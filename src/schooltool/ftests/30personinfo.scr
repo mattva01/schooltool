@@ -28,7 +28,7 @@ PUT>          xlink:href="/persons/Aiste/facets/person_info/photo"/>
 PUT> </person_info>
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Updated
 
 SchoolTool> get /persons/Aiste/facets/person_info

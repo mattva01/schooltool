@@ -38,7 +38,7 @@ from schooltool.views.csvexport import CSVExporter
 from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date
 from schooltool.schema.rng import validate_against_schema
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -203,16 +203,16 @@ class AvailabilityQueryView(View):
         for arg in 'first', 'last', 'duration':
             if arg not in request.args:
                 return textErrorPage(request,
-                                     _("%r argument must be provided") % _(arg))
+                                     _("%r argument must be provided") % arg)
         try:
-            arg = _('first')
+            arg = 'first'
             self.first = parse_date(request.args['first'][0])
-            arg = _('last')
+            arg = 'last'
             self.last = parse_date(request.args['last'][0])
-            arg = _('duration')
+            arg = 'duration'
             minutes = int(request.args['duration'][0])
             self.duration = datetime.timedelta(minutes=minutes)
-            arg = _('hours')
+            arg = 'hours'
             if 'hours' not in request.args:
                 self.hours = [(datetime.time(0), datetime.timedelta(hours=24))]
             else:

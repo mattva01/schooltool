@@ -4,7 +4,7 @@ SchoolTool> links off
 
 SchoolTool> get /busysearch
 400 Bad Request
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 'first' argument must be provided
 
 SchoolTool> get /busysearch?first=2004-01-01&last=2004-01-01&duration=60

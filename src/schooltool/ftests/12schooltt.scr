@@ -7,7 +7,7 @@ SchoolTool> links off
 
 SchoolTool> get /schooltt/2003-fall/wekly
 404 Not Found
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Not found: /schooltt/2003-fall/wekly
 
 SchoolTool> get /schooltt/2003-fall/weekly
@@ -477,7 +477,7 @@ PUT>   </teacher>
 PUT> </schooltt>
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 OK
 
 SchoolTool> get /schooltt/2003-fall/weekly

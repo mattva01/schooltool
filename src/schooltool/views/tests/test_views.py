@@ -40,6 +40,7 @@ class TemplateStub:
         assert request is self.request
         assert view is self.view
         assert context is self.context
+        request.setHeader('Content-Type', 'text/plain')
         return self.body
 
 
@@ -62,7 +63,7 @@ class TestTemplate(unittest.TestCase):
         templ = Template('sample.pt')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                      "text/html; charset=UTF-8")
         self.assertEquals(result, "code: 200\nfoo: Foo\nbar: Bar\n")
 
@@ -71,7 +72,7 @@ class TestTemplate(unittest.TestCase):
         templ = Template('sample_xml.pt', content_type='text/plain')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                      "text/plain; charset=UTF-8")
         self.assertEquals(result, "code: 200\n")
 
@@ -95,13 +96,14 @@ class TestErrorViews(unittest.TestCase):
         result = textErrorPage(request, "Not ready to take off", 747, "Wait")
         self.assertEquals(request.code, 747)
         self.assertEquals(request.reason, "Wait")
-        self.assertEquals(result, "Not ready to take off")
+        self.assertEquals(request.headers['content-type'], "text/plain")
+        self.assertEquals(result, u"Not ready to take off")
 
         request = RequestStub()
         result = textErrorPage(request, 42)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(result, "42")
+        self.assertEquals(result, u"42")
 
     def test_notFoundPage(self):
         from schooltool.views import notFoundPage
@@ -109,8 +111,8 @@ class TestErrorViews(unittest.TestCase):
         result = notFoundPage(request)
         self.assertEquals(request.code, 404)
         self.assertEquals(request.reason, "Not Found")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assertEquals(result, "Not found: /path")
+        self.assertEquals(request.headers['content-type'], "text/plain")
+        self.assertEquals(result, u"Not found: /path")
 
     def test_NotFoundView(self):
         from schooltool.views import NotFoundView
@@ -119,7 +121,8 @@ class TestErrorViews(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 404)
         self.assertEquals(request.reason, "Not Found")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "Not found: /path")
 
 
@@ -187,7 +190,7 @@ class TestView(unittest.TestCase):
         view.template = TemplateStub(request, view, context, body)
         view.authorization = lambda ctx, rq: True
         self.assertEquals(view.render(request), '')
-        self.assertEquals(request.headers['Content-Length'], len(body))
+        self.assertEquals(request.headers['content-length'], len(body))
 
     def test_render(self):
         from schooltool.views import View
@@ -197,7 +200,8 @@ class TestView(unittest.TestCase):
 
             def do_FOO(self, request, testcase=self):
                 testcase.assert_(request is self.request)
-                return "Foo"
+                request.setHeader('Content-Type', 'text/x-foo')
+                return u"Foo \u263a"
 
         view = ViewSubclass(context)
         view.authorization = lambda ctx, rq: True
@@ -206,13 +210,15 @@ class TestView(unittest.TestCase):
         self.assertNotEquals(view.render(request), '')
         self.assertEquals(request.code, 405)
         self.assertEquals(request.reason, 'Method Not Allowed')
-        self.assertEquals(request.headers['Allow'], 'FOO, GET, HEAD')
+        self.assertEquals(request.headers['allow'], 'FOO, GET, HEAD')
 
         request = RequestStub(method='FOO')
         self.assert_(view.request is None)
-        self.assertEquals(view.render(request), 'Foo')
+        self.assertEquals(view.render(request), 'Foo \xe2\x98\xba')
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, 'OK')
+        self.assertEquals(request.headers['content-type'],
+                          'text/x-foo; charset=UTF-8')
         self.assert_(view.request is None)
 
         view.authorization = lambda ctx, rq: False
@@ -220,8 +226,10 @@ class TestView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 401)
         self.assertEquals(result, "Bad username or password")
-        self.assertEquals(request.headers['WWW-Authenticate'],
+        self.assertEquals(request.headers['www-authenticate'],
                           'basic realm="SchoolTool"')
+        self.assertEquals(request.headers['content-type'],
+                          'text/plain; charset=UTF-8')
         self.assert_(view.request is None)
 
 

@@ -28,8 +28,7 @@ from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import getView
-from schooltool.translation import ugettext
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -76,7 +75,7 @@ class Template(PageTemplateFile):
     in the output charset, a UnicodeError will be raised when rendering.
     """
 
-    ugettext_hook = ugettext
+    ugettext_hook = _
 
     def __init__(self, filename, content_type='text/html', charset='UTF-8',
                        _prefix=None):
@@ -130,7 +129,7 @@ def textErrorPage(request, message, code=400, reason=None):
     """Renders a simple error page and sets the HTTP status code and reason."""
     request.setResponseCode(code, reason)
     request.setHeader('Content-Type', 'text/plain')
-    return str(message)
+    return unicode(message)
 
 
 def notFoundPage(request):
@@ -150,17 +149,24 @@ class View(Resource):
     non-thread-safe methods.  You can read more in Twisted
     documentation section about threading.
 
-    Subclasses could provide the following methods and attributes:
+    Subclasses can provide the following methods and attributes:
 
         template    Attribute that contains a Template instance for rendering.
+                    It will be used by the default do_GET implementation.
+                    Subclasses that override do_GET do not need this attribute.
         _traverse   Method that should return a view for a contained object
                     or raise a KeyError.
         do_FOO      Method that processes HTTP requests FOO for various values
-                    of FOO.  Its signature should match render.
+                    of FOO.  Its signature should match render.  It can return
+                    either an 8-bit string or a Unicode object (which will be
+                    converted to UTF-8 by render).  It must set the
+                    Content-Type header in the request.
         authorization
                     Callable that takes a context and a request and returns
                     True if that request is authorized.  See also,
                     schooltool.views.auth
+
+    Subclasses must provide authorization and either do_GET or template.
 
     """
 
@@ -189,20 +195,44 @@ class View(Resource):
     def render(self, request):
         request.setHeader('Allow', ', '.join(self.allowedMethods()))
         handler = getattr(self, 'do_%s' % request.method, None)
-        if handler is not None:
-            if not self.authorization(self.context, request):
-                request.setHeader('WWW-Authenticate',
-                                  'basic realm="SchoolTool"')
-                return textErrorPage(request, _("Bad username or password"),
-                                     code=401)
+        if handler is None:
+            body = textErrorPage(request, _("Method Not Allowed"), code=405)
+            culprit = 'textErrorPage'
+        elif not self.authorization(self.context, request):
+            request.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
+            body = textErrorPage(request, _("Bad username or password"),
+                                 code=401)
+            culprit = 'textErrorPage'
+        else:
             self.request = request
             body = handler(request)
             self.request = None
-            assert isinstance(body, str), \
-                   "do_%s did not return a string" % request.method
+            culprit = 'do_%s' % request.method
+
+        # Twisted's http.Request keeps outgoing headers in a dict keyed by
+        # lower-cased header name.
+        ctype = request.headers.get('content-type', None)
+        if ctype is None:
+            raise AssertionError("%s did not set the Content-Type"
+                                 " header" % culprit)
+        if isinstance(body, str):
             return body
+        elif isinstance(body, unicode):
+            if not ctype.startswith('text/'):
+                raise AssertionError("%s returned an unicode string for"
+                                     " a non-text MIME type (%s)"
+                                     % (culprit, ctype))
+            if ';' not in ctype:
+                ctype += '; charset=UTF-8'
+                request.setHeader('Content-Type', ctype)
+            elif not ctype.endswith('; charset=UTF-8'):
+                raise AssertionError("%s returned an unicode string but"
+                                     " specified a non-UTF-8 charset in"
+                                     " Content-Type (%s)"
+                                     % (culprit, ctype))
+            return body.encode('UTF-8')
         else:
-            return textErrorPage(request, _("Method Not Allowed"), code=405)
+            raise AssertionError("%s did not return a string" % culprit)
 
     def allowedMethods(self):
         """Lists all allowed methods."""

@@ -83,7 +83,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -174,7 +174,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
     def test_render(self):
         request = RequestStub("http://localhost/groups")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -196,13 +196,14 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        location = request.headers['Location']
+        location = request.headers['location']
         base = "http://localhost:7001/groups/"
         self.assert_(location.startswith(base),
                      "%r.startswith(%r) failed" % (location, base))
         name = location[len(base):]
         self.assert_(name in self.app['groups'].keys())
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(location in result)
         return name
 

@@ -50,7 +50,7 @@ from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
 from schooltool.uris import nameURI
 from schooltool.common import parse_date, parse_time
-from schooltool.translation import _
+from schooltool.translation import gettext as _
 
 __metaclass__ = type
 

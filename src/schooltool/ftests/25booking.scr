@@ -7,7 +7,7 @@ POST> <slot start="2004-01-01 10:00:00" duration="90"/>
 POST> </booking>
 POST> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 OK
 
 SchoolTool> get /persons/Aiste/calendar
@@ -50,7 +50,7 @@ END:VCALENDAR
 SchoolTool> put /resources/hall/calendar text/calendar
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Calendar imported
 
 SchoolTool> get /persons/Aiste/calendar
@@ -75,7 +75,7 @@ POST> <slot start="2004-01-01 10:00:00" duration="90"/>
 POST> </booking>
 POST> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 OK
 
 SchoolTool> get /persons/Aiste/calendar
@@ -129,7 +129,7 @@ PUT> END:VEVENT
 PUT> END:VCALENDAR
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Calendar imported
 
 SchoolTool> get /resources/hall/calendar

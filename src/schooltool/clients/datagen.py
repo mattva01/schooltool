@@ -31,7 +31,7 @@ import random
 import sys
 import sets
 import datetime
-from schooltool.translation import _
+from schooltool.translation import gettext as _
 
 names = _('David Deb Sue Martin Denise Vicki Lorne Jeff Michael '
           'Norma Nicola Wendy Lesley Carey Debbie Alden Carol Jay '

@@ -153,7 +153,7 @@ PUT> END:VEVENT
 PUT> END:VCALENDAR
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Calendar imported
 
 SchoolTool> get /persons/Aiste/calendar

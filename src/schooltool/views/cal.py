@@ -40,7 +40,7 @@ from schooltool.common import parse_date, parse_datetime
 from schooltool.component import getPath, traverse
 from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -331,22 +331,23 @@ class BookingView(View):
             try:
                 owner = traverse(self.context, owner_path)
             except KeyError:
-                return textErrorPage(request, _("Invalid path: %r") % owner_path)
+                return textErrorPage(request,
+                                     _("Invalid path: %r") % owner_path)
             if not IApplicationObject.providedBy(owner):
                 return textErrorPage(request,
                                      _("'owner' in not an ApplicationObject."))
             if (owner is not request.authenticated_user
                     and not isManager(request.authenticated_user)):
                 return textErrorPage(request, _("You can only book resources "
-                                     "for yourself"))
+                                                "for yourself"))
 
             resource_node = xpathctx.xpathEval('/cal:booking/cal:slot')[0]
             start_str = resource_node.nsProp('start', None)
             dur_str = resource_node.nsProp('duration', None)
             try:
-                arg = _('start')
+                arg = 'start'
                 start = parse_datetime(start_str)
-                arg = _('duration')
+                arg = 'duration'
                 duration = datetime.timedelta(minutes=int(dur_str))
             except ValueError:
                 return textErrorPage(request, _("%r argument incorrect") % arg)

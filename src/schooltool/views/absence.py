@@ -42,7 +42,7 @@ from schooltool.views.facet import FacetView
 from schooltool.views.auth import TeacherAccess, isManager
 from schooltool.common import parse_datetime
 from schooltool.schema.rng import validate_against_schema
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 

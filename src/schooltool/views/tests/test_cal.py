@@ -66,7 +66,7 @@ class CalendarTestBase(unittest.TestCase):
         result = reorder_vcal(result)
         expected = reorder_vcal(expected)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/calendar; charset=UTF-8")
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
@@ -163,7 +163,8 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                               body=calendar)
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
@@ -180,7 +181,8 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                               body=body)
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         if errmsg:
             self.assertEquals(result, errmsg)
         self.assertEquals(self.sm.first, datetime.date(2003, 9, 1))
@@ -322,7 +324,8 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(self.sm.first, datetime.date(2003, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2003, 9, 7))
         schooldays = []
@@ -443,7 +446,8 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         events = list(cal)
         expected = []
         self.assertEquals(sorted(events), sorted(expected))
@@ -503,7 +507,8 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         events = list(cal)
         expected = [
             CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
@@ -526,7 +531,8 @@ class TestCalendarView(TestCalendarReadView):
         if errmsg:
             self.assertEquals(result, errmsg)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
 
     def test_put_errors(self):
         self._create()
@@ -865,7 +871,7 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
             </html>
         """
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
         self.assertEqualsXML(result, expected)
 

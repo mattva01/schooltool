@@ -178,7 +178,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub("http://localhost/person/absences")
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -209,11 +209,12 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
 
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        location = request.headers['Location']
+        location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
         name = location[len(baseurl):]
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         path = '%s%s' % (basepath, name)
         self.assert_(path in result, '%r not in %r' % (path, result))
         self.assertEquals(len(list(context.iterAbsences())), 1)
@@ -241,11 +242,12 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
 
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
-        location = request.headers['Location']
+        location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
         name = location[len(baseurl):]
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         path = '%s%s' % (basepath, name)
         self.assert_(path in result, '%r not in %r' % (path, result))
         self.assertEquals(len(list(context.iterAbsences())), 1)
@@ -269,7 +271,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
 
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "Document not valid XML")
 
 
@@ -305,7 +308,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub("http://localhost/person/absences/001")
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <absence xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -343,7 +346,8 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
         self.assertEquals(comment.text, "Foo")
@@ -363,7 +367,8 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "Reporter not found: /does/not/exist")
         self.assertEquals(len(absence.comments), 2)
 
@@ -384,7 +389,8 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result,
             "Cannot reopen an absence when another one is not ended")
         self.assertEquals(len(absence.comments), 2)
@@ -442,7 +448,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub("http://localhost/group/rollcall")
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -490,7 +496,8 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "2 absences and 1 presences reported")
 
         # persona was present and is present, no comments should be added.
@@ -579,7 +586,8 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, "Reporter does not match the authenticated"
                                   " user")
 
@@ -593,7 +601,8 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, errmsg)
 
     def test_post_syntax_errors(self):
@@ -767,7 +776,7 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
     def test_get(self):
         request = RequestStub("http://localhost/utils/absences/")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -793,18 +802,18 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
                           (0.5, 'text/html', {}, {})]
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
 
         request.accept = [(0.1, 'text/plain', {}, {}),
                           (0.5, 'text/xml', {}, {})]
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
 
         request.accept = [(0, 'text/plain', {}, {})]
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
 
     def test_get_text(self):
@@ -825,7 +834,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub("http://localhost/utils/absences/")
         request.accept = [('1', 'text/plain', {}, {})]
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
 
         steve = self.persons.new('steve', title='Steve Alexander')

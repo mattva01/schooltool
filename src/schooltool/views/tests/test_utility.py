@@ -47,7 +47,7 @@ class TestUtilityServiceView(XMLCompareMixin, RegistriesSetupMixin,
     def test_render(self):
         request = RequestStub("http://localhost/groups")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -84,7 +84,7 @@ class TestUtilityView(XMLCompareMixin, RegistriesSetupMixin,
     def test_render(self):
         request = RequestStub("http://localhost/groups")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <utility>

@@ -60,7 +60,7 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         result = view.render(request)
 
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           'text/xml; charset=UTF-8')
         self.assertEqualsXML(result, empty_xml)
 
@@ -137,7 +137,7 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(result, context.photo)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], 'image/jpeg')
+        self.assertEquals(request.headers['content-type'], 'image/jpeg')
 
     def test_get_no_photo(self):
         from schooltool.views.infofacets import PhotoView

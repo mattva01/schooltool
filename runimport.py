@@ -10,7 +10,7 @@ import os
 import sys
 import time
 import urllib
-from schooltool.translation import _
+from schooltool.translation import gettext as _
 from schooltool.clients import csvclient
 
 if os.path.exists('Data.fs'):

@@ -13,7 +13,7 @@ Content-Type: text/xml; charset=UTF-8
 
 SchoolTool> get /time-periods/x
 404 Not Found
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Not found: /time-periods/x
 
 SchoolTool> put /time-periods/2003-fall text/calendar
@@ -26,7 +26,7 @@ PUT> END:VEVENT
 PUT> END:VCALENDAR
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Calendar imported
 
 SchoolTool> get /time-periods
@@ -64,7 +64,7 @@ PUT> END:VEVENT
 PUT> END:VCALENDAR
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Calendar imported
 
 SchoolTool> get /time-periods
@@ -81,7 +81,7 @@ Content-Type: text/xml; charset=UTF-8
 
 SchoolTool> delete /time-periods/x
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 OK
 
 SchoolTool> get /time-periods
@@ -103,7 +103,7 @@ PUT>   <holiday date="2003-12-26">Christmas</holiday>
 PUT> </schooldays>
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Calendar imported
 
 SchoolTool> get /time-periods/2003-fall

@@ -52,7 +52,7 @@ from schooltool.membership import Membership
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 

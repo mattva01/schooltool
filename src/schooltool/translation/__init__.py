@@ -25,12 +25,15 @@ The following names are available in this module:
   catalog       catalog of translations for domain 'schooltool'
   gettext       alias for catalog.gettext
   ugettext      alias for catalog.ugettext
-  _             alias for catalog.gettext
 
 Example usage:
 
-  from schooltool.translations import _
+  from schooltool.translations import gettext as _
   print _("Translated message")
+
+Note that SchoolTool server mostly deals with Unicode strings and thus should
+use ugettext, while the clients use 8-bit strings in locale encoding and thus
+should use gettext.
 
 
 The following files were taken from Zope 3 CVS (src/zope/app/translation_files)
@@ -51,4 +54,3 @@ localedir = os.path.dirname(__file__)
 catalog = gettext.translation('schooltool', localedir, fallback=True)
 gettext = catalog.gettext
 ugettext = catalog.ugettext
-_ = gettext

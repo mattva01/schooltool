@@ -137,7 +137,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         result = view.render(request)
         if xml:
             self.assertEquals(request.code, 200)
-            self.assertEquals(request.headers['Content-Type'],
+            self.assertEquals(request.headers['content-type'],
                               "text/xml; charset=UTF-8")
             self.assertEqualsXML(result, xml, recursively_sort=['timetables'])
         else:
@@ -147,7 +147,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         result = view.render(request)
         if html:
             self.assertEquals(request.code, 200)
-            self.assertEquals(request.headers['Content-Type'],
+            self.assertEquals(request.headers['content-type'],
                               "text/html; charset=UTF-8")
             self.assertEqualsXML(result, html, recursively_sort=['ul'])
         else:
@@ -471,7 +471,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         view = self.createView(context)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "%s; charset=UTF-8" % ctype)
         self.assertEqualsXML(result, expected, recursively_sort=['timetable'])
 
@@ -615,7 +615,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(timetabled.timetables[key], expected)
 
     def test_put_nonexistent(self):
@@ -633,7 +634,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(key not in timetabled.timetables)
 
     def test_put_bad_period(self):
@@ -645,7 +647,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(key not in timetabled.timetables)
 
     def do_test_error(self, xml=None, ctype='text/xml', message=None):
@@ -660,7 +663,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         if message is not None:
             self.assertEquals(result, message)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(context, self.createEmpty())
 
     def test_put_error_handling(self):
@@ -686,7 +690,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(key not in timetabled.timetables)
 
     def test_delete_nonexistent(self):
@@ -968,7 +973,8 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertRaises(KeyError, lambda: service[key])
 
     def test_delete_nonexistent(self):
@@ -1015,7 +1021,8 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(service[key], self.createEmpty())
 
     def test_roundtrip(self):
@@ -1051,7 +1058,8 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
                               headers={'Content-Type': ctype})
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertRaises(KeyError, lambda: service[key])
 
     def test_put_error_handling(self):
@@ -1079,7 +1087,7 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1091,7 +1099,7 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1314,7 +1322,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         result = self.view.render(request)
 
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
 
         self.assertEquals(self.sg4.timetables[self.key],
                           self.sg4.timetables[self.key].cloneEmpty())
@@ -1359,7 +1368,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                               headers={'Content-Type': 'text/xml'})
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(self.sg1.timetables[self.key],
                           self.sg1.timetables[self.key].cloneEmpty())
         self.assertEquals(self.sg2.timetables[self.key],
@@ -1447,7 +1457,7 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1459,7 +1469,7 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1510,7 +1520,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/calendar; charset=UTF-8")
 
     def test_put(self):
@@ -1535,7 +1545,8 @@ class TestTimePeriodCreatorView(unittest.TestCase):
                               headers={"Content-Type": "text/calendar"})
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(key in service)
         self.assertEquals(service[key].first, datetime.date(2004, 9, 1))
         self.assertEquals(getPath(service[key]), '/time-periods/%s' % key)
@@ -1551,7 +1562,8 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(key not in service)
 
     def test_delete_nonexistent(self):

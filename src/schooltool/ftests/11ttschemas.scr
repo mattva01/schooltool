@@ -13,7 +13,7 @@ Content-Type: text/xml; charset=UTF-8
 
 SchoolTool> get /ttschemas/x
 404 Not Found
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Not found: /ttschemas/x
 
 SchoolTool> put /ttschemas/weekly text/xml
@@ -96,7 +96,7 @@ PUT>   </day>
 PUT> </timetable>
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 OK
 
 SchoolTool> get /ttschemas
@@ -121,7 +121,7 @@ PUT>   </day>
 PUT> </timetable>
 PUT> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 OK
 
 SchoolTool> get /ttschemas
@@ -139,7 +139,7 @@ Content-Type: text/xml; charset=UTF-8
 
 SchoolTool> delete /ttschemas/x
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Deleted timetable schema
 
 SchoolTool> get /ttschemas

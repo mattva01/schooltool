@@ -170,7 +170,7 @@ class TestCSVExporter(RegistriesSetupMixin, NiceDiffsMixin, unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'], "application/x-zip")
+        self.assertEquals(request.headers['content-type'], "application/x-zip")
 
         stm = StringIO(result)
         zf = zipfile.ZipFile(stm)

@@ -69,7 +69,7 @@ class RequestStub:
         return self.request_headers.get(header.lower())
 
     def setHeader(self, header, value):
-        self.headers[header] = value
+        self.headers[header.lower()] = value
 
     def setResponseCode(self, code, reason=None):
         self.code = code

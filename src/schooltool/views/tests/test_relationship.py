@@ -127,10 +127,10 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(len(self.sub.listLinks()), 3)
         self.assert_(self.new in
                      [l.traverse() for l in self.sub.listLinks()])
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         location = "http://localhost:7001/groups/sub/relationships/0003"
-        self.assertEquals(request.headers['Location'], location)
+        self.assertEquals(request.headers['location'], location)
         self.assert_(location in result)
 
     def testBadPOSTs(self):
@@ -218,8 +218,8 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
             self.assertEquals(request.code, 400,
                               "%d: %s\n%s" % (bad_requests.index(body),
                                               result, body))
-            self.assertEquals(request.headers['Content-Type'],
-                              "text/plain")
+            self.assertEquals(request.headers['content-type'],
+                              "text/plain; charset=UTF-8")
             self.assertEquals(len(self.sub.listLinks()), 2)
 
 
@@ -248,7 +248,7 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getPath
         request = RequestStub("http://localhost%s" % getPath(self.link))
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
         <relationship xmlns:xlink="http://www.w3.org/1999/xlink"

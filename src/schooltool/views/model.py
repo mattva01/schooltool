@@ -39,7 +39,7 @@ from schooltool.views.timetable import CompositeTimetableTraverseView
 from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.views.absence import RollCallView, AbsenceManagementView
 from schooltool.views.auth import PublicAccess, PrivateAccess
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -128,10 +128,12 @@ class PersonPasswordView(View):
         password = request.content.read()
         password = password.strip()
         self.context.setPassword(password)
+        request.setHeader('Content-Type', 'text/plain')
         return _("Password changed")
 
     def do_DELETE(self, request):
         self.context.setPassword(None)
+        request.setHeader('Content-Type', 'text/plain')
         return _("Account disabled")
 
 

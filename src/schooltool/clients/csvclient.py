@@ -115,7 +115,7 @@ import httplib
 import csv
 import sys
 import base64
-from schooltool.translation import _
+from schooltool.translation import gettext as _
 
 
 class DataError(Exception):

@@ -60,7 +60,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <eventLog>
@@ -76,7 +76,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <eventLog>

@@ -84,7 +84,7 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/some/object/facets/001")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <facet active="active" owned="unowned">
@@ -96,7 +96,7 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.facet.active = False
         self.facet.owner = object()
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <facet active="inactive" owned="owned">
@@ -169,7 +169,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         view = FacetManagementView(context)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <facets xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -208,11 +208,12 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         baseurl = "http://localhost:7001/group/facets/"
-        location = request.headers['Location']
+        location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
         name = location[len(baseurl):]
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assert_(location in result)
         self.assertEquals(len(list(context.iterFacets())), 2)
         facet = context.facetByName(name)
@@ -238,7 +239,8 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
             result = view.render(request)
             self.assertEquals(request.code, 400,
                               "%s != 400 for %s" % (request.code, body))
-            self.assertEquals(request.headers['Content-Type'], "text/plain")
+            self.assertEquals(request.headers['content-type'],
+                              "text/plain; charset=UTF-8")
 
     def test_post_singleton_twice(self):
         from schooltool.views.facet import FacetManagementView
@@ -257,7 +259,8 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
                               body='facet factory="eventlog"')
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
 
 
 def test_suite():

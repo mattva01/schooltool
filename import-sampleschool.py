@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.join(basedir, 'src'))
 
 import urllib
 import getopt
-from schooltool.translation import _
+from schooltool.translation import gettext as _
 
 
 class Error(Exception):

@@ -29,7 +29,7 @@ from schooltool.views import View, Template, textErrorPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import SystemAccess
 from schooltool.eventlog import IEventLog, IEventLogUtility, IEventLogFacet
-from schooltool.translation import _
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 

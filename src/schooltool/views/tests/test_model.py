@@ -119,7 +119,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -220,7 +220,7 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, QuietLibxml2Mixin,
         view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/groups/root/tree")
         result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -300,7 +300,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/person")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <person xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -405,7 +405,7 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/resources/room3")
         result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
+        self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <resource xmlns:xlink="http://www.w3.org/1999/xlink">
