@@ -38,7 +38,7 @@ from schooltool.absence import AbsenceComment
 from schooltool.views import View, Template
 from schooltool.views import textErrorPage
 from schooltool.views import read_file
-from schooltool.views import getURL, absolutePath
+from schooltool.views import absoluteURL, absolutePath
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import TeacherAccess, isManager
 from schooltool.common import parse_datetime, to_unicode
@@ -312,7 +312,7 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
         except ValueError, e:
             return textErrorPage(request, str(e))
         absence = self.context.reportAbsence(comment)
-        location = getURL(request, absence)
+        location = absoluteURL(request, absence)
         request.setHeader('Location', location)
         request.setHeader('Content-Type', 'text/plain')
         if len(absence.comments) == 1:

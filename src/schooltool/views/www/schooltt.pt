@@ -2,19 +2,19 @@
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:tal="http://xml.zope.org/namespaces/tal">
   <teacher tal:repeat="item view/getTeachersTimetables"
-           tal:attributes="path python: view.getURL(item[0])">
+           tal:attributes="path python: view.absolutePath(item[0])">
     <day tal:condition="python: item[1] is not None"
          tal:repeat="day python: item[1].items()"
          tal:attributes="id python: day[0]">
       <period tal:repeat="period python: day[1].items()"
               tal:attributes="id python: period[0]">
         <activity tal:repeat="activity python: period[1]"
-                  tal:attributes="group python: view.getURL(activity.owner);
-                                  title activity/title">
+                  tal:attributes="title activity/title;
+                          group python: view.absolutePath(activity.owner)">
           <resource tal:repeat="resource activity/resources"
                     xlink:type="simple"
-                    tal:attributes="xlink:href python: view.getURL(resource);
-                                    xlink:title resource/title" />
+                    tal:attributes="xlink:title resource/title;
+                            xlink:href python: view.absolutePath(resource)" />
         </activity>
       </period>
     </day>

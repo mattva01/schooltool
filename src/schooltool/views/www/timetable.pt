@@ -10,8 +10,8 @@
                 tal:attributes="title activity/title">
         <resource tal:repeat="resource activity/resources"
                   xlink:type="simple"
-                  tal:attributes="xlink:href python:view.getURL(resource);
-                                  xlink:title resource/title" />
+                  tal:attributes="xlink:title resource/title;
+                          xlink:href python:view.absolutePath(resource)" />
       </activity>
     </period>
   </day>

@@ -40,7 +40,7 @@ moduleProvides(IModuleSetup)
 # Helpers
 #
 
-def getURL(request, obj, suffix=''):
+def absoluteURL(request, obj, suffix=''):
     """Return the absolute URL of an object.
 
     Example:
@@ -52,9 +52,9 @@ def getURL(request, obj, suffix=''):
       >>> from schooltool.views.tests import RequestStub
       >>> request = RequestStub('http://example.org:7001/')
 
-      >>> getURL(request, root)
+      >>> absoluteURL(request, root)
       'http://example.org:7001/'
-      >>> getURL(request, obj)
+      >>> absoluteURL(request, obj)
       'http://example.org:7001/obj'
 
     Virtual hosting is supported:
@@ -62,18 +62,18 @@ def getURL(request, obj, suffix=''):
       >>> request.getHost = lambda: ('SSL', 'example.com', 443)
       >>> request.virtualpath = '/virtual/path'
 
-      >>> getURL(request, root)
+      >>> absoluteURL(request, root)
       'https://example.com:443/virtual/path'
-      >>> getURL(request, obj)
+      >>> absoluteURL(request, obj)
       'https://example.com:443/virtual/path/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
-      >>> getURL(request, root, 'subobject/or/two')
+      >>> absoluteURL(request, root, 'subobject/or/two')
       'https://example.com:443/virtual/path/subobject/or/two'
-      >>> getURL(request, obj, 'subobject')
+      >>> absoluteURL(request, obj, 'subobject')
       'https://example.com:443/virtual/path/obj/subobject'
 
     """

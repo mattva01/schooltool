@@ -30,7 +30,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
-from schooltool.views import getURL, absolutePath, read_file
+from schooltool.views import absoluteURL, absolutePath, read_file
 from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.views.auth import PublicAccess
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
@@ -105,7 +105,7 @@ class TimetableReadView(View, TimetableContentNegotiation):
         return _("%s's complete timetable for %s") % (timetabled.title,
                                                    ", ".join(self.key))
 
-    def getURL(self, obj):
+    def absolutePath(self, obj):
         return absolutePath(self.request, obj)
 
     def do_GET(self, request):
@@ -442,7 +442,7 @@ class TimetableTraverseView(BaseTimetableTraverseView):
         return _("Timetables for %s") % self.context.title
 
     def timetables(self):
-        baseuri = getURL(self.request, self.context, 'timetables')
+        baseuri = absoluteURL(self.request, self.context, 'timetables')
         basepath = absolutePath(self.request, self.context, 'timetables')
         results = []
         for period_id, schema_id in self.context.timetables:
@@ -472,7 +472,7 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
         return _("Composite timetables for %s") % self.context.title
 
     def timetables(self):
-        baseuri = getURL(self.request, self.context, 'composite-timetables')
+        baseuri = absoluteURL(self.request, self.context, 'composite-timetables')
         basepath = absolutePath(self.request, self.context,
                                 'composite-timetables')
         results = []
@@ -503,7 +503,7 @@ class SchoolTimetableTraverseView(BaseTimetableTraverseView):
         return _("School timetables")
 
     def timetables(self):
-        baseuri = getURL(self.request, self.context, 'schooltt')
+        baseuri = absoluteURL(self.request, self.context, 'schooltt')
         basepath = absolutePath(self.request, self.context, 'schooltt')
         periods = getTimePeriodService(self.context).keys()
         schemas = getTimetableSchemaService(self.context).keys()
@@ -671,7 +671,7 @@ class SchoolTimetableView(View):
             result.append((teacher, tt))
         return result
 
-    def getURL(self, obj):
+    def absolutePath(self, obj):
         return absolutePath(self.request, obj)
 
 

@@ -32,7 +32,7 @@ from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import TraversableView
 from schooltool.views import notFoundPage, textErrorPage
-from schooltool.views import getURL, absolutePath
+from schooltool.views import absoluteURL, absolutePath
 from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
 from schooltool.views.csvexport import CSVExporter
@@ -126,7 +126,7 @@ class ApplicationObjectCreator:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
         obj = container.new(**kw)
-        location = getURL(request, obj)
+        location = absoluteURL(request, obj)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)

@@ -29,7 +29,7 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.interfaces import IApplicationObject
-from schooltool.views import View, Template, getURL
+from schooltool.views import View, Template, absoluteURL
 from schooltool.views import textErrorPage, notFoundPage
 from schooltool.views import read_file
 from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
@@ -396,8 +396,8 @@ class AllCalendarsView(View):
         return self._list('resources')
 
     def _list(self, name):
-        items = [(item.title, getURL(self.request, item.calendar),
-                  getURL(self.request, item, 'timetable-calendar'))
+        items = [(item.title, absoluteURL(self.request, item.calendar),
+                  absoluteURL(self.request, item, 'timetable-calendar'))
                  for item in self.context[name].itervalues()]
         items.sort()
         return [{'title': title,

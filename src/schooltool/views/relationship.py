@@ -28,7 +28,7 @@ from schooltool.uris import strURI, getURI
 from schooltool.component import traverse
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
-from schooltool.views import getURL, absolutePath
+from schooltool.views import absoluteURL, absolutePath
 from schooltool.views.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
@@ -115,7 +115,7 @@ class RelationshipsView(View):
                                  _("Cannot establish relationship: %s") % e)
 
         link = links[val.other]
-        location = getURL(request, link)
+        location = absoluteURL(request, link)
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
