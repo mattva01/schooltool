@@ -794,6 +794,26 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'add_event.html', EventAddView, context)
 
 
+class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
+
+    def test(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.browser.cal import CalendarEventView
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(hours=1), "Main event")
+        view = CalendarEventView(ev)
+        request = RequestStub()
+
+        self.assertEquals(view.render(request),
+                          '<div class="calevent">\n'
+                          '  <h3>Main event</h3>\n'
+                          '  12:01&amp;ndash;13:01\n'
+                          '</div>\n')
+
+        self.assertEquals(view.cssClass(), 'event')
+        view.context.source = 'timetable-calendar'
+        self.assertEquals(view.cssClass(), 'ro_event')
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
@@ -808,6 +828,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventSourceDecorator))
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))
+    suite.addTest(unittest.makeSuite(TestCalendarEventView))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 

@@ -125,13 +125,6 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assertEquals(view.passwordURL(),
                 'http://localhost:7001/persons/johndoe/password.html')
 
-    def test_calendarURL(self):
-        from schooltool.browser.model import PersonView
-        view = PersonView(self.person)
-        view.request = RequestStub()
-        self.assertEquals(view.calendarURL(),
-                'http://localhost:7001/persons/johndoe/calendar_weekly.html')
-
     def test_timetables(self):
         from schooltool.browser.model import PersonView
         from schooltool.timetable import Timetable

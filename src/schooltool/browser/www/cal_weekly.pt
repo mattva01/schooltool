@@ -20,14 +20,9 @@
       <div class="day"
            tal:repeat="day view/getCurrentWeek">
         <h2 tal:content="python:day.date.strftime('%A, %Y-%m-%d')" />
-        <div class="event"
-             tal:repeat="event day/events">
-           <h3 tal:content="event/title" />
-           Duration:
-              <span tal:replace="python:event.dtstart.strftime('%H:%M')"
-              />&ndash;<span tal:replace="python:(event.dtstart +
-                                          event.duration).strftime('%H:%M')" />
-        </div>
+        <div tal:repeat="event day/events"
+	     tal:attributes="class python:view.eventClass(event)"
+             tal:content="structure python:view.renderEvent(event)"/>
       </div>
     </div>
   </metal:block>

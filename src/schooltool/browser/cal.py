@@ -26,11 +26,11 @@ from datetime import datetime, date, time, timedelta
 from sets import Set
 from zope.interface import implements
 from schooltool.browser import View, Template, absoluteURL
-from schooltool.browser.auth import TeacherAccess, PrivateAccess
+from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
 from schooltool.cal import Calendar, CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime
 from schooltool.component import traverse, getPath
-from schooltool.interfaces import IResource, ICalendar
+from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.translation import ugettext as _
 from schooltool.common import parse_date
 
@@ -153,6 +153,14 @@ class CalendarViewBase(View):
     __used_for__ = ICalendar
 
     authorization = PrivateAccess
+
+    def renderEvent(self, event):
+        view = CalendarEventView(event)
+        return view.render(self.request)
+
+    def eventClass(self, event):
+        view = CalendarEventView(event)
+        return view.cssClass()
 
     def update(self):
         if 'date' not in self.request.args:
@@ -578,3 +586,24 @@ class ComboCalendarView(CalendarView):
         elif name == 'add_event.html':
             return EventAddView(self.context)
         raise KeyError(name)
+
+
+class CalendarEventView(View):
+    """Renders the inside of the event box in various calendar views"""
+
+    __used_for__ = ICalendarEvent
+
+    authorization = PublicAccess
+
+    template = Template("www/cal_event.pt")
+
+    def duration(self):
+        ev = self.context
+        return "%s-%s" % (ev.dtstart.strftime('%H:%M'),
+                          (ev.dtstart + ev.duration).strftime('%H:%M'))
+
+    def cssClass(self):
+        if getattr(self.context, 'source', None) == 'timetable-calendar':
+            return 'ro_event'
+        else:
+            return 'event'
