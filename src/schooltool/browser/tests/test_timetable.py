@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+import datetime
 
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import RequestStub
@@ -125,22 +126,6 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request = RequestStub(authenticated_user=self.manager)
         return view
 
-    def createDefaultSchema(self, days=('Day 1', ), periods=('Period 1', )):
-        from schooltool.timetable import Timetable
-        from schooltool.timetable import TimetableDay
-        schema = Timetable(days)
-        for day in days:
-            schema[day] = TimetableDay(list(periods))
-        return schema
-
-    def createSchema(self, days, *periods_for_each_day):
-        from schooltool.timetable import Timetable
-        from schooltool.timetable import TimetableDay
-        schema = Timetable(days)
-        for day, periods in zip(days, periods_for_each_day):
-            schema[day] = TimetableDay(list(periods))
-        return schema
-
     def test(self):
         view = self.createView()
         request = view.request
@@ -152,15 +137,45 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         request = view.request
         view.request.args['day1'] = ['Monday']
         view.request.args['model'] = ['SequentialDaysTimetableModel']
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(view.ttschema, self.createDefaultSchema(['Monday']))
+        self.assertEquals(view.ttschema,
+                          createSchema(['Monday'], ['Period 1']))
         self.assertEquals(view.model_name, 'SequentialDaysTimetableModel')
+        self.assertEquals(view.day_templates,
+                          {0: createDayTemplate([('Period 1', 9, 0, 45)])})
+
+    def test_buildDayTemplates_empty(self):
+        view = self.createView()
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt, {})
+
+    def test_buildDayTemplates_simple(self):
+        view = self.createView()
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['time2.period'] = ['Period 2']
+        view.request.args['time2.day0'] = ['10:00-10:45']
+        view.request.args['time2.day6'] = ['10:30-11:10']
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt,
+                          {0: createDayTemplate([('Period 1', 9, 0, 45),
+                                                 ('Period 2', 10, 0, 45)]),
+                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+
+    def test_buildDayTemplates_errors(self):
+        view = self.createView()
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['foo']
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt, {})
 
     def test_buildSchema_empty(self):
         view = self.createView()
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createDefaultSchema())
+        self.assertEquals(schema, createSchema(['Day 1'], ['Period 1']))
 
     def test_buildSchema_from_request(self):
         view = self.createView()
@@ -171,7 +186,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period1'] = ['C']
         view.request.args['day2.period2'] = ['']
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
+        self.assertEquals(schema, createSchema(['Monday', 'Tuesday'],
                                                     ['A', 'B'], ['C']))
 
     def test_buildSchema_empty_day(self):
@@ -183,8 +198,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period1'] = ['']
         view.request.args['day2.period2'] = ['']
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
-                                                    ['A', 'B'], ['Period 1']))
+        self.assertEquals(schema, createSchema(['Monday', 'Tuesday'],
+                                               ['A', 'B'], ['Period 1']))
 
     def test_buildSchema_repeated_day_name(self):
         view = self.createView()
@@ -195,23 +210,23 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period1'] = ['B']
         view.request.args['day3.period1'] = ['C']
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['D', 'D (2)', 'D (3)'],
-                                                    ['A'], ['B'], ['C']))
+        self.assertEquals(schema, createSchema(['D', 'D (2)', 'D (3)'],
+                                               ['A'], ['B'], ['C']))
     def test_buildSchema_repeated_period_nam(self):
         view = self.createView()
         view.request.args['day1'] = ['D']
         view.request.args['day1.period1'] = ['A']
         view.request.args['day1.period2'] = ['A']
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['D'], ['A', 'A (2)']))
+        self.assertEquals(schema, createSchema(['D'], ['A', 'A (2)']))
 
     def test_buildSchema_add_day(self):
         view = self.createView()
         view.request.args['day1'] = ['Monday']
         view.request.args['ADD_DAY'] = ["Add"]
         schema = view._buildSchema()
-        self.assertEquals(schema,
-                          self.createDefaultSchema(['Monday', 'Day 2']))
+        self.assertEquals(schema, createSchema(['Monday', 'Day 2'],
+                                               ['Period 1'], ['Period 1']))
 
     def test_buildSchema_add_period(self):
         view = self.createView()
@@ -223,9 +238,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period2'] = ['']
         view.request.args['ADD_PERIOD'] = ["Add"]
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
-                                                    ['A', 'B', 'Period 3'],
-                                                    ['C']))
+        self.assertEquals(schema, createSchema(['Monday', 'Tuesday'],
+                                               ['A', 'B', 'Period 3'], ['C']))
 
     def test_buildSchema_add_period_not_first_day(self):
         view = self.createView()
@@ -236,9 +250,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period2'] = ['D']
         view.request.args['ADD_PERIOD'] = ["Add"]
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
-                                                    ['A'],
-                                                    ['C', 'D', 'Period 3']))
+        self.assertEquals(schema, createSchema(['Monday', 'Tuesday'],
+                                               ['A'], ['C', 'D', 'Period 3']))
 
     def test_buildSchema_delete_day(self):
         view = self.createView()
@@ -250,7 +263,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period2'] = ['D']
         view.request.args['DELETE_DAY_1'] = ["Delete"]
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Day 1'], ['C', 'D']))
+        self.assertEquals(schema, createSchema(['Day 1'], ['C', 'D']))
 
     def test_buildSchema_copy_day(self):
         view = self.createView()
@@ -262,8 +275,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period2'] = ['D']
         view.request.args['COPY_DAY_2'] = ["Copy"]
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Day 1', 'Day 2'],
-                                                    ['A', 'B'], ['A', 'B']))
+        self.assertEquals(schema, createSchema(['Day 1', 'Day 2'],
+                                               ['A', 'B'], ['A', 'B']))
 
     def test_buildSchema_copy_day_1(self):
         view = self.createView()
@@ -275,22 +288,83 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['day2.period2'] = ['D']
         view.request.args['COPY_DAY_1'] = ["Copy"]
         schema = view._buildSchema()
-        self.assertEquals(schema, self.createSchema(['Day 1', 'Day 2'],
-                                                    ['A', 'B'], ['C', 'D']))
+        self.assertEquals(schema, createSchema(['Day 1', 'Day 2'],
+                                               ['A', 'B'], ['C', 'D']))
 
     def test_all_periods(self):
         view = self.createView()
-        view.request.args['day1'] = ['Day 1']
-        view.request.args['day2'] = ['Day 2']
-        view.request.args['day3'] = ['Day 3']
-        view.request.args['day1.period1'] = ['A']
-        view.request.args['day1.period2'] = ['C']
-        view.request.args['day2.period1'] = ['B']
-        view.request.args['day2.period2'] = ['D']
-        view.request.args['day3.period1'] = ['A']
-        view.request.args['day3.period2'] = ['F']
-        view.ttschema = view._buildSchema()
+        view.ttschema = createSchema(['Day 1', 'Day 2', 'Day 3'],
+                                     ['A', 'C'], ['B', 'D'], ['A', 'F'])
         self.assertEquals(view.all_periods(), ['A', 'C', 'B', 'D', 'F'])
+
+    def test_period_times(self):
+        view = self.createView()
+        view.ttschema = createSchema(['Day 1', 'Day 2', 'Day 3'],
+                                     ['A', 'C'], ['B', 'D'], ['A', 'F'])
+        view.day_templates = {}
+        titles = [p['title'] for p in view.period_times()]
+        self.assertEquals(titles, ['A', 'C', 'B', 'D', 'F'])
+        for p in view.period_times():
+            self.assertEquals(p['times'], 7 * [None])
+
+    def test_period_times_with_data(self):
+        view = self.createView()
+        view.ttschema = createSchema(['Day 1', 'Day 2', 'Day 3'],
+                                     ['A', 'C'], ['B', 'D'], ['A', 'F'])
+        view.day_templates = {0: createDayTemplate([('A', 9, 0, 45),
+                                                    ('F', 10, 30, 40),
+                                                    ('X', 11, 22, 33)]),
+                              6: createDayTemplate([('A', 8, 55, 45),
+                                                    ('D', 0, 0, 24*60)])}
+        times = view.period_times()
+        titles = [p['title'] for p in times]
+        self.assertEquals(titles, ['A', 'C', 'B', 'D', 'F'])
+        self.assertEquals(times[0]['times'], ['09:00-09:45', None, None, None,
+                                              None, None, '08:55-09:40'])  # A
+        self.assertEquals(times[1]['times'], [None] * 7)                   # C
+        self.assertEquals(times[2]['times'], [None] * 7)                   # B
+        self.assertEquals(times[3]['times'], [None] * 6 + ['00:00-24:00']) # D
+        self.assertEquals(times[4]['times'], ['10:30-11:10'] + [None] * 6) # F
+
+
+def createSchema(days, *periods_for_each_day):
+    """Create a timetable schema.
+
+    Example:
+
+        createSchema(['D1', 'D2', 'D3'], ['A'], ['B', 'C'], ['D'])
+
+    creates a schema with three days, the first of which (D1) has one
+    period (A), the second (D2) has two periods (B and C), and the third
+    (D3) has again one period (D).
+    """
+
+    from schooltool.timetable import Timetable
+    from schooltool.timetable import TimetableDay
+    schema = Timetable(days)
+    for day, periods in zip(days, periods_for_each_day):
+        schema[day] = TimetableDay(list(periods))
+    return schema
+
+
+def createDayTemplate(periods):
+    """Create a SchooldayTemplate.
+
+    Example:
+
+        createDayTemplate([('Period 1', 9, 30, 45),
+                           ('Period 2', 10, 30, 45)])
+
+    would create a day template containing two periods, the first one starting
+    at 9:30, the second one starting at 10:30, both 45 minutes long.
+    """
+    from schooltool.timetable import SchooldayTemplate
+    from schooltool.timetable import SchooldayPeriod
+    day = SchooldayTemplate()
+    for period, h, m, duration in periods:
+        day.add(SchooldayPeriod(period, datetime.time(h, m),
+                                datetime.timedelta(minutes=duration)))
+    return day
 
 
 def test_suite():

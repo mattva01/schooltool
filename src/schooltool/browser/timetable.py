@@ -22,7 +22,9 @@ Web-application views for the schooltool.timetable objects.
 $Id$
 """
 
+import re
 import sets
+import datetime
 from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage
 from schooltool.browser.auth import PublicAccess
@@ -33,6 +35,8 @@ from schooltool.interfaces import ITimetable
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.translation import ugettext as _
 from schooltool.timetable import Timetable, TimetableDay
+from schooltool.timetable import SchooldayTemplate
+from schooltool.timetable import SchooldayPeriod
 from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
 
@@ -108,8 +112,8 @@ class TimetableSchemaWizard(View):
         self.ttschema = self._buildSchema()
         self.model_name = self.request.args.get('model', [None])[0]
         # TODO: verify if model_name is OK and display the dreaded red border
-        #       day templates
-        #       actual schema creation
+        self.day_templates = self._buildDayTemplates()
+        # TODO: actual schema creation
         return View.do_GET(self, request)
 
     def rows(self):
@@ -166,6 +170,34 @@ class TimetableSchemaWizard(View):
 
         return ttschema
 
+    def _buildDayTemplates(self):
+        """Built a dict of day templates from data contained in the request.
+
+        The dict is suitable to be passed as the second argument to the
+        timetable model factory.
+        """
+        result = {}
+        n = 1
+        while 'time%d.period' % n in self.request.args:
+            raw_value = self.request.args['time%d.period' % n][0]
+            period = to_unicode(raw_value).strip()
+            for day in range(7):
+                raw_value = self.request.args.get('time%d.day%d' % (n, day),
+                                                  [''])[0]
+                value = to_unicode(raw_value).strip()
+                if not value:
+                    continue
+                try:
+                    start, duration = parse_time_range(value)
+                except ValueError:
+                    # ignore invalid values for now
+                    continue
+                if day not in result:
+                    result[day] = SchooldayTemplate()
+                result[day].add(SchooldayPeriod(period, start, duration))
+            n += 1
+        return result
+
     def all_periods(self):
         """Return a list of all period names in order of occurrence."""
         periods = []
@@ -174,6 +206,21 @@ class TimetableSchemaWizard(View):
                 if period not in periods:
                     periods.append(period)
         return periods
+
+    def period_times(self):
+        """Return a list of all period times for every day of the week."""
+        result = []
+        times_for = {}
+        for period in self.all_periods():
+            times = [None] * 7
+            times_for[period] = times
+            result.append({'title': period, 'times': times})
+        for day, template in self.day_templates.items():
+            for event in template:
+                if event.title in times_for:
+                    range = format_time_range(event.tstart, event.duration)
+                    times_for[event.title][day] = range
+        return result
 
 
 def fix_duplicates(names):
@@ -215,3 +262,98 @@ def fix_duplicates(names):
         result.append(name)
         used.add(name)
     return result
+
+
+def parse_time_range(value):
+    """Parse a range of times (e.g. 9:45-14:20).
+
+    Example:
+
+        >>> parse_time_range('9:45-14:20')
+        (datetime.time(9, 45), datetime.timedelta(0, 16500))
+
+        >>> parse_time_range('00:00-24:00')
+        (datetime.time(0, 0), datetime.timedelta(1))
+
+        >>> parse_time_range('10:00-10:00')
+        (datetime.time(10, 0), datetime.timedelta(0))
+
+    Time ranges may span midnight
+
+        >>> parse_time_range('23:00-02:00')
+        (datetime.time(23, 0), datetime.timedelta(0, 10800))
+
+    Invalid values cause a ValueError
+
+        >>> parse_time_range('something else')
+        Traceback (most recent call last):
+          ...
+        ValueError: bad time range: something else
+
+        >>> parse_time_range('9:00-9:75')
+        Traceback (most recent call last):
+          ...
+        ValueError: minute must be in 0..59
+
+        >>> parse_time_range('5:99-6:00')
+        Traceback (most recent call last):
+          ...
+        ValueError: minute must be in 0..59
+
+        >>> parse_time_range('14:00-24:01')
+        Traceback (most recent call last):
+          ...
+        ValueError: hour must be in 0..23
+
+    White space can be inserted between times
+
+        >>> parse_time_range(' 9:45 - 14:20 ')
+        (datetime.time(9, 45), datetime.timedelta(0, 16500))
+
+    but not inside times
+
+        >>> parse_time_range('9: 45-14:20')
+        Traceback (most recent call last):
+          ...
+        ValueError: bad time range: 9: 45-14:20
+
+    """
+    m = re.match(r'\s*(\d+):(\d+)\s*-\s*(\d+):(\d+)\s*$', value)
+    if not m:
+        raise ValueError('bad time range: %s' % value)
+    h1, m1, h2, m2 = map(int, m.groups())
+    if (h2, m2) != (24, 0):   # 24:00 is expressly allowed here
+        datetime.time(h2, m2) # validate the second time
+    duration = (h2*60+m2) - (h1*60+m1)
+    if duration < 0:
+        duration += 1440
+    return datetime.time(h1, m1), datetime.timedelta(minutes=duration)
+
+
+def format_time_range(start, duration):
+    """Format a range of times (e.g. 9:45-14:20).
+
+    Example:
+
+        >>> format_time_range(datetime.time(9, 45),
+        ...                   datetime.timedelta(0, 16500))
+        '09:45-14:20'
+
+        >>> format_time_range(datetime.time(0, 0), datetime.timedelta(1))
+        '00:00-24:00'
+
+        >>> format_time_range(datetime.time(10, 0), datetime.timedelta(0))
+        '10:00-10:00'
+
+        >>> format_time_range(datetime.time(23, 0),
+        ...                   datetime.timedelta(0, 10800))
+        '23:00-02:00'
+
+    """
+    end = (datetime.datetime.combine(datetime.date.today(), start) + duration)
+    ends = end.strftime('%H:%M')
+    if ends == '00:00' and duration == datetime.timedelta(1):
+        return '00:00-24:00' # special case
+    else:
+        return '%s-%s' % (start.strftime('%H:%M'), ends)
+
