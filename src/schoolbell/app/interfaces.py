@@ -236,11 +236,14 @@ class IPersonPreferences(Interface):
 
     timezone = Attribute("""Timezone to display""")
 
-    timeformat = Attribute("""Time Format preference""")
+    timeformat = TextLine(title=u"Time Format preference",
+        description=u"strftime format string to display time.")
 
-    dateformat = Attribute("""Date format preference""")
+    dateformat = TextLine(title=u"Date Format preference",
+        description=u"strftime format string to display date.")
 
-    weekstart = Attribute("""Start week Sunday or Monday""")
+    weekstart = TextLine(title=u"Start week Sunday or Monday",
+        description=u"Day of week name to start calendar display weeks.")
 
 
 class IGroup(ICalendarOwner):
