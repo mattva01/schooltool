@@ -624,6 +624,7 @@ h2.calendar-view-title {
     height: 4em;
     margin: 0 !important;
     padding: 0 !important;
+    cursor: pointer;
 }
 
 #calendar-view-day .even {
