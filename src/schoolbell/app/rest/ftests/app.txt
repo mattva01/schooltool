@@ -1,0 +1,45 @@
+Functional tests for SchoolBell app RESTive views
+=================================================
+
+First of all, we will need a schoolbell instance.  We will add it via
+the web ZMI:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... new_value=frogpond""", handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Now, we can run the REST page tests:
+
+    >>> print rest("""
+    ... GET /frogpond HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+      <message>Welcome to the SchoolTool server</message>
+      <containers>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/persons"
+                   xlink:title="persons"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/groups"
+                   xlink:title="groups"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/resources"
+                   xlink:title="resources"/>
+      </containers>
+    </schooltool>
+    <BLANKLINE>
