@@ -81,21 +81,28 @@ class TestEventSystem(unittest.TestCase):
         #
         from schooltool.model import RootGroup, Group, Person
         from schooltool.event import RouteToGroupsAction, RouteToMembersAction
+        from schooltool.event import RouteToRelationshipsAction
+        from schooltool.interfaces import URIGroup, URIMember
         root = RootGroup("root")
         datamgr.root()['root'] = root
         datamgr.add(root)
         root.eventTable.append(RouteToMembersAction(IStudentEvent))
 
         students = Group("students")
-        students.eventTable.append(RouteToGroupsAction(IEvent))
+        students.eventTable.append(RouteToRelationshipsAction(URIGroup, IEvent))
         root.add(students)
 
         student1 = Person("Fred")
         student1.eventTable.append(RouteToGroupsAction(IEvent))
         students.add(student1)
 
+        misc_group = Group("misc")
+        misc_group.eventTable.append(
+            RouteToRelationshipsAction(URIMember, IEvent))
+        root.add(misc_group)
+
         another_listener = EventCatcher()
-        root.add(another_listener)
+        misc_group.add(another_listener)
 
         # Create another event listener, not attached to the containment
         # hierarchy, and subscribe it to the global event service
