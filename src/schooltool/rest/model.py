@@ -90,7 +90,7 @@ class GroupView(ApplicationObjectTraverserView):
 
 
 class TreeView(View):
-    """XXX what does this do?"""
+    """A view that shows the group tree in XML."""
 
     template = Template('www/tree.pt', content_type='text/xml')
     node_template = Template('www/tree_node.pt',
