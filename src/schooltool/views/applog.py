@@ -44,10 +44,9 @@ class ApplicationLogView(View):
             return textErrorPage(request, _("Application log not configured"))
 
     def file_contents(self, name):
-        f = file(name)
+        f = open(name)
         try:
-            contents = f.read()
+            return f.read()
         finally:
             f.close()
-        return contents
 
