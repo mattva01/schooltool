@@ -939,8 +939,56 @@ class IViewAPI(Interface):
 
 
 #
-# Exceptions
+# Calendaring
 #
+
+class ISchooldayCalendar(Interface):
+    """A normal calendar which can tell whether a day is a
+    school day or not for a certain period of time.
+    """
+
+    start = Attribute("The date of the start of the period")
+
+    end = Attribute("The date of the end of the period""")
+
+    def __contains__(date):
+        """Returns True if the date passed is a schoolday.
+
+        Raises a ValueError if the date is outside of the period covered.
+        """
+
+    def add(day):
+        """Marks the day as a schoolday.
+
+        Raises a ValueError if the date is outside of the period covered.
+        """
+
+    def remove(day):
+        """Marks the day as a holiday.
+
+        Raises a ValueError if the date is outside of the period covered.
+        """
+
+    def addWeekdays(*weekdays):
+        """Mark that all days of week with a number in weekdays within the
+        period will be schooldays.
+
+        The numbering used is the same as one used by
+        datetime.date.weekday() method, or the calendar module:
+        0 is Monday, 1 is Tuesday, etc.
+        """
+
+    def removeWeekdays(*weekdays):
+        """Mark that all days of week with a number in weekdays within the
+        period will be holidays.
+
+        The numbering used is the same as one used by
+        datetime.date.weekday() method, or the calendar module.
+        0 is Monday, 1 is Tuesday, etc.
+        """
+
+
+# Exceptions
 
 class ComponentLookupError(Exception):
     """An exception for component architecture."""
