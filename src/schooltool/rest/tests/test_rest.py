@@ -159,7 +159,6 @@ class TestSchoolToolTraverse(unittest.TestCase):
         assert schooltoolTraverse(a, ['foo', 'magic'], None) is d
         assert schooltoolTraverse(a, ['foo', '@@path'], None) == '/foo'
 
-
         cx = ContextStub()
         cx.vars['request'] = RequestStub()
         assert (schooltoolTraverse(a, ['foo', '@@absolute_path'], cx)
@@ -223,7 +222,7 @@ class TestView(unittest.TestCase):
 
         request = RequestStub(uri='http://foo/x')
         result = view.getChild('', request)
-        self.assert_(result.__class__ is NotFoundView)
+        self.assert_(result is view)
 
     def test_getChild_with_traverse(self):
         from schooltool.rest import View, NotFoundView

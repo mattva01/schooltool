@@ -349,10 +349,7 @@ class View(Resource):
 
     def getChild(self, name, request):
         if name == '': # trailing slash in the URL
-            if request.path == '/':
-                return self
-            else:
-                return NotFoundView()
+            return self
         try:
             child = self._traverse(name, request)
             assert child is not None, ("%s._traverse returned None"
