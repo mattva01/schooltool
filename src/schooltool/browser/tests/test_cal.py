@@ -291,7 +291,7 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         from schooltool.browser.cal import CalendarViewBase
 
         e0 = createEvent('2004-08-10 11:00', '1h', "e0")
-        e1 = createEvent('2004-08-11 12:00', '1h', "e1")
+        e1 = createEvent('2004-08-11 12:00', '1h', "e1", privacy="hidden")
         e2 = createEvent('2004-08-11 11:00', '1h', "e2")
         e3 = createEvent('2004-08-12 23:00', '4h', "e3")
         e4 = createEvent('2004-08-15 11:00', '1h', "e4")
@@ -300,8 +300,12 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         e7 = createEvent('2004-08-12 00:00', '1d+1sec', "e7")
         e8 = createEvent('2004-08-15 00:00', '0sec', "e8")
 
-        cal = createCalendar([e0, e1, e2, e3, e4, e5, e6, e7, e8])
+        cal = self.person.calendar
+        for e in [e0, e1, e2, e3, e4, e5, e6, e7, e8]:
+            cal.addEvent(e)
+
         view = CalendarViewBase(cal)
+        view.request = RequestStub(authenticated_user=self.person)
 
         start = date(2004, 8, 10)
         days = view.getDays(start, start)
@@ -328,6 +332,15 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         self.assertEquals(len(days), 1)
         self.assertEquals(days[0].date, start)
         self.assertEqualEventLists(days[0].events, [e5, e2, e1])
+
+        # Check that the hidden event is excluded for another person
+        view.request = RequestStub(authenticated_user=self.person2)
+        start = date(2004, 8, 11)
+        end = date(2004, 8, 12)
+        days = view.getDays(start, end)
+
+        self.assertEqualEventLists(days[0].events, [e5, e2])            # 11
+
 
     def test_getWeek(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
@@ -532,8 +545,11 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         ev2 = createEvent('2004-08-12 13:00', '2h', "ev2")
         ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
         ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
-        cal = createCalendar([ev1, ev2, ev3, ev4])
+        cal = self.person.calendar
+        for e in [ev1, ev2, ev3, ev4]:
+            cal.addEvent(e)
         view = DailyCalendarView(cal)
+        view.request = RequestStub(authenticated_user=self.person)
         result = view.dayEvents(date(2004, 8, 12))
         expected = [ev4, ev1, ev2, ev3]
         fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
@@ -2319,6 +2335,33 @@ class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
         assert canView(self.person)
         assert canView(self.person2)
         assert canView(self.manager)
+
+    def test_isHidden(self):
+        from schooltool.interfaces import ViewPermission
+        from schooltool.browser.cal import CalendarEventView
+        ev = createEvent('2004-11-03 14:32', '1h', 'Nothing of importance',
+                         privacy="hidden")
+        self.person.calendar.addEvent(ev)
+        self.person.calendar.acl.add((self.person, ViewPermission))
+        self.person.calendar.acl.add((self.person2, ViewPermission))
+        view = CalendarEventView(ev, self.person.calendar)
+
+        anonymous = None
+        def isHidden(user):
+            view.request = RequestStub(authenticated_user=user)
+            return view.isHidden()
+
+        assert isHidden(anonymous)
+        assert not isHidden(self.person)
+        assert isHidden(self.person2)
+        assert not isHidden(self.manager)
+
+        view.context = view.context.replace(privacy="public")
+
+        assert not isHidden(anonymous)
+        assert not isHidden(self.person)
+        assert not isHidden(self.person2)
+        assert not isHidden(self.manager)
 
 
 def test_suite():

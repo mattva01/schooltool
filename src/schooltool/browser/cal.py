@@ -259,6 +259,11 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     def eventShort(self, event):
         return self._eventView(event).short(self.request)
 
+    def eventHidden(self, event):
+        view = self._eventView(event)
+        view.request = self.request
+        return view.isHidden()
+
     def update(self):
         if 'date' not in self.request.args:
             self.cursor = date.today()
@@ -295,6 +300,8 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             day += timedelta(1)
 
         for event in self.iterEvents(start, end):
+            if self.eventHidden(event):
+                continue
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
             # |     |  [-- event --)  |     |
@@ -1475,6 +1482,14 @@ class CalendarEventView(View):
             return True
         else:
             return self.isManager() or user is self.calendar.__parent__
+
+    def isHidden(self):
+        """Should the event be hidden from the current user?"""
+        user = self.request.authenticated_user
+        if not self.context.privacy == 'hidden':
+            return False
+        else:
+            return not (self.isManager() or user is self.calendar.__parent__)
 
     def cssClass(self):
         """Choose a CSS class for the event."""
