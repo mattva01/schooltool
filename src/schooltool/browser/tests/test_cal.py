@@ -25,16 +25,75 @@ $Id$
 import re
 import unittest
 from logging import INFO
-from pprint import pformat
 from datetime import datetime, date, timedelta
 
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
+from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.helpers import diff
 from schooltool.common import dedent
 
 __metaclass__ = type
+
+
+def createEvent(dtstart, duration, title):
+    """Create a CalendarEvent.
+
+      >>> e = createEvent('2004-01-02 14:45:50', '5min', 'title')
+      >>> e == CalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
+      ...                    timedelta(minutes=5), 'title')
+      True
+
+      >>> e = createEvent('2004-01-02 14:45', '3h', 'title')
+      >>> e == CalendarEvent(datetime(2004, 1, 2, 14, 45), timedelta(hours=3),
+      ...                    'title')
+      True
+
+      >>> e = createEvent('2004-01-02', '2d', 'title')
+      >>> e == CalendarEvent(datetime(2004, 1, 2), timedelta(days=2),
+      ...                    'title')
+      True
+
+    createEvent is very strict about the format of it arguments, and terse in
+    error reporting, but it's OK, as it is only used in unit tests.
+    """
+    from schooltool.cal import CalendarEvent
+    from schooltool.common import parse_datetime
+    if dtstart.count(':') == 0:         # YYYY-MM-DD
+        dtstart = parse_datetime(dtstart+' 00:00:00') # add hh:mm:ss
+    elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
+        dtstart = parse_datetime(dtstart+':00') # add seconds
+    else:                               # YYYY-MM-DD HH:MM:SS
+        dtstart = parse_datetime(dtstart)
+    dur = timedelta(0)
+    for part in duration.split('+'):
+        part = part.strip()
+        if part.endswith('d'):
+            dur += timedelta(days=int(part.rstrip('d')))
+        elif part.endswith('h'):
+            dur += timedelta(hours=int(part.rstrip('h')))
+        elif part.endswith('sec'):
+            dur += timedelta(seconds=int(part.rstrip('sec')))
+        else:
+            dur += timedelta(minutes=int(part.rstrip('min')))
+    return CalendarEvent(dtstart, dur, title)
+
+
+def createCalendar(events=()):
+    """Create a calendar with events.
+
+      >>> e = createEvent('2004-01-02 14:45', '5', 'title')
+      >>> c = createCalendar([e])
+      >>> list(c) == [e]
+      True
+
+    """
+    from schooltool.cal import Calendar
+    calendar = Calendar()
+    for event in events:
+        calendar.addEvent(event)
+    return calendar
 
 
 class TestBookingView(AppSetupMixin, unittest.TestCase):
@@ -139,10 +198,7 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
                      "%r is not %r" % (ev1.owner, self.teacher))
 
     def test_conflict(self):
-        from schooltool.cal import CalendarEvent
-        from schooltool.common import parse_datetime
-        ev = CalendarEvent(parse_datetime('2004-08-10 19:00:00'),
-                           timedelta(hours=1), "Some event")
+        ev = createEvent('2004-08-10 19:00', '1h', "Some event")
         self.resource.calendar.addEvent(ev)
         self.assertEquals(len(list(self.teacher.calendar)), 0)
         self.assertEquals(len(list(self.resource.calendar)), 1)
@@ -190,10 +246,9 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_urls(self):
         from schooltool.browser.cal import CalendarViewBase
-        from schooltool.cal import Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar()
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
@@ -210,24 +265,17 @@ class TestCalendarViewBase(unittest.TestCase):
                           prefix + 'calendar/bar.html?date=2005-03-22')
 
     def test_getDays(self):
-        from schooltool.browser.cal import CalendarViewBase, CalendarDay
-        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.browser.cal import CalendarViewBase
 
-        cal = Calendar()
+        e0 = createEvent('2004-08-10 11:00', '1h', "zeroth")
+        e1 = createEvent('2004-08-11 12:00', '1h', "second")
+        e2 = createEvent('2004-08-11 11:00', '1h', "first")
+        e3 = createEvent('2004-08-12 23:00', '4h', "long")
+        e4 = createEvent('2004-08-15 11:00', '1h', "last")
+        e5 = createEvent('2004-08-10 09:00', '3d', "all over")
+
+        cal = createCalendar([e0, e1, e2, e3, e4, e5])
         view = CalendarViewBase(cal)
-        view.cursor = date(2004, 8, 11)
-
-        def calEvent(name, dt, hours=1):
-            event = CalendarEvent(dt, timedelta(hours=hours), name)
-            cal.addEvent(event)
-            return event
-
-        e0 = calEvent("zeroth", datetime(2004, 8, 10, 11, 0))
-        e1 = calEvent("second", datetime(2004, 8, 11, 12, 0))
-        e2 = calEvent("first", datetime(2004, 8, 11, 11, 0))
-        e3 = calEvent("long", datetime(2004, 8, 12, 23, 0), hours=4)
-        e4 = calEvent("last", datetime(2004, 8, 15, 11, 0))
-        e5 = calEvent("all over", datetime(2004, 8, 10, 9, 0), hours=24 * 3)
 
         start = date(2004, 8, 10)
         end = date(2004, 8, 16)
@@ -246,9 +294,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getWeek(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
-        from schooltool.cal import Calendar
 
-        cal = Calendar()
+        cal = createCalendar()
         view = CalendarViewBase(cal)
         self.assertEquals(view.first_day_of_week, 0) # Monday by default
 
@@ -270,9 +317,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getWeek_first_day_of_week(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
-        from schooltool.cal import Calendar
 
-        cal = Calendar()
+        cal = createCalendar()
         view = CalendarViewBase(cal)
         view.first_day_of_week = 2 # Wednesday
 
@@ -301,9 +347,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getMonth(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
-        from schooltool.cal import Calendar
 
-        cal = Calendar()
+        cal = createCalendar()
         view = CalendarViewBase(cal)
 
         def getDaysStub(start, end):
@@ -336,9 +381,8 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getYear(self):
         from schooltool.browser.cal import CalendarViewBase
-        from schooltool.cal import Calendar
 
-        cal = Calendar()
+        cal = createCalendar()
         view = CalendarViewBase(cal)
 
         def getMonthStub(dt):
@@ -366,17 +410,14 @@ class TestWeeklyCalendarView(unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import WeeklyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
+                                          "Stuff happens")])
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
-                                   timedelta(hours=1),
-                                   "Stuff happens"))
 
         view = WeeklyCalendarView(cal)
         view.authorization = lambda x, y: True
@@ -394,7 +435,7 @@ class TestWeeklyCalendarView(unittest.TestCase):
         self.assertEquals(view.getCurrentWeek(), "really works")
 
 
-class TestDailyCalendarView(unittest.TestCase):
+class TestDailyCalendarView(NiceDiffsMixin, unittest.TestCase):
 
     def test_update(self):
         from schooltool.browser.cal import DailyCalendarView
@@ -410,10 +451,9 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test__setRange(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
         view = DailyCalendarView(cal)
         view.request = RequestStub()
@@ -426,39 +466,45 @@ class TestDailyCalendarView(unittest.TestCase):
 
         do_test([], (8, 19))
 
-        events = [CalendarEvent(datetime(2004, 8, 16, 7, 00),
-                                timedelta(minutes=1), "workout")]
+        events = [createEvent('2004-08-16 7:00', '1min', 'workout')]
         do_test(events, (7, 19))
 
-        events = [CalendarEvent(datetime(2004, 8, 15, 8, 00),
-                                timedelta(days=1), "long workout")]
+        events = [createEvent('2004-08-15 8:00', '1d', "long workout")]
         do_test(events, (0, 19))
 
-        events = [CalendarEvent(datetime(2004, 8, 16, 20, 00),
-                                timedelta(minutes=30),
-                                "late workout")]
+        events = [createEvent('2004-08-16 20:00', '30min', "late workout")]
         do_test(events, (8, 21))
 
-        events = [CalendarEvent(datetime(2004, 8, 16, 20, 00),
-                                timedelta(hours=5),
-                                "long late workout")]
+        events = [createEvent('2004-08-16 20:00', '5h', "long late workout")]
         do_test(events, (8, 24))
+
+    def test_dayEvents(self):
+        from schooltool.browser.cal import DailyCalendarView
+        ev1 = createEvent('2004-08-12 12:00', '2h', "ev1")
+        ev2 = createEvent('2004-08-12 13:00', '2h', "ev2")
+        ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
+        ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
+        cal = createCalendar([ev1, ev2, ev3, ev4])
+        view = DailyCalendarView(cal)
+        result = view.dayEvents(date(2004, 8, 12))
+        expected = [ev4, ev1, ev2, ev3]
+        fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
+        self.assertEquals(result, expected,
+                          '%s != %s' % (fmt(result), fmt(expected)))
 
     def test_getColumns(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
         view = DailyCalendarView(cal)
         view.request = RequestStub()
         view.cursor = date(2004, 8, 12)
 
         self.assertEquals(view.getColumns(), 1)
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                   timedelta(hours=2),
-                                   "Meeting"))
+
+        cal.addEvent(createEvent('2004-08-12 12:00', '2h', "Meeting"))
         self.assertEquals(view.getColumns(), 1)
 
         #
@@ -472,13 +518,8 @@ class TestDailyCalendarView(unittest.TestCase):
         #
         #  Expected result: 2
 
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 13, 0),
-                                   timedelta(hours=2),
-                                   "Lunch"))
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 14, 0),
-                                   timedelta(hours=2),
-                                   "Another meeting"))
-
+        cal.addEvent(createEvent('2004-08-12 13:00', '2h', "Lunch"))
+        cal.addEvent(createEvent('2004-08-12 14:00', '2h', "Another meeting"))
         self.assertEquals(view.getColumns(), 2)
 
         #
@@ -491,42 +532,31 @@ class TestDailyCalendarView(unittest.TestCase):
         #  16         +--+
         #
         #  Expected result: 3
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 13, 0),
-                                   timedelta(hours=2),
-                                   "Call Mark during lunch"))
+
+        cal.addEvent(createEvent('2004-08-12 13:00', '2h',
+                                 "Call Mark during lunch"))
         self.assertEquals(view.getColumns(), 3)
 
+        #
+        #  Events that do not overlap in real life, but overlap in our view
         #
         #    +-------------+-------------+-------------+
         #    | 12:00-12:30 | 12:30-13:00 | 12:00-12:00 |
         #    +-------------+-------------+-------------+
+        #
+        #  Expected result: 3
 
         cal.clear()
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                   timedelta(minutes=30),
-                                   "a"))
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 30),
-                                   timedelta(minutes=30),
-                                   "b"))
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                   timedelta(minutes=0),
-                                   "c"))
+        cal.addEvent(createEvent('2004-08-12 12:00', '30min', "a"))
+        cal.addEvent(createEvent('2004-08-12 12:30', '30min', "b"))
+        cal.addEvent(createEvent('2004-08-12 12:00', '0min', "c"))
         self.assertEquals(view.getColumns(), 3)
 
     def test_getHours(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.cal import CalendarEvent as CE, Calendar
         from schooltool.model import Person
 
-        class CalendarEvent(CE):
-            """Calendar events that can be compared to '' or None"""
-            def __cmp__(self, other):
-                if other is None or other == '':
-                    return 1
-                else:
-                    return CE.__cmp__(self, other)
-
-        cal = Calendar()
+        cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
         view = DailyCalendarView(cal)
         view.request = RequestStub()
@@ -540,11 +570,9 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'time': '12:00', 'cols': (None,)},
                            {'time': '13:00', 'cols': (None,)},
                            {'time': '14:00', 'cols': (None,)},
-                           {'time': '15:00', 'cols': (None,)},],
-                          pformat(result))
+                           {'time': '15:00', 'cols': (None,)},])
 
-        ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0), timedelta(hours=2),
-                            "Meeting")
+        ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
         cal.addEvent(ev1)
         result = list(view.getHours())
         self.assertEquals(result,
@@ -553,8 +581,7 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'time': '12:00', 'cols': (ev1,)},
                            {'time': '13:00', 'cols': ('',)},
                            {'time': '14:00', 'cols': (None,)},
-                           {'time': '15:00', 'cols': (None,)},],
-                          pformat(result))
+                           {'time': '15:00', 'cols': (None,)},])
 
         #
         #  12 +--+
@@ -564,11 +591,8 @@ class TestDailyCalendarView(unittest.TestCase):
         #  16 +--+
         #
 
-        ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
-                            timedelta(hours=2), "Lunch")
-        ev3 = CalendarEvent(datetime(2004, 8, 12, 14, 0),
-                            timedelta(hours=2), "Another meeting")
-
+        ev2 = createEvent('2004-08-12 13:00', '2h', "Lunch")
+        ev3 = createEvent('2004-08-12 14:00', '2h', "Another meeting")
         cal.addEvent(ev2)
         cal.addEvent(ev3)
 
@@ -579,12 +603,9 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'time': '12:00', 'cols': (ev1, None)},
                            {'time': '13:00', 'cols': ('', ev2)},
                            {'time': '14:00', 'cols': (ev3,'')},
-                           {'time': '15:00', 'cols': ('', None)},],
-                          pformat(result))
+                           {'time': '15:00', 'cols': ('', None)},])
 
-        ev4 = CalendarEvent(datetime(2004, 8, 11, 14, 0),
-                            timedelta(days=3), "Visit")
-
+        ev4 = createEvent('2004-08-11 14:00', '3d', "Visit")
         cal.addEvent(ev4)
 
         result = list(view.getHours())
@@ -612,45 +633,36 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'time': '20:00', 'cols': ('', None, None)},
                            {'time': '21:00', 'cols': ('', None, None)},
                            {'time': '22:00', 'cols': ('', None, None)},
-                           {'time': '23:00', 'cols': ('', None, None)}],
-                          pformat(result))
+                           {'time': '23:00', 'cols': ('', None, None)}])
 
     def test_rowspan(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         view = DailyCalendarView(None)
         view.starthour = 10
         view.endhour = 18
         view.cursor = date(2004, 8, 12)
 
-        self.assertEquals(view.rowspan(CalendarEvent(
-            datetime(2004, 8, 12, 12, 0), timedelta(days=1), "Long")), 6)
-
-        self.assertEquals(view.rowspan(CalendarEvent(
-            datetime(2004, 8, 11, 12, 0), timedelta(days=3), "Very")), 8)
-
-        self.assertEquals(view.rowspan(CalendarEvent(
-            datetime(2004, 8, 12, 12, 0), timedelta(seconds=600), "")), 1)
-
-        self.assertEquals(view.rowspan(CalendarEvent(
-            datetime(2004, 8, 12, 12, 0),timedelta(seconds=3601), "")), 2)
-
-        self.assertEquals(view.rowspan(CalendarEvent(
-            datetime(2004, 8, 12, 9, 0), timedelta(hours=3), "")), 2)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1d', "Long")), 6)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-11 12:00', '3d', "Very")), 8)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '10min', "")), 1)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 09:00', '3h', "")), 2)
 
     def test_render(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar([createEvent('2004-08-12 12:00', '1h',
+                                          "Stuff happens")])
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                   timedelta(hours=1),
-                                   "Stuff happens"))
 
         view = DailyCalendarView(cal)
         view.authorization = lambda x, y: True
@@ -664,17 +676,14 @@ class TestMonthlyCalendarView(unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import MonthlyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
+                                          "Stuff happens")])
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
-                                   timedelta(hours=1),
-                                   "Stuff happens"))
 
         view = MonthlyCalendarView(cal)
         view.authorization = lambda x, y: True
@@ -703,17 +712,14 @@ class TestYearlyCalendarView(unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import YearlyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
+                                          "Stuff happens")])
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
-        cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
-                                   timedelta(hours=1),
-                                   "Stuff happens"))
 
         view = YearlyCalendarView(cal)
         view.authorization = lambda x, y: True
@@ -757,10 +763,9 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
     def test_render(self):
         from schooltool.browser.cal import CalendarView
-        from schooltool.cal import CalendarEvent, Calendar
         from schooltool.model import Person
 
-        cal = Calendar()
+        cal = createCalendar()
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
@@ -783,9 +788,8 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_getLocations(self):
         from schooltool.browser.cal import EventViewBase
-        from schooltool.cal import Calendar
 
-        cal = self.person.cal = Calendar()
+        cal = self.person.cal = createCalendar()
         cal.__parent__ = self.person
 
         view = EventViewBase(cal)
@@ -794,9 +798,8 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_customized_location(self):
         from schooltool.browser.cal import EventViewBase
-        from schooltool.cal import Calendar
 
-        cal = Calendar()
+        cal = createCalendar()
         setPath(cal, '/persons/foo/calendar')
         view = EventViewBase(cal)
 
@@ -822,9 +825,8 @@ class TestEventAddView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.browser.cal import EventAddView
-        from schooltool.cal import Calendar
 
-        self.cal = Calendar()
+        self.cal = createCalendar()
         setPath(self.cal, '/persons/somebody/calendar')
         self.view = EventAddView(self.cal)
         self.view.authorization = lambda x, y: True
@@ -900,9 +902,9 @@ class TestEventEditView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.browser.cal import EventEditView
-        from schooltool.cal import Calendar, CalendarEvent
+        from schooltool.cal import CalendarEvent
 
-        self.cal = Calendar()
+        self.cal = createCalendar()
         setPath(self.cal, '/persons/somebody/calendar')
 
         self.ev1 = CalendarEvent(datetime(2004, 8, 15, 12, 0),
@@ -966,9 +968,9 @@ class TestEventDeleteView(unittest.TestCase):
 
     def test(self):
         from schooltool.browser.cal import EventDeleteView
-        from schooltool.cal import Calendar, CalendarEvent
+        from schooltool.cal import CalendarEvent
 
-        cal = Calendar()
+        cal = createCalendar()
         setPath(cal, '/persons/somebody/calendar')
 
         view = EventDeleteView(cal)
@@ -1019,17 +1021,16 @@ class TestCalendarComboMixin(unittest.TestCase):
 
     def test(self):
         from schooltool.browser.cal import CalendarComboMixin
-        from schooltool.cal import Calendar, CalendarEvent
         from schooltool.model import Person
 
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
 
-        cal = Calendar()
+        cal = createCalendar()
         cal.__parent__ = person
         cal.__name__ = 'calendar'
 
-        tcal = Calendar()
+        tcal = createCalendar()
         tcal.__parent__ = person
         tcal.__name__ = 'timetable-calendar'
 
@@ -1040,10 +1041,8 @@ class TestCalendarComboMixin(unittest.TestCase):
         result = list(view.iterEvents())
         self.assertEquals(result, [])
 
-        ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                            timedelta(hours=1), "ev1")
-        ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
-                            timedelta(hours=1), "ev2")
+        ev1 = createEvent('2004-08-12 12:00', '1h', 'ev1')
+        ev2 = createEvent('2004-08-12 13:00', '1h', 'ev2')
         cal.addEvent(ev1)
         tcal.addEvent(ev2)
 
@@ -1057,7 +1056,6 @@ class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
                             TraversalTestMixin):
 
     def test_traverse(self):
-        from schooltool.cal import ACLCalendar
         from schooltool.browser.cal import ComboCalendarView
         from schooltool.browser.cal import ComboDailyCalendarView
         from schooltool.browser.cal import ComboWeeklyCalendarView
