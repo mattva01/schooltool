@@ -45,13 +45,14 @@ class FacetFactory:
 
     implements(IFacetFactory)
 
-    def __init__(self, factory, name, title=None):
+    def __init__(self, factory, name, title=None, facet_name=None):
         self.factory = factory
         self.name = name
         if title is None:
             self.title = name
         else:
             self.title = title
+        self.facet_name = facet_name
 
     def __call__(self):
         return self.factory()

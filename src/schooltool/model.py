@@ -248,6 +248,7 @@ class AbsenceTrackerFacet(AbsenceTrackerMixin):
 def setUp():
     """Register the AbsenceTrackerFacet factory."""
     registerFacetFactory(FacetFactory(AbsenceTrackerFacet, 'absence_tracker',
-                                      'Absence Tracker'))
+                                      'Absence Tracker',
+                                      facet_name='absences'))
 
 

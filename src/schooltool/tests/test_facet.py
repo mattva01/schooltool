@@ -96,7 +96,6 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         from schooltool.facet import FacetedEventTargetMixin
         from schooltool.component import FacetManager
         et = FacetedEventTargetMixin()
-        et.__facets__ = Set()
         et.eventTable.append(0)
         FacetManager(et).setFacet(FacetStub())
         f = FacetStub()

@@ -1192,10 +1192,10 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEqualsXML(result, """
             <facets xmlns:xlink="http://www.w3.org/1999/xlink">
               <facet xlink:type="simple" active="inactive"
-                     xlink:title="001" class="EventLogFacet"
+                     xlink:title="001"
                      owned="unowned" xlink:href="/person/facets/001"/>
               <facet xlink:type="simple" active="active"
-                     xlink:title="002" class="EventLogFacet"
+                     xlink:title="002"
                      owned="owned" xlink:href="/person/facets/002"/>
               <facetFactory name="eventlog" title="Event Log Factory"/>
             </facets>
@@ -1217,13 +1217,17 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        self.assertEquals(request.headers['Location'],
-                          "http://localhost/group/facets/001")
+        baseurl = "http://localhost/group/facets/"
+        location = request.headers['Location']
+        self.assert_(location.startswith(baseurl),
+                     "%r.startswith(%r) failed" % (location, baseurl))
+        name = location[len(baseurl):]
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assert_("http://localhost/group/facets/001" in result)
+        self.assert_(location in result)
         self.assertEquals(len(list(context.iterFacets())), 1)
-        facet = context.facetByName('001')
+        facet = context.facetByName(name)
         self.assert_(facet.__class__ is EventLogFacet)
+        self.assertEquals(name, 'eventlog')
 
     def test_post_errors(self):
         from schooltool.views import FacetManagementView
@@ -1240,6 +1244,23 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
             self.assertEquals(request.code, 400,
                               "%s != 400 for %s" % (request.code, body))
             self.assertEquals(request.headers['Content-Type'], "text/plain")
+
+    def test_post_singleton_twice(self):
+        from schooltool.views import FacetManagementView
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+        from schooltool.debug import EventLogFacet, setUp
+        setUp() # register a facet factory
+        facetable = Person()
+        context = FacetManager(facetable)
+        view = FacetManagementView(context)
+        context.setFacet(EventLogFacet(), name='eventlog')
+        request = RequestStub("http://localhost/group/facets",
+                              method="POST",
+                              body='facet factory="eventlog"')
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
 
 
 class TestXMLPseudoParser(unittest.TestCase):

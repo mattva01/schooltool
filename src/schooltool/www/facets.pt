@@ -6,7 +6,6 @@
     xlink:type="simple"
     tal:attributes="active item/active;
                     owned item/owned;
-                    class item/class_name;
                     xlink:title item/title;
                     xlink:href item/path"
   />

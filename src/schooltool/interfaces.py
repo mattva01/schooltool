@@ -714,6 +714,9 @@ class IFacetFactory(Interface):
 
     name = Attribute("The name of this factory")
     title = Attribute("Short description of this factory")
+    facet_name = Attribute(
+        """The __name__ the facet will get if it is a singleton facet.
+        None if the facet is not a singleton facet.""")
 
     def __call__():
         """Return a facet."""
@@ -722,14 +725,17 @@ class IFacetFactory(Interface):
 class IFacetManager(Interface):
     """A thing that manages the facets of some object."""
 
-    def setFacet(facet, owner=None):
+    def setFacet(facet, owner=None, name=None):
         """Set the facet on the object.
 
         Owner is the agent responsible for adding the facet.
         If owner is None, the ownership of the facet is not changed.
 
         facet.__name__ must be None before setting the facet.
-        facet.__name__ will be set to a name unique within the set of facets.
+        facet.__name__ will be set to a name unique within the set of facets,
+        if the name argument is None.  Otherwise facet.__name__ will be
+        set to the name provided in the argument, if it is possible (no other
+        facet has the same name), or a ValueError will be raised if it is not.
         """
 
     def removeFacet(facet):

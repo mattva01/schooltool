@@ -424,6 +424,27 @@ class TestUniqueNamesMixin(unittest.TestCase, EqualsSortedMixin):
         u.newName(named_object3)
         self.assertEqual(named_object3.__name__, '00003')
 
+    def test_fixed_names(self):
+        from schooltool.db import UniqueNamesMixin
+        u = UniqueNamesMixin(name_length=3)
+        named_object1 = NamedObject()
+        u.newName(named_object1, name='name')
+        self.assertEqual(named_object1.__name__, 'name')
+
+        named_object2 = NamedObject()
+        self.assertRaises(ValueError, u.newName, named_object2, name='name')
+        self.assert_(named_object2.__name__ is None)
+
+        named_object3 = NamedObject()
+        named_object4 = NamedObject()
+        named_object5 = NamedObject()
+        u.newName(named_object3, name='002')
+        u.newName(named_object4)
+        u.newName(named_object5)
+        self.assertEqual(named_object3.__name__, '002')
+        self.assertEqual(named_object4.__name__, '001')
+        self.assertEqual(named_object5.__name__, '003')
+
 
 class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
 
@@ -532,6 +553,18 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         finally:
             get_transaction().abort()
             datamgr.close()
+
+    def test_add_with_name(self):
+        p = self.newInstance()
+        a = N()
+        p.add(a, name='foo')
+        self.assertEquals(a.__name__, 'foo')
+
+        b = N()
+        self.assertRaises(ValueError, p.add, b, 'foo')
+        self.assert_(b.__name__ is None)
+        self.assert_(b not in p)
+
 
 
 class TestPersistentPairKeysDictWithNames(unittest.TestCase,

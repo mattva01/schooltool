@@ -134,5 +134,5 @@ POST> factory="eventlog"
 POST> .
 201 Created
 Content-Type: text/plain
-Facet created: http://localhost/persons/Marius/facets/001
+Facet created: http://localhost/persons/Marius/facets/eventlog
 

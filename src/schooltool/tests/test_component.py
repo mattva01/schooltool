@@ -226,6 +226,18 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
         self.assertNotEquals(facet2.__name__, None)
         self.assertNotEquals(facet2.__name__, facet1.__name__)
 
+    def test_setFacet_with_a_name(self):
+        from schooltool.component import FacetManager
+        fm = FacetManager(self.ob)
+        facet1 = self.facetclass()
+        fm.setFacet(facet1, name='facetname')
+        self.assertEquals(facet1.__name__, 'facetname')
+
+        facet2 = self.facetclass()
+        self.assertRaises(ValueError, fm.setFacet, facet2, name='facetname')
+        self.assert_(facet2.__name__ is None)
+        self.assert_(facet2.__parent__ is None)
+
     def test_iterFacets(self):
         from schooltool.component import FacetManager
         self.ob.__facets__.add(self.facet)

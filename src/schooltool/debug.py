@@ -116,6 +116,7 @@ class EventLogFacetFactory:
 
     name = "eventlog"
     title = "Event Log Factory"
+    facet_name = "eventlog"
     __call__ = EventLogFacet
 
 

@@ -121,16 +121,16 @@ class FacetManager:
             raise TypeError(
                 "FacetManager's context must be IFaceted", context)
 
-    def setFacet(self, facet, owner=None):
+    def setFacet(self, facet, owner=None, name=None):
         """Set a facet on a faceted object."""
         ob = self.__parent__
         if not IFacet.isImplementedBy(facet):
             raise TypeError("%r does not implement IFacet" % facet)
-        ob.__facets__.add(facet)  # This sets facet.__name__
         # XXX Check that facet doesn't already have a parent.
         #     An assert will do for now.
         assert (facet.__parent__ is None,
                 "Trying to add a facet that already has a parent")
+        ob.__facets__.add(facet, name=name)  # This sets facet.__name__
         facet.__parent__ = ob
         if owner is not None:
             facet.owner = owner

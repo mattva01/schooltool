@@ -494,7 +494,6 @@ class FacetManagementView(View, XMLPseudoParser):
         return [{'active': activness[bool(facet.active)],
                  'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
-                 'class_name': facet.__class__.__name__,
                  'path': getPath(facet)}
                 for facet in self.context.iterFacets()]
 
@@ -519,7 +518,15 @@ class FacetManagementView(View, XMLPseudoParser):
             return "Factory does not exist: %s" % e
 
         facet = factory()
-        self.context.setFacet(facet)
+        try:
+            self.context.setFacet(facet, name=factory.facet_name)
+        except ValueError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            if factory.facet_name is not None:
+                return "Facet '%s' already exists" % factory.facet_name
+            else:
+                return "Could not create facet: %s" % e
 
         location = absoluteURL(request,
                                '%s/%s' % (request.path, facet.__name__))

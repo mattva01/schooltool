@@ -95,9 +95,8 @@ Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=facets
 <facets xmlns:xlink="http://www.w3.org/1999/xlink">
   <facet xlink:type="simple" active="active"
-         xlink:title="001" class="EventLogFacet"
-         owned="unowned"
-         xlink:href="/persons/Marius/facets/001"/>
+         xlink:title="eventlog" owned="unowned"
+         xlink:href="/persons/Marius/facets/eventlog"/>
   <facetFactory name="absence_tracker" title="Absence Tracker"/>
   <facetFactory name="subject_group" title="Subject Group"/>
   <facetFactory name="eventlog" title="Event Log Factory"/>
@@ -105,7 +104,7 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
-SchoolTool> get /persons/Marius/facets/001
+SchoolTool> get /persons/Marius/facets/eventlog
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML

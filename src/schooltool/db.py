@@ -249,13 +249,17 @@ class UniqueNamesMixin:
         self._names['__next'] = next + 1
         return self._format % next
 
-    def newName(self, ob, value=None):
-        if ob.__name__ is None:
-            name = self._newName()
-            self._names[name] = value
-            ob.__name__ = name
-        else:
+    def newName(self, ob, value=None, name=None):
+        if ob.__name__ is not None:
             raise ValueError('object already has a name', ob.__name__, ob)
+        if name is None:
+            name = self._newName()
+            while name in self._names:
+                name = self._newName()
+        elif name in self._names:
+            raise ValueError('name already used', name, ob)
+        self._names[name] = value
+        ob.__name__ = name
 
     def valueForName(self, name):
         return self._names[name]
@@ -275,9 +279,9 @@ class PersistentKeysSetWithNames(Persistent, UniqueNamesMixin):
         self._data = PersistentKeysDict()
         UniqueNamesMixin.__init__(self, name_length)
 
-    def add(self, item):
+    def add(self, item, name=None):
         if item not in self._data:
-            self.newName(item, item)
+            self.newName(item, item, name=name)
             self._data[item] = None
 
     def __iter__(self):
