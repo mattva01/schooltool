@@ -19,6 +19,8 @@ Features
 - You can display several calendars in a single view by using calendar
   composition.
 
+- It supports recurring events.
+
 
 Quick overview
 --------------
@@ -107,7 +109,7 @@ listing calendar events sorted by date
 Note that, although IRC meeting repeats weekly, it was printed only once.
 If you want to see all occurrences of repeating calendar events, you can
 call calendar.expand.  Since some events may repeat indefinitely, expand
-takes a two datetime arguments and limits returned event to the specified
+takes two datetime arguments and limits returned events to the specified
 datetime range.
 
     >>> print_cal(calendar.expand(datetime(2005, 2, 1), datetime(2005, 3, 1)))
@@ -148,22 +150,22 @@ We can generate a calendar like this
     >>> from schoolbell.calendar.simple import SimpleCalendarEvent
     >>> from schoolbell.calendar.utils import parse_datetime
     >>> from datetime import timedelta
+
     >>> deadline_calendar = ImmutableCalendar([
     ...         SimpleCalendarEvent(parse_datetime(date + ' 00:00:00'),
     ...                             timedelta(hours=1),
     ...                             deadline)
     ...         for date, deadline in deadlines])
 
-(Note that every event will get a new randomly generated unique_id attribute.
-If you want to publish a computed calendar as an iCalendar file, you might
-want to generate deterministic unique IDs and explicitly pass them to
-SimpleCalendarEvent's constructor.)
-
-    >>> for event in deadline_calendar:
-    ...     print event.dtstart.strftime('%Y-%m-%d'), event.title
+    >>> print_cal(deadline_calendar)
     2005-02-28 Feature freeze
     2005-03-05 Release candidate 1
     2005-03-15 Release
+
+Note that every event will get a new randomly generated unique_id attribute.
+If you want to publish a computed calendar as an iCalendar file, you might
+want to generate deterministic unique IDs and explicitly pass them to
+SimpleCalendarEvent's constructor.
 
 
 iCalendar
@@ -184,23 +186,23 @@ schoolbell.calendar.tests
 You can read an iCalendar file event by event:
 
     >>> from schoolbell.calendar.icalendar import read_icalendar
-    >>> for event in read_icalendar(open(filename)):
-    ...     print event.dtstart.strftime('%Y-%m-%d'), event.title
-    2005-02-14 #schooltool meeting
+    >>> print_cal(read_icalendar(open(filename)))
     2005-02-09 SchoollTool 0.9 release
     2005-02-09 SchoolTool release party!
+    2005-02-14 #schooltool meeting
 
-You can easily construct a SchoolBell calendar from an iCalendar file
+Note that read_icalendar returns an iterator, and not a calendar.  If you want
+a calendar object, you can create one as follows:
 
     >>> from schoolbell.calendar.simple import ImmutableCalendar
-    >>> calendar = ImmutableCalendar(read_icalendar(open(filename)))
-    >>> len(calendar)
+    >>> sample_calendar = ImmutableCalendar(read_icalendar(open(filename)))
+    >>> len(sample_calendar)
     3
 
 You can create an iCalendar file from a SchoolBell calendar.
 
     >>> from schoolbell.calendar.icalendar import convert_calendar_to_ical
-    >>> lines = convert_calendar_to_ical(calendar)
+    >>> lines = convert_calendar_to_ical(sample_calendar)
     >>> print "\n".join(lines)                          # doctest: +ELLIPSIS
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -219,6 +221,11 @@ characters, so you should use something like
 
     >>> output_as_string = "\r\n".join(lines + [''])
 
+TODO: this is inconvenient.  "".join(lines) should return a valid iCalendar
+stream.  fileobject.writelines(lines) should just work.  Although there
+are other complications with automatic LF -> CRLF transformations when
+file objects are opened in text mode.
+
 iCalendar is a large specification, and schoolbell.calendar supports only a
 subset of it.  This subset should be enough to interoperate with most open
 source calendaring software, but you should keep in mind that reading an
@@ -234,17 +241,19 @@ than iterating over a number of calendars, you may want to construct a single
 calendar that contains all the events from those other calendars:
 
     >>> from schoolbell.calendar.simple import combine_calendars
-    >>> cal = combine_calendars(deadline_calendar, calendar)
-    >>> len(cal) == len(deadline_calendar) + len(calendar)
+    >>> cal = combine_calendars(deadline_calendar, sample_calendar)
+    >>> len(cal) == len(deadline_calendar) + len(sample_calendar)
     True
-    >>> for event in cal:
-    ...     print event.dtstart.strftime('%Y-%m-%d'), event.title
+    >>> print_cal(cal)
+    2005-02-09 SchoollTool 0.9 release
+    2005-02-09 SchoolTool release party!
+    2005-02-14 #schooltool meeting
     2005-02-28 Feature freeze
     2005-03-05 Release candidate 1
     2005-03-15 Release
-    2005-02-14 #schooltool meeting
-    2005-02-09 SchoollTool 0.9 release
-    2005-02-09 SchoolTool release party!
+
+TODO: when we display a combined calendar, we often want to know where each
+event came from.
 
 
 Utilities
