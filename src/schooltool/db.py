@@ -146,7 +146,9 @@ class PersistentPairKeysDict(Persistent, UserDict.DictMixin):
     def __setitem__(self, (persistent, hashable), value):
         if persistent not in self._data:
             self._data[persistent] = {}
-        self._data[persistent][hashable] = value
+        d = self._data[persistent]
+        d[hashable] = value
+        self._data[persistent] = d
 
     def __getitem__(self, (persistent, hashable)):
         return self._data[persistent][hashable]

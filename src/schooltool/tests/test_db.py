@@ -188,6 +188,32 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         del d[(p, 2)]
         self.assertRaises(KeyError, d.__getitem__, (p, 2))
 
+    def testPersistentSetitem(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        db = DB(MappingStorage())
+        datamgr = db.open()
+        from schooltool.db import PersistentPairKeysDict
+
+        d = PersistentPairKeysDict()
+        value = object()
+        p = P()
+        d[(p, 2)] = value
+        datamgr.root()['D'] = d
+        datamgr.root()['P'] = p
+        from transaction import get_transaction
+        get_transaction().commit()
+        datamgr.close()
+
+        datamgr = db.open()
+        d = datamgr.root()['D']
+        p = datamgr.root()['P']
+        self.assertEqual(d._data._data._p_changed, False)
+        d[(p, 1)] = value
+        # The next line fails if __setitem__ does not activate persistence
+        # properly.
+        self.assertEqual(d._data._data._p_changed, True)
+
     def testNoEmptyDicts(self):
         from schooltool.db import PersistentPairKeysDict
 
