@@ -127,7 +127,7 @@ def run_unit_tests(testcase):
         ...     def test1(self):
         ...         self.assertEquals(2 + 2, 4)
         >>> run_unit_tests(SampleTestCase)
-        
+
         >>> class BadTestCase(SampleTestCase):
         ...     def test2(self):
         ...         self.assertEquals(2 * 2, 5)
@@ -144,7 +144,7 @@ def run_unit_tests(testcase):
         AssertionError: 4 != 5
         <BLANKLINE>
         ----------------------------------------------------------------------
-        Ran 2 tests in 0.001s
+        Ran 2 tests in ...s
         <BLANKLINE>
         FAILED (failures=1)
 
