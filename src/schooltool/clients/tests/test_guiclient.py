@@ -30,7 +30,7 @@ from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.uris import URIMembership, URIGroup, getURI
+from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught, URITeacher
 
 __metaclass__ = type
@@ -567,10 +567,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.method, "DELETE")
 
     def test_getObjectRelationships(self):
-        from schooltool.clients.guiclient import RelationshipInfo
-        from schooltool.clients.guiclient import stubURI
-        arcrole1 = stubURI("test://arcrole1")
-        role1 = stubURI("test://role1")
+        from schooltool.clients.guiclient import RelationshipInfo, URIObject
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -592,13 +589,16 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
               </valencies>
             </relationships>
         """)
+        group_id = '/groups/group1'
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        arcrole1 = URIObject('test://arcrole1')
+        role1 = URIObject('test://role1')
+        client.uriobjects = {arcrole1.uri: arcrole1, role1: role1}
+        results = list(client.getObjectRelationships(group_id))
         expected = [RelationshipInfo(*args) for args in [
                 (arcrole1, role1, 'title1', 'href1', 'mhref1'),
-                (URIMembership, URIGroup, 'title2', 'href2', 'mhref2'),
-            ]]
-        client = self.newClient(ResponseStub(200, 'OK', body))
-        group_id = '/groups/group1'
-        results = list(client.getObjectRelationships(group_id))
+                (URIMembership, URIGroup, 'title2', 'href2', 'mhref2')]
+                    ]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '%s/relationships' % group_id)
 
@@ -1230,10 +1230,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
 
     def test__parseRelationships(self):
         from schooltool.clients.guiclient import _parseRelationships
-        from schooltool.clients.guiclient import RelationshipInfo
-        from schooltool.clients.guiclient import stubURI
-        role1 = stubURI('test://role1')
-        arcrole1 = stubURI('test://arcrole1')
+        from schooltool.clients.guiclient import RelationshipInfo, URIObject
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -1301,9 +1298,13 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               </valencies>
             </relationships>
         """)
-        result = _parseRelationships(body)
-        role3 = getURI('test://role3')
-        arcrole3 = getURI('test://arcrole3')
+        role1 = URIObject('test://role1')
+        arcrole1 = URIObject('test://arcrole1')
+        uriobjects = {role1.uri: role1, arcrole1.uri: arcrole1}
+        result = _parseRelationships(body, uriobjects)
+        role3 = uriobjects['test://role3']
+        arcrole3 = uriobjects['test://arcrole3']
+
         expected = [RelationshipInfo(*args) for args in [
                 (arcrole1, role1, u'title1 \u2730', 'href1', 'mhref1'),
                 (URIMembership, URIGroup, u'title2 \u2730', 'href2', 'mhref2'),
@@ -1315,7 +1316,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         from schooltool.clients.guiclient import _parseRelationships
         from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, _parseRelationships, body)
+        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
 
         # Two manage elements
         body = dedent("""
@@ -1330,7 +1331,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               </existing>
             </relationships>
         """)
-        self.assertRaises(SchoolToolError, _parseRelationships, body)
+        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
 
         # No manage elements
         body = dedent("""
@@ -1342,7 +1343,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               </existing>
             </relationships>
         """)
-        self.assertRaises(SchoolToolError, _parseRelationships, body)
+        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
 
     def test__parseRollCall(self):
         from schooltool.clients.guiclient import _parseRollCall, RollCallInfo

@@ -31,25 +31,15 @@ import datetime
 import urllib
 import base64
 import cgi
+
 from schooltool.interfaces import ComponentLookupError
-from schooltool.uris import getURI, isURI, registerURI
-from schooltool.uris import URIObject, URITeaching, URITaught
+# TODO: Remove dependency on schooltool.uris.
+from schooltool.uris import URIObject, URITeaching, URITaught, isURI
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
-
-
-#
-# Dealing with unknown URIs
-#
-
-def stubURI(uri):
-    """Create a stub IURIObject, register and return it."""
-    uri_obj = URIObject(uri)
-    registerURI(uri_obj)
-    return uri_obj
 
 
 #
@@ -107,7 +97,7 @@ class SchoolToolClient:
     password = ''
     status = ''
     version = ''
-    uriobjects = None
+    uriobjects = {}
 
     # Hooks for unit tests.
     connectionFactory = httplib.HTTPConnection
@@ -370,7 +360,7 @@ class SchoolToolClient:
         response = self.get('%s/relationships' % object_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return _parseRelationships(response.read())
+        return _parseRelationships(response.read(), self.uriobjects)
 
     def getRollCall(self, group_path):
         """Return a roll call template for a group.
@@ -744,8 +734,12 @@ def _parseMemberList(body):
         ctx.xpathFreeContext()
 
 
-def _parseRelationships(body):
-    """Parse the list of relationships."""
+def _parseRelationships(body, uriobjects):
+    """Parse the list of relationships.
+
+    uriobjects is a mapping from URIs to URIObjects.  Note that new keys
+    may be added to this mapping, to register unknown URIs.
+    """
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
@@ -766,13 +760,15 @@ def _parseRelationships(body):
             if title is None:
                 title = href.split('/')[-1]
             try:
-                role = getURI(role)
-            except ComponentLookupError:
-                role = stubURI(role)
+                role = uriobjects[role]
+            except KeyError:
+                role_uri = role
+                role = uriobjects[role_uri] = URIObject(role_uri)
             try:
-                arcrole = getURI(arcrole)
-            except ComponentLookupError:
-                arcrole = stubURI(arcrole)
+                arcrole = uriobjects[arcrole]
+            except KeyError:
+                arcrole_uri = arcrole
+                arcrole = uriobjects[arcrole_uri] = URIObject(arcrole_uri)
             ctx.setContextNode(node)
             manage_nodes = ctx.xpathEval("manage/@xlink:href")
             if len(manage_nodes) != 1:
