@@ -7,10 +7,10 @@ set -e
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/bin/schooltool-server
-NAME=schooltool
+NAME=schooltool-server
 DESC="SchoolTool"
-PNAME=schooltool-serv
-PIDFILE=/var/run/schooltool/$NAME.pid
+PNAME=schooltool-serv # truncated to 15 chars by the kernel
+PIDFILE=/var/run/$NAME/schooltool.pid
 SCRIPTNAME=/etc/init.d/$NAME
 CONFIGFILE=/etc/schooltool.conf
 

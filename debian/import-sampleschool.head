@@ -6,6 +6,6 @@ A script to import sample school data into SchoolTool on Debian systems.
 import os
 import sys
 
-datadir = '/usr/share/schooltool/sampleschool'
-sys.path.insert(0, '/usr/lib/schooltool')
+datadir = '/usr/share/schooltool-clients/sampleschool'
+sys.path.insert(0, '/usr/lib/schooltool-clients')
 

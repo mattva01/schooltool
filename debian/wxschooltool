@@ -4,7 +4,7 @@ A script to start the schooltool GUI client in a Debian system.
 """
 
 import sys
-sys.path.insert(0, '/usr/lib/schooltool')
+sys.path.insert(0, '/usr/lib/schooltool-clients')
 
 import schooltool.clients.wxclient
 schooltool.clients.wxclient.main()

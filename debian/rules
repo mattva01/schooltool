@@ -29,29 +29,52 @@ install-stamp: build
 	dh_installdirs
 
 	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
-	cd src && find \( -name 'tests' -o -name 'ftests' \) -prune -o \
-		       \( -name '*.py' -o -name '*.so' -o -name '*.pt' -o \
-			  -name '*.xml' -o -name '*.rng' -o \
-			  -name '*.png' -o -name '*.xpm' \) \
-		       -exec install -m 644 -D -p {} \
-				 ../debian/schooltool/usr/lib/schooltool/{} \;
+	cd src && \
+	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
+	     \( -name '*.py' -o -name '*.so' -o -name '*.pt' -o \
+	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
+		-name '*.xpm' \) \
+	     -exec install -m 644 -D -p {} \
+		../debian/schooltool-server/usr/lib/schooltool-server/{} \;
 
-	rm -f debian/schooltool/usr/lib/schooltool/trace.py
+	rm -f debian/schooltool-server/usr/lib/schooltool-server/trace.py
 
-	install -m 755 -p debian/schooltool-server debian/schooltool/usr/bin/
-	install -m 755 -p debian/schooltool-client debian/schooltool/usr/bin/
-	install -m 755 -p debian/wxschooltool debian/schooltool/usr/bin/
-	install -m 755 -p debian/import-sampleschool debian/schooltool/usr/bin/
+	cd src && \
+	find zope/interface schooltool/clients \
+	     \( -name 'tests' -o -name 'ftests' \) -prune -o\
+	     \( -name '*.py' -o -name '*.so' -o -name '*.pt' -o -name '*.xml' \
+	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
+	     -exec install -m 644 -D -p {} \
+		../debian/schooltool-clients/usr/lib/schooltool-clients/{} \;
+	for fn in schooltool/__init__.py \
+	          schooltool/common.py \
+	          schooltool/interfaces.py \
+	          schooltool/unchanged.py \
+	          schooltool/uris.py \
+	          schooltool/translation/__init__.py \
+	          zope/__init__.py; \
+	do \
+	    install -m 644 -D -p src/$$fn \
+		debian/schooltool-clients/usr/lib/schooltool-clients/$$fn; \
+	done
 
-	install -m 644 -p debian/schooltool.conf debian/schooltool/etc/
+	install -m 755 -D -p debian/schooltool-server.py \
+		debian/schooltool-server/usr/bin/schooltool-server; \
+	for p in schooltool-client wxschooltool import-sampleschool; do \
+	    install -m 755 -D -p debian/$$p \
+		    debian/schooltool-clients/usr/bin/$$p; \
+	done
+
+	install -m 644 -D -p debian/schooltool.conf \
+	    debian/schooltool-server/etc/schooltool.conf
 	install -m 644 -D -p debian/example.conf \
-	    debian/schooltool/usr/share/doc/schooltool/examples/schooltool.conf
+	    debian/schooltool-server/usr/share/doc/schooltool-server/examples/schooltool.conf
 
 	install -m 644 -D -p ttconfig.data \
-	    debian/schooltool/usr/share/schooltool/sampleschool/ttconfig.data
+	    debian/schooltool-clients/usr/share/schooltool-clients/sampleschool/ttconfig.data
 
 	dir=$$PWD \
-	    && cd debian/schooltool/usr/share/schooltool/sampleschool/ \
+	    && cd debian/schooltool-clients/usr/share/schooltool-clients/sampleschool/ \
 	    && PYTHONPATH=$$dir/src \
 	       python $$dir/src/schooltool/clients/datagen.py $(datagen_seed)
 

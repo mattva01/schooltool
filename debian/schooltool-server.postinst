@@ -34,12 +34,12 @@ case "$1" in
 		    schooltool
 	fi
 	# Create files and directories
-	mkdir -p /var/lib/schooltool
-	mkdir -p /var/run/schooltool
-	mkdir -p /var/log/schooltool
-	chown schooltool:schooltool /var/lib/schooltool
-	chown schooltool:schooltool /var/run/schooltool
-	chown schooltool:schooltool /var/log/schooltool
+	mkdir -p /var/lib/schooltool-server
+	mkdir -p /var/run/schooltool-server
+	mkdir -p /var/log/schooltool-server
+	chown schooltool:schooltool /var/lib/schooltool-server
+	chown schooltool:schooltool /var/run/schooltool-server
+	chown schooltool:schooltool /var/log/schooltool-server
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

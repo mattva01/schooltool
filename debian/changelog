@@ -1,3 +1,9 @@
+schooltool (0.4+svn20040419-0.1) unstable; urgency=low
+
+  * Split the server and the client parts into separate packages.
+
+ -- Marius Gedminas <mgedmin@b4net.lt>  Mon, 19 Apr 2004 19:17:37 +0300
+
 schooltool (0.4+svn20040413-0.1) unstable; urgency=low
 
   * Packaged subversion snapshot as of 2004-04-13.

@@ -18,11 +18,13 @@ any later version.
 Files in the following directories are (c) their respective owners. See
 the individual files and directories for details of the licences.
 
+  /usr/lib/schooltool/BTrees
   /usr/lib/schooltool/ZConfig
+  /usr/lib/schooltool/ZODB
   /usr/lib/schooltool/persistence
+  /usr/lib/schooltool/persistent
   /usr/lib/schooltool/transaction
-  /usr/lib/schooltool/zdaemon
-  /usr/lib/schooltool/zodb
+  /usr/lib/schooltool/zLOG
   /usr/lib/schooltool/zope
 
 Files in the same directory of the source tree as the main README file are (c)

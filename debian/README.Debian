@@ -4,15 +4,16 @@ SchoolTool for Debian
 This is an early testing version of SchoolTool.  The configuration file is
 /etc/schooltool.conf.
 
-Look at /usr/share/doc/schooltool/examples/schooltool.conf for a full list
-of SchoolTool server configuration options.
+Look at /usr/share/doc/schooltool-server/examples/schooltool.conf for a full
+list of SchoolTool server configuration options.
 
 The simplest way to start playing with SchoolTool is as follows:
 
-  1. run import-sampledata to populate the database
-  2. run wxschooltool or schooltool-client and play around
+  1. apt-get install schooltool-server schooltool-clients
+  2. run import-sampledata to populate the database
+  3. run wxschooltool or schooltool-client and play around
 
 By default a user 'manager' with password 'schooltool' is created with full
 access and modification privileges.
 
- -- Marius Gedminas <marius@pov.lt>, Tue, 13 Apr 2004 19:58:14 +0300
+ -- Marius Gedminas <marius@pov.lt>  Mon, 19 Apr 2004 20:13:21 +0300
