@@ -109,49 +109,68 @@ def listURIs():
 # Concrete URIs
 #
 
-URIMembership = URIObject("http://schooltool.org/ns/membership",
-                          _("Membership"),
-                          _("The membership relationship."))
+URIMembership = URIObject(
+                "http://schooltool.org/ns/membership",
+                _("Membership"),
+                _("The membership relationship."))
+
+URIGroup = URIObject(
+                "http://schooltool.org/ns/membership/group",
+                _("Group"),
+                _("A role of a containing group."))
+
+URIMember = URIObject(
+                "http://schooltool.org/ns/membership/member",
+                _("Member"),
+                _("A group member role."))
 
 
-URIGroup = URIObject("http://schooltool.org/ns/membership/group",
-                     _("Group"),
-                     _("A role of a containing group."))
+URITeaching = URIObject(
+                "http://schooltool.org/ns/teaching",
+                _("Teaching"),
+                _("The teaching relationship."))
+
+URITeacher = URIObject(
+                "http://schooltool.org/ns/teaching/teacher",
+                _("Teacher"),
+                _("A role of a teacher."))
+
+URITaught = URIObject(
+                "http://schooltool.org/ns/teaching/taught",
+                _("Taught"),
+                _("A role of a group that has a teacher."))
 
 
-URIMember = URIObject("http://schooltool.org/ns/membership/member",
-                      _("Member"),
-                      _("A group member role."))
+URIOccupies = URIObject(
+                "http://schooltool.org/ns/occupies",
+                _("Occupies"),
+                _("The occupation relationship"))
+
+URICurrentlyResides = URIObject(
+                "http://schooltool.org/ns/occupies/currentlyresides",
+                _("Resides"),
+                _("The role of a person in Occupies"))
+
+URICurrentResidence = URIObject(
+                "http://schooltool.org/ns/occupies/currentresidence",
+                _("Residence"),
+                _("The role of an Address in Occupies"))
 
 
-URITeaching = URIObject("http://schooltool.org/ns/teaching",
-                        _("Teaching"),
-                        _("The teaching relationship."))
+URICalendarSubscription = URIObject(
+                "http://schooltool.org/ns/calendar_subscription",
+                _("Calendar subscription"),
+                _("The calendar subscription relationship."))
 
+URICalendarProvider = URIObject(
+                "http://schooltool.org/ns/calendar_subscription/provider",
+                _("Calendar provider"),
+                _("A role of an object providing a calendar."))
 
-URITeacher = URIObject("http://schooltool.org/ns/teaching/teacher",
-                       _("Teacher"),
-                       _("A role of a teacher."))
-
-
-URITaught = URIObject("http://schooltool.org/ns/teaching/taught",
-                      _("Taught"),
-                      _("A role of a group that has a teacher."))
-
-
-URIOccupies =  URIObject("http://schooltool.org/ns/occupies",
-                      _("Occupies"),
-                      _("The occupation relationship"))
-
-
-URICurrentlyResides = URIObject("http://schooltool.org/ns/occupies/currentlyresides",
-                      _("Resides"),
-                      _("The role of a person in Occupies"))
-
-
-URICurrentResidence = URIObject("http://schooltool.org/ns/occupies/currentresidence",
-                      _("Residence"),
-                      _("The role of an Address in Occupies"))
+URICalendarSubscriber = URIObject(
+                "http://schooltool.org/ns/calendar_subscription/subscriber",
+                _("Calendar subscriber"),
+                _("A role of an object that subscribes to a calendar."))
 
 
 #
@@ -169,5 +188,8 @@ def setUp():
     registerURI(URIOccupies)
     registerURI(URICurrentlyResides)
     registerURI(URICurrentResidence)
+    registerURI(URICalendarSubscription)
+    registerURI(URICalendarProvider)
+    registerURI(URICalendarSubscriber)
 
 moduleProvides(IModuleSetup, IURIAPI)
