@@ -38,7 +38,7 @@ from zope.component import adapts
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IGroupContained
-from schoolbell.app.interfaces import IPerson, IResource
+from schoolbell.app.interfaces import IPerson, IResource, IPersonContainer
 from schoolbell.app.app import Person
 
 
@@ -124,7 +124,7 @@ class GroupListView(BrowserView):
 
     def getGroupList(self):
         """Return a sorted list of all groups in the system."""
-        groups = self.context.__parent__.__parent__['groups'] # XXX Ugly.
+        groups = self.context.__parent__.__parent__['groups']
         return sorted_by_title(groups.values())
 
     def update(self):
@@ -325,6 +325,7 @@ class PersonAddAdapter(object):
         self.context = context
 
     def setPassword(self, password):
+        # XXX I'd say this is a bit evil, but it will do for now.
         if self._password is marker:
             self._password = password
         elif self._password == password:
@@ -354,6 +355,8 @@ class PersonAddAdapter(object):
 class PersonAddView(AddView):
     """A view for adding a person."""
 
+    __used_for__ = IPersonContainer
+
     # Form error message for the page template
     error = None
 
@@ -376,11 +379,20 @@ class PersonAddView(AddView):
                 [ValidationError('This username is already used!')])
         return AddView.createAndAdd(self, data)
 
+    def getGroupList(self):
+        """Return a sorted list of all groups in the system."""
+        groups = self.context.__parent__['groups']
+        return sorted_by_title(groups.values())
+
     def add(self, person):
         """Add `person` to the container.
 
         Uses the username of `person` as the object ID (__name__).
         """
+        person_groups = removeSecurityProxy(person.groups)
+        for group in self.getGroupList():
+            if 'group.' + group.__name__ in self.request:
+                person.groups.add(removeSecurityProxy(group))
         name = person.username
         self.context[name] = person
         return person

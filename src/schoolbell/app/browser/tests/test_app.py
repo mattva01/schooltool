@@ -698,11 +698,11 @@ def doctest_PersonAddView():
         >>> from schoolbell.app.browser.app import PersonAddAdapter
         >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
 
-
     Let's create a PersonContainer
 
-        >>> from schoolbell.app.app import PersonContainer
-        >>> pc = PersonContainer()
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> pc = app['persons']
 
     Now let's create a PersonAddView for the container
 
@@ -712,7 +712,6 @@ def doctest_PersonAddView():
 
     Let's try to add a user:
 
-        >>> from schoolbell.app.browser.app import PersonAddView
         >>> request = TestRequest(form={'field.title': u'John Doe',
         ...                             'field.username': u'jdoe',
         ...                             'field.password': u'secret',
@@ -730,7 +729,6 @@ def doctest_PersonAddView():
 
     If we try to add a user with the same login, we get a nice error message:
 
-        >>> from schoolbell.app.browser.app import PersonAddView
         >>> request = TestRequest(form={'field.title': u'Another John Doe',
         ...                             'field.username': u'jdoe',
         ...                             'field.password': u'pass',
@@ -744,7 +742,6 @@ def doctest_PersonAddView():
 
     Let's try to add user with different password and verify_password fields:
 
-        >>> from schoolbell.app.browser.app import PersonAddView
         >>> request = TestRequest(form={'field.title': u'Coo Guy',
         ...                             'field.username': u'coo',
         ...                             'field.password': u'secret',
@@ -757,6 +754,33 @@ def doctest_PersonAddView():
         u'Passwords do not match!'
         >>> 'coo' in pc
         False
+
+    We can select groups that the user should be in.  First, let's create a
+    group:
+
+        >>> from schoolbell.app.app import Group
+        >>> pov = app['groups']['pov'] = Group('PoV')
+
+    Now, let's create and render a view:
+
+        >>> request = TestRequest(form={'field.title': u'Gintas',
+        ...                             'field.username': u'gintas',
+        ...                             'field.password': u'denied',
+        ...                             'field.verify_password': u'denied',
+        ...                             'group.pov': 'on',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        ''
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+    Now the person belongs to the group that we have selected:
+
+        >>> list(pc['gintas'].groups) == [pov]
+        True
 
     """
 

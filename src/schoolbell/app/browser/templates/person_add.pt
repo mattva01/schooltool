@@ -16,8 +16,8 @@
       <div class="error"
            tal:condition="view/error"
            tal:content="view/error" />
-      <fieldset>
 
+      <fieldset>
         <div class="row" tal:define="widget nocall:view/title_widget">
           <div metal:use-macro="context/@@form_macros/widget_row" />
         </div>
@@ -38,9 +38,17 @@
           <div metal:use-macro="context/@@form_macros/widget_row" />
         </div>
       </fieldset>
+
       <fieldset>
-        <legend i18n:translate="">Add to groups (XXX not implemented)</legend>
-        <div class="row" tal:condition="nothing" tal:replace="structure view/groups_widget" />
+        <legend i18n:translate="">Add to groups</legend>
+        <div tal:repeat="group view/getGroupList">
+          <label>
+            <input type="checkbox"
+                   tal:attributes="name string:group.${group/__name__};
+                      checked python:('group.' + group.__name__) in request" />
+            <span tal:replace="group/title" />
+          </label>
+        </div>
       </fieldset>
 
       <div class="controls">
