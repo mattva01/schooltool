@@ -302,9 +302,7 @@ def main(argv):
 
     # Defaults
     cfg = Options()
-    cfg.basedir = os.path.dirname(argv[0])
-    if not cfg.basedir:
-        cfg.basedir = '.'
+    cfg.basedir = os.path.join(os.path.dirname(argv[0]), 'src')
 
     # Option processing
     opts, args = getopt.getopt(argv[1:], 'hvpuf', ['list-files', 'list-tests'])
@@ -346,6 +344,9 @@ def main(argv):
         print >> sys.stderr, '%s: need Python 2.3 or later' % argv[0]
         print >> sys.stderr, 'your python is %s' % sys.version
         return 1
+
+    # Set up the python path
+    sys.path[0] = cfg.basedir
 
     # Finding and importing
     test_files = get_test_files(cfg)

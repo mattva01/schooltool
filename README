@@ -16,14 +16,15 @@ System requirements
 Project structure
 -----------------
 
-  GPL           the GNU General Public License, version 2
-  README        this file
-  test.py       unit test runner
+  GPL             the GNU General Public License, version 2
+  README          this file
+  test.py         unit test runner
 
-  schooltool/   Python module 'schooltool'
-    main.py     executable prototype
-    ftests/     functional tests for the schooltool module
-    tests/      unit tests for the schooltool module
+  src/            source code
+    schooltool/   Python module 'schooltool'
+      main.py     executable prototype
+      ftests/     functional tests for the schooltool module
+      tests/      unit tests for the schooltool module
 
 
 Testing
