@@ -484,10 +484,14 @@ class LoginView(BrowserView):
             except ValueError:
                 self.error = _("Username or password is incorrect")
             else:
-                if 'nexturl' not in self.request:
-                    nexturl = zapi.absoluteURL(self.context, self.request)
-                else:
+                principal = auth.authenticate(self.request)
+                person = IPerson(principal, None)
+                if 'nexturl' in self.request:
                     nexturl = self.request['nexturl']
+                elif person is not None:
+                    nexturl = zapi.absoluteURL(person.calendar, self.request)
+                else:
+                    nexturl = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(nexturl)
 
 

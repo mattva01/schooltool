@@ -768,6 +768,13 @@ def doctest_PersonPreferencesView():
 
 def doctest_LoginView():
     """
+    We have to set up a security checker for person objects:
+
+        >>> from schoolbell.app.app import Person
+        >>> from zope.security.checker import defineChecker, Checker
+        >>> defineChecker(Person,
+        ...               Checker({'calendar': 'zope.Public'},{}))
+
     Suppose we have a SchoolBell app and a person:
 
         >>> from schoolbell.app.app import SchoolBellApplication
@@ -778,7 +785,6 @@ def doctest_LoginView():
         >>> setSite(app)
         >>> persons = app['persons']
 
-        >>> from schoolbell.app.app import Person
         >>> frog = Person('frog')
         >>> persons[None] = frog
         >>> frog.setPassword('pond')
@@ -824,9 +830,8 @@ def doctest_LoginView():
         >>> view.error
         >>> request.response.getStatus()
         302
-        >>> url = zapi.absoluteURL(app, request)
-        >>> request.response.getHeader('Location') == url
-        True
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/persons/frog/calendar'
         >>> auth.authenticate(request)
         <schoolbell.app.security.Principal object at 0x...>
 
