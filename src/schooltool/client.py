@@ -54,14 +54,31 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     port = 80
 
     def __init__(self, *args):
+        self._setupPrompt()
+        Cmd.__init__(self, *args)
+
+    def _setupPrompt(self):
+        """Sets up the prompt suitable to operating environment.
+
+        Noninteractive sessions (sys.stdin is not a tty) get no prompt.
+        Interactive sessions get a coloured prompt if the terminal supports
+        it, or just a simple prompt otherwise.
+        """
         if not sys.stdin.isatty():
             self.prompt = ""
             self.intro = ""
-        elif ('TERM' in os.environ and
-              os.environ['TERM'] in ('linux', 'vt220', 'xterm',
-                                     'xterm-color', 'rxvt')):
-            self.prompt = "\001\033[33m\002SchoolTool>\001\033[0m\002 "
-        Cmd.__init__(self, *args)
+        else:
+            try:
+                import curses
+                curses.setupterm()
+            except (ImportError, curses.error):
+                pass
+            else:
+                bold = curses.tigetstr('bold')
+                normal = curses.tigetstr('sgr0')
+                if bold:
+                    self.prompt = ("\001%s\002SchoolTool>\001%s\002 "
+                                   % (bold, normal))
 
     def emit(self, *args):
         """Output the arguments.  A hook for tests"""

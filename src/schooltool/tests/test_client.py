@@ -23,6 +23,7 @@ Unit tests for schooltool.client
 import unittest
 import httplib
 import socket
+import sys
 from StringIO import StringIO
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
@@ -88,6 +89,96 @@ class TestClient(unittest.TestCase):
                 self.emitted = ' '.join(args)
         self.client.emit = emit
         self.client.http = HTTPStub
+
+    def test_setupPrompt_noninteractive(self):
+        class StdinStub:
+            isatty = lambda self: False
+        old_stdin = sys.stdin
+        try:
+            sys.stdin = StdinStub()
+            self.client.prompt = "# "
+            self.client.intro = "Hello"
+            self.client._setupPrompt()
+            self.assertEquals(self.client.prompt, "")
+            self.assertEquals(self.client.intro, "")
+        finally:
+            sys.stdin = old_stdin
+
+    def test_setupPrompt_no_curses(self):
+        class StdinStub:
+            isatty = lambda self: True
+        class CursesStub:
+            error = Exception
+            def setupterm(self):
+                raise self.error, "testing"
+        old_stdin = sys.stdin
+        try:
+            sys.stdin = StdinStub()
+            sys.modules['curses'] = CursesStub()
+            self.client.prompt = "# "
+            self.client.intro = "Hello"
+            self.client._setupPrompt()
+            self.assertEquals(self.client.prompt, "# ")
+            self.assertEquals(self.client.intro, "Hello")
+        finally:
+            sys.stdin = old_stdin
+            try:
+                del sys.modules['curses']
+            except KeyError:
+                pass
+
+    def test_setupPrompt_no_color(self):
+        class StdinStub:
+            isatty = lambda self: True
+        class CursesStub:
+            error = Exception
+            _terminfo = {}
+            def setupterm(self):
+                pass
+            def tigetstr(self, s):
+                return self._terminfo.get(s)
+        old_stdin = sys.stdin
+        try:
+            sys.stdin = StdinStub()
+            sys.modules['curses'] = CursesStub()
+            self.client.prompt = "# "
+            self.client.intro = "Hello"
+            self.client._setupPrompt()
+            self.assertEquals(self.client.prompt, "# ")
+            self.assertEquals(self.client.intro, "Hello")
+        finally:
+            sys.stdin = old_stdin
+            try:
+                del sys.modules['curses']
+            except KeyError:
+                pass
+
+    def test_setupPrompt_color(self):
+        class StdinStub:
+            isatty = lambda self: True
+        class CursesStub:
+            error = Exception
+            _terminfo = {'bold': '<B>', 'sgr0': '<N>'}
+            def setupterm(self):
+                pass
+            def tigetstr(self, s):
+                return self._terminfo.get(s)
+        old_stdin = sys.stdin
+        try:
+            sys.stdin = StdinStub()
+            sys.modules['curses'] = CursesStub()
+            self.client.prompt = "# "
+            self.client.intro = "Hello"
+            self.client._setupPrompt()
+            self.assertEquals(self.client.prompt,
+                              "\001<B>\002SchoolTool>\001<N>\002 ")
+            self.assertEquals(self.client.intro, "Hello")
+        finally:
+            sys.stdin = old_stdin
+            try:
+                del sys.modules['curses']
+            except KeyError:
+                pass
 
     def test_help(self):
         self.client.onecmd("?help")
