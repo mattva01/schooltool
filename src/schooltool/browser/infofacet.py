@@ -99,6 +99,9 @@ class DynamicFacetSchemaView(DynamicFacetView):
 
     authorization = ManagerAccess
 
+    def __init__(self, context):
+        DynamicFacetView.__init__(self, context, None)
+
     def breadcrumbs(self):
         app = traverse(self.context, '/')
         name = self.context.__name__
@@ -106,10 +109,7 @@ class DynamicFacetSchemaView(DynamicFacetView):
             (_('Start'), absoluteURL(self.request, app, 'start')),
             (_('Dynamic facet schemas'),
              absoluteURL(self.request, app, 'dfschemas')),
-            (name, absoluteURL(self.request, app, 'dfschemas/%s' % name))]
-
-    def __init__(self, context):
-        DynamicFacetView.__init__(self, context, None)
+            (name, absoluteURL(self.request, app, 'dfschemas', name))]
 
     def title(self):
         return "Dynamic facet schema %s" % self.context.__name__
@@ -124,7 +124,8 @@ class DynamicFacetSchemaServiceView(ContainerServiceViewBase):
 
     def logDeletion(self, schema):
         """Taken from browser.timetable.TimetableSchemaServiceView"""
-        self.request.appLog(_("Dynamic facet schema %s deleted") % getPath(schema))
+        self.request.appLog(_("Dynamic facet schema %s deleted")
+                            % getPath(schema))
 
     def breadcrumbs(self):
         app = traverse(self.context, '/')

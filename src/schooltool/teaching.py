@@ -51,7 +51,10 @@ class TeacherFacet(FacetMixin, RelationshipValenciesMixin):
 
 
 class SubjectGroupFacet(FacetMixin, RelationshipValenciesMixin):
-    """Facet for a group that is taught by a teacher."""
+    """Facet for a group that is taught by a teacher.
+
+    These groups are called "sections" in US schools.
+    """
 
     valencies = Valency(Teaching, 'taught')
 

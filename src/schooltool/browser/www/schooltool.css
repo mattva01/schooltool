@@ -88,7 +88,7 @@ a.action:active {
 div.family-relationships a.action:link,
 div.family-relationships a.action:visited {
   background: #b0b0b0;
-  font-size:smaller;
+  font-size: smaller;
 }
 
 a.sitemap {
@@ -269,7 +269,7 @@ div.timetables {
 }
 
 div.family-relationships {
-  width:15em;
+  width: 15em;
 }
 
 div.family-relationships,
