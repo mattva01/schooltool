@@ -203,22 +203,21 @@ class RelationshipEvent(EventMixin):
 
     def __str__(self):
         event = self.__class__.__name__
-        s = ["<%s>" % event]
+        s = ["%s" % event]
         reltype = self.links[0].reltype
         if reltype is not None:
-            s.append("  <reltype>%s</reltype>" % strURI(reltype))
+            s.append("reltype=%r" % strURI(reltype))
         title = self.links[0].title
         if title:
-            s.append("  <title>%s</title>" % title)
+            s.append("title=%r" % title)
         for link in self.links:
             try:
                 path = getPath(link.traverse())
             except TypeError:
                 path = str(link.traverse())
-            s.append("  <link role=\"%s\" target=\"%s\"/>"
+            s.append("link=%r, %r"
                      % (strURI(link.role), path))
-        s.append("</%s>" % event)
-        return "\n".join(s)
+        return "\n    ".join(s) + '\n'
 
 
 class RelationshipAddedEvent(RelationshipEvent):
