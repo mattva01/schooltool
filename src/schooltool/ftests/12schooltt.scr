@@ -19,7 +19,8 @@ SchoolTool> get /schooltt/2003-fall/weekly
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=schooltt
-<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+          xmlns:xlink="http://www.w3.org/1999/xlink">
   <teacher path="/persons/Mark">
     <day id="Monday">
       <period id="0">
@@ -249,7 +250,8 @@ Content-Type: text/xml; charset=UTF-8
 
 
 SchoolTool> put /schooltt/2003-fall/weekly text/xml
-PUT> <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+PUT> <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+PUT>           xmlns:xlink="http://www.w3.org/1999/xlink">
 PUT>   <teacher path="/persons/Mark">
 PUT>     <day id="Monday">
 PUT>       <period id="0">
@@ -455,7 +457,7 @@ PUT>     <day id="Friday">
 PUT>       <period id="0">
 PUT>       </period>
 PUT>       <period id="1">
-PUT>         <activity group="/groups/students">Assembly</activity>
+PUT>         <activity group="/groups/students" title="Assembly"/>
 PUT>       </period>
 PUT>       <period id="2">
 PUT>       </period>
@@ -485,7 +487,8 @@ SchoolTool> get /schooltt/2003-fall/weekly
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=schooltt
-<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+          xmlns:xlink="http://www.w3.org/1999/xlink">
   <teacher path="/persons/Mark">
     <day id="Monday">
       <period id="0">
@@ -691,7 +694,7 @@ Content-Type: text/xml; charset=UTF-8
       <period id="0">
       </period>
       <period id="1">
-        <activity group="/groups/students">Assembly</activity>
+        <activity group="/groups/students" title="Assembly"/>
       </period>
       <period id="2">
       </period>

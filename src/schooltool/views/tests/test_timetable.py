@@ -28,7 +28,8 @@ import libxml2
 from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
-from schooltool.views.tests import RequestStub, setPath
+from schooltool.interfaces import ITraversable
+from schooltool.views.tests import RequestStub, TraversableRoot, setPath
 from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -67,6 +68,22 @@ class TimetabledStub:
         return Set(self.timetables.keys() + self.overlay.keys())
 
 
+class ResourceStub(TimetabledStub):
+
+    def __init__(self, name, title):
+        TimetabledStub.__init__(self)
+        self.title = title
+        self.__name__ = 'resources/%s' % name
+        self.__parent__ = TraversableRoot()
+
+
+class ResourceContainer(dict):
+    implements(ITraversable)
+
+    def traverse(self, name):
+        return self[name]
+
+
 class SchooldayModelStub:
     implements(ILocation)
 
@@ -84,15 +101,23 @@ class SchooldayModelStub:
 
 
 class ServiceManagerStub:
-    implements(IServiceManager, IContainmentRoot)
+    implements(IServiceManager, IContainmentRoot, ITraversable)
 
-    def __init__(self, weekly_tt):
+    def __init__(self, weekly_tt=None):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.timetable import TimePeriodService
         self.timetableSchemaService = TimetableSchemaService()
-        self.timetableSchemaService['weekly'] = weekly_tt
+        if weekly_tt is not None:
+            self.timetableSchemaService['weekly'] = weekly_tt
         self.timePeriodService = TimePeriodService()
         self.timePeriodService['2003 fall'] = SchooldayModelStub()
+        self.resources = ResourceContainer()
+        self.resources['room1'] = ResourceStub('room1', 'Room 1')
+        self.resources['lab1'] = ResourceStub('lab1', 'CS Lab 1')
+        self.resources['lab2'] = ResourceStub('lab2', 'CS Lab 2')
+
+    def traverse(self, name):
+        return {'resources': self.resources}[name]
 
 
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
@@ -252,7 +277,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
 
     empty_xml = """
-        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
           <day id="Day 1">
             <period id="A">
             </period>
@@ -304,19 +330,29 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         """
 
     full_xml = """
-        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
           <day id="Day 1">
             <period id="A">
-              <activity>Maths</activity>
+              <activity title="Maths">
+                <resource xlink:type="simple" xlink:href="/resources/room1"
+                          xlink:title="Room 1"/>
+              </activity>
             </period>
             <period id="B">
-              <activity> English</activity>
-              <activity>French </activity>
+              <activity title="English" />
+              <activity title="French">
+              </activity>
             </period>
           </day>
           <day id="Day 2">
             <period id="C">
-              <activity>CompSci</activity>
+              <activity title="CompSci">
+                <resource xlink:type="simple" xlink:href="/resources/lab1"
+                          xlink:title="CS Lab 1"/>
+                <resource xlink:type="simple" xlink:href="/resources/lab2"
+                          xlink:title="CS Lab 2"/>
+              </activity>
             </period>
             <period id="D">
             </period>
@@ -362,6 +398,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html = empty_html_template % {'tt_type': "complete"}
     full_html = full_html_template % {'tt_type': "complete"}
 
+    def setUp(self):
+        self.root = ServiceManagerStub()
+
     def createEmpty(self):
         from schooltool.timetable import Timetable, TimetableDay
         grandparent = TimetabledStub()
@@ -377,10 +416,13 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     def createFull(self, owner=None):
         from schooltool.timetable import TimetableActivity
         tt = self.createEmpty()
-        tt['Day 1'].add('A', TimetableActivity('Maths', owner))
+        room1 = self.root.resources['room1']
+        lab1 = self.root.resources['lab1']
+        lab2 = self.root.resources['lab2']
+        tt['Day 1'].add('A', TimetableActivity('Maths', owner, [room1]))
         tt['Day 1'].add('B', TimetableActivity('English', owner))
         tt['Day 1'].add('B', TimetableActivity('French', owner))
-        tt['Day 2'].add('C', TimetableActivity('CompSci', owner))
+        tt['Day 2'].add('C', TimetableActivity('CompSci', owner, [lab1, lab2]))
         return tt
 
     def createView(self, context, key=('2003 fall', 'weekly')):
@@ -425,10 +467,11 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         """
 
     unknown_day_xml = """
-        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
           <day id="Day 1">
             <period id="A">
-              <activity>English</activity>
+              <activity title="English"/>
             </period>
             <period id="B">
             </period>
@@ -439,10 +482,26 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         """
 
     unknown_period_xml = """
-        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
           <day id="Day 1">
             <period id="A">
-              <activity>English</activity>
+              <activity title="English"/>
+            </period>
+            <period id="X">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    nonexistent_resource_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
+          <day id="Day 1">
+            <period id="A">
+              <activity title="English">
+                <resource xlink:type="simple" xlink:href="/resources/moon"/>
+              </activity>
             </period>
             <period id="X">
             </period>
@@ -456,12 +515,13 @@ class TestTimetableReadWriteView(TestTimetableReadView):
     def setUp(self):
         TestTimetableReadView.setUp(self)
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.root = ServiceManagerStub(self.createEmpty())
 
     def createTimetabled(self):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.timetable import TimePeriodService
         timetabled = TimetabledStub()
-        timetabled.__parent__ = ServiceManagerStub(self.createEmpty())
+        timetabled.__parent__ = self.root
         return timetabled
 
     def createView(self, context=None, timetabled=None,
@@ -482,14 +542,29 @@ class TestTimetableReadWriteView(TestTimetableReadView):
     def test_put(self):
         key = ('2003 fall', 'weekly')
         ttd = self.createTimetabled()
+        room1 = self.root.resources['room1']
+        lab1 = self.root.resources['lab1']
+        lab2 = self.root.resources['lab2']
 
         ttd.timetables[key] = self.createEmpty()
         expected = self.createFull(ttd)
         self.do_test_put(ttd, key, self.full_xml, expected)
+        self.assertEquals([(d, p, a.title) for d, p, a in
+                                room1.timetables[key].itercontent()],
+                          [('Day 1', 'A', 'Maths')])
+        self.assertEquals([(d, p, a.title) for d, p, a in
+                                lab1.timetables[key].itercontent()],
+                          [('Day 2', 'C', 'CompSci')])
+        self.assertEquals([(d, p, a.title) for d, p, a in
+                                lab2.timetables[key].itercontent()],
+                          [('Day 2', 'C', 'CompSci')])
 
         ttd.timetables[key] = self.createFull(ttd)
         expected = self.createEmpty()
         self.do_test_put(ttd, key, self.empty_xml, expected)
+        self.assertEquals(list(room1.timetables[key].itercontent()), [])
+        self.assertEquals(list(lab1.timetables[key].itercontent()), [])
+        self.assertEquals(list(lab2.timetables[key].itercontent()), [])
 
     def do_test_put(self, timetabled, key, xml, expected):
         view = self.createView(timetabled=timetabled, key=key)
@@ -528,7 +603,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assert_(key not in timetabled.timetables)
 
-    def do_test_error(self, xml=None, ctype='text/xml'):
+    def do_test_error(self, xml=None, ctype='text/xml', message=None):
         if xml is None:
             xml = self.empty_xml
         context = self.createEmpty()
@@ -536,16 +611,25 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': ctype})
         result = view.render(request)
+        if message is not None:
+            self.assertEquals(result, message)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(context, self.createEmpty())
 
     def test_put_error_handling(self):
-        self.do_test_error(ctype='text/plain')
-        self.do_test_error(xml=self.illformed_xml)
-        self.do_test_error(xml=self.invalid_xml)
-        self.do_test_error(xml=self.unknown_day_xml)
-        self.do_test_error(xml=self.unknown_period_xml)
+        self.do_test_error(ctype='text/plain',
+                           message="Unsupported content type: text/plain")
+        self.do_test_error(xml=self.illformed_xml,
+                           message="Timetable not valid XML")
+        self.do_test_error(xml=self.invalid_xml,
+                           message="Timetable not valid according to schema")
+        self.do_test_error(xml=self.unknown_day_xml,
+                           message="Unknown day id: 'Day 3'")
+        self.do_test_error(xml=self.unknown_period_xml,
+                           message="Unknown period id: 'X'")
+        self.do_test_error(xml=self.nonexistent_resource_xml,
+                           message="Invalid path: /resources/moon")
 
     def test_delete(self):
         key = ('2003 fall', 'weekly')
@@ -978,7 +1062,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                               unittest.TestCase):
 
     example_xml = """
-        <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+        <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                  xmlns:xlink="http://www.w3.org/1999/xlink">
           <teacher path="/persons/p2">
             <day id="A">
               <period id="Blue">
@@ -988,8 +1073,9 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
             </day>
             <day id="B">
               <period id="Red">
-                <activity group="/groups/sg3">
-                  Email
+                <activity group="/groups/sg3" title="Email">
+                  <resource xlink:type="simple" xlink:href="/resources/room1"
+                            xlink:title="Room 1"/>
                 </activity>
               </period>
               <period id="Yellow">
@@ -999,13 +1085,11 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
           <teacher path="/persons/p1">
             <day id="A">
               <period id="Blue">
-                <activity group="/groups/sg2">
-                  Slashdot
+                <activity group="/groups/sg2" title="Slashdot">
                 </activity>
               </period>
               <period id="Green">
-                <activity group="/groups/sg1">
-                  Slacking
+                <activity group="/groups/sg1" title="Slacking">
                 </activity>
               </period>
             </day>
@@ -1021,7 +1105,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
 
     def setUp(self):
         from schooltool.views.timetable import SchoolTimetableView
-        from schooltool.model import Group, Person
+        from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
         from schooltool.teaching import TeacherFacet, Teaching
@@ -1037,6 +1121,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
 
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
         self.teachers = app['groups'].new("teachers", title="teachers")
 
         self.teacher1 = app['persons'].new("p1", title="Albert")
@@ -1057,6 +1142,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         Teaching(teacher=self.teacher2, taught=self.sg3)
         Teaching(teacher=self.teacher2, taught=self.sg4)
 
+        self.room1 = app['resources'].new('room1', title="Room 1")
+
         self.key = ('2003-spring', '2day')
         self.view = SchoolTimetableView(app, key=self.key)
 
@@ -1071,7 +1158,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub()
         result = self.view.render(request)
         expected = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher path="/persons/p2">
                 <day id="A">
                   <period id="Blue">
@@ -1118,9 +1206,14 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         tt["A"].add("Blue", TimetableActivity("Slashdot", self.sg2))
         self.sg2.timetables[self.key] = tt
 
+        email_activity = TimetableActivity("Email", self.sg3, [self.room1])
         tt = tt.cloneEmpty()
-        tt["B"].add("Red", TimetableActivity("Email", self.sg3))
+        tt["B"].add("Red", email_activity)
         self.sg3.timetables[self.key] = tt
+
+        tt = tt.cloneEmpty()
+        tt["B"].add("Red", email_activity)
+        self.room1.timetables[self.key] = tt
 
     def testNonempty(self):
         from schooltool.component import getTimetableSchemaService
@@ -1172,8 +1265,13 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(Set(tt3["A"]["Blue"]), Set())
         self.assertEquals(Set(tt3["A"]["Green"]), Set())
         self.assertEquals(Set(tt3["B"]["Red"]),
-                          Set([TimetableActivity("Email", self.sg3)]))
+                          Set([TimetableActivity("Email", self.sg3,
+                                                 [self.room1])]))
         self.assertEquals(Set(tt3["B"]["Yellow"]), Set())
+
+        email_activity = list(tt3["B"]["Red"])[0]
+        self.assertEquals(list(self.room1.timetables[self.key].itercontent()),
+                          [('B', 'Red', email_activity)])
 
     def test_PUT_empty(self):
         xml = """
@@ -1184,6 +1282,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
               </teacher>
             </schooltt>
             """
+        self.setUpTimetables()
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': 'text/xml'})
         result = self.view.render(request)
@@ -1197,6 +1296,9 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                           self.sg3.timetables[self.key].cloneEmpty())
         self.assertEquals(self.sg4.timetables[self.key],
                           self.sg4.timetables[self.key].cloneEmpty())
+
+        self.assertEquals(list(self.room1.timetables[self.key].itercontent()),
+                          [])
 
     def test_PUT_badxml(self):
         nonxml = "<schooltt parse error>"

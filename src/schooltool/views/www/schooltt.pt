@@ -1,4 +1,5 @@
 <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:tal="http://xml.zope.org/namespaces/tal">
   <teacher tal:repeat="item view/getTeachersTimetables"
            tal:attributes="path python: view.getPath(item[0])">
@@ -8,8 +9,13 @@
       <period tal:repeat="period python: day[1].items()"
               tal:attributes="id python: period[0]">
         <activity tal:repeat="activity python: period[1]"
-	          tal:attributes="group python: view.getPath(activity.owner)"
-		  tal:content="activity/title"/>
+                  tal:attributes="group python: view.getPath(activity.owner);
+                                  title activity/title">
+          <resource tal:repeat="resource activity/resources"
+                    xlink:type="simple"
+                    tal:attributes="xlink:href python: view.getPath(resource);
+                                    xlink:title resource/title" />
+        </activity>
       </period>
     </day>
   </teacher>

@@ -871,16 +871,16 @@ class ITimetable(Interface):
         """A timetable model this timetable should be used with""")
 
     def keys():
-        """Returns a sequence of identifiers for days within the timetable"""
+        """Return a sequence of identifiers for days within the timetable"""
 
     def items():
-        """Returns a sequence of tuples of (day_id, ITimetableDay)."""
+        """Return a sequence of tuples of (day_id, ITimetableDay)."""
 
     def __getitem__(key):
-        """Returns a ITimetableDay for a given day id"""
+        """Return a ITimetableDay for a given day id"""
 
     def cloneEmpty():
-        """Returns a new empty timetable with the same structure.
+        """Return a new empty timetable with the same structure.
 
         The new timetable has the same set of day_ids, and the sets of
         period ids within each day.
@@ -892,13 +892,18 @@ class ITimetable(Interface):
         """
 
     def __ne__(other):
-        """Returns True iff __eq__ returns False."""
+        """Return True iff __eq__ returns False."""
+
+    def itercontent():
+        """Return an iterator for tuples (day_id, period_id, activity)
+        for all activities in this timetable.
+        """
 
 
 class ITimetableWrite(Interface):
 
     def __setitem__(key, value):
-        """Sets an ITimetableDay for a given day id.
+        """Set an ITimetableDay for a given day id.
 
         Throws a TypeError if the value does not implement ITimetableDay.
         Throws a ValueError if the key is not a day id.
@@ -948,6 +953,13 @@ class ITimetableDay(Interface):
 
 
 class ITimetableDayWrite(Interface):
+    """Writable timetable day.
+
+    Note that all clients which use ITimetableDayWrite or ITimetableWrite
+    to modify timetables should maintain the following invariant:
+     - every TimetableActivity is present in the timetable of its owner
+       and all the timetables of its resources.
+    """
 
     def clear(key):
         """Remove all the activities for a certain period id."""
@@ -980,7 +992,11 @@ class ITimetableActivity(Interface):
         The activity lives in the owner's timetable.
         """)
 
-    resources = Attribute("""A set of resources assigned to this activity""")
+    resources = Attribute("""A set of resources assigned to this activity.
+
+        The activity is also present in the timetables of all resources
+        assigned to this activity.
+        """)
 
 
 class ICompositeTimetableProvider(Interface):

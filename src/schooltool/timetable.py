@@ -114,6 +114,12 @@ class Timetable(Persistent):
     def __ne__(self, other):
         return not self == other
 
+    def itercontent(self):
+        for day_id in self.day_ids:
+            for period_id, iactivities in self.days[day_id].items():
+                for activity in iactivities:
+                    yield (day_id, period_id, activity)
+
 
 class TimetableDay(Persistent):
 

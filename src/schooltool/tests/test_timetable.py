@@ -214,6 +214,21 @@ class TestTimetable(unittest.TestCase):
         tt2["B"].remove("Green", bio)
         self.assertNotEquals(tt, tt2)
 
+    def test_itercontent(self):
+        from schooltool.timetable import TimetableActivity
+        tt = self.createTimetable()
+        english = TimetableActivity("English")
+        math = TimetableActivity("Math")
+        bio = TimetableActivity("Biology")
+        tt["A"].add("Green", english)
+        tt["A"].add("Blue", math)
+        tt["B"].add("Green", bio)
+        result = list(tt.itercontent())
+        expected = [("A", "Green", english),
+                    ("A", "Blue", math),
+                    ("B", "Green", bio)]
+        self.assertEquals(result, expected)
+
 
 class TestTimetableDay(unittest.TestCase):
 

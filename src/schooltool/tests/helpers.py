@@ -165,9 +165,12 @@ def normalize_xml(xml, recursively_sort=()):
                     result.append('\n')
                     line = '%s %s%s' % (indent, ' ' * len(self.tag), attr)
             if self.children:
+                s = ''.join([child.render(level+1) for child in self.children])
+            else:
+                s = ''
+            if s:
                 result.append('%s>\n' % line)
-                for child in self.children:
-                    result.append(child.render(level + 1))
+                result.append(s)
                 result.append('%s</%s>\n' % (indent, self.tag))
             else:
                 result.append('%s/>\n' % line)

@@ -1,4 +1,5 @@
 <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
            xmlns:tal="http://xml.zope.org/namespaces/tal">
   <day tal:repeat="item context/items"
        tal:attributes="id python:item[0]">
@@ -6,7 +7,12 @@
             tal:repeat="item day/items"
             tal:attributes="id python:item[0]">
       <activity tal:repeat="activity python:item[1]"
-                tal:content="activity/title" />
+                tal:attributes="title activity/title">
+        <resource tal:repeat="resource activity/resources"
+                  xlink:type="simple"
+                  tal:attributes="xlink:href python:getPath(resource);
+                                  xlink:title resource/title" />
+      </activity>
     </period>
   </day>
 </timetable>

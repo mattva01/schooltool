@@ -3,13 +3,28 @@
 RelaxNG grammar for a timetable.
 -->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
          ns="http://schooltool.org/ns/timetable/0.1"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 
   <define name="idattr">
-     <attribute name="id">
+    <attribute name="id">
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="xlinkattr">
+    <attribute name="xlink:type">
+      <value>simple</value>
+    </attribute>
+    <attribute name="xlink:href">
+      <data type="anyURI"/>
+    </attribute>
+    <optional>
+      <attribute name="xlink:title">
         <text/>
-     </attribute>
+      </attribute>
+    </optional>
   </define>
 
   <start>
@@ -17,7 +32,6 @@ RelaxNG grammar for a timetable.
   </start>
 
   <define name="timetable">
-
     <element name="timetable">
       <oneOrMore>
         <element name="day">
@@ -27,7 +41,14 @@ RelaxNG grammar for a timetable.
               <ref name="idattr"/>
               <zeroOrMore>
                 <element name="activity">
-                  <text/>
+                  <attribute name="title">
+                    <text/>
+                  </attribute>
+                  <zeroOrMore>
+                    <element name="resource">
+                      <ref name="xlinkattr"/>
+                    </element>
+                  </zeroOrMore>
                 </element>
               </zeroOrMore>
             </element>

@@ -49,6 +49,10 @@ __metaclass__ = type
 moduleProvides(IModuleSetup)
 
 
+class ViewError(Exception):
+    pass
+
+
 class TimetableContentNegotiation:
     """Mixin for figguring out the representation of timetables."""
 
@@ -97,7 +101,8 @@ class TimetableReadView(View, TimetableContentNegotiation):
 
     def do_GET(self, request):
         template = self.chooseRepresentation(request)
-        return template(request, view=self, context=self.context)
+        return template(request, view=self, context=self.context,
+                        getPath=getPath)
 
     def rows(self):
         rows = []
@@ -155,6 +160,8 @@ class TimetableReadWriteView(TimetableReadView):
         try:
             ns = 'http://schooltool.org/ns/timetable/0.1'
             xpathctx.xpathRegisterNs('tt', ns)
+            xlink = "http://www.w3.org/1999/xlink"
+            xpathctx.xpathRegisterNs('xlink', xlink)
 
             time_period_id, schema_id = self.key
             if time_period_id not in getTimePeriodService(self.timetabled):
@@ -181,9 +188,20 @@ class TimetableReadWriteView(TimetableReadView):
                                              % period_id)
                     xpathctx.setContextNode(period)
                     for activity in xpathctx.xpathEval('tt:activity'):
-                        title = activity.get_content().strip()
+                        title = activity.nsProp('title', None)
+                        resources = []
+                        xpathctx.setContextNode(activity)
+                        for resource in xpathctx.xpathEval('tt:resource'):
+                            path = resource.nsProp('href', xlink)
+                            try:
+                                res = traverse(self.timetabled, path)
+                            except KeyError:
+                                return textErrorPage(request,
+                                                     "Invalid path: %s" % path)
+                            resources.append(res)
                         ttday.add(period_id,
-                                  TimetableActivity(title, self.timetabled))
+                                  TimetableActivity(title, self.timetabled,
+                                                    resources))
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
@@ -191,8 +209,17 @@ class TimetableReadWriteView(TimetableReadView):
         if self.context is None:
             self.timetabled.timetables[self.key] = tt
         else:
+            for day_id, period_id, activity in self.context.itercontent():
+                for resource in activity.resources:
+                    resource.timetables[self.key][day_id].remove(period_id,
+                                                                 activity)
             self.context.clear()
             self.context.update(tt)
+        for day_id, period_id, activity in tt.itercontent():
+            for resource in activity.resources:
+                if self.key not in resource.timetables:
+                    resource.timetables[self.key] = tt.cloneEmpty()
+                resource.timetables[self.key][day_id].add(period_id, activity)
         request.setHeader('Content-Type', 'text/plain')
         return "OK"
 
@@ -513,6 +540,8 @@ class SchoolTimetableView(View):
             ns = 'http://schooltool.org/ns/schooltt/0.1'
             xpathctx = doc.xpathNewContext()
             xpathctx.xpathRegisterNs('st', ns)
+            xlink = "http://www.w3.org/1999/xlink"
+            xpathctx.xpathRegisterNs('xlink', xlink)
 
             timetables = {}
             service = getTimetableSchemaService(self.context)
@@ -531,46 +560,69 @@ class SchoolTimetableView(View):
                         continue
                     if self.key in group.timetables:
                         tt = group.timetables[self.key]
+                        for day_id, period_id, activity in tt.itercontent():
+                            for resource in activity.resources:
+                                res_tt = resource.timetables[self.key]
+                                res_tt[day_id].remove(period_id, activity)
+                        tt.clear()
                     else:
                         tt = schema.cloneEmpty()
-                    tt.clear()
                     group.timetables[self.key] = tt
                     timetables[path] = tt
 
-            for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-                teacher_path = teacher_node.nsProp('path', None)
-                xpathctx.setContextNode(teacher_node)
-                for day in xpathctx.xpathEval('st:day'):
-                    day_id = day.nsProp('id', None)
-                    if day_id not in schema.keys():
-                        return textErrorPage(request,
-                                             "Unknown day id: %r" % day_id)
-                    xpathctx.setContextNode(day)
-                    for period in xpathctx.xpathEval('st:period'):
-                        period_id = period.nsProp('id', None)
-                        if period_id not in schema[day_id].periods:
-                            return textErrorPage(request,
-                                       "Unknown period id: %r" % period_id)
-                        xpathctx.setContextNode(period)
-                        for activity in xpathctx.xpathEval('st:activity'):
-                            path = activity.nsProp('group', None)
-                            title = activity.get_content().strip()
-                            if path not in timetables:
-                                return textErrorPage(request,
-                                           "Invalid group: %s" % path)
-                            group = traverse(self.context, path)
-                            if group not in groups[teacher_path]:
-                                return textErrorPage(request,
-                                           "Invalid group %s for teacher %s"
-                                           % (path, teacher_path))
-                            timetables[path][day_id].add(period_id,
-                                TimetableActivity(title, group))
+            try:
+                iterator = self._walkXml(xpathctx, schema, timetables, groups)
+                for tt, day_id, period_id, activity in iterator:
+                    tt[day_id].add(period_id, activity)
+                    for res in activity.resources:
+                        if self.key not in res.timetables:
+                            res.timetables[self.key] = schema.cloneEmpty()
+                        res_tt = res.timetables[self.key]
+                        res_tt[day_id].add(period_id, activity)
+            except ViewError, e:
+                return textErrorPage(request, e)
 
             request.setHeader('Content-Type', 'text/plain')
             return "OK"
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
+
+    def _walkXml(self, xpathctx, schema, timetables, groups):
+        xlink = "http://www.w3.org/1999/xlink"
+        for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
+            teacher_path = teacher_node.nsProp('path', None)
+            xpathctx.setContextNode(teacher_node)
+            for day in xpathctx.xpathEval('st:day'):
+                day_id = day.nsProp('id', None)
+                if day_id not in schema.keys():
+                    raise ViewError("Unknown day id: %r" % day_id)
+                xpathctx.setContextNode(day)
+                for period in xpathctx.xpathEval('st:period'):
+                    period_id = period.nsProp('id', None)
+                    if period_id not in schema[day_id].periods:
+                        raise ViewError("Unknown period id: %r" % period_id)
+                    xpathctx.setContextNode(period)
+                    for activity in xpathctx.xpathEval('st:activity'):
+                        path = activity.nsProp('group', None)
+                        title = activity.nsProp('title', None)
+                        if path not in timetables:
+                            raise ViewError("Invalid group: %s" % path)
+                        group = traverse(self.context, path)
+                        if group not in groups[teacher_path]:
+                            raise ViewError("Invalid group %s for teacher %s"
+                                            % (path, teacher_path))
+                        resources = []
+                        xpathctx.setContextNode(activity)
+                        for resource in xpathctx.xpathEval('st:resource'):
+                            rpath = resource.nsProp('href', xlink)
+                            try:
+                                res = traverse(self.context, rpath)
+                            except KeyError:
+                                raise ViewError("Invalid path: %s" % rpath)
+                            resources.append(res)
+                        act = TimetableActivity(title, group, resources)
+                        yield timetables[path], day_id, period_id, act
 
     def getTeachersTimetables(self):
         result = []

@@ -3,6 +3,7 @@
 RelaxNG grammar for a timetable for the whole school.
 -->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
          ns="http://schooltool.org/ns/schooltt/0.1"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 
@@ -10,6 +11,20 @@ RelaxNG grammar for a timetable for the whole school.
      <attribute name="id">
         <text/>
      </attribute>
+  </define>
+
+  <define name="xlinkattr">
+    <attribute name="xlink:type">
+      <value>simple</value>
+    </attribute>
+    <attribute name="xlink:href">
+      <data type="anyURI"/>
+    </attribute>
+    <optional>
+      <attribute name="xlink:title">
+        <text/>
+      </attribute>
+    </optional>
   </define>
 
   <start>
@@ -34,7 +49,14 @@ RelaxNG grammar for a timetable for the whole school.
                       <attribute name="group">
                         <text/>
                       </attribute>
-                      <text/>
+                      <attribute name="title">
+                        <text/>
+                      </attribute>
+                      <zeroOrMore>
+                        <element name="resource">
+                          <ref name="xlinkattr"/>
+                        </element>
+                      </zeroOrMore>
                     </element>
                   </zeroOrMore>
                 </element>
