@@ -102,6 +102,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assert_('John Doe' in result)
         self.assert_('edit.html' not in result)
         self.assert_('password.html' in result)
+        self.assert_('Merge calendars' in result)
 
     def test_otheruser(self):
         from schooltool.browser.app import PersonView
@@ -114,6 +115,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assert_('John Doe' in result)
         self.assert_('edit.html' not in result)
         self.assert_('password.html' not in result)
+        self.assert_('Merge calendars' not in result)
 
     def test_manager(self):
         from schooltool.browser.app import PersonView
@@ -126,6 +128,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assert_('John Doe' in result)
         self.assert_('edit.html' in result)
         self.assert_('password.html' in result)
+        self.assert_('Merge calendars' in result)
 
     def test_traverse(self):
         from schooltool.browser.model import PersonView, PhotoView
@@ -217,7 +220,6 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                             'empty': False}])
 
     def test_POST(self):
-        from schooltool.model import Group
         from schooltool.browser.model import PersonView
         from schooltool.timetable import Timetable
         from schooltool.uris import URICalendarProvider
@@ -228,10 +230,14 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
 
         self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 0)
 
-        def assertChecked(doc, name, checked):
-            ch = doc.query('//input[@name="group.%s" and @checked="checked"]'
-                           % name)
-            self.assert_(bool(ch) == bool(checked), name)
+        def assertChecked(doc, group, expected):
+            links = view.context.listLinks(URICalendarProvider)
+            self.assertEquals(group in [link.traverse() for link in links],
+                              expected,
+                              group)
+            checked = doc.query('//input[@name="group.%s"'
+                                ' and @checked="checked"]' % group.__name__)
+            self.assertEquals(bool(checked), bool(expected), group)
 
         request = RequestStub(method='POST', args={'group.teachers': '',
                                                    'group.managers': '',
@@ -239,11 +245,9 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                               authenticated_user=self.manager)
         result = view.render(request)
         doc = HTMLDocument(result)
-        assertChecked(doc, 'teachers', True)
-        assertChecked(doc, 'managers', True)
-        assertChecked(doc, 'pupils', False)
-
-        self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 2)
+        assertChecked(doc, self.teachers, True)
+        assertChecked(doc, self.managers, True)
+        assertChecked(doc, self.pupils, False)
 
         request = RequestStub(method='POST', args={'group.teachers': '',
                                                    'group.pupils': '',
@@ -251,11 +255,21 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                               authenticated_user=self.manager)
         result = view.render(request)
         doc = HTMLDocument(result)
-        assertChecked(doc, 'teachers', True)
-        assertChecked(doc, 'managers', False)
-        assertChecked(doc, 'pupils', True)
+        assertChecked(doc, self.teachers, True)
+        assertChecked(doc, self.managers, False)
+        assertChecked(doc, self.pupils, True)
 
-        self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 2)
+    def test_POST_unauthorized(self):
+        from schooltool.browser.model import PersonView
+        from schooltool.uris import URICalendarProvider
+        view = PersonView(self.person)
+        request = RequestStub(method='POST', args={'group.teachers': '',
+                                                   'SUBMIT': ''},
+                              authenticated_user=self.person2)
+        groups = [self.teachers, self.managers, self.pupils]
+        view.getParentGroups = lambda: groups
+        result = view.render(request)
+        self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 0)
 
 
 class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):

@@ -146,9 +146,10 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
         return absoluteURL(self.request, self.context, 'password.html')
 
     canViewCalendar = canChangePassword
+    canChooseCalendars = canChangePassword
 
     def do_POST(self, request):
-        if 'SUBMIT' in request.args:
+        if 'SUBMIT' in request.args and self.canChooseCalendars():
             # Unlink old calendar subscriptions.
             for link in self.context.listLinks(URICalendarProvider):
                 link.unlink()
@@ -206,6 +207,8 @@ class PersonPasswordView(View, AppObjectBreadcrumbsMixin):
                     self.context.setPassword(new_password)
                     request.appLog(_("Password changed for %s (%s)") %
                                    (self.context.title, getPath(self.context)))
+                    # XXX I'd like to redirect to the person's page
+                    #     here, because current behaviour is very annoying.
         return self.do_GET(request)
 
 

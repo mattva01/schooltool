@@ -18,9 +18,9 @@
          tal:attributes="href string:${context/@@absolute_url}/calendar"
          i18n:translate="">View calendar</a>
     </div>
-    <div class="groups">
+
+    <div tal:condition="view/canChooseCalendars" class="groups">
       <!-- XXX The double frame looks ugly -->
-      <!-- TODO Do not show checkboxes for unauthorized users -->
       <form method="POST" tal:attributes="action request/path">
         <h3 i18n:translate="">Groups</h3>
 
@@ -36,6 +36,14 @@
         <input type="submit" name="SUBMIT" i18n:attributes="value"
                value="Update" />
       </form>
+    </div>
+
+    <div tal:condition="not:view/canChooseCalendars" class="groups">
+      <h3 i18n:translate="">Groups</h3>
+      <p tal:repeat="group view/getParentGroups">
+       <a tal:attributes="href group/@@absolute_url"
+          tal:content="group/title"></a>
+      </p>
     </div>
 
     <div class="timetables"
