@@ -351,8 +351,6 @@ class Server:
         """
         try:
             self.configure(args)
-            self.db = self.config.database.open()
-            self.ensureAppExists(self.db, self.appname)
         except getopt.GetoptError, e:
             print >> self.stderr, "schooltool: %s" % e
             print >> self.stderr, "run schooltool -h for help"
@@ -439,14 +437,21 @@ class Server:
 
         Must be called after configure.
         """
+        # Do this before calling suggestThreadPoolSize, as calling that
+        # will create a number of non-daemon threads and will prevent the
+        # application from exitting.
+        db_configuration = self.config.database
+        self.db = db_configuration.open()
+        self.ensureAppExists(self.db, self.appname)
+
         self.threadable_hook.init()
-        self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
 
         site = Site(self.db, self.appname, self.viewFactory)
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
 
+        self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
         self.reactor_hook.run()
 
     def ensureAppExists(self, db, appname):

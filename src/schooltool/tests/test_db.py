@@ -75,6 +75,10 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
 
+    def tearDown(self):
+        from transaction import get_transaction
+        get_transaction().abort()
+
     def test_setitem(self):
         from schooltool.db import PersistentKeysDict
         ob = object()
@@ -136,6 +140,10 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
         from zodb.storage.mapping import MappingStorage
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
+
+    def tearDown(self):
+        from transaction import get_transaction
+        get_transaction().abort()
 
     def test(self):
         from schooltool.db import PersistentKeysSet

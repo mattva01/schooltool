@@ -582,6 +582,10 @@ class TestServer(MemberSetup, unittest.TestCase):
         self.assert_(stderr.getvalue() != '')
 
     def test_run(self):
+        # make sure we have a clean fresh transaction
+        from transaction import get_transaction
+        get_transaction().abort()
+
         from schooltool.main import Server
         from schooltool.views import GroupView
 
@@ -596,7 +600,6 @@ class TestServer(MemberSetup, unittest.TestCase):
         server.notifyServerStarted = lambda x, y: None
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
-        server.db = DbStub()
         server.run()
 
         self.assert_(threadable._initialized)
