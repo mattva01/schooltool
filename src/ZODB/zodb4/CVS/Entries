@@ -1,0 +1,10 @@
+/__init__.py/1.1.2.1/Wed Jan 28 12:45:44 2004//Tzope3-zodb3-devel-branch
+/main.py/1.1.2.2/Thu Jan 29 21:31:42 2004//Tzope3-zodb3-devel-branch
+/z4base.py/1.1.2.1/Wed Jan 28 13:04:47 2004//Tzope3-zodb3-devel-branch
+/z4errors.py/1.1.2.1/Wed Jan 28 13:04:47 2004//Tzope3-zodb3-devel-branch
+/z4format.py/1.1.2.1/Wed Jan 28 13:04:47 2004//Tzope3-zodb3-devel-branch
+/z4interfaces.py/1.1.2.1/Wed Jan 28 13:04:47 2004//Tzope3-zodb3-devel-branch
+/z4iterator.py/1.1.2.5/Fri Jan 30 17:29:59 2004//Tzope3-zodb3-devel-branch
+/z4utils.py/1.1.2.2/Thu Jan 29 21:29:26 2004//Tzope3-zodb3-devel-branch
+D/tests////
+/conversion.py/1.1.2.8/Thu Feb 19 15:00:21 2004//Tzope3-zodb3-devel-branch

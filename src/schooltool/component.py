@@ -22,7 +22,7 @@ The schooltool component.
 $Id$
 """
 
-from zope.interface import moduleProvides, InterfaceSpecification, implements
+from zope.interface import moduleProvides, Declaration, implements
 from zope.interface.type import TypeRegistry
 from persistence.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI
@@ -269,7 +269,7 @@ def registerRelationship(rel_type, handler):
 
 def getRelationshipHandlerFor(rel_type):
     """Returns the registered handler for relationship_type."""
-    handlers = relationship_registry.getAll(InterfaceSpecification(rel_type))
+    handlers = relationship_registry.getAll(Declaration(rel_type))
     if not handlers:
         raise ComponentLookupError("No handler registered for %s" % rel_type)
     return handlers[0]

@@ -279,7 +279,10 @@ class Request(http.Request):
     """
 
     reactor_hook = reactor
-    get_transaction_hook = get_transaction
+
+    def __init__(self, *args, **kwargs):
+        self.get_transaction_hook = get_transaction
+        http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):
         """Resets the state of the request.
@@ -520,11 +523,11 @@ class Server:
 
     threadable_hook = threadable
     reactor_hook = reactor
-    get_transaction_hook = get_transaction
 
     def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
         self.stdout = stdout
         self.stderr = stderr
+        self.get_transaction_hook = get_transaction
 
     def main(self, args):
         """Starts the SchoolTool HTTP server.
