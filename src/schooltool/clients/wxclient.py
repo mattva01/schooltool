@@ -1132,7 +1132,7 @@ class SchoolTimetableFrame(wxDialog):
             period, schema = self.key
             self.client.putSchooltoolTimetable(period, schema, self.tt)
         except SchoolToolError, e:
-            wxMessageBox(_("Could not submit the roll call: %s") % e,
+            wxMessageBox(_("Could not update the timetable: %s") % e,
                          self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
