@@ -29,5 +29,12 @@
       add="zope.View"
       />
 
+  <containerViews
+      for="schoolbell.app.interfaces.IGroupContainer"
+      index="zope.View"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
 
 </configure>

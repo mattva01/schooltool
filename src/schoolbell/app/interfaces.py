@@ -18,14 +18,25 @@ class IPersonContainer(IContainer):
     contains(IPerson)
 
 
+class IGroup(Interface):
+    """Group."""
+
+
+class IGroupContainer(IContainer):
+    """Container of groups."""
+
+    contains(IGroup)
+
+
 class ISchoolBellApplication(IReadContainer):
     """The main SchoolBell application object.
 
     The application is a read-only container with the following items:
 
         'persons' - IPersonContainer
+        'groups' - IGroupContainer
 
-    TODO: groups, resources
+    TODO: resources
 
     TODO: this object can be added as a regular content object to a folder, or
     it can be used as the application root object.

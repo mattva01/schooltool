@@ -10,6 +10,7 @@ from zope.app.container.sample import SampleContainer
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer
+from schoolbell.app.interfaces import IGroupContainer
 
 
 class SchoolBellApplication(Persistent, SampleContainer):
@@ -24,6 +25,7 @@ class SchoolBellApplication(Persistent, SampleContainer):
     def __init__(self):
         SampleContainer.__init__(self)
         self['persons'] = PersonContainer()
+        self['groups'] = GroupContainer()
 
     def _newContainerData(self):
         return PersistentDict()
@@ -33,3 +35,9 @@ class PersonContainer(BTreeContainer):
     """Container of persons."""
 
     implements(IPersonContainer)
+
+
+class GroupContainer(BTreeContainer):
+    """Container of groups."""
+
+    implements(IGroupContainer)
