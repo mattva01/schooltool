@@ -32,7 +32,8 @@ from schooltool.views import View, Template
 from schooltool.views import TraversableView, XMLPseudoParser
 from schooltool.views import absoluteURL, notFoundPage, textErrorPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
-from schooltool.views.cal import AllCalendarsView, parse_date
+from schooltool.views.cal import AllCalendarsView
+from schooltool.common import parse_date
 
 __metaclass__ = type
 

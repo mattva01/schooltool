@@ -24,11 +24,14 @@ $Id$
 
 import unittest
 import datetime
+from zope.testing.doctestunit import DocTestSuite
 
 __metaclass__ = type
 
 
 class TestHelpers(unittest.TestCase):
+
+    # parse_date has a doctest
 
     def test_parse_datetime(self):
         from schooltool.common import parse_datetime
@@ -62,7 +65,9 @@ class TestHelpers(unittest.TestCase):
 
 
 def test_suite():
+    import schooltool.common
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite(schooltool.common))
     suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 

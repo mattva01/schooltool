@@ -25,7 +25,6 @@ $Id$
 import unittest
 import datetime
 import libxml2
-from zope.testing.doctestunit import DocTestSuite
 from schooltool.views.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
@@ -644,9 +643,7 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
 
 def test_suite():
-    import schooltool.views.cal
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite(schooltool.views.cal))
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarReadView))
     suite.addTest(unittest.makeSuite(TestCalendarView))

@@ -35,6 +35,7 @@ from schooltool.cal import ical_text, ical_duration
 from schooltool.component import getPath
 from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
+from schooltool.common import parse_date
 
 __metaclass__ = type
 
@@ -43,35 +44,6 @@ moduleProvides(IModuleSetup)
 
 
 complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
-
-
-def parse_date(value):
-    """Parse a ISO-8601 date value.
-
-    >>> parse_date('2003-09-01')
-    datetime.date(2003, 9, 1)
-    >>> parse_date('20030901')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '20030901'
-    >>> parse_date('2003-IX-01')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '2003-IX-01'
-    >>> parse_date('2003-09-31')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '2003-09-31'
-    >>> parse_date('2003-09-30-15-42')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '2003-09-30-15-42'
-    """
-    try:
-        y, m, d = map(int, value.split('-'))
-        return datetime.date(y, m, d)
-    except ValueError:
-        raise ValueError("Invalid date: %r" % value)
 
 
 class SchooldayModelCalendarView(View):

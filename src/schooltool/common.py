@@ -26,8 +26,37 @@ import datetime
 __metaclass__ = type
 
 
+def parse_date(value):
+    """Parse a ISO-8601 YYYY-MM-DD date value.
+
+    >>> parse_date('2003-09-01')
+    datetime.date(2003, 9, 1)
+    >>> parse_date('20030901')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '20030901'
+    >>> parse_date('2003-IX-01')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '2003-IX-01'
+    >>> parse_date('2003-09-31')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '2003-09-31'
+    >>> parse_date('2003-09-30-15-42')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '2003-09-30-15-42'
+    """
+    try:
+        y, m, d = map(int, value.split('-'))
+        return datetime.date(y, m, d)
+    except ValueError:
+        raise ValueError("Invalid date: %r" % value)
+
+
 def parse_datetime(s):
-    """Parses ISO 8601 date/time values.
+    """Parse a ISO 8601 date/time value.
 
     Only a small subset of ISO 8601 is accepted:
 
