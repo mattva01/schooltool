@@ -339,7 +339,7 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
             # we pass a 'ward' request varible to link it to.
             wid = to_unicode(request.args.get('ward',[None])[0])
             new_guardian = traverse(self.context, '/persons/' + wid)
-            Guardian(custodian = new_guardian, ward = person)
+            Guardian(custodian=new_guardian, ward=person)
 
         if person is None:
             # Unlikely, but possible
