@@ -25,10 +25,9 @@ $Id$
 import unittest
 import calendar
 from pprint import pformat
-from datetime import date, time, timedelta, datetime
+from datetime import date, timedelta, datetime
 from StringIO import StringIO
 from zope.interface.verify import verifyObject
-from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.helpers import diff, dedent
 from schooltool.tests.utils import EqualsSortedMixin

@@ -31,7 +31,7 @@ from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
-from schooltool.interfaces import ITimetableModel, ISchooldayModel
+from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService, ISchooldayPeriod
 from schooltool.cal import Calendar, CalendarEvent

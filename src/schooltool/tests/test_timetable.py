@@ -30,7 +30,7 @@ from persistence import Persistent
 
 from zope.interface.verify import verifyObject
 from zope.interface import implements
-from schooltool.tests.helpers import diff, dedent
+from schooltool.tests.helpers import diff
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -808,7 +808,6 @@ class TestTimetableSchemaService(unittest.TestCase):
         self.assertRaises(KeyError, service.__getitem__, "super")
 
 def test_suite():
-    import schooltool.cal
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
