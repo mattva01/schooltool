@@ -440,8 +440,8 @@ class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
         widget.setValue(False)
         expected = """
             <div class="row">
-              <label for="field">Label</label>
               <input type="checkbox" name="field" id="field"/>
+              <label class="plain" for="field">Label</label>
             </div>
             """
         self.assertEqualsXML(widget(), expected)
@@ -455,9 +455,9 @@ class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
         widget.error = u"An error!"
         expected = """
             <div class="row row_error">
-              <label for="field">Label</label>
               <input type="checkbox" class="extra"
                      id="field" name="field" tabindex="11" checked="checked" />
+              <label class="plain" for="field">Label</label>
               <span class="unit">(blah blah blah)</span>
               <div class="error">An error!</div>
             </div>

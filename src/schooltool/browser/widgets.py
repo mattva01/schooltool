@@ -525,9 +525,9 @@ class CheckboxWidget(Widget):
 
     def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
-                '  <label for="%(name)s">%(label)s</label>\n'
                 '  <input %(css_class)s type="checkbox" name="%(name)s"'
-                ' id="%(name)s" %(tabindex)s %(checked)s/>\n'
+                '         id="%(name)s" %(tabindex)s %(checked)s/>\n'
+                '  <label class="plain" for="%(name)s">%(label)s</label>\n'
                 '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
