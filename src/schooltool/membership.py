@@ -132,7 +132,7 @@ class GroupMixin(Persistent):
 Membership = RelationshipSchema(URIMembership,
                                 group=URIGroup, member=URIMember)
 
-def checkForCycles(group, potential_member):
+def checkForPotentialCycles(group, potential_member):
     """Raises ValueError if adding potential_member would create a
     cycle in membership relationships.
     """
@@ -187,7 +187,7 @@ class MemberRemovedEvent(MembershipEvent):
 def membershipRelate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipFactory"""
 
-    checkForCycles(a, b)
+    checkForPotentialCycles(a, b)
     links = relationship.relate(relationship_type,
                                 (a, role_a), (b, role_b), title)
     event = MemberAddedEvent(links)
@@ -199,4 +199,3 @@ def membershipRelate(relationship_type, (a, role_a), (b, role_b), title=None):
 def setUp():
     """Register the URIMembership relationship handler."""
     registerRelationship(URIMembership, membershipRelate)
-

@@ -190,7 +190,7 @@ class TestCyclicConstraint(RelationshipTestMixin, EventServiceTestMixin,
         self.setUpEventService()
         # Not bothering to register a relationship especially for membership.
         # Standard relationships will do.
-        from schooltool.membership import Membership, checkForCycles
+        from schooltool.membership import Membership, checkForPotentialCycles
         from schooltool.component import registerRelationship
         from schooltool.interfaces import ISpecificURI
         from schooltool.relationship import defaultRelate
@@ -199,18 +199,18 @@ class TestCyclicConstraint(RelationshipTestMixin, EventServiceTestMixin,
         g = Relatable()
 
         # Test a cycle of a group with itself.
-        self.assertRaises(ValueError, checkForCycles, g, g)
+        self.assertRaises(ValueError, checkForPotentialCycles, g, g)
 
         # Test a two-group cycle.
         g1 = Relatable()
         g2 = Relatable()
-        checkForCycles(g1, g2)
-        checkForCycles(g2, g1)
+        checkForPotentialCycles(g1, g2)
+        checkForPotentialCycles(g2, g1)
         links = Membership(group=g1, member=g2)
         self.assertEquals(links['member'].traverse(), g2)
         self.assertEquals(links['group'].traverse(), g1)
-        self.assertRaises(ValueError, checkForCycles, g2, g1)
-        self.assertRaises(ValueError, checkForCycles, g1, g2)
+        self.assertRaises(ValueError, checkForPotentialCycles, g2, g1)
+        self.assertRaises(ValueError, checkForPotentialCycles, g1, g2)
 
 
 class TestEvents(unittest.TestCase):
