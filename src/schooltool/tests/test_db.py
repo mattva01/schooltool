@@ -129,9 +129,13 @@ class TestPersistentTuplesDict(unittest.TestCase):
         self.datamgr = self.db.open()
 
     def test___init__(self):
-        # This is a white-box test
         from schooltool.db import PersistentTuplesDict
         self.assertRaises(TypeError, PersistentTuplesDict)
+        self.assertRaises(ValueError, PersistentTuplesDict, 'x')
+        self.assertRaises(ValueError, PersistentTuplesDict, ('x',))
+        self.assertRaises(TypeError, PersistentTuplesDict, ((),))
+
+        # The rest of this test is a white-box
         d = PersistentTuplesDict('')
         self.assertEquals(d._patternlen, 0)
         self.assertEquals(d._pindexes, [])
@@ -154,6 +158,9 @@ class TestPersistentTuplesDict(unittest.TestCase):
         self.assertEquals(d._pindexes, [0, 2])
 
         d = PersistentTuplesDict(u'pop')
+        self.assertEquals(d._patternlen, 3)
+        self.assertEquals(d._pindexes, [0, 2])
+        d = PersistentTuplesDict((u'p', u'o', u'p'))
         self.assertEquals(d._patternlen, 3)
         self.assertEquals(d._pindexes, [0, 2])
 

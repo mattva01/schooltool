@@ -149,6 +149,24 @@ class PersistentTuplesDict(PersistentKeysDict):
             raise TypeError('pattern must be a tuple or string, not %r'
                             % (pattern,))
         self._patternlen = len(pattern)
+        self._pindexes = []
+        for count, item in enumerate(pattern):
+            # This test isn't really needed if pattern is a string.
+            # We could join a tuple to make it into a string, but we'd also
+            # need to assert that each element of the tuple is a single
+            # character.
+            if not isinstance(item, basestring):
+                raise TypeError(
+                    "Pattern items must be characters 'p' or 'o': %r"
+                    % (pattern,))
+            if item.lower() == 'p':
+                self._pindexes.append(count)
+            elif item.lower() == 'o':
+                pass
+            else:
+                raise ValueError(
+                    "Pattern items must be characters 'p' or 'o': %r"
+                    % (pattern,))
         self._pindexes = [count
                           for count, item in enumerate(pattern)
                           if item.lower() == 'p']
