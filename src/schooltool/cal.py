@@ -1048,7 +1048,7 @@ class ACL(Persistent):
         """Returns true iff the principal has the permission"""
         if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
-        if principal is Everybody:
+        if principal == Everybody:
             return permission in self._everybody
         else:
             return (principal, permission) in self._data
@@ -1057,7 +1057,7 @@ class ACL(Persistent):
         """Grants the permission to a principal"""
         if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
-        if principal is Everybody:
+        if principal == Everybody:
             self._everybody[permission] = 1
         else:
             self._data[(principal, permission)] = 1
@@ -1066,7 +1066,7 @@ class ACL(Persistent):
         """Revokes the permission from a principal"""
         if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
-        if principal is Everybody:
+        if principal == Everybody:
             del self._everybody[permission]
         else:
             del self._data[(principal, permission)]
