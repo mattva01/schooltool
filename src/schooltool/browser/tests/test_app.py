@@ -1000,12 +1000,61 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.r2 = r.new('r2', title='Resource 2')
         self.view = BusySearchView(app)
 
+    def setUpTimetable(self):
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        from schooltool.timetable import SchooldayTemplate
+        from schooltool.timetable import SchooldayPeriod
+        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.cal import SchooldayModel
+        tt = Timetable(['Day1', 'Day2'])
+        dt = SchooldayTemplate()
+        dt.add(SchooldayPeriod('A', time(10), timedelta(minutes=50)))
+        dt.add(SchooldayPeriod('B', time(11), timedelta(minutes=50)))
+        dt.add(SchooldayPeriod('C', time(12), timedelta(minutes=50)))
+        tt.model = SequentialDaysTimetableModel(['Day1', 'Day2'],
+                                                {None: dt})
+        tt['Day1'] = TimetableDay(['B', 'A'])
+        tt['Day2'] = TimetableDay(['A', 'C'])
+        self.app.timetableSchemaService['some'] = tt
+        sm = SchooldayModel(date(2004, 8, 1), date(2004, 9, 1))
+        sm.addWeekdays(0, 1, 2, 3, 4, 5, 6)
+        self.app.timePeriodService['now'] = sm
+
     def test_allResources(self):
         self.assertEqual(self.view._allResources(),
                          [(self.r1, 'Resource 1'),
                           (self.r2, 'Resource 2')])
 
+    def test_allPeriods(self):
+        self.assertEquals(self.view._allPeriods(), [])
+
+        self.setUpTimetable()
+        self.assertEquals(self.view._allPeriods(), ['A', 'B', 'C'])
+
     def test_doSearch(self):
+        self.view.by_periods = False
+        self.view.resources_widget.setValue([self.r1])
+        self.view.hours_widget.setValue([13, 14])
+        self.view.first_widget.setValue(date(2004, 8, 11))
+        self.view.last_widget.setValue(date(2004, 8, 11))
+        self.view.duration_widget.setValue(30)
+        self.view.request = RequestStub()
+        self.view._query = lambda *args: ('_query', args)
+        self.view.searhcing = False
+        self.view._doSearch()
+        self.assert_(self.view.searching)
+        self.assertEquals(self.view.results[0], '_query')
+        resources, hours, first, last, duration = self.view.results[1]
+        self.assertEquals(first, date(2004, 8, 11))
+        self.assertEquals(last, date(2004, 8, 11))
+        self.assertEquals(duration, timedelta(minutes=30))
+        self.assertEquals(hours, [(time(13, 0), timedelta(hours=1)),
+                                  (time(14, 0), timedelta(hours=1))])
+        self.assertEqualsSorted(resources, [self.r1])
+
+    def test_doSearch_all_resources(self):
+        self.view.by_periods = False
         self.view.resources_widget.setValue([])
         self.view.hours_widget.setValue([13, 14])
         self.view.first_widget.setValue(date(2004, 8, 11))
@@ -1025,6 +1074,63 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
                                   (time(14, 0), timedelta(hours=1))])
         self.assertEqualsSorted(resources, [self.r1, self.r2])
 
+    def test_doSearch_all_hours(self):
+        self.view.by_periods = False
+        self.view.resources_widget.setValue([])
+        self.view.hours_widget.setValue([])
+        self.view.first_widget.setValue(date(2004, 8, 11))
+        self.view.last_widget.setValue(date(2004, 8, 11))
+        self.view.duration_widget.setValue(30)
+        self.view.request = RequestStub()
+        self.view._query = lambda *args: ('_query', args)
+        self.view.searhcing = False
+        self.view._doSearch()
+        self.assert_(self.view.searching)
+        self.assertEquals(self.view.results[0], '_query')
+        resources, hours, first, last, duration = self.view.results[1]
+        self.assertEquals(first, date(2004, 8, 11))
+        self.assertEquals(last, date(2004, 8, 11))
+        self.assertEquals(duration, timedelta(minutes=30))
+        self.assertEquals(hours, [(time(0, 0), timedelta(hours=24))])
+        self.assertEqualsSorted(resources, [self.r1, self.r2])
+
+    def test_doSearch_by_periods(self):
+        self.view.by_periods = True
+        self.view.resources_widget.setValue([])
+        self.view.periods_widget.setValue(['B', 'C'])
+        self.view.first_widget.setValue(date(2004, 8, 11))
+        self.view.last_widget.setValue(date(2004, 8, 11))
+        self.view.request = RequestStub()
+        self.view._queryByPeriods = lambda *args: ('_queryByPeriods', args)
+        self.view.searhcing = False
+        self.view._doSearch()
+        self.assert_(self.view.searching)
+        self.assertEquals(self.view.results[0], '_queryByPeriods')
+        resources, periods, first, last = self.view.results[1]
+        self.assertEquals(first, date(2004, 8, 11))
+        self.assertEquals(last, date(2004, 8, 11))
+        self.assertEquals(periods, ['B', 'C'])
+        self.assertEqualsSorted(resources, [self.r1, self.r2])
+
+    def test_doSearch_all_periods(self):
+        self.setUpTimetable()
+        self.view.by_periods = True
+        self.view.resources_widget.setValue([])
+        self.view.periods_widget.setValue([])
+        self.view.first_widget.setValue(date(2004, 8, 11))
+        self.view.last_widget.setValue(date(2004, 8, 11))
+        self.view.request = RequestStub()
+        self.view._queryByPeriods = lambda *args: ('_queryByPeriods', args)
+        self.view.searhcing = False
+        self.view._doSearch()
+        self.assert_(self.view.searching)
+        self.assertEquals(self.view.results[0], '_queryByPeriods')
+        resources, periods, first, last = self.view.results[1]
+        self.assertEquals(first, date(2004, 8, 11))
+        self.assertEquals(last, date(2004, 8, 11))
+        self.assertEquals(periods, ['A', 'B', 'C'])
+        self.assertEqualsSorted(resources, [self.r1, self.r2])
+
     def test_query(self):
         resources = [self.r1, self.r2]
         hours = [(time(13, 0), timedelta(hours=2))]
@@ -1037,6 +1143,7 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
                           [{'title': 'Resource 1',
                             'href': 'http://localhost:7001/resources/r1',
                             'slots': [{'duration': 120,
+                                       'suggested_duration': 30,
                                        'start_date': '2004-08-11',
                                        'start_time': '13:00',
                                        'start': '2004-08-11 13:00',
@@ -1044,18 +1151,50 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
                            {'title': 'Resource 2',
                             'href': 'http://localhost:7001/resources/r2',
                             'slots': [{'duration': 120,
+                                       'suggested_duration': 30,
                                        'start_date': '2004-08-11',
                                        'start_time': '13:00',
                                        'start': '2004-08-11 13:00',
                                        'end': '2004-08-11 15:00'}]}])
 
+    def test_queryByPeriods(self):
+        self.setUpTimetable()
+        resources = [self.r1, self.r2]
+        periods = ['A']
+        first = date(2004, 8, 11)
+        last = date(2004, 8, 11)
+        self.view.request = RequestStub()
+        results = self.view._queryByPeriods(resources, periods, first, last)
+        self.assertEquals(results,
+                          [{'title': 'Resource 1',
+                            'href': 'http://localhost:7001/resources/r1',
+                            'slots': [{'duration': 50,
+                                       'suggested_duration': 50,
+                                       'period': 'A',
+                                       'start_date': '2004-08-11',
+                                       'start_time': '10:00',
+                                       'start': '2004-08-11 10:00',
+                                       'end': '2004-08-11 10:50'}]},
+                           {'title': 'Resource 2',
+                            'href': 'http://localhost:7001/resources/r2',
+                            'slots': [{'duration': 50,
+                                       'suggested_duration': 50,
+                                       'period': 'A',
+                                       'start_date': '2004-08-11',
+                                       'start_time': '10:00',
+                                       'start': '2004-08-11 10:00',
+                                       'end': '2004-08-11 10:50'}]}])
+
     def test_render(self):
         request = RequestStub(args={}, authenticated_user=self.r1)
         result = self.view.render(request)
+        self.assert_(not self.view.by_periods)
         self.assert_(not self.view.searching)
         self.assert_('Resource 1' in result, result)
         self.assert_('Search' in result)
         self.assert_('Available time slots' not in result)
+        self.assert_('Periods' not in result)
+        self.assert_('Hours' in result)
 
         request = RequestStub(args={'first': '2004-08-11',
                                     'last': '2004-08-11',
@@ -1064,6 +1203,7 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
                                     'SEARCH': 'Submit'},
                               authenticated_user=self.r1)
         result = self.view.render(request)
+        self.assert_(not self.view.by_periods)
         self.assert_(self.view.searching)
         self.assert_(self.view.results)
         self.assert_('Resource 1' in result, result)
@@ -1085,6 +1225,46 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.assert_('Search' in result)
         self.assert_('Available time slots' not in result)
         self.assert_('Invalid' in result)
+
+    def test_render_by_periods(self):
+        self.setUpTimetable()
+        request = RequestStub(cookies={'cal_periods': 'yes'},
+                              args={}, authenticated_user=self.r1)
+        result = self.view.render(request)
+        self.assert_(self.view.by_periods)
+        self.assert_(not self.view.searching)
+        self.assert_('Resource 1' in result, result)
+        self.assert_('Search' in result)
+        self.assert_('Available time slots' not in result)
+        self.assert_('Periods' in result)
+        self.assert_('Hours' not in result)
+
+        request = RequestStub(cookies={'cal_periods': 'yes'},
+                              args={'first': '2004-08-11',
+                                    'last': '2004-08-11',
+                                    'periods': ['A'],
+                                    'SEARCH': 'Submit'},
+                              authenticated_user=self.r1)
+        result = self.view.render(request)
+        self.assert_(self.view.by_periods)
+        self.assert_(self.view.searching)
+        self.assert_(self.view.results)
+        self.assert_('Resource 1' in result, result)
+        self.assert_('Search' in result)
+        self.assert_('Available time slots' in result)
+        self.assert_('Book' in result)
+        self.assert_('2004-08-11' in result)
+
+    def test_render_switching(self):
+        request = RequestStub(args={'HOURS': ''}, authenticated_user=self.r1)
+        result = self.view.render(request)
+        self.assert_(not self.view.by_periods)
+        self.assertEquals(request._outgoing_cookies['cal_periods'][0], '')
+
+        request = RequestStub(args={'PERIODS': ''}, authenticated_user=self.r1)
+        result = self.view.render(request)
+        self.assert_(self.view.by_periods)
+        self.assertEquals(request._outgoing_cookies['cal_periods'], 'yes')
 
 
 class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):

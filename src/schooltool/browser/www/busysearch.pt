@@ -20,9 +20,17 @@
   </tal:block>
 </td>
 
-<td>
+<td tal:condition="not:view/by_periods">
   <h3 i18n:translate="">Hours</h3>
   <tal:block define="widget nocall:view/hours_widget">
+    <div metal:use-macro="widget/template/macros/select" />
+    <div metal:use-macro="widget/template/macros/error" />
+  </tal:block>
+</td>
+
+<td tal:condition="view/by_periods">
+  <h3 i18n:translate="">Periods</h3>
+  <tal:block define="widget nocall:view/periods_widget">
     <div metal:use-macro="widget/template/macros/select" />
     <div metal:use-macro="widget/template/macros/error" />
   </tal:block>
@@ -33,11 +41,19 @@
   <div class="row" tal:replace="structure view/first_widget" />
   <div class="row" tal:replace="structure view/last_widget" />
 
+<tal:if condition="not:view/by_periods">
   <h3 i18n:translate="">Duration</h3>
   <div class="row" tal:replace="structure view/duration_widget" />
+</tal:if>
 
   <div class="buttons">
     <input type="submit" name="SEARCH" value="Search" class="button"
+           i18n:attributes="value" />
+    <input tal:condition="view/by_periods"
+           type="submit" name="HOURS" value="By hours" class="button"
+           i18n:attributes="value" />
+    <input tal:condition="not:view/by_periods"
+           type="submit" name="PERIODS" value="By periods" class="button"
            i18n:attributes="value" />
   </div>
 </td>
@@ -54,15 +70,20 @@
 <table class="available" tal:condition="results">
   <tr>
     <th i18n:translate="">Resource</th>
-    <th i18n:translate="">Start</th>
-    <th i18n:translate="">End</th>
+    <th tal:condition="view/by_periods" i18n:translate="">Date</th>
+    <th tal:condition="view/by_periods" i18n:translate="">Period</th>
+    <th tal:condition="not:view/by_periods" i18n:translate="">Start</th>
+    <th tal:condition="not:view/by_periods" i18n:translate="">End</th>
     <th></th>
   </tr>
   <tal:block repeat="resource results">
   <tr tal:repeat="slot resource/slots">
-    <td tal:content="resource/title">Resource</td>
-    <td tal:content="slot/start">Start</td>
-    <td tal:content="slot/end">Duration</td>
+    <td><a tal:attributes="href resource/href"
+           tal:content="resource/title">Resource</a></td>
+    <td tal:condition="view/by_periods" tal:content="slot/start_date">Date</td>
+    <td tal:condition="view/by_periods" tal:content="slot/period">Period</td>
+    <td tal:condition="not:view/by_periods" tal:content="slot/start">Start</td>
+    <td tal:condition="not:view/by_periods" tal:content="slot/end">End</td>
     <td>
       <form method="GET" class="plain"
             tal:attributes="action string:${resource/href}/book">
@@ -71,7 +92,7 @@
          <input type="hidden" name="start_time"
                 tal:attributes="value slot/start_time"/>
          <input type="hidden" name="duration"
-                tal:attributes="value view/duration_widget/raw_value"/>
+                tal:attributes="value slot/suggested_duration"/>
          <input type="submit" name="BOOK" value="Book" class="button"
                 i18n:attributes="value"/>
       </form>

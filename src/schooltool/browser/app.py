@@ -22,6 +22,7 @@ Web-application views for the schooltool.app objects.
 $Id$
 """
 
+import sets
 import datetime
 from cStringIO import StringIO
 
@@ -656,6 +657,8 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
                                     [(hour, '%02d:00' % hour)
                                     for hour in range(24)],
                                     parser=sequenceParser(intParser))
+        self.periods_widget = MultiselectionWidget('periods', _('Periods'),
+                                    [(p, p) for p in self._allPeriods()])
         self.first_widget = TextWidget('first', _('First'), parser=dateParser,
                                     value=datetime.date.today())
         self.last_widget = TextWidget('last', _('Last'), parser=dateParser,
@@ -671,6 +674,19 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
         result = [(obj.title, obj) for obj in resources.itervalues()]
         result.sort()
         return [(obj, title) for title, obj in result]
+
+    def _allPeriods(self):
+        """Return a sorted list of all timetable period IDs."""
+        ttservice = getTimetableSchemaService(self.context)
+        if ttservice.default_id is None:
+            return []
+        tt = ttservice.getDefault()
+        periods = sets.Set()
+        for day_id, day in tt.items():
+            periods.update(day.periods)
+        periods = list(periods)
+        periods.sort()
+        return periods
 
     def _parseResources(self, raw_value):
         """Parse a list of paths and return a list of resources."""
@@ -688,15 +704,29 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
 
     def do_GET(self, request):
         """Process the request."""
+        if 'HOURS' in self.request.args:
+            self.by_periods = False
+            request.clearCookie('cal_periods')
+        elif 'PERIODS' in self.request.args:
+            self.by_periods = True
+            request.addCookie('cal_periods', 'yes')
+        else:
+            self.by_periods = bool(request.getCookie('cal_periods'))
         self.searching = False
-        widgets = [self.resources_widget, self.hours_widget,
-                   self.first_widget, self.last_widget, self.duration_widget]
+        if self.by_periods:
+            widgets = [self.resources_widget, self.periods_widget,
+                       self.first_widget, self.last_widget]
+        else:
+            widgets = [self.resources_widget, self.hours_widget,
+                       self.first_widget, self.last_widget,
+                       self.duration_widget]
         for widget in widgets:
             widget.update(request)
         if 'SEARCH' in request.args:
             self.first_widget.require()
             self.last_widget.require()
-            self.duration_widget.require()
+            if not self.by_periods:
+                self.duration_widget.require()
             errors = False
             for widget in widgets:
                 if widget.error:
@@ -712,22 +742,31 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
         if not resources:
             resource_container = traverse(self.context, 'resources')
             resources = list(resource_container.itervalues())
-        if not self.hours_widget.value:
-            hours = [(datetime.time(0), datetime.timedelta(hours=24))]
+        if self.by_periods:
+            periods = self.periods_widget.value
+            if not periods:
+                periods = self._allPeriods()
+            self.results = self._queryByPeriods(resources, periods,
+                                                self.first_widget.value,
+                                                self.last_widget.value)
         else:
-            hours = [(datetime.time(h), datetime.timedelta(hours=1))
-                     for h in self.hours_widget.value]
-        duration = datetime.timedelta(minutes=self.duration_widget.value)
-        self.results = self._query(resources, hours, self.first_widget.value,
-                                   self.last_widget.value, duration)
+            if not self.hours_widget.value:
+                hours = [(datetime.time(0), datetime.timedelta(hours=24))]
+            else:
+                hours = [(datetime.time(h), datetime.timedelta(hours=1))
+                         for h in self.hours_widget.value]
+            duration = datetime.timedelta(minutes=self.duration_widget.value)
+            self.results = self._query(resources, hours,
+                                       self.first_widget.value,
+                                       self.last_widget.value, duration)
 
-    def _query(self, resources, hours, first, last, duration):
+    def _query(self, resources, hours, first, last, min_duration):
         """Perform resource busy search."""
         resources = [(r.title, r) for r in resources]
         resources.sort()
         results = []
         for title, resource in resources:
-            slots = resource.getFreeIntervals(first, last, hours, duration)
+            slots = resource.getFreeIntervals(first, last, hours, min_duration)
             if not slots:
                 continue
             res_slots = []
@@ -740,6 +779,34 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
                      'start_date': start.strftime("%Y-%m-%d"),
                      'start_time': start.strftime("%H:%M"),
                      'duration': mins,
+                     'suggested_duration': self.duration_widget.value,
+                     })
+            results.append({'title': title,
+                            'href': absoluteURL(self.request, resource),
+                            'slots': res_slots})
+        return results
+
+    def _queryByPeriods(self, resources, periods, first, last):
+        """Perform resource busy search."""
+        resources = [(r.title, r) for r in resources]
+        resources.sort()
+        results = []
+        for title, resource in resources:
+            slots = resource.getFreePeriods(first, last, periods)
+            if not slots:
+                continue
+            res_slots = []
+            for start, duration, period in slots:
+                mins = duration.days * 60 * 24 + duration.seconds // 60
+                end = start + duration
+                res_slots.append(
+                    {'start': start.strftime("%Y-%m-%d %H:%M"),
+                     'end': end.strftime("%Y-%m-%d %H:%M"),
+                     'start_date': start.strftime("%Y-%m-%d"),
+                     'start_time': start.strftime("%H:%M"),
+                     'duration': mins,
+                     'suggested_duration': mins,
+                     'period': period,
                      })
             results.append({'title': title,
                             'href': absoluteURL(self.request, resource),
