@@ -47,8 +47,6 @@ from twisted.python import failure
 from schooltool import mockup
 from schooltool.model import RootGroup, Group, Person
 from schooltool.views import GroupView, errorPage
-from schooltool.relationships import setUp as setUpRelationship
-from schooltool.membership import setUp as setUpMembership
 
 __metaclass__ = type
 
@@ -439,8 +437,11 @@ class Server:
 
         Must be called after configure.
         """
-        setUpRelationship()
-        setUpMembership()
+        import schooltool.relationships
+        import schooltool.membership
+
+        schooltool.relationships.setUp()
+        schooltool.membership.setUp()
 
         db_configuration = self.config.database
         self.db = db_configuration.open()
