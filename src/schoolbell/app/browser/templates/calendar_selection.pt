@@ -28,8 +28,9 @@
 
     <fieldset tal:define="persons view/persons">
       <legend i18n:translate="">People</legend>
-      <p tal:condition="not:persons"
-         i18n:translate="">There are no persons in the system</p>
+      <p tal:condition="not:persons" i18n:translate="">
+        There are no persons with calendars accessible to you.
+      </p>
       <select multiple="multiple" id="people" name="persons:list"
               tal:condition="persons">
         <option tal:repeat="person persons/sortby:title"
@@ -41,8 +42,9 @@
 
     <fieldset tal:define="groups view/groups">
       <legend i18n:translate="">Groups</legend>
-      <p tal:condition="not:groups"
-         i18n:translate="">There are no groups in the system</p>
+      <p tal:condition="not:groups" i18n:translate="">
+        There are no groups with calendars accessible to you.
+      </p>
       <select multiple="multiple" id="groups" name="groups:list"
               tal:condition="groups">
         <option tal:repeat="group groups/sortby:title"
@@ -54,8 +56,9 @@
 
     <fieldset tal:define="resources view/resources">
       <legend i18n:translate="">Resources</legend>
-      <p tal:condition="not:resources"
-         i18n:translate="">There are no resources in the system</p>
+      <p tal:condition="not:resources" i18n:translate="">
+        There are no resources with calendars accessible to you.
+      </p>
       <select multiple="multiple" id="resources" name="resources:list"
               tal:condition="resources">
         <option tal:repeat="resource resources/sortby:title"

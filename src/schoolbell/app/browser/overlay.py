@@ -30,6 +30,7 @@ from zope.app.traversing.api import getPath
 from zope.app.traversing.browser.absoluteurl import absoluteURL
 from zope.app.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
+from zope.security.checker import canAccess
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
@@ -145,13 +146,12 @@ class CalendarSelectionView(BrowserView):
         if user is None:
             return []
         app = getSchoolBellApplication()
-        # TODO: only show calendars that we can access
         return [{'id': o.__name__,
                  'title': o.title,
                  'selected': o.calendar in user.overlaid_calendars,
                  'calendar': o.calendar}
                 for o in app[container].values()
-                if o is not user]
+                if o is not user and canAccess(o.calendar, '__iter__')]
 
     persons = property(lambda self: self.getCalendars('persons'))
     groups = property(lambda self: self.getCalendars('groups'))
