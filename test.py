@@ -43,20 +43,21 @@ regexp is applied to the whole path (package/package/module.py). Test regexp
 is applied to a full test id (package.package.module.class.test_method).
 
 Options:
-  -h            print this help message
-  -v            verbose (print dots for each test run)
-  -vv           very verbose (print test names)
-  -q            quiet (do not print anything on success)
-  -w            enable warnings about omitted test cases
-  -p            show progress bar (can be combined with -v or -vv)
-  -u            select unit tests (default)
-  -f            select functional tests
-  --level n     select only tests at level n or lower
-  --all-levels  select all tests
-  --list-files  list all selected test files
-  --list-tests  list all selected test cases
-  --list-hooks  list all loaded test hooks
-  --coverage    create code coverage reports
+  -h               print this help message
+  -v               verbose (print dots for each test run)
+  -vv              very verbose (print test names)
+  -q               quiet (do not print anything on success)
+  -w               enable warnings about omitted test cases
+  -p               show progress bar (can be combined with -v or -vv)
+  -u               select unit tests (default)
+  -f               select functional tests
+  --level n        select only tests at level n or lower
+  --all-levels     select all tests
+  --list-files     list all selected test files
+  --list-tests     list all selected test cases
+  --list-hooks     list all loaded test hooks
+  --coverage       create code coverage reports
+  --search-in dir  limit directory tree walk to dir (optimisation)
 """
 #
 # This script borrows ideas from Zope 3's test runner heavily.  It is smaller
@@ -82,6 +83,8 @@ class Options:
     # test location
     basedir = ''                # base directory for tests (defaults to
                                 # basedir of argv[0] + 'src'), must be absolute
+    search_in = ()              # list of subdirs to traverse (defaults to
+                                # basedir)
     follow_symlinks = True      # should symlinks to subdirectories be
                                 # followed? (hardcoded, may cause loops)
 
@@ -180,7 +183,8 @@ def get_test_files(cfg):
         walker = walk_with_symlinks
     else:
         walker = os.path.walk
-    walker(cfg.basedir, visit, None)
+    for dir in cfg.search_in:
+        walker(dir, visit, None)
     results.sort()
     return results
 
@@ -473,7 +477,8 @@ def main(argv):
     # Option processing
     opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufw',
                                    ['list-files', 'list-tests', 'list-hooks',
-                                    'level=', 'all-levels', 'coverage'])
+                                    'level=', 'all-levels', 'coverage',
+                                    'search-in='])
     for k, v in opts:
         if k == '-h':
             print __doc__
@@ -514,6 +519,14 @@ def main(argv):
                 return 1
         elif k == '--all-levels':
             cfg.level = None
+        elif k == '--search-in':
+            dir = os.path.abspath(v)
+            if not dir.startswith(cfg.basedir):
+                print >> sys.stderr, ('%s: argument to --search-in (%s) must'
+                                      ' be a subdir of %s'
+                                      % (argv[0], v, cfg.basedir))
+                return 1
+            cfg.search_in += (dir, )
         else:
             print >> sys.stderr, '%s: invalid option: %s' % (argv[0], k)
             print >> sys.stderr, 'run %s -h for help'
@@ -528,6 +541,9 @@ def main(argv):
         return 1
     if not cfg.unit_tests and not cfg.functional_tests:
         cfg.unit_tests = True
+
+    if not cfg.search_in:
+        cfg.search_in = (cfg.basedir, )
 
     # Set up the python path
     sys.path[0] = cfg.basedir
