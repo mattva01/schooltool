@@ -228,7 +228,7 @@ input.button-cancel {
 
 #header .tools a:hover {
     color: #ffffff;
-    background: #990000 url(++resource++toolbar-background-hover.png) top left repeat-x;
+    background: #C40000 url(++resource++toolbar-background-hover.png) top left repeat-x;
     border-left: 1px #800 solid;
     border-right: 1px #800 solid;
 }
