@@ -45,17 +45,22 @@ class Libxml2ErrorLogger:
         self.log.append(error)
 
 
-class XpathTestContext:
-    """xpath context for use in tests that check rendered xml.
+class XPathTestContext:
+    """XPath context for use in tests that check rendered xml.
 
     You must call the free() method at the end of the test.
 
     XXX add option for validating result against a schema
     """
 
-    namespaces = {'xlink':'http://www.w3.org/1999/xlink'}
+    namespaces = {'xlink': 'http://www.w3.org/1999/xlink'}
 
     def __init__(self, test, result):
+        """Create an XPath test context.
+
+        test is the unit test TestCase, used for assertions.
+        result is a string containing XML>
+        """
         import libxml2  # import here so we only import if we need it
         self.errorlogger = Libxml2ErrorLogger()
         libxml2.registerErrorHandler(self.errorlogger, None)
@@ -65,16 +70,45 @@ class XpathTestContext:
         for nsname, ns in self.namespaces.iteritems():
             self.context.xpathRegisterNs(nsname, ns)
 
+    def free(self):
+        """Free C level objects.
+
+        Call this at the end of a test to prevent memory leaks.
+        """
+        self.doc.freeDoc()
+        self.context.xpathFreeContext()
+
+    def query(self, expression):
+        """Perform an XPath query.
+
+        Returns a sequence of DOM nodes.
+        """
+        return self.context.xpathEval(expression)
+
     def oneNode(self, expression):
+        """Perform an XPath query.
+
+        Asserts that the query matches exactly one DOM node.  Returns it.
+        """
         nodes = self.context.xpathEval(expression)
-        self.test.assertEquals(len(nodes), 1)
+        self.test.assertEquals(len(nodes), 1,
+                               "%s matched %d nodes"
+                               % (expression, len(nodes)))
         return nodes[0]
 
     def assertNumNodes(self, num, expression):
+        """Assert that an XPath expression matches exactly num nodes."""
         nodes = self.context.xpathEval(expression)
-        self.test.assertEquals(num, len(nodes))
+        self.test.assertEquals(num, len(nodes),
+                               "%s matched %d nodes instead of %d"
+                               % (expression, len(nodes), num))
 
     def assertAttrEquals(self, node, name, value):
+        """Assert that an attribute of an element node has a given value.
+
+        Attribute name may contain a namespace (e.g. 'xlink:href').  The
+        dict of recongized namespaces is kept in the namespaces attribute.
+        """
         name_parts = name.split(':')
         if len(name_parts) > 2:
             raise ValueError('max one colon in attribute name', name)
@@ -86,14 +120,8 @@ class XpathTestContext:
             ns = self.namespaces[nsname]
         self.test.assertEquals(node.nsProp(localname, ns), value)
 
-    def query(self, expression):
-        return self.context.xpathEval(expression)
-
-    def free(self):
-        self.doc.freeDoc()
-        self.context.xpathFreeContext()
-
     def assertNoErrors(self):
+        """Assert that no errors were found while parsing the document."""
         self.test.assertEquals(self.errorlogger.log, [])
 
 
@@ -585,7 +613,7 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub("http://localhost/")
         result = self.view.render(request)
 
-        context = XpathTestContext(self, result)
+        context = XPathTestContext(self, result)
         try:
             res = context.query("/schooltool/containers/container")
             containers = context.oneNode('/schooltool/containers')
