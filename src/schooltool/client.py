@@ -20,14 +20,15 @@
 """
 Schooltool command line client.
 """
+import os
+import sys
+import socket
+import httplib
 import readline
 from cmd import Cmd
-import sys
-import httplib
-import socket
-from xml.sax.handler import ContentHandler, feature_namespaces
-from xml.sax import make_parser, SAXParseException
 from StringIO import StringIO
+from xml.sax import make_parser, SAXParseException
+from xml.sax.handler import ContentHandler, feature_namespaces
 
 class Client(Cmd):
 
@@ -36,7 +37,7 @@ SchoolTool client 0.0alpha-pre0
 This is free software, covered by the GNU General Public License, and you are
 welcome to change it and/or distribute copies of it under certain conditions."""
 
-    prompt = "\001\033[33m\002SchoolTool>\001\033[0m\002 "
+    prompt = "SchoolTool> "
 
     doc_header = "Available commands:"
     ruler = ""
@@ -48,6 +49,16 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     http = httplib.HTTPConnection
     port = 80
 
+    def __init__(self, *args):
+        if not sys.stdin.isatty():
+            self.prompt = ""
+            self.intro = ""
+        elif ('TERM' in os.environ and
+              os.environ['TERM'] in ('linux', 'vt220', 'xterm',
+                                     'xterm-color', 'rxvt')):
+            self.prompt = "\001\033[33m\002SchoolTool>\001\033[0m\002 "
+        Cmd.__init__(self, *args)
+
     def emit(self, *args):
         """Output the arguments.  A hook for tests"""
         print ' '.join(args)
@@ -55,7 +66,8 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     def default(self, line):
         """This is called when a nonexistent command is invoked."""
         if line == "EOF":
-            self.emit("quit")
+            if sys.stdin.isatty():
+                self.emit("quit")
             self.do_quit(line)
         else:
             self.emit("I beg your pardon?")

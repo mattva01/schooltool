@@ -234,11 +234,11 @@ class TestUtilities(unittest.TestCase):
         self.assertRaises(IndexError, http_join, '/foo/bar', '../../baz')
         self.assertRaises(ValueError, http_join, 'foo/bar', '../baz')
         self.assertRaises(ValueError, http_join, '/foo/bar', 'baz//quux')
-        self.assertRaises(ValueError, http_join,
-                          '/foo/bar', 'http://www.akl.lt/programos')
         # That ain't right, but let's document it anyway
         self.assertRaises(ValueError, http_join,
                           'http://example.com/foo', '../baz')
+        self.assertRaises(ValueError, http_join,
+                          '/foo/bar', 'http://www.akl.lt/programos')
 
 def test_suite():
     suite = unittest.TestSuite()
