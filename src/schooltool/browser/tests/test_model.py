@@ -438,6 +438,18 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
                           [{'url': 'http://localhost:7001/groups/root',
                             'title': 'root'}])
 
+    def test_teachersList(self):
+        from schooltool.browser.model import GroupView
+        from schooltool.teaching import Teaching, setUp
+        from schooltool.relationship import setUp as setUpRel
+        setUpRel(); setUp()
+        Teaching(teacher=self.per, taught=self.group)
+        view = GroupView(self.group)
+        view.request = RequestStub(authenticated_user=UserStub())
+        self.assertEquals(view.teachersList(),
+                          [('Pete', '/persons/p',
+                            'http://localhost:7001/persons/p')])
+
     def test_traverse(self):
         from schooltool.browser.model import GroupView, GroupEditView
         from schooltool.browser.model import GroupTeachersView

@@ -32,6 +32,20 @@
       <a class="action" tal:attributes="href view/editURL">Edit</a>
     </div>
   </div>
+
+  <div class="members"
+       tal:define="teachers view/teachersList"
+       tal:condition="teachers">
+    <h3 i18n:translate="">Teachers</h3>
+    <p tal:repeat="teacher teachers">
+      <a tal:attributes="href python:teacher[2]"
+         tal:content="python:teacher[0]"/>
+    </p>
+    <div class="actions" tal:condition="view/canEdit">
+      <a class="action" tal:attributes="href view/teachersURL">Edit</a>
+    </div>
+  </div>
+
   </metal:block>
 </body>
 </html>

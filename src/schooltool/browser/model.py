@@ -245,11 +245,21 @@ class GroupView(View, GetParentsMixin):
                 for g in getRelatedObjects(self.context, URIMember)
                 if IGroup.providedBy(g)]
 
+    def teachersList(self):
+        """Lists teachers of this group"""
+        result = [(obj.title, getPath(obj), absoluteURL(self.request, obj))
+                  for obj in getRelatedObjects(self.context, URITeacher)]
+        result.sort()
+        return result
+
     def canEdit(self):
         return isManager(self.request.authenticated_user)
 
     def editURL(self):
         return absoluteURL(self.request, self.context) + '/edit.html'
+
+    def teachersURL(self):
+        return absoluteURL(self.request, self.context) + '/teachers.html'
 
 
 class GroupEditView(View):
