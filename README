@@ -12,6 +12,9 @@ Project structure
   README        this file
   test.py       unit test runner
 
+  schooltool/   Python module 'schooltool'
+    tests/      unit tests for the schooltool module
+
 Copyright information
 ---------------------
 
