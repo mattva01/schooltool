@@ -205,7 +205,7 @@ class GroupView(View):
 class PersonView(View):
     """The view for a person object"""
 
-    template = Template("www/person1.pt", content_type="text/xml")
+    template = Template("www/person.pt", content_type="text/xml")
 
     def getGroups(self):
         return [{'title': group.title, 'path': getPath(group)}
