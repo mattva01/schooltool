@@ -16,15 +16,23 @@ System requirements
 Project structure
 -----------------
 
-  GPL             the GNU General Public License, version 2
-  README          this file
-  test.py         unit test runner
+  GPL                   the GNU General Public License, version 2
+  README                this file
 
-  src/            source code
-    schooltool/   Python module 'schooltool'
-      main.py     executable prototype
-      ftests/     functional tests for the schooltool module
-      tests/      unit tests for the schooltool module
+  Makefile              makefile for building extension modules
+  setup.py              distutils setup script for building extension modules
+  test.py               unit test runner
+  schooltool.conf.in    sample configuration file
+
+  build/                temporary files are placed here during build process
+  src/                  source code
+    schooltool/         Python module 'schooltool'
+      main.py           executable prototype
+      schema.xml        ZConfig schema definition for the configuration file
+      www/              page templates
+      ftests/           functional tests for the schooltool module
+      tests/            unit tests for the schooltool module
+    other subdirs       packages taken from other sources (Zope 3 source tree)
 
 
 Testing
