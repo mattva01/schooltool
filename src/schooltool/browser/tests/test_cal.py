@@ -417,6 +417,15 @@ class TestCalendarViewBase(unittest.TestCase):
         for i, month in enumerate(months):
             self.assertEquals(month, date(2004, i+1, 1))
 
+    def test_renderEvent(self):
+        from schooltool.browser.cal import CalendarViewBase
+        cal = createCalendar()
+        view = CalendarViewBase(cal)
+        view.request = RequestStub()
+        e = createEvent('2004-01-02 14:30', '30min', u'\u263B')
+        result = view.renderEvent(e)
+        self.assert_(isinstance(result, unicode))
+
 
 class TestWeeklyCalendarView(unittest.TestCase):
 

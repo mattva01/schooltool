@@ -165,7 +165,10 @@ class CalendarViewBase(View):
 
     def renderEvent(self, event):
         view = CalendarEventView(event)
-        return view.render(self.request)
+        # Using render here has two downsides:
+        #  - the Content-Type header is overwritten
+        #  - we do needless conversion from Unicode to UTF-8 and back
+        return to_unicode(view.render(self.request))
 
     def eventClass(self, event):
         view = CalendarEventView(event)
