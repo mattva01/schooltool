@@ -489,6 +489,14 @@
       layer=".skin.ISchoolBellSkin"
       />
 
+  <page
+      name="widget_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/widget_macros.pt"
+      layer=".skin.ISchoolBellSkin"
+      />
+
   <icon
       name="zmi_icon"
       for="schoolbell.app.interfaces.ISchoolBellApplication"

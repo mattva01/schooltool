@@ -33,7 +33,7 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/clear_photo_widget">
-        <div metal:use-macro="context/@@standard_macros/checkbox_widget " />
+        <div metal:use-macro="context/@@form_macros/checkbox_widget " />
       </div>
     </fieldset>
 

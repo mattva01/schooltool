@@ -103,7 +103,7 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/duration_widget">
-        <div metal:use-macro="context/@@standard_macros/widget_row_with_extra">
+        <div metal:use-macro="context/@@form_macros/widget_row">
           <metal:block fill-slot="extra" i18n:translate="">minutes</metal:block>
         </div>
       </div>
@@ -115,7 +115,7 @@
       </div>
 
       <div class="row" tal:define="widget nocall:view/recurrence_widget">
-        <div metal:use-macro="context/@@standard_macros/checkbox_widget " />
+        <div metal:use-macro="context/@@form_macros/checkbox_widget " />
       </div>
 
       <div id="recurrence_box">
@@ -126,7 +126,7 @@
         <!-- Repeat every [count] [freq [v]] -->
         <div class="row">
           <div class="row" tal:define="widget nocall:view/interval_widget">
-            <div metal:use-macro="context/@@standard_macros/widget_row_with_extra">
+            <div metal:use-macro="context/@@form_macros/widget_row">
               <metal:block fill-slot="extra">
               <tal:comment condition="nothing">
               Sadly, the Zope 3 SelectWidget is brain-dead:
