@@ -14,4 +14,9 @@
       trusted="true"
       />
 
+  <subscriber
+      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      handler="schoolbell.relationship.objectevents.unrelateOnDeletion"
+      />
+
 </configure>

@@ -434,6 +434,51 @@ def doctest_unrelateAll():
     """
 
 
+def doctest_delete_breaks_relationships():
+    """When you delete an object, all of its relationships should be removed
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> from schoolbell.relationship.objectevents import unrelateOnDeletion
+        >>> zope.event.subscribers.append(unrelateOnDeletion)
+
+    Suppose we have two related objects
+
+        >>> from schoolbell.relationship.tests import SomeObject
+        >>> apple = SomeObject('apple')
+        >>> orange = SomeObject('orange')
+
+        >>> from schoolbell.relationship import getRelatedObjects, relate
+        >>> relate('example:Relationship',
+        ...             (apple, 'example:One'),
+        ...             (orange, 'example:Two'))
+        >>> getRelatedObjects(apple, 'example:Two')
+        [orange]
+
+    We put those objects to a Zope 3 container.
+
+        >>> from zope.app.container.btree import BTreeContainer
+        >>> container = BTreeContainer()
+        >>> container['apple'] = apple
+        >>> container['orange'] = orange
+
+    When we delete an object, all of its relationships should disappear
+
+        >>> del container['orange']
+        >>> getRelatedObjects(apple, 'example:Two')
+        []
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> tearDown()
+
+    """
+
+
+# TODO: copy & paste, cut & paste
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocFileSuite('README.txt'),
