@@ -25,6 +25,10 @@ $Id$
 import os
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
+from zope.tales.tales import ExpressionEngine
+from zope.tales.expressions import PathExpr, StringExpr, NotExpr, DeferExpr
+from zope.tales.expressions import SimpleModuleImporter
+from zope.tales.pythonexpr import PythonExpr
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import getView, getPath
@@ -144,6 +148,61 @@ def read_file(fn, basedir=None):
 # Page templates
 #
 
+_marker = object()
+
+def schooltoolTraverse(object, path_items, econtext):
+    """A SchoolTool traverser for TALES expressions.
+
+    Honours the special names useful in SchoolTool page templates:
+
+    object/@@absolute_url    -- returns the absolute URL of the object
+    object/@@absolute_path   -- returns the path part of the absolute URL
+    object/@@path            -- returns the path on the object in ZODB.
+
+    See also zope.tal.expressions.simpleTraverse
+    """
+    for name in path_items:
+        next = getattr(object, name, _marker)
+        if next is not _marker:
+            object = next
+        elif name == '@@absolute_url':
+            request = econtext.vars['request']
+            return absoluteURL(request, object)
+        elif name == '@@absolute_path':
+            request = econtext.vars['request']
+            return absolutePath(request, object)
+        elif name == '@@path':
+            return getPath(object)
+        elif hasattr(object, '__getitem__'):
+            object = object[name]
+        else:
+            raise NameError, name
+    return object
+
+
+class SchoolToolPathExpr(PathExpr):
+    """Path expressions with schooltoolTraverse"""
+
+    def __init__(self, name, expr, engine):
+        PathExpr.__init__(self, name, expr, engine, schooltoolTraverse)
+
+
+def _Engine():
+    """This is zope.tal.engine.Engine with SchoolToolPathExpr"""
+    e = ExpressionEngine()
+    reg = e.registerType
+    for pt in SchoolToolPathExpr._default_type_names:
+        reg(pt, SchoolToolPathExpr)
+    reg('string', StringExpr)
+    reg('python', PythonExpr)
+    reg('not', NotExpr)
+    reg('defer', DeferExpr)
+    e.registerBaseName('modules', SimpleModuleImporter())
+    return e
+
+_Engine = _Engine()
+
+
 class Template(PageTemplateFile):
     """Page template file.
 
@@ -189,9 +248,12 @@ class Template(PageTemplateFile):
         Gets the engine context and adds our translation method to the
         object before returning it.
         """
-        engine = PageTemplateFile.pt_getEngineContext(*args, **kwargs)
+        engine = _Engine.getContext(*args, **kwargs)
         engine.translate = self.translate
         return engine
+
+    def pt_getEngine(self):
+        return _Engine
 
     def translate(self, msgid, mapping=None, context=None,
                         target_language=None, default=None):

@@ -25,6 +25,8 @@ $Id$
 import unittest
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.rest.tests import RequestStub
+from schooltool.interfaces import IContainmentRoot, ILocation
+from zope.interface.declarations import implements, directlyProvides
 
 __metaclass__ = type
 
@@ -43,6 +45,27 @@ class TemplateStub:
         assert context is self.context
         request.setHeader('Content-Type', 'text/plain')
         return self.body
+
+
+class LocationStub:
+    implements(ILocation)
+
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+        self.dict = {}
+
+    def __getitem__(self, key):
+        return self.dict[key]
+
+    def __repr__(self):
+        return "LocationStub(%r, %r)" % (self.__parent__, self.__name__)
+
+
+class ContextStub:
+
+    def __init__(self):
+        self.vars = {}
 
 
 class TestTemplate(unittest.TestCase):
@@ -92,6 +115,52 @@ class TestTemplate(unittest.TestCase):
         templ.ugettext_hook = fake_ugettext
         result = templ(RequestStub())
         self.assertEquals(result, '<span title="A tooltip">Labas</span>\n')
+
+    def buildTree(self):
+        a = LocationStub(None, 'root')
+        directlyProvides(a, IContainmentRoot)
+        b = LocationStub(a, 'foo')
+        c = LocationStub(b, 'bar')
+        return a, b, c
+
+    def test_absoluteURL(self):
+        from schooltool.rest import Template
+        templ = Template('sample_url.pt')
+        context = self.buildTree()[2]
+        result = templ(RequestStub(), context=context)
+        self.assertEquals(result,
+                          '<span>http://localhost:7001/foo/bar</span>\n'
+                          '<span>/foo/bar</span>\n'
+                          '<span>/foo/bar</span>\n')
+
+
+class TestSchoolToolTraverse(unittest.TestCase):
+
+    def test(self):
+        from schooltool.rest import schooltoolTraverse
+        a = LocationStub(None, 'root')
+        directlyProvides(a, IContainmentRoot)
+        b = LocationStub(a, 'foo')
+        a.foo = b
+        c = LocationStub(b, 'bar')
+        b.bar = c
+        d = LocationStub(c, 'baz')
+
+        b.dict['magic'] = d
+        assert b['magic'] is d
+
+        assert schooltoolTraverse(a, ['foo', 'bar'], None) is c
+        assert schooltoolTraverse(a, ['foo', 'magic'], None) is d
+        assert schooltoolTraverse(a, ['foo', '@@path'], None) == '/foo'
+
+
+        cx = ContextStub()
+        cx.vars['request'] = RequestStub()
+        assert (schooltoolTraverse(a, ['foo', '@@absolute_path'], cx)
+                == '/foo')
+
+        assert (schooltoolTraverse(a, ['foo', '@@absolute_url'], cx)
+                == 'http://localhost:7001/foo')
 
 
 class TestErrorViews(unittest.TestCase):
@@ -258,6 +327,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.rest'))
     suite.addTest(unittest.makeSuite(TestTemplate))
+    suite.addTest(unittest.makeSuite(TestSchoolToolTraverse))
     suite.addTest(unittest.makeSuite(TestErrorViews))
     suite.addTest(unittest.makeSuite(TestView))
     return suite
