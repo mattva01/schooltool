@@ -146,6 +146,7 @@ class CalendarTraverser(object):
             datetime.date(2005, 12, 27)
 
         """
+        # TODO: use weeknum_bounds form schoolbell.calendar.utils
         return date(year, 1, 4) + timedelta(weeks=(week-1))
 
 
