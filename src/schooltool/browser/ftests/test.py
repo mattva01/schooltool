@@ -160,11 +160,30 @@ class TestPersonEdit(unittest.TestCase):
         self.assert_('foobar' in browser.content)
         self.assert_('I can write!' in browser.content)
 
-        # Restore original person info
         browser.post('http://localhost:8814/persons/manager/edit.html',
                      {'first_name': 'Manager', 'last_name': '',
                       'date_of_birth': '2004-08-04',
                       'comment': '', 'photo': ''})
+        self.assert_('field is required'in browser.content)
+
+
+class TestResetDB(unittest.TestCase):
+
+    def test(self):
+        browser = Browser()
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+
+        browser.go('http://localhost:8814/reset_db.html')
+        self.assert_('Warning' in browser.content)
+        browser.post('http://localhost:8814/reset_db.html',
+                     {'confirm': 'Confirm'})
+
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+        browser.go('http://localhost:8814/persons/manager/edit.html')
+        self.assert_('Edit person info' in browser.content)
+        self.assert_('Manager' in browser.content)
 
 
 def test_suite():
@@ -172,6 +191,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestLogin))
     suite.addTest(unittest.makeSuite(TestPersonEdit))
     suite.addTest(unittest.makeSuite(TestLoginSSL))
+    suite.addTest(unittest.makeSuite(TestResetDB))
     return suite
 
 
