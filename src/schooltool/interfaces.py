@@ -230,7 +230,7 @@ class IServiceAPI(Interface):
         """Return the ticket service for authentication."""
 
     def getOptions(context):
-        """Return an IOptions object found from the context"""
+        """Return an IOptions object found from the context."""
 
 
 class IServiceManager(Interface):
@@ -1370,7 +1370,7 @@ class ITimetableDay(Interface):
         """
 
     def __ne__(other):
-        """Returns True iff __eq__ returns False."""
+        """Return True iff __eq__ returns False."""
 
 
 class ITimetableDayWrite(Interface):
@@ -1645,9 +1645,7 @@ class ISchooldayTemplate(Interface):
     """
 
     def __iter__():
-        """Returns an iterator over the ISchooldayPeriods of this
-        template.
-        """
+        """Return an iterator over the ISchooldayPeriods of this template."""
 
 
 class ISchooldayTemplateWrite(Interface):
@@ -1710,18 +1708,17 @@ class ITimetableModel(Interface):
     """
 
     timetableDayIds = Attribute(
-        """Returns a sequence of day_ids which can be used in the timetable.
-        """)
+        """Return a sequence of day_ids which can be used in the timetable.""")
 
     dayTemplates = Attribute(
         """A mapping of weekdays (calendar.MONDAY,...) to ISchooldayTemplates.
 
-        The template with the key of None is used if there is no
-        template for a particular weekday.
+        The template with the key of None is used if there is no template
+        for a particular weekday.
         """)
 
     def createCalendar(schoolday_model, timetable):
-        """Returns an ICalendar composed out of schoolday_model and timetable.
+        """Return an ICalendar composed out of schoolday_model and timetable.
 
         This method has model-specific knowledge as to how schooldays,
         weekends and holidays map affect the mapping of the timetable
@@ -1732,18 +1729,17 @@ class ITimetableModel(Interface):
 class ITimetableModelRegistry(Interface):
     """A registry of timetable model classes present in the system.
 
-    The timetable model classes are identified by the dotted class
-    names.
+    The timetable model classes are identified by the dotted class names.
     """
 
     def getTimetableModel(id):
-        """Returns a timetable schema identified by a given id."""
+        """Return a timetable schema identified by a given id."""
 
     def registerTimetableModel(id, factory):
-        """Registers a timetable schema identified by a given id."""
+        """Register a timetable schema identified by a given id."""
 
     def listTimetableModels():
-        """Returns a sequence of keys of the timetable models in the
+        """Return a sequence of keys of the timetable models in the
         registry."""
 
 
@@ -1786,7 +1782,7 @@ class ITimePeriodService(ILocation):
         """Store a schoolday model for this time period."""
 
     def __delitem__(period_id):
-        """Removes the specified time period."""
+        """Remove the specified time period."""
 
 
 #
@@ -1801,7 +1797,7 @@ class IAvailabilitySearch(Interface):
         when the object is free within a range of dates [first, last]
         during the times of day specified by time_periods.
 
-        fist, last     datetime.datetime objects specifying a range of
+        first, last    datetime.datetime objects specifying a range of
                        dates.
 
         time_periods   a sequence of tuples (start_time, duration)
@@ -1812,7 +1808,7 @@ class IAvailabilitySearch(Interface):
         duration       datetime.timedelta object specifying a minimum
                        interval of time we're searching for.
 
-        The returned value is a sequence of (start_datetime, duration).
+        The returned value is a sequence of tuples (start_datetime, duration).
         """
 
 
@@ -1948,8 +1944,7 @@ class IAbsenceTracker(IEventTarget):
     of unended absences."""
 
     absences = Attribute(
-        """A set of unended absences this object has been notified
-        of.""")
+        """A set of unended absences this object has been notified of.""")
 
 
 class IAbsenceTrackerUtility(IUtility, IAbsenceTracker):
@@ -1969,7 +1964,7 @@ class IOptions(Interface):
         """)
 
     timetable_privacy = Attribute(
-        """The value of the privacy attribute for the timetable events""")
+        """The value of the privacy attribute for the timetable events.""")
 
 
 class IApplication(IContainmentRoot, IServiceManager, ITraversable, IOptions):
@@ -2064,13 +2059,14 @@ class INote(ILocation):
     title = Attribute("""The title of the note.""")
     body = Attribute("""The body of the note.""")
     owner = Attribute("""The object that created this note.""")
-    url = Attribute("""The path of the object this note refers to. """)
+    url = Attribute("""The path of the object this note refers to.""")
 
 
 class IAddress(IRelatable, IFaceted):
-    """The base of a physical address
+    """The base of a physical address.
 
-    Participates in URIOccupies as occupiedBy"""
+    Participates in URIOccupies as occupiedBy.
+    """
 
     country = Attribute("""ISO Country code""")
 
@@ -2078,23 +2074,22 @@ class IAddress(IRelatable, IFaceted):
 class IAddressInfoFacet(IFacet):
     """Default address attributes
 
-    The default info facet, hopefully will cover most use cases, its based on a
-    draft of the Address Data Interchange Specification (ADIS) version 04-1.
+    The default info facet hopefully will cover most use cases.  It is based on
+    a draft of the Address Data Interchange Specification (ADIS) version 04-1.
     See http://www.upu.int/document/2004/an/cep_gan-3/d010.pdf for more info.
 
     The examples show how the standard might map to a locale's terms.
 
-    Note: this is note a comprehensive implementation of the standard, but
-    enough to build relationships on.  The full standard should be added
+    Note: this is not a comprehensive implementation of the standard, but
+    enough to build relationships on.  The full standard should be implemented
     later.
     """
     postcode = Attribute("""Postal service sorting code
-
                          Ex. Zip in the US, DX in the UK""")
-    district = Attribute("""district, Ex. US State""")
-    town = Attribute("""town, Ex. US City""")
-    streetNr = Attribute("""street number""")
-    thoroughfareName = Attribute("""street name""")
+    district = Attribute("""District, Ex. US State""")
+    town = Attribute("""Town, Ex. US City""")
+    streetNr = Attribute("""Street number""")
+    thoroughfareName = Attribute("""Street name""")
 
 
 #
@@ -2102,7 +2097,7 @@ class IAddressInfoFacet(IFacet):
 #
 
 class IModuleSetup(Interface):
-    """Module that needs initialization"""
+    """Module that needs initialization."""
 
     def setUp():
         """Initialize the module."""

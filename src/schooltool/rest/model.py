@@ -75,7 +75,7 @@ class ApplicationObjectDeleteMixin:
     """A mixin that implements HTTP DELETE for application objects."""
 
     def do_DELETE(self, request):
-        """Deletes self.context from the system.
+        """Delete self.context from the system.
 
         Removes self.context from the application object container that it
         resides in.  Breaks all relationships that self.context participates
