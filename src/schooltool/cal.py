@@ -75,6 +75,9 @@ class SchooldayModel:
             if date.weekday() in weekdays and self.isSchoolday(date):
                 self.remove(date)
 
+    def clear(self):
+        self._schooldays.clear()
+
 
 def daterange(date1, date2):
     """Returns a generator of the range of dates from date1 to date2.

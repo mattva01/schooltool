@@ -57,6 +57,14 @@ class TestSchooldayModel(unittest.TestCase):
         self.assertRaises(ValueError, cal.add, date(2003, 9, 15))
         self.assertRaises(ValueError, cal.remove, date(2003, 9, 15))
 
+    def testClear(self):
+        from schooltool.cal import SchooldayModel, daterange
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
+        cal.addWeekdays(1, 3, 5)
+        cal.clear()
+        for d in daterange(cal.start, cal.end):
+            self.assert_(not cal.isSchoolday(d))
+
     def testMarkWeekday(self):
         from schooltool.cal import SchooldayModel
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 17))

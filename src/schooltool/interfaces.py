@@ -990,6 +990,9 @@ class ISchooldayModel(Interface):
         0 is Monday, 1 is Tuesday, etc.
         """
 
+    def clear():
+        """Mark all days as holidays."""
+
 
 class ICalendar(Interface):
     """A calendar, containing days which in turn contain events.
