@@ -68,6 +68,10 @@ class EventCatcher(Persistent):
         self.received = []
         self.__links__ = Set()
 
+    def listLinks(self, kind=None):
+        return [link for link in self.__links__
+                if kind is None or link == kind]
+
     def notify(self, event):
         self.received.append(event)
 
