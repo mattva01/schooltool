@@ -327,7 +327,7 @@ class ExpandedCalendarEventProperty(object):
     def __set__(self, obj, value):
         raise AttributeError("can't set attribute")
 
-    
+
 class ExpandedCalendarEvent(CalendarEventMixin):
     """A single occurrence of a recurring calendar event.
 

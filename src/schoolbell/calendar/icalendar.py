@@ -1154,7 +1154,7 @@ class VEvent:
 
 
 class Period:
-    """A period of time"""
+    """A period of time."""
 
     def __init__(self, start, end_or_duration):
         self.start = start

@@ -73,10 +73,8 @@ Register the iCalendar read view in ZCML as
 
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
 
-__metaclass__ = type
 
-
-class CalendarICalendarView:
+class CalendarICalendarView(object):
     """RFC 2445 (ICalendar) view for calendars."""
 
     def show(self):
@@ -88,4 +86,3 @@ class CalendarICalendarView:
             request.response.setHeader('Content-Length', len(data))
 
         return data
-
