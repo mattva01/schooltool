@@ -198,30 +198,26 @@ class MainFrame(wxFrame):
         def menu(title, *items):
             menu = wxMenu()
             for item in items:
-                menu.AppendItem(item)
+                getattr(menu, item[0])(*item[1:]) 
             return menu, title
 
         def separator():
-            return wxMenuItem(kind=wxITEM_SEPARATOR)
+            return ('AppendSeparator', )
 
         def item(title, description='', action=None, id=None):
             if not id:
                 id = wxNewId()
-            item = wxMenuItem(None, id, title, description)
             if action:
                 EVT_MENU(self, id, action)
-            return item
+            return ('Append', id, title, description)
 
         def submenu(title, *items, **kw):
             description = kw.get('description', '')
             id = kw.get('id', None)
-            submenu = wxMenu()
-            for item in items:
-                submenu.AppendItem(item)
             if not id:
                 id = wxNewId()
-            item = wxMenuItem(None, id, title, description, subMenu=submenu)
-            return item
+            submenu, title = menu(title, items)
+            return ('AppendMenu', id, title, submenu, description)
 
         self.SetMenuBar(menubar(
             menu("&File",
