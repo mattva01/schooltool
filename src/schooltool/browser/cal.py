@@ -677,21 +677,29 @@ class CalendarView(View):
     """The main calendar view.
 
     Switches daily, weekly, monthly, yearly calendar presentations.
+
+    The *_view_class attributes may be overridden by subclasses to show
+    different combinations of calendars.
     """
 
     __used_for__ = ICalendar
 
     authorization = ACLViewAccess
 
+    daily_view_class = DailyCalendarView
+    weekly_view_class = WeeklyCalendarView
+    monthly_view_class = MonthlyCalendarView
+    yearly_view_class = YearlyCalendarView
+
     def _traverse(self, name, request):
-        if name == 'weekly.html':
-            return WeeklyCalendarView(self.context)
-        elif name == 'daily.html':
-            return DailyCalendarView(self.context)
+        if name == 'daily.html':
+            return self.daily_view_class(self.context)
+        elif name == 'weekly.html':
+            return self.weekly_view_class(self.context)
         elif name == 'monthly.html':
-            return MonthlyCalendarView(self.context)
+            return self.monthly_view_class(self.context)
         elif name == 'yearly.html':
-            return YearlyCalendarView(self.context)
+            return self.yearly_view_class(self.context)
         elif name == 'add_event.html':
             return EventAddView(self.context)
         elif name == 'edit_event.html':
@@ -700,7 +708,8 @@ class CalendarView(View):
             return EventDeleteView(self.context)
         elif name == 'acl.html':
             return ACLView(self.context.acl)
-        raise KeyError(name)
+        else:
+            raise KeyError(name)
 
     def do_GET(self, request):
         url = absoluteURL(request, self.context, 'daily.html')
@@ -1395,7 +1404,10 @@ class EventDeleteView(View, EventViewHelpers):
 
 
 class CalendarComboMixin(View):
-    """Mixin for views over the combined calendar of a person."""
+    """Mixin for views over the combined calendar of a person.
+
+    Provides iteration over the private and timetable calendar.
+    """
 
     def iterEvents(self, first, last):
         """Iterate over the events of the calendars displayed."""
@@ -1416,30 +1428,16 @@ class ComboMonthlyCalendarView(CalendarComboMixin, MonthlyCalendarView):
 
 
 class ComboCalendarView(CalendarView):
-    """A view combining several calendars.
+    """A view combining the personal calendar and the timetable calendar.
 
     This view will display events from both a private and timetable
     calendars of an application object.
     """
 
-    def _traverse(self, name, request):
-        if name == 'weekly.html':
-            return ComboWeeklyCalendarView(self.context)
-        elif name == 'daily.html':
-            return ComboDailyCalendarView(self.context)
-        elif name == 'monthly.html':
-            return ComboMonthlyCalendarView(self.context)
-        elif name == 'yearly.html':
-            return YearlyCalendarView(self.context)
-        elif name == 'add_event.html':
-            return EventAddView(self.context)
-        elif name == 'edit_event.html':
-            return EventEditView(self.context)
-        elif name == 'delete_event.html':
-            return EventDeleteView(self.context)
-        elif name == 'acl.html':
-            return ACLView(self.context.acl)
-        raise KeyError(name)
+    daily_view_class = ComboDailyCalendarView
+    weekly_view_class = ComboWeeklyCalendarView
+    monthly_view_class = ComboMonthlyCalendarView
+    yearly_view_class = YearlyCalendarView
 
 
 class CalendarEventView(View):
