@@ -1071,13 +1071,26 @@ class TestCalendarEvent(unittest.TestCase):
         self.assertRaises(AttributeError, setattr, ce, 'location', 'not-ro')
 
 
+class TestACLCalendar(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import ACLCalendar
+        from schooltool.interfaces import IACLCalendar, IACL
+        calendar = ACLCalendar()
+        verifyObject(IACLCalendar, calendar)
+        verifyObject(IACL, calendar.acl)
+
+
 class TestCalendarOwnerMixin(unittest.TestCase):
 
     def test(self):
         from schooltool.cal import CalendarOwnerMixin
         from schooltool.interfaces import ICalendarOwner
+        from schooltool.interfaces import IACLCalendar, IACL
         com = CalendarOwnerMixin()
         verifyObject(ICalendarOwner, com)
+        verifyObject(IACLCalendar, com.calendar)
+        verifyObject(IACL, com.calendar.acl)
         self.assert_(com.calendar.__parent__ is com)
         self.assertEquals(com.calendar.__name__, 'calendar')
 
@@ -1156,6 +1169,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarPersistence))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestACLCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     suite.addTest(unittest.makeSuite(TestACL))
     return suite

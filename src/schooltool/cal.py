@@ -32,7 +32,7 @@ from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
 from schooltool.interfaces import ICalendarOwner
-from schooltool.interfaces import IACL, View, Modify, Add
+from schooltool.interfaces import IACL, IACLCalendar, View, Modify, Add
 
 
 __metaclass__ = type
@@ -966,11 +966,21 @@ class CalendarEvent(Persistent):
                     self.context, self.location, self.unique_id), ))
 
 
+class ACLCalendar(Calendar):
+
+    implements(IACLCalendar)
+
+    def __init__(self):
+        self.acl = ACL()
+        Calendar.__init__(self)
+
+
 class CalendarOwnerMixin:
+
     implements(ICalendarOwner)
 
     def __init__(self):
-        self.calendar = Calendar()
+        self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
 

@@ -867,6 +867,12 @@ class ICalendarWrite(Interface):
         """Add all events from another calendar."""
 
 
+class IACLCalendar(ICalendarWrite):
+    """A calendar that has an ACL"""
+
+    acl = Attribute("""The ACL for this calendar.""")
+
+
 class ICalendarEvent(Interface):
     """A calendar event."""
 
