@@ -79,7 +79,7 @@ from schoolbell.calendar.simple import SimpleCalendarEvent
 EMPTY_CALENDAR_PLACEHOLDER = 'empty-calendar-placeholder@schooltool.org'
 
 def convert_event_to_vfb(event):
-    r"""Convert an ICalendarEvent to iCalendar FREEBUSY component.
+    r"""Convert an ICalendarEvent to iCalendar FREEBUSY entry.
 
     Returns a list of strings (without newlines) in UTF-8.
 
