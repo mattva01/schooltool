@@ -1898,6 +1898,17 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assert_('13:45' in content)
         self.assert_('Foo' in content)
 
+    def test_render_inherited_recurrent_event(self):
+        view = self.createCompositeView()
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': '2004-11-05'},
+                              method='POST')
+        content = view.render(request)
+
+        self.assert_('2004-08-16' in content)
+        self.assert_('13:45' in content)
+        self.assert_('Foo' in content)
+
     def test_edit_inherited_event(self):
         view = self.createCompositeView()
         request = RequestStub(args={'event_id': "uniq",
@@ -1948,7 +1959,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertRaises(Unauthorized, view.do_GET, view.request)
         self.assertEquals(list(self.group.calendar), [self.event])
 
-    def test_edit_recurrent_event(self):
+    def test_edit_recurrent_inherited_event(self):
         from schooltool.browser import Unauthorized
         view = self.createCompositeView(recurrent=True)
         request = RequestStub(args={'event_id': "uniq",

@@ -1276,16 +1276,21 @@ class EventEditView(EventViewBase):
     page_title = _("Edit event")
 
     composite_event = None
+    calendar = None
 
     def update(self):
         self.event_id = to_unicode(self.request.args['event_id'][0])
         date = to_unicode(self.request.args['date'][0])
         self.date = parse_date(date)
 
+        self.calendar = self.context
         event = self._findOrdinaryEvent(self.event_id)
         if event is None:
             event = self._findInheritedEvent(self.event_id, self.date)
-            self.composite_event = (event is not None)
+            if event is not None:
+                self.composite_event = True
+                self.calendar = event.calendar
+                event = self.calendar.find(event.unique_id)
         if event is None:
             event = self._findTimetableEvent(self.event_id)
             self.tt_event = (event is not None)
@@ -1347,27 +1352,19 @@ class EventEditView(EventViewBase):
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location, privacy):
-        uid = self.event.unique_id
-        if self.composite_event:
-            # XXX Ugly scoping
-            orig_calendar = self.event.calendar
-            self.event = self.event.calendar.find(uid)
         ev = self.event.replace(dtstart=dtstart, duration=duration,
-                                title=title, location=location, unique_id=uid,
+                                title=title, location=location,
+                                unique_id=self.event.unique_id,
                                 recurrence=self.getRecurrenceRule(),
                                 privacy=privacy)
         if (self.tt_event or self.composite_event) and not self.isManager():
-            # XXX embedding security policy decisions in the middle of view
-            # code is not nice.
+            # Only managers may add timetable exceptions
             raise Unauthorized
-        if self.composite_event:
-            orig_calendar.removeEvent(self.event)
-            orig_calendar.addEvent(ev)
-        elif self.tt_event:
+        if self.tt_event:
             self._addTimetableException(self.event, replacement=ev)
         else:
-            self.context.removeEvent(self.event)
-            self.context.addEvent(ev)
+            self.calendar.removeEvent(self.event)
+            self.calendar.addEvent(ev)
 
 
 class EventDeleteView(View, EventViewHelpers):
