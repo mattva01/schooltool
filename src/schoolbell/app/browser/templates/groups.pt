@@ -7,7 +7,7 @@
 <metal:block metal:fill-slot="body"
              tal:define="all_groups view/getAllGroups">
 
-<form method="POST" tal:attributes="action request/URL" class="standalone">
+<form method="post" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="">
   Groups of <span i18n:name="title" tal:replace="context/title" />
 </h3>

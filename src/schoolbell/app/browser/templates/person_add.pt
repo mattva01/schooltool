@@ -8,7 +8,7 @@
 
 <metal:block metal:fill-slot="body">
 
-  <form class="standalone" method="POST" enctype="multipart/form-data"
+  <form class="standalone" method="post" enctype="multipart/form-data"
         tal:attributes="action request/URL">
     <h3 i18n:translate="">Person Information</h3>
 

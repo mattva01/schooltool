@@ -10,7 +10,7 @@
 <body>
   <metal:block metal:fill-slot="body">
 
-  <form method="POST" tal:attributes="action request/URL" class="standalone">
+  <form method="post" tal:attributes="action request/URL" class="standalone">
 
     <h3 i18n:translate="">
       Deleting a repeating event (<span tal:replace="event/title"

@@ -5,7 +5,7 @@
 <body>
 <metal:block metal:fill-slot="body">
 
-<form tal:attributes="action request/URL" method="POST">
+<form tal:attributes="action request/URL" method="post">
   <h3 i18n:translate="" tal:condition="not:context/title|nothing">
       Access control
   </h3>

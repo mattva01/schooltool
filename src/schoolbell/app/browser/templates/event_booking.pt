@@ -6,7 +6,7 @@
 <body>
 <metal:block metal:fill-slot="body">
 
-<form tal:attributes="action request/URL" method="POST" class="standalone" style="width: 75%">
+<form tal:attributes="action request/URL" method="post" class="standalone" style="width: 75%">
   <h3 i18n:translate="">
     Resource Booking for <span i18n:name="title"
                                tal:replace="context/title">something</span>

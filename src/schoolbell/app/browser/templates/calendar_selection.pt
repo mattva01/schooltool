@@ -9,7 +9,7 @@
 <metal:nothing metal:fill-slot="content-header" />
 <metal:block metal:fill-slot="body">
 
-  <form action="." method="POST" tal:attributes="action request/URL"
+  <form action="." method="post" tal:attributes="action request/URL"
         class="standalone" enctype="multipart/form-data">
 
     <h3 i18n:translate="">
