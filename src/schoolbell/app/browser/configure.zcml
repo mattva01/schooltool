@@ -46,6 +46,14 @@
       permission="zope.Public"
       />
 
+  <page
+      name="login.html"
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      template="templates/login.pt"
+      class=".app.LoginView"
+      permission="zope.Public"
+      />
+
   <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
 
   <menuItem

@@ -733,6 +733,35 @@ def doctest_PersonAddView():
 
     """
 
+def doctest_SchoolBellLoginView():
+    """
+    Suppose we have a SchoolBell app and a person:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+
+        >>> from schoolbell.app.app import Person
+        >>> frog = Person('frog')
+        >>> persons[None] = frog
+        >>> frog.setPassword('pond')
+
+    We create our view:
+
+        >>> from schoolbell.app.browser.app import LoginView
+        >>> from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+        >>> request = TestRequest()
+        >>> class StubPrincipal:
+        ...     title = "Some user"
+        ...
+        >>> request.setPrincipal(StubPrincipal())
+        >>> View = SimpleViewClass('../templates/login.pt', bases=(LoginView,))
+        >>> view = View(app, request)
+        >>> content = view()
+
+
+    """
 
 def setUp(test):
     """Set up the test fixture for doctests in this module.
@@ -762,6 +791,46 @@ def setUp(test):
     from zope.app.form.browser.exception import WidgetInputErrorView
     ztapi.browserViewProviding(IWidgetInputError, WidgetInputErrorView,
                                IWidgetInputErrorView)
+
+
+    # Now, the question is: does the speed of the tests run with the
+    # setup below justify this complex setup that duplicates the ZCML?
+    # For now, I say yes.
+
+    # ++view++
+    from zope.app.traversing.interfaces import ITraversable
+    from zope.app.traversing.namespace import view, resource
+    ztapi.provideView(None, None, ITraversable, 'view', view)
+    ztapi.provideView(None, None, ITraversable, 'resource', resource)
+
+    # standard_macros and schoolbell_navigation
+    from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+    from schoolbell.app.browser import NavigationView
+    from zope.app.basicskin.standardmacros import StandardMacros
+    ztapi.browserView(None, 'standard_macros', StandardMacros)
+    ztapi.browserView(None, 'view_macros',
+                      SimpleViewClass("../templates/view_macros.pt"))
+    ztapi.browserView(None, 'schoolbell_navigation',
+                      SimpleViewClass("../templates/navigation.pt",
+                                      bases=(NavigationView,)))
+    class ResourceStub:
+        def __init__(self, request):
+            pass
+        def __call__(self):
+            return "a resource"
+
+    ztapi.browserResource('layout.css', ResourceStub)
+    ztapi.browserResource('style.css', ResourceStub)
+    ztapi.browserResource('schoolbell.js', ResourceStub)
+    ztapi.browserResource('logo.png', ResourceStub)
+
+    from zope.app.publisher.browser.menu import MenuAccessView
+    ztapi.browserView(None, 'view_get_menu', MenuAccessView)
+    from zope.app.publisher.interfaces.browser import IMenuItemType
+    class ZMIMenu(IMenuItemType): pass
+    directlyProvides(ZMIMenu, IMenuItemType)
+    ztapi.provideUtility(IMenuItemType, ZMIMenu, 'zmi_views')
+    ztapi.provideUtility(IMenuItemType, ZMIMenu, 'schoolbell_actions')
 
 
 def tearDown(test):

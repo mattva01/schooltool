@@ -409,3 +409,9 @@ class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
     __used_for__ = IResourceContained
+
+
+class LoginView(BrowserView):
+    """A login view"""
+
+    error = None

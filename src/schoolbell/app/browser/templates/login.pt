@@ -1,0 +1,68 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Login</title>
+</head>
+<body>
+<metal:block metal:fill-slot="body">
+
+
+      <div id="message" tal:condition="request/expired | nothing"
+        i18n:translate="">
+        Your session has expired.
+      </div>
+
+      <div id="message" tal:condition="request/forbidden | nothing"
+        i18n:translate="">
+        You are not allowed to access this page.  You can click on the back
+        button in your browser to go back, or ask a more privileged user to log
+        in.
+      </div>
+
+
+
+    <form action="." method="POST" class="standalone"
+      tal:attributes="action string:${context/@@absolute_url}/@@login.html">
+
+      <h3 i18n:translate="">Please log-in</h3>
+
+      <input type="hidden" name="nexturl"
+        tal:condition="request/nexturl | nothing"
+        tal:attributes="value request/nexturl" />
+
+      <p class="error" tal:condition="view/error" i18n:translate="">
+        Incorrect username or password.
+      </p>
+
+      <fieldset>
+        <legend i18n:translate="">User Information</legend>
+
+        <div class="row">
+          <label for="username" i18n:translate="">Username</label>
+          <input id="username" name="username" type="text"
+            tal:attributes="value request/username|nothing" />
+        </div>
+
+        <div class="row">
+          <label for="password" i18n:translate="">Password</label>
+          <input id="password" name="password" type="password" />
+        </div>
+
+        <div class="row">
+          <input id="remember" name="remember" type="checkbox"
+          value="remember" />
+          <label for="remember" i18n:translate="">Remember Me</label>
+        </div>
+
+      </fieldset>
+
+      <div class="controls">
+        <input class="button-ok" type="submit" value="Log in" accesskey="L"
+          i18n:attributes="value; accesskey" />
+      </div>
+
+    </form>
+
+
+</metal:block>
+</body>
+</html>
