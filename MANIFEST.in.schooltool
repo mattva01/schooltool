@@ -1,0 +1,21 @@
+include RELEASE
+include GPL
+include Makefile
+include MANIFEST*
+include test.conf test.py testserver.pem
+include ttconfig.data
+include schooltool.conf.in
+include ftesting.zcml
+include schooltool-*.py
+include setup-schooltool.py
+include *sampleschool.py
+recursive-include src/schooltool *.pt *.css *.png *.js *.xml *.rng
+recursive-include doc *.txt *.rst
+recursive-include src/schooltool/ftests *.py
+recursive-include src/schooltool/tests *.py *.conf
+recursive-include src/schooltool/browser/ftests *.py
+recursive-include src/schooltool/browser/tests *.py
+recursive-include src/schooltool/clients/tests *.py
+recursive-include src/schooltool/schema/tests *.py
+recursive-include src/schooltool/rest/tests *.py *.pt
+recursive-include src/schooltool/rest/ftests *.py *.scr

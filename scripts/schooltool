@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""
+A script to start the SchoolTool server in a Debian system.
+"""
+
+import sys
+sys.path.insert(0, '/usr/lib/schooltool')
+
+# SchoolTool depends on schoolbell, so we have to add schoolbell to the path
+# as well (zope is in temporarily in schoolbell)
+sys.path.insert(0, '/usr/lib/schoolbell')
+
+# Change the default config file name by prepending a command-line argument
+sys.argv.insert(1, '--config=/etc/schooltool/schooltool.conf')
+
+import schooltool.main
+schooltool.main.main()

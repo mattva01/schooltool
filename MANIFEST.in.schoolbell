@@ -1,0 +1,13 @@
+include RELEASE
+include GPL
+include Makefile
+include MANIFEST*
+include test.conf test.py testserver.pem
+include ttconfig.data
+include schoolbell.conf.in
+include ftesting.zcml
+include schoolbell-*.py
+include setup-schoolbell.py
+include *sampleschool.py
+recursive-include src/schoolbell *.pt *.css *.png *.js *.xml *.rng
+recursive-include doc *.txt *.rst
