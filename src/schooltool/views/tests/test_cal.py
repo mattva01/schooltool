@@ -636,17 +636,25 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
         self.assertEquals(len(list(self.resource.calendar)), 0)
 
 
-class TestBookingView(unittest.TestCase):
+class TestBookingView(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views.cal import BookingView
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Group, Person, Resource
+        from schooltool.membership import Membership
+        import schooltool.membership
+        self.setUpRegistries()
+        schooltool.membership.setUp()
         app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
         self.person = app['persons'].new("john", title="John")
         self.resource = app['resources'].new("hall", title="Hall")
+        self.manager = app['persons'].new("manager", title="Manager")
+        self.managers = app['groups'].new("managers", title="Managers")
+        Membership(member=self.manager, group=self.managers)
         self.view = BookingView(self.resource)
         self.view.authorization = lambda ctx, rq: True
 
@@ -659,7 +667,8 @@ class TestBookingView(unittest.TestCase):
             """
         self.assertEquals(len(list(self.person.calendar)), 0)
         self.assertEquals(len(list(self.resource.calendar)), 0)
-        request = RequestStub(method="POST", body=xml)
+        request = RequestStub(method="POST", body=xml,
+                              authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(len(list(self.person.calendar)), 1)
@@ -694,7 +703,8 @@ class TestBookingView(unittest.TestCase):
         self.assertEquals(len(list(self.person.calendar)), 0)
         self.assertEquals(len(list(self.resource.calendar)), 1)
         for xml in xml1, xml2:
-            request = RequestStub(method="POST", body=xml)
+            request = RequestStub(method="POST", body=xml,
+                                  authenticated_user=self.manager)
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
             self.assertEquals(result, "The resource is busy at specified time")
@@ -708,7 +718,8 @@ class TestBookingView(unittest.TestCase):
               <slot start="2004-01-01 10:00:00" duration="90"/>
             </booking>
             """
-        request = RequestStub(method="POST", body=xml3)
+        request = RequestStub(method="POST", body=xml3,
+                              authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
         pevs = list(self.person.calendar)
@@ -753,7 +764,8 @@ class TestBookingView(unittest.TestCase):
             (bad_owner_xml, "'owner' in not an ApplicationObject."),
             ]
         for xml, error in cases:
-            request = RequestStub(method="POST", body=xml)
+            request = RequestStub(method="POST", body=xml,
+                                  authenticated_user=self.manager)
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
             self.assertEquals(result, error)
@@ -761,6 +773,19 @@ class TestBookingView(unittest.TestCase):
         request = RequestStub()
         result = self.view.render(request)
         self.assertEquals(request.code, 404)
+
+    def test_no_auth(self):
+        xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <owner path="/persons/manager"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        request = RequestStub(method="POST", body=xml,
+                              authenticated_user=self.person)
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(result, "You can only book resources for yourself")
 
 
 class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):

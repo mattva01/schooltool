@@ -497,7 +497,6 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body, dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
-                <reporter xlink:type="simple" xlink:href="/persons/anonymous"/>
                 <person xlink:type="simple" xlink:href="/persons/p1"
                         presence="present" comment="foo" resolved="resolved"/>
                 <person xlink:type="simple" xlink:href="/persons/p2"

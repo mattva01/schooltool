@@ -37,7 +37,7 @@ from schooltool.views.facet import FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
 from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
-from schooltool.views.absence import RollcallView, AbsenceManagementView
+from schooltool.views.absence import RollCallView, AbsenceManagementView
 from schooltool.views.auth import PublicAccess, PrivateAccess
 
 __metaclass__ = type
@@ -76,7 +76,7 @@ class GroupView(ApplicationObjectTraverserView):
 
     def _traverse(self, name, request):
         if name == 'rollcall':
-            return RollcallView(self.context)
+            return RollCallView(self.context)
         elif name == 'tree':
             return TreeView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)

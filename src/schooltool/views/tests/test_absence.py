@@ -358,7 +358,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(len(absence.comments), 2)
 
 
-class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
+class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
                        unittest.TestCase):
 
     def setUp(self):
@@ -372,6 +372,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         self.group = app['groups'].new("root", title="group")
+        self.managers = app['groups'].new("managers", title="managers")
         self.sub = app['groups'].new("subgroup", title="subgroup")
         self.subsub = app['groups'].new("subsubgroup", title="subsubgroup")
         self.sub2 = app['groups'].new("subgroup2", title="subgroup")
@@ -380,6 +381,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         self.personc = app['persons'].new("c", title="c")
         self.persond = app['persons'].new("d", title="d")
         self.personq = app['persons'].new("q", title="q")
+        self.manager = app['persons'].new("mgr", title="manager")
 
         Membership(group=self.group, member=self.sub)
         Membership(group=self.sub, member=self.subsub)
@@ -391,15 +393,17 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         Membership(group=self.subsub, member=self.persona)
         Membership(group=self.sub2, member=self.personb)
 
+        Membership(group=self.managers, member=self.manager)
+
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
     def test_get(self):
-        from schooltool.views.absence import RollcallView
+        from schooltool.views.absence import RollCallView
         from schooltool.absence import AbsenceComment
         self.personb.reportAbsence(AbsenceComment())
         self.personc.reportAbsence(AbsenceComment(None, "",
                 expected_presence=datetime.datetime(2001, 1, 1, 2, 2, 2)))
-        view = RollcallView(self.group)
+        view = RollCallView(self.group)
         request = RequestStub("http://localhost/group/rollcall")
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
@@ -423,11 +427,11 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
             """, recursively_sort=['rollcall'])
 
     def test_post(self):
-        from schooltool.views.absence import RollcallView
+        from schooltool.views.absence import RollCallView
         from schooltool.absence import AbsenceComment
         personc_absence = self.personc.reportAbsence(AbsenceComment())
         persond_absence = self.persond.reportAbsence(AbsenceComment())
-        view = RollcallView(self.group)
+        view = RollCallView(self.group)
         text = "I just did a roll call and noticed Mr. B. is missing again"
         request = RequestStub("http://localhost/group/rollcall",
                               method="POST", body="""
@@ -446,7 +450,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
               <person xlink:type="simple" xlink:href="/persons/d"
                       xlink:title="d" presence="absent"/>
             </rollcall>
-                              """ % text)
+            """ % text, authenticated_user=self.manager)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -488,11 +492,68 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(comment.datetime,
                           datetime.datetime(2001, 2, 3, 4, 5, 6))
 
-    def post_errors(self, body, errmsg):
-        from schooltool.views.absence import RollcallView
-        view = RollcallView(self.group)
+    def test_post_no_reporter(self):
+        from schooltool.views.absence import RollCallView
+        view = RollCallView(self.group)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/group/rollcall",
-                              method="POST", body=body)
+                              method="POST", body="""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="b" presence="absent"/>
+            </rollcall>
+            """, authenticated_user=self.personb)
+        # when reporter is not explicitly specified, take authenticated_user
+        result = view.render(request)
+        self.assertEquals(request.code, 200, 'request failed:\n' + result)
+        absence = self.persona.getCurrentAbsence()
+        comment = absence.comments[-1]
+        self.assert_(comment.reporter is self.personb)
+
+    def test_post_no_authorization(self):
+        from schooltool.views.absence import RollCallView
+        view = RollCallView(self.group)
+        view.authorization = lambda ctx, rq: True
+        request = RequestStub("http://localhost/group/rollcall",
+                              method="POST", body="""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="b" presence="absent"/>
+            </rollcall>
+            """, authenticated_user=self.personb)
+        # when reporter is not explicitly specified, take authenticated_user
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason, "Bad Request")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Reporter does not match the authenticated"
+                                  " user")
+
+    def post_errors(self, body, errmsg):
+        from schooltool.views.absence import RollCallView
+        view = RollCallView(self.group)
+        request = RequestStub("http://localhost/group/rollcall",
+                              method="POST", body=body,
+                              authenticated_user=self.manager)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 400)
@@ -507,22 +568,6 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
     def test_post_structure_errors(self):
         # I expect that we can validate all these errors with a schema
         # and just return a generic "Bad roll call representation" error
-        self.post_errors("""
-            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
-                      xlink:type="simple" xlink:title="group"
-                      xlink:href="/groups/root"
-                      datetime="2001-02-03 04:05:06">
-              <comment>A comment</comment>
-              <person xlink:type="simple" xlink:href="/persons/a"
-                      xlink:title="a" presence="present"/>
-              <person xlink:type="simple" xlink:href="/persons/b"
-                      xlink:title="b" presence="absent"/>
-              <person xlink:type="simple" xlink:href="/persons/c"
-                      xlink:title="c" presence="present"/>
-              <person xlink:type="simple" xlink:href="/persons/d"
-                      xlink:title="d" presence="absent"/>
-            </rollcall>""",
-            "Reporter not specified")
         self.post_errors("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
                       xlink:type="simple" xlink:title="group"
@@ -852,7 +897,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerTextView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerFacetView))
-    suite.addTest(unittest.makeSuite(TestRollcallView))
+    suite.addTest(unittest.makeSuite(TestRollCallView))
     return suite
 
 if __name__ == '__main__':

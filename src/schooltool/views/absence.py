@@ -39,7 +39,7 @@ from schooltool.views import View, Template
 from schooltool.views import XMLPseudoParser
 from schooltool.views import absoluteURL, textErrorPage
 from schooltool.views.facet import FacetView
-from schooltool.views.auth import TeacherAccess
+from schooltool.views.auth import TeacherAccess, isManager
 from schooltool.common import parse_datetime
 
 __metaclass__ = type
@@ -48,7 +48,7 @@ __metaclass__ = type
 moduleProvides(IModuleSetup)
 
 
-class RollcallView(View):
+class RollCallView(View):
     """This is a view for doing roll calls on groups."""
 
     template = Template('www/rollcall.pt', content_type="text/xml")
@@ -107,12 +107,17 @@ class RollcallView(View):
 
             res = ctx.xpathEval("/rollcall/reporter/@xlink:href")
             if not res:
-                raise ValueError("Reporter not specified")
-            path = res[0].content
-            try:
-                reporter = traverse(self.context, path)
-            except KeyError:
-                raise ValueError("Reporter not found: %s" % path)
+                reporter = request.authenticated_user
+            else:
+                path = res[0].content
+                try:
+                    reporter = traverse(self.context, path)
+                except KeyError:
+                    raise ValueError("Reporter not found: %s" % path)
+                if (reporter is not request.authenticated_user
+                        and not isManager(request.authenticated_user)):
+                    raise ValueError("Reporter does not match the"
+                                     " authenticated user")
 
             items = []
             presence = {'present': True, 'absent': False}

@@ -152,7 +152,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.model import TreeView
-        from schooltool.views.absence import RollcallView
+        from schooltool.views.absence import RollCallView
         from schooltool.views.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/group")
@@ -166,7 +166,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.assert_(IFacetManager.isImplementedBy(result.context))
 
         result = self.view._traverse("rollcall", request)
-        self.assert_(isinstance(result, RollcallView))
+        self.assert_(isinstance(result, RollCallView))
         self.assert_(result.context is self.group)
 
         result = self.view._traverse("tree", request)

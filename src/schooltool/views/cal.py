@@ -33,6 +33,7 @@ from schooltool.views import View, Template, absoluteURL
 from schooltool.views import textErrorPage, notFoundPage
 from schooltool.views import read_file
 from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
+from schooltool.views.auth import isManager
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period
 from schooltool.common import parse_date, parse_datetime
@@ -333,6 +334,10 @@ class BookingView(View):
             if not IApplicationObject.isImplementedBy(owner):
                 return textErrorPage(request,
                                      "'owner' in not an ApplicationObject.")
+            if (owner is not request.authenticated_user
+                    and not isManager(request.authenticated_user)):
+                return textErrorPage(request, "You can only book resources "
+                                     "for yourself")
 
             resource_node = xpathctx.xpathEval('/cal:booking/cal:slot')[0]
             start_str = resource_node.nsProp('start', None)

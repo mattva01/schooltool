@@ -264,15 +264,15 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return _parseRollCall(response.read())
 
-    def submitRollCall(self, group_path, roll_call,
-                       reporter_path='/persons/anonymous'):
+    def submitRollCall(self, group_path, roll_call, reporter_path=None):
         """Post a roll call for a group.
 
         Expects roll_call to be a list of RollCallEntry objects.
         """
-        body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n'
-                '<reporter xlink:type="simple" xlink:href="%s"/>\n'
-                % cgi.escape(reporter_path, True)]
+        body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n']
+        if reporter_path is not None:
+            body.append('<reporter xlink:type="simple" xlink:href="%s"/>\n'
+                        % cgi.escape(reporter_path, True))
         for entry in roll_call:
             href = cgi.escape(entry.person_path, True)
             if entry.presence is Unchanged: presence = ''
