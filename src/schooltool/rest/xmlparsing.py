@@ -19,7 +19,7 @@ class XMLDocument(object):
 
         >>> body = '''
         ...   <?xml version="1.0" encoding="ISO-8859-13"?>
-        ...   <hello>
+        ...   <hello id="123">
         ...     <world>Earth</world>
         ...     <message language="en">Hi, people!</message>
         ...     <message language="lt">Sveiki, \xFEmon\xEBs!</message>
@@ -42,6 +42,11 @@ class XMLDocument(object):
         >>> message['language']
         u'en'
 
+    You can access the root element directly
+
+        >>> doc.root['id']
+        u'123'
+
     You do not need to worry about charset conversions.
 
         >>> message = doc.query('//message')[1]
@@ -57,6 +62,8 @@ class XMLDocument(object):
     If you do not free the memory manually, it will be freed during garbage
     collection.
     """
+
+    root = property(lambda self: XMLNode(self._doc.getRootElement(), self))
 
     def __init__(self, body, schema=None):
         """Parse the document (and validate with a RelaxNG schema if given).
