@@ -260,6 +260,8 @@ def doctest_WriteCalendar():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
+                doctest.DocTestSuite('schoolbell.app.cal',
+                                     optionflags=doctest.ELLIPSIS),
            ])
 
 

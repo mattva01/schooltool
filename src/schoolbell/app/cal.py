@@ -98,11 +98,11 @@ class Calendar(Persistent, CalendarMixin):
 
 
 class WriteCalendar(object):
-    """An adapter that allows writing iCalendar date to a calendar.
+    r"""An adapter that allows writing iCalendar date to a calendar.
 
         >>> calendar = Calendar()
         >>> adapter = WriteCalendar(calendar)
-        >>> adapter.write('''
+        >>> adapter.write('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
         ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
@@ -110,7 +110,7 @@ class WriteCalendar(object):
         ... UID:some-random-uid@example.com
         ... SUMMARY:LAN party
         ... DTSTART:20050226T160000
-        ... DURATION:P6H
+        ... DURATION:PT6H
         ... DTSTAMP:20050203T150000
         ... END:VEVENT
         ... END:VCALENDAR
