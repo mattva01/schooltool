@@ -23,7 +23,7 @@ $Id$
 """
 
 import datetime
-import libxml2
+
 from zope.interface import moduleProvides
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource
@@ -119,23 +119,20 @@ class ApplicationObjectCreator:
         if name is not None:
             kw['__name__'] = name
         try:
-            if not validate_against_schema(self.schema, body):
-                return textErrorPage(request,
+            doc = XMLDocument(body, self.schema)
+        except XMLValidationError:
+            return textErrorPage(request,
                                  _("Document not valid according to schema"))
-        except libxml2.parserError:
+        except XMLParseError:
             return textErrorPage(request, _("Document not valid XML"))
 
-        doc = libxml2.parseDoc(body)
-        xpathctx = doc.xpathNewContext()
         try:
-            ns = 'http://schooltool.org/ns/model/0.1'
-            xpathctx.xpathRegisterNs('m', ns)
-            nodes = xpathctx.xpathEval('/*/@title')
+            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+            nodes = doc.query('/*/@title')
             if nodes:
-                kw['title'] = to_unicode(nodes[0].content)
+                kw['title'] = nodes[0].content
         finally:
-            doc.freeDoc()
-            xpathctx.xpathFreeContext()
+            doc.free()
         obj = container.new(**kw)
         location = absoluteURL(request, obj)
         request.setResponseCode(201, 'Created')
