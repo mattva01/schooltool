@@ -5,3 +5,4 @@ debian/schooltool.postrm.debhelper
 debian/schooltool.prerm.debhelper
 debian/files
 ./*.log
+./Data.fs*
