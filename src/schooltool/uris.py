@@ -108,7 +108,9 @@ def getURI(str):
 
 
 def listURIs():
+    """Return a list of all registered URIs."""
     return _uri_registry.values()
+
 
 #
 # Concrete URIs
