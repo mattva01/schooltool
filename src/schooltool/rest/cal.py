@@ -31,12 +31,13 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.interfaces import IApplicationObject
+from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.rest import View, Template, absoluteURL
 from schooltool.rest import textErrorPage, notFoundPage
 from schooltool.rest import read_file
 from schooltool.rest.acl import ACLView
 from schooltool.rest.auth import PublicAccess, PrivateAccess, TeacherAccess
-from schooltool.rest.auth import isManager, PrivateACLAccess
+from schooltool.rest.auth import isManager, CalendarACLAccess
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period
 from schooltool.common import parse_date, parse_datetime, to_unicode
@@ -262,7 +263,7 @@ class CalendarReadView(View):
 class CalendarView(CalendarReadView):
     """iCalendar r/w view for IACLCalendar."""
 
-    authorization = PrivateACLAccess
+    authorization = CalendarACLAccess
 
     def _traverse(self, name, request):
         if name == 'acl':
@@ -334,12 +335,16 @@ class CalendarView(CalendarReadView):
             else:
                 need_add_perm = True
 
-##      acl = self.context.acl
-##      user = request.authenticated_user
-##      if need_add_perm and not acl.allows(user, AddPermission):
-##          ...
-##      if need_modify_perm and not acl.allows(user, ModifyPermission):
-##          ...
+        def acl_allows(permission):
+            return self.authorization.hasPermission(self.context, request,
+                                                    permission)
+
+        if need_add_perm and not acl_allows(AddPermission):
+            return textErrorPage(request, _("You are not allowed"
+                                            " to add calendar events"), 401)
+        if need_modify_perm and not acl_allows(ModifyPermission):
+            return textErrorPage(request, _("You are not allowed"
+                                            " to modify the calendar"), 401)
 
         for event in events_to_delete:
             if event.owner or event.context:

@@ -115,24 +115,57 @@ def SystemAccess(context, request):
 SystemAccess = staticmethod(SystemAccess)
 
 
-def PrivateACLAccess(context, request):
-    """Allows access to the owner of the object, and to the users in ACL"""
-    owner = getOwner(context)
-    if isManager(request.authenticated_user):
-        return True
-    if owner is not None and owner is request.authenticated_user:
-        return True
-    if IACLOwner.providedBy(context):
-        acl = context.acl
-        if (request.method in ('GET', 'HEAD') and
-            acl.allows(request.authenticated_user, ViewPermission)):
-            return True
-        elif (request.method == 'PUT' and
-              acl.allows(request.authenticated_user, AddPermission)):
-            return True
-        elif (request.method in ('POST', 'DELETE') and
-              acl.allows(request.authenticated_user, ModifyPermission)):
-            return True
-    return False
+class ACLAccess:
+    """Allows access for persons listed in the ACL of context."""
 
-PrivateACLAccess = staticmethod(PrivateACLAccess)
+    def __init__(self, get=None, put=None, post=None, delete=None):
+        self.permission_map = {'GET': get,
+                               'HEAD': get,
+                               'PUT': put,
+                               'POST': post,
+                               'DELETE': delete}
+
+    def __call__(self, context, request):
+        """Allows access to the owner of the object, and to the users in ACL"""
+        permission = self.permission_map.get(request.method)
+        return self.hasPermission(context, request, permission)
+
+    def hasPermission(self, context, request, permission):
+        """Checks whether the authenticated user has a given permission.
+
+        Managers and the owner of context always have the permission, even
+        if it is not explicitly listed in the ACL.
+        """
+        if isManager(request.authenticated_user):
+            return True
+        owner = getOwner(context)
+        if owner is not None and owner is request.authenticated_user:
+            return True
+        if permission is not None and IACLOwner.providedBy(context):
+            if context.acl.allows(request.authenticated_user, permission):
+                return True
+        return False
+
+
+# XXX badly named?
+PrivateACLAccess = ACLAccess(get=ViewPermission,
+                             put=AddPermission,
+                             post=ModifyPermission,
+                             delete=ModifyPermission)
+
+
+class CalendarACLAccessClass(ACLAccess):
+
+    def __init__(self):
+        ACLAccess.__init__(self, get=ViewPermission)
+
+    def __call__(self, context, request):
+        if request.method == 'PUT':
+            return (self.hasPermission(context, request, AddPermission)
+                    or self.hasPermission(context, request, ModifyPermission))
+        else:
+            return ACLAccess.__call__(self, context, request)
+
+
+CalendarACLAccess = CalendarACLAccessClass()
+

@@ -198,7 +198,8 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         teacher      -       -       -       -        -       -
         manager      +       +       +       +        +       +
         """
-        self.do_test_access(PrivateACLAccess, access, self.simpleuser.calendar)
+        self.do_test_access(PrivateACLAccess, access,
+                            self.simpleuser.calendar)
 
         self.simpleuser.calendar.acl.add((self.otheruser, ViewPermission))
         access = """
@@ -209,7 +210,8 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         teacher      -       -       -       -        -       -
         manager      +       +       +       +        +       +
         """
-        self.do_test_access(PrivateACLAccess, access, self.simpleuser.calendar)
+        self.do_test_access(PrivateACLAccess, access,
+                            self.simpleuser.calendar)
 
         self.simpleuser.calendar.acl.add((self.otheruser, AddPermission))
         self.simpleuser.calendar.acl.add((self.teachers_group,
@@ -222,7 +224,48 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         teacher      -       -       -       +        +       -
         manager      +       +       +       +        +       +
         """
-        self.do_test_access(PrivateACLAccess, access, self.simpleuser.calendar)
+        self.do_test_access(PrivateACLAccess, access,
+                            self.simpleuser.calendar)
+
+    def test_CalendarACLAccess(self):
+        from schooltool.rest.auth import CalendarACLAccess
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission
+        access = """
+                    GET     HEAD    PUT     POST    DELETE  OTHER
+        anonymous    -       -       -       -        -       -
+        simpleuser   -       -       -       -        -       -
+        otheruser    -       -       -       -        -       -
+        teacher      -       -       -       -        -       -
+        manager      +       +       +       +        +       +
+        """
+        self.do_test_access(CalendarACLAccess, access)
+
+        access = """
+                    GET     HEAD    PUT     POST    DELETE  OTHER
+        anonymous    -       -       -       -        -       -
+        simpleuser   +       +       +       +        +       +
+        otheruser    -       -       -       -        -       -
+        teacher      -       -       -       -        -       -
+        manager      +       +       +       +        +       +
+        """
+        self.do_test_access(CalendarACLAccess, access,
+                            self.simpleuser.calendar)
+
+        self.simpleuser.calendar.acl.add((self.otheruser, AddPermission))
+        self.simpleuser.calendar.acl.add((self.teachers_group,
+                                          ModifyPermission))
+        access = """
+                    GET     HEAD    PUT     POST    DELETE  OTHER
+        anonymous    -       -       -       -        -       -
+        simpleuser   +       +       +       +        +       +
+        otheruser    -       -       +       -        -       -
+        teacher      -       -       +       -        -       -
+        manager      +       +       +       +        +       +
+        """
+        self.do_test_access(CalendarACLAccess, access,
+                            self.simpleuser.calendar)
+
 
 def test_suite():
     suite = unittest.TestSuite()

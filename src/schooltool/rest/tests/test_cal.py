@@ -29,6 +29,7 @@ from schooltool.rest.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
+from schooltool.tests.utils import AppSetupMixin
 from schooltool.tests.helpers import dedent, diff, sorted
 
 __metaclass__ = type
@@ -57,11 +58,11 @@ def reorder_vcal(body):
     return head + marker.join(events) + tail
 
 
-class CalendarTestBase(unittest.TestCase):
+class CalendarTestBase(AppSetupMixin, unittest.TestCase):
 
     def do_test_get(self, expected, uri='http://localhost/calendar'):
         """Bind self.view to a view before calling this."""
-        request = RequestStub(uri)
+        request = RequestStub(uri, authenticated_user=self.manager)
         result = self.view.render(request)
         expected = "\r\n".join(expected.splitlines()) # normalize line endings
         result = reorder_vcal(result)
@@ -82,10 +83,11 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         setPath(self.sm, '/person/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
         self.view.datetime_hook = DatetimeStub()
-        self.view.authorization = lambda ctx, rq: True
         self.setUpLibxml2()
+        self.setUpSampleApp()
 
     def tearDown(self):
+        self.tearDownRegistries()
         self.tearDownLibxml2()
 
     def test_get_empty(self):
@@ -161,14 +163,14 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
         request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
-                              body=calendar)
+                              body=calendar, authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
-                          [(None,
+                          [(request.authenticated_user,
                             'Schoolday Calendar /person/calendar updated',
                             INFO)])
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
@@ -183,7 +185,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         self.sm.add(datetime.date(2003, 9, 15))
         request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": content_type},
-                              body=body)
+                              body=body, authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
@@ -326,11 +328,13 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         """)
         request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/xml"},
-                              body=body)
+                              body=body, authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
-                [(None, 'Schoolday Calendar /person/calendar updated', INFO)])
+                          [(request.authenticated_user,
+                            'Schoolday Calendar /person/calendar updated',
+                            INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -388,7 +392,6 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
         context.__parent__.title = "A Person"
         self.view = self._newView(context)
         self.view.datetime_hook = DatetimeStub()
-        self.view.authorization = lambda ctx, rq: True
         return context
 
     def test_get_empty(self):
@@ -449,7 +452,7 @@ class TestCalendarView(TestCalendarReadView):
         from schooltool.cal import CalendarEvent
         request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
-                              body=body)
+                              body=body, authenticated_user=self.manager)
         cal = self._create()
         cal.addEvent(CalendarEvent(datetime.date(2003, 9, 1),
                                    datetime.timedelta(1),
@@ -457,7 +460,7 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
-                          [(None,
+                          [(request.authenticated_user,
                             'Calendar /person/calendar for A Person imported',
                             INFO)])
         self.assertEquals(request.code, 200)
@@ -515,7 +518,7 @@ class TestCalendarView(TestCalendarReadView):
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
         request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
-                              body=calendar)
+                              body=calendar, authenticated_user=self.manager)
         cal = self._create()
         cal.addEvent(CalendarEvent(datetime.date(2003, 9, 1),
                                    datetime.timedelta(1),
@@ -523,7 +526,7 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
-                          [(None,
+                          [(request.authenticated_user,
                             'Calendar /person/calendar for A Person imported',
                             INFO)])
         self.assertEquals(request.code, 200)
@@ -549,7 +552,7 @@ class TestCalendarView(TestCalendarReadView):
     def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
         request = RequestStub("http://localhost/calendar", method="PUT",
                               headers={"Content-Type": content_type},
-                              body=body)
+                              body=body, authenticated_user=self.manager)
         result = self.view.render(request)
         if errmsg:
             self.assertEquals(result, errmsg)
@@ -601,21 +604,127 @@ class TestCalendarView(TestCalendarReadView):
         self.assertRaises(KeyError, self.view._traverse, 'keyerror', request)
 
 
-class TestCalendarViewBookingEvents(NiceDiffsMixin, unittest.TestCase):
+class TestCalendarViewPermissions(AppSetupMixin, unittest.TestCase):
+
+    def calendarBody(self, events):
+        from schooltool.cal import Calendar
+        from schooltool.rest.cal import CalendarReadView
+        cal = Calendar()
+        for event in events:
+            cal.addEvent(event)
+        view = CalendarReadView(cal)
+        return view.render(RequestStub())
+
+    def _getCalendar(self, view, person, code):
+        request = RequestStub(method="GET", authenticated_user=person)
+        result = view.render(request)
+        self.assertEquals(request.code, code,
+                          '%s != %s:\n%s' % (request.code, code, result))
+
+    def _putCalendar(self, view, person, events, code):
+        from schooltool.cal import Calendar
+        copy_of_calendar = Calendar()
+        copy_of_calendar.update(self.person.calendar)
+        request = RequestStub(method="PUT",
+                              headers={'Content-Type': 'text/calendar'},
+                              body=self.calendarBody(events),
+                              authenticated_user=person)
+        result = view.render(request)
+        self.assertEquals(request.code, code,
+                          '%s != %s:\n%s' % (request.code, code, result))
+        self.person.calendar.clear()
+        self.person.calendar.update(copy_of_calendar)
+
+    def assertCannotView(self, view, person):
+        self._getCalendar(view, person, 401)
+
+    def assertCanView(self, view, person):
+        self._getCalendar(view, person, 200)
+
+    def assertCannotChange(self, view, person, events):
+        self._putCalendar(view, person, events, 401)
+
+    def assertCanChange(self, view, person, events):
+        self._putCalendar(view, person, events, 200)
+
+    def test_get_permissions(self):
+        from schooltool.rest.cal import CalendarView
+        from schooltool.interfaces import ViewPermission
+        cal = self.person.calendar
+        view = CalendarView(self.person.calendar)
+        self.assertCanView(view, self.person)
+        self.assertCanView(view, self.manager)
+        self.assertCannotView(view, self.person2)
+
+        cal.acl.add((self.person2, ViewPermission))
+        self.assertCanView(view, self.person2)
+
+    def test_put_permissions(self):
+        from schooltool.rest.cal import CalendarView
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import AddPermission
+        from schooltool.interfaces import ModifyPermission
+        e1 = CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                           datetime.timedelta(minutes=20),
+                           "Quick Lunch", unique_id="12345678")
+        e1m = CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                            datetime.timedelta(minutes=25),
+                            "Sorta Quick Lunch", unique_id="12345678")
+        e2 = CalendarEvent(datetime.datetime(2003, 9, 3, 15, 40),
+                           datetime.timedelta(minutes=60),
+                           "Slow Lunch", unique_id="87654321")
+        e3 = CalendarEvent(datetime.datetime(2003, 9, 3, 16, 40),
+                           datetime.timedelta(minutes=75),
+                           "Nap", unique_id="99999999")
+        cal = self.person.calendar
+        cal.addEvent(e1)
+        cal.addEvent(e2)
+        view = CalendarView(cal)
+
+        # Try to delete e2; modify e1; add e3:
+        self.assertCannotChange(view, self.person2, [e1])
+        self.assertCannotChange(view, self.person2, [e1m, e2])
+        self.assertCannotChange(view, self.person2, [e1, e2, e3])
+
+        cal.acl.add((self.person2, AddPermission))
+
+        # Try to delete e2; modify e1; add e3:
+        self.assertCannotChange(view, self.person2, [e1])
+        self.assertCannotChange(view, self.person2, [e1m, e2])
+        self.assertCanChange(view, self.person2, [e1, e2, e3])
+        # Try to add and modify in a single request
+        self.assertCannotChange(view, self.person2, [e1m, e2, e3])
+
+        cal.acl.clear()
+        cal.acl.add((self.person2, ModifyPermission))
+
+        # Try to delete e2; modify e1; add e3; modify e1 and add e3:
+        self.assertCanChange(view, self.person2, [e1])
+        self.assertCanChange(view, self.person2, [e1m, e2])
+        self.assertCannotChange(view, self.person2, [e1, e2, e3])
+        self.assertCannotChange(view, self.person2, [e1m, e2, e3])
+
+        cal.acl.clear()
+        cal.acl.add((self.person2, AddPermission))
+        cal.acl.add((self.person2, ModifyPermission))
+
+        # Try to delete e2; modify e1; add e3; modify e1 and add e3:
+        self.assertCanChange(view, self.person2, [e1])
+        self.assertCanChange(view, self.person2, [e1m, e2])
+        self.assertCanChange(view, self.person2, [e1, e2, e3])
+        self.assertCanChange(view, self.person2, [e1m, e2, e3])
+
+
+class TestCalendarViewBookingEvents(NiceDiffsMixin, AppSetupMixin,
+                                    unittest.TestCase):
 
     def setUp(self):
-        from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.model import Group, Person, Resource
         from schooltool.cal import CalendarEvent
         from schooltool.rest.cal import CalendarView
-
-        app = Application()
-        app['persons'] = ApplicationObjectContainer(Person)
-        app['resources'] = ApplicationObjectContainer(Resource)
-        self.person = app['persons'].new("john", title="John")
-        self.resource = app['resources'].new("hall", title="Hall")
+        self.setUpSampleApp()
+        self.person = self.app['persons'].new("john", title="John")
+        self.resource = self.app['resources'].new("hall", title="Hall")
         self.view = CalendarView(self.person.calendar)
-        self.view.authorization = lambda ctx, rq: True
 
         e = CalendarEvent(datetime.datetime(2004, 1, 1, 10, 0, 0),
                           datetime.timedelta(minutes=60),
@@ -628,7 +737,8 @@ class TestCalendarViewBookingEvents(NiceDiffsMixin, unittest.TestCase):
 
     def test_put_empty(self):
         request = RequestStub("/persons/john/calendar", method="PUT", body="",
-                              headers={'Content-Type': 'text/calendar'})
+                              headers={'Content-Type': 'text/calendar'},
+                              authenticated_user=self.manager)
         self.view.render(request)
 
         self.assertEquals(list(self.person.calendar), [])
@@ -673,7 +783,7 @@ class TestCalendarViewBookingEvents(NiceDiffsMixin, unittest.TestCase):
 
         request = RequestStub("/persons/john/calendar", method="PUT",
                               headers={'Content-Type': 'text/calendar'},
-                              body=cal)
+                              body=cal, authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(len(list(self.person.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 0)
@@ -935,6 +1045,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarReadView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestCalendarViewPermissions))
     suite.addTest(unittest.makeSuite(TestCalendarViewBookingEvents))
     suite.addTest(unittest.makeSuite(TestBookingView))
     suite.addTest(unittest.makeSuite(TestAllCalendarsView))
