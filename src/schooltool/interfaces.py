@@ -128,10 +128,16 @@ class IFacetAPI(Interface):
 
 class ISpecificURI(Interface):
     """All interfaces derived from this must have the URI they map on
-    to as their docstring:
+    to as the first part of their docstring. Examples::
 
         class ITutor(ISpecificURI):
             '''http://schooltool.org/ns/tutor'''
+
+        class ITutor(ISpecificURI):
+            '''http://schooltool.org/ns/tutor
+
+            A person who is responsible for a registration class.
+            '''
     """
 
 
