@@ -200,14 +200,12 @@ following to your Apache configuration file:
   <VirtualHost *:80>
     ServerName school1.example.org
     RewriteEngine On
-    RewriteRule ^/$ http://localhost:7001/++vh++http:school1.example.org:80 [P,L]
     RewriteRule ^/(.*) http://localhost:7001/++vh++http:school1.example.org:80/$1 [P]
   </VirtualHost>
 
   <VirtualHost *:80>
     ServerName school2.example.org
     RewriteEngine On
-    RewriteRule ^/$ http://localhost:7002/++vh++http:school2.example.org:80 [P,L]
     RewriteRule ^/(.*) http://localhost:7002/++vh++http:school2.example.org:80/$1 [P]
   </VirtualHost>
 
@@ -216,7 +214,8 @@ Also, enable mod_proxy and mod_rewrite.
 See http://issues.schooltool.org/issue91 if you're interested why two rewrite rules
 are needed for each virtual host.
 
-You can also get SSL support in the same way:
+You can also get SSL support in the same way, as an alternative to the build-in
+SSL support:
 
   NameVirtualHost *:443
 
@@ -225,7 +224,6 @@ You can also get SSL support in the same way:
     SSLEnable          # Apache 1.3
     # SSLEngine On     # Apache 2.0
     RewriteEngine On
-    RewriteRule ^/$ http://localhost:7001/++vh++https:school1.example.org:443 [P,L]
     RewriteRule ^/(.*) http://localhost:7001/++vh++https:school1.example.org:443/$1 [P]
   </VirtualHost>
 
