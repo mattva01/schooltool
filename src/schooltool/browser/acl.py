@@ -196,7 +196,6 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
                                    (_(permission), self.printUser(user)))
                 return "\n".join(result)
 
-
     def printUser(self, user):
         if user == Everybody:
             return _('Everybody')

@@ -561,6 +561,7 @@ class MultiselectionWidget(SequenceWidget):
         SequenceWidget.__init__(self, name, label, **kw)
         self.choices = choices
 
+
 class MultiCheckboxWidget(MultiselectionWidget):
     """Multiselection checkboxes widget"""
 
