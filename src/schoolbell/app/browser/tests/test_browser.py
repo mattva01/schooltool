@@ -50,7 +50,6 @@ def doctest_getSchoolBellApplication():
       >>> getSchoolBellApplication(p) is app
       True
 
-
     However, this function raises an error if the object does not have
     an ISchoolBellApplication among its ancestors:
 
@@ -77,6 +76,26 @@ def doctest_getSchoolBellApplication():
 
     """
 
+
+def doctest_SchoolBellAPI():
+    """Tests for SchoolBellAPI.
+    
+        >>> from zope.interface.verify import verifyObject
+        >>> from zope.tales.interfaces import ITALESFunctionNamespace
+        >>> from schoolbell.app.browser import SchoolBellAPI
+        >>> context = object()
+        >>> ns = SchoolBellAPI(context)
+        >>> verifyObject(ITALESFunctionNamespace, ns)
+        True
+
+    'context/schoolbell:app' adapts context to ISchoolBellApplication
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> SchoolBellAPI(app['persons']).app is app
+        True
+
+    """
 
 def doctest_SortBy():
     """Tests for SortBy adapter.

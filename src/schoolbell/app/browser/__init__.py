@@ -30,6 +30,7 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.location.interfaces import ILocation
 from zope.app.size.interfaces import ISized
 from zope.app.traversing.interfaces import IPathAdapter, ITraversable
+from zope.tales.interfaces import ITALESFunctionNamespace
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -67,6 +68,30 @@ class NavigationView(BrowserView):
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         self.app = getSchoolBellApplication(context)
+
+
+class SchoolBellAPI(object):
+    """TALES function namespace for SchoolBell specific actions.
+
+    In a page template you can use it as follows:
+
+        tal:define="app context/schoolbell:app"
+
+    """
+
+    implements(IPathAdapter, ITALESFunctionNamespace)
+
+    def __init__(self, context):
+        self.context = context
+
+    def setEngine(self, engine):
+        """See ITALESFunctionNamespace."""
+        pass
+
+    def app(self):
+        """Adapt context to ISchoolBellApplication."""
+        return ISchoolBellApplication(self.context)
+    app = property(app)
 
 
 class SortBy(object):

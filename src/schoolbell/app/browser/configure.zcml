@@ -11,7 +11,14 @@
       factory=".SortBy"
       />
 
-<!-- TALES path expressions -->
+  <zope:adapter
+      for="*"
+      name="schoolbell" 
+      provides="zope.app.traversing.interfaces.IPathAdapter"
+      factory=".SchoolBellAPI"
+      />
+
+<!-- Adapters -->
 
   <zope:adapter
       for="schoolbell.app.interfaces.ISchoolBellApplication"
