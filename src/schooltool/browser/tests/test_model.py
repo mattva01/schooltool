@@ -364,7 +364,8 @@ class TestPersonInfoMixin(unittest.TestCase):
         self.assertEquals(mixin.photoURL(), '')
 
 
-class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
+class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
+                    unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -422,8 +423,8 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.browser.model import GroupView, GroupEditView
         request = RequestStub()
         view = GroupView(self.group)
-        result = view._traverse('edit.html', request)
-        assert result.__class__ is GroupEditView
+        self.assertTraverses(view, 'edit.html', GroupEditView, self.group)
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
 class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
