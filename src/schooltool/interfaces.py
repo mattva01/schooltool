@@ -24,6 +24,32 @@ $Id$
 
 from zope.interface import Interface, Attribute
 
+class ILocation(Interface):
+    """A location in the standard object *hierarchy*
+
+    The location can be either a physical location for content objects
+    or an adapted location.  An adapter, like a view, gets a location
+    from the physically located objects that it directly or indirectly
+    adapts.
+
+    From the location information, a *unique* path can be computed for
+    an object. By definition, an object cannot be at two locations in
+    a hierarchy.
+    """
+
+    __parent__ = Attribute("The parent of an object")
+
+    __name__ = Attribute(
+        """The name of the object within the parent.
+
+        This is a name that the parent can be traversed with to get
+        the child.
+        """)
+
+class IPath(Interface):
+    """An object which knows its canonical path."""
+    def path():
+        """Returns a canonical path of this object."""
 
 class IGroupRead(Interface):
     """A set of group members.
@@ -67,14 +93,14 @@ class IGroup(IGroupWrite, IGroupRead):
     __doc__ = IGroupRead.__doc__
 
 
-class IGroupMember(Interface):
+class IGroupMember(ILocation):
 
     name = Attribute("A human readable name of this member.")
 
     def groups():
         """Returns a set for all groups this object is a member of."""
 
-    def notifyAdd(group):
+    def notifyAdd(group, name):
         """Notifies the member that it's added to a group."""
 
     def notifyRemove(group):

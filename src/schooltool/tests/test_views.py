@@ -209,12 +209,51 @@ class TestGroupView(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
+class TestPersonView(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import PersonView
+        from schooltool.model import Group, Person
+        from schooltool.interfaces import IPath
+        from zope.interface import directlyProvides
+
+        self.group = Group("group")
+        directlyProvides(self.group, IPath)
+        self.group.path = lambda: '/group'
+        self.sub = Group("subgroup")
+        self.per = Person("Pete")
+        self.subkey = self.group.add(self.sub)
+        self.perkey = self.group.add(self.per)
+        self.sub.add(self.per)
+
+        self.view = PersonView(self.per)
+
+    def test_render(self):
+        request = RequestStub("http://localhost/group/")
+        request.method = "GET"
+        request.path = '/group/%s' % self.perkey
+        result = self.view.render(request)
+        expected = """\
+<person xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Pete</name>
+  <groups>
+    <item xlink:type="simple" xlink:href="/group"
+          xlink:title="group" />
+    <item xlink:type="simple" xlink:href="/group/0"
+          xlink:title="subgroup" />
+  </groups>
+</person>
+"""
+        self.assertEqual(result, expected)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
-    suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestView))
+    suite.addTest(unittest.makeSuite(TestGroupView))
+    suite.addTest(unittest.makeSuite(TestPersonView))
     return suite
 
 if __name__ == '__main__':

@@ -34,7 +34,7 @@ class MemberStub:
     added = None
     removed = None
     implements(IGroupMember)
-    def notifyAdd(self, group):
+    def notifyAdd(self, group, name):
         self.added = group
     def notifyRemove(self, group):
         self.removed = group
@@ -53,17 +53,33 @@ class TestGroupMember(unittest.TestCase):
         from schooltool.model import GroupMember
         member = GroupMember()
         group = object()
-        member.notifyAdd(group)
+        member.notifyAdd(group, 1)
         self.assertEqual(list(member.groups()), [group])
+        self.assertEqual(member.__parent__, group)
+        self.assertEqual(member.__name__, '1')
+        member.notifyAdd(object(), '2')
+        self.assertEqual(member.__parent__, group)
+        self.assertEqual(member.__name__, '1')
 
     def test_notifyRemove(self):
         from schooltool.model import GroupMember
         member = GroupMember()
         group = object()
-        member._groups = Set([group])
-        member.notifyRemove(group)
-        self.assertEqual(list(member.groups()), [])
-        self.assertRaises(KeyError, member.notifyRemove, group)
+        other = object()
+        for parent in (group, other):
+            member.__parent__ = parent
+            member.__name__ = 'spam'
+            member._groups = Set([group])
+            member.notifyRemove(group)
+            self.assertEqual(list(member.groups()), [])
+            self.assertRaises(KeyError, member.notifyRemove, group)
+            if parent == group:
+                self.assertEqual(member.__parent__, None)
+                self.assertEqual(member.__name__, None)
+            else:
+                self.assertEqual(member.__parent__, other)
+                self.assertEqual(member.__name__, 'spam')
+
 
 class TestGroup(unittest.TestCase):
 
@@ -113,12 +129,29 @@ class TestGroup(unittest.TestCase):
         self.assertEquals(list(group.values()), [member])
         self.assertEquals(list(group.items()), [(key, member)])
 
+class TestPersistentListSet(unittest.TestCase):
+
+    def test(self):
+        from schooltool.model import PersistentListSet
+        p = PersistentListSet()
+        a, b = object(), object()
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        p.add(b)
+        self.assertEquals(list(p), [a, b])
+        p.remove(a)
+        self.assertEquals(list(p), [b])
+        p.add(a)
+        self.assertEquals(list(p), [b, a])
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestGroupMember))
+    suite.addTest(unittest.makeSuite(TestPersistentListSet))
     return suite
 
 if __name__ == '__main__':

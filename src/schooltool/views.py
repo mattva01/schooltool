@@ -24,7 +24,8 @@ $Id$
 
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
-from schooltool.interfaces import IGroup, IPerson
+from schooltool.interfaces import IGroup, IPerson, IPath
+from schooltool.adapters import getAdapter
 
 __metaclass__ = type
 
@@ -168,4 +169,9 @@ class GroupView(View):
 
 class PersonView(View):
     """The view for a person object"""
-    
+
+    template = Template("www/person1.pt")
+
+    def getGroups(self):
+        return [{'name': group.name, 'path': getAdapter(group, IPath).path()}
+                for group in self.context.groups()]

@@ -1,0 +1,10 @@
+<person xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name tal:content="view/context/name">Pete</name>
+  <groups>
+    <item tal:repeat="group view/getGroups"
+          xlink:type="simple"
+          tal:attributes="xlink:title group/name;
+	                  xlink:href group/path"
+	  />
+  </groups>
+</person>

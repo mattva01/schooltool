@@ -22,9 +22,11 @@ SchoolTool organisational model.
 $Id$
 """
 
+from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IGroupMember
 from persistence import Persistent
+from persistence.list import PersistentList
 from zodb.btrees.OOBTree import OOSet
 from zodb.btrees.IOBTree import IOBTree
 
@@ -32,25 +34,37 @@ __metaclass__ = type
 
 
 class GroupMember:
-    """A mixin providing the IGroupMember interface."""
+    """A mixin providing the IGroupMember interface.
+
+    Also, it implements ILocation by setting the first group the
+    member is added to as a parent, and clearing it if the member is
+    removed from it.
+    """
 
     implements(IGroupMember)
 
     def __init__(self):
-        self._groups = OOSet()
+        self._groups = PersistentListSet()
+        self.__name__ = None
+        self.__parent__ = None
 
     def groups(self):
         """See IGroupMember"""
         return self._groups
 
-    def notifyAdd(self, group):
+    def notifyAdd(self, group, name):
         """See IGroupMember"""
-        self._groups.insert(group)
+        self._groups.add(group)
+        if self.__parent__ is None:
+            self.__parent__ = group
+            self.__name__ = str(name)
 
     def notifyRemove(self, group):
         """See IGroupMember"""
         self._groups.remove(group)
-
+        if group == self.__parent__:
+            self.__parent__ = None
+            self.__name__ = None
 
 class Person(Persistent, GroupMember):
 
@@ -94,7 +108,7 @@ class Group(Persistent, GroupMember):
         key = self._next_key
         self._next_key += 1
         self._members[key] = member
-        member.notifyAdd(self)
+        member.notifyAdd(self, key)
         return key
 
     def __delitem__(self, key):
@@ -102,3 +116,26 @@ class Group(Persistent, GroupMember):
         self._members[key].notifyRemove(self)
         del self._members[key]
 
+
+class PersistentListSet(Persistent):
+    """A set implemented with a PersistentList as a backend storage.
+
+    This approach is not most efficient, but avoids the need of having
+    a total ordering needed to employ OOSets
+    (http://zope.org/Wikis/ZODB/FrontPage/guide/node6.html) or
+    constant hashes (memory addresses) used for normal dicts.
+    """
+
+    def __init__(self):
+        self._data = PersistentList()
+
+    def add(self, item):
+        if item not in self._data:
+            self._data.append(item)
+
+    def __iter__(self):
+        for item in self._data:
+            yield item
+
+    def remove(self, item):
+        self._data.remove(item)
