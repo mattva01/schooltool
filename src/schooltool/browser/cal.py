@@ -1108,6 +1108,8 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
     def getWeekDay(self):
         """Returns a description like '4th Tuesday'"""
+        # XXX Seems to have a bug (returns 5th instead of 4th Thursday for
+        #     the date 2004-10-28.
         evdate = self.date_widget.value
         if evdate is None:
             return "same weekday"
