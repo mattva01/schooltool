@@ -168,6 +168,11 @@ def to_unicode(s):
 
         >>> to_unicode('\xc4\x84\xc5\xbeuol\xc5\xb3')
         u'\u0104\u017euol\u0173'
+
+    For convenience, to_unicode accepts None as the argument value.  This makes
+    it easier to use it with libxml2 functions such as nsProp, which return
+    None for missing attribute values.
+
         >>> to_unicode(None) is None
         True
 
@@ -184,13 +189,20 @@ locale_charset = locale.getpreferredencoding()
 def to_locale(us):
     r"""Convert a Unicode string to the current locale encoding.
 
-    Example (assuming LC_CTYPE=C):
+    Example:
 
-        >>> import locale
-        >>> locale.getpreferredencoding()
-        'ANSI_X3.4-1968'
+        >>> from schooltool import common
+        >>> old_locale_charset = common.locale_charset
+
+        >>> common.locale_charset = 'UTF-8'
+        >>> to_locale(u'\u263B')
+        '\xe2\x98\xbb'
+
+        >>> common.locale_charset = 'ASCII'
         >>> to_locale(u'Unrepresentable: \u263B')
         'Unrepresentable: ?'
+
+        >>> locale_charset = old_locale_charset
 
     """
     return us.encode(locale_charset, 'replace')
@@ -201,8 +213,17 @@ def from_locale(s):
 
     Example:
 
+        >>> from schooltool import common
+        >>> old_locale_charset = common.locale_charset
+
         >>> from_locale('xyzzy')
         u'xyzzy'
+
+        >>> common.locale_charset = 'UTF-8'
+        >>> from_locale('\xe2\x98\xbb')
+        u'\u263b'
+
+        >>> locale_charset = old_locale_charset
 
     """
     return unicode(s, locale_charset)
