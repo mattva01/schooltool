@@ -65,9 +65,10 @@ class Group(Persistent, GroupMember):
 
     implements(IGroup, IGroupMember)
 
-    def __init__(self):
+    def __init__(self, name):
         self._next_key = 0
         self._members = IOBTree()
+        self.name = name
         super(Group, self).__init__()
 
     def keys(self):

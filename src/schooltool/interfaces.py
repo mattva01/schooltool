@@ -69,6 +69,8 @@ class IGroup(IGroupWrite, IGroupRead):
 
 class IGroupMember(Interface):
 
+    name = Attribute("A human readable name of this member.")
+
     def groups():
         """Returns a set for all groups this object is a member of."""
 

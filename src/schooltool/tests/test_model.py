@@ -70,13 +70,13 @@ class TestGroup(unittest.TestCase):
     def test(self):
         from schooltool.interfaces import IGroup
         from schooltool.model import Group
-        group = Group()
+        group = Group("root")
         verifyObject(IGroup, group)
         verifyObject(IGroupMember, group)
 
     def test_add(self):
         from schooltool.model import Group
-        group = Group()
+        group = Group("root")
         member = MemberStub()
         key = group.add(member)
         self.assertEqual(member, group[key])
@@ -85,15 +85,15 @@ class TestGroup(unittest.TestCase):
 
     def test_add_group(self):
         from schooltool.model import Group
-        group = Group()
-        member = Group()
+        group = Group("root")
+        member = Group("people")
         key = group.add(member)
         self.assertEqual(member, group[key])
         self.assertEqual(list(member.groups()), [group])
 
     def test_remove(self):
         from schooltool.model import Group
-        group = Group()
+        group = Group("root")
         member = MemberStub()
         key = group.add(member)
         del group[key]
@@ -103,7 +103,7 @@ class TestGroup(unittest.TestCase):
 
     def test_items(self):
         from schooltool.model import Group
-        group = Group()
+        group = Group("root")
         self.assertEquals(list(group.keys()), [])
         self.assertEquals(list(group.values()), [])
         self.assertEquals(list(group.items()), [])

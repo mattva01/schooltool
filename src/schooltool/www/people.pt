@@ -3,9 +3,9 @@
 <body>
 <h1>People</h1>
 <ul>
-  <li tal:repeat="person view/listNames"
-    ><a href="/people/person_name" tal:attributes="href string:/people/$person"
-       tal:content="person">person_name</a></li>
+  <li tal:repeat="member view/context/keys"
+    ><a tal:attributes="href string:/people/$member"
+        tal:content="python: view.context[member].name">person_name</a></li>
 </ul>
 </body>
 </html>

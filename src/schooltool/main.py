@@ -39,6 +39,8 @@ from twisted.protocols import http
 from twisted.python import threadable
 from twisted.python import failure
 
+from schooltool.model import Person, Group
+
 __metaclass__ = type
 
 
@@ -61,21 +63,19 @@ class FakePhoto:
     data = readFile('photo.jpg')
 
 
-class FakePerson:
+class FakePerson(Person):
 
     photo = FakePhoto()
-
-    def __init__(self, name):
-        self.name = name
 
 
 class FakeApplication(Persistent):
 
-    people = {'john': FakePerson('john'),
-              'smith': FakePerson('smith'),
-              'george': FakePerson('george')}
-
-    counter = 0
+    def __init__(self):
+        self.people = Group("people")
+        self.people.add(FakePerson('John'))
+        self.people.add(FakePerson('Steve'))
+        self.people.add(FakePerson('Mark'))
+        self.counter = 0
 
 
 #
@@ -153,13 +153,14 @@ def errorPage(request, code, reason):
 class View(resource.Resource):
     """View for a content component.
 
-    A View is a kind of a Resource in twisted.web sense, but it is really just
-    a view for the actual resource, which is a content component.
+    A View is a kind of a Resource in twisted.web sense, but it is
+    really just a view for the actual resource, which is a content
+    component.
 
-    Rendering and traversal happens in a separate worker thread.  It is
-    incorrect to call request.write or request.finish, or other non-thread-safe
-    methods.  You can read more in Twisted documentation section about
-    threading.
+    Rendering and traversal happens in a separate worker thread.  It
+    is incorrect to call request.write or request.finish, or other
+    non-thread-safe methods.  You can read more in Twisted
+    documentation section about threading.
 
     Subclasses could provide the following methods and attributes:
 
@@ -357,7 +358,7 @@ class RootView(View):
 
     def _traverse(self, name, request):
         if name == 'people':
-            return PeopleView(self.context)
+            return PeopleView(self.context.people)
         raise KeyError(name)
 
 
@@ -366,17 +367,8 @@ class PeopleView(View):
 
     template = Template('www/people.pt')
 
-    def listNames(self):
-        """Lists the names of all persons known to the system.
-
-        Names are sorted in alphabetical order.
-        """
-        people = self.context.people.items()
-        people.sort()
-        return [k for k, v in people]
-
     def _traverse(self, name, request):
-        person = self.context.people[name]
+        person = self.context[int(name)]
         return PersonView(person)
 
 

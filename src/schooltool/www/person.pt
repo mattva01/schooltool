@@ -4,7 +4,7 @@
 <h1 tal:content="context/name">Person Name</h1>
 <p>Information page for <span tal:replace="context/name">Person Name</span></p>
 <p>
-<img src="photo" tal:attributes="src string:/people/${context/name}/photo"
+<img src="photo" tal:attributes="src string:${request/path}/photo"
      alt="photo" />
 </p>
 </body>
