@@ -107,6 +107,13 @@ install-indep-stamp:
 		-name '*.xpm' -o -name '*.css' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(package)/usr/lib/$(package)/{} \;
+	cd Zope3/src && \
+	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
+	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
+	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
+		-name '*.xpm' -o -name '*.css' \) \
+	     -exec install -m 644 -D -p {} \
+		../../debian/$(package)/usr/lib/$(package)/{} \;
 	rm -f debian/$(package)/usr/lib/$(package)/trace.py
 	# executables
 	install -m 755 -D -p debian/$(package).py \
@@ -129,6 +136,13 @@ install-indep-stamp:
 		-name '*.xpm' -o -name '*.css' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(bellpackage)/usr/lib/$(package)/{} \;
+	cd Zope3/src && \
+	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
+	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
+	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
+		-name '*.xpm' -o -name '*.css' \) \
+	     -exec install -m 644 -D -p {} \
+		../../debian/$(bellpackage)/usr/lib/$(package)/{} \;
 	rm -f debian/$(bellpackage)/usr/lib/$(package)/trace.py
 	# executables
 	install -m 755 -D -p debian/$(bellpackage).py \
@@ -156,6 +170,13 @@ install-indep-stamp:
 	     $(clientfiles) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
+	cd Zope3/src && \
+	find \( -name 'tests' -o -name 'ftests' \) -prune -o \
+	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
+	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
+	     $(clientfiles) \
+	     -exec install -m 644 -D -p {} \
+		../../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
 	# executables
 	for p in schooltool-client import-sampleschool; do \
 	    install -m 755 -D -p debian/$$p.py \
@@ -188,6 +209,12 @@ install-arch-stamp: build
 		$(archdep)\
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkg)/usr/lib/$(package)/{} \;
+	cd Zope3/src && \
+	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
+		-name '*.so'  \
+		$(archdep)\
+	     -exec install -m 644 -D -p {} \
+		../../debian/$(libpkg)/usr/lib/$(package)/{} \;
 
 	# Make client library
 	# arch-dep files
@@ -198,6 +225,13 @@ install-arch-stamp: build
 	     $(clientfiles)	\
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
+	cd Zope3/src && \
+	find \( -name tests -o -name ftests \) -prune -o \
+	     -name '*.so' 	\
+	     $(archdep)		\
+	     $(clientfiles)	\
+	     -exec install -m 644 -D -p {} \
+		../../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
 
 	touch install-arch-stamp
 

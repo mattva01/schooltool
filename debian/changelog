@@ -29,6 +29,9 @@ schooltool (0.8+svn) unstable; urgency=low
   * Added chezh translation, patch thanks to Miroslav Kure.
   * Reduced the changes necessary to update packages to a new python version
     to one line. Thanks to a suggestion from Matthias Klose.
+  * Temporarily patch rules to install zope modules from the zope tree because
+    no zope3 package exists yet. Sigh! more lintian warnings, but it's
+    temporary and way too much effort to fix this.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
