@@ -1,0 +1,38 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title">Timetable setup</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" tal:content="view/title">Timetable setup</h1>
+<metal:block metal:fill-slot="content">
+
+  <form tal:attributes="action request/uri" class="plain" method="POST">
+
+  <tal:block repeat="day view/days">
+    <h2 tal:content="day/title">Day N</h2>
+
+    <table class="timetable_setup">
+      <tr tal:repeat="period day/periods">
+        <th tal:content="period/title">Period N</th>
+        <td tal:repeat="widget period/widgets">
+          <select tal:attributes="name widget/name">
+            <option tal:replace="structure widget/_options_html">
+              Options
+            </option>
+          </select>
+          <div tal:replace="structure widget/_error_html">Error</div>
+        </td>
+      </tr>
+    </table>
+  </tal:block>
+
+  <div class="buttons">
+    <input class="button" type="submit" name="SAVE" value="Save"
+           i18n:attributes="value" />
+  </div>
+
+  </form>
+
+</metal:block>
+</body>
+</html>

@@ -25,6 +25,7 @@ $Id$
 import re
 import sets
 import datetime
+import itertools
 
 from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
@@ -34,11 +35,14 @@ from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.widgets import TextWidget, dateParser, intParser
+from schooltool.browser.widgets import SelectionWidget
 from schooltool.browser.cal import next_month, week_start
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ISchooldayModel
+from schooltool.interfaces import IApplicationObject
+from schooltool.interfaces import IPerson
 from schooltool.translation import ugettext as _
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import SchooldayTemplate
@@ -49,6 +53,9 @@ from schooltool.common import to_unicode
 from schooltool.common import parse_date
 from schooltool.component import getTimetableModel
 from schooltool.component import getPath, traverse
+from schooltool.component import getTimetableSchemaService
+from schooltool.membership import Membership, memberOf
+from schooltool.uris import URIGroup
 from schooltool.rest import absoluteURL
 
 __metaclass__ = type
@@ -143,6 +150,237 @@ class TimetableView(View, AppObjectBreadcrumbsMixin):
                         yield self.context.exceptions[idx - 1]
                 except (ValueError, IndexError):
                     pass # Ignore hacking attempts and obsolete forms
+
+    def _traverse(self, name, request):
+        timetabled = self.context.__parent__.__parent__
+        if name == 'setup.html' and IPerson.providedBy(timetabled):
+            return TimetableSetupView(timetabled, self.key)
+        else:
+            raise KeyError(name)
+
+
+class TimetableSetupView(View, AppObjectBreadcrumbsMixin):
+    """Timetable set up view.
+
+    Shows a web form with a drop-down box for every timetable period.
+    Each drop-down box contains a list of groups that have activities
+    during that time period.  If the person belongs to any of those groups,
+    then they are selected in the appropriate drop-down boxes.  When
+    the form is submitted, the person is added to and removed from groups
+    according to the choices made in this form.
+
+    Can be accessed at /persons/$id/timetables/$period/$schema/setup.html
+    """
+
+    __used_for__ = IApplicationObject
+
+    authorization = ManagerAccess
+
+    template = Template("www/timetable-setup.pt")
+
+    def __init__(self, context, key):
+        """Create the view.
+
+        `context` is an application object (normally IPerson).
+
+        `key` is a tuple (period_id, schema_id) identifying a timetable.
+        """
+        View.__init__(self, context)
+        self.key = key
+
+    def breadcrumbs(self):
+        breadcrumbs = AppObjectBreadcrumbsMixin.breadcrumbs(self,
+                                                    context=self.context)
+        breadcrumbs.append((_('Timetable for %s, %s') % self.key,
+                            self.request.uri))
+        return breadcrumbs
+
+    def title(self):
+        """Return the title of the page."""
+        return _("%s's timetable setup (%s)") % (self.context.title,
+                                                 ", ".join(self.key))
+
+    def schema(self):
+        """Return the timetable schema for self.key."""
+        period_id, schema_id = self.key
+        return getTimetableSchemaService(self.context)[schema_id]
+
+    def groupMap(self):
+        """Compute a mapping timetable periods to groups that have activities.
+
+        Returns a dict {(day_id, period_id): [group]}.  The list for each
+        period contains all groups in the system that have activities in the
+        (non-composite) timetable during that timetable period.
+        """
+        schema = self.schema()
+        group_map = {}
+        for day_id, day in schema.items():
+            for period_id in day.periods:
+                group_map[day_id, period_id] = sets.Set()
+        for group in traverse(self.context, '/groups').itervalues():
+            timetable = group.timetables.get(self.key)
+            if timetable:
+                for day_id, period_id, activity in timetable.itercontent():
+                    group_map[day_id, period_id].add(group)
+        return group_map
+
+    def allGroups(self, group_map):
+        """Return a set of all groups that can be selected."""
+        groups = sets.Set()
+        for groupset in group_map.itervalues():
+            groups.update(groupset)
+        return groups
+
+    def createForm(self, group_map):
+        """Return a list of timetable days containing form widgets.
+
+        Returns a list of dicts with the following keys:
+
+            'title' -- timetable day name
+            'periods' -- a list of periods in this day
+
+        Each period in a day is represented by a dict with the following keys:
+
+            'title' -- period name
+            'widgets' -- a list of drop-down widgets
+
+        Each drop-down box lists all groups that have activities during this
+        timetable period, and also "None" as an additional choice.  There is
+        at least one widget for every period.  More than one widget appear
+        only when there are scheduling conflicts.
+
+        """
+        idx = itertools.count(1)
+        all_widgets = []
+
+        def days(schema):
+            for day_id, day in schema.items():
+                yield {'title': day_id,
+                       'periods': list(periods(day_id, day))}
+
+        def periods(day_id, day):
+            for period_id in day.periods:
+                choices = [(group.title, group)
+                           for group in group_map[day_id, period_id]]
+                choices.sort()
+                choices = [(value, title) for title, value in choices]
+                selected = [group for group, title in choices
+                            if memberOf(self.context, group)]
+                if not selected:
+                    selected = [None]
+                widgets = []
+                for value in selected:
+                    widget = SelectionWidget('g%d' % idx.next(), '',
+                                             [(None, _('None'))] + choices,
+                                             value=value,
+                                             parser=self.groupParser,
+                                             formatter=self.groupFormatter)
+                    widgets.append(widget)
+                    all_widgets.append(widget)
+                yield {'title': period_id,
+                       'widgets': widgets}
+
+        return list(days(self.schema())), all_widgets
+
+    def groupParser(self, raw_value):
+        """Convert a group name from the HTML form to a group object."""
+        if raw_value:
+            try:
+                group = traverse(self.context, '/groups/%s' % raw_value)
+            except KeyError:
+                pass
+            else:
+                if group in self.all_groups:
+                    return group
+        return None
+
+    def groupFormatter(self, value):
+        """Convert a group object to a group name for the HTML form."""
+        if value is None:
+            return ''
+        else:
+            return value.__name__
+
+    def getSelectedGroups(self):
+        """Return a set of groups that are selected in all the widgets.
+
+        If you call this method before calling widget.update(request) for
+        all the widgets, you will get the old set of groups -- i.e. those
+        groups that self.context is a member of.
+
+        If you call this method after calling widget.update(request) for
+        all the widgets, you will get the new set of groups -- i.e. those
+        groups that the user indicated that self.context should be a member of.
+        """
+        groups = sets.Set()
+        for widget in self.widgets:
+            if widget.value is not None:
+                groups.add(widget.value)
+        return groups
+
+    def do_GET(self, request):
+        """Process the request.
+
+        Sets the following attributes on self:
+
+            `all_groups` -- a set of all groups that can be selected in widgets
+            (used for validation in `groupParser`).
+
+            `days` -- structural representation of the form for the page
+            template.
+
+            `widgets` -- a list of all form widgets.
+
+        If 'SAVE' is present in the request arguments, the view adds and
+        removes self.context to/from groups as indicated in the form.
+        """
+        group_map = self.groupMap()
+        self.all_groups = self.allGroups(group_map)
+        self.days, self.widgets = self.createForm(group_map)
+        old_groups = self.getSelectedGroups()
+        errors = False
+        for widget in self.widgets:
+            widget.update(request)
+            if widget.error:
+                errors = True
+        if 'SAVE' in request.args and not errors:
+            new_groups = self.getSelectedGroups()
+            for group in old_groups - new_groups:
+                self._removeFromGroup(group)
+            for group in new_groups - old_groups:
+                self._addToGroup(group)
+            self.days, self.widgets = self.createForm(group_map)
+        return View.do_GET(self, request)
+
+    def _addToGroup(self, group):
+        """Add self.context to `group`.
+
+        No exception is raised if self.context is already a member of `group`.
+        """
+        try:
+            Membership(group=group, member=self.context)
+        except ValueError:
+            pass
+        else:
+            request = self.request
+            request.appLog(_("Relationship '%s' between %s and %s created")
+                           % (_('Membership'), getPath(self.context),
+                              getPath(group)))
+
+    def _removeFromGroup(self, group):
+        """Remove self.context from `group`.
+
+        No exception is raised if self.context is not a member of `group`.
+        """
+        for link in self.context.listLinks(URIGroup):
+            if link.traverse() is group:
+                link.unlink()
+                request = self.request
+                request.appLog(_("Relationship '%s' between %s and %s"
+                                 " removed")
+                               % (_('Membership'), getPath(self.context),
+                                  getPath(group)))
+                break
 
 
 class TimetableSchemaView(TimetableView):
@@ -928,3 +1166,4 @@ def format_time_range(start, duration):
         return '00:00-24:00' # special case
     else:
         return '%s-%s' % (start.strftime('%H:%M'), ends)
+

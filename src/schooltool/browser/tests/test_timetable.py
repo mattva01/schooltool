@@ -24,11 +24,13 @@ $Id$
 
 import unittest
 import datetime
+import sets
 from logging import INFO
 
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import TraversalTestMixin
+from schooltool.browser.tests import HTMLDocument
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.tests.utils import NiceDiffsMixin, AppSetupMixin
 from schooltool.tests.helpers import sorted
@@ -133,18 +135,20 @@ class TestTimetableTraverseView(AppSetupMixin, TraversalTestMixin,
         self.assertEquals(v4.key, ('2003-fall', 'default'))
 
 
-class TestTimetableView(AppSetupMixin, unittest.TestCase):
+class TestTimetableView(AppSetupMixin, TraversalTestMixin, unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
+        self.person.title = 'John Smith'
 
-    def createView(self):
+    def createView(self, context=None):
         from schooltool.timetable import Timetable
         from schooltool.browser.timetable import TimetableView
         key = ('2004-fall', 'default')
-        self.person.timetables[key] = Timetable([])
-        self.person.title = 'John Smith'
-        return TimetableView(self.person.timetables[key], key)
+        if context is None:
+            context = self.person
+        context.timetables[key] = Timetable([])
+        return TimetableView(context.timetables[key], key)
 
     def createTimetableExceptions(self):
         from schooltool.timetable import TimetableActivity
@@ -192,6 +196,275 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         self.assertEquals(view.title(),
                           "John Smith's timetable for 2004-fall, default")
+
+    def test_traverse(self):
+        from schooltool.browser.timetable import TimetableSetupView
+        view = self.createView()
+        view2 = self.assertTraverses(view, 'setup.html', TimetableSetupView,
+                                self.person)
+        self.assertEquals(view2.key, view.key)
+        request = RequestStub()
+        self.assertRaises(KeyError, view._traverse, 'anything else', request)
+
+    def test_traverse_not_a_person(self):
+        from schooltool.browser.timetable import TimetableSetupView
+        view = self.createView(context=self.resource)
+        request = RequestStub()
+        self.assertRaises(KeyError, view._traverse, 'setup.html', request)
+
+
+class TestTimetableSetupView(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.membership import Membership
+        self.setUpSampleApp()
+        Group =  self.app['groups'].new
+        self.group1 = Group('group1', title='Group 1')
+        self.group2 = Group('group2', title='Group 2')
+        self.group3 = Group('group3', title='Group 3')
+        self.group4 = Group('group4', title='Group 4')
+        Membership(group=self.group1, member=self.person)
+        Membership(group=self.group3, member=self.person)
+
+        schema = self.createEmptyTimetable()
+        self.app.timetableSchemaService['default'] = schema
+        self.key = ('2004-fall', 'default')
+
+    def createEmptyTimetable(self):
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        tt = Timetable(['Day 1', 'Day 2'])
+        tt['Day 1'] = TimetableDay(['P1', 'P2'])
+        tt['Day 2'] = TimetableDay(['P1', 'P2'])
+        return tt
+
+    def setUpGroupTimetables(self):
+        from schooltool.timetable import TimetableActivity
+        tt = self.createEmptyTimetable()
+        tt['Day 1'].add('P1', TimetableActivity('Group1', self.group1))
+        self.group1.timetables[self.key] = tt
+
+        tt = self.createEmptyTimetable()
+        tt['Day 1'].add('P2', TimetableActivity('Group2', self.group2))
+        tt['Day 2'].add('P2', TimetableActivity('Group2', self.group2))
+        self.group2.timetables[self.key] = tt
+
+        tt = self.createEmptyTimetable()
+        tt['Day 1'].add('P1', TimetableActivity('Group3', self.group3))
+        tt['Day 1'].add('P1', TimetableActivity('Something else', None))
+        self.group3.timetables[self.key] = tt
+
+    def createView(self):
+        from schooltool.browser.timetable import TimetableSetupView
+        return TimetableSetupView(self.person, self.key)
+
+    def test_get(self):
+        self.setUpGroupTimetables()
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+
+        doc = HTMLDocument(result)
+        paths = [node.content for node in doc.query(
+                        '//form//select//option[@selected]/@value')]
+        self.assertEquals(sets.Set(paths), sets.Set(['', 'group1', 'group3']))
+
+    def test_put(self):
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIGroup
+        self.setUpGroupTimetables()
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'g1': '',
+                                    'g2': 'group3',
+                                    'g3': 'group2',
+                                    'g4': '',
+                                    'g5': '',
+                                    'SAVE': 'Save'})
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        groups = getRelatedObjects(self.person, URIGroup)
+        self.assert_(self.group1 not in groups)
+        self.assert_(self.group2 in groups)
+        self.assert_(self.group3 in groups)
+
+        doc = HTMLDocument(result)
+        paths = [node.content for node in doc.query(
+                        '//form//select//option[@selected]/@value')]
+        self.assertEquals(sets.Set(paths), sets.Set(['', 'group2', 'group3']))
+        self.assertEquals(len(paths), 4, "the form was not recreated")
+
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            "Relationship 'Membership' between"
+                            " /persons/johndoe and /groups/group1 removed",
+                            INFO),
+                           (self.manager,
+                            "Relationship 'Membership' between"
+                            " /persons/johndoe and /groups/group2 created",
+                            INFO)])
+
+    def test_groupMap_empty(self):
+        view = self.createView()
+        result = view.groupMap()
+        Set = sets.Set
+        self.assertEquals(result,
+                          {('Day 1', 'P1'): Set(),
+                           ('Day 1', 'P2'): Set(),
+                           ('Day 2', 'P1'): Set(),
+                           ('Day 2', 'P2'): Set()})
+
+    def test_groupMap_non_empty(self):
+        self.setUpGroupTimetables()
+        view = self.createView()
+        result = view.groupMap()
+        Set = sets.Set
+        self.assertEquals(result,
+                          {('Day 1', 'P1'): Set([self.group1, self.group3]),
+                           ('Day 1', 'P2'): Set([self.group2]),
+                           ('Day 2', 'P1'): Set(),
+                           ('Day 2', 'P2'): Set([self.group2])})
+
+    def test_createForm(self):
+        from schooltool.browser.widgets import SelectionWidget
+        self.setUpGroupTimetables()
+        view = self.createView()
+        days, widgets = view.createForm(view.groupMap())
+
+        self.assertEquals(len(days), 2) # there are two days
+        self.assertEquals(days[0]['title'], 'Day 1')
+        self.assertEquals(len(days[0]['periods']), 2)
+
+        self.assertEquals(days[0]['periods'][0]['title'], 'P1')
+        self.assertEquals(len(days[0]['periods'][0]['widgets']), 2)
+        w = days[0]['periods'][0]['widgets'][0]
+        self.assert_(isinstance(w, SelectionWidget))
+        self.assert_(w is widgets[0])
+        self.assertEquals(w.name, 'g1')
+        self.assertEquals(w.choices, [(None, 'None'),
+                                      (self.group1, 'Group 1'),
+                                      (self.group3, 'Group 3')])
+        self.assertEquals(w.value, self.group1)
+        w = days[0]['periods'][0]['widgets'][1]
+        self.assert_(isinstance(w, SelectionWidget))
+        self.assert_(w is widgets[1])
+        self.assertEquals(w.name, 'g2')
+        self.assertEquals(w.choices, [(None, 'None'),
+                                      (self.group1, 'Group 1'),
+                                      (self.group3, 'Group 3')])
+        self.assertEquals(w.value, self.group3)
+
+        self.assertEquals(days[0]['periods'][1]['title'], 'P2')
+        self.assertEquals(len(days[0]['periods'][1]['widgets']), 1)
+        w = days[0]['periods'][1]['widgets'][0]
+        self.assert_(isinstance(w, SelectionWidget))
+        self.assert_(w is widgets[2])
+        self.assertEquals(w.name, 'g3')
+        self.assertEquals(w.choices, [(None, 'None'),
+                                      (self.group2, 'Group 2')])
+        self.assertEquals(w.value, None)
+
+        self.assertEquals(days[1]['title'], 'Day 2')
+        self.assertEquals(len(days[1]['periods']), 2)
+
+        self.assertEquals(days[1]['periods'][0]['title'], 'P1')
+        self.assertEquals(len(days[1]['periods'][0]['widgets']), 1)
+        w = days[1]['periods'][0]['widgets'][0]
+        self.assert_(isinstance(w, SelectionWidget))
+        self.assert_(w is widgets[3])
+        self.assertEquals(w.name, 'g4')
+        self.assertEquals(w.choices, [(None, 'None')])
+        self.assertEquals(w.value, None)
+
+        self.assertEquals(days[1]['periods'][1]['title'], 'P2')
+        self.assertEquals(len(days[1]['periods'][1]['widgets']), 1)
+        w = days[1]['periods'][1]['widgets'][0]
+        self.assert_(isinstance(w, SelectionWidget))
+        self.assert_(w is widgets[4])
+        self.assertEquals(w.name, 'g5')
+        self.assertEquals(w.choices, [(None, 'None'),
+                                      (self.group2, 'Group 2')])
+        self.assertEquals(w.value, None)
+
+        self.assertEquals(len(widgets), 5)
+
+    def test_breadcrumbs(self):
+        view = self.createView()
+        view.request = RequestStub('/persons/johndoe/timetables/'
+                                   '2004-fall/default/setup.html')
+        breadcrumbs = view.breadcrumbs()
+        self.assertEquals(breadcrumbs,
+                          [('Start', 'http://localhost:7001/start'),
+                           ('Persons', 'http://localhost:7001/persons'),
+                           ('John Doe',
+                            'http://localhost:7001/persons/johndoe'),
+                           ('Timetable for 2004-fall, default',
+                            view.request.uri)])
+
+    def test_groupParser(self):
+        self.setUpGroupTimetables()
+        view = self.createView()
+        view.all_groups = view.allGroups(view.groupMap())
+        self.assertEquals(view.groupParser(None), None)
+        self.assertEquals(view.groupParser(''), None)
+        self.assertEquals(view.groupParser('group1'), self.group1)
+        self.assertEquals(view.groupParser('nosuchgroup'), None)
+        self.assertEquals(view.groupParser('..'), None)
+        self.assertEquals(view.groupParser('root'), None)
+
+    def test_groupFormatter(self):
+        view = self.createView()
+        self.assertEquals(view.groupFormatter(None), '')
+        self.assertEquals(view.groupFormatter(self.group2), 'group2')
+
+    def test_getSelectedGroups(self):
+        self.setUpGroupTimetables()
+        view = self.createView()
+        view.days, view.widgets = view.createForm(view.groupMap())
+        groups = view.getSelectedGroups()
+        self.assertEquals(groups, sets.Set([self.group1, self.group3]))
+
+    def test_addToGroup(self):
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIGroup
+        view = self.createView()
+        view.request = RequestStub()
+        view._addToGroup(self.group2)
+        self.assert_(self.group2 in getRelatedObjects(self.person, URIGroup))
+        self.assertEquals(view.request.applog,
+                          [(None,
+                            "Relationship 'Membership' between"
+                            " /persons/johndoe and /groups/group2 created",
+                            INFO)])
+
+    def test_addToGroup_when_in_group(self):
+        view = self.createView()
+        view.request = RequestStub()
+        # self.person is already a member of self.group1
+        view._addToGroup(self.group1) # no exception
+        self.assertEquals(view.request.applog, [])
+
+    def test_removeFromGroup(self):
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIGroup
+        view = self.createView()
+        view.request = RequestStub()
+        view._removeFromGroup(self.group3)
+        self.assert_(self.group3 not in getRelatedObjects(self.person,
+                                                          URIGroup))
+        self.assertEquals(view.request.applog,
+                          [(None,
+                            "Relationship 'Membership' between"
+                            " /persons/johndoe and /groups/group3 removed",
+                            INFO)])
+
+    def test_removeFromGroup_when_not_in_group(self):
+        view = self.createView()
+        view.request = RequestStub()
+        # self.person is not a member of self.group2
+        view._removeFromGroup(self.group2) # no exception
+        self.assertEquals(view.request.applog, [])
 
 
 class TestTimetableSchemaView(AppSetupMixin, unittest.TestCase):
@@ -564,8 +837,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
         self.assertEquals(times[4]['times'], ['10:30-11:10'] + [None] * 6) # F
 
 
-class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
-                                     TraversalTestMixin):
+class TestTimetableSchemaServiceView(AppSetupMixin, TraversalTestMixin,
+                                     unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
@@ -1116,6 +1389,7 @@ def test_suite():
     suite.addTest(DocTestSuite('schooltool.browser.timetable'))
     suite.addTest(unittest.makeSuite(TestTimetableTraverseView))
     suite.addTest(unittest.makeSuite(TestTimetableView))
+    suite.addTest(unittest.makeSuite(TestTimetableSetupView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
