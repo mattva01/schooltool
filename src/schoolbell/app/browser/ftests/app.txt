@@ -149,7 +149,7 @@ We can click on it and get a form:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-         <form class="standalone" method="POST"
+         <form class="standalone" method="post"
                enctype="multipart/form-data"
                action="http://localhost/frogpond/persons/add.html">
     ...<input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  />...
