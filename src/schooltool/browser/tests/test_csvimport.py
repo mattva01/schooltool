@@ -549,6 +549,37 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         check(["Biology Nut", "", "Chemistry Nerd"],
               [("Biology", "Nut"), None, ("Chemistry", "Nerd")])
 
+    def assertIsMember(self, name, group, expected=True):
+        from schooltool.uris import URIMember
+        from schooltool.component import getRelatedObjects
+        person = self.app['persons'][name]
+        members = getRelatedObjects(group, URIMember)
+        self.assertEquals(person in members, expected,
+                          "%r %sin %r" % (person, expected and "not " or "",
+                                          members))
+
+    def test_importRoster(self):
+        g1 = self.app['groups'].new(title="Math1 - Lorch")
+        g2 = self.app['groups'].new(title="Math2 - Guzman")
+        roster = dedent("""
+            Math1 - Lorch
+            Guzman
+            Curtin
+
+            Math2 - Guzman
+            Lorch
+            Curtin
+            """)
+        imp = self.createImporter()
+        imp.importRoster(roster)
+
+        self.assertIsMember('lorch', g1, False)
+        self.assertIsMember('guzman', g1)
+        self.assertIsMember('curtin', g1)
+        self.assertIsMember('lorch', g2)
+        self.assertIsMember('guzman', g2, False)
+        self.assertIsMember('curtin', g2)
+
 
 def test_suite():
     suite = unittest.TestSuite()

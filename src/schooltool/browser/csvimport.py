@@ -29,13 +29,14 @@ from schooltool.browser import View, Template, ToplevelBreadcrumbsMixin
 from schooltool.browser.auth import ManagerAccess
 from schooltool.csvimport import CSVImporterBase, DataError
 from schooltool.common import parse_date
-from schooltool.component import FacetManager, getFacetFactory
+from schooltool.component import FacetManager, getFacetFactory, relate
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
 from schooltool.teaching import Teaching
 from schooltool.timetable import TimetableActivity
 from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
+from schooltool.uris import URIMembership, URIMember, URIGroup
 
 __metaclass__ = type
 
@@ -313,6 +314,7 @@ class TimetableCSVImporter:
 
     Two externally useful methods are importTimetable and importRoster.
     """
+    # Perhaps this class should be moved to schooltool.csvimport
 
     def __init__(self, app):
         self.app = app
@@ -430,4 +432,14 @@ class TimetableCSVImporter:
 
     def importRoster(self, roster_txt):
         """Import timetables from provided unicode data."""
-        pass # TODO
+        group = None
+        for line in roster_txt.splitlines():
+            if group is None:
+                group = self.findByTitle(self.groups, line)
+                continue
+            elif not line:
+                group = None
+                continue
+            else:
+                person = self.findByTitle(self.persons, line)
+                relate(URIMembership, (person, URIMember), (group, URIGroup))
