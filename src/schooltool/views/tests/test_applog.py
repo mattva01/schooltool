@@ -54,7 +54,7 @@ class TestApplicationLogView(unittest.TestCase):
 
     def testFilter(self):
         self.view.openLog = lambda f: StringIO("cut\nfit\ndog\nbit\nkite")
-        self.request.args.update({'filter': 'i'})
+        self.request.args.update({'filter': ['i']})
 
         result = self.view.render(self.request)
 
@@ -64,7 +64,8 @@ class TestApplicationLogView(unittest.TestCase):
 
     def testLastPage(self):
         self.view.openLog = lambda f: StringIO("cut\nfit\ndog\nbit\nkite\n")
-        self.request.args.update({'filter': '', 'pagesize': "2", 'page': "-1"})
+        self.request.args.update({'filter': [''],
+                                  'pagesize': ["2"], 'page': ["-1"]})
 
         result = self.view.render(self.request)
 
