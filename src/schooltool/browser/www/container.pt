@@ -8,18 +8,18 @@
 
 <metal:block metal:fill-slot="content">
 
+  <p tal:condition="view/isManager">
+    <a class="action"
+       tal:attributes="href string:${context/@@absolute_url}/add.html"
+       tal:content="view/add_title">Add new</a>
+  </p>
+
   <ul>
     <li tal:repeat="obj view/sortedObjects">
       <a tal:content="obj/title"
          tal:attributes="href obj/@@absolute_url">Some Object</a>
     </li>
   </ul>
-
-  <p tal:condition="view/isManager">
-    <a class="action"
-       tal:attributes="href string:${context/@@absolute_url}/add.html"
-       tal:content="view/add_title">Add new</a>
-  </p>
 
 </metal:block>
 </body>
