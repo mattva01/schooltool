@@ -377,13 +377,16 @@ def main(argv):
     # Figure out terminal size
     try:
         import curses
-        curses.setupterm()
-    except (ImportError, curses.error):
+    except ImportError:
         pass
     else:
-        cols = curses.tigetnum('cols')
-        if cols > 0:
-            cfg.screen_width = cols
+        try:
+            curses.setupterm()
+            cols = curses.tigetnum('cols')
+            if cols > 0:
+                cfg.screen_width = cols
+        except curses.error:
+            pass
 
     # Option processing
     opts, args = getopt.getopt(argv[1:], 'hvpufw',

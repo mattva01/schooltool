@@ -73,15 +73,19 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         else:
             try:
                 import curses
-                curses.setupterm()
-            except (ImportError, curses.error):
+                curses.error
+            except (ImportError, AttributeError):
                 pass
             else:
-                bold = curses.tigetstr('bold')
-                normal = curses.tigetstr('sgr0')
-                if bold:
-                    self.prompt = ("\001%s\002SchoolTool>\001%s\002 "
-                                   % (bold, normal))
+                try:
+                    curses.setupterm()
+                    bold = curses.tigetstr('bold')
+                    normal = curses.tigetstr('sgr0')
+                    if bold:
+                        self.prompt = ("\001%s\002SchoolTool>\001%s\002 "
+                                       % (bold, normal))
+                except curses.error:
+                    pass
 
     def emit(self, *args):
         """Output the arguments.  A hook for tests"""
