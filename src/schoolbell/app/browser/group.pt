@@ -25,26 +25,7 @@
     </div>
   </div>
 
-  <div class="parentgroups" tal:define="supergroups view/getParentGroups">
-    <h3 i18n:translate="">Super-groups XXX NOT IMPLEMENTED</h3>
-    <p tal:repeat="parent supergroups">
-     <a tal:attributes="href parent/@@absolute_url"
-        tal:content="parent/title"/>
-    </p>
-    <p tal:condition="not:supergroups" i18n:translate="">
-      This group has no super-groups.
-    </p>
-  </div>
-
   <div class="members">
-    <div tal:define="subgroups view/getSubGroups">
-      <h3 i18n:translate="">Sub-groups XXX NOT IMPLEMENTED</h3>
-      <p tal:repeat="sub subgroups">
-       <a tal:attributes="href sub/@@absolute_url" tal:content="sub/title"/>
-      </p>
-      <p tal:condition="not:subgroups" i18n:translate="">
-      This group has no sub-groups.</p>
-    </div>
     <div class="actions"  tal:condition="view/canEdit">
       <a class="action"
      tal:attributes="href string:${context/@@absolute_url}/edit_subgroups.html"
