@@ -92,6 +92,9 @@ backwards-compatibility:
   make runclient            starts the command line client
   make runwxclient          starts the wxWindows GUI client
 
+These commands are superseded by executable Python scripts in the top-level
+directory.
+
 
 Project structure
 -----------------
@@ -152,13 +155,17 @@ configuration file (hint: make runtestserver) and then do
 
   python2.3 test.py -fpv
 
-Note that unlike unit tests, functional tests do not run in isolation, and
-therefore you need to stop and restart the SchoolTool server if you want to
-run them again.
-
 The test runner has more options and features.  To find out about them, do
 
   python2.3 test.py -h
+
+Functional tests are are not completely isolated.  Some functional tests
+create named database state snapshots, while other tests reuse those snapshots
+of known database state.  The test runner does not know which tests create
+which snapshots, so if you want to run just one (or a couple) of functional
+tests in isolation, it is likely that you will have first run the full suite
+to create the necessary snapshots.  Do not restart the test server, or all
+saved snapshots will be gone.
 
 
 Translation
