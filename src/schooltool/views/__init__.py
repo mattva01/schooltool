@@ -250,10 +250,12 @@ def setUp():
     import schooltool.views.utility
     import schooltool.views.eventlog
     import schooltool.views.timetable
+    import schooltool.views.cal
     schooltool.views.app.setUp()
     schooltool.views.model.setUp()
     schooltool.views.facet.setUp()
     schooltool.views.utility.setUp()
     schooltool.views.eventlog.setUp()
     schooltool.views.timetable.setUp()
+    schooltool.views.cal.setUp()
 

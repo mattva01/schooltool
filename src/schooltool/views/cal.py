@@ -26,9 +26,12 @@ import datetime
 import operator
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.views import View, textErrorPage
 from schooltool.cal import ICalReader, ICalParseError
+from schooltool.cal import ical_text, ical_duration
 from schooltool.component import getPath
+from schooltool.component import registerView
 
 __metaclass__ = type
 
@@ -42,7 +45,6 @@ class SchooldayModelCalendarView(View):
     datetime_hook = datetime.datetime
 
     def do_GET(self, request):
-        request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
         end_date = self.context.last
         uid_suffix = "%s@%s" % (getPath(self.context),
                                 request.getRequestHostname())
@@ -71,6 +73,7 @@ class SchooldayModelCalendarView(View):
                     "END:VEVENT",
                 ]
         result.append("END:VCALENDAR")
+        request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
         return "\r\n".join(result)
 
     def do_PUT(self, request):
@@ -129,7 +132,38 @@ class SchooldayModelCalendarView(View):
         return "Calendar imported"
 
 
+class CalendarView(View):
+    """iCalendar view for ICalendar."""
+
+    datetime_hook = datetime.datetime
+
+    def do_GET(self, request):
+        dtstamp = self.datetime_hook.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        uid_suffix = "%s@%s" % (getPath(self.context),
+                                request.getRequestHostname())
+        result = [
+            "BEGIN:VCALENDAR",
+            "PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN",
+            "VERSION:2.0",
+        ]
+        for event in self.context:
+            uid_hash = hash((event.title, event.dtstart, event.duration))
+            result += [
+                "BEGIN:VEVENT",
+                "UID:%d-%s" % (uid_hash, uid_suffix),
+                "SUMMARY:%s" % ical_text(event.title),
+                "DTSTART:%s" % event.dtstart.strftime('%Y%m%dT%H%M%S'),
+                "DURATION:%s" % ical_duration(event.duration),
+                "DTSTAMP:%s" % dtstamp,
+                "END:VEVENT",
+            ]
+        result.append("END:VCALENDAR")
+        request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
+        return "\r\n".join(result)
+
+
 def setUp():
     """See IModuleSetup."""
     registerView(ISchooldayModel, SchooldayModelCalendarView)
+    registerView(ICalendar, CalendarView)
 

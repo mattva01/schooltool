@@ -24,7 +24,9 @@ $Id$
 
 import unittest
 import datetime
+from zope.interface import implements
 from schooltool.views.tests import RequestStub, setPath
+from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.helpers import dedent, diff
 
 __metaclass__ = type
@@ -36,7 +38,38 @@ class DatetimeStub:
         return datetime.datetime(2004, 1, 2, 3, 4, 5)
 
 
-class TestSchooldayModelCalendarView(unittest.TestCase):
+def reorder_vcal(body):
+    """Sort all VEVENTs in body."""
+    begin, end = "BEGIN:VEVENT", "END:VEVENT"
+    marker = "%s\r\n%s" % (end, begin)
+    first_idx = body.find(begin)
+    if first_idx == -1:
+        return body
+    else:
+        first_idx += len(begin)
+    last_idx = body.rindex(end)
+    head = body[:first_idx]
+    events = body[first_idx:last_idx].split(marker)
+    tail = body[last_idx:]
+    events.sort()
+    return head + marker.join(events) + tail
+
+
+class CalendarTestBase(unittest.TestCase):
+
+    def do_test_get(self, expected, uri='http://localhost/calendar'):
+        """Bind self.view to a view before calling this."""
+        request = RequestStub(uri)
+        result = self.view.render(request)
+        expected = "\r\n".join(expected.splitlines()) # normalize line endings
+        result = reorder_vcal(result)
+        expected = reorder_vcal(expected)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/calendar; charset=UTF-8")
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+
+class TestSchooldayModelCalendarView(CalendarTestBase):
 
     def setUp(self):
         from schooltool.cal import SchooldayModel
@@ -47,16 +80,8 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         self.view = SchooldayModelCalendarView(self.sm)
         self.view.datetime_hook = DatetimeStub()
 
-    def do_test(self, expected):
-        request = RequestStub("http://localhost/calendar")
-        result = self.view.render(request)
-        expected = "\r\n".join(expected.splitlines()) # normalize line endings
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/calendar; charset=UTF-8")
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
-
     def test_get_empty(self):
-        self.do_test(dedent("""
+        self.do_test_get(dedent("""
             BEGIN:VCALENDAR
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
@@ -95,7 +120,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
                     DTSTAMP:20040102T030405Z
                     END:VEVENT
                 """ % (s, s))
-        self.do_test(expected + "END:VCALENDAR")
+        self.do_test_get(expected + "END:VCALENDAR")
 
     def test_put(self):
         calendar = dedent("""
@@ -275,9 +300,83 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
                      errmsg="Schoolday outside school period")
 
 
+class TestCalendarView(CalendarTestBase):
+
+    def _create(self):
+        from schooltool.views.cal import CalendarView
+        from schooltool.cal import Calendar
+        context = Calendar(datetime.date(2003, 9, 1),
+                           datetime.date(2003, 9, 30))
+        setPath(context, '/calendar')
+        self.view = CalendarView(context)
+        self.view.datetime_hook = DatetimeStub()
+        return context
+
+    def test_get_empty(self):
+        self._create()
+        self.do_test_get(dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            END:VCALENDAR
+        """))
+
+    def test_get_empty(self):
+        from schooltool.cal import CalendarEvent
+        cal = self._create()
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                                   datetime.timedelta(minutes=20),
+                                   "Quick Lunch"))
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
+                                   datetime.timedelta(minutes=60),
+                                   "Long\nLunch"))
+        self.do_test_get(dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:1668453774-/calendar@localhost
+            SUMMARY:Quick Lunch
+            DTSTART:20030902T154000
+            DURATION:PT20M
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:-1822792810-/calendar@localhost
+            SUMMARY:Long\\nLunch
+            DTSTART:20030903T120000
+            DURATION:PT1H
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """))
+
+
+class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
+
+    def test(self):
+        from schooltool.interfaces import ISchooldayModel, ICalendar
+        from schooltool.views.cal import SchooldayModelCalendarView
+        from schooltool.views.cal import CalendarView
+        from schooltool.component import getView
+        import schooltool.views.cal
+        schooltool.views.cal.setUp()
+
+        def viewClass(iface):
+            class FakeClass:
+                implements(iface)
+            obj = FakeClass()
+            return getView(obj).__class__
+
+        self.assert_(viewClass(ISchooldayModel) is SchooldayModelCalendarView)
+        self.assert_(viewClass(ICalendar) is CalendarView)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
+    suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestModuleSetup))
     return suite
 
 if __name__ == '__main__':

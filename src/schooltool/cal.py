@@ -120,6 +120,24 @@ class ICalParseError(Exception):
     """Invalid syntax in an iCalendar file."""
 
 
+def ical_text(value):
+    r"""Format value according to iCalendar TEXT escaping rules.
+
+    >>> ical_text('Foo')
+    'Foo'
+    >>> ical_text('\\')
+    '\\\\'
+    >>> ical_text(';')
+    '\\;'
+    >>> ical_text(',')
+    '\\,'
+    >>> ical_text('\n')
+    '\\n'
+    """
+    return (value.replace('\\', '\\\\').replace(';', '\\;').replace(',', '\\,')
+                 .replace('\n', '\\n'))
+
+
 def parse_duration(value):
     """Parse iCalendar DURATION value.  Returns a timedelta instance.
 
@@ -137,6 +155,10 @@ def parse_duration(value):
     datetime.timedelta(0, 7200)
     >>> parse_duration('PT2H3M4S')
     datetime.timedelta(0, 7384)
+    >>> parse_duration('PT3M4S')
+    datetime.timedelta(0, 184)
+    >>> parse_duration('PT22S')
+    datetime.timedelta(0, 22)
     >>> parse_duration('')
     Traceback (most recent call last):
       ...
@@ -155,7 +177,7 @@ def parse_duration(value):
     ValueError: Invalid iCalendar duration: 'P1WT2H'
     """
     date_part = r'(\d+)D'
-    time_part = r'T(\d+)H(?:(\d+)M(?:(\d+)S)?)?'
+    time_part = r'T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
     datetime_part = '(?:%s)?(?:%s)?' % (date_part, time_part)
     weeks_part = r'(\d+)W'
     duration_rx = re.compile(r'([-+]?)P(?:%s|%s)$'
@@ -167,7 +189,8 @@ def parse_duration(value):
     if weeks:
         value = datetime.timedelta(weeks=int(weeks))
     else:
-        if days is None and hours is None:
+        if (days is None and hours is None
+            and minutes is None and seconds is None):
             raise ValueError('Invalid iCalendar duration: %r'
                              % value)
         value = datetime.timedelta(days=int(days or 0),
@@ -177,6 +200,51 @@ def parse_duration(value):
     if sign == '-':
         value = -value
     return value
+
+
+def ical_duration(value):
+    """Format a timedelta as an iCalendar DURATION value.
+
+    >>> ical_duration(datetime.timedelta(11))
+    'P11D'
+    >>> ical_duration(datetime.timedelta(-14))
+    '-P14D'
+    >>> ical_duration(datetime.timedelta(1, 7384))
+    'P1DT2H3M4S'
+    >>> ical_duration(datetime.timedelta(1, 7380))
+    'P1DT2H3M'
+    >>> ical_duration(datetime.timedelta(1, 7200))
+    'P1DT2H'
+    >>> ical_duration(datetime.timedelta(0, 7200))
+    'PT2H'
+    >>> ical_duration(datetime.timedelta(0, 7384))
+    'PT2H3M4S'
+    >>> ical_duration(datetime.timedelta(0, 184))
+    'PT3M4S'
+    >>> ical_duration(datetime.timedelta(0, 22))
+    'PT22S'
+    >>> ical_duration(datetime.timedelta(0, 3622))
+    'PT1H0M22S'
+    """
+    sign = ""
+    if value.days < 0:
+        sign = "-"
+    timepart = ""
+    if value.seconds:
+        timepart = "T"
+        hours = value.seconds // 3600
+        minutes = value.seconds % 3600 // 60
+        seconds = value.seconds % 60
+        if hours:
+            timepart += "%dH" % hours
+        if minutes or (hours and seconds):
+            timepart += "%dM" % minutes
+        if seconds:
+            timepart += "%dS" % seconds
+    if value.days == 0 and timepart:
+        return "%sP%s" % (sign, timepart)
+    else:
+        return "%sP%dD%s" % (sign, abs(value.days), timepart)
 
 
 def parse_date(value):
