@@ -27,6 +27,7 @@ import socket
 from StringIO import StringIO
 from pprint import pformat
 from schooltool.tests.helpers import diff
+from schooltool.tests.utils import NiceDiffsMixin
 from zope.testing.doctestunit import DocTestSuite
 
 __metaclass__ = type
@@ -134,7 +135,7 @@ teaching_pattern = (
     ' xlink:href="%s"/>')
 
 
-class TestCSVImporter(unittest.TestCase):
+class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
 
     def test_importGroup(self):
         from schooltool.clients.csvclient import CSVImporter
@@ -185,6 +186,18 @@ class TestCSVImporter(unittest.TestCase):
             ('/resources', 'POST',
              '<object xmlns="http://schooltool.org/ns/model/0.1"'
              ' title="Room 3"/>')])
+
+    def test_addResourceToGroups(self):
+        from schooltool.clients.csvclient import CSVImporter
+
+        im = CSVImporter()
+
+        requests = im.addResourceToGroups('r123', 'locations misc')
+        self.assertEqual(requests, [
+            ('/groups/locations/relationships', 'POST',
+             membership_pattern % "/resources/r123"),
+            ('/groups/misc/relationships', 'POST',
+             membership_pattern % "/resources/r123")])
 
     def test_importPupil(self):
         from schooltool.clients.csvclient import CSVImporter
@@ -248,17 +261,17 @@ class TestCSVImporter(unittest.TestCase):
             '</person_info>'
             )])
 
-    def test_getPersonName(self):
+    def test_getName(self):
         from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
 
-        class FakeResnonse:
+        class FakeResponse:
             def getheader(self, header, default=None):
                 if header.lower() == 'location':
                     return 'http://localhost/people/123'
                 return default
-        name = im.getPersonName(FakeResnonse())
+        name = im.getName(FakeResponse())
         self.assertEqual(name, '123')
 
     def test_run_empty(self):
@@ -310,7 +323,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1","1968-01-01",""')
             if name == 'resources.csv':
-                return StringIO('"Hall"')
+                return StringIO('"Hall","locations"')
         im.file = file
 
         results = []
@@ -373,7 +386,9 @@ class TestCSVImporter(unittest.TestCase):
                      '<comment></comment></person_info>'),
                     ('POST', '/resources',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' title="Hall"/>')]
+                     ' title="Hall"/>'),
+                    ('POST', '/groups/locations/relationships',
+                     membership_pattern % "/resources/quux")]
 
         self.assertEqual(results, expected,
                          diff(pformat(results), pformat(expected)))
@@ -392,7 +407,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1","1998-01-01",""')
             if name == 'resources.csv':
-                return StringIO('"Hall"')
+                return StringIO('"Hall","foo bar"')
         im.file = file
 
         class ResponseStub:
@@ -413,7 +428,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1","1998-01-01",""')
             if name == 'resources.csv':
-                return StringIO('"Hall"')
+                return StringIO('"Hall",""')
         im.file = file
         self.assertRaises(DataError, im.run)
 
@@ -425,7 +440,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'teachers.csv':
                 return StringIO('kria kria')
             if name == 'resources.csv':
-                return StringIO('"Hall"')
+                return StringIO('"Hall",""')
         im.file = file
         self.assertRaises(DataError, im.run)
 
@@ -437,7 +452,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'teachers.csv':
                 return StringIO('1,"2')
             if name == 'resources.csv':
-                return StringIO('"Hall"')
+                return StringIO('"Hall",""')
         im.file = file
         self.assertRaises(DataError, im.run)
 
@@ -449,7 +464,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1","1998-01-01",""')
             if name == 'resources.csv':
-                return StringIO('"Hall","Schmall"')
+                return StringIO('"Hall"')
         im.file = file
         self.assertRaises(DataError, im.run)
 

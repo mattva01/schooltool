@@ -42,6 +42,7 @@ groups_csv = """\
 "year3","Year 3","root",""
 "biol3","Biology 3","year3","subject_group"
 "ling3","Linguistics 3","year3","subject_group"
+"locations","Locations","",""
 """
 
 pupils_csv = """\
@@ -55,10 +56,11 @@ teachers_csv = """\
 """
 
 resources_csv = """\
-"Hall"
-"Room 1"
-"Room 2"
-"Projector 1"
+"Hall",""
+"Moon","locations"
+"Room 1",""
+"Room 2",""
+"Projector 1",""
 """
 
 
@@ -81,6 +83,7 @@ class TestCSVExporter(RegistriesSetupMixin, NiceDiffsMixin, unittest.TestCase):
         app['groups'].new("root", title="Root Group")
         app['groups'].new("teachers", title="Teachers")
         app['groups'].new("pupils", title="Pupils")
+        app['groups'].new("locations", title="Locations")
         return app
 
     def createApp(self):
@@ -160,6 +163,10 @@ class TestCSVExporter(RegistriesSetupMixin, NiceDiffsMixin, unittest.TestCase):
         resources.new(title="Room 1")
         resources.new(title="Room 2")
         resources.new(title="Projector 1")
+
+        locations = groups['locations']
+        moon = resources.new(title="Moon")
+        Membership(member=moon, group=locations)
 
         return app
 

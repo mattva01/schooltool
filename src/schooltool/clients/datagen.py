@@ -160,14 +160,14 @@ def createResources():
     """Create a generated resources.csv in the current directory.
 
     Format of the file:
-      title
+      title, groups
     """
     f = open("resources.csv", "w")
-    print >> f, '"%s"' % (_('Hall'), )
+    print >> f, '"%s","locations"' % _('Hall')
     for i in range(1,10):
-        print >> f, '"%s"' % (_('Room %d') % i, )
+        print >> f, '"%s","locations"' % (_('Room %d') % i)
     for i in range(1,4):
-       print >> f, '"%s"' % (_('Projector %d') % i, )
+       print >> f, '"%s",""' % (_('Projector %d') % i)
     f.close()
 
 

@@ -94,14 +94,17 @@ Sample teachers.csv::
 resources.csv contains lines of comma-separated values with the following
 columns:
 
-  title -- The human readable name of the resource.
+  title  -- The human readable name of the resource.
+  groups -- A space-separated list of groups that this resource belongs to.
 
 Sample resources.csv::
 
-  "Hall"
-  "Room 1"
-  "Room 2"
-  "Projector 1"
+  "Hall", ""
+  "Stadium", "locations"
+  "Room 1", ""
+  "Room 2", ""
+  "Projector 1", ""
+  "Vilnius", "locations"
 
 
 $Id$
@@ -210,6 +213,12 @@ class CSVImporter:
                  '<object xmlns="http://schooltool.org/ns/model/0.1" '
                  'title="%s"/>' % to_xml(title))]
 
+    def addResourceToGroups(self, name, groups):
+        result = []
+        for group in groups.split():
+            result.append(self.membership(group, "/resources/%s" % name))
+        return result
+
     def importPupil(self, name, parents):
         """Adds a pupil to the groups.  Need a name (generated path
         element), so it is separate from importPerson()
@@ -243,7 +252,7 @@ class CSVImporter:
                  '</person_info>' % (to_xml(first_name), to_xml(last_name),
                                      to_xml(dob), to_xml(comment)))]
 
-    def getPersonName(self, response):
+    def getName(self, response):
         loc = response.getheader('Location')
         if loc is None:
             raise ValueError('response has no Location header!')
@@ -311,7 +320,7 @@ class CSVImporter:
                 title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
-                    name = self.getPersonName(response)
+                name = self.getName(response)
 
                 for resource, method, body in self.importTeacher(name, groups):
                     response = self.process(method, resource, body=body)
@@ -335,7 +344,7 @@ class CSVImporter:
                 title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
-                    name = self.getPersonName(response)
+                name = self.getName(response)
 
                 for resource, method, body in self.importPupil(name, groups):
                     self.process(method, resource, body=body)
@@ -352,14 +361,19 @@ class CSVImporter:
             line = 1
             file = "resources.csv"
             for row in csv.reader(self.file(file)):
-                if len(row) != 1:
+                if len(row) != 2:
                     raise DataError(_("Error in %s line %d:"
-                                      " expected 1 column, got %d") %
+                                      " expected 2 columns, got %d") %
                                     (file, line, len(row)))
-                title = from_locale(row[0])
+                title, groups = map(from_locale, row)
                 for resource, method, body in self.importResource(title):
                     response = self.process(method, resource, body=body)
-                    name = self.getPersonName(response)
+                name = self.getName(response)
+
+                for resource, method, body in \
+                        self.addResourceToGroups(name, groups):
+                    self.process(method, resource, body=body)
+                line += 1
 
             if self.verbose:
                 print

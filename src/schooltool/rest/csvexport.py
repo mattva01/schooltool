@@ -44,7 +44,7 @@ class CSVExporter(View):
       teachers.csv
       resources.csv
 
-    See the docstring of schooltool.client.csvclient for information about the
+    See the docstring of schooltool.clients.csvclient for information about the
     structure of those files.
 
     Note that currently the files are stored inside the zip archive
@@ -107,7 +107,9 @@ class CSVExporter(View):
     def exportResources(self):
         """Return an iterator over tuples describing resources."""
         for resource in self.context['resources'].itervalues():
-            yield resource.title,
+            groups = getRelatedObjects(resource, URIGroup)
+            group_names = " ".join([g.__name__ for g in groups])
+            yield resource.title, group_names
 
 
 class FactoryNameHack:
