@@ -15,7 +15,7 @@
          tal:attributes="href view/passwordURL"
          i18n:translate="">Change password</a>
       <a class="action" tal:condition="view/canViewCalendar"
-         tal:attributes="href view/calendarURL"
+         tal:attributes="href string:${context/@@absolute_url}/calendar"
          i18n:translate="">View calendar</a>
     </div>
     <div class="groups">

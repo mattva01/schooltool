@@ -128,9 +128,6 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
 
     canViewCalendar = canChangePassword
 
-    def calendarURL(self):
-        return absoluteURL(self.request, self.context, 'calendar_weekly.html')
-
 
 class PersonPasswordView(View):
     """Page for changing a person's password (/persons/id/password.html)."""
