@@ -32,7 +32,7 @@ from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility, IFacet
-from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import IModuleSetup, IAbsenceTrackerUtility
 from schooltool.interfaces import ComponentLookupError, Unchanged
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
@@ -903,6 +903,20 @@ class RollcallView(View):
         return "%d absences and %d presences reported" % (nabsences, npresences)
 
 
+class AbsenceTrackerView(View):
+
+    template = Template('www/absences.pt', content_type='text/xml')
+
+    def listAbsences(self):
+        endedness = {False: 'unended', True: 'ended'}
+        resolvedness = {False: 'unresolved', True: 'resolved'}
+        return [{'title': item.__name__,
+                 'path': getPath(item),
+                 'ended': endedness[item.ended],
+                 'resolved': resolvedness[item.resolved]}
+                for item in self.context.absences]
+
+
 def setUp():
     registerView(IPerson, PersonView)
     registerView(IGroup, GroupView)
@@ -913,5 +927,6 @@ def setUp():
     registerView(IEventLog, EventLogView)
     registerView(IEventLogUtility, EventLogView)
     registerView(IEventLogFacet, EventLogFacetView)
+    registerView(IAbsenceTrackerUtility, AbsenceTrackerView)
     registerView(IFacet, FacetView)
 

@@ -1794,6 +1794,43 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
             "Cannot resolve an absence for absent person /persons/b")
 
 
+class TestAbsenceTrackerView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.model import Person, AbsenceTrackerUtility
+        from schooltool.model import AbsenceComment
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.views import AbsenceTrackerView
+        from schooltool.interfaces import IAttendanceEvent
+        self.setUpRegistries()
+        app = Application()
+        self.tracker = AbsenceTrackerUtility()
+        app.utilityService['absences'] = self.tracker
+        app.eventService.subscribe(self.tracker, IAttendanceEvent)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.person = app['persons'].new("a", title="a")
+        self.person.reportAbsence(AbsenceComment(None, ""))
+        self.view = AbsenceTrackerView(self.tracker)
+
+    def test_get(self):
+        request = RequestStub("http://localhost/utils/absences/")
+        result = self.view.render(request)
+        expected = dedent("""
+            <absences xmlns:xlink="http://www.w3.org/1999/xlink">
+              <absence xlink:type="simple"
+                       xlink:href="/persons/a/absences/001"
+                       ended="unended" xlink:title="001"
+                       resolved="unresolved"/>
+            </absences>
+            """)
+        self.assertEqual(result, expected, diff(result, expected))
+        for segment in expected.split("---8<---\n"):
+            self.assert_(segment in result,
+                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestHelpers))
@@ -1817,6 +1854,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAbsenceView))
     suite.addTest(unittest.makeSuite(TestAbsenceCommentParser))
     suite.addTest(unittest.makeSuite(TestRollcallView))
+    suite.addTest(unittest.makeSuite(TestAbsenceTrackerView))
     return suite
 
 if __name__ == '__main__':
