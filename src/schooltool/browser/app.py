@@ -592,7 +592,7 @@ class GroupContainerView(ObjectContainerView):
     add_view = GroupAddView
     obj_view = GroupView
     index_title = _("Group index")
-    add_title = _("Add a new person")
+    add_title = _("Add a new group")
 
 
 class ResourceContainerView(ObjectContainerView):
