@@ -162,6 +162,16 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return self._parseContainer(response.read())
 
+    def getListOfGroups(self):
+        """Return the list of all groups.
+
+        Returns a sequence of tuples (group_title, group_path).
+        """
+        response = self.get('/groups')
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return self._parseContainer(response.read())
+
     def getGroupTree(self):
         """Return the tree of groups.
 

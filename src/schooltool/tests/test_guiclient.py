@@ -236,6 +236,31 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(500, 'Internal Error'))
         self.assertRaises(SchoolToolError, client.getListOfPersons)
 
+    def test_getListOfGroups(self):
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/groups/fred" xlink:title="Fred" />
+                <item xlink:href="/groups/barney" xlink:title="Barney"/>
+               </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getListOfGroups()
+        expected = [('Fred', '/groups/fred'),
+                    ('Barney', '/groups/barney')]
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
+        self.checkConnPath(client, '/groups')
+
+    def test_getListOfGroups_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(error=socket.error(23, 'out of groups'))
+        self.assertRaises(SchoolToolError, client.getListOfGroups)
+
+        client = self.newClient(ResponseStub(500, 'Internal Error'))
+        self.assertRaises(SchoolToolError, client.getListOfGroups)
+
     def test_getGroupTree(self):
         body = dedent("""
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">

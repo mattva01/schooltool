@@ -40,6 +40,7 @@ from wxPython.lib.scrolledpanel import wxScrolledPanel
 from schooltool.guiclient import SchoolToolClient, Unchanged, RollCallEntry
 from schooltool.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
+from schooltool.uris import URITeaching, URITaught
 
 __metaclass__ = type
 
@@ -664,12 +665,18 @@ class MainFrame(wxFrame):
         label2b = wxStaticText(panel2b, -1, "Relationships")
         ID_RELATIONSHIP_LIST = wxNewId()
         self.relationshipListCtrl = wxListCtrl(panel2b, ID_RELATIONSHIP_LIST,
-                style=wxSUNKEN_BORDER|wxLC_REPORT)
+                style=wxSUNKEN_BORDER|wxLC_REPORT|wxLC_SINGLE_SEL)
         self.relationshipListCtrl.InsertColumn(0, "Title", width=110)
         self.relationshipListCtrl.InsertColumn(1, "Role", width=110)
         self.relationshipListCtrl.InsertColumn(2, "Relationship", width=110)
         self.relationshipPopupMenu = popupmenu(
-                item("&Remove", "Remove selected relationship",
+                item("&Add Member", "Add a person to this group",
+                     self.DoAddMember),
+                item("&Add Teacher", "Add a teacher to this group",
+                     self.DoAddTeacher),
+                item("&Add Subgroup", "Add a group to this group",
+                     self.DoAddSubgroup),
+                item("&Remove Relationship", "Remove selected relationship",
                      self.DoRemoveRelationship),
             )
         EVT_RIGHT_DOWN(self.relationshipListCtrl, self.DoRelationshipRightDown)
@@ -737,8 +744,14 @@ class MainFrame(wxFrame):
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
 
-        persons = self.client.getListOfPersons()
+        try:
+            persons = self.client.getListOfPersons()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get a list of persons: %s" % e,
+                         "Add Teacher", wxICON_ERROR|wxOK)
+            return
         persons.sort()
+
         # wxGetMultipleChoice is defined in wxWindows API documentation,
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
@@ -754,6 +767,87 @@ class MainFrame(wxFrame):
         except SchoolToolError, e:
             wxMessageBox("Could not add member: %s" % e,
                          "Add Member", wxICON_ERROR|wxOK)
+            return
+        else:
+            self.DoRefresh()
+
+    def DoAddTeacher(self, event):
+        """Add a teacher from the current group.
+
+        Accessible from relationships list popup menu.
+        """
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            # should not happen
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+
+        try:
+            teachers_group = self.client.getGroupInfo('/groups/teachers')
+        except SchoolToolError, e:
+            wxMessageBox("Could not get a list of teachers: %s" % e,
+                         "Add Teacher", wxICON_ERROR|wxOK)
+            return
+        persons = teachers_group.members
+        persons.sort()
+
+        # wxGetMultipleChoice is defined in wxWindows API documentation,
+        # but wxPython 2.4.2.4 does NOT have it.
+        choice = wxGetSingleChoiceIndex(
+                        "Select a teacher to add to %s" % group_title,
+                        "Add Teacher", [p.person_title for p in persons])
+        if choice == -1:
+            return
+
+        person_path = persons[choice].person_path
+        try:
+            self.client.createRelationship(group_path, person_path,
+                                           URITeaching, URITaught)
+        except SchoolToolError, e:
+            wxMessageBox("Could not add teacher: %s" % e,
+                         "Add Teacher", wxICON_ERROR|wxOK)
+            return
+        else:
+            self.DoRefresh()
+
+    def DoAddSubgroup(self, event):
+        """Add a subgroup from the current group.
+
+        Accessible from person list popup menu.
+        """
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            # should not happen
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+
+        try:
+            groups = self.client.getListOfGroups()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get a list of groups: %s" % e,
+                         "Add Subgroup", wxICON_ERROR|wxOK)
+            return
+        groups.sort()
+
+        # wxGetMultipleChoice is defined in wxWindows API documentation,
+        # but wxPython 2.4.2.4 does NOT have it.
+        choice = wxGetSingleChoiceIndex(
+                        "Select a group to add to %s" % group_title,
+                        "Add Subgroup", [g[0] for g in groups])
+        if choice == -1:
+            return
+
+        subgroup_path = groups[choice][1]
+        try:
+            self.client.createRelationship(group_path, subgroup_path,
+                                           URIMembership, URIGroup)
+        except SchoolToolError, e:
+            wxMessageBox("Could not add subgroup: %s" % e,
+                         "Add Subgroup", wxICON_ERROR|wxOK)
             return
         else:
             self.DoRefresh()
