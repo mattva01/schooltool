@@ -28,7 +28,7 @@ from zope.interface.interfaces import IInterface
 from zope.interface.type import TypeRegistry
 from persistence.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
-from schooltool.interfaces import ILocation, IContainmentRoot
+from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IFacetManager
 from schooltool.interfaces import IServiceAPI, IServiceManager
@@ -47,7 +47,7 @@ __metaclass__ = type
 #
 
 def getPath(obj):
-    """Returns the path of an object implementing ILocation"""
+    """See IContainmentAPI."""
 
     if IContainmentRoot.isImplementedBy(obj):
         return '/'
@@ -63,6 +63,42 @@ def getPath(obj):
             cur = cur.__parent__
         else:
             raise TypeError("Cannot determine path for %s" % obj)
+
+
+def getRoot(obj):
+    """See IContainmentAPI."""
+    cur = obj
+    while not IContainmentRoot.isImplementedBy(cur):
+        if ILocation.isImplementedBy(cur):
+            cur = cur.__parent__
+        else:
+            raise TypeError("Cannot determine path for %s" % obj)
+    return cur
+
+
+def traverse(obj, path):
+    """See IContainmentAPI."""
+    if path.startswith('/'):
+        cur = getRoot(obj)
+    else:
+        cur = obj
+    for name in path.split('/'):
+        if name in ('', '.'):
+            continue
+        if name == '..':
+            if IContainmentRoot.isImplementedBy(cur):
+                continue
+            elif ILocation.isImplementedBy(cur):
+                cur = cur.__parent__
+                continue
+            else:
+                raise TypeError('Could not traverse', cur, name)
+        if ITraversable.isImplementedBy(cur):
+            cur = cur.traverse(name)
+        else:
+            raise TypeError('Could not traverse', cur, name)
+
+    return cur
 
 
 #
@@ -120,6 +156,7 @@ def resetFacetFactoryRegistry():
     """Clears the facet factory registry."""
     facet_factory_registry.clear()
 
+
 def registerFacetFactory(factory):
     """Register the given facet factory by the given name.
 
@@ -138,9 +175,11 @@ def registerFacetFactory(factory):
                 factory.name, factory)
     facet_factory_registry[factory.name] = factory
 
+
 def facetFactories(ob):
     """Returns a sequence of facet factories for the given object."""
     return facet_factory_registry.values()
+
 
 def getFacetFactory(name):
     """Returns the named facet factory."""
@@ -174,9 +213,11 @@ def _getServiceManager(context):
         place = place.__parent__
     return place
 
+
 def getEventService(context):
     """See IServiceAPI"""
     return _getServiceManager(context).eventService
+
 
 def getUtilityService(context):
     """See IServiceAPI"""

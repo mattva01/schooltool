@@ -31,6 +31,7 @@ from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
+from schooltool.interfaces import ITraversable
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.interfaces import IViewAPI
 from schooltool.interfaces import ComponentLookupError
@@ -58,6 +59,25 @@ class C1:
     def foo(self):
         return "foo"
 
+class LocationStub:
+    implements(ILocation)
+
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+
+    def __repr__(self):
+        return "LocationStub(%r, %r)" % (self.__parent__, self.__name__)
+
+class TraversableStub:
+    implements(ITraversable)
+
+    def __init__(self):
+        self.children = {}
+
+    def traverse(self, name):
+        return self.children[name]
+
 
 class TestCanonicalPath(unittest.TestCase):
 
@@ -65,24 +85,65 @@ class TestCanonicalPath(unittest.TestCase):
         from schooltool import component
         verifyObject(IContainmentAPI, component)
 
-    def test_path(self):
+    def buildTree(self):
+        a = LocationStub(None, 'root')
+        directlyProvides(a, IContainmentRoot)
+        b = LocationStub(a, 'foo')
+        c = LocationStub(b, 'bar')
+        return a, b, c
+
+    def test_getPath(self):
         from schooltool.component import getPath
 
-        class Stub:
-            implements(ILocation)
+        x = LocationStub(None, 'root')
+        self.assertRaises(TypeError, getPath, x)
+        self.assertRaises(TypeError, getPath, object())
 
-            def __init__(self, parent, name):
-                self.__parent__ = parent
-                self.__name__ = name
-
-        a = Stub(None, 'root')
-        self.assertRaises(TypeError, getPath, a)
-        directlyProvides(a, IContainmentRoot)
+        a, b, c = self.buildTree()
         self.assertEqual(getPath(a), '/')
-        b = Stub(a, 'foo')
         self.assertEqual(getPath(b), '/foo')
-        c = Stub(b, 'bar')
         self.assertEqual(getPath(c), '/foo/bar')
+
+    def test_getRoot(self):
+        from schooltool.component import getRoot
+
+        x = LocationStub(None, 'root')
+        self.assertRaises(TypeError, getRoot, x)
+        self.assertRaises(TypeError, getRoot, object())
+
+        a, b, c = self.buildTree()
+        self.assertEqual(getRoot(a), a)
+        self.assertEqual(getRoot(b), a)
+        self.assertEqual(getRoot(c), a)
+
+    def test_traverse(self):
+        from schooltool.component import traverse
+
+        x = LocationStub(None, 'root')
+        y = object()
+
+        a, b, c = self.buildTree()
+        for path in ('', '.', './', './.', './/'):
+            self.assertEqual(traverse(x, path), x)
+            self.assertEqual(traverse(y, path), y)
+            self.assertEqual(traverse(a, path), a)
+            self.assertEqual(traverse(b, path), b)
+            self.assertEqual(traverse(c, path), c)
+        for path in ('/', '//', '/..', '/.', '../.././/../..'):
+            self.assertRaises(TypeError, traverse, x, path)
+            self.assertRaises(TypeError, traverse, y, path)
+            self.assertEqual(traverse(a, path), a)
+            self.assertEqual(traverse(b, path), a)
+            self.assertEqual(traverse(c, path), a)
+        u = TraversableStub()
+        v = TraversableStub()
+        u.children['v'] = v
+        for path in ('v', './v', 'v/', 'v/.', 'v//'):
+            self.assertEqual(traverse(u, 'v'), v)
+        self.assertRaises(TypeError, traverse, u, '..')
+        self.assertRaises(TypeError, traverse, u, '/')
+        self.assertRaises(TypeError, traverse, x, 'y')
+        self.assertRaises(KeyError, traverse, u, 'y')
 
 
 class TestFacetManager(unittest.TestCase, EqualsSortedMixin):

@@ -28,6 +28,40 @@ from zope.interface import Interface, Attribute, moduleProvides
 # Containment
 #
 
+class IContainmentAPI(Interface):
+    """Containment API"""
+
+    def getPath(obj):
+        """Return the unique path of an object in the containment hierarchy.
+
+        The object must implement ILocation or IContainmentRoot and must be
+        attached to the hierarchy (i.e. following parent references should not
+        reach None).  If either of those conditions is not met, raises a
+        TypeError.
+        """
+
+    def getRoot(obj):
+        """Return the containment root for obj.
+
+        The object must implement ILocation or IContainmentRoot and must be
+        attached to the hierarchy (i.e. following parent references should not
+        reach None).  If either of those conditions is not met, raises a
+        TypeError.
+        """
+
+    def traverse(obj, path):
+        """Return the object accessible as path from obj.
+
+        Path is a list of names separated with forward slashes.  Multiple
+        adjacent slashes are equivalent to a single slash.  Special names
+        are '.' and '..'; they are treated as is customary in file systems.
+        Traversing to .. at the root keeps you at the root.
+
+        If path starts with a slash, then the traversal starts from
+        getRoot(obj), otherwise the travelsal starts from obj.
+        """
+
+
 class ILocation(Interface):
     """An object located in a containment hierarchy.
 
@@ -55,17 +89,16 @@ class IContainmentRoot(Interface):
     """A marker interface for the top level application object."""
 
 
-class IContainmentAPI(Interface):
-    """Containment API"""
+class ITraversable(Interface):
+    """An object that can be traversed."""
 
-    def getPath(obj):
-        """Returns the unique path of an object in the containment hierarchy.
+    def traverse(name):
+        """Return an object reachable as name.
 
-        The object must implement ILocation or IContainmentRoot and must be
-        attached to the hierarchy (i.e. following parent references should not
-        reach None).
+        Raises a KeyError if the name cannot be traversed.
+
+        Traversables do not have to handle special names '.' or '..'.
         """
-
 
 #
 # Services
