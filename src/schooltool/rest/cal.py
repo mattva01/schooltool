@@ -266,6 +266,8 @@ class CalendarView(CalendarReadView):
         if ctype != 'text/calendar':
             return textErrorPage(request,
                                  _("Unsupported content type: %s") % ctype)
+
+        # First, build a list of new events
         events = []
         reader = ICalReader(request.content)
         try:
@@ -284,39 +286,59 @@ class CalendarView(CalendarReadView):
                                             unique_id=event.uid))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
-        else:
-            for event in list(self.context):
-                if event in events:
-                    # old events
-                    events.remove(event)
-                elif event.owner or event.context:
-                    # XXX: This business logic should be in an event
-                    #      handler, not in a view.
 
-                    # owner and context are not represented in the
-                    # iCalendar representation
-                    e = CalendarEvent(event.dtstart, event.duration,
-                                      event.title, unique_id=event.unique_id)
-                    if e in events:
-                        # old event
-                        events.remove(e)
-                    else:
-                        if event.owner is not None:
-                            event.owner.calendar.removeEvent(event)
-                        if event.context is not None:
-                            event.context.calendar.removeEvent(event)
-                else:
-                    # deleted event
-                    self.context.removeEvent(event)
+        # Iterate over old events and see what changed.  For every event e
+        # that is either in events or in self.context, there are three
+        # possibilities:
+        #   - newly added (e is in events, but not in self.context)
+        #   - deleted (e is in self.context, but not in events)
+        #   - unchanged (e is both in self.context and in events)
+        #
+        # We will build two lists:
+        #   events_to_add -- a list of newly added events
+        #   events_to_delete -- a list of deleted events
+        #
+        # Note that when an event is changed, it will look as if the old
+        # event was deleted and a new event added in its place.  We could
+        # see that this is actually a modification by comparing unique_id,
+        # but currently that is just not interesting.
+        events_to_add = events # alias
+        events_to_delete = []
+        for event in list(self.context):
+            # owner and context are not represented in the iCalendar
+            # representation.  We do not want every upload to discard
+            # those attributes, so we ignore them when checking for changes.
+            event_to_compare = event.replace(owner=None, context=None)
+            if event_to_compare in events_to_add:
+                # unchanged: remove from list of newly added events
+                events_to_add.remove(event_to_compare)
+            else:
+                events_to_delete.append(event)
 
-            for event in events:
-                # newly added events
-                self.context.addEvent(event)
-            request.appLog(
-                _("Calendar %s for %s imported")
-                % (getPath(self.context), self.context.__parent__.title))
-            request.setHeader('Content-Type', 'text/plain')
-            return _("Calendar imported")
+        # TODO: check for permissions in the calendar ACL
+
+        for event in events_to_delete:
+            if event.owner or event.context:
+                # self.context is either event.owner.calendar or
+                # event.context.calendar
+                #
+                # XXX: This business logic should be in an event
+                #      handler, not in a view.
+                if event.owner is not None:
+                    event.owner.calendar.removeEvent(event)
+                if event.context is not None:
+                    event.context.calendar.removeEvent(event)
+            else:
+                self.context.removeEvent(event)
+
+        for event in events_to_add:
+            self.context.addEvent(event)
+
+        request.appLog(_("Calendar %s for %s imported")
+                       % (getPath(self.context),
+                          self.context.__parent__.title))
+        request.setHeader('Content-Type', 'text/plain')
+        return _("Calendar imported")
 
 
 class BookingView(View):
