@@ -1,0 +1,139 @@
+Checking basic timetable schema service functionality.
+Preconditions: timetable schema service is empty.
+Postconditions: timetable schema service contains a schema called 'weekly'
+
+SchoolTool> links off
+
+SchoolTool> get /ttschemas
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+</timetableSchemas>
+
+
+SchoolTool> get /ttschemas/x
+404 Not Found
+Content-Type: text/html; charset=UTF-8
+<html>
+<head><title>404 - Not Found</title></head>
+<body>
+  <h1>404 - Not Found</h1>
+  <p>The following resource does not exist: /ttschemas/x</p>
+</body>
+</html>
+
+
+SchoolTool> put /ttschemas/weekly text/xml
+PUT> <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+PUT>   <day id="Monday">
+PUT>     <period id="0" />
+PUT>     <period id="1" />
+PUT>     <period id="2" />
+PUT>     <period id="3" />
+PUT>     <period id="4" />
+PUT>     <period id="5" />
+PUT>     <period id="6" />
+PUT>     <period id="7" />
+PUT>     <period id="8" />
+PUT>     <period id="9" />
+PUT>   </day>
+PUT>   <day id="Tuesday">
+PUT>     <period id="0" />
+PUT>     <period id="1" />
+PUT>     <period id="2" />
+PUT>     <period id="3" />
+PUT>     <period id="4" />
+PUT>     <period id="5" />
+PUT>     <period id="6" />
+PUT>     <period id="7" />
+PUT>     <period id="8" />
+PUT>     <period id="9" />
+PUT>   </day>
+PUT>   <day id="Wednesday">
+PUT>     <period id="0" />
+PUT>     <period id="1" />
+PUT>     <period id="2" />
+PUT>     <period id="3" />
+PUT>     <period id="4" />
+PUT>     <period id="5" />
+PUT>     <period id="6" />
+PUT>     <period id="7" />
+PUT>     <period id="8" />
+PUT>     <period id="9" />
+PUT>   </day>
+PUT>   <day id="Thursday">
+PUT>     <period id="0" />
+PUT>     <period id="1" />
+PUT>     <period id="2" />
+PUT>     <period id="3" />
+PUT>     <period id="4" />
+PUT>     <period id="5" />
+PUT>     <period id="6" />
+PUT>     <period id="7" />
+PUT>     <period id="8" />
+PUT>     <period id="9" />
+PUT>   </day>
+PUT>   <day id="Friday">
+PUT>     <period id="0" />
+PUT>     <period id="1" />
+PUT>     <period id="2" />
+PUT>     <period id="3" />
+PUT>     <period id="4" />
+PUT>     <period id="5" />
+PUT>     <period id="6" />
+PUT>     <period id="7" />
+PUT>     <period id="8" />
+PUT>     <period id="9" />
+PUT>   </day>
+PUT> </timetable>
+PUT> .
+200 OK
+Content-Type: text/plain
+OK
+
+SchoolTool> get /ttschemas
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+  <schema xlink:type="simple" xlink:href="/ttschemas/weekly"
+          xlink:title="weekly"/>
+</timetableSchemas>
+
+
+SchoolTool> put /ttschemas/x text/xml
+PUT> <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+PUT>   <day id="XXX">
+PUT>   </day>
+PUT> </timetable>
+PUT> .
+200 OK
+Content-Type: text/plain
+OK
+
+SchoolTool> get /ttschemas
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=timetableSchemas
+<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+  <schema xlink:type="simple" xlink:href="/ttschemas/weekly"
+          xlink:title="weekly"/>
+  <schema xlink:type="simple" xlink:href="/ttschemas/x"
+          xlink:title="x"/>
+</timetableSchemas>
+%% END XML
+
+
+SchoolTool> delete /ttschemas/x
+200 OK
+Content-Type: text/plain
+Deleted timetable schema
+
+SchoolTool> get /ttschemas
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+  <schema xlink:type="simple" xlink:href="/ttschemas/weekly"
+          xlink:title="weekly"/>
+</timetableSchemas>
+
+

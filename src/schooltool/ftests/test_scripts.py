@@ -151,7 +151,8 @@ class ScriptTestCase(unittest.TestCase):
                 context_start = max(0, eidx-5)
                 orig_start = orig_lineno[context_start]
                 diffs = ["@@ -%d..%d @@\n"
-                         % (orig_start, orig_lineno[eidx])]
+                         % (orig_start,
+                            orig_lineno[min(eidx, len(expected)-1)])]
                 context = expected[context_start:eidx]
                 diffs += [" " + s for s in context]
                 diffs += ["-" + s for s in expected[eidx:eidx+2]]

@@ -1,0 +1,30 @@
+Checking the school time table view.
+Preconditions: /ttschemas/weekly and /time-periods/2003-fall exist.
+               /persons/Mark and /persons/Steve are teachers
+Postconditions:
+
+SchoolTool> get /schooltt/2003-fall/wekly
+404 Not Found
+Content-Type: text/html; charset=UTF-8
+<html>
+<head><title>404 - Not Found</title></head>
+<body>
+  <h1>404 - Not Found</h1>
+  <p>The following resource does not exist: /schooltt/2003-fall/wekly</p>
+</body>
+</html>
+
+
+SchoolTool> get /schooltt/2003-fall/weekly
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=schooltt
+<schooltt xmlns="http://schooltool.org/ns/timetable/0.1">
+  <teacher path="/persons/Mark">
+  </teacher>
+  <teacher path="/persons/Steve">
+  </teacher>
+</schooltt>
+%% END XML
+
+

@@ -105,6 +105,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
     def test__traverse(self):
         from schooltool.views.app import ApplicationObjectContainerView
         from schooltool.views.utility import UtilityServiceView
+        from schooltool.views.timetable import SchoolTimetableTraverseView
         request = RequestStub("http://localhost/groups")
         view = self.view._traverse('groups', request)
         self.assert_(view.__class__ is ApplicationObjectContainerView)
@@ -112,6 +113,9 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         view = self.view._traverse('utils', request)
         self.assert_(view.__class__ is UtilityServiceView)
+
+        view = self.view._traverse('schooltt', request)
+        self.assert_(view.__class__ is SchoolTimetableTraverseView)
 
 
 class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,

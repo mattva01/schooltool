@@ -33,8 +33,10 @@ from schooltool.views import View, Template, textErrorPage, notFoundPage
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
-from schooltool.component import registerView, getPath
+from schooltool.component import registerView, getPath, traverse
+from schooltool.component import getRelatedObjects
 from schooltool.schema.rng import validate_against_schema
+from schooltool.uris import URIMember
 
 __metaclass__ = type
 
@@ -304,6 +306,20 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
             return TimetableReadView(tt)
 
 
+class SchoolTimetableTraverseView(BaseTimetableTraverseView):
+    """View for obj/composite-timetable."""
+
+    def _traverse(self, name, request):
+        if self.time_period is None:
+            if name not in getTimePeriodService(self.context):
+                raise KeyError(name)
+            return SchoolTimetableTraverseView(self.context, name)
+        else:
+            getTimetableSchemaService(self.context)[name]
+            return SchoolTimetableView(self.context,
+                                       key=(self.time_period, name))
+
+
 class TimetableSchemaServiceView(View):
     """View for the timetable schema service"""
 
@@ -316,6 +332,29 @@ class TimetableSchemaServiceView(View):
 
     def _traverse(self, key, request):
         return TimetableSchemaView(self.context, key)
+
+
+class SchoolTimetableView(View):
+    """A view for the timetable management of the whole school"""
+
+    group = '/groups/teachers'
+
+    template = Template("www/schooltt.pt", content_type="text/xml")
+
+    def __init__(self, context, key):
+        View.__init__(self, context)
+        self.key = key
+
+    def getTeachersTimetables(self):
+        result = []
+        group = traverse(self.context, self.group)
+        for teacher in getRelatedObjects(group, URIMember):
+            tt = teacher.getCompositeTimetable(*self.key)
+            result.append((teacher, tt))
+        return result
+
+    def getPath(self, obj):
+        return getPath(obj)
 
 
 class TimePeriodServiceView(View):

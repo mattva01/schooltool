@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for a timetable for the whole school.
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         ns="http://schooltool.org/ns/timetable/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <define name="idattr">
+     <attribute name="id">
+        <text/>
+     </attribute>
+  </define>
+
+  <start>
+    <ref name="schooltt"/>
+  </start>
+
+  <define name="schooltt">
+    <element name="schooltt">
+      <oneOrMore>
+        <element name="teacher">
+          <attribute name="path">
+            <text/>
+          </attribute>
+          <oneOrMore>
+            <element name="day">
+              <ref name="idattr"/>
+              <zeroOrMore>
+                <element name="period">
+                  <ref name="idattr"/>
+                  <zeroOrMore>
+                    <element name="activity">
+                      <attribute name="group">
+                        <text/>
+                      </attribute>
+                      <text/>
+                    </element>
+                  </zeroOrMore>
+                </element>
+              </zeroOrMore>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+
+</grammar>

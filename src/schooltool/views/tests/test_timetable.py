@@ -26,7 +26,7 @@ import unittest
 import libxml2
 import sets
 from zope.interface import implements
-from schooltool.interfaces import IServiceManager, ILocation
+from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.views.tests import RequestStub, setPath
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -63,28 +63,42 @@ class TimetabledStub:
         return sets.Set(self.timetables.keys() + self.overlay.keys())
 
 
+class ServiceManagerStub:
+    implements(IServiceManager, IContainmentRoot)
+
+    def __init__(self, weekly_tt):
+        from schooltool.timetable import TimetableSchemaService
+        from schooltool.timetable import TimePeriodService
+        self.timetableSchemaService = TimetableSchemaService()
+        self.timetableSchemaService['weekly'] = weekly_tt
+        self.timePeriodService = TimePeriodService()
+        self.timePeriodService.register('2003 fall')
+
+
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
-    def do_test(self, view_class, tt_view_class, xml, html):
+    def do_test(self, view_class, tt_view_class, xml=None, html=None):
         context = TimetabledStub()
-        setPath(context, '/...object')
+        setPath(context, '/...object', ServiceManagerStub(TimetableStub()))
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
         context.overlay['2003 spring', 'weekly'] = TimetableStub()
         view = view_class(context)
         request = RequestStub()
 
-        result = view.render(request)
-        self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result, xml, recursively_sort=['timetables'])
+        if xml:
+            result = view.render(request)
+            self.assertEquals(request.code, 200)
+            self.assertEquals(request.headers['Content-Type'],
+                              "text/xml; charset=UTF-8")
+            self.assertEqualsXML(result, xml, recursively_sort=['timetables'])
 
-        request.accept = [('1', 'text/html', {}, {})]
-        result = view.render(request)
-        self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/html; charset=UTF-8")
-        self.assertEqualsXML(result, html, recursively_sort=['ul'])
+        if html:
+            request.accept = [('1', 'text/html', {}, {})]
+            result = view.render(request)
+            self.assertEquals(request.code, 200)
+            self.assertEquals(request.headers['Content-Type'],
+                              "text/html; charset=UTF-8")
+            self.assertEqualsXML(result, html, recursively_sort=['ul'])
 
         view2 = view._traverse('2003 fall', request)
         self.assert_(view2.__class__ is view_class,
@@ -99,13 +113,14 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assert_(view3.__class__ is tt_view_class,
                      '%r is not %r' % (view3.__class__, tt_view_class))
 
-        return view2, view3, context, tt
+        return view, view2, view3, context, tt
 
     def test_TimetableTraverseView(self):
         from schooltool.views.timetable import TimetableTraverseView
         from schooltool.views.timetable import TimetableReadWriteView
-        view2, view, context, tt = self.do_test(TimetableTraverseView,
-            TimetableReadWriteView, """
+        view1, view2, view3, context, tt = self.do_test(
+            TimetableTraverseView, TimetableReadWriteView,
+            """
             <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
               <timetable period="2003 fall" schema="weekly" xlink:type="simple"
                          xlink:href="/...object/timetable/2003 fall/weekly" />
@@ -124,9 +139,9 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             </body>
             </html>
             """)
-        self.assert_(view.timetabled is context)
-        self.assertEquals(view.key, ('2003 fall', 'weekly'))
-        self.assert_(view.context is tt, '%r is not %r' % (view.context, tt))
+        self.assert_(view3.timetabled is context)
+        self.assertEquals(view3.key, ('2003 fall', 'weekly'))
+        self.assert_(view3.context is tt, '%r is not %r' % (view3.context, tt))
 
         # traversing to nonexistent timetables is allowed
         request = RequestStub()
@@ -138,8 +153,9 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
     def test_CompositeTimetableTraverseView(self):
         from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.views.timetable import TimetableReadView
-        view2, view, context, tt = self.do_test(CompositeTimetableTraverseView,
-            TimetableReadView, """
+        view1, view2, view3, context, tt = self.do_test(
+            CompositeTimetableTraverseView, TimetableReadView,
+            """
             <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
               <timetable period="2003 fall" schema="weekly" xlink:type="simple"
                 xlink:href="/...object/composite-timetable/2003 fall/weekly" />
@@ -163,11 +179,24 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             </body>
             </html>
             """)
-        self.assertEqual(view.context, tt)
-        self.assert_(view.context is not tt)
+        self.assertEqual(view3.context, tt)
+        self.assert_(view3.context is not tt)
 
         request = RequestStub()
         self.assertRaises(KeyError, view2._traverse, 'eewkly', request)
+
+    def test_SchoolTimetableTraverseView(self):
+        from schooltool.views.timetable import SchoolTimetableTraverseView
+        from schooltool.views.timetable import SchoolTimetableView
+        view1, view2, view3, context, tt = (
+            self.do_test(SchoolTimetableTraverseView,
+                         SchoolTimetableView)
+            )
+        self.assertEqual(view3.context, context)
+
+        request = RequestStub()
+        self.assertRaises(KeyError, view2._traverse, 'eewkly', request)
+        self.assertRaises(KeyError, view1._traverse, '2033 faal', request)
 
 
 class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
@@ -358,18 +387,8 @@ class TestTimetableReadWriteView(TestTimetableReadView):
     def createTimetabled(self):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.timetable import TimePeriodService
-
-        class ServiceManagerStub:
-            implements(IServiceManager)
-
-            timetableSchemaService = TimetableSchemaService()
-            timetableSchemaService['weekly'] = self.createEmpty()
-
-            timePeriodService = TimePeriodService()
-            timePeriodService.register('2003 fall')
-
         timetabled = TimetabledStub()
-        timetabled.__parent__ = ServiceManagerStub()
+        timetabled.__parent__ = ServiceManagerStub(self.createEmpty())
         return timetabled
 
     def createView(self, context=None, timetabled=None,
@@ -647,6 +666,124 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(result.key, 'newone')
 
 
+class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
+                              unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views.timetable import SchoolTimetableView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool.teaching import TeacherFacet, Teaching
+        from schooltool.component import FacetManager
+        from schooltool import membership
+        from schooltool import relationship
+        self.setUpRegistries()
+        membership.setUp()
+        relationship.setUp()
+        app = Application()
+
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.teachers = app['groups'].new("teachers", title="teachers")
+
+        self.teacher1 = app['persons'].new("p1", title="Albert")
+        Membership(group=self.teachers, member=self.teacher1)
+        FacetManager(self.teacher1).setFacet(TeacherFacet())
+
+        self.teacher2 = app['persons'].new("p2", title="Marius")
+        Membership(group=self.teachers, member=self.teacher2)
+        FacetManager(self.teacher2).setFacet(TeacherFacet())
+
+        self.sg1 = app['groups'].new("sg1", title="Math 1")
+        self.sg2 = app['groups'].new("sg2", title="Calculus 1")
+        self.sg3 = app['groups'].new("sg3", title="Chemistry 1")
+        self.sg4 = app['groups'].new("sg4", title="Physics 1")
+
+        Teaching(teacher=self.teacher1, taught=self.sg1)
+        Teaching(teacher=self.teacher1, taught=self.sg2)
+        Teaching(teacher=self.teacher2, taught=self.sg3)
+        Teaching(teacher=self.teacher2, taught=self.sg4)
+
+        self.view = SchoolTimetableView(app, key=('2003-spring', '2day'))
+
+    def testEmpty(self):
+        request = RequestStub()
+        result = self.view.render(request)
+        expected = """
+            <schooltt xmlns="http://schooltool.org/ns/timetable/0.1">
+              <teacher path="/persons/p2">
+              </teacher>
+              <teacher path="/persons/p1">
+              </teacher>
+            </schooltt>
+            """
+        self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
+
+    def testNonempty(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableActivity
+
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(("Green", "Blue"))
+        tt["B"] = TimetableDay(("Red", "Yellow"))
+        tt["A"].add("Green", TimetableActivity("Slacking", self.sg1))
+        self.sg1.timetables['2003-spring', '2day'] = tt
+
+        tt = tt.cloneEmpty()
+        tt["A"].add("Blue", TimetableActivity("Slashdot", self.sg2))
+        self.sg2.timetables['2003-spring', '2day'] = tt
+
+        tt = tt.cloneEmpty()
+        tt["B"].add("Red", TimetableActivity("Email", self.sg3))
+        self.sg3.timetables['2003-spring', '2day'] = tt
+
+        request = RequestStub()
+        result = self.view.render(request)
+        expected = """
+            <schooltt xmlns="http://schooltool.org/ns/timetable/0.1">
+              <teacher path="/persons/p2">
+                <day id="A">
+                  <period id="Blue">
+                  </period>
+                  <period id="Green">
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Red">
+                    <activity group="/groups/sg3">
+                      Email
+                    </activity>
+                  </period>
+                  <period id="Yellow">
+                  </period>
+                </day>
+              </teacher>
+              <teacher path="/persons/p1">
+                <day id="A">
+                  <period id="Blue">
+                    <activity group="/groups/sg2">
+                      Slashdot
+                    </activity>
+                  </period>
+                  <period id="Green">
+                    <activity group="/groups/sg1">
+                      Slacking
+                    </activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Red">
+                  </period>
+                  <period id="Yellow">
+                  </period>
+                </day>
+              </teacher>
+            </schooltt>
+            """
+        self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
+
+
 class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
 
     def test_get(self):
@@ -775,6 +912,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableReadWriteView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
+    suite.addTest(unittest.makeSuite(TestSchoolTimetableView))
     suite.addTest(unittest.makeSuite(TestTimePeriodServiceView))
     suite.addTest(unittest.makeSuite(TestTimePeriodCreatorView))
     suite.addTest(unittest.makeSuite(TestModuleSetup))

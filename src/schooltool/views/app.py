@@ -30,6 +30,7 @@ from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import TraversableView, XMLPseudoParser
 from schooltool.views import absoluteURL, notFoundPage
+from schooltool.views.timetable import SchoolTimetableTraverseView
 
 __metaclass__ = type
 
@@ -41,6 +42,12 @@ class ApplicationView(TraversableView):
     """The root view for the application"""
 
     template = Template("www/app.pt", content_type="text/xml")
+
+    def _traverse(self, name, request):
+        if name == 'schooltt':
+            return SchoolTimetableTraverseView(self.context)
+        else:
+            return TraversableView._traverse(self, name, request)
 
     def getRoots(self):
         return [{'path': getPath(root), 'title': root.title}
