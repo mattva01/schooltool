@@ -14,8 +14,8 @@
 
     <p i18n:translate="">
     You are trying to delete an event that has been generated from a timetable.
-    An exception for this day will be marked in the corresponding timetable.  Are
-    you sure you want to add an exception for this activity?
+    An exception for this day will be marked in the corresponding timetable.
+    Are you sure you want to add an exception for this activity?
     </p>
 
     <!-- TODO: prettying up (format, etc.) -->
@@ -31,10 +31,8 @@
     <div class="buttons">
       <input class="button" type="submit" name="CONFIRM" value="Confirm"
              i18n:attributes="value" />
-      <!-- TODO the link is not aligned with the button -->
-      <a class="action" tal:attributes="href
-    string:${context/@@absolute_url}/daily.html?date=${view/event/dtstart/date}"
-        >Go back</a>
+      <input class="button" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
     </div>
 
   </form>

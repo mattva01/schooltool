@@ -37,6 +37,16 @@ from schooltool.common import dedent
 __metaclass__ = type
 
 
+class TimetableStub:
+
+    def __init__(self):
+        self.exceptions = []
+
+
+class TimetableActivityStub:
+    timetable = None
+
+
 def createEvent(dtstart, duration, title, **kw):
     """Create a CalendarEvent.
 
@@ -999,6 +1009,19 @@ class TestEventDeleteView(unittest.TestCase):
             ttcal.addEvent(event)
         return ttcal
 
+    def createTimetableEvent(self):
+        from schooltool.timetable import TimetableCalendarEvent
+        period = "P1"
+        tt = TimetableStub()
+        act = TimetableActivityStub()
+        act.timetable = tt
+        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                    timedelta(hours=1), "Math",
+                                    unique_id="uniq",
+                                    period_id=period,
+                                    activity=act)
+        return ev
+
     def test(self):
         from schooltool.cal import CalendarEvent
         ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0),
@@ -1073,19 +1096,8 @@ class TestEventDeleteView(unittest.TestCase):
         dummy2 = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0), td1, "B",
                                         period_id="bar", activity=object())
 
-        class TimetableStub:
-            def __init__(self):
-                self.exceptions = ["dummy"]
-
-        period = "Math"
-        tt = TimetableStub()
-        act = lambda: None
-        act.timetable = tt
-        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                    timedelta(hours=1), "Math",
-                                    unique_id="uniq",
-                                    period_id=period,
-                                    activity=act)
+        ev = self.createTimetableEvent()
+        tt = ev.activity.timetable
         view = self.createView()
         view.context.addEvent(dummy1)
         view.context.addEvent(dummy2)
@@ -1095,14 +1107,26 @@ class TestEventDeleteView(unittest.TestCase):
         content = view.render(request)
 
         self.assertEquals(len(list(ttcal)), 3)
-        self.assertEquals(len(tt.exceptions), 2)
+        self.assertEquals(len(tt.exceptions), 1)
 
-        exc = tt.exceptions[1]
+        exc = tt.exceptions[0]
         self.assertEquals(exc.date, date(2004, 8, 12))
-        self.assertEquals(exc.period_id, "Math")
-        self.assertEquals(exc.activity, act)
+        self.assertEquals(exc.period_id, "P1")
+        self.assertEquals(exc.activity, ev.activity)
         self.assertEquals(exc.replacement, None)
 
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/somebody/calendar/'
+                          'daily.html?date=2004-08-12')
+
+    def test_tt_event_cancel(self):
+        view = self.createView()
+        ev = self.createTimetableEvent()
+        ttcal = self.createTTCal(view.context.__parent__, [ev])
+        request = RequestStub(args={'event_id': "uniq", 'CANCEL': 'Cancel'})
+        content = view.render(request)
+        self.assertEquals(ev.activity.timetable.exceptions, [])
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
