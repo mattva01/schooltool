@@ -201,8 +201,7 @@ class CSVImporterZODB(CSVImporterBase):
                 Membership(group=self.groups[parent], member=person)
             except KeyError:
                 raise DataError(_("Invalid group: %s") % parent)
-
-
+        Membership(group=self.groups['root'], member=person)
         for group in groups.split():
             try:
                 Membership(group=self.groups[group], member=person)

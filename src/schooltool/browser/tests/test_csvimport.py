@@ -222,6 +222,8 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.groups = ApplicationObjectContainer(Group)
         self.group1 = self.groups.new(__name__='group1')
         self.group2 = self.groups.new(__name__='group2')
+        self.group3 = self.groups.new(__name__='group3')
+        self.root = self.groups.new(__name__='root')
 
         self.persons = ApplicationObjectContainer(Person)
         self.person1 = self.persons.new(__name__='person1')
@@ -274,21 +276,24 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(person.title, 'Smith')
 
         objs = [link.traverse() for link in person.listLinks()]
-        self.assertEquals(len(objs), 2)
+        self.assertEquals(len(objs), 3)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
+        self.assert_(self.root in objs)
 
     def test_importPerson_teacher(self):
         name = self.im.importPerson('Wesson', 'group1', 'group2',
-                                    'group2')
+                                    'group3')
         self.assertEquals(self.im.logs, ["Imported person: Wesson"])
         person = self.persons[name]
         self.assertEquals(person.title, 'Wesson')
 
         objs = [link.traverse() for link in person.listLinks()]
-        self.assertEquals(len(objs), 3)
+        self.assertEquals(len(objs), 4)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
+        self.assert_(self.group3 in objs)
+        self.assert_(self.root in objs)
 
     def test_importPerson_errors(self):
         from schooltool.browser.csvimport import DataError
