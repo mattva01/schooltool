@@ -77,7 +77,7 @@ SchoolTool> put /utils/eventlog
 SchoolTool> .
 200 OK
 Content-Type: text/plain; charset=UTF-8
-11 events cleared
+11 events cleared in /utils/eventlog
 
 SchoolTool> get /utils/eventlog
 200 OK
