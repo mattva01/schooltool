@@ -483,8 +483,13 @@ class TestSequentialDaysTimetableModel(unittest.TestCase):
         template1 = SchooldayTemplate()
         template1.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
         template1.add(SchooldayPeriod('Blue', t(11, 0), td(minutes=90)))
+        template2 = SchooldayTemplate()
+        template2.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
+        template2.add(SchooldayPeriod('Blue', t(10, 30), td(minutes=90)))
 
-        model = SequentialDaysTimetableModel(("A", "B"), (template1,))
+        model = SequentialDaysTimetableModel(("A", "B"),
+                                             {None: template1,
+                                              calendar.FRIDAY: template2})
         schooldays = SchooldayModelStub()
 
         cal = model.createCalendar(schooldays, tt)
@@ -506,7 +511,7 @@ class TestSequentialDaysTimetableModel(unittest.TestCase):
         expected = [{dt(2003, 11, 20, 9, 0): "English",
                      dt(2003, 11, 20, 11, 0): "Math"},
                     {dt(2003, 11, 21, 9, 0): "Biology",
-                     dt(2003, 11, 21, 11, 0): "Geography"},
+                     dt(2003, 11, 21, 10, 30): "Geography"},
                     {}, {},
                     {dt(2003, 11, 24, 9, 0): "English",
                      dt(2003, 11, 24, 11, 0): "Math"},

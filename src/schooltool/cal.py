@@ -306,7 +306,6 @@ class SchooldayTemplate:
         self.events.remove(obj)
 
 
-
 class SequentialDaysTimetableModel:
 
     """A timetable model in which the school days go in sequence with
@@ -341,7 +340,7 @@ class SequentialDaysTimetableModel:
         for date in schoolday_model:
             if schoolday_model.isSchoolday(date):
                 day_id = day_id_gen.next()
-                day_template = self._getTeplateForDay(date)
+                day_template = self._getTemplateForDay(date)
                 for period in day_template:
                     dt = datetime.datetime.combine(date, period.tstart)
                     activity = timetable[day_id][period.title]
@@ -350,14 +349,17 @@ class SequentialDaysTimetableModel:
                     cal.addEvent(event)
         return cal
 
-    def _getTeplateForDay(self, date):
-        # XXX figure out how the templates are chosen
-        return self.dayTemplates[0]
+    def _getTemplateForDay(self, date):
+        try:
+            return self.dayTemplates[date.weekday()]
+        except KeyError:
+            return self.dayTemplates[None]
 
     def _nextDayId(self):
         while True:
             for day_id in self.timetableDayIds:
                 yield day_id
+
 
 class Calendar:
     implements(ICalendar)

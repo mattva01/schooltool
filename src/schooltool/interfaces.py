@@ -1196,7 +1196,11 @@ class ITimetableModel(Interface):
         """Returns a sequence of day_ids which can be used in the timetable.""")
 
     dayTemplates = Attribute(
-        """Returns a set of schoolday templates to be used with this model.""")
+        """A mapping of weekdays (calendar.MONDAY,...) to ISchooldayTemplates.
+
+        The template with the key of None is used if there is no
+        template for a particular weekday.
+        """)
 
     def createCalendar(schoolday_model, timetable):
         """Returns an ICalendar composed out of schoolday_model and timetable.
