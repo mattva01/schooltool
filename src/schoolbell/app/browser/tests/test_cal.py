@@ -2794,6 +2794,12 @@ def doctest_YearlyCalendarView():
         <a href="http://127.0.0.1/calendar/2004-02-05" class="cal_yearly_day">5</a>
         </td>
 
+    If the week includes today, that is indicated in a class attribute:
+
+        >>> week = view.getWeek(date.today())
+        >>> print view.renderRow(week, date.today().month)
+        <td...class="cal_yearly_day today">...
+
     """
 
 

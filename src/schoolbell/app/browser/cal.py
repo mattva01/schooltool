@@ -531,7 +531,8 @@ class CalendarViewBase(BrowserView):
              tal:attributes="href python:view.calURL('daily', day.date);
                              class python:(len(day.events) > 0
                                            and 'cal_yearly_day_busy'
-                                           or  'cal_yearly_day')"/>
+                                           or  'cal_yearly_day')
+                                        + (day.today() and ' today' or '')"/>
          </td>
         """
         result = []
@@ -543,6 +544,8 @@ class CalendarViewBase(BrowserView):
                     cssClass = 'cal_yearly_day_busy'
                 else:
                     cssClass = 'cal_yearly_day'
+                if day.today():
+                    cssClass += ' today'
                 # Let us hope that URLs will not contain < > & or "
                 # This is somewhat related to
                 #   http://issues.schooltool.org/issue96
