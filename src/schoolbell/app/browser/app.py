@@ -21,9 +21,10 @@ SchoolBell application views.
 
 $Id$
 """
+
 from zope.publisher.interfaces import NotFound
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.browser.skin import ISchoolBellSkin
+
 
 class ContainerView(object):
     """A base view for all containers.
@@ -79,25 +80,12 @@ class PersonView(object):
         self.request = request
 
     def canEdit(self):
-        #XXX Not implemented
-        return True
+        return True # TODO: implement permission checking
 
-    def canChangePassword(self):
-        #XXX Not implemented
-        return True
+    canChangePassword = canEdit # TODO: implement permission checking
+    canViewCalendar = canEdit # TODO: implement permission checking
+    canChooseCalendars = canEdit # TODO: implement permission checking
 
-    canViewCalendar = canChangePassword
-    canChooseCalendars = canChangePassword
-
-    def timetables(self, empty=False):
-        """Return a sorted list of all composite timetables on self.context.
-
-        If `empty` is True, also includes empty timetables in the output.
-
-        The list contains dicts with 'title', 'url' and 'empty' in them.
-        """
-        #XXX Not implemented
-        pass
 
 class PersonPhotoView(object):
     """View that returns photo of a Person."""
@@ -112,3 +100,4 @@ class PersonPhotoView(object):
             raise NotFound(self.context, u'photo', self.request)
         self.request.response.setHeader('Content-Type', "image/jpeg")
         return photo
+

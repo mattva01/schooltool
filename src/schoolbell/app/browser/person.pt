@@ -29,22 +29,6 @@
       </tal>
     </div>
 
-    <!-- XXX timetables python:view.timetables(view.isManager()) -->
-    <div class="timetables"
-         tal:define="timetables python:view.timetables(True)"
-         tal:condition="timetables">
-      <h3 i18n:translate="">Timetables (XXX NOT IMPLEMENTED)</h3>
-      <tal tal:condition="nothing">
-        <p tal:repeat="tt timetables">
-          <a tal:omit-tag="tt/empty"
-             tal:attributes="href tt/url" tal:content="tt/title"/>
-          <tal:if tal:condition="view/isManager">
-            (<a tal:attributes="href string:${tt/url}/setup.html"
-                i18n:translate="">setup</a>)
-          </tal:if>
-        </p>
-      </tal>
-    </div>
     <div class="row"><b i18n:translate="">Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>
