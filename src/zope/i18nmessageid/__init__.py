@@ -11,5 +11,5 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"$Id: messageid.py,v 1.10 2004/03/19 12:00:07 jim Exp $"
-from zope.i18nmessageid import MessageID, MessageIDFactory
+"$Id: __init__.py,v 1.1 2004/03/19 12:00:05 jim Exp $"
+from messageid import MessageID, MessageIDFactory

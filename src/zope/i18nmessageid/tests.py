@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 Zope Corporation and Contributors.
+# Copyright (c) 2003 Zope Corporation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -11,5 +11,17 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"$Id: messageid.py,v 1.10 2004/03/19 12:00:07 jim Exp $"
-from zope.i18nmessageid import MessageID, MessageIDFactory
+"""Message ID tests.
+
+$Id: tests.py,v 1.1 2004/03/19 12:00:05 jim Exp $
+"""
+import unittest
+from zope.testing.doctestunit import DocTestSuite
+
+def test_suite():
+    return unittest.TestSuite((
+        DocTestSuite('zope.i18nmessageid.messageid'),
+        ))
+
+if __name__ == '__main__':
+    unittest.main()
