@@ -3,7 +3,7 @@
 
   <content
       class="schoolbell.relationship.relationship.BoundRelationshipProperty">
-    <allow attributes="__iter__" />
+    <allow attributes="__iter__ __contains__" />
   </content>
 
 
