@@ -978,12 +978,10 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         from schooltool.clients.guiclient import URIObject
         from schooltool.clients.guiclient import URIMembership_uri
         from schooltool.clients.guiclient import URIMember_uri
-        URIMembership = URIObject(URIMembership_uri)
-        URIMember = URIObject(URIMember_uri)
         client = self.newClient(ResponseStub(201, 'Created',
                 location='http://localhost/persons/john/relationships/004'))
         result = client.createRelationship('/persons/john', '/groups/teachers',
-                                           URIMembership, URIMember)
+                                           URIMembership_uri, URIMember_uri)
         self.assertEquals(result, '/persons/john/relationships/004')
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/persons/john/relationships')

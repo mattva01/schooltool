@@ -507,18 +507,17 @@ class SchoolToolClient:
     def createRelationship(self, obj1_path, obj2_path, reltype, obj1_role):
         """Create a relationship between two objects.
 
+        reltype and obj1_role are simple string URIs, not URIObjects.
+
         Example:
-          URIMembership = client.uriobjects[URIMembership_uri]
-          URIMember = client.uriobjects[URIMember_uri]
           client.createRelationship('/persons/john', '/groups/teachers',
-                                    URIMembership, URIMember)
+                                    URIMembership_uri, URIMember_uri)
         """
         body = ('<relationship xmlns="http://schooltool.org/ns/model/0.1"'
                 ' xmlns:xlink="http://www.w3.org/1999/xlink"'
                 ' xlink:type="simple"'
                 ' xlink:href="%s" xlink:arcrole="%s" xlink:role="%s"/>'
-                % tuple(map(to_xml, [obj2_path, reltype.uri,
-                                     obj1_role.uri])))
+                % tuple(map(to_xml, [obj2_path, reltype, obj1_role])))
         response = self.post('%s/relationships' % obj1_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)
