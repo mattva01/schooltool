@@ -731,18 +731,12 @@ class DailyCalendarView(CalendarViewBase):
     def rowTitle(self, hour, minute):
         """Return the row title as HH:MM or H:MM am/pm."""
         person = IPerson(self.request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-            if prefs.timeformat == "H:MM am/pm":
-                # FIXME issues with 12 am - 1 am
-                if hour < 13:
-                    return '%d:%02d am' % (hour, minute)
-                else:
-                    return '%d:%02d pm' % (hours_map[hour], minute)
-            else:
-                return '%d:%02d' % (hour, minute)
-
-        return '%d:%02d' % (hour, minute)
+        prefs = IPersonPreferences(person, None)
+        if prefs is not None and prefs.timeformat == "H:MM am/pm":
+            fmt = '%I:%M %p'
+        else:
+            fmt = '%H:%M'
+        return time(hour, minute).strftime(fmt)
 
     def calendarRows(self):
         """Iterate over (title, start, duration) of time slots that make up
