@@ -180,7 +180,10 @@ class View(Resource):
     def render(self, request):
         handler = getattr(self, 'do_%s' % request.method, None)
         if handler is not None:
-            return handler(request)
+            body = handler(request)
+            assert isinstance(body, str), \
+                   "do_%s did not return a string" % request.method
+            return body
         else:
             request.setHeader('Allow', ', '.join(self.allowedMethods()))
             return errorPage(request, 405, "Method Not Allowed")
