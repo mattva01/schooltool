@@ -28,6 +28,7 @@ import urllib
 import copy
 from persistence import Persistent
 from transaction import get_transaction
+from zodb.interfaces import ConflictError
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web import server, resource
 from twisted.internet import reactor
@@ -205,23 +206,57 @@ class Request(server.Request):
         self.zodb_conn = None
         try:
             try:
-                self.zodb_conn = self.site.db.open()
-                resrc = self.traverse()
-                self.render(resrc)
-                # XXX: if an exception happens after this point, note, that
-                #      request.write and request.finish might be already queued
-                #      with the reactor.
-                txn = get_transaction()
-                txn.note(self.path)
-                txn.setUser(self.getUser()) # anonymous is ""
-                txn.commit()
+                retries = self.site.conflictRetries
+                while True:
+                    try:
+                        self.zodb_conn = self.site.db.open()
+                        resrc = self.traverse()
+                        body = self.render(resrc)
+                        txn = get_transaction()
+                        txn.note(self.path)
+                        txn.setUser(self.getUser()) # anonymous is ""
+                        txn.commit()
+                    except ConflictError:
+                        if retries <= 0:
+                            raise
+                        retries -= 1
+                        get_transaction().abort()
+                        self.zodb_conn.close()
+                        self.reset()
+                    else:
+                        break
             except:
                 get_transaction().abort()
                 reactor.callFromThread(self.processingFailed, failure.Failure())
+            else:
+                reactor.callFromThread(self.write, body)
+                reactor.callFromThread(self.finish)
         finally:
             if self.zodb_conn:
                 self.zodb_conn.close()
                 self.zodb_conn = None
+
+    def reset(self):
+        """Resets the state of the request.
+
+        Clears all cookies, headers.  In other words, undoes any changes
+        caused by calling setHeader, addCookie, setResponseCode, redirect,
+        setLastModified, setETag.
+
+        Limitation: this method does not undo changes made by calling setHost.
+
+        You may not call reset if the response is already partially written
+        to the transport.
+        """
+
+        # should not happen
+        assert not self.startedWriting, 'cannot reset at this state'
+
+        self.cookies = []
+        self.headers = {}
+        self.lastModified = None
+        self.etag = None
+        self.setResponseCode(http.OK)
 
     def traverse(self):
         """Locate the resource for this request.
@@ -252,11 +287,10 @@ class Request(server.Request):
         if self.method == "HEAD":
             if len(body) > 0:
                 self.setHeader('Content-Length', len(body))
-            reactor.callFromThread(self.write, '')
+            return ''
         else:
             self.setHeader('Content-Length', len(body))
-            reactor.callFromThread(self.write, body)
-        reactor.callFromThread(self.finish)
+            return body
 
 
 class Site(server.Site):
@@ -265,6 +299,8 @@ class Site(server.Site):
     __super = server.Site
     __super___init__ = __super.__init__
     __super_buildProtocol = __super.buildProtocol
+
+    conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
 
     def __init__(self, db, rootName, viewFactory):
         """Creates a site.
