@@ -30,16 +30,16 @@ from schooltool.component import registerView
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
 from schooltool.component import getPath
-from schooltool.views import View, Template
-from schooltool.views import notFoundPage
-from schooltool.views import absolutePath
-from schooltool.views.relationship import RelationshipsView
-from schooltool.views.facet import FacetManagementView
-from schooltool.views.timetable import TimetableTraverseView
-from schooltool.views.timetable import CompositeTimetableTraverseView
-from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
-from schooltool.views.absence import RollCallView, AbsenceManagementView
-from schooltool.views.auth import PublicAccess, PrivateAccess
+from schooltool.rest import View, Template
+from schooltool.rest import notFoundPage
+from schooltool.rest import absolutePath
+from schooltool.rest.relationship import RelationshipsView
+from schooltool.rest.facet import FacetManagementView
+from schooltool.rest.timetable import TimetableTraverseView
+from schooltool.rest.timetable import CompositeTimetableTraverseView
+from schooltool.rest.cal import CalendarView, CalendarReadView, BookingView
+from schooltool.rest.absence import RollCallView, AbsenceManagementView
+from schooltool.rest.auth import PublicAccess, PrivateAccess
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type

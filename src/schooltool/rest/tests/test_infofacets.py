@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.infofacets
+Unit tests for schooltool.rest.infofacets
 
 $Id$
 """
@@ -28,8 +28,8 @@ import datetime
 from zope.interface import directlyProvides
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import ILocation
-from schooltool.views.tests import RequestStub
-from schooltool.views.tests import setPath
+from schooltool.rest.tests import RequestStub
+from schooltool.rest.tests import setPath
 from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
@@ -38,7 +38,7 @@ __metaclass__ = type
 class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
 
     def createView(self, context=None):
-        from schooltool.views.infofacets import PersonInfoFacetView
+        from schooltool.rest.infofacets import PersonInfoFacetView
         from schooltool.infofacets import PersonInfoFacet
         if context is None:
             context = PersonInfoFacet()
@@ -129,7 +129,7 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
 
     def test_traverse(self):
         from schooltool.infofacets import PersonInfoFacet
-        from schooltool.views.infofacets import PhotoView
+        from schooltool.rest.infofacets import PhotoView
         context = PersonInfoFacet()
         context.photo = "[pretend that this is JPEG data]"
         view = self.createView(context)
@@ -143,7 +143,7 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
 class TestPhotoView(unittest.TestCase):
 
     def test_get(self):
-        from schooltool.views.infofacets import PhotoView
+        from schooltool.rest.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
         context.photo = 'data\rdata\ndata\000and more data'
@@ -155,7 +155,7 @@ class TestPhotoView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'], 'image/jpeg')
 
     def test_get_no_photo(self):
-        from schooltool.views.infofacets import PhotoView
+        from schooltool.rest.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
         view = PhotoView(context)
@@ -164,7 +164,7 @@ class TestPhotoView(unittest.TestCase):
         self.assertEquals(request.code, 404)
 
     def test_put(self):
-        from schooltool.views.infofacets import PhotoView
+        from schooltool.rest.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
 
         photo = 'P6\n1 1\n255\n\xff\xff\xff'
@@ -184,7 +184,7 @@ class TestPhotoView(unittest.TestCase):
         self.assert_(context.photo is not None)
 
     def test_put_errors(self):
-        from schooltool.views.infofacets import PhotoView
+        from schooltool.rest.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
 
         photo = 'this is not a picture'
@@ -202,7 +202,7 @@ class TestPhotoView(unittest.TestCase):
         self.assertEquals(request.applog, [])
 
     def test_delete(self):
-        from schooltool.views.infofacets import PhotoView
+        from schooltool.rest.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
 
@@ -223,7 +223,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersonInfoFacetView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
-    suite.addTest(DocTestSuite('schooltool.views.infofacets'))
+    suite.addTest(DocTestSuite('schooltool.rest.infofacets'))
     return suite
 
 if __name__ == '__main__':

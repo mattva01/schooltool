@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.csvexport
+Unit tests for schooltool.rest.csvexport
 
 $Id$
 """
@@ -30,7 +30,7 @@ from cStringIO import StringIO
 from pprint import pformat
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.helpers import sorted, diff
-from schooltool.views.tests import RequestStub
+from schooltool.rest.tests import RequestStub
 
 __metaclass__ = type
 
@@ -164,7 +164,7 @@ class TestCSVExporter(RegistriesSetupMixin, NiceDiffsMixin, unittest.TestCase):
         return app
 
     def test(self):
-        from schooltool.views.csvexport import CSVExporter
+        from schooltool.rest.csvexport import CSVExporter
         app = self.createApp()
         view = CSVExporter(app)
         request = RequestStub()

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.absence
+Unit tests for schooltool.rest.absence
 
 $Id$
 """
@@ -29,8 +29,8 @@ from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.tests.helpers import diff, dedent
-from schooltool.views.tests import RequestStub
-from schooltool.views.tests import TraversableStub, TraversableRoot, setPath
+from schooltool.rest.tests import RequestStub
+from schooltool.rest.tests import TraversableStub, TraversableRoot, setPath
 
 __metaclass__ = type
 
@@ -51,7 +51,7 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
 
     def test_parseComment(self):
         from schooltool.interfaces import Unchanged
-        from schooltool.views.absence import AbsenceCommentParser
+        from schooltool.rest.absence import AbsenceCommentParser
         john = object()
         group = object()
         persons = TraversableStub(john=john)
@@ -112,7 +112,7 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
         self.assert_(comment.expected_presence is None)
 
     def test_parseComment_errors(self):
-        from schooltool.views.absence import AbsenceCommentParser
+        from schooltool.rest.absence import AbsenceCommentParser
         parser = AbsenceCommentParser()
         parser.context = TraversableRoot(obj=object())
         bad_requests = (
@@ -151,7 +151,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.setUpEventService()
 
     def test_traverse(self):
-        from schooltool.views.absence import AbsenceManagementView, AbsenceView
+        from schooltool.rest.absence import AbsenceManagementView, AbsenceView
         from schooltool.model import Person
         from schooltool.absence import AbsenceComment
         context = Person()
@@ -166,7 +166,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
                           view._traverse, absence.__name__ + 'X', request)
 
     def test_get(self):
-        from schooltool.views.model import AbsenceManagementView
+        from schooltool.rest.model import AbsenceManagementView
         from schooltool.model import Person
         from schooltool.absence import AbsenceComment
         context = Person()
@@ -193,7 +193,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
             """, recursively_sort=['absences'])
 
     def test_post(self):
-        from schooltool.views.model import AbsenceManagementView
+        from schooltool.rest.model import AbsenceManagementView
         from schooltool.model import Person
         context = Person()
         context.title = 'Mr. Foo'
@@ -228,7 +228,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(comment.text, "Foo")
 
     def test_post_another_one(self):
-        from schooltool.views.model import AbsenceManagementView
+        from schooltool.rest.model import AbsenceManagementView
         from schooltool.model import Person
         from schooltool.absence import AbsenceComment
         context = Person()
@@ -265,7 +265,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(comment.text, "Bar")
 
     def test_post_errors(self):
-        from schooltool.views.model import AbsenceManagementView
+        from schooltool.rest.model import AbsenceManagementView
         from schooltool.model import Person
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
@@ -313,7 +313,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         return absence
 
     def test_get(self):
-        from schooltool.views.absence import AbsenceView
+        from schooltool.rest.absence import AbsenceView
         absence = self.createAbsence()
         view = AbsenceView(absence)
         request = RequestStub("http://localhost/person/absences/001")
@@ -345,7 +345,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
             """, recursively_sort=['absence'])
 
     def test_post(self):
-        from schooltool.views.absence import AbsenceView
+        from schooltool.rest.absence import AbsenceView
         absence = self.createAbsence()
         view = AbsenceView(absence)
         basepath = "/person/absences/001/"
@@ -367,7 +367,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(comment.text, u"Foo \u2730")
 
     def test_post_errors(self):
-        from schooltool.views.absence import AbsenceView
+        from schooltool.rest.absence import AbsenceView
         absence = self.createAbsence()
         self.assertEquals(len(absence.comments), 2)
         basepath = "/person/absences/001/"
@@ -388,7 +388,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(len(absence.comments), 2)
 
     def test_post_duplicate(self):
-        from schooltool.views.absence import AbsenceView
+        from schooltool.rest.absence import AbsenceView
         from schooltool.absence import AbsenceComment
         absence = self.createAbsence()
         absence.person.reportAbsence(AbsenceComment())
@@ -455,7 +455,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.tearDownLibxml2()
 
     def test_get(self):
-        from schooltool.views.absence import RollCallView
+        from schooltool.rest.absence import RollCallView
         from schooltool.absence import AbsenceComment
         self.personb.reportAbsence(AbsenceComment())
         self.personc.reportAbsence(AbsenceComment(None, "",
@@ -484,7 +484,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
             """, recursively_sort=['rollcall'])
 
     def test_post(self):
-        from schooltool.views.absence import RollCallView
+        from schooltool.rest.absence import RollCallView
         from schooltool.absence import AbsenceComment
         personc_absence = self.personc.reportAbsence(AbsenceComment())
         persond_absence = self.persond.reportAbsence(AbsenceComment())
@@ -558,7 +558,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
                           datetime.datetime(2001, 2, 3, 4, 5, 6))
 
     def test_post_no_reporter(self):
-        from schooltool.views.absence import RollCallView
+        from schooltool.rest.absence import RollCallView
         view = RollCallView(self.group)
         view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/group/rollcall",
@@ -590,7 +590,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assert_(comment.reporter is self.personb)
 
     def test_post_no_authorization(self):
-        from schooltool.views.absence import RollCallView
+        from schooltool.rest.absence import RollCallView
         view = RollCallView(self.group)
         view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/group/rollcall",
@@ -621,7 +621,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
                                   " user")
 
     def post_errors(self, body, errmsg):
-        from schooltool.views.absence import RollCallView
+        from schooltool.rest.absence import RollCallView
         view = RollCallView(self.group)
         request = RequestStub("http://localhost/group/rollcall",
                               method="POST", body=body,
@@ -789,7 +789,7 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool.model import Person
         from schooltool.absence import AbsenceComment, AbsenceTrackerUtility
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.views.absence import AbsenceTrackerView
+        from schooltool.rest.absence import AbsenceTrackerView
         from schooltool.interfaces import IAttendanceEvent
         self.setUpRegistries()
         app = Application()
@@ -824,7 +824,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
                                  unittest.TestCase):
 
     def test_get_text_choice(self):
-        from schooltool.views.absence import AbsenceTrackerView
+        from schooltool.rest.absence import AbsenceTrackerView
         context = AbsenceTrackerStub()
         view = AbsenceTrackerView(context)
         request = RequestStub("http://localhost/utils/absences/")
@@ -850,7 +850,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool.model import Person
         from schooltool.absence import AbsenceComment, AbsenceTrackerUtility
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.views.absence import AbsenceTrackerView
+        from schooltool.rest.absence import AbsenceTrackerView
         from schooltool.interfaces import IAttendanceEvent
         app = Application()
         self.tracker = AbsenceTrackerUtility()
@@ -939,7 +939,7 @@ class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
         from schooltool.model import Person
         from schooltool.absence import AbsenceTrackerFacet, AbsenceComment
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.views.absence import AbsenceTrackerFacetView
+        from schooltool.rest.absence import AbsenceTrackerFacetView
         from schooltool.facet import FacetManager
 
         self.setUpRegistries()

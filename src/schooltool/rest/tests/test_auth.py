@@ -17,14 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.auth
+Unit tests for schooltool.rest.auth
 
 $Id$
 """
 
 import unittest
 from zope.interface import implements
-from schooltool.views.tests import RequestStub
+from schooltool.rest.tests import RequestStub
 from schooltool.tests.utils import RegistriesSetupMixin
 
 __metaclass__ = type
@@ -56,21 +56,21 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.managers_group, member=self.manager)
 
     def test_isManager(self):
-        from schooltool.views.auth import isManager
+        from schooltool.rest.auth import isManager
         self.assertEquals(isManager(None), False)
         self.assertEquals(isManager(self.simpleuser), False)
         self.assertEquals(isManager(self.teacher), False)
         self.assertEquals(isManager(self.manager), True)
 
     def test_isTeacher(self):
-        from schooltool.views.auth import isTeacher
+        from schooltool.rest.auth import isTeacher
         self.assertEquals(isTeacher(None), False)
         self.assertEquals(isTeacher(self.simpleuser), False)
         self.assertEquals(isTeacher(self.teacher), True)
         self.assertEquals(isTeacher(self.manager), True)
 
     def test_getOwner(self):
-        from schooltool.views.auth import getOwner
+        from schooltool.rest.auth import getOwner
         from schooltool.interfaces import ILocation, IApplicationObject
 
         class ObjectStub:
@@ -122,7 +122,7 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
                                  % (method, username))
 
     def test_PublicAccess(self):
-        from schooltool.views.auth import PublicAccess
+        from schooltool.rest.auth import PublicAccess
         access = """
                     GET     HEAD    PUT     POST    DELETE  OTHER
         anonymous    +       +       -       -        -       -
@@ -133,7 +133,7 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         self.do_test_access(PublicAccess, access)
 
     def test_TeacherAccess(self):
-        from schooltool.views.auth import TeacherAccess
+        from schooltool.rest.auth import TeacherAccess
         access = """
                     GET     HEAD    PUT     POST    DELETE  OTHER
         anonymous    +       +       -       -        -       -
@@ -144,7 +144,7 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         self.do_test_access(TeacherAccess, access)
 
     def test_SystemAccess(self):
-        from schooltool.views.auth import SystemAccess
+        from schooltool.rest.auth import SystemAccess
         access = """
                     GET     HEAD    PUT     POST    DELETE  OTHER
         anonymous    -       -       -       -        -       -
@@ -155,7 +155,7 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         self.do_test_access(SystemAccess, access)
 
     def test_PrivateAccess(self):
-        from schooltool.views.auth import PrivateAccess
+        from schooltool.rest.auth import PrivateAccess
         access = """
                     GET     HEAD    PUT     POST    DELETE  OTHER
         anonymous    -       -       -       -        -       -

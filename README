@@ -109,9 +109,9 @@ Project structure
       ftests/           functional tests for the schooltool package
       browser/          web application views for the server
         tests/          unit tests for the schooltool.browser package
-      views/            RESTive views for the server
+      rest/             RESTive views for the server
         www/            page templates
-        tests/          unit tests for the schooltool.views package
+        tests/          unit tests for the schooltool.rest package
       clients/          SchoolTool clients
         client.py       executable command line client
         wxclient.py     executable wxWindows client

@@ -25,9 +25,9 @@ $Id$
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import registerView
-from schooltool.views import View, Template, textErrorPage
-from schooltool.views.facet import FacetView
-from schooltool.views.auth import SystemAccess
+from schooltool.rest import View, Template, textErrorPage
+from schooltool.rest.facet import FacetView
+from schooltool.rest.auth import SystemAccess
 from schooltool.eventlog import IEventLog, IEventLogUtility, IEventLogFacet
 from schooltool.translation import ugettext as _
 

@@ -22,8 +22,8 @@ View for the SchoolTool application log.
 $Id$
 """
 
-from schooltool.views import View, textErrorPage
-from schooltool.views.auth import SystemAccess
+from schooltool.rest import View, textErrorPage
+from schooltool.rest.auth import SystemAccess
 from schooltool.translation import ugettext as _
 from schooltool.common import from_locale, to_unicode
 

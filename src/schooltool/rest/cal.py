@@ -29,11 +29,11 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.interfaces import IApplicationObject
-from schooltool.views import View, Template, absoluteURL
-from schooltool.views import textErrorPage, notFoundPage
-from schooltool.views import read_file
-from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
-from schooltool.views.auth import isManager
+from schooltool.rest import View, Template, absoluteURL
+from schooltool.rest import textErrorPage, notFoundPage
+from schooltool.rest import read_file
+from schooltool.rest.auth import PublicAccess, PrivateAccess, TeacherAccess
+from schooltool.rest.auth import isManager
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period
 from schooltool.common import parse_date, parse_datetime, to_unicode

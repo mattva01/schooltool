@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.eventlog
+Unit tests for schooltool.rest.eventlog
 
 $Id$
 """
@@ -27,7 +27,7 @@ from logging import INFO
 import unittest
 from schooltool.tests.helpers import diff
 from schooltool.tests.utils import XMLCompareMixin
-from schooltool.views.tests import RequestStub
+from schooltool.rest.tests import RequestStub
 
 __metaclass__ = type
 
@@ -55,7 +55,7 @@ class EventStub:
 class TestEventLogView(XMLCompareMixin, unittest.TestCase):
 
     def test_empty(self):
-        from schooltool.views.eventlog import EventLogView
+        from schooltool.rest.eventlog import EventLogView
         context = EventLogStub()
         view = EventLogView(context)
         view.authorization = lambda ctx, rq: True
@@ -69,7 +69,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
             """)
 
     def test_nonempty(self):
-        from schooltool.views.eventlog import EventLogView
+        from schooltool.rest.eventlog import EventLogView
         context = EventLogStub()
         context.received = [(datetime.datetime(2003, 10, 01, 11, 12, 13),
                              EventStub())]
@@ -86,7 +86,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
             """)
 
     def test_clear(self):
-        from schooltool.views.eventlog import EventLogView
+        from schooltool.rest.eventlog import EventLogView
         context = EventLogStub()
         context.received = [(datetime.datetime(2003, 10, 01, 11, 12, 13),
                              EventStub())]

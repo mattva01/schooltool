@@ -26,10 +26,10 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IUtilityService, IUtility
 from schooltool.component import registerView
-from schooltool.views import View, Template
-from schooltool.views import ItemTraverseView
-from schooltool.views import absolutePath
-from schooltool.views.auth import PublicAccess
+from schooltool.rest import View, Template
+from schooltool.rest import ItemTraverseView
+from schooltool.rest import absolutePath
+from schooltool.rest.auth import PublicAccess
 
 __metaclass__ = type
 

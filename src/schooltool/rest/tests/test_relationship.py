@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.relationship
+Unit tests for schooltool.rest.relationship
 
 $Id$
 """
@@ -27,7 +27,7 @@ import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub
+from schooltool.rest.tests import RequestStub
 
 __metaclass__ = type
 
@@ -36,7 +36,7 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
                             unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.relationship import RelationshipsView
+        from schooltool.rest.relationship import RelationshipsView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -91,7 +91,7 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
 
     def test_traverse(self):
         from schooltool.interfaces import ILink
-        from schooltool.views.relationship import LinkView
+        from schooltool.rest.relationship import LinkView
         request = RequestStub("http://localhost/groups/sub/relationships/0001")
         result = self.view._traverse('0001', request)
         self.assert_(isinstance(result, LinkView), "is LinkView")
@@ -232,7 +232,7 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
 class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.relationship import LinkView
+        from schooltool.rest.relationship import LinkView
         from schooltool.model import Group
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership

@@ -509,7 +509,7 @@ def setUp():
         'schooltool.relationship',
         'schooltool.membership',
         'schooltool.absence',
-        'schooltool.views',
+        'schooltool.rest',
         'schooltool.eventlog',
         'schooltool.uris',
         'schooltool.teaching',

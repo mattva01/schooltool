@@ -29,10 +29,10 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
-from schooltool.views import View, Template, textErrorPage, notFoundPage
-from schooltool.views import absoluteURL, absolutePath, read_file
-from schooltool.views.cal import SchooldayModelCalendarView
-from schooltool.views.auth import PublicAccess
+from schooltool.rest import View, Template, textErrorPage, notFoundPage
+from schooltool.rest import absoluteURL, absolutePath, read_file
+from schooltool.rest.cal import SchooldayModelCalendarView
+from schooltool.rest.auth import PublicAccess
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.common import UnicodeAwareException, to_unicode

@@ -17,17 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.app
+Unit tests for schooltool.rest.app
 
-$Id: test_views.py 397 2003-11-21 11:38:01Z mg $
+$Id$
 """
 
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub, UtilityStub
-from schooltool.views.tests import XPathTestContext
+from schooltool.rest.tests import RequestStub, UtilityStub
+from schooltool.rest.tests import XPathTestContext
 
 
 __metaclass__ = type
@@ -36,13 +36,13 @@ __metaclass__ = type
 class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.app import ApplicationView
+        from schooltool.rest.app import ApplicationView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool import membership, views
+        from schooltool import membership, rest
         self.setUpRegistries()
         membership.setUp()
-        views.setUp()
+        rest.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
@@ -116,12 +116,12 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
             """, recursively_sort=["schooltool"])
 
     def test__traverse(self):
-        from schooltool.views.app import ApplicationObjectContainerView
-        from schooltool.views.app import AvailabilityQueryView
-        from schooltool.views.utility import UtilityServiceView
-        from schooltool.views.timetable import SchoolTimetableTraverseView
-        from schooltool.views.cal import AllCalendarsView
-        from schooltool.views.csvexport import CSVExporter
+        from schooltool.rest.app import ApplicationObjectContainerView
+        from schooltool.rest.app import AvailabilityQueryView
+        from schooltool.rest.utility import UtilityServiceView
+        from schooltool.rest.timetable import SchoolTimetableTraverseView
+        from schooltool.rest.cal import AllCalendarsView
+        from schooltool.rest.csvexport import CSVExporter
         request = RequestStub("http://localhost/groups")
         view = self.view._traverse('groups', request)
         self.assert_(view.__class__ is ApplicationObjectContainerView)
@@ -151,14 +151,14 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
                               QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.app import ApplicationObjectContainerView
+        from schooltool.rest.app import ApplicationObjectContainerView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool import membership, views
+        from schooltool import membership, rest
         self.setUpLibxml2()
         self.setUpRegistries()
         membership.setUp()
-        views.setUp()
+        rest.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
@@ -223,7 +223,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.code, 400)
 
     def test_get_child(self, method="GET"):
-        from schooltool.views.app import ApplicationObjectCreatorView
+        from schooltool.rest.app import ApplicationObjectCreatorView
         view = ApplicationObjectCreatorView(self.app['groups'], 'foo')
         request = RequestStub("http://localhost/groups/foo", method=method)
         view.authorization = lambda ctx, rq: True
@@ -235,7 +235,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.test_get_child(method="DELETE")
 
     def test_put_child(self):
-        from schooltool.views.app import ApplicationObjectCreatorView
+        from schooltool.rest.app import ApplicationObjectCreatorView
         view = ApplicationObjectCreatorView(self.app['groups'], 'foo')
         name = self.test_post(method="PUT", suffix="/foo", view=view)
         self.assertEquals(name, 'foo')
@@ -249,8 +249,8 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assert_(self.app['groups'][name].title == u'Bar Bar \u263B')
 
     def test__traverse(self):
-        from schooltool.views.model import GroupView
-        from schooltool.views.app import ApplicationObjectCreatorView
+        from schooltool.rest.model import GroupView
+        from schooltool.rest.app import ApplicationObjectCreatorView
         request = RequestStub("http://localhost/groups/root")
         view = self.view._traverse('root', request)
         self.assert_(view.__class__ is GroupView)
@@ -264,7 +264,7 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
                                 EqualsSortedMixin):
 
     def setUp(self):
-        from schooltool.views.app import AvailabilityQueryView
+        from schooltool.rest.app import AvailabilityQueryView
         from schooltool.model import Resource, Person
         from schooltool.app import Application, ApplicationObjectContainer
         self.app = Application()

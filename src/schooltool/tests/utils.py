@@ -103,7 +103,7 @@ class RegistriesSetupMixin:
     """Mixin for substituting temporary global registries."""
 
     def setUpRegistries(self):
-        from schooltool import component, views, uris, timetable
+        from schooltool import component, rest, uris, timetable
         self.old_relationship_registry = component.relationship_registry
         self.old_view_registry = component.view_registry
         self.old_class_view_registry = component.class_view_registry
@@ -116,7 +116,7 @@ class RegistriesSetupMixin:
         component.resetTimetableModelRegistry()
         uris.resetURIRegistry()
         uris.setUp()
-        views.setUp()
+        rest.setUp()
         timetable.setUp()
 
     def tearDownRegistries(self):

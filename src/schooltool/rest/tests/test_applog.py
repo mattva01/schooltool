@@ -17,14 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.applog
+Unit tests for schooltool.rest.applog
 
 $Id$
 """
 
 import unittest
 from StringIO import StringIO
-from schooltool.views.tests import RequestStub
+from schooltool.rest.tests import RequestStub
 
 __metaclass__ = type
 
@@ -33,7 +33,7 @@ class TestApplicationLogView(unittest.TestCase):
 
     def setUp(self):
         import schooltool.common
-        from schooltool.views.applog import ApplicationLogView
+        from schooltool.rest.applog import ApplicationLogView
         self.old_locale_charset = schooltool.common.locale_charset
         self.view = ApplicationLogView(None)
         self.view.authorization = lambda ctx, rq: True

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.facet
+Unit tests for schooltool.rest.facet
 
 $Id$
 """
@@ -31,7 +31,7 @@ from schooltool.tests.helpers import diff
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub, setPath
+from schooltool.rest.tests import RequestStub, setPath
 
 __metaclass__ = type
 
@@ -71,10 +71,10 @@ class FacetManagerStub:
 class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.facet import FacetView
-        from schooltool import views
+        from schooltool.rest.facet import FacetView
+        from schooltool import rest
         self.setUpRegistries()
-        views.setUp()
+        rest.setUp()
         self.facet = FacetStub(name="001")
         self.view = FacetView(self.facet)
         self.view.authorization = lambda ctx, rq: True
@@ -141,8 +141,8 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.tearDownLibxml2()
 
     def test_traverse(self):
-        from schooltool.views import View
-        from schooltool.views.facet import FacetManagementView
+        from schooltool.rest import View
+        from schooltool.rest.facet import FacetManagementView
         from schooltool.component import registerView
         registerView(IFacetStub, View)
 
@@ -156,7 +156,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(child.context, facet)
 
     def test_get(self):
-        from schooltool.views.facet import FacetManagementView
+        from schooltool.rest.facet import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
         from schooltool.eventlog import EventLogFacet
@@ -194,7 +194,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
             """, recursively_sort=["facets"])
 
     def test_post(self):
-        from schooltool.views.facet import FacetManagementView
+        from schooltool.rest.facet import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
         from schooltool.eventlog import EventLogFacet
@@ -231,7 +231,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(name, 'eventlog')
 
     def test_post_errors(self):
-        from schooltool.views.facet import FacetManagementView
+        from schooltool.rest.facet import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
         import schooltool.eventlog
@@ -256,7 +256,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
                               "text/plain; charset=UTF-8")
 
     def test_post_singleton_twice(self):
-        from schooltool.views.facet import FacetManagementView
+        from schooltool.rest.facet import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
         from schooltool.eventlog import EventLogFacet

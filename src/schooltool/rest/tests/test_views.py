@@ -17,14 +17,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views
+Unit tests for schooltool.rest
 
 $Id$
 """
 
 import unittest
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.views.tests import RequestStub
+from schooltool.rest.tests import RequestStub
 
 __metaclass__ = type
 
@@ -48,7 +48,7 @@ class TemplateStub:
 class TestTemplate(unittest.TestCase):
 
     def test_call(self):
-        from schooltool.views import Template
+        from schooltool.rest import Template
         templ = Template('sample.pt')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
@@ -57,7 +57,7 @@ class TestTemplate(unittest.TestCase):
         self.assertEquals(result, "code: 200\nfoo: Foo\nbar: Bar\n")
 
     def test_content_type(self):
-        from schooltool.views import Template
+        from schooltool.rest import Template
         templ = Template('sample_xml.pt', content_type='text/plain')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
@@ -66,7 +66,7 @@ class TestTemplate(unittest.TestCase):
         self.assertEquals(result, "code: 200\n")
 
     def test_no_content_type(self):
-        from schooltool.views import Template
+        from schooltool.rest import Template
         templ = Template('sample_xml.pt', content_type=None)
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
@@ -74,7 +74,7 @@ class TestTemplate(unittest.TestCase):
         self.assertEquals(result, "code: 200\n")
 
     def test_no_charset(self):
-        from schooltool.views import Template
+        from schooltool.rest import Template
         templ = Template('sample_xml.pt', content_type='text/plain',
                          charset=None)
         request = RequestStub()
@@ -83,7 +83,7 @@ class TestTemplate(unittest.TestCase):
         self.assertEquals(result, u"code: 200\n")
 
     def test_translate(self):
-        from schooltool.views import Template
+        from schooltool.rest import Template
         templ = Template('sample_i18n.pt')
 
         def fake_ugettext(msgid):
@@ -97,7 +97,7 @@ class TestTemplate(unittest.TestCase):
 class TestErrorViews(unittest.TestCase):
 
     def test_textErrorPage(self):
-        from schooltool.views import textErrorPage
+        from schooltool.rest import textErrorPage
         request = RequestStub()
         result = textErrorPage(request, u"Not ready to take off \u2639",
                                747, "Wait")
@@ -114,7 +114,7 @@ class TestErrorViews(unittest.TestCase):
         self.assertEquals(result, "42")
 
     def test_notFoundPage(self):
-        from schooltool.views import notFoundPage
+        from schooltool.rest import notFoundPage
         request = RequestStub(uri='/path')
         result = notFoundPage(request)
         self.assertEquals(request.code, 404)
@@ -124,7 +124,7 @@ class TestErrorViews(unittest.TestCase):
         self.assertEquals(result, "Not found: /path")
 
     def test_NotFoundView(self):
-        from schooltool.views import NotFoundView
+        from schooltool.rest import NotFoundView
         view = NotFoundView()
         request = RequestStub(uri='/path')
         result = view.render(request)
@@ -138,7 +138,7 @@ class TestErrorViews(unittest.TestCase):
 class TestView(unittest.TestCase):
 
     def test_getChild(self):
-        from schooltool.views import View, NotFoundView
+        from schooltool.rest import View, NotFoundView
         context = None
         request = RequestStub(uri='http://foo/')
         view = View(context)
@@ -151,7 +151,7 @@ class TestView(unittest.TestCase):
         self.assert_(result.__class__ is NotFoundView)
 
     def test_getChild_with_traverse(self):
-        from schooltool.views import View, NotFoundView
+        from schooltool.rest import View, NotFoundView
         context = None
         request = RequestStub()
         view = View(context)
@@ -168,7 +168,7 @@ class TestView(unittest.TestCase):
         self.assert_(result.__class__ is NotFoundView)
 
     def test_getChild_with_exceptions(self):
-        from schooltool.views import View
+        from schooltool.rest import View
         context = None
         request = RequestStub()
         view = View(context)
@@ -181,7 +181,7 @@ class TestView(unittest.TestCase):
         self.assertRaises(AssertionError, view.getChild, 'frob', request)
 
     def test_do_GET(self):
-        from schooltool.views import View
+        from schooltool.rest import View
         context = object()
         body = 'foo'
         view = View(context)
@@ -191,7 +191,7 @@ class TestView(unittest.TestCase):
         self.assertEquals(view.render(request), body)
 
     def test_do_HEAD(self):
-        from schooltool.views import View
+        from schooltool.rest import View
         context = object()
         body = 'foo'
         view = View(context)
@@ -202,7 +202,7 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['content-length'], len(body))
 
     def test_render(self):
-        from schooltool.views import View
+        from schooltool.rest import View
         context = object()
 
         class ViewSubclass(View):
@@ -242,7 +242,7 @@ class TestView(unittest.TestCase):
         self.assert_(view.request is None)
 
     def test_unauthorized(self):
-        from schooltool.views import View
+        from schooltool.rest import View
         view = View(None)
         request = RequestStub()
         result = view.unauthorized(request)
@@ -256,7 +256,7 @@ class TestView(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite('schooltool.views'))
+    suite.addTest(DocTestSuite('schooltool.rest'))
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
     suite.addTest(unittest.makeSuite(TestView))

@@ -20,7 +20,7 @@
 Unit tests for the schooltool.browser package.
 """
 
-from schooltool.views.tests import RequestStub, setPath     # reexport
+from schooltool.rest.tests import RequestStub, setPath     # reexport
 
 
 class TraversalTestMixin:

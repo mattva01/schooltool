@@ -33,7 +33,7 @@ from twisted.internet import reactor
 from twisted.protocols import http
 from twisted.python import failure
 
-from schooltool.views import textErrorPage
+from schooltool.rest import textErrorPage
 from schooltool.interfaces import AuthenticationError
 from schooltool.translation import ugettext as _
 

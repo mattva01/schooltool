@@ -45,11 +45,11 @@ def absoluteURL(request, obj, suffix=''):
 
     Example:
 
-      >>> from schooltool.views.tests import LocatableStub, setPath
+      >>> from schooltool.rest.tests import LocatableStub, setPath
       >>> root, obj = LocatableStub(), LocatableStub()
       >>> setPath(root, '/')
       >>> setPath(obj, '/obj')
-      >>> from schooltool.views.tests import RequestStub
+      >>> from schooltool.rest.tests import RequestStub
       >>> request = RequestStub('http://example.org:7001/')
 
       >>> absoluteURL(request, root)
@@ -98,11 +98,11 @@ def absolutePath(request, obj, suffix=''):
 
     Example:
 
-      >>> from schooltool.views.tests import LocatableStub, setPath
+      >>> from schooltool.rest.tests import LocatableStub, setPath
       >>> root, obj = LocatableStub(), LocatableStub()
       >>> setPath(root, '/')
       >>> setPath(obj, '/obj')
-      >>> from schooltool.views.tests import RequestStub
+      >>> from schooltool.rest.tests import RequestStub
       >>> request = RequestStub()
 
       >>> absolutePath(request, root)
@@ -255,7 +255,7 @@ class View(Resource):
         authorization
                     Callable that takes a context and a request and returns
                     True if that request is authorized.  See also,
-                    schooltool.views.auth
+                    schooltool.rest.auth
 
     Subclasses must provide authorization and either do_GET or template.
 
@@ -375,22 +375,22 @@ class TraversableView(View):
 
 def setUp():
     """See IModuleSetup."""
-    import schooltool.views.app
-    import schooltool.views.model
-    import schooltool.views.facet
-    import schooltool.views.utility
-    import schooltool.views.absence
-    import schooltool.views.eventlog
-    import schooltool.views.timetable
-    import schooltool.views.cal
-    import schooltool.views.infofacets
-    schooltool.views.app.setUp()
-    schooltool.views.model.setUp()
-    schooltool.views.facet.setUp()
-    schooltool.views.utility.setUp()
-    schooltool.views.absence.setUp()
-    schooltool.views.eventlog.setUp()
-    schooltool.views.timetable.setUp()
-    schooltool.views.cal.setUp()
-    schooltool.views.infofacets.setUp()
+    import schooltool.rest.app
+    import schooltool.rest.model
+    import schooltool.rest.facet
+    import schooltool.rest.utility
+    import schooltool.rest.absence
+    import schooltool.rest.eventlog
+    import schooltool.rest.timetable
+    import schooltool.rest.cal
+    import schooltool.rest.infofacets
+    schooltool.rest.app.setUp()
+    schooltool.rest.model.setUp()
+    schooltool.rest.facet.setUp()
+    schooltool.rest.utility.setUp()
+    schooltool.rest.absence.setUp()
+    schooltool.rest.eventlog.setUp()
+    schooltool.rest.timetable.setUp()
+    schooltool.rest.cal.setUp()
+    schooltool.rest.infofacets.setUp()
 

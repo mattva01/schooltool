@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.model
+Unit tests for schooltool.rest.model
 
 $Id$
 """
@@ -27,7 +27,7 @@ import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub, viewClass, setPath
+from schooltool.rest.tests import RequestStub, viewClass, setPath
 
 __metaclass__ = type
 
@@ -42,7 +42,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
                                          unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.model import ApplicationObjectTraverserView
+        from schooltool.rest.model import ApplicationObjectTraverserView
         from schooltool.model import Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -56,11 +56,11 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.view.authorization = lambda ctx, rq: True
 
     def test_traverse(self):
-        from schooltool.views.facet import FacetManagementView
-        from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.cal import CalendarView, CalendarReadView
-        from schooltool.views.timetable import TimetableTraverseView
-        from schooltool.views.timetable import CompositeTimetableTraverseView
+        from schooltool.rest.facet import FacetManagementView
+        from schooltool.rest.relationship import RelationshipsView
+        from schooltool.rest.cal import CalendarView, CalendarReadView
+        from schooltool.rest.timetable import TimetableTraverseView
+        from schooltool.rest.timetable import CompositeTimetableTraverseView
         from schooltool.interfaces import IFacetManager
 
         request = RequestStub("http://localhost/people/p")
@@ -93,7 +93,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
 class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.model import GroupView
+        from schooltool.rest.model import GroupView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -150,11 +150,11 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
             recursively_sort=['group'])
 
     def test_traverse(self):
-        from schooltool.views.facet import FacetManagementView
-        from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.model import TreeView
-        from schooltool.views.absence import RollCallView
-        from schooltool.views.timetable import TimetableTraverseView
+        from schooltool.rest.facet import FacetManagementView
+        from schooltool.rest.relationship import RelationshipsView
+        from schooltool.rest.model import TreeView
+        from schooltool.rest.absence import RollCallView
+        from schooltool.rest.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/group")
 
@@ -216,7 +216,7 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, QuietLibxml2Mixin,
         self.tearDownLibxml2()
 
     def test(self):
-        from schooltool.views.model import TreeView
+        from schooltool.rest.model import TreeView
         view = TreeView(self.group)
         view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/groups/root/tree")
@@ -247,7 +247,7 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, QuietLibxml2Mixin,
 class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.model import PersonView
+        from schooltool.rest.model import PersonView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -269,11 +269,11 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.view.authorization = lambda ctx, rq: True
 
     def test_traverse(self):
-        from schooltool.views.model import PersonPasswordView
-        from schooltool.views.facet import FacetManagementView
-        from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.absence import AbsenceManagementView
-        from schooltool.views.timetable import TimetableTraverseView
+        from schooltool.rest.model import PersonPasswordView
+        from schooltool.rest.facet import FacetManagementView
+        from schooltool.rest.relationship import RelationshipsView
+        from schooltool.rest.absence import AbsenceManagementView
+        from schooltool.rest.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/person")
 
@@ -336,7 +336,7 @@ class TestPersonPasswordView(unittest.TestCase):
 
     def test_do_PUT(self):
         from schooltool.model import Person
-        from schooltool.views.model import PersonPasswordView
+        from schooltool.rest.model import PersonPasswordView
         p = Person("John")
         setPath(p, '/persons/001')
         v = PersonPasswordView(p)
@@ -356,7 +356,7 @@ class TestPersonPasswordView(unittest.TestCase):
 
     def test_do_DELETE(self):
         from schooltool.model import Person
-        from schooltool.views.model import PersonPasswordView
+        from schooltool.rest.model import PersonPasswordView
         p = Person("John")
         setPath(p, '/persons/002')
         p.setPassword("foo")
@@ -374,7 +374,7 @@ class TestPersonPasswordView(unittest.TestCase):
 class TestResourceView(XMLCompareMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.model import ResourceView
+        from schooltool.rest.model import ResourceView
         from schooltool.model import Resource
         from schooltool.app import Application, ApplicationObjectContainer
         app = Application()
@@ -385,10 +385,10 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
         self.view.authorization = lambda ctx, rq: True
 
     def test_traverse(self):
-        from schooltool.views.facet import FacetManagementView
-        from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.timetable import TimetableTraverseView
-        from schooltool.views.cal import BookingView
+        from schooltool.rest.facet import FacetManagementView
+        from schooltool.rest.relationship import RelationshipsView
+        from schooltool.rest.timetable import TimetableTraverseView
+        from schooltool.rest.cal import BookingView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/resources/room3")
 
@@ -439,9 +439,9 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IGroup, IPerson, IResource
-        from schooltool.views.model import GroupView, PersonView, ResourceView
-        import schooltool.views.model
-        schooltool.views.model.setUp()
+        from schooltool.rest.model import GroupView, PersonView, ResourceView
+        import schooltool.rest.model
+        schooltool.rest.model.setUp()
 
         self.assert_(viewClass(IGroup) is GroupView)
         self.assert_(viewClass(IPerson) is PersonView)

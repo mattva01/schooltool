@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.utility
+Unit tests for schooltool.rest.utility
 
 $Id$
 """
@@ -25,7 +25,7 @@ $Id$
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
-from schooltool.views.tests import RequestStub, UtilityStub
+from schooltool.rest.tests import RequestStub, UtilityStub
 
 __metaclass__ = type
 
@@ -34,11 +34,11 @@ class TestUtilityServiceView(XMLCompareMixin, RegistriesSetupMixin,
                              unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.utility import UtilityServiceView
+        from schooltool.rest.utility import UtilityServiceView
         from schooltool.app import Application
-        import schooltool.views
+        import schooltool.rest
         self.setUpRegistries()
-        schooltool.views.setUp()
+        schooltool.rest.setUp()
         self.app = Application()
         self.app.utilityService["foo"] = UtilityStub("Foo utility")
         self.view = UtilityServiceView(self.app.utilityService)
@@ -60,7 +60,7 @@ class TestUtilityServiceView(XMLCompareMixin, RegistriesSetupMixin,
             """)
 
     def test__traverse(self):
-        from schooltool.views.utility import UtilityView
+        from schooltool.rest.utility import UtilityView
         request = RequestStub("http://localhost/utils/foo")
         view = self.view._traverse('foo', request)
         self.assert_(view.__class__ is UtilityView)
@@ -71,11 +71,11 @@ class TestUtilityView(XMLCompareMixin, RegistriesSetupMixin,
                       unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.utility import UtilityView
+        from schooltool.rest.utility import UtilityView
         from schooltool.app import Application
-        import schooltool.views
+        import schooltool.rest
         self.setUpRegistries()
-        schooltool.views.setUp()
+        schooltool.rest.setUp()
         self.app = Application()
         self.app.utilityService["foo"] = UtilityStub("Foo utility")
         self.view = UtilityView(self.app.utilityService['foo'])

@@ -35,12 +35,12 @@ from schooltool.component import registerView
 from schooltool.component import getPath, traverse
 from schooltool.component import getRelatedObjects
 from schooltool.absence import AbsenceComment
-from schooltool.views import View, Template
-from schooltool.views import textErrorPage
-from schooltool.views import read_file
-from schooltool.views import absoluteURL, absolutePath
-from schooltool.views.facet import FacetView
-from schooltool.views.auth import TeacherAccess, isManager
+from schooltool.rest import View, Template
+from schooltool.rest import textErrorPage
+from schooltool.rest import read_file
+from schooltool.rest import absoluteURL, absolutePath
+from schooltool.rest.facet import FacetView
+from schooltool.rest.auth import TeacherAccess, isManager
 from schooltool.common import parse_datetime, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.timetable
+Unit tests for schooltool.rest.timetable
 
 $Id$
 """
@@ -29,7 +29,7 @@ from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.interfaces import ITraversable
-from schooltool.views.tests import RequestStub, TraversableRoot, setPath
+from schooltool.rest.tests import RequestStub, TraversableRoot, setPath
 from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -126,7 +126,7 @@ class ServiceManagerStub:
 class TestTimetableContentNegotiation(unittest.TestCase):
 
     def test(self):
-        from schooltool.views.timetable import TimetableContentNegotiation
+        from schooltool.rest.timetable import TimetableContentNegotiation
         cn = TimetableContentNegotiation()
         cn.template = 'xml'
         cn.html_template = 'html'
@@ -198,8 +198,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         return view, view2, view3, context, tt
 
     def test_TimetableTraverseView_rw(self):
-        from schooltool.views.timetable import TimetableTraverseView
-        from schooltool.views.timetable import TimetableReadWriteView
+        from schooltool.rest.timetable import TimetableTraverseView
+        from schooltool.rest.timetable import TimetableReadWriteView
         view1, view2, view3, context, tt = self.do_test(
             TimetableTraverseView, TimetableReadWriteView,
             """
@@ -234,8 +234,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(view.key, ('2003 fall', 'eewkly'))
 
     def test_TimetableTraverseView_ro(self):
-        from schooltool.views.timetable import TimetableTraverseView
-        from schooltool.views.timetable import TimetableReadView
+        from schooltool.rest.timetable import TimetableTraverseView
+        from schooltool.rest.timetable import TimetableReadView
         view1, view2, view3, context, tt = self.do_test(
             TimetableTraverseView, TimetableReadView,
             """
@@ -265,8 +265,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(KeyError, view2._traverse, 'eewkly', request)
 
     def test_CompositeTimetableTraverseView(self):
-        from schooltool.views.timetable import CompositeTimetableTraverseView
-        from schooltool.views.timetable import TimetableReadView
+        from schooltool.rest.timetable import CompositeTimetableTraverseView
+        from schooltool.rest.timetable import TimetableReadView
         view1, view2, view3, context, tt = self.do_test(
             CompositeTimetableTraverseView, TimetableReadView,
             """
@@ -303,8 +303,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(KeyError, view2._traverse, 'eewkly', request)
 
     def test_SchoolTimetableTraverseView(self):
-        from schooltool.views.timetable import SchoolTimetableTraverseView
-        from schooltool.views.timetable import SchoolTimetableView
+        from schooltool.rest.timetable import SchoolTimetableTraverseView
+        from schooltool.rest.timetable import SchoolTimetableView
         view1, view2, view3, context, tt = (
             self.do_test(SchoolTimetableTraverseView, SchoolTimetableView,
                 """
@@ -492,7 +492,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         return tt
 
     def createView(self, context, key=('2003 fall', 'weekly')):
-        from schooltool.views.timetable import TimetableReadView
+        from schooltool.rest.timetable import TimetableReadView
         return TimetableReadView(context, key)
 
     def do_test_get(self, context, expected, ctype="text/xml", accept=()):
@@ -597,7 +597,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
 
     def createView(self, context=None, timetabled=None,
                    key=('2003 fall', 'weekly')):
-        from schooltool.views.timetable import TimetableReadWriteView
+        from schooltool.rest.timetable import TimetableReadWriteView
         if timetabled is None:
             timetabled = self.createTimetabled()
             if context is not None:
@@ -984,7 +984,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
 
     def createView(self, context, service=None, key='weekly'):
         from schooltool.timetable import TimetableSchemaService
-        from schooltool.views.timetable import TimetableSchemaView
+        from schooltool.rest.timetable import TimetableSchemaView
         if service is None:
             service = TimetableSchemaService()
             if context is not None:
@@ -1136,7 +1136,7 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
 
     def test_get(self):
         from schooltool.timetable import TimetableSchemaService, Timetable
-        from schooltool.views.timetable import TimetableSchemaServiceView
+        from schooltool.rest.timetable import TimetableSchemaServiceView
         context = TimetableSchemaService()
         setPath(context, '/ttservice')
         view = TimetableSchemaServiceView(context)
@@ -1169,8 +1169,8 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.timetable import TimetableSchemaService, Timetable
-        from schooltool.views.timetable import TimetableSchemaServiceView
-        from schooltool.views.timetable import TimetableSchemaView
+        from schooltool.rest.timetable import TimetableSchemaServiceView
+        from schooltool.rest.timetable import TimetableSchemaView
         context = TimetableSchemaService()
         tt = context['weekly'] = Timetable(())
         view = TimetableSchemaServiceView(context)
@@ -1237,7 +1237,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         """
 
     def setUp(self):
-        from schooltool.views.timetable import SchoolTimetableView
+        from schooltool.rest.timetable import SchoolTimetableView
         from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -1517,7 +1517,7 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
 
     def test_get(self):
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimePeriodServiceView
+        from schooltool.rest.timetable import TimePeriodServiceView
         context = TimePeriodService()
         setPath(context, '/time-periods')
         view = TimePeriodServiceView(context)
@@ -1550,8 +1550,8 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimePeriodServiceView
-        from schooltool.views.timetable import TimePeriodCreatorView
+        from schooltool.rest.timetable import TimePeriodServiceView
+        from schooltool.rest.timetable import TimePeriodCreatorView
         context = TimePeriodService()
         context['2003 fall'] = SchooldayModelStub()
         view = TimePeriodServiceView(context)
@@ -1572,7 +1572,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
 
     def test_get(self):
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimePeriodCreatorView
+        from schooltool.rest.timetable import TimePeriodCreatorView
         service = TimePeriodService()
         key = '2003 fall'
         view = TimePeriodCreatorView(service, key)
@@ -1593,7 +1593,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
 
     def test_put(self):
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimePeriodCreatorView
+        from schooltool.rest.timetable import TimePeriodCreatorView
         from schooltool.component import getPath
         service = TimePeriodService()
         setPath(service, '/time-periods')
@@ -1624,7 +1624,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
 
     def test_delete(self):
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimePeriodCreatorView
+        from schooltool.rest.timetable import TimePeriodCreatorView
         service = TimePeriodService()
         setPath(service, '/tpservice')
         key = '2003 fall'
@@ -1642,7 +1642,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
 
     def test_delete_nonexistent(self):
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimePeriodCreatorView
+        from schooltool.rest.timetable import TimePeriodCreatorView
         service = TimePeriodService()
         key = '2003 fall'
         view = TimePeriodCreatorView(service, key)
@@ -1657,11 +1657,11 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
     def test(self):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.timetable import TimePeriodService
-        from schooltool.views.timetable import TimetableSchemaServiceView
-        from schooltool.views.timetable import TimePeriodServiceView
+        from schooltool.rest.timetable import TimetableSchemaServiceView
+        from schooltool.rest.timetable import TimePeriodServiceView
         from schooltool.component import getView
-        import schooltool.views.timetable
-        schooltool.views.timetable.setUp()
+        import schooltool.rest.timetable
+        schooltool.rest.timetable.setUp()
 
         def viewClass(obj):
             return getView(obj).__class__

@@ -24,8 +24,8 @@ returns True iff access is granted.
 
 Example:
 
-    from schooltool.views import View, Template
-    from schooltool.views.auth import PublicAccess
+    from schooltool.rest import View, Template
+    from schooltool.rest.auth import PublicAccess
 
     class SomeView(View):
         template = Template('some.pt')

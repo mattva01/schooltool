@@ -438,3 +438,7 @@ src/schooltool/translation/schooltool.pot
 ./testserver_access.log
 ./app.log
 ./testserver_app.log
+src/schooltool/rest/www/*.pyc
+src/schooltool/rest/www/Data.fs*
+src/schooltool/rest/www/*~
+src/schooltool/rest/www/*.so

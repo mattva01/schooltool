@@ -25,12 +25,12 @@ $Id$
 import csv
 import zipfile
 from cStringIO import StringIO
-from schooltool.views import View
+from schooltool.rest import View
 from schooltool.uris import URIMember, URIGroup, URITaught
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
 from schooltool.component import iterFacetFactories
-from schooltool.views.auth import PublicAccess
+from schooltool.rest.auth import PublicAccess
 
 __metaclass__ = type
 

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.views.cal
+Unit tests for schooltool.rest.cal
 
 $Id$
 """
@@ -25,7 +25,7 @@ $Id$
 import unittest
 from logging import INFO
 import datetime
-from schooltool.views.tests import RequestStub, setPath, viewClass
+from schooltool.rest.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
@@ -76,7 +76,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
 
     def setUp(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.views.cal import SchooldayModelCalendarView
+        from schooltool.rest.cal import SchooldayModelCalendarView
         self.sm = SchooldayModel(datetime.date(2003, 9, 1),
                                  datetime.date(2003, 9, 30))
         setPath(self.sm, '/person/calendar')
@@ -377,7 +377,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
 class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
 
     def _newView(self, context):
-        from schooltool.views.cal import CalendarReadView
+        from schooltool.rest.cal import CalendarReadView
         return CalendarReadView(context)
 
     def _create(self):
@@ -439,7 +439,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
 class TestCalendarView(TestCalendarReadView):
 
     def _newView(self, context):
-        from schooltool.views.cal import CalendarView
+        from schooltool.rest.cal import CalendarView
         return CalendarView(context)
 
     def test_put_empty(self, body=""):
@@ -591,7 +591,7 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Group, Person, Resource
         from schooltool.cal import CalendarEvent
-        from schooltool.views.cal import CalendarView
+        from schooltool.rest.cal import CalendarView
 
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
@@ -666,7 +666,7 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
                       unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.cal import BookingView
+        from schooltool.rest.cal import BookingView
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Group, Person, Resource
         from schooltool.membership import Membership
@@ -845,7 +845,7 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
         return app
 
     def test(self):
-        from schooltool.views.cal import AllCalendarsView
+        from schooltool.rest.cal import AllCalendarsView
         context = self.createApp()
         view = AllCalendarsView(context)
         view.authorization = lambda ctx, rq: True
@@ -904,10 +904,10 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import ISchooldayModel, ICalendar
-        from schooltool.views.cal import SchooldayModelCalendarView
-        from schooltool.views.cal import CalendarView
-        import schooltool.views.cal
-        schooltool.views.cal.setUp()
+        from schooltool.rest.cal import SchooldayModelCalendarView
+        from schooltool.rest.cal import CalendarView
+        import schooltool.rest.cal
+        schooltool.rest.cal.setUp()
 
         self.assert_(viewClass(ISchooldayModel) is SchooldayModelCalendarView)
         self.assert_(viewClass(ICalendar) is CalendarView)

@@ -30,11 +30,11 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
 from schooltool.component import getPath
-from schooltool.views import View, Template
-from schooltool.views import notFoundPage, textErrorPage
-from schooltool.views import absolutePath
-from schooltool.views.facet import FacetView
-from schooltool.views.auth import PublicAccess
+from schooltool.rest import View, Template
+from schooltool.rest import notFoundPage, textErrorPage
+from schooltool.rest import absolutePath
+from schooltool.rest.facet import FacetView
+from schooltool.rest.auth import PublicAccess
 from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _

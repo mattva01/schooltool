@@ -39,7 +39,7 @@ $Id$
 import random
 import datetime
 from schooltool.interfaces import AuthenticationError
-from schooltool.views.auth import isManager
+from schooltool.rest.auth import isManager
 
 
 __metaclass__ = type

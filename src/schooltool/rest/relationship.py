@@ -26,10 +26,10 @@ import libxml2
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, nameURI
 from schooltool.component import traverse, getPath
-from schooltool.views import View, Template, textErrorPage
-from schooltool.views import read_file
-from schooltool.views import absoluteURL, absolutePath
-from schooltool.views.auth import PublicAccess
+from schooltool.rest import View, Template, textErrorPage
+from schooltool.rest import read_file
+from schooltool.rest import absoluteURL, absolutePath
+from schooltool.rest.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 from schooltool.common import to_unicode

@@ -29,15 +29,15 @@ from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource
 from schooltool.component import traverse, getPath
 from schooltool.component import registerView
-from schooltool.views import View, Template
-from schooltool.views import TraversableView
-from schooltool.views import notFoundPage, textErrorPage
-from schooltool.views import absoluteURL, absolutePath
-from schooltool.views.timetable import SchoolTimetableTraverseView
-from schooltool.views.cal import AllCalendarsView
-from schooltool.views.csvexport import CSVExporter
-from schooltool.views.auth import PublicAccess
-from schooltool.views.applog import ApplicationLogView
+from schooltool.rest import View, Template
+from schooltool.rest import TraversableView
+from schooltool.rest import notFoundPage, textErrorPage
+from schooltool.rest import absoluteURL, absolutePath
+from schooltool.rest.timetable import SchoolTimetableTraverseView
+from schooltool.rest.cal import AllCalendarsView
+from schooltool.rest.csvexport import CSVExporter
+from schooltool.rest.auth import PublicAccess
+from schooltool.rest.applog import ApplicationLogView
 from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
