@@ -49,6 +49,20 @@ Let's create a second person so that we can test access control.
     Location: http://localhost/frogpond/persons
     ...
 
+Also, let's create a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+
 Calendar views
 --------------
 
@@ -415,6 +429,24 @@ This should have cleared the calendar.
 Calendar overlaying
 -------------------
 
+Let's allow frog to see all calendars:
+
+    >>> print http("""
+    ... POST /frogpond/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schoolbell.view&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond
+    ...
+
+
 SchoolBell lets users overlay calendars of other users and groups, and see all
 calendar events in one view.  When you are logged in, and you look at your own
 calendar, you will see a new portlet on the left:
@@ -460,13 +492,108 @@ and add other calendars to this list.
     ...
 
     >>> print http("""
-    ... GET /frogpond/persons/frog/calendar_selection.html HTTP/1.1
+    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... persons:list=toad&\
+    ... groups:list=animals&\
+    ... nexturl=http://localhost/&\
+    ... UPDATE_SUBMIT=Apply
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+
+Now, you can see both calendars in the overlay portlet:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
+          <label class="disabled">
+            <input type="checkbox" checked="checked" disabled="disabled" />
+            My Calendar
+          </label>
+    ...
+         <label>
+           <input type="checkbox" name="overlay:list"
+                  checked="checked"
+                  value="/frogpond/groups/animals" />
+           <span>Animals</span>
+         </label>
+    ...
+         <label>
+           <input type="checkbox" name="overlay:list"
+                  checked="checked"
+                  value="/frogpond/persons/toad" />
+           <span>Toad</span>
+         </label>
+    ...
 
-TODO: finish this test
+Now, if there are events in the animals' and toad's calendars, you can
+see them:
+
+    >>> print http("""
+    ... POST /frogpond/persons/toad/calendar/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Eat+flies&field.start_date=2005-02-03&\
+    ... field.start_time=09:00&field.duration=30&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+    >>> print http("""
+    ... POST /frogpond/groups/animals/calendar/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Daily+meeting&field.start_date=2005-02-03&\
+    ... field.start_time=10:00&field.duration=30&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    Eat flies
+    ...
+    Daily meeting
+    ...
+
+If the permissions to overlaid calendars are revoked, you can still
+see your calendar, albeit without overlaid events:
+
+    >>> print http("""
+    ... POST /frogpond/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.view&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond
+    ...
+
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
 
 
 The Tomorrow's events box

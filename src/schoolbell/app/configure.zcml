@@ -205,6 +205,23 @@
       factory=".cal.WriteCalendar"
       provides="zope.app.filerepresentation.interfaces.IWriteFile" />
 
+  <content
+      class="schoolbell.app.overlay.BoundOverlaidCalendarsProperty">
+    <allow attributes="__iter__ __contains__" />
+    <require
+        permission="schoolbell.viewCalendar"
+        attributes="add remove" />
+  </content>
+
+  <content class="schoolbell.app.overlay.CalendarOverlayInfo">
+    <require
+        permission="schoolbell.view"
+        interface="schoolbell.app.overlay.ICalendarOverlayInfo"/>
+    <require
+        permission="schoolbell.viewCalendar"
+        set_schema="schoolbell.app.overlay.ICalendarOverlayInfo"/>
+  </content>
+
 <!-- Events -->
 
   <subscriber

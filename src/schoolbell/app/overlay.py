@@ -71,6 +71,7 @@ import sys
 from persistent import Persistent
 from zope.interface import Interface, implements
 from zope.schema import Object, TextLine, Bool
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.relationship import URIObject
 from schoolbell.relationship.interfaces import IRelationshipLinks
@@ -262,13 +263,16 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
         BoundRelationshipProperty.__init__(self, this, URICalendarSubscription,
                                            URICalendarSubscriber,
                                            URICalendarProvider)
+        # for the local grants to work
+        self.__parent__ = this
 
     def add(self, calendar, show=True, color1=None, color2=None):
         if not color1 or not color2:
             used_colors = [(item.color1, item.color2) for item in self]
             color1, color2 = choose_color(DEFAULT_COLORS, used_colors)
-        BoundRelationshipProperty.add(self, calendar,
-                    CalendarOverlayInfo(calendar, show, color1, color2))
+        info = CalendarOverlayInfo(calendar, show, color1, color2)
+        info.__parent__ = self.this
+        BoundRelationshipProperty.add(self, calendar, info)
 
     def __contains__(self, calendar):
         for item in self:

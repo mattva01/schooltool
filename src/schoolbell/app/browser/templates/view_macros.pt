@@ -228,8 +228,7 @@
 <!-- BEGIN CALENDAR MACROS -->
 
 <metal:block define-macro="portlet-calendar-overlay" i18n:domain="schoolbell">
-  <div tal:replace="structure context/@@calendar_overlay"
-       tal:on-error="nothing"/>
+  <div tal:replace="structure context/@@calendar_overlay" />
 </metal:block>
 
 <metal:block define-macro="portlet-calendar-jumpto" i18n:domain="schoolbell">

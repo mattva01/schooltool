@@ -211,7 +211,8 @@ Now, it is authenticated by our utility:
 Our principal is adaptable to IPerson:
 
     >>> from schoolbell.app.interfaces import IPerson
-    >>> IPerson(principal) is  app['persons']['frog']
+    >>> from zope.security.proxy import removeSecurityProxy
+    >>> removeSecurityProxy(IPerson(principal)) is  app['persons']['frog']
     True
 
 The credentials can be cleared from the session:
