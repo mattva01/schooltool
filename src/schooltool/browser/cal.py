@@ -779,8 +779,13 @@ def datesParser(raw_dates):
 
     Incorrect lines are ignored.
 
-    >>> datesParser('2004-05-17\n123\n\nNone\n2004-01-29')
+    >>> datesParser('2004-05-17\n\n\n2004-01-29')
     (datetime.date(2004, 5, 17), datetime.date(2004, 1, 29))
+
+    >>> datesParser('2004-05-17\n123\n\nNone\n2004-01-29')
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid date.  Please specify YYYY-MM-DD, one per line.
 
     """
     results = []
@@ -788,10 +793,33 @@ def datesParser(raw_dates):
         try:
             d = dateParser(dstr)
         except ValueError:
-            d = None
+            raise ValueError('Invalid date.  Please specify YYYY-MM-DD,'
+                             ' one per line.')
         if isinstance(d, date):
             results.append(d)
     return tuple(results)
+
+
+def positiveIntValidator(value):
+    """
+    >>> positiveIntValidator(None)
+    >>> positiveIntValidator(1)
+
+    >>> positiveIntValidator(0)
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid value (must be not less than 1).
+
+    >>> positiveIntValidator(-1)
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid value (must be not less than 1).
+
+    """
+    if value is None:
+        return
+    if value < 1:
+        raise ValueError("Invalid value (must be not less than 1).")
 
 
 class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
@@ -837,7 +865,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
 
         self.interval_widget = TextWidget('interval', 'Repeat every',
-                                          parser=intParser, value=1)
+                                          parser=intParser,
+                                          validator=positiveIntValidator,
+                                          value=1)
 
         self.range_widget = SelectionWidget('range', 'Range',
                                             (('count', 'Count'),
@@ -846,6 +876,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                             value='forever')
 
         self.count_widget = TextWidget('count', 'Number of events',
+                                       validator=positiveIntValidator,
                                        parser=intParser)
         self.until_widget = TextWidget('until', 'Repeat until',
                                        parser=dateParser)
@@ -895,6 +926,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                   self.time_widget.error or self.duration_widget.error or
                   self.location_widget.error or
                   self.other_location_widget.error)
+        
         if errors:
             return View.do_GET(self, request)
 

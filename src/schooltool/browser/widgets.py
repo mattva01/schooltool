@@ -484,7 +484,7 @@ class SelectionWidget(Widget):
                         formatter=formatter, value=value)
         self.choices = choices
 
-    def __call__(self, tabindex=None):
+    def _options_html(self):
         options = []
         for value, display in self.choices:
             options.append('    <option value="%(value)s"%(selected)s>'
@@ -494,6 +494,9 @@ class SelectionWidget(Widget):
                               'selected': (value == self.value
                                            and ' selected="selected"'
                                            or '')})
+        return ''.join(options)
+
+    def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <select%(css_class)s name="%(name)s"'
@@ -507,7 +510,7 @@ class SelectionWidget(Widget):
                             'tabindex': self._tabindex_html(tabindex),
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
-                            'options': ''.join(options),
+                            'options': self._options_html(),
                             'unit': self._unit_html(),
                             'error': self._error_html()})
 
