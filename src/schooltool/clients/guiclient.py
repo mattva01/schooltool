@@ -589,8 +589,11 @@ class SchoolToolClient:
         response = self.get('/applog?' + qs)
         if response.status != 200:
             raise ResponseStatusError(response)
-        page = int(response.getheader('x-page'))
-        total_pages = int(response.getheader('x-total-pages'))
+        try:
+            page = int(response.getheader('x-page'))
+            total_pages = int(response.getheader('x-total-pages'))
+        except TypeError, ValueError:
+            raise SchoolToolError("Invalid headers received")
         text = response.read()
         return ApplicationLogPage(text, page, total_pages)
 

@@ -1692,6 +1692,7 @@ class AppLogFrame(wxDialog):
     """Window showing the application log."""
 
     def __init__(self, client, parent=None, id=-1):
+        self.ok = False
         self.client = client
 
         wxDialog.__init__(self, parent, id, _("Application log"),
@@ -1702,7 +1703,9 @@ class AppLogFrame(wxDialog):
         top_bar = wxBoxSizer(wxHORIZONTAL)
         label = wxStaticText(self, -1, _("Show only lines containing"))
         top_bar.Add(label, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 16)
-        filter_ctrl = self.filter_ctrl = wxTextCtrl(self, -1, '')
+        filter_ctrl = self.filter_ctrl = wxTextCtrl(self, -1, '',
+                                                    style=wxTE_PROCESS_ENTER)
+        EVT_TEXT_ENTER(self, filter_ctrl.GetId(), self.OnFilter)
         top_bar.Add(filter_ctrl, 1, wxEXPAND)
         filter_btn = wxButton(self, -1, _("&Filter"))
         filter_btn.SetDefault()
@@ -1721,8 +1724,9 @@ class AppLogFrame(wxDialog):
         button_bar = wxBoxSizer(wxHORIZONTAL)
         prev_btn = wxButton(self, -1, _("&Previous"))
         EVT_BUTTON(self, prev_btn.GetId(), self.OnPrev)
-        page_ctrl = self.page_ctrl = wxTextCtrl(self, -1, "1", # XXX
-                                                style=wxTE_CENTER)
+        page_ctrl = self.page_ctrl = wxTextCtrl(self, -1, "",
+                                        style=wxTE_CENTER | wxTE_PROCESS_ENTER)
+        EVT_TEXT_ENTER(self, page_ctrl.GetId(), self.OnGotoPage)
         size = page_ctrl.GetSize()
         size.width /= 2
         page_ctrl.SetSize(size)
@@ -1748,8 +1752,10 @@ class AppLogFrame(wxDialog):
         self.Layout()
         self.CenterOnScreen(wxBOTH)
 
-        self.setTotalPages(321) # XXX
-        self.OnFilter()
+        self.page = -1
+        self.pagesize = 25
+        self.filter_str = ''
+        self.ok = self.refresh()
 
     def OnClose(self, event=None):
         """Close the window."""
@@ -1757,28 +1763,47 @@ class AppLogFrame(wxDialog):
 
     def OnPrev(self, event=None):
         """Show the previous page."""
-        raise NotImplementedError, 'XXX'
+        if self.page > 1:
+            self.page -= 1
+        self.refresh()
 
     def OnNext(self, event=None):
         """Show the next page."""
-        raise NotImplementedError, 'XXX'
+        # No need to validate before incrementing -- it is taken care of
+        # on server-side.
+        self.page += 1
+        self.refresh()
+
+    def OnGotoPage(self, event=None):
+        """Jump to the page entered in the page control."""
+        try:
+            self.page = int(self.page_ctrl.GetValue())
+        except ValueError:
+            # Restore the original page number if the user-specified one
+            # is not valid.
+            self.page_ctrl.SetValue(self.page)
+        else:
+            self.refresh()
 
     def OnFilter(self, event=None):
-        # XXX We might want to check here if the total number of pages has
-        #     changed and react.
+        self.filter_str = self.filter_ctrl.GetValue()
+        self.page = -1
+        self.refresh()
 
-        # XXX Validation
-        page = int(self.page_ctrl.GetValue())
-        filter_str = self.filter_ctrl.GetValue()
-        pagesize = 20 # XXX
+    def refresh(self):
         try:
-            log_page = self.client.getAppLogPage(page=page, pagesize=pagesize,
-                                                 filter=filter_str)
+            log_page = self.client.getAppLogPage(page=self.page,
+                                                 pagesize=self.pagesize,
+                                                 filter=self.filter_str)
         except SchoolToolError, e:
-            raise # XXX What do I do, what do I do?  We might want a statusbar.
+            return False  # XXX I'm not sure what we should do here.
+
+        self.page = log_page.page
+
         self.page_ctrl.SetValue(str(log_page.page))
         self.total_label.SetLabel(_("of %d") % log_page.total_pages)
         self.text_ctrl.SetValue(to_wx(log_page.text))
+        return True
 
 
 #
@@ -2630,16 +2655,11 @@ class MainFrame(wxFrame):
 
         Accessible via View|Application Log
         """
-        try:
-            # XXX This is inefficient and should be replaced, but I
-            # think that the window shouldn't be opened if the user
-            # doesn't have the permission to view the application log.
-            self.client.getAppLogPage(page=1, pagesize=1)
-        except SchoolToolError, e:
-            self.SetStatusText(to_wx(unicode(e)))
+        window = AppLogFrame(self.client, parent=self)
+        if window.ok:
+            window.Show()
         else:
-            dlg = AppLogFrame(self.client, parent=self)
-            dlg.Show()
+            window.Destroy()
 
 
 class SchoolToolApp(wxApp):
