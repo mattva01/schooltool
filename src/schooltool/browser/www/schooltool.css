@@ -33,6 +33,10 @@ div.logo {
   margin-right: 1em;
 }
 
+img.logo {
+  border: none;
+}
+
 div.login {
   float: right;
   /* position: absolute;
@@ -83,18 +87,16 @@ a.action:active {
 
 /* Forms */
 
-form, div.form {
+form {
   padding: 1ex;
   background: #e2e2e2; /* #ffffd3; */
   border: 1px solid #b34848;
-}
-form {
   float: left;
 }
 
 form.invisible {
   padding: 0;
-  background: inherit;
+  background: white;
   border: none;
   float: none;
 }
@@ -109,14 +111,6 @@ label {
 
 label.wide {
   width: 12em;
-}
-
-label.block {
-  display: block;
-  width: auto;
-  float: none;
-  font-weight: normal;
-  margin: 1ex;
 }
 
 div.info {
@@ -273,8 +267,6 @@ pre.traceback span.source {
   color: black;
 }
 
-/* Busy search for resources */
-
 form.busysearch select {
   height: 20ex;
   width: 10em;
@@ -302,11 +294,9 @@ div.available {
   clear: both;
 }
 
-/* Calendars */
-
 div.day {
-  border-bottom: 1px solid gray;
-  background: white;
+  border: 0.5px solid gray;
+  background: white; /* #8af; */
   padding: 0.5ex 0.5em;
 }
 
@@ -320,21 +310,8 @@ div.event {
   font-size: smaller;
 }
 
-div.ro_event {
-  border: 1px solid #007;
-  background: #9af;
-  margin: 1ex;
-  padding: 0.5ex 0.5em;
-  border-bottom-width: 3px;
-  border-right-width: 3	px;
-  font-size: smaller;
-}
-
-
-
 div.calweekly {
    border: 1px solid gray;
-   border-bottom-width: 0;
 }
 
 div.day h2,
@@ -344,52 +321,16 @@ div.day h3  {
   color: navy;
 }
 
-table.cal_yearly {
+table.cal_monthly {
   table-layout: fixed;
   width: 90%;
   border: 1px solid #888;
   empty-cells: show;
   border-collapse: collapse;
-  vertical-align: top;
-}
-
-td.cal_yearly_month {
-  border: 1px solid gray;
-  text-align: center;
-}
-
-table.cal_yearly_month {
-  width: 100%;
-}
-
-table.cal_yearly_month th {
-  width: 14%;
-}
-
-table.cal_yearly_month td {
-  width: 14%;
-  padding-right: 0.5em;
-}
-
-td.cal_yearly_day {
-  text-align: right;
-}
-
-a.cal_yearly_day_busy {
-  color: red;
-}
-
-
-table.cal_monthly {
-  table-layout: fixed;
-  width: 90%;
-  border: 1px solid gray;
-  empty-cells: show;
-  border-collapse: collapse;
 }
 
 td.cal_monthly_weekno {
-  border: 1px solid gray;
+  border: 1px solid #ccc;
 }
 
 a.cal_monthly_weekno {
@@ -399,7 +340,7 @@ a.cal_monthly_weekno {
 }
 
 td.cal_monthly_day {
-  border: 1px solid gray;
+  border: 1px solid #ccc;
   vertical-align: top;
 }
 
@@ -417,15 +358,6 @@ div.event_weekly {
   background: #ff7;
   margin: 2px;
   border: 0.5px solid #447;
-  padding: 1px;
-}
-
-
-.cal_monthly div.event,
-.cal_monthly div.ro_event {
-  font-size: smaller;
-  margin: 2px;
-  border-width: 0.5px;
   padding: 1px;
 }
 
@@ -452,16 +384,6 @@ table.daycal td.event{
   font-size: smaller;
 }
 
-table.daycal td.ro_event{
-  border: 1px solid #007;
-  background: #9af;
-  padding: 1ex 0.5em;
-  border-right-width: 3px;
-  border-bottom-width: 3px;
-  vertical-align: top;
-  font-size: smaller;
-}
-
 td.daycalhour {
   padding: 1px;
   background: #cef;
@@ -470,9 +392,7 @@ td.daycalhour {
 }
 
 .event h2,
-.event h3,
-.ro_event h2,
-.ro_event h3 {
+.event h3 {
   font-size: smaller;
   color: navy;
   margin: 0;
@@ -496,38 +416,10 @@ div.calcontent {
   padding: 1ex 1em;
 }
 
-/* Start page */
-
 div.section {
 }
 
 div.section h2 {
   font-size: medium;
   margin: 0;
-}
-
-/* Timetable schemas */
-
-form table.timetable {
-  width: 90%;
-}
-
-table.timetable th.day input.text {
-  width: 100%;
-  background: #cccccc;
-  border: 1px solid #888888;
-}
-table.timetable td.period input.text,
-table.timetable td.time input.text {
-  width: 100%;
-  background: #eeeeee;
-  border: 1px solid #888888;
-}
-table.timetable td.buttons {
-  text-align: right;
-}
-
-div.dellink {
-  float: right;
-  font-size: smaller;
 }

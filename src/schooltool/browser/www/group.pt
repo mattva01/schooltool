@@ -15,7 +15,7 @@
   </div>
 
   <div class="parentgroups">
-    <h3 i18n:translate="">Parent groups</h3>
+    <h3 i18n:translate="">Super-groups</h3>
     <p tal:repeat="parent view/getParentGroups">
      <a tal:attributes="href parent/@@absolute_url"
         tal:content="parent/title"/>
@@ -24,7 +24,7 @@
 
   <div class="members">
     <div tal:define="subgroups view/getSubGroups" tal:condition="subgroups">
-      <h3 i18n:translate="">Subgroups</h3>
+      <h3 i18n:translate="">Sub-groups</h3>
       <p tal:repeat="sub subgroups">
        <a tal:attributes="href sub/@@absolute_url" tal:content="sub/title"/>
       </p>
