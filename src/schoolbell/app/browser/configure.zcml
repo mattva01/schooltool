@@ -123,6 +123,16 @@
       class=".app.GroupAddView"
       />
 
+  <editform
+      for="schoolbell.app.interfaces.IGroup"
+      name="edit.html"
+      label="Edit Group Information"
+      schema="schoolbell.app.interfaces.IGroup"
+      permission="zope.ManageContent"
+      template="templates/group_edit.pt"
+      class=".app.GroupEditView"
+      />
+
   <addMenuItem
       title="SchoolBell Group"
       description="A Group"

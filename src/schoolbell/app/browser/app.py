@@ -28,6 +28,7 @@ from zope.schema.interfaces import ValidationError
 from zope.app import zapi
 from zope.app.form.utility import getWidgetsData, setUpEditWidgets
 from zope.app.form.browser.add import AddView
+from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
@@ -395,3 +396,19 @@ class GroupAddView(AddView):
 
     def nextURL(self):
         return zapi.absoluteURL(self.context.context, self.request)
+
+
+class GroupEditView(EditView):
+    """A view for adding a group."""
+
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+        else:
+            return EditView.update(self)
+
+    def changed(self):
+        url = zapi.absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)

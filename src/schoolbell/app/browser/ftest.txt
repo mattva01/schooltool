@@ -702,6 +702,58 @@ The supergroup list works for resources too:
     ...
 
 
+Group Edit view
+---------------
+
+If the Cancel button is hit, we get redirected to the group info view:
+
+    >>> print http("""
+    ... GET /frogpond/groups/Group/edit.html?\
+    ... field.title=Foo&CANCEL=Please HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups/Group
+    ...
+
+But the context is unchanged:
+
+    >>> print http("""
+    ... GET /frogpond/groups/Group/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...<input ... name="field.title" size="20" type="text" value="group"  />...
+    ...
+
+When the form is successfully submitted, we also get
+redirected to the info view:
+
+    >>> print http("""
+    ... GET /frogpond/groups/Group/edit.html?\
+    ... field.title=Foo&UPDATE_SUBMIT=Please HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups/Group
+    ...
+    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    ...
+
+Now the group info is indeed updated:
+
+    >>> print http("""
+    ... GET /frogpond/groups/Group/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    ...
+
 
 Navigation view
 ---------------
