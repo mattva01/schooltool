@@ -713,9 +713,9 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEqual(tm.timetables, {})
         self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
 
-        tt = tm.timetables["sequential", "2003 fall"] = self.newTimetable()
+        tt = tm.timetables["2003 fall", "sequential"] = self.newTimetable()
 
-        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        result = tm.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, tt)
         self.assert_(result is not tt)
 
@@ -735,15 +735,15 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         english = TimetableActivity("English")
         composite["A"].add("Green", english)
 
-        def newComposite(schema_id, period_id):
-            if schema_id == "sequential" and period_id == "2003 fall":
+        def newComposite(period_id, schema_id):
+            if (period_id, schema_id) == ("2003 fall", "sequential"):
                 return composite
             else:
                 return None
 
         parent.getCompositeTimetable = newComposite
 
-        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        result = tm.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, composite)
         self.assert_(result is not composite)
 
@@ -751,9 +751,9 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         private = self.newTimetable()
         math = TimetableActivity("Math")
         private["B"].add("Blue", math)
-        tm.timetables["sequential", "2003 fall"] = private
+        tm.timetables["2003 fall", "sequential"] = private
 
-        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        result = tm.getCompositeTimetable("2003 fall", "sequential")
         expected = composite.cloneEmpty()
         expected.update(composite)
         expected.update(private)
@@ -765,9 +765,9 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         parent_private = self.newTimetable()
         french = TimetableActivity("French")
         parent_private["A"].add("Green", french)
-        parent.timetables["sequential", "2003 fall"] = parent_private
+        parent.timetables["2003 fall", "sequential"] = parent_private
 
-        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        result = tm.getCompositeTimetable("2003 fall", "sequential")
         expected = composite.cloneEmpty()
         expected.update(private)
         expected.update(parent_private)
@@ -802,11 +802,11 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         facets.setFacet(TeacherFacet())
 
         tt = self.newTimetable()
-        taught.timetables['sequential', '2003 fall'] = tt
+        taught.timetables['2003 fall', 'sequential'] = tt
         stuff = TimetableActivity("Stuff")
         tt["A"].add("Green", stuff)
 
-        result = teacher.getCompositeTimetable('sequential', '2003 fall')
+        result = teacher.getCompositeTimetable('2003 fall', 'sequential')
         self.assertEqual(result, tt)
 
 

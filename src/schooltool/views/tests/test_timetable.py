@@ -44,9 +44,9 @@ class TimetabledStub:
     def __init__(self):
         self.timetables = {}
 
-    def getCompositeTimetable(self, schema_id, period_id):
+    def getCompositeTimetable(self, period_id, schema_id):
         try:
-            tt = self.timetables[schema_id, period_id]
+            tt = self.timetables[period_id, schema_id]
         except KeyError:
             return None
         else:
@@ -59,7 +59,7 @@ class TestTimetableTraverseViews(unittest.TestCase):
 
     def do_test(self, view_class, tt_view_class):
         context = TimetabledStub()
-        tt = context.timetables[('weekly', '2003 fall')] = TimetableStub()
+        tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
         view = view_class(context)
         request = RequestStub()
 
@@ -83,16 +83,16 @@ class TestTimetableTraverseViews(unittest.TestCase):
         from schooltool.views.timetable import TimetableReadWriteView
         view2, view, context, tt = self.do_test(TimetableTraverseView,
                                                 TimetableReadWriteView)
-        self.assert_(view.context is tt)
         self.assert_(view.timetabled is context)
-        self.assertEquals(view.key, ('weekly', '2003 fall'))
+        self.assertEquals(view.key, ('2003 fall', 'weekly'))
+        self.assert_(view.context is tt, '%r is not %r' % (view.context, tt))
 
         # traversing to nonexistent timetables is allowed
         request = RequestStub()
         view = view2._traverse('eewkly', request)
         self.assert_(view.context is None)
         self.assert_(view.timetabled is context)
-        self.assertEquals(view.key, ('eewkly', '2003 fall'))
+        self.assertEquals(view.key, ('2003 fall', 'eewkly'))
 
     def test_CompositeTimetableTraverseView(self):
         from schooltool.views.timetable import CompositeTimetableTraverseView
@@ -128,10 +128,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html = """
         <html>
         <head>
-          <title>Timetable ...object/timetables/x/y</title>
+          <title>Timetable ...object/timetable/x/y</title>
         </head>
         <body>
-          <h1>Timetable ...object/timetables/x/y</h1>
+          <h1>Timetable ...object/timetable/x/y</h1>
           <table>
             <tr>
               <th colspan="2">Day 1</th>
@@ -178,10 +178,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     full_html = """
         <html>
         <head>
-          <title>Timetable ...object/timetables/x/y</title>
+          <title>Timetable ...object/timetable/x/y</title>
         </head>
         <body>
-          <h1>Timetable ...object/timetables/x/y</h1>
+          <h1>Timetable ...object/timetable/x/y</h1>
           <table>
             <tr>
               <th colspan="2">Day 1</th>
@@ -225,7 +225,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         return TimetableReadView(context)
 
     def do_test_get(self, context, expected, ctype="text/xml", accept=()):
-        request = RequestStub('...object/timetables/x/y')
+        request = RequestStub('...object/timetable/x/y')
         request.accept = accept
         result = self.createView(context).render(request)
         self.assertEquals(request.headers['Content-Type'],
@@ -320,35 +320,42 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         self.assertEquals(request.code, 404)
 
     def test_put(self):
+        key = ('2003 fall', 'weekly')
         ttd = self.createTimetabled()
-        key = '2003 fall', 'weekly'
 
-        for context, xml, expected in [
-                (self.createEmpty(), self.full_xml, self.createFull(ttd)),
-                (self.createFull(ttd), self.empty_xml, self.createEmpty())]:
-            ttd.timetables[key] = context
-            self.do_test_put(ttd, key, context, xml, expected)
+        ttd.timetables[key] = self.createEmpty()
+        expected = self.createFull(ttd)
+        self.do_test_put(ttd, key, self.full_xml, expected)
 
-    def do_test_put(self, timetabled, key, context, xml, expected):
+        ttd.timetables[key] = self.createFull(ttd)
+        expected = self.createEmpty()
+        self.do_test_put(ttd, key, self.empty_xml, expected)
+
+    def do_test_put(self, timetabled, key, xml, expected):
         view = self.createView(timetabled=timetabled, key=key)
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assertEquals(context, expected)
+        self.assertEquals(timetabled.timetables[key], expected)
 
     def test_put_nonexistent(self):
         key = ('2003 fall', 'weekly')
+        timetabled = self.createTimetabled()
+        expected = self.createFull(timetabled)
+        self.do_test_put(timetabled, key, self.full_xml, expected)
+
+    def test_put_bad_schema(self):
+        key = ('2003 fall', 'wekly')
         timetabled = self.createTimetabled()
         view = self.createView(None, timetabled, key)
         request = RequestStub(method="PUT", body=self.full_xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
-        self.assertEquals(request.code, 200)
+        self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        expected = self.createFull(timetabled)
-        self.assertEquals(timetabled.timetables[key], expected)
+        self.assert_(key not in timetabled.timetables)
 
     def do_test_error(self, xml=None, ctype='text/xml'):
         if xml is None:

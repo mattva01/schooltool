@@ -119,7 +119,11 @@ class TimetableReadWriteView(TimetableReadView):
         xpathctx.xpathRegisterNs('tt', ns)
 
         time_period_id, schema_id = self.key
-        tt = getTimetableSchemaService(self.timetabled)[schema_id]
+        try:
+            tt = getTimetableSchemaService(self.timetabled)[schema_id]
+        except KeyError:
+            return textErrorPage(request, "Timetable schema not defined: %s"
+                                           % schema_id)
         for day in xpathctx.xpathEval('/tt:timetable/tt:day'):
             day_id = day.nsProp('id', None)
             if day_id not in tt.day_ids:
@@ -247,7 +251,7 @@ class TimetableTraverseView(BaseTimetableTraverseView):
         if self.time_period is None:
             return TimetableTraverseView(self.context, name)
         else:
-            key = (name, self.time_period)
+            key = (self.time_period, name)
             return TimetableReadWriteView(self.context, key)
 
 
@@ -258,11 +262,10 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
         if self.time_period is None:
             return CompositeTimetableTraverseView(self.context, name)
         else:
-            timetable = self.context.getCompositeTimetable(name,
-                                                           self.time_period)
-            if timetable is None:
+            tt = self.context.getCompositeTimetable(self.time_period, name)
+            if tt is None:
                 raise KeyError(name)
-            return TimetableReadView(timetable)
+            return TimetableReadView(tt)
 
 
 class TimetableSchemaServiceView(View):

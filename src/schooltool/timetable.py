@@ -353,7 +353,7 @@ class TimetabledMixin:
     def __init__(self):
         self.timetables = PersistentDict()
 
-    def getCompositeTimetable(self, schema_id, period_id):
+    def getCompositeTimetable(self, period_id, schema_id):
         sources = list(self.timetableSource)
 
         for facet in FacetManager(self).iterFacets():
@@ -364,13 +364,13 @@ class TimetabledMixin:
         for role, composite in sources:
             for related in getRelatedObjects(self, role):
                 if composite:
-                    tt = related.getCompositeTimetable(schema_id, period_id)
+                    tt = related.getCompositeTimetable(period_id, schema_id)
                 else:
-                    tt = related.timetables.get((schema_id, period_id))
+                    tt = related.timetables.get((period_id, schema_id))
                 if tt is not None:
                     timetables.append(tt)
         try:
-            timetables.append(self.timetables[schema_id, period_id])
+            timetables.append(self.timetables[period_id, schema_id])
         except KeyError:
             pass
 

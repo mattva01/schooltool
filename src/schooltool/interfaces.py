@@ -1196,14 +1196,14 @@ class ITimetabled(Interface):
         """A mapping of private timetables of this object.
 
         The keys of this mapping are tuples of
-        (timetable_schema_id, time_period_id), e.g.
-        ('Weekly', '2003 autumn semester')
+        (time_period_id, timetable_schema_id), e.g.
+        ('2003 autumn semester', 'Weekly')
 
         These timetables can be directly manipulated.  For a lot of
         objects this mapping will be empty.
         """)
 
-    def getCompositeTimetable(tt_schema_id, time_period_id):
+    def getCompositeTimetable(time_period_id, tt_schema_id):
         """Returns a composite timetable for a given object with a
         given timetable schema for a given time period id.
 
