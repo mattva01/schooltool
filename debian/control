@@ -43,7 +43,7 @@ Description: web server for co-ordinating schedules, timetables and calendars
 Package: libschoolbell
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${python:Depends}, python2.3-xml, python2.3-imaging, python2.3-docutils, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${python:Depends}, python2.3-xml, python2.3-imaging, ${misc:Depends}
 Description: web server for co-ordinating schedules, timetables and calendars
  A calendaring server which can be used as a standalone server or a Zope 3
  component. This server allows for people and resources to have individual and

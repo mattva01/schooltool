@@ -25,8 +25,6 @@ schoolbell (0.9.99+1.0rc1-1) unstable; urgency=low
   * Correct name of server in initscript (SchoolTool > SchoolBell).
   * Update README.Debian to have the new default manager password
     (i.e. schoolbell).
-  * Temporarily add the python2.3-docutils as a dependency, because the
-    temporarily included Zope libraries need it.
   * Removed unimplemented config file options that got lost in the transition
     to a Zope 3 SchoolBell. i.e. 'domain' and 'app-log-file'.
   * Removed the postinst code to generate the 'lang' config file option. This
