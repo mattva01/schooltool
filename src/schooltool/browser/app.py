@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+import re
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
@@ -165,21 +166,15 @@ class PersonAddView(View):
 
     template = Template('www/person_add.pt')
 
+    # XXX Perhaps this constraint is a bit too strict.
+    valid_usernames = re.compile("^[a-zA-Z0-9.,'()]+$")
+
     error = None
-    username = ''
 
     def do_POST(self, request):
         username = request.args['username'][0]
-        # XXX The wx client will not allow us to create a user with a non-ascii
-        #     username (in an ugly way BTW).  I'm not sure of our policy
-        #     with regard to this, so for now an unhandled exception is raised.
-        try:
-            username = unicode(username)
-            if '/' in username or username == u'':
-                raise ValueError()
-        except (UnicodeDecodeError, ValueError):
+        if not self.valid_usernames.match(username):
             self.error = _('Invalid username')
-            self.username = username
             return self.do_GET(request)
 
         person = self.context.new(username, title=username)

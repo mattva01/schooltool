@@ -280,10 +280,10 @@ class TestPersonAddView(unittest.TestCase):
         # XXX We're not very i18n friendly by not allowing international
         #     symbols in user names.
         view = self.createView()
-        for username in ('newbie \xc4\x85', 'new/bie', ''):
+        for username in ('newbie \xc4\x85', 'new/bie', 'foo\000bar'):
             request = RequestStub(args={'username': username})
             view.do_POST(request)
-            self.assertEquals(view.error, 'Invalid username')
+            self.assertEquals(view.error, u'Invalid username')
 
 
 class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
