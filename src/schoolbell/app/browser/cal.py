@@ -39,6 +39,7 @@ from schoolbell.app.interfaces import ICalendarOwner
 
 
 class CalendarOwnerTraverser(object):
+    """A traverser that allows to traverse to a calendar owner's calendar."""
 
     implements(IBrowserPublisher)
 
@@ -62,15 +63,13 @@ class CalendarOwnerTraverser(object):
         return self.context, ('index.html', )
 
 
-class CalendarDay:
-    # XXX Not tested.
+class CalendarDay(object):
     """A single day in a calendar.
 
     Attributes:
        'date'   -- date of the day (a datetime.date instance)
        'events' -- list of events that took place that day, sorted by start
                    time (in ascending order).
-
     """
 
     def __init__(self, date, events=None):
@@ -129,8 +128,7 @@ class CalendarViewBase(BrowserView):
         10: _("October"), 11: _("November"), 12: _("December")}
 
     # Which day is considered to be the first day of the week (0 = Monday,
-    # 6 = Sunday).  Currently hardcoded.  A similar value is also hardcoded
-    # in schooltool.browser.timetable.
+    # 6 = Sunday).  Currently hardcoded.
     first_day_of_week = 0
 
     def dayTitle(self, day):
@@ -148,25 +146,23 @@ class CalendarViewBase(BrowserView):
 
     def ellipsizeTitle(self, title):
         """For labels with limited space replace the tail with '...'."""
-        # XXX Not tested.
         if len(title) < 17:
              return title
         else:
              return title[:15] + '...'
 
     def update(self):
-        # XXX Not tested, TODO: parse_date
-        #if 'date' not in self.request.args:
+        # TODO: parse_date in request
+        #if 'date' not in self.request:
         self.cursor = date.today()
         ##else:
-        ##    self.cursor = parse_date(self.request.args['date'][0])
+        ##    self.cursor = parse_date(self.request['date'])
 
     def getWeek(self, dt):
         """Return the week that contains the day dt.
 
         Returns a list of CalendarDay objects.
         """
-        # XXX Not tested
         start = week_start(dt, self.first_day_of_week)
         end = start + timedelta(7)
         return self.getDays(start, end)
@@ -185,7 +181,6 @@ class CalendarViewBase(BrowserView):
         Events spanning more than one day get included in all days they
         overlap.
         """
-        # XXX Not tested
         events = {}
         day = start
         while day < end:
@@ -242,7 +237,6 @@ class WeeklyCalendarView(CalendarViewBase):
     __used_for__ = ICalendar
 
     def title(self):
-        # XXX Not tested.
         month_name = unicode(self.month_names[self.cursor.month])
         args = {'month': month_name,
                 'year': self.cursor.year,
@@ -251,15 +245,12 @@ class WeeklyCalendarView(CalendarViewBase):
 
     def prevWeek(self):
         """Return the day a week before."""
-        # XXX Not tested.
         return self.cursor - timedelta(7)
 
     def nextWeek(self):
         """Return the day a week after."""
-        # XXX Not tested.
         return self.cursor + timedelta(7)
 
     def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
-        # XXX Not tested.
         return self.getWeek(self.cursor)
