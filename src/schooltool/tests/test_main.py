@@ -611,7 +611,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def testNoIModuleSetup_run(self):
         from schooltool.main import Server
-        server = Server()
+        stdout = StringIO()
+        stderr = StringIO()
+        server = Server(stdout, stderr)
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
         import schooltool.tests.test_main as thismodule
