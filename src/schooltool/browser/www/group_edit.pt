@@ -1,31 +1,40 @@
-<html metal:use-macro="view/macros/page">
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">
+  <title metal:fill-slot="title" i18n:translate="">
     Edit <span tal:replace="context/title"/>
   </title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">
+  <h1 metal:fill-slot="h1" i18n:translate="">
     Edit <span tal:replace="context/title"/>
   </h1>
-  <metal:block metal:fill-slot="content">
+<metal:block metal:fill-slot="content">
 
   <div tal:define="status view/update"
        tal:condition="status" tal:content="status" class="status"/>
 
-  <tal:block condition="not:request/args/ADD|nothing">
-  <tal:block condition="not:request/args/ADD2|nothing">
-  <form method="POST"
-        tal:attributes="action request/uri">
+<tal:comment condition="nothing">
+<strong style="color:red">
+
+  XXX Fix this mess with trying to cram three different forms into a single
+      template and display them conditionally.  Just use three different
+      templates already!
+
+</strong>
+</tal:comment>
+
+<tal:block condition="not:request/args/ADD|nothing">
+ <tal:block condition="not:request/args/ADD2|nothing">
+  <form method="POST" tal:attributes="action request/uri">
   <table>
     <tr>
-      <th>Icon</th>
+      <th i18n:translate="">Icon</th>
       <th>&nbsp;</th>
-      <th>Name</th>
+      <th i18n:translate="">Name</th>
     </tr>
 
     <tr tal:repeat="item view/list">
-      <td tal:content="python:item[0]">Icon</td>
+      <td tal:content="python:item[0]">[Icon]</td>
       <td><input
               type="checkbox" name="CHECK"
               tal:attributes="value python:item[2]">
@@ -35,40 +44,40 @@
     </tr>
   </table>
   <input type="submit" class="button" name="DELETE"
-         value="Remove selected members"/>
+         value="Remove selected members"
+         i18n:attributes="value" />
   <input type="submit" class="button" name="ADD"
-         value="Add members"/>
+         value="Add members"
+         i18n:attributes="value" />
   </form>
-  </tal:block>
-  </tal:block>
+ </tal:block>
+</tal:block>
 
-  <tal:block condition="request/args/ADD|nothing">
-  <form method="POST"
-        tal:attributes="action request/uri">
+<tal:block condition="request/args/ADD|nothing">
+  <form method="POST" tal:attributes="action request/uri">
 
   <p i18n:translate="">Enter the name of a member you want to add:</p>
 
   <input type="text" class="field" name="SEARCH"/>
-  <input type="submit" class="button" name="ADD2"
-         value="Next"/>
+  <input type="submit" class="button" name="ADD2" value="Next"
+         i18n:attributes="value" />
   </form>
-  </tal:block>
+</tal:block>
 
-  <tal:block condition="request/args/SEARCH|nothing">
-  <form method="POST"
-        tal:attributes="action request/uri">
+<tal:block condition="request/args/SEARCH|nothing">
+  <form method="POST" tal:attributes="action request/uri">
 
   <p i18n:translate="">Select a member you want to add:</p>
 
   <table>
     <tr>
-      <th>Icon</th>
+      <th i18n:translate="">Icon</th>
       <th>&nbsp;</th>
-      <th>Name</th>
+      <th i18n:translate="">Name</th>
     </tr>
 
     <tr tal:repeat="item view/addList">
-      <td tal:content="python:item[0]">Icon</td>
+      <td tal:content="python:item[0]">[Icon]</td>
       <td><input
               type="checkbox" name="CHECK"
               tal:attributes="value python:item[2];
@@ -80,9 +89,10 @@
   </table>
 
   <input type="submit" class="button" name="FINISH_ADD"
-         value="Add selected"/>
+         i18n:attributes="value" />
   </form>
-  </tal:block>
-  </metal:block>
+</tal:block>
+
+</metal:block>
 </body>
 </html>

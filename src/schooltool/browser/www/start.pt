@@ -1,4 +1,4 @@
-<html metal:use-macro="view/macros/page">
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title">Start page</title>
 </head>

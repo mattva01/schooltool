@@ -1,4 +1,4 @@
-<html metal:use-macro="view/macros/page" i18n:domain="">
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title"><span tal:replace="context/title" />
   </title>
@@ -42,7 +42,8 @@
          tal:content="python:teacher[0]"/>
     </p>
     <div class="actions" tal:condition="view/canEdit">
-      <a class="action" tal:attributes="href view/teachersURL">Edit</a>
+      <a class="action" tal:attributes="href view/teachersURL"
+         i18n:translate="">Edit</a>
     </div>
   </div>
 

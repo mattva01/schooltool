@@ -1,25 +1,25 @@
-<html metal:use-macro="view/macros/page">
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Add group</title>
+  <title metal:fill-slot="title" i18n:translate="">Add group</title>
 </head>
 <body>
 
-  <h1 metal:fill-slot="h1">
-    Add group
-  </h1>
+<h1 metal:fill-slot="h1" i18n:translate="">Add group</h1>
 
-  <metal:block metal:fill-slot="content">
+<metal:block metal:fill-slot="content">
+
   <form method="POST" tal:attributes="action request/path">
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row">
-      <label class="wide" for="username">Group name</label>
+      <label class="wide" for="username" i18n:translate="">Group name</label>
       <input id="groupname" name="groupname" type="text">
     </div>
     <div class="buttons">
-      <input class="button" type="submit" value="Add" />
+      <input class="button" type="submit" value="Add"
+             i18n:attributes="value" />
     </div>
   </form>
-  </metal:block>
 
+</metal:block>
 </body>
 </html>

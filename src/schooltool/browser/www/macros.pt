@@ -1,4 +1,4 @@
-<metal:block define-macro="page">
+<metal:block define-macro="page" i18n:domain="schooltool">
 <html>
 <head>
   <meta http-equiv="Content-Type" value="text/html; charset=UTF-8" />
