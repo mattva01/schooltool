@@ -49,7 +49,7 @@ moduleProvides(IModuleSetup)
 #
 
 def absoluteURL(request, obj, suffix=''):
-    """Return the absolute URL of an object.
+    r"""Return the absolute URL of an object.
 
     We need the location adapters to be set up:
 
@@ -90,9 +90,15 @@ def absoluteURL(request, obj, suffix=''):
       >>> absoluteURL(request, obj, 'subobject')
       'https://example.com:443/obj/subobject'
 
+    However do not use the suffix argument to construct queries, because suffix
+    will be URL-quoted:
+
+      >>> absoluteURL(request, obj, 'daily.html?wide=1")
+      'https://example.com:443/obj/dailt.html%3Fwide%3D1"
+
     Unicode paths in URLs are converted to UTF-8 and escaped properly.
 
-      >>> obj.__name__ = u"Hi \\u362B"
+      >>> obj.__name__ = u"Hi \u362B"
       >>> absoluteURL(request, obj, 'hey!')
       'https://example.com:443/Hi%20%E3%98%AB/hey%21'
 
