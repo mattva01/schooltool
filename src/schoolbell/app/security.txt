@@ -25,6 +25,13 @@ SchoolBell authentication utility
 (Handwaving...)
     >>> from zope.app.tests import setup
     >>> root = setup.placefulSetUp(True)
+    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> setUpRelationships()
+
+    >>> from zope.app.security.principalregistry import principalRegistry
+    >>> from zope.app.security.interfaces import IAuthentication
+    >>> from zope.app.tests import ztapi
+    >>> ztapi.provideUtility(IAuthentication, principalRegistry)
 
 SchoolBell is a site:
 
@@ -41,7 +48,6 @@ lives in that site:
 
     >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
     >>> auth = SchoolBellAuthenticationUtility()
-    >>> from zope.app.security.interfaces import IAuthentication
     >>> verifyObject(IAuthentication, auth)
     True
 
@@ -59,12 +65,15 @@ Let's provide the location of auth:
 
 The utility knows about the users of the application:
 
+    XXX: for now we assume the Principal Id equal to the __name__ of
+    persons and groups.  this is wrong and will have to change.
+
     >>> from schoolbell.app.app import Person
     >>> from zope.app.security.interfaces import IPrincipal
     >>> person = Person(username=u"frog", title="Frog")
     >>> app['persons']['frog'] = person
 
-    >>> principal = auth.getPrincipal('frog')
+    >>> principal = auth.getPrincipal('sb.person.frog')
     >>> verifyObject(IPrincipal, principal)
     True
     >>> principal.title
@@ -73,16 +82,48 @@ The utility knows about the users of the application:
 The utility delegates to the next service if the principal is not
 found:
 
-    >>> from zope.app.security.principalregistry import principalRegistry
     >>> p = principalRegistry.definePrincipal('zope.manager', 'Mgmt', '',
     ...                                       'gandalf', '123')
-    >>> from zope.app.tests import ztapi
-    >>> ztapi.provideUtility(IAuthentication, principalRegistry)
 
     >>> p1 = auth.getPrincipal('zope.manager')
     >>> p == p1
     True
     >>> p.title
     'Mgmt'
+
+
+If the principal we are looking up does not exist, an exception is
+raised:
+
+    >>> auth.getPrincipal('sb.person.nonexistent')
+    Traceback (most recent call last):
+    ...
+    PrincipalLookupError: 'sb.person.nonexistent'
+
+
+The groups of the SchoolBell instance are also principals:
+
+    >>> from schoolbell.app.app import Group
+    >>> group = Group()
+    >>> group.title = "The Management"
+    >>> app['groups']['management'] = group
+
+    >>> g1 = auth.getPrincipal('sb.group.management')
+    >>> g1.title
+    'The Management'
+    >>> group.members.add(person)
+
+And the user principal has a list ids of group principals he belongs
+to.  This list is used by the Zope Security Policy:
+
+    >>> from zope.security.interfaces import IGroupAwarePrincipal
+    >>> p = auth.getPrincipal('sb.person.frog')
+    >>> verifyObject(IGroupAwarePrincipal, p)
+    True
+    >>> p.groups
+    [u'sb.group.management']
+
+
+Clean up:
 
     >>> root = setup.placefulTearDown()

@@ -23,26 +23,30 @@ $Id$
 """
 
 from persistent import Persistent
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.app import zapi
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
-from zope.app.security.interfaces import IPrincipal
+from zope.security.interfaces import IGroupAwarePrincipal
 from zope.app.component.localservice import getNextService
 from schoolbell.app.app import getSchoolBellApplication
 
 
 class Principal(Contained):
-    implements(IPrincipal)
+    implements(IGroupAwarePrincipal)
     def __init__(self, id, title):
         self.id = id
         self.title = title
         self.description = ""
+        self.groups = []
 
 
 class SchoolBellAuthenticationUtility(Persistent):
     implements(IAuthentication, ILocation)
+
+    person_prefix = "sb.person."
+    group_prefix = "sb.group."
 
     def authenticate(self, request):
         """Identify a principal for request"""
@@ -61,10 +65,23 @@ class SchoolBellAuthenticationUtility(Persistent):
         Returns principals for groups and persons.
         """
         app = getSchoolBellApplication(self)
-        for person in app['persons'].values():
-            if person.__name__ == id:
-                principal = Principal(person.username, person.title)
+        if id.startswith(self.person_prefix):
+            username = id[len(self.person_prefix):]
+            if username in app['persons']:
+                person = app['persons'][username]
+                principal = Principal(id, person.title)
+                for group in person.groups:
+                    group_principal_id = self.group_prefix + group.__name__
+                    principal.groups.append(group_principal_id)
                 return principal
+
+        if id.startswith(self.group_prefix):
+            group_name = id[len(self.group_prefix):]
+            if group_name in app['groups']:
+                group = app['groups'][group_name]
+                # Group membership is not supported in SB, so we don't bother
+                # filling in principal.groups.
+                return Principal(id, group.title)
 
         next = getNextService(self, 'Utilities')
         return next.getUtility(IAuthentication).getPrincipal(id)
