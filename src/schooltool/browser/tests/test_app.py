@@ -53,14 +53,14 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Person, Group, Resource, Note, Address
+        from schooltool.model import Person, Group, Resource, Note, Residence
         from schooltool.browser.app import RootView
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
         app['groups'] = ApplicationObjectContainer(Group)
         app['resources'] = ApplicationObjectContainer(Resource)
         app['notes'] = ApplicationObjectContainer(Note)
-        app['addresses'] = ApplicationObjectContainer(Address)
+        app['residences'] = ApplicationObjectContainer(Residence)
         view = RootView(app)
         return view
 
@@ -723,27 +723,27 @@ class TestNoteContainerView(TestObjectContainerView):
         self.assert_('add.html' not in view.render(request))
 
 
-class TestAddressContainerView(TestObjectContainerView):
+class TestResidenceContainerView(TestObjectContainerView):
 
     def setUp(self):
-        from schooltool.browser.app import AddressContainerView
-        from schooltool.browser.app import AddressAddView
-        from schooltool.browser.model import AddressView
+        from schooltool.browser.app import ResidenceContainerView
+        from schooltool.browser.app import ResidenceAddView
+        from schooltool.browser.model import ResidenceView
         TestObjectContainerView.setUp(self)
-        self.view = AddressContainerView
-        self.add_view = AddressAddView
-        self.obj_view = AddressView
+        self.view = ResidenceContainerView
+        self.add_view = ResidenceAddView
+        self.obj_view = ResidenceView
 
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Address
+        from schooltool.model import Residence
         app = Application()
-        app['addresses'] = ApplicationObjectContainer(Address)
-        app['addresses'].new('obj', title='Test Address', country='US')
-        self.obj = app['addresses']['obj']
+        app['residences'] = ApplicationObjectContainer(Residence)
+        app['residences'].new('obj', title='Test Residence', country='US')
+        self.obj = app['residences']['obj']
 
-        view = self.view(app['addresses'])
+        view = self.view(app['residences'])
         view.add_view = self.add_view
         view.obj_view = self.obj_view
         return view
@@ -754,8 +754,8 @@ class TestAddressContainerView(TestObjectContainerView):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        for s in ['href="http://localhost:7001/addresses/obj"',
-                  'Test Address',
+        for s in ['href="http://localhost:7001/residences/obj"',
+                  'Test Residence',
                   view.index_title]:
             self.assert_(s in result, s)
 
@@ -1030,16 +1030,16 @@ class TestNoteAddView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.title, "Add note")
 
 
-class TestAddressAddView(AppSetupMixin, unittest.TestCase):
+class TestResidenceAddView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
-        from schooltool.browser.app import AddressAddView
-        view = AddressAddView(self.app['addresses'])
+        from schooltool.browser.app import ResidenceAddView
+        view = ResidenceAddView(self.app['residences'])
         return view
 
     def test(self):
         view = self.createView()
-        self.assertEquals(view.title, "Add address")
+        self.assertEquals(view.title, "Add residence")
 
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
@@ -1633,12 +1633,12 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     suite.addTest(unittest.makeSuite(TestResourceContainerView))
     suite.addTest(unittest.makeSuite(TestNoteContainerView))
-    suite.addTest(unittest.makeSuite(TestAddressContainerView))
+    suite.addTest(unittest.makeSuite(TestResidenceContainerView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))
     suite.addTest(unittest.makeSuite(TestNoteAddView))
-    suite.addTest(unittest.makeSuite(TestAddressAddView))
+    suite.addTest(unittest.makeSuite(TestResidenceAddView))
     suite.addTest(unittest.makeSuite(TestBusySearchView))
     suite.addTest(unittest.makeSuite(TestDatabaseResetView))
     suite.addTest(unittest.makeSuite(TestOptionsView))

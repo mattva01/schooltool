@@ -179,14 +179,14 @@ class AppSetupMixin(RegistriesSetupMixin):
       notes
         note        (self.note1)
         note2       (self.note2)
-      address
-        address     (self.address1)
-        address     (self.address2)
+      residences
+        residence     (self.residence1)
+        residence     (self.residence2)
 
     """
 
     def setUpSampleApp(self):
-        from schooltool.model import Group, Person, Resource, Note, Address
+        from schooltool.model import Group, Person, Resource, Note, Residence
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
         from schooltool import membership
@@ -197,7 +197,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
         app['notes'] = ApplicationObjectContainer(Note)
-        app['addresses'] = ApplicationObjectContainer(Address)
+        app['residences'] = ApplicationObjectContainer(Residence)
         self.root = app['groups'].new("root", title="root")
         self.locations = app['groups'].new("locations", title="Locations")
         self.managers = app['groups'].new("managers", title="Managers")
@@ -214,7 +214,7 @@ class AppSetupMixin(RegistriesSetupMixin):
                 body="Note 1 Body")
         self.note2 = app['notes'].new("note2", title="Note 2",
                 body="Note 2 Body")
-        self.address1 = app['addresses'].new(title="Home Address")
+        self.residence1 = app['residences'].new(title="Home Residence")
 
         Membership(group=self.root, member=self.person)
         Membership(group=self.root, member=self.teachers)

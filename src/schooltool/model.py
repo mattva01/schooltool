@@ -28,7 +28,7 @@ import sha
 
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
-from schooltool.interfaces import INote, IAddress
+from schooltool.interfaces import INote, IResidence
 from schooltool.interfaces import IAbsenceComment
 from schooltool.interfaces import IApplicationObject
 from schooltool.interfaces import Everybody, ViewPermission
@@ -43,7 +43,7 @@ from schooltool.timetable import getPeriodsForDay
 from schooltool.absence import Absence
 from schooltool.component import FacetManager, getRelatedObjects
 from schooltool.component import getDynamicFacetSchemaService
-from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
+from schooltool.infofacets import PersonInfoFacet, AddressFacet
 from schooltool.infofacets import DynamicFacet
 from schooltool.auth import ACL
 from schooltool.uris import URICurrentlyResides, URICurrentResidence
@@ -219,7 +219,7 @@ class Person(ApplicationObjectMixin):
     def hasPassword(self):
         return self._pwhash is not None
     
-    def getAddresses(self):
+    def getResidences(self):
         return getRelatedObjects(self, URICurrentResidence)
 
     def getDynamicFacets(self):
@@ -267,9 +267,9 @@ class Note(RelationshipValenciesMixin, EventTargetMixin):
         return getRelatedObjects(self, URINotandum)
 
 
-class Address(RelationshipValenciesMixin, FacetedEventTargetMixin):
+class Residence(RelationshipValenciesMixin, FacetedEventTargetMixin):
 
-    implements(IAddress)
+    implements(IResidence)
 
     title = None
     country = None
@@ -279,8 +279,8 @@ class Address(RelationshipValenciesMixin, FacetedEventTargetMixin):
         RelationshipValenciesMixin.__init__(self)
         self.title = title
         self.country = country
-        facet = AddressInfoFacet()
-        FacetManager(self).setFacet(facet, self, "address_info")
+        address = AddressFacet()
+        FacetManager(self).setFacet(address, self, "address_info")
         self.__name__ = None
         self.__parent__ = None
 

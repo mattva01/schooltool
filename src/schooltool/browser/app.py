@@ -38,7 +38,7 @@ from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.csvimport import CSVImportView, TimetableCSVImportView
 from schooltool.browser.model import PersonView, GroupView, ResourceView
-from schooltool.browser.model import NoteView, AddressView
+from schooltool.browser.model import NoteView, ResidenceView
 from schooltool.browser.model import app_object_list
 from schooltool.browser.timetable import NewTimePeriodView
 from schooltool.browser.timetable import TimePeriodServiceView
@@ -150,8 +150,8 @@ class RootView(View):
             return ResourceContainerView(self.context['resources'])
         elif name == 'notes':
             return NoteContainerView(self.context['notes'])
-        elif name == 'addresses':
-            return AddressContainerView(self.context['addresses'])
+        elif name == 'residences':
+            return ResidenceContainerView(self.context['residences'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logo.png':
@@ -578,16 +578,16 @@ class NoteAddView(View):
         return self.redirect(nexturl, request)
 
 
-class AddressAddView(ObjectAddView):
-    """View for adding addresses """
+class ResidenceAddView(ObjectAddView):
+    """View for adding residences """
 
-    title = _("Add address")
+    title = _("Add residence")
 
     error = u""
 
     relname = _('Occupies')
 
-    template = Template('www/address_add.pt')
+    template = Template('www/residence_add.pt')
 
     authorization = ManagerAccess
 
@@ -731,14 +731,14 @@ class NoteContainerView(ObjectContainerView):
     add_title = property(lambda self: _("Add a new note"))
 
 
-class AddressContainerView(ObjectContainerView):
-    """View for traversing to addresses (/addresses)."""
+class ResidenceContainerView(ObjectContainerView):
+    """View for traversing to residences (/residences)."""
 
-    template = Template('www/address_container.pt')
-    add_view = AddressAddView
-    obj_view = AddressView
-    index_title = _("Addresses")
-    add_title = _("Add a new address")
+    template = Template('www/residence_container.pt')
+    add_view = ResidenceAddView
+    obj_view = ResidenceView
+    index_title = _("Residences")
+    add_title = _("Add a new residence")
 
 
 class BusySearchView(View, ToplevelBreadcrumbsMixin):

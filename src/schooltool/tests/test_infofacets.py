@@ -86,14 +86,14 @@ class TestPersonInfoFacet(unittest.TestCase):
         self.assertEqual(person.title, "Smith")
 
 
-class TestAddressInfoFacet(unittest.TestCase):
+class TestAddressFacet(unittest.TestCase):
 
     def test(self):
-        from schooltool.infofacets import AddressInfoFacet
-        from schooltool.interfaces import IAddressInfoFacet
+        from schooltool.infofacets import AddressFacet
+        from schooltool.interfaces import IAddressFacet
 
-        aif = AddressInfoFacet()
-        verifyObject(IAddressInfoFacet, aif)
+        aif = AddressFacet()
+        verifyObject(IAddressFacet, aif)
 
 
 def test_suite():
@@ -101,7 +101,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDynamicFacet))
     suite.addTest(unittest.makeSuite(TestDynamicFacetSchemaService))
     suite.addTest(unittest.makeSuite(TestPersonInfoFacet))
-    suite.addTest(unittest.makeSuite(TestAddressInfoFacet))
+    suite.addTest(unittest.makeSuite(TestAddressFacet))
     return suite
 
 if __name__ == '__main__':

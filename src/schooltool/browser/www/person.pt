@@ -18,8 +18,8 @@
          tal:attributes="href string:${context/@@absolute_url}/calendar"
          i18n:translate="">View calendar</a>
       <a class="action"
-          tal:attributes="href string:/addresses/add.html?pid=${context/__name__}"
-         i18n:translate="">Add address</a>
+          tal:attributes="href string:/residences/add.html?pid=${context/__name__}"
+         i18n:translate="">Add residence</a>
     </div>
     <div class="actions">
         <tal:loop repeat="facet view/getAvailableDynamicFacets">
@@ -95,18 +95,18 @@
         <img src="photo.jpg" tal:attributes="src view/photoURL" />
       </p>
     </div>
-    <div class="addresses"
-        tal:define="addresses context/getAddresses"
-        tal:condition="addresses">
-      <h3>Addresses</h3>
+    <div class="residences"
+        tal:define="residences context/getResidences"
+        tal:condition="residences">
+      <h3>Residences</h3>
       <ul>
-        <tal:loop repeat="address addresses">
+        <tal:loop repeat="residence residences">
           <li>
-            <a href="address/@@absolute_url"
-              tal:content="address/title"></a>
-              <address tal:define="addressinfo address/info">
-              <span tal:content="addressinfo/streetNr"/> <span tal:content="addressinfo/thoroughfareName"/><br/>
-              <span tal:content="addressinfo/town"/> <span tal:content="addressinfo/district"/>, <span tal:content="addressinfo/postcode"/>
+            <a href="residence/@@absolute_url"
+              tal:content="residence/title"></a>
+              <address tal:define="address residence/info">
+              <span tal:content="address/streetNr"/> <span tal:content="address/thoroughfareName"/><br/>
+              <span tal:content="address/town"/> <span tal:content="address/district"/>, <span tal:content="address/postcode"/>
               </address>
               
           </li>

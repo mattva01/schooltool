@@ -2280,7 +2280,7 @@ class INote(ILocation, IRelatable):
     created = Attribute("""The time the note was created.""")
 
 
-class IAddress(ILocation, IRelatable, IFaceted):
+class IResidence(ILocation, IRelatable, IFaceted):
     """The base of a physical address.
 
     Participates in URIOccupies as occupiedBy.
@@ -2289,7 +2289,7 @@ class IAddress(ILocation, IRelatable, IFaceted):
     country = Attribute("""ISO Country code""")
 
 
-class IAddressInfoFacet(IFacet):
+class IAddressFacet(IFacet):
     """Default address attributes
 
     The default info facet hopefully will cover most use cases.  It is based on

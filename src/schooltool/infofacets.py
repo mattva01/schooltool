@@ -27,7 +27,7 @@ from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from zope.interface import implements
 from schooltool.interfaces import IDynamicFacet, IPersonInfoFacet
-from schooltool.interfaces import IAddressInfoFacet
+from schooltool.interfaces import IAddressFacet
 from schooltool.interfaces import IPersonInfoFacet, IDynamicFacetSchemaService
 from schooltool.component import DynamicSchemaField, DynamicSchema
 from schooltool.component import DynamicSchemaService
@@ -109,9 +109,9 @@ class PersonInfoFacet(Persistent):
         pass
 
 
-class AddressInfoFacet(Persistent):
+class AddressFacet(Persistent):
 
-    implements(IAddressInfoFacet)
+    implements(IAddressFacet)
 
     __parent__ = None
     __name__ = None

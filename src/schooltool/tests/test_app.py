@@ -194,7 +194,7 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.interfaces import IBeforeMembershipEvent
         from schooltool.uris import URIGroup
         from schooltool.app import create_application
-        from schooltool.model import Person, Group, Resource, Address
+        from schooltool.model import Person, Group, Resource, Residence
         from schooltool.component import getRelatedObjects
         from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.membership import RestrictedMembershipPolicy
@@ -218,8 +218,8 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         resource = app['resources'].new()
         self.assert_(isinstance(resource, Resource))
 
-        address = app['addresses'].new()
-        self.assert_(isinstance(address, Address))
+        residence = app['residences'].new()
+        self.assert_(isinstance(residence, Residence))
 
         event_log = app.utilityService['eventlog']
         event_service = app.eventService

@@ -47,7 +47,7 @@ from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import getOptions
-from schooltool.interfaces import IPerson, IGroup, IResource, INote, IAddress
+from schooltool.interfaces import IPerson, IGroup, IResource, INote, IResidence
 from schooltool.membership import Membership
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
@@ -724,14 +724,14 @@ class NoteEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         return self.redirect(url, request)
 
 
-class AddressView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
-    """View for displaying an address."""
+class ResidenceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
+    """View for displaying an residence."""
 
-    __used_for__ = IAddress
+    __used_for__ = IResidence
 
     authorization = AuthenticatedAccess
 
-    template = Template("www/address.pt")
+    template = Template("www/residence.pt")
 
     def canEdit(self):
         return self.isManager()
@@ -741,19 +741,19 @@ class AddressView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
 
     def _traverse(self, name, request):
         if name == "edit.html":
-            return AddressEditView(self.context)
+            return ResidenceEditView(self.context)
         else:
             raise KeyError(name)
 
 
-class AddressEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
-    """Page for "editing" an Address (/addresses/id/edit.html)."""
+class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+    """Page for "editing" an Residence (/residences/id/edit.html)."""
 
-    __used_for__ = IAddress
+    __used_for__ = IResidence
 
     authorization = ACLModifyAccess
 
-    template = Template('www/address_edit.pt')
+    template = Template('www/residence_edit.pt')
 
     linkrole = URICurrentResidence
 
@@ -819,7 +819,7 @@ class AddressEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         infofacet.streetNr = streetNr
         infofacet.thoroughfareName = thoroughfareName
                 
-        request.appLog(_("Address info updated on %s (%s)") %
+        request.appLog(_("Residence info updated on %s (%s)") %
                        (self.context.title, getPath(self.context)))
         
         url = absoluteURL(request, self.context)

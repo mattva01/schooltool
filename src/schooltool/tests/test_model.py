@@ -468,19 +468,19 @@ class TestNote(unittest.TestCase):
         verifyObject(IRelatable, note)
 
 
-class TestAddress(unittest.TestCase):
+class TestResidence(unittest.TestCase):
 
     def newObject(self):
-        from schooltool.model import Address
-        return Address("Home Address")
+        from schooltool.model import Residence
+        return Residence("Home Residence")
 
     def test(self):
-        from schooltool.interfaces import IAddress, IAddressInfoFacet
+        from schooltool.interfaces import IResidence, IAddressFacet
         from schooltool.component import FacetManager
-        address = self.newObject()
-        verifyObject(IAddress, address)
-        facet = FacetManager(address).facetByName("address_info")
-        verifyObject(IAddressInfoFacet, facet)
+        residence = self.newObject()
+        verifyObject(IResidence, residence)
+        facet = FacetManager(residence).facetByName("address_info")
+        verifyObject(IAddressFacet, facet)
 
 
 def test_suite():
@@ -490,7 +490,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestResource))
     suite.addTest(unittest.makeSuite(TestNote))
-    suite.addTest(unittest.makeSuite(TestAddress))
+    suite.addTest(unittest.makeSuite(TestResidence))
     return suite
 
 if __name__ == '__main__':

@@ -198,7 +198,7 @@ def create_application():
     app['persons'] = ApplicationObjectContainer(model.Person)
     app['resources'] = ApplicationObjectContainer(model.Resource)
     app['notes'] = ApplicationObjectContainer(model.Note)
-    app['addresses'] = ApplicationObjectContainer(model.Address)
+    app['residences'] = ApplicationObjectContainer(model.Residence)
     Person = app['persons'].new
     Group = app['groups'].new
 

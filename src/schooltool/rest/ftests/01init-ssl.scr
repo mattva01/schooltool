@@ -22,8 +22,8 @@ Content-Type: text/xml; charset=UTF-8
                xlink:title="resources"/>
     <container xlink:type="simple" xlink:href="/notes"
                xlink:title="notes"/>
-    <container xlink:type="simple" xlink:href="/addresses"
-               xlink:title="addresses"/>
+    <container xlink:type="simple" xlink:href="/residences"
+               xlink:title="residences"/>
     <container xlink:type="simple" xlink:href="/groups"
                xlink:title="groups"/>
   </containers>
