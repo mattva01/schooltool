@@ -28,6 +28,7 @@ from schooltool.interfaces import IEventTarget
 
 __metaclass__ = type
 
+
 class IEventLog(IEventTarget):
     """Event log that stores all received events persistently"""
 

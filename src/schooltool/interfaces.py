@@ -572,6 +572,17 @@ class IRootGroup(IGroup, IContainmentRoot, IServiceManager):
 
 
 #
+# Modules
+#
+
+class IModuleSetup(Interface):
+    """Module that needs initialization"""
+
+    def setUp():
+        """Initializes the module."""
+
+
+#
 # Exceptions
 #
 

@@ -21,6 +21,7 @@ The schooltool component.
 
 $Id$
 """
+
 import re
 from sets import Set
 from zope.interface import moduleProvides
@@ -31,6 +32,13 @@ from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
+
+__metaclass__ = type
+
+
+#
+# Adapters
+#
 
 adapterRegistry = {}
 

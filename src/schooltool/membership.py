@@ -23,7 +23,7 @@ $Id: model.py 153 2003-10-16 12:33:50Z mg $
 """
 
 from sets import Set
-from zope.interface import implements
+from zope.interface import implements, moduleProvides
 from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
 from schooltool.interfaces import IQueryLinks, IGroupMember, IGroup
@@ -32,9 +32,12 @@ from schooltool.interfaces import URIMembership, URIGroup, URIMember
 from schooltool.interfaces import IMembershipEvent
 from schooltool.interfaces import IMemberAddedEvent
 from schooltool.interfaces import IMemberRemovedEvent
+from schooltool.interfaces import IModuleSetup
 from schooltool.db import PersistentKeysDict
 from schooltool.relationships import RelationshipSchema, RelationshipEvent
 from schooltool.component import registerRelationship
+
+moduleProvides(IModuleSetup)
 
 __metaclass__ = type
 

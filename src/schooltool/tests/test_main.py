@@ -614,6 +614,13 @@ class TestServer(unittest.TestCase):
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is GroupView)
 
+        from schooltool.component import getRelationshipHandlerFor
+        from schooltool.interfaces import ISpecificURI, URIMembership
+        # make sure relationships.setUp was called
+        x = getRelationshipHandlerFor(ISpecificURI)
+        y = getRelationshipHandlerFor(URIMembership)
+        self.assertNotEquals(x, y, "schooltool.membership.setUp not called")
+
     def test_ensureAppExists(self):
         from schooltool.main import Server
         server = Server()

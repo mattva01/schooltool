@@ -47,6 +47,8 @@ from twisted.python import failure
 from schooltool import mockup
 from schooltool.model import RootGroup, Group, Person
 from schooltool.views import GroupView, errorPage
+from schooltool.relationships import setUp as setUpRelationship
+from schooltool.membership import setUp as setUpMembership
 
 __metaclass__ = type
 
@@ -437,9 +439,9 @@ class Server:
 
         Must be called after configure.
         """
-        # Do this before calling suggestThreadPoolSize, as calling that
-        # will create a number of non-daemon threads and will prevent the
-        # application from exitting.
+        setUpRelationship()
+        setUpMembership()
+
         db_configuration = self.config.database
         self.db = db_configuration.open()
         self.ensureAppExists(self.db, self.appname)
@@ -451,6 +453,9 @@ class Server:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
 
+        # Call suggestThreadPoolSize at the last possible moment, because it
+        # will create a number of non-daemon threads and will prevent the
+        # application from exitting on errors.
         self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
         self.reactor_hook.run()
 

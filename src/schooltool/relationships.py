@@ -22,7 +22,7 @@ The schooltool relationships.
 $Id$
 """
 from persistence import Persistent
-from zope.interface import implements, classProvides
+from zope.interface import implements, classProvides, moduleProvides
 from schooltool.interfaces import IRemovableLink, IRelatable
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
@@ -30,10 +30,14 @@ from schooltool.interfaces import IRelationshipEvent
 from schooltool.interfaces import IRelationshipAddedEvent
 from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import ISpecificURI
+from schooltool.interfaces import IModuleSetup
 from schooltool.component import inspectSpecificURI, registerRelationship
 from schooltool.event import EventMixin
 
+moduleProvides(IModuleSetup)
+
 __metaclass__ = type
+
 
 class Link(Persistent):
     """A side (view) of a relationship belonging to one of the two
