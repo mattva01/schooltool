@@ -41,7 +41,7 @@ from schooltool.component import getView, traverse
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
-from schooltool.translation import setCatalog, ugettext as _
+from schooltool.translation import setCatalog, ugettext, TranslatableString
 from schooltool.browser import BrowserRequest
 from schooltool.browser.app import RootView
 from schooltool.http import Site, SnapshottableDB
@@ -87,6 +87,8 @@ def profile(fn, extension='prof'):
 # Main loop
 #
 
+_ = TranslatableString  # postpone actual translations
+
 no_storage_error_msg = _("""\
 No storage defined in the configuration file.  Unable to start the server.
 
@@ -105,6 +107,9 @@ Options:
   -c, --config xxx  use this configuration file instead of the default
   -h, --help        show this help message
   -d, --daemon      go to background after starting""")
+
+
+_ = ugettext        # go back to immediate translations
 
 
 class ConfigurationError(UnicodeAwareException):
@@ -279,12 +284,12 @@ class Server:
     def help(self):
         """Print a help message."""
         progname = os.path.basename(sys.argv[0])
-        print >> self.stdout, usage_msg % progname
+        print >> self.stdout, unicode(usage_msg) % progname
 
     def noStorage(self):
         """Print an informative message when the config file does not define a
         storage."""
-        print >> self.stderr, no_storage_error_msg
+        print >> self.stderr, unicode(no_storage_error_msg)
 
     def findDefaultConfigFile(self):
         """Return the default config file pathname.
@@ -437,7 +442,7 @@ class Server:
         if not hasattr(app, 'ticketService'):
             self.transaction_hook.abort()
             conn.close()
-            raise SchoolToolError(incompatible_version_msg)
+            raise SchoolToolError(unicode(incompatible_version_msg))
 
         # Enable or disable global event logging
         eventlog = app.utilityService['eventlog']
@@ -466,6 +471,10 @@ class Server:
     authenticate = staticmethod(authenticate)
 
     def notifyConfigFile(self, config_file):
+        # Note that the following message will be translated to the language
+        # specified by the system locale, instead of the language specified
+        # in the config file.  The reason for that should be obvious (chicken
+        # and egg problem).
         self.logger.info(_("Reading configuration from %s"), config_file)
 
     def notifyServerStarted(self, network_interface, port, ssl=False):
