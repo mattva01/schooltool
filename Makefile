@@ -54,35 +54,13 @@ realclean: clean
 	rm -rf dist
 
 test: build
-	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
-
-testall: build
-	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS)
+	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schoolbell
 
 ftest: build
-	@LC_ALL="C" $(PYTHON) schooltool-server.py -c test.conf -d \
-	&& ($(PYTHON) test.py -f $(TESTFLAGS) ; \
-	kill `cat testserver.pid`)
+	$(PYTHON) test.py -f $(TESTFLAGS) schoolbell 
 
 run: build
 	$(PYTHON) schooltool-server.py
-
-runtestserver: build
-	LC_ALL="C" $(PYTHON) schooltool-server.py -c test.conf
-
-runclient: build
-	$(PYTHON) schooltool-client.py
-
-runwxclient: build
-	$(PYTHON) wxschooltool.py
-
-sampledata persons.csv groups.csv resources.csv timetable.csv roster.txt:
-	$(PYTHON) generate-sampleschool.py
-
-sampleschool: build persons.csv groups.csv resources.csv timetable.csv roster.txt
-	@$(PYTHON) schooltool-server.py -d && \
-	($(PYTHON) import-sampleschool.py ; \
-	 kill `cat schooltool.pid`)
 
 coverage: build
 	rm -rf coverage
@@ -103,13 +81,6 @@ vi-coverage-reports:
 scripts/import-sampleschool: scripts/import-sampleschool.head
 	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
 	    import-sampleschool.py) > $@
-
-.PHONY: schooltooldist
-schooltooldist: realclean build extract-translations \
-	sampledata scripts/import-sampleschool clean
-	rm -rf dist
-	fakeroot ./debian/rules clean
-	./setup.py schooltool sdist --formats=gztar,zip
 
 .PHONY: schoolbelldist
 schoolbelldist: realclean build extract-translations clean
