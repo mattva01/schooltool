@@ -27,7 +27,7 @@ from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
-from schooltool.cal import Calendar, CalendarEvent, Period
+from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
@@ -975,6 +975,7 @@ class ACLView(View):
             return Everybody
         else:
             return "%s (%s)" % (getPath(principal), principal.title)
+
 
 #
 # Calendaring functions

@@ -1168,8 +1168,8 @@ class TestACL(unittest.TestCase):
                           (self.person, "Delete"))
 
     def testEverybody(self):
-        from schooltool.interfaces import ViewPermission, AddPermission
-        from schooltool.interfaces import ModifyPermission, Everybody
+        from schooltool.interfaces import ViewPermission
+        from schooltool.interfaces import Everybody
         assert not self.acl.allows(self.person, ViewPermission)
 
         self.acl.add((Everybody, ViewPermission))

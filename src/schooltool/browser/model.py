@@ -41,7 +41,6 @@ from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.membership import Membership
-from schooltool.rest.infofacets import maxspect
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.teaching import Teaching

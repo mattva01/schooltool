@@ -756,7 +756,6 @@ class TestYearlyCalendarView(unittest.TestCase):
 class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
-        from schooltool.cal import ACLCalendar
         from schooltool.browser.cal import CalendarView
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.browser.cal import WeeklyCalendarView
@@ -1258,7 +1257,6 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
                                    args={'DELETE': 'revoke'})
         result = view.update()
 
-
     def test_update_add(self):
         from schooltool.interfaces import ViewPermission
         view = self.createView()
@@ -1303,6 +1301,7 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
                                          'permission': 'View'})
         result = view.update()
         assert view.context.allows(Everybody, ViewPermission), result
+
 
 def test_suite():
     suite = unittest.TestSuite()

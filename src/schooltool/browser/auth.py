@@ -69,12 +69,13 @@ TeacherAccess = staticmethod(TeacherAccess)
 
 
 class ACLCalendarAccess:
+    """Allows access for persons listed in the ACL of context."""
+
     def __init__(self, permission):
         self.permission = permission
-        self.__name__ = self.__class__.__name__
 
     def __call__(self, context, request):
         if isManager(request.authenticated_user):
             return True
         return context.acl.allows(request.authenticated_user, self.permission)
-    
+

@@ -39,21 +39,27 @@ class AuthPolicyTestMixin(object):
             authorize = policy
         return ViewStub()
 
+    def policyName(self, policy):
+        if isinstance(policy, staticmethod):
+            return self.createViewWithPolicy(policy).authorize.__name__
+        else:
+            return policy.__class__.__name__
+
     def assertAllows(self, policy, users, context=None):
         view = self.createViewWithPolicy(policy)
+        name = self.policyName(policy)
         for user in users:
             request = RequestStub(authenticated_user=user)
             self.assert_(view.authorize(context, request),
-                         "%s should allow access for %r"
-                         % (view.authorize.__name__, user))
+                         "%s should allow access for %r" % (name, user))
 
     def assertDenies(self, policy, users, context=None):
         view = self.createViewWithPolicy(policy)
+        name = self.policyName(policy)
         for user in users:
             request = RequestStub(authenticated_user=user)
             self.assert_(not view.authorize(context, request),
-                         "%s should deny access for %r"
-                         % (view.authorize.__name__, user))
+                         "%s should deny access for %r" % (name, user))
 
 
 class TestBrowserAuthPolicies(AuthPolicyTestMixin, AppSetupMixin,
@@ -96,6 +102,7 @@ class TestBrowserAuthPolicies(AuthPolicyTestMixin, AppSetupMixin,
                           context)
         self.assertAllows(PrivateAccess, [self.person, self.manager],
                           context)
+
 
 class TestACLCalendarAccess(AppSetupMixin, AuthPolicyTestMixin,
                             unittest.TestCase):

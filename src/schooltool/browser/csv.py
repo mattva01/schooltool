@@ -23,8 +23,6 @@ Web-application views for managing SchoolTool data in CSV format.
 $Id$
 """
 
-import datetime
-
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.clients.csvclient import CSVImporterBase, DataError
