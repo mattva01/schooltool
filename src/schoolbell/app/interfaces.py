@@ -51,6 +51,7 @@ from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 class IContainedCalendarEvent(ICalendarEvent, IContained):
     """An event that is contained in a calendar."""
 
+
 class INote(Interface):
     """A note."""
 
@@ -83,6 +84,7 @@ class INotes(Interface):
 
     def clear():
         """Remove all notes."""
+
 
 class ICalendarOwner(Interface):
     """An object that has a calendar."""
@@ -230,7 +232,7 @@ class ISchoolBellApplication(IReadContainer):
         'resources' - IResourceContainer
 
     This object can be added as a regular content object to a folder, or
-    TODO: it can be used as the application root object.
+    it can be used as the application root object.
     """
 
 
@@ -245,3 +247,4 @@ class ISchoolBellAuthentication(IAuthentication):
 
     def clearCredentials(request):
         """Forget the username and password stored in a session"""
+
