@@ -129,6 +129,11 @@ class ResponseStub:
 class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                            RegistriesSetupMixin, unittest.TestCase):
 
+    uri_markup = dedent("""
+        <uriobjects>
+        </uriobjects>
+        """) # TODO
+
     def setUp(self):
         self.setUpLibxml2()
         self.setUpRegistries()
@@ -176,8 +181,9 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         server = 'example.com'
         port = 8081
         version = 'UnitTest/0.0'
-        response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
+        response = ResponseStub(200, 'OK', self.uri_markup, server=version)
         client = self.newClient(response)
+        client.getListOfURIs = lambda: None
         client.setServer(server, port)
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
@@ -196,6 +202,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
         client = self.newClient(response)
+        client.getListOfURIs = lambda: None
         client.setServer(server, port, ssl=True)
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
@@ -222,9 +229,33 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
         client = self.newClient(response)
+        client.getListOfURIs = lambda: "pretend that I'm a mapping"
         client.tryToConnect()
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
+        self.assertEquals(client.uriobjects, "pretend that I'm a mapping")
+
+        e = socket.error(23, 'out of spam')
+        client = self.newClient(error=e)
+        client.getListOfURIs = lambda: None
+        client.tryToConnect()
+        self.assertEquals(client.status, 'out of spam (23)')
+        self.assertEquals(client.version, '')
+
+    def test_getListOfURIs(self):
+        from schooltool.clients.guiclient import SchoolToolClient
+        body = ('<uriobjects>'
+                '<uriobject uri="http://foo.bar/baz"><name>Noname</name>'
+                '  <description>Desc</description></uriobject>'
+                '<uriobject uri="http://foo.bar/quux"><name>N2</name>'
+                '  <description>Desc2</description></uriobject>'
+                '</uriobjects>')
+        response = ResponseStub(200, 'OK', body)
+        client = self.newClient(response)
+        uris = client.getListOfURIs()
+        self.assertEquals(len(uris), 2)
+        self.assertEquals(uris['http://foo.bar/baz'].name, 'Noname')
+        self.assertEquals(uris['http://foo.bar/quux'].description, 'Desc2')
 
         e = socket.error(23, 'out of spam')
         client = self.newClient(error=e)
@@ -1800,6 +1831,32 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
             </person_info>
         """
         self.assertRaises(SchoolToolError, _parsePersonInfo, body)
+
+    def test__parseURIList(self):
+        from schooltool.clients.guiclient import _parseURIList
+        from schooltool.clients.guiclient import SchoolToolError
+        body = dedent("""
+                      <uriobjects>
+                        <uriobject uri="http://example.com/uri1">
+                          <name>Hello</name>
+                          <description>A URI that
+                        is named "Hello"</description>
+                        </uriobject>
+                        <uriobject uri="http://example.com/uri2">
+                          <name>Name \xe2\x9c\xb0</name>
+                          <description>Desc \xe2\x9c\xb0</description>
+                        </uriobject>
+                      </uriobjects>
+                      """)
+        result = _parseURIList(body)
+        self.assertEquals(len(result), 2)
+        self.assertEquals(result[0].uri, "http://example.com/uri1")
+        self.assertEquals(result[0].name, "Hello")
+        self.assertEquals(result[0].description,
+                          'A URI that\n  is named "Hello"')
+        self.assertEquals(result[1].uri, "http://example.com/uri2")
+        self.assertEquals(result[1].name, u"Name \u2730")
+        self.assertEquals(result[1].description, u"Desc \u2730")
 
 
 class InfoClassTestMixin:

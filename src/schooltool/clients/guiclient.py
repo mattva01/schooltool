@@ -107,6 +107,7 @@ class SchoolToolClient:
     password = ''
     status = ''
     version = ''
+    uriobjects = None
 
     # Hooks for unit tests.
     connectionFactory = httplib.HTTPConnection
@@ -137,11 +138,16 @@ class SchoolToolClient:
             self.password = ""
 
     def tryToConnect(self):
-        """Try to connect to the server and set the status message."""
+        """Try to connect to the server and set the status message.
+
+        If connection is successful, try to update the URI list."""
         try:
             self.get('/')
         except SchoolToolError, e:
+            # self.status has been set and will be shown on the status bar
             pass
+        else:
+            self.uriobjects = self.getListOfURIs()
 
     def get(self, path, headers=None):
         """Perform an HTTP GET request for a given path.
@@ -596,6 +602,20 @@ class SchoolToolClient:
         text = to_unicode(response.read())
         return ApplicationLogPage(text, page, total_pages)
 
+    def getListOfURIs(self):
+        """Fetch URI list from the server.
+
+        Returns a mapping from URIs to URIObjects.
+        """
+        response = self.get('/uris')
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        uriobjects = _parseURIList(response.read())
+        mapping = {}
+        for uriobject in uriobjects:
+            mapping[uriobject.uri] = uriobject
+        return mapping
+
 
 class Response:
     """HTTP response.
@@ -1023,7 +1043,7 @@ def _parseAvailabilityResults(body):
 
 
 def _parsePersonInfo(body):
-    """Parse the data provided by the person info facet"""
+    """Parse the data provided by the person info facet."""
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
@@ -1044,7 +1064,7 @@ def _parsePersonInfo(body):
             comment = to_unicode(
                     ctx.xpathEval("/m:person_info/m:comment")[0].content)
         except IndexError:
-            raise SchoolToolError(_("Insufficient data in the person info"))
+            raise SchoolToolError(_("Insufficient data in person info"))
 
         dob = None
         if datestr:
@@ -1058,6 +1078,31 @@ def _parsePersonInfo(body):
         doc.freeDoc()
         ctx.xpathFreeContext()
 
+def _parseURIList(body):
+    """Parse the data provided by the URI list view."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError(_("Could not parse URI list"))
+    ctx = doc.xpathNewContext()
+    try:
+        uris = []
+        res = ctx.xpathEval("/uriobjects/uriobject")
+        try:
+            for node in res:
+                uri = node.prop('uri')
+                # TODO: validate URI
+                name = to_unicode(node.xpathEval('name')[0].content)
+                desc_node = node.xpathEval('description')[0]
+                description = to_unicode(desc_node.content)
+                uris.append(URIObject(uri, name, description))
+        except IndexError:
+            raise SchoolToolError(_("Insufficient data in URI object"))
+        return uris
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
+
 
 #
 # Application object representation
@@ -1066,6 +1111,8 @@ def _parsePersonInfo(body):
 
 Unchanged = "Unchanged"
 
+
+# TODO: URIObject
 
 class PersonInfo:
     """An object containing the data for a person"""
@@ -1081,7 +1128,8 @@ class PersonInfo:
 class GroupInfo:
     """Information about a group."""
 
-    members = None              # List of group members
+    # List of group members
+    members = None
 
     def __init__(self, members):
         self.members = members
