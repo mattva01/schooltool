@@ -44,19 +44,15 @@
   <h1 metal:define-slot="h1" metal:fill-slot="h1"
       i18n:translate="">Welcome to SchoolTool</h1>
   <div metal:fill-slot="content">
-    <div class="calnav">
-      <a class="calnav"
-         tal:attributes="href string:${context/@@absolute_url}/daily.html"
-         >Daily</a>
-      <a class="calnav"
-         tal:attributes="href string:${context/@@absolute_url}/weekly.html"
-         >Weekly</a>
-      <a class="calnav"
-         tal:attributes="href string:${context/@@absolute_url}/monthly.html"
-         >Monthly</a>
-      <a class="calnav"
-         tal:attributes="href string:${context/@@absolute_url}/yearly.html"
-         >Yearly</a>
+    <div class="calnav" tal:define="update view/update">
+      <a class="calnav" tal:attributes="href python:view.calURL('daily')"
+         i18n:translate="">Daily</a>
+      <a class="calnav" tal:attributes="href python:view.calURL('weekly')"
+         i18n:translate="">Weekly</a>
+      <a class="calnav" tal:attributes="href python:view.calURL('monthly')"
+         i18n:translate="">Monthly</a>
+      <a class="calnav" tal:attributes="href python:view.calURL('yearly')"
+         i18n:translate="">Yearly</a>
     </div>
     <div class="calcontent">
       <p metal:define-slot="content">[Content]</p>
