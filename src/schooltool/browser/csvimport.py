@@ -365,28 +365,21 @@ class TimetableCSVImporter:
 
         Should not throw exceptions, but will set self.*error attributes.
         Returns True on success.  If False is returned, it means that at least
-        one of attributes of self.errors have been set, and no changes to the
-        database have been applied.
+        one of attributes of self.errors have been set, and that no changes to
+        the database have been applied.
         """
-        rows = self.convertRowsToCSV(timetable_csv.splitlines())
+        rows = self.parseCSVRows(timetable_csv.splitlines())
         if rows is None:
             return False
 
-        def head(seq):
-            # XXX Move this elsewhere.
-            for ind, s in enumerate(seq):
-                if not s:
-                    return seq[:ind]
-            return seq
-
-        if len(head(rows[0])) != 2:
+        if len(rows[0]) != 2:
             self.errors.generic.append(
-                    _("The first row of the CSV file should"
+                    _("The first row of the CSV file must"
                       " contain the period id and the schema"
                       " of the timetable."))
             return False
 
-        self.period_id, self.ttschema = head(rows[0])
+        self.period_id, self.ttschema = rows[0]
         if self.ttschema not in self.app.timetableSchemaService.keys():
             self.errors.generic.append(
                 _("The timetable schema %r does not exist." % self.ttschema))
@@ -399,20 +392,24 @@ class TimetableCSVImporter:
                     state = 'day_ids'
                     continue
                 elif state == 'day_ids':
-                    day_ids = head(row)
+                    day_ids = row
                     state = 'periods'
                     continue
                 elif state == 'periods':
-                    periods = head(row[1:])
+                    if row[0] is not None:
+                        self.errors.generic.append(
+                            "The first cell on the period list row (%r)"
+                            " should be empty." % row[0])
+                    periods = row[1:]
                     self.validatePeriods(day_ids, periods)
                     state = 'content'
                     continue
 
                 location, records = row[0], self.parseRecordRow(row[1:])
-                if len(records) < len(periods):
+                if len(records) > len(periods):
                     self.errors.generic.append(
-                            _("The number of cells %r (line %d) is less than"
-                              " the provided number of periods %r."
+                            _("The number of records %r (line %d) is more than"
+                              " the number of periods %r."
                               % (row[1:], row_no + 3, periods)))
                     continue
 
@@ -427,8 +424,10 @@ class TimetableCSVImporter:
                 return False
         return True
 
-    def convertRowsToCSV(self, rows):
-        """Convert rows (a list of strings) in CSV format to a list of lists.
+    def parseCSVRows(self, rows):
+        """Parse rows (a list of strings) in CSV format.
+
+        Returns a list of rows as lists.
 
         rows must be in the encoding specified during construction of
         TimetableCSVImportView; the returned values are in unicode.
@@ -443,9 +442,17 @@ class TimetableCSVImporter:
             while True:
                 line += 1
                 values = reader.next()
-                if self.charset:
-                    values = [unicode(v, self.charset) for v in values]
-                result.append(values)
+                # Sanitize: convert empty or whitespace-only cells to None
+                # and remove trailing empty cells; convert others to unicode.
+                last = -1
+                for ind, s in enumerate(values):
+                    if s.strip():
+                        last = ind
+                        if self.charset:
+                            values[ind] = unicode(s, self.charset)
+                    else:
+                        values[ind] = None
+                result.append(values[:last+1])
         except StopIteration:
             return result
         except csv.Error:
@@ -458,15 +465,15 @@ class TimetableCSVImporter:
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).
 
-        records is a list of strings.  If a string is empty, the result list
-        contains None instead of a tuple in the corresponding place.
+        records is a list of strings.  Some elements may be None; in that case,
+        the corresponding tuple also contains None.
 
         If invalid entries are encountered, self.errors.records is modified
         and None is put in place of the malformed record.
         """
         result = []
         for record in records:
-            if record.strip():
+            if record is not None:
                 parts = record.split("|", 1)
                 if len(parts) != 2:
                     if record not in self.errors.records:
@@ -494,7 +501,14 @@ class TimetableCSVImporter:
                         self.errors.periods.append(period)
 
     def _updateCache(self, container_name):
-        """Update self.cache."""
+        """Maintain the internal mapping of titles to objects.
+
+        This method maintains self.cache, which is a mapping from container
+        names to dicts.  Each dict is a mapping from object titles to objects.
+
+        The cache is an optimization so that we do not have to do a linear
+        search every time we need to pick an object by title.
+        """
         # I would be happy if this method lived in ApplicationObjectContainer
         objs = {}
         for obj in self.app[container_name].itervalues():
