@@ -5,6 +5,7 @@ A script to import sample school data into SchoolTool.
 
 import os
 import sys
+
 if sys.version_info < (2, 3):
     print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
     print >> sys.stderr, 'Your python is %s' % sys.version
@@ -14,10 +15,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 datadir = basedir
 sys.path.insert(0, os.path.join(basedir, 'src'))
 
+# If you modify something above, take a look at debian/rules and
+# debian/import-sampleschool.head, too.
 # -- Do not remove this line --
 
 import urllib
 import getopt
+import schooltool.translation
 
 
 class Error(Exception):
@@ -63,15 +67,16 @@ class SampleSchoolImporter:
                 try:
                     self.port = int(v)
                 except ValueError, e:
-                    raise Error("Invalid port number: %s" % v)
+                    raise Error(_("Invalid port number: %s") % v)
 
     def check_data_files(self):
         """Check that the data files exist."""
         for filename in ('groups.csv', 'pupils.csv', 'teachers.csv',
                          'resources.csv'):
             if not os.path.exists(os.path.join(self.datadir, filename)):
-                raise Error("%s does not exist.  "
-                            "Please run generate-sampleschool.py" % filename)
+                raise Error(_("%s does not exist.  "
+                              "Please run generate-sampleschool.py")
+                            % filename)
 
     def check_server_running(self):
         """Check that the server is running, and it is the correct version."""
@@ -80,12 +85,12 @@ class SampleSchoolImporter:
             f = urllib.URLopener().open("http://%s:%s"
                                         % (self.host, self.port))
         except IOError:
-            raise Error("SchoolTool server not listening on %s:%s"
+            raise Error(_("SchoolTool server not listening on %s:%s")
                         % (self.host, self.port))
         else:
             version = f.info().getheader('Server')
             if version != self.expected_version:
-                raise Error("Server version is %s, expected %s"
+                raise Error(_("Server version is %s, expected %s")
                             % (version, self.expected_version))
 
     def check_server_empty(self):
@@ -99,9 +104,9 @@ class SampleSchoolImporter:
                 # good, we got a 404
                 return
             else:
-                raise Error("SchoolTool server already has data imported."
-                            " Remove your Data.fs if necessary,\n"
-                            "restart the server and try again.")
+                raise Error(_("SchoolTool server already has data imported."
+                              " Remove your Data.fs if necessary,\n"
+                              "restart the server and try again."))
 
     def import_csv_files(self):
         """Import data from CSV files."""
@@ -126,4 +131,5 @@ class SampleSchoolImporter:
 
 
 if __name__ == '__main__':
+    schooltool.translation.setUp()
     sys.exit(SampleSchoolImporter().main(sys.argv))

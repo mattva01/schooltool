@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "#-#-#-#-#  schooltool.pot (Zope 3 (unknown version))  #-#-#-#-#\n"
 "Project-Id-Version: Zope 3 (unknown version)\n"
-"POT-Creation-Date: Mon Apr  5 13:40:54 2004\n"
+"POT-Creation-Date: Mon Apr  5 15:11:58 2004\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Generated-By: zope/app/translation_files/extract.py\n"
 "#-#-#-#-#  messages.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: Mon Apr  5 13:40:55 2004\n"
+"POT-Creation-Date: Mon Apr  5 15:11:59 2004\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,214 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: ENCODING\n"
 "Generated-By: pygettext.py 1.4\n"
+
+#: src/schooltool/clients/csvclient.py:273
+msgid "Creating groups... "
+msgstr ""
+
+#: src/schooltool/clients/csvclient.py:289
+#: src/schooltool/clients/csvclient.py:304
+#: src/schooltool/clients/csvclient.py:328
+msgid "Error in %s line %d: expected 4 columns, got %d"
+msgstr ""
+
+#: src/schooltool/clients/csvclient.py:298
+msgid "Creating teachers... "
+msgstr ""
+
+#: src/schooltool/clients/csvclient.py:322
+msgid "Creating pupils... "
+msgstr ""
+
+#: src/schooltool/clients/csvclient.py:346
+msgid "Creating resources... "
+msgstr ""
+
+#: src/schooltool/clients/csvclient.py:352
+msgid "Error in %s line %d: expected 1 column, got %d"
+msgstr ""
+
+#: src/schooltool/clients/csvclient.py:365
+msgid "Error in %s line %d: %s"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:168
+msgid "\"Hall\""
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:170
+msgid "\"Room %d\""
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:172
+msgid "\"Projector %d\""
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:38
+msgid ""
+"David Deb Sue Martin Denise Vicki Lorne Jeff Michael Norma Nicola Wendy "
+"Lesley Carey Debbie Alden Carol Jay Heather Barbara John Peter Andrea "
+"Courtney Kathleen Lisa Sharon James Patricia Mary Mary John John John James "
+"James James Geoffrey Tom"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:44
+msgid ""
+"Moore McCullogh Buckingham Butler Davies Clark Cooper Thrift Cox Ford "
+"Horsman Price Siggs Bisset Ball Barrett Oakley Hall Turner Hester Batchelor "
+"Broughton Jones Smith Smith Smith Smith Smith Smith Smith Greenspun Eastwood "
+"Baggins"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:54
+msgid "Linguistics"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:55
+msgid "Physics"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:56
+msgid "Mathematics"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:57
+msgid "Biology"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:87
+msgid "%s Department"
+msgstr ""
+
+#: src/schooltool/clients/datagen.py:90
+msgid "Year %d"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1172
+msgid "%s expected %s, at %s %s"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1179
+msgid "%s absent for %s, since %s %s"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1192
+msgid "%dh%dm"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1197
+msgid "today"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1280
+msgid "Could not parse school timetable"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:576
+msgid "Could not parse item list"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:615
+msgid "Group tag does not have xlink:href"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:637
+#: src/schooltool/clients/guiclient.py:640
+msgid "Could not parse group tree"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:648
+msgid "Could not parse member list"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:675
+#: src/schooltool/clients/guiclient.py:702
+msgid "Could not parse relationship list"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:717
+msgid "Could not parse roll call"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:733
+msgid "Unrecognized presence value: %s"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:748
+msgid "Could not parse absences"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:765
+#: src/schooltool/clients/guiclient.py:839
+msgid "Datetime not given"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:773
+#: src/schooltool/clients/guiclient.py:852
+msgid "Unrecognized ended value: %s"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:777
+#: src/schooltool/clients/guiclient.py:861
+msgid "Unrecognized resolved value: %s"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:802
+msgid "Could not parse absence comments"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:813
+msgid "Reporter not given"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:815
+msgid "More than one reporter given"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:819
+msgid "Reporter does not have xlink:href"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:826
+msgid "More than one absentfrom given"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:831
+msgid "absentfrom does not have xlink:href"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:878
+msgid "More than one text node"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:897
+msgid "Could not parse time period list"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:917
+msgid "Could not parse timetable schema list"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:937
+msgid "Could not parse resource availability slots"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:953
+#: src/schooltool/clients/guiclient.py:994
+msgid "Bad datetime: %r"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:957
+msgid "Bad duration: %r"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:971
+msgid "Could not parse person info"
+msgstr ""
+
+#: src/schooltool/clients/guiclient.py:987
+msgid "Insufficient data in the person info"
+msgstr ""
 
 #: src/schooltool/clients/wxclient.py:1043
 msgid "School Timetable (%s, %s)"
@@ -387,8 +595,8 @@ msgid "&Remove Member"
 msgstr ""
 
 #: src/schooltool/clients/wxclient.py:1782
-#: src/schooltool/views/www/resource.pt:6 src/schooltool/views/www/group.pt:8
 #: src/schooltool/views/www/person.pt:10
+#: src/schooltool/views/www/resource.pt:6 src/schooltool/views/www/group.pt:8
 msgid "Relationships"
 msgstr ""
 
@@ -873,31 +1081,92 @@ msgstr ""
 msgid "Photo"
 msgstr ""
 
+#: src/schooltool/views/www/person.pt:13
+#: src/schooltool/views/www/resource.pt:9 src/schooltool/views/www/group.pt:11
+msgid "Facets"
+msgstr ""
+
 # Default: "Own timetables"
+#: src/schooltool/views/www/person.pt:16
 #: src/schooltool/views/www/resource.pt:12
-#: src/schooltool/views/www/group.pt:14 src/schooltool/views/www/person.pt:16
+#: src/schooltool/views/www/group.pt:14
 msgid "Own_timetables"
 msgstr ""
 
 # Default: "Composite timetables"
+#: src/schooltool/views/www/person.pt:19
 #: src/schooltool/views/www/resource.pt:15
-#: src/schooltool/views/www/group.pt:17 src/schooltool/views/www/person.pt:19
+#: src/schooltool/views/www/group.pt:17
 msgid "Composite_timetables"
 msgstr ""
 
 # Default: "Private calendar"
+#: src/schooltool/views/www/person.pt:22
 #: src/schooltool/views/www/resource.pt:18
-#: src/schooltool/views/www/group.pt:20 src/schooltool/views/www/person.pt:22
+#: src/schooltool/views/www/group.pt:20
 msgid "Private_calendar"
 msgstr ""
 
 # Default: "Calendar derived from timetables"
+#: src/schooltool/views/www/person.pt:25
 #: src/schooltool/views/www/resource.pt:21
-#: src/schooltool/views/www/group.pt:23 src/schooltool/views/www/person.pt:25
+#: src/schooltool/views/www/group.pt:23
 msgid "Calendar_derived_from_timetables"
 msgstr ""
 
-#: src/schooltool/views/www/resource.pt:9 src/schooltool/views/www/group.pt:11
-#: src/schooltool/views/www/person.pt:13
-msgid "Facets"
+#: import-sampleschool.py:70
+msgid "Invalid port number: %s"
+msgstr ""
+
+#: import-sampleschool.py:77
+msgid "%s does not exist.  Please run generate-sampleschool.py"
+msgstr ""
+
+#: import-sampleschool.py:88
+msgid "SchoolTool server not listening on %s:%s"
+msgstr ""
+
+#: import-sampleschool.py:93
+msgid "Server version is %s, expected %s"
+msgstr ""
+
+#: import-sampleschool.py:107
+msgid ""
+"SchoolTool server already has data imported. Remove your Data.fs if "
+"necessary,\n"
+"restart the server and try again."
+msgstr ""
+
+#: runimport.py:19
+msgid "Please remove Data.fs before creating a sample school"
+msgstr ""
+
+#: runimport.py:25
+msgid ""
+"Please create the sample data files by running src/schooltool/clients/"
+"datagen.py"
+msgstr ""
+
+#: runimport.py:30
+msgid "Starting server..."
+msgstr ""
+
+#: runimport.py:41
+msgid "Problems starting the server"
+msgstr ""
+
+#: runimport.py:48
+msgid "Importing data..."
+msgstr ""
+
+#: runimport.py:50
+msgid "Creating a timetable..."
+msgstr ""
+
+#: runimport.py:53
+msgid "Stopping the server..."
+msgstr ""
+
+#: runimport.py:56
+msgid "Done."
 msgstr ""

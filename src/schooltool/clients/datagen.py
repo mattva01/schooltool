@@ -31,30 +31,30 @@ import random
 import sys
 import sets
 import datetime
+import schooltool.translation
 
-names = ('David', 'Deb', 'Sue', 'Martin', 'Denise', 'Vicki', 'Lorne',
-         'Jeff', 'Michael', 'Norma', 'Nicola', 'Wendy', 'Lesley',
-         'Carey', 'Debbie', 'Alden', 'Carol', 'Jay', 'Heather',
-         'Barbara', 'John', 'Peter', 'Andrea', 'Courtney', 'Kathleen',
-         'Lisa', 'Sharon', 'James', 'Patricia', 'Mary', 'Mary',
-         'John', 'John', 'John', 'James', 'James', 'James',
-         'Geoffrey', 'Tom')
+schooltool.translation.setUp()
 
-surnames = ('Moore', 'McCullogh', 'Buckingham', 'Butler', 'Davies',
-            'Clark', 'Cooper', 'Thrift', 'Cox', 'Ford', 'Horsman',
-            'Price', 'Siggs', 'Bisset', 'Ball', 'Barrett', 'Oakley',
-            'Hall', 'Turner', 'Hester', 'Batchelor', 'Broughton',
-            'Jones', 'Smith', 'Smith', 'Smith', 'Smith', 'Smith',
-            'Smith', 'Smith', 'Greenspun', 'Eastwood', 'Baggins')
+names = _('David Deb Sue Martin Denise Vicki Lorne Jeff Michael '
+          'Norma Nicola Wendy Lesley Carey Debbie Alden Carol Jay '
+          'Heather Barbara John Peter Andrea Courtney Kathleen '
+          'Lisa Sharon James Patricia Mary Mary John John John James '
+          'James James Geoffrey Tom').split()
+
+surnames = _('Moore McCullogh Buckingham Butler Davies Clark Cooper '
+             'Thrift Cox Ford Horsman Price Siggs Bisset Ball Barrett '
+             'Oakley Hall Turner Hester Batchelor Broughton Jones '
+             'Smith Smith Smith Smith Smith Smith Smith Greenspun '
+             'Eastwood Baggins').split()
 
 years = 3
 nr_teachers = 10
 nr_pupils = 60
 subjects = {
-    'ling': 'Linguistics',
-    'phys': 'Physics',
-    'math': 'Mathematics',
-    'biol': 'Biology'
+    'ling': _('Linguistics'),
+    'phys': _('Physics'),
+    'math': _('Mathematics'),
+    'biol': _('Biology')
     }
 pupil_age_end = 1994        # Which year the youngest pupils will be
 teacher_age_start = 1950    # Oldest teachers
@@ -84,10 +84,10 @@ def createGroups():
     f = open("groups.csv", "w")
 
     for subj, subject in subjects.items():
-        print >> f, '"%s","%s Department","root",' % (subj, subject)
+        print >> f, '"%s","%s","root",' % (subj, _("%s Department") % subject)
 
     for year in range(1, years + 1):
-        print >> f, '"year%d","Year %d","root",' % (year, year)
+        print >> f, '"year%d","%s","root",' % (year, _("Year %d") % year)
         for subj, subject in subjects.items():
             print >> f, ('"%s%d","%s %d","%s year%d","subject_group"' %
                          (subj, year, subject, year, subj, year))
@@ -165,11 +165,11 @@ def createResources():
       title
     """
     f = open("resources.csv", "w")
-    print >> f, '"Hall"'
+    print >> f, _('"Hall"')
     for i in range(1,10):
-        print >> f, '"Room %d"' % i
+        print >> f, _('"Room %d"') % i
     for i in range(1,4):
-        print >> f, '"Projector %d"' % i
+        print >> f, _('"Projector %d"') % i
     f.close()
 
 

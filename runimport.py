@@ -10,21 +10,24 @@ import os
 import sys
 import time
 import urllib
+import schooltool.translation
 from schooltool.clients import csvclient
 
+schooltool.translation.setUp()
+
 if os.path.exists('Data.fs'):
-    print "Please remove Data.fs before creating a sample school"
+    print _("Please remove Data.fs before creating a sample school")
     sys.exit(1)
 
 for file in ('groups.csv',  'teachers.csv', 'pupils.csv'):
     if not os.path.exists(file):
         print "%s not found." %  file
-        print ("Please create the sample data files by running "
-               "src/schooltool/clients/datagen.py")
+        print (_("Please create the sample data files by running "
+               "src/schooltool/clients/datagen.py"))
         sys.exit(1)
 
 
-print "Starting server..."
+print _("Starting server...")
 pid = os.spawnlp(os.P_NOWAIT, "python2.3",
                  "SchoolTool", os.path.abspath("src/schooltool/main.py"))
 try:
@@ -35,20 +38,20 @@ try:
         except IOError:
             time.sleep(rest)
             if rest > 4:
-                print "Problems starting the server"
+                print _("Problems starting the server")
                 sys.exit(1)
             rest *= 2
         else:
             print
             break
 
-    print "Importing data..."
+    print _("Importing data...")
     csvclient.main()
-    print "Creating a timetable..."
+    print _("Creating a timetable...")
     os.system("make runclient < ttconfig.data")
 finally:
-    print "Stopping the server..."
+    print _("Stopping the server...")
     os.kill(pid, 15)
 
-print "Done."
+print _("Done.")
 

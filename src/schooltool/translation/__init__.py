@@ -29,19 +29,14 @@ and have their own copyright notices:
 
 """
 
-from zope.interface import moduleProvides
-from schooltool.interfaces import IModuleSetup
+import os
+import gettext
 
+localedir = os.path.dirname(__file__)
 
 def setUp():
     """Initialize SchoolTool translations.
 
     Note that this function installs _ into the built-in namespace.
     """
-    import os
-    import gettext
-    localedir = os.path.dirname(__file__)
     gettext.install('schooltool', localedir)
-
-
-moduleProvides(IModuleSetup)

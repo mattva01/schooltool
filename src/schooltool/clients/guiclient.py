@@ -45,6 +45,7 @@ from schooltool.common import parse_datetime, parse_date
 __metaclass__ = type
 
 
+
 #
 # Client/server communication
 #
@@ -572,7 +573,7 @@ def _parseContainer(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse item list")
+        raise SchoolToolError(_("Could not parse item list"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -611,8 +612,8 @@ def _parseGroupTree(body):
             if tag == 'group':
                 href = attrs and attrs.get('xlink:href', None)
                 if not href:
-                    self.exception = SchoolToolError("Group tag does not"
-                                                     " have xlink:href")
+                    self.exception = SchoolToolError(_("Group tag does not"
+                                                       " have xlink:href"))
                     return
                 title = attrs.get('xlink:title', None)
                 if title is None:
@@ -633,10 +634,10 @@ def _parseGroupTree(body):
         if handler.exception:
             raise handler.exception
         if retval:
-            raise SchoolToolError("Could not parse group tree")
+            raise SchoolToolError(_("Could not parse group tree"))
         return handler.result
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse group tree")
+        raise SchoolToolError(_("Could not parse group tree"))
 
 
 def _parseMemberList(body):
@@ -644,7 +645,7 @@ def _parseMemberList(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse member list")
+        raise SchoolToolError(_("Could not parse member list"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -671,7 +672,7 @@ def _parseRelationships(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse relationship list")
+        raise SchoolToolError(_("Could not parse relationship list"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -698,7 +699,7 @@ def _parseRelationships(body):
             ctx.setContextNode(node)
             manage_nodes = ctx.xpathEval("manage/@xlink:href")
             if len(manage_nodes) != 1:
-                raise SchoolToolError("Could not parse relationship list")
+                raise SchoolToolError(_("Could not parse relationship list"))
             link_href = manage_nodes[0].content
             relationships.append(RelationshipInfo(arcrole, role, title,
                                                   href, link_href))
@@ -713,7 +714,7 @@ def _parseRollCall(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse roll call")
+        raise SchoolToolError(_("Could not parse roll call"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -729,7 +730,7 @@ def _parseRollCall(body):
                 title = href.split('/')[-1]
             presence = node.nsProp('presence', None)
             if presence not in ('present', 'absent'):
-                raise SchoolToolError("Unrecognized presence value: %s"
+                raise SchoolToolError(_("Unrecognized presence value: %s")
                                       % presence)
             presence = (presence == 'present')
             persons.append(RollCallInfo(title, href, presence))
@@ -744,7 +745,7 @@ def _parseAbsences(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse absences")
+        raise SchoolToolError(_("Could not parse absences"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -761,7 +762,7 @@ def _parseAbsences(body):
                 person_title = person_path.split('/')[-1]
             dt = node.nsProp('datetime', None)
             if dt is None:
-                raise SchoolToolError("Datetime not given")
+                raise SchoolToolError(_("Datetime not given"))
             else:
                 try:
                     dt = parse_datetime(dt)
@@ -769,11 +770,11 @@ def _parseAbsences(body):
                     raise SchoolToolError(str(e))
             ended = node.nsProp('ended', None)
             if ended not in ('ended', 'unended'):
-                raise SchoolToolError("Unrecognized ended value: %s"
+                raise SchoolToolError(_("Unrecognized ended value: %s")
                                       % ended)
             resolved = node.nsProp('resolved', None)
             if resolved not in ('resolved', 'unresolved'):
-                raise SchoolToolError("Unrecognized resolved value: %s"
+                raise SchoolToolError(_("Unrecognized resolved value: %s")
                                       % resolved)
             expected_presence = node.nsProp('expected_presence', None)
             if expected_presence is not None:
@@ -798,7 +799,7 @@ def _parseAbsenceComments(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse absence comments")
+        raise SchoolToolError(_("Could not parse absence comments"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -809,33 +810,33 @@ def _parseAbsenceComments(body):
             ctx.setContextNode(node)
             res = ctx.xpathEval("reporter")
             if len(res) < 1:
-                raise SchoolToolError("Reporter not given")
+                raise SchoolToolError(_("Reporter not given"))
             elif len(res) > 1:
-                raise SchoolToolError("More than one reporter given")
+                raise SchoolToolError(_("More than one reporter given"))
             reporter = res[0]
             reporter_href = reporter.nsProp('href', xlink)
             if not reporter_href:
-                raise SchoolToolError("Reporter does not have xlink:href")
+                raise SchoolToolError(_("Reporter does not have xlink:href"))
             reporter_title = reporter.nsProp('title', xlink)
             if not reporter_title:
                 reporter_title = reporter_href.split('/')[-1]
 
             res = ctx.xpathEval("absentfrom")
             if len(res) > 1:
-                raise SchoolToolError("More than one absentfrom given")
+                raise SchoolToolError(_("More than one absentfrom given"))
             absent_from_href = absent_from_title = ""
             if res:
                 absent_from_href = res[0].nsProp('href', xlink)
                 if not absent_from_href:
-                    raise SchoolToolError("absentfrom does not have"
-                                          " xlink:href")
+                    raise SchoolToolError(_("absentfrom does not have"
+                                            " xlink:href"))
                 absent_from_title = res[0].nsProp('title', xlink)
                 if not absent_from_title:
                     absent_from_title = absent_from_href.split('/')[-1]
 
             dt = node.nsProp('datetime', None)
             if dt is None:
-                raise SchoolToolError("Datetime not given")
+                raise SchoolToolError(_("Datetime not given"))
             else:
                 try:
                     dt = parse_datetime(dt)
@@ -848,7 +849,7 @@ def _parseAbsenceComments(body):
             elif ended in ('ended', 'unended'):
                 ended = (ended == 'ended')
             else:
-                raise SchoolToolError("Unrecognized ended value: %s"
+                raise SchoolToolError(_("Unrecognized ended value: %s")
                                       % ended)
 
             resolved = node.nsProp('resolved', None)
@@ -857,7 +858,7 @@ def _parseAbsenceComments(body):
             elif resolved in ('resolved', 'unresolved'):
                 resolved = (resolved == 'resolved')
             else:
-                raise SchoolToolError("Unrecognized resolved value: %s"
+                raise SchoolToolError(_("Unrecognized resolved value: %s")
                                       % resolved)
 
             expected_presence = node.nsProp('expected_presence', None)
@@ -874,7 +875,7 @@ def _parseAbsenceComments(body):
             text = ""
             res = ctx.xpathEval("text")
             if len(res) > 1:
-                raise SchoolToolError("More than one text node")
+                raise SchoolToolError(_("More than one text node"))
             if res:
                 text = res[0].content.strip()
 
@@ -893,7 +894,7 @@ def _parseTimePeriods(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse time period list")
+        raise SchoolToolError(_("Could not parse time period list"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -913,7 +914,7 @@ def _parseTimetableSchemas(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse timetable schema list")
+        raise SchoolToolError(_("Could not parse timetable schema list"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -933,7 +934,7 @@ def _parseAvailabilityResults(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse resource availability slots")
+        raise SchoolToolError(_("Could not parse resource availability slots"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -949,11 +950,11 @@ def _parseAvailabilityResults(body):
                 try:
                     start_dt = parse_datetime(start)
                 except ValueError, e:
-                    raise SchoolToolError("Bad datetime: %r" % start)
+                    raise SchoolToolError(_("Bad datetime: %r") % start)
                 try:
                     duration_td = datetime.timedelta(minutes=int(duration))
                 except ValueError, e:
-                    raise SchoolToolError("Bad duration: %r" % duration)
+                    raise SchoolToolError(_("Bad duration: %r") % duration)
                 slot = ResourceTimeSlot(title, path, start_dt, duration_td)
                 slots.append(slot)
         return slots
@@ -967,7 +968,7 @@ def _parsePersonInfo(body):
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
-        raise SchoolToolError("Could not parse person info")
+        raise SchoolToolError(_("Could not parse person info"))
     ctx = doc.xpathNewContext()
     try:
         xlink = "http://www.w3.org/1999/xlink"
@@ -983,14 +984,14 @@ def _parsePersonInfo(body):
             datestr = node.content
             comment = ctx.xpathEval("/m:person_info/m:comment")[0].content
         except IndexError:
-            raise SchoolToolError("Insufficient data in the person info")
+            raise SchoolToolError(_("Insufficient data in the person info"))
 
         dob = None
         if datestr:
             try:
                 dob = parse_date(datestr)
             except ValueError, e:
-                raise SchoolToolError("Bad datetime: %r" % datestr)
+                raise SchoolToolError(_("Bad datetime: %r") % datestr)
 
         return PersonInfo(first_name, last_name, dob, comment)
     finally:
@@ -1168,14 +1169,14 @@ class AbsenceInfo:
 
     def __str__(self):
         if self.expected_presence:
-            return ("%s expected %s, at %s %s"
+            return (_("%s expected %s, at %s %s")
                     % (self.person_title,
                        self.format_age(self.now() - self.expected_presence,
                                        '%s ago', 'in %s'),
                        self.expected_presence.strftime("%I:%M%P"),
                        self.format_date(self.expected_presence)))
         else:
-            return ("%s absent for %s, since %s %s"
+            return (_("%s absent for %s, since %s %s")
                     % (self.person_title,
                        self.format_age(self.now() - self.datetime),
                        self.datetime.strftime("%I:%M%P"),
@@ -1188,12 +1189,12 @@ class AbsenceInfo:
         if age < 0:
             age = -age
             fmt = fmt_negative
-        return fmt % '%dh%dm' % divmod(age / 60, 60)
+        return fmt % _('%dh%dm') % divmod(age / 60, 60)
 
     def format_date(self, date):
         """Format the date part of a datetime."""
         if date.date() == self.now().date():
-            return 'today'
+            return _('today')
         else:
             return date.strftime('%Y-%m-%d')
 
@@ -1276,7 +1277,7 @@ class SchoolTimetableInfo:
         try:
             doc = libxml2.parseDoc(data)
         except libxml2.parserError:
-            raise SchoolToolError("Could not parse school timetable")
+            raise SchoolToolError(_("Could not parse school timetable"))
         ctx = doc.xpathNewContext()
         try:
             schooltt = "http://schooltool.org/ns/schooltt/0.1"

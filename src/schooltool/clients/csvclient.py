@@ -115,6 +115,7 @@ import httplib
 import csv
 import sys
 import base64
+import schooltool.translation
 
 
 class DataError(Exception):
@@ -269,7 +270,7 @@ class CSVImporter:
 
     def run(self):
         if self.verbose:
-            print "Creating groups... "
+            print _("Creating groups... ")
         for resource, method, body in self.importGroup("teachers",
                                                        "Teachers",
                                                        "root",
@@ -285,8 +286,8 @@ class CSVImporter:
             file = "groups.csv"
             for row in csv.reader(self.file(file)):
                 if len(row) != 4:
-                    raise DataError("Error in %s line %d:"
-                                    " expected 4 columns, got %d" %
+                    raise DataError(_("Error in %s line %d:"
+                                      " expected 4 columns, got %d") %
                                     (file, line, len(row)))
                 for resource, method, body in self.importGroup(*row):
                     self.process(method, resource, body=body)
@@ -294,14 +295,14 @@ class CSVImporter:
 
             if self.verbose:
                 print
-                print "Creating teachers... "
+                print _("Creating teachers... ")
 
             line = 1
             file = "teachers.csv"
             for row in csv.reader(self.file(file)):
                 if len(row) != 4:
-                    raise DataError("Error in %s line %d:"
-                                    " expected 4 columns, got %d" %
+                    raise DataError(_("Error in %s line %d:"
+                                      " expected 4 columns, got %d") %
                                     (file, line, len(row)))
                 title, groups, dob, comment = row
                 for resource, method, body in self.importPerson(title):
@@ -318,14 +319,14 @@ class CSVImporter:
 
             if self.verbose:
                 print
-                print "Creating pupils... "
+                print _("Creating pupils... ")
 
             line = 1
             file = "pupils.csv"
             for row in csv.reader(self.file(file)):
                 if len(row) != 4:
-                    raise DataError("Error in %s line %d:"
-                                    " expected 4 columns, got %d" %
+                    raise DataError(_("Error in %s line %d:"
+                                      " expected 4 columns, got %d") %
                                     (file, line, len(row)))
                 title, groups, dob, comment = row
                 for resource, method, body in self.importPerson(title):
@@ -342,14 +343,14 @@ class CSVImporter:
 
             if self.verbose:
                 print
-                print "Creating resources... "
+                print _("Creating resources... ")
 
             line = 1
             file = "resources.csv"
             for row in csv.reader(self.file(file)):
                 if len(row) != 1:
-                    raise DataError("Error in %s line %d:"
-                                    " expected 1 column, got %d" %
+                    raise DataError(_("Error in %s line %d:"
+                                      " expected 1 column, got %d") %
                                     (file, line, len(row)))
                 title = row[0]
                 for resource, method, body in self.importResource(title):
@@ -361,7 +362,7 @@ class CSVImporter:
         except DataError:
             raise
         except csv.Error, e:
-            raise DataError("Error in %s line %d: %s" % (file, line, e))
+            raise DataError(_("Error in %s line %d: %s") % (file, line, e))
 
 
 def main():
@@ -374,5 +375,6 @@ def main():
 
 
 if __name__ == '__main__':
+    schooltool.translation.setUp()
     main()
 

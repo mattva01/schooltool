@@ -30,6 +30,9 @@ from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
+import schooltool.translation
+
+schooltool.translation.setUp()
 
 __metaclass__ = type
 
