@@ -30,18 +30,19 @@ __metaclass__ = type
 class RequestStub:
 
     code = 200
-    message = 'OK'
+    reason = 'OK'
 
-    def __init__(self, uri=''):
+    def __init__(self, uri='', method='GET'):
         self.headers = {}
         self.uri = uri
+        self.method = method
 
     def setHeader(self, header, value):
         self.headers[header] = value
 
-    def setResponseCode(self, code, message):
+    def setResponseCode(self, code, reason):
         self.code = code
-        self.message = message
+        self.reason = reason
 
 
 class TestTemplate(unittest.TestCase):
@@ -66,7 +67,7 @@ class TestErrorViews(unittest.TestCase):
         self.assertEquals(request.headers['Content-Type'],
                           "text/html; charset=UTF-8")
         self.assertEquals(request.code, 747)
-        self.assertEquals(request.message, "Not ready to take off")
+        self.assertEquals(request.reason, "Not ready to take off")
         self.assert_('<title>747 - Not ready to take off</title>' in result)
         self.assert_('<h1>747 - Not ready to take off</h1>' in result)
 
@@ -78,7 +79,7 @@ class TestErrorViews(unittest.TestCase):
         self.assertEquals(request.headers['Content-Type'],
                           "text/html; charset=UTF-8")
         self.assertEquals(request.code, 404)
-        self.assertEquals(request.message, "No Boeing found")
+        self.assertEquals(request.reason, "No Boeing found")
         self.assert_('<title>404 - No Boeing found</title>' in result)
         self.assert_('<h1>404 - No Boeing found</h1>' in result)
         self.assert_('/hangar' in result)
@@ -88,22 +89,91 @@ class TestErrorViews(unittest.TestCase):
         request = RequestStub()
         result = errorPage(request, 747, "Not ready to take off")
         self.assertEquals(request.code, 747)
-        self.assertEquals(request.message, "Not ready to take off")
+        self.assertEquals(request.reason, "Not ready to take off")
         self.assert_('<title>747 - Not ready to take off</title>' in result)
         self.assert_('<h1>747 - Not ready to take off</h1>' in result)
 
 
-# Other things that could use some unit tests:
-#   View.getChild
-#   View.render
-#   Request (tricky: threads)
-#   main (should be refactored and tested)
+class TestView(unittest.TestCase):
+
+    def test_getChild(self):
+        from schooltool.views import View, NotFoundView
+        context = None
+        request = RequestStub()
+        view = View(context)
+        self.assert_(view.getChild('', request) is view)
+        result = view.getChild('anything', request)
+        self.assert_(result.__class__ is NotFoundView)
+        self.assert_(result.code == 404)
+
+    def test_getChild_with_traverse(self):
+        from schooltool.views import View, NotFoundView
+        context = None
+        request = RequestStub()
+        view = View(context)
+        frob = object()
+        def _traverse(name, request):
+            if name == 'frob':
+                return frob
+            raise KeyError(name)
+        view._traverse = _traverse
+        self.assert_(view.getChild('frob', request) is frob)
+        result = view.getChild('not frob', request)
+        self.assert_(result.__class__ is NotFoundView)
+        self.assert_(result.code == 404)
+
+    def test_getChild_with_exceptions(self):
+        from schooltool.views import View, NotFoundView
+        context = None
+        request = RequestStub()
+        view = View(context)
+        frob = object()
+        def _traverse(name, request):
+            raise AssertionError('just testing')
+        view._traverse = _traverse
+        self.assertRaises(AssertionError, view.getChild, 'frob', request)
+
+    def test_render(self):
+        from schooltool.views import View, NotFoundView
+        context = object()
+        body = 'foo'
+        view = View(context)
+
+        class TemplateStub:
+
+            def __init__(self, request, view, context, body):
+                self.request = request
+                self.view = view
+                self.context = context
+                self.body = body
+
+            def __call__(self, request, view=None, context=None):
+                assert request is self.request
+                assert view is self.view
+                assert context is self.context
+                return self.body
+
+        request = RequestStub()
+        view.template = TemplateStub(request, view, context, body)
+        self.assertEquals(view.render(request), body)
+
+        request = RequestStub(method='HEAD')
+        view.template = TemplateStub(request, view, context, body)
+        self.assertEquals(view.render(request), '')
+        self.assertEquals(request.headers['Content-Length'], len(body))
+
+        request = RequestStub(method='PUT')
+        self.assertNotEquals(view.render(request), '')
+        self.assertEquals(request.code, 405)
+        self.assertEquals(request.reason, 'Method Not Allowed')
+        self.assertEquals(request.headers['Allow'], 'GET, HEAD')
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
+    suite.addTest(unittest.makeSuite(TestView))
     return suite
 
 if __name__ == '__main__':
