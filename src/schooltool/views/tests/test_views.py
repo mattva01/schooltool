@@ -53,36 +53,6 @@ class TestHelpers(unittest.TestCase):
                           "http://localhost/moo/spoo")
         self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
 
-    def test_parse_datetime(self):
-        from schooltool.views import parse_datetime
-        dt = datetime.datetime
-        valid_dates = (
-            ("2000-01-01 00:00:00", dt(2000, 1, 1, 0, 0, 0, 0)),
-            ("2000-01-01 00:00:00.000000", dt(2000, 1, 1, 0, 0, 0, 0)),
-            ("2000-01-01T00:00:00", dt(2000, 1, 1, 0, 0, 0, 0)),
-            ("2005-12-23 11:22:33", dt(2005, 12, 23, 11, 22, 33)),
-            ("2005-12-23T11:22:33", dt(2005, 12, 23, 11, 22, 33)),
-            ("2005-12-23T11:22:33.4", dt(2005, 12, 23, 11, 22, 33, 400000)),
-            ("2005-12-23T11:22:33.456789", dt(2005, 12, 23, 11, 22, 33,
-                                              456789)),
-        )
-        for s, d in valid_dates:
-            result = parse_datetime(s)
-            self.assertEquals(result, d,
-                              "parse_datetime(%r) returned %r" % (s, result))
-        invalid_dates = (
-            "2000/01/01",
-            "2100-02-29 00:00:00",
-            "2005-12-23 11:22:33 "
-        )
-        for s in invalid_dates:
-            try:
-                result = parse_datetime(s)
-            except ValueError:
-                pass
-            else:
-                self.fail("parse_datetime(%r) did not raise" % s)
-
 
 class TestTemplate(unittest.TestCase):
 

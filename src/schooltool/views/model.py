@@ -31,18 +31,19 @@ from schooltool.interfaces import IGroup, IPerson
 from schooltool.interfaces import IAbsenceTrackerUtility, IAbsenceTrackerFacet
 from schooltool.interfaces import Unchanged
 from schooltool.uris import URIMember, URIGroup
-from schooltool.views import View, Template
 from schooltool.component import registerView
 from schooltool.component import getPath, traverse
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
 from schooltool.model import AbsenceComment
+from schooltool.views import View, Template
 from schooltool.views import XMLPseudoParser
-from schooltool.views import parse_datetime, absoluteURL, textErrorPage
+from schooltool.views import absoluteURL, textErrorPage
 from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetView, FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
+from schooltool.common import parse_datetime
 
 __metaclass__ = type
 

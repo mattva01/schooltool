@@ -23,7 +23,6 @@ $Id$
 """
 
 import re
-import datetime
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
@@ -45,30 +44,6 @@ def absoluteURL(request, path):
     if not path.startswith('/'):
         raise ValueError("Path must be absolute")
     return 'http://%s%s' % (request.getRequestHostname(), path)
-
-
-def parse_datetime(s):
-    """Parses ISO 8601 date/time values.
-
-    Only a small subset of ISO 8601 is accepted:
-
-      YYYY-MM-DD HH:MM:SS
-      YYYY-MM-DD HH:MM:SS.ssssss
-      YYYY-MM-DDTHH:MM:SS
-      YYYY-MM-DDTHH:MM:SS.ssssss
-
-    Returns a datetime.datetime object without a time zone.
-    """
-    m = re.match("(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
-    if not m:
-        raise ValueError("Bad datetime: %s" % s)
-    ssssss = m.groups()[7]
-    if ssssss:
-        ssssss = int((ssssss + "00000")[:6])
-    else:
-        ssssss = 0
-    y, m, d, hh, mm, ss = map(int, m.groups()[:6])
-    return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
 
 
 #

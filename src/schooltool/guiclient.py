@@ -37,9 +37,7 @@ import libxml2
 import datetime
 import cgi
 from schooltool.uris import strURI
-# XXX: parse_datetime should be split into a separate common module shared by
-# both the client and the server
-from schooltool.views import parse_datetime
+from schooltool.common import parse_datetime
 
 __metaclass__ = type
 
