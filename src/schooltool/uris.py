@@ -180,6 +180,18 @@ class URIMembership(ISpecificURI):
     """
 
 
+class URITeaching(ISpecificURI):
+    """http://schooltool.org/ns/teaching"""
+
+
+class URITeacher(ISpecificURI):
+    """http://schooltool.org/ns/teaching/teacher"""
+
+
+class URITaught(ISpecificURI):
+    """http://schooltool.org/ns/teaching/taught"""
+
+
 #
 #  Configuration
 #
@@ -189,5 +201,8 @@ def setUp():
     registerURI(URIMembership)
     registerURI(URIMember)
     registerURI(URIGroup)
+    registerURI(URITeacher)
+    registerURI(URITeaching)
+    registerURI(URITaught)
 
 moduleProvides(IModuleSetup, IURIAPI)

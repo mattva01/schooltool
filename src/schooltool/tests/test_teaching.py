@@ -84,9 +84,6 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         verifyObject(IModuleSetup, teaching)
         teaching.setUp()
         getFacetFactory('subject_group')
-        getURI("http://schooltool.org/ns/teaching")
-        getURI("http://schooltool.org/ns/teaching/teacher")
-        getURI("http://schooltool.org/ns/teaching/taught")
 
     def testSubjectGroupFacet(self):
         from schooltool.teaching import SubjectGroupFacet

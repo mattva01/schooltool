@@ -127,6 +127,9 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
         getURI("http://schooltool.org/ns/membership")
         getURI("http://schooltool.org/ns/membership/member")
         getURI("http://schooltool.org/ns/membership/group")
+        getURI("http://schooltool.org/ns/teaching")
+        getURI("http://schooltool.org/ns/teaching/teacher")
+        getURI("http://schooltool.org/ns/teaching/taught")
 
 
 def test_suite():

@@ -26,23 +26,11 @@ from schooltool.interfaces import IModuleSetup, IFacet
 from schooltool.relationship import RelationshipSchema
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency
-from schooltool.uris import ISpecificURI, registerURI
+from schooltool.uris import URITeaching, URITeacher, URITaught
 from schooltool.facet import FacetFactory
 from schooltool.component import registerFacetFactory
 
 moduleProvides(IModuleSetup)
-
-
-class URITeaching(ISpecificURI):
-    """http://schooltool.org/ns/teaching"""
-
-
-class URITeacher(ISpecificURI):
-    """http://schooltool.org/ns/teaching/teacher"""
-
-
-class URITaught(ISpecificURI):
-    """http://schooltool.org/ns/teaching/taught"""
 
 
 Teaching = RelationshipSchema(URITeaching,
@@ -62,8 +50,6 @@ class SubjectGroupFacet(RelationshipValenciesMixin):
 
 
 def setUp():
+    """See IModuleSetup"""
     registerFacetFactory(FacetFactory(SubjectGroupFacet, 'subject_group',
                                       'Subject Group'))
-    registerURI(URITeacher)
-    registerURI(URITeaching)
-    registerURI(URITaught)
