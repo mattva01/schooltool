@@ -358,8 +358,10 @@ class BusySearchView(View, AvailabilityQueryView):
 
     def __init__(self, context):
         View.__init__(self, context)
-        self.first_widget = TextWidget('first', _('First'), parser=dateParser)
-        self.last_widget = TextWidget('last', _('Last'), parser=dateParser)
+        self.first_widget = TextWidget('first', _('First'), parser=dateParser,
+                                       value=datetime.date.today())
+        self.last_widget = TextWidget('last', _('Last'), parser=dateParser,
+                                      value=datetime.date.today())
         self.duration_widget = TextWidget('duration', _('Duration'),
                                           unit=_('min.'), parser=intParser,
                                           validator=self.duration_validator,
