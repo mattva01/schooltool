@@ -169,8 +169,10 @@ class CSVImporter:
     def run(self):
         if self.verbose:
             print "Creating groups... "
-        for resource, method, body in self.importGroup("teachers", "Teachers",
-                                                       "root", ''):
+        for resource, method, body in self.importGroup("teachers",
+                                                       "Teachers",
+                                                       "root",
+                                                       'teacher_group'):
             self.process(method, resource, body=body)
 
         for resource, method, body in self.importGroup("pupils", "Pupils",

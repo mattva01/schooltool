@@ -44,6 +44,8 @@ try:
 
     print "Importing data..."
     csvclient.main()
+    print "Creating a timetable..."
+    os.system("make runclient < ttconfig.data")
 finally:
     print "Stopping the server..."
     os.kill(pid, 15)
