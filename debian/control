@@ -11,7 +11,7 @@ Depends: ${python:Depends}, python2.3-pyopenssl, python2.3-xml, python2.3-twiste
 Conflicts: schoolbell, schooltool-server
 Replaces: schoolbell, schooltool-server
 Recommends: python-tcpwrap (>= 0.2)
-Description: Common platform for school administration
+Description: common platform for school administration
  SchoolTool is a project to develop a common global school administration
  infrastructure that is freely available under an Open Source licence.
  .
@@ -27,7 +27,7 @@ Depends: ${python:Depends}, python2.3-pyopenssl, python2.3-xml, python2.3-twiste
 Conflicts: schooltool
 Replaces: schooltool
 Recommends: python-tcpwrap (>= 0.2)
-Description: A web server for co-ordinating schedules, timetables and calendars
+Description: web server for co-ordinating schedules, timetables and calendars
  SchoolBell is a free and open source application to allow groups and
  organizations to coordinate schedules and timetables.  Users may manage their
  personal calendars, group calendars and calendars for resources, e.g., rooms,
@@ -44,7 +44,7 @@ Package: schooltool-clients
 Section: misc
 Architecture: all
 Depends: ${python:Depends}, python2.3-xml, libxml2-python2.3 (>= 2.6.3-1), libwxgtk2.4-python (>= 2.4.2.4), libschooltool-clients (= ${Source-Version}), ${misc:Depends}
-Description: Clients for the Schooltool common platform for school administration
+Description: clients for the Schooltool common platform for school administration
  SchoolTool is a project to develop a common global school administration
  infrastructure that is freely available under an Open Source licence.
  .
@@ -57,7 +57,7 @@ Package: libschooltool
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Common architecture dependent files for the SchoolTool and SchoolBell server
+Description: common architecture dependent files for the SchoolTool and SchoolBell server
  SchoolTool is a project to develop a common global school administration
  infrastructure that is freely available under an Open Source licence.
  .
@@ -70,7 +70,7 @@ Package: libschooltool-clients
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Architecture dependent files for the SchoolTool clients
+Description: architecture dependent files for the SchoolTool clients
  SchoolTool is a project to develop a common global school administration
  infrastructure that is freely available under an Open Source licence.
  .
