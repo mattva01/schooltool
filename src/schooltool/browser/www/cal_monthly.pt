@@ -17,9 +17,12 @@
 
     <table class="cal_monthly"
            tal:define="weeks view/getWeeks">
-    <tr><th class="cal_monthly_weekday"
+    <tr>
+      <th>&nbsp;</th>
+      <th class="cal_monthly_weekday"
             tal:repeat="weekday python:weeks[0]"
-            tal:content="python:weekday.strftime('%A')" /></tr>
+            tal:content="python:weekday.strftime('%A')" />
+    </tr>
     <tr tal:repeat="week weeks">
       <!-- XXX not translatable -->
       <td class="cal_monthly"
