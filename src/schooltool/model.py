@@ -27,7 +27,7 @@ from zope.interface import implements
 from persistence import Persistent
 from schooltool.interfaces import IPerson, IGroup, Unchanged
 from schooltool.interfaces import IAbsence, IAbsenceComment
-from schooltool.interfaces import IAttendanceEvent, IEventTarget
+from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import IAbsenceEvent, IResolvedAbsenceEvent
 from schooltool.interfaces import IAbsenceTracker, IAbsenceTrackerUtility
 from schooltool.interfaces import IAbsenceTrackerFacet

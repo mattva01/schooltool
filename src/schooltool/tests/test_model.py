@@ -397,7 +397,6 @@ class TestAbsenceTrackerMixin(EventServiceTestMixin, EqualsSortedMixin,
         verifyObject(IAbsenceTracker, tr)
 
     def test_notify(self):
-        from schooltool.interfaces import IAbsenceTracker
         from schooltool.event import EventMixin
         from schooltool.model import AbsenceTrackerMixin, ResolvedAbsenceEvent
         from schooltool.model import Absence, AbsenceEvent
