@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RelaxNG grammar for SchoolTool options -->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <element name="options">
+
+      <optional>
+        <element name="defaultTimetableSchema">
+          <text/>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="newEventPrivacy">
+          <choice>
+            <value>public</value>
+            <value>private</value>
+            <value>hidden</value>
+          </choice>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="timetablePrivacy">
+          <choice>
+            <value>public</value>
+            <value>private</value>
+            <value>hidden</value>
+          </choice>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="restrictMembership">
+          <choice>
+            <value>False</value>
+            <value>True</value>
+          </choice>
+        </element>
+      </optional>
+
+    </element>
+  </start>
+</grammar>

@@ -1982,16 +1982,23 @@ class IOptions(Interface):
     """User-selectable options of the system."""
 
     new_event_privacy = Attribute(
-        """The default value of the privacy attribute for the newly
-        created events.
+        """The default privacy setting of newly created calendar events.
+
+        Allowed values are 'public', 'private' and 'hidden'.
         """)
 
     timetable_privacy = Attribute(
-        """The value of the privacy attribute for the timetable events.""")
+        """The value of the privacy attribute for timetable events.
+
+        Allowed values are 'public', 'private' and 'hidden'.
+        """)
 
     restrict_membership = Attribute(
-        """A boolean value signifying whether the membership in every group
-        is restricted to the members of immediate parent groups.
+        """Restricted group membership mode.
+
+        If True, membership in every group is restricted to the members of
+        immediate parent groups.  If False, any object can be added to any
+        group.
         """)
 
 
@@ -2136,6 +2143,14 @@ class IModuleSetup(Interface):
 #
 
 class IViewAPI(Interface):
+    """View registry.
+
+    The view registry is only used for RESTive views, and is not used very
+    extensively.  Whenever an view's _traverse method does not know the
+    type of the object it traverses to, it uses getView to select an
+    appropriate view.  For example, this is the case for application object
+    container views.
+    """
 
     def getView(object):
         """Select a view for an object by its class or its interface.

@@ -384,10 +384,10 @@ class View(Resource):
         # Twisted's http.Request keeps outgoing headers in a dict keyed by
         # lower-cased header name.
         ctype = request.headers.get('content-type', None)
-        if ctype is None:
+        if ctype is None and body != "":
             raise AssertionError("%s did not set the Content-Type"
                                  " header" % culprit)
-        if isinstance(body, str):
+        if isinstance(body, str) or body == u"":
             return body
         elif isinstance(body, unicode):
             if not ctype.startswith('text/'):

@@ -1,0 +1,7 @@
+<options xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <defaultTimetableSchema
+      tal:content="context/timetableSchemaService/default_id" />
+  <newEventPrivacy tal:content="context/new_event_privacy" />
+  <timetablePrivacy tal:content="context/timetable_privacy" />
+  <restrictMembership tal:content="context/restrict_membership" />
+</options>

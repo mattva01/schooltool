@@ -113,13 +113,14 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               <ttschemas xlink:href="/ttschemas"
                          xlink:title="Timetable schemas"
                          xlink:type="simple"/>
-       </schooltool>
+            </schooltool>
             """, recursively_sort=["schooltool"])
 
     def test__traverse(self):
         from schooltool.rest.app import ApplicationObjectContainerView
         from schooltool.rest.app import AvailabilityQueryView
         from schooltool.rest.app import UriObjectListView
+        from schooltool.rest.app import OptionsView
         from schooltool.rest.utility import UtilityServiceView
         from schooltool.rest.timetable import SchoolTimetableTraverseView
         from schooltool.rest.cal import AllCalendarsView
@@ -150,6 +151,10 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         view = self.view._traverse('uris', request)
         self.assert_(view.__class__ is UriObjectListView)
+        self.assert_(view.context is self.view.context)
+
+        view = self.view._traverse('options', request)
+        self.assert_(view.__class__ is OptionsView)
         self.assert_(view.context is self.view.context)
 
 
@@ -454,12 +459,75 @@ class TestUriObjectListView(NiceDiffsMixin, XMLCompareMixin,
                 """))
 
 
+class TestOptionsView(QuietLibxml2Mixin, XMLCompareMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+
+    def createView(self):
+        from schooltool.app import Application
+        from schooltool.rest.app import OptionsView
+        app = Application()
+        app.timetableSchemaService.default_id = 'default'
+        view = OptionsView(app)
+        return view
+
+    def test_get(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEqualsXML(result, """
+            <options>
+              <defaultTimetableSchema>default</defaultTimetableSchema>
+              <newEventPrivacy>public</newEventPrivacy>
+              <timetablePrivacy>public</timetablePrivacy>
+              <restrictMembership>False</restrictMembership>
+            </options>
+            """)
+
+    def test_put(self):
+        view = self.createView()
+        view.authorization = lambda *args: True
+        request = RequestStub(method="PUT", body="""
+            <options>
+              <defaultTimetableSchema>other</defaultTimetableSchema>
+              <newEventPrivacy>hidden</newEventPrivacy>
+              <timetablePrivacy>private</timetablePrivacy>
+              <restrictMembership>True</restrictMembership>
+            </options>
+            """)
+        result = view.render(request)
+        self.assertEquals(request.code, 204)
+        self.assertEquals(result, '')
+        self.assertEquals(view.context.timetableSchemaService.default_id,
+                          'other')
+        self.assertEquals(view.context.new_event_privacy, 'hidden')
+        self.assertEquals(view.context.timetable_privacy, 'private')
+        self.assertEquals(view.context.restrictMembership, True)
+
+    def test_put_with_errors(self):
+        view = self.createView()
+        view.authorization = lambda *args: True
+        request = RequestStub(method="PUT", body="""
+            <options>
+              <restrictMembership>Maybe</restrictMembership>
+            </options>
+            """)
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(result, 'Invalid XML document')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
     suite.addTest(unittest.makeSuite(TestAvailabilityQueryView))
     suite.addTest(unittest.makeSuite(TestUriObjectListView))
+    suite.addTest(unittest.makeSuite(TestOptionsView))
     return suite
 
 if __name__ == '__main__':

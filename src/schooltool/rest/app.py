@@ -33,6 +33,7 @@ from schooltool.rest import View, Template
 from schooltool.rest import TraversableView
 from schooltool.rest import notFoundPage, textErrorPage
 from schooltool.rest import absoluteURL, absolutePath
+from schooltool.rest import read_file
 from schooltool.rest.timetable import SchoolTimetableTraverseView
 from schooltool.rest.cal import AllCalendarsView
 from schooltool.rest.csvexport import CSVExporter
@@ -42,6 +43,8 @@ from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 from schooltool.uris import listURIs
+from schooltool.rest.xmlparsing import XMLDocument
+from schooltool.rest.xmlparsing import XMLParseError, XMLValidationError
 
 __metaclass__ = type
 
@@ -68,6 +71,8 @@ class ApplicationView(TraversableView):
             return ApplicationLogView(self.context)
         elif name == 'uris':
             return UriObjectListView(self.context)
+        elif name == 'options':
+            return OptionsView(self.context)
         else:
             return TraversableView._traverse(self, name, request)
 
@@ -303,6 +308,54 @@ class UriObjectListView(View):
 
     def uriobjects(self):
         return listURIs()
+
+
+class OptionsView(View):
+    """View for viewing/changing application options."""
+
+    template = Template("www/options.pt", content_type="text/xml")
+    schema = read_file("../schema/options.rng")
+    authorization = PublicAccess
+
+    def do_PUT(self, request):
+        xml = request.content.read()
+        try:
+            doc = XMLDocument(xml, self.schema)
+        except XMLParseError:
+            return textErrorPage(request, _("Ill-formed XML document"))
+        except XMLValidationError:
+            return textErrorPage(request, _("Invalid XML document"))
+        else:
+            options = doc.query('options')[0]
+
+            def extract(key):
+                nodes = options.query(key)
+                if not nodes:
+                    return None
+                else:
+                    return nodes[0].content.strip()
+
+            defaultTimetableSchema = extract('defaultTimetableSchema')
+            if defaultTimetableSchema is not None:
+                # XXX what if there is no such timetable schema?
+                ttservice = self.context.timetableSchemaService
+                ttservice.default_id = defaultTimetableSchema
+
+            value = extract('newEventPrivacy')
+            if value is not None:
+                self.context.new_event_privacy = value
+
+            value = extract('timetablePrivacy')
+            if value is not None:
+                self.context.timetable_privacy = value
+
+            value = extract('restrictMembership')
+            if value is not None:
+                self.context.restrictMembership = (value.lower() == 'true')
+
+            doc.free()
+        request.setResponseCode(204)
+        return ""
 
 
 def setUp():
