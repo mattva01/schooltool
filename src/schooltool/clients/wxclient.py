@@ -1781,7 +1781,7 @@ class AppLogFrame(wxDialog):
         except ValueError:
             # Restore the original page number if the user-specified one
             # is not valid.
-            self.page_ctrl.SetValue(self.page)
+            self.page_ctrl.SetValue(str(self.page))
         else:
             self.refresh()
 
