@@ -465,3 +465,73 @@ and add other calendars to this list.
     ...
 
 TODO: finish this test
+
+
+The Tomorrow's events box
+-------------------------
+
+Warning, this test might break if run exactly at midnight, as the
+value of 'tomorrow' jumps to the next day.
+
+First of all, what is tomorrow?
+
+    >>> from datetime import date
+    >>> tomorrow = date.today() + date.resolution
+
+Now, let's add an event which will take place tomorrow:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Important+meeting&field.start_date=%s&\
+    ... field.start_time=12:00&field.duration=60&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """ % tomorrow)
+    HTTP/1.1 303 See Other
+    ...
+
+We should see it in the calendar for today:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+         <div id="portlet-next-day-events" class="portlet">
+           <h4>Tomorrow's Events</h4>
+           <ul>
+    <BLANKLINE>
+             <li style="color: #7590ae">
+               <b>12:00</b>
+               Important meeti...
+             </li>
+    <BLANKLINE>
+           </ul>
+         </div>
+    ...
+
+
+Now, let's take a look at the daily calendar for an arbitrary day.  It
+should have the event we have just created in the Tomorrow's events box.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-01-01 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+         <div id="portlet-next-day-events" class="portlet">
+           <h4>Tomorrow's Events</h4>
+           <ul>
+    <BLANKLINE>
+             <li style="color: #7590ae">
+               <b>12:00</b>
+               Important meeti...
+             </li>
+    <BLANKLINE>
+           </ul>
+         </div>
+    ...
