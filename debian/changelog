@@ -1,5 +1,6 @@
-schooltool (0.8-1) unstable; urgency=low
+schooltool (0.7.99+0.8rc1-1) unstable; urgency=low
 
+  * New upstream release: 0.8 release candidate 1.
   * Moved configuration file template to /usr/share (Policy 10.7.3).
   * Try to remove configuration file on purge (10.7.3).
   * Depend on ssl-cert rather than copy debconf templates at build.
@@ -22,7 +23,7 @@ schooltool (0.8-1) unstable; urgency=low
   * Merge build the schoolbell package in this source package. The schoolbell
     source package will be removed from debian.
   * schooltool and schoolbell conflict and replace each other
-    (Closes: Bug#281621). 
+    (Closes: Bug#281621).
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 
