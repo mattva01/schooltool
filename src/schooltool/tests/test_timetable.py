@@ -1078,6 +1078,8 @@ class TestTimetableSchemaService(unittest.TestCase):
 
         service["super"] = tt
         self.assertEqual(service.keys(), ["super"])
+        self.assertEqual(service["super"].__name__, "super")
+        self.assert_(service["super"].__parent__ is service)
 
         copy1 = service["super"]
         copy2 = service["super"]

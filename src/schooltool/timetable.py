@@ -496,7 +496,10 @@ class TimetableSchemaService(Persistent):
         return self.timetables.keys()
 
     def __getitem__(self, schema_id):
-        return self.timetables[schema_id].cloneEmpty()
+        schema = self.timetables[schema_id].cloneEmpty()
+        schema.__parent__ = self
+        schema.__name__ = schema_id
+        return schema
 
     def __setitem__(self, schema_id, timetable):
         prototype = timetable.cloneEmpty()
