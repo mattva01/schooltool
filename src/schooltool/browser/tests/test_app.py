@@ -499,6 +499,9 @@ class TestObjectAddView(unittest.TestCase):
                 self.objs.append(obj)
                 return obj
 
+            def itervalues(self):
+                return iter(self.objs)
+
         self.container = ObjContainerStub()
         setPath(self.container, '/objects')
         return ObjectAddView(self.container)
@@ -527,6 +530,16 @@ class TestObjectAddView(unittest.TestCase):
         obj = self.container.objs[0]
         self.assertEquals(obj.__name__, 'newobj')
         self.assertEquals(obj.title, u'New \u0105 stuff')
+
+    def test_POST_cancel(self):
+        view = self.createView()
+        request = RequestStub(args={'name': 'newobj',
+                                    'title': 'New \xc4\x85 stuff',
+                                    'CANCEL': 'Cancel'})
+        view.request = request
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.applog, [])
 
     def test_POST_noname(self):
         view = self.createView()
@@ -557,6 +570,38 @@ class TestObjectAddView(unittest.TestCase):
         self.assert_('Add object' in content)
         self.assert_('Title should not be empty' in content)
 
+    def test_POST_duptitle(self):
+        view = self.createView()
+        view.context.new(name="obj1", title="Already Used")
+        request = RequestStub(args={'name': '',
+                                    'title': 'Already Used'})
+        view.request = request
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.applog, [])
+        self.assert_('Add object' in content)
+        self.assert_('There is an object with this title already' in content)
+
+    def test_POST_duptitle_anyway(self):
+        view = self.createView()
+        view.context.new(name="obj1", title="Already Used")
+        request = RequestStub(args={'name': 'newobj',
+                                    'title': 'Already Used',
+                                    'CONFIRM': 'Add anyway'})
+        view.request = request
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/objects/newobj')
+        self.assertEquals(request.applog,
+                          [(None, u'Object /objects/newobj of type'
+                            ' ApplicationObjectMixin created', INFO)])
+
+        self.assertEquals(len(self.container.objs), 2)
+        obj = self.container.objs[-1]
+        self.assertEquals(obj.__name__, 'newobj')
+        self.assertEquals(obj.title, u'Already Used')
+
     def test_POST_errors(self):
         view = self.createView()
         request = RequestStub(args={'name': 'new/obj', 'title': 'abc'})
@@ -578,6 +623,12 @@ class TestObjectAddView(unittest.TestCase):
         self.assert_('Identifier already taken' in content)
         self.assert_('conflict' in content)
         self.assert_('foofoobar' in content)
+
+    def test_titleAlreadyUsed(self):
+        view = self.createView()
+        view.context.new(name='obj1', title='Used Already')
+        assert view._titleAlreadyUsed('Used Already')
+        assert not view._titleAlreadyUsed('Not Used Yet')
 
 
 class TestGroupAddView(AppSetupMixin, unittest.TestCase):

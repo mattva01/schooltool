@@ -20,8 +20,14 @@
       <input id="name" name="name" type="text"
              tal:attributes="value view/prev_name">
     </div>
-    <div class="buttons">
-      <input class="button" type="submit" value="Add"
+    <div class="buttons" tal:condition="view/duplicate_warning">
+      <input class="button" type="submit" name="CONFIRM" value="Add anyway"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+    <div class="buttons" tal:condition="not: view/duplicate_warning">
+      <input class="button" type="submit" name="ADD" value="Add"
              i18n:attributes="value" />
     </div>
   </form>

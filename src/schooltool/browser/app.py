@@ -246,10 +246,15 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
     error = u""
     prev_name = u""
     prev_title = u""
+    duplicate_warning = False
 
     title = _("Add object") # should be overridden by subclasses
 
     def do_POST(self, request):
+        if 'CANCEL' in self.request.args:
+            # Just show the form without any data.
+            return self.do_GET(request)
+
         name = request.args['name'][0]
 
         if name == '':
@@ -258,18 +263,22 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
             if not valid_name(name):
                 self.error = _("Invalid identifier")
                 return self.do_GET(request)
-            self.prev_name = name
+        self.prev_name = name
 
         try:
             title = to_unicode(request.args['title'][0])
         except UnicodeError:
             self.error = _("Invalid UTF-8 data.")
             return self.do_GET(request)
-        else:
-            if not title:
-                self.error = _("Title should not be empty.")
-                return self.do_GET(request)
         self.prev_title = title
+        if not title:
+            self.error = _("Title should not be empty.")
+            return self.do_GET(request)
+        add_anyway = 'CONFIRM' in self.request.args
+        if self._titleAlreadyUsed(title) and not add_anyway:
+            self.error = _("There is an object with this title already.")
+            self.duplicate_warning = True
+            return self.do_GET(request)
 
         try:
             obj = self.context.new(name, title=title)
@@ -284,6 +293,13 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
 
         url = absoluteURL(request, obj)
         return self.redirect(url, request)
+
+    def _titleAlreadyUsed(self, title):
+        """Check if there's already an object with this title."""
+        for obj in self.context.itervalues():
+            if obj.title == title:
+                return True
+        return False
 
     def _afterCreationHook(self, obj):
         """This method is called once when obj is created.
