@@ -77,7 +77,6 @@ class TestAppView(unittest.TestCase):
         self.assertEquals(result, 'Wrong')
 
 
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
