@@ -34,7 +34,7 @@ build-translations:
 	done
 
 clean:
-	find . \( -path 'src/schooltool/*.mo' -o -name '*.o' \
+	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 	[ -x debian/rules ] && debian/rules debdirclean
