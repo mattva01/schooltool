@@ -29,6 +29,7 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
+from schooltool.component import getPath
 from schooltool.views import View, Template
 from schooltool.views import notFoundPage, textErrorPage
 from schooltool.views import absolutePath
@@ -121,7 +122,7 @@ class PersonInfoFacetView(FacetView):
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                                  "Facet updated: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
@@ -151,7 +152,7 @@ class PhotoView(View):
         buf = StringIO()
         img2.save(buf, 'JPEG')
         self.context.photo = buf.getvalue()
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                                  "Photo added: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
@@ -159,7 +160,7 @@ class PhotoView(View):
 
     def do_DELETE(self, request):
         self.context.photo = None
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                                  "Photo removed: %s" % path)
         request.setHeader('Content-Type', 'text/plain')

@@ -29,6 +29,7 @@ from schooltool.uris import URIMember, URIGroup
 from schooltool.component import registerView
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
+from schooltool.component import getPath
 from schooltool.views import View, Template
 from schooltool.views import notFoundPage
 from schooltool.views import absolutePath
@@ -132,7 +133,7 @@ class PersonPasswordView(View):
         password = request.content.read()
         password = password.strip()
         self.context.setPassword(password)
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                 "Password changed for %s (%s)" % (path, self.context.title))
         request.setHeader('Content-Type', 'text/plain')
@@ -140,7 +141,7 @@ class PersonPasswordView(View):
 
     def do_DELETE(self, request):
         self.context.setPassword(None)
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                 "Account disabled for %s (%s)" % (path, self.context.title))
         request.setHeader('Content-Type', 'text/plain')

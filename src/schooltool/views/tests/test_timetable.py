@@ -1382,7 +1382,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'School timetable updated: /groups/sg2', 'INFO')])
+                [(None, 'School timetable updated', 'INFO')])
 
         self.assertEquals(self.sg4.timetables[self.key],
                           self.sg4.timetables[self.key].cloneEmpty())
@@ -1432,7 +1432,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'School timetable updated: /groups/sg2', 'INFO')])
+                [(None, 'School timetable updated', 'INFO')])
         self.assertEquals(self.sg1.timetables[self.key],
                           self.sg1.timetables[self.key].cloneEmpty())
         self.assertEquals(self.sg2.timetables[self.key],

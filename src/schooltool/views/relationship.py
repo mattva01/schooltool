@@ -25,7 +25,7 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 import libxml2
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI
-from schooltool.component import traverse
+from schooltool.component import traverse, getPath
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
 from schooltool.views import absoluteURL, absolutePath
@@ -117,7 +117,7 @@ class RelationshipsView(View):
         link = links[val.other]
         location = absoluteURL(request, link)
         request.site.logAppEvent(request.authenticated_user,
-                    "Relationship created: %s" % absolutePath(request, link))
+                                 "Relationship created: %s" % getPath(link))
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
@@ -139,7 +139,7 @@ class LinkView(View):
     def do_DELETE(self, request):
         self.context.unlink()
         request.site.logAppEvent(request.authenticated_user,
-                    "Link removed: %s" % absolutePath(request, self.context))
+                                 "Link removed: %s" % getPath(self.context))
         request.setHeader('Content-Type', 'text/plain')
         return _("Link removed")
 

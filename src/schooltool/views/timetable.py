@@ -38,7 +38,7 @@ from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.common import UnicodeAwareException, to_unicode
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
-from schooltool.component import registerView, traverse
+from schooltool.component import registerView, traverse, getPath
 from schooltool.component import getRelatedObjects
 from schooltool.component import getTimetableModel
 from schooltool.schema.rng import validate_against_schema
@@ -232,16 +232,16 @@ class TimetableReadWriteView(TimetableReadView):
                 if self.key not in resource.timetables:
                     resource.timetables[self.key] = tt.cloneEmpty()
                 resource.timetables[self.key][day_id].add(period_id, activity)
+        path = getPath(self.timetabled.timetables[self.key])
         request.site.logAppEvent(request.authenticated_user,
-                "Timetable updated: %s" % absolutePath(request,
-                        self.timetabled.timetables[self.key]))
+                                 "Timetable updated: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("OK")
 
     def do_DELETE(self, request):
         if self.context is None:
             return notFoundPage(request)
-        path = absolutePath(request, self.timetabled.timetables[self.key])
+        path = getPath(self.context)
         del self.timetabled.timetables[self.key]
         request.site.logAppEvent(request.authenticated_user,
                                  "Timetable deleted: %s" % path)
@@ -308,7 +308,7 @@ class TimetableSchemaView(TimetableReadView):
         if self.context is None:
             return notFoundPage(request)
         else:
-            path = absolutePath(request, self.context)
+            path = getPath(self.context)
             del self.service[self.key]
             request.site.logAppEvent(request.authenticated_user,
                                      "Timetable schema deleted: %s" % path)
@@ -390,7 +390,7 @@ class TimetableSchemaView(TimetableReadView):
                                          _("Duplicate periods in schema"))
                 timetable[day_id] = TimetableDay(period_ids)
             self.service[self.key] = timetable
-            path = absolutePath(request, self.service[self.key])
+            path = getPath(self.service[self.key])
             request.site.logAppEvent(request.authenticated_user,
                     "Timetable schema updated: %s" % path)
             request.setHeader('Content-Type', 'text/plain')
@@ -590,15 +590,17 @@ class SchoolTimetableView(View):
             schema = service[self.key[1]]
             groups = {}
             for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-                path = to_unicode(teacher_node.nsProp('href', xlink))
+                teacher_path = to_unicode(teacher_node.nsProp('href', xlink))
                 try:
-                    teacher = traverse(self.context, path)
+                    teacher = traverse(self.context, teacher_path)
                 except KeyError:
-                    return textErrorPage(request, _("Invalid path: %s") % path)
-                groups[path] = list(getRelatedObjects(teacher, URITaught))
-                for group in groups[path]:
-                    path = absolutePath(self.request, group)
-                    if path in timetables:
+                    return textErrorPage(request,
+                                         _("Invalid path: %s") % teacher_path)
+                groups_taught = list(getRelatedObjects(teacher, URITaught))
+                groups[teacher_path] = groups_taught
+                for group in groups_taught:
+                    group_path = absolutePath(self.request, group)
+                    if group_path in timetables:
                         continue
                     if self.key in group.timetables:
                         tt = group.timetables[self.key]
@@ -610,7 +612,7 @@ class SchoolTimetableView(View):
                     else:
                         tt = schema.cloneEmpty()
                     group.timetables[self.key] = tt
-                    timetables[path] = tt
+                    timetables[group_path] = tt
 
             try:
                 iterator = self._walkXml(xpathctx, schema, timetables, groups)
@@ -625,7 +627,7 @@ class SchoolTimetableView(View):
                 return textErrorPage(request, e)
 
             request.site.logAppEvent(request.authenticated_user,
-                    "School timetable updated: %s" % path)
+                                     "School timetable updated")
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:
@@ -728,13 +730,13 @@ class TimePeriodCreatorView(SchooldayModelCalendarView):
         return SchooldayModelCalendarView.do_PUT(self, request)
 
     def log_PUT(self, request):
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                                  "Calendar created: %s" % path)
 
     def do_DELETE(self, request):
         try:
-            path = absolutePath(request, self.service[self.key])
+            path = getPath(self.service[self.key])
             del self.service[self.key]
             request.site.logAppEvent(request.authenticated_user,
                                      "Calendar deleted: %s" % path)

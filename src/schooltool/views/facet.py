@@ -29,6 +29,7 @@ from schooltool.interfaces import IFacet
 from schooltool.component import registerView, getView
 from schooltool.component import FacetManager
 from schooltool.component import getFacetFactory, iterFacetFactories
+from schooltool.component import getPath
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
 from schooltool.views import absoluteURL, absolutePath
@@ -68,7 +69,7 @@ class FacetView(View):
         if self.context.owner is not None:
             return textErrorPage(request,
                                  _("Owned facets may not be deleted manually"))
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         FacetManager(self.context.__parent__).removeFacet(self.context)
         request.site.logAppEvent(request.authenticated_user,
                                  "Facet removed: %s" % path)
@@ -137,7 +138,7 @@ class FacetManagementView(View):
                            _("Could not create facet: %s") % e)
 
         location = absoluteURL(request, facet)
-        path = absolutePath(request, facet)
+        path = getPath(facet)
         request.site.logAppEvent(request.authenticated_user,
                                  "Facet created: %s" % path)
         request.setResponseCode(201, 'Created')

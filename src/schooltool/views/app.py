@@ -27,7 +27,7 @@ import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource
-from schooltool.component import traverse
+from schooltool.component import traverse, getPath
 from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import TraversableView
@@ -130,7 +130,7 @@ class ApplicationObjectCreator:
             xpathctx.xpathFreeContext()
         obj = container.new(**kw)
         location = absoluteURL(request, obj)
-        self.obj_path = absolutePath(request, obj)
+        self.obj_path = getPath(obj)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)

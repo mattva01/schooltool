@@ -29,7 +29,7 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.interfaces import IApplicationObject
-from schooltool.views import View, Template, absoluteURL, absolutePath
+from schooltool.views import View, Template, absoluteURL
 from schooltool.views import textErrorPage, notFoundPage
 from schooltool.views import read_file
 from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
@@ -200,7 +200,7 @@ class SchooldayModelCalendarView(View):
         return _("Calendar imported")
 
     def log_PUT(self, request):
-        path = absolutePath(request, self.context)
+        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
                                  "Calendar updated: %s" % path)
 
@@ -311,7 +311,7 @@ class CalendarView(CalendarReadView):
             for event in events:
                 # newly added  events
                 self.context.addEvent(event)
-            path = absolutePath(request, self.context)
+            path = getPath(self.context)
             request.site.logAppEvent(request.authenticated_user,
                                      "Imported calendar: %s" % path)
             request.setHeader('Content-Type', 'text/plain')
