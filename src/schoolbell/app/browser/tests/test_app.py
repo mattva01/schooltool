@@ -619,11 +619,6 @@ def doctest_PersonAddView():
         >>> ztapi.browserViewProviding(IPersonContainer, FakeURL, \
         ...                            providing=IAbsoluteURL)
 
-    Let's define an adapter for our view:
-
-        >>> from schoolbell.app.interfaces import IPerson
-        >>> from schoolbell.app.browser.app import IPersonAddForm
-
     Let's create a PersonContainer
 
         >>> from schoolbell.app.app import SchoolBellApplication
