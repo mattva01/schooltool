@@ -28,6 +28,7 @@ import email.Utils
 from sets import Set
 from zope.interface import implements
 from persistent import Persistent
+from persistent.list import PersistentList
 from schooltool.auth import ACL
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
@@ -382,6 +383,15 @@ class CalendarOwnerMixin(Persistent):
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
+        self.composite_cal_groups = PersistentList()
+
+    def makeCompositeCalendar(self):
+        result = Calendar()
+        result.__parent__ = self
+        result.__name__ = 'composite-calendar'
+        for group in self.composite_cal_groups:
+            result.update(group.calendar)
+        return result
 
     def addSelfToCalACL(self):
         self.calendar.acl.add((self, ViewPermission))

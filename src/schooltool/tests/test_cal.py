@@ -703,6 +703,27 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         assert com.calendar.acl.allows(com, ModifyPermission)
         assert com.calendar.acl.allows(com, AddPermission)
 
+    def test_makeCompositeCalendar(self):
+        from schooltool.cal import CalendarOwnerMixin, Calendar, CalendarEvent
+        from schooltool.model import Group
+
+        com = CalendarOwnerMixin()
+
+        gr1 = Group("Little")
+        gr1.calendar.addEvent(CalendarEvent(datetime(2003, 11, 26, 12, 00),
+                                            timedelta(minutes=30), "AG"))
+
+        gr2 = Group("Big")
+        gr2.calendar.addEvent(CalendarEvent(datetime(2003, 11, 26, 13, 00),
+                                            timedelta(minutes=30), "AB"))
+
+        com.composite_cal_groups = [gr1, gr2]
+        result = com.makeCompositeCalendar()
+        self.assertEquals(result.events,
+                          gr1.calendar.events | gr2.calendar.events)
+        self.assert_(result.__parent__ is com)
+        self.assertEquals(result.__name__, 'composite-calendar')
+
 
 class TestRecurrenceRule:
     """Base tests for the recurrence rules"""

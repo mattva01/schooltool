@@ -1010,13 +1010,13 @@ class ICalendar(Interface):
         """
 
     def expand(first, last):
-       """Expand recurring events.
+        """Expand recurring events.
 
-       Returns an ICalendar with all the IExpandedCalendarEvents in
-       that occur in the given date range.  Recurrences of all events
-       in the calendar happening during the specified period are
-       included.
-       """
+        Returns an ICalendar with all the IExpandedCalendarEvents in
+        that occur in the given date range.  Recurrences of all events
+        in the calendar happening during the specified period are
+        included.
+        """
 
 
 class ICalendarWrite(Interface):
@@ -1236,7 +1236,20 @@ class IExpandedCalendarEvent(ICalendarEvent):
 class ICalendarOwner(Interface):
     """An object that has a calendar."""
 
-    calendar = Attribute("""The object's calendar.""")
+    calendar = Attribute(
+        """The object's calendar.""")
+
+    composite_cal_groups = Attribute(
+        """A list of groups whose calendars will be included in the composite
+           calendar.
+        """)
+
+    def makeCompositeCalendar():
+        """Return the composite calendar for this person.
+
+        Returns a calendar that contains all events from every group in
+        composite_cal_groups.
+        """
 
 
 #
