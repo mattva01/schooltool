@@ -45,6 +45,7 @@ body {
 
 .clearer {
     clear: both;
+    margin-top: 2em;
 }
 
 /* SBMH -- see http://css-discuss.incutio.com/?page=BoxModelHack
