@@ -307,12 +307,6 @@ class CalendarView(CalendarReadView):
             return 'public'
 
     def do_PUT(self, request):
-        # TODO: remove this check
-        ctype = request.getContentType()
-        if ctype != 'text/calendar':
-            return textErrorPage(request,
-                                 _("Unsupported content type: %s") % ctype)
-
         # First, build a list of new events
         events = []
         reader = ICalReader(request.content)

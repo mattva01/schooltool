@@ -724,8 +724,6 @@ class TestCalendarView(TestCalendarReadView):
 
     def test_put_errors(self):
         self._create()
-        self._test_put_error("Hi, Mom!", content_type="text/plain",
-                             errmsg="Unsupported content type: text/plain")
         self._test_put_error("This is not iCalendar")
         calendar = dedent("""
             BEGIN:VCALENDAR
