@@ -116,6 +116,18 @@ We can traverse to the group index too
     <BLANKLINE>
     <!DOCTYPE html ...
 
+We can traverse to the resource index too
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+
 
 Appendix: Tips and tricks for writing functional doctests
 ---------------------------------------------------------

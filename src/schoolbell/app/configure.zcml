@@ -19,6 +19,13 @@
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
+  <content class=".app.ResourceContainer">
+    <require permission="zope.View"
+             interface="zope.app.container.interfaces.IReadContainer" />
+    <require permission="zope.ManageContent"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
   <include package=".browser" />
 
 </configure>

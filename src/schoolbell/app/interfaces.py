@@ -28,6 +28,16 @@ class IGroupContainer(IContainer):
     contains(IGroup)
 
 
+class IResource(Interface):
+    """Resource."""
+
+
+class IResourceContainer(IContainer):
+    """Container of resources."""
+
+    contains(IResource)
+
+
 class ISchoolBellApplication(IReadContainer):
     """The main SchoolBell application object.
 
@@ -35,8 +45,7 @@ class ISchoolBellApplication(IReadContainer):
 
         'persons' - IPersonContainer
         'groups' - IGroupContainer
-
-    TODO: resources
+        'resources' - IResourceContainer
 
     TODO: this object can be added as a regular content object to a folder, or
     it can be used as the application root object.

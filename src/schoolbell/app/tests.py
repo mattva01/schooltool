@@ -34,6 +34,11 @@ def doctest_SchoolBellApplication():
         >>> verifyObject(IGroupContainer, groups)
         True
 
+        >>> from schoolbell.app.interfaces import IResourceContainer
+        >>> resources = app['resources']
+        >>> verifyObject(IResourceContainer, resources)
+        True
+
     For Zopeish reasons these containers must know where they come from
 
         >>> persons.__parent__ is app
@@ -46,7 +51,10 @@ def doctest_SchoolBellApplication():
         >>> groups.__name__
         u'groups'
 
-    TODO: resources
+        >>> resources.__parent__ is app
+        True
+        >>> resources.__name__
+        u'resources'
 
     """
 
@@ -70,6 +78,7 @@ def doctest_PersonContainer():
 
     """
 
+
 def doctest_GroupContainer():
     """Tests for GroupContainer
 
@@ -85,6 +94,26 @@ def doctest_GroupContainer():
         >>> class Test(TestBTreeContainer):
         ...    def makeTestObject(self):
         ...        return GroupContainer()
+        >>> run_unit_tests(Test)
+
+    """
+
+
+def doctest_ResourceContainer():
+    """Tests for ResourceContainer
+
+        >>> from schoolbell.app.interfaces import IResourceContainer
+        >>> from schoolbell.app.app import ResourceContainer
+        >>> c = ResourceContainer()
+        >>> verifyObject(IResourceContainer, c)
+        True
+
+    Let's make sure it acts like a proper container should act
+
+        >>> from zope.app.container.tests.test_btree import TestBTreeContainer
+        >>> class Test(TestBTreeContainer):
+        ...    def makeTestObject(self):
+        ...        return ResourceContainer()
         >>> run_unit_tests(Test)
 
     """
