@@ -46,7 +46,7 @@
         <a tal:attributes="href group/@@absolute_url"
            tal:content="group/title"></a>
       </div>
-      <div tal:condition="python:not list(context.groups)">
+      <div tal:condition="not:context/groups">
         This person does not belong to any groups.
       </div>
       <p>
