@@ -6,6 +6,21 @@
     HTTP server.
   </description>
 
+  <import package="zodb" />
+
+  <section type="zodb.database" name="*" required="yes" attribute="database">
+    <description>
+      The main application database that should be used.
+    </description>
+    <example>
+      &lt;zodb&gt;
+        &lt;filestorage&gt;
+          path Data.fs
+        &lt;/filestorage&gt;
+      &lt;/zodb&gt;
+    </example>
+  </section>
+
   <multikey name="listen" datatype="inet-address">
     <description>
       Network interface and port number the HTTP server should listen on.
@@ -20,4 +35,13 @@
       listen 127.0.0.1:80
     </example>
   </multikey>
+
+  <key name="thread-pool-size" datatype="integer" default="10">
+    <description>
+      Suggested thread pool size.
+    </description>
+    <example>
+      thread-pool-size 20
+    </example>
+  </key>
 </schema>

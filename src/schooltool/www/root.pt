@@ -6,5 +6,6 @@
   <h1>Prototype</h1>
   <p>This is a very early prototype of a SchoolTool HTTP server.</p>
   <p>See a <a href="people">list of persons</a></p>
+  <p>You are visitor #<span tal:replace="view/counter">0</span> here.</p>
 </body>
 </html>

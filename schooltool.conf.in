@@ -13,3 +13,30 @@
 # Examples:
 #   listen 8080
 #   listen 127.0.0.1:80
+#
+
+#
+# thread-pool-size n
+#
+#   Specifies the suggested size for request thread pool
+#
+# Default:
+#   thread-pool-size 10
+#
+
+#
+# <zodb>
+#   ...
+# </zodb>
+#
+#   Specifies a ZODB database to use.
+#   This section is required.
+#
+#   XXX: more documentation needed
+#
+
+<zodb>
+  <filestorage>
+    path Data.fs
+  </filestorage>
+</zodb>
