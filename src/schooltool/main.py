@@ -526,12 +526,12 @@ class Server:
 
 def setUpModules(module_names):
     """Set up the modules named in the given list."""
-    for module_name in module_names:
-        assert isinstance(module_name, basestring)
-        module = __import__(module_name, globals(),  locals(), [])
-        components = module_name.split('.')
-        for comp in components[1:]:
-            module = getattr(module, comp)
+    for name in module_names:
+        assert isinstance(name, basestring)
+        module = __import__(name)
+        components = name.split('.')
+        for component in components[1:]:
+            module = getattr(module, component)
         if IModuleSetup.isImplementedBy(module):
             module.setUp()
         else:
