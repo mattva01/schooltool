@@ -100,10 +100,15 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         expected = "0 events cleared"
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
+        self.assertEquals(request.site.applog,
+                          [(None, "1 event cleared", 'INFO'),
+                           (None, "0 events cleared", 'INFO')])
+
         request = RequestStub("http://localhost/foo/eventlog", "PUT")
         request.content.write("something")
         request.content.seek(0)
         result = view.render(request)
+        self.assertEquals(request.site.applog, [])
         self.assertEquals(request.code, 400)
         self.assertEquals(result,
                 "Only PUT with an empty body is defined for event logs")
