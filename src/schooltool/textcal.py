@@ -24,13 +24,14 @@ $Id$
 """
 import datetime
 import calendar
+from sets import Set
 from cal import Timetable, TimetableDay, TimetableActivity
 from cal import SchooldayModel, SchooldayPeriod, SchooldayTemplate
 from cal import SequentialDaysTimetableModel
 
 
 class Config:
-    """Hard-coded timetable configuration data for this script"""
+    """Hard-coded timetable configuration."""
 
     days = ("1A", "2E", "3A", "4E")
 
@@ -51,13 +52,13 @@ class Config:
                            "P3": "Mathematics",
                            "P4": "Music"}}
 
-    long_day = {"title": "L",
+    long_day = {"title": "Long day",
                 "P1": (datetime.time(9, 0), datetime.timedelta(hours=1)),
                 "P2": (datetime.time(10, 15), datetime.timedelta(hours=1)),
                 "P3": (datetime.time(11, 30), datetime.timedelta(hours=1)),
                 "P4": (datetime.time(12, 45), datetime.timedelta(hours=1))}
 
-    short_day = {"title": "S",
+    short_day = {"title": "Short day",
                 "P1": (datetime.time(9, 0), datetime.timedelta(hours=1)),
                  "P2": (datetime.time(10, 5), datetime.timedelta(hours=1)),
                  "P3": (datetime.time(11, 10), datetime.timedelta(hours=1)),
@@ -180,6 +181,19 @@ def printCalendar(cal, model):
     pp.output()
 
 
+def printSummaryLegend(model):
+    print
+    print "Legend"
+    print "------"
+    print "Timetable days:\n   ", ", ".join(model.timetableDayIds)
+    print "Day templates:"
+    templ = list(Set(model.dayTemplates.values()))
+    templ_names = [(t.title, t) for t in templ]
+    templ_names.sort()
+    for day, template in templ_names:
+        print "    %s: %s" % (day[0], day)
+    print
+
 def printCalendarSummary(cal, model):
     gen = model._dayGenerator()
     pp = PrintPacker(2)
@@ -191,7 +205,7 @@ def printCalendarSummary(cal, model):
         events = list(daycal)
         if events:
             day = model.schooldayStrategy(date, gen).title()
-            length = model._getTemplateForDay(date).title
+            length = model._getTemplateForDay(date).title[0]
         else:
             day = "--"
             length = "-"
@@ -245,18 +259,21 @@ def main():
 
     cal = timetable_model.createCalendar(scoolday_model, timetable)
 
-    print "============="
-    print "FULL CALENDAR"
-    print "============="
+    print "================"
+    print "MONTHLY CALENDAR"
+    print "================"
+
+    printSummaryLegend(timetable_model)
+    printCalendarSummary(cal, timetable_model)
+
+    print
+    print "==================="
+    print "DAY BY DAY CALENDAR"
+    print "==================="
+    print
 
     printCalendar(cal, timetable_model)
 
-    print
-    print "==============="
-    print "SCHEMATIC MODEL"
-    print "==============="
-
-    printCalendarSummary(cal, timetable_model)
 
 
 if __name__ == '__main__':
