@@ -179,14 +179,12 @@ let's use an aliased URL (directly on the person rather than on the calendar):
     BEGIN:VCALENDAR
     VERSION:2.0
     PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
-    ...
-    BEGIN:VEVENT
+    ...BEGIN:VEVENT
     UID:...
     SUMMARY:Sleeping
     DTSTART:20050203T010000
     DURATION:PT8H20M
     DTSTAMP:...
-    END:VEVENT
-    ...
+    END:VEVENT...
     END:VCALENDAR
     <BLANKLINE>
