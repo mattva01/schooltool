@@ -67,7 +67,7 @@ def ugettext(str):
     global catalog
     # Uncomment the following line to decorate all translatable strings -- then
     # all untranslated strings will stand out:
-    #   return u'\u00AB%s\u00BB' % catalog.ugettext(msgid)
+    #   return u'\u00AB%s\u00BB' % catalog.ugettext(str)
     return catalog.ugettext(str)
 
 
@@ -83,7 +83,7 @@ def setCatalog(domain, languages=None):
     'schoolbell').
 
     Languages, if specified, override the default gettext language selection
-    (e.g. the environment variables LANGUAGES, LC_ALL, LC_MESSAGES, LANG on
+    (e.g., the environment variables LANGUAGES, LC_ALL, LC_MESSAGES, LANG on
     POSIX systems).
     """
     global catalog
