@@ -1,3 +1,4 @@
+# Top level directory
 include RELEASE
 include *schoolbell*
 include GPL
@@ -6,22 +7,24 @@ include test.py
 include ftesting.zcml
 include remove-stale-bytecode.py
 
+# misc directories
 include debian/rules debian/changelog debian/compat debian/control
 include debian/copyright debian/README.Debian debian/TODO
 include debian/*schoolbell* debian/ssl-cert.cnf
 include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
-
 include images/schoolbell.svg
 include scripts/schoolbell
 include scripts/schoolbell-export.py
 include scripts/schoolbell-import.py
 include scripts/run-export.sh
 include scripts/run-import.sh
-
-recursive-include src/schoolbell *.py *.pt *.css *.png *.txt
-recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
 include doc/release-policy.txt doc/release-checklist.txt
 
+# modules
+recursive-include src/schoolbell *.py *.pt *.css *.png *.txt
+recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
+
+# Zope
 include Zope3/setup.py
 include Zope3/test.py
 include Zope3/Makefile
@@ -69,3 +72,8 @@ recursive-include Zope3/src/zope/thread *
 
 recursive-include Zope3/src/ThreadedAsync *
 recursive-include Zope3/src/zdaemon *
+
+# Some things that we should not let into a distribution
+# RCS stuff is handled internally by distutils
+# NOTE: it is important that this is last
+global-exclude *.so *.pyo *.pyc
