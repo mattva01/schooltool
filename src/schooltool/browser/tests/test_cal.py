@@ -242,6 +242,21 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(days[4].events, [])
         self.assertEquals(days[5].events, [e4])
 
+    def test_getWeek(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.cal import Calendar
+
+        cal = Calendar()
+        view = CalendarViewBase(cal)
+
+        for dt in (date(2004, 8, 9), date(2004, 8, 11), date(2004, 8, 15)):
+            view.getDays = GetDaysStub()
+            week = view.getWeek(dt)
+            self.assertEquals(week, None)
+            self.assertEquals(view.getDays.bounds,
+                              [(date(2004, 8, 9), date(2004, 8, 15))])
+
+
 class TestWeeklyCalendarView(unittest.TestCase):
 
     def test_prev_next(self):
@@ -273,20 +288,13 @@ class TestWeeklyCalendarView(unittest.TestCase):
         self.assert_("Da Boss" in content, content)
         self.assert_("Stuff happens" in content)
 
-    def test_getWeek(self):
+    def test_getCurrentWeek(self):
         from schooltool.browser.cal import WeeklyCalendarView
-        from schooltool.cal import Calendar
 
-        cal = Calendar()
-        view = WeeklyCalendarView(cal)
-
-        for cursor in (date(2004, 8, 9), date(2004, 8, 11), date(2004, 8, 15)):
-            view.getDays = GetDaysStub()
-            view.cursor = cursor
-            week = view.getWeek()
-            self.assertEquals(week, None)
-            self.assertEquals(view.getDays.bounds,
-                              [(date(2004, 8, 9), date(2004, 8, 15))])
+        view = WeeklyCalendarView(None)
+        view.cursor = "works"
+        view.getWeek = lambda x: "really " + x
+        self.assertEquals(view.getCurrentWeek(), "really works")
 
 
 class TestDailyCalendarView(unittest.TestCase):

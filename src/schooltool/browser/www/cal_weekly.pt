@@ -19,7 +19,7 @@
     <div>
     <div class="calweekly">
       <div class="day"
-	   tal:repeat="day view/getWeek">
+	   tal:repeat="day view/getCurrentWeek">
 	<h2 tal:content="python:day.date.strftime('%A, %Y-%m-%d')" />
 	<div class="event"
 	     tal:repeat="event day/events">

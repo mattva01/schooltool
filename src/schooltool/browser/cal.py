@@ -192,6 +192,15 @@ class CalendarViewBase(View):
         days.sort()
         return days
 
+    def getWeek(self, dt):
+        """Return the week that contains the day dt.
+
+        Returns a list of CalendarDay objects."""
+        # XXX Hardcoded Monday-based weeks.
+        start = dt - timedelta(dt.weekday())
+        end = start + timedelta(6)
+        return self.getDays(start, end)
+
 
 class DailyCalendarView(CalendarViewBase):
     """Daily calendar view.
@@ -342,12 +351,9 @@ class WeeklyCalendarView(CalendarViewBase):
         """Return the day a week after."""
         return self.cursor + timedelta(7)
 
-    def getWeek(self):
+    def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
-        # For now, we're Monday based
-        start = self.cursor - timedelta(self.cursor.weekday())
-        end = start + timedelta(6)
-        return self.getDays(start, end)
+        return self.getWeek(self.cursor)
 
 
 class MonthlyCalendarView(CalendarViewBase):
