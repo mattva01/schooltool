@@ -296,7 +296,6 @@ class TestPersonAddView(unittest.TestCase):
 class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
 
     def setUp(self):
-        # these can be overriden by subclasses
         from schooltool.browser.app import ObjectContainerView
 
         class ViewStub:
@@ -309,6 +308,7 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
             def __init__(self, context):
                 self.context = context
 
+        # These can be overridden by subclasses.
         self.view = ObjectContainerView
         self.add_view = ViewStub
         self.obj_view = AddViewStub
