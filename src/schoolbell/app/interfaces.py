@@ -171,7 +171,7 @@ class IPersonContained(IPerson, IContained, IAdaptableToSchoolBellApplication):
     containers(IPersonContainer)
 
 
-class IGroup(Interface):
+class IGroup(ICalendarOwner):
     """Group."""
 
     title = TextLine(title=u"Title",
@@ -196,7 +196,7 @@ class IGroupContained(IGroup, IContained, IAdaptableToSchoolBellApplication):
     containers(IGroupContainer)
 
 
-class IResource(IGroupMember):
+class IResource(IGroupMember, ICalendarOwner):
     """Resource."""
 
     title = TextLine(title=u"Title",

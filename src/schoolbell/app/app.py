@@ -50,7 +50,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
     """The main application object.
 
     This object can be added as a regular content object to a folder,
-    TODO: or it can be used as the application root object.
+    or it can be used as the application root object.
     """
 
     implements(ISchoolBellApplication, IAttributeAnnotatable)
@@ -233,6 +233,7 @@ class Group(Persistent, Contained):
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
+        self.calendar = Calendar(self)
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
@@ -249,6 +250,7 @@ class Resource(Persistent, Contained):
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
+        self.calendar = Calendar(self)
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:

@@ -351,14 +351,15 @@ def doctest_GroupAddView():
         >>> container = GroupContainer()
         >>> context.context = container
 
-    ZCML configuration adds some attributes to GroupAddView, namely `schema`
-    and `_factory`.
+    ZCML configuration adds some attributes to GroupAddView, namely `schema`,
+    'fieldNames', and `_factory`.
 
         >>> from schoolbell.app.browser.app import GroupAddView
         >>> from schoolbell.app.interfaces import IGroup
         >>> from schoolbell.app.app import Group
         >>> class GroupAddViewForTesting(GroupAddView):
         ...     schema = IGroup
+        ...     fieldNames = ('title', 'description')
         ...     _factory = Group
 
     We can now finally create the view:
@@ -414,6 +415,7 @@ def doctest_GroupEditView():
 
         >>> class TestGroupEditView(GroupEditView):
         ...     schema = IGroup
+        ...     fieldNames = ('title', 'description')
         ...     _factory = Group
 
         >>> view = TestGroupEditView(group, request)

@@ -5,25 +5,9 @@
 <body>
 <h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
 
-<div class="portlet" metal:fill-slot="column-left-extra">
-  <h4 i18n:translate="">Access control</h4>
-  <ul tal:define="base context/@@absolute_url">
-    <li><a tal:attributes="href string:$base/acl.html"
-           i18n:translate="">Membership access control</a></li>
-    <li><a tal:attributes="href string:$base/calendar/acl.html"
-           i18n:translate="">Calendar access control</a></li>
-  </ul>
-</div>
-
 <metal:block metal:fill-slot="body">
 
   <p class="description" tal:content="context/description"/>
-
-  <div>
-    <h3 i18n:translate="">Calendar</h3>
-    <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
-          i18n:translate="">Use calendar for this group</a></p>
-  </div>
 
   <div class="members">
     <div tal:define="members view/getPersons">
