@@ -162,7 +162,7 @@ def setUp(test=None):
             return "a dummy resource"
 
     for name in ['layout.css', 'style.css', 'schoolbell.js', 'logo.png',
-                 'next.png', 'prev.png', ]:
+                 'next.png', 'prev.png', 'favicon.ico']:
         ztapi.browserResource(name, ResourceStub)
 
     # menus

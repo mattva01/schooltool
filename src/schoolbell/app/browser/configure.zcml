@@ -586,6 +586,8 @@
             layer=".skin.ISchoolBellLayer" />
   <resource name="schoolbell.js" file="resources/schoolbell.js"
             layer=".skin.ISchoolBellLayer" />
+  <resource name="favicon.ico" file="resources/favicon.ico"
+            layer=".skin.ISchoolBellLayer" />
 
   <resource name="previous.png" file="resources/previous.png"
             layer=".skin.ISchoolBellLayer" />
