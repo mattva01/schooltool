@@ -41,18 +41,6 @@ from schoolbell.app.interfaces import IPerson, IResource, IPersonContainer
 from schoolbell.app.app import Person
 
 
-def sorted_by_title(objects):
-    """Sort a list of objects by title.
-
-    The objects must have a title attribute.
-
-    XXX This can go away now that we can say list/sortby:title in TALES
-    """
-    objs = [(o.title, o) for o in objects]
-    objs.sort()
-    return [o for (title, o) in objs]
-
-
 class ContainerView(BrowserView):
     """A base view for all containers.
 
