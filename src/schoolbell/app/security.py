@@ -86,8 +86,9 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
     def _checkPassword(self, username, password):
         app = getSchoolBellApplication(self)
-        person = app['persons'][username]
-        return person.checkPassword(password)
+        if username in app['persons']:
+            person = app['persons'][username]
+            return person.checkPassword(password)
 
     def unauthenticatedPrincipal(self):
         """Return the unauthenticated principal, if one is defined."""
