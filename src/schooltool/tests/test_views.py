@@ -240,7 +240,7 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
-        from schooltool import membership 
+        from schooltool import membership
         self.setUpRegistries()
         membership.setUp()
         app = Application()
@@ -257,15 +257,6 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
 
     def tearDown(self):
         self.tearDownRegistries()
-
-    def test_traverse(self):
-        from schooltool.views import FacetManagementView
-        from schooltool.interfaces import IFacetManager
-        request = RequestStub()
-        self.assertRaises(KeyError, self.view._traverse, 'foo', request)
-        child = self.view._traverse('facets', request)
-        self.assert_(isinstance(child, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(child.context))
 
     def test_render(self):
         from schooltool.component import getPath
@@ -298,7 +289,7 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
-        from schooltool import membership 
+        from schooltool import membership
         self.setUpRegistries()
         membership.setUp()
         app = Application()
@@ -313,15 +304,6 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.sub, member=self.per)
 
         self.view = PersonView(self.per)
-
-    def test_traverse(self):
-        from schooltool.views import FacetManagementView
-        from schooltool.interfaces import IFacetManager
-        request = RequestStub()
-        self.assertRaises(KeyError, self.view._traverse, 'foo', request)
-        child = self.view._traverse('facets', request)
-        self.assert_(isinstance(child, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(child.context))
 
     def test_render(self):
         from schooltool.component import getPath
@@ -341,6 +323,11 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:title="subgroup"/>
             ---8<---
               </groups>
+              <relationships xlink:type="simple"
+                             xlink:title="Relationships"
+                             xlink:href="p/relationships"/>
+              <facets xlink:type="simple" xlink:title="Facets"
+                      xlink:href="p/facets"/>
             </person>
             """).split("---8<---\n")
 
@@ -349,6 +336,37 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
 
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
+
+class TestApplicationObjectTraverserView(RegistriesSetupMixin,
+                                         unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import ApplicationObjectTraverserView
+        from schooltool.model import Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.per = app['persons'].new("p", title="Pete")
+        self.view = ApplicationObjectTraverserView(self.per)
+
+    def test_traverse(self):
+        from schooltool.views import RelationshipsView, FacetManagementView
+        from schooltool.interfaces import IFacetManager
+
+        request = RequestStub("http://localhost/people/p")
+        request.method = "GET"
+        result = self.view._traverse('relationships', request)
+        self.assert_(isinstance(result, RelationshipsView))
+
+        result = self.view._traverse('facets', request)
+        self.assert_(isinstance(result, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(result.context))
+
+        self.assertRaises(KeyError, self.view._traverse, 'anything', request)
 
 
 class TestAppView(RegistriesSetupMixin, unittest.TestCase):
@@ -659,44 +677,6 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                             'role':'http://schooltool.org/ns/membership/group'
                             }])
 
-    def testGET(self):
-        # from schooltool.component import getPath
-        request = RequestStub("http://localhost/groups/sub/relationships/")
-        request.method = "GET"
-        result = self.view.render(request)
-        self.assert_('<valencies>' in result)
-        self.assert_('<existing>' in result)
-        self.assert_(
-            '<relationships xmlns:xlink="http://www.w3.org/1999/xlink">'
-            in result)
-        self.assert_(
-            'xlink:role="http://schooltool.org/ns/membership/group"' in result)
-        self.assert_(
-            'xlink:role="http://schooltool.org/ns/membership/member"'
-            in result)
-
-    def testPOST(self):
-        # from schooltool.component import getPath
-        request = RequestStub("http://localhost/groups/sub/relationships/")
-        request.content = StringIO('''\
-            <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
-                  xlink:type="simple"
-                  xlink:role="http://schooltool.org/ns/membership/group"
-                  xlink:title="http://schooltool.org/ns/membership"
-                  xlink:arcrole="http://schooltool.org/ns/membership"
-                  xlink:href="/groups/new"/>
-            ''')
-        request.content.seek(0, 0)
-        request.method = "POST"
-        self.assertEquals(len(self.sub.listLinks()), 2)
-        self.assert_(self.new not in
-                     [l.traverse() for l in self.sub.listLinks()])
-        result = self.view.render(request)
-        self.assertEquals(request.code, 201)
-        self.assertEquals(len(self.sub.listLinks()), 3)
-        self.assert_(self.new in
-                     [l.traverse() for l in self.sub.listLinks()])
-
     def test_extractKeyword(self):
         request = RequestStub("http://localhost/groups/sub/relationships/")
         text = '''This is not even XML, it\'s just some random text.
@@ -717,6 +697,102 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(extr(text, 'href'),
                           '/groups/new')
         self.assertRaises(KeyError, extr, text, 'shmoo')
+
+    def testGET(self):
+        # from schooltool.component import getPath
+        request = RequestStub("http://localhost/groups/sub/relationships/")
+        request.method = "GET"
+        result = self.view.render(request)
+        self.assert_('<valencies>' in result)
+        self.assert_('<existing>' in result)
+        self.assert_(
+            '<relationships xmlns:xlink="http://www.w3.org/1999/xlink">'
+            in result)
+        self.assert_(
+            'xlink:role="http://schooltool.org/ns/membership/group"' in result)
+        self.assert_(
+            'xlink:role="http://schooltool.org/ns/membership/member"'
+            in result)
+
+    def testPOST(self):
+        request = RequestStub("http://localhost/groups/sub/relationships/")
+        request.content = StringIO('''\
+            <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/group"
+                  xlink:title="http://schooltool.org/ns/membership"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/groups/new"/>
+            ''')
+        request.content.seek(0, 0)
+        request.method = "POST"
+        self.assertEquals(len(self.sub.listLinks()), 2)
+        self.assert_(self.new not in
+                     [l.traverse() for l in self.sub.listLinks()])
+        result = self.view.render(request)
+        self.assertEquals(request.code, 201)
+        self.assertEquals(len(self.sub.listLinks()), 3)
+        self.assert_(self.new in
+                     [l.traverse() for l in self.sub.listLinks()])
+
+    def testBadPOSTs(self):
+        bad_requests = (
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership/group"
+            xlink:title="http://schooltool.org/ns/membership"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="BADPATH"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="BAD URI"
+            xlink:title="http://schooltool.org/ns/membership"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="/groups/new"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/nonexistent"
+            xlink:title="http://schooltool.org/ns/membership"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="/groups/new"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership/group"
+            xlink:title="http://schooltool.org/ns/membership"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            />''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:title="http://schooltool.org/ns/membership"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="/groups/new"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership"
+            xlink:href="/groups/new"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:role="http://schooltool.org/ns/membership"
+            xlink:href="/groups/new"/>''',
+            )
+
+        for body in bad_requests:
+            request = RequestStub("http://localhost/groups/sub/relationships")
+            request.content = StringIO(body)
+            request.content.seek(0, 0)
+            request.method = "POST"
+            self.assertEquals(len(self.sub.listLinks()), 2)
+            result = self.view.render(request)
+            self.assertEquals(request.code, 400)
+            self.assertEquals(len(self.sub.listLinks()), 2)
+
 
 class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
 
@@ -790,6 +866,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestView))
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestPersonView))
+    suite.addTest(unittest.makeSuite(TestApplicationObjectTraverserView))
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
     suite.addTest(unittest.makeSuite(TestUtilityServiceView))

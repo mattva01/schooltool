@@ -28,6 +28,7 @@ from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility
+from schooltool.interfaces import ComponentLookupError
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
 from schooltool.component import FacetManager
@@ -189,12 +190,14 @@ class TraversableView(View):
         return getView(self.context.traverse(name))
 
 
-class FacetableView(View):
-    """A view that supports traversing to ./facets/."""
+class ApplicationObjectTraverserView(View):
+    """A view that supports traversing to facets and relationships."""
 
     def _traverse(self, name, request):
         if name == 'facets':
             return FacetManagementView(FacetManager(self.context))
+        if name == 'relationships':
+            return RelationshipsView(self.context)
         raise KeyError(name)
 
 
@@ -202,7 +205,7 @@ class FacetableView(View):
 # Concrete views
 #
 
-class GroupView(FacetableView):
+class GroupView(ApplicationObjectTraverserView):
     """The view for a group"""
 
     template = Template("www/group.pt", content_type="text/xml")
@@ -212,7 +215,7 @@ class GroupView(FacetableView):
             yield {'title': item.title, 'path': getPath(item)}
 
 
-class PersonView(FacetableView):
+class PersonView(ApplicationObjectTraverserView):
     """The view for a person object"""
 
     template = Template("www/person.pt", content_type="text/xml")
@@ -338,14 +341,29 @@ class RelationshipsView(View):
 
     def do_POST(self, request):
         body = request.content.read()
-        type = self.extractKeyword(body, 'arcrole')
-        role = self.extractKeyword(body, 'role')
-        path = self.extractKeyword(body, 'href')
-        title = self.extractKeyword(body, 'title')
 
-        type = getURI(type)
-        role = getURI(role)
-        other = traverse(self.context, path)
+        try:
+            type = self.extractKeyword(body, 'arcrole')
+            role = self.extractKeyword(body, 'role')
+            path = self.extractKeyword(body, 'href')
+            title = self.extractKeyword(body, 'title')
+        except KeyError, e:
+            request.setResponseCode(400, 'Bad request')
+            return "Could not find a needed param: %s" % e
+
+        try:
+            type = getURI(type)
+            role = getURI(role)
+        except ComponentLookupError, e:
+            request.setResponseCode(400, 'Bad request')
+            return "Bad URI: %s" % e
+
+        try:
+            other = traverse(self.context, path)
+        except TypeError, e:
+            request.setResponseCode(400, 'Bad request')
+            return "Nontraversable path: %s" % e
+
         val = self.context.getValencies()[type, role]
         kw = {val.this: self.context, val.other: other}
         val.schema(**kw)

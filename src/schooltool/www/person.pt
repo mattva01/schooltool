@@ -8,4 +8,10 @@
 	                  xlink:href group/path"
 	  />
   </groups>
+  <relationships xlink:type="simple" xlink:title="Relationships"
+      tal:attributes="xlink:href string:${view/context/__name__}/relationships"
+      />
+  <facets xlink:type="simple" xlink:title="Facets"
+      tal:attributes="xlink:href string:${view/context/__name__}/facets"
+      />
 </person>
