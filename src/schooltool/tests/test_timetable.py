@@ -41,6 +41,10 @@ from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
 
+class PersistentStub(Persistent):
+    pass
+
+
 class TestTimetable(unittest.TestCase):
 
     def test_interface(self):
@@ -321,6 +325,8 @@ class TestTimetableActivity(unittest.TestCase):
         ta = TimetableActivity("Dancing", owner)
         verifyObject(ITimetableActivity, ta)
         self.assertEqual(ta.title, "Dancing")
+        self.assert_(ta.owner is owner)
+        self.assertEqual(list(ta.resources), [])
 
         class FakeThing:
             title = "Dancing"
@@ -328,6 +334,10 @@ class TestTimetableActivity(unittest.TestCase):
         tb = TimetableActivity("Dancing", owner)
         tc = TimetableActivity("Fencing", owner)
         td = TimetableActivity("Dancing", object())
+        res1 = object()
+        res2 = object()
+        te = TimetableActivity("Dancing", owner, [res1, res2])
+        tf = TimetableActivity("Dancing", owner, [res2, res1])
 
         # __eq__
         self.assertEqual(ta, ta)
@@ -335,6 +345,8 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertNotEqual(ta, tc)
         self.assertNotEqual(ta, td)
         self.assertNotEqual(ta, fake_thing)
+        self.assertNotEqual(ta, te)
+        self.assertEqual(te, tf)
 
         # __ne__
         self.failIf(ta != ta)
@@ -342,18 +354,33 @@ class TestTimetableActivity(unittest.TestCase):
         self.assert_(ta != tc)
         self.assert_(ta != td)
         self.assert_(ta != fake_thing)
+        self.assert_(ta != te)
+        self.failIf(te != tf)
 
         # __hash__
         self.assertEqual(hash(ta), hash(tb))
         self.assertNotEqual(hash(ta), hash(tc))
         self.assertNotEqual(hash(ta), hash(td))
+        self.assertNotEqual(hash(ta), hash(te))
+        self.assertEqual(hash(te), hash(tf))
+
+    def test_immutability(self):
+        from schooltool.timetable import TimetableActivity
+        owner = object()
+        ta = TimetableActivity("Dancing", owner)
 
         def try_to_assign_title():
             ta.title = "xyzzy"
         def try_to_assign_owner():
             ta.owner = "xyzzy"
+        def try_to_assign_resources():
+            ta.resources = "xyzzy"
+        def try_to_modify_resources():
+            ta.resources.add("xyzzy")
         self.assertRaises(AttributeError, try_to_assign_title)
         self.assertRaises(AttributeError, try_to_assign_owner)
+        self.assertRaises(AttributeError, try_to_assign_resources)
+        self.assertRaises(AttributeError, try_to_modify_resources)
         self.assertEquals(ta.title, "Dancing")
 
 
@@ -414,6 +441,41 @@ class TestTimetablingPersistence(unittest.TestCase):
             last = tt3["B"]["Blue"].next()
             # self.assertEqual(last.title, "Advanced geography")
             self.assertEqual(last.title, "Geography")
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
+    def testTimetableActivity(self):
+        from schooltool.timetable import TimetableActivity
+        from transaction import get_transaction
+
+        owner = PersistentStub()
+        res1 = PersistentStub()
+        res2 = PersistentStub()
+        ta = TimetableActivity("Pickling", owner, [res1, res2])
+        tb = TimetableActivity("Pickling", owner, [res2, res1])
+        tseta = Set([ta, tb])
+        tsetb = Set([ta, tb])
+        self.datamgr.root()['ta'] = ta
+        self.datamgr.root()['tb'] = tb
+        self.datamgr.root()['tseta'] = tseta
+        self.datamgr.root()['tsetb'] = tsetb
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            ta2 = datamgr.root()['ta']
+            tb2 = datamgr.root()['tb']
+            tseta2 = datamgr.root()['tseta']
+            tsetb2 = datamgr.root()['tsetb']
+            self.assertEqual(ta2, tb2)
+            self.assertEqual(hash(ta2), hash(tb2))
+            self.assertEqual(tseta2, tsetb2)
+            ## Activities unpersisted in different DB connections are not
+            ## supposed to be compared
+            # self.assertEqual(ta, ta2)
+            # self.assertEqual(hash(ta), hash(ta2))
+            # self.assertEqual(tset, tset2)
         finally:
             get_transaction().abort()
             datamgr.close()

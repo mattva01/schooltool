@@ -320,7 +320,6 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
     def test_traverse(self):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.absence import AbsenceManagementView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/resources/room3")
 

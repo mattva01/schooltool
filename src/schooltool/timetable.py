@@ -22,7 +22,7 @@ SchoolTool timetabling code.
 $Id$
 """
 import datetime
-from sets import Set
+from sets import Set, ImmutableSet
 from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements, moduleProvides
@@ -170,34 +170,38 @@ class TimetableActivity:
     """Timetable activity.
 
     Instances are immutable.
+
+    Equivalent timetable activities must compare and hash equally after
+    pickling and unpickling.
     """
 
     implements(ITimetableActivity)
 
-    def __init__(self, title=None, owner=None):
+    def __init__(self, title=None, owner=None, resources=()):
         self._title = title
         self._owner = owner
+        self._resources = ImmutableSet(resources)
 
     title = property(lambda self: self._title)
     owner = property(lambda self: self._owner)
+    resources = property(lambda self: self._resources)
 
     def __repr__(self):
-        return "TimetableActivity(%r, %r)" % (self.title, self.owner)
+        return ("TimetableActivity(%r, %r, %r)"
+                % (self.title, self.owner, self.resources))
 
     def __eq__(self, other):
         if isinstance(other, TimetableActivity):
-            return self.title == other.title and self.owner == other.owner
+            return (self.title == other.title and self.owner == other.owner
+                    and self.resources == other.resources)
         else:
             return False
 
     def __ne__(self, other):
-        if isinstance(other, TimetableActivity):
-            return self.title != other.title or self.owner != other.owner
-        else:
-            return True
+        return not (self == other)
 
     def __hash__(self):
-        return hash((self.title, self.owner))
+        return hash((self.title, self.owner, self.resources))
 
 
 #

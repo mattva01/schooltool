@@ -968,6 +968,8 @@ class ITimetableActivity(Interface):
 
     Something that happens on a certain period_id in a certain
     day_id.
+
+    Timetable activities are immutable.
     """
 
     title = Attribute("""The title of the activity""")
@@ -977,6 +979,8 @@ class ITimetableActivity(Interface):
 
         The activity lives in the owner's timetable.
         """)
+
+    resources = Attribute("""A set of resources assigned to this activity""")
 
 
 class ICompositeTimetableProvider(Interface):
