@@ -144,7 +144,7 @@ class SchooldayModel(DateRange, Persistent):
 class ImmutableCalendar:
     """An immutable calendar.
 
-    This calendar gets given a sequence of events upon its creation
+    This calendar gets given an iterable of events upon its creation
     and cannot change it.
 
     It is used for functionally defined calendars and other

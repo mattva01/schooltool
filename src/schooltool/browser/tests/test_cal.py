@@ -24,12 +24,14 @@ $Id$
 
 import urllib
 import unittest
+import itertools
 from logging import INFO
 from datetime import datetime, date, timedelta, time
 from pprint import pformat
 
 from zope.testing.doctestunit import DocTestSuite
 from zope.interface import directlyProvides
+from schooltool.cal import ImmutableCalendar
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.browser.tests import HTMLDocument
@@ -2479,8 +2481,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
     def combinedCalendar(self):
         """Combine the ordinary and timetable calendars."""
         calendar = self.person.makeTimetableCalendar()
-        calendar.update(self.calendar)
-        return calendar
+        return ImmutableCalendar(itertools.chain(calendar, self.calendar))
 
     def assertCanDelete(self, user, event_id):
         from schooltool.browser import absoluteURL

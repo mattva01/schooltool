@@ -168,7 +168,7 @@ from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ILocation, IMultiContainer
 from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import Unchanged
-from schooltool.cal import Calendar, CalendarEvent
+from schooltool.cal import ImmutableCalendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
@@ -613,7 +613,7 @@ class BaseTimetableModel(Persistent):
         for e in timetable.exceptions:
             exceptions[(e.date, e.period_id, e.activity)] = e
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
-        cal = Calendar()
+        cal = []
         day_id_gen = self._dayGenerator()
         privacy = getOptions(timetable).timetable_privacy
 
@@ -635,10 +635,10 @@ class BaseTimetableModel(Persistent):
                                     unique_id=uid,
                                     period_id=period.title, activity=activity,
                                     privacy=privacy)
-                        cal.addEvent(event)
+                        cal.append(event)
                     elif exception.replacement is not None:
-                        cal.addEvent(exception.replacement)
-        return cal
+                        cal.append(exception.replacement)
+        return ImmutableCalendar(cal)
 
     def _periodsInDay(self, schoolday_model, timetable, day, day_id_gen=None):
         """Return a timetable day_id and a list of periods for a given day.
@@ -872,15 +872,16 @@ class TimetabledMixin:
         return keys
 
     def makeTimetableCalendar(self):
-        result = Calendar()
-        result.__parent__ = self
-        result.__name__ = 'timetable-calendar'
+        events = []
         timePeriodService = getTimePeriodService(self)
         for period_id, schema_id in self.listCompositeTimetables():
             schoolday_model = timePeriodService[period_id]
             tt = self.getCompositeTimetable(period_id, schema_id)
             cal = tt.model.createCalendar(schoolday_model, tt)
-            result.update(cal)
+            events += list(cal)
+        result = ImmutableCalendar(events)
+        # Parent is needes so that we can find out the owner of this calendar.
+        result.__parent__ = self
         return result
 
 

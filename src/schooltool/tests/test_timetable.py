@@ -1458,7 +1458,6 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         cal = tm.makeTimetableCalendar()
         self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
         self.assert_(cal.__parent__ is tm)
-        self.assertEquals(cal.__name__, 'timetable-calendar')
 
 
 class TestTimetableSchemaService(unittest.TestCase):
