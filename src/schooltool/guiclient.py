@@ -34,6 +34,7 @@ the Free Software Foundation; either version 2 of the License, or
 import httplib
 import socket
 import libxml2
+import cgi
 
 __metaclass__ = type
 
@@ -54,7 +55,11 @@ class SchoolToolClient:
 
     role_names = {'http://schooltool.org/ns/membership/member': 'Member',
                   'http://schooltool.org/ns/membership/group': 'Group',
-                  'http://schooltool.org/ns/membership': 'Membership'}
+                  'http://schooltool.org/ns/membership': 'Membership',
+                  'http://schooltool.org/ns/teaching': 'Teaching',
+                  'http://schooltool.org/ns/teaching/teacher': 'Teacher',
+                  'http://schooltool.org/ns/teaching/taught': 'Taught',
+                 }
 
     # Generic HTTP methods
 
@@ -72,26 +77,50 @@ class SchoolToolClient:
         try:
             self.get('/')
         except SchoolToolError, e:
-            self.status = str(e)
-            self.version = ''
+            pass
 
     def get(self, path):
         """Perform an HTTP GET request for a given path.
 
-        Returns the response body as a string.
+        Returns the response object.
+
+        Sets status and version attributes if the communication succeeds.
+        Raises SchoolToolError if the communication fails.
+        """
+        return self._request("GET", path)
+
+    def post(self, path, body):
+        """Perform an HTTP POST request for a given path.
+
+        Returns the response object.
+
+        Sets status and version attributes if the communication succeeds.
+        Raises SchoolToolError if the communication fails.
+        """
+        return self._request('POST', path, body)
+
+    def _request(self, method, path, body=None, headers=None):
+        """Perform an HTTP request for a given path.
+
+        Returns the response object.
 
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
         conn = self.connectionFactory(self.server, self.port)
         try:
-            conn.request("GET", path)
-            response = conn.getresponse()
-            body = response.read()
+            hdrs = {}
+            if body:
+                hdrs['Content-Type'] = 'text/xml'
+                hdrs['Content-Length'] = len(body)
+            if headers:
+                hdrs.update(headers)
+            conn.request(method, path, body, hdrs)
+            response = Response(conn.getresponse())
             conn.close()
             self.status = "%d %s" % (response.status, response.reason)
             self.version = response.getheader('Server')
-            return body
+            return response
         except socket.error, e:
             conn.close()
             errno, message = e.args
@@ -103,13 +132,17 @@ class SchoolToolClient:
 
     def getListOfPersons(self):
         """Return a list of person IDs."""
-        people = self.get('/persons')
-        return self._parsePeopleList(people)
+        response = self.get('/persons')
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return self._parsePeopleList(response.read())
 
     def getPersonInfo(self, person_id):
         """Return information page about a person."""
-        person = self.get(person_id)
-        return person
+        response = self.get(person_id)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return response.read()
 
     def getGroupTree(self):
         """Return the tree of groups.
@@ -136,13 +169,17 @@ class SchoolToolClient:
         """
         # XXX this url is hardcoded, we could instead find out all roots
         # by getting /
-        tree = self.get('/groups/root/tree')
-        return self._parseGroupTree(tree)
+        response = self.get('/groups/root/tree')
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return self._parseGroupTree(response.read())
 
     def getGroupInfo(self, group_id):
         """Return information page about a group."""
-        group = self.get(group_id)
-        persons = self._parseMemberList(group)
+        response = self.get(group_id)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        persons = self._parseMemberList(response.read())
         return GroupInfo(persons)
 
     def getObjectRelationships(self, object_id):
@@ -150,8 +187,40 @@ class SchoolToolClient:
 
         Returns a list of tuples (arcrole, role, title, href_of_target).
         """
-        result = self.get('%s/relationships' % object_id)
-        return self._parseRelationships(result)
+        response = self.get('%s/relationships' % object_id)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return self._parseRelationships(response.read())
+
+    def getRollCall(self, group_id):
+        """Return a roll call template for a group."""
+        response = self.get('%s/rollcall' % group_id)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return self._parseRollCall(response.read())
+
+    def submitRollCall(self, group_id, rollcall, reporter_id='/persons/anonymous'):
+        """Post a roll call for a group."""
+        body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n'
+                '<reporter xlink:type="simple" xlink:href="%s"/>\n'
+                % cgi.escape(reporter_id, True)]
+        for href, presence, comment, resolved in rollcall:
+            href = cgi.escape(href, True)
+            if presence is None: presence = ''
+            elif presence: presence = ' presence="present"'
+            else: presence = ' presence="absent"'
+            if not comment: comment = ''
+            else: comment = ' comment="%s"' % cgi.escape(comment, True)
+            if resolved is None: resolved = ''
+            elif resolved: resolved = ' resolved="resolved"'
+            else: resolved = ' resolved="unresolved"'
+            body.append('<person xlink:type="simple" xlink:href="%s"%s%s%s/>\n'
+                        % (href, presence, comment, resolved))
+        body += ['</rollcall>\n']
+        body = ''.join(body)
+        response = self.post('%s/rollcall' % group_id, body)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
 
     # Parsing
 
@@ -278,8 +347,57 @@ class SchoolToolClient:
             doc.freeDoc()
             ctx.xpathFreeContext()
 
+    def _parseRollCall(self, body):
+        """Parse a roll call template."""
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse roll call")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/rollcall/person")
+            persons = []
+            for node in res:
+                href = node.nsProp('href', xlink)
+                if not href:
+                    continue
+                title = node.nsProp('title', xlink)
+                if not title:
+                    title = href.split('/')[-1]
+                presence = node.nsProp('presence', None)
+                if presence not in ('present', 'absent'):
+                    raise SchoolToolError("Unrecognized presence value: %s"
+                                          % presence)
+                persons.append((title, href, presence))
+            return persons
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
+
+class Response:
+    """HTTP response.
+
+    Wraps httplib.HTTPResponse and stores the response body as a string.
+    """
+
+    def __init__(self, response):
+        self.status = response.status
+        self.reason = response.reason
+        self.body = response.read()
+        self._response = response
+
+    def getheader(self, header):
+        return self._response.getheader(header)
+
+    def read(self):
+        return self.body
+
 
 class GroupInfo:
+    """Information about a group."""
 
     def __init__(self, members):
         self.members = members

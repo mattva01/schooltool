@@ -24,6 +24,7 @@ import unittest
 import socket
 import libxml2
 from schooltool.tests.helpers import dedent
+from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
 
@@ -50,12 +51,14 @@ class ConnectionStub:
         self.closed = False
         self.request_called = False
 
-    def request(self, method, path):
+    def request(self, method, path, body=None, headers=None):
         if self.request_called:
             raise RuntimeError('ConnectionStub.request called more than once')
         self.request_called = True
         self.method = method
         self.path = path
+        self.body = body
+        self.headers = headers
         if self.error is not None:
             raise self.error
 
@@ -64,33 +67,49 @@ class ConnectionStub:
 
     def close(self):
         self.closed = True
+        if self.response is not None:
+            self.response._body = ''
 
 
 class ResponseStub:
 
-    def __init__(self, status, reason, body, **kw):
+    def __init__(self, status, reason, body='', **kw):
         self.status = status
         self.reason = reason
-        self.body = body
-        self.headers = {}
+        self._body = body
+        self._headers = {'server': 'UnitTest/0.0'}
         for k, v in kw.items():
-            self.headers[k.lower()] = v
-        self.read_called = False
+            self._headers[k.lower()] = v
+        self._read_called = False
 
     def read(self):
-        if self.read_called:
+        if self._read_called:
             raise RuntimeError('ResponseStub.read called more than once')
-        self.read_called = True
-        return self.body
+        self._read_called = True
+        return self._body
 
     def getheader(self, name):
-        return self.headers[name.lower()]
+        return self._headers[name.lower()]
 
 
-class TestSchoolToolClient(unittest.TestCase):
+class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
 
     def setUp(self):
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
+    def newClient(self, response=None, error=None):
+        from schooltool.guiclient import SchoolToolClient
+        client = SchoolToolClient()
+        client.connectionFactory = ConnectionFactory(response, error)
+        return client
+
+    def oneConnection(self, client):
+        self.assertEquals(len(client.connectionFactory.connections), 1)
+        return client.connectionFactory.connections[0]
+
+    def checkConnPath(self, client, path):
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, path)
 
     def test_setServer(self):
         from schooltool.guiclient import SchoolToolClient
@@ -98,71 +117,97 @@ class TestSchoolToolClient(unittest.TestCase):
         port = 8081
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        client = self.newClient(response)
         client.setServer(server, port)
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
-        conn = factory.connections[0]
+        conn = self.oneConnection(client)
         self.assertEquals(conn.server, server)
         self.assertEquals(conn.port, port)
         self.assertEquals(client.server, server)
         self.assertEquals(client.port, port)
 
     def test_tryToConnect(self):
-        from schooltool.guiclient import SchoolToolClient
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        client = self.newClient(response)
         client.tryToConnect()
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
 
-    def test_get(self):
+        e = socket.error(23, 'out of spam')
+        client = self.newClient(error=e)
+        client.tryToConnect()
+        self.assertEquals(client.status, 'out of spam (23)')
+        self.assertEquals(client.version, '')
+
+    def test_request(self):
         from schooltool.guiclient import SchoolToolClient
         path = '/path'
         body = 'spam'
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', body, server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
-        result = client.get(path)
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
+        client = self.newClient(response)
+        result = client._request('FOO', path)
+        conn = self.oneConnection(client)
         self.assertEquals(conn.server, SchoolToolClient.server)
         self.assertEquals(conn.port, SchoolToolClient.port)
-        self.assertEquals(conn.method, 'GET')
+        self.assertEquals(conn.method, 'FOO')
         self.assertEquals(conn.path, path)
-        self.assertEquals(result, body)
+        self.assertEquals(conn.headers, {})
+        self.assert_(conn.body is None)
+        self.assertEquals(result.status, 200)
+        self.assertEquals(result.reason, 'OK')
+        self.assertEquals(result.body, body)
+        self.assert_(result._response is response)
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
         self.assert_(conn.closed)
 
-    def test_get_with_errors(self):
+    def test_request_with_body_and_headers(self):
+        from schooltool.guiclient import SchoolToolClient
+        path = '/path'
+        body = 'spam'
+        version = 'UnitTest/0.0'
+        response = ResponseStub(200, 'OK', body, server=version)
+        client = self.newClient(response)
+        result = client._request('BAR', path, 'body body body',
+                                 {'X-Foo': 'Foo!'})
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.server, SchoolToolClient.server)
+        self.assertEquals(conn.port, SchoolToolClient.port)
+        self.assertEquals(conn.method, 'BAR')
+        self.assertEquals(conn.path, path)
+        self.assertEquals(conn.headers,
+                          {'X-Foo': 'Foo!',
+                           'Content-Type': 'text/xml',
+                           'Content-Length': len('body body body')})
+        self.assertEquals(conn.body, 'body body body')
+        self.assertEquals(result.status, 200)
+        self.assertEquals(result.reason, 'OK')
+        self.assertEquals(result.body, body)
+        self.assert_(result._response is response)
+        self.assertEquals(client.status, '200 OK')
+        self.assertEquals(client.version, version)
+        self.assert_(conn.closed)
+
+    def test_request_with_errors(self):
         from schooltool.guiclient import SchoolToolClient, SchoolToolError
         path = '/path'
         e = socket.error(23, 'out of spam')
-        factory = ConnectionFactory(None, error=e)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        client = self.newClient(error=e)
         try:
-            result = client.get(path)
+            result = client._request('GET', path)
         except SchoolToolError, e:
             self.assertEquals(str(e), 'out of spam (23)')
         else:
             self.fail("did not raise SchoolToolError")
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
+        conn = self.oneConnection(client)
         self.assertEquals(client.status, "out of spam (23)")
         self.assertEquals(client.version, '')
         self.assert_(conn.closed)
 
     def test_getListOfPersons(self):
-        from schooltool.guiclient import SchoolToolClient
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
@@ -172,47 +217,41 @@ class TestSchoolToolClient(unittest.TestCase):
                </items>
             </container>
         """)
-        version = 'UnitTest/0.0'
-        response = ResponseStub(200, 'OK', body, server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        client = self.newClient(ResponseStub(200, 'OK', body))
         result = client.getListOfPersons()
         self.assertEquals(result, ['/persons/fred', '/persons/barney'])
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
-        self.assertEquals(conn.path, '/persons')
+        self.checkConnPath(client, '/persons')
 
     def test_getListOfPersons_with_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        version = 'UnitTest/0.0'
-        e = socket.error(23, 'out of persons')
-        factory = ConnectionFactory(None, error=e)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(error=socket.error(23, 'out of persons'))
+        self.assertRaises(SchoolToolError, client.getListOfPersons)
+
+        client = self.newClient(ResponseStub(500, 'Internal Error'))
         self.assertRaises(SchoolToolError, client.getListOfPersons)
 
     def test_getPersonInfo(self):
-        from schooltool.guiclient import SchoolToolClient
+        person_id = '/persons/foo'
         body = dedent("""
             <html>
               <h1>Foo!</h1>
             </html>
         """)
-        version = 'UnitTest/0.0'
-        person_id = '/persons/foo'
-        response = ResponseStub(200, 'OK', body, server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        client = self.newClient(ResponseStub(200, 'OK', body))
         result = client.getPersonInfo(person_id)
         self.assertEquals(result, body)
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
-        self.assertEquals(conn.path, '/persons/foo')
+        self.checkConnPath(client, person_id)
+
+    def test_getPersonInfo_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        person_id = '/persons/bar'
+        client = self.newClient(error=socket.error(23, 'out of persons'))
+        self.assertRaises(SchoolToolError, client.getPersonInfo, person_id)
+
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.getPersonInfo, person_id)
 
     def test_getGroupTree(self):
-        from schooltool.guiclient import SchoolToolClient
         body = dedent("""
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
               <group xlink:type="simple" xlink:href="/groups/root"
@@ -238,28 +277,20 @@ class TestSchoolToolClient(unittest.TestCase):
                     (2, 'group1a',    '/groups/group1a'),
                     (2, 'group1b',    '/groups/group1b'),
                    ]
-        version = 'UnitTest/0.0'
-        response = ResponseStub(200, 'OK', body, server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        client = self.newClient(ResponseStub(200, 'OK', body))
         result = client.getGroupTree()
         self.assertEquals(list(result), expected)
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
-        self.assertEquals(conn.path, '/groups/root/tree')
+        self.checkConnPath(client, '/groups/root/tree')
 
     def test_getGroupTree_with_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        version = 'UnitTest/0.0'
-        e = socket.error(23, 'out of trees')
-        factory = ConnectionFactory(None, error=e)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(error=socket.error(23, 'out of trees'))
+        self.assertRaises(SchoolToolError, client.getGroupTree)
+
+        client = self.newClient(ResponseStub(500, 'Internal Error'))
         self.assertRaises(SchoolToolError, client.getGroupTree)
 
     def test_getGroupInfo(self):
-        from schooltool.guiclient import SchoolToolClient
         body = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <item xlink:type="simple" xlink:href="/groups/group2"
@@ -271,19 +302,22 @@ class TestSchoolToolClient(unittest.TestCase):
             </group>
         """)
         expected = [('person1', '/persons/person1')]
-        version = 'UnitTest/0.0'
-        response = ResponseStub(200, 'OK', body, server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
-        result = client.getGroupInfo('/groups/group1')
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        group_id = '/groups/group1'
+        result = client.getGroupInfo(group_id)
         self.assertEquals(list(result.members), expected)
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
-        self.assertEquals(conn.path, '/groups/group1')
+        self.checkConnPath(client, group_id)
+
+    def test_getGroupInfo_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        group_id = '/groups/group1'
+        client = self.newClient(error=socket.error(23, 'out of groups'))
+        self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
+
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
 
     def test_getObjectRelationships(self):
-        from schooltool.guiclient import SchoolToolClient
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -301,16 +335,75 @@ class TestSchoolToolClient(unittest.TestCase):
         """)
         expected = [('arcrole1', 'role1', 'title1', 'href1'),
                     ('Membership', 'Group', 'title2', 'href2')]
-        version = 'UnitTest/0.0'
-        response = ResponseStub(200, 'OK', body, server=version)
-        factory = ConnectionFactory(response)
-        client = SchoolToolClient()
-        client.connectionFactory = factory
-        result = client.getObjectRelationships('/groups/group1')
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        group_id = '/groups/group1'
+        result = client.getObjectRelationships(group_id)
         self.assertEquals(list(result), expected)
-        self.assertEquals(len(factory.connections), 1)
-        conn = factory.connections[0]
-        self.assertEquals(conn.path, '/groups/group1/relationships')
+        self.checkConnPath(client, '%s/relationships' % group_id)
+
+    def test_getObjectRelationships_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        group_id = '/groups/group1'
+        client = self.newClient(error=socket.error(23, 'out of groups'))
+        self.assertRaises(SchoolToolError, client.getObjectRelationships,
+                          group_id)
+
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.getObjectRelationships,
+                          group_id)
+
+    def test_getRollCall(self):
+        body = dedent("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:href="/persons/p1" xlink:title="person 1"
+                      presence="present" />
+            </rollcall>
+        """)
+        expected = [('person 1', '/persons/p1', 'present')]
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        group_id = '/groups/group1'
+        result = client.getRollCall(group_id)
+        self.assertEquals(list(result), expected)
+        self.checkConnPath(client, '%s/rollcall' % group_id)
+
+    def test_getRollCall_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        group_id = '/groups/group1'
+        client = self.newClient(error=socket.error(23, 'out of groups'))
+        self.assertRaises(SchoolToolError, client.getRollCall, group_id)
+
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.getRollCall, group_id)
+
+    def test_submitRollCall(self):
+        client = self.newClient(ResponseStub(200, 'OK', 'Accepted'))
+        group_id = '/groups/group1'
+        rollcall = [('/persons/p1', True, 'foo', True),
+                    ('/persons/p2', False, 'bar', False),
+                    ('/persons/p3', None, None, None)]
+        client.submitRollCall(group_id, rollcall)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '%s/rollcall' % group_id)
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body, dedent("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
+                <reporter xlink:type="simple" xlink:href="/persons/anonymous"/>
+                <person xlink:type="simple" xlink:href="/persons/p1"
+                        presence="present" comment="foo" resolved="resolved"/>
+                <person xlink:type="simple" xlink:href="/persons/p2"
+                        presence="absent" comment="bar" resolved="unresolved"/>
+                <person xlink:type="simple" xlink:href="/persons/p3"/>
+            </rollcall>
+            """))
+
+    def test_submitRollCall_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(400, 'Bad Request', 'No foo'))
+        group_id = '/groups/group1'
+        rollcall = [('/persons/p3', None, None, None)]
+        self.assertRaises(SchoolToolError,
+                          client.submitRollCall, group_id, rollcall)
 
     def test__parsePeopleList(self):
         from schooltool.guiclient import SchoolToolClient
@@ -479,6 +572,41 @@ class TestSchoolToolClient(unittest.TestCase):
         client = SchoolToolClient()
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, client._parseRelationships, body)
+
+    def test__parseRollCall(self):
+        from schooltool.guiclient import SchoolToolClient, SchoolToolError
+        body = dedent("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:href="/persons/p1" xlink:title="person 1"
+                      presence="present" />
+              <person xlink:href="/persons/p2" xlink:title=""
+                      presence="absent" />
+              <person href="/persons/p3" xlink:title="person 3"
+                      presence="absent" />
+              <person xlink:href="/persons/p4"
+                      presence="absent" />
+            </rollcall>
+        """)
+        expected = [('person 1', '/persons/p1', 'present'),
+                    ('p2',       '/persons/p2', 'absent'),
+                    ('p4',       '/persons/p4', 'absent')]
+        client = SchoolToolClient()
+        result = client._parseRollCall(body)
+        self.assertEquals(result, expected)
+
+    def test__parseRollCall_errors(self):
+        from schooltool.guiclient import SchoolToolClient, SchoolToolError
+        client = SchoolToolClient()
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, client._parseRollCall, body)
+
+        body = dedent("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:href="/persons/p3" xlink:title="person 3"
+                      presence="dunno" />
+            </rollcall>
+        """)
+        self.assertRaises(SchoolToolError, client._parseRollCall, body)
 
 
 def test_suite():
