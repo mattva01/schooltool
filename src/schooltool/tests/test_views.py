@@ -221,9 +221,12 @@ class TestHelpers(unittest.TestCase):
         dt = datetime.datetime
         valid_dates = (
             ("2000-01-01 00:00:00", dt(2000, 1, 1, 0, 0, 0, 0)),
+            ("2000-01-01 00:00:00.000000", dt(2000, 1, 1, 0, 0, 0, 0)),
             ("2000-01-01T00:00:00", dt(2000, 1, 1, 0, 0, 0, 0)),
             ("2005-12-23 11:22:33", dt(2005, 12, 23, 11, 22, 33)),
             ("2005-12-23T11:22:33", dt(2005, 12, 23, 11, 22, 33)),
+            ("2005-12-23T11:22:33.4", dt(2005, 12, 23, 11, 22, 33, 400000)),
+            ("2005-12-23T11:22:33.456789", dt(2005, 12, 23, 11, 22, 33, 456789)),
         )
         for s, d in valid_dates:
             result = parse_datetime(s)
@@ -1396,8 +1399,9 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        context.reportAbsence(AbsenceComment(ended=True, resolved=True))
-        context.reportAbsence(AbsenceComment())
+        dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
+        context.reportAbsence(AbsenceComment(dt=dt, ended=True, resolved=True))
+        context.reportAbsence(AbsenceComment(dt=dt))
         self.assertEquals(len(list(context.iterAbsences())), 2)
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
@@ -1406,12 +1410,12 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
-              <absence xlink:type="simple"
-                       xlink:href="/person/absences/001" ended="ended"
-                       xlink:title="001" resolved="resolved"/>
-              <absence xlink:type="simple"
-                       xlink:href="/person/absences/002" ended="unended"
-                       xlink:title="002" resolved="unresolved"/>
+              <absence xlink:type="simple" xlink:href="/person/absences/001"
+                       xlink:title="001" datetime="2001-02-03 04:05:06"
+                       ended="ended" resolved="resolved"/>
+              <absence xlink:type="simple" xlink:href="/person/absences/002"
+                       xlink:title="002" datetime="2001-02-03 04:05:06"
+                       ended="unended" resolved="unresolved"/>
             </absences>
             """, recursively_sort=['absences'])
 
@@ -1908,7 +1912,8 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
         app.eventService.subscribe(self.tracker, IAttendanceEvent)
         app['persons'] = ApplicationObjectContainer(Person)
         self.person = app['persons'].new("a", title="a")
-        self.person.reportAbsence(AbsenceComment(None, ""))
+        dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
+        self.person.reportAbsence(AbsenceComment(dt=dt))
         self.view = AbsenceTrackerView(self.tracker)
 
     def test_get(self):
@@ -1920,6 +1925,7 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
               <absence xlink:type="simple"
                        xlink:href="/persons/a/absences/001"
+                       datetime="2001-02-03 04:05:06"
                        ended="unended" xlink:title="001"
                        resolved="unresolved"/>
             </absences>
@@ -1943,7 +1949,8 @@ class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
         self.facet = AbsenceTrackerFacet()
         FacetManager(self.person).setFacet(self.facet)
 
-        self.person.reportAbsence(AbsenceComment(None, ""))
+        dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
+        self.person.reportAbsence(AbsenceComment(dt=dt))
         self.view = AbsenceTrackerFacetView(self.facet)
 
     def testDelete(self):

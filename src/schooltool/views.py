@@ -65,15 +65,22 @@ def parse_datetime(s):
     Only a small subset of ISO 8601 is accepted:
 
       YYYY-MM-DD HH:MM:SS
+      YYYY-MM-DD HH:MM:SS.ssssss
       YYYY-MM-DDTHH:MM:SS
+      YYYY-MM-DDTHH:MM:SS.ssssss
 
     Returns a datetime.datetime object without a time zone.
     """
-    m = re.match("(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)$", s)
+    m = re.match("(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
     if not m:
-        raise ValueError("bad date/time value", s)
-    y, m, d, hh, mm, ss = map(int, m.groups())
-    return datetime.datetime(y, m, d, hh, mm, ss)
+        raise ValueError("Bad datetime: %s" % s)
+    ssssss = m.groups()[7]
+    if ssssss:
+        ssssss = int((ssssss + "00000")[:6])
+    else:
+        ssssss = 0
+    y, m, d, hh, mm, ss = map(int, m.groups()[:6])
+    return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
 
 
 #
@@ -687,7 +694,24 @@ class AbsenceCommentParser(XMLPseudoParser):
         return comment
 
 
-class AbsenceManagementView(View, AbsenceCommentParser):
+class AbsenceListViewMixin:
+
+    def _listAbsences(self, absences):
+        endedness = {False: 'unended', True: 'ended'}
+        resolvedness = {False: 'unresolved', True: 'resolved'}
+        for absence in absences:
+            expected_presence = None
+            if absence.expected_presence is not None:
+                expected_presence = absence.expected_presence.isoformat(' ')
+            yield {'title': absence.__name__,
+                   'path': getPath(absence),
+                   'datetime': absence.comments[0].datetime.isoformat(' '),
+                   'expected_presence': expected_presence,
+                   'ended': endedness[absence.ended],
+                   'resolved': resolvedness[absence.resolved]}
+
+
+class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
 
     template = Template('www/absences.pt', content_type="text/xml")
 
@@ -696,13 +720,7 @@ class AbsenceManagementView(View, AbsenceCommentParser):
         return AbsenceView(absence)
 
     def listAbsences(self):
-        endedness = {False: 'unended', True: 'ended'}
-        resolvedness = {False: 'unresolved', True: 'resolved'}
-        return [{'title': item.__name__,
-                 'path': getPath(item),
-                 'ended': endedness[item.ended],
-                 'resolved': resolvedness[item.resolved]}
-                for item in self.context.iterAbsences()]
+        return self._listAbsences(self.context.iterAbsences())
 
     def do_POST(self, request):
         try:
@@ -914,18 +932,12 @@ class RollcallView(View):
                 % (nabsences, npresences))
 
 
-class AbsenceTrackerView(View):
+class AbsenceTrackerView(View, AbsenceListViewMixin):
 
     template = Template('www/absences.pt', content_type='text/xml')
 
     def listAbsences(self):
-        endedness = {False: 'unended', True: 'ended'}
-        resolvedness = {False: 'unresolved', True: 'resolved'}
-        return [{'title': item.__name__,
-                 'path': getPath(item),
-                 'ended': endedness[item.ended],
-                 'resolved': resolvedness[item.resolved]}
-                for item in self.context.absences]
+        return self._listAbsences(self.context.absences)
 
 
 class AbsenceTrackerFacetView(AbsenceTrackerView, FacetView):
