@@ -26,6 +26,8 @@ import libxml2
 
 from schooltool.common import dedent  # it used to live here
 
+__metaclass__ = type
+
 
 def unidiff(old, new, oldlabel="expected output", newlabel="actual output"):
     """Display a compact unified diff between old text and new text.
