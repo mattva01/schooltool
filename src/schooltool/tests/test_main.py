@@ -503,9 +503,10 @@ class TestRequest(unittest.TestCase):
                                 user=user, password=password)
 
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 2)
+        self.assertEquals(len(called), 3)
         self.assertEquals(called[0], (rq.write, body))
         self.assertEquals(called[1], (rq.finish, ))
+        self.assertEquals(called[2], (rq.logHit, ))
 
         self.assertEquals(transaction.history, 'C')
 
@@ -528,9 +529,10 @@ class TestRequest(unittest.TestCase):
                                 traverse_stub=traverse_stub)
 
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 2)
+        self.assertEquals(len(called), 3)
         self.assertEquals(called[0], (rq.write, body))
         self.assertEquals(called[1], (rq.finish, ))
+        self.assertEquals(called[2], (rq.logHit, ))
 
         self.assertEquals(transaction.history, 'A')
 
@@ -548,9 +550,10 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(transaction.history, 'A')
 
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 3)
+        self.assertEquals(len(called), 4)
         self.assertEquals(called[1], (rq.write, error_msg))
         self.assertEquals(called[2], (rq.finish, ))
+        self.assertEquals(called[3], (rq.logHit, ))
 
     def test__process_many_conflict_errors(self):
         from ZODB.POSException import ConflictError
@@ -566,9 +569,10 @@ class TestRequest(unittest.TestCase):
         rq, transaction = self.do_test__process(path, render_stub)
 
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 3)
+        self.assertEquals(len(called), 4)
         self.assertEquals(called[1], (rq.write, error_msg))
         self.assertEquals(called[2], (rq.finish, ))
+        self.assertEquals(called[3], (rq.logHit, ))
 
         retries = rq.site.conflictRetries + 1
         self.assertEquals(transaction.history, 'A' * retries)
@@ -597,9 +601,10 @@ class TestRequest(unittest.TestCase):
                                     user=user, password=password)
 
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 2)
+        self.assertEquals(len(called), 3)
         self.assertEquals(called[0], (rq.write, body))
         self.assertEquals(called[1], (rq.finish, ))
+        self.assertEquals(called[2], (rq.logHit, ))
 
         # these checks are a bit coarse...
         self.assertEquals(transaction.history, 'A' * retries + 'C')
@@ -729,9 +734,9 @@ class TestRequest(unittest.TestCase):
         from schooltool.main import Request
         buffer = StringIO()
         hitlogger = logging.getLogger('access')
-        hitlogger.addHandler(logging.StreamHandler(buffer))
+        hitlogger.propagate = False
         hitlogger.setLevel(logging.INFO)
-        hitlogger.propagate = 0
+        hitlogger.addHandler(logging.StreamHandler(buffer))
 
         rq = Request(None, True)
         rq.user = 'manager'

@@ -401,7 +401,7 @@ class Request(http.Request):
                 body = self._handle_exception(failure.Failure())
             self.reactor_hook.callFromThread(self.write, body)
             self.reactor_hook.callFromThread(self.finish)
-            # self.reactor_hook.callFromThread(self.logHit)
+            self.reactor_hook.callFromThread(self.logHit)
         finally:
             if self.zodb_conn:
                 self.zodb_conn.close()
@@ -689,6 +689,7 @@ class Server:
         self.hitlogfiles = []
         logger = logging.getLogger('access')
         logger.propagate = False
+        logger.setLevel(logging.INFO)
         for filename in self.config.access_log_file:
             if filename == 'STDOUT':
                 handler = logging.StreamHandler(sys.stdout)
