@@ -51,8 +51,6 @@ moduleProvides(IModuleSetup)
 def absoluteURL(request, obj, suffix=''):
     """Return the absolute URL of an object.
 
-    Example:
-
     We need the location adapters to be set up:
 
       >>> from schooltool.tests.utils import RegistriesSetupMixin
@@ -124,8 +122,6 @@ def absolutePath(request, obj, suffix=''):
     directives might strip some initial path elements and add some virtual
     elements in their place).
 
-    Example:
-
     We need the location adapters to be set up:
 
       >>> from schooltool.tests.utils import RegistriesSetupMixin
@@ -162,6 +158,10 @@ def absolutePath(request, obj, suffix=''):
       >>> obj.__name__ = u"Hi \\u362B"
       >>> absolutePath(request, obj, u'Yay \\u362A')
       u'/Hi \\u362b/Yay \\u362a'
+
+    Let's clean up after ourselves.
+
+      >>> initializer.tearDownRegistries()
 
     """
     path = getPath(obj)

@@ -28,13 +28,23 @@ __metaclass__ = type
 
 
 def warn(msg):
-    print >> sys.stderr, msg
+    print >> sys.stderr, "\n" + msg
 
 
 def sorted(l):
     l = list(l) # make a copy
     l.sort()
     return l
+
+
+def difflist(old, new):
+    """Show the differences between two lists."""
+    import pprint
+    import difflib
+    old = pprint.pformat(old) + "\n"
+    new = pprint.pformat(new) + "\n"
+    return ''.join(difflib.unified_diff(old.splitlines(True),
+                                        new.splitlines(True)))
 
 
 def adapter_registry_contents(ar):
@@ -47,16 +57,24 @@ class ComponentChecks:
 
     def startTest(self, test):
         from schooltool import component
+        from zope.component import getServiceDefinitions
         self.view_registry = adapter_registry_contents(component.view_registry)
         self.class_view_registry = dict(component.class_view_registry)
+        self.global_service_definitions = list(getServiceDefinitions())
 
     def stopTest(self, test):
         from schooltool import component
+        from zope.component import getServiceDefinitions
         if (self.view_registry !=
                 adapter_registry_contents(component.view_registry)):
-            warn("%s changed view registry" % test)
+            warn("%s changed view registry" % test.id())
         if self.class_view_registry != component.class_view_registry:
-            warn("%s changed class view registry" % test)
+            warn("%s changed class view registry" % test.id())
+        service_definitions = list(getServiceDefinitions())
+        if self.global_service_definitions != service_definitions:
+            warn("%s changed global service definitions:\n%s"
+                 % (test.id(), difflist(self.global_service_definitions,
+                                        service_definitions)))
 
 
 class TransactionChecks:
@@ -72,7 +90,7 @@ class TransactionChecks:
         import transaction
         txn = transaction.get()
         if txn._resources:
-            warn("%s left an unclean transaction" % test)
+            warn("%s left an unclean transaction" % test.id())
             txn.abort()
 
 
@@ -133,13 +151,13 @@ class StdoutChecks:
         sys.stdout = self.old_stdout
         sys.stderr = self.old_stderr
         if warn_stdout_replaced:
-            warn("%s replaced sys.stdout" % test)
+            warn("%s replaced sys.stdout" % test.id())
         if warn_stderr_replaced:
-            warn("%s replaced sys.stderr" % test)
+            warn("%s replaced sys.stderr" % test.id())
         if self.stdout_wrapper.written:
-            warn("%s wrote to sys.stdout" % test)
+            warn("%s wrote to sys.stdout" % test.id())
         if self.stderr_wrapper.written:
-            warn("%s wrote to sys.stderr" % test)
+            warn("%s wrote to sys.stderr" % test.id())
 
         import pdb
         pdb.set_trace = self.old_pdb_set_trace
@@ -156,7 +174,7 @@ class LibxmlChecks:
         mem = libxml2.debugMemory(1)
         if mem > self.last_mem:
             warn("libxml2 used %d bytes of memory before test %s"
-                 % (mem - self.last_mem, test))
+                 % (mem - self.last_mem, test.id()))
 
         # Attempts to call libxml2.cleanupParser() in stopTest and then check
         # that debugMemory() returns 0 were unsuccessful.  It appears that
@@ -212,7 +230,7 @@ class LoggingChecks:
     def stopTest(self, test):
         new_snapshot = self.makeSnapshot()
         if new_snapshot != self.snapshot:
-            warn("%s changed logging configuration" % test)
+            warn("%s changed logging configuration" % test.id())
             if self.verbose:
                 old_loggers = sets.Set(self.snapshot.keys())
                 new_loggers = sets.Set(new_snapshot.keys())

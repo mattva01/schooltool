@@ -29,6 +29,7 @@ from zope.interface import Interface, implements
 from zope.interface import directlyProvides, classProvides
 from zope.interface.verify import verifyObject
 from zope.component.exceptions import ComponentLookupError, Invalid
+from zope.testing.cleanup import CleanUp
 from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService, IViewAPI
@@ -534,7 +535,7 @@ class TestTimetableModelRegistry(RegistriesCleanupMixin, unittest.TestCase):
                          TMStub)
 
 
-class TestComponentArchitecture(unittest.TestCase):
+class TestComponentArchitecture(CleanUp, unittest.TestCase):
 
     def test(self):
         from zope.component import getService

@@ -365,6 +365,10 @@ def doctest_TraversableView():
 
     We also need to register a view for MyThing
 
+        >>> from schooltool.tests.utils import RegistriesSetupMixin
+        >>> initializer = RegistriesSetupMixin()
+        >>> initializer.setUpRegistries()
+
         >>> from schooltool.rest import View
         >>> class MyThingView(View):
         ...     def __repr__(self):
@@ -394,6 +398,10 @@ def doctest_TraversableView():
         >>> try: view._traverse('nosuchthing', request)
         ... except KeyError: print '404 Not Found'
         404 Not Found
+
+    Cleaning up:
+
+        >>> initializer.tearDownRegistries()
 
     """
 
