@@ -173,6 +173,16 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return _parseContainer(response.read())
 
+    def getListOfResources(self):
+        """Return the list of all resources.
+
+        Returns a sequence of tuples (resource_title, resource_path).
+        """
+        response = self.get('/resources')
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parseContainer(response.read())
+
     def getGroupTree(self):
         """Return the tree of groups.
 
@@ -1051,7 +1061,8 @@ class SchoolTimetableInfo:
                       teacher.
         * periods -- a sequence of (day_id, period_id) tuples
         * tt -- a matrix ([[]]) of lists of activities, which are
-                tuples of (title, group_path)
+                tuples of (title, group_path, resources)
+        * resources -- a sequence of (resource_title, resource_path) tuples
     """
 
     def __init__(self, teachers=None, periods=None, tt=None):
@@ -1067,7 +1078,9 @@ class SchoolTimetableInfo:
         ctx = doc.xpathNewContext()
         try:
             schooltt = "http://schooltool.org/ns/schooltt/0.1"
+            xlink = "http://www.w3.org/1999/xlink"
             ctx.xpathRegisterNs("st", schooltt)
+            ctx.xpathRegisterNs("xlink", xlink)
             self.teachers = []
             self.periods = []
             self.tt = []
@@ -1096,7 +1109,13 @@ class SchoolTimetableInfo:
                         for activity_node in ctx.xpathEval('st:activity'):
                             group_path = activity_node.nsProp('group', None)
                             activity = activity_node.nsProp('title', None)
-                            activities.append((activity, group_path))
+                            res = []
+                            ctx.setContextNode(activity_node)
+                            for res_node in ctx.xpathEval('st:resource'):
+                                rpath = res_node.nsProp('href', xlink)
+                                rtitle = res_node.nsProp('title', xlink)
+                                res.append((rtitle, rpath))
+                            activities.append((activity, group_path, res))
                         tt_row.append(activities)
                 assert len(tt_row) == len(self.periods)
                 self.tt.append(tt_row)
@@ -1130,28 +1149,41 @@ class SchoolTimetableInfo:
     def toXML(self):
         result = []
         result.append(
-            '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">')
+            '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"\n'
+            '          xmlns:xlink="http://www.w3.org/1999/xlink">')
         for i, teacher in enumerate(self.teachers):
             result.append('  <teacher path="%s">' % teacher[0])
             last_day = None
             for j, (day, period) in enumerate(self.periods):
                 if last_day != day:
                     if last_day is not None:
-                        result.append('    </day>')
+                        result.append(' '*4 + '</day>')
                     last_day = day
-                    result.append('    <day id="%s">' % day)
-                result.append('      <period id="%s">' % period)
+                    result.append(' '*4 + '<day id="%s">' % day)
+                result.append(' '*6 + '<period id="%s">' % period)
                 try:
                     activities = self.tt[i][j]
-                    for title, group in activities:
-                        result.append('        '
-                                      '<activity group="%s" title="%s"/>'
-                                      % (group, title))
+                    for title, group, resources in activities:
+                        if resources:
+                            c = ""
+                        else:
+                            c = "/"
+                        result.append(' '*8 + 
+                                      '<activity group="%s" title="%s"%s>'
+                                      % (group, title, c))
+                        for rtitle, rpath in resources:
+                            result.append(' '*10 +
+                                          '<resource xlink:type="simple"'
+                                                   ' xlink:href="%s"'
+                                                   ' xlink:title="%s"/>'
+                                      % (rpath, rtitle))
+                        if resources:
+                            result.append(' '*8 + '</activity>')
                 except (KeyError, TypeError):
                     pass
-                result.append('      </period>')
+                result.append(' '*6 + '</period>')
             if last_day is not None:
-                result.append('    </day>')
+                result.append(' '*4 + '</day>')
             result.append('  </teacher>')
         result.append('</schooltt>\n')
         return "\n".join(result)

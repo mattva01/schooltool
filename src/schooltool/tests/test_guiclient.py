@@ -246,7 +246,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
               <items>
                 <item xlink:href="/persons/fred" xlink:title="Fred" />
                 <item xlink:href="/persons/barney" xlink:title="Barney"/>
-               </items>
+              </items>
             </container>
         """)
         client = self.newClient(ResponseStub(200, 'OK', body))
@@ -270,7 +270,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
               <items>
                 <item xlink:href="/groups/fred" xlink:title="Fred" />
                 <item xlink:href="/groups/barney" xlink:title="Barney"/>
-               </items>
+              </items>
             </container>
         """)
         client = self.newClient(ResponseStub(200, 'OK', body))
@@ -287,6 +287,30 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
 
         client = self.newClient(ResponseStub(500, 'Internal Error'))
         self.assertRaises(SchoolToolError, client.getListOfGroups)
+
+    def test_getListOfResources(self):
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/resources/nut" xlink:title="Nut" />
+                <item xlink:href="/resources/bolt" xlink:title="Bolt"/>
+              </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getListOfResources()
+        expected = [('Nut', '/resources/nut'),
+                    ('Bolt', '/resources/bolt')]
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/resources')
+
+    def test_getListOfResources_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(error=socket.error(23, 'out of resources'))
+        self.assertRaises(SchoolToolError, client.getListOfResources)
+
+        client = self.newClient(ResponseStub(500, 'Internal Error'))
+        self.assertRaises(SchoolToolError, client.getListOfResources)
 
     def test_getGroupTree(self):
         body = dedent("""
@@ -507,11 +531,15 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
     def test_getSchoolTimetable(self):
         from schooltool.guiclient import SchoolTimetableInfo
         body1 = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/002" title="French"/>
+                    <activity group="/groups/002" title="French">
+                      <resource xlink:type="simple" xlink:title="101"
+                                xlink:href="/resources/room101" />
+                    </activity>
                   </period>
                   <period id="Blue">
                     <activity group="/groups/003" title="Math"/>
@@ -551,7 +579,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
               <items>
                 <item xlink:href="/persons/0013" xlink:title="Fred" />
                 <item xlink:href="/persons/0014" xlink:title="Barney"/>
-               </items>
+              </items>
             </container>
         """)
         body3 = dedent("""
@@ -579,14 +607,14 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
              ("A", "Blue"),
              ("B", "Green"),
              ("B", "Blue")],
-            [[[('French', '/groups/002')],
-              [('Math', '/groups/003')],
-              [('English', '/groups/004')],
-              [('Biology', '/groups/005')]],
-             [[('Geography', '/groups/006')],
-              [('History', '/groups/007')],
-              [('Physics', '/groups/008')],
-              [('Chemistry', '/groups/009')]]]
+            [[[('French', '/groups/002', [('101', '/resources/room101')])],
+              [('Math', '/groups/003', [])],
+              [('English', '/groups/004', [])],
+              [('Biology', '/groups/005', [])]],
+             [[('Geography', '/groups/006', [])],
+              [('History', '/groups/007', [])],
+              [('Physics', '/groups/008', [])],
+              [('Chemistry', '/groups/009', [])]]]
             )
 
         client = self.newClientMulti([ResponseStub(200, 'OK', body1),
@@ -609,14 +637,14 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
              ("A", "Blue"),
              ("B", "Green"),
              ("B", "Blue")],
-            [[[('French', '/groups/002')],
-              [('Math', '/groups/003')],
-              [('English', '/groups/004')],
-              [('Biology', '/groups/005')]],
-             [[('Geography', '/groups/006')],
-              [('History', '/groups/007')],
-              [('Physics', '/groups/008')],
-              [('Chemistry', '/groups/009')]]]
+            [[[('French', '/groups/002', [])],
+              [('Math', '/groups/003', [])],
+              [('English', '/groups/004', [])],
+              [('Biology', '/groups/005', [])]],
+             [[('Geography', '/groups/006', [])],
+              [('History', '/groups/007', [])],
+              [('Physics', '/groups/008', [])],
+              [('Chemistry', '/groups/009', [])]]]
             )
         client = self.newClient(ResponseStub(200, 'OK'))
         client.putSchooltoolTimetable('2003-fall', '4-day', tt)
@@ -788,7 +816,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               <items>
                 <item xlink:href="/persons/fred" xlink:title="Fred" />
                 <item xlink:href="/persons/barney"/>
-               </items>
+              </items>
             </container>
         """)
         results = _parseContainer(body)
@@ -1465,11 +1493,15 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
         from schooltool.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/002" title="French"/>
+                    <activity group="/groups/002" title="French">
+                      <resource xlink:type="simple" xlink:title="101"
+                                xlink:href="/resources/room101" />
+                    </activity>
                   </period>
                   <period id="Blue">
                     <activity group="/groups/003" title="Math"/>
@@ -1513,15 +1545,16 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
                                        ("A", "Blue"),
                                        ("B", "Green"),
                                        ("B", "Blue")])
-        self.assertEquals(st.tt, [[[('French', '/groups/002')],
-                                   [('Math', '/groups/003')],
-                                   [('English', '/groups/004'),
-                                    ('English', '/groups/005')],
-                                   [('Biology', '/groups/005')]],
-                                  [[('Geography', '/groups/006')],
-                                   [('History', '/groups/007')],
-                                   [('Physics', '/groups/008')],
-                                   [('Chemistry', '/groups/009')]]])
+        self.assertEquals(st.tt, [[[('French', '/groups/002',
+                                     [('101', '/resources/room101')])],
+                                   [('Math', '/groups/003', [])],
+                                   [('English', '/groups/004', []),
+                                    ('English', '/groups/005', [])],
+                                   [('Biology', '/groups/005', [])]],
+                                  [[('Geography', '/groups/006', [])],
+                                   [('History', '/groups/007', [])],
+                                   [('Physics', '/groups/008', [])],
+                                   [('Chemistry', '/groups/009', [])]]])
 
     def test_loadData_breakage(self):
         from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
@@ -1532,7 +1565,8 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
         from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
         st = SchoolTimetableInfo()
         data = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
             </schooltt>
             """)
 
@@ -1550,7 +1584,8 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
                                   ("2", "A"), ("2", "B")])
         result = st.toXML()
         expected = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher path="a">
                 <day id="1">
                   <period id="A">
@@ -1611,11 +1646,15 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
         from schooltool.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/002" title="French"/>
+                    <activity group="/groups/002" title="French">
+                      <resource xlink:type="simple" \\
+            xlink:href="/resources/room101" xlink:title="101"/>
+                    </activity>
                   </period>
                   <period id="Blue">
                     <activity group="/groups/003" title="Math"/>
@@ -1650,7 +1689,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
                 </day>
               </teacher>
             </schooltt>
-            """)
+            """).replace('\\\n', '')
         st.loadData(data)
         output = st.toXML()
         self.assertEquals(data, output, "\n" + diff(data, output))

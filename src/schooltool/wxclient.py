@@ -132,7 +132,6 @@ class RollCallInfoDlg(wxDialog):
         wxDialog.__init__(self, parent, -1, title,
                           style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
         self.show_resolved = show_resolved
-        self.CenterOnScreen(wx.wxBOTH)
 
         vsizer = wxBoxSizer(wxVERTICAL)
         hsizer = wxBoxSizer(wxHORIZONTAL)
@@ -175,6 +174,7 @@ class RollCallInfoDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
 
     def OnOk(self, event):
         """Verify that all data is entered before closing the dialog."""
@@ -543,30 +543,48 @@ class SchoolTimetableGridTable(wxPyGridTableBase):
         return len(self.tt.tt[row][col]) == 0
 
     def GetValue(self, row, col):
-        return "\n".join([title for title, path in self.tt.tt[row][col]])
+        rows = []
+        for title, path, resources in self.tt.tt[row][col]:
+            if resources:
+                resource_titles = [rtitle for rtitle, rpath in resources]
+                resource_titles.sort()
+                rows.append("%s (%s)" % (title, ', '.join(resource_titles)))
+            else:
+                rows.append(title)
+        rows.sort()
+        return ",\n".join(rows)
 
     def SetValue(self, row, col, value):
         pass
 
 
-class ActivitySelectionDlg(wxDialog):
-    """Activity selection popup of the school timetable grid"""
+class ResourceSelectionDlg(wxDialog):
+    """Resource selection popup of the school timetable grid"""
 
-    def __init__(self, parent, teacher_title, period_key, choices):
-        title = "%s, %s, %s" % (teacher_title, period_key[0], period_key[1])
+    def __init__(self, parent, activity_title, teacher_title, period_key,
+                 choices):
+        title = "Resource Assignment"
         wxDialog.__init__(self, parent, -1, title,
                           style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
-        self.CenterOnScreen(wx.wxBOTH)
 
         self.choices = list(choices)
         self.choices.sort()
 
         vsizer = wxBoxSizer(wxVERTICAL)
+        static_text = wxStaticText(self, -1,
+                            "%s, %s\nTeacher: %s\nActivity: %s" %
+                            (period_key[0], period_key[1], teacher_title,
+                             activity_title))
+        vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
+
+        static_text = wxStaticText(self, -1, "Resources")
+        vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
+
         # wxLB_EXTENDED would be nicer, but then SetSelection stops working
         # for completely obscure reasons
         self.listbox = wxListBox(self, -1, style=wxLB_MULTIPLE,
                             choices=[title for title, value in self.choices])
-        vsizer.Add(self.listbox, 1, wxEXPAND|wxALL, 8)
+        vsizer.Add(self.listbox, 1, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8)
 
         static_line = wxStaticLine(self, -1)
         vsizer.Add(static_line, 0, wxEXPAND, 0)
@@ -582,6 +600,7 @@ class ActivitySelectionDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
 
     def setSelection(self, selection):
         selected = sets.Set()
@@ -597,19 +616,116 @@ class ActivitySelectionDlg(wxDialog):
         return [self.choices[idx] for idx in self.listbox.GetSelections()]
 
 
+class ActivitySelectionDlg(wxDialog):
+    """Activity selection popup of the school timetable grid"""
+
+    def __init__(self, parent, teacher_title, period_key, choices, resources):
+        title = "Activity Selection"
+        wxDialog.__init__(self, parent, -1, title,
+                          style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
+
+        self.teacher_title = teacher_title
+        self.period_key = period_key
+        self.resources = resources
+        self.choices = [(title, path, []) for title, path in choices]
+        self.choices.sort()
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+        static_text = wxStaticText(self, -1, "%s, %s\nTeacher: %s" %
+                            (period_key[0], period_key[1], teacher_title))
+        vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
+
+        static_text = wxStaticText(self, -1, "Activities")
+        vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
+
+        self.listbox = wxCheckListBox(self, -1,
+                                      choices=[c[0] for c in self.choices])
+        vsizer.Add(self.listbox, 1, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8)
+        EVT_LISTBOX_DCLICK(self, self.listbox.GetId(), self.OnListDClick)
+
+        static_line = wxStaticLine(self, -1)
+        vsizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        resource_btn = wxButton(self, -1, "&Assign Resources")
+        EVT_BUTTON(self, resource_btn.GetId(), self.OnAssignResources)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn.SetDefault()
+        button_bar.Add(resource_btn, 0, 0, 0)
+        button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
+        button_bar.Add(ok_btn, 0, wxLEFT|wxRIGHT, 16)
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
+
+    def OnListDClick(self, event):
+        self.DoAssignResources(event.GetSelection())
+
+    def OnAssignResources(self, event=None):
+        idx = self.listbox.GetSelection()
+        if idx != -1:
+            self.DoAssignResources(idx)
+
+    def DoAssignResources(self, idx):
+        title, path, resources = self.choices[idx]
+        dlg = ResourceSelectionDlg(self, title, self.teacher_title,
+                                   self.period_key, self.resources)
+        dlg.setSelection(resources)
+        if dlg.ShowModal() == wxID_OK:
+            # Important: in-place modification of self.choices
+            resources[:] = dlg.getSelection()
+            resources.sort()
+            resource_titles = ', '.join([r[0] for r in resources])
+            if resource_titles:
+                title += ' (%s)' % resource_titles
+            self.listbox.SetString(idx, title)
+            self.listbox.Check(idx)
+        dlg.Destroy()
+
+    def setSelection(self, selection):
+        selected = {}
+        for title, path, resources in selection:
+            selected[path] = resources
+        for idx, (title, path, resources) in enumerate(self.choices):
+            is_selected = path in selected
+            if is_selected:
+                # Important: in-place modification of self.choices
+                resources[:] = selected[path]
+                resources.sort()
+            resource_titles = ', '.join([r[0] for r in resources])
+            if resource_titles:
+                title += ' (%s)' % resource_titles
+            self.listbox.SetString(idx, title)
+            self.listbox.Check(idx, is_selected)
+
+    def getSelection(self):
+        selection = []
+        for idx, choice in enumerate(self.choices):
+            if self.listbox.IsChecked(idx):
+                selection.append(choice)
+        return selection
+
+
 class SchoolTimetableGrid(wxGrid):
 
-    def __init__(self, parent, tt):
+    def __init__(self, parent, tt, resources):
         wxGrid.__init__(self, parent, -1)
         self.tt = tt
+        self.resources = resources
         self.SetTable(SchoolTimetableGridTable(tt), True)
         # There is no way to auto-size row labels.
         self.SetRowLabelSize(150)
 
         EVT_GRID_EDITOR_SHOWN(self, self.OnEditorShown)
-        EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
+        EVT_GRID_CELL_LEFT_DCLICK(self, self.OnEdit)
 
-    def OnLeftDClick(self, event):
+    def OnEdit(self, event=None):
+        """Open the activity selection dialog"""
         if self.CanEnableCellControl():
             self.EnableCellEditControl()
 
@@ -620,7 +736,7 @@ class SchoolTimetableGrid(wxGrid):
 
         teacher_path, teacher_title, choices = self.tt.teachers[row]
         dlg = ActivitySelectionDlg(self, teacher_title, self.tt.periods[col],
-                                   choices)
+                                   choices, self.resources)
         dlg.setSelection(self.tt.tt[row][col])
         if dlg.ShowModal() == wxID_OK:
             self.tt.tt[row][col] = dlg.getSelection()
@@ -633,30 +749,35 @@ class SchoolTimetableGrid(wxGrid):
 class SchoolTimetableFrame(wxDialog):
     """Window showing a timetable for the whole school."""
 
-    def __init__(self, client, key, tt, parent=None, id=-1):
+    def __init__(self, client, key, tt, resources, parent=None, id=-1):
         title = "School Timetable (%s, %s)" % key
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
-              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxMAXIMIZE_BOX|
+                    wxTHICK_FRAME)
         self.title = title
         self.client = client
         self.key = key
         self.tt = tt
 
         main_sizer = wxBoxSizer(wxVERTICAL)
-        self.grid = grid = SchoolTimetableGrid(self, tt)
+        self.grid = grid = SchoolTimetableGrid(self, tt, resources)
         main_sizer.Add(grid, 1, wxEXPAND|wxALL, 8)
+        self.OnResize()
 
         static_line = wxStaticLine(self, -1)
         main_sizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        resize_btn = wxButton(self, -1, "&Fit cells")
+        resize_btn = wxButton(self, -1, "&Fit Cells")
+        EVT_BUTTON(self, resize_btn.GetId(), self.OnResize)
+        edit_btn = wxButton(self, -1, "&Edit Cell")
+        EVT_BUTTON(self, edit_btn.GetId(), grid.OnEdit)
         ok_btn = wxButton(self, wxID_OK, "OK")
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
         cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
         ok_btn.SetDefault()
-        EVT_BUTTON(self, wxID_OK, self.OnOk)
-        EVT_BUTTON(self, resize_btn.GetId(), self.OnResize)
         button_bar.Add(resize_btn, 0, 0, 0)
+        button_bar.Add(edit_btn, 0, wxLEFT, 16)
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
         button_bar.Add(ok_btn, 0, wxRIGHT|wxLEFT, 16)
         button_bar.Add(cancel_btn, 0, 0, 0)
@@ -1557,7 +1678,16 @@ class MainFrame(wxFrame):
             wxMessageBox("Could not get the school timetable: %s" % e,
                          "School Timetable", wxICON_ERROR|wxOK)
             return
-        window = SchoolTimetableFrame(self.client, key, tt, parent=self)
+
+        try:
+            resources = self.client.getListOfResources()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the list of resources: %s" % e,
+                         "School Timetable", wxICON_ERROR|wxOK)
+            return
+
+        window = SchoolTimetableFrame(self.client, key, tt, resources,
+                                      parent=self)
         window.Show()
 
 
