@@ -53,6 +53,10 @@ class Application(Persistent):
 
     implements(IApplication)
 
+    # Attributes from IOptions
+    new_event_privacy = "public"
+    timetable_privacy = "public"
+
     def __init__(self):
         self.eventService = EventService()
         self.utilityService = UtilityService()

@@ -1950,6 +1950,18 @@ class IAbsenceTrackerFacet(IFacet, IEventConfigurable, IAbsenceTracker):
     pass
 
 
+class IOptions(Interface):
+    """User-selectable options of the system."""
+
+    new_event_privacy = Attribute(
+        """The default value of the privacy attribute for the newly
+        created events.
+        """)
+
+    timetable_privacy = Attribute(
+        """The value of the privacy attribute for the timetable events""")
+
+
 class IApplication(IContainmentRoot, IServiceManager, ITraversable):
     """The application object.
 
