@@ -27,10 +27,11 @@ import logging
 from StringIO import StringIO
 
 from twisted.python.failure import Failure
-from zope.interface import directlyProvides
-from schooltool.browser.tests import RequestStub
-from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup
 from twisted.internet.address import IPv4Address
+from zope.interface import directlyProvides
+
+from schooltool.browser.tests import RequestStub
+from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup, LocationStub
 
 __metaclass__ = type
 
@@ -53,7 +54,9 @@ class TestBrowserRequest(unittest.TestCase):
 
     def createRequest(self):
         from schooltool.browser import BrowserRequest
-        return BrowserRequest(None, True)
+        rq = BrowserRequest(None, True)
+        rq.path = '/whatever'
+        return rq
 
     def createRequestWithStubbedAuth(self, auth_cookie, user, ts):
         from schooltool.interfaces import AuthenticationError
@@ -124,6 +127,22 @@ class TestBrowserRequest(unittest.TestCase):
 
     def test_renderInternalError(self):
         rq = self.createRequest()
+        # Request does this before calling renderInternalError:
+        rq.setResponseCode(500)
+        failure = Failure(AttributeError('foo'))
+        result = rq.renderInternalError(failure)
+        self.assert_(isinstance(result, str))
+        self.assert_(rq.code, 500)
+        self.assertEqual(rq.headers['content-type'],
+                         'text/html; charset=UTF-8')
+
+    def test_renderInternalError_when_logged_in(self):
+        # Regression test for http://issues.schooltool.org/issue165
+        rq = self.createRequest()
+        class UserStub(LocationStub):
+            def listLinks(self, role=None):
+                return []
+        rq.authenticated_user = UserStub('john')
         # Request does this before calling renderInternalError:
         rq.setResponseCode(500)
         failure = Failure(AttributeError('foo'))
@@ -262,6 +281,18 @@ class TestView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           'text/html; charset=UTF-8')
         self.assert_('http://localhost:7001/sublocation' in result)
+
+    def test_redirect_when_logged_in(self):
+        # Regression test for http://issues.schooltool.org/issue165
+        view = self.createView()
+        request = RequestStub()
+        request.authenticated_user = self.person
+        result = view.redirect('http://example.com/', request)
+        self.assertEquals(request.headers['location'], 'http://example.com/')
+        self.assertEquals(request.headers['content-type'],
+                          'text/html; charset=UTF-8')
+        self.assert_('http://example.com/' in result)
+
 
     def test_macros(self):
         view = self.createView()

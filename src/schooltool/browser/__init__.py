@@ -177,6 +177,8 @@ class View(_View):
             port = request.getHost().port
             url = '%s://%s:%s%s' % (scheme, hostname, port, url)
         request.redirect(url)
+        # The template may call view.isManager which needs self.request
+        self.request = request
         return self.redirect_template(request, destination=url, view=self,
                                       context=self.context)
 
@@ -255,8 +257,14 @@ class InternalErrorView(View):
     authorization = PublicAccess
 
     def do_GET(self, request):
-        request.setResponseCode(500)
-        return View.do_GET(self, request)
+        # Normally View.render sets self.request, but we call
+        # InternalErrorView.do_GET directly from renderInternalError
+        self.request = request
+        try:
+            request.setResponseCode(500)
+            return View.do_GET(self, request)
+        finally:
+            self.request = None
 
     def traceback(self):
         import cgi
