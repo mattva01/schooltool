@@ -57,8 +57,6 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
         return self._absences.valueForName(key)
 
     def getCurrentAbsence(self):
-        if self._current_absence and self._current_absence.resolved:
-            self._current_absence = None
         return self._current_absence
 
     def addAbsence(self, comment):
@@ -120,6 +118,8 @@ class Absence(Persistent):
                     raise ValueError("Cannot reopen an absence when another"
                                      " one is not resolved", self, comment)
                 self.person._current_absence = self
+            elif not self.resolved and comment.resolution_change:
+                self.person._current_absence = None
             self.resolved = comment.resolution_change
         if comment.expected_presence_change is not None:
             self.expected_presence = comment.expected_presence_change

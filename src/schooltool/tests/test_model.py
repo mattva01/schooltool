@@ -140,6 +140,8 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         self.assert_(person.getCurrentAbsence() is absence)
         absence.addComment(AbsenceComment(None, "", resolution_change=False))
         self.assert_(person.getCurrentAbsence() is absence)
+        absence4.addComment(AbsenceComment(None, "", resolution_change=True))
+        self.assert_(person.getCurrentAbsence() is absence)
         old_len = len(absence4.comments)
         self.assertRaises(ValueError, absence4.addComment,
                           AbsenceComment(None, "", resolution_change=False,
