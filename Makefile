@@ -47,7 +47,7 @@ runwxclient: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/clients/wxclient.py
 
 sampledata teachers.csv groups.csv pupils.csv:
-	PYTHONPATH=src $(PYTHON) src/schooltool/clients/datagen.py schooltool-m2
+	PYTHONPATH=src $(PYTHON) src/schooltool/clients/datagen.py schooltool-m4
 
 sampleschool: teachers.csv groups.csv pupils.csv
 	PYTHONPATH=src $(PYTHON) runimport.py

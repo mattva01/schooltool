@@ -202,6 +202,24 @@ class TestCSVImporter(unittest.TestCase):
         self.assertEqual(requests, expected, "\n" +
                          diff(pformat(expected), pformat(requests)))
 
+    def test_importPersonInfo(self):
+        from schooltool.clients.csvclient import CSVImporter
+
+        im = CSVImporter()
+
+        requests = im.importPersonInfo('123','Joe Hacker',
+                                       '1978-01-02', 'comment')
+        self.assertEqual(requests, [(
+            '/persons/123/facets/person_info', 'PUT',
+            '<person_info xmlns="http://schooltool.org/ns/model/0.1"'
+            ' xmlns:xlink="http://www.w3.org/1999/xlink">'
+            '<first_name>Joe</first_name>'
+            '<last_name>Hacker</last_name>'
+            '<date_of_birth>1978-01-02</date_of_birth>'
+            '<comment>comment</comment>'
+            '</person_info>'
+            )])
+
     def test_getPersonName(self):
         from schooltool.clients.csvclient import CSVImporter
 
@@ -260,9 +278,9 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root",')
             if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2"')
+                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
             if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1"')
+                return StringIO('"Doc Doc","group1","1968-01-01",""')
             if name == 'resources.csv':
                 return StringIO('"Hall"')
         im.file = file
@@ -301,6 +319,13 @@ class TestCSVImporter(unittest.TestCase):
                      membership_pattern % "/persons/quux"),
                     ('POST', '/groups/group1/relationships',
                      teaching_pattern % "/persons/quux"),
+                    ('PUT',
+                     '/persons/quux/facets/person_info',
+                     '<person_info xmlns="http://schooltool.org/ns/model/0.1" '
+                     'xmlns:xlink="http://www.w3.org/1999/xlink">'
+                     '<first_name>Doc</first_name><last_name>Doc</last_name>'
+                     '<date_of_birth>1968-01-01</date_of_birth>'
+                     '<comment></comment></person_info>'),
                     ('POST', '/persons',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Jay Hacker"/>'),
@@ -310,6 +335,14 @@ class TestCSVImporter(unittest.TestCase):
                      membership_pattern % "/persons/quux"),
                     ('POST', '/groups/group2/relationships',
                      membership_pattern % "/persons/quux"),
+                    ('PUT',
+                     '/persons/quux/facets/person_info',
+                     '<person_info xmlns="http://schooltool.org/ns/model/0.1"'
+                     ' xmlns:xlink="http://www.w3.org/1999/xlink">'
+                     '<first_name>Jay</first_name>'
+                     '<last_name>Hacker</last_name>'
+                     '<date_of_birth>1998-01-01</date_of_birth>'
+                     '<comment></comment></person_info>'),
                     ('POST', '/resources',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Hall"/>')]
@@ -327,9 +360,9 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root"')
             if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2"')
+                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
             if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1"')
+                return StringIO('"Doc Doc","group1","1998-01-01",""')
             if name == 'resources.csv':
                 return StringIO('"Hall"')
         im.file = file
@@ -347,9 +380,10 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root",')
             if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","what is this"')
+                return StringIO('"Jay Hacker","group1 group2","what is this"'
+                                ',"1998-01-01",""')
             if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1"')
+                return StringIO('"Doc Doc","group1","1998-01-01",""')
             if name == 'resources.csv':
                 return StringIO('"Hall"')
         im.file = file
@@ -359,7 +393,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root",')
             if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2"')
+                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
             if name == 'teachers.csv':
                 return StringIO('kria kria')
             if name == 'resources.csv':
@@ -371,7 +405,7 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root",')
             if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2"')
+                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
             if name == 'teachers.csv':
                 return StringIO('1,"2')
             if name == 'resources.csv':
@@ -383,9 +417,9 @@ class TestCSVImporter(unittest.TestCase):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root",')
             if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2"')
+                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
             if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1"')
+                return StringIO('"Doc Doc","group1","1998-01-01",""')
             if name == 'resources.csv':
                 return StringIO('"Hall","Schmall"')
         im.file = file

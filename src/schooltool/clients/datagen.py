@@ -29,6 +29,7 @@ $Id$
 import random
 import sys
 import sets
+import datetime
 
 names = ('David', 'Deb', 'Sue', 'Martin', 'Denise', 'Vicki', 'Lorne',
          'Jeff', 'Michael', 'Norma', 'Nicola', 'Wendy', 'Lesley',
@@ -54,10 +55,19 @@ subjects = {
     'math': 'Mathematics',
     'biol': 'Biology'
     }
-
+pupil_age_end = 1994        # Which year the youngest pupils will be
+teacher_age_start = 1950    # Oldest teachers
+teacher_age_end = 1980      # Youngest teachers
 
 def random_name():
     return "%s %s" % (random.choice(names), random.choice(surnames))
+
+
+def random_date(start, end):
+    """Generates a random date in the given date range (inclusive)"""
+    len = end - start
+    days = len.days
+    return start + datetime.timedelta(days=random.randint(0, days))
 
 
 def createGroups():
@@ -86,7 +96,7 @@ def createPupils(nr=nr_pupils):
     """Create a randomly generated pupils.csv in the current directory.
 
     Format of the file:
-      pupil_title, groups
+      pupil_title, groups, birth date, comment
     where
       groups is a space separated list of groups this pupils is a member of
     """
@@ -98,6 +108,8 @@ def createPupils(nr=nr_pupils):
         subject1 = random.choice(groups)
         groups.remove(subject1)
         subject2 = random.choice(groups)
+        birthday = random_date(datetime.date(pupil_age_end - year + 1, 1, 1),
+                               datetime.date(pupil_age_end - year + 2, 1, 1))
 
         for counter in range(20):
             name = random_name()
@@ -105,8 +117,8 @@ def createPupils(nr=nr_pupils):
                 break
 
         names.add(name)
-        print >> f, '"%s","%s"' % (name, " ".join(("year%d" % year,
-                                                   subject1, subject2)))
+        groups_str = " ".join(("year%d" % year, subject1, subject2))
+        print >> f, '"%s","%s","%s",""' % (name, groups_str, birthday)
     f.close()
 
 
@@ -114,7 +126,7 @@ def createTeachers():
     """Create a randomly generated teachers.csv in the current directory.
 
     Format of the file:
-      title, groups
+      title, groups, birthday, comment
     where
       groups is a space separated list of groups this teacher teaches
     """
@@ -137,7 +149,10 @@ def createTeachers():
             teacher.append("%s%d" % (dept, year))
 
     for groups in teachers:
-        print >> f, '"%s","%s"' % (random_name(),  " ".join(groups))
+        birthday = random_date(datetime.date(teacher_age_start, 1, 1),
+                               datetime.date(teacher_age_end, 1, 1))
+        print >> f, '"%s","%s","%s",""' % (random_name(),  " ".join(groups),
+                                           birthday)
     f.close()
 
 

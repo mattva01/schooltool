@@ -38,11 +38,19 @@ pupils.csv contains the lines of the following format:
 
   title --  the real name of a pupil.
   groups -- a space-separated list of groups this pupil is a member in.
+  birthday -- YYYY-MM-DD  format
+  comment -- a free form string
 
 teachers.csv has the following columns:
 
   title -- the real name of a teacher.
   groups -- a space-separated list of groups this teacher teaches to.
+  birthday -- YYYY-MM-DD  format
+  comment -- a free form string
+
+resources.csv has just a single column:
+
+  title -- the human readable name of the resource
 
 Pupils are implicitly added to the pupils group, teachers are
 implicitly added to the teachers group.
@@ -165,6 +173,18 @@ class CSVImporter:
             result.append(self.teaching(name, group))
         return result
 
+    def importPersonInfo(self, name, title, dob, comment):
+        """Add the Person Info to this person"""
+        first_name, last_name = title.split(None, 1)
+        return [('/persons/%s/facets/person_info' % name, 'PUT',
+                 '<person_info xmlns="http://schooltool.org/ns/model/0.1"'
+                 ' xmlns:xlink="http://www.w3.org/1999/xlink">'
+                 '<first_name>%s</first_name>'
+                 '<last_name>%s</last_name>'
+                 '<date_of_birth>%s</date_of_birth>'
+                 '<comment>%s</comment>'
+                 '</person_info>' % (first_name, last_name, dob, comment))]
+
     def getPersonName(self, response):
         loc = response.getheader('Location')
         if loc is None:
@@ -227,17 +247,21 @@ class CSVImporter:
             line = 1
             file = "teachers.csv"
             for row in csv.reader(self.file(file)):
-                if len(row) != 2:
+                if len(row) != 4:
                     raise DataError("Error in %s line %d:"
-                                    " expected 2 columns, got %d" %
+                                    " expected 4 columns, got %d" %
                                     (file, line, len(row)))
-                title, groups = row
+                title, groups, dob, comment = row
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
                     name = self.getPersonName(response)
 
                 for resource, method, body in self.importTeacher(name, groups):
                     response = self.process(method, resource, body=body)
+
+                for path, meth, body in self.importPersonInfo(name, title,
+                                                              dob, comment):
+                    response = self.process(meth, path, body=body)
                 line += 1
 
             if self.verbose:
@@ -247,17 +271,21 @@ class CSVImporter:
             line = 1
             file = "pupils.csv"
             for row in csv.reader(self.file(file)):
-                if len(row) != 2:
+                if len(row) != 4:
                     raise DataError("Error in %s line %d:"
-                                    " expected 2 columns, got %d" %
+                                    " expected 4 columns, got %d" %
                                     (file, line, len(row)))
-                title, groups = row
+                title, groups, dob, comment = row
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
                     name = self.getPersonName(response)
 
                 for resource, method, body in self.importPupil(name, groups):
                     self.process(method, resource, body=body)
+
+                for path, meth, body in self.importPersonInfo(name, title,
+                                                              dob, comment):
+                    response = self.process(meth, path, body=body)
                 line += 1
 
             if self.verbose:
