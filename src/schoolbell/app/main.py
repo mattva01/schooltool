@@ -48,7 +48,7 @@ from schoolbell.app.app import SchoolBellApplication, Person
 from schoolbell.app.security import setUpLocalAuth
 
 
-ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__), 'schema.xml')
+ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__), 'config-schema.xml')
 
 
 usage_message = """
@@ -143,8 +143,6 @@ def load_options(argv):
         if getattr(options.config, setting):
             print >> sys.stderr, ("%s: warning: the `%s` option is"
                                   " obsolete." % (progname, setting))
-    # TODO: log
-
     return options
 
 
