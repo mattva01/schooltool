@@ -421,7 +421,6 @@ class LoginView(BrowserView):
     """A login view"""
 
     error = None
-    title = "wtf view"
 
     def __call__(self):
         self.update()
