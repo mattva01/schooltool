@@ -1,4 +1,4 @@
-Release Notes - SchoolTool/SchoolBell 0.8
+Release Notes - SchoolTool/SchoolBell 0.9
 =========================================
 
 
@@ -8,169 +8,95 @@ Upgrade Issues
 Database Incompatibilities
 --------------------------
 
-The SchoolTool database in 0.8 is incompatible with earlier databases and the
+The SchoolTool database in 0.9 is incompatible with earlier databases and the
 server will not be able to start with an old database. Currently there is no
 way to upgrade a database, so the only possibility is to delete the old one and
 re-create it.
 
-Additionally it also may not be possible to upgrade or export a 0.8 database
+Additionally it also may not be possible to upgrade or export a 0.9 database
 to later versions.
 
 Bear in mind that this is still an early stage of development.
 
 
-New Features in 0.8
+New Features in 0.9
 ~~~~~~~~~~~~~~~~~~~
 
-Community Contributed Features
-------------------------------
+The new features in this release are primarily from the schoolbell User
+Interface bounty. The full text of this bounty can be found at
+http://www.schooltool.org/bounties/ui/SchoolBell09.
 
-* Server Side SSL support and suggestions on SSL Certificate generation.
-  - Matthew Good
+Anonymous User
+--------------
 
-* TCP wrapper support for the server. - Eugene Coetzee
+When an anonymous user navigates to the root of the site, they should see a
+calendar for the day containing public events from all the calendars that have
+been selected by the administrator. They'll also be able to use the legend to
+view additional public calendars.
 
-* Debconf configuration for Debian packages including SSL certificate
-  generation and server ports. - Brian Sutherland
+There won't be any navigational aids to view person/group/resource calendars,
+but if you navigate there by entering the right URL you'll see a similar
+calendar, showing public events for that person/group/resource.
 
-Second SchoolBell Milestone (Programmers of Vilnius)
-----------------------------------------------------
+Regular User Point of View
+--------------------------
 
-Support for a calendering server for groups and organizations to coordinate
-schedules and timetables.
+SchoolBell should give the user the option of getting a cookie that will
+automatically log them in from that browser.
 
-Infrastructure
-++++++++++++++
+When an authenticated user logs in to the root of the site, they should be
+redirected to their calendar.
 
-* Refactor URIs to be normal objects, not interfaces. They should be available
-  to the client over a restive interface.
+For each hour (in the daily or weekly view) or each day (in the monthly view)
+there is a link to create an event which will pop up a form with the relevant
+day and time.
 
-Basic functionality
-+++++++++++++++++++
+For each hour there is also a "book" icon. The user clicks "book" at tomorrow
+9am he will get a simplified version of busysearch with the start time
+"Tomorrow 9am selected." He picks from all available resources and sets the
+duration. He gets back a list of everything available at that time for that
+duration. The resources which he is looking at are preselected.
 
-* "Add a sub-group" will be an option of each group.
+Changes to the legend (calendars added or removed from the list, turned visible
+or invisible) those changes should be persistent.
 
-* When creating a new group, membership in the group is limited to members of
-  its immediate parent(s). This restriction can be removed
+Each event that the user can manage should should have a link which pops up an
+edit window for the event.
 
-* The ability do delete a person, group, or resource, and break all existing
-  relationships, including resource bookings.
+Manager Point of View
+---------------------
 
-* The system should provide lists of all persons, groups and resources.
+When a user logs in as a manager, they'll still see the root calendar, which
+they'll be able to edit, and also a link to the admin page, similar to the
+current one, where they can:
 
-* When creating a person with a name that already exists, the user should
-  receive a warning.
+    * Set up the default page -- which calendars should be overlaid on it by
+      default.
 
-* Resource calendars should be accessible and editable through the web, and
-  their ACLs should be editable by manager. The manager specify who can book
-  the resource, who can cancel bookings, and who can view the resource's
-  calendar.
+    * Add users, one at a time via form or via CSV import. They should be able
+      to add users to groups when they create the users.
 
-Calendaring functionality
-+++++++++++++++++++++++++
+    * Add resources, via a text box (just the titles, one per row), in a form
+      one at a time (with groups and specifying id and title) or via CSV.
 
-* Handling recurring events in the calendar. Each event will support the full
-  iCalendar specs recurring event model. iCal views will support retrieving and
-  creating recurring events, so will web views.
+    * Add groups, via text box, form or CSV, as for resources. I don't think we
+      need to allow members to be added at the time of creation. Perhaps that
+      could be a second step. All groups will just be subgroups of the root
+      group. All the UI elements related to the group hierarchy should be
+      removed.
 
-* A user can choose groups whose calendars will be merged onto his web calendar
-  view. This is intended a device for communication between group members.
+    * View index pages for persons/resources/groups
 
-* The manager can set the global policy whether publicly available personal
-  calendars will be displayed as free/busy calendars or if all the events will
-  be visible.
+    * The info pages for persons/resources/groups should be able to stay the
+      same, more or less.
 
-* A user can select, on per-event basis, whether the event is publicly
-  available, is visible as a "busy" block, or is not visible to others at all.
+    * Logs (as is)
 
-* This should be chosen from a list in the add/edit form for the event. There
-  should also be visible feed back on the calendar view indicating the status.
+    * Delete (as is)
 
-Timetables
-++++++++++
+    * Reset (as is)
 
-* A view for entering a school timetable
-
-* A simple HTML UI for entering a timetable for the whole school prepared by
-  some other means.
-
-* A web page that lets the user to set add a person to the appropriate groups.
-  The page will contain a form with a row for each period for each day in the
-  timetable, which would contain a dropdown box of groups meeting on that
-  period. Choosing certain groups and submitting a form will result in a person
-  being added to those groups as a member, and being removed from the groups
-  which were in the form but were not selected, and the person were a member
-  of. Conflicts will be represented in the form if they occur, but the user
-  will not be able to intentionally create them in this form: if a person is a
-  member in the groups that have an activity in the same time slot, two
-  dropdown boxes are displayed, but either of them can be set to 'None'.
-
-* A manager needs to be able to edit and cancel individual occurrences of
-  events in the timetable.
-
-* When scheduling a resource, the system should by default assume that you want
-  to book the resource for a block of time that corresponds to a period (or
-  several periods) as defined in the main school's timetable. For example,
-  teachers will be thinking, "I need the computer lab first period", and not "I
-  need the computer lab 9:03 - 9:51".
-
-Events
-++++++
-
-* A resource's event has to have a property stipulating who is responsible for
-  the resource during the scheduled block of time. A person can be responsible
-  for a resource.
-
-Student Information, Address and Relationship Tracking - (Etria)
-----------------------------------------------------------------
-
-* Users will be able to attach personal notes to application objects via the
-  Atom publishing REST API.
-
-* The notes will be viewable through the web interface ONLY by the author of
-  the note.
-
-* The comments should be integrated into the author's view of the object.
-
-* In order to make SchoolTool applicable across diverse school districts and
-  educational systems, the personal information stored for each person
-  (Student, Teacher, Administrator, Staff, Parents, etc.) has to be fully
-  flexible. Starting from the example of the SIF data standard we see how
-  complex this data can be, rather than shoe horn every school into the SIF
-  model, SchoolTool will provide layers of extensibility for what information
-  it stores about people. In order to do this effectively Schooltool
-  administrators will be able to create custom schema through the web for
-  storing Person information.
-
-* Personal info facets will be viewable and editable through the
-  browser interface. The separate facets should be displayed on the
-  main page for the person and a page for each facet. Likewise there should be
-  a single form where all the info facets can be edited as well as separate
-  form for each facet.
-
-* Client applications should be able to fetch the data schemas from an object
-  via the REST API and PUT data into the personal info facet.
-
-* The user needs to be able to add a residence for a person. The residences
-  will be application objects with address facets. As above, this should appear
-  more or less seamless on the main page for a person, but the residence
-  objects will also have their own info pages.
-
-* Catching duplicate addresses is extremely important, so when an address is
-  entered the system should first check for similar addresses and return any
-  possible matches. Users should also be able to start by searching for
-  existing residences.
-
-* When people move, the old residence object is retained (we'll clean 'em up
-  later, maybe) and a new one is created. If multiple people live at the same
-  residence, the system will ask if the user wants to move all of them.
-
-* When creating/editing a student, there should be a create/edit
-  parent/guardian link. Guardians are regular person objects, connected by a
-  link.
-
-* The main view for a person should include links to their relatives.
-
-* Both an example extended schema product and documentation to create a custom
-  schema should be written. A default personal info schema will also be created
-  for inclusion in the standard SchoolTool distribution
+    * Options. As is, plus an option to start or stop using the REST interface
+      (restart required?). REST will be off by default. Also, the iCal
+      representations of calendars should be made available via the browser
+      interface.
