@@ -26,11 +26,12 @@ import datetime
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
-from schooltool.browser.auth import PublicAccess
+from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import globalTicketService
 from schooltool.browser.model import PersonView, GroupView
 from schooltool.interfaces import IApplication
 from schooltool.interfaces import IApplicationObjectContainer
+from schooltool.interfaces import IPerson
 from schooltool.interfaces import AuthenticationError
 
 __metaclass__ = type
@@ -45,6 +46,15 @@ class RootView(View):
 
     Presents a login page.  Redirects to a person's information page after
     a successful login.
+
+    Sublocations found at / are
+
+        schooltool.css      the stylesheet
+        logout              logout page (accessing it logs you out)
+        start               a person's start page
+        persons/id          person information pages
+        groups/id           group information pages
+
     """
 
     __used_for__ = IApplication
@@ -72,7 +82,7 @@ class RootView(View):
             if 'url' in request.args:
                 url = request.args['url'][0]
             else:
-                url = absoluteURL(request, user)
+                url = '/start'
             return self.redirect(url, request)
 
     def _traverse(self, name, request):
@@ -84,10 +94,17 @@ class RootView(View):
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logout':
             return LogoutView(self.context)
+        elif name == 'start':
+            return StartView(None)
         raise KeyError(name)
 
 
 class LogoutView(View):
+    """View for /logout.
+
+    Accessing this URL causes the authenticated user to be logged out and
+    redirected back to the login page.
+    """
 
     __used_for__ = IApplication
 
@@ -99,7 +116,29 @@ class LogoutView(View):
         return self.redirect('/', request)
 
 
+class StartView(View):
+    """Start page (/start).
+
+    This is where the user is redirected after logging in.  The start page
+    displays common actions.
+    """
+
+    __used_for__ = IPerson
+
+    authorization = AuthenticatedAccess
+
+    template = Template("www/start.pt")
+
+
 class PersonContainerView(View):
+    """View for /persons.
+
+    Accessing this location returns a 404 Not Found response.
+
+    Traversing /persons with a person's id returns the person information page
+    for that person.
+    """
+
 
     __used_for__ = IApplicationObjectContainer
 
@@ -112,6 +151,13 @@ class PersonContainerView(View):
 
 
 class GroupContainerView(View):
+    """View for /groups.
+
+    Accessing this location returns a 404 Not Found response.
+
+    Traversing /groups with a group's id returns the group information page
+    for that group.
+    """
 
     __used_for__ = IApplicationObjectContainer
 

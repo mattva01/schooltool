@@ -104,8 +104,8 @@ class TestLogin(unittest.TestCase):
 
         browser.post('http://localhost:8814/',
                      {'username': 'manager', 'password': 'schooltool'})
-        self.assertEquals(browser.url, 'http://localhost:8814/persons/manager')
-        self.assert_('Person info' in browser.content)
+        self.assertEquals(browser.url, 'http://localhost:8814/start')
+        self.assert_('Start' in browser.content)
 
 
 class TestPersonEdit(unittest.TestCase):

@@ -25,14 +25,17 @@ from schooltool.views.tests import RequestStub, setPath     # reexport
 
 class TraversalTestMixin:
 
-    def assertTraverses(self, view, name, viewclass, context=None):
+    def assertTraverses(self, view, name, viewclass, context=None,
+                        request=None):
         """Assert that traversal returns the appropriate view.
 
         Checks that view._traverse(name, request) returns an instance of
         viewclass, and that the context attribute of the new view is
         identical to context.
         """
-        destination = view._traverse(name, RequestStub())
+        if request is None:
+            request = RequestStub()
+        destination = view._traverse(name, request)
         self.assert_(isinstance(destination, viewclass))
         self.assert_(destination.context is context)
         return destination

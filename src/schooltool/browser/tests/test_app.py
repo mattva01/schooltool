@@ -103,7 +103,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         result = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/persons/manager')
+                          'http://localhost:7001/start')
         ticket = request._outgoing_cookies['auth']
         username, password = globalTicketService.verifyTicket(ticket)
         self.assertEquals(username, 'manager')
@@ -142,6 +142,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def test_traversal(self):
         from schooltool.browser import StaticFile
         from schooltool.browser.app import LogoutView
+        from schooltool.browser.app import StartView
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
         view = self.createView()
@@ -152,6 +153,9 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
+        user = object()
+        request = RequestStub(authenticated_user=user)
+        self.assertTraverses(view, 'start', StartView, None, request=request)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
@@ -183,6 +187,23 @@ class TestLogoutView(unittest.TestCase):
                           'http://localhost:7001/')
         self.assertRaises(AuthenticationError,
                           globalTicketService.verifyTicket, ticket)
+
+
+class TestStartView(unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import StartView
+        return StartView(None)
+
+    def test(self):
+        from schooltool.model import Person
+        person = Person()
+        view = self.createView()
+        request = RequestStub(authenticated_user=person)
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assertEquals(request.code, 200)
 
 
 class TestPersonContainerView(unittest.TestCase, TraversalTestMixin):
@@ -231,6 +252,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestLogoutView))
+    suite.addTest(unittest.makeSuite(TestStartView))
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     return suite
