@@ -613,6 +613,46 @@ class TestTimetable(unittest.TestCase):
                           ("Th", None), ("Fr", None)])
 
 
+    def test_update(self):
+        from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+
+        days = ('A', 'B')
+        periods = ('Green', 'Blue')
+        tt = Timetable(days)
+        tt["A"] = TimetableDay(periods)
+        tt["B"] = TimetableDay(periods)
+        english = TimetableActivity("English")
+        math = TimetableActivity("Math")
+        bio = TimetableActivity("Biology")
+        tt["A"].add("Green", english)
+        tt["A"].add("Blue", math)
+        tt["B"].add("Green", bio)
+
+        tt2 = Timetable(days)
+        tt2["A"] = TimetableDay(periods)
+        tt2["B"] = TimetableDay(periods)
+        french = TimetableActivity("French")
+        math2 = TimetableActivity("Math 2")
+        geo = TimetableActivity("Geography")
+        tt2["A"].add("Green", french)
+        tt2["A"].add("Blue", math2)
+        tt2["B"].add("Blue", geo)
+
+        tt.update(tt2)
+
+        items = [(p, Set(i)) for p, i in tt["A"].items()]
+        self.assertEqual(items, [("Green", Set([english, french])),
+                                 ("Blue", Set([math, math2]))])
+
+        items = [(p, Set(i)) for p, i in tt["B"].items()]
+        self.assertEqual(items, [("Green", Set([bio])),
+                                 ("Blue", Set([geo]))])
+
+        tt3 = Timetable(("A", ))
+        tt3["A"] = TimetableDay(periods)
+        self.assertRaises(ValueError, tt.update, tt3)
+
+
 class TestTimetableDay(unittest.TestCase):
 
     def test_interface(self):

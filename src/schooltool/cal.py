@@ -620,6 +620,19 @@ class Timetable(Persistent):
             raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
         self.days[key] = value
 
+    def update(self, other):
+        # XXX Right now we're trusting the user that the periods of
+        # XXX the timetable days are compatible.  Maybe that'll be enough?
+
+        if self.day_ids != other.day_ids:
+            raise ValueError("Cannot update -- timetables have different"
+                             " sets of days: %r and %r" % (self.day_ids,
+                                                           other.day_ids))
+        for day_id in other.keys():
+            for period, activities in other[day_id].items():
+                for activity in activities:
+                    self[day_id].add(period, activity)
+
 
 class TimetableDay(Persistent):
 
@@ -666,6 +679,9 @@ class TimetableActivity:
 
     def __init__(self, title=None):
         self.title = title
+
+    def __repr__(self):
+        return "<TimetableActivity %s>" % repr(self.title)
 
 
 class SchooldayPeriod:

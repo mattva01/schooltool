@@ -1072,6 +1072,10 @@ class ITimetableWrite(Interface):
         Throws a ValueError if the key is not a day id.
         """
 
+    def update(timetable):
+        """Add all the events in the timetable passed to self, thus
+        producing a combined template.
+        """
 
 class ITimetableDay(Interface):
     """A model of a day with a mapping of periods to ITimetableActivities"""
@@ -1113,6 +1117,7 @@ class ITimetableDayWrite(Interface):
         """Remove a certain activity from a set of activities planned
         for a given period.
         """
+
 
 class ITimetableActivity(Interface):
     """An event in a timetable.
