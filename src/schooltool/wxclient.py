@@ -32,6 +32,8 @@ the Free Software Foundation; either version 2 of the License, or
 """
 
 import sets
+import libxml2
+import threading
 from wxPython.wx import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
 from guiclient import SchoolToolClient, SchoolToolError, Unchanged
@@ -417,6 +419,7 @@ class MainFrame(wxFrame):
         """Create the main application window."""
         wxFrame.__init__(self, parent, id, title, size=wxSize(500, 400))
         self.client = client
+        self.refresh_lock = threading.Lock()
         self.CreateStatusBar()
 
         # Menu bar
@@ -580,11 +583,15 @@ class MainFrame(wxFrame):
 
         # Clear lists and see if a group is selected
         self.personListData = []
+        self.personListCtrl.Freeze()
         self.personListCtrl.DeleteAllItems()
         self.relationshipListData = []
+        self.relationshipListCtrl.Freeze()
         self.relationshipListCtrl.DeleteAllItems()
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
+            self.personListCtrl.Thaw()
+            self.relationshipListCtrl.Thaw()
             return
         group_id = self.groupTreeCtrl.GetPyData(item)
 
@@ -593,6 +600,8 @@ class MainFrame(wxFrame):
             info = self.client.getGroupInfo(group_id)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
+            self.personListCtrl.Thaw()
+            self.relationshipListCtrl.Thaw()
             return
         self.SetStatusText(self.client.status)
         self.personListData = info.members
@@ -604,6 +613,7 @@ class MainFrame(wxFrame):
             return cmp(self.personListData[x], self.personListData[y])
 
         self.personListCtrl.SortItems(compare)
+        self.personListCtrl.Thaw()
 
         # Fill in group relationship list
         try:
@@ -611,6 +621,7 @@ class MainFrame(wxFrame):
                                                                     group_id)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
+            self.relationshipListCtrl.Thaw()
             return
         self.SetStatusText(self.client.status)
         self.relationshipListData.sort()
@@ -620,6 +631,7 @@ class MainFrame(wxFrame):
             self.relationshipListCtrl.SetItemData(idx, idx)
             self.relationshipListCtrl.SetStringItem(idx, 1, role)
             self.relationshipListCtrl.SetStringItem(idx, 2, arcrole)
+        self.relationshipListCtrl.Thaw()
 
     def DoTreeRightDown(self, event):
         """Select the group under mouse cursor.
@@ -665,12 +677,18 @@ class MainFrame(wxFrame):
 
         Accessible via Alt+R, from View|Refresh and from the group tree
         popup menu.
-
-        XXX there are reentrancy problems -- hold down Alt-R and watch.
-            it looks like wxWindows can call DoRefresh while another
-            "thread" is still inside DoRefresh
         """
 
+        # If the user holds down Alt+R, wxWindows tends to call DoRefresh
+        # before the previous call finishes, thus causing reentrancy problems
+        if not self.refresh_lock.acquire(False):
+            return
+        try:
+            self._refresh()
+        finally:
+            self.refresh_lock.release()
+
+    def _refresh(self):
         # Get the tree from the server
         try:
             group_tree = self.client.getGroupTree()
@@ -720,7 +738,6 @@ class MainFrame(wxFrame):
             self.groupTreeCtrl.SetPyData(item, href)
             if href == old_selection and selected_item is None:
                 selected_item = item
-                self.groupTreeCtrl.SelectItem(item)
             stack.append((item, href))
         while stack:
             last = stack.pop()[0]
@@ -730,6 +747,7 @@ class MainFrame(wxFrame):
             self.groupTreeCtrl.Unselect()
             self.DoSelectGroup(None)
         else:
+            self.groupTreeCtrl.SelectItem(selected_item)
             self.groupTreeCtrl.EnsureVisible(selected_item)
         self.groupTreeCtrl.Thaw()
 
@@ -814,13 +832,13 @@ class SchoolToolApp(wxApp):
 
 
 def main():
+    # Do not output XML parsing errors to the terminal
+    libxml2.registerErrorHandler(lambda ctx, error: None, None)
     wxInitAllImageHandlers()
     client = SchoolToolClient()
     app = SchoolToolApp(client)
     app.MainLoop()
 
-
-# XXX libxml2 errors are noisy on the stderr, should register an error handler
 
 if __name__ == '__main__':
     main()
