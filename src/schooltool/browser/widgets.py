@@ -53,6 +53,8 @@ class IWidget(Interface):
 
     unit = Attribute("Text displayed after the widget")
 
+    tabindex = Attribute("Index in tab order")
+
     # Widget state
 
     raw_value = Attribute("Raw field value extracted from the request")
@@ -192,7 +194,7 @@ class Widget:
     css_class = None
 
     def __init__(self, name, label, parser=None, validator=None,
-                 formatter=None, unit=None, value=None):
+                 formatter=None, unit=None, value=None, tabindex=None):
         if parser is None:
             parser = defaultParser
         if validator is None:
@@ -202,6 +204,7 @@ class Widget:
         self.name = name
         self.label = label
         self.unit = unit
+        self.tabindex = tabindex
         self.parser = parser
         self.validator = validator
         self.formatter = formatter
@@ -279,6 +282,13 @@ class Widget:
         else:
             return ''
 
+    def _tabindex_html(self):
+        """Helper for subclasses."""
+        if self.tabindex:
+            return ' tabindex="%d"' % self.tabindex
+        else:
+            return ''
+
 
 class TextWidget(Widget):
     """Text field widget."""
@@ -291,7 +301,7 @@ class TextWidget(Widget):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <input%(css_class)s type="text" name="%(name)s"'
-                        ' id="%(name)s" value="%(value)s" />\n'
+                        ' id="%(name)s"%(tabindex)s value="%(value)s" />\n'
                 '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
@@ -300,11 +310,15 @@ class TextWidget(Widget):
                             'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or '', True),
                             'unit': self._unit_html(),
+                            'tabindex': self._tabindex_html(),
                             'error': self._error_html()})
 
 
 class TextAreaWidget(Widget):
-    """Text area widget."""
+    """Text area widget.
+
+    Note that TextAreaWidget ignores its 'unit' attribute.
+    """
 
     implements(IWidget)
 
@@ -314,13 +328,14 @@ class TextAreaWidget(Widget):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <textarea%(css_class)s name="%(name)s"'
-                        ' id="%(name)s">%(value)s</textarea>\n'
+                        ' id="%(name)s"%(tabindex)s>%(value)s</textarea>\n'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
                             'label': cgi.escape(self.label, True),
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or ''),
+                            'tabindex': self._tabindex_html(),
                             'error': self._error_html()})
 
 
@@ -359,14 +374,18 @@ class SelectionWidget(Widget):
                                            or '')})
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
-                '  <select%(css_class)s name="%(name)s" id="%(name)s">\n'
+                '  <select%(css_class)s name="%(name)s"'
+                         ' id="%(name)s"%(tabindex)s>\n'
                 '%(options)s'
                 '  </select>\n'
+                '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
                             'label': cgi.escape(self.label, True),
+                            'tabindex': self._tabindex_html(),
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'options': ''.join(options),
+                            'unit': self._unit_html(),
                             'error': self._error_html()})
 

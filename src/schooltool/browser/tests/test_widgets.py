@@ -153,6 +153,14 @@ class TestWidget(unittest.TestCase):
         self.assertEquals(widget._unit_html(),
                           '<span class="unit">&amp;</span>\n')
 
+    def test_tabindex_html(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label')
+        widget.tabindex = None
+        self.assertEquals(widget._tabindex_html(), '')
+        widget.tabindex = 42
+        self.assertEquals(widget._tabindex_html(), ' tabindex="42"')
+
 
 class TestWidgetWithConverters(unittest.TestCase):
 
@@ -254,14 +262,16 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEqualsXML(widget().encode('UTF-8'),
                              expected.encode('UTF-8'))
 
-    def test_call_with_unit(self):
+    def test_call_with_everything(self):
         widget = self.createWidget(label="Length", unit="mm, > 0")
         widget.error = "Error"
+        widget.css_class = "extra"
+        widget.tabindex = 16
         expected = u"""
             <div class="row row_error">
               <label for="field">Length</label>
-              <input class="text" type="text" name="field" id="field"
-                     value="" />
+              <input class="extra" type="text" name="field" id="field"
+                     tabindex="16" value="" />
               <span class="unit">mm, &gt; 0</span>
               <div class="error">Error</div>
             </div>
@@ -295,13 +305,16 @@ class TestTextAreaWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEqualsXML(widget().encode('UTF-8'),
                              expected.encode('UTF-8'))
 
-    def test_call_with_error(self):
+    def test_call_with_everything(self):
         widget = self.createWidget()
         widget.error = u"An error! \u2639"
+        widget.css_class = "extra"
+        widget.tabindex = 12
         expected = u"""
             <div class="row row_error">
               <label for="field">Label</label>
-              <textarea class="text" name="field" id="field"></textarea>
+              <textarea class="extra" name="field" id="field" tabindex="12">
+              </textarea>
               <div class="error">An error! \u2639</div>
             </div>
             """
@@ -334,16 +347,20 @@ class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
             """
         self.assertEqualsXML(widget(), expected)
 
-    def test_call_with_error(self):
+    def test_call_with_everything(self):
         widget = self.createWidget()
         widget.error = u"An error!"
+        widget.unit = u"(blah blah blah)"
+        widget.css_class = u"extra"
+        widget.tabindex = 11
         expected = """
             <div class="row row_error">
               <label for="field">Label</label>
-              <select name="field" id="field">
+              <select class="extra" name="field" id="field" tabindex="11">
                 <option value="a">Aa</option>
                 <option value="b">Bb</option>
               </select>
+              <span class="unit">(blah blah blah)</span>
               <div class="error">An error!</div>
             </div>
             """
