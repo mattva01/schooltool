@@ -53,7 +53,7 @@ class TestApplicationLogView(unittest.TestCase):
         self.assertEquals(self.request.code, 200)
         self.assertEquals(self.request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(result, 'y00 h4v3 b33n 0wn3d')
+        self.assertEquals(result, 'y00 h4v3 b33n 0wn3d\n')
 
         self.request.site.applog_path = None
         result = self.view.render(self.request)
@@ -68,7 +68,7 @@ class TestApplicationLogView(unittest.TestCase):
         self.assertEquals(self.request.code, 200)
         self.assertEquals(self.request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(result, 'fit\nbit\nkite')
+        self.assertEquals(result, 'fit\nbit\nkite\n')
 
     def testFilterUnicode(self):
         import schooltool.common
@@ -96,21 +96,6 @@ class TestApplicationLogView(unittest.TestCase):
         self.assertEquals(self.request.headers['x-page'], "3")
         self.assertEquals(self.request.headers['x-total-pages'], "3")
         self.assertEquals(result, 'kite\n')
-
-    def test_getPageInRange(self):
-        self.assertEquals(self.view.getPageInRange(1, 10, 100), (1, 10))
-        self.assertEquals(self.view.getPageInRange(2, 10, 100), (2, 10))
-
-        # If the last page is incomplete, slice does the right thing
-        self.assertEquals(self.view.getPageInRange(2, 10, 12), (2, 2))
-
-        # Negative indices mean counting from the end
-        self.assertEquals(self.view.getPageInRange(-1, 10, 12), (2, 2))
-        self.assertEquals(self.view.getPageInRange(-2, 10, 12), (1, 2))
-
-        # Out of range gets the last page
-        self.assertEquals(self.view.getPageInRange(3, 10, 12), (2, 2))
-        self.assertEquals(self.view.getPageInRange(-3, 10, 12), (1, 2))
 
     def testBadPageSize(self):
         self.request.args.update({'filter': [''],
@@ -142,12 +127,78 @@ class TestApplicationLogView(unittest.TestCase):
         self.assertEquals(self.request.code, 200)
         self.assertEquals(self.request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(result, '\xc3\xbf')  # '\u00ff' in UTF-8
+        self.assertEquals(result, '\xc3\xbf\n')  # '\u00ff' in UTF-8
+
+
+class TestApplicationLogQuery(unittest.TestCase):
+
+    def test(self):
+        from schooltool.rest.applog import ApplicationLogQuery
+        query = ApplicationLogQuery(StringIO('y00 h4v3 b33n 0wn3d'))
+        self.assertEquals(query.result, ['y00 h4v3 b33n 0wn3d'])
+
+    def test_filter(self):
+        from schooltool.rest.applog import ApplicationLogQuery
+        applog = StringIO("cut\nfit\ndog\nbit\nkite")
+        query = ApplicationLogQuery(applog, filter_str="it")
+        self.assertEquals(query.result, ["fit", "bit", "kite"])
+
+    def test_filter_unicode(self):
+        from schooltool.rest.applog import ApplicationLogQuery
+        import schooltool.common
+
+        old_locale_charset = schooltool.common.locale_charset
+        schooltool.common.locale_charset = 'latin-1'
+
+        applog = StringIO("assume latin-1\n\xFF\n")
+        query = ApplicationLogQuery(applog, filter_str=u'\xFF')
+        self.assertEquals(query.result, [u'\xFF'])
+
+        schooltool.common.locale_charset = old_locale_charset
+
+    def test_getPageInRange(self):
+        from schooltool.rest.applog import ApplicationLogQuery
+        query = ApplicationLogQuery(StringIO("foo"))
+        self.assertEquals(query.getPageInRange(1, 10, 100), (1, 10))
+        self.assertEquals(query.getPageInRange(2, 10, 100), (2, 10))
+
+        # If the last pagencomplete, slice does the right thing
+        self.assertEquals(query.getPageInRange(2, 10, 12), (2, 2))
+
+        # Negative indices counting from the end
+        self.assertEquals(query.getPageInRange(-1, 10, 12), (2, 2))
+        self.assertEquals(query.getPageInRange(-2, 10, 12), (1, 2))
+
+        # Out of range get last page
+        self.assertEquals(query.getPageInRange(3, 10, 12), (2, 2))
+        self.assertEquals(query.getPageInRange(-3, 10, 12), (1, 2))
+
+    def testPaging(self):
+        from schooltool.rest.applog import ApplicationLogQuery
+        applog = StringIO("cut\nfit\ndog\nbit\nkite\n")
+        query = ApplicationLogQuery(applog, page=-1, pagesize=2)
+        self.assertEquals(query.page, 3)
+        self.assertEquals(query.total, 3)
+        self.assertEquals(query.result, ['kite'])
+
+    def testCharsetTranscoding(self):
+        from schooltool.rest.applog import ApplicationLogQuery
+        import schooltool.common
+
+        old_locale_charset = schooltool.common.locale_charset
+        schooltool.common.locale_charset = 'latin-1'
+
+        applog = StringIO('\xff')
+        query = ApplicationLogQuery(applog, page=-1, pagesize=2)
+        self.assertEquals(query.result, [u'\u00ff'])
+
+        schooltool.common.locale_charset = old_locale_charset
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestApplicationLogView))
+    suite.addTest(unittest.makeSuite(TestApplicationLogQuery))
     return suite
 
 if __name__ == '__main__':

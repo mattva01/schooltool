@@ -40,9 +40,9 @@ class ApplicationLogView(View):
         if path is None:
             return textErrorPage(request, _("Application log not configured"))
 
-        filter = page = pagesize = None
+        filter_str = page = pagesize = None
         if 'filter' in request.args:
-            filter = to_unicode(request.args['filter'][0])
+            filter_str = to_unicode(request.args['filter'][0])
 
         if 'page' in request.args and 'pagesize' in request.args:
             try:
@@ -52,27 +52,55 @@ class ApplicationLogView(View):
                             _("Invalid value for 'page' parameter."))
             try:
                 pagesize = int(request.args['pagesize'][0])
-                if pagesize <= 0:
-                    raise ValueError("page size must be positive")
             except ValueError:
                 return textErrorPage(request,
                             _("Invalid value for 'pagesize' parameter."))
+            if pagesize <= 0:
+                return textErrorPage(request,
+                            _("Page size must be positive"))
 
-        file = self.openLog(path)
-        result = map(from_locale, file.readlines())
-        file.close()
-
-        if filter:
-            result = [line for line in result if filter in line]
+        logfile = self.openLog(path)
+        try:
+            query = ApplicationLogQuery(logfile, page=page, pagesize=pagesize,
+                                        filter_str=filter_str)
+        except ValueError, e:
+            return textErrorPage(request, str(e))
 
         if page is not None:
-            page, total = self.getPageInRange(page, pagesize, len(result))
-            request.setHeader('X-Page', str(page))
-            request.setHeader('X-Total-Pages', str(total))
-            result = result[(page - 1) * pagesize:page * pagesize]
+            request.setHeader('X-Page', str(query.page))
+            request.setHeader('X-Total-Pages', str(query.total))
 
         request.setHeader('Content-Type', 'text/plain; charset=UTF-8')
-        return "".join(result)
+        return "\n".join(query.result) + "\n"
+
+    def openLog(self, filename):
+        return file(filename)
+
+
+class ApplicationLogQuery:
+    """A query in the application log.
+
+    After instantiation, the result (a list of strings) is available in
+    the attributes 'result'.  If the arguments 'page' and 'pagesize' were
+    provided, the returned page number is stored in the attribute 'page'
+    and the total number of pages in 'total'.
+    """
+
+    def __init__(self, logfile, page=None, pagesize=None, filter_str=None):
+
+        result = map(from_locale, logfile.read().splitlines())
+
+        if filter_str:
+            result = [line for line in result if filter_str in line]
+
+        if page is not None:
+            self.page, self.total = self.getPageInRange(page, pagesize,
+                                                        len(result))
+            start = (self.page - 1) * pagesize
+            end = self.page * pagesize
+            result = result[start:end]
+
+        self.result = result
 
     def getPageInRange(self, page, pagesize, lines):
         """A helper to cut out a page out of an array of lines.
@@ -95,5 +123,3 @@ class ApplicationLogView(View):
             page = totalpages + 1 + page
         return max(1, min(page, totalpages)), totalpages
 
-    def openLog(self, filename):
-        return file(filename)
