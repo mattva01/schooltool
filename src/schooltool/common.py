@@ -158,3 +158,21 @@ def dedent(text):
     while indent < limit and firstline[indent] in (' ', '\t'):
         indent += 1
     return '\n'.join([line[indent:] for line in lines[first:]])
+
+
+def to_unicode(s):
+    r"""Convert an UTF-8 string to Unicode.
+
+    Example:
+
+        >>> to_unicode('\xc4\x84\xc5\xbeuol\xc5\xb3')
+        u'\u0104\u017euol\u0173'
+        >>> to_unicode(None) is None
+        True
+
+    """
+    if s is None:
+        return None
+    else:
+        return unicode(s, 'UTF-8')
+
