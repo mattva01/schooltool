@@ -533,8 +533,6 @@ class CalendarEventView(object):
         return _("Public") # TODO used to also have busy-block and hidden.
 
 
-# DANGER! -- do not cross this line -- everything below is untested!
-
 class DailyCalendarView(CalendarViewBase):
     """Daily calendar view.
 
