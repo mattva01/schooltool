@@ -30,7 +30,11 @@ the individual files and directories for details of the licenses (see below [1])
   /usr/dir/zope
   /usr/dir/schooltool/translation
 
-(where dir can be lib/schooltool-clients,share/schooltool or lib/libschooltool)
+where dir can be
+    share/schooltool-clients
+    lib/schooltool-clients
+    share/schooltool
+    lib/schooltool
 
 Files in the same directory of the source tree as the main README file are (c)
 Shuttleworth Foundation, with the exception of GPL, which is a copy of the Free

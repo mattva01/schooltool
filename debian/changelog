@@ -1,4 +1,4 @@
-schooltool (0.7.2-1svn1727) unstable; urgency=low
+schooltool (0.8-1) unstable; urgency=low
 
   * Moved configuration file template to /usr/share (Policy 10.7.3).
   * Try to remove configuration file on purge (10.7.3).
@@ -7,6 +7,8 @@ schooltool (0.7.2-1svn1727) unstable; urgency=low
   * I18n of schooltool debconf templates with po-debconf.
   * Fixed bug where the ssl_certificate configuration option was not added
     to the configuration file if the certificate existed before installation.
+  * Moved the persistent, zope, BTrees and ZDOB modules to /usr/lib and
+    removed all links from /usr/share to /usr/lib.
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 
