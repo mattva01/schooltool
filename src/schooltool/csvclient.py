@@ -237,6 +237,7 @@ def main():
     importer = CSVImporter(port=8080)
     try:
         importer.run()
+        print
     except DataError, e:
         print
         print e
