@@ -74,6 +74,8 @@ class SimpleCalendarEvent(CalendarEventMixin):
 
     implements(ICalendarEvent)
 
+    # Events in older versions had no allday events so this attribute
+    # must be initialized in here
     allday = False
 
     def __init__(self, dtstart, duration, title, description=None,
