@@ -28,12 +28,11 @@
          tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
     </div>
     <metal:block metal:define-slot="navigation">
-      <span tal:define="crumbs
-                        python:getattr(view, 'breadcrumbs', lambda: [])()"
-	    tal:condition="crumbs" tal:repeat="crumb crumbs">
-	<a tal:attributes="href python:crumb[1]"
-	   tal:content="python:crumb[0]" />
-	<span tal:condition="not: repeat/crumb/end">&gt;</span>
+      <span tal:define="crumbs view/breadcrumbs"
+            tal:condition="crumbs" tal:repeat="crumb crumbs">
+        <a tal:attributes="href python:crumb[1]"
+           tal:content="python:crumb[0]" />
+        <span tal:condition="not: repeat/crumb/end">&gt;</span>
       </span>
     </metal:block>
     &nbsp;

@@ -108,6 +108,9 @@ class View(_View):
                     either an 8-bit string or a Unicode object (which will be
                     converted to UTF-8 by render).  It must set the
                     Content-Type header in the request.
+        breadcrumbs
+                    Method that returns a sequence of (title, url) breadcrumbs
+                    to display in the navigation bar.
 
     """
 
@@ -115,6 +118,9 @@ class View(_View):
     redirect_template = Template('www/redirect.pt')
 
     macros = property(lambda self: self.macros_template.macros)
+
+    def breadcrumbs(self):
+        return []
 
     def unauthorized(self, request):
         """Render an unauthorized page."""
