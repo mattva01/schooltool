@@ -163,7 +163,7 @@ In the above '...object' stands for a full path to an application object (i.e.
 a group, a person or a resource), for example '/persons/some_person_id'.
 
 This list should be up-to-date (I think) with respect to SchoolTool revision
-534.  It has not been verified, so it might contain errors or omissions.
+562.  It has not been verified, so it might contain errors or omissions.
 
 Ideally all this should be automatically extracted from source code (e.g.
 docstrings for views).
