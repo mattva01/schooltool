@@ -696,9 +696,11 @@ class TestResourceView(unittest.TestCase, TraversalTestMixin,):
     def test_traverse(self):
         from schooltool.model import Resource
         from schooltool.browser.model import ResourceView, ResourceEditView
+        from schooltool.browser.cal import BookingView
         resource = Resource()
         view = ResourceView(resource)
         self.assertTraverses(view, 'edit.html', ResourceEditView, resource)
+        self.assertTraverses(view, 'book', BookingView, resource)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 

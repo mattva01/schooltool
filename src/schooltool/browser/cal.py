@@ -24,8 +24,8 @@ $Id$
 
 import datetime
 
-from schooltool.browser import View, Template, notFoundPage
-from schooltool.browser.auth import ManagerAccess
+from schooltool.browser import View, Template
+from schooltool.browser.auth import TeacherAccess
 from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime
 from schooltool.component import traverse, getPath
@@ -37,28 +37,50 @@ class BookingView(View):
 
     __used_for__ = IResource
 
-    authorization = ManagerAccess # XXX Should be accessible by teachers too
+    authorization = TeacherAccess
+
+    template = Template('www/booking.pt')
 
     error = u""
 
-    do_GET = staticmethod(notFoundPage)
+    owner = u""
+    start_date = u""
+    start_time = u""
+    duration = u""
 
-    # XXX Errors are not shown to the user.
-    def do_POST(self, request):
-        if 'conflicts' in request.args:
-            force = (request.args['conflicts'][0] == 'ignore')
+    booked = False
+
+    def update(self):
+        request = self.request
+        if 'CONFIRM_BOOK' not in request.args:
+            if 'start' in request.args:
+                start = to_unicode(request.args['start'][0])
+                parts = start.split(' ')
+                self.start_date = parts[0]
+                self.start_time = parts[1].split(':')[:2]
+            if 'mins' in request.args:
+                self.duration = to_unicode(request.args['mins'][0])
+            return
+
+        force = 'conflicts' in request.args
+
+        if 'owner' in request.args:
+            if not self.isManager():
+                self.error = _("Only managers can set the owner")
+                return
+            persons = traverse(self.context, '/persons')
+            owner_name = to_unicode(request.args['owner'][0])
+            try:
+                owner = persons[owner_name]
+            except KeyError:
+                self.error = _("Invalid owner: %s") % owner_name
+                return
         else:
-            force = False
-        owner_path = to_unicode(request.args['owner'][0])
+            owner = request.authenticated_user
+
         start_date_str = to_unicode(request.args['start_date'][0])
         start_time_str = to_unicode(request.args['start_time'][0])
         duration_str = to_unicode(request.args['duration'][0])
-
-        try:
-            owner = traverse(self.context, owner_path)
-        except KeyError:
-            self.error = _("Invalid owner path: %r") % owner_path
-            return
 
         try:
             arg = 'start_date'
@@ -90,3 +112,4 @@ class BookingView(View):
         request.appLog(_("%s (%s) booked by %s (%s) at %s for %s") %
                        (getPath(self.context), self.context.title,
                         getPath(owner), owner.title, start, duration))
+        self.booked = True

@@ -34,34 +34,102 @@ __metaclass__ = type
 class TestBookingView(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.model import Person, Resource
+        from schooltool.model import Person, Group, Resource
         from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool import membership
+
+        membership.setUp()
 
         self.app = Application()
         self.app['persons'] = ApplicationObjectContainer(Person)
+        self.app['groups'] = ApplicationObjectContainer(Group)
         resrc = self.app['resources'] = ApplicationObjectContainer(Resource)
 
         self.person = self.app['persons'].new("me", title="Me")
         self.resource = resrc.new("sink", title="Kitchen sink")
 
+        managers = self.app['groups'].new("managers", title="managers")
+        self.manager = self.app['persons'].new("manager", title="Manager")
+        membership.Membership(group=managers, member=self.manager)
+
+
     def createView(self):
-        from schooltool.model import Resource
         from schooltool.browser.cal import BookingView
         view = BookingView(self.resource)
         view.authorization = lambda ctx, rq: True
         return view
 
-    def test(self):
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
+        content = view.render(request)
+        self.assert_('Book' in content)
+
+    def test_book(self):
         view = self.createView()
         request = RequestStub(args={'conflicts': 'ignore',
-                                    'owner': '/persons/me',
+                                    'start': '2004-08-10 19:01:00',
+                                    'mins': '61',
+                                    'BOOK': 'Book'})
+        content = view.render(request)
+        self.assert_('2004-08-10 19:01:00' not in content)
+        self.assert_('19:01:00' not in content)
+        self.assert_('2004-08-10' in content)
+        self.assert_('19:01' not in content)
+        self.assert_('61' in content)
+
+    def test_owner(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'owner': 'me',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
-                                    'duration': '61'})
-        view.do_POST(request)
+                                    'duration': '61',
+                                    'CONFIRM_BOOK': 'Book'})
+        content = view.render(request)
+        self.assert_("Only managers can set the owner" not in content)
+        self.assert_("Invalid owner: me" not in content)
+
+        ev1 = iter(self.person.calendar).next()
+        self.assert_(ev1.owner is self.person,
+                     "%r is not %r" % (ev1.owner, self.person))
+
+    def test_owner_forbidden(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.person,
+                              args={'owner': 'whatever',
+                                    'start_date': '2004-08-10',
+                                    'start_time': '19:01',
+                                    'duration': '61',
+                                    'CONFIRM_BOOK': 'Book'})
+        content = view.render(request)
+        self.assert_("Only managers can set the owner" in content)
+
+    def test_owner_wrong_name(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'owner': 'whatever',
+                                    'start_date': '2004-08-10',
+                                    'start_time': '19:01',
+                                    'duration': '61',
+                                    'CONFIRM_BOOK': 'Book'})
+        content = view.render(request)
+        self.assert_("Invalid owner: whatever" in content)
+
+    def test_confirm_book(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.person,
+                              args={'conflicts': 'ignore',
+                                    'start_date': '2004-08-10',
+                                    'start_time': '19:01',
+                                    'duration': '61',
+                                    'CONFIRM_BOOK': 'Book'})
+        content = view.render(request)
+        self.assert_('Resource booked' in content)
         self.assertEquals(view.error, "")
         self.assertEquals(request.applog,
-                [(None, u'/resources/sink (Kitchen sink) booked by'
+                [(self.person,
+                  u'/resources/sink (Kitchen sink) booked by'
                   ' /persons/me (Me) at 2004-08-10 19:01:00 for 1:01:00',
                   INFO)])
 
@@ -85,11 +153,11 @@ class TestBookingView(unittest.TestCase):
         self.assertEquals(len(list(self.resource.calendar)), 1)
 
         view = self.createView()
-        request = RequestStub(args={'owner': '/persons/me',
-                                    'start_date': '2004-08-10',
+        request = RequestStub(args={'start_date': '2004-08-10',
                                     'start_time': '19:20',
-                                    'duration': '61'})
-        view.do_POST(request)
+                                    'duration': '61',
+                                    'CONFIRM_BOOK': 'Book'})
+        view.render(request)
         self.assertEquals(request.applog, [])
         self.assertEquals(view.error, "The resource is busy at specified time")
 

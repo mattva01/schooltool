@@ -32,6 +32,7 @@ from schooltool.browser import notFoundPage
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import isManager
+from schooltool.browser.cal import BookingView
 from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
@@ -392,6 +393,8 @@ class ResourceView(View):
     def _traverse(self, name, request):
         if name == "edit.html":
             return ResourceEditView(self.context)
+        elif name == "book":
+            return BookingView(self.context)
         else:
             raise KeyError(name)
 

@@ -1,0 +1,50 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Book a resource</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Book resource <span tal:replace="context/title"/>
+  </h1>
+
+  <metal:block metal:fill-slot="content" tal:define="update view/update">
+
+  <tal:block condition="view/booked">
+    Resource booked.
+  </tal:block>
+
+  <tal:block condition="not:view/booked">
+  <div class="error" tal:condition="view/error" tal:content="view/error" />
+
+  <form method="POST" tal:attributes="action request/path">
+    <div class="row" tal:condition="view/isManager">
+      <label for="owner">Owner</label>
+      <input id="owner" name="owner" type="text"
+             tal:attributes="value request/authenticated_user/__name__" />
+    </div>
+    <div class="row">
+      <label for="start_date">Date</label>
+      <input id="start_date" name="start_date" type="text"
+             tal:attributes="value view/start_date" />
+    </div>
+    <div class="row">
+      <label for="start_time">Time</label>
+      <input id="start_time" name="start_time" type="text"
+             tal:attributes="value view/start_time" />
+    </div>
+    <div class="row">
+      <label for="duration">Duration</label>
+      <input id="duration" name="duration" type="text"
+             tal:attributes="value view/duration" />
+    </div>
+    <div class="row">
+      <label for="conflicts">Ignore conflicts</label>
+      <input id="conflicts" name="conflicts" type="checkbox" value="ignore" />
+    </div>
+    <input name="CONFIRM_BOOK" type="submit" value="Book" />
+  </form>
+  </tal:block>
+  </metal:block>
+
+</body>
+</html>
