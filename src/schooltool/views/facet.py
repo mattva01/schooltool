@@ -31,7 +31,7 @@ from schooltool.component import FacetManager
 from schooltool.component import getFacetFactory, iterFacetFactories
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
-from schooltool.views import getURL
+from schooltool.views import getURL, absolutePath
 from schooltool.views.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
@@ -89,7 +89,7 @@ class FacetManagementView(View):
         return [{'active': activeness[bool(facet.active)],
                  'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
-                 'href': getURL(self.request, facet, absolute=False)}
+                 'href': absolutePath(self.request, facet)}
                 for facet in self.context.iterFacets()]
 
     def listFacetFactories(self):

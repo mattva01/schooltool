@@ -28,7 +28,7 @@ from schooltool.interfaces import IUtilityService, IUtility
 from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import ItemTraverseView
-from schooltool.views import getURL
+from schooltool.views import absolutePath
 from schooltool.views.auth import PublicAccess
 
 __metaclass__ = type
@@ -47,7 +47,7 @@ class UtilityServiceView(ItemTraverseView):
         return self.context.__name__
 
     def items(self):
-        return [{'href': getURL(self.request, utility, absolute=False),
+        return [{'href': absolutePath(self.request, utility),
                  'title': utility.title}
                 for utility in self.context.values()]
 

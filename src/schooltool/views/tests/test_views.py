@@ -57,15 +57,11 @@ class TestHelpers(unittest.TestCase):
 
         self.assertEquals(getURL(request, root),
                           "http://localhost:7001/")
-        self.assertEquals(getURL(request, root, absolute=False),
-                          "/")
         self.assertEquals(getURL(request, root, 'baz/123'),
                           "http://localhost:7001/baz/123")
 
         self.assertEquals(getURL(request, obj),
                           "http://localhost:7001/foo/bar")
-        self.assertEquals(getURL(request, obj, absolute=False),
-                          "/foo/bar")
         self.assertEquals(getURL(request, obj, 'baz/123'),
                           "http://localhost:7001/foo/bar/baz/123")
 

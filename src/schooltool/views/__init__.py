@@ -40,7 +40,7 @@ moduleProvides(IModuleSetup)
 # Helpers
 #
 
-def getURL(request, obj, suffix='', absolute=True):
+def getURL(request, obj, suffix=''):
     """Returns the URL of an object."""
     if request.getHost()[0] == 'SSL':
         scheme = 'https'
@@ -53,10 +53,7 @@ def getURL(request, obj, suffix='', absolute=True):
         if not url.endswith('/'):
             url += '/'
         url += suffix
-    if absolute:
-        return '%s://%s:%s%s' % (scheme, hostname, port, url)
-    else:
-        return url
+    return '%s://%s:%s%s' % (scheme, hostname, port, url)
 
 
 def absolutePath(request, obj, suffix=''):

@@ -31,7 +31,7 @@ from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import notFoundPage, textErrorPage
-from schooltool.views import getURL
+from schooltool.views import absolutePath
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date, to_unicode
@@ -81,7 +81,7 @@ class PersonInfoFacetView(FacetView):
     """
 
     def photo_href(self):
-        return getURL(self.request, self.context, 'photo', absolute=False)
+        return absolutePath(self.request, self.context, 'photo')
 
     def _traverse(self, name, request):
         if name == 'photo':

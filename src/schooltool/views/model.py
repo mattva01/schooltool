@@ -31,7 +31,7 @@ from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
 from schooltool.views import View, Template
 from schooltool.views import notFoundPage
-from schooltool.views import getURL
+from schooltool.views import absolutePath
 from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
@@ -51,7 +51,7 @@ class ApplicationObjectTraverserView(View):
     """A view that supports traversing to facets and relationships etc."""
 
     def href(self):
-        return getURL(self.request, self.context, absolute=False)
+        return absolutePath(self.request, self.context)
 
     def _traverse(self, name, request):
         if name == 'facets':
@@ -85,7 +85,7 @@ class GroupView(ApplicationObjectTraverserView):
     def listItems(self):
         for item in getRelatedObjects(self.context, URIMember):
             yield {'title': item.title,
-                   'href': getURL(self.request, item, absolute=False)}
+                   'href': absolutePath(self.request, item)}
 
 
 class TreeView(View):
@@ -99,7 +99,7 @@ class TreeView(View):
         children = [child for child in getRelatedObjects(node, URIMember)
                     if IGroup.providedBy(child)]
         res = self.node_template(self.request, title=node.title,
-                             href=getURL(self.request, node, absolute=False),
+                             href=absolutePath(self.request, node),
                              children=children, generate=self.generate)
         return res.strip().replace('\n', '\n  ')
 
@@ -119,7 +119,7 @@ class PersonView(ApplicationObjectTraverserView):
 
     def getGroups(self):
         return [{'title': group.title,
-                 'href': getURL(self.request, group, absolute=False)}
+                 'href': absolutePath(self.request, group)}
                 for group in getRelatedObjects(self.context, URIGroup)]
 
 

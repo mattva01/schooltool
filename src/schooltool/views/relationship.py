@@ -28,7 +28,7 @@ from schooltool.uris import strURI, getURI
 from schooltool.component import traverse
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
-from schooltool.views import getURL
+from schooltool.views import getURL, absolutePath
 from schooltool.views.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
@@ -50,12 +50,11 @@ class RelationshipsView(View):
     authorization = PublicAccess
 
     def listLinks(self):
-        return [{'traverse': getURL(self.request, link.traverse(),
-                                    absolute=False),
+        return [{'traverse': absolutePath(self.request, link.traverse()),
                  'title': link.title,
                  'type': strURI(link.reltype),
                  'role': strURI(link.role),
-                 'href': getURL(self.request, link, absolute=False)}
+                 'href': absolutePath(self.request, link)}
                 for link in self.context.listLinks()]
 
     def getValencies(self):
@@ -133,8 +132,7 @@ class LinkView(View):
         return {'role': strURI(self.context.role),
                 'arcrole': strURI(self.context.reltype),
                 'title': self.context.title,
-                'href': getURL(self.request, self.context.traverse(),
-                               absolute=False)}
+                'href': absolutePath(self.request, self.context.traverse())}
 
     def do_DELETE(self, request):
         self.context.unlink()
