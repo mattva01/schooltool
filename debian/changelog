@@ -13,6 +13,10 @@ schooltool (0.8+svn) unstable; urgency=low
   * Change the section of libschooltool and libschooltool-clients to libs.
   * Fix python dependencies to cope with upcoming python version 2.4
     - Use python 2.3 explicity.
+  * Undo past changes of putting some modules in /usr/share. It was a
+    violation of the FHS because the .py files are bytecompiled on
+    installation. There are now a _LOT_ of lintian warnings about arch-indep
+    files in /usr/lib, but this is the lesser evil.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

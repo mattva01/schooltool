@@ -16,14 +16,6 @@ bellpackage=schoolbell
 packageclients=schooltool-clients
 libpkgclients=libschooltool-clients
 
-# list of files/directories which have arch-dep files in them
-archdep=\( 							\
-	   -path './persistent*'				\
-	-o -path './BTrees*' 					\
-	-o -path './zope*' 					\
-	-o -path './ZODB*' 					\
-	\)
-
 # list of files/directories which are required for the clients
 clientfiles=\(							\
 	    -path './zope/interface*' 				\
@@ -78,25 +70,20 @@ install-indep-stamp:
 	dh_installdirs -i
 
 	# make SchoolTool server package
-	# arch-indep files which can go into /usr/share
+	# arch-indep files into /usr/lib
+	# NOTE: We have to put .py files into /usr/lib because they
+	# are byte compiled after installation and are thus arch dependent
+	# Unfortunately it is difficult to saparate the rest, so everything
+	# ends up in /usr/lib which generate some lintian errors. But this is
+	# the lesser of the two evils.
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
 		-name '*.xpm' -o -name '*.css' \) \
-		-not $(archdep) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(package)/usr/share/$(package)/{} \;
-	rm -f debian/$(package)/usr/share/$(package)/trace.py
-	# arch-indep files into /usr/lib becuse their modules depend on a .so
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
-		$(archdep)\
 	     -exec install -m 644 -D -p {} \
 		../debian/$(package)/usr/lib/$(package)/{} \;
+	rm -f debian/$(package)/usr/lib/$(package)/trace.py
 	# executables
 	install -m 755 -D -p debian/$(package).py \
 		debian/$(package)/usr/bin/$(package); \
@@ -109,25 +96,16 @@ install-indep-stamp:
 	    debian/$(package)/usr/share/$(package)/$(package).conf.default
 
 	# make SchoolBell server package
-	# arch-indep files which can go into /usr/share
+	# arch-indep (have to go into /usr/lib because .py files are
+	# bytecompiled)
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
 		-name '*.xpm' -o -name '*.css' \) \
-		-not $(archdep) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(bellpackage)/usr/share/$(bellpackage)/{} \;
-	rm -f debian/$(bellpackage)/usr/share/$(bellpackage)/trace.py
-	# arch-indep files into /usr/lib becuse their modules depend on a .so
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
-		$(archdep)\
 	     -exec install -m 644 -D -p {} \
 		../debian/$(bellpackage)/usr/lib/$(package)/{} \;
+	rm -f debian/$(bellpackage)/usr/lib/$(package)/trace.py
 	# executables
 	install -m 755 -D -p debian/$(bellpackage).py \
 		debian/$(bellpackage)/usr/bin/$(bellpackage); \
@@ -146,21 +124,11 @@ install-indep-stamp:
 	echo $(db_version) > debian/$(bellpackage)/var/lib/$(bellpackage)/database_ver
 
 	# Make client package
-	# arch-indep files
-	cd src && \
-	find \( -name 'tests' -o -name 'ftests' \) -prune -o\
-	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
-	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
-	     -not $(archdep)\
-	     $(clientfiles) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(packageclients)/usr/share/$(packageclients)/{} \;
-	# arch-indep files into /usr/lib becuse their modules depend on a .so
+	# arch-indep files into /usr/lib becuse .py files are byte-compiled
 	cd src && \
 	find \( -name 'tests' -o -name 'ftests' \) -prune -o \
 	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
 	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
-	     $(archdep) \
 	     $(clientfiles) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
