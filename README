@@ -140,9 +140,6 @@ Project structure
   import-sampleschool.py
                         script to import sample school data
   schooltool-client.py  script to start the command-line client
-  schooltool-grapher.py
-                        script to start the experimental wxGraph client
-  wxschooltool.py       script to start the deprecated wxWidgets client
 
   test.conf             configuration file used for functional tests
   testserver.pem        sample SSL certificate used for functional tests
