@@ -362,12 +362,13 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
 
     def _parseGroups(self, raw_value):
         """Parse a list of paths and return a list of groups."""
+        raise NotImplementedError('XXX this function has no unit tests')
         groups_container = traverse(self.context, '/groups')
         groups = []
         for path in raw_value:
             try:
                 group = traverse(groups_container, path)
-            except (KeyError, UnicodeError):
+            except TraversalError:
                 pass
             else:
                 if IGroup.providedBy(group):
@@ -500,6 +501,10 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         """Add user to groups."""
         if groups is not None:
             for group in groups:
+                # XXX This will not work for SchoolTool
+                # Look how 
+                # schooltool.browser.model.GroupEditView.createRelationship
+                # does it.
                 Membership(group=group, member=person)
                 self.request.appLog(
                         _("Relationship 'Membership' between %s and %s created")
