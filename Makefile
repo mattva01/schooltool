@@ -16,6 +16,10 @@ build:
 extract-translations:
 	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
 			-o translation/
+	$(PYTHON) src/schooltool/translation/pygettext.py *.py
+	msgcat src/schooltool/translation/schooltool.pot messages.pot > all.pot
+	rm messages.pot src/schooltool/translation/schooltool.pot
+	mv all.pot src/schooltool/translation/schooltool.pot
 	$(MAKE) update-translations
 
 update-translations:
