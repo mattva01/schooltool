@@ -311,7 +311,13 @@ class RelationshipViewMixin:
 
       def createRelationship(self, other):
           'Create the relationship between self.context and other'
+
+      errormessage = Attribute('A translated error that is displayed'
+                               'when the relationship creation fails'
     """
+
+    errormessage = _("Cannont create relationship between"
+                     " %(other)s and %(this)s")
 
     def list(self):
         """Return a list of related objects"""
@@ -351,7 +357,11 @@ class RelationshipViewMixin:
             paths = filter(None, request.args.get("toadd", []))
             for path in paths:
                 obj = traverse(self.context, path)
-                self.createRelationship(obj)
+                try:
+                    self.createRelationship(obj)
+                except ValueError:
+                    return self.errormessage % {'other': obj.title,
+                                                'this': self.context.title}
                 request.appLog(_("Relationship '%s' between %s and %s created")
                                % (self.relname, getPath(obj),
                                   getPath(self.context)))
@@ -371,6 +381,8 @@ class GroupEditView(View, RelationshipViewMixin):
     relname = _('Membership')
 
     back = True
+
+    errormessage = _("Cannont add %(other)s to %(this)s")
 
     def addList(self):
         """Return a list of objects available for addition"""
@@ -402,6 +414,8 @@ class GroupTeachersView(View, RelationshipViewMixin):
     relname = _('Teaching')
 
     back = True
+
+    errormessage = _("Cannont add teacher %(other)s to %(this)s")
 
     def addList(self):
         """List all members of the Teachers group except current teachers."""

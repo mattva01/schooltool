@@ -11,7 +11,7 @@
 <metal:block metal:fill-slot="content">
 
   <div tal:define="status view/update"
-       tal:condition="status" tal:content="status" class="status"/>
+       tal:condition="status" tal:content="status" class="error"/>
 
 <tal:comment condition="nothing">
   XXX Fix this mess with trying to cram three different forms into a single

@@ -648,6 +648,18 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                   "Relationship 'Membership' between "
                   "/persons/lj and /groups/new created", INFO)])
 
+    def test_update_ADD_loop(self):
+        from schooltool.browser.model import GroupEditView
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIMember
+        view = GroupEditView(self.group)
+        request = RequestStub(args={"FINISH_ADD":"Add selected",
+                                    "toadd": ['/groups/new']})
+        view.request = request
+        result = view.update()
+        self.assertEquals(sorted(request.applog), [])
+        self.assertEquals(result, 'Cannont add Teachers to Teachers')
+
 
 class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
                             unittest.TestCase):
@@ -751,6 +763,17 @@ class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
                                          "toadd": ''})
         view.update()
         self.assertEquals(view.request.applog, [])
+
+    def test_update_ADD_loop(self):
+        from schooltool.browser.model import GroupTeachersView
+        view = GroupTeachersView(self.group)
+        view.request = RequestStub(args={"FINISH_ADD":"Add selected",
+                                         "toadd": ['/persons/josh']})
+        result = view.update()
+        del view.request.applog[:]
+        result = view.update() # second update will fail
+        self.assertEquals(sorted(view.request.applog), [])
+        self.assertEquals(result, 'Cannont add teacher Josh to Group')
 
 
 class TestResourceView(unittest.TestCase, TraversalTestMixin,):
