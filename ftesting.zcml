@@ -1,0 +1,44 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="zope">
+
+  <!-- This file is the equivalent of site.zcml and it is
+       used for functional testing setup, when you run SchoolBell tests
+       with the SchoolBell test runner.  It is not used when you run
+       SchoolBell tests with the Zope 3 test runner.
+
+       This file differs from the standard Zope 3 ftesting.zcml.
+       -->
+
+  <include package="zope.app" />
+  <include package="zope.app.securitypolicy" file="meta.zcml" />
+
+  <include package="zope.app.session" />
+  <include package="zope.app.server" />
+
+  <!-- Workaround to shut down a DeprecationWarning that appears because we do
+       not include zope.app.onlinehelp and the rotterdam skin tries to look for
+       this menu -->
+  <browser:menu id="help_actions" />
+
+  <include package="schoolbell.app" />
+
+  <include package="zope.app.securitypolicy" />
+  <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
+
+  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+  <everybodyGroup id="zope.Everybody" title="All Users" />
+
+  <!-- Principal that tests generally run as -->
+
+  <principal id="zope.mgr" title="Manager" login="mgr" password="mgrpw" />
+
+  <!-- Bootstrap principal used to make local grant to the principal above -->
+  <principal id="zope.globalmgr" title="Manager" login="globalmgr"
+             password="globalmgrpw" />
+
+  <grant role="zope.Manager" principal="zope.globalmgr" />
+
+</configure>
