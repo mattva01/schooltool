@@ -847,6 +847,8 @@ class ICalendarEvent(Interface):
         will be the owner of the booking event, and the resource will
         be the context.
         """)
+    location = Attribute(
+          """The title of the location where this event takes place.""")
 
     def __cmp__(other):
         """Compare calendar events in chronological order.

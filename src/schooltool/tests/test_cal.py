@@ -981,12 +981,15 @@ class TestCalendarEvent(unittest.TestCase):
                            timedelta(minutes=10),
                            "reality check")
         verifyObject(ICalendarEvent, ce)
+        self.assert_(ce.unique_id)
 
-        ce_id = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                              timedelta(minutes=10),
-                              "reality check",
-                              unique_id="I am unique")
-        self.assertEquals(ce_id.unique_id, "I am unique")
+        ce_ = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "reality check",
+                            unique_id="I am unique",
+                            location="PoV")
+        self.assertEquals(ce_.unique_id, "I am unique")
+        self.assertEquals(ce_.location, "PoV")
 
         ce1 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                             timedelta(minutes=10),
@@ -1016,6 +1019,9 @@ class TestCalendarEvent(unittest.TestCase):
         self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')
+        self.assertRaises(AttributeError, setattr, ce, 'owner', 'not-ro')
+        self.assertRaises(AttributeError, setattr, ce, 'context', 'not-ro')
+        self.assertRaises(AttributeError, setattr, ce, 'location', 'not-ro')
 
 
 class TestCalendarOwnerMixin(unittest.TestCase):
