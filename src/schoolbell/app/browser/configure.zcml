@@ -69,7 +69,7 @@
       layer=".skin.ISchoolBellLayer"
       class=".app.ACLView"
       template="templates/acl.pt"
-      permission="zope.Security"
+      permission="schoolbell.controlAccess"
       title="Set up access"
       menu="schoolbell_actions"
       />
@@ -167,7 +167,7 @@
       fields="title description"
       set_before_add="title"
       content_factory="schoolbell.app.app.Group"
-      permission="zope.ManageContent"
+      permission="schoolbell.create"
       template="templates/simple_add.pt"
       class=".app.GroupAddView"
       />
@@ -185,7 +185,7 @@
       label="Edit Group Information"
       schema="schoolbell.app.interfaces.IGroup"
       fields="title description"
-      permission="zope.ManageContent"
+      permission="schoolbell.create"
       template="templates/simple_edit.pt"
       class=".app.GroupEditView"
       menu="schoolbell_actions"
@@ -215,7 +215,7 @@
       for="schoolbell.app.interfaces.IGroup"
       class="schoolbell.app.browser.app.MemberViewPersons"
       template="templates/members.pt"
-      permission="zope.View"
+      permission="schoolbell.edit"
       menu="schoolbell_actions"
       title="Add/remove members"
       />
@@ -225,7 +225,7 @@
       for="schoolbell.app.interfaces.IGroup"
       class="schoolbell.app.browser.app.MemberViewResources"
       template="templates/members.pt"
-      permission="zope.View"
+      permission="schoolbell.edit"
       menu="schoolbell_actions"
       title="Add/remove resources"
       />
@@ -244,8 +244,8 @@
 
   <containerViews
       for="schoolbell.app.interfaces.IResourceContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
+      contents="zope.View"
+      add="schoolbell.create"
       />
 
   <addform
@@ -257,7 +257,7 @@
       content_factory="schoolbell.app.app.Resource"
       template="templates/simple_add.pt"
       class=".app.ResourceAddView"
-      permission="zope.ManageContent"
+      permission="schoolbell.create"
       />
 
   <editform
@@ -266,7 +266,7 @@
       label="Edit Resource Information"
       schema="schoolbell.app.interfaces.IResource"
       fields="title description"
-      permission="zope.ManageContent"
+      permission="schoolbell.edit"
       template="templates/simple_edit.pt"
       class=".app.ResourceEditView"
       menu="schoolbell_actions"
@@ -284,7 +284,7 @@
       title="SchoolBell Resource"
       description="A Resource"
       class="schoolbell.app.app.Resource"
-      permission="zope.ManageContent"
+      permission="schoolbell.create"
       view="addSchoolBellResource.html"
       />
 
@@ -329,7 +329,7 @@
       for="schoolbell.calendar.interfaces.ICalendar"
       class=".cal.PlainCalendarView"
       template="templates/cal_plain.pt"
-      permission="zope.View"
+      permission="schoolbell.view"
       menu="zmi_views"
       title="Calendar (plain)"
       />
@@ -339,7 +339,7 @@
       for="schoolbell.calendar.interfaces.ICalendar"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
-      permission="zope.View"
+      permission="schoolbell.view"
       menu="zmi_views"
       title="Calendar (daily)"
       />
@@ -349,7 +349,7 @@
       for="schoolbell.calendar.interfaces.ICalendar"
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
-      permission="zope.View"
+      permission="schoolbell.view"
       menu="zmi_views"
       title="Calendar (weekly)"
       />
@@ -359,7 +359,7 @@
       for="schoolbell.calendar.interfaces.ICalendar"
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
-      permission="zope.View"
+      permission="schoolbell.view"
       menu="zmi_views"
       title="Calendar (monthly)"
       />
@@ -369,7 +369,7 @@
       for="schoolbell.calendar.interfaces.ICalendar"
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
-      permission="zope.View"
+      permission="schoolbell.view"
       menu="zmi_views"
       title="Calendar (yearly)"
       />
@@ -377,7 +377,7 @@
   <page
       for="schoolbell.app.interfaces.ICalendar"
       name="calendar.ics"
-      permission="zope.Public"
+      permission="schoolbell.view"
       class="schoolbell.calendar.browser.CalendarICalendarView"
       attribute="show"
       menu="zmi_views"
@@ -387,7 +387,7 @@
   <menuItem
       for="schoolbell.calendar.interfaces.IEditCalendar"
       menu="schoolbell_actions" title="New event"
-      action="add.html" permission="zope.View" />
+      action="add.html" permission="schoolbell.view" />
 
   <menuItem
       for="schoolbell.calendar.interfaces.ICalendar"

@@ -315,19 +315,6 @@ class CalendarEventMixin(object):
         return SimpleCalendarEvent(**kw)
 
 
-class ExpandedCalendarEventProperty(object):
-    """A data descriptior for ExpandedCalendarEvent."""
-
-    def __init__(self, attr):
-        self.attr = attr
-
-    def __get__(self, obj, cls):
-        return getattr(obj.original, self.attr)
-
-    def __set__(self, obj, value):
-        raise AttributeError("can't set attribute")
-
-
 class ExpandedCalendarEvent(CalendarEventMixin):
     """A single occurrence of a recurring calendar event.
 
@@ -390,16 +377,12 @@ class ExpandedCalendarEvent(CalendarEventMixin):
 
     implements(IExpandedCalendarEvent)
 
-    dtstart = property(lambda self: self._dtstart)
-
-    unique_id = ExpandedCalendarEventProperty('unique_id')
-    duration = ExpandedCalendarEventProperty('duration')
-    title = ExpandedCalendarEventProperty('title')
-    description = ExpandedCalendarEventProperty('description')
-    location = ExpandedCalendarEventProperty('location')
-    recurrence = ExpandedCalendarEventProperty('recurrence')
-
     def __init__(self, event, dtstart):
-        self.original = event
-        self._dtstart = dtstart
+        self.__dict__["original"] = event
+        self.__dict__["dtstart"] = dtstart
 
+    def __getattr__(self, name):
+        return getattr(self.original, name)
+
+    def __setattr__(self, name, value):
+        raise AttributeError("can't set attribute")

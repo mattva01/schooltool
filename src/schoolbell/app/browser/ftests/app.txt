@@ -454,6 +454,7 @@ We should see the group in this person's possible group list.
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/groups.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -468,6 +469,7 @@ Let's add the person to the group.
 
     >>> print http(r"""
     ... POST /frogpond/persons/frog/groups.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 44
     ... Content-Type: application/x-www-form-urlencoded
     ... UPDATE_SUBMIT=Apply&group.venerable-frogs=on
@@ -481,6 +483,7 @@ The person's info view should show the group:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -493,6 +496,7 @@ And the groups page shows the checkbox checked.
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/groups.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -508,6 +512,7 @@ The group members view reflects the change that we have done:
 
     >>> print http(r"""
     ... GET /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -605,6 +610,7 @@ The supergroup list works for resources too:
 
     >>> print http(r"""
     ... GET /frogpond/resources/lily/groups.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...

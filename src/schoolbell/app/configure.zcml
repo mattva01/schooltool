@@ -2,28 +2,35 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schoolbell">
 
+  <permission id="schoolbell.view" title="View" />
+  <permission id="schoolbell.edit" title="Edit Info" />
+  <permission id="schoolbell.addEvent"  title="Add Event" />
+  <permission id="schoolbell.modifyEvent"  title="Modify Event" />
+  <permission id="schoolbell.controlAccess"  title="Set up access" />
+  <permission id="schoolbell.create"  title="Create new objects" />
+
   <content class=".app.SchoolBellApplication">
     <allow interface=".interfaces.ISchoolBellApplication" />
   </content>
 
   <content class=".app.PersonContainer">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="zope.app.container.interfaces.IReadContainer" />
-    <require permission="zope.ManageContent"
+    <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".app.GroupContainer">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="zope.app.container.interfaces.IReadContainer" />
-    <require permission="zope.ManageContent"
+    <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".app.ResourceContainer">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="zope.app.container.interfaces.IReadContainer" />
-    <require permission="zope.ManageContent"
+    <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
@@ -38,40 +45,38 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <content class=".app.Person">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.app.interfaces.IReadPerson" />
     <!-- This is not entirely correct, but we want to let users
          modify their account info. -->
-    <require permission="zope.View"
+    <require permission="schoolbell.edit"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schoolbell.app.interfaces.IPerson" />
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.app.interfaces.ICalendarOwner" />
   </content>
 
   <content class=".app.Group">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.app.interfaces.IGroup" />
-    <require permission="zope.ManageContent"
+    <require permission="schoolbell.edit"
              set_schema="schoolbell.app.interfaces.IGroup" />
   </content>
 
   <content class=".app.Resource">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.app.interfaces.IResource" />
-    <require permission="zope.ManageContent"
+    <require permission="schoolbell.edit"
              set_schema="schoolbell.app.interfaces.IResource" />
   </content>
 
-  <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
-
   <content class="schoolbell.app.cal.CalendarEvent">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.calendar.interfaces.ICalendarEvent" />
   </content>
 
   <content class="schoolbell.app.cal.ExpandedCalendarEvent">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.calendar.interfaces.IExpandedCalendarEvent"
              />
   </content>
@@ -100,13 +105,17 @@
   </content>
 
   <content class="schoolbell.app.cal.ImmutableCalendar">
-    <require permission="zope.View"
+    <require permission="schoolbell.view"
              interface="schoolbell.calendar.interfaces.ICalendar" />
   </content>
 
   <content class=".app.Calendar">
-    <require permission="zope.View"
-             interface="schoolbell.calendar.interfaces.IEditCalendar" />
+    <require permission="schoolbell.view"
+             interface="schoolbell.calendar.interfaces.ICalendar" />
+    <require permission="schoolbell.addEvent"
+             attributes="addEvent" />
+    <require permission="schoolbell.modifyEvent"
+             attributes="clear removeEvent" />
   </content>
 
   <subscriber
