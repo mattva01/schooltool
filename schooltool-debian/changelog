@@ -1,6 +1,16 @@
 schooltool (0.9.99+1.0rc1) unstable; urgency=low
 
   * Split the schoolbell and schooltool packages.
+  * Hack upstreams build process until it does everything debian/rules used to
+    do, then reduce the rules file to less than 75 lines. Also the application
+    startup scripts are moved to the upstream scripts directory as they will
+    be usefull for the RPM packages.
+  * Create a python2.3-schooltool library package, this contains the
+    schooltool python module and the clients. The schooltool package is only
+    now only a configuration package.
+  * Fold the clients (command line and import-sampleschool) into the library
+    package as they would otherwise have been 2 lonely scripts in one big
+    package.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 

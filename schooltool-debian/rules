@@ -1,117 +1,40 @@
 #!/usr/bin/make -f
 
-# If you change the seed, you will have to recreate ttconfig.data as well.
-datagen_seed = schooltool-m4
-
-# This number and the dependencies should be the only thing needed to change
-# the python version
-PYTHON_VERSION=2.3
-PYTHON=python$(PYTHON_VERSION)
+# This variable, control file and the names of the .manpages and .docs files
+# should be the only thing needed to change the python version
+PYTHON=python2.3
 
 # Server Packages
-sourcepackage=schooltool
 package=schooltool
-libpkg=libschooltool
-
-# Schooltool server packages
-bellpackage=schoolbell
-
-# Client Packages
-packageclients=schooltool-clients
-libpkgclients=libschooltool-clients
-
-# Executable Scripts
-scripts=debian/schoolbell.py debian/schooltool.py \
-	debian/import-sampleschool.py debian/schooltool-client.py
-
-# list of files/directories which are required for the clients
-clientfiles=\(							\
-	    -path './zope/interface*' 				\
-	    -o -path './zope/__init__.py;' 			\
-	    -o -path './schooltool/clients*' 			\
-	    -o -path './schooltool/__init__.py' 		\
-	    -o -path './schooltool/common.py' 			\
-	    -o -path './schooltool/csvimport.py' 		\
-	    -o -path './schooltool/interfaces.py' 		\
-	    -o -path './schooltool/unchanged.py' 		\
-	    -o -path './schooltool/uris.py' 			\
-	    -o -path './schooltool/translation/__init__.py' 	\
-	    \)
-
-#
-# Rules to build tree
-#
+library=$(PYTHON)-schooltool
 
 build: build-stamp
-
-debian/import-sampleschool.py.template: debian/import-sampleschool.head
-	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
-	    import-sampleschool.py) > $@
-
-$(scripts): %: %.template
-	cat $< | sed s/@PYTHON@/$(PYTHON)/ > $@
-
-build-stamp: $(scripts)
+build-stamp:
 	dh_testdir
 	$(MAKE) PYTHON=$(PYTHON) PYTHONDIR=/usr/bin/$(PYTHON)
 	touch build-stamp
 
-#
-# Cleaning Rules
-#
-
 clean::
 	dh_testdir
 	dh_testroot
-	-$(MAKE) realclean
-	rm -f debian/import-sampleschool.py
-	rm -f debian/schooltool.py
-	rm -f debian/schoolbell.py
-	rm -f debian/schooltool-client.py
-	rm -f debian/import-sampleschool.py.template
+	-$(MAKE) clean
 	rm -f install-arch-stamp
 	rm -f install-indep-stamp
 	dh_clean
 	debconf-updatepo
 
-#
-# Rules to install packages
-#
-
-install: install-arch install-indep
-
 install-indep: install-indep-stamp
-install-indep-stamp: $(scripts)
+install-indep-stamp: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k -i
 	dh_installdirs -i
 
-	# make SchoolTool server package
-	# arch-indep files into /usr/lib
-	# NOTE: We have to put .py files into /usr/lib because they
-	# are byte compiled after installation and are thus arch dependent
-	# Unfortunately it is difficult to saparate the rest, so everything
-	# ends up in /usr/lib which generate some lintian errors. But this is
-	# the lesser of the two evils.
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(package)/usr/lib/$(package)/{} \;
-	cd Zope3/src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(package)/usr/lib/$(package)/{} \;
-	rm -f debian/$(package)/usr/lib/$(package)/trace.py
-	# executables
-	install -m 755 -D -p debian/$(package).py \
-		debian/$(package)/usr/bin/$(package); \
+	$(PYTHON) setup.py $(package) install \
+	    --install-purelib=debian/$(library)/usr/lib/$(package)\
+	    --install-data=debian/$(library)/usr/share/$(package) \
+	    --install-scripts=debian/$(library)/usr/bin
+
 	# configuration
 	install -m 644 -D -p debian/$(package).logrotate \
 		debian/$(package)/etc/logrotate.d/$(package)
@@ -120,110 +43,9 @@ install-indep-stamp: $(scripts)
 	install -m 644 -D -p debian/$(package).conf.default \
 	    debian/$(package)/usr/share/$(package)/$(package).conf.default
 
-	# make SchoolBell server package
-	# arch-indep (have to go into /usr/lib because .py files are
-	# bytecompiled)
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(bellpackage)/usr/lib/$(package)/{} \;
-	cd Zope3/src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(bellpackage)/usr/lib/$(package)/{} \;
-	rm -f debian/$(bellpackage)/usr/lib/$(package)/trace.py
-	# executables
-	install -m 755 -D -p debian/$(bellpackage).py \
-		debian/$(bellpackage)/usr/bin/$(bellpackage); \
-	# configuration
-	install -m 644 -D -p debian/$(bellpackage).logrotate \
-		debian/$(bellpackage)/etc/logrotate.d/$(bellpackage)
-	install -m 644 -D -p debian/ssl-cert.cnf \
-	    debian/$(bellpackage)/etc/$(bellpackage)/ssl-cert.cnf
-	install -m 644 -D -p debian/$(bellpackage).conf.default \
-	    debian/$(bellpackage)/usr/share/$(bellpackage)/$(bellpackage).conf.default
-
-	# Make client package
-	# arch-indep files into /usr/lib becuse .py files are byte-compiled
-	cd src && \
-	find \( -name 'tests' -o -name 'ftests' \) -prune -o \
-	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
-	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
-	     $(clientfiles) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(packageclients)/usr/lib/$(packageclients)/{} \;
-	cd Zope3/src && \
-	find \( -name 'tests' -o -name 'ftests' \) -prune -o \
-	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
-	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
-	     $(clientfiles) \
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(packageclients)/usr/lib/$(packageclients)/{} \;
-	# executables
-	for p in schooltool-client import-sampleschool; do \
-	    install -m 755 -D -p debian/$$p.py \
-		    debian/$(packageclients)/usr/bin/$$p; \
-	done
-	# Setup sample school for clients
-	install -m 644 -D -p ttconfig.data \
-	    debian/$(packageclients)/usr/share/$(packageclients)/sampleschool/ttconfig.data
-	dir=$$PWD \
-	    && cd debian/$(packageclients)/usr/share/$(packageclients)/sampleschool/ \
-	    && PYTHONPATH=$$dir/src \
-	       python $$dir/src/schooltool/clients/datagen.py $(datagen_seed)
-
 	touch install-indep-stamp
 
-install-arch: install-arch-stamp
-install-arch-stamp: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k -s
-	dh_installdirs -s
-
-	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
-
-	# make server library package
-	# arch-dep files
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-		-name '*.so'  \
-		$(archdep)\
-	     -exec install -m 644 -D -p {} \
-		../debian/$(libpkg)/usr/lib/$(package)/{} \;
-	cd Zope3/src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-		-name '*.so'  \
-		$(archdep)\
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(libpkg)/usr/lib/$(package)/{} \;
-
-	# Make client library
-	# arch-dep files
-	cd src && \
-	find \( -name tests -o -name ftests \) -prune -o \
-	     -name '*.so' 	\
-	     $(archdep)		\
-	     $(clientfiles)	\
-	     -exec install -m 644 -D -p {} \
-		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
-	cd Zope3/src && \
-	find \( -name tests -o -name ftests \) -prune -o \
-	     -name '*.so' 	\
-	     $(archdep)		\
-	     $(clientfiles)	\
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
-
-	touch install-arch-stamp
-
-binary-common:
+binary-indep: install-indep
 	dh_testdir
 	dh_testroot
 	dh_installdocs
@@ -235,7 +57,7 @@ binary-common:
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_python -V $(PYTHON_VERSION)
+	dh_python
 	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
@@ -243,11 +65,8 @@ binary-common:
 	dh_md5sums
 	dh_builddeb
 
-binary-indep: build install-indep
-	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
-
-binary-arch: build install-arch
-	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+# policy requires binary-arch, but there is nothing for it to do.
+binary-arch:
 
 binary: binary-arch binary-indep
 
