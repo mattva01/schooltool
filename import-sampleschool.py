@@ -54,12 +54,17 @@ class SampleSchoolImporter:
             self.import_csv_files()
             self.import_timetable_data()
         except Error, e:
+            print _("An error occured!")
             print >> sys.stderr, unicode(e)
             if self.interactive:
-                print 'Press <Enter> to continue.'
+                print _("Press <Enter> to continue.")
                 raw_input()
             return 1
         else:
+            if self.interactive:
+                print _("The sample school has been imported succesfully.")
+                print _("Press <Enter> to continue.")
+                raw_input()
             return 0
 
     def process_args(self, argv):
