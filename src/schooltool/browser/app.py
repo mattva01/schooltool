@@ -260,7 +260,11 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
                 return self.do_GET(request)
             self.prev_name = name
 
-        title = to_unicode(request.args['title'][0])
+        try:
+            title = to_unicode(request.args['title'][0])
+        except UnicodeError:
+            self.error = _("Invalid UTF-8 data.")
+            return self.do_GET(request)
         self.prev_title = title
 
         try:

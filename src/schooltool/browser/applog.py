@@ -50,10 +50,12 @@ class ApplicationLogView(View, ToplevelBreadcrumbsMixin):
             return View.do_GET(self, request)
 
         # XXX use widgets
+        self.filter_str = None
         if 'filter' in request.args:
-            self.filter_str = to_unicode(request.args['filter'][0])
-        else:
-            self.filter_str = None
+            try:
+                self.filter_str = to_unicode(request.args['filter'][0])
+            except UnicodeError:
+                pass
 
         if 'page' in request.args:
             try:
@@ -68,7 +70,11 @@ class ApplicationLogView(View, ToplevelBreadcrumbsMixin):
             page = 1
 
         if 'prev_filter' in request.args and self.filter_str is not None:
-            prev_filter_str = to_unicode(request.args['prev_filter'][0])
+            prev_filter_str = None
+            try:
+                prev_filter_str = to_unicode(request.args['prev_filter'][0])
+            except UnicodeError:
+                pass
             if prev_filter_str != self.filter_str:
                 page = 1
 
