@@ -283,7 +283,7 @@ class ServerSettingsDlg(wxDialog):
         self.__do_layout()
         # end wxGlade
 
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
         EVT_BUTTON(self, wxID_OK, self.OnOk)
 
@@ -412,7 +412,7 @@ class RollCallInfoDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnOk(self, event):
         """Verify that all data is entered before closing the dialog."""
@@ -521,7 +521,7 @@ class RollCallDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnPresentSelected(self, event):
         """Mark the person as present or absent."""
@@ -656,7 +656,7 @@ class AbsenceFrame(wxDialog):
         self.SetSizer(main_sizer)
         self.SetSizeHints(minW=200, minH=200)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
         self.DoRefresh(data=absence_data)
 
@@ -846,7 +846,7 @@ class ResourceSelectionDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def setSelection(self, selection):
         selected = sets.Set()
@@ -908,7 +908,7 @@ class ActivitySelectionDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnListDClick(self, event):
         self.DoAssignResources(event.GetSelection())
@@ -1009,7 +1009,7 @@ class NewPersonDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnOk(self, event):
         """Verify that all data is entered before closing the dialog."""
@@ -1106,7 +1106,7 @@ class SchoolTimetableFrame(wxDialog):
         self.SetSizeHints(minW=max(200, min_size.width),
                           minH=max(200, min_size.height))
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnClose(self, event=None):
         """Close the window."""
@@ -1163,7 +1163,7 @@ class BrowserFrame(wxDialog):
         self.SetSizeHints(minW=max(200, min_size.width),
                           minH=max(200, min_size.height))
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnBack(self, event=None):
         """Go back in histrory."""
@@ -1295,7 +1295,7 @@ class AvailabilitySearchFrame(wxDialog):
         self.SetSizer(main_sizer)
         self.SetSizeHints(minW=500, minH=300)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
         self.ok = True
 
     def OnClose(self, event=None):
@@ -1423,7 +1423,7 @@ class ResourceBookingDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
         self.ok = True
 
     def preselect(self, slot):
@@ -1512,7 +1512,7 @@ class PasswordDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
     def OnOk(self, event=None):
         if self.new_pw_ctrl.GetValue() != self.confirm_pw_ctrl.GetValue():
@@ -1619,7 +1619,7 @@ class PersonInfoDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
-        self.CenterOnScreen(wx.wxBOTH)
+        self.CenterOnScreen(wxBOTH)
 
         self.ok = True
 
