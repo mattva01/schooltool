@@ -37,7 +37,7 @@
     <p><a class="sitemap" href="/time-periods"
           i18n:translate="">Manage time periods</a></p>
     <p><a class="sitemap" href="/dfschemas"
-          i18n:translate="">Manage dynamic facet schemas</a></p>
+          i18n:translate="">Manage person information fields</a></p>
     <p><a class="sitemap" href="/csvimport.html"
           i18n:translate="">Import CSV data</a></p>
     <p><a class="sitemap" href="/tt_csvimport.html"

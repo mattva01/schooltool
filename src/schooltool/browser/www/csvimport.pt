@@ -5,39 +5,45 @@
 <!-- TODO: javascript magic to disable the 'other' field when an encoding is
            chosen from the dropdown box -->
 <body>
-<h1 metal:fill-slot="h1" i18n:translate="">Upload CSV data</h1>
+  <h1 metal:fill-slot="h1" i18n:translate="" style="display:none">
+    Upload CSV data
+  </h1>
 <metal:block metal:fill-slot="content">
 
-  <form method="POST" enctype="multipart/form-data"
+  <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/path">
-    <div class="error" tal:condition="view/error" tal:content="view/error" />
-    <div class="info" tal:condition="view/success"
-         i18n:translate="">Data imported successfully.</div>
+    <h3 i18n:translate="">Upload CSV data</h3>
+    <fieldset>
+      <legend i18n:translate="">Files</legend>
+      <div class="error" tal:condition="view/error" tal:content="view/error" />
+      <div class="info" tal:condition="view/success"
+           i18n:translate="">Data imported successfully.</div>
 
-    <div class="row">
-      <label for="groups.csv" i18n:translate="">groups.csv</label>
-      <input id="groups.csv" type="file" name="groups.csv" />
-    </div>
+      <div class="row">
+        <label for="groups.csv" i18n:translate="">groups.csv</label>
+        <input id="groups.csv" type="file" name="groups.csv" />
+      </div>
 
-    <div class="row">
-      <label for="persons.csv" i18n:translate="">persons.csv</label>
-      <input id="persons.csv" type="file" name="persons.csv" />
-    </div>
+      <div class="row">
+        <label for="persons.csv" i18n:translate="">persons.csv</label>
+        <input id="persons.csv" type="file" name="persons.csv" />
+      </div>
 
-    <div class="row">
-      <label for="resources.csv" i18n:translate="">resources.csv</label>
-      <input id="resources.csv" type="file" name="resources.csv" />
-    </div>
+      <div class="row">
+        <label for="resources.csv" i18n:translate="">resources.csv</label>
+        <input id="resources.csv" type="file" name="resources.csv" />
+      </div>
 
-    <div class="row" tal:replace="structure view/charset_widget">
-      [Charset]
-    </div>
-    <div class="row" tal:replace="structure view/other_charset_widget">
-      [Charset if Other was selected]
-    </div>
+      <div class="row" tal:replace="structure view/charset_widget">
+        [Charset]
+      </div>
+      <div class="row" tal:replace="structure view/other_charset_widget">
+        [Charset if Other was selected]
+      </div>
+  </fieldset>
 
-  <div class="buttons">
-    <input class="button" type="submit" value="Submit"
+  <div class="controls">
+    <input class="button-ok" type="submit" value="Submit"
            i18n:attributes="value" />
   </div>
 
