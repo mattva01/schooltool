@@ -412,8 +412,10 @@ class TestPersonAddView(SchoolToolSetup):
         from schooltool.app import Application, ApplicationObjectContainer
         app = Application()
         self.app = app
-        app['groups'] = ApplicationObjectContainer(Group)
+        g = app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
+        self.g1 = g.new('g1', title='Group 1')
+        self.g2 = g.new('g2', title='Group 2')
 
         return PersonAddView(app['persons'])
 
@@ -722,6 +724,18 @@ class TestPersonAddView(SchoolToolSetup):
                                    ' Person created', INFO),
                            (None, u'Person info updated on First Last'
                                    ' (/persons/000001)', INFO)])
+
+    def test_parseGroups(self):
+        view = self.createView()
+        pr = view._parseGroups
+        self.assertEquals(pr([]), [])
+        self.assertEquals(pr(['g1']), [self.g1])
+        self.assertEquals(pr(['/groups/g2']), [self.g2])
+        # Random junk is ignored
+        self.assertEquals(pr(['random junk', 'g1']), [self.g1])
+        self.assertEquals(pr(['non-utf-8 junk: \xff', 'g1']), [self.g1])
+        self.assertEquals(pr(['/groups', 'g1']), [self.g1])
+        self.assertEquals(pr(['/', 'g1']), [self.g1])
 
 
 class TestObjectContainerView(SchoolToolSetup, TraversalTestMixin):
@@ -1190,7 +1204,7 @@ class TestResidenceAddView(AppSetupMixin, unittest.TestCase):
 class TestBusySearchView(SchoolToolSetup, EqualsSortedMixin):
 
     def setUp(self):
-        from schooltool.model import Resource
+        from schooltool.model import Resource, Group
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.browser.app import BusySearchView
         self.setUpRegistries()

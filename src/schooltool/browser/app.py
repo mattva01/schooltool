@@ -362,7 +362,6 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
 
     def _parseGroups(self, raw_value):
         """Parse a list of paths and return a list of groups."""
-        raise NotImplementedError('XXX this function has no unit tests')
         groups_container = traverse(self.context, '/groups')
         groups = []
         for path in raw_value:
