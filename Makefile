@@ -96,20 +96,17 @@ deb:
 schooltooltar: realclean
 	[ ! -d .svn ] || { echo Error: This is a working copy, export it first; exit 1;}
 	builddir=`echo "$$PWD" | sed 's/.*\///'` 			&&\
-	[ zbell == z`echo "$$builddir"| grep -o bell` ]		  	||\
+	[ ztool == z`echo "$$builddir"| grep -o tool` ]		  	||\
 	{ echo Error: The directory has the wrong name; exit 1;}	&&\
 	cd .. 								&&\
 	tar -czf "$$builddir.tar.gz" 					\
-		    --exclude=schoolbell.conf.in			\
-		    --exclude=schoolbell-server.py			\
-		    --exclude=README.schoolbell				\
 		    --exclude=CVS 					\
 		    "$$builddir"
 
 schoolbelltar: realclean
 	[ ! -d .svn ] || { echo Error: This is a working copy, export it first; exit 1;}
 	builddir=`echo "$$PWD" | sed 's/.*\///'` 			&&\
-	[ ztool == z`echo "$$builddir"| grep -o tool` ]		  	||\
+	[ zbell == z`echo "$$builddir"| grep -o bell` ]		  	||\
 	{ echo Error: The directory has the wrong name; exit 1;}	&&\
 	cd .. 								&&\
 	tar -czf "$$builddir.tar.gz"					\
@@ -121,6 +118,7 @@ schoolbelltar: realclean
 		    --exclude=import-sampleschool.py			\
 		    --exclude=generate-sampleschool.py			\
 		    --exclude=clients					\
+		    --exclude=debian 					\
 		    --exclude=CVS 					\
 		    "$$builddir"
 
