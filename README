@@ -9,7 +9,8 @@ Website: http://www.schooltool.org/
 System requirements
 -------------------
 
-At the moment the only requirement is Python 2.3.
+- Python 2.3
+- Twisted (www.twistedmatrix.com)
 
 
 Project structure
@@ -20,6 +21,7 @@ Project structure
   test.py       unit test runner
 
   schooltool/   Python module 'schooltool'
+    main.py     executable prototype
     ftests/     functional tests for the schooltool module
     tests/      unit tests for the schooltool module
 
