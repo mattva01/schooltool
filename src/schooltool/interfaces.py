@@ -201,6 +201,8 @@ class IRemovableLink(ILink):
         The callback must conform to IUnlinkHook and be pickleable.
 
         All callbacks will be unregistered when unlink is called.
+        Callbacks are a set. If you register an identical callback more than
+        once, it will still be called only once.
         """
 
 

@@ -123,6 +123,10 @@ class TestPersistentKeysDictBare(BaseTestPersistentKeysDict):
 
 class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
 
+    def newInstance(self):
+        from schooltool.db import PersistentKeysSet
+        return PersistentKeysSet()
+
     def setUp(self):
         from zodb.db import DB
         from zodb.storage.mapping import MappingStorage
@@ -132,10 +136,10 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
     def tearDown(self):
         from transaction import get_transaction
         get_transaction().abort()
+        self.datamgr.close()
 
-    def test(self):
-        from schooltool.db import PersistentKeysSet
-        p = PersistentKeysSet()
+    def testPersistentKeys(self):
+        p = self.newInstance()
         self.datamgr.root()['p'] = p
         a, b = P(), P()
         self.assertEqual(len(p), 0)
@@ -157,6 +161,70 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
 
         from transaction import get_transaction
         get_transaction().commit()
+
+    def testValueNotPersistent(self):
+        p = self.newInstance()
+        self.assertRaises(TypeError, p.add, object())
+
+    def test_clear(self):
+        p = self.newInstance()
+        self.datamgr.root()['p'] = p
+        a, b = P(), P()
+        p.add(a)
+        p.add(b)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        p.clear()
+        self.assertEqual(list(p), [])
+        self.assertEqual(len(p), 0)
+
+
+class TestMaybePersistentKeysSet(TestPersistentKeysSet):
+
+    def newInstance(self):
+        from schooltool.db import MaybePersistentKeysSet
+        return MaybePersistentKeysSet()
+
+    def testValueNotPersistent(self):
+        # We like non-persistent values
+        pass
+
+    def testNonPersistentAndPersistentValues(self):
+        p = self.newInstance()
+        self.datamgr.root()['p'] = p
+        a = P()
+        b = object
+        self.assertEqual(len(p), 0)
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        p.add(b)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        p.remove(a)
+        self.assertEquals(list(p), [b])
+        self.assertEqual(len(p), 1)
+        p.add(a)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+
+        from transaction import get_transaction
+        get_transaction().commit()
+
+    def test_clear(self):
+        p = self.newInstance()
+        self.datamgr.root()['p'] = p
+        a, b = P(), object
+        p.add(a)
+        p.add(b)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        p.clear()
+        self.assertEqual(list(p), [])
+        self.assertEqual(len(p), 0)
 
 
 class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
@@ -295,6 +363,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
+    suite.addTest(unittest.makeSuite(TestMaybePersistentKeysSet))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDictBare))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDictWithDataManager))
     suite.addTest(unittest.makeSuite(TestPersistentPairKeysDict))

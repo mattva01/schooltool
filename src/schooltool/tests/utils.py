@@ -98,3 +98,5 @@ class EqualsSortedMixin:
         x.sort()
         y.sort()
         self.assertEquals(x, y)
+
+    assertEqualSorted = assertEqualsSorted

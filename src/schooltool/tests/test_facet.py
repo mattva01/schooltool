@@ -30,7 +30,8 @@ from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IGroupMember, IFacet, IFaceted
 from schooltool.interfaces import IEventConfigurable, ISpecificURI
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
-from schooltool.interfaces import IFacetedRelationshipSchema
+from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
+from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type
 
@@ -104,9 +105,13 @@ class LinkStub:
 
     def __init__(self, target):
         self.target = target
+        self.callbacks = Set()
 
     def traverse(self):
         return self.target
+
+    def registerUnlinkCallback(self, callback):
+        self.callbacks.add(callback)
 
 class URIDummy(ISpecificURI): """http://example.com/ns/dummy"""
 
@@ -132,32 +137,63 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         parent = object()
         child = object()
 
-        # raises a TypeError because child is not IFaceted
+        # Raises a TypeError because child is not IFaceted
         self.assertRaises(TypeError, f, parent=parent, child=child)
 
         from schooltool.facet import FacetedMixin
         from schooltool.component import iterFacets
         child = FacetedMixin()
         self.assertEqual(list(iterFacets(child)), [])
-        returned = f(parent=parent, child=child)
-        self.assertEqual(len(returned), 2)
-        self.assertEqual(returned['parent'].traverse(), parent)
-        self.assertEqual(returned['child'].traverse(), child)
-        # next, need to check a facet was added to child.
+        links = f(parent=parent, child=child)
+        self.assertEqual(len(links), 2)
+        self.assertEqual(links['parent'].traverse(), parent)
+        self.assertEqual(links['child'].traverse(), child)
+        # Next, need to check a facet was added to child.
         facet_list = list(iterFacets(child))
         self.assertEqual(len(facet_list), 1)
         facet = facet_list[0]
 
-        # These will fail until I've updated the facet API for ownership
         self.assert_(facet.active, 'facet.active')
         self.assertEqual(facet.__parent__, child)
-        self.assertEqual(facet.owner, returned['child'])
+        self.assertEqual(facet.owner, links['child'])
+
+        # Check that the facet will get deactivated when the link is unlinked.
+        self.assert_(links['child'].callbacks,
+                     'callbacks were not registered for the child link')
+        for callback in links['child'].callbacks:
+            if IUnlinkHook.isImplementedBy(callback):
+                callback.notifyUnlinked(links['child'])
+            else:
+                callback(links['child'])
+        self.assert_(not facet.active, 'not facet.active')
+
+
+class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
+
+    def test(self):
+        from schooltool.facet import facetDeactivator
+        from schooltool.facet import FacetedMixin
+        from schooltool.component import iterFacets, setFacet
+        faceted = FacetedMixin()
+        facet = FacetStub()
+        another_facet = FacetStub()
+        link = LinkStub(faceted)
+        setFacet(faceted, facet, owner=link)
+        setFacet(faceted, another_facet, owner=object())
+        self.assertEqualSorted(list(iterFacets(faceted)),
+                               [facet, another_facet])
+        self.assert_(another_facet.active)
+        self.assert_(facet.active)
+        facetDeactivator(link)
+        self.assert_(another_facet.active)
+        self.assert_(not facet.active, 'not facet.active')
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestFacetedRelationshipSchema))
+    suite.addTest(unittest.makeSuite(TestFacetDeactivation))
     return suite
 
 if __name__ == '__main__':

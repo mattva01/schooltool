@@ -30,7 +30,7 @@ $Id$
 from zope.interface import implements, classProvides
 from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
-from schooltool.interfaces import IFacetedRelationshipSchema
+from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
 from schooltool.event import EventTargetMixin
 from schooltool.component import setFacet, iterFacets
 from schooltool.db import PersistentKeysSet
@@ -85,8 +85,17 @@ class FacetedRelationshipSchema:
                 target = link.traverse()
                 if IFaceted.isImplementedBy(target):
                     setFacet(target, factory(), owner=link)
+                    link.registerUnlinkCallback(facetDeactivator)
                 else:
                     raise TypeError('Target of link "%s" must be IFaceted: %r'
                                     % (role_name, target))
         return links
 
+
+def facetDeactivator(link):
+    """Deactivate any facets registered in the link target that are owned by
+    the link.
+    """
+    for facet in iterFacets(link.traverse()):
+        if facet.owner is link:
+            facet.active = False

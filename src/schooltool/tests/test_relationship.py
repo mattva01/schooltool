@@ -25,7 +25,7 @@ from sets import Set
 import unittest
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
-from schooltool.interfaces import ISpecificURI, IRelatable, ILink
+from schooltool.interfaces import ISpecificURI, IRelatable, ILink, IUnlinkHook
 from schooltool.component import inspectSpecificURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -101,12 +101,20 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(list(self.tutor.__links__), [self.ltutor])
 
         class Callback:
-            link = None
+            implements(IUnlinkHook)
+            notify_link = None
+            callable_link = None
             def notifyUnlinked(self, link):
-                self.link = link
+                self.notify_link = link
+
+            def callableCallback(self, link):
+                self.callable_link = link
+
+        self.assertRaises(TypeError, self.ltutor.registerUnlinkCallback,
+                          object())
 
         tutor_callback = Callback()
-        self.ltutor.registerUnlinkCallback(tutor_callback)
+        self.ltutor.registerUnlinkCallback(tutor_callback.callableCallback)
         klass_callback = Callback()
         self.lklass.registerUnlinkCallback(klass_callback)
 
@@ -119,10 +127,12 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assert_(self.ltutor.__parent__ is self.tutor)
         self.assert_(self.lklass.__parent__ is self.klass)
 
-        self.assert_(tutor_callback.link is self.ltutor)
+        self.assert_(tutor_callback.callable_link is self.ltutor)
+        self.assert_(tutor_callback.notify_link is None)
         self.assertEquals(len(self.ltutor.callbacks), 0)
 
-        self.assert_(klass_callback.link is self.lklass)
+        self.assert_(klass_callback.callable_link is None)
+        self.assert_(klass_callback.notify_link is self.lklass)
         self.assertEquals(len(self.lklass.callbacks), 0)
 
         self.assertEquals(len(self.eventService.events), 1)

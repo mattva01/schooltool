@@ -25,6 +25,7 @@ from persistence import Persistent
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
 from schooltool.db import PersistentKeysSet, PersistentPairKeysDict
+from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
@@ -33,6 +34,7 @@ from schooltool.interfaces import IRelationshipAddedEvent
 from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import ISpecificURI
 from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import IUnlinkHook
 from schooltool.component import inspectSpecificURI, registerRelationship
 from schooltool import component
 from schooltool.event import EventMixin
@@ -58,7 +60,7 @@ class Link(Persistent):
             raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent
         self.role = role
-        self.callbacks = []
+        self.callbacks = MaybePersistentKeysSet()
         # self.relationship is set when this link becomes part of a
         # Relationship
 
@@ -91,13 +93,20 @@ class Link(Persistent):
 
     def _notifyCallbacks(self):
         for callback in self.callbacks:
-            callback.notifyUnlinked(self)
-        self.callbacks = []
+            if IUnlinkHook.isImplementedBy(callback):
+                callback.notifyUnlinked(self)
+            else:
+                callback(self)
+        self.callbacks.clear()
 
     def registerUnlinkCallback(self, callback):
-        # this also has the nice side effect of notifying persistence that
-        # self has changed
-        self.callbacks += [callback]
+        if IUnlinkHook.isImplementedBy(callback) or callable(callback):
+            # this also has the nice side effect of notifying persistence that
+            # self has changed
+            self.callbacks.add(callback)
+        else:
+            raise TypeError("Callback must provide IUnlinkHook or be"
+                            " callable. Got %r." % (callback,))
 
 
 class _LinkRelationship(Persistent):

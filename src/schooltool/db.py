@@ -24,6 +24,7 @@ $Id$
 import UserDict
 from persistence import Persistent
 from persistence.dict import PersistentDict
+import itertools
 
 __metaclass__ = type
 
@@ -134,6 +135,46 @@ class PersistentKeysSet(Persistent):
 
     def __len__(self):
         return len(self._data)
+
+    def clear(self):
+        self._data.clear()
+
+
+class MaybePersistentKeysSet(Persistent):
+    """A set for persistent and non-persistent but picklable objects that
+    uses PersistentKeysDict as a backend.
+    """
+
+    def __init__(self):
+        self._pdata = PersistentKeysDict()
+        self._npdata = PersistentDict()
+
+    def add(self, item):
+        data = self._dataSourceFor(item)
+        if item not in data:
+            data[item] = None
+
+    def __iter__(self):
+        return itertools.chain(self._pdata, self._npdata)
+
+    def remove(self, item):
+        del self._dataSourceFor(item)[item]
+
+    def __len__(self):
+        return len(self._pdata) + len(self._npdata)
+
+    def _isPersistent(self, obj):
+        return hasattr(obj, '_p_oid')
+
+    def _dataSourceFor(self, obj):
+        if self._isPersistent(obj):
+            return self._pdata
+        else:
+            return self._npdata
+
+    def clear(self):
+        self._pdata.clear()
+        self._npdata.clear()
 
 
 class PersistentPairKeysDict(Persistent, UserDict.DictMixin):
