@@ -29,7 +29,7 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.interfaces import IApplicationObject
-from schooltool.views import View, Template, absoluteURL
+from schooltool.views import View, Template, absoluteURL, absolutePath
 from schooltool.views import textErrorPage, notFoundPage
 from schooltool.views import read_file
 from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
@@ -151,8 +151,9 @@ class SchooldayModelCalendarView(View):
             self.context.reset(first, last - datetime.date.resolution)
             for day in days:
                 self.context.add(day)
+        path = absolutePath(request, self.context)
         request.site.logAppEvent(request.authenticated_user,
-                                 "Imported calendar (text)")
+                                 "Imported calendar: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("Calendar imported")
 
@@ -196,8 +197,9 @@ class SchooldayModelCalendarView(View):
         for holiday in holidays:
             if holiday in self.context and self.context.isSchoolday(holiday):
                 self.context.remove(holiday)
+        path = absolutePath(request, self.context)
         request.site.logAppEvent(request.authenticated_user,
-                                 "Imported calendar (XML)")
+                                 "Imported calendar: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("Calendar imported")
 
@@ -308,8 +310,9 @@ class CalendarView(CalendarReadView):
             for event in events:
                 # newly added  events
                 self.context.addEvent(event)
+            path = absolutePath(request, self.context)
             request.site.logAppEvent(request.authenticated_user,
-                                     "Imported calendar (text)")
+                                     "Imported calendar: %s" % path)
             request.setHeader('Content-Type', 'text/plain')
             return _("Calendar imported")
 
