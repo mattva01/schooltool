@@ -751,13 +751,62 @@ class IGroup(IFaceted, ILocation):
     """
 
 
-class IPerson(IFaceted, ILocation):
+class IPerson(IFaceted, ILocation, IMultiContainer):
     """A person.
 
     Participates in URIMembership as URIMember.
     """
 
-    title = Attribute("Person's name")
+    title = Attribute("""Person's name""")
+
+    def iterAbsences():
+        """Iterate over all absences."""
+
+    def getAbsence(key):
+        """Return the absence with a given key."""
+
+    def getCurrentAbsence():
+        """Return the currently unresolved absence or None."""
+
+    def addAbsence(comment):
+        """Add a new absence or extend the current absence.
+
+        Returns IAbsence.
+        """
+
+
+class IAbsence(ILocation):
+    """Absence object.
+
+    The __parent__ of an absence is its person.  The absence can be
+    located in IPersons.absences by its __name__.
+
+    You can assign True to the resolved attribute, but once it is done,
+    you must not assign False to it.
+    """
+
+    person = Attribute("""Person that was absent""")
+    comments = Attribute("""Comments (a sequence of IAbsenceComment)""")
+    resolved = Attribute("""Has this absence been resolved?""")
+    expected_presence = Attribute(
+        """Date and time after which the person is expected to be present""")
+
+    def addComment(comment):
+        """Add a comment."""
+
+
+class IAbsenceComment(Interface):
+
+    datetime = Attribute("""Date and time of the comment""")
+    reporter = Attribute("""Person that made this comment""")
+    text = Attribute("""Text of the comment""")
+    group = Attribute("""Group the person was absent from (can be None)""")
+
+
+class IAbsenteeismEvent(IEvent):
+    """Event that gets sent out when an absence is recorded."""
+
+    absence = Attribute("""IAbsence""")
 
 
 class IApplication(IContainmentRoot, IServiceManager, ITraversable):

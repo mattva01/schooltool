@@ -294,6 +294,7 @@ class PersistentKeysSetWithNames(UniqueNamesMixin):
         self._data.clear()
         self.clearNames()
 
+
 class PersistentPairKeysDictWithNames(PersistentPairKeysDict,
                                       UniqueNamesMixin):
     def __init__(self):
