@@ -22,7 +22,72 @@ RESTive views for SchoolBellApplication
 $Id$
 """
 from zope.app import zapi
-from schoolbell.app.rest import View, Template
+from zope.interface import implements
+from zope.component import adapts
+from zope.app.container.interfaces import INameChooser
+from zope.app.filerepresentation.interfaces import IFileFactory
+
+from schoolbell.app.rest import View, Template, textErrorPage
+from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
+from schoolbell.app.rest.xmlparsing import XMLDocument
+
+from schoolbell.app.app import Group
+from schoolbell.app.interfaces import IGroupContainer
+
+from schoolbell.app.app import Resource
+from schoolbell.app.interfaces import IResourceContainer
+
+from schoolbell import SchoolBellMessageID as _
+
+class ApplicationObjectFileFactory(object):
+    """ """
+
+    implements(IFileFactory)
+
+    def __init__(self, container):
+        self.context = container
+
+    def __call__(self, name, content_type, data):
+        doc = XMLDocument(data, self.schema)
+        try:
+            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+            obj = self.create(doc)
+        finally:
+            doc.free()
+
+        return obj
+
+
+class GroupFileFactory(ApplicationObjectFileFactory):
+    """Adapter that adapts GroupContainer to FileFactory"""
+
+    adapts(IGroupContainer)
+
+    schema = '''<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="object">
+              <attribute name="title">
+                <text/>
+              </attribute>
+              <optional>
+                <attribute name="description">
+                  <text/>
+                </attribute>
+              </optional>
+            </element>
+          </start>
+        </grammar>
+        '''
+
+    def create(self, doc):
+        """Extract data from an XMLDocument and create a Group."""
+        node = doc.query('/m:object')[0]
+        title = node['title']
+        description = node.get('description')
+        return Group(title=title, description=description)
 
 
 class ApplicationView(View):
@@ -33,3 +98,46 @@ class ApplicationView(View):
     def getContainers(self):
         return [{'href': zapi.absoluteURL(self.context[key], self.request),
                  'title': key} for key in self.context.keys()]
+
+
+class GenericContainerView(View):
+    """ """
+
+    template = Template("www/aoc.pt", content_type="text/xml; charset=UTF-8")
+
+    def getName(self):
+        return self.context.__name__
+
+    def items(self):
+        return [{'href': zapi.absoluteURL(self.context[key], self.request),
+                 'title': self.context[key].title}
+                for key in self.context.keys()]
+
+    def add(self, obj):
+        chooser = INameChooser(self.context)
+        name = chooser.chooseName(None, obj)
+        self.context[name] = obj
+
+    def POST(self):
+        return self.create()
+
+
+class GroupContainerView(GenericContainerView):
+    """ """
+
+    def create(self):
+        """ """
+
+        response = self.request.response
+        body = self.request.body
+
+        factory = GroupFileFactory(self.context)
+        group = factory(None, None, body)
+        self.add(group)
+        location = zapi.absoluteURL(group, self.request)
+
+        response.setStatus(201, 'Created')
+        response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
+        response.setHeader('Location', location)
+
+        return _("Object created: %s") % location

@@ -10,4 +10,43 @@
       permission="zope.Public"
       />
 
+  <adapter
+      for="schoolbell.app.interfaces.IGroupContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.GroupFileFactory"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IGroupContainer"
+      name="GET"
+      factory=".app.GroupContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IGroupContainer"
+      name="POST"
+      factory=".app.GroupContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IGroupContainer"
+      name="PUT"
+      factory=".app.GroupContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IGroupContainer"
+      name="DELETE"
+      factory=".app.GroupContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
 </configure>

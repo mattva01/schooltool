@@ -23,14 +23,22 @@ $Id$
 """
 
 import unittest
+from StringIO import StringIO
 
+from zope.app.testing import ztapi
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.container.interfaces import INameChooser
 
-from schoolbell.app.rest.tests.utils import XMLCompareMixin
-from schoolbell.app.rest.xmlparsing import XMLDocument
+from schoolbell.app.app import SimpleNameChooser
+from schoolbell.app.rest.app import GroupContainerView
+from schoolbell.app.interfaces import IGroupContainer
+
+
+from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
+from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
 
 
 class TestAppView(XMLCompareMixin, unittest.TestCase):
@@ -41,7 +49,7 @@ class TestAppView(XMLCompareMixin, unittest.TestCase):
         setup.placefulSetUp()
         self.app = SchoolBellApplication()
         directlyProvides(self.app, IContainmentRoot)
-        self.view = ApplicationView(self.app, TestRequest("/"))
+        self.view = ApplicationView(self.app, TestRequest())
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -104,9 +112,126 @@ class TestAppView(XMLCompareMixin, unittest.TestCase):
             """, recursively_sort=["schooltool"])
 
 
+class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
+    """Common code for Container View tests"""
+
+    def setUp(self):
+        from schoolbell.app.app import SchoolBellApplication
+
+        setup.placefulSetUp()
+        self.setUpLibxml2()
+
+        ztapi.provideAdapter(IGroupContainer,
+                             INameChooser,
+                             SimpleNameChooser)
+
+        self.app = SchoolBellApplication()
+        directlyProvides(self.app, IContainmentRoot)
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+        setup.placefulTearDown()
+
+
+class TestGroupContainerView(ContainerViewTestMixin,
+                             unittest.TestCase):
+    """Test for GroupContainerView"""
+
+    def setUp(self):
+        ContainerViewTestMixin.setUp(self)
+        from schoolbell.app.app import Group
+
+        self.group = self.app['groups']['root'] = Group("Root group")
+        self.groupContainer = self.app['groups']
+
+    def test_render(self):
+        view = GroupContainerView(self.groupContainer,
+                                  TestRequest())
+        result = view.GET()
+        response = view.request.response
+
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>groups</name>
+              <items>
+                <item xlink:href="http://127.0.0.1/groups/root"
+                      xlink:type="simple" xlink:title="Root group"/>
+              </items>
+            </container>
+            """)
+
+    def test_post(self, suffix="", view=None,
+                  body="""<object xmlns="http://schooltool.org/ns/model/0.1"
+                                  title="New Group"/>"""):
+        view = GroupContainerView(self.groupContainer,
+                                  TestRequest(StringIO(body)))
+        result = view.POST()
+        response = view.request.response
+
+        self.assertEquals(response.getStatus(), 201)
+        self.assertEquals(response._reason, "Created")
+
+        location = response.getHeader('location')
+        base = "http://127.0.0.1/groups/"
+        self.assert_(location.startswith(base),
+                     "%r.startswith(%r) failed" % (location, base))
+        name = location[len(base):]
+        self.assert_(name in self.app['groups'].keys())
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/plain; charset=UTF-8")
+        self.assert_(location in result)
+        return name
+
+    def test_post_with_a_description(self):
+        name = self.test_post(body='''
+            <object title="New Group"
+                    description="A new group"
+                    xmlns='http://schooltool.org/ns/model/0.1'/>''')
+        self.assertEquals(self.app['groups'][name].title, 'New Group')
+        self.assertEquals(self.app['groups'][name].description, 'A new group')
+        self.assertEquals(name, 'new-group')
+
+    def test_post_error(self):
+        view = GroupContainerView(
+            self.groupContainer,
+            TestRequest(StringIO('<element title="New Group">')))
+        self.assertRaises(XMLParseError, view.POST)
+
+
+class TestGroupFileFactory(unittest.TestCase):
+
+    def setUp(self):
+        from schoolbell.app.app import GroupContainer
+        from schoolbell.app.rest.app import GroupFileFactory
+
+        self.groupContainer = GroupContainer()
+        self.factory = GroupFileFactory(self.groupContainer)
+
+    def test_title(self):
+        group = self.factory("new_group", None,
+                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
+                                title="New Group"/>''')
+
+        self.assertEquals(group.title, "New Group")
+
+    def test_description(self):
+        group = self.factory("new_group", None,
+                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
+                                title="New Group"
+                                description="Boo"/>''')
+
+        self.assertEquals(group.title, "New Group")
+        self.assertEquals(group.description, "Boo")
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestAppView))
+    suite.addTests([unittest.makeSuite(test) for test in
+                    (TestAppView,
+                     TestGroupContainerView,
+                     TestGroupFileFactory)])
     return suite
 
 if __name__ == '__main__':
