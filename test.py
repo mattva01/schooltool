@@ -185,13 +185,16 @@ def get_test_files(cfg):
     return results
 
 
-def import_module(filename, cfg):
+def import_module(filename, cfg, tracer=None):
     """Imports and returns a module."""
     filename = os.path.splitext(filename)[0]
     modname = filename[len(cfg.basedir):].replace(os.path.sep, '.')
     if modname.startswith('.'):
         modname = modname[1:]
-    mod = __import__(modname)
+    if tracer is not None:
+        mod = tracer.runfunc(__import__, modname)
+    else:
+        mod = __import__(modname)
     components = modname.split('.')
     for comp in components[1:]:
         mod = getattr(mod, comp)
@@ -243,13 +246,16 @@ def get_test_classes_from_testsuite(suite):
     return results
 
 
-def get_test_cases(test_files, cfg):
+def get_test_cases(test_files, cfg, tracer=None):
     """Returns a list of test cases from a given list of test modules."""
     matcher = compile_matcher(cfg.test_regex)
     results = []
     for file in test_files:
-        module = import_module(file, cfg)
-        test_suite = module.test_suite()
+        module = import_module(file, cfg, tracer=tracer)
+        if tracer is not None:
+            test_suite = tracer.runfunc(module.test_suite)
+        else:
+            test_suite = module.test_suite()
         if test_suite is None:
             continue
         if cfg.warn_omitted:
@@ -271,7 +277,7 @@ def get_test_cases(test_files, cfg):
     return results
 
 
-def get_test_hooks(test_files, cfg):
+def get_test_hooks(test_files, cfg, tracer=None):
     """Returns a list of test hooks from a given list of test modules."""
     results = []
     dirs = Set(map(os.path.dirname, test_files))
@@ -283,8 +289,11 @@ def get_test_hooks(test_files, cfg):
     for dir in dirs:
         filename = os.path.join(dir, 'checks.py')
         if os.path.exists(filename):
-            module = import_module(filename, cfg)
-            hooks = module.test_hooks()
+            module = import_module(filename, cfg, tracer=tracer)
+            if tracer is not None:
+                hooks = tracer.runfunc(module.test_hooks)
+            else:
+                hooks = module.test_hooks()
             results.extend(hooks)
     return results
 
@@ -523,12 +532,28 @@ def main(argv):
     # Set up the python path
     sys.path[0] = cfg.basedir
 
+    # Set up tracing before we start importing things
+    tracer = None
+    if cfg.run_tests and cfg.coverage:
+        import trace
+        # trace.py in Python 2.3.1 is buggy:
+        # 1) Despite sys.prefix being in ignoredirs, a lot of system-wide
+        #    modules are included in the coverage reports
+        # 2) Some module file names do not have the first two characters,
+        #    and in general the prefix used seems to be arbitrary
+        # These bugs are fixed in src/trace.py which should be in PYTHONPATH
+        # before the official one.
+        ignoremods = ['test']
+        ignoredirs = [sys.prefix, sys.exec_prefix]
+        tracer = trace.Trace(count=True, trace=False,
+                    ignoremods=ignoremods, ignoredirs=ignoredirs)
+
     # Finding and importing
     test_files = get_test_files(cfg)
     if cfg.list_tests or cfg.run_tests:
-        test_cases = get_test_cases(test_files, cfg)
+        test_cases = get_test_cases(test_files, cfg, tracer=tracer)
     if cfg.list_hooks or cfg.run_tests:
-        test_hooks = get_test_hooks(test_files, cfg)
+        test_hooks = get_test_hooks(test_files, cfg, tracer=tracer)
 
     # Configure the logging module
     import logging
@@ -548,21 +573,10 @@ def main(argv):
         runner = CustomTestRunner(cfg, test_hooks)
         suite = unittest.TestSuite()
         suite.addTests(test_cases)
-        if cfg.coverage:
-            import trace
-            ignoremods = ['test']
-            ignoredirs = [sys.prefix, sys.exec_prefix]
-            tracer = trace.Trace(count=True, trace=False,
-                        ignoremods=ignoremods, ignoredirs=ignoredirs)
+        if tracer is not None:
             success = tracer.runfunc(runner.run, suite).wasSuccessful()
             results = tracer.results()
             results.write_results(show_missing=True, coverdir=cfg.coverdir)
-            # trace.py in Python 2.3.1 is buggy:
-            # 1) despite sys.prefix being in ignoredirs, a lot of system-wide
-            #    modules are included in the coverage reports
-            # 2) some module file names do not have the first two characters,
-            #    and in general the prefix used seems to be arbitrary
-            # these bugs are fixed in src/trace.py
         else:
             success = runner.run(suite).wasSuccessful()
 
