@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+import datetime
 
 from schooltool.browser.tests import RequestStub, setPath, TraversalTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -92,12 +93,14 @@ class TestPersonEditView(unittest.TestCase):
         view = self.createView()
         request = RequestStub(args={'first_name': u'I Changed',
                                     'last_name': u'My Name Recently',
+                                    'date_of_birth': '2004-08-05',
                                     'comment': u'For various reasons.',
                                     'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
         view.do_POST(request)
 
         self.assertEquals(self.info.first_name, u'I Changed')
         self.assertEquals(self.info.last_name, u'My Name Recently')
+        self.assertEquals(self.info.date_of_birth, datetime.date(2004, 8, 5))
         self.assertEquals(self.info.comment, u'For various reasons.')
         self.assert_('JFIF' in self.info.photo)
 
@@ -108,10 +111,32 @@ class TestPersonEditView(unittest.TestCase):
         # Check that the photo doesn't get removed.
         request = RequestStub(args={'first_name': u'I Changed',
                                     'last_name': u'My Name Recently',
+                                    'date_of_birth': '2004-08-06',
                                     'comment': u'For various reasons.',
                                     'photo': ''})
         view.do_POST(request)
+        self.assertEquals(self.info.date_of_birth, datetime.date(2004, 8, 6))
         self.assert_('JFIF' in self.info.photo)
+
+    def test_post_errors(self):
+        for dob in ['bwahaha', '2004-13-01', '2004-08-05-01']:
+            view = self.createView()
+            request = RequestStub(args={'first_name': u'I Changed',
+                                        'last_name': u'My Name Recently',
+                                        'date_of_birth': dob,
+                                        'comment': u'For various reasons.',
+                                        'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
+            body = view.do_POST(request)
+            self.assert_('Invalid date' in body)
+
+        view = self.createView()
+        request = RequestStub(args={'first_name': u'I Changed',
+                                    'last_name': u'My Name Recently',
+                                    'date_of_birth': '2004-08-05',
+                                    'comment': u'For various reasons.',
+                                    'photo': 'eeevill'})
+        body = view.do_POST(request)
+        self.assert_('Invalid photo' in body, body)
 
 
 class TestPersonInfoMixin(unittest.TestCase):

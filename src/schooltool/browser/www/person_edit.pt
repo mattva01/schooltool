@@ -10,6 +10,7 @@
 
   <form action="." method="POST" enctype="multipart/form-data"
         tal:attributes="action request/path">
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row"><b>Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>
@@ -26,8 +27,10 @@
       <input id="last_name" name="last_name" type="text"
              tal:attributes="value info/last_name" />
     </div>
-    <div class="row"><b>Date of birth:</b>
-      <span tal:replace="info/date_of_birth"></span>
+    <div class="row">
+      <label for="date_of_birth">Birth date</label>
+      <input id="date_of_birth" name="date_of_birth" type="text"
+             tal:attributes="value info/date_of_birth" />
     </div>
     <div class="row">
       <label for="comment">Comment</label>

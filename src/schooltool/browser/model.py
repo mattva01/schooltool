@@ -23,6 +23,7 @@ $Id$
 """
 
 import cgi
+import datetime
 import PIL.Image
 from StringIO import StringIO
 
@@ -86,20 +87,38 @@ class PersonEditView(View, PersonInfoMixin):
 
     template = Template('www/person_edit.pt')
 
+    error = None
+
     canonical_photo_size = (240, 240)
 
     def do_POST(self, request):
         first_name = request.args['first_name'][0]
         last_name = request.args['last_name'][0]
+        dob_string = request.args['date_of_birth'][0]
         comment = request.args['comment'][0]
         photo = request.args['photo'][0]
+
+        try:
+            date_elements = [int(el) for el in dob_string.split('-')]
+            dob = datetime.date(*date_elements)
+        except (TypeError, ValueError):
+            self.error = 'Invalid date'
+            return self.do_GET(request)
+
+        if photo:
+            try:
+                photo = self.processPhoto(photo)
+            except IOError:
+                self.error = 'Invalid photo'
+                return self.do_GET(request)
 
         infofacet = self.info()
         infofacet.first_name = first_name
         infofacet.last_name = last_name
+        infofacet.date_of_birth = dob
         infofacet.comment = comment
         if photo:
-            infofacet.photo = self.processPhoto(photo)
+            infofacet.photo = photo
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
