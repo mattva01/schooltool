@@ -612,9 +612,11 @@ class MainFrame(wxFrame):
             ))
 
         def setupPopupMenu(control, menu):
+
             def handler(event):
                 mouse_pos = wxGetMousePosition()
                 control.PopupMenu(menu, control.ScreenToClient(mouse_pos))
+
             EVT_RIGHT_UP(control, handler)
             EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), handler)
             if isinstance(control, wxTreeCtrl):

@@ -352,6 +352,7 @@ class SchoolToolClient:
         if response.status != 200:
             raise ResponseStatusError(response)
 
+
 #
 # Parsing utilities
 #
@@ -381,6 +382,7 @@ def _parseContainer(body):
     finally:
         doc.freeDoc()
         ctx.xpathFreeContext()
+
 
 def _parseGroupTree(body):
     """Parse the tree of groups returned from the server.
@@ -429,6 +431,7 @@ def _parseGroupTree(body):
     except libxml2.parserError:
         raise SchoolToolError("Could not parse group tree")
 
+
 def _parseMemberList(body):
     """Parse the list of group members (persons only)."""
     try:
@@ -454,6 +457,7 @@ def _parseMemberList(body):
     finally:
         doc.freeDoc()
         ctx.xpathFreeContext()
+
 
 def _parseRelationships(body, role_names):
     """Parse the list of relationships."""
@@ -490,6 +494,7 @@ def _parseRelationships(body, role_names):
         doc.freeDoc()
         ctx.xpathFreeContext()
 
+
 def _parseRollCall(body):
     """Parse a roll call template."""
     try:
@@ -519,6 +524,7 @@ def _parseRollCall(body):
     finally:
         doc.freeDoc()
         ctx.xpathFreeContext()
+
 
 def _parseAbsences(body):
     """Parse a list of absences."""
@@ -572,6 +578,7 @@ def _parseAbsences(body):
     finally:
         doc.freeDoc()
         ctx.xpathFreeContext()
+
 
 def _parseAbsenceComments(body):
     """Parse a list of absence comments."""

@@ -196,7 +196,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assert_(conn.closed)
 
     def test_request_with_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
+        from schooltool.guiclient import SchoolToolError
         path = '/path'
         e = socket.error(23, 'out of spam')
         client = self.newClient(error=e)
@@ -483,7 +483,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.getAbsenceComments, '/p')
 
     def test_getSchoolTimetable(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolTimetableInfo
+        from schooltool.guiclient import SchoolTimetableInfo
         body = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
               <teacher path="/people/0013">

@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-import datetime
 from schooltool.views.tests import RequestStub
 
 __metaclass__ = type
