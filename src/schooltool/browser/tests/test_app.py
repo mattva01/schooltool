@@ -763,6 +763,18 @@ class TestResidenceContainerView(TestObjectContainerView):
         self.assert_('add.html' not in view.render(request))
 
 
+class TestResidenceAddView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import ResidenceAddView
+        view = GroupAddView(self.app['residences'])
+        return view
+
+    def test(self):
+        view = self.createView()
+        self.assertEquals(view.title, "Add residence")
+
+
 class TestObjectAddView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
@@ -1634,6 +1646,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestResourceContainerView))
     suite.addTest(unittest.makeSuite(TestNoteContainerView))
     suite.addTest(unittest.makeSuite(TestResidenceContainerView))
+    suite.addTest(unittest.makeSuite(TestResidenceAddView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))

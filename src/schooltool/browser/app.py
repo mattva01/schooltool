@@ -623,14 +623,16 @@ class ResidenceAddView(ObjectAddView):
             if widget.error:
                 return self.do_GET(request)
 
-        obj = self.context.new(name, 
-                title=self.title_widget.value, 
-                country=self.country_widget.value,
-                postcode=self.postcode_widget.value,
-                district=self.district_widget.value,
-                town=self.town_widget.value,
-                streetNr=self.streetNr_widget.value,
-                thoroughfareName=self.thoroughfareName_widget.value)
+        obj = self.context.new(name, title=self.title_widget.value, 
+                country=self.country_widget.value)
+
+        info = obj.info()
+
+        info.postcode=self.postcode_widget.value
+        info.district=self.district_widget.value
+        info.town=self.town_widget.value
+        info.streetNr=self.streetNr_widget.value
+        info.thoroughfareName=self.thoroughfareName_widget.value
 
 #        obj = self.context.new(name, 
 #                title=self.title_widget.value, 

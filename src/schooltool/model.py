@@ -274,7 +274,7 @@ class Residence(RelationshipValenciesMixin, FacetedEventTargetMixin):
     title = None
     country = None
 
-    def __init__(self, title=None, country=None, **kwargs):
+    def __init__(self, title=None, country=None):
         FacetedEventTargetMixin.__init__(self)
         RelationshipValenciesMixin.__init__(self)
         self.title = title
