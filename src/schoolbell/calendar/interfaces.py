@@ -123,6 +123,7 @@ class IEditCalendar(ICalendar):
 
             for event in cal2:
                 cal1.addEvent(event)
+
         """
 
 

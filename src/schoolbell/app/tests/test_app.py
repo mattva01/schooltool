@@ -28,9 +28,6 @@ from zope.testing import doctest
 from zope.interface.verify import verifyObject
 
 
-# When this file grows too big, move the following tests to
-# test_app.py
-
 def doctest_SchoolBellApplication():
     r"""Tests for SchoolBellApplication.
 
