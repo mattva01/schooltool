@@ -87,6 +87,18 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
 
+    def test_render_forbidden(self):
+        view = self.createView()
+        request = RequestStub('/?forbidden=1', args={'forbidden': '1'})
+        result = view.render(request)
+        self.assert_('Username' in result)
+        self.assert_('error' not in result)
+        self.assert_('expired' not in result)
+        self.assert_('not allowed' in result)
+        self.assert_('action="/"' in result)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+
     def test_render_with_url(self):
         view = self.createView()
         request = RequestStub(args={'url': '/some/url'})

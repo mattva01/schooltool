@@ -10,6 +10,10 @@
   <input type="hidden" name="url"
          tal:condition="request/args/url | nothing"
          tal:attributes="value python:request.args['url'][0]" />
+  <div class="error" tal:condition="request/args/forbidden | nothing">
+    You are not allowed to access this page.  You can click on the back button
+    in your browser to go back, or ask a more privileged user to log in.
+  </div>
   <div class="info" tal:condition="request/args/expired | nothing">
     Your session has expired.
   </div>

@@ -42,7 +42,7 @@ __metaclass__ = type
 session_time_limit = datetime.timedelta(hours=5)
 
 
-# Person username / group name validation
+# Person username / group __name__ validation
 # XXX Perhaps this constraint is a bit too strict.
 valid_name = re.compile("^[a-zA-Z0-9.,'()]+$")
 
