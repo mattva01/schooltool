@@ -713,9 +713,6 @@ h2.calendar-view-title {
     padding: 0.5ex;
 }
 
-#calendar-view-day .event:hover .description {
-}
-
 #calendar-view-day .hour a.event-new {
     padding: 0.5ex;
     cursor: pointer;
