@@ -26,6 +26,8 @@ import sets
 import datetime
 from cStringIO import StringIO
 
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.app import create_application
 from schooltool.uris import URIOccupies
 from schooltool.browser import ToplevelBreadcrumbsMixin
@@ -54,7 +56,7 @@ from schooltool.browser.widgets import dateParser, intParser
 from schooltool.browser.widgets import sequenceParser, sequenceFormatter
 from schooltool.common import to_unicode
 from schooltool.component import FacetManager
-from schooltool.component import getPath, traverse, getRelatedObjects
+from schooltool.component import getRelatedObjects
 from schooltool.component import getTicketService, getTimetableSchemaService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, IResource, AuthenticationError

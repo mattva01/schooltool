@@ -25,6 +25,7 @@ $Id: model.py 153 2003-10-16 12:33:50Z mg $
 from sets import Set
 from zope.component import getService
 from zope.interface import implements, moduleProvides
+from zope.app.traversing.api import getPath
 from schooltool.interfaces import IQueryLinks
 from schooltool.interfaces import IMembershipEvent
 from schooltool.interfaces import IMemberAddedEvent
@@ -36,7 +37,7 @@ from schooltool.uris import URIMembership, URIGroup, URIMember
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool import relationship
 from schooltool.component import registerRelationship
-from schooltool.component import getRelatedObjects, getOptions, getPath
+from schooltool.component import getRelatedObjects, getOptions
 from schooltool.event import EventMixin
 from schooltool.translation import ugettext as _
 

@@ -32,13 +32,14 @@ import logging
 import ZConfig
 import transaction
 from zope.interface import moduleProvides
+from zope.app.traversing.api import traverse
 from twisted.internet import reactor
 from twisted.internet.ssl import DefaultOpenSSLContextFactory
 from twisted.python import threadable
 import twisted.python.runtime
 
 from schooltool.app import create_application
-from schooltool.component import getView, traverse
+from schooltool.component import getView
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
@@ -456,7 +457,7 @@ class Server:
         """See IAuthenticator."""
         try:
             persons = traverse(context, '/persons')
-        except (TypeError, KeyError):
+        except TraversalError:
             # Perhaps log somewhere that authentication is not possible in
             # this context, otherwise it might be hard to debug
             raise AuthenticationError(_("Invalid login"))

@@ -17,7 +17,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-The schooltool component.
+SchoolTool component architecture.
+
+This module will eventually go away, as we are migrating towards Zope 3
+component architecture.
 
 $Id$
 """
@@ -50,8 +53,6 @@ from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import IOptions, IModuleSetup
 from schooltool.interfaces import IDynamicSchemaField, IDynamicSchema
 from schooltool.interfaces import IDynamicSchemaService
-# XXX Reexport zope traversing API.
-from zope.app.traversing.api import getPath, getRoot, traverse, TraversalError
 
 moduleProvides(IFacetAPI, IServiceAPI, IRelationshipAPI, IViewAPI,
                ITimetableModelRegistry, IModuleSetup)

@@ -31,6 +31,8 @@ from datetime import date, time, timedelta, datetime
 from persistent import Persistent
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
+from zope.app.traversing.api import getPath
+
 from schooltool.tests.helpers import diff, sorted
 from schooltool.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -1467,8 +1469,6 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEqual(result, tt)
 
     def test_paths(self):
-        from schooltool.component import getPath
-
         tm = TimetabledStub(self.eventService)
         tm.__name__ = 'stub'
         tt = tm.timetables["2003-fall", "sequential"] = self.newTimetable()

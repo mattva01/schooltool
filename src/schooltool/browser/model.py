@@ -26,6 +26,8 @@ import sets
 import itertools
 from cStringIO import StringIO
 
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.rest.cal import CalendarView as RestCalendarView
 from schooltool.rest.cal import CalendarReadView as RestCalendarReadView
 from schooltool.rest.infofacets import resize_photo, canonical_photo_size
@@ -42,7 +44,7 @@ from schooltool.browser.acl import ACLView
 from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.browser.cal import CalendarView
 from schooltool.component import FacetManager
-from schooltool.component import getRelatedObjects, relate, getPath, traverse
+from schooltool.component import getRelatedObjects, relate
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getDynamicFacetSchemaService

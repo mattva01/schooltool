@@ -23,13 +23,15 @@ $Id$
 """
 
 import libxml2
+
 from zope.interface import moduleProvides
 from zope.component import getUtility, getUtilitiesFor
+from zope.app.traversing.api import getPath
+
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IFacet, IFacetFactory
 from schooltool.component import registerView, getView
 from schooltool.component import FacetManager
-from schooltool.component import getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest import absoluteURL, absolutePath

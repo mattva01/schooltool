@@ -24,9 +24,12 @@ $Id$
 
 from sets import Set
 import unittest
+
 from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
+from zope.app.traversing.api import getPath
+
 from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
 from schooltool.interfaces import ILinkSet, IPlaceholder
 from schooltool.interfaces import IURIObject
@@ -166,7 +169,6 @@ class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
 
     def test_getPath(self):
         from schooltool.relationship import RelatableMixin
-        from schooltool.component import getPath
 
         root = TraversableRoot()
         parent = RelatableMixin()

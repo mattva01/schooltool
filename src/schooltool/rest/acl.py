@@ -22,8 +22,8 @@ The views for the ACL objects.
 $Id$
 """
 
+from zope.app.traversing.api import getPath, traverse, TraversalError
 from schooltool.interfaces import Everybody
-from schooltool.component import traverse, getPath, TraversalError
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest.auth import SystemAccess

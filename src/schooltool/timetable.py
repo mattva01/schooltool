@@ -148,6 +148,7 @@ from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
 from zope.interface import implements, moduleProvides, classProvides
+from zope.app.traversing.api import getPath
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
@@ -176,7 +177,7 @@ from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import registerTimetableModel
-from schooltool.component import getPath, getOptions
+from schooltool.component import getOptions
 from schooltool.uris import URIGroup
 from schooltool.event import EventMixin
 from zope.app.location.traversing import LocationPhysicallyLocatable

@@ -27,7 +27,7 @@ from zope.testing.cleanup import CleanUp
 from schooltool.common import dedent
 from schooltool.tests.utils import RegistriesSetupMixin, SchoolToolSetup
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
-from schooltool.tests.utils import QuietLibxml2Mixin, NiceDiffsMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.rest.tests import RequestStub, UtilityStub
 from schooltool.rest.xmlparsing import XMLDocument
 

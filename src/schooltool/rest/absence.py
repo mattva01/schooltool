@@ -25,14 +25,16 @@ $Id$
 import sets
 import datetime
 import libxml2
+
 from zope.interface import moduleProvides
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IGroup, IPerson
 from schooltool.interfaces import IAbsenceTrackerUtility, IAbsenceTrackerFacet
 from schooltool.interfaces import Unchanged
 from schooltool.uris import URIMember
 from schooltool.component import registerView
-from schooltool.component import getPath, traverse
 from schooltool.component import getRelatedObjects
 from schooltool.absence import AbsenceComment
 from schooltool.rest import View, Template

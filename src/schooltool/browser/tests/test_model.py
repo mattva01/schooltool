@@ -27,6 +27,8 @@ import datetime
 from logging import INFO
 
 from zope.interface import implements
+from zope.app.traversing.api import getPath
+
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.browser.tests import HTMLDocument
 from schooltool.browser.tests import RequestStub, setPath
@@ -764,7 +766,6 @@ class TestGroupEditView(SchoolToolSetup):
 
     def test_list(self):
         from schooltool.browser.model import GroupEditView
-        from schooltool.component import getPath
         from schooltool.rest import absoluteURL
         view = GroupEditView(self.group)
         view.request = RequestStub()
@@ -784,7 +785,6 @@ class TestGroupEditView(SchoolToolSetup):
 
     def test_addList(self):
         from schooltool.browser.model import GroupEditView
-        from schooltool.component import getPath
         from schooltool.rest import absoluteURL
         view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
@@ -812,7 +812,6 @@ class TestGroupEditView(SchoolToolSetup):
 
     def test_addList_restricted(self):
         from schooltool.browser.model import GroupEditView
-        from schooltool.component import getPath
         from schooltool.rest import absoluteURL
         from schooltool.membership import Membership
 
@@ -936,7 +935,6 @@ class TestGroupSubgroupView(SchoolToolSetup):
 
     def test_addList(self):
         from schooltool.browser.model import GroupSubgroupView
-        from schooltool.component import getPath
         from schooltool.rest import absoluteURL
         view = GroupSubgroupView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
@@ -956,7 +954,6 @@ class TestGroupSubgroupView(SchoolToolSetup):
 
     def test_list(self):
         from schooltool.browser.model import GroupSubgroupView
-        from schooltool.component import getPath
         from schooltool.rest import absoluteURL
         view = GroupSubgroupView(self.group)
         view.request = RequestStub()

@@ -25,6 +25,9 @@ $Id$
 import unittest
 import datetime
 from logging import INFO
+
+from zope.app.traversing.api import getPath
+
 from schooltool.tests.utils import RegistriesSetupMixin, SchoolToolSetup
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
@@ -185,7 +188,6 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.tearDownRegistries()
 
     def test_render(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
         result = self.view.render(request)
         self.assertEquals(request.headers['content-type'],

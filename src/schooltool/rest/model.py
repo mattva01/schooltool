@@ -23,6 +23,8 @@ $Id$
 """
 
 from zope.interface import moduleProvides
+from zope.app.traversing.api import getPath
+
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IGroup, IPerson, IResource, INote
 from schooltool.interfaces import IApplicationObject
@@ -30,7 +32,6 @@ from schooltool.uris import URIMember, URIGroup
 from schooltool.component import registerView
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
-from schooltool.component import getPath
 from schooltool.rest import View, Template
 from schooltool.rest import notFoundPage
 from schooltool.rest import absolutePath

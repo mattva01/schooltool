@@ -25,11 +25,13 @@ $Id$
 import libxml2
 import PIL.Image
 from cStringIO import StringIO
+
 from zope.interface import moduleProvides
+from zope.app.traversing.api import getPath
+
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
-from schooltool.component import getPath
 from schooltool.rest import View, Template
 from schooltool.rest import notFoundPage, textErrorPage
 from schooltool.rest import absolutePath

@@ -24,8 +24,11 @@ $Id$
 
 import sets
 import datetime
+
 from zope.interface import moduleProvides
 from zope.component import getUtility
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
@@ -43,7 +46,7 @@ from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.common import parse_date, parse_time
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
-from schooltool.component import registerView, traverse, getPath
+from schooltool.component import registerView
 from schooltool.component import getRelatedObjects
 from schooltool.uris import URIMember, URITaught
 from schooltool.cal import SchooldayModel

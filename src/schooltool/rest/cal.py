@@ -28,6 +28,8 @@ import datetime
 import operator
 
 from zope.interface import moduleProvides
+from zope.app.traversing.api import getPath, traverse
+
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.interfaces import IApplicationObject
@@ -42,7 +44,6 @@ from schooltool.icalendar import ICalReader, ICalParseError, Period
 from schooltool.icalendar import ical_text, ical_duration
 from schooltool.cal import CalendarEvent
 from schooltool.common import parse_date, parse_datetime, to_unicode
-from schooltool.component import getPath, traverse
 from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _

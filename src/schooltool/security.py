@@ -28,7 +28,8 @@ yet.
 $Id$
 """
 from zope.interface import Interface, implements
-from schooltool.component import getRelatedObjects, getPath
+from zope.app.traversing.api import getPath
+from schooltool.component import getRelatedObjects
 from schooltool.uris import URIGroup
 from schooltool.interfaces import ILocation, IApplicationObject
 from schooltool.interfaces import ModifyPermission

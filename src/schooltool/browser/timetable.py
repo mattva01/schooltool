@@ -28,6 +28,8 @@ import datetime
 import itertools
 
 from zope.component import getUtility
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import View, Template
@@ -38,7 +40,6 @@ from schooltool.browser.widgets import SelectionWidget, TextWidget
 from schooltool.browser.widgets import dateParser, intParser
 from schooltool.cal import SchooldayModel
 from schooltool.common import to_unicode, parse_date
-from schooltool.component import getPath, traverse
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IApplicationObject, IPerson

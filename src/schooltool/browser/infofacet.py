@@ -22,8 +22,9 @@ Web-application views for the schooltool.infofacets.
 $Id$
 """
 
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.common import to_unicode
-from schooltool.component import getPath, traverse
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import FacetManager
 from schooltool.interfaces import IDynamicFacet, IDynamicFacetSchemaService

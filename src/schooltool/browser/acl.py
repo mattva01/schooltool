@@ -22,10 +22,11 @@ Browser views for ACLs.
 $Id$
 """
 
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.browser import View, Template
 from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser.auth import PrivateAccess
-from schooltool.component import traverse, getPath
 from schooltool.translation import ugettext as _
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission

@@ -25,10 +25,10 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 import libxml2
 from zope.component import getUtility
 from zope.component.exceptions import ComponentLookupError
+from zope.app.traversing.api import getPath, traverse, TraversalError
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission
 from schooltool.interfaces import IURIObject
-from schooltool.component import traverse, getPath, TraversalError
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest import absoluteURL, absolutePath

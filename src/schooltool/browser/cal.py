@@ -27,6 +27,8 @@ import urllib
 import calendar
 from datetime import datetime, date, time, timedelta
 
+from zope.app.traversing.api import traverse, getPath
+
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser import Unauthorized
@@ -40,7 +42,7 @@ from schooltool.cal import WeeklyRecurrenceRule, MonthlyRecurrenceRule
 from schooltool.cal import YearlyRecurrenceRule
 from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
-from schooltool.component import traverse, getPath, getRelatedObjects, traverse
+from schooltool.component import getRelatedObjects
 from schooltool.component import getOptions
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent

@@ -26,9 +26,11 @@ import datetime
 import logging
 import urllib
 
+from zope.app.traversing.api import traverse
+
 from schooltool.interfaces import AuthenticationError
 from schooltool.interfaces import IApplicationObjectContainer, IRelatable
-from schooltool.component import getTicketService, traverse, getRelatedObjects
+from schooltool.component import getTicketService, getRelatedObjects
 from schooltool.rest import View as _View
 from schooltool.rest import Unauthorized               # reexport
 from schooltool.rest import Template, read_file        # reexport

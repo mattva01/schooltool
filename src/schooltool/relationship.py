@@ -25,6 +25,7 @@ $Id$
 import sets
 from persistent import Persistent
 from zope.interface import implements, classProvides, moduleProvides
+from zope.app.traversing.api import getPath
 from schooltool.db import PersistentPairKeysDictWithNames
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
@@ -39,7 +40,7 @@ from schooltool.interfaces import IFaceted, ISchemaInvocation
 from schooltool.interfaces import IModuleSetup, IValency
 from schooltool.interfaces import IUnlinkHook
 from schooltool.interfaces import IURIObject
-from schooltool.component import getPath, registerRelationship
+from schooltool.component import registerRelationship
 from schooltool import component
 from schooltool.event import EventMixin
 

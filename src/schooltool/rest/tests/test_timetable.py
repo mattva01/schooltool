@@ -29,6 +29,8 @@ from sets import Set
 
 from zope.interface import implements, directlyProvides
 from zope.testing.doctestunit import DocTestSuite
+from zope.app.traversing.api import getPath
+
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.interfaces import ITraversable, IEventTarget
 from schooltool.rest.tests import RequestStub, TraversableRoot, setPath
@@ -1828,7 +1830,6 @@ class TestTimePeriodCreatorView(SchoolToolSetup):
     def test_put(self):
         from schooltool.timetable import TimePeriodService
         from schooltool.rest.timetable import TimePeriodCreatorView
-        from schooltool.component import getPath
         service = TimePeriodService()
         setPath(service, '/time-periods')
         key = '2003 fall'

@@ -24,6 +24,9 @@ $Id$
 
 from logging import INFO
 import unittest
+
+from zope.app.traversing.api import getPath
+
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
@@ -251,7 +254,6 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.view.authorization = lambda ctx, rq: True
 
     def testGET(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost%s" % getPath(self.link))
         result = self.view.render(request)
         self.assertEquals(request.headers['content-type'],
@@ -266,7 +268,6 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         """)
 
     def testDELETE(self):
-        from schooltool.component import getPath
         url = "http://localhost%s" % getPath(self.link)
         request = RequestStub(url, method="DELETE")
         self.assertEqual(len(self.sub.listLinks()), 1)

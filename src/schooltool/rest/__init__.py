@@ -24,6 +24,7 @@ $Id$
 
 import os
 import urllib
+
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from zope.tales.tales import ExpressionEngine
@@ -31,9 +32,11 @@ from zope.tales.expressions import PathExpr, StringExpr, NotExpr, DeferExpr
 from zope.tales.expressions import SimpleModuleImporter
 from zope.tales.pythonexpr import PythonExpr
 from zope.i18n import interpolate
+from zope.app.traversing.api import getPath
 from twisted.web.resource import Resource
+
 from schooltool.interfaces import IModuleSetup
-from schooltool.component import getView, getPath, getRelatedObjects
+from schooltool.component import getView, getRelatedObjects
 from schooltool.uris import URINotation
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
@@ -121,14 +124,17 @@ def absoluteURL(request, obj, suffix=''):
 def absolutePath(request, obj, suffix=''):
     r"""Return the absolute path of an object in context of request.
 
-    The difference between schooltool.component.getPath and absolutePath
-    is that the former works with "physical", application-space paths while
-    the latter works with URL-space paths.  Currently the mapping is nearly
-    one-to-one, but this might change in the future (e.g. virtual hosting
-    directives might strip some initial path elements and add some virtual
-    elements in their place).
+    The difference between getPath and absolutePath is that the former works
+    with "physical", application-space paths while the latter works with
+    URL-space paths.  Currently the mapping is nearly one-to-one, but this
+    might change in the future (e.g. virtual hosting directives might strip
+    some initial path elements and add some virtual elements in their place).
 
-    We need the location adapters to be set up:
+    Also, absolutePath lets you specify a suffix and figures out all by itself
+    whether it needs to add a slash between the path and the suffix.
+
+    Before we use absolutePath (or getPath for that matter), we need the
+    location adapters to be set up:
 
       >>> from schooltool.tests.utils import RegistriesSetupMixin
       >>> initializer = RegistriesSetupMixin()
@@ -159,13 +165,14 @@ def absolutePath(request, obj, suffix=''):
       >>> absolutePath(request, obj, 'subobject/subsubobject')
       u'/obj/subobject/subsubobject'
 
-    The returned paths are proper unicode:
+    absolutePath returns a unicode string if it encounters Unicode object
+    names:
 
       >>> obj.__name__ = u"Hi \u362B"
       >>> absolutePath(request, obj, u'Yay \u362A')
       u'/Hi \u362b/Yay \u362a'
 
-    Let's clean up after ourselves.
+    We're done with the examples, let's clean up after ourselves.
 
       >>> initializer.tearDownRegistries()
 

@@ -24,11 +24,12 @@ $Id$
 
 import datetime
 
+from zope.app.traversing.api import traverse, getPath
+
 from zope.interface import moduleProvides
 from zope.component import getUtilitiesFor
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource, IURIObject
-from schooltool.component import traverse, getPath
 from schooltool.component import registerView
 from schooltool.rest import View, Template
 from schooltool.rest import TraversableView
