@@ -26,6 +26,7 @@ from persistence import Persistent
 
 
 class EqualsSortedMixin:
+
     def assertEqualsSorted(self, a, b):
         x = a[:]
         y = b[:]
@@ -57,6 +58,8 @@ class TestPersistentListSet(unittest.TestCase):
         self.assertEquals(list(p), [b, a])
         self.assertEqual(len(p), 2)
 
+        from transaction import get_transaction
+        get_transaction().commit()
 
 
 class P(Persistent):
@@ -87,6 +90,9 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         d[p] = 2
         self.assertRaises(TypeError, d.__setitem__, ob, 1)
 
+        from transaction import get_transaction
+        get_transaction().commit()
+
     def test_getitem(self):
         from schooltool.db import PersistentKeysDict
         ob = object()
@@ -96,6 +102,9 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertEqual(d[p], 2)
         self.assertRaises(TypeError, d.__getitem__, object())
         self.assertRaises(KeyError, d.__getitem__, P())
+
+        from transaction import get_transaction
+        get_transaction().commit()
 
     def test_delitem(self):
         from schooltool.db import PersistentKeysDict
@@ -110,6 +119,9 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(KeyError, d.__delitem__, P())
         self.assertRaises(TypeError, d.__delitem__, object())
 
+        from transaction import get_transaction
+        get_transaction().commit()
+
     def test_keys_iter_len(self):
         from schooltool.db import PersistentKeysDict
         ob = object()
@@ -122,6 +134,9 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertEqualsSorted(list(d), [p, p2])
         self.assertEqual(len(d), 2)
 
+        from transaction import get_transaction
+        get_transaction().commit()
+
     def test_contains(self):
         from schooltool.db import PersistentKeysDict
         ob = object()
@@ -131,6 +146,9 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assert_(p in d)
         self.assertRaises(TypeError, d.__contains__, object())
         self.assert_(P() not in d)
+
+        from transaction import get_transaction
+        get_transaction().commit()
 
 
 class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
@@ -148,7 +166,7 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
     def test(self):
         from schooltool.db import PersistentKeysSet
         p = PersistentKeysSet()
-        self.datamgr.add(p)
+        self.datamgr.root()['p'] = p
         a, b = P(), P()
         self.assertEqual(len(p), 0)
         p.add(a)
@@ -166,6 +184,9 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
         p.add(a)
         self.assertEqualsSorted(list(p), [a, b])
         self.assertEqual(len(p), 2)
+
+        from transaction import get_transaction
+        get_transaction().commit()
 
 
 def test_suite():
