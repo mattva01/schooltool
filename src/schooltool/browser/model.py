@@ -181,6 +181,7 @@ class PersonEditView(View, PersonInfoMixin):
             dob = None
         else:
             try:
+                # XXX The format of the date is too strict
                 date_elements = [int(el) for el in dob_string.split('-')]
                 dob = datetime.date(*date_elements)
             except (TypeError, ValueError):

@@ -22,6 +22,8 @@ Web-application views for the application log.
 $Id$
 """
 
+import urllib
+
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.common import from_locale, to_unicode
@@ -73,21 +75,12 @@ class ApplicationLogView(View):
                                          page=page, pagesize=self.pagesize)
         return View.do_GET(self, request)
 
-    def nextPageURL(self):
-        if self.query.page < self.query.total:
-            url = absoluteURL(self.request, self.context, 'applog')
-            url += '?page=%d' % (self.query.page + 1)
-            return url
-        else:
-            return None
-
-    def prevPageURL(self):
-        if self.query.page > 1:
-            url = absoluteURL(self.request, self.context, 'applog')
-            url += '?page=%d' % (self.query.page - 1)
-            return url
-        else:
-            return None
+    def pageURL(self, page):
+        url = absoluteURL(self.request, self.context, 'applog')
+        url += '?page=%d' % page
+        if self.filter_str:
+            url += '&filter=%s' % urllib.quote(self.filter_str)
+        return url
 
     def openLog(self, filename):
         return open(filename)

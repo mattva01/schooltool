@@ -101,43 +101,24 @@ class TestAppLog(unittest.TestCase):
         self.assert_("evil" not in contents)
         self.assert_("hackers" not in contents)
 
-    def test_nextPageURL(self):
-        request = RequestStub(args={'page':'1'})
+    def test_pageURL(self):
+        request = RequestStub(args={'page':'1', 'filter': '12*2=4!'})
         request.site = SiteStub()
-        self.view.pagesize = 1
 
         contents = self.view.render(request)
         self.view.request = request
-        url = self.view.nextPageURL()
+        url = self.view.pageURL(2)
+        self.assertEquals(url, 'http://localhost:7001/applog?page=2'
+                               '&filter=12%2A2%3D4%21')
+
+    def test_pageURL_nofilter(self):
+        request = RequestStub(args={'page': '3'})
+        request.site = SiteStub()
+
+        contents = self.view.render(request)
+        self.view.request = request
+        url = self.view.pageURL(2)
         self.assertEquals(url, 'http://localhost:7001/applog?page=2')
-
-    def test_nextPageURL_last(self):
-        request = RequestStub(args={'page':'-1'})
-        request.site = SiteStub()
-
-        contents = self.view.render(request)
-        self.view.request = request
-        url = self.view.nextPageURL()
-        self.assertEquals(url, None)
-
-    def test_prevPageURL(self):
-        request = RequestStub(args={'page':'3'})
-        request.site = SiteStub()
-        self.view.pagesize = 1
-
-        contents = self.view.render(request)
-        self.view.request = request
-        url = self.view.prevPageURL()
-        self.assertEquals(url, 'http://localhost:7001/applog?page=2')
-
-    def test_prevPageURL_first(self):
-        request = RequestStub(args={'page':'1'})
-        request.site = SiteStub()
-
-        contents = self.view.render(request)
-        self.view.request = request
-        url = self.view.prevPageURL()
-        self.assertEquals(url, None)
 
 
 def test_suite():
