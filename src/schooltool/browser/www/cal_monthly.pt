@@ -21,25 +21,25 @@
        i18n:translate="">Next month</a>
 
     <table class="cal_monthly"
-           tal:define="weeks view/getWeeks">
+           tal:define="weeks view/getMonth">
     <tr>
       <th>&nbsp;</th>
       <th class="cal_monthly_weekday"
             tal:repeat="weekday python:weeks[0]"
-            tal:content="python:weekday.strftime('%A')" />
+            tal:content="python:weekday.date.strftime('%A')" />
     </tr>
     <tr tal:repeat="week weeks">
       <!-- XXX not translatable -->
       <td class="cal_monthly_weekno">
          <a class="cal_monthly_weekno"
-            tal:content="python:'Week ' + week[0].strftime('%V')"
-            tal:attributes="href python:view.calURL('weekly', week[0])" />
+            tal:content="python:'Week ' + week[0].date.strftime('%V')"
+            tal:attributes="href python:view.calURL('weekly', week[0].date)" />
       <td class="cal_monthly_day"
           tal:repeat="day week">
-        <a class="cal_weekly_dayno" tal:content="day/day"
-           tal:attributes="href python:view.calURL('daily', day)" />
+        <a class="cal_weekly_dayno" tal:content="day/date/day"
+           tal:attributes="href python:view.calURL('daily', day.date)" />
         <div class="event_weekly"
-             tal:repeat="event python:context.byDate(day)"
+             tal:repeat="event day/events"
              tal:content="python:event.title+event.dtstart.strftime(' (%H:%M)')"
              />
       </td>

@@ -22,10 +22,10 @@
         Next week</a>
 
     <div class="day"
-         tal:repeat="day view/getDays">
-      <h2 tal:content="python:day.strftime('%A, %Y-%m-%d')" />
+         tal:repeat="day view/getWeek">
+      <h2 tal:content="python:day.date.strftime('%A, %Y-%m-%d')" />
       <div class="event"
-           tal:repeat="event python:view.dayEvents(day)">
+           tal:repeat="event day/events">
          <h3 tal:content="event/title" />
          Duration:
             <span tal:replace="python:event.dtstart.strftime('%H:%M')"

@@ -33,6 +33,10 @@ from schooltool.interfaces import IResource, ICalendar
 from schooltool.translation import ugettext as _
 from schooltool.common import parse_date
 
+
+__metaclass__ = type
+
+
 class BookingView(View):
 
     __used_for__ = IResource
@@ -124,6 +128,28 @@ class BookingView(View):
         return True
 
 
+class CalendarDay:
+    """A single day in a calendar.
+
+    The attribute `date` is the day as a date() object,
+    `events` is list of events that took place that day, sorted by start time.
+
+    Oppositely from Calendar.byDate(), events that span several days are
+    included in the first one only.
+    """
+    # XXX I'm not sure whether we should repeat events spanning several days.
+
+    def __init__(self, date, events=None):
+        self.date = date
+        if events is None:
+            self.events = []
+        else:
+            self.events = events
+
+    def __cmp__(self, other):
+        return cmp(self.date, other.date)
+
+
 class CalendarViewBase(View):
 
     __used_for__ = ICalendar
@@ -142,6 +168,30 @@ class CalendarViewBase(View):
         return absoluteURL(self.request, self.context.__parent__,
                           'calendar_%s.html?date=%s' % (cal_type, cursor))
 
+    def getDays(self, start, end):
+        """Get a list of CalendarDay objects for a selected period of time.
+
+        `start` and `end` (date objects) are bounds (half-open) for the result.
+        """
+        # XXX Multiple-day events (see the XXX above)
+        events = {}
+        dt = start
+        while dt < end:
+            events[dt] = []
+            dt += timedelta(days=1)
+
+        for event in self.context:
+            event_start = event.dtstart.date()
+            if event_start >= start and event_start < end:
+                events[event_start].append(event)
+
+        days = []
+        for day in events.keys():
+            events[day].sort()
+            days.append(CalendarDay(day, events[day]))
+        days.sort()
+        return days
+
 
 class WeeklyCalendarView(CalendarViewBase):
 
@@ -155,18 +205,12 @@ class WeeklyCalendarView(CalendarViewBase):
         """Return the day a week after."""
         return self.cursor + timedelta(7)
 
-    def getDays(self):
+    def getWeek(self):
+        """Return the current week as a list of CalendarDay objects."""
         # For now, we're Monday based
         start = self.cursor - timedelta(self.cursor.weekday())
-        return [start + timedelta(i) for i in range(7)]
-
-    def dayEvents(self, date):
-        """Return events for a day sorted by start time."""
-        # XXX If an event spans several days, it will be shown multiple times.
-        daycal = self.context.byDate(date)
-        events = [(e.dtstart, e) for e in daycal]
-        events.sort()
-        return [e for start, e in events]
+        end = start + timedelta(6)
+        return self.getDays(start, end)
 
 
 class MonthlyCalendarView(CalendarViewBase):
@@ -185,7 +229,7 @@ class MonthlyCalendarView(CalendarViewBase):
                         + timedelta(7))
         return date(next_someday.year, next_someday.month, 1)
 
-    def getWeeks(self):
+    def getMonth(self):
         """Return a nested list of days in a month.
 
         Returns a list of lists of date objects.  Days in neighbouring
@@ -204,7 +248,8 @@ class MonthlyCalendarView(CalendarViewBase):
 
         last = start
         while last.month in [start.month, cursor.month]:
-            week = [last + timedelta(days=i) for i in range(7)]
+            end = last + timedelta(days=7)
+            week = self.getDays(last, end)
             weeks.append(week)
-            last = last + timedelta(days=7)
+            last = end
         return weeks

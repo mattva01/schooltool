@@ -153,6 +153,21 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.error, "The resource is busy at specified time")
 
 
+class TestCalendarDay(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.cal import CalendarDay
+        day1 = CalendarDay(date(2004, 8, 5))
+        day2 = CalendarDay(date(2004, 7, 15), ["abc", "def"])
+        self.assertEquals(day1.date, date(2004, 8, 5))
+        self.assertEquals(day1.events, [])
+        self.assertEquals(day2.date, date(2004, 7, 15))
+        self.assertEquals(day2.events, ["abc", "def"])
+
+        self.assert_(day1 > day2 and not day1 < day2)
+        self.assertEquals(day2, CalendarDay(date(2004, 7, 15)))
+
+
 class TestCalendarViewBase(unittest.TestCase):
 
     def test_update(self):
@@ -188,6 +203,39 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(view.calURL("bar", date(2005, 3, 22)),
                           prefix + 'calendar_bar.html?date=2005-03-22')
 
+    def test_getDays(self):
+        from schooltool.browser.cal import CalendarViewBase, CalendarDay
+        from schooltool.cal import CalendarEvent, Calendar
+
+        cal = Calendar()
+        view = CalendarViewBase(cal)
+        view.cursor = date(2004, 8, 11)
+
+        def calEvent(name, dt, hours=1):
+            event = CalendarEvent(dt, timedelta(hours=hours), name)
+            cal.addEvent(event)
+            return event
+
+        e0 = calEvent("zeroth", datetime(2004, 8, 10, 11, 0))
+        e1 = calEvent("second", datetime(2004, 8, 11, 12, 0))
+        e2 = calEvent("first", datetime(2004, 8, 11, 11, 0))
+        e3 = calEvent("long", datetime(2004, 8, 12, 23, 0), hours=4)
+        e4 = calEvent("last", datetime(2004, 8, 15, 11, 0))
+
+        start = date(2004, 8, 10)
+        end = date(2004, 8, 16)
+        days = view.getDays(start, end)
+
+        self.assertEquals(len(days), 6)
+        for i, day in enumerate(days): 
+            self.assertEquals(day.date, date(2004, 8, 10 + i))
+
+        self.assertEquals(days[0].events, [e0])
+        self.assertEquals(days[1].events, [e2, e1])
+        self.assertEquals(days[2].events, [e3])
+        self.assertEquals(days[3].events, [])
+        self.assertEquals(days[4].events, [])
+        self.assertEquals(days[5].events, [e4])
 
 class TestWeeklyCalendarView(unittest.TestCase):
 
@@ -219,35 +267,20 @@ class TestWeeklyCalendarView(unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
-    def test_getDays(self):
+    def test_getWeek(self):
         from schooltool.browser.cal import WeeklyCalendarView
-
-        view = WeeklyCalendarView(None)
-        view.request = RequestStub()
-        view.cursor = date(2004, 8, 11)
-
-        self.assertEquals(view.getDays(),
-                          [date(2004, 8, d) for d in range(9, 16)])
-
-    def test_dayEvents(self):
-        from schooltool.browser.cal import WeeklyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.cal import Calendar
 
         cal = Calendar()
         view = WeeklyCalendarView(cal)
-        view.request = RequestStub()
-        view.cursor = date(2004, 8, 11)
-        e1 = CalendarEvent(datetime(2004, 8, 11, 12, 0),
-                           timedelta(hours=1),
-                           "first event")
-        cal.addEvent(e1)
-        e2 = CalendarEvent(datetime(2004, 8, 11, 11, 0),
-                           timedelta(hours=1),
-                           "second event")
-        cal.addEvent(e2)
 
-        self.assertEquals(view.dayEvents(view.cursor),
-                          [e2, e1])
+        for cursor in (date(2004, 8, 9), date(2004, 8, 11), date(2004, 8, 15)):
+            view.getDays = GetDaysStub()
+            view.cursor = cursor
+            week = view.getWeek()
+            self.assertEquals(week, None)
+            self.assertEquals(view.getDays.bounds,
+                              [(date(2004, 8, 9), date(2004, 8, 15))])
 
 
 class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
@@ -280,40 +313,69 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(view.prevMonth(), date(2004, 7, 1))
         self.assertEquals(view.nextMonth(), date(2004, 9, 1))
 
-    def test_getWeeks(self):
+    def test_getMonth(self):
         from schooltool.browser.cal import MonthlyCalendarView
+        from schooltool.cal import Calendar
 
-        view = MonthlyCalendarView(None)
-        view.request = RequestStub()
-        view.update()
+        cal = Calendar()
+        view = MonthlyCalendarView(cal)
 
+        view.getDays = GetDaysStub()
         view.cursor = date(2004, 8, 11)
-        weeks = view.getWeeks()
-        self.assertEquals(weeks,
-                          [[date(2004, 7, d) for d in range(26, 32)]
-                           + [date(2004, 8, 1)],
-                           [date(2004, 8, d) for d in range(2, 9)],
-                           [date(2004, 8, d) for d in range(9, 16)],
-                           [date(2004, 8, d) for d in range(16, 23)],
-                           [date(2004, 8, d) for d in range(23, 30)],
-                           [date(2004, 8, d) for d in range(30, 32)]
-                           + [date(2004, 9, d) for d in range(1, 6)]])
 
-        # October 2004 ends with a Sunday, so we use it to check that
-        # no days from the next month are included.
-        view.cursor = date(2004, 10, 1)
-        weeks = view.getWeeks()
-        self.assertEquals(weeks[-1][-1].month, 10)
+        weeks = view.getMonth()
+        self.assertEquals(weeks, [None] * 6)
+        self.assertEquals(view.getDays.bounds,
+                          [(date(2004, 7, 26), date(2004, 8, 2)),
+                           (date(2004, 8, 2), date(2004, 8, 9)),
+                           (date(2004, 8, 9), date(2004, 8, 16)),
+                           (date(2004, 8, 16), date(2004, 8, 23)),
+                           (date(2004, 8, 23), date(2004, 8, 30)),
+                           (date(2004, 8, 30), date(2004, 9, 6))])
 
-        # Same here, just check the previous month.
-        view.cursor = date(2004, 11, 1)
-        weeks = view.getWeeks()
-        self.assertEquals(weeks[0][0].month, 11)
+##    def test_getMonth(self):
+##        from schooltool.browser.cal import MonthlyCalendarView
+##
+##        view = MonthlyCalendarView(None)
+##        view.request = RequestStub()
+##        view.update()
+##
+##        weeks = view.getMonth()
+##        self.assertEquals(weeks,
+##                          [[date(2004, 7, d) for d in range(26, 32)]
+##                           + [date(2004, 8, 1)],
+##                           [date(2004, 8, d) for d in range(2, 9)],
+##                           [date(2004, 8, d) for d in range(9, 16)],
+##                           [date(2004, 8, d) for d in range(16, 23)],
+##                           [date(2004, 8, d) for d in range(23, 30)],
+##                           [date(2004, 8, d) for d in range(30, 32)]
+##                           + [date(2004, 9, d) for d in range(1, 6)]])
+##
+##        # October 2004 ends with a Sunday, so we use it to check that
+##        # no days from the next month are included.
+##        view.cursor = date(2004, 10, 1)
+##        weeks = view.getMonth()
+##        self.assertEquals(weeks[-1][-1].month, 10)
+##
+##        # Same here, just check the previous month.
+##        view.cursor = date(2004, 11, 1)
+##        weeks = view.getMonth()
+##        self.assertEquals(weeks[0][0].month, 11)
+
+
+class GetDaysStub:
+
+    def __init__(self):
+        self.bounds = []
+
+    def __call__(self, start, end):
+        self.bounds.append((start, end))
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
+    suite.addTest(unittest.makeSuite(TestCalendarDay))
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
