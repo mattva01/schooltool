@@ -113,7 +113,7 @@ class SchoolBellAPI(object):
               User title
             </tal:span>
             <tal:span tal:define="user request/principal"
-                      tal:condition="not:user/schoolbell:authenticated"
+                      tal:condition="not:user/schoolbell:authenticated">
               Anonymous
             </tal:span>
 
