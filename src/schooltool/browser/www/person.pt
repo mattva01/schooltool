@@ -9,9 +9,11 @@
   <metal:block metal:fill-slot="content" tal:define="info view/info">
     <div class="actions">
       <a class="action" tal:condition="view/canEdit"
-         tal:attributes="href view/editURL">Edit</a>
+         tal:attributes="href view/editURL"
+         i18n:translate="">Edit</a>
       <a class="action" tal:condition="view/canChangePassword"
-         tal:attributes="href view/passwordURL">Change password</a>
+         tal:attributes="href view/passwordURL"
+         i18n:translate="">Change password</a>
     </div>
     <div class="groups">
       <h3 i18n:translate="">Groups</h3>
