@@ -472,7 +472,8 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
         return _("Composite timetables for %s") % self.context.title
 
     def timetables(self):
-        baseuri = absoluteURL(self.request, self.context, 'composite-timetables')
+        baseuri = absoluteURL(self.request, self.context,
+                              'composite-timetables')
         basepath = absolutePath(self.request, self.context,
                                 'composite-timetables')
         results = []

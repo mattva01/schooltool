@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.views.tests import LocatableStub, RequestStub, setPath
+from schooltool.views.tests import RequestStub
 
 __metaclass__ = type
 
