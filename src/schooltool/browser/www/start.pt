@@ -12,8 +12,10 @@
 
 <div class="actions">
   <p><a class="action" href="/groups/root">Browse groups and persons</a></p>
-  <p><a class="action" href="/persons/add.html">Add a person</a></p>
-  <p><a class="action" href="/groups/add.html">Add a group</a></p>
+  <p><a class="action" tal:condition="view/isManager"
+        href="/persons/add.html">Add a person</a></p>
+  <p><a class="action" tal:condition="view/isManager"
+        href="/groups/add.html">Add a group</a></p>
   <p><a class="action" tal:attributes="href view/person_url">View your
      information page</a></p>
   <p><a class="action"

@@ -29,6 +29,7 @@ from schooltool.rest import absoluteURL, absolutePath  # reexport
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import globalTicketService
+from schooltool.browser.auth import isManager
 
 
 __metaclass__ = type
@@ -124,6 +125,13 @@ class View(_View):
             url = '%s://%s:%s%s' % (scheme, hostname, port, url)
         request.redirect(url)
         return self.redirect_template(request, destination=url, view=self)
+
+    def isManager(self):
+        """Check if the authenticated user is a manager.
+
+        To be used from page templates (e.g. tal:condition="view/isManager").
+        """
+        return isManager(self.request.authenticated_user)
 
 
 class StaticFile(View):

@@ -142,9 +142,6 @@ class PersonPasswordView(View):
                     self.context.setPassword(new_password)
         return self.do_GET(request)
 
-    def manager(self):
-        return isManager(self.request.authenticated_user)
-
     def contextURL(self):
         return absoluteURL(self.request, self.context)
 

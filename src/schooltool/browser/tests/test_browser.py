@@ -27,6 +27,7 @@ import unittest
 from twisted.python.failure import Failure
 
 from schooltool.browser.tests import RequestStub
+from schooltool.browser.tests import AppSetupMixin
 
 
 class TestBrowserRequest(unittest.TestCase):
@@ -87,7 +88,13 @@ class TestBrowserRequest(unittest.TestCase):
                          'text/html; charset=UTF-8')
 
 
-class TestView(unittest.TestCase):
+class TestView(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def tearDown(self):
+        self.tearDownRegistries()
 
     def createView(self):
         from schooltool.browser import View
@@ -167,6 +174,15 @@ class TestView(unittest.TestCase):
     def test_macros(self):
         view = self.createView()
         self.assert_('page' in view.macros)
+
+    def test_isManager(self):
+        view = self.createView()
+        view.request = RequestStub()
+        self.assert_(not view.isManager())
+        view.request = RequestStub(authenticated_user=self.person)
+        self.assert_(not view.isManager())
+        view.request = RequestStub(authenticated_user=self.manager)
+        self.assert_(view.isManager())
 
 
 class TestStaticFile(unittest.TestCase):
