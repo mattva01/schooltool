@@ -27,6 +27,7 @@ import sys
 from StringIO import StringIO
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
+from helpers import dedent
 
 __metaclass__ = type
 
@@ -63,18 +64,19 @@ class ResponseStub:
         if self.request.resource == "/":
             return "Welcome"
         if self.request.resource == "/doc.xml":
-            return """\
-<index xmlns:xlink="http://www.w3.org/1999/xlink">
-  <student xlink:type="simple"
-           xlink:href="student1"
-           xlink:title="John"/>
-  <student xlink:type="simple"
-           xlink:href="student2"
-           xlink:title="Kate"/>
-</index>
-"""
+            return dedent("""
+                <index xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <student xlink:type="simple"
+                           xlink:href="student1"
+                           xlink:title="John"/>
+                  <student xlink:type="simple"
+                           xlink:href="student2"
+                           xlink:title="Kate"/>
+                </index>
+                """)
         else:
             return "404 :-)"
+
 
 class TestClient(unittest.TestCase):
 
@@ -251,37 +253,36 @@ class TestClient(unittest.TestCase):
         self.client.do_links("on")
         self.assertEqual(self.client.links, True)
         self.client.do_get("/doc.xml")
-        self.assertEqual(self.emitted, """\
-<index xmlns:xlink="http://www.w3.org/1999/xlink">
-  <student xlink:type="simple"
-           xlink:href="student1"
-           xlink:title="John"/>
-  <student xlink:type="simple"
-           xlink:href="student2"
-           xlink:title="Kate"/>
-</index>
+        self.assertEqual(self.emitted, dedent("""
+            <index xmlns:xlink="http://www.w3.org/1999/xlink">
+              <student xlink:type="simple"
+                       xlink:href="student1"
+                       xlink:title="John"/>
+              <student xlink:type="simple"
+                       xlink:href="student2"
+                       xlink:title="Kate"/>
+            </index>
 
-==================================================
-1   John (student1)
-2   Kate (student2)"""
-                         )
+            ==================================================
+            1   John (student1)
+            2   Kate (student2)"""))
         self.assertEqual(self.client.resources,
                          ['/student1', '/student2'])
 
     def test_follow(self):
         self.client.resources = ['/doc.xml']
         self.client.do_follow('1')
-        self.assertEqual(self.emitted, """\
-<index xmlns:xlink="http://www.w3.org/1999/xlink">
-  <student xlink:type="simple"
-           xlink:href="student1"
-           xlink:title="John"/>
-  <student xlink:type="simple"
-           xlink:href="student2"
-           xlink:title="Kate"/>
-</index>
-"""
-                         )
+        self.assertEqual(self.emitted, dedent("""
+            <index xmlns:xlink="http://www.w3.org/1999/xlink">
+              <student xlink:type="simple"
+                       xlink:href="student1"
+                       xlink:title="John"/>
+              <student xlink:type="simple"
+                       xlink:href="student2"
+                       xlink:title="Kate"/>
+            </index>
+            """))
+
 
 class TestXLinkHandler(unittest.TestCase):
 
@@ -293,20 +294,21 @@ class TestXLinkHandler(unittest.TestCase):
         self.parser.setFeature(feature_namespaces, 1)
 
     def test_simple(self):
-        link = ("""<top xmlns:xlink="http://www.w3.org/1999/xlink">
-                     <tag xlink:type="simple"
-                          xlink:title="foo"
-                          xlink:href="bar"
-                          name="Bond"
-                          />
+        link = dedent("""
+            <top xmlns:xlink="http://www.w3.org/1999/xlink">
+              <tag xlink:type="simple"
+                   xlink:title="foo"
+                   xlink:href="bar"
+                   name="Bond"
+                   />
 
-                     <noxlinks />
-                     <tag xlink:type="simple"
-                          xlink:title="moo"
-                          xlink:href="spoo"
-                          xlink:role="http://www.example.com/role"/>
-                   </top>
-                   """)
+              <noxlinks />
+              <tag xlink:type="simple"
+                   xlink:title="moo"
+                   xlink:href="spoo"
+                   xlink:role="http://www.example.com/role"/>
+            </top>
+            """)
         self.parser.parse(StringIO(link))
         self.assertEqual(self.handler.links,
                          [{'type':'simple', 'title': 'foo', 'href': 'bar'},
@@ -331,12 +333,14 @@ class TestUtilities(unittest.TestCase):
         self.assertRaises(ValueError, http_join,
                           '/foo/bar', 'http://www.akl.lt/programos')
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestClient))
     suite.addTest(unittest.makeSuite(TestXLinkHandler))
     suite.addTest(unittest.makeSuite(TestUtilities))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()
