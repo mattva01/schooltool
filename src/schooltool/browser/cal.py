@@ -1052,28 +1052,89 @@ class EventDeleteView(View, EventViewHelpers):
         # If it is an ordinary calendar event, remove it
         event = self._findOrdinaryEvent(event_id)
         if event is not None:
-            # TODO: if event.recurrence is not None: display a form
-            self.context.removeEvent(event)
-            return self._redirectToDailyView(date)
+            if event.recurrence is not None:
+                return self._deleteRepeatingEvent(event, date)
+            else:
+                return self._deleteOrdinaryEvent(event, date)
 
         # If it is a timetable event, show a confirmation form,
         # and then add a timetable exception (unless canceled).
         event = self._findTimetableEvent(event_id)
         if event is not None:
-            # Only managers can edit timetable events
-            if not self.isManager():
-                raise Unauthorized
-            if 'CONFIRM' in request.args:
-                self._addTimetableException(event, replacement=None)
-            elif 'CANCEL' not in request.args:
-                return self._showConfirmationForm(event)
-            return self._redirectToDailyView(date)
+            return self._deleteTimetableEvent(event, date)
 
         # Dangling event ID
         return self._redirectToDailyView(date)
 
+    def _deleteOrdinaryEvent(self, event, date):
+        """Delete an ordinary event."""
+        self.context.removeEvent(event)
+        return self._redirectToDailyView(date)
+
+    def _deleteRepeatingEvent(self, event, date):
+        """Delete a repeating event."""
+        if 'CANCEL' in self.request.args:
+            return self._redirectToDailyView(date)
+        elif 'ALL' in self.request.args:
+            self.context.removeEvent(event)
+            return self._redirectToDailyView(date)
+        elif 'FUTURE' in self.request.args:
+            self.context.removeEvent(event)
+            self.context.addEvent(self._deleteFutureOccurrences(event, date))
+            return self._redirectToDailyView(date)
+        elif 'CURRENT' in self.request.args:
+            self.context.removeEvent(event)
+            self.context.addEvent(self._deleteOneOccurrence(event, date))
+            return self._redirectToDailyView(date)
+        return self._showOccurrenceForm(event)
+
+    def _deleteFutureOccurrences(self, event, date):
+        """Return event without repetitions past a given date."""
+        until = date - timedelta(days=1)
+        if (event.recurrence.until is not None
+            and event.recurrence.until <= until):
+            return event
+        new_recurrence = event.recurrence.replace(count=None, until=until)
+        return event.replace(recurrence=new_recurrence)
+
+    def _deleteOneOccurrence(self, event, date):
+        """Return event without a repetition on a given date."""
+        if date in event.recurrence.exceptions:
+            return event
+        exceptions = event.recurrence.exceptions + (date, )
+        new_recurrence = event.recurrence.replace(exceptions=exceptions)
+        return event.replace(recurrence=new_recurrence)
+
+    def _deleteTimetableEvent(self, event, date):
+        """Delete a timetable event."""
+        if not self.isManager():
+            raise Unauthorized # Only managers can edit timetable events
+        if 'CONFIRM' in self.request.args:
+            self._addTimetableException(event, replacement=None)
+        elif 'CANCEL' not in self.request.args:
+            return self._showConfirmationForm(event)
+        return self._redirectToDailyView(date)
+
+    def _showOccurrenceForm(self, event):
+        """Render the form where the user selects occurrences to be deleted.
+
+        The form offers a choice to delete just this one occurrence of the
+        repeating event (CURRENT), this and future occurrences (FUTURE),
+        all occurrences (ALL), or to cancel the deletion (CANCEL).  Uppercase
+        words in parentheses are the names of submit elements corresponding
+        to each choice.
+        """
+        return self.recurrence_template(self.request, view=self,
+                                        context=self.context, event=event)
+
     def _showConfirmationForm(self, event):
-        """Render the notification/confirmation form for a timetable event."""
+        """Render the notification/confirmation form for a timetable event.
+
+        The form tells the user that a timetable exception will be added
+        and allows to confirm it (CONFIRM) or to cancel the deletion (CANCEL).
+        Uppercase words in parentheses are the names of submit elements
+        corresponding to each choice.
+        """
         return self.tt_confirm_template(self.request, view=self,
                                         context=self.context, event=event)
 

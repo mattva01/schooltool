@@ -32,6 +32,10 @@ from zope.testing.doctestunit import DocTestSuite
 from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
+from schooltool.browser.tests import HTMLDocument
+from schooltool.browser.tests import assertRedirectedTo
+from schooltool.browser.tests import assertHasHiddenField
+from schooltool.browser.tests import assertHasSubmitButton
 from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.helpers import diff
@@ -1298,6 +1302,9 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
 
 class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
 
+    assertHasHiddenField = assertHasHiddenField
+    assertHasSubmitButton = assertHasSubmitButton
+
     def createView(self):
         from schooltool.model import Person
         from schooltool.browser.cal import EventDeleteView
@@ -1357,17 +1364,12 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assertEquals(len(list(ttcal)), 3)
         self.assertNotEquals(request.code, 302)
         self.assert_("add an exception" in content)
-        self.assert_("CONFIRM" in content)
-        self.assert_("uniq" in content)
 
-        from schooltool.browser.tests import HTMLDocument
         doc = HTMLDocument(content)
-        for field, value in [('event_id', 'uniq'), ('date', '2004-08-14')]:
-            q = ('//form/input[@type="hidden" and @name="%s" and @value="%s"]'
-                 % (field, value))
-            errmsg = ('<input type="hidden" name="%s" value="%s"/>'
-                      ' missing in output' % (field, value))
-            self.assertEquals(len(doc.query(q)), 1, errmsg)
+        self.assertHasHiddenField(doc, 'event_id', 'uniq')
+        self.assertHasHiddenField(doc, 'date', '2004-08-14')
+        self.assertHasSubmitButton(doc, 'CONFIRM')
+        self.assertHasSubmitButton(doc, 'CANCEL')
 
     def test_tt_event_confirm(self):
         view = self.createView()
@@ -1443,7 +1445,186 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
                           'daily.html?date=2004-08-14')
 
 
+class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
+
+    assertRedirectedTo = assertRedirectedTo
+    assertHasHiddenField = assertHasHiddenField
+    assertHasSubmitButton = assertHasSubmitButton
+
+    def createView(self, events=()):
+        from schooltool.model import Person
+        from schooltool.browser.cal import EventDeleteView
+
+        person = Person(title="Somebody")
+        setPath(person, '/persons/somebody')
+        cal = createCalendar(events)
+        cal.__name__ = 'calendar'
+        cal.__parent__ = person
+        view = EventDeleteView(cal)
+        view.authorization = lambda x, y: True
+        return view
+
+    def test_repeating_event(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(count=5))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14"})
+        content = view.render(request)
+
+        # Nothing is deleted, and we aren't redirected anywhere
+        self.assertEquals(list(view.context), [ev1])
+        self.assertNotEquals(request.code, 302)
+
+        doc = HTMLDocument(content)
+        self.assertHasHiddenField(doc, 'event_id', 'uniq')
+        self.assertHasHiddenField(doc, 'date', '2004-08-14')
+        self.assertHasSubmitButton(doc, 'CURRENT')
+        self.assertHasSubmitButton(doc, 'FUTURE')
+        self.assertHasSubmitButton(doc, 'ALL')
+        self.assertHasSubmitButton(doc, 'CANCEL')
+
+    def test_repeating_event_cancel(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(count=5))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14",
+                                    'CANCEL': 'cancel'})
+        content = view.render(request)
+
+        # Nothing is deleted, we are redirected to calendar for 2004-08-14
+        self.assertEquals(list(view.context), [ev1])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-14')
+
+    def test_repeating_event_all(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(count=5))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14",
+                                    'ALL': 'all'})
+        content = view.render(request)
+
+        # The event is deleted, we are redirected to calendar for 2004-08-14
+        self.assertEquals(list(view.context), [])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-14')
+
+    def test_repeating_event_future(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(count=5))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14",
+                                    'FUTURE': 'future'})
+        content = view.render(request)
+
+        ev1prime = ev1.replace(recurrence=DailyRecurrenceRule(
+                                    until=date(2004, 8, 13)))
+
+        # The event is modified, we are redirected to calendar for 2004-08-14
+        self.assertEquals(list(view.context), [ev1prime])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-14')
+
+    def test_repeating_event_current(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(
+                                count=5, exceptions=[date(2004, 8, 13)]))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14",
+                                    'CURRENT': 'current'})
+        content = view.render(request)
+
+        new_recurrence = ev1.recurrence.replace(exceptions=[date(2004, 8, 13),
+                                                            date(2004, 8, 14)])
+        ev1prime = ev1.replace(recurrence=new_recurrence)
+
+        # The event is modified, we are redirected to calendar for 2004-08-14
+        self.assertEquals(list(view.context), [ev1prime])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-14')
+
+    def test_deleteOneOccurrence(self):
+        from schooltool.cal import DailyRecurrenceRule
+        view = self.createView()
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(
+                                count=5, exceptions=[date(2004, 8, 13)]))
+
+        self.assertEquals(view._deleteOneOccurrence(ev1, date(2004, 8, 13)),
+                          ev1)
+
+        self.assertEquals(view._deleteOneOccurrence(ev1, date(2004, 8, 14)),
+                          ev1.replace(recurrence=DailyRecurrenceRule(
+                                count=5, exceptions=[date(2004, 8, 13),
+                                                     date(2004, 8, 14)])))
+
+        # XXX test case: you remove the only remaining repetition
+
+    def test_deleteFutureOccurrences(self):
+        from schooltool.cal import DailyRecurrenceRule
+        view = self.createView()
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(
+                                count=5, exceptions=[date(2004, 8, 13)]))
+
+        self.assertEquals(view._deleteFutureOccurrences(ev1,
+                                                        date(2004, 8, 14)),
+                          ev1.replace(recurrence=DailyRecurrenceRule(
+                                until=date(2004, 8, 13),
+                                exceptions=[date(2004, 8, 13)])))
+
+        ev2 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(
+                                until=date(2004, 8, 16),
+                                exceptions=[date(2004, 8, 13)]))
+
+        self.assertEquals(view._deleteFutureOccurrences(ev2,
+                                                        date(2004, 8, 14)),
+                          ev2.replace(recurrence=DailyRecurrenceRule(
+                                until=date(2004, 8, 13),
+                                exceptions=[date(2004, 8, 13)])))
+
+        self.assertEquals(view._deleteFutureOccurrences(ev2,
+                                                        date(2004, 8, 17)),
+                          ev2)
+
+        self.assertEquals(view._deleteFutureOccurrences(ev2,
+                                                        date(2004, 8, 20)),
+                          ev2)
+
+        # XXX test case: you remove all remaining repetitions
+
+
 class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
+
+    assertRedirectedTo = assertRedirectedTo
 
     def test_ordinary_events(self):
         self.setUpCalendar(person_to_add_to_acl=self.person)
@@ -1531,10 +1712,6 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
                                     'CONFIRM': 'Yes'})
         result = view.render(request)
         return result, request
-
-    def assertRedirectedTo(self, request, location):
-        self.assertEquals(request.code, 302)
-        self.assertEquals(request.headers['location'], location)
 
 
 class TestCalendarComboMixin(unittest.TestCase):
@@ -1761,6 +1938,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventAddView))
     suite.addTest(unittest.makeSuite(TestEventEditView))
     suite.addTest(unittest.makeSuite(TestEventDeleteView))
+    suite.addTest(unittest.makeSuite(TestEventDeleteViewWithRepeatingEvents))
     suite.addTest(unittest.makeSuite(TestEventDeleteViewPermissionChecking))
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))

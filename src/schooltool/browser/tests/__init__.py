@@ -58,3 +58,48 @@ def HTMLDocument(content):
 
     from schooltool.rest.xmlparsing import XMLDocument
     return XMLDocument(content)
+
+
+def assertRedirectedTo(self, request, url):
+    """Assert that request redirects to url.
+
+    response.status must be 302 and the location header must be equal to url.
+
+    self should be a unittest.TestCase instance.
+    """
+    self.assertEquals(request.code, 302)
+    self.assertEquals(request.headers['location'], url)
+
+
+def assertHasHiddenField(self, doc, field, value):
+    """Assert that the HTML document has a hidden form field with given value.
+
+    Looks for a <input type="hidden" name="..." value="..." /> element within
+    a <form> element.
+
+    doc should be a XMLDocument instance (see also HTMLDocument).
+
+    self should be a unittest.TestCase instance.
+    """
+    q = ('//form/input[@type="hidden" and @name="%s" and @value="%s"]'
+         % (field, value))
+    errmsg = ('<input type="hidden" name="%s" value="%s"/>'
+              ' missing in output' % (field, value))
+    self.assertEquals(len(doc.query(q)), 1, errmsg)
+
+
+def assertHasSubmitButton(self, doc, name):
+    """Assert that the HTML document has a form submit button with given name.
+
+    Looks for a <input type="submit" name="..." /> element within a <form>
+    element.
+
+    doc should be a XMLDocument instance (see also HTMLDocument).
+
+    self should be a unittest.TestCase instance.
+    """
+    q = '//form//input[@type="submit" and @name="%s"]' % name
+    errmsg = ('<input type="submit" name="%s" />'
+              ' missing in output' % name)
+    self.assertEquals(len(doc.query(q)), 1, errmsg)
+

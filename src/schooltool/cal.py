@@ -395,6 +395,11 @@ class RecurrenceRule:
             exceptions = tuple(self.exceptions)
         return self.__class__(interval, count, until, exceptions)
 
+    def __repr__(self):
+        return '%s(%r, %r, %r, %r,)' % (self.__class__.__name__, self.interval,
+                                        self.count, self.until,
+                                        self.exceptions)
+
     def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, tuple(self.exceptions))
