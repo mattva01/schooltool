@@ -25,6 +25,7 @@ with the "dot" application in your command path.
 """
 
 import os
+from schooltool.uris import strURI
 from schooltool.clients.guiclient import SchoolToolClient
 
 
@@ -118,18 +119,12 @@ class GraphGenerator(SchoolToolClient):
                              'xlink:href'))
             self.DOT.append('"%s" -> "%s" [label="%s"]' %
                             (relationship.link_path,
-                             self.getDoc(relationship.arcrole),
+                             strURI(relationship.arcrole),
                              'xlink:arcrole'))
             self.DOT.append('"%s" -> "%s" [label="%s"]' %
                             (relationship.link_path,
-                             self.getDoc(relationship.role),
+                             strURI(relationship.role),
                              'xlink:role'))
-
-    def getDoc(self, relationship):
-        """I have no idea why URIstub is stored so weirdly."""
-        repeat = relationship.__doc__
-        uris = repeat.split(' ')
-        return uris[0].strip()
 
 
 class DOT_Error(Exception):
