@@ -90,13 +90,20 @@ class Template(PageTemplateFile):
         Any keyword arguments passed to this function will be accessible
         in the page template namespace.
         """
-        request.setHeader('Content-Type',
-                          '%s; charset=%s' % (self.content_type, self.charset))
+        if self.content_type is not None:
+            if self.charset is None:
+                request.setHeader('Content-Type', self.content_type)
+            else:
+                request.setHeader('Content-Type', '%s; charset=%s' %
+                                        (self.content_type, self.charset))
         context = self.pt_getContext()
         context['request'] = request
         context.update(kw)
         body = self.pt_render(context)
-        return body.encode(self.charset, 'xmlcharrefreplace')
+        if self.charset is None:
+            return body
+        else:
+            return body.encode(self.charset, 'xmlcharrefreplace')
 
     def pt_getEngineContext(self, *args, **kwargs):
         """Get the engine context.

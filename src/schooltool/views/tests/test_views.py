@@ -76,6 +76,23 @@ class TestTemplate(unittest.TestCase):
                      "text/plain; charset=UTF-8")
         self.assertEquals(result, "code: 200\n")
 
+    def test_no_content_type(self):
+        from schooltool.views import Template
+        templ = Template('sample_xml.pt', content_type=None)
+        request = RequestStub()
+        result = templ(request, foo='Foo', bar='Bar')
+        self.assert_('content-type' not in request.headers)
+        self.assertEquals(result, "code: 200\n")
+
+    def test_no_charset(self):
+        from schooltool.views import Template
+        templ = Template('sample_xml.pt', content_type='text/plain',
+                         charset=None)
+        request = RequestStub()
+        result = templ(request, foo='Foo', bar='Bar')
+        self.assertEquals(request.headers['content-type'], "text/plain")
+        self.assertEquals(result, u"code: 200\n")
+
     def test_translate(self):
         from schooltool.views import Template
         templ = Template('sample_i18n.pt')

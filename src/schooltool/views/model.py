@@ -90,7 +90,8 @@ class GroupView(ApplicationObjectTraverserView):
 class TreeView(View):
 
     template = Template('www/tree.pt', content_type='text/xml')
-    node_template = Template('www/tree_node.pt', content_type='text/xml')
+    node_template = Template('www/tree_node.pt',
+                             content_type=None, charset=None)
     authorization = PublicAccess
 
     def generate(self, node, request):
