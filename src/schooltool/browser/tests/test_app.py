@@ -245,6 +245,8 @@ class TestPersonAddView(unittest.TestCase):
             def new(self, username, title):
                 if username == 'conflict':
                     raise KeyError(username)
+                elif username is None:
+                    username = 'auto'
                 person = Person(title=title)
                 person.__name__ = username
                 person.__parent__ = self
@@ -278,6 +280,24 @@ class TestPersonAddView(unittest.TestCase):
         self.assertEquals(len(persons), 1)
         self.assertEquals(persons[0].__name__, 'newbie')
         self.assertEquals(persons[0].title, 'newbie')
+
+    def test_nousername(self):
+        view = self.createView()
+        request = RequestStub(args={'username': '',
+                                    'password': 'foo',
+                                    'verify_password': 'foo'})
+        result = view.do_POST(request)
+        self.assertEquals(request.applog,
+                          [(None, u'Object /persons/auto of type'
+                            ' Person created', INFO)])
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/auto/edit.html')
+
+        persons = self.person_container.persons
+        self.assertEquals(len(persons), 1)
+        self.assertEquals(persons[0].__name__, 'auto')
+        self.assertEquals(persons[0].title, 'auto')
 
     def test_errors_invalidnames(self):
         # We're not very i18n friendly by not allowing international
@@ -402,6 +422,8 @@ class TestObjectAddView(unittest.TestCase):
                 if name == 'conflict':
                     raise KeyError(name)
                 obj = ApplicationObjectMixin(title=title)
+                if name is None:
+                    name = "auto"
                 obj.__name__ = name
                 obj.__parent__ = self
                 self.objs.append(obj)
@@ -443,6 +465,23 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/objects/newobj')
+
+    def test_POST_noname(self):
+        view = self.createView()
+        request = RequestStub(args={'name': '',
+                                    'title': ''})
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/objects/auto/edit.html')
+        self.assertEquals(request.applog,
+                          [(None, u'Object /objects/auto of type'
+                            ' ApplicationObjectMixin created', INFO)])
+
+        self.assertEquals(len(self.container.objs), 1)
+        obj = self.container.objs[0]
+        self.assertEquals(obj.__name__, 'auto')
+        self.assertEquals(obj.title, u'')
 
     def test_POST_errors(self):
         view = self.createView()

@@ -164,11 +164,14 @@ class PersonAddView(View):
         password = request.args['password'][0]
         verify_password = request.args['verify_password'][0]
 
-        if not valid_name.match(username):
-            self.error = _('Invalid username')
-            return self.do_GET(request)
+        if username == '':
+            username = None
+        else:
+            if not valid_name.match(username):
+                self.error = _('Invalid username')
+                return self.do_GET(request)
+            self.prev_username = username
 
-        self.prev_username = username
         if password != verify_password:
             self.error = _('Passwords do not match')
             return self.do_GET(request)
@@ -182,6 +185,9 @@ class PersonAddView(View):
         except KeyError:
             self.error = _('Username already registered')
             return self.do_GET(request)
+
+        if username is None:
+            person.title = person.__name__
 
         person.setPassword(password)
 
@@ -213,13 +219,15 @@ class ObjectAddView(View):
     def do_POST(self, request):
         name = request.args['name'][0]
 
-        if not valid_name.match(name):
-            self.error = _("Invalid name")
-            return self.do_GET(request)
+        if name == '':
+            name = None
+        else:
+            if not valid_name.match(name):
+                self.error = _("Invalid name")
+                return self.do_GET(request)
+            self.prev_name = name
 
         title = unicode(request.args['title'][0], 'utf-8')
-
-        self.prev_name = name
         self.prev_title = title
 
         try:
