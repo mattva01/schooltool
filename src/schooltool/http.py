@@ -333,7 +333,10 @@ class Request(http.Request):
             self.accept = parseAccept(self.getHeader('Accept'))
         except ValueError, e:
             self.accept = []
-            body = self.formatError(e)
+            self.setResponseCode(400)
+            body = self.renderRequestError(e)
+            assert isinstance(body, str), \
+                   "renderRequestError did not return a string"
             self.setHeader('Content-Length', len(body))
             self.write(body)
             self.finish()
@@ -342,10 +345,6 @@ class Request(http.Request):
 
         # But perform traversal and rendering in a separate worker thread
         self.reactor_hook.callInThread(self._process)
-
-    def formatError(self, exception):
-        """Format an error page for an exception."""
-        return textErrorPage(self, exception)
 
     def _handleVh(self):
         """Handle the virtual hosting directive in the path.
@@ -432,23 +431,37 @@ class Request(http.Request):
 
         # Find out the authenticated user
         self.authenticated_user = None
-        if self.getUser():
-            try:
-                self.authenticate(self.getUser(), self.getPassword())
-            except AuthenticationError:
-                body = textErrorPage(self, _("Bad username or password"),
-                                     code=401)
-                self.setHeader('Content-Length', len(body))
-                self.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
-                return body
+        try:
+            self.maybeAuthenticate()
+        except AuthenticationError:
+            body = self.renderAuthError()
+            assert isinstance(body, str), \
+                   "renderAuthError did not return a string"
+            self.setHeader('Content-Length', len(body))
+            return body
 
         # Traverse and render the resource
         resrc = self.traverse(app)
         body = self.render(resrc)
         return body
 
-    def authenticate(self, username, password):
+    def maybeAuthenticate(self):
         """Try to authenticate.
+
+        Looks for HTTP basic authentication header.  If it is found, calls
+        self.authenticate with the username and password extracted from the
+        header.
+
+        May raise an AuthenticationError.
+
+        Subclasses may override this method to implement cookie-based
+        authentication, for example.
+        """
+        if self.getUser():
+            self.authenticate(self.getUser(), self.getPassword())
+
+    def authenticate(self, username, password):
+        """Try to authenticate with a given username and password.
 
         Sets the 'authenticated_user' attribute (to None if the authentication
         is not successful).
@@ -467,8 +480,7 @@ class Request(http.Request):
             raise
 
     def _printTraceback(self, reason):
-        """Print a timestamp preceding a traceback to the site log."""
-        # XXX Do we really need a separate method here?
+        """Print a a traceback to the site log."""
         self.site.logger.error(reason.getTraceback(), exc_info=False)
 
     def _handle_exception(self, reason):
@@ -481,10 +493,11 @@ class Request(http.Request):
         This is called in a separate thread.
         """
         self.reactor_hook.callFromThread(self._printTraceback, reason)
-        body = reason.getErrorMessage()
         self.reset()
         self.setResponseCode(500)
-        self.setHeader('Content-Type', 'text/plain')
+        body = self.renderInternalError(reason)
+        assert isinstance(body, str), \
+               "renderInternalError did not return a string"
         self.setHeader('Content-Length', len(body))
         return body
 
@@ -511,6 +524,28 @@ class Request(http.Request):
         else:
             self.setHeader('Content-Length', len(body))
             return body
+
+    def renderRequestError(self, exception):
+        """Render an error page for an ill-formed request."""
+        return textErrorPage(self, exception)
+
+    def renderInternalError(self, failure):
+        """Render an error page for an internal server error.
+
+        failure is an instance of twisted.pyton.failure.Failure.
+        """
+        self.setHeader('Content-Type', 'text/plain; charset=UTF-8')
+        return failure.getErrorMessage()
+
+    def renderAuthError(self):
+        """Render an authentication error page.
+
+        The default implementation sends a basic HTTP authentication challenge
+        for realm "SchoolTool" and returns a 401 (Unauthorized) HTTP status
+        code.
+        """
+        self.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
+        return textErrorPage(self, _("Bad username or password"), code=401)
 
     def chooseMediaType(self, supported_types):
         """Choose a media type for presentation according to Accept: header."""

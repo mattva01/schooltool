@@ -33,6 +33,7 @@ from zope.interface import moduleProvides
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import IModuleSetup, AuthenticationError
 from twisted.internet.address import IPv4Address
+from twisted.python.failure import Failure
 
 __metaclass__ = type
 
@@ -728,6 +729,19 @@ class TestRequest(unittest.TestCase):
                   [(logging.WARNING, "Failed login, username: 'fred'"),
                    (logging.WARNING, "Failed login, username: 'freq'")])
 
+    def test_maybeAuthenticate(self):
+        rq = self.newRequest('/')
+        rq.applogger = AppLoggerStub()
+        rq.zodb_conn = ConnectionStub()
+        rq.authenticated_user = None
+        rq.maybeAuthenticate()
+        self.assert_(rq.authenticated_user is None)
+
+        rq.user = 'fred'
+        rq.password = 'wilma'
+        rq.maybeAuthenticate()
+        self.assert_(rq.authenticated_user is SiteStub.fred)
+
     def test_authenticate_success(self):
         rq = self.newRequest('/')
         rq.applogger = AppLoggerStub()
@@ -849,6 +863,40 @@ class TestRequest(unittest.TestCase):
                 '192.193.194.195 - manager [%s]'
                 ' "FOO /foo/bar bar/1.2" 200 42 "http://example.com"'
                 ' "Godzilla/115.0"\n' % rq.hit_time)
+
+    def test_renderRequestError(self):
+        from schooltool.http import Request
+        rq = Request(None, True)
+        # Request does this before calling renderRequestError:
+        rq.setResponseCode(400)
+        result = rq.renderRequestError(ValueError('Invalid Accept header'))
+        self.assert_(isinstance(result, str))
+        self.assert_(rq.code, 400)
+        self.assertEqual(rq.headers['content-type'],
+                         'text/plain; charset=UTF-8')
+
+    def test_renderInternalError(self):
+        from schooltool.http import Request
+        rq = Request(None, True)
+        # Request does this before calling renderRequestError:
+        rq.setResponseCode(500)
+        failure = Failure(AttributeError('foo'))
+        result = rq.renderInternalError(failure)
+        self.assert_(isinstance(result, str))
+        self.assert_(rq.code, 500)
+        self.assertEqual(rq.headers['content-type'],
+                         'text/plain; charset=UTF-8')
+
+    def test_renderAuthError(self):
+        from schooltool.http import Request
+        rq = Request(None, True)
+        result = rq.renderAuthError()
+        self.assert_(isinstance(result, str))
+        self.assert_(rq.code, 401)
+        self.assertEqual(rq.headers['content-type'],
+                         'text/plain; charset=UTF-8')
+        self.assertEqual(rq.headers['www-authenticate'],
+                         'basic realm="SchoolTool"')
 
 
 class TestTimeFormatting(unittest.TestCase):
