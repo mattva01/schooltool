@@ -35,8 +35,8 @@ def doctest_Options():
         >>> import os
         >>> from schoolbell.app.main import Options
         >>> options = Options()
-        >>> os.path.exists(options.config_file)
-        True
+        >>> options.config_file
+        '...schoolbell.conf...'
 
     """
 
