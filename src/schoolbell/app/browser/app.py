@@ -503,6 +503,8 @@ class ACLView(BrowserView):
 
         if 'UPDATE_SUBMIT' in self.request:
             map = IPrincipalPermissionManager(self.context)
+            # this view is protected by schooltool.controlAccess
+            map = removeSecurityProxy(map)
             auth = zapi.getUtility(IAuthentication)
             for info in self.getPersons() + self.getGroups():
                 principalid = info['id']
