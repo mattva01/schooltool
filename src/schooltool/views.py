@@ -87,14 +87,14 @@ class ErrorView(Resource):
     """
 
     __super = Resource
-    __super___init__ = __super.__init__
+    __super_init = __super.__init__
 
     isLeaf = True
 
     template = Template('www/error.pt')
 
     def __init__(self, code, reason):
-        self.__super___init__()
+        self.__super_init()
         self.code = code
         self.reason = reason
 
@@ -109,7 +109,13 @@ class NotFoundView(ErrorView):
     This view should be used for HTTP status code 404.
     """
 
+    __super = ErrorView
+    __super_init = __super.__init__
+
     template = Template('www/notfound.pt')
+
+    def __init__(self, code=404, reason='Not Found'):
+        self.__super_init(code, reason)
 
 
 def errorPage(request, code, reason):
@@ -140,10 +146,10 @@ class View(Resource):
     """
 
     __super = Resource
-    __super___init__ = __super.__init__
+    __super_init = __super.__init__
 
     def __init__(self, context):
-        self.__super___init__()
+        self.__super_init()
         self.context = context
 
     def getChild(self, name, request):
@@ -151,11 +157,11 @@ class View(Resource):
             if request.path == '/':
                 return self
             else:
-                return NotFoundView(404, "Not Found")
+                return NotFoundView()
         try:
             return self._traverse(name, request)
         except KeyError:
-            return NotFoundView(404, "Not Found")
+            return NotFoundView()
 
     def _traverse(self, name, request):
         raise KeyError(name)
@@ -209,6 +215,22 @@ class ApplicationObjectTraverserView(View):
         raise KeyError(name)
 
 
+class XMLPseudoParser:
+    """This is a temporary stub for validating XML parsing."""
+
+    def extractKeyword(self, text, key):
+        """Extracts values of key="value" format from a string.
+
+        Throws a KeyError if key is not found.
+        """
+        pat = re.compile(r'\b%s="([^"]*)"' % key)
+        match = pat.search(text)
+        if match:
+            return match.group(1)
+        else:
+            raise KeyError("%r not in text" % (key,))
+
+
 #
 # Concrete views
 #
@@ -254,7 +276,28 @@ class ApplicationView(TraversableView):
                 for utility in self.context.utilityService.values()]
 
 
-class ApplicationObjectContainerView(TraversableView):
+class ApplicationObjectCreator(XMLPseudoParser):
+    """Mixin for adding new application objects"""
+
+    def create(self, request, container, name=None):
+        body = request.content.read()
+        kw = {}
+        if name is not None:
+            kw['__name__'] = name
+        try:
+            kw['title'] = self.extractKeyword(body, 'title')
+        except KeyError:
+            pass
+        obj = container.new(**kw)
+        location = ('http://%s%s'
+                    % (request.getRequestHostname(), getPath(obj)))
+        request.setResponseCode(201, 'Created')
+        request.setHeader('Content-Type', 'text/plain')
+        request.setHeader('Location', location)
+        return "Object created: %s" % location
+
+
+class ApplicationObjectContainerView(TraversableView, ApplicationObjectCreator):
     """The view for the application object containers"""
 
     template = Template("www/aoc.pt", content_type="text/xml")
@@ -266,6 +309,37 @@ class ApplicationObjectContainerView(TraversableView):
         c = self.context
         return [{'path': getPath(c[key]), 'title': c[key].title}
                 for key in self.context.keys()]
+
+    def _traverse(self, name, request):
+        try:
+            return TraversableView._traverse(self, name, request)
+        except KeyError:
+            return ApplicationObjectCreatorView(self.context, name)
+
+    def do_POST(self, request):
+        return self.create(request, self.context)
+
+
+class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
+    """View for non-existing application objects"""
+
+    template = Template('www/notfound.pt')
+    code = 404
+    reason = "Not Found"
+
+    def __init__(self, container, name):
+        View.__init__(self, None)
+        self.container = container
+        self.name = name
+
+    def do_GET(self, request):
+        request.setResponseCode(self.code, self.reason)
+        return self.template(request, code=self.code, reason=self.reason)
+
+    do_DELETE = do_GET
+
+    def do_PUT(self, request):
+        return self.create(request, self.container, self.name)
 
 
 class UtilityServiceView(ItemTraverseView):
@@ -348,22 +422,6 @@ class EventLogView(View):
 
 class EventLogFacetView(EventLogView, FacetView):
     """A view for IEventLogFacet."""
-
-
-class XMLPseudoParser:
-    """This is a temporary stub for validating XML parsing."""
-
-    def extractKeyword(self, text, key):
-        """Extracts values of key="value" format from a string.
-
-        Throws a KeyError if key is not found.
-        """
-        pat = re.compile(r'\b%s="([^"]*)"' % key)
-        match = pat.search(text)
-        if match:
-            return match.group(1)
-        else:
-            raise KeyError("%r not in text" % (key,))
 
 
 class FacetManagementView(View, XMLPseudoParser):

@@ -445,7 +445,7 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub("http://localhost/groups")
         view = self.view._traverse('groups', request)
         self.assert_(view.__class__ is ApplicationObjectContainerView)
-        self.assertRaises(KeyError, view._traverse, 'froups', request)
+        self.assertRaises(KeyError, self.view._traverse, 'froups', request)
 
         view = self.view._traverse('utils', request)
         self.assert_(view.__class__ is UtilityServiceView)
@@ -490,12 +490,59 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
 
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
+    def test_post(self, suffix="", method="POST", body=None, view=None):
+        if view is None:
+            view = self.view
+        request = RequestStub("http://localhost/groups" + suffix,
+                              method=method, body=body)
+        result = view.render(request)
+        self.assertEquals(request.code, 201)
+        self.assertEquals(request.reason, "Created")
+        location = request.headers['Location']
+        base = "http://localhost/groups/"
+        self.assert_(location.startswith(base))
+        name = location[len(base):]
+        self.assert_(name in self.app['groups'].keys())
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assert_(location in result)
+        return name
+
+    def test_post_with_a_title(self):
+        name = self.test_post(body='title="New Group"')
+        self.assert_(self.app['groups'][name].title == 'New Group')
+
+    def test_get_child(self, method="GET"):
+        from schooltool.views import ApplicationObjectCreatorView
+        view = ApplicationObjectCreatorView(self.app['groups'], 'foo')
+        request = RequestStub("http://localhost/groups/foo", method=method)
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.reason, "Not Found")
+
+    def test_delete_child(self):
+        self.test_get_child(method="DELETE")
+
+    def test_put_child(self):
+        from schooltool.views import ApplicationObjectCreatorView
+        view = ApplicationObjectCreatorView(self.app['groups'], 'foo')
+        name = self.test_post(method="PUT", suffix="/foo", view=view)
+        self.assertEquals(name, 'foo')
+
+        view = ApplicationObjectCreatorView(self.app['groups'], 'bar')
+        name = self.test_post(method="PUT", suffix="/bar", view=view,
+                              body='title="Bar Bar"')
+        self.assertEquals(name, 'bar')
+        self.assert_(self.app['groups'][name].title == 'Bar Bar')
+
     def test__traverse(self):
-        from schooltool.views import GroupView
+        from schooltool.views import GroupView, ApplicationObjectCreatorView
         request = RequestStub("http://localhost/groups/root")
         view = self.view._traverse('root', request)
         self.assert_(view.__class__ is GroupView)
-        self.assertRaises(KeyError, view._traverse, 'moot', request)
+        view = self.view._traverse('newchild', request)
+        self.assert_(view.__class__ is ApplicationObjectCreatorView)
+        self.assertEquals(view.container, self.view.context)
+        self.assertEquals(view.name, 'newchild')
 
 
 class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
