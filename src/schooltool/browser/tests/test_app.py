@@ -398,16 +398,15 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
         self.obj_view = AddViewStub
 
     def createView(self):
+        from schooltool.app import Application
+        from schooltool.app import ApplicationObjectContainer
+        from schooltool.model import Person
+        app = Application()
+        app['container'] = ApplicationObjectContainer(Person)
+        app['container'].new('obj', title='Some Object')
+        self.obj = app['container']['obj']
 
-        class ContentStub:
-
-            def __init__(self, name, title):
-                self.__name__ = name
-                self.title = title
-
-        self.obj = ContentStub('obj', 'Some Object')
-        self.context = {'obj': self.obj}
-        view = self.view(self.context)
+        view = self.view(app['container'])
         view.add_view = self.add_view
         view.obj_view = self.obj_view
         return view
@@ -417,14 +416,23 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assert_('href="obj"' in result)
+        self.assert_('href="http://localhost:7001/container/obj"' in result)
         self.assert_('Some Object' in result)
 
     def test_traverse(self):
         view = self.createView()
         self.assertTraverses(view, 'obj', self.obj_view, self.obj)
-        self.assertTraverses(view, 'add.html', self.add_view, self.context)
+        self.assertTraverses(view, 'add.html', self.add_view, view.context)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+    def test_sortedObjects(self):
+        view = self.createView()
+        o1 = GroupStub(__name__='a', title='ccc')
+        o2 = GroupStub(__name__='b', title='bbb')
+        o3 = GroupStub(__name__='c', title='aaa')
+        view.context.itervalues = lambda: [o1, o2, o3]
+        objs = view.sortedObjects()
+        self.assertEquals(objs, [o3, o2, o1])
 
 
 class TestPersonContainerView(TestObjectContainerView):

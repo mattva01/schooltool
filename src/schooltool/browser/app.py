@@ -365,6 +365,12 @@ class ObjectContainerView(View):
         else:
             return self.obj_view(self.context[name])
 
+    def sortedObjects(self):
+        """Return a list of contained objects sorted by title."""
+        objs = list(self.context.itervalues())
+        objs.sort(lambda x, y: cmp(x.title, y.title))
+        return objs
+
 
 class PersonContainerView(ObjectContainerView):
     """View for traversing to persons (/persons)."""

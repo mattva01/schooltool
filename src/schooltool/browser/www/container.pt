@@ -11,12 +11,13 @@
   <!-- TODO: breadcrumbs -->
 
   <ul>
-    <li tal:repeat="obj context/itervalues">
+    <li tal:repeat="obj view/sortedObjects">
       <a tal:content="obj/title"
-         tal:attributes="href obj/__name__">Some Object</a>
-         <!-- TODO: sorting, absolute URLs? -->
+         tal:attributes="href obj/@@absolute_url">Some Object</a>
     </li>
   </ul>
+  
+  <!-- TODO: link to add new object -->
 
 </metal:block>
 </body>
