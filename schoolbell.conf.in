@@ -88,7 +88,7 @@ web 7080
 #
 # Default: no pidfile
 #
-pid-file schooltool.pid
+pid-file schoolbell.pid
 
 #
 # error-log-file
@@ -107,7 +107,7 @@ pid-file schooltool.pid
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file schooltool.log
+error-log-file schoolbell.log
 error-log-file STDERR
 
 #
