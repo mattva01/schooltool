@@ -1980,6 +1980,8 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
         self.assertEquals(uriobj.name, 'name')
         self.assertEquals(uriobj.description, 'desc')
 
+        self.assertRaises(AssertionError, URIObject, "invalid_uri")
+
 
 class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
 

@@ -1112,10 +1112,10 @@ class URIObject:
     """An object that represents an URI."""
 
     def __init__(self, uri, name=None, description=''):
+        assert looks_like_a_uri(uri)
         self.uri = uri
         self.name = name
         self.description = description
-        # TODO: validation?
 
 
 URITeaching_uri = 'http://schooltool.org/ns/teaching'
