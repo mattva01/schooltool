@@ -26,7 +26,7 @@ import tempfile
 tempdir = tempfile.mkdtemp()
 
 import shutil
-shutil.copy('Data.fs-0.8', tempdir + 'Data.fs')
+shutil.copy('Data.fs-0.8', os.path.join(tempdir, 'Data.fs'))
 
 os.chdir(tempdir)
 
