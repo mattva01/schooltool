@@ -11,6 +11,7 @@ System requirements
 
 - Python 2.3
 - Twisted (www.twistedmatrix.com)
+- wxPython 2.4
 
 
 Project structure
