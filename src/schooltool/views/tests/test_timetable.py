@@ -65,7 +65,7 @@ class TimetabledStub:
 
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
-    def do_test(self, view_class, tt_view_class, xml):
+    def do_test(self, view_class, tt_view_class, xml, html):
         context = TimetabledStub()
         setPath(context, '/...object')
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
@@ -78,6 +78,13 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, xml, recursively_sort=['timetables'])
+
+        request.accept = [('1', 'text/html', {}, {})]
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/html; charset=UTF-8")
+        self.assertEqualsXML(result, html, recursively_sort=['ul'])
 
         view2 = view._traverse('2003 fall', request)
         self.assert_(view2.__class__ is view_class,
@@ -103,6 +110,19 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
               <timetable period="2003 fall" schema="weekly" xlink:type="simple"
                          xlink:href="/...object/timetable/2003 fall/weekly" />
             </timetables>
+            """, """
+            <html>
+            <head>
+              <title>Timetables for /...object</title>
+            </head>
+            <body>
+              <h1>Timetables for /...object</h1>
+              <ul>
+                <li><a href="/...object/timetable/2003 fall/weekly"
+                    >2003 fall, weekly</a></li>
+              </ul>
+            </body>
+            </html>
             """)
         self.assert_(view.timetabled is context)
         self.assertEquals(view.key, ('2003 fall', 'weekly'))
@@ -127,6 +147,21 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                  xlink:href="/...object/composite-timetable/2003 spring/weekly"
                  xlink:type="simple" />
             </timetables>
+            """, """
+            <html>
+            <head>
+              <title>Composite timetables for /...object</title>
+            </head>
+            <body>
+              <h1>Composite timetables for /...object</h1>
+              <ul>
+                <li><a href="/...object/composite-timetable/2003 fall/weekly"
+                    >2003 fall, weekly</a></li>
+                <li><a href="/...object/composite-timetable/2003 spring/weekly"
+                    >2003 spring, weekly</a></li>
+              </ul>
+            </body>
+            </html>
             """)
         self.assertEqual(view.context, tt)
         self.assert_(view.context is not tt)

@@ -59,7 +59,7 @@ class TimetableReadView(View):
     """Read-only view for ITimetable."""
 
     template = Template("www/timetable.pt", content_type="text/xml")
-    html_template = Template("www/timetable_html.pt", content_type="text/html")
+    html_template = Template("www/timetable_html.pt")
 
     def do_GET(self, request):
         mtype = request.chooseMediaType(['text/xml', 'text/html'])
@@ -243,6 +243,7 @@ class BaseTimetableTraverseView(View):
     """
 
     template = Template("www/timetables.pt", content_type="text/xml")
+    html_template = Template("www/timetables_html.pt")
 
     def __init__(self, context, time_period=None):
         View.__init__(self, context)
@@ -252,11 +253,19 @@ class BaseTimetableTraverseView(View):
         if self.time_period is not None:
             return notFoundPage(request)
         else:
-            return View.do_GET(self, request)
+            mtype = request.chooseMediaType(['text/xml', 'text/html'])
+            if mtype == 'text/html':
+                return self.html_template(request, view=self,
+                                          context=self.context)
+            else:
+                return self.template(request, view=self, context=self.context)
 
 
 class TimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/timetable."""
+
+    def title(self):
+        return "Timetables for %s" % getPath(self.context)
 
     def timetables(self):
         basepath = getPath(self.context) + '/timetable'
@@ -274,6 +283,9 @@ class TimetableTraverseView(BaseTimetableTraverseView):
 
 class CompositeTimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/composite-timetable."""
+
+    def title(self):
+        return "Composite timetables for %s" % getPath(self.context)
 
     def timetables(self):
         basepath = getPath(self.context) + '/composite-timetable'
