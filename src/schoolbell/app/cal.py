@@ -35,7 +35,6 @@ from schoolbell.calendar.mixins import CalendarMixin
 from schoolbell.calendar.simple import SimpleCalendarEvent, ImmutableCalendar
 from schoolbell.app.interfaces import IContainedCalendarEvent
 
-
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     """A persistent calendar event contained in a persistent calendar."""
 

@@ -31,6 +31,12 @@ from zope.interface.verify import verifyObject
 from zope.app.tests import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 
+# Used in defining TestCalendarEventView
+from schoolbell.app.browser.cal import CalendarEventAddView
+from schoolbell.app.browser.cal import ICalendarEventAddForm
+from schoolbell.app.cal import CalendarEvent
+from schoolbell.app.app import Calendar
+
 
 def doctest_CalendarOwnerTraverser():
     """Tests for CalendarOwnerTraverser.
@@ -811,15 +817,29 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(view.editLink(), 'edit_event.html?' + params)
 
 
-def doctest_CalendarEventAddView():
-    r"""Tests for CalendarEventAddView.
 
-    Let's create a CalendarEventAddView
+class TestCalendarEventAddView(CalendarEventAddView):
+    """Class for testing CalendarEventAddView.
 
-        >>> from schoolbell.app.browser.cal import CalendarEventAddView
-        >>> from schoolbell.app.app import Calendar
+    We extend CalendarEventAddView so we could supply arguments normaly
+    provided in ZCML.
+    """
 
-        >>> view = CalendarEventAddView(Calendar(), TestRequest())
+    schema = ICalendarEventAddForm
+    _factory = CalendarEvent
+    _arguments = ['title', 'start_date', 'start_time', 'duration']
+    _keyword_arguments = ['recurrence', 'location', 'recurrence_type',
+                          'interval', 'range', 'until', 'count']
+    _set_before_add = []
+    _set_after_add = []
+
+
+def doctest_CalendarEventAddView_add():
+    r"""Tests for CalendarEventAddView adding of new event.
+
+    Let's create a TestCalendarEventAddView
+
+        >>> view = TestCalendarEventAddView(Calendar(), TestRequest())
         >>> view.update()
 
     Let's try to add an event:
@@ -833,7 +853,7 @@ def doctest_CalendarEventAddView():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = CalendarEventAddView(calendar, request)
+        >>> view = TestCalendarEventAddView(calendar, request)
         >>> view.update()
         ''
 
@@ -861,26 +881,6 @@ def doctest_CalendarEventAddView():
         >>> view.request.response.getHeaders()['Location']
         'http://127.0.0.1/calendar'
 
-    Let's try to add an event without a required field:
-
-        >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_time': '15:30',
-        ...                             'field.duration': '50',
-        ...                             'field.recurrence.used': '',
-        ...                             'UPDATE_SUBMIT': 'Add'})
-
-        >>> calendar = Calendar()
-        >>> view = CalendarEventAddView(calendar, request)
-        >>> view.update()
-        u'An error occured.'
-
-        >>> print view.errors
-        MissingInputError: ('start_date', 'Date', 'the field is required')
-        >>> print view.error
-        None
-        >>> len(calendar)
-        0
-
     Let's try to add an event with an optional location field:
 
         >>> request = TestRequest(form={'field.title': 'Hacking',
@@ -893,7 +893,7 @@ def doctest_CalendarEventAddView():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = CalendarEventAddView(calendar, request)
+        >>> view = TestCalendarEventAddView(calendar, request)
         >>> view.update()
         ''
 
@@ -906,6 +906,99 @@ def doctest_CalendarEventAddView():
         >>> event = list(calendar)[0]
         >>> event.location
         u'Moon'
+
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50'})
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.title_widget.getInputValue()
+        u'Hacking'
+        >>> view.location_widget.getInputValue()
+        u'Kitchen'
+        >>> view.start_date_widget.getInputValue()
+        datetime.date(2004, 8, 13)
+        >>> view.start_time_widget.getInputValue()
+        u'15:30'
+        >>> view.duration_widget.getInputValue()
+        50
+
+    """
+
+def doctest_CalendarEventAddView_add_validation():
+    r"""Tests for CalendarEventAddView form validation.
+
+    Let's try to add an event without a required field:
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar()
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+
+        >>> print view.errors
+        MissingInputError: ('start_date', 'Date', 'the field is required')
+        >>> print view.error
+        None
+        >>> len(calendar)
+        0
+
+
+        >>> request = TestRequest(form={'field.title': '',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors
+        WidgetInputError: ('title', 'Title', )
+        >>> view.error is None
+        True
+
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-31-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors                                # doctest: +ELLIPSIS
+        ConversionError: ('Invalid datetime data', <...>)
+        >>> view.error is None
+        True
+
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '100h',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors                                # doctest: +ELLIPSIS
+        ConversionError: ('Invalid integer data', <...>)
+        >>> view.error is None
+        True
+
+    """
+
+def doctest_CalendarEventAddView_add_recurrence():
+    r"""Tests for CalendarEventAddView adding of recurring event.
 
     Let's try to add a recurring event:
 
@@ -922,7 +1015,7 @@ def doctest_CalendarEventAddView():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = CalendarEventAddView(calendar, request)
+        >>> view = TestCalendarEventAddView(calendar, request)
         >>> view.update()
         ''
 
@@ -945,7 +1038,7 @@ def doctest_CalendarEventAddView():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = CalendarEventAddView(calendar, request)
+        >>> view = TestCalendarEventAddView(calendar, request)
         >>> view.update()
         ''
 
@@ -981,7 +1074,7 @@ def doctest_CalendarEventAddView():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = CalendarEventAddView(calendar, request)
+        >>> view = TestCalendarEventAddView(calendar, request)
         >>> view.update()
         ''
 
@@ -1003,12 +1096,165 @@ def doctest_CalendarEventAddView():
         >>> event.recurrence
         DailyRecurrenceRule(2, None, None, ())
 
-        >>> view = CalendarEventAddView(calendar, request)
+    """
 
-    TODO?
+def doctest_CalendarEventAddView_getWeekDay():
+    r"""Tests for CalendarEventAddView.getWeekDay().
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-10-01',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'field.interval': '2',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> calendar = Calendar()
+
+        >>> request.form['field.start_date'] = "2004-10-01"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'1st Friday'
+
+        >>> request.form['field.start_date'] = "2004-10-13"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'2nd Wednesday'
+
+        >>> request.form['field.start_date'] = "2004-10-16"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'3rd Saturday'
+
+        >>> request.form['field.start_date'] = "2004-10-26"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'4th Tuesday'
+
+        >>> request.form['field.start_date'] = "2004-10-28"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'4th Thursday'
+
+        >>> request.form['field.start_date'] = "2004-10-29"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'5th Friday'
+
+        >>> request.form['field.start_date'] = "2004-10-31"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getWeekDay()
+        u'5th Sunday'
 
     """
 
+def doctest_CalendarEventAddView_getLastWeekDay():
+    r"""Tests for CalendarEventAddView.getLastWeekDay().
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-10-01',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'field.interval': '2',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> calendar = Calendar()
+
+        >>> request.form['field.start_date'] = ""
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getLastWeekDay()
+        u'last weekday'
+
+        >>> request.form['field.start_date'] = "2004-10-24"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getLastWeekDay() is None
+        True
+
+        >>> request.form['field.start_date'] = "2004-10-25"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getLastWeekDay()
+        u'Last Monday'
+
+        >>> request.form['field.start_date'] = "2004-10-31"
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.getLastWeekDay()
+        u'Last Sunday'
+
+    """
+
+def doctest_CalendarEventAddView_cross_validation():
+    r"""Tests for CalendarEventAddView cross validation.
+
+        >>> request = TestRequest(form={'field.title': 'Foo',
+        ...                             'field.start_date': '2003-12-01',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '59',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence_type' : '',
+        ...                             'field.interval': '',
+        ...                             'field.range': 'count',
+        ...                             'field.count': '6',
+        ...                             'field.until': '2004-01-01',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> calendar = Calendar()
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors
+        WidgetInputError: ('interval', u'Repeat every', )
+        WidgetInputError: ('recurrence_type', 'Recurs', )
+        >>> view.error is None
+        True
+
+
+        >>> request = TestRequest(form={'field.title': 'Foo',
+        ...                             'field.start_date': '2003-12-01',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '59',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence_type' : 'daily',
+        ...                             'field.interval': '1',
+        ...                             'field.range': 'until',
+        ...                             'field.until': '2002-01-01',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> calendar = Calendar()
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors
+        WidgetInputError: ('until', 'Repeat until', End date is earlier than start date)
+        >>> view.error is None
+        True
+
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '100',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence_type' : 'daily',
+        ...                             'field.range': 'until',
+        ...                             'field.count': '23',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> calendar = Calendar()
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors
+        MissingInputError: ('field.interval', u'Repeat every', None)
+        MissingInputError: ('field.until', 'Repeat until', None)
+        >>> view.error is None
+        True
+
+    """
 
 class TestGetRecurrenceRule(unittest.TestCase):
 

@@ -359,14 +359,17 @@
 
 <!-- Calendar event views -->
 
-  <page
+  <addform
+      label="Add Event"
       name="add.html"
-      for="schoolbell.calendar.interfaces.ICalendar"
-      class=".cal.CalendarEventAddView"
-      template="templates/event_add.pt"
+      for="schoolbell.calendar.interfaces.IEditCalendar"
+      schema=".cal.ICalendarEventAddForm"
+      arguments="title start_date start_time duration"
+      keyword_arguments="recurrence location recurrence_type interval range until count monthly exceptions"
+      content_factory="schoolbell.app.cal.CalendarEvent"
       permission="zope.ManageContent"
-      menu="zmi_views"
-      title="Add Event"
+      template="templates/event_add.pt"
+      class=".cal.CalendarEventAddView"
       />
 
   <page

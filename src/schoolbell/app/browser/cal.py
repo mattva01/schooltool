@@ -24,14 +24,20 @@ $Id$
 
 from datetime import datetime, date, time, timedelta
 import urllib
+import calendar
+import sys
 
 from zope.interface import implements, Interface
 from zope.schema import Date, TextLine, Choice, Int, Bool, Set, Text
+from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.component import queryView, queryMultiAdapter, adapts
+from zope.app.form.interfaces import WidgetInputError, WidgetsError
+from zope.app.form.interfaces import IWidgetInputError
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
+from zope.app.form.utility import getWidgetsData
 from zope.app.traversing.browser.absoluteurl import absoluteURL
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
@@ -945,7 +951,9 @@ class ICalendarEventAddForm(Interface):
 
     # Recurrence
     recurrence = Bool(
-        title=_("Recurring"))
+        title=_("Recurring"),
+        required=False)
+
 
     recurrence_type = Choice(
         title=_("Recurs"),
@@ -955,7 +963,6 @@ class ICalendarEventAddForm(Interface):
                                ("weekly", _("Week")),
                                ("monthly", _("Month")),
                                ("yearly", _("Year"))]))
-
 
     interval = Int(
         title=u"Repeat every",
@@ -1011,16 +1018,33 @@ class CalendarEventAddView(AddView):
     """A view for adding an event."""
 
     __used_for__ = ICalendar
-
     schema = ICalendarEventAddForm
+
     error = None
 
-    _factory = CalendarEvent
-    _arguments = ['title', 'start_date', 'start_time', 'duration',
-                  'recurrence']
-    _keyword_arguments = ['location', 'recurrence_type', 'interval']
-    _set_before_add = []
-    _set_after_add = []
+    def _setError(self, name, error=RequiredMissing()):
+        """Set an error on a widget."""
+        # XXX Touching widget._error is bad, see
+        #     http://dev.zope.org/Zope3/AccessToWidgetErrors
+        # The call to setRenderedValue is necessary because
+        # otherwise _getFormValue will call getInputValue and
+        # overwrite _error while rendering.
+        self._found_errors = True
+        widget = getattr(self, name + '_widget')
+        widget.setRenderedValue(widget._getFormValue())
+        if not IWidgetInputError.providedBy(error):
+            error = WidgetInputError(name, widget.label, error)
+        widget._error = error
+
+    def _requireField(self, name, errors):
+        widget = getattr(self, name + '_widget')
+        field = widget.context
+        try:
+            if widget.getInputValue() == field.missing_value:
+                self._setError(name)
+                errors.append(widget._error)
+        except WidgetInputError, e:
+                errors.append(e)
 
     def create(self, title, start_date, start_time, duration, recurrence,
                **kwargs):
@@ -1031,14 +1055,33 @@ class CalendarEventAddView(AddView):
         if 'location' in kwargs:
             location = kwargs.pop('location')
 
-        rrule = recurrence and makeRecurrenceRule(**kwargs) or None
+        errors = []
+        if recurrence:
+            self._requireField("interval", errors)
+            self._requireField("recurrence_type", errors)
 
+            if 'range' in kwargs:
+                range = kwargs['range']
+                if range == "count":
+                    self._requireField("count", errors)
+                if range == "until":
+                    self._requireField("until", errors)
+                    if 'until' in kwargs and kwargs['until'] < start_date:
+                        self._setError("until", ConstraintNotSatisfied(_(
+                                    "End date is earlier than start date")))
+                        errors.append(self.until_widget._error)
+
+        if errors:
+            raise WidgetsError(errors)
+
+        rrule = recurrence and makeRecurrenceRule(**kwargs) or None
         event = self._factory(start, duration, title,
                               recurrence=rrule, location=location)
         return event
 
     def add(self, event):
         self.context.addEvent(event)
+        return event
 
     def nextURL(self):
         return absoluteURL(self.context, self.request) # XXX untested
@@ -1046,7 +1089,7 @@ class CalendarEventAddView(AddView):
     def getWeekDay(self):
         """Return a description like '4th Tuesday'."""
 
-        evdate = self.start_date_widget.value
+        evdate = self.start_date_widget.getInputValue()
         if evdate is None:
             return _("same weekday")
         weekday = evdate.weekday()
@@ -1057,6 +1100,26 @@ class CalendarEventAddView(AddView):
         day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
 
         return "%s %s" % (indexes[index], day_of_week)
+
+    def getLastWeekDay(self):
+        """Return a description like 'Last Friday' or None."""
+
+        try:
+            evdate = self.start_date_widget.getInputValue()
+        except WidgetInputError:
+            evdate = None
+
+        if evdate is None:
+            return _("last weekday")
+
+        lastday = calendar.monthrange(evdate.year, evdate.month)[1]
+
+        if lastday - evdate.day >= 7:
+            return None
+        else:
+            weekday = evdate.weekday()
+            day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
+            return _("Last %(weekday)s") % {'weekday': day_of_week}
 
 
 def makeRecurrenceRule(interval=None, until=None,
