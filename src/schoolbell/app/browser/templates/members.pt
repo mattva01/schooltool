@@ -4,7 +4,7 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<h1 metal:fill-slot="h1" i18n:translate="">
+<h1 metal:fill-slot="content-header" i18n:translate="">
   Members of <span i18n:name="title" tal:replace="context/title" />
 </h1>
 <metal:block metal:fill-slot="body"

@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1 metal:fill-slot="h1" tal:content="view/index_title">Contents</h1>
+<h1 metal:fill-slot="content-header" tal:content="view/index_title">Contents</h1>
 
 <metal:block metal:fill-slot="body"
              tal:define="objects context/values">

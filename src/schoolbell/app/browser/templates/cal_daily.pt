@@ -1,6 +1,6 @@
 <tal:defs define="status view/update" />
 <html metal:use-macro="view/@@standard_macros/calendar-page" i18n:domain="schooltool">
-  <metal:block fill-slot="body">
+  <metal:block fill-slot="calendar-body">
     <div id="calendar-view-day"
         tal:attributes="style python:'height: ' + str(view.visiblehours * 4 + 1) + 'em'">
 

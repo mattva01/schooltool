@@ -4,7 +4,7 @@
   <title metal:fill-slot="title" i18n:translate="">Calendar (plain)</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="">
+  <h1 metal:fill-slot="conent-header" i18n:translate="">
 <!--     Calendar for <span tal:replace="context/title" i18n:name="title"/> -->
   </h1>
 <metal:block metal:fill-slot="body">

@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" i18n:translate="">Resource info</title>
 </head>
 <body>
-<h1 metal:fill-slot="h1" i18n:translate="">Resource info</h1>
+<h1 metal:fill-slot="content-header" i18n:translate="">Resource info</h1>
 <metal:block metal:fill-slot="body">
 
   <div class="row">

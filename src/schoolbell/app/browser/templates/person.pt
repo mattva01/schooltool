@@ -3,8 +3,8 @@
   <title metal:fill-slot="title" i18n:translate="">Person info</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="">
-    Person info for <span tal:replace="context/title" i18n:name="title"/>
+  <h1 metal:fill-slot="content-header" i18n:translate="">
+    <span tal:replace="context/title" i18n:name="title"/>
   </h1>
 <metal:block metal:fill-slot="body">
   <div class="row">

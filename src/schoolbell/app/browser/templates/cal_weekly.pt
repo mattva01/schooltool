@@ -1,6 +1,6 @@
 <tal:defs define="status view/update" />
 <html metal:use-macro="view/@@standard_macros/calendar-page" i18n:domain="schooltool">
-<metal:block metal:fill-slot="body">
+<metal:block metal:fill-slot="calendar-body">
   <table id="calendar-view-week" cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <tal:loop repeat="day view/getCurrentWeek">

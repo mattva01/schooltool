@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<h1 metal:fill-slot="h1"><span tal:replace="context/title" /></h1>
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
 
 <div class="portlet" metal:fill-slot="column-left-extra">
   <h4 i18n:translate="">Access control</h4>

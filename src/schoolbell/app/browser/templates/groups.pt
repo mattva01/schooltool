@@ -4,7 +4,8 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<metal:block metal:fill-slot="body" tal:define="all_groups view/getAllGroups">
+    <metal:block metal:fill-slot="body"
+        tal:define="all_groups view/getAllGroups">
 
 <form method="POST" tal:attributes="action request/URL" class="standalone">
   <h3 i18n:translate="">

@@ -4,7 +4,7 @@
   <title metal:fill-slot="title" i18n:translate="">Add person</title>
 </head>
 <body>
-<metal:nothing metal:fill-slot="h1" />
+<metal:nothing metal:fill-slot="content-header" />
 
 <metal:block metal:fill-slot="body">
 
