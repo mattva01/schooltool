@@ -39,6 +39,8 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
   * Remove the database versioning code and add code ro remove the crufty
     database versioning stamps. Database upgrades will be handled within
     schooltool from this point on.
+  * Change the default ports for SchoolBell to 7101 for the RESTive interface
+    and 7180 for the web interface.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

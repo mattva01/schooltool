@@ -1,8 +1,7 @@
 SchoolBell for Debian
 ---------------------
 
-This is an early testing version of SchoolBell.  The configuration file is
-/etc/schoolbell/schoolbell.conf.
+The configuration file is /etc/schoolbell/schoolbell.conf.
 
 If you don't want SchoolBell to start automatically on system boot, edit
 /etc/default/schoolbell.
@@ -13,7 +12,7 @@ list of SchoolBell server configuration options.
 The simplest way to start playing with SchoolBell is as follows:
 
   1. `apt-get install schoolbell`
-  4. Open http://localhost:7080/ in a web browser and play with the web
+  2. Open http://localhost:7180/ in a web browser and play with the web
      frontend.
 
 By default a user 'manager' with password 'schooltool' is created with full

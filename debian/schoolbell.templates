@@ -1,6 +1,6 @@
 Template: schoolbell/listen
 Type: string
-Default: 7001
+Default: 7101
 _Description: Network interfaces for SchoolBell XML web services:
  Please enter a space separated list of [address:]port values that you
  would like the server to listen on.
@@ -12,7 +12,7 @@ _Description: Network interfaces for SchoolBell XML web services:
 
 Template: schoolbell/web
 Type: string
-Default: 7080
+Default: 7180
 _Description: Network interfaces for the HTML browser interface:
  Please enter a space separated list of [address:]port values that you
  would like the server to listen on.
