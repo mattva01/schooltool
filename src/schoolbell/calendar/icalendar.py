@@ -94,7 +94,6 @@ def convert_event_to_vfb(event):
         FREEBUSY:20041216T100729/20041216T11072900Z
 
     """
-    dtstamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
     dtend = event.dtstart + event.duration
     result = []
     # XXX: not handling recurrence yet
@@ -188,6 +187,7 @@ def convert_calendar_to_vfb(calendar):
         VERSION:2.0
         PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
         METHOD:PUBLISH
+        DTSTAMP:...
         BEGIN:VFREEBUSY
         FREEBUSY:20041116T100729/20041116T11072900Z
         FREEBUSY:20041216T100729/20041216T12072900Z
@@ -202,6 +202,7 @@ def convert_calendar_to_vfb(calendar):
         VERSION:2.0
         PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
         METHOD:PUBLISH
+        DTSTAMP:...
         BEGIN:VFREEBUSY
         END:VFREEBUSY
         END:VCALENDAR
@@ -213,6 +214,7 @@ def convert_calendar_to_vfb(calendar):
         "VERSION:2.0",
         "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
         "METHOD:PUBLISH",
+        "DTSTAMP: %s" % datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"),
         "BEGIN:VFREEBUSY"
     ]
     footer = [
