@@ -30,7 +30,7 @@ update-translations:
 clean:
 	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
-	rm -rf debian/schooltool
+	rm -rf debian/schooltool-server debian/schooltool-clients
 	rm -f debian/schooltool.substvars \
 		debian/schooltool.postinst.debhelper \
 		debian/import-sampleschool \
@@ -42,7 +42,7 @@ clean:
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags
-	rm -f schooltool.log testserver.log testserver_access.log
+	rm -f schooltool.log access.log testserver.log testserver_access.log
 
 test: build
 	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
