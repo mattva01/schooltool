@@ -164,7 +164,7 @@ Let the Frog modify this event:
     ... field.title=Sleeping&field.start_date=2005-02-03&\
     ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
     ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/frogpond/persons/frog/calendar/2005-02-03...

@@ -89,7 +89,6 @@
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <input type="hidden" tal:condition="request/date|nothing"
            name="date" tal:attributes="value request/date" />
-
     <fieldset>
       <legend i18n:translate="">Event details</legend>
 
@@ -112,6 +111,15 @@
       </div>
       <div class="row" tal:define="widget nocall:view/description_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:condition="view/show_book_checkbox">
+        <div class="field">
+          <input class="hiddenType" id="field.book.used" name="field.book.used" type="hidden" value="" />
+          <input class="checkboxType" id="field.book" name="field.book" type="checkbox" value="on"
+                 tal:attributes="checked request/field.book|nothing" />
+          <label for="field.book">Book Resources</label>
+        </div>
       </div>
 
       <div class="row" tal:define="widget nocall:view/recurrence_widget">
@@ -250,6 +258,9 @@
              i18n:attributes="accesskey" />
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
+      <a tal:condition="view/show_book_link"
+         tal:attributes="href view/bookingURL"
+         i18n:translate="">Book resources</a>
     </div>
   </form>
 </metal:block>

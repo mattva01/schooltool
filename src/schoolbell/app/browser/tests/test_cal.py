@@ -2114,8 +2114,8 @@ def doctest_TestCalendarEventBookingView():
     person and his calendar with an event:
 
         >>> from schoolbell.app.browser.cal import CalendarEventBookingView
-        >>> from schoolbell.app.security import setUpLocalAuth
         >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.security import setUpLocalAuth
         >>> from schoolbell.app.app import Resource, Person
         >>> from schoolbell.app.cal import CalendarEvent
         >>> from zope.app.component.hooks import setSite
@@ -2124,6 +2124,12 @@ def doctest_TestCalendarEventBookingView():
         >>> directlyProvides(app, IContainmentRoot)
         >>> setUpLocalAuth(app)
         >>> setSite(app)
+
+        >>> from zope.security.checker import defineChecker, Checker
+        >>> defineChecker(Calendar,
+        ...               Checker({'addEvent': 'zope.Public'},
+        ...                       {'addEvent': 'zope.Public'}))
+
 
         >>> person = Person(u'ignas')
         >>> app['persons']['ignas'] = person
@@ -2138,13 +2144,10 @@ def doctest_TestCalendarEventBookingView():
 
     Now let's create a view for the event:
 
-
         >>> request = TestRequest()
         >>> view = CalendarEventBookingView(event, request)
 
         >>> view.update()
-        ''
-
         >>> view.errors
         ()
 
@@ -2158,6 +2161,61 @@ def doctest_TestCalendarEventBookingView():
         >>> [resource.title for resource in view.availableResources
         ...                 if not view.hasBooked(resource)]
         ['res0', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'res8', 'res9']
+
+    Now let's book some resources for our event:
+
+        >>> request = TestRequest(form={'marker-res0': '1',
+        ...                             'marker-res1': '1',
+        ...                             'res2': 'booked',
+        ...                             'marker-res2': '1',
+        ...                             'marker-res3': '1',
+        ...                             'res4': 'booked',
+        ...                             'marker-res4': '1',
+        ...                             'marker-res5': '1',
+        ...                             'marker-res6': '1',
+        ...                             'marker-res7': '1',
+        ...                             'marker-res8': '1',
+        ...                             'marker-res9': '1',
+        ...                             'UPDATE_SUBMIT': 'Set'})
+
+        >>> view = CalendarEventBookingView(event, request)
+
+        >>> view.update()
+        ''
+
+    Couple of resources should be booked now:
+
+        >>> [resource.title for resource in view.availableResources
+        ...                 if view.hasBooked(resource)]
+        ['res2', 'res4']
+
+
+    Now let's unbook a resource and book a nnew one:
+
+        >>> request = TestRequest(form={'marker-res0': '1',
+        ...                             'marker-res1': '1',
+        ...                             'marker-res2': '1',
+        ...                             'res3': 'booked',
+        ...                             'marker-res3': '1',
+        ...                             'res4': 'booked',
+        ...                             'marker-res4': '1',
+        ...                             'marker-res5': '1',
+        ...                             'marker-res6': '1',
+        ...                             'marker-res7': '1',
+        ...                             'marker-res8': '1',
+        ...                             'marker-res9': '1',
+        ...                             'UPDATE_SUBMIT': 'Set'})
+
+        >>> view = CalendarEventBookingView(event, request)
+
+        >>> view.update()
+        ''
+
+    We should see a resource 3 in the list now:
+
+        >>> [resource.title for resource in view.availableResources
+        ...                 if view.hasBooked(resource)]
+        ['res3', 'res4']
 
     """
 

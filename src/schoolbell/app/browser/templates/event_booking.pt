@@ -1,3 +1,4 @@
+<tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">Resource Booking</title>
@@ -13,6 +14,8 @@
       Resource Booking for <span i18n:name="title"
                                  tal:replace="context/title">something</span>
   </h3>
+  <input type="hidden" tal:condition="request/date|nothing"
+         name="date" tal:attributes="value request/date" />
   <fieldset>
     <legend i18n:translate="">Available Resources</legend>
     <table class="acl">

@@ -486,7 +486,7 @@
 
   <page
       for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
-      name="event_resource_booking.html"
+      name="booking.html"
       layer=".skin.ISchoolBellLayer"
       class=".cal.CalendarEventBookingView"
       template="templates/event_booking.pt"

@@ -47,7 +47,9 @@ from zope.publisher.interfaces import NotFound
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.security.proxy import removeSecurityProxy
+from zope.security.interfaces import ForbiddenAttribute
 from zope.security.checker import canWrite, canAccess
 
 from schoolbell.app.app import getSchoolBellApplication
@@ -1299,6 +1301,10 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     title = _("Add event")
     submit_button_title = _("Add")
 
+    show_book_checkbox = True
+    show_book_link = False
+    _event_uid = None
+
     error = None
 
     def __init__(self, context, request):
@@ -1318,6 +1324,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     def add(self, event):
         """Add the event to a calendar."""
         self.context.addEvent(event)
+        self._event_uid = event.unique_id
         self._redirectToDate = event.dtstart.date()
         return event
 
@@ -1342,8 +1349,20 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         """
         if date is None:
             date = self._redirectToDate
+
+        if "field.book" in self.request:
+            return self._bookingURL(date)
+
         url = absoluteURL(self.context, self.request)
         return '%s/%s' % (url, date)
+
+    def _bookingURL(self, date):
+        """Returns link to the booking view of the newly created event.
+
+        Passes the date supplied as a redirect date to the booking view.
+        """
+        url = absoluteURL(self.context, self.request)
+        return '%s/%s/booking.html?date=%s' % (url, self._event_uid, date)
 
 
 class ICalendarEventEditForm(ICalendarEventAddForm):
@@ -1355,6 +1374,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
     error = None
     _redirectToDate = None
+    show_book_checkbox = False
+    show_book_link = True
 
     title = _("Edit event")
     submit_button_title = _("Update")
@@ -1492,32 +1513,81 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         """
         if date is None:
             date = self._redirectToDate
+
+        if "field.book" in self.request:
+            return self.bookingURL(date)
+
         url = absoluteURL(self.context.__parent__, self.request)
         return '%s/%s' % (url, date)
+
+    def bookingURL(self, date=None):
+        """Returns link to the booking view of the newly created event.
+
+        If a date is supplied passes it as a redirect date to the booking view
+        else - passes the date that was supplied in the request.
+        """
+
+        if date is None:
+            date = self._redirectToDate
+
+        url = absoluteURL(self.context, self.request)
+        return '%s/booking.html?date=%s' % (url, date)
 
 
 class CalendarEventBookingView(BrowserView):
     """A view for booking resources."""
 
     errors = ()
+    update_status = None
+    _redirectToDate = None
 
     def update(self):
-        return ''
+        """Books and unbooks resources according to the request."""
 
-    def resources(self):
-        """Gives us a list of all booked resources."""
-        return []
+        self._redirectToDate = self.request.get(
+            'date',
+            self.context.dtstart.strftime("%Y-%m-%d"))
+
+        if "UPDATE_SUBMIT" in self.request and not self.update_status:
+            self.update_status = ''
+            sb = getSchoolBellApplication()
+
+            for res_id, resource in sb["resources"].items():
+                if 'marker-%s' % res_id in self.request:
+                    booked = self.hasBooked(resource)
+                    checked = res_id in self.request
+                    if booked != checked:
+                        if checked:
+                            # TODO: make sure the user has permission to book
+                            self.context.bookResource(resource)
+                        else:
+                            # Always allow unbooking, even if permission to
+                            # book was revoked
+                            self.context.unbookResource(resource)
+            self.request.response.redirect(self.nextURL())
+
+        return self.update_status
 
     def _availableResources(self):
         """Gives us a list of all bookable resources."""
         sb = getSchoolBellApplication()
-        return sb["resources"].values()
+        resources = []
+        for resource in sb["resources"].values():
+            if (canAccess(resource.calendar, "addEvent") or
+                self.hasBooked(resource)):
+                resources.append(resource)
+        return resources
 
     availableResources = property(_availableResources)
 
     def hasBooked(self, resource):
         """Checks whether a resource is booked by this event."""
-        return resource in self.resources()
+        return resource in self.context.resources
+
+    def nextURL(self):
+        """Return the URL to be displayed after the add operation."""
+        url = absoluteURL(self.context.__parent__, self.request)
+        return '%s/%s' % (url, self._redirectToDate)
 
 
 def makeRecurrenceRule(interval=None, until=None,

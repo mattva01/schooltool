@@ -173,6 +173,8 @@ Let's add an ordinary event that takes place on 3rd February, 2005:
     ... """)
     HTTP/1.1 303 See Other
     ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-03
+    ...
 
 The event should be visible in the daily calendar view:
 
