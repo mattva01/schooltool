@@ -1,0 +1,27 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+    <head>
+        <title metal:fill-slot="title" tal:content="view/title">Add object</title>
+    </head>
+    <body>
+
+        <h1 metal:fill-slot="h1" tal:content="view/title">Add object</h1>
+
+        <metal:block metal:fill-slot="content">
+
+            <form method="POST" enctype="multipart/form-data"
+                tal:attributes="action request/path">
+                <input type="hidden" name="name" value=""/>
+                <input type="hidden" name="url" value=""
+                    tal:attributes="value python:request.args.get('url', [''])[0]"/>
+                <div class="error" tal:condition="view/error"
+                    tal:content="view/error" />
+                <div class="row" tal:replace="structure view/title_widget" />
+                <div class="row" tal:replace="structure view/body_widget" />
+
+                <input class="button" type="submit" name="ADD" value="Add"
+                    i18n:attributes="value" />
+            </form>
+
+        </metal:block>
+    </body>
+</html>

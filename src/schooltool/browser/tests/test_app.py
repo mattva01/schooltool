@@ -51,12 +51,13 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Person, Group, Resource
+        from schooltool.model import Person, Group, Resource, Note
         from schooltool.browser.app import RootView
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
         app['groups'] = ApplicationObjectContainer(Group)
         app['resources'] = ApplicationObjectContainer(Resource)
+        app['notes'] = ApplicationObjectContainer(Note)
         view = RootView(app)
         return view
 
@@ -182,6 +183,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
         from schooltool.browser.app import ResourceContainerView
+        from schooltool.browser.app import NoteContainerView
         from schooltool.browser.app import BusySearchView
         from schooltool.browser.applog import ApplicationLogView
         from schooltool.browser.timetable import TimetableSchemaWizard
@@ -200,6 +202,8 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         self.assertTraverses(view, 'resources', ResourceContainerView,
                              app['resources'])
+        self.assertTraverses(view, 'notes', NoteContainerView,
+                             app['notes'])
         self.assertTraverses(view, 'csvimport.html', CSVImportView, app)
         self.assertTraverses(view, 'busysearch', BusySearchView, app)
         self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
@@ -657,6 +661,17 @@ class TestResourceContainerView(TestObjectContainerView):
         self.add_view = ResourceAddView
         self.obj_view = ResourceView
 
+class TestNoteContainerView(TestObjectContainerView):
+
+    def setUp(self):
+        from schooltool.browser.app import NoteContainerView
+        from schooltool.browser.app import NoteAddView
+        from schooltool.browser.model import NoteView
+        TestObjectContainerView.setUp(self)
+        self.view = NoteContainerView
+        self.add_view = NoteAddView
+        self.obj_view = NoteView
+
 
 class TestObjectAddView(AppSetupMixin, unittest.TestCase):
 
@@ -912,6 +927,16 @@ class TestResourceAddView(AppSetupMixin, unittest.TestCase):
         assert view.parent is self.locations
         assert view.prev_location
 
+class TestNoteAddView(AppSetupMixin, unittest.TestCase):
+      
+    def createView(self):
+        from schooltool.browser.app import NoteAddView
+        view = NoteAddView(self.app['notes'])
+        return view
+    
+    def test(self):
+        view = self.createView()
+        self.assertEquals(view.title, "Add note")
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
 
@@ -1065,9 +1090,11 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     suite.addTest(unittest.makeSuite(TestResourceContainerView))
+    suite.addTest(unittest.makeSuite(TestNoteContainerView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))
+    suite.addTest(unittest.makeSuite(TestNoteAddView))
     suite.addTest(unittest.makeSuite(TestBusySearchView))
     suite.addTest(unittest.makeSuite(TestDatabaseResetView))
     suite.addTest(DocTestSuite('schooltool.browser.app'))

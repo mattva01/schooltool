@@ -136,7 +136,7 @@ class RegistriesSetupMixin:
 class AppSetupMixin(RegistriesSetupMixin):
     """Mixin that creates a sample application structure for tests.
 
-    The application (self.app) contains three containers:
+    The application (self.app) contains four containers:
 
       groups
         root        (self.root)
@@ -153,11 +153,14 @@ class AppSetupMixin(RegistriesSetupMixin):
         resource    (self.resource)
         location    (self.location)
         location2   (self.location2)
+      notes
+        note        (self.note1)
+        note2       (self.note2)
 
     """
 
     def setUpSampleApp(self):
-        from schooltool.model import Group, Person, Resource
+        from schooltool.model import Group, Person, Resource, Note
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
         from schooltool import membership
@@ -167,6 +170,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
+        app['notes'] = ApplicationObjectContainer(Note)
         self.root = app['groups'].new("root", title="root")
         self.locations = app['groups'].new("locations", title="Locations")
         self.managers = app['groups'].new("managers", title="Managers")
@@ -179,6 +183,10 @@ class AppSetupMixin(RegistriesSetupMixin):
         self.resource = app['resources'].new("resource", title="Kitchen sink")
         self.location = app['resources'].new("location", title="Inside")
         self.location2 = app['resources'].new("location2", title="Outside")
+        self.note1 = app['notes'].new("note1", title="Note 1 Title",
+                body="Note 1 Body")
+        self.note2 = app['notes'].new("note2", title="Note 2",
+                body="Note 2 Body")
 
         Membership(group=self.root, member=self.person)
         Membership(group=self.root, member=self.teachers)

@@ -347,12 +347,26 @@ class TestResource(ApplicationObjectsTestMixin):
         verifyObject(IResource, resource)
 
 
+class TestNote(unittest.TestCase):
+
+    def newObject(self):
+        from schooltool.model import Note
+        return Note("Test Note", "Test Body", "", "/start")
+
+    def test(self):
+        from schooltool.interfaces import INote, ILocation
+        note = self.newObject()
+        verifyObject(INote, note)
+        verifyObject(ILocation, note)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.model'))
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestResource))
+    suite.addTest(unittest.makeSuite(TestNote))
     return suite
 
 if __name__ == '__main__':

@@ -293,7 +293,8 @@ class ContainerBreadcrumbsMixin(ToplevelBreadcrumbsMixin):
 
     _container_translations = {'groups': _('Groups'),
                                'persons': _('Persons'),
-                               'resources': _('Resources')}
+                               'resources': _('Resources'),
+                               'notes': _('Notes')}
 
     def breadcrumbs(self):
         breadcrumbs = ToplevelBreadcrumbsMixin.breadcrumbs(self)

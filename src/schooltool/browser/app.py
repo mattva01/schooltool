@@ -36,7 +36,7 @@ from schooltool.browser.applog import ApplicationLogView
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.csv import CSVImportView
-from schooltool.browser.model import PersonView, GroupView, ResourceView
+from schooltool.browser.model import PersonView, GroupView, ResourceView, NoteView
 from schooltool.browser.timetable import NewTimePeriodView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import TimetableSchemaServiceView
@@ -118,6 +118,8 @@ class RootView(View):
             return GroupContainerView(self.context['groups'])
         elif name == 'resources':
             return ResourceContainerView(self.context['resources'])
+        elif name == 'notes':
+            return NoteContainerView(self.context['notes'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logo.png':
@@ -382,6 +384,7 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
         except UnicodeError:
             self.error = _("Invalid UTF-8 data.")
             return self.do_GET(request)
+
         self.prev_title = title
         if not title:
             self.error = _("Title should not be empty.")
@@ -460,6 +463,68 @@ class ResourceAddView(ObjectAddView):
             self.parent = traverse(self.context, '/groups/locations')
 
 
+class NoteAddView(ObjectAddView):
+    """View for adding notes """
+
+    title = _("Add note")
+
+    template = Template('www/note_add.pt')
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.title_widget = TextWidget('title', _('Title'))
+        self.body_widget = TextAreaWidget('body', _('Note'))
+
+    def do_POST(self, request):
+
+        if 'CANCEL' in self.request.args:
+            # Just show the form without any data.
+            return self.do_GET(request)
+
+        name = request.args['name'][0]
+        body = request.args['body'][0]
+        url = request.args['url'][0]
+
+        if name == '':
+            name = None
+        else:
+            if not valid_name(name):
+                self.error = _("Invalid identifier")
+                return self.do_GET(request)
+
+        self.prev_name = name
+
+        try:
+            title = to_unicode(request.args['title'][0])
+        except UnicodeError:
+            self.error = _("Invalid UTF-8 data.")
+            return self.do_GET(request)
+
+        self.prev_title = title
+        if not title:
+            self.error = _("Title should not be empty.")
+            return self.do_GET(request)
+
+        add_anyway = 'CONFIRM' in self.request.args
+
+        try:
+            obj = self.context.new(name, title=title, body=body, url=url)
+        except KeyError:
+            self.error = _('Identifier already taken')
+            return self.do_GET(request)
+
+        request.appLog(_("Object %s of type %s created") %
+                       (getPath(obj), obj.__class__.__name__))
+
+        if self.parent is not None:
+            Membership(group=self.parent, member=obj)
+            self.request.appLog(
+                    _("Relationship 'Membership' between %s and %s created")
+                    % (getPath(obj), getPath(self.parent)))
+
+        url = absoluteURL(request, obj)
+        return self.redirect(url, request)
+
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):
     """View for an ApplicationObjectContainer.
 
@@ -522,6 +587,15 @@ class ResourceContainerView(ObjectContainerView):
     obj_view = ResourceView
     index_title = _("Resource index")
     add_title = _("Add a new resource")
+
+
+class NoteContainerView(ObjectContainerView):
+    """View for traversing to notes (/notes)."""
+
+    add_view = NoteAddView
+    obj_view = NoteView
+    index_title = _("Notes")
+    add_title = _("Add a new note")
 
 
 class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):

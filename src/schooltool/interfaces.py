@@ -1895,6 +1895,15 @@ class IPersonInfoFacet(IFacet):
     )
 
 
+class INote(ILocation):
+    """A note."""
+
+    title = Attribute("""The title of the note.""")
+    body = Attribute("""The body of the note.""")
+    owner = Attribute("""The object that created this note.""")
+    url = Attribute("""The path of the object this note refers to. """)
+
+
 #
 # Modules
 #

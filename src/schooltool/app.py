@@ -167,8 +167,10 @@ def create_application():
     app['groups'] = ApplicationObjectContainer(model.Group)
     app['persons'] = ApplicationObjectContainer(model.Person)
     app['resources'] = ApplicationObjectContainer(model.Resource)
+    app['notes'] = ApplicationObjectContainer(model.Note)
     Person = app['persons'].new
     Group = app['groups'].new
+    Note = app['notes'].new
 
     root = Group("root", title=_("Root Group"))
     app.addRoot(root)

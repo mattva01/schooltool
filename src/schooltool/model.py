@@ -25,7 +25,7 @@ $Id$
 import datetime
 import sha
 from zope.interface import implements
-from schooltool.interfaces import IPerson, IGroup, IResource
+from schooltool.interfaces import IPerson, IGroup, IResource, INote
 from schooltool.interfaces import IAbsenceComment
 from schooltool.interfaces import IApplicationObject
 from schooltool.interfaces import Everybody, ViewPermission
@@ -188,6 +188,24 @@ class Group(ApplicationObjectMixin):
 class Resource(ApplicationObjectMixin):
 
     implements(IResource)
+
+
+class Note:
+
+    implements(INote)
+
+    title = property(lambda self: self._title)
+    body = property(lambda self: self._body)
+    owner = property(lambda self: self._owner)
+    url = property(lambda self: self._url)
+
+    def __init__(self, title, body=None, owner=None, url=None):
+        self._title = title
+        self._body = body
+        self._owner = owner
+        self._url = url
+        self.__name__ = None
+        self.__parent__ = None
 
 
 class IntervalSet:

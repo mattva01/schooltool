@@ -42,7 +42,7 @@ from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.browser.cal import ComboCalendarView
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
-from schooltool.interfaces import IPerson, IGroup, IResource
+from schooltool.interfaces import IPerson, IGroup, IResource, INote
 from schooltool.membership import Membership
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
@@ -522,6 +522,29 @@ class ResourceEditView(View, AppObjectBreadcrumbsMixin):
             request.appLog(_("Resource %s modified") % getPath(self.context))
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
+
+
+class NoteView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
+    """View for displaying a note."""
+
+    __used_for__ = INote
+
+    authorization = AuthenticatedAccess
+
+    template = Template("www/note.pt")
+
+    def canEdit(self):
+        return isManager(self.request.authenticated_user)
+
+    def editURL(self):
+        return absoluteURL(self.request, self.context) + '/edit.html'
+
+    def _traverse(self, name, request):
+        if name == "edit.html":
+            return NoteEditView(self.context)
+        else:
+            raise KeyError(name)
+
 
 
 class PhotoView(View):

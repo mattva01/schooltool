@@ -968,6 +968,19 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 404)
 
+class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
+
+    def test(self):
+        from schooltool.browser.model import NoteView
+        note = self.note1
+        view = NoteView(note)
+        view.authorization = lambda x, y: True
+        request = RequestStub()
+        content = view.render(request)
+
+        self.assert_("Note 1 Title" in content)
+        self.assert_("Note 1 Body" in content)
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -981,6 +994,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestResourceView))
     suite.addTest(unittest.makeSuite(TestResourceEditView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
+    suite.addTest(unittest.makeSuite(TestNoteView))
     return suite
 
 

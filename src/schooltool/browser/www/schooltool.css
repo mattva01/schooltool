@@ -568,8 +568,7 @@ td.daycalhour {
 .event h3,
 .tt_event h2,
 .tt_event h3,
-.exc_event h2,
-.exc_event h3 {
+.exc_event h2, .exc_event h3 {
   font-size: smaller;
   color: navy;
   margin: 0;
@@ -675,4 +674,18 @@ table.schooldaymodel td label {
 
 table.acl th {
   background: #cccccc;
+}
+
+/* Notes */
+
+div.note .content{
+    background: #ebe9bf;
+    border: 1px #999999 solid;
+    margin: 1em;
+    padding: 1em;
+    width: 300px;
+}
+
+div.note a {
+    
 }
