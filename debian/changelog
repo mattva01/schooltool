@@ -5,6 +5,8 @@ schooltool (0.8+svn) unstable; urgency=low
     http://people.debian.org/~seanius/policy/dbapp-policy.html.
     (Closes: Bug#282369)
   * Change password in debian readme back to schooltool. (Closes: Bug#283430)
+  * Stop postinst scripts from adding blank lines to config files.
+  * Remove un-needed build dependency on python2.3.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

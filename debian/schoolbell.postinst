@@ -46,7 +46,7 @@ set_simple () {
 
     cat $config                 \
     | grep -v "^ *${1} .*"      \
-    | sed "s|$header|$stanza|"  \
+    | sed "s|$header\n|$stanza|"  \
     > $config.tmp
 
     mv -f $config.tmp $config
