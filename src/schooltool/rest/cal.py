@@ -368,11 +368,8 @@ class BookingView(View):
                 duration = datetime.timedelta(minutes=int(dur_str))
             except ValueError:
                 return textErrorPage(request, _("%r argument incorrect") % arg)
-            force = False
             booking_node = xpathctx.xpathEval('/cal:booking')[0]
-            if to_unicode(booking_node.nsProp('conflicts', None)) == 'ignore':
-                force = True
-            if not force:
+            if to_unicode(booking_node.nsProp('conflicts', None)) != 'ignore':
                 p = Period(start, duration)
                 for e in self.context.calendar:
                     if p.overlaps(Period(e.dtstart, e.duration)):
