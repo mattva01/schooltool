@@ -158,14 +158,16 @@ class RelationshipSchema:
         if len(self.roles) != len(parties):
             raise TypeError("Wrong number of parties to this relationship."
                             " Need %s, got %r" % (len(self.roles), parties))
-        L = []
+        L, N = [], []
         for name, uri in self.roles.items():
             party = parties.pop(name, None)
             if party is None:
                 raise TypeError("This relationship needs a %s party."
                                 " Got %r" % (name, parties))
             L.append((party, uri))
-        return relate(self.type, L[0], L[1], title=self.title)
+            N.append(name)
+        links = relate(self.type, L[0], L[1], title=self.title)
+        return {N[1]: links[0], N[0]: links[1]}
 
 
 class RelationshipEvent(EventMixin):

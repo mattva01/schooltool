@@ -209,19 +209,18 @@ class TestMembershipRelationship(RelationshipTestMixin, unittest.TestCase):
         from schooltool.interfaces import URIMembership, URIGroup, URIMember
 
         cookie = object()
-        def handler(*args, **kw):
-            return (cookie, args, kw)
+        def handler(reltype, (a, role_of_a), (b, role_of_b), title=None):
+            self.assert_(reltype is URIMembership)
+            self.assert_((m, URIMember) in [(a, role_of_a), (b, role_of_b)])
+            self.assert_((g, URIGroup) in [(a, role_of_a), (b, role_of_b)])
+            self.assertEquals(title, "http://schooltool.org/ns/membership")
+            return (cookie, cookie)
 
         registerRelationship(URIMembership, handler)
 
         g, m = GroupStub(), MemberStub()
         result = Membership(group=g, member=m)
-        check, (reltype, (a, role_of_a), (b, role_of_b)), kw = result
-        self.assert_(check is cookie, "our handler wasn't called")
-        self.assert_(reltype is URIMembership)
-        self.assert_((m, URIMember) in [(a, role_of_a), (b, role_of_b)])
-        self.assert_((g, URIGroup) in [(a, role_of_a), (b, role_of_b)])
-        self.assertEquals(kw, {'title': "http://schooltool.org/ns/membership"})
+        self.assert_(result['group'] is cookie, "our handler wasn't called")
 
 
 class TestMemberLink(EventServiceTestMixin, unittest.TestCase):

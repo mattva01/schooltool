@@ -298,6 +298,8 @@ class IRelationshipSchema(Interface):
 
         The objects are related according to the roles indicated
         by the keyword arguments.
+
+        Returns a dict of {role_name: link}.
         """
 
 
@@ -307,7 +309,7 @@ class IRelationshipFactory:
     def __call__(relationship_type, (a, role_a), (b, role_b), title=None):
         """Relate a and b via the roles and the relationship type.
 
-        Returns a tuple of links.
+        Returns a tuple of links attached to a and b respectively.
 
         Sends a IRelationshipAddedEvent to both a and b after the
         relationship has been established.

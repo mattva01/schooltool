@@ -173,24 +173,17 @@ class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
             report = Relatable(self.serviceManager)
             links = schema(superior=superior, report=report)
 
-            self.assertEqual(len(links), 2)
-            link_to_superior = None
-            link_to_report = None
-            for link in links:
-                verifyObject(ILink, link)
-                if link.role is URISuperior:
-                    link_to_superior = link
-                elif link.role is URIReport:
-                    link_to_report = link
-                else:
-                    raise AssertionError('link has bad role. %r, %r'
-                                        % (link, link.role))
+            link_to_superior = links.pop('superior')
+            link_to_report = links.pop('report')
+            self.assertEqual(links, {})
 
-            self.assertNotEquals(link_to_superior, None)
+            verifyObject(ILink, link_to_superior)
+            self.assert_(link_to_superior.role is URISuperior)
             self.assert_(link_to_superior.__parent__ is report)
             self.assert_(link_to_superior.traverse() is superior)
 
-            self.assertNotEquals(link_to_report, None)
+            verifyObject(ILink, link_to_report)
+            self.assert_(link_to_report.role is URIReport)
             self.assert_(link_to_report.__parent__ is superior)
             self.assert_(link_to_report.traverse() is report)
 
