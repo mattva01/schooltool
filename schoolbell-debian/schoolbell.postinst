@@ -52,6 +52,56 @@ set_simple () {
     mv -f $config.tmp $config
 }
 
+db_upgrade () {
+    # Try to upgrade a database using a standalone upgrade script
+    # arguments:
+    # $1 old version
+    importscr=/usr/lib/libschoolbell/scripts/schoolbell-import.py
+    exportscr=/usr/lib/libschoolbell/scripts/schoolbell-export.py
+    compat=/var/lib/$package/compat
+    dump=/var/lib/$package/dump/
+    backup=/var/lib/$package/backup/
+    db=/var/lib/$package/Data.fs
+    # only do anything unless we actually have a db and some compat libs
+    if [ -f $db ] && [ -d $compat ];then
+        mkdir -p $dump/calendars
+        if PYTHONPATH=$compat $PYTHON $exportscr \
+                $db $dump/backup.xml $dump/calendars; then
+            # yay !! export sucessfull backing up old db
+            mkdir -p $backup
+            mv $db $backup
+            mv $db.index $backup
+            mv $db.lock $backup
+            mv $db.tmp $backup
+            if PYTHONPATH=/usr/lib/libschoolbell $PYTHON \
+                $importscr $db $dump/backup.xml $dump/calendars ; then
+                chown $package:$package $db*
+            else
+                # oops, we're screwed and way past the point of no return
+                # try to restore db and let admin know
+                db_upgrade=failed
+                rm -f $db $db.index $db.lock $db.tmp
+                mv $backup/* /var/lib/$package
+                rmdir $backup
+            fi
+        else
+            # dump failed!!! tell admin and continue
+            db_upgrade=failed
+        fi
+        rm -rf $dump
+    else
+        db_upgrade=failed
+    fi
+    if [ z$db_upgrade == zfailed ];then
+        db_fset $package/db_upgrade_error seen false
+        db_input critical $package/db_upgrade_error || true
+        db_go || true
+    fi
+    # try to clean up a little
+    rmdir /var/lib/$package/dump || true
+    rmdir /var/lib/$package/backup || true
+}
+
 . /usr/share/debconf/confmodule
 
 case "$1" in
@@ -79,22 +129,18 @@ case "$1" in
     # TODO - delete this when schooltool can upgrade it's own database
     echo $db_version > /var/lib/$package/database_ver
 
+    # try database upgrades of old versions
+    db_get $package/auto_upgrade_db
+    ans="$RET"
+    db_fset $package/auto_upgrade_db seen false
+    db_reset $package/auto_upgrade_db
+    [ "$ans" == false ] || db_upgrade ${2}
+
+
     #Make the config file
     #Put the default template there if none exists
     if [ ! -e $config ]; then
         cp -a /usr/share/$package/$package.conf.default $config
-        # Set the default language from the default environment if it exists
-        if [ -f /etc/environment ];then
-            if [ `grep -c '^LANG=' /etc/environment` != 0 ]; then
-                lang=`cat /etc/environment|grep '^LANG='|tail -1\
-                |sed -e 's/^LANG=//' -e 's/["[:space:]]//g'`
-                if [ -n $lang ];then
-                    echo >> $config
-                    echo '# Default translation' >> $config
-                    echo lang $lang >> $config
-                fi
-            fi
-        fi
     fi
 
     # Setup Interfaces
@@ -102,17 +148,20 @@ case "$1" in
     set_simple listen "$RET"
     db_get $package/web
     set_simple web "$RET"
-    db_get $package/listen_ssl
-    set_simple listen_ssl "$RET"
-    db_get $package/web_ssl
-    set_simple web_ssl "$RET"
+    # XXX - SSL certificate generation is disabled. dee config for details
+    #db_get $package/listen_ssl
+    #set_simple listen_ssl "$RET"
+    #db_get $package/web_ssl
+    #set_simple web_ssl "$RET"
 
+    # XXX - SSL certificate generation is disabled. see .config for details
     # Should we create an SSL cert?
-    db_get $package/create-cert
-    Create="$RET"
+    #db_get $package/create-cert
+    #Create="$RET"
     # re-set the default
-    db_reset $package/create-cert
-    if [ "z$Create" == ztrue ]; then
+    #db_reset $package/create-cert
+    #if [ "z$Create" == ztrue ]; then
+    if false; then
         db_get $package/cert-type
         case "$RET" in
 
@@ -130,6 +179,7 @@ case "$1" in
                 cp $TMPFILE2 $TMPFILE1
             done
             export RANDFILE=/dev/random
+            echo "Generating SSL Certificate... (might take a while)"
             openssl req -config $TMPFILE1 -new -x509 -nodes -out $sslcert \
                 -keyout $sslkey
             cat $sslcert >> $sslkey

@@ -91,3 +91,39 @@ _Description: Do you want to purge the database for SchoolBell?
  if you would like to retain the database for SchoolBell, this is your
  last chance.  Please note that purging the database means that all
  the data will be irrevocably lost.
+
+Template: schoolbell/auto_upgrade_db
+Type: boolean
+Default: true
+_Description: Should the database be automatically upgraded?
+ A database from a previous version of SchoolBell has been found. The
+ SchoolBell package can attempt to automatically upgrade the database. If so,
+ it will leave compatibility libraries in /var/lib/schoolbell/compat and a
+ database backup in /var/lib/schoolbell/backup. These can be deleted after
+ an upgrade is verified to be successful. The database can also be manually
+ upgraded after package installation by following the documentation in the
+ /usr/share/doc/schoolbell/README.
+
+Template: schoolbell/no_compat_libs
+Type: select
+__Choices: ignore and continue, abort installation, delete current database
+Default: abort installation
+_Description: Unable to automatically upgrade database:
+ A database from a previous version of SchoolBell has been found.
+ Unfortunately, because the previously installed version of SchoolBell has
+ been removed, the SchoolBell package cannot attempt to automatically upgrade
+ the database. It is advised to abort, install the old package and attempt an
+ upgrade again. If continued, the server will be unable to start until the
+ database had been manually upgraded or deleted.
+
+Template: schoolbell/db_upgrade_error
+Type: note
+_Description: Error upgrading database!
+ Sorry, there seems to have been an error upgrading the database!
+ Fortunately, there should be a backup of the database made just before
+ the upgrade in /var/lib/schoolbell/backup and compatibility libraries from the
+ previously installed version in /var/lib/schoolbell/compat.
+ .
+ The server will not be able to start until you upgrade the database.
+ Information on manual upgrades can be found in the
+ /usr/share/doc/schoolbell/README file.

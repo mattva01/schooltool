@@ -60,8 +60,3 @@ pid-file /var/run/schoolbell/schoolbell.pid
 error-log-file /var/log/schoolbell/error.log
 rest-access-log-file /var/log/schoolbell/rest-access.log
 web-access-log-file /var/log/schoolbell/web-access.log
-app-log-file /var/log/schoolbell/app.log
-
-# This is the schoolbell release
-domain schoolbell
-

@@ -27,9 +27,7 @@ package=schoolbell
 # which will dissapear when schoolbell can automatically upgrade
 # its own database.
 
-db_version=0.8
-
-try_db_delete () {
+try_db_delete () { # This code must go in 1.1
     db_fset $package/incompatible_database seen false
     db_reset $package/incompatible_database
     db_input high $package/incompatible_database || true
@@ -43,20 +41,66 @@ try_db_delete () {
     fi
 }
 
-if [ -f /var/lib/$package/database_ver ];then
-    db_version_installed=`cat /var/lib/$package/database_ver`
-    if [ $db_version_installed != $db_version ]; then
-        try_db_delete
-    fi
-else
-    if [ -d /var/lib/$package ];then
-        try_db_delete
-    fi
-fi
+db_get $package/no_compat_libs
+ans="$RET"
+db_fset $package/no_compat_libs seen false
+db_reset $package/no_compat_libs
+case "$ans" in
+    abort*) exit 1;;
+    delete*) rm -rf /var/lib/$package;;
+esac
 
 case "$1" in
 
-    install|abort-upgrade|upgrade)
+    install)
+    case "${2}" in
+        0.7*)
+            # A database this old is lost, try to delete it!!!
+            if [ -d /var/lib/$package ];then
+                try_db_delete
+            fi
+        ;;
+    esac
+    ;;
+
+    upgrade)
+    case "${2}" in
+        0.7*)
+            # A database this old is lost, try to delete it!!!
+            if [ -d /var/lib/$package ];then
+                try_db_delete
+            fi
+        ;;
+        0.8*)
+            # From 0.8 we can upgrade the database, but only if we have
+            # the old ZDOB and schooltool modules in the postinst
+            compat=/var/lib/schoolbell/compat/
+            rm -rf $compat
+            mkdir $compat
+            cp -r /usr/share/schoolbell/transaction $compat||true
+            cp -r /usr/lib/schooltool/BTrees $compat||true
+            cp -r /usr/lib/schooltool/persistent $compat||true
+            cp -r /usr/lib/schooltool/zope $compat||true
+            cp -r /usr/lib/schooltool/ZODB $compat||true
+            cp -r /usr/share/schoolbell/schooltool $compat||true
+        ;;
+        0.9*)
+            # From 0.9 we can upgrade the database, but only if we have
+            # the old ZODB and schooltool modules from 0.9 in the postinst
+            compat=/var/lib/schoolbell/compat/
+            rm -rf $compat
+            mkdir $compat
+            cp -r /usr/lib/schooltool/transaction $compat||true
+            cp -r /usr/lib/schooltool/BTrees $compat||true
+            cp -r /usr/lib/schooltool/persistent $compat||true
+            cp -r /usr/lib/schooltool/zope $compat||true
+            cp -r /usr/lib/schooltool/ZODB $compat||true
+            cp -r /usr/lib/schooltool/schooltool $compat||true
+        ;;
+    esac
+    ;;
+
+    abort-upgrade)
     ;;
 
     *)

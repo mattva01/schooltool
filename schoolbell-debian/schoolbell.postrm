@@ -57,6 +57,10 @@ case "$1" in
                 rm /var/lib/$package/$i ||true
             done
         fi
+        # Remove any stuff left from the 0.9>1.0 db upgrade
+        rm -rf /var/lib/$package/compat
+        rm -rf /var/lib/$package/backup
+        rm -rf /var/lib/$package/export
         rmdir /var/lib/$package || true
         # Clean up /var/run
         [ -e /var/run/$package/$package.pid ] && \

@@ -1,28 +1,55 @@
 schoolbell (0.9.99+1.0rc1-1) unstable; urgency=low
 
   * Split the schoolbell and schooltool packages. Schoolbell is now spilt into
-    3 packages, a configuration package, a python module and a arch dependent
-    library package containing the zope extensions. The library package is a
-    temporary package as schoolbell needs to contain its own version of Zope
-    until zope 3.1 is packaged.
+    2 packages, a configuration package, an arch dependent library package
+    containing the Zope extensions. The library package is a temporary package
+    as schoolbell needs to contain its own version of Zope until Zope 3.1 is
+    packaged. After that, it will become a small arch-indep Zope component.
   * Hack upstreams build process until it does everything debian/rules used to
     do, then reduce and simplify the debian rules. Also the application startup
-    scripts are moved to the upstream scripts directory as they will be usefull
+    scripts are moved to the upstream scripts directory as they will be useful
     for the RPM packages.
-  * Use the Zope3 setup.py script to install the Zope libraries rather than
-    finding and copying individual files.
+  * Use the Zope 3 setup.py script to install the Zope libraries rather than
+    finding and copying individual files. Unfortunately this gives no
+    fine-grained control over where *.so and *.py files are put, so everything
+    goes in an arch-dep package. But it's temporary and the simplification
+    is worth it.
   * Remove the dependencies on twisted and pyopenssl as schoolbell 1.0 has
-    been rewritten as a pure Zope 3.1 component.
+    been rewritten as a pure Zope 3.1 component. Also, the dependency on
+    libxml2 has been removed as it is not used in SchoolBell anymore.
+  * Rewrite database upgrade code to export/import upgrade databases from
+    schoolbell 0.8 and 0.9. Necessary as there was a major structural change
+    at schoolbell 1.0.
+  * Add `mkdir -p /var/run/schoolbell` to initscript because some people like
+    to mount tmpfs on /var/run.
+  * Correct name of server in initscript (SchoolTool > SchoolBell).
+  * Update README.Debian to have the new default manager password
+    (i.e. schoolbell).
+  * Temporarily add the python2.3-docutils as a dependency, because the
+    temporarily included Zope libraries need it.
+  * Removed unimplemented config file options that got lost in the transition
+    to a Zope 3 SchoolBell. i.e. 'domain' and 'app-log-file'.
+  * Removed the postinst code to generate the 'lang' config file option. This
+    is not implemented in the new Zope 3 SchoolBell. It would also probably be
+    better to have the server default to reading /etc/environment itself if
+    there is a future implementation of 'lang' (iff no lang is defined in the
+    config file).
+  * Disabled the SSL Certificate generation in the maintainer scripts as the
+    server SSL support did not survive the transition to Zope 3. Left the code
+    in, just in case that support is added.
+  * Added a note that generating SSL certificates might take a while
+    (Closes: Bug#297146). (Even though SSL is not available in this release,
+    it might be in the future)
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 
 schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
 
-  * Delete SSL cerificate on purge. Ask debconf question whether to purge
+  * Delete SSL certificate on purge. Ask debconf question whether to purge
     database, using the form used in the proposed database policy at
     http://people.debian.org/~seanius/policy/dbapp-policy.html.
     (Closes: Bug#282369)
-  * Change password in debian readme back to schooltool. (Closes: Bug#283430)
+  * Change password in debian README back to schooltool. (Closes: Bug#283430)
   * Stop postinst scripts from adding blank lines to config files.
   * Remove un-needed build dependency on python2.3.
   * Make debconf questions for interface setup clearer.
@@ -30,9 +57,9 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
   * On first installation, set default locale from default system locale.
   * Change the section of libschooltool and libschooltool-clients to libs.
   * Fix python dependencies to cope with upcoming python version 2.4
-    - Use python 2.3 explicity.
+    - Use python 2.3 explicitly.
   * Undo past changes of putting some modules in /usr/share. It was a
-    violation of the FHS because the .py files are bytecompiled on
+    violation of the FHS because the .py files are byte-compiled on
     installation. There are now a _LOT_ of lintian warnings about arch-indep
     files in /usr/lib, but this is the lesser evil.
   * Fix package description style to conform to some new lintian warnings and
@@ -48,8 +75,8 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
   * Reduced the changes necessary to update packages to a new python version
     to one line in debian/rules and dependencies.Thanks to a suggestion from
     Matthias Klose.
-  * Temporarily patch rules to install zope modules from the zope tree because
-    no zope3 package exists yet. Sigh! more lintian warnings, but it's
+  * Temporarily patch rules to install Zope modules from the Zope tree because
+    no Zope 3 package exists yet. Sigh! more lintian warnings, but it's
     temporary and way too much effort to fix these.
   * General cleanup:
     - Removed debdirclean makefile target called from top level directory.
@@ -100,7 +127,7 @@ schooltool (0.7.2-1) unstable; urgency=low
     them into one.
   * Use dh_installinit to install /etc/default/schooltool.
   * Use dh_installexamples to install example config file.
-  * Added logrotation using logrotate script.
+  * Added log rotation using logrotate script.
   * Moved installation of clients into /usr/share as it is architecture
     independent.
   * Attempt to remove logs and other files on purge (but NOT database).

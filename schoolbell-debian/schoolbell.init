@@ -9,7 +9,7 @@ package=schoolbell
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/bin/$package
 NAME=$package
-DESC="SchoolTool"
+DESC="SchoolBell"
 PNAME=$package # truncated to 15 chars by the kernel
 PIDFILE=/var/run/$package/$package.pid
 SCRIPTNAME=/etc/init.d/$package
@@ -29,7 +29,11 @@ case "$1" in
 	# Exit if the server has been disabled in /etc/default/$package
 	[ "$SCHOOLBELL_ENABLE" != "yes" ] && exit 0
 
-	echo -n "Starting $DESC: $NAME"
+	# Make sure we have a /var/run sub-directory
+        [ -d /var/run/$package ] || mkdir -p /var/run/$package
+        chown $package:$package /var/run/$package
+
+        echo -n "Starting $DESC: $NAME"
 	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
 		--chuid $package --startas $DAEMON -- -d >/dev/null
 	echo "."
@@ -44,7 +48,11 @@ case "$1" in
 	# Exit if the server has been disabled in /etc/default/$package
 	[ "$SCHOOLBELL_ENABLE" != "yes" ] && exit 0
 
-	echo -n "Restarting $DESC: $NAME"
+	# Make sure we have a /var/run sub-directory
+        [ -d /var/run/$package ] || mkdir -p /var/run/$package
+        chown $package:$package /var/run/$package
+
+        echo -n "Restarting $DESC: $NAME"
 	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
 		--name $PNAME
 	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
