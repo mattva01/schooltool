@@ -842,6 +842,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.sg3.timetables[self.key] = tt
 
     def testNonempty(self):
+        from schooltool.component import getTimetableSchemaService
+        from schooltool.timetable import TimetableActivity
         self.setUpTimetables()
         request = RequestStub()
         result = self.view.render(request)
@@ -849,6 +851,13 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
         self.assert_(validate_against_schema(self.view.schema, result),
                      "Doesn't validate:\n" + result)
+
+        # Teacher's personal timetables should not be included here
+        tt = getTimetableSchemaService(self.app)[self.key[1]]
+        tt["B"].add("Yellow", TimetableActivity("Personal", self.teacher1))
+        self.teacher1.timetables[self.key] = tt
+        result = self.view.render(request)
+        self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
 
     def test_PUT(self):
         from schooltool.timetable import TimetableActivity

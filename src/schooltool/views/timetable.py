@@ -443,12 +443,15 @@ class SchoolTimetableView(View):
 
     def getTeachersTimetables(self):
         result = []
-        group = traverse(self.context, self.group)
-        for teacher in getRelatedObjects(group, URIMember):
-            tt = teacher.getCompositeTimetable(*self.key)
-            if tt is None:
-                service = getTimetableSchemaService(self.context)
-                tt = service[self.key[1]]
+        service = getTimetableSchemaService(self.context)
+        schema = service[self.key[1]]
+        teachers_group = traverse(self.context, self.group)
+        for teacher in getRelatedObjects(teachers_group, URIMember):
+            tt = schema.cloneEmpty()
+            for group in getRelatedObjects(teacher, URITaught):
+                group_tt = group.timetables.get(self.key)
+                if group_tt is not None:
+                    tt.update(group_tt)
             result.append((teacher, tt))
         return result
 
