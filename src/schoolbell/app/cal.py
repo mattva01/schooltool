@@ -121,7 +121,7 @@ class Calendar(Persistent, CalendarMixin):
 
 
 class WriteCalendar(object):
-    r"""An adapter that allows writing iCalendar date to a calendar.
+    r"""An adapter that allows writing iCalendar data to a calendar.
 
         >>> calendar = Calendar()
         >>> adapter = WriteCalendar(calendar)
