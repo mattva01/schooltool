@@ -1060,7 +1060,7 @@ class ITimetable(Interface):
         """Returns a sequence of tuples of (day_id, ITimetableDay)."""
 
     def __getitem__(key):
-        """Returns an ITimetableDay for a given day id"""
+        """Returns a ITimetableDay for a given day id"""
 
 
 class ITimetableWrite(Interface):
@@ -1076,35 +1076,50 @@ class ITimetableWrite(Interface):
 class ITimetableDay(Interface):
     """A model of a day with a mapping of periods to ITimetableActivities"""
 
+    periods = Attribute("""A list of periods which are meaningful within
+                        this day.""")
+
     def keys():
-        """Returns a sequence of period_ids within this day"""
+        """Returns a sequence of period_ids which have activities
+        assigned to them within this day.
+        """
 
     def items():
-        """Returns a sequence of tuples (period_id, ITimetableActivity).
+        """Returns a sequence of tuples (period_id, Set([ITimetableActivity])).
 
-        If there is no activity for a certain period, the timetable
-        activity is None.
+        If there is no activity for a certain period, the timetable an
+        empty set is given.
         """
 
     def __getitem__(key):
-        """Get the ITimetableActivity for a given period identifier.
+        """Get a set of ITimetableActivities for a given period identifier.
 
-        If there is no activity for the period, KeyError is raised.
+        If there is no activity for the period, an empty set is returned.
         """
 
 
 class ITimetableDayWrite(Interface):
 
     def __setitem__(key, value):
-        """Sets an ITimetableActivity for a given period.
+        """Sets a sequence of ITimetableActivities for a given period.
 
-        Throws a TypeError if the value does not implement ITimetableActivity.
-        Throws a ValueError if the key is not a period id.
+        Throws a TypeError if one of the the values does not implement
+        ITimetableActivity.  Throws a ValueError if the key is not a
+        period id.
         """
 
     def __delitem__(key):
-        """Remove the activity planned for a given period"""
+        """Remove all the activities planned for a given period"""
 
+    def add(key, value):
+        """Adds a single activity to the set of activities planned for
+        a given period.
+        """
+
+    def remove(key, value):
+        """Remove a certain activity from a set of activities planned
+        for a given period.
+        """
 
 class ITimetableActivity(Interface):
     """An event in a timetable.

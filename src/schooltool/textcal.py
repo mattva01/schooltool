@@ -55,7 +55,7 @@ def createTimetable(config):
         ttday = TimetableDay([item[0] for item in periods])
         tt[day] = ttday
         for period, activity in periods:
-            ttday[period] = TimetableActivity(activity)
+            ttday[period].add(TimetableActivity(activity))
     return tt
 
 

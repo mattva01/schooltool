@@ -625,27 +625,44 @@ class TimetableDay:
     def __init__(self, periods=()):
         self.periods = periods
         self.activities = {}
+        for p in periods:
+            self.activities[p] = Set()
 
     def keys(self):
-        return [period for period in self.periods if period in self.activities]
+        return [period for period in self.periods if self.activities[period]]
 
     def items(self):
-        return [(period, self.activities.get(period, None))
-                for period in self.periods]
+        return [(period, self.activities[period]) for period in self.periods]
 
     def __getitem__(self, key):
         return self.activities[key]
 
     def __setitem__(self, key, value):
-        if not ITimetableActivity.isImplementedBy(value):
-            raise TypeError("TimetableDay cannot set a non-ITimetableActivity "
-                            "(got %r)" % (value,))
+        set = Set(value)
+        for activity in set:
+            if not ITimetableActivity.isImplementedBy(activity):
+                raise TypeError("TimetableDay cannot set a "
+                                "non-ITimetableActivity (got %r)"
+                                % (activity,))
         if key not in self.periods:
             raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        self.activities[key] = value
+        self.activities[key] = set
 
     def __delitem__(self, key):
-        del self.activities[key]
+        if key not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (key, self.periods))
+        self.activities[key] = Set()
+
+    def add(self, key, value):
+        if key not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (key, self.periods))
+        if not ITimetableActivity.isImplementedBy(value):
+            raise TypeError("TimetableDay cannot set a "
+                            "non-ITimetableActivity (got %r)" % (value,))
+        self.activities[key].add(value)
+
+    def remove(self, key, value):
+        pass
 
 
 class TimetableActivity:
@@ -725,10 +742,10 @@ class BaseTimetableModel:
                 for period in day_template:
                     dt = datetime.datetime.combine(date, period.tstart)
                     if period.title in timetable[day_id].keys():
-                        activity = timetable[day_id][period.title]
-                        event = CalendarEvent(dt, period.duration,
-                                              activity.title)
-                        cal.addEvent(event)
+                        for activity in timetable[day_id][period.title]:
+                            event = CalendarEvent(dt, period.duration,
+                                                  activity.title)
+                            cal.addEvent(event)
         return cal
 
     def _getTemplateForDay(self, date):
