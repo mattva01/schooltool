@@ -389,6 +389,14 @@ div.tt_event {
   font-size: smaller;
 }
 
+div.exc_event {
+  border: 1px solid #007;
+  background: #f66;
+  margin: 1ex;
+  padding: 0.5ex 0.5em;
+  font-size: smaller;
+}
+
 div.day h2,
 div.day h3  {
   margin: 0;
@@ -497,7 +505,8 @@ div.event_weekly {
 
 
 .cal_monthly div.event,
-.cal_monthly div.tt_event {
+.cal_monthly div.tt_event
+.cal_monthly div.exc_event {
   font-size: smaller;
   margin: 2px;
   border-width: 0.5px;
@@ -531,6 +540,14 @@ table.daycal td.tt_event {
   font-size: smaller;
 }
 
+table.daycal td.exc_event {
+  border: 1px solid #007;
+  background: #f66;
+  padding: 1ex 0.5em;
+  vertical-align: top;
+  font-size: smaller;
+}
+
 td.daycalhour {
   padding: 1px;
   background: #cef;
@@ -541,7 +558,9 @@ td.daycalhour {
 .event h2,
 .event h3,
 .tt_event h2,
-.tt_event h3 {
+.tt_event h3,
+.exc_event h2,
+.exc_event h3 {
   font-size: smaller;
   color: navy;
   margin: 0;

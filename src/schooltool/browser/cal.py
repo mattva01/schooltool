@@ -37,6 +37,7 @@ from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
+from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
@@ -720,7 +721,7 @@ class EventViewHelpers:
         return View.do_GET(self, self.request)
 
     def _addTimetableException(self, event, replacement):
-        """Add a timetable exception replaces or removes this event."""
+        """Add a timetable exception that replaces or removes an event."""
         exception = TimetableException(event.dtstart.date(),
                                        event.period_id,
                                        event.activity)
@@ -1011,6 +1012,8 @@ class CalendarEventView(View):
         """Choose a CSS class for the event."""
         if ITimetableCalendarEvent.providedBy(self.context):
             return 'tt_event'
+        elif IExceptionalTTCalendarEvent.providedBy(self.context):
+            return 'exc_event'
         else:
             return 'event'
 

@@ -1265,7 +1265,31 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
 
+    def test_cssClass(self):
+        from schooltool.browser.cal import CalendarEventView
+        from schooltool.cal import CalendarEvent
+        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(hours=1), "Main event",
+                           unique_id="id!")
+        view = CalendarEventView(ev)
         self.assertEquals(view.cssClass(), 'event')
+
+        tt_ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                       timedelta(minutes=1), "A",
+                                       period_id="foo", activity=object())
+        view = CalendarEventView(tt_ev)
+        self.assertEquals(view.cssClass(), 'tt_event')
+
+        exc = TimetableException(date=date(2003, 11, 26), period_id='Green',
+                                 activity=object())
+        exc_ev = ExceptionalTTCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                            timedelta(minutes=1), "A",
+                                            exception=exc)
+        view = CalendarEventView(exc_ev)
+        self.assertEquals(view.cssClass(), 'exc_event')
 
     def test_location(self):
         from schooltool.cal import CalendarEvent
