@@ -98,7 +98,7 @@ class SchoolToolClient:
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request("GET", path)
+        return self._request('GET', path)
 
     def post(self, path, body):
         """Perform an HTTP POST request for a given path.
@@ -109,6 +109,16 @@ class SchoolToolClient:
         Raises SchoolToolError if the communication fails.
         """
         return self._request('POST', path, body)
+
+    def delete(self, path):
+        """Perform an HTTP DELETE request for a given path.
+
+        Returns the response object.
+
+        Sets status and version attributes if the communication succeeds.
+        Raises SchoolToolError if the communication fails.
+        """
+        return self._request('DELETE', path, '')
 
     def _request(self, method, path, body=None, headers=None):
         """Perform an HTTP request for a given path.
@@ -286,6 +296,12 @@ class SchoolToolClient:
         slash = location.index('/', slashslash + 2)
         return location[slash:]
 
+    def deleteObject(self, object_path):
+        """Delete an object."""
+        response = self.delete(object_path)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+
     # Parsing
 
     def _parseGroupTree(self, body):
@@ -384,8 +400,13 @@ class SchoolToolClient:
                     title = href.split('/')[-1]
                 role = self.role_names.get(role, role)
                 arcrole = self.role_names.get(arcrole, arcrole)
+                ctx.setContextNode(node)
+                manage_nodes = ctx.xpathEval("manage/@xlink:href")
+                if len(manage_nodes) != 1:
+                    raise SchoolToolError("Could not parse relationship list")
+                link_href = manage_nodes[0].content
                 relationships.append(RelationshipInfo(arcrole, role, title,
-                                                      href))
+                                                      href, link_href))
             return relationships
         finally:
             doc.freeDoc()
@@ -636,25 +657,28 @@ class RelationshipInfo:
     role = None                 # Role of the relationship (user friendly)
     target_title = None         # Title of the target
     target_path = None          # Path of the target
+    link_path = None            # Path of the link
 
-    def __init__(self, arcrole, role, title, path):
+    def __init__(self, arcrole, role, title, path, link_path):
         self.arcrole = arcrole
         self.role = role
         self.target_title = title
         self.target_path = path
+        self.link_path = link_path
 
     def __cmp__(self, other):
         if not isinstance(other, RelationshipInfo):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
         return cmp((self.arcrole, self.role, self.target_title,
-                    self.target_path),
+                    self.target_path, self.link_path),
                    (other.arcrole, other.role, other.target_title,
-                    other.target_path))
+                    other.target_path, other.link_path))
 
     def __repr__(self):
-        return "%s(%r, %r, %r, %r)" % (self.__class__.__name__, self.arcrole,
-                   self.role, self.target_title, self.target_path)
+        return "%s(%r, %r, %r, %r, %r)" % (self.__class__.__name__,
+                   self.arcrole, self.role, self.target_title,
+                   self.target_path, self.link_path)
 
 
 class RollCallInfo:

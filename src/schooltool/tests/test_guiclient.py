@@ -285,10 +285,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="title1" xlink:href="href1"
-                              xlink:role="role1" xlink:arcrole="arcrole1" />
+                              xlink:role="role1" xlink:arcrole="arcrole1">
+                    <manage xlink:href="mhref1"/>
+                </relationship>
                 <relationship xlink:title="title2" xlink:href="href2"
                     xlink:role="http://schooltool.org/ns/membership/group"
-                    xlink:arcrole="http://schooltool.org/ns/membership" />
+                    xlink:arcrole="http://schooltool.org/ns/membership">
+                    <manage xlink:href="mhref2"/>
+                </relationship>
               </existing>
               <valencies>
                 <relationship xlink:title="title3" xlink:href="href3"
@@ -296,8 +300,10 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </valencies>
             </relationships>
         """)
-        expected = [RelationshipInfo('arcrole1', 'role1', 'title1', 'href1'),
-                    RelationshipInfo('Membership', 'Group', 'title2', 'href2')]
+        expected = [RelationshipInfo(*args) for args in [
+                ('arcrole1', 'role1', 'title1', 'href1', 'mhref1'),
+                ('Membership', 'Group', 'title2', 'href2', 'mhref2'),
+            ]]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
         results = list(client.getObjectRelationships(group_id))
@@ -476,6 +482,19 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
 
+    def test_deleteObject(self):
+        client = self.newClient(ResponseStub(200, 'OK', 'Deleted'))
+        client.deleteObject('/path/to/object')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/path/to/object')
+        self.assertEquals(conn.method, 'DELETE')
+        self.assertEquals(conn.body, '')
+
+    def test_deleteObject_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        self.assertRaises(SchoolToolError, client.deleteObject, '/path')
+
     def test__pathFromResponse(self):
         client = self.newClient(None)
         response = ResponseStub(200, 'OK',
@@ -569,24 +588,44 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="title1" xlink:href="href1"
-                              xlink:role="role1" xlink:arcrole="arcrole1" />
+                              xlink:role="role1" xlink:arcrole="arcrole1">
+                    <manage xlink:href="mhref1"/>
+                </relationship>
                 <relationship xlink:title="title2" xlink:href="href2"
                     xlink:role="http://schooltool.org/ns/membership/group"
-                    xlink:arcrole="http://schooltool.org/ns/membership" />
+                    xlink:arcrole="http://schooltool.org/ns/membership">
+                    <manage xlink:href="mhref2"/>
+                </relationship>
                 <relationship                       xlink:href="/objects/href3"
-                              xlink:role="role3"    xlink:arcrole="arcrole3" />
+                              xlink:role="role3"    xlink:arcrole="arcrole3">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
+                <!-- the rest are ignored for because of missing/empty
+                     attributes -->
                 <relationship xlink:title="title4"
-                              xlink:role="role4"    xlink:arcrole="arcrole4" />
+                              xlink:role="role4"    xlink:arcrole="arcrole4">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
                 <relationship                       xlink:href=""
-                              xlink:role="role4b"   xlink:arcrole="arcrole4b"/>
+                              xlink:role="role4b"   xlink:arcrole="arcrole4b">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
                 <relationship xlink:title="title5"  xlink:href="href5"
-                                                    xlink:arcrole="arcrole5" />
+                                                    xlink:arcrole="arcrole5">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
                 <relationship xlink:title="title5b" xlink:href="href5b"
-                              xlink:role=""         xlink:arcrole="arcrole5b"/>
+                              xlink:role=""         xlink:arcrole="arcrole5b">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
                 <relationship xlink:title="title6"  xlink:href="href6"
-                              xlink:role="role6"                             />
+                              xlink:role="role6">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
                 <relationship xlink:title="title6b" xlink:href="href6b"
-                              xlink:role="role6b"   xlink:arcrole=""         />
+                              xlink:role="role6b"   xlink:arcrole="">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
               </existing>
               <valencies>
                 <relationship xlink:title="title0" xlink:href="href0"
@@ -594,10 +633,11 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </valencies>
             </relationships>
         """)
-        expected = [RelationshipInfo('arcrole1', 'role1', 'title1', 'href1'),
-                    RelationshipInfo('Membership', 'Group', 'title2', 'href2'),
-                    RelationshipInfo('arcrole3', 'role3', 'href3',
-                                     '/objects/href3')]
+        expected = [RelationshipInfo(*args) for args in [
+                ('arcrole1', 'role1', 'title1', 'href1', 'mhref1'),
+                ('Membership', 'Group', 'title2', 'href2', 'mhref2'),
+                ('arcrole3', 'role3', 'href3', '/objects/href3', 'mhref3')
+            ]]
         client = SchoolToolClient()
         result = client._parseRelationships(body)
         self.assertEquals(list(result), expected)
@@ -606,6 +646,29 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         from schooltool.guiclient import SchoolToolClient, SchoolToolError
         client = SchoolToolClient()
         body = "<This is not XML"
+        self.assertRaises(SchoolToolError, client._parseRelationships, body)
+
+        body = dedent("""
+            <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+              <existing>
+                <relationship xlink:title="title1" xlink:href="href1"
+                              xlink:role="role1" xlink:arcrole="arcrole1">
+                    <manage xlink:href="mhref1"/>
+                    <manage xlink:href="mhref2"/>
+                </relationship>
+              </existing>
+            </relationships>
+        """)
+        self.assertRaises(SchoolToolError, client._parseRelationships, body)
+
+        body = dedent("""
+            <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+              <existing>
+                <relationship xlink:title="title1" xlink:href="href1"
+                              xlink:role="role1" xlink:arcrole="arcrole1" />
+              </existing>
+            </relationships>
+        """)
         self.assertRaises(SchoolToolError, client._parseRelationships, body)
 
     def test__parseRollCall(self):
@@ -991,8 +1054,8 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
 
     def test_RelationshipInfo(self):
         from schooltool.guiclient import RelationshipInfo
-        self._test_repr(RelationshipInfo, 4)
-        self._test_cmp(RelationshipInfo, 4,
+        self._test_repr(RelationshipInfo, 5)
+        self._test_cmp(RelationshipInfo, 5,
                        ('arcrole', 'role', 'target_title'))
 
     def test_RollCallInfo(self):

@@ -545,6 +545,9 @@ class MainFrame(wxFrame):
         wxFrame.__init__(self, parent, id, title, size=wxSize(500, 400))
         self.client = client
         self.refresh_lock = threading.Lock()
+        self.personListData = []
+        self.relationshipListData = []
+
         self.CreateStatusBar()
 
         # Menu bar
@@ -632,16 +635,20 @@ class MainFrame(wxFrame):
         # top pane of the second splitter: member list
         panel2a = wxPanel(splitter2, -1)
         label2a = wxStaticText(panel2a, -1, "Members")
-        self.personListCtrl = wxListCtrl(panel2a,
+        ID_PERSON_LIST = wxNewId()
+        self.personListCtrl = wxListCtrl(panel2a, ID_PERSON_LIST,
                                          style=wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
         self.personPopupMenu = popupmenu(
                 item("View &Absences", "View a list of person's absences",
-                     self.DoViewPersonAbsences)
+                     self.DoViewPersonAbsences),
+                separator(),
+                item("&Remove", "Remove a person from this group",
+                     self.DoRemoveMember),
             )
         EVT_RIGHT_DOWN(self.personListCtrl, self.DoPersonRightDown)
         # looks like I need both for this to work on Gtk and MSW
         EVT_RIGHT_UP(self.personListCtrl, self.DoPersonPopup)
-        EVT_COMMAND_RIGHT_CLICK(self.personListCtrl, ID_GROUP_TREE,
+        EVT_COMMAND_RIGHT_CLICK(self.personListCtrl, ID_PERSON_LIST,
                                 self.DoPersonPopup)
         sizer2a = wxBoxSizer(wxVERTICAL)
         sizer2a.Add(label2a)
@@ -651,11 +658,21 @@ class MainFrame(wxFrame):
         # bottom pane of the second splitter: relationship list
         panel2b = wxPanel(splitter2, -1)
         label2b = wxStaticText(panel2b, -1, "Relationships")
-        self.relationshipListCtrl = wxListCtrl(panel2b,
+        ID_RELATIONSHIP_LIST = wxNewId()
+        self.relationshipListCtrl = wxListCtrl(panel2b, ID_RELATIONSHIP_LIST,
                 style=wxSUNKEN_BORDER|wxLC_REPORT)
         self.relationshipListCtrl.InsertColumn(0, "Title", width=110)
         self.relationshipListCtrl.InsertColumn(1, "Role", width=110)
         self.relationshipListCtrl.InsertColumn(2, "Relationship", width=110)
+        self.relationshipPopupMenu = popupmenu(
+                item("&Remove", "Remove selected relationship",
+                     self.DoRemoveRelationship),
+            )
+        EVT_RIGHT_DOWN(self.relationshipListCtrl, self.DoRelationshipRightDown)
+        # looks like I need both for this to work on Gtk and MSW
+        EVT_RIGHT_UP(self.relationshipListCtrl, self.DoRelationshipPopup)
+        EVT_COMMAND_RIGHT_CLICK(self.relationshipListCtrl,
+                                ID_RELATIONSHIP_LIST, self.DoRelationshipPopup)
         sizer2b = wxBoxSizer(wxVERTICAL)
         sizer2b.Add(label2b)
         sizer2b.Add(self.relationshipListCtrl, 1, wxEXPAND)
@@ -702,6 +719,83 @@ class MainFrame(wxFrame):
             wxMessageBox("Could not create a group: %s" % e,
                          "New Group", wxICON_ERROR|wxOK)
             return
+
+    def DoRemoveMember(self, event):
+        """Remove a person from the current group.
+
+        Accessible from person list popup menu.
+        """
+        item = self.personListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No person selected")
+            return
+        key = self.personListCtrl.GetItemData(item)
+        member = self.personListData[key]
+
+        for relationship in self.relationshipListData:
+            if relationship.target_path == member.person_path:
+                break
+        else:
+            # should not happen
+            self.SetStatusText("Selected person is not a member of this group")
+            return
+
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            # should not happen
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+
+        if wxMessageBox("Really remove %s from %s?"
+                        % (member.person_title, group_title),
+                        "Remove Person", wxYES_NO) != wxYES:
+            return
+
+        try:
+            self.client.deleteObject(relationship.link_path)
+        except SchoolToolError, e:
+            wxMessageBox("Could not remove member: %s" % e,
+                         "Remove Person", wxICON_ERROR|wxOK)
+            return
+        else:
+            self.DoRefresh()
+
+    def DoRemoveRelationship(self, event):
+        """Remove a relationship.
+
+        Accessible from relationship list popup menu.
+        """
+        item = self.relationshipListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No relationship selected")
+            return
+        key = self.relationshipListCtrl.GetItemData(item)
+        relationship = self.relationshipListData[key]
+
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            # should not happen
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+
+        if wxMessageBox("Really remove %s (%s) from %s?"
+                        % (relationship.target_title, relationship.role,
+                           group_title),
+                        "Remove Relationship", wxYES_NO) != wxYES:
+            return
+
+        try:
+            self.client.deleteObject(relationship.link_path)
+        except SchoolToolError, e:
+            wxMessageBox("Could not remove relationship: %s" % e,
+                         "Remove Relationship", wxICON_ERROR|wxOK)
+            return
+        else:
+            self.DoRefresh()
 
     def DoExit(self, event):
         """Exit the application.
@@ -824,6 +918,26 @@ class MainFrame(wxFrame):
         """
         self.personListCtrl.PopupMenu(self.personPopupMenu,
                                       event.GetPosition())
+
+    def DoRelationshipRightDown(self, event):
+        """Select the relationship under mouse cursor.
+
+        Called when the right mouse buton is pressed on the relationship list
+        control.
+        """
+        item, flags = self.relationshipListCtrl.HitTest(event.GetPosition())
+        if flags & wxLIST_HITTEST_ONITEM:
+            self.relationshipListCtrl.Select(item)
+        event.Skip()
+
+    def DoRelationshipPopup(self, event):
+        """Show the popup menu for the relationship list control.
+
+        Called when the right mouse buton released on the relationship list
+        control.
+        """
+        self.relationshipListCtrl.PopupMenu(self.relationshipPopupMenu,
+                                            event.GetPosition())
 
     def DoRefresh(self, event=None):
         """Refresh data from the server.
