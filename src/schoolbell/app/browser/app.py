@@ -26,26 +26,27 @@ from zope.interface import Interface, implements
 from zope.schema import Password, TextLine, Bytes, getFieldNamesInOrder
 from zope.schema.interfaces import ValidationError
 from zope.app import zapi
-from zope.app import zapi
 from zope.app.form.utility import setUpWidgets, getWidgetsData
 from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
-from schoolbell.app.app import Person
-from schoolbell import SchoolBellMessageID as _
 from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
+from zope.component import adapts
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IGroupContained
 from schoolbell.app.interfaces import IPerson, IResource
+from schoolbell.app.app import Person
 
 
 def sorted_by_title(objects):
     """Sort a list of objects by title.
 
     The objects must have a title attribute.
+
+    XXX This can go away now that we can say list/sortby:title in TALES
     """
     objs = [(o.title, o) for o in objects]
     objs.sort()
@@ -282,16 +283,19 @@ class PersonChangePasswordView(BrowserView):
 
             self.context.setPassword(None)
 
+
 class IPersonAddForm(Interface):
+    """Schema for person adding form."""
 
     title = TextLine(title=u"Full name",
         description=u"Name that should be displayed")
 
-    password = Password(title=u"Password")
-    verify_password = Password(title=u"Verify password")
-
     username = TextLine(title=u"Username",
         description=u"Username")
+
+    password = Password(title=u"Password")
+
+    verify_password = Password(title=u"Verify password")
 
     photo = Bytes(title=u"Photo",
         required=False,
@@ -299,8 +303,21 @@ class IPersonAddForm(Interface):
 
 
 marker = object()
+
+
 class PersonAddAdapter(object):
+    """An adapter for the person add form.
+
+    We want to reuse a Zope 3 adding form, but we want to use a slightly
+    different schema (IPersonAddForm instead of IPerson), because IPerson
+    lacks certain fields (namely `password` and `confirm_password`).  Because
+    Zope's AddView adapts the created object to the schema in `createAndAdd`,
+    we need this adapter.
+    """
+
+    adapts(IPerson)
     implements(IPersonAddForm)
+
     _password = marker
 
     def __init__(self, context):
@@ -336,31 +353,35 @@ class PersonAddAdapter(object):
 class PersonAddView(AddView):
     """A view for adding a person."""
 
-    duplicate_warning = None
-    fieldNames = None
+    # Form error message for the page template
     error = None
+
+    # Override some fields of AddView
     schema = IPersonAddForm
+    _factory = Person
     _arguments = ()
     _keyword_arguments = ()
-    _factory = Person
-    _set_before_add = 'username',
+    _set_before_add = getFieldNamesInOrder(schema)
     _set_after_add = ()
 
-    def __init__(self, context, request):
-        AddView.__init__(self, context, request)
-        self._set_before_add = getFieldNamesInOrder(IPersonAddForm)
-
     def createAndAdd(self, data):
-        if (data['password'] == data['verify_password']):
+        """Create a Person from form data and add it to the container."""
+        if data['password'] == data['verify_password']:
             return AddView.createAndAdd(self, data)
         else:
             self.error = u'Passwords do not match!'
             raise WidgetsError([ValidationError('Passwords do not match!')])
 
-    def add(self, thing):
-        name = thing.username
-        self.context[name] = thing
-        return thing
+    def add(self, person):
+        """Add `person` to the container.
+
+        Uses the username of `person` as the object ID (__name__).
+        """
+        name = person.username
+        self.context[name] = person
+        return person
 
     def nextURL(self):
+        """See zope.app.container.interfaces.IAdding"""
         return zapi.absoluteURL(self.context, self.request)
+

@@ -511,12 +511,18 @@ def doctest_PersonAddAdapter():
         >>> from schoolbell.app.browser.app import PersonAddAdapter
         >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
 
+    If you assign the same password to `password` and `verify_password`
+    attributes, the person's password is set.
+
         >>> person = Person()
         >>> adapter = IPersonAddForm(person)
         >>> adapter.password = 'foo'
         >>> adapter.verify_password = 'foo'
         >>> person.checkPassword('foo')
         True
+
+    However if you try that with differing passwords, you get an exception,
+    and the password is not changed.
 
         >>> adapter = IPersonAddForm(person)
         >>> adapter.password = 'baz'
@@ -528,11 +534,17 @@ def doctest_PersonAddAdapter():
         >>> person.checkPassword('foo')
         True
 
+    It even works for disabling the account (though I fail to see need for
+    this -- mg):
+
         >>> adapter = IPersonAddForm(person)
         >>> adapter.password = None
         >>> adapter.verify_password = None
         >>> person.hasPassword()
         False
+
+    Other fields of IPersonAddForm are nonmagical, they simply set the value
+    on the person
 
         >>> adapter = IPersonAddForm(person)
         >>> adapter.title = u'Ignas M.'
@@ -601,7 +613,7 @@ def doctest_PersonAddView():
         >>> 'jdoe' in pc
         True
 
-    Let's try to add user with not matchin password and verify_password:
+    Let's try to add user with different password and verify_password fields:
 
         >>> from schoolbell.app.browser.app import PersonAddView
         >>> request = TestRequest(form={'field.title': u'Coo Guy',
