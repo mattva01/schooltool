@@ -28,6 +28,7 @@ import datetime
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.clients.csvclient import CSVImporterBase, DataError
+from schooltool.common import to_unicode
 from schooltool.component import traverse, FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
@@ -47,24 +48,33 @@ class CSVImportView(View):
     success = False
 
     def do_POST(self, request):
-        groups_csv = resources_csv = None
-        if 'groups.csv' in request.args:
-            groups_csv = request.args['groups.csv'][0]
+        groups_csv = to_unicode(request.args['groups.csv'][0])
+        resources_csv = to_unicode(request.args['resources.csv'][0])
+        teachers_csv = to_unicode(request.args['teachers.csv'][0])
+        pupils_csv = to_unicode(request.args['pupils.csv'][0])
 
-        if groups_csv is None and resources_csv is None:
-            self.error = _('No files provided')
+        if not (groups_csv or resources_csv or pupils_csv or teachers_csv):
+            self.error = _('No data provided')
             return self.do_GET(request)
 
         importer = CSVImporterZODB(self.context)
 
         try:
-            if groups_csv is not None:
-                importer.importGroupsCsv(groups_csv.splitlines())
+            ##if groups_csv: (until start setup is fixed)
+            importer.importGroupsCsv(groups_csv.splitlines())
+            if resources_csv:
+                importer.importResourcesCsv(resources_csv.splitlines())
+            if teachers_csv:
+                importer.importPersonsCsv(teachers_csv.splitlines(),
+                                          'teachers', teaching=True)
+            if pupils_csv:
+                importer.importPersonsCsv(pupils_csv.splitlines(),
+                                          'pupils', teaching=False)
         except DataError, e:
             self.error = unicode(e)
             return self.do_GET(request)
 
-        request.appLog(_("CSV data imported"))
+        request.appLog(_("CSV data imported")) # TODO: More verbose logging.
         self.success = True
         return self.do_GET(request)
 

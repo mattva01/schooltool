@@ -11,8 +11,23 @@
     <div class="error" tal:condition="view/error" tal:content="view/error" />
 
     <div class="row">
-      <label for="">groups.csv</label>
+      <label for="groups.csv">groups.csv</label>
       <input id="groups.csv" type="file" name="groups.csv" />
+    </div>
+
+    <div class="row">
+      <label for="teachers.csv">teachers.csv</label>
+      <input id="teachers.csv" type="file" name="teachers.csv" />
+    </div>
+
+    <div class="row">
+      <label for="pupils.csv">pupils.csv</label>
+      <input id="pupils.csv" type="file" name="pupils.csv" />
+    </div>
+
+    <div class="row">
+      <label for="groups.csv">resources.csv</label>
+      <input id="resources.csv" type="file" name="resources.csv" />
     </div>
 
   <div class="buttons">

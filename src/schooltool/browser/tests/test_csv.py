@@ -55,46 +55,84 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assert_('Upload CSV' in content)
 
     def test_POST_empty(self):
-        request = RequestStub(args={})
+        request = RequestStub(args={'groups.csv': '',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': ''})
         content = self.view.do_POST(request)
-        self.assert_('No files provided' in content)
+        self.assert_('No data provided' in content)
         self.assert_('Data imported successfully' not in content)
 
         self.assert_('teachers' not in self.app['groups'].keys())
         self.assertEquals(request.applog, [])
 
-    def test_POST_empty_groups(self):
+    def test_POST_groups(self):
         from schooltool.component import FacetManager
         from schooltool.teaching import TeacherGroupFacet
-        request = RequestStub(args={'groups.csv': ''})
+        request = RequestStub(args={'groups.csv':'"year1","Year 1","root",""',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': ''})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
-        # The empty import should have created basic groups.
+        # The import should have created basic groups.
         self.assert_('teachers' in self.app['groups'].keys())
         teachers = self.app['groups']['teachers']
         facets = list(FacetManager(teachers).iterFacets())
         self.assertEquals(len(facets), 1)
         self.assert_(isinstance(facets[0], TeacherGroupFacet))
-        self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
-
-    def test_POST_groups(self):
-        request = RequestStub(args={'groups.csv':'"year1","Year 1","root",""'})
-        content = self.view.do_POST(request)
-        self.assert_('Data imported successfully' in content)
-
-        # The empty import should have created basic groups.
-        self.assert_('teachers' in self.app['groups'].keys())
 
         self.assert_('year1' in self.app['groups'].keys())
         self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
 
     def test_POST_groups_errors(self):
-        request = RequestStub(args={'groups.csv': '"year1","b0rk'})
+        request = RequestStub(args={'groups.csv': '"year1","b0rk',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': ''})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' not in content)
         self.assert_('Error in group data' in content)
         self.assertEquals(request.applog, [])
+
+    def test_POST_resources(self):
+        request = RequestStub(args={'resources.csv':'"Stool",""',
+                                    'groups.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': ''})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' in content)
+
+        titles = [resource.title
+                  for resource in self.app['resources'].itervalues()]
+        self.assert_('Stool' in titles)
+
+        self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
+
+    def test_POST_pupils(self):
+        request = RequestStub(args={'pupils.csv':'"Me !","","1922-11-22",""',
+                                    'groups.csv': '',
+                                    'teachers.csv': '',
+                                    'resources.csv': ''})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' in content)
+
+        titles = [resource.title
+                  for resource in self.app['persons'].itervalues()]
+        self.assert_('Me !' in titles)
+
+    def test_POST_teachers(self):
+        request = RequestStub(args={'teachers.csv':'"Me !","","1922-11-22",""',
+                                    'groups.csv': '',
+                                    'pupils.csv': '',
+                                    'resources.csv': ''})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' in content)
+
+        titles = [resource.title
+                  for resource in self.app['persons'].itervalues()]
+        self.assert_('Me !' in titles)
 
 
 class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
