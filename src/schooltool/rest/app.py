@@ -246,13 +246,13 @@ class AvailabilityQueryView(View):
             return _("%r argument is invalid") % arg
         self.resources = []
         if 'resources' not in request.args:
-            resource_container = traverse(self.context, 'resources')
+            resource_container = traverse(self.context, '/resources')
             self.resources.extend(resource_container.itervalues())
         else:
             for path in request.args['resources']:
                 try:
                     resource = traverse(self.context, path)
-                except KeyError:
+                except KeyError: # XXX use TraversalError
                     return _("Invalid resource: %r") % path
                 if not IResource.providedBy(resource):
                     return _("%r is not a resource") % path

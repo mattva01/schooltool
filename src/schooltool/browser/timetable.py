@@ -311,7 +311,7 @@ class TimetableSetupView(View, AppObjectBreadcrumbsMixin):
         if raw_value:
             try:
                 group = traverse(self.context, '/groups/%s' % raw_value)
-            except KeyError:
+            except KeyError: # XXX use TraversalError
                 pass
             else:
                 if group in self.all_groups:

@@ -361,7 +361,7 @@ def doctest_TraversableView():
         ...     def traverse(self, name, furtherPath):
         ...         if name == 'thing':
         ...             return self.thing
-        ...         raise TraversalError
+        ...         raise TraversalError, name
 
     We also need to register a view for MyThing
 

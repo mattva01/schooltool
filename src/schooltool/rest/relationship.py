@@ -106,7 +106,7 @@ class RelationshipsView(View):
         try:
             other = traverse(self.context, path)
         except TraversalError, e:
-            return textErrorPage(request, _("Nontraversable path: %s") % e)
+            return textErrorPage(request, _("Nontraversable path: %s") % path)
 
         try:
             val = self.context.getValencies()[type, role]

@@ -29,10 +29,11 @@ from sets import Set
 
 from zope.interface import implements, directlyProvides
 from zope.testing.doctestunit import DocTestSuite
+from zope.app.traversing.interfaces import ITraversable, TraversalError
 from zope.app.traversing.api import getPath
 
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
-from schooltool.interfaces import ITraversable, IEventTarget
+from schooltool.interfaces import IEventTarget
 from schooltool.rest.tests import RequestStub, TraversableRoot, setPath
 from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import SchoolToolSetup, RegistriesSetupMixin
@@ -94,7 +95,10 @@ class ResourceContainer(dict):
     implements(ITraversable)
 
     def traverse(self, name, path=None):
-        return self[name]
+        try:
+            return self[name]
+        except KeyError:
+            raise TraversalError, name
 
 
 class SchooldayModelStub:
@@ -134,7 +138,9 @@ class ServiceManagerStub:
                                                self.eventService)
 
     def traverse(self, name, path=None):
-        return {'resources': self.resources}[name]
+        if name == 'resources':
+            return self.resources
+        raise TraversalError, name
 
 
 class TestTimetableContentNegotiation(unittest.TestCase):

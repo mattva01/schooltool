@@ -118,7 +118,7 @@ class RollCallView(View):
                 path = to_unicode(res[0].content)
                 try:
                     reporter = traverse(self.context, path)
-                except KeyError:
+                except KeyError: # XXX use TraversalError
                     raise ValueError("Reporter not found: %s" % path)
                 if (reporter is not request.authenticated_user
                         and not isManager(request.authenticated_user)):
@@ -143,6 +143,7 @@ class RollCallView(View):
                     raise ValueError("Person %s is not a member of %s"
                                      % (path, getPath(self.context)))
                 person = traverse(self.context, path)
+                # XXX traverse might raise TraversalError
                 try:
                     presence_attr = to_unicode(node.nsProp('presence', None))
                     present = presence[presence_attr]
@@ -229,7 +230,7 @@ class AbsenceCommentParser:
 
             try:
                 reporter = traverse(self.context, reporter_path)
-            except KeyError:
+            except KeyError: # XXX use TraversalError
                 raise ValueError("Reporter not found: %s" % reporter_path)
 
             dt = to_unicode(node.nsProp('datetime', None))
@@ -240,7 +241,7 @@ class AbsenceCommentParser:
             if absent_from_path is not None:
                 try:
                     absent_from = traverse(self.context, absent_from_path)
-                except KeyError:
+                except KeyError: # XXX use TraversalError
                     raise ValueError("Object not found: %s" % reporter_path)
             else:
                 absent_from = None

@@ -352,7 +352,7 @@ class TimetableReadWriteView(TimetableReadView):
             path = resource['xlink:href']
             try:
                 res = traverse(self.timetabled, path)
-            except KeyError:
+            except KeyError: # XXX use TraversalError
                 raise ViewError(_("Invalid path: %s") % path)
             resources.append(res)
         return TimetableActivity(title, self.timetabled, resources)
@@ -750,7 +750,7 @@ class SchoolTimetableView(View):
                 teacher_path = teacher_node['xlink:href']
                 try:
                     teacher = traverse(self.context, teacher_path)
-                except KeyError:
+                except KeyError: # XXX use TraversalError
                     return textErrorPage(request,
                                          _("Invalid path: %s") % teacher_path)
                 groups_taught = list(getRelatedObjects(teacher, URITaught))
@@ -793,6 +793,8 @@ class SchoolTimetableView(View):
                         if path not in timetables:
                             raise ViewError(_("%s is not a teacher of %s")
                                             % (teacher_path, path))
+                        # Since path is in timetables, we know that traverse
+                        # will not raise exceptions
                         group = traverse(self.context, path)
                         if group not in groups[teacher_path]:
                             raise ViewError(_("%s is not a teacher of %s")
@@ -802,7 +804,7 @@ class SchoolTimetableView(View):
                             rpath = resource['xlink:href']
                             try:
                                 res = traverse(self.context, rpath)
-                            except KeyError:
+                            except KeyError: # XXX use TraversalError
                                 raise ViewError(_("Invalid path: %s") % rpath)
                             resources.append(res)
                         act = TimetableActivity(title, group, resources)

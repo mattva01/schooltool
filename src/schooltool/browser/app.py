@@ -342,6 +342,7 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
             # we pass a 'ward' request varible to link it to.
             wid = to_unicode(request.args.get('ward',[None])[0])
             new_guardian = traverse(self.context, '/persons/' + wid)
+            # XXX traverse might raise TraversalError
             Guardian(custodian=new_guardian, ward=person)
 
         if person is None:
@@ -550,6 +551,7 @@ class NoteAddView(View):
             # Just show the form without any data.
             cancelpath = self.request.args['toadd'][0]
             nobj = traverse(self.context, cancelpath)
+            # XXX traverse might raise TraversalError
             url = absoluteURL(request, nobj)
             return self.redirect(url, request)
 
@@ -577,6 +579,7 @@ class NoteAddView(View):
         paths = filter(None, request.args.get("toadd", []))
         for path in paths:
             pobj = traverse(self.context, path)
+            # XXX traverse might raise TraversalError
             try:
                 Noted(notation=obj, notandum=pobj)
             except:
@@ -635,10 +638,12 @@ class ResidenceAddView(ObjectAddView):
         if 'RELATE' in request.args:
             rpath = to_unicode(request.args.get('residence', [None])[0])
             residence = traverse(self.context, rpath)
+            # XXX traverse might raise TraversalError
 
             paths = filter(None, to_unicode(request.args.get("toadd", [])))
             for path in paths:
                 pobj = traverse(self.context, path)
+                # XXX traverse might raise TraversalError
                 try:
                     Occupies(residence=residence, resides=pobj)
                 except ValueError:
@@ -688,6 +693,7 @@ class ResidenceAddView(ObjectAddView):
         paths = filter(None, request.args.get("toadd", []))
         for path in paths:
             pobj = traverse(self.context, path)
+            # XXX traverse might raise TraversalError
             try:
                 Occupies(residence=obj, resides=pobj)
             except ValueError:
@@ -851,12 +857,12 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
 
     def _parseResources(self, raw_value):
         """Parse a list of paths and return a list of resources."""
-        resource_container = traverse(self.context, 'resources')
+        resource_container = traverse(self.context, '/resources')
         resources = []
         for path in raw_value:
             try:
                 resource = traverse(resource_container, path)
-            except (KeyError, UnicodeError):
+            except (KeyError, UnicodeError): # XXX use TraversalError
                 pass
             else:
                 if IResource.providedBy(resource):
@@ -901,7 +907,7 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
         self.searching = True
         resources = self.resources_widget.value
         if not resources:
-            resource_container = traverse(self.context, 'resources')
+            resource_container = traverse(self.context, '/resources')
             resources = list(resource_container.itervalues())
         if self.by_periods:
             periods = self.periods_widget.value
@@ -1203,7 +1209,7 @@ class DeleteView(View, ToplevelBreadcrumbsMixin):
                 obj = traverse(self.context, to_unicode(path))
                 if IApplicationObject.providedBy(obj):
                     objs.append(obj)
-            except (KeyError, UnicodeError):
+            except (KeyError, UnicodeError): # XXX use TraversalError
                 pass
         return app_object_list(objs)
 

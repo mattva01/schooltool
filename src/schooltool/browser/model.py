@@ -473,6 +473,7 @@ class RelationshipViewMixin:
             paths = filter(None, request.args.get("toadd", []))
             for path in paths:
                 obj = traverse(self.context, path)
+                # XXX traverse might raise TraversalError
                 try:
                     self.createRelationship(obj)
                 except ValueError:
@@ -940,6 +941,7 @@ class ResidenceMoveView(View, RelationshipViewMixin,
         for id in ids:
             path = "/persons/%s" % id
             pobj = traverse(self.context, path)
+            # XXX traverse might raise TraversalError
             try:
                 Occupies(residence=obj, resides=pobj)
                 for link in self.context.listLinks():

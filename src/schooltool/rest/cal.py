@@ -424,7 +424,7 @@ class BookingView(View):
             owner_path = to_unicode(owner_node.nsProp('path', None))
             try:
                 owner = traverse(self.context, owner_path)
-            except KeyError:
+            except KeyError: # XXX use TraversalError
                 return textErrorPage(request,
                                      _("Invalid path: %r") % owner_path)
             if not IApplicationObject.providedBy(owner):

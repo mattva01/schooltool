@@ -160,7 +160,7 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
                 else:
                     try:
                         obj = traverse(self.context, path)
-                    except KeyError:
+                    except KeyError: # XXX use TraversalError
                         continue
                 try:
                     self.context.remove((obj, perm))
