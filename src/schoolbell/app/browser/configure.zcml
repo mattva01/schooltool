@@ -569,4 +569,14 @@
       permission="zope.View"
       />
 
+<!-- Breadcrumbs -->
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      name="absolute_url"
+      class=".cal.CalendarEventAbsoluteURL"
+      permission="zope.Public"
+      allowed_interface="zope.app.traversing.browser.interfaces.IAbsoluteURL"
+      />
+
 </configure>

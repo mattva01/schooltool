@@ -246,7 +246,7 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
     ... BEGIN:VEVENT
     ... UID:dummy-uid
-    ... SUMMARY:Empty calendar
+    ... SUMMARY:Important event
     ... DTSTART:20050204T100000
     ... DURATION:PT1H
     ... DTSTAMP:20050203T150000
@@ -257,6 +257,29 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     Content-Length: 0
     Set-Cookie: ...
     <BLANKLINE>
+
+Let's see what the breadcrumbs are for this event:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+            <div class="breadcrumbs">
+              <a href="http://localhost">top</a>
+              &#187;
+              <a href="http://localhost/frogpond">frogpond</a>
+              &#187;
+              <a href="http://localhost/frogpond/persons">persons</a>
+              &#187;
+              <a href="http://localhost/frogpond/persons/frog">frog</a>
+              &#187;
+              <a href="http://localhost/frogpond/persons/frog/calendar">calendar</a>
+              &#187;
+              <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/edit.html">Important event</a>
+            </div>
+    ...
 
 Let the Frog modify this event:
 
