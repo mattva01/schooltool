@@ -25,6 +25,7 @@ from zope.app.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from schoolbell.app.interfaces import ISchoolBellApplication
 
+
 class ISchoolBellLayer(ILayer):
     """SchoolBell layer"""
 
