@@ -17,10 +17,40 @@
       permission="zope.Public"
       />
 
+  <adapter
+      for="schoolbell.app.interfaces.IResourceContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.ResourceFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schoolbell.app.interfaces.IPersonContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.PersonFileFactory"
+      permission="zope.Public"
+      />
+
   <view
       for="schoolbell.app.interfaces.IGroupContainer"
       name="GET"
       factory=".app.GroupContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResourceContainer"
+      name="GET"
+      factory=".app.ResourceContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IPersonContainer"
+      name="GET"
+      factory=".app.PersonContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
@@ -45,6 +75,46 @@
       for="schoolbell.app.interfaces.IGroupContainer"
       name="DELETE"
       factory=".app.GroupContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResourceContainer"
+      name="POST"
+      factory=".app.ResourceContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResourceContainer"
+      name="PUT"
+      factory=".app.ResourceContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResourceContainer"
+      name="DELETE"
+      factory=".app.ResourceContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IPersonContainer"
+      name="PUT"
+      factory=".app.PersonContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IPersonContainer"
+      name="DELETE"
+      factory=".app.PersonContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

@@ -43,3 +43,279 @@ Now, we can run the REST page tests:
       </containers>
     </schooltool>
     <BLANKLINE>
+
+There are no groups at the moment:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>groups</name>
+      <items>
+      </items>
+    </container>
+    <BLANKLINE>
+
+no resources:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>resources</name>
+      <items>
+      </items>
+    </container>
+    <BLANKLINE>
+
+and no persons:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>persons</name>
+      <items>
+      </items>
+    </container>
+    <BLANKLINE>
+
+We can add some groups with POST:
+
+    >>> print rest("""
+    ... POST /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Group"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    Location: http://localhost/frogpond/groups/a-group
+    <BLANKLINE>
+    Object created: http://localhost/frogpond/groups/a-group
+
+We can add some groups with PUT:
+
+    >>> print rest("""
+    ... PUT /frogpond/groups/another-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Another Group"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    <BLANKLINE>
+
+Both groups were created:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>groups</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/a-group"
+              xlink:title="A Group"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/another-group"
+              xlink:title="Another Group"/>
+      </items>
+    </container>
+    <BLANKLINE>
+
+We can delete groups as well:
+
+    >>> print rest("""
+    ... DELETE /frogpond/groups/another-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+Only one group is left:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>groups</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/a-group"
+              xlink:title="A Group"/>
+      </items>
+    </container>
+    <BLANKLINE>
+
+Same with the resources:
+
+We can add some resources with POST:
+
+    >>> print rest("""
+    ... POST /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Resource"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    Location: http://localhost/frogpond/resources/a-resource
+    <BLANKLINE>
+    Object created: http://localhost/frogpond/resources/a-resource
+
+We can add some resources with PUT:
+
+    >>> print rest("""
+    ... PUT /frogpond/resources/another-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Another Resource"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    <BLANKLINE>
+
+Both resources were created:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>resources</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/resources/a-resource"
+              xlink:title="A Resource"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/resources/another-resource"
+              xlink:title="Another Resource"/>
+      </items>
+    </container>
+    <BLANKLINE>
+
+We can delete resources as well:
+
+    >>> print rest("""
+    ... DELETE /frogpond/resources/another-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+Only one resource is left:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>resources</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/resources/a-resource"
+              xlink:title="A Resource"/>
+      </items>
+    </container>
+    <BLANKLINE>
+
+Persons are a bit different, they don't have description yet they have
+username:
+
+The id of the user is same as his username:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+We don't have to supply a username when making a PUT:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/peter HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Peter"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    <BLANKLINE>
+
+Both persons were created:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>persons</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/persons/john"
+              xlink:title="John"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/persons/peter"
+              xlink:title="Peter"/>
+      </items>
+    </container>
+    <BLANKLINE>
+
+We can delete persons as well:
+
+    >>> print rest("""
+    ... DELETE /frogpond/persons/peter HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+Only one person is left:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>persons</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/persons/john"
+              xlink:title="John"/>
+      </items>
+    </container>
+    <BLANKLINE>
+

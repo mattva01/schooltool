@@ -37,10 +37,14 @@ from schoolbell.app.interfaces import IGroupContainer
 from schoolbell.app.app import Resource
 from schoolbell.app.interfaces import IResourceContainer
 
+from schoolbell.app.app import Person
+from schoolbell.app.interfaces import IPersonContainer
+
 from schoolbell import SchoolBellMessageID as _
 
+
 class ApplicationObjectFileFactory(object):
-    """ """
+    """A superclass for ApplicationObjectContainer to FileFactory adapters."""
 
     implements(IFileFactory)
 
@@ -51,7 +55,7 @@ class ApplicationObjectFileFactory(object):
         doc = XMLDocument(data, self.schema)
         try:
             doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            obj = self.create(doc)
+            obj = self.create(doc, name)
         finally:
             doc.free()
 
@@ -82,12 +86,70 @@ class GroupFileFactory(ApplicationObjectFileFactory):
         </grammar>
         '''
 
-    def create(self, doc):
+    def create(self, doc, name=None):
         """Extract data from an XMLDocument and create a Group."""
         node = doc.query('/m:object')[0]
         title = node['title']
         description = node.get('description')
         return Group(title=title, description=description)
+
+
+class ResourceFileFactory(ApplicationObjectFileFactory):
+    """Adapter that adapts ResourceContainer to FileFactory"""
+
+    adapts(IResourceContainer)
+
+    schema = '''<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="object">
+              <attribute name="title">
+                <text/>
+              </attribute>
+              <optional>
+                <attribute name="description">
+                  <text/>
+                </attribute>
+              </optional>
+            </element>
+          </start>
+        </grammar>
+        '''
+
+    def create(self, doc, name=None):
+        """Extract data from an XMLDocument and create a Resource."""
+        node = doc.query('/m:object')[0]
+        title = node['title']
+        description = node.get('description')
+        return Resource(title=title, description=description)
+
+
+class PersonFileFactory(ApplicationObjectFileFactory):
+    """Adapter that adapts PersonContainer to FileFactory"""
+
+    adapts(IPersonContainer)
+
+    schema = '''<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="object">
+              <attribute name="title">
+                <text/>
+              </attribute>
+            </element>
+          </start>
+        </grammar>
+        '''
+
+    def create(self, doc, name):
+        """Extract data from an XMLDocument and create a Person."""
+        node = doc.query('/m:object')[0]
+        title = node['title']
+        return Person(title=title, username=name)
 
 
 class ApplicationView(View):
@@ -101,7 +163,7 @@ class ApplicationView(View):
 
 
 class GenericContainerView(View):
-    """ """
+    """A RESTive container view superclass."""
 
     template = Template("www/aoc.pt", content_type="text/xml; charset=UTF-8")
 
@@ -121,23 +183,38 @@ class GenericContainerView(View):
     def POST(self):
         return self.create()
 
-
-class GroupContainerView(GenericContainerView):
-    """ """
-
     def create(self):
-        """ """
+        """Creates a new object from the data supplied in the request."""
 
         response = self.request.response
-        body = self.request.body
+        body = self.request.bodyFile.read()
 
-        factory = GroupFileFactory(self.context)
-        group = factory(None, None, body)
-        self.add(group)
-        location = zapi.absoluteURL(group, self.request)
+        factory = self._factory(self.context)
+        item = factory(None, None, body)
+        self.add(item)
+        location = zapi.absoluteURL(item, self.request)
 
         response.setStatus(201, 'Created')
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
         response.setHeader('Location', location)
 
         return _("Object created: %s") % location
+
+
+class GroupContainerView(GenericContainerView):
+    """RESTive view of a group container."""
+
+    _factory = GroupFileFactory
+
+
+class ResourceContainerView(GenericContainerView):
+    """RESTive view of a resource container."""
+
+    _factory = ResourceFileFactory
+
+
+class PersonContainerView(GenericContainerView):
+    """RESTive view of a person container."""
+
+    _factory = PersonFileFactory
+
