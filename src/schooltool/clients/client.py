@@ -432,7 +432,7 @@ def http_join(path, rel):
 def main():
     c = Client()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hp:', ['host', 'port='])
+        opts, args = getopt.getopt(sys.argv[1:], 'h:p:', ['host=', 'port='])
     except getopt.error, e:
         print >> sys.stderr, "%s: %s" % (sys.argv[0], e)
         sys.exit(1)

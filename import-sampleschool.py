@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(basedir, 'src'))
 # -- Do not remove this line --
 
 import urllib
+import getopt
 
 
 class Error(Exception):
@@ -36,6 +37,7 @@ class SampleSchoolImporter:
     def main(self, argv):
         """Generate and import sample school data."""
         try:
+            self.process_args(argv)
             self.check_server_running()
             self.check_server_empty()
             self.import_csv_files()
@@ -45,6 +47,22 @@ class SampleSchoolImporter:
             return 1
         else:
             return 0
+
+    def process_args(self, argv):
+        """Process command line arguments."""
+        try:
+            opts, args = getopt.getopt(argv[1:], 'h:p:', ['host=', 'port='])
+        except getopt.error, e:
+            raise Error(str(e))
+
+        for k, v in opts:
+            if k in ('-h', '--host'):
+                self.host = v
+            if k in ('-p', '--port'):
+                try:
+                    self.port = int(v)
+                except ValueError, e:
+                    raise Error("Invalid port number: %s" % v)
 
     def check_server_running(self):
         """Check that the server is running, and it is the correct version."""
@@ -78,12 +96,16 @@ class SampleSchoolImporter:
 
     def import_csv_files(self):
         """Import data from CSV files."""
-        import schooltool.clients.csvclient
+        from schooltool.clients.csvclient import CSVImporter, DataError
         os.chdir(self.datadir)
-        schooltool.clients.csvclient.main()
+        importer = CSVImporter(host=self.host, port=self.port)
+        try:
+            importer.run()
+        except DataError, e:
+            raise Error(str(e))
 
     def import_timetable_data(self):
-        """Import data from CSV files."""
+        """Import timetable data from ttconfig.data."""
         import schooltool.clients.client
         ttconfig = file(self.ttconfig_filename)
         c = schooltool.clients.client.Client(stdin=ttconfig)
