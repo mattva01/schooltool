@@ -6,7 +6,11 @@
   <h1 metal:fill-slot="h1">
     Search for available resources
   </h1>
-  <metal:block metal:fill-slot="content">
+  <metal:block metal:fill-slot="content"
+               tal:define="duration python:('duration' in request.args)
+                                           and request.args['duration'][0]
+                                           or view.defaultDur">
+
     <form tal:attributes="action request/uri"
           method="POST" class="busysearch">
       <div class="error" tal:define="status view/update"
@@ -55,7 +59,7 @@
       <h3>Duration</h3>
       <div class="row">
         <input type="text" name="duration"
-          tal:attributes="value request/args/duration/pop|view/defaultDur"/>
+          tal:attributes="value duration"/>
        min.
       <div class="row">
 
@@ -87,7 +91,7 @@
              <input type="hidden" name="start"
                     tal:attributes="value slot/start"/>
              <input type="hidden" name="mins"
-                    tal:attributes="value request/args/duration"/>
+                    tal:attributes="value duration"/>
              <input type="submit" name="BOOK" value="Book" class="button"
                     i18n:attributes="values"/>
           </form>
