@@ -80,3 +80,14 @@ div.parentgroups {
   margin: 1ex 1em;
   float: left;
 }
+
+h3 {
+  margin: 0px;
+  margin-bottom: 0.5ex;
+}
+
+div.members p,
+div.subgroups p,
+div.parentgroups p {
+  margin: 0 0 0.5ex 0;
+}
