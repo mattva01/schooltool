@@ -135,7 +135,8 @@ class TestACLView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
                           'Granted permission View to'
                           ' /persons/johndoe (John Doe)')
         result = view.update()
-        self.assertEquals(result, 'John Doe already has permission View')
+        self.assertEquals(result, '/persons/johndoe (John Doe) already has'
+                                  ' permission View')
 
         view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'grant permission',

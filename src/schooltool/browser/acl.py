@@ -47,15 +47,15 @@ class ACLView(View):
 
         self.user_widget = SelectionWidget(
             'user', _('User'),
-            [(None, _('Select user')), (Everybody, _('Everybody'))] +
-            [(obj, obj.title) for obj in self.allUsers()],
+            [(None, _('Select a user'))]
+                + self.allUsers() + [(Everybody, _('Everybody'))],
             parser=self.userParser,
             formatter=self.formatUser,
             validator=self.userValidator)
 
         self.permission_widget = SelectionWidget(
             'permission', _('Permission'),
-            [(None, _('Select permission'))] +
+            [(None, _('Select a permission'))] +
             [(ViewPermission, _('View')),
              (AddPermission, _('Add')),
              (ModifyPermission, _('Modify'))],
@@ -119,12 +119,12 @@ class ACLView(View):
         """Return a list of objects available for addition"""
         result = []
 
-        for path in ('/groups', '/persons'):
-            for obj in traverse(self.context, path).itervalues():
-                # XXX who uses __class__.__name__ in this way?! *thwap*
-                result.append((obj.__class__.__name__, obj.title, obj))
-        result.sort()
-        return [obj for cls, title, obj in result]
+        for path in ('/persons', '/groups'):
+            subresult = [(obj.title, obj)
+                         for obj in traverse(self.context, path).itervalues()]
+            subresult.sort()
+            result += subresult
+        return [(obj, title) for title, obj in result]
 
     def update(self):
         result = []
