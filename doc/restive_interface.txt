@@ -1,6 +1,9 @@
 SchoolTool server RESTive interface
 ===================================
 
+This is a brief list of all actions accessible through the RESTive interface
+to the SchoolTool server.
+
   GET /
     lists all application object containers, roots, utilities
 
@@ -173,8 +176,27 @@ SchoolTool server RESTive interface
   GET /csvexport.zip
     returns a zip with four csv files, suitable for importing with csvclient.
 
-  GET /applog
+  GET /applog?query
     returns the application log as text/plain
+
+    The following query parameters are accepted:
+
+       filter     Substring for filtering log messages.
+
+       pagesize   Number of lines per page (ignored if you omit the 'page'
+                  parameter).
+
+       page       Page number (1-based), negative numbers count backwards from
+                  the last page.  Ignored if you omit the 'pagesize'
+                  parameter.
+
+    If you specify both page and pagesize, the response will contain a couple
+    of additional headers:
+
+        X-Page    Page number (always positive).
+
+        X-Total-Pages
+                  Total number of pages.
 
   GET /uris
     returns the list of URI objects
@@ -183,7 +205,7 @@ In the above '...object' stands for a full path to an application object (i.e.
 a group, a person or a resource), for example '/persons/some_person_id'.
 
 This list should be up-to-date (I think) with respect to SchoolTool revision
-562.  It has not been verified, so it might contain errors or omissions.
+1971.  It has not been verified, so it might contain errors or omissions.
 
 Ideally all this should be automatically extracted from source code (e.g.
 docstrings for views).
