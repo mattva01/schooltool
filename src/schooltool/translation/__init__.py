@@ -25,7 +25,6 @@ The following names are available in this module:
   catalog       catalog of translations for domain 'schooltool'
   ugettext      alias for catalog.ugettext
   gettext       wrapper around ugettext
-  charset       locale encoding name
 
 Example usage:
 
@@ -49,13 +48,13 @@ and have their own copyright notices:
 
 import os
 import gettext
-import locale
+from schooltool.common import to_locale
 
 
 localedir = os.path.dirname(__file__)
 catalog = gettext.translation('schooltool', localedir, fallback=True)
-charset = locale.getpreferredencoding()
 ugettext = catalog.ugettext
 
+
 def gettext(msgid):
-    return ugettext(msgid).encode(charset, 'replace')
+    return to_locale(ugettext(msgid))
