@@ -80,10 +80,10 @@ class CSVImportView(View):
 class CSVImporterZODB(CSVImporterBase):
     """A CSV importer that works directly with the database."""
 
-    def __init__(self, root):
-        self.groups = root['groups']
-        self.persons = root['persons']
-        self.resources = root['resources']
+    def __init__(self, app):
+        self.groups = app['groups']
+        self.persons = app['persons']
+        self.resources = app['resources']
 
     def importGroup(self, name, title, parents, facets):
         group = self.groups.new(__name__=name, title=title)
@@ -126,3 +126,4 @@ class CSVImporterZODB(CSVImporterBase):
 
         infofacet.dob = parse_date(dob)
         infofacet.comment = comment
+
