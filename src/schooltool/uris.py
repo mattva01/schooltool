@@ -151,6 +151,22 @@ URICalendarSubscriber = URIObject(
                 _("A role of an object that subscribes to a calendar."))
 
 
+URICalendarListing = URIObject(
+                "http://schooltool.org/ns/calendar_listing",
+                _("Calendar listing"),
+                _("The calendar listing relationship."))
+
+URICalendarListed = URIObject(
+                "http://schooltool.org/ns/calendar_listing/listed",
+                _("Calendar listed"),
+                _("A role of an object providing a calendar to be listed."))
+
+URICalendarListor = URIObject(
+                "http://schooltool.org/ns/calendar_listing/listor",
+                _("Calendar listor"),
+                _("A role of an object that chooses to list a calendar."))
+
+
 URINoted = URIObject(
                 "http://schooltool.org/ns/noted",
                 _("Noted"),

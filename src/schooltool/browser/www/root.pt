@@ -1,0 +1,18 @@
+<metal:block use-macro="view/macros/page" i18n:domain="schooltool">
+
+  <metal:block fill-slot="title">
+    <title i18n:translate=""> Welcome to SchoolTool </title>
+  </metal:block>
+
+  <metal:block fill-slot="h1"></metal:block>
+
+  <!-- Hide the left column -->
+  <metal:block fill-slot="column-left"></metal:block>
+
+  <metal:block metal:fill-slot="content">
+
+      <!-- Nobody should ever see this page... -->
+
+  </metal:block>
+
+</metal:block>

@@ -12,7 +12,7 @@
           tal:attributes="action request/path">
 
         <fieldset>
-          <legend i18n:translate="">Schema Name</legend>
+          <legend>Schema Name</legend>
 
           <tal:block define="schema view/schema|nothing">
             <tal:if condition="schema">
@@ -30,7 +30,7 @@
           <div class="row" tal:replace="structure view/name_widget"/>
       </fieldset>
       <fieldset>
-          <legend i18n:translate="">Add Fields</legend>
+          <legend>Add Fields</legend>
 
 
           <div class="row" tal:replace="structure view/newlabel_widget"/>
@@ -47,7 +47,7 @@
         <fieldset
             tal:define="newfield request/args/newfield | nothing"
             tal:condition="newfield">
-          <legend i18n:translate="">Custom Schema</legend>
+          <legend>Custom Schema</legend>
 
           <tal:block define="schema view/schema|nothing">
             <tal:if condition="schema">

@@ -211,13 +211,13 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getRelatedObjects
 
         app = create_application()
-        root = app['groups']['root']
+        community = app['groups']['community']
         managers = app['groups']['managers']
         locations = app['groups']['locations']
         manager = app['persons']['manager']
         self.assert_(manager.checkPassword('schooltool'))
         self.assertEquals(getRelatedObjects(manager, URIGroup), [managers])
-        self.assertEquals(getRelatedObjects(managers, URIGroup), [root])
+        self.assertEquals(getRelatedObjects(managers, URIGroup), [community])
         self.assertEquals(getRelatedObjects(locations, URIGroup), [])
 
         person = app['persons'].new()

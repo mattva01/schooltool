@@ -1,0 +1,120 @@
+<html metal:use-macro="view/macros/popup" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Search for resources</title>
+</head>
+<body>
+<h1 style="display:none;" metal:fill-slot="h1" i18n:translate="">
+  &nbsp;
+</h1>
+<metal:block metal:fill-slot="content">
+
+<form tal:attributes="action request/uri" method="POST" class="standalone popup">
+  <h3>
+    Search for available resources
+  </h3>
+  <fieldset>
+    <table class="busysearch">
+      <tr>
+        <td>
+          <label i18n:translate="">Resource</label>
+          <tal:block define="widget nocall:view/resources_widget">
+            <div metal:use-macro="widget/template/macros/select" />
+            <div metal:use-macro="widget/template/macros/error" />
+          </tal:block>
+        </td>
+
+        <td tal:condition="not:view/by_periods">
+          <label i18n:translate="">Hours</label>
+          <tal:block define="widget nocall:view/hours_widget">
+            <div metal:use-macro="widget/template/macros/select" />
+            <div metal:use-macro="widget/template/macros/error" />
+          </tal:block>
+        </td>
+
+        <td tal:condition="view/by_periods">
+          <label i18n:translate="">Periods</label>
+          <tal:block define="widget nocall:view/periods_widget">
+            <div metal:use-macro="widget/template/macros/select" />
+            <div metal:use-macro="widget/template/macros/error" />
+          </tal:block>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+
+  <fieldset>
+    <legend i18n:translate="">Dates</legend>
+    <div class="row">
+      <div class="row" tal:replace="structure view/first_widget" />
+      <div class="row" tal:replace="structure view/last_widget" />
+    </div>
+
+  </fieldset>
+  <fieldset>
+    <div class="row">
+    <tal:if condition="not:view/by_periods">
+      <legend i18n:translate="">Duration</legend>
+      <div class="row" tal:replace="structure view/duration_widget" />
+    </tal:if>
+
+    </div>
+  </fieldset>
+  <div class="row">
+    <input type="submit" name="SEARCH" value="Search" class="button"
+           i18n:attributes="value" />
+    <input tal:condition="view/by_periods"
+           type="submit" name="HOURS" value="By hours" class="button"
+           i18n:attributes="value" />
+    <input tal:condition="not:view/by_periods"
+           type="submit" name="PERIODS" value="By periods" class="button"
+           i18n:attributes="value" />
+  </div>
+</form>
+
+<div tal:condition="view/searching" class="available">
+<tal:block define="results view/results">
+<h3 i18n:translate="">Available time slots</h3>
+<p tal:condition="not:results" i18n:translate="">
+  No available time slots found.
+</p>
+  <div class="search-results popup">
+<table class="available" tal:condition="results">
+  <tr>
+    <th i18n:translate="">Resource</th>
+    <th tal:condition="view/by_periods" i18n:translate="">Date</th>
+    <th tal:condition="view/by_periods" i18n:translate="">Period</th>
+    <th tal:condition="not:view/by_periods" i18n:translate="">Start</th>
+    <th tal:condition="not:view/by_periods" i18n:translate="">End</th>
+    <th></th>
+  </tr>
+  <tal:block repeat="resource results">
+  <tr tal:repeat="slot resource/slots">
+    <td><a tal:attributes="href resource/href"
+           tal:content="resource/title">Resource</a></td>
+    <td tal:condition="view/by_periods" tal:content="slot/start_date">Date</td>
+    <td tal:condition="view/by_periods" tal:content="slot/period">Period</td>
+    <td tal:condition="not:view/by_periods" tal:content="slot/start">Start</td>
+    <td tal:condition="not:view/by_periods" tal:content="slot/end">End</td>
+    <td>
+      <form method="GET" class="plain"
+            tal:attributes="action string:${resource/href}/book-popup">
+         <input type="hidden" name="start_date"
+                tal:attributes="value slot/start_date"/>
+         <input type="hidden" name="start_time"
+                tal:attributes="value slot/start_time"/>
+         <input type="hidden" name="duration"
+                tal:attributes="value slot/suggested_duration"/>
+         <input type="submit" name="BOOK" value="Book" class="button"
+                i18n:attributes="value"/>
+      </form>
+    </td>
+  </tr>
+  </tal:block>
+</table>
+  </div>
+</tal:block>
+</div>
+
+</metal:block>
+</body>
+</html>

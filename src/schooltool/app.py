@@ -36,6 +36,7 @@ from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
 from schooltool.interfaces import IFacetFactory
+from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.membership import Membership
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
 from schooltool.infofacets import DynamicFacetSchemaService, DynamicFacet
@@ -204,24 +205,26 @@ def create_application():
     Person = app['persons'].new
     Group = app['groups'].new
 
-    root = Group("root", title=_("Root Group"))
-    app.addRoot(root)
+    community = Group("community", title=_("Community"))
+    # Make the community calendar viewable by Everybody by default.
+    community.calendar.acl.add((Everybody, ViewPermission))
+    app.addRoot(community)
 
     managers = Group("managers", title=_("System Managers"))
     manager = Person("manager", title=_("Manager"))
     manager.setPassword('schooltool')
     Membership(group=managers, member=manager)
-    Membership(group=root, member=managers)
+    Membership(group=community, member=managers)
 
     teachers = Group("teachers", title=_("Teachers"))
-    Membership(group=root, member=teachers)
+    Membership(group=community, member=teachers)
 
     facet_factory = getUtility(IFacetFactory, 'teacher_group')
     facet = facet_factory()
     FacetManager(teachers).setFacet(facet, name=facet_factory.facet_name)
 
     pupils = Group("pupils", title=_("Pupils"))
-    Membership(group=root, member=pupils)
+    Membership(group=community, member=pupils)
 
     locations = Group("locations", title=_("Locations"))
 

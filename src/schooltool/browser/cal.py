@@ -35,6 +35,7 @@ from schooltool.browser import Unauthorized
 from schooltool.browser.auth import AuthenticatedAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
+from schooltool.browser.auth import isManager
 from schooltool.browser.acl import ACLView
 from schooltool.auth import getACL
 from schooltool.cal import CalendarEvent, DailyRecurrenceRule
@@ -43,7 +44,7 @@ from schooltool.cal import YearlyRecurrenceRule
 from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import getRelatedObjects
-from schooltool.component import getOptions
+from schooltool.component import getOptions, relate
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
@@ -54,7 +55,9 @@ from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.timetable import getPeriodsForDay
 from schooltool.translation import ugettext as _, TranslatableString
-from schooltool.uris import URIMember
+from schooltool.uris import URIMember, URIGroup, URICalendarListed
+from schooltool.uris import URICalendarProvider
+from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
 from schooltool.browser.widgets import TextWidget, SelectionWidget
 from schooltool.browser.widgets import SequenceWidget
 from schooltool.browser.widgets import TextAreaWidget, CheckboxWidget
@@ -177,6 +180,12 @@ class BookingView(View, AppObjectBreadcrumbsMixin):
         return True
 
 
+class BookingViewPopUp(BookingView):
+    """Frameless BookingView"""
+
+    template = Template('www/booking-popup.pt')
+
+
 class CalendarDay:
     """A single day in a calendar.
 
@@ -260,6 +269,16 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     del _ # go back to immediate translations
 
     __url = None
+
+    days_widget = SelectionWidget('day',_('Day'),
+                                    (('1',_("Sunday")),
+                                     ('2',_("Monday")),
+                                     ('3',_("Tuesday")),
+                                     ('4',_("Wednesday")),
+                                     ('5',_("Thursday")),
+                                     ('6',_("Friday")),
+                                     ('7',_("Saturday"))),
+                                    value='month')
 
     def _eventView(self, event):
         return CalendarEventView(event, self.context)
@@ -395,12 +414,200 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             quarters.append(quarter)
         return quarters
 
+    def dayEvents(self, date):
+        """Return events for a day sorted by start time.
+
+        Events spanning several days and overlapping with this day
+        are included.
+        """
+        day = self.getDays(date, date + timedelta(1))[0]
+        return day.events
+
     def addParam(self, key, value):
         uri = self.request.uri
         if '?' in uri:
             return "%s&%s=%s" % (uri, key, value)
         else:
             return "%s?%s=%s" % (uri, key, value)
+
+    def dayTitle(self, day):
+        day_of_week = unicode(self.day_of_week_names[day.weekday()])
+        return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
+
+    def monthTitle(self, date):
+        return unicode(self.month_names[date.month])
+
+    def prevDay(self):
+        return self.cursor - timedelta(1)
+
+    def nextDay(self):
+        return self.cursor + timedelta(1)
+
+    def prevMonth(self):
+        """Return the first day of the previous month."""
+        return prev_month(self.cursor)
+
+    def nextMonth(self):
+        """Return the first day of the next month."""
+        return next_month(self.cursor)
+
+    def do_POST(self, request):
+
+        if 'OVERLAY' in request.args:
+
+            # This should never happen
+            if not request.authenticated_user:
+                self.request.appLog(_("Anonymous overlay change attempted"))
+                return self.do_GET(request)
+
+            overlays = request.args.get('overlay', [])
+            user = request.authenticated_user
+
+            self._subscribeToCalendars(overlays)
+
+        return self.do_GET(request)
+
+    def do_GET(self, request):
+        # All the calendar views deal with self.cursor, which is not set until
+        # self.update() is called
+        self.update()
+        return View.do_GET(self, request)
+
+    def getMergedCalendars(self):
+        """List objects who's calendars the user subscribes to."""
+
+        if self.request.authenticated_user:
+            return [ group for group in \
+                    getRelatedObjects(self.request.authenticated_user,
+                            URICalendarProvider)]
+
+        return []
+
+    def checkedOverlay(self, calendar):
+        if calendar in self.getMergedCalendars():
+            return "checked"
+
+        return None
+
+    def getPortletCalendars(self):
+        """Return a list of calendars that the user chooses
+
+        The list defaults to all the groups a user has Membership in and
+        includes any additional calendars that a user chooses on their
+        information page.
+        """
+        calendars = []
+        if self.request.authenticated_user:
+            for group in getRelatedObjects(self.request.authenticated_user, 
+                                            URIGroup):
+                calendars.append(group)
+            for cal in getRelatedObjects(self.request.authenticated_user, 
+                                            URICalendarListed):
+                calendars.append(cal)
+
+        return calendars
+
+    def renderRow(self, week, month):
+        """Do some HTML rendering in Python for performance.
+
+        This gains us 0.4 seconds out of 0.6 on my machine.
+        Here is the original piece of ZPT:
+
+         <td class="cal_yearly_day" tal:repeat="day week">
+          <a tal:condition="python:day.date.month == month[1][0].date.month"
+             tal:content="day/date/day"
+             tal:attributes="href python:view.calURL('daily', day.date);
+                             class python:(len(day.events) > 0
+                                           and 'cal_yearly_day_busy'
+                                           or  'cal_yearly_day')"/>
+         </td>
+        """
+        result = []
+
+        for day in week:
+            result.append('<td class="cal_yearly_day">')
+            if day.date.month == month:
+                if len(day.events):
+                    cssClass = 'cal_yearly_day_busy'
+                else:
+                    cssClass = 'cal_yearly_day'
+                # Let us hope that URLs will not contain < > & or "
+                # This is somewhat related to
+                #   http://issues.schooltool.org/issue96
+                result.append('<a href="%s" class="%s">%s</a>' %
+                              (self.calURL('daily', day.date), cssClass,
+                               day.date.day))
+            result.append('</td>')
+        return "\n".join(result)
+
+    def ellipsizeTitle(self, str):
+        """For labels with limited space replace the tail with '...'"""
+
+        if len(str) < 17:
+             return str
+        else:
+             return str[:15] + '...'
+
+    def getJumpToYears(self):
+        """Return jump targets for five years centered on the current year."""
+        this_year = datetime.today().year
+        return [{'label': year, 'value': year}
+                for year in range(this_year - 2, this_year + 3)]
+
+    def getJumpToMonths(self):
+        months = []
+        for k,v in self.month_names.items():
+            months.append({'label' : v,
+                           'value' : k})
+
+        return months
+
+    def canChooseCalendars(self):
+        user = self.request.authenticated_user
+        return isManager(user) or user is self.context.__parent__
+
+    def getValue(self, obj):
+        return getPath(obj)
+
+    def _subscribeToCalendars(self, calendars):
+        """Link user to selected calendar."""
+
+        # Unlink old calendar subscriptions.
+        for link in \
+                self.request.authenticated_user.listLinks(URICalendarProvider):
+            link.unlink()
+
+        for calendar in calendars:
+            relate(URICalendarSubscription,
+                   (self.request.authenticated_user , URICalendarSubscriber),
+                   (traverse(self.context,calendar), URICalendarProvider))
+
+    def eventColors(self, event):
+        """Figure out what color to display events from this calendar in.
+
+        Fallback to the standard blue.
+        """
+        if IInheritedCalendarEvent.providedBy(event):
+            path = getPath(event.calendar.__parent__)
+            user = self.request.authenticated_user
+            if user:
+                if path in user.cal_colors.keys():
+                    return user.cal_colors[path]
+
+        return ('#9db8d2', '#7590ae')
+
+    def calendarColors(self, owner):
+        """Figure out what color to display events from this calendar in.
+
+        This is only used in the portlet-calendar-overlay macro.
+        """
+        path = getPath(owner)
+        user = self.request.authenticated_user
+        if user:
+            if path in user.cal_colors.keys():
+                return user.cal_colors[path]
+
+        return ('transparent', 'transparent')
 
 
 class DailyCalendarView(CalendarViewBase):
@@ -423,20 +630,14 @@ class DailyCalendarView(CalendarViewBase):
     starthour = 8
     endhour = 19
 
+    def title(self):
+        return self.dayTitle(self.cursor)
+
     def prev(self):
         return self.cursor - timedelta(1)
 
     def next(self):
         return self.cursor + timedelta(1)
-
-    def dayEvents(self, date):
-        """Return events for a day sorted by start time.
-
-        Events spanning several days and overlapping with this day
-        are included.
-        """
-        day = self.getDays(date, date + timedelta(1))[0]
-        return day.events
 
     def getColumns(self):
         """Return the maximum number of events that are overlapping.
@@ -591,6 +792,46 @@ class DailyCalendarView(CalendarViewBase):
                 count += 1
         return count
 
+    def eventTop(self, event):
+        """Calculate the position of the top of the event block in the display.
+
+        Each hour is made up of 4 units ('em' currently). If an event starts at
+        10:15, and the day starts at 8:00 we get a top value of:
+
+          (2 * 4 ) + (15 / 15) = 9
+
+        """
+
+        top = ((event.dtstart.hour - self.starthour) * 4) \
+                + (event.dtstart.minute / 15)
+
+        return top
+
+    def eventHeight(self, event):
+        """Calculate the height of the event block in the display.
+
+        Each hour is made up of 4 units ('em' currently).  Need to round 1 -
+        14 minute intervals up to 1 display unit.
+
+        """
+
+        minutes = event.duration.seconds / 60
+
+        return max(1, (minutes + 14) / 15)
+
+    def do_GET(self, request):
+
+        # Create self.cursor
+        self.update()
+
+        # Initialize self.starthour and self.endhour
+        events = self.dayEvents(self.cursor)
+        self._setRange(events)
+
+        # The number of hours displayed in the day view
+        self.visiblehours = self.endhour - self.starthour
+        return View.do_GET(self, request)
+
 
 class Slots(dict):
     """A dict with automatic key selection.
@@ -638,10 +879,6 @@ class WeeklyCalendarView(CalendarViewBase):
                                 'week': self.cursor.isocalendar()[1],
                             }
 
-    def dayTitle(self, day):
-        day_of_week = unicode(self.day_of_week_names[day.weekday()])
-        return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
-
     def prevWeek(self):
         """Return the day a week before."""
         return self.cursor - timedelta(7)
@@ -672,14 +909,6 @@ class MonthlyCalendarView(CalendarViewBase):
 
     def weekTitle(self, date):
         return _('Week %d') % date.isocalendar()[1]
-
-    def prevMonth(self):
-        """Return the first day of the previous month."""
-        return prev_month(self.cursor)
-
-    def nextMonth(self):
-        """Return the first day of the next month."""
-        return next_month(self.cursor)
 
     def getCurrentMonth(self):
         """Return the current month as a nested list of CalendarDays."""
@@ -713,39 +942,6 @@ class YearlyCalendarView(CalendarViewBase):
         if self.__url is None:
             self.__url = absolutePath(self.request, self.context)
         return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
-
-    def renderRow(self, week, month):
-        """Do some HTML rendering in Python for performance.
-
-        This gains us 0.4 seconds out of 0.6 on my machine.
-        Here is the original piece of ZPT:
-
-         <td class="cal_yearly_day" tal:repeat="day week">
-          <a tal:condition="python:day.date.month == month[1][0].date.month"
-             tal:content="day/date/day"
-             tal:attributes="href python:view.calURL('daily', day.date);
-                             class python:(len(day.events) > 0
-                                           and 'cal_yearly_day_busy'
-                                           or  'cal_yearly_day')"/>
-         </td>
-        """
-        result = []
-
-        for day in week:
-            result.append('<td class="cal_yearly_day">')
-            if day.date.month == month:
-                if len(day.events):
-                    cssClass = 'cal_yearly_day_busy'
-                else:
-                    cssClass = 'cal_yearly_day'
-                # Let us hope that URLs will not contain < > & or "
-                # This is somewhat related to
-                #   http://issues.schooltool.org/issue96
-                result.append('<a href="%s" class="%s">%s</a>' %
-                              (self.calURL('daily', day.date), cssClass,
-                               day.date.day))
-            result.append('</td>')
-        return "\n".join(result)
 
 
 class CalendarView(View):
@@ -785,6 +981,8 @@ class CalendarView(View):
             return EventEditView(self.context)
         elif name == 'delete_event.html':
             return EventDeleteView(self.context)
+        elif name == 'event-popup.html':
+            return EventDisplayView(self.context)
         elif name == 'acl.html':
             return ACLView(self.context.acl)
         else:
@@ -1541,6 +1739,12 @@ class EventDeleteView(View, EventViewHelpers):
         """
         return self.tt_confirm_template(self.request, view=self,
                                         context=self.context, event=event)
+
+
+class EventDisplayView(EventEditView):
+    """Read only display of an event."""
+
+    template = Template("www/event-popup.pt")
 
 
 class CalendarEventView(View):

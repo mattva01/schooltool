@@ -65,8 +65,8 @@
           <legend>People to Move</legend>
           <div class="row" tal:repeat="link context/listLinks">
             <input type="checkbox" name="tomove" value=""
-              tal:attributes="value link/target/__name__"/>
-            <b tal:content="link/title"/>
+              tal:attributes="value python:link.target.__name__"/>
+            <b tal:content="link/_getTitle"/>
           </div>
         </fieldset>
         <div class="buttons">

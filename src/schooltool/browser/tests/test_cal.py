@@ -527,6 +527,13 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         for i, month in enumerate(months):
             self.assertEquals(month, date(2004, i+1, 1))
 
+    def test_dayTitle(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+
+        view = WeeklyCalendarView(None)
+        dt = datetime(2004, 7, 1)
+        self.assertEquals(view.dayTitle(dt), "Thursday, 2004-07-01")
+
     def test_renderEvent(self):
         from schooltool.auth import ACL
         from schooltool.interfaces import IACLOwner
@@ -539,6 +546,78 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         e = createEvent('2004-01-02 14:30', '30min', u'\u263B')
         result = view.renderEvent(e, e.dtstart.date())
         self.assert_(isinstance(result, unicode))
+
+    def test_prev_next(self):
+        from schooltool.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None)
+        view.cursor = date(2004, 8, 18)
+        self.assertEquals(view.prevMonth(), date(2004, 7, 1))
+        self.assertEquals(view.nextMonth(), date(2004, 9, 1))
+        self.assertEquals(view.prevDay(), date(2004, 8, 17))
+        self.assertEquals(view.nextDay(), date(2004, 8, 19))
+
+    def test_getValue(self):
+        from schooltool.browser.cal import CalendarViewBase
+
+        cal = createCalendar()
+        view = CalendarViewBase(cal)
+
+        self.assertEquals('/persons/manager', view.getValue(self.manager))
+
+    def test_getPortletCalendars(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.model import Person, Group
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URICalendarListing
+
+        me = Person(title="Da Boss")
+        group = Group(title="Managers")
+        self.assertEquals(getRelatedObjects(me, URICalendarListing), [])
+
+        cal = createCalendar()
+        view = CalendarViewBase(cal)
+        view.request = RequestStub(authenticated_user=self.manager)
+        self.assert_(group, view.getPortletCalendars())
+
+    def test_ellipsizeTitle(self):
+        from schooltool.browser.cal import CalendarViewBase
+
+        under17 = '0123456789012345'
+        over17 = '01234567890123456'
+
+        cal = createCalendar()
+        view = CalendarViewBase(cal)
+
+        self.assertEquals(view.ellipsizeTitle(under17),under17)
+        self.assertEquals(view.ellipsizeTitle(over17),
+                                              '012345678901234...')
+
+    def test_getJumpToYears(self):
+        from schooltool.browser.cal import CalendarViewBase
+
+        first_year = datetime.today().year - 2
+        last_year = datetime.today().year + 2
+
+        cal = createCalendar()
+        view = CalendarViewBase(cal)
+
+        displayed_years = view.getJumpToYears()
+
+        self.assertEquals(displayed_years[0]['value'], first_year)
+        self.assertEquals(displayed_years[0]['label'], first_year)
+        self.assertEquals(displayed_years[-1]['value'], last_year)
+        self.assertEquals(displayed_years[-1]['label'], last_year)
+
+    def test_getJumpToMonths(self):
+        from schooltool.browser.cal import CalendarViewBase
+
+        cal = createCalendar()
+        view = CalendarViewBase(cal)
+
+        displayed_months = view.getJumpToMonths()
+
+        self.assertEquals(displayed_months[0]['value'], 01)
+        self.assertEquals(displayed_months[-1]['value'], 12)
 
 
 class TestWeeklyCalendarView(AppSetupMixin, unittest.TestCase):
@@ -574,15 +653,23 @@ class TestWeeklyCalendarView(AppSetupMixin, unittest.TestCase):
         view.getWeek = lambda x: "really " + x
         self.assertEquals(view.getCurrentWeek(), "really works")
 
-    def test_dayTitle(self):
-        from schooltool.browser.cal import WeeklyCalendarView
-
-        view = WeeklyCalendarView(None)
-        dt = datetime(2004, 7, 1)
-        self.assertEquals(view.dayTitle(dt), "Thursday, 2004-07-01")
-
 
 class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
+
+    def test_title(self):
+        from schooltool.browser.cal import DailyCalendarView
+
+        view = DailyCalendarView(None)
+        view.request = RequestStub()
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+        view.request = RequestStub(args={'date': '2005-01-06'})
+        view.update()
+        self.assertEquals(view.title(), "Thursday, 2005-01-06")
+        view.request = RequestStub(args={'date': '2005-01-07'})
+        view.update()
+        self.assertEquals(view.title(), "Friday, 2005-01-07")
 
     def test_update(self):
         from schooltool.browser.cal import DailyCalendarView
@@ -887,6 +974,48 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
+    def test_eventTop(self):
+        from schooltool.browser.cal import DailyCalendarView
+        view = DailyCalendarView(None)
+        view.starthour = 8
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+        view.request = RequestStub(cookies={'cal_periods': 'no'})
+
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 09:00', '1h', "")), 4)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:00', '1h', "")), 8)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:15', '1h', "")), 9)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:30', '1h', "")), 10)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:45', '1h', "")), 11)
+
+    def test_eventHeight(self):
+        from schooltool.browser.cal import DailyCalendarView
+        view = DailyCalendarView(None)
+        view.starthour = 8
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+        view.request = RequestStub(cookies={'cal_periods': 'no'})
+
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 09:00', '0', "")), 1)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 09:00', '14m', "")), 1)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 09:00', '1h', "")), 4)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h', "")), 8)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+15m', "")), 9)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+30m', "")), 10)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+45m', "")), 11)
+
 
 class DefaultTimetableSetup(AppSetupMixin):
 
@@ -980,13 +1109,6 @@ class TestMonthlyCalendarView(AppSetupMixin, unittest.TestCase):
         content = view.render(request)
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
-
-    def test_prev_next(self):
-        from schooltool.browser.cal import MonthlyCalendarView
-        view = MonthlyCalendarView(None)
-        view.cursor = date(2004, 8, 18)
-        self.assertEquals(view.prevMonth(), date(2004, 7, 1))
-        self.assertEquals(view.nextMonth(), date(2004, 9, 1))
 
     def test_getCurrentMonth(self):
         from schooltool.browser.cal import MonthlyCalendarView
@@ -2589,7 +2711,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
                                  'delete_event.html?date=%s&event_id=%s'
                                  % ('2004-08-14', event_id))
         quoted_url = urllib.quote(delete_url)
-        url = 'http://localhost:7001/?forbidden=1&url=%s' % quoted_url
+        url = 'http://localhost:7001/login?forbidden=1&url=%s' % quoted_url
         self.assertRedirectedTo(request, url)
         # If the event was not deleted, calendar.find will not raise a KeyError
         self.assert_(self.combinedCalendar().find(event_id))
@@ -2748,6 +2870,12 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
         view.canView = lambda: False
         self.assertEquals(view.short(request),
                           'Busy (12:01&ndash;13:01)')
+
+        ev = createEvent('2005-01-17 12:01', '1d', '12345678901234567890')
+        view = self.createView(ev)
+        view.canView = lambda: True
+        self.assertEquals(view.short(request),
+                '12345678901234567890 (Jan&nbsp;17&ndash;Jan&nbsp;18)')
 
     def test_editLink_and_deleteLink(self):
         ev = createEvent('2004-12-01 12:01', '1h', 'Repeating event',

@@ -1,4 +1,4 @@
-<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<html metal:use-macro="view/macros/popup" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" tal:content="view/page_title">title</title>
 
@@ -87,7 +87,7 @@
 </head>
 <body>
 
-<h1 metal:fill-slot="h1" tal:content="view/page_title" />
+<h1 style="display:none" metal:fill-slot="h1" tal:content="view/page_title" />
 
 <metal:block metal:fill-slot="content">
 
@@ -99,7 +99,8 @@
     will be generated in the timetable.
   </p>
 
-  <form method="POST" tal:attributes="action request/path" class="standalone">
+  <form method="POST" tal:attributes="action request/path" 
+      class="popup standalone">
     <h3 tal:content="view/page_title"/>
 
     <fieldset>

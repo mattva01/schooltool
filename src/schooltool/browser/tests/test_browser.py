@@ -195,7 +195,7 @@ class TestView(AppSetupMixin, unittest.TestCase):
         result = view.unauthorized(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/?expired=1'
+                          'http://localhost:7001/login?expired=1'
                           '&url=/some/path%3Farg%3Dval%26arg2%3Dval2')
         self.assert_('www-authenticate' not in request.headers)
 
@@ -207,7 +207,7 @@ class TestView(AppSetupMixin, unittest.TestCase):
         result = view.unauthorized(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/?forbidden=1'
+                          'http://localhost:7001/login?forbidden=1'
                           '&url=/some/path%3Farg%3Dval%26arg2%3Dval2')
         self.assert_('www-authenticate' not in request.headers)
 

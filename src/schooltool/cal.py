@@ -27,6 +27,7 @@ import calendar
 import email.Utils
 from sets import Set
 from zope.interface import implements
+from zope.app.traversing.api import getPath
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from schooltool.auth import ACL
@@ -440,6 +441,27 @@ class CalendarOwnerMixin(Persistent):
 
     implements(ICalendarOwner)
 
+    # XXX Temporary addition to map colors to merged calendars in the calendar
+    # views.  After SchoolBell 0.9 is released this should be moved to an
+    # IAttriute on the relationship (that is one of the ideas anyways).
+    #
+    # These should probably be stored somewhere in browser.cal
+    # (body-color, header-color)
+    colors = (
+            ('#e0b6af', '#c1665a'), # Red Hilight, Red Medium
+            ('#eed680', '#d1940c'), # Accent Yellow, Accent Yellow Dark
+            ('#c5d2c8', '#83a67f'), # Green Hilight, Green Medium
+            ('#efe0cd', '#e0c39e'), # Face Skin Hilight, Face Skin Medium
+            ('#ada7c8', '#887fa3'), # Purple Hilight, Purple Medium
+            ('#eae8e3', '#bab5ab'), # Basic 3D Hilight, Basic 3D Medium
+            ('#e0c39e', '#b39169'), # Face Skin Medium, Face Skin Dark
+            ('#c1665a', '#884631'), # Red Medium, Red Dark
+            ('#b39169', '#826647'), # Face Skin Dark, Face Skin Shadow
+            ('#83a67f', '#5d7555'), # Green Medium, Green Dark
+            )
+    cal_colors = PersistentDict()
+
+
     def __init__(self):
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
@@ -448,6 +470,13 @@ class CalendarOwnerMixin(Persistent):
     def makeCompositeCalendar(self, start, end):
         events = []
         for obj in getRelatedObjects(self, URICalendarProvider):
+            # XXX Assign a color
+            if getPath(obj) not in self.cal_colors.keys():
+                for color in self.colors:
+                    if color not in self.cal_colors.values():
+                        self.cal_colors[getPath(obj)] = color
+                        break
+
             for event in obj.calendar.expand(start, end):
                 events.append(InheritedCalendarEvent(event, obj.calendar))
         result = ImmutableCalendar(events)

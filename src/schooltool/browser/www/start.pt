@@ -49,32 +49,6 @@
     <p><a class="sitemap" href="/options.html"
           i18n:translate="">Edit system options</a></p>
   </div>
-
-  <div tal:condition="view/isTeacher" class="section">
-    <h2 i18n:translate="">Teacher tasks</h2>
-    <p><a class="sitemap" href="/busysearch"
-          i18n:translate="">Book a resource</a></p>
-  </div>
-
-  <div class="section">
-    <h2 i18n:translate="">User tasks</h2>
-    <p><a class="sitemap" tal:attributes="href view/person_url"
-          i18n:translate="">View your information page</a></p>
-    <p><a class="sitemap" i18n:translate=""
-          tal:attributes="href string:${view/person_url}/password.html"
-          >Change your password</a></p>
-    <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
-          class="sitemap"  i18n:translate=""
-          >Browse your calendar</a></p>
-    <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
-          class="sitemap"  i18n:translate=""
-          >Open your calendar in an iCal client</a></p>
-    <p><a tal:attributes="href
-                     string:${context/@@absolute_url}/timetable-calendar.ics"
-          class="sitemap" i18n:translate=""
-          >Open your timetable calendar in an iCal client</a></p>
-    <p><a class="sitemap" href="/logout" i18n:translate="">Log out</a></p>
-  </div>
 </div>
 
 </metal:block>

@@ -4,7 +4,8 @@
          tal:content="widget/label">[label]</label>
   <select metal:define-macro="select" multiple="multiple"
           tal:attributes="class widget/css_class; name widget/name;
-                          id widget/name; tabindex widget/tabindex">
+                          size widget/size; id widget/name;
+                          tabindex widget/tabindex">
     <option tal:repeat="choice widget/choices"
             tal:attributes="value python:widget.formatter([choice[0]])[0];
                             selected python:widget.value and 

@@ -346,7 +346,7 @@ class Widget:
 
     def __init__(self, name, label, parser=None, validator=None,
                  formatter=None, unit=None, value=None, tabindex=None,
-                 css_class=None, label_class=None):
+                 css_class=None, label_class=None, size=None):
         if parser is None:
             parser = defaultParser
         if validator is None:

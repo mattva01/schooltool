@@ -105,7 +105,6 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assert_('John Doe' in result)
         self.assert_('edit.html' not in result)
         self.assert_('password.html' in result)
-        self.assert_('Merge calendars' in result)
 
     def test_otheruser(self):
         from schooltool.browser.app import PersonView
@@ -131,7 +130,6 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assert_('John Doe' in result)
         self.assert_('edit.html' in result)
         self.assert_('password.html' in result)
-        self.assert_('Merge calendars' in result)
 
     def test_traverse(self):
         from schooltool.browser.model import PersonView, PhotoView
@@ -228,45 +226,53 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                             'url': '%s/timetables/2004-spring/default' % pp,
                             'empty': False}])
 
+    def test_allObjects(self):
+        from schooltool.browser.model import PersonView
+
+        view = PersonView(self.person)
+        view.getParentGroups = lambda: groups
+
+        self.assert_(self.pupils in view.allGroups())
+        self.assert_(self.pupils not in view.allPersons())
+        self.assert_(self.pupils not in view.allResources())
+        self.assert_(self.manager in view.allPersons())
+        self.assert_(self.manager not in view.allGroups())
+        self.assert_(self.manager not in view.allResources())
+
+    def test_disabledResource(self):
+        from schooltool.browser.model import PersonView
+
+        view = PersonView(self.person)
+        groups = [self.teachers, self.managers]
+        view.getParentGroups = lambda: groups
+
+        self.assertEquals('disabled', view.disabledResource(self.teachers))
+        self.assertEquals(False, view.disabledResource(self.pupils))
+
     def test_POST(self):
         from schooltool.browser.model import PersonView
         from schooltool.timetable import Timetable
         from schooltool.uris import URICalendarProvider
+        from schooltool.uris import URICalendarListed
 
         view = PersonView(self.person)
         groups = [self.teachers, self.managers, self.pupils]
         view.getParentGroups = lambda: groups
 
         self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 0)
+        self.assertEquals(len(view.context.listLinks(URICalendarListed)), 0)
 
-        def assertChecked(doc, group, expected):
-            links = view.context.listLinks(URICalendarProvider)
-            self.assertEquals(group in [link.target for link in links],
-                              expected,
-                              group)
-            checked = doc.query('//input[@name="group.%s"'
-                                ' and @checked="checked"]' % group.__name__)
-            self.assertEquals(bool(checked), bool(expected), group)
-
-        request = RequestStub(method='POST', args={'group.teachers': '',
-                                                   'group.managers': '',
+        request = RequestStub(method='POST', args={'groups': 'teachers',
+                                                   'groups': 'managers',
                                                    'CHOOSE_CALENDARS': ''},
                               authenticated_user=self.manager)
         result = view.render(request)
-        doc = HTMLDocument(result)
-        assertChecked(doc, self.teachers, True)
-        assertChecked(doc, self.managers, True)
-        assertChecked(doc, self.pupils, False)
+        self.assertEquals(len(view.context.listLinks(URICalendarListed)), 1)
 
-        request = RequestStub(method='POST', args={'group.teachers': '',
-                                                   'group.pupils': '',
-                                                   'CHOOSE_CALENDARS': ''},
+        request = RequestStub(method='POST', args={'CHOOSE_CALENDARS': ''},
                               authenticated_user=self.manager)
         result = view.render(request)
-        doc = HTMLDocument(result)
-        assertChecked(doc, self.teachers, True)
-        assertChecked(doc, self.managers, False)
-        assertChecked(doc, self.pupils, True)
+        self.assertEquals(len(view.context.listLinks(URICalendarListed)), 0)
 
     def test_POST_unauthorized(self):
         from schooltool.browser.model import PersonView
@@ -619,12 +625,12 @@ class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
-        self.root = app['groups'].new("root", title="root")
+        self.community = app['groups'].new("community", title="Community")
         self.group = app['groups'].new("new", title="Teachers")
         self.sub = app['groups'].new("sub", title="subgroup")
         self.per = app['persons'].new("p", title="Pete")
 
-        Membership(group=self.root, member=self.group)
+        Membership(group=self.community, member=self.group)
         Membership(group=self.group, member=self.sub)
         Membership(group=self.group, member=self.per)
 
@@ -662,7 +668,7 @@ class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.getParentGroups(), [self.root])
+        self.assertEquals(view.getParentGroups(), [self.community])
 
     def test_teachersList(self):
         from schooltool.browser.model import GroupView
@@ -706,7 +712,7 @@ class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
         view.context.timetables['2004-spring', 'default'] = Timetable([])
         view.context.timetables['2004-spring', 'another'] = Timetable([])
         view.context.timetables['2003-fall', 'another'] = Timetable([])
-        self.root.timetables['2003-fall', 'default'] = Timetable([])
+        self.community.timetables['2003-fall', 'default'] = Timetable([])
         pp = 'http://localhost:7001/groups/new'
         self.assertEquals(view.timetables(),
                           [{'title': '2003-fall, another',
@@ -891,7 +897,7 @@ class TestGroupEditView(SchoolToolSetup):
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
-        self.root = app['groups'].new("root", title="root")
+        self.community = app['groups'].new("community", title="Community")
         self.group = app['groups'].new("new", title="Teachers")
         self.sub = app['groups'].new("sub", title="subgroup")
         self.group2 = app['groups'].new("group2", title="Random group")
@@ -901,7 +907,7 @@ class TestGroupEditView(SchoolToolSetup):
         self.res = app['resources'].new("hall", title="Hall")
         self.res2 = app['resources'].new("book", title="Book")
 
-        Membership(group=self.root, member=self.group)
+        Membership(group=self.community, member=self.group)
         Membership(group=self.group, member=self.sub)
         Membership(group=self.group, member=self.per)
         Membership(group=self.group, member=self.per2)
@@ -912,7 +918,8 @@ class TestGroupEditView(SchoolToolSetup):
         return GroupEditView(self.group)
 
     def test(self):
-        view = self.createView()
+        from schooltool.browser.model import GroupEditView
+        view = GroupEditView(self.group)
         view.authorization = lambda x, y: True
         request = RequestStub()
         result = view.render(request)
@@ -921,8 +928,9 @@ class TestGroupEditView(SchoolToolSetup):
         self.assert_('Pete' in result, result)
 
     def test_list(self):
+        from schooltool.browser.model import GroupEditView
         from schooltool.rest import absoluteURL
-        view = self.createView()
+        view = GroupEditView(self.group)
         view.request = RequestStub()
         list = view.list()
         expected = [self.per2, self.per, self.res2]
@@ -939,8 +947,9 @@ class TestGroupEditView(SchoolToolSetup):
                           ['Person', 'Person', 'Resource'])
 
     def test_addList(self):
+        from schooltool.browser.model import GroupEditView
         from schooltool.rest import absoluteURL
-        view = self.createView()
+        view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
         expected = [self.per3, self.res]
@@ -965,6 +974,7 @@ class TestGroupEditView(SchoolToolSetup):
                             'url': 'http://localhost:7001/persons/lj'}])
 
     def test_addList_restricted(self):
+        from schooltool.browser.model import GroupEditView
         from schooltool.rest import absoluteURL
         from schooltool.membership import Membership
 
@@ -972,12 +982,12 @@ class TestGroupEditView(SchoolToolSetup):
 
         john = Person('john', title='John')
         pete = Person('pete', title='Pete')
-        Membership(group=self.root, member=john)
-        Membership(group=self.root, member=pete)
+        Membership(group=self.community, member=john)
+        Membership(group=self.community, member=pete)
 
         self.app.restrict_membership = True
 
-        view = self.createView()
+        view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
         expected = [john, pete]
@@ -1002,9 +1012,10 @@ class TestGroupEditView(SchoolToolSetup):
                             'url': 'http://localhost:7001/persons/pete'}])
 
     def test_update_DELETE(self):
+        from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
         from schooltool.uris import URIMember
-        view = self.createView()
+        view = GroupEditView(self.group)
         request = RequestStub(args={"DELETE":"Remove them",
                                     "CHECK": ['/groups/sub', '/persons/p']})
         view.request = request
@@ -1020,9 +1031,10 @@ class TestGroupEditView(SchoolToolSetup):
                   "/persons/p and /groups/new removed", INFO)])
 
     def test_update_ADD(self):
+        from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
         from schooltool.uris import URIMember
-        view = self.createView()
+        view = GroupEditView(self.group)
         request = RequestStub(args={"FINISH_ADD":"Add selected",
                                     "toadd": ['/groups/group2',
                                               '/persons/lj']})
@@ -1040,8 +1052,9 @@ class TestGroupEditView(SchoolToolSetup):
                   "/persons/lj and /groups/new created", INFO)])
 
     def test_update_ADD_loop(self):
+        from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
-        view = self.createView()
+        view = GroupEditView(self.group)
         request = RequestStub(args={"FINISH_ADD":"Add selected",
                                     "toadd": ['/groups/new']})
         view.request = request
@@ -1083,7 +1096,7 @@ class TestGroupSubgroupView(SchoolToolSetup):
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
-        self.root = app['groups'].new("root", title="root")
+        self.community = app['groups'].new("community", title="Community")
         self.group = app['groups'].new("new", title="Teachers")
         self.sub = app['groups'].new("sub", title="subgroup")
         self.group2 = app['groups'].new("group2", title="Random group")
@@ -1093,7 +1106,7 @@ class TestGroupSubgroupView(SchoolToolSetup):
         self.res = app['resources'].new("hall", title="Hall")
         self.res2 = app['resources'].new("book", title="Book")
 
-        Membership(group=self.root, member=self.group)
+        Membership(group=self.community, member=self.group)
         Membership(group=self.group, member=self.sub)
         Membership(group=self.group, member=self.per)
         Membership(group=self.group, member=self.per2)
@@ -1105,7 +1118,7 @@ class TestGroupSubgroupView(SchoolToolSetup):
         view = GroupSubgroupView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
-        expected = [self.group2, self.group, self.root]
+        expected = [self.community, self.group2, self.group]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -1163,7 +1176,7 @@ class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
-        self.root = app['groups'].new("root", title="root")
+        self.community = app['groups'].new("community", title="Community")
         self.group = app['groups'].new("new", title="Group")
         self.per = app['persons'].new("p", title="Pete")
         self.per3 = app['persons'].new("lj", title="Longjohn")
@@ -1181,7 +1194,7 @@ class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
         val.schema(group=self.teachers, member=self.teacher)
         val.schema(group=self.teachers, member=self.per3)
 
-        Membership(group=self.root, member=self.group)
+        Membership(group=self.community, member=self.group)
         Membership(group=self.group, member=self.per)
         Teaching(teacher=self.per3, taught=self.group)
 
@@ -1305,7 +1318,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
     def test_traverse(self):
         from schooltool.model import Resource
         from schooltool.browser.model import ResourceView, ResourceEditView
-        from schooltool.browser.cal import BookingView
+        from schooltool.browser.cal import BookingView, BookingViewPopUp
         from schooltool.browser.timetable import TimetableTraverseView
         from schooltool.browser.cal import CalendarView
         from schooltool.browser.acl import ACLView

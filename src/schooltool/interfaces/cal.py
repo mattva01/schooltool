@@ -26,7 +26,7 @@ $Id$
 from schooltool.unchanged import Unchanged  # reexport from here
 from zope.interface import Interface
 from zope.schema import Field, Object, Int, TextLine, List, Set
-from zope.schema import Choice, Date, Datetime, BytesLine
+from zope.schema import Choice, Date, Datetime, BytesLine, Dict
 
 from schooltool.interfaces.fields import Timedelta
 from schooltool.interfaces.auth import IACLOwner
@@ -394,6 +394,28 @@ class ICalendarOwner(Interface):
         title=u"The object's calendar.",
         schema=ICalendar)
 
+    # XXX Temporary for SB09
+    colors = List(
+        title=u"A tuple of color pair tuples for use in calendar display.")
+
+    cal_colors = Dict(
+            title=u"Calendar Colors",
+            key_type=TextLine(title=u"Symbolic parameter name"),
+            value_type=List(),
+            description=u"""
+            A PersistentDict of {getPath(cal.__parent__): color_tuple}
+            mappings.""")
+
+    def makeCompositeCalendar(start, end):
+        """Return the composite calendar for this person.
+
+        start, end are dates denoting the period we are interested in.
+
+        Returns a calendar that contains all events from every group
+        that is related to this calendar as URICalendarProvider.
+
+        All recurrent events are already expanded in the returned calendar.
+        """
     def makeCompositeCalendar(start, end):
         """Return the composite calendar for this person.
 

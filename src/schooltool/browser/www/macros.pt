@@ -1,178 +1,427 @@
-<metal:block define-macro="page" i18n:domain="schooltool">
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!-- START Page frame macros -->
+  <!-- START main page macro -->
+  <metal:block define-macro="page" i18n:domain="schooltool">
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title metal:define-slot="title">[Title]</title>
-  <link rel="stylesheet" href="/schooltool.css" />
-  <metal:block metal:define-slot="extrahead" />
-</head>
-<body metal:define-slot="body">
-  <div class="header">
-    <div class="logo">
-      <a href="/start">
-        <img src="/logo.png" alt="SchoolTool" class="logo"
-             i18n:attributes="alt" />
-      </a>
-    </div>
-    <h1 metal:define-slot="h1" i18n:translate="">Welcome to SchoolTool</h1>
-    <div class="login" tal:condition="not:request/authenticated_user"
-         i18n:translate="">
-      Not logged in.
-    </div>
-  </div>
-  <div class="navigation">
-    <div class="login" tal:condition="request/authenticated_user">
-      <span class="userlabel" i18n:translate="">User:</span>
-      <span class="username" tal:content="request/authenticated_user/title" />.
+  <html>
+    <head>
+      <meta http-equiv="Content-Type"
+        content="text/html; charset=UTF-8" />
+      <link rel="stylesheet" type="text/css" href="/layout.css"/>
+      <link rel="stylesheet" type="text/css" href="/style.css"/>
+      <script type="text/javascript" 
+          src="/schoolbell.js">
+      </script>
+      <metal:block define-slot="title">
+        <title>SchoolBell</title>
+      </metal:block>
+      <metal:block metal:define-slot="extrahead" />
+    </head>
+    <body tal:attributes="id view/getBodyId">
+      <div id="header">
+        <div class="logo">
+          <img src="/logo.png" alt="SchoolTool" i18n:attributes="alt" />
+        </div>
+        <div class="tools">
+          <tal:if condition="request/authenticated_user">
+            <a href="/logout" i18n:translate=""
+                tal:attributes="href string:/logout?url=${request/path}">
+              Log out
+            </a>
+          </tal:if>
+          <tal:if condition="not:request/authenticated_user">
+            <!-- 
+               TODO: This has to change when public redirect of / 
+               changes.
+            -->
+            <a href="/login" i18n:translate="">Login</a>
+          </tal:if>
+        </div>
+      </div>
 
-      <tal:if condition="view/isNotable">
-        <a href="" i18n:translate=""
-          tal:attributes="href string:/notes/add.html?toadd=${context/@@path}"
-          >Add note</a>.
+      <div id="columns">
+
+        <metal:block define-slot="column-left">
+          <div id="column-left">
+
+            <div class="portlet" id="portlet-navigation"
+                tal:condition="request/authenticated_user">
+              <h4>Navigation</h4>
+              <ul>
+                <li>
+                  <a href="" id="portlet-navigation-calendar"
+                      tal:attributes="href string:/persons/${request/authenticated_user/__name__}/calendar"
+                      i18n:translate="">My Calendar</a></li>
+                <li>
+                  <a href="" id="portlet-navigation-information"
+                      tal:attributes="href string:/persons/${request/authenticated_user/__name__}"
+                      i18n:translate="">My Information</a></li>
+                <li>
+                  <a tal:attributes="href string:/persons/${request/authenticated_user/__name__}/calendar.ics"
+                      i18n:translate="">
+                    Open your calendar in an iCal client
+                  </a>
+                </li>
+                <li>
+                  <a tal:attributes="href string:/persons/${request/authenticated_user/__name__}/timetable-calendar.ics"
+                      i18n:translate="">
+                    Open your timetable calendar in an iCal client
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <metal:block define-slot="column-left-extra"/>
+
+          </div>
+        </metal:block>
+
+        <div id="column-center">
+
+          <metal:block define-slot="h1"></metal:block>
+
+          <metal:block define-slot="content"/>
+
+        </div>
+
+      </div>
+      <div id="footer" i18n:translate="">
+        <p>
+          &copy; The Shuttleworth Foundation 2003 - <span>2004</span>:
+          Supporting Social Innovation. 
+        </p>
+        <p>
+          SchoolTool&trade; is a Trademark 
+          of The Shuttleworth Foundation.
+        </p>
+      </div>
+    </body>
+  </html>
+  </metal:block>
+  <!-- END main page macro -->
+
+
+  <!-- START popup macro -->
+  <metal:block define-macro="popup" i18n:domain="schooltool">
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  <html>
+    <head>
+      <meta http-equiv="Content-Type"
+        content="text/html; charset=UTF-8" />
+      <link rel="stylesheet" type="text/css" href="/layout.css"/>
+      <link rel="stylesheet" type="text/css" href="/style.css"/>
+      <script type="text/javascript" 
+          src="/schoolbell.js">
+      </script>
+      <metal:block define-slot="title">
+        <title>SchoolBell</title>
+      </metal:block>
+      <metal:block metal:define-slot="extrahead" />
+    </head>
+    <body id="popup">
+      <div id="popup-content">
+        <h1 metal:define-slot="h1"/>
+        <metal:block define-slot="content"/>
+      </div>
+    </body>
+  </html>
+  </metal:block>
+  <!-- END main popup macro -->
+
+
+  <!-- START calendarpage macro -->
+  <metal:block define-macro="calendarpage" i18n:domain="schooltool">
+    <html metal:use-macro="view/macros/page">
+      <metal:block fill-slot="column-left-extra">
+        <metal:block define-slot="column-left-extra"/>
+      </metal:block>
+      <title metal:define-slot="title" metal:fill-slot="title">[Title]</title>
+      <body>
+        <h1 metal:define-slot="h1" metal:fill-slot="h1"
+          i18n:translate="">Welcome to SchoolTool</h1>
+        <div metal:fill-slot="content">
+
+          <metal:macro use-macro="view/macros/calendar-navigation"/>
+
+          <p>
+            <a class="action"  tal:condition="view/isManager"
+              tal:attributes="href string:${context/@@absolute_url}/acl.html"
+              i18n:translate="">Edit Permissions</a>
+          </p>
+          <div class="calcontent">
+            <p metal:define-slot="content">[Content]</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  </metal:block>
+  <!-- END calendarpage macro -->
+<!-- END page frame macros -->
+
+
+<!-- START 'portlet' macros -->
+  <metal:block define-macro="calendar-navigation">
+
+    <div id="calendar-navigation">
+      <tal:if tal:condition="view/isManager">
+        <div>
+          <a href="/start" i18n:translate="">
+            Manage Site
+          </a>
+        </div>
       </tal:if>
 
-      <a href="/logout" i18n:translate=""
-         tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
+      <a id="calendar-navigation-day"
+        tal:attributes="href python:view.calURL('daily')"
+        title="View daily calendar"
+        i18n:attributes="title"
+        i18n:translate="">Daily</a>
+      <a id="calendar-navigation-week"
+        tal:attributes="href python:view.calURL('weekly')"
+        title="View weekly calendar"
+        i18n:attributes="title"
+        i18n:translate="">Weekly</a>
+      <a id="calendar-navigation-month"
+        tal:attributes="href python:view.calURL('monthly')"
+        title="View monthly calendar"
+        i18n:attributes="title"
+        i18n:translate="">Monthly</a>
+      <a id="calendar-navigation-year"
+        tal:attributes="href python:view.calURL('yearly')"
+        title="View yearly calendar"
+        i18n:attributes="title"
+        i18n:translate="">Yearly</a>
     </div>
-    <metal:block metal:define-slot="navigation">
-      <span tal:define="crumbs view/listBreadcrumbs"
-            tal:condition="crumbs" tal:repeat="crumb crumbs">
-        <a tal:attributes="href crumb/url"
-           tal:content="crumb/title" />
-        <span tal:condition="not: repeat/crumb/end">&gt;</span>
-      </span>
-    </metal:block>
-    &nbsp;
-  </div>
-  <div class="content">
+  </metal:block>
 
-    <p metal:define-slot="content">[Content]</p>
 
-  </div>
-  <metal:macro use-macro="view/macros/notes"/>
-</body>
-</html>
-</metal:block>
 
-<metal:block define-macro="calendarpage" i18n:domain="schooltool">
-<html metal:use-macro="view/macros/page">
-<title metal:define-slot="title" metal:fill-slot="title">[Title]</title>
-<body>
-  <h1 metal:define-slot="h1" metal:fill-slot="h1"
-      i18n:translate="">Welcome to SchoolTool</h1>
-  <div metal:fill-slot="content">
-    <div class="calnav" tal:define="update view/update">
-      <a class="calnav" tal:attributes="href python:view.calURL('daily')"
-         i18n:translate="">Daily</a>
-      <a class="calnav" tal:attributes="href python:view.calURL('weekly')"
-         i18n:translate="">Weekly</a>
-      <a class="calnav" tal:attributes="href python:view.calURL('monthly')"
-         i18n:translate="">Monthly</a>
-      <a class="calnav" tal:attributes="href python:view.calURL('yearly')"
-         i18n:translate="">Yearly</a>
+  <metal:block define-macro="notes">
+    <tal:block define="notes python:view.getNotations(request)">
+      <tal:if condition="notes">
+        <div class="notes">
+          <h3>Notes</h3>
+          <dl>
+            <tal:loop repeat="note notes">
+              <dt>
+                <a href="" 
+                  tal:attributes="href note/@@absolute_url"
+                  tal:content="note/title"></a>
+              </dt>
+              <dd>
+                <div tal:content="note/body"></div>
+                <div class="byline"
+                    tal:define="owner note/owner">
+                    By: <span tal:content="owner/title"/>
+                </div>
+              </dd>
+            </tal:loop>
+          </dl>
+        </div>
+      </tal:if>
+    </tal:block>
+  </metal:block>
+
+  <metal:block define-macro="render-infowidget">
+      <tal:comment condition="nothing">
+        <!-- Render dynamicfacet fields:
+        Parameters:
+            field: a DynamicSchemaField
+            isSchema: boolean, true if we are creating a schemata.
+        -->
+      </tal:comment>
+      <label tal:content="field/label"></label>
+      <tal:if condition="python:field['ftype'] == 'textarea'">
+          <textarea name="" value=""
+              tal:attributes="name field/name"
+              tal:content="field/value">
+          </textarea>
+      </tal:if>
+      <tal:if condition="python:field['ftype'] == 'selection'">
+          <select name="" tal:attributes="name field/name">
+              <tal:loop repeat="option field/vocabulary">
+                  <option tal:content="option"></option>
+              </tal:loop>
+          </select>
+          <textarea name=""
+              tal:condition="isSchema|nothing"
+              tal:attributes="name string:${field/name}_vocabulary"
+              tal:content="python:'\n'.join(field.vocabulary)"></textarea>
+      </tal:if>
+      <tal:if condition="python:field['ftype'] == 'multiselection'">
+          <select multiple="multiple" name="" tal:attributes="name field/name">
+              <tal:loop repeat="option field/vocabulary">
+                  <option tal:content="option"></option>
+              </tal:loop>
+          </select>
+          <textarea name=""
+              tal:condition="isSchema|nothing"
+              tal:attributes="name string:${field/name}_vocabulary"
+              tal:content="python:'\n'.join(field.vocabulary)"></textarea>
+      </tal:if>
+      <tal:if condition="python:field['ftype'] == 'checkbox'">
+          <input type="checkbox" name=""
+            tal:attributes="name field/name"/>
+      </tal:if>
+      <tal:if condition="python:field['ftype'] == 'text'">
+        <input type="text" name=""
+          tal:attributes="name field/name;
+                          value field/value"/>
+      </tal:if>
+  </metal:block>
+
+  <metal:block define-macro="dynamic-facet">
+      <!-- Requres a DynamicFacet defined as 'facet' prior to calling -->
+      <div class="dynamic-facet">
+          <h3 tal:content="facet/__name__"></h3>
+          <div class="row" tal:repeat="field facet/fields">
+              <label tal:content="field/label"></label>
+              <span tal:content="field/value"></span>
+          </div>
+      </div>
+  </metal:block>
+
+  <metal:block define-macro="portlet-calendar-jumpto" 
+      i18n:domain="schooltool">
+    <div id="portlet-jumpto" class="portlet">
+
+      <h4 i18n:translate="">Jump To ...</h4>
+
+      <form class="center">
+        <div>
+          <select name="jump" onChange="jumpTo(this);">
+            <option value=''>Month</option>
+            <tal:loop repeat="month view/getJumpToMonths">
+              <option value="" i18n:translate=""
+                tal:attributes="value string:monthly.html?date=2004-${month/value}-01"
+                tal:content="month/label" />
+            </tal:loop>
+          </select>
+        </div>
+      </form>
+
+      <form class="center">
+        <div>
+          <select name="jump" onChange="jumpTo(this);">
+            <option value=''>Year</option>
+            <tal:loop repeat="year view/getJumpToYears">
+              <option value="" i18n:translate=""
+                tal:attributes="value string:yearly.html?date=${year/value}-11-01"
+                tal:content="year/label" />
+            </tal:loop>
+          </select>
+        </div>
+      </form>
     </div>
-    <div class="calcontent">
-      <p metal:define-slot="content">[Content]</p>
-    </div>
-    <p>
-      <a tal:attributes="href python:view.addParam('cal_periods', 'yes')"
-         tal:condition="not: python:request.getCookie('cal_periods')"
-         i18n:translate="" class="action">Show time in periods</a>
-      <a tal:attributes="href python:view.addParam('cal_periods', 'no')"
-         tal:condition="python:request.getCookie('cal_periods')"
-         i18n:translate="" class="action">Periods off</a>
-      <a class="action"  tal:condition="view/isManager"
-         tal:attributes="href string:${context/@@absolute_url}/acl.html"
-         i18n:translate="">Edit ACL</a>
-    </p>
-  </div>
-</body>
-</html>
-</metal:block>
+  </metal:block>
 
-<metal:block define-macro="notes">
-  <tal:block define="notes python:view.getNotations(request)">
-    <tal:if condition="notes">
-      <div class="notes">
-        <h3>Notes</h3>
-        <dl>
-          <tal:loop repeat="note notes">
-            <dt>
-              <a href="" 
-                tal:attributes="href note/@@absolute_url"
-                tal:content="note/title"></a>
-            </dt>
-            <dd>
-              <div tal:content="note/body"></div>
-              <div class="byline"
-                  tal:define="owner note/owner">
-                  By: <span tal:content="owner/title"/>
-              </div>
-            </dd>
+  <metal:block define-macro="portlet-calendar-overlay" i18n:domain="schooltool">
+
+    <tal:if condition="view/canChooseCalendars">
+      <div id="portlet-calendar-overlay" class="portlet">
+        <h4>
+          <a href="" i18n:translate=""
+              tal:attributes="href string:/persons/${request/authenticated_user/__name__}/#calendar-form">
+            Calendars
+          </a>
+        </h4>
+        <form method="POST" tal:attributes="action request/path">
+
+          <!-- USERS Calendar is always visible -->
+          <div class="row" style="background: #9db8d2">
+            <input type="checkbox" checked="checked" disabled="disabled" />
+                <label>My Calendar</label>
+          </div>
+
+          <!-- USERS frequently used calendars -->
+          <tal:loop repeat="cal view/getPortletCalendars">
+            <div class="row"
+                tal:attributes="style python:'background: %s;;' % view.calendarColors(cal)[0]">
+              <input type="checkbox" name="overlay"
+                tal:attributes="value python:view.getValue(cal);
+                    checked python:view.checkedOverlay(cal)" />
+                  <label tal:content="cal/title"/>
+            </div>
           </tal:loop>
-        </dl>
+          <input name="OVERLAY" type="submit" value="Overlay"/>
+        </form>
       </div>
     </tal:if>
-  </tal:block>
-</metal:block>
+  </metal:block>
 
-<metal:block define-macro="render-infowidget">
-    <tal:comment condition="nothing">
-        <!-- Render dynamicfacet fields:
 
-        Parameters:
-        field: a DynamicSchemaField
-        isSchema: boolean, true if we are creating a schemata.
-        -->
-    </tal:comment>
-    <label tal:content="field/label"></label>
-    <tal:if condition="python:field['ftype'] == 'textarea'">
-        <textarea name="" value=""
-            tal:attributes="name field/name"
-            tal:content="field/value">
-        </textarea>
-    </tal:if>
-    <tal:if condition="python:field['ftype'] == 'selection'">
-        <select name="" tal:attributes="name field/name">
-            <tal:loop repeat="option field/vocabulary">
-                <option tal:content="option"></option>
-            </tal:loop>
-        </select>
-        <textarea name=""
-            tal:condition="isSchema|nothing"
-            tal:attributes="name string:${field/name}_vocabulary"
-            tal:content="python:'\n'.join(field.vocabulary)"></textarea>
-    </tal:if>
-    <tal:if condition="python:field['ftype'] == 'multiselection'">
-        <select multiple="multiple" name="" tal:attributes="name field/name">
-            <tal:loop repeat="option field/vocabulary">
-                <option tal:content="option"></option>
-            </tal:loop>
-        </select>
-        <textarea name=""
-            tal:condition="isSchema|nothing"
-            tal:attributes="name string:${field/name}_vocabulary"
-            tal:content="python:'\n'.join(field.vocabulary)"></textarea>
-    </tal:if>
-    <tal:if condition="python:field['ftype'] == 'checkbox'">
-        <input type="checkbox" name=""
-          tal:attributes="name field/name"/>
-    </tal:if>
-    <tal:if condition="python:field['ftype'] == 'text'">
-      <input type="text" name=""
-        tal:attributes="name field/name;
-                        value field/value"/>
-    </tal:if>
-</metal:block>
-<metal:block define-macro="dynamic-facet">
-    <!-- Requres a DynamicFacet defined as 'facet' prior to calling -->
-    <div class="dynamic-facet">
-        <h3 tal:content="facet/__name__"></h3>
-        <div class="row" tal:repeat="field facet/fields">
-            <label tal:content="field/label"></label>
-            <span tal:content="field/value"></span>
-        </div>
+  <metal:block define-macro="brief-month-view" i18n:domain="schooltool">
+    <table class="month" cellpadding="0" cellspacing="0">
+      <tr>
+        <th colspan="7" class="month-title"
+          tal:define="mtit python:view.monthTitle(month[1][0].date)">
+          <a tal:content="mtit"
+            tal:attributes="href python:view.calURL('monthly', 
+            month[1][0].date);
+            title string:Go to $mtit"
+            />
+        </th>
+      </tr>
+      <tr tal:repeat="week month">
+        <td tal:replace="structure
+          python:view.renderRow(week, month[1][0].date.month)" />
+      </tr>
+    </table>
+
+  </metal:block>
+
+  <metal:block define-macro="portlet-tomorrow-events" 
+      i18n:domain="schooltool">
+
+    <tal:block define="next view/nextDay; nevents python:view.dayEvents(next)">
+      <div id="portlet-next-day-events" class="portlet" tal:condition="nevents">
+        <h4 i18n:translate="">Tomorrow's Events</h4>
+        <ul>
+          <li tal:repeat="nevent nevents">
+            <a href=""
+                tal:define="evdate python:nevent.dtstart.strftime('%Y-%m-%d');"
+                tal:attributes="href string:javascript:popUp('${context/@@absolute_url}/event-popup.html?date=${evdate}&amp;event_id=${nevent/unique_id}')" 
+                tal:content="nevent/title"/>
+          </li>
+        </ul>
+      </div>
+    </tal:block>
+
+  </metal:block>
+
+
+  <metal:block define-macro="portlet-calendar-view-month"
+      i18n:domain="schooltool">
+
+    <div id="portlet-calendar-view-month" class="portlet">
+        <tal:block define="month python:view.getMonth(view.prevMonth());">
+            <metal:block use-macro="view/macros/brief-month-view" 
+                i18n:domain="schooltool" />
+        </tal:block>
+        <tal:block define="month python:view.getMonth(view.cursor);">
+            <metal:block use-macro="view/macros/brief-month-view" 
+                i18n:domain="schooltool" />
+        </tal:block>
+        <tal:block define="month python:view.getMonth(view.nextMonth());">
+            <metal:block use-macro="view/macros/brief-month-view" 
+                i18n:domain="schooltool" />
+        </tal:block>
     </div>
-</metal:block>
+
+  </metal:block>
+
+
+  <metal:block define-macro="common-calendar-portlets" 
+      i18n:domain="schooltool">
+
+    <metal:macro use-macro="view/macros/portlet-calendar-overlay" />
+
+    <metal:macro use-macro="view/macros/portlet-tomorrow-events" />
+
+    <metal:block use-macro="view/macros/portlet-calendar-jumpto" />
+
+    <metal:macro use-macro="view/macros/portlet-calendar-view-month" />
+
+  </metal:block>
+<!-- END 'portlet' macros -->

@@ -21,32 +21,13 @@
           tal:attributes="href string:/residences/add.html?pid=${context/__name__}"
          i18n:translate="">Add residence</a>
     </div>
-    <div class="actions" tal:condition="view/canEdit">
-        <tal:loop repeat="facet view/getAvailableDynamicFacets">
-            <a class="action"
-                tal:attributes="href string:${view/editDynamicFacetURL}?facet=${facet}"
-                tal:content="facet"></a>
-        </tal:loop>
-    </div>
 
-    <div tal:condition="view/canChooseCalendars" class="groups">
-      <form method="POST" class="plain"
-            tal:attributes="action request/path">
-        <h3 i18n:translate="">Groups</h3>
-        <tal:block define="parent_groups view/getParentGroups"
-                   condition="parent_groups">
-          <p i18n:translate="">Merge calendars:</p>
-          <p tal:repeat="group parent_groups">
-            <input type="checkbox"
-                   tal:attributes="name string:group.${group/__name__};
-                                   checked python:view.checked(group)" />
-            <a tal:attributes="href group/@@absolute_url"
-               tal:content="group/title"></a>
-          </p>
-          <input class="button" type="submit" name="CHOOSE_CALENDARS"
-                 i18n:attributes="value" value="Update" />
-        </tal:block>
-      </form>
+    <div class="actions">
+      <tal:loop repeat="facet view/getAvailableDynamicFacets">
+        <a class="action" tal:condition="view/canEdit"
+            tal:attributes="href string:${view/editDynamicFacetURL}?facet=${facet}"
+            tal:content="facet"></a>
+      </tal:loop>
     </div>
 
     <div tal:condition="not:view/canChooseCalendars" class="groups">
@@ -62,12 +43,12 @@
          tal:condition="timetables">
       <h3 i18n:translate="">Timetables</h3>
       <p tal:repeat="tt timetables">
-       <a tal:omit-tag="tt/empty"
-          tal:attributes="href tt/url" tal:content="tt/title"/>
-       <tal:if tal:condition="view/isManager">
-         (<a tal:attributes="href string:${tt/url}/setup.html"
-             i18n:translate="">setup</a>)
-       </tal:if>
+        <a tal:omit-tag="tt/empty"
+           tal:attributes="href tt/url" tal:content="tt/title"/>
+        <tal:if tal:condition="view/isManager">
+          (<a tal:attributes="href string:${tt/url}/setup.html"
+              i18n:translate="">setup</a>)
+        </tal:if>
       </p>
     </div>
     <div class="row"><b i18n:translate="">Username:</b>
@@ -90,35 +71,35 @@
     </div>
     <div class="row">
       <b i18n:translate="">Photo:</b>
-      <tal:block condition="not:view/photoURL" 
-                 i18n:translate="">N/A</tal:block>
+      <tal:block condition="not:view/photoURL"
+          i18n:translate="">N/A</tal:block>
       <p tal:condition="view/photoURL">
         <img src="photo.jpg" tal:attributes="src view/photoURL" />
       </p>
     </div>
 
     <div class="family-relationships"
-      tal:define="custodians context/getCustodians|nothing;
-      children context/getWards|nothing">
+        tal:define="custodians context/getCustodians|nothing;
+                    children context/getWards|nothing">
       <tal:if condition="children">
-        <h3 i18n:translate="">Children</h3>
+        <h3>Children</h3>
         <ul>
           <tal:loop repeat="child children">
             <li>
               <a href="" tal:attributes="href child/@@absolute_url"
-                tal:content="child/title">
+                  tal:content="child/title">
               </a>
             </li>
           </tal:loop>
         </ul>
       </tal:if>
       <tal:if condition="custodians">
-        <h3 i18n:translate="">Guardians</h3>
+        <h3>Guardians</h3>
         <ul>
           <tal:loop repeat="custodian custodians">
             <li>
               <a href="" tal:attributes="href custodian/@@absolute_url"
-                tal:content="custodian/title">
+                  tal:content="custodian/title">
               </a>
             </li>
           </tal:loop>
@@ -138,19 +119,19 @@
     <div class="residences"
         tal:define="residences context/getResidences"
         tal:condition="residences">
-      <h3 i18n:translate="">Residences</h3>
+      <h3>Residences</h3>
       <ul>
         <tal:loop repeat="residence residences">
           <li>
             <a href="" tal:attributes="href residence/@@absolute_url"
-              tal:content="residence/title"></a>
-              <address tal:define="address residence/info">
-                  <span tal:content="address/streetNr"
-                      /> <span tal:content="address/thoroughfareName"/><br/>
-                  <span tal:content="address/town"
-                      /> <span tal:content="address/district"
-                      />, <span tal:content="address/postcode"/>
-              </address>
+                tal:content="residence/title"></a>
+            <address tal:define="address residence/info">
+              <span tal:content="address/streetNr"/> 
+              <span tal:content="address/thoroughfareName"/><br/>
+              <span tal:content="address/town"/> 
+              <span tal:content="address/district"/>, 
+              <span tal:content="address/postcode"/>
+            </address>
           </li>
         </tal:loop>
       </ul>
@@ -159,6 +140,68 @@
     <tal:loop repeat="facet view/getDynamicFacets">
       <metal:macro use-macro="view/macros/dynamic-facet"/>
     </tal:loop>
+
+    <div class="groups">
+      <h3 i18n:translate="">Groups</h3>
+      <p tal:repeat="group view/getParentGroups">
+       <a tal:attributes="href group/@@absolute_url"
+          tal:content="group/title"></a>
+      </p>
+    </div>
+
+    <tal:block condition="view/canChooseCalendars">
+      <a id="calendar-form"></a>
+      <form method="POST">
+        <fieldset>
+          <legend i18n:translate="">
+            Choose calendars for portlet
+          </legend>
+          <table>
+            <tr>
+
+              <td>
+                <label for="groups">Groups</label>
+                <select multiple="multiple" id="groups" size="5"
+                    name="groups">
+                  <tal:loop repeat="group view/allGroups">
+                    <option tal:content="group/title"
+                        tal:attributes="value group/__name__;
+                        selected python:view.listedResource(group);
+                        disabled python:view.disabledResource(group)"/>
+                  </tal:loop>
+                </select>
+              </td>
+
+              <td>
+                <label for="people">People</label>
+                <select multiple="multiple" id="people" size="5"
+                    name="people">
+                  <tal:loop repeat="person view/allPersons">
+                    <option tal:content="person/title"
+                        tal:attributes="value person/__name__;
+                        selected python:view.listedResource(person);
+                        disabled python:view.disabledResource(person)"/>
+                  </tal:loop>
+                </select>
+              </td>
+
+              <td>
+                <label for="resources">Resources</label>
+                <select multiple="multiple" id="resources" size="5"
+                    name="resources">
+                  <tal:loop repeat="resource view/allResources">
+                    <option tal:content="resource/title"
+                        tal:attributes="value resource/__name__;
+                        selected python:view.listedResource(resource)"/>
+                  </tal:loop>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" value="Update" name="CHOOSE_CALENDARS"/>
+        </fieldset>
+      </form>
+    </tal:block>
 
 </metal:block>
 </body>

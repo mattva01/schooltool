@@ -40,7 +40,7 @@ from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ACLModifyAccess, ACLViewAccess
 from schooltool.browser.auth import isManager
-from schooltool.browser.cal import BookingView
+from schooltool.browser.cal import BookingView, BookingViewPopUp
 from schooltool.browser.acl import ACLView
 from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.browser.cal import CalendarView
@@ -51,16 +51,19 @@ from schooltool.component import getTimetableSchemaService
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import getOptions
 from schooltool.interfaces import IPerson, IGroup, IResource, INote, IResidence
+from schooltool.membership import Membership
 from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.translation import ugettext as _
-from schooltool.uris import URIMembership, URIMember, URIGroup
-from schooltool.uris import URITeaching, URITeacher
+from schooltool.uris import URIMembership, URITeaching
+from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.uris import URIGuardian, URICustodian, URIWard
-from schooltool.uris import URICurrentResidence
+from schooltool.uris import URICurrentResidence, URICalendarListing
+from schooltool.uris import URICalendarListor, URICalendarListed
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
 from schooltool.uris import URICalendarProvider, URINotation
+from schooltool.teaching import Teaching
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
 from schooltool.browser.infofacet import PersonEditFacetView
@@ -168,18 +171,73 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
     canViewCalendar = canChangePassword
     canChooseCalendars = canChangePassword
 
+    def _allObjects(self, path):
+        """Return a sorted list of application objects."""
+        try:
+            objects = traverse(self.context, path)
+            result = [(obj.title, obj) for obj in objects.itervalues()]
+            result.sort()
+            return objects.itervalues()
+        except KeyError:
+            return None
+
+    def allGroups(self):
+        return self._allObjects('/groups')
+
+    def allPersons(self):
+        return self._allObjects('/persons')
+
+    def allResources(self):
+        return self._allObjects('/resources')
+
+    def listedResource(self, obj):
+        if obj in getRelatedObjects(self.request.authenticated_user, 
+                                    URICalendarListed):
+            return 'selected'
+        return False
+
+    def disabledResource(self, obj):
+        """Users' own calendar and parent groups are always available.
+
+        Use this to disable they're selection.
+        """
+
+        if obj in self.getParentGroups() or obj == self.context:
+            return "disabled"
+        return False
+
+
     def do_POST(self, request):
-        if 'CHOOSE_CALENDARS' in request.args and self.canChooseCalendars():
+        if 'CHOOSE_CALENDARS' in request.args and \
+                self.canChooseCalendars():
             # Unlink old calendar subscriptions.
-            for link in self.context.listLinks(URICalendarProvider):
+            for link in self.context.listLinks(URICalendarListed):
                 link.unlink()
 
-            # Link selected groups.
-            for group in self.getParentGroups():
-                if ('group.' + group.__name__) in request.args:
-                    relate(URICalendarSubscription,
-                           (self.context, URICalendarSubscriber),
-                           (group, URICalendarProvider))
+            # Create Listing relationships between the objects and user
+            if 'people' in request.args:
+                for person in request.args['people']:
+                    object = traverse(self.context, 
+                                      '/persons/' + person)
+                    relate(URICalendarListing,
+                            (self.context, URICalendarListor),
+                            (object, URICalendarListed))
+
+            if 'groups' in request.args:
+                for group in request.args['groups']:
+                    object = traverse(self.context, 
+                                      '/groups/' + group)
+                    relate(URICalendarListing,
+                            (self.context, URICalendarListor),
+                            (object, URICalendarListed))
+
+            if 'resources' in request.args:
+                for resource in request.args['resources']:
+                    object = traverse(self.context, 
+                                      '/resources/' + resource)
+                    relate(URICalendarListing,
+                            (self.context, URICalendarListor),
+                            (object, URICalendarListed))
         return self.do_GET(request)
 
     def checked(self, group):
@@ -666,6 +724,8 @@ class ResourceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
             return ResourceEditView(self.context)
         elif name == "book":
             return BookingView(self.context)
+        elif name == "book-popup":
+            return BookingViewPopUp(self.context)
         elif name == 'acl.html':
             return ACLView(self.context.acl)
         elif name == 'calendar':

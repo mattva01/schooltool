@@ -143,9 +143,9 @@ class View(_View):
         """Render an unauthorized page."""
         uri = urllib.quote(request.uri)
         if request.authenticated_user is None:
-            return self.redirect('/?expired=1&url=%s' % uri, request)
+            return self.redirect('/login?expired=1&url=%s' % uri, request)
         else:
-            return self.redirect('/?forbidden=1&url=%s' % uri, request)
+            return self.redirect('/login?forbidden=1&url=%s' % uri, request)
 
     def do_POST(self, request):
         """Process an HTTP POST.
@@ -217,6 +217,19 @@ class View(_View):
             return [obj for title, obj in list if obj.owner == user]
         except AttributeError: # XXX This looks fishy.
             return []
+
+    def getBodyId(self):
+        """Provide a unique id for use in the view's body tag"""
+
+        if not self.request:
+            return None
+
+        path = self.request.path
+        if path == "/":
+            path = "-login"
+        else:
+            path = path.replace("/", "-").replace(".html", "")
+        return "path" + path
 
 
 class StaticFile(View):

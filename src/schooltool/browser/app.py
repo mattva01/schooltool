@@ -60,8 +60,10 @@ from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects
 from schooltool.component import getTicketService, getTimetableSchemaService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IPerson, IResource, AuthenticationError
+from schooltool.interfaces import IPerson, IResource, IGroup
+from schooltool.interfaces import AuthenticationError
 from schooltool.interfaces import IApplicationObject
+from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.membership import Membership
 from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
@@ -113,7 +115,7 @@ class RootView(View):
 
     authorization = PublicAccess
 
-    template = Template("www/login.pt")
+    template = Template("www/root.pt")
 
     error = False
     username = ''
@@ -121,30 +123,17 @@ class RootView(View):
     def do_GET(self, request):
         logged_in = request.authenticated_user is not None
         forbidden = 'forbidden' in request.args
+        community = traverse(self.context, '/groups/community')
         if logged_in and not forbidden:
-            return self.redirect('/start', request)
+            return self.redirect('/persons/'                            \
+                                 + request.authenticated_user.__name__  \
+                                 + '/calendar', request)
+        elif community.calendar.acl.allows(Everybody, ViewPermission) \
+                and not forbidden:
+            return self.redirect('/groups/community/calendar/daily.html',
+                                 request)
         else:
-            return View.do_GET(self, request)
-
-    def do_POST(self, request):
-        username = request.args['username'][0]
-        password = request.args['password'][0]
-        try:
-            request.authenticate(username, password)
-        except AuthenticationError:
-            self.error = True
-            self.username = username
-            return self.do_GET(request)
-        else:
-            ticketService = getTicketService(self.context)
-            ticket = ticketService.newTicket((username, password),
-                                             session_time_limit)
-            request.addCookie('auth', ticket, path='/')
-            if 'url' in request.args:
-                url = request.args['url'][0]
-            else:
-                url = '/start'
-            return self.redirect(url, request)
+            return self.redirect('/login', request)
 
     def _traverse(self, name, request):
         if name == 'persons':
@@ -159,6 +148,12 @@ class RootView(View):
             return ResidenceContainerView(self.context['residences'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
+        elif name == 'layout.css':
+            return StaticFile('www/layout.css', 'text/css')
+        elif name == 'style.css':
+            return StaticFile('www/style.css', 'text/css')
+        elif name == 'schoolbell.js':
+            return StaticFile('www/schoolbell.js', 'text/javascript')
         elif name == 'logo.png':
             return StaticFile(_('www/logo.png'), 'image/png')
         elif name == 'person.png':
@@ -167,8 +162,34 @@ class RootView(View):
             return StaticFile('www/group2.png', 'image/png')
         elif name == 'resource.png':
             return StaticFile('www/resource2.png', 'image/png')
+        elif name == 'meeting.png':
+            return StaticFile('www/meeting.png', 'image/png')
+        elif name == 'booking.png':
+            return StaticFile('www/booking.png', 'image/png')
+        elif name == 'calendar.png':
+            return StaticFile('www/calendar.png', 'image/png')
+        elif name == 'information.png':
+            return StaticFile('www/information.png', 'image/png')
+        elif name == 'delete.png':
+            return StaticFile('www/delete.png', 'image/png')
+        elif name == 'day.png':
+            return StaticFile('www/day.png', 'image/png')
+        elif name == 'week.png':
+            return StaticFile('www/week.png', 'image/png')
+        elif name == 'month.png':
+            return StaticFile('www/month.png', 'image/png')
+        elif name == 'year.png':
+            return StaticFile('www/year.png', 'image/png')
+        elif name == 'previous.png':
+            return StaticFile('www/previous.png', 'image/png')
+        elif name == 'current.png':
+            return StaticFile('www/current.png', 'image/png')
+        elif name == 'next.png':
+            return StaticFile('www/next.png', 'image/png')
         elif name == 'logout':
             return LogoutView(self.context)
+        elif name == 'login':
+            return LoginView(self.context)
         elif name == 'delete.html':
             return DeleteView(self.context)
         elif name == 'reset_db.html':
@@ -185,6 +206,8 @@ class RootView(View):
             return TimetableCSVImportView(self.context)
         elif name == 'busysearch':
             return BusySearchView(self.context)
+        elif name == 'busysearch-popup':
+            return BusySearchViewPopUp(self.context)
         elif name == 'ttschemas':
             return TimetableSchemaServiceView(
                 self.context.timetableSchemaService)
@@ -198,9 +221,58 @@ class RootView(View):
             return DynamicFacetSchemaServiceView(
                 self.context.dynamicFacetSchemaService)
         elif name == 'newdfschema':
-            return DynamicFacetSchemaWizard(
-                        self.context.dynamicFacetSchemaService)
+            return DynamicFacetSchemaWizard(self.context.dynamicFacetSchemaService)
         raise KeyError(name)
+
+
+class LoginView(View):
+    """View for /login
+    """
+
+    __used_for__ = IApplication
+
+    authorization = PublicAccess
+
+    template = Template("www/login.pt")
+
+    error = False
+    username = ''
+
+    def do_GET(self, request):
+        logged_in = request.authenticated_user is not None
+        forbidden = 'forbidden' in request.args
+        if logged_in and not forbidden:
+            return self.redirect('/persons/'                            \
+                                 + request.authenticated_user.__name__  \
+                                 + '/calendar', request)
+        else:
+            return View.do_GET(self, request)
+
+    def do_POST(self, request):
+        username = request.args['username'][0]
+        password = request.args['password'][0]
+
+        try:
+            request.authenticate(username, password)
+        except AuthenticationError:
+            self.error = True
+            self.username = username
+            return self.do_GET(request)
+        else:
+            ticketService = getTicketService(self.context)
+            if 'remember' in request.args:
+                ticket = ticketService.newTicket((username, password))
+            else:
+                ticket = ticketService.newTicket((username, password),
+                                                  session_time_limit)
+            request.addCookie('auth', ticket, path='/')
+            if 'url' in request.args:
+                url = request.args['url'][0]
+            else:
+                url = '/persons/'                             \
+                        + request.authenticated_user.__name__ \
+                        + '/calendar'
+            return self.redirect(url, request)
 
 
 class LogoutView(View):
@@ -262,6 +334,12 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         self.dob_widget = TextWidget('date_of_birth', _('Birth date'),
                                      unit=_('(YYYY-MM-DD)'), parser=dateParser)
         self.comment_widget = TextAreaWidget('comment', _('Comment'))
+        self.groups_widget = MultiselectionWidget('groups',
+                                    _('Groups'),
+                                    self._allGroups(),
+                                    parser=self._parseGroups,
+                                    formatter=sequenceFormatter(getPath))
+        self.groups_widget.size = 5
 
     def name_validator(self, username):
         """Validate username and raise ValueError if it is invalid."""
@@ -275,12 +353,36 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
             # This check is racy, but that is fixed in _addUser
             raise ValueError(_("User with this username already exists."))
 
+    def _allGroups(self):
+        """Return a sorted list of all groups."""
+        try:
+            groups = traverse(self.context, '/groups')
+            result = [(obj.title, obj) for obj in groups.itervalues()]
+            result.sort()
+            return [(obj, title) for title, obj in result]
+        except KeyError:
+            return None
+
+    def _parseGroups(self, raw_value):
+        """Parse a list of paths and return a list of groups."""
+        groups_container = traverse(self.context, '/groups')
+        groups = []
+        for path in raw_value:
+            try:
+                group = traverse(groups_container, path)
+            except (KeyError, UnicodeError):
+                pass
+            else:
+                if IGroup.providedBy(group):
+                    groups.append(group)
+        return groups
+
     def _processForm(self, request):
         """Process and form data, return True if there were no errors."""
         widgets = [self.first_name_widget, self.last_name_widget,
                    self.username_widget, self.password_widget,
                    self.confirm_password_widget, self.dob_widget,
-                   self.comment_widget]
+                   self.comment_widget, self.groups_widget]
         for widget in widgets:
             widget.update(request)
 
@@ -355,6 +457,9 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
                           self.last_name_widget.value, self.dob_widget.value,
                           self.comment_widget.value)
         self._setUserPhoto(person, photo)
+
+        self._setUserGroups(person, self.groups_widget.value)
+
         url = absoluteURL(request, person)
         return self.redirect(url, request)
 
@@ -393,6 +498,15 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         infofacet.photo = photo
         self.request.appLog(_("Photo added on %s (%s)") %
                             (person.title, getPath(person)))
+
+    def _setUserGroups(self, person, groups):
+        """Add user to groups."""
+        if groups is not None:
+            for group in groups:
+                Membership(group=group, member=person)
+                self.request.appLog(
+                        _("Relationship 'Membership' between %s and %s created")
+                        % (getPath(person), getPath(group)))
 
 
 class ObjectAddView(View, ToplevelBreadcrumbsMixin):
@@ -821,12 +935,15 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
                                     self._allResources(),
                                     parser=self._parseResources,
                                     formatter=sequenceFormatter(getPath))
+        self.resources_widget.size = 5
         self.hours_widget = MultiselectionWidget('hours', _('Hours'),
                                     [(hour, '%02d:00' % hour)
                                     for hour in range(24)],
                                     parser=sequenceParser(intParser))
+        self.hours_widget.size = 5
         self.periods_widget = MultiselectionWidget('periods', _('Periods'),
                                     [(p, p) for p in self._allPeriods()])
+        self.periods_widget.size = 5
         self.first_widget = TextWidget('first', _('First'), parser=dateParser,
                                     value=datetime.date.today())
         self.last_widget = TextWidget('last', _('Last'), parser=dateParser,
@@ -980,6 +1097,12 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
                             'href': absoluteURL(self.request, resource),
                             'slots': res_slots})
         return results
+
+
+class BusySearchViewPopUp(BusySearchView):
+    """Frameless version of BusySearch for popups"""
+
+    template = Template("www/busysearch-popup.pt")
 
 
 def duration_validator(value):

@@ -745,6 +745,7 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.relationship import RelatableMixin
         from schooltool.uris import URICalendarProvider
         from schooltool.interfaces import IInheritedCalendarEvent
+        from schooltool.tests.test_timetable import setPath
 
         ev1 = CalendarEvent(datetime(2003, 11, 26, 20, 00),
                             timedelta(minutes=30), "AG")
@@ -756,6 +757,9 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
                             timedelta(minutes=30), "AB", recurrence=rr)
         gr2 = Group("Big")
         gr2.calendar.addEvent(ev2)
+
+        setPath(gr1, '/groups/gr1')
+        setPath(gr2, '/groups/gr2')
 
         class AppObjectStub(CalendarOwnerMixin, RelatableMixin):
 
@@ -781,6 +785,9 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
                                            date(2003, 11, 28))
 
         self.assertEquals(list(result), [ev1, ev2, rec1, rec2])
+
+        self.assert_('/groups/gr1' in com.cal_colors)
+        self.assert_('/groups/gr2' in com.cal_colors)
 
         for event in result:
             verifyObject(IInheritedCalendarEvent, event)
