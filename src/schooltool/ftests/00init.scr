@@ -1,6 +1,13 @@
 Creates some sample persons and groups.
 Make sure you start with a clean Data.fs.
 
+SchoolTool> put /persons/anonymous
+PUT> title="Anonymous"
+PUT> .
+201 Created
+Content-Type: text/plain
+Object created: http://localhost/persons/anonymous
+
 SchoolTool> put /groups/teachers
 PUT> title="Teachers"
 PUT> .
