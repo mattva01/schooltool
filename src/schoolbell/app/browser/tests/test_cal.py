@@ -611,7 +611,7 @@ class TestCalendarViewBase(unittest.TestCase):
             My Calendar (#9db8d2, #7590ae)
 
         If the authenticated user is looking at his own calendar, then
-        a list of overlayd calendars is taken into consideration
+        a list of overlaid calendars is taken into consideration
 
             >>> class OverlayInfoStub:
             ...     def __init__(self, title, color1, color2, show=True):
@@ -2536,29 +2536,6 @@ class TestDailyCalendarView(unittest.TestCase):
                             createEvent('2004-08-11 10:00', '48h+44m', "")), 40)
         self.assertEquals(view.eventHeight(
                             createEvent('2004-08-11 10:00', '24h', "")), 8)
-
-    def test_do_POST(self):
-        return # XXX TODO
-        from schoolbell.app.browser.cal import DailyCalendarView
-        from schooltool.cal import ACLCalendar
-        from schooltool.model import Person, Group
-        from schooltool.component import getRelatedObjects
-        from schooltool.uris import URICalendarProvider
-
-        from schooltool import relationship
-        relationship.setUp()
-
-        context = self.manager.calendar
-        view = DailyCalendarView(context)
-
-        view.request = RequestStub(authenticated_user=self.manager,
-                args={'overlay':['/groups/locations','/groups/managers'],
-                    'OVERLAY': ''})
-
-        view.do_POST(view.request)
-
-        related = getRelatedObjects(self.manager, URICalendarProvider)
-        self.assertEquals(related, [self.locations, self.managers])
 
 
 def doctest_CalendarViewBase():
