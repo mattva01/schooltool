@@ -98,13 +98,6 @@ class PersonView(BrowserView):
 
     __used_for__ = IPersonContained
 
-    def canEdit(self):
-        return True # TODO: implement permission checking
-
-    canChangePassword = canEdit # TODO: implement permission checking
-    canViewCalendar = canEdit # TODO: implement permission checking
-    canChooseCalendars = canEdit # TODO: implement permission checking
-
 
 class PersonPhotoView(BrowserView):
     """View that returns photo of a Person."""
@@ -155,9 +148,6 @@ class GroupView(BrowserView):
     """A Group info view."""
 
     __used_for__ = IGroupContained
-
-    def canEdit(self):
-        return True # TODO: implement permission checking
 
     def getPersons(self):
         return filter(IPerson.providedBy, self.context.members)
@@ -219,9 +209,6 @@ class ResourceView(BrowserView):
     """A Resource info view."""
 
     __used_for__ = IResourceContained
-
-    def canEdit(self):
-        return True # TODO: implement permission checking
 
 
 class IPersonEditForm(Interface):

@@ -48,18 +48,6 @@ def doctest_PersonView():
         >>> request = TestRequest()
         >>> view = PersonView(person, request)
 
-    TODO: implement proper permission checking.
-    For now, all these methods just return True
-
-        >>> view.canEdit()
-        True
-        >>> view.canChangePassword()
-        True
-        >>> view.canViewCalendar()
-        True
-        >>> view.canChooseCalendars()
-        True
-
     """
 
 
@@ -349,13 +337,6 @@ def doctest_GroupView():
         >>> titles
         ['Another', 'Average', 'The last']
 
-
-    TODO: implement proper permission checking.
-    For now, all these methods just return True
-
-        >>> view.canEdit()
-        True
-
     """
 
 
@@ -526,12 +507,6 @@ def doctest_ResourceView():
         >>> resource = Resource()
         >>> request = TestRequest()
         >>> view = ResourceView(resource, request)
-
-    TODO: implement proper permission checking.
-    For now, all these methods just return True
-
-        >>> view.canEdit()
-        True
 
     """
 

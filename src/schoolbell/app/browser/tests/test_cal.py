@@ -711,8 +711,6 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
                          unique_id="id!")
         return ev
 
-    # TODO: test canEdit
-
     def test_cssClass(self):
         def class_of(event):
             return self.createView(event).cssClass()
@@ -732,6 +730,7 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
     def test_full(self):
         view = self.createView()
         view.canEdit = lambda: False
+        view.canView = lambda: True
         request = TestRequest()
         content = view.full(request, date(2004, 12, 2))
         self.assertEqualsXML(content.replace('&ndash;', '--'), """
@@ -751,9 +750,6 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
                 <a href="delete_event.html?date=2004-12-02&amp;event_id=id%21">
                   [delete]
                 </a>
-                <div>
-                  Public
-                </div>
               </div>
               <h3>
                 <a href="edit_event.html?date=2004-12-02&amp;event_id=id%21">
@@ -768,6 +764,7 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
                          unique_id="id", location="Office")
         view = self.createView(ev)
         view.canEdit = lambda: False
+        view.canView = lambda: True
         content = view.full(request, date(2004, 12, 2))
         self.assertEqualsXML(content.replace('&ndash;', '--'), """
             <div class="calevent">
@@ -827,7 +824,6 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
         params = 'date=2004-12-02&event_id=s%40me%3Did'
         self.assertEquals(view.deleteLink(), 'delete_event.html?' + params)
         self.assertEquals(view.editLink(), 'edit_event.html?' + params)
-
 
 
 class TestCalendarEventAddView(CalendarEventAddView):
@@ -1997,6 +1993,14 @@ def doctest_CalendarViewBase():
         >>> from schoolbell.app.app import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
+
+    Set up the checkers for canEdit/canView on events:
+
+        >>> from schoolbell.app.cal import CalendarEvent
+        >>> from zope.security.checker import defineChecker, Checker
+        >>> defineChecker(CalendarEvent,
+        ...               Checker({'description': 'zope.Public'},
+        ...                       {'description': 'zope.Public'}))
 
     CalendarViewBase has a method calURL used for forming links to other
     calendar views on other dates.

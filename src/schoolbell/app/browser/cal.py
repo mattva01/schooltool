@@ -43,6 +43,7 @@ from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.security.proxy import removeSecurityProxy
+from zope.security.checker import canWrite, canAccess
 
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
@@ -599,26 +600,14 @@ class CalendarEventView(object):
 
     def canEdit(self):
         """Can the current user edit this calendar event?"""
-        return True # TODO: implement this when we have security.
+        return canWrite(self.context, 'description')
 
     def canView(self):
-        """Can the current user view this calendar event?"""
-        return True # TODO: implement this when we have security.
-
-    def isHidden(self):
-        """Should the event be hidden from the current user?"""
-        return False # TODO
+        return canAccess(self.context, 'description')
 
     def cssClass(self):
         """Choose a CSS class for the event."""
         return 'event' # TODO: for now we do not have any other CSS classes.
-
-    def getPeriod(self):
-        """Returns the title of the timetable period this event coincides with.
-
-        Returns None if there is no such period.
-        """
-        return None # XXX Does not apply to SchoolBell.
 
     def duration(self):
         """Format the time span of the event."""
@@ -631,11 +620,7 @@ class CalendarEventView(object):
             span = "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
                                     dtend.strftime('%Y-%m-%d %H:%M'))
 
-        period = self.getPeriod()
-        if period:
-            return "Period %s (%s)" % (period, span)
-        else:
-            return span
+        return span
 
     def full(self, request, date):
         """Full representation of the event for daily/weekly views."""
@@ -657,12 +642,8 @@ class CalendarEventView(object):
         else:
             title = _("Busy")
         if ev.dtstart.date() == end.date():
-            period = self.getPeriod()
-            if period:
-                duration = _("Period %s") % period
-            else:
-                duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
-                                             end.strftime('%H:%M'))
+            duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
+                                         end.strftime('%H:%M'))
         else:
             duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%b&nbsp;%d'),
                                          end.strftime('%b&nbsp;%d'))
@@ -682,9 +663,6 @@ class CalendarEventView(object):
         event_id = self.context.unique_id
         date = self.date.strftime('%Y-%m-%d')
         return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
-
-    def privacy(self):
-        return _("Public") # TODO used to also have busy-block and hidden.
 
 
 class DailyCalendarView(CalendarViewBase):
