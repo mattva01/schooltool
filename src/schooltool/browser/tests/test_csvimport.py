@@ -410,12 +410,11 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.app.timetableSchemaService['three-day'] = ttschema
 
         # add some people and groups
-        for name, title in [('curtin', 'Curtin'), ('lorch', 'Lorch'),
-                            ('guzman', 'Guzman')]:
-            self.app['persons'].new(name, title=title)
+        for title in ['Curtin', 'Lorch', 'Guzman']:
+            self.app['persons'].new(title.lower(), title=title)
         for title in ['Math1', 'Math2', 'Math3',
                       'English1', 'English2', 'English3']:
-            self.app['groups'].new(title, title=title)
+            self.app['groups'].new(title.lower(), title=title)
 
     def createImporter(self):
         from schooltool.browser.csvimport import TimetableCSVImporter
@@ -428,6 +427,24 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp.importTimetable(csv)
         self.assertEquals(imp.period_id, 'period_id')
         self.assertEquals(imp.ttschema, 'ttschema name')
+
+    def test_timetable_vacancies(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        imp = self.createImporter()
+
+        csv = dedent("""
+                "summer","three-day"
+                ""
+                "Monday","Tuesday"
+                "","A","B","C"
+                "Inside","Math1 Curtin","","Math1 Curtin"
+                """)
+        imp.importTimetable(csv)
+        group = imp.findByTitle(self.app['groups'], 'Math1 - Curtin')
+        tt = group.timetables['summer', 'three-day']
+        self.assert_(list(tt['Monday']['A']))
+        self.assert_(not list(tt['Monday']['B']))
+        self.assert_(list(tt['Monday']['C']))
 
     def test_timetable_functional(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -448,8 +465,9 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 """)
         imp.importTimetable(csv)
 
-        # a little poking around; we could be more comprehensive
-        tt = self.app['groups']['English1'].timetables['summer', 'three-day']
+        # A little poking around.  We could be more comprehensive...
+        group = imp.findByTitle(self.app['groups'], 'English1 - Lorch')
+        tt = group.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
         self.assert_(not list(tt['Monday']['C']))
@@ -457,15 +475,14 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.assert_(not list(tt['Wednesday']['B']))
         self.assert_(list(tt['Wednesday']['C']))
 
-#    def test_timetable_empty(self):
-#        imp = self.createImporter()
-#        imp.importTimetable('')
-#        # TODO
-#
-#    def test_timetable_invalid(self):
-#        imp = self.createImporter()
-#        imp.importTimetable('"Some","invalid","csv')
-#        # TODO
+    def test_timetable_empty(self):
+        imp = self.createImporter()
+        imp.importTimetable('')
+
+    def test_timetable_invalid(self):
+        imp = self.createImporter()
+        self.assertRaises(ValueError, imp.importTimetable,
+                          '"Some"\n"invalid"\n"csv"\n"follows')
 
     def test_clearTimetables(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -508,14 +525,29 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
                           day_ids=['day1', 'day2'], location='Inside')
 
-        tt = math101.timetables['period1', 'two_day']
+        group = imp.findByTitle(self.app['groups'], 'Math 101 - Prof. Bar')
+        #group.getRelatedObjects(group, URIMember)
+        # TODO: test relationship between group and math101
+
+        tt = group.timetables['period1', 'two_day']
         activities = list(tt.itercontent())
         self.assertEquals(len(activities), 2)
         for day_id, period_id, activity in activities:
             self.assertEquals(activity.title, 'Math 101')
-            self.assert_(activity.owner is self.teacher)
+            self.assert_(activity.owner is group)
             self.assertEquals(list(activity.resources), [self.location])
             self.assert_(activity.timetable is tt)
+
+    def test_parseRecordRow(self):
+        imp = self.createImporter()
+        def check(row, expected):
+            self.assertEquals(imp.parseRecordRow(row), expected)
+
+        check([], [])
+        check(["Math Whiz", "Comp Geek"],
+              [("Math", "Whiz"), ("Comp", "Geek")])
+        check(["Biology Nut", "", "Chemistry Nerd"],
+              [("Biology", "Nut"), None, ("Chemistry", "Nerd")])
 
 
 def test_suite():

@@ -320,9 +320,17 @@ class TimetableCSVImporter:
         self.persons = self.app['persons']
 
     def importTimetable(self, timetable_csv):
-        """Import timetables from CSV data."""
+        """Import timetables from CSV data.
+
+        May throw various exceptions (to be improved).
+        """
+        if not timetable_csv:
+            return # XXX Should we complain?
         reader = csv.reader(timetable_csv.splitlines())
-        rows = list(reader) # TODO: error checking
+        try:
+            rows = list(reader)
+        except csv.Error, e:
+            raise ValueError("Invalid CSV")
 
         self.period_id, self.ttschema = rows[0]
         state = 'day_ids'
@@ -342,12 +350,31 @@ class TimetableCSVImporter:
                 state = 'content'
                 continue
 
-            location, records = row[0], row[1:]
-            subjects = [record.split(" ", 1)[0] for record in records]
-            teachers = [record.split(" ", 1)[1] for record in records]
+            location, records = row[0], self.parseRecordRow(row[1:])
 
-            for period, subject, teacher in zip(periods, subjects, teachers):
-                self.scheduleClass(period, subject, teacher, day_ids, location)
+            for period, record in zip(periods, records):
+                if record is not None:
+                    subject, teacher = record
+                    self.scheduleClass(period, subject, teacher,
+                                       day_ids, location)
+
+    def parseRecordRow(self, records):
+        """Parse records and return a list of tuples (subject, teacher).
+
+        records is a list of strings.  If a string is empty, the result list
+        contains None instead of a tuple in the corresponding place.
+
+        TODO: error handling
+        """
+        result = []
+        for record in records:
+            if record:
+                # TODO: introduce a better separator than a space
+                record = record.split(" ", 1)
+                result.append(tuple(record))
+            else:
+                result.append(None)
+        return result
 
     def findByTitle(self, container, title):
         """Find an object with provided title in a container.
@@ -369,9 +396,24 @@ class TimetableCSVImporter:
 
     def scheduleClass(self, period, subject, teacher, day_ids, location):
         """Schedule a class of subject during a given period."""
-        group = self.findByTitle(self.groups, subject)
-        teacher = self.findByTitle(self.persons, teacher)
+        try: # TODO: nicer error handling
+            subject = self.findByTitle(self.groups, subject)
+        except KeyError:
+            raise ValueError('Group %r not found' % subject)
+        try:
+            teacher = self.findByTitle(self.persons, teacher)
+        except KeyError:
+            raise ValueError('Person %r not found' % teacher)
+        # TODO: should we check that teacher has role URITeacher for group?
+
         location = self.findByTitle(self.app['resources'], location)
+
+        group_name = '%s - %s' % (subject.title, teacher.title)
+        try:
+            group = self.findByTitle(self.groups, group_name)
+        except KeyError:
+            group = self.groups.new(title=group_name)
+            # TODO: set up teaching and membership relationships
 
         # Create the timetable if it does not exist yet.
         if (self.period_id, self.ttschema) not in group.timetables.keys():
@@ -381,8 +423,8 @@ class TimetableCSVImporter:
             tt = group.timetables[self.period_id, self.ttschema]
 
         # Add a new activity to the timetable
-        act = TimetableActivity(title=subject, owner=teacher,
-                                resources=(location,))
+        act = TimetableActivity(title=subject.title, owner=group,
+                                resources=(location, ))
         for day_id in day_ids:
             tt[day_id].add(period, act)
 
