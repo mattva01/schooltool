@@ -299,7 +299,6 @@ class ContainerBreadcrumbsMixin(ToplevelBreadcrumbsMixin):
         container = self.context
         while not IApplicationObjectContainer.providedBy(container):
             container = container.__parent__
-        # XXX Exceptions?
         breadcrumbs.append((self._container_translations[container.__name__],
                             absoluteURL(self.request, container)))
         return breadcrumbs
