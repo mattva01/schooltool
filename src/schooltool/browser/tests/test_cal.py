@@ -495,6 +495,13 @@ class TestWeeklyCalendarView(AppSetupMixin, unittest.TestCase):
         view.getWeek = lambda x: "really " + x
         self.assertEquals(view.getCurrentWeek(), "really works")
 
+    def test_dayTitle(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+
+        view = WeeklyCalendarView(None)
+        dt = datetime(2004, 7, 1)
+        self.assertEquals(view.dayTitle(dt), "Thursday, 2004-07-01")
+
 
 class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 

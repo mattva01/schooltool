@@ -564,11 +564,8 @@ class WeeklyCalendarView(CalendarViewBase):
                             }
 
     def dayTitle(self, day):
-        return _('%(day_of_week)s, %(year)s-%(month)s-%(day)s') % {
-                    'year': day.year,
-                    'month': day.month,
-                    'day': day.day,
-                    'day_of_week': self.day_of_week_names[day.weekday()]}
+        day_of_week = self.day_of_week_names[day.weekday()]
+        return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
 
     def prevWeek(self):
         """Return the day a week before."""
