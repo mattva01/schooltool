@@ -29,7 +29,7 @@ from zope.app.location.interfaces import ILocation
 
 
 def doctest_SchoolBellAPI():
-    """Tests for SchoolBellAPI.
+    r"""Tests for SchoolBellAPI.
 
         >>> from zope.interface.verify import verifyObject
         >>> from zope.tales.interfaces import ITALESFunctionNamespace
@@ -47,7 +47,7 @@ def doctest_SchoolBellAPI():
         True
 
     It does so even for objects that do not adapt to
-    ISchoolBellApplication, but are sublocations ofr SchoolBellApplication:
+    ISchoolBellApplication, but are sublocations of SchoolBellApplication:
 
         >>> class Adding:
         ...     implements(ILocation)
@@ -67,7 +67,28 @@ def doctest_SchoolBellAPI():
         >>> SchoolBellAPI(app).person is None
         True
 
+
+    'context/schoolbell:authenticated' checks whether context is an
+    authenticated principal
+
+        >>> from zope.app.security.principalregistry \
+        ...     import Principal, UnauthenticatedPrincipal
+        >>> root = Principal('root', 'Admin', 'Supreme user', 'root', 'secret')
+        >>> anonymous = UnauthenticatedPrincipal('anonymous', 'Anonymous',
+        ...                             "Anyone who didn't bother to log in")
+
+        >>> SchoolBellAPI(root).authenticated
+        True
+        >>> SchoolBellAPI(anonymous).authenticated
+        False
+
+        >>> SchoolBellAPI(Person()).authenticated
+        Traceback (most recent call last):
+          ...
+        TypeError: schoolbell:authenticated can only be applied to a principal
+
     """
+
 
 def doctest_SortBy():
     """Tests for SortBy adapter.

@@ -29,6 +29,8 @@ from zope.component import adapts
 from zope.app.publisher.browser import BrowserView
 from zope.app.size.interfaces import ISized
 from zope.app.traversing.interfaces import IPathAdapter, ITraversable
+from zope.app.security.interfaces import IPrincipal
+from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.tales.interfaces import ITALESFunctionNamespace
 
 from schoolbell import SchoolBellMessageID as _
@@ -73,15 +75,54 @@ class SchoolBellAPI(object):
         pass
 
     def app(self):
-        """Adapt context to ISchoolBellApplication."""
-        #return ISchoolBellApplication(self.context)
+        """Adapt context to ISchoolBellApplication.
+
+        Sample usage in a page template:
+
+            <a tal:attributes="href context/schoolbell:app/@@absolute_url">
+               Front page
+            </a>
+
+        """
         return getSchoolBellApplication(self.context)
     app = property(app)
 
     def person(self):
-        """Adapt context to IPerson, default to None"""
+        """Adapt context to IPerson, default to None.
+
+        Sample usage in a page template:
+
+            <a tal:define="person request/principal/schoolbell:person"
+               tal:condition="person"
+               tal:attributes="person/calendar/@@absolute_url">
+               My calendar
+            </a>
+
+        """
         return IPerson(self.context, None)
     person = property(person)
+
+    def authenticated(self):
+        """Check whether context is an authenticated principal.
+
+        Sample usage in a page template:
+
+            <tal:span tal:define="user request/principal"
+                      tal:condition="user/schoolbell:authenticated"
+                      tal:replace="user/title">
+              User title
+            </tal:span>
+            <tal:span tal:define="user request/principal"
+                      tal:condition="not:user/schoolbell:authenticated"
+              Anonymous
+            </tal:span>
+
+        """
+        if not IPrincipal.providedBy(self.context):
+            raise TypeError("schoolbell:authenticated can only be applied"
+                            " to a principal")
+        return not IUnauthenticatedPrincipal.providedBy(self.context)
+    authenticated = property(authenticated)
 
 
 class SortBy(object):
