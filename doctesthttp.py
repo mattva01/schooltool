@@ -16,7 +16,6 @@ from StringIO import StringIO
 sys.path.insert(0, 'Zope3/src')
 
 from zope.testing import doctest
-from zope.app.tests.functional import CookieHandler
 
 
 class HTTPCaller(object):

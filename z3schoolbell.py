@@ -3,6 +3,20 @@
 Start the new Zope-3 based SchoolBell.
 """
 
+#
+# XXX This file is an experimental script.  It is dirty.  It is ugly.  It is
+#     not unit tested!  It is a proof of concept: I wanted to be sure that it
+#     was possible to have a standalone Zope 3 based Python application that
+#     doesn't use ZMI, doesn't use zope.conf, and doesn't need a Zope3-style
+#     site.zcml.
+#
+#     This file will eventually be replaced by a small script that sets up
+#     sys.path, imports schoolbell.app.main, and runs schoolbell.app.main.main.
+#     schoolbell.app.main will, of course, be unit tested.  It will read
+#     a schoolbell.conf configuration file that will be more-or-less compatible
+#     with schoolbell.conf from SchoolBell 0.9.
+#
+
 import sys
 import os
 import time
@@ -125,17 +139,14 @@ def installAppInRoot(db, root):
     from zope.app.traversing.interfaces import IContainmentRoot
     from zope.interface import directlyProvides
     from zope.app.publication.zopepublication import ZopePublication
-    from zope.app.appsetup.bootstrap import getServiceManager
-    from zope.app.appsetup.bootstrap import ensureService
-    from zope.app.servicenames import Utilities
-    from zope.app.utility import LocalUtilityService
+    from zope.app.component import site
 
     app = SchoolBellApplication()
     directlyProvides(app, IContainmentRoot)
     root[ZopePublication.root_name] = app
 
-    service_manager = getServiceManager(app)
-    ensureService(service_manager, app, Utilities, LocalUtilityService)
+    site_manager = site.LocalSiteManager(app)
+    app.setSiteManager(site_manager)
 
     from schoolbell.app.security import setUpLocalAuth
     setUpLocalAuth(app)
