@@ -568,7 +568,7 @@ class TestPersonAddView(unittest.TestCase):
         request = view.request
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/persons/auto/edit.html')
+                          'http://localhost:7001/persons/auto')
         self.assertEquals(request.applog,
                           [(None, u'Object /persons/auto of type'
                                    ' Person created', INFO),

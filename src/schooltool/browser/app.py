@@ -325,7 +325,7 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
                           self.last_name_widget.value, self.dob_widget.value,
                           self.comment_widget.value)
         self._setUserPhoto(person, photo)
-        url = absoluteURL(request, person, 'edit.html')
+        url = absoluteURL(request, person)
         return self.redirect(url, request)
 
     def _addUser(self, username=None, password=None):
