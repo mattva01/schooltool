@@ -154,7 +154,7 @@ class RestrictedMembershipPolicy:
         if (IBeforeMembershipEvent.providedBy(event) and
             IPerson.providedBy(event.member) and
             getOptions(event.group).restrict_membership):
-            parents =  getRelatedObjects(event.group, URIGroup)
+            parents = getRelatedObjects(event.group, URIGroup)
             if parents:
                 possible_members = Set()
                 for parent in parents:
