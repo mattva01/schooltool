@@ -17,6 +17,9 @@ Content-Type: text/xml; charset=UTF-8
   </containers>
   <utilities>
     <utility xlink:type="simple"
+             xlink:href="/utils/absences"
+             xlink:title="Absence Tracker"/>
+    <utility xlink:type="simple"
              xlink:href="/utils/eventlog"
              xlink:title="Event Log"/>
   </utilities>
@@ -26,5 +29,6 @@ Content-Type: text/xml; charset=UTF-8
 1   Root Group (/groups/root)
 2   persons (/persons)
 3   groups (/groups)
-4   Event Log (/utils/eventlog)
+4   Absence Tracker (/utils/absences)
+5   Event Log (/utils/eventlog)
 
