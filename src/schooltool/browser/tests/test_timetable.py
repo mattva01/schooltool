@@ -144,8 +144,22 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.ttschema,
                           createSchema(['Monday'], ['Period 1']))
         self.assertEquals(view.model_name, 'SequentialDaysTimetableModel')
+        self.assertEquals(view.model_error, False)
         self.assertEquals(view.day_templates,
                           {0: createDayTemplate([('Period 1', 9, 0, 45)])})
+
+    def test_model_error(self):
+        view = self.createView()
+        view.request.args['model'] = ['xxx']
+        view.request.args['CREATE'] = ['Create']
+        view.render(view.request)
+        self.assertEquals(view.model_error, True)
+
+    def test_model_error_ignored_unless_this_is_the_final_submit(self):
+        view = self.createView()
+        view.request.args['model'] = ['xxx']
+        view.render(view.request)
+        self.assertEquals(view.model_error, False)
 
     def test_buildDayTemplates_empty(self):
         view = self.createView()

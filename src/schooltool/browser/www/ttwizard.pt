@@ -75,6 +75,9 @@ Second, select the way timetable days are aligned with calendar days.
 </p>
 
 <div class="form" tal:define="tabindex python:ncols*(nrows+3)+10">
+  <div class="error" tal:condition="view/model_error">
+    Please select a value.
+  </div>
   <table>
     <tr>
       <td>
@@ -128,7 +131,8 @@ you made in the table above, use the Update button to refresh the form.
       <th class="day" width="12%" i18n:translate="">Saturday</th>
       <th class="day" width="12%" i18n:translate="">Sunday</th>
     </tr>
-    <tr tal:repeat="period period_times"><tal:block define="n repeat/period/number">
+    <tr tal:repeat="period period_times"><tal:block
+        define="n repeat/period/number">
       <th class="period" nowrap="">
         <span tal:replace="period/title">Period 1</span>
         <input type="hidden"

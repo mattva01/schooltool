@@ -39,6 +39,7 @@ from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import SchooldayPeriod
 from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
+from schooltool.component import getTimetableModel
 
 __metaclass__ = type
 
@@ -111,9 +112,17 @@ class TimetableSchemaWizard(View):
     def do_GET(self, request):
         self.ttschema = self._buildSchema()
         self.model_name = self.request.args.get('model', [None])[0]
-        # TODO: verify if model_name is OK and display the dreaded red border
+        self.model_error = False
         self.day_templates = self._buildDayTemplates()
-        # TODO: actual schema creation
+        if 'CREATE' in request.args:
+            try:
+                factory = getTimetableModel(self.model_name)
+            except KeyError:
+                self.model_error = True
+            # TODO: actual schema creation
+            #   model = factory(self.ttschema.day_ids, self.day_templates)
+            #   self.ttschema.model = model
+            #   self.context[self.key] = self.ttschema
         return View.do_GET(self, request)
 
     def rows(self):
