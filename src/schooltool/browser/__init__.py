@@ -158,7 +158,7 @@ class View(_View):
 
     def redirect(self, url, request):
         """Redirect to a URL and return a html page explaining the redirect."""
-        if '://' not in url:
+        if not url.startswith('http://') and not url.startswith('https://'):
             if not url.startswith('/'):
                 url = '/' + url
             scheme = request.isSecure() and 'https' or 'http'

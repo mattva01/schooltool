@@ -219,6 +219,16 @@ class TestView(AppSetupMixin, unittest.TestCase):
                           'text/html; charset=UTF-8')
         self.assert_('http://localhost:7001/sublocation' in result)
 
+    def test_redirect_not_absolute_tricky(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.redirect('/sublocation?url=http://example.com', request)
+        full_url = 'http://localhost:7001/sublocation?url=http://example.com'
+        self.assertEquals(request.headers['location'], full_url)
+        self.assertEquals(request.headers['content-type'],
+                          'text/html; charset=UTF-8')
+        self.assert_(full_url in result)
+
     def test_redirect_no_slash(self):
         view = self.createView()
         request = RequestStub()
