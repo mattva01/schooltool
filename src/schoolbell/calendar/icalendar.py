@@ -92,6 +92,7 @@ def convert_event_to_ical(event):
         "SUMMARY:%s" % ical_text(event.title)]
     if event.location:
         result.append("LOCATION:%s" % ical_text(event.location))
+### TODO: event description
 ### if event.recurrence is not None:   # TODO
 ###     start = event.dtstart
 ###     result.extend(event.recurrence.iCalRepresentation(start))
