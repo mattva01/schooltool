@@ -1,6 +1,7 @@
 schooltool (0.6+svn20040918) unstable; urgency=low
 
   * Changed maintainer name.
+  * Moved logic for cleaning debian directory into debian/rules.
 
  -- Brian Sutherland <jinty@web.de>  Sat, 18 Sep 2004 13:05:48 +0200
 

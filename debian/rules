@@ -14,6 +14,19 @@ build-stamp:
 	chmod 755 debian/import-sampleschool
 	touch build-stamp
 
+debdirclean:
+	#This rule is only meant to be called from the top level makefile
+	rm -rf debian/schooltool-server debian/schooltool-clients
+	rm -f debian/schooltool-clients.substvars
+	rm -f debian/schooltool-clients.postinst.debhelper
+	rm -f debian/schooltool-clients.prerm.debhelper
+	rm -f debian/schooltool-server.substvars
+	rm -f debian/schooltool-server.postinst.debhelper
+	rm -f debian/schooltool-server.postrm.debhelper
+	rm -f debian/schooltool-server.prerm.debhelper
+	rm -f debian/import-sampleschool
+	rm -f debian/files
+
 clean::
 	dh_testdir
 	dh_testroot

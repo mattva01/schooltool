@@ -30,16 +30,7 @@ update-translations:
 clean:
 	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
-	rm -rf debian/schooltool-server debian/schooltool-clients
-	rm -f debian/schooltool-clients.substvars
-	rm -f debian/schooltool-clients.postinst.debhelper
-	rm -f debian/schooltool-clients.prerm.debhelper
-	rm -f debian/schooltool-server.substvars
-	rm -f debian/schooltool-server.postinst.debhelper
-	rm -f debian/schooltool-server.postrm.debhelper
-	rm -f debian/schooltool-server.prerm.debhelper
-	rm -f debian/import-sampleschool
-	rm -f debian/files
+	[ -x debian/rules ] && debian/rules debdirclean	
 	rm -f build-stamp install-stamp
 
 realclean: clean
