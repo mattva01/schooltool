@@ -131,7 +131,6 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -304,7 +303,7 @@ However Toad cannot modify the calendar.
     ... END:VEVENT
     ... END:VCALENDAR
     ... """, handle_errors=True)
-    HTTP/1.1 403 Forbidden
+    HTTP/1.1 401 Unauthorized
     ...
 
 Unless the manager grants him modification permissions too.
@@ -385,7 +384,7 @@ Modification: forbidden
     ... END:VEVENT
     ... END:VCALENDAR
     ... """)
-    HTTP/1.1 403 Forbidden
+    HTTP/1.1 401 Unauthorized
     ...
 
 Removal: forbidden
@@ -408,7 +407,7 @@ Removal: forbidden
     ... END:VEVENT
     ... END:VCALENDAR
     ... """)
-    HTTP/1.1 403 Forbidden
+    HTTP/1.1 401 Unauthorized
     ...
 
 Addition: allowed
@@ -531,6 +530,6 @@ Addition: not allowed
     ... END:VEVENT
     ... END:VCALENDAR
     ... """)
-    HTTP/1.1 403 Forbidden
+    HTTP/1.1 401 Unauthorized
     ...
 

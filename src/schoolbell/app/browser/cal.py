@@ -210,6 +210,47 @@ class CalendarTraverser(object):
         """
         return weeknum_bounds(year, week)[0]
 
+class CalendarOwnerHTTPTraverser(object):
+    """A traverser that allows to traverse to a calendar owner's calendar.
+
+    For HTTPRequests.
+    """
+
+    adapts(ICalendarOwner)
+    implements(IBrowserPublisher)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        if name in ('calendar.ics', 'calendar.vfb'):
+            return self.context.calendar
+        elif name == 'calendar':
+            return self.context.calendar
+
+        raise NotFound(self.context, name, request)
+
+
+class CalendarHTTPTraverser(object):
+    """Traverser that allows different ways of accessing ones calendar.
+
+    For HTTPRequest.
+    """
+
+    adapts(ISchoolBellCalendar)
+    implements(IBrowserPublisher)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        if name in ('calendar.ics', 'calendar.vfb'):
+            return self.context
+
+        raise NotFound(self.context, name, request)
+
 
 #
 # Calendar displaying backend
