@@ -114,8 +114,11 @@ class RequestStub:
         # Twisted's getCookie returns None when the cookie does not exist
         return self._cookies.get(key)
 
-    def addCookie(self, key, value):
-        self._outgoing_cookies[key] = value
+    def addCookie(self, key, value, expires=None):
+        if expires is not None:
+            self._outgoing_cookies[key] = (value, expires)
+        else:
+            self._outgoing_cookies[key] = value
 
     def setResponseCode(self, code, reason=None):
         self.code = code

@@ -385,6 +385,13 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             quarters.append(quarter)
         return quarters
 
+    def addParam(self, key, value):
+        uri = self.request.uri
+        if '?' in uri:
+            return "%s&%s=%s" % (uri, key, value)
+        else:
+            return "%s?%s=%s" % (uri, key, value)
+
 
 class DailyCalendarView(CalendarViewBase):
     """Daily calendar view.
@@ -523,7 +530,6 @@ class DailyCalendarView(CalendarViewBase):
             if pstart == dt:
                 return True
 
-        period = None
         start = today + timedelta(hours=self.starthour)
         for end in row_ends:
             if periodIsStarting(start):
@@ -531,7 +537,6 @@ class DailyCalendarView(CalendarViewBase):
                 pstart = datetime.combine(self.cursor, period.tstart)
                 pend = pstart + period.duration
                 yield (period.title, start, period.duration)
-                period = None
             else:
                 duration =  end - start
                 yield ('%d:%02d' % (start.hour, start.minute), start, duration)
@@ -753,9 +758,6 @@ class CalendarView(View):
     """The main calendar view.
 
     Switches daily, weekly, monthly, yearly calendar presentations.
-
-    The *_view_class attributes may be overridden by subclasses to show
-    different combinations of calendars.
     """
 
     __used_for__ = ICalendar
@@ -763,6 +765,16 @@ class CalendarView(View):
     authorization = ACLViewAccess
 
     def _traverse(self, name, request):
+        if 'cal_periods' in request.args:
+            expires = None
+            if request.args['cal_periods'][0] != 'yes':
+                now = datetime.utcnow()
+                expires = now.strftime("%a, %d-%h-%Y %H:%M:%S UTC")
+            request.addCookie('cal_periods', 'yes', expires=expires)
+            uri = request.uri
+            if '?' in uri:
+                uri = uri[:uri.rindex('?')]
+            self.redirect(uri, request)
         if name == 'daily.html':
             return DailyCalendarView(self.context)
         elif name == 'weekly.html':

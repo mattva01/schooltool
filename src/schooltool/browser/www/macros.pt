@@ -58,7 +58,6 @@
 <body>
   <h1 metal:define-slot="h1" metal:fill-slot="h1"
       i18n:translate="">Welcome to SchoolTool</h1>
-
   <div metal:fill-slot="content">
     <div class="calnav" tal:define="update view/update">
       <a class="calnav" tal:attributes="href python:view.calURL('daily')"
@@ -73,8 +72,14 @@
     <div class="calcontent">
       <p metal:define-slot="content">[Content]</p>
     </div>
-    <p tal:condition="view/isManager">
-      <a class="action"
+    <p>
+      <a tal:attributes="href python:view.addParam('cal_periods', 'yes')"
+         tal:condition="not: python:request.getCookie('cal_periods')"
+         i18n:translate="" class="action">Show time in periods</a>
+      <a tal:attributes="href python:view.addParam('cal_periods', 'no')"
+         tal:condition="python:request.getCookie('cal_periods')"
+         i18n:translate="" class="action">Periods off</a>
+      <a class="action"  tal:condition="view/isManager"
          tal:attributes="href string:${context/@@absolute_url}/acl.html"
          i18n:translate="">Edit ACL</a>
     </p>

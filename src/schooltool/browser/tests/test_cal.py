@@ -1004,24 +1004,38 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'acl.html', ACLView,
                              context.acl)
 
+    def test_period_switch(self):
+        from schooltool.browser.cal import CalendarView
+        view = CalendarView(self.person.calendar)
+        request = RequestStub(uri='http://server/calendar?periods=yes',
+                              args={'cal_periods': 'yes'})
+        view._traverse('daily.html', request)
+        self.assertEquals(request._outgoing_cookies['cal_periods'], 'yes')
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://server/calendar')
+
+        request = RequestStub(uri='http://server/calendar?periods=no',
+                              args={'cal_periods': 'no'})
+        view._traverse('daily.html', request)
+        self.assertEquals(request._outgoing_cookies['cal_periods'][0], 'yes')
+        # a date like 'Fri, 05-Nov-2004 19:35:06 UTC'
+        self.assertEquals(len(request._outgoing_cookies['cal_periods'][1]), 29)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://server/calendar')
+
     def test_render(self):
         from schooltool.browser.cal import CalendarView
-        from schooltool.model import Person
 
-        cal = createCalendar()
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
-        cal.__parent__ = person
-        cal.__name__ = 'calendar'
-
-        view = CalendarView(cal)
+        view = CalendarView(self.person.calendar)
         request = RequestStub()
         view.authorization = lambda x, y: True
         view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(
             request.headers['location'],
-            'http://localhost:7001/persons/boss/calendar/daily.html')
+            'http://localhost:7001/persons/johndoe/calendar/daily.html')
 
 
 class TestEventViewBase(AppSetupMixin, unittest.TestCase):
