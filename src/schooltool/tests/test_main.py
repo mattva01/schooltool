@@ -296,6 +296,8 @@ class TestRequest(unittest.TestCase):
         channel = None
         rq = Request(channel, True)
         rq.path = path
+        rq.uri = path
+        rq.method = "GET"
         rq.site = SiteStub()
         rq.reactor_hook = ReactorStub()
         rq.get_transaction_hook = lambda: transaction
@@ -327,7 +329,7 @@ class TestRequest(unittest.TestCase):
 
         self.assertEquals(transaction.history, 'C')
 
-        self.assertEquals(transaction._note, path)
+        self.assertEquals(transaction._note, "GET %s" % path)
         self.assertEquals(transaction._user, user)
 
         called = rq.reactor_hook._called_from_thread
@@ -406,7 +408,7 @@ class TestRequest(unittest.TestCase):
         # these checks are a bit coarse...
         self.assertEquals(transaction.history, 'A' * retries + 'C')
 
-        self.assertEquals(transaction._note, path)
+        self.assertEquals(transaction._note, "GET %s" % path)
         self.assertEquals(transaction._user, user)
 
         called = rq.reactor_hook._called_from_thread

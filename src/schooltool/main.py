@@ -228,7 +228,7 @@ class Request(server.Request):
                         resrc = self.traverse()
                         body = self.render(resrc)
                         txn = self.get_transaction_hook()
-                        txn.note(self.path)
+                        txn.note("%s %s" % (self.method, self.uri))
                         txn.setUser(self.getUser()) # anonymous is ""
                         txn.commit()
                     except ConflictError:
