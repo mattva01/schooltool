@@ -935,9 +935,9 @@ class CalendarEvent(Persistent):
             raise NotImplementedError('Cannot compare CalendarEvent with %r'
                                       % other)
         return cmp((self.dtstart, self.title, self.duration,
-                    hash(self.owner), hash(self.context)),
+                    hash(self.owner), hash(self.context), self.unique_id),
                    (other.dtstart, other.title, other.duration,
-                    hash(other.owner), hash(other.context)))
+                    hash(other.owner), hash(other.context), self.unique_id))
 
     def __hash__(self):
         return hash((self.dtstart, self.title, self.duration,

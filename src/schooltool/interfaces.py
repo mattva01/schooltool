@@ -837,9 +837,9 @@ class ICalendarEvent(Interface):
 
     unique_id = Attribute("""A unique id of this calendar event.""")
     dtstart = Attribute("""The datetime.datetime of the start of the event.""")
-    duration = Attribute("""The duration of the event (datetime.timedelta)""")
-    title = Attribute("""The title of the event""")
-    owner = Attribute("""The object that created this event""")
+    duration = Attribute("""The duration of the event (datetime.timedelta).""")
+    title = Attribute("""The title of the event.""")
+    owner = Attribute("""The object that created this event.""")
     context = Attribute(
         """The object in whose calendar this event lives.
 
@@ -853,11 +853,11 @@ class ICalendarEvent(Interface):
 
         Events that occur at the same time are compared by their titles.
 
-        Events are considered equal only if all three attributes are equal.
+        Events are considered equal only if all attributes are equal.
         """
 
     def __hash__():
-        """Compare the hash value of this event.
+        """Return the hash value of this event.
 
         It is guaranteed that if calendar events compare equal, hash will
         return the same value.
