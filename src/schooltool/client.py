@@ -36,7 +36,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     prompt = "\001\033[33m\002SchoolTool>\001\033[0m\002 "
 
     doc_header = "Available commands:"
-    ruler=""
+    ruler = ""
 
     server = 'localhost'
     accept = 'text/xml'
@@ -59,7 +59,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     def help_help(self):
         self.emit("This help.")
 
-    def do_quit(self,line):
+    def do_quit(self, line):
         """Exit the client."""
         sys.exit(0);
 
@@ -72,9 +72,9 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             pieces = line.split()
             self.server = pieces[0]
             self.port = 80
-            self.do_get("/")
             if len(pieces) > 1:
                 self.port = int(pieces[1])
+            self.do_get("/")
         else:
             self.emit(self.server)
 

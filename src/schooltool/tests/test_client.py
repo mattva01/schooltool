@@ -35,6 +35,8 @@ class HTTPStub:
 
         if host == 'badhost':
             raise socket.error(-2, 'Name or service not known')
+        if port != 80:
+            raise socket.error(111, 'Connection refused')
 
     def putrequest(self, method, resource, *args, **kw):
         self.method = method
@@ -90,9 +92,11 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.client.server, "server2.example.com")
         self.assertEqual(self.emitted, "server2.example.com")
 
+        self.emitted = ""
         self.client.do_server("server 31337")
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 31337)
+        self.assertEqual(self.emitted, "Error: could not connect to server")
 
         self.client.do_server("server")
         self.assertEqual(self.client.server, "server")
