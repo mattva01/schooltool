@@ -24,6 +24,7 @@ $Id$
 
 import datetime
 import random
+import itertools
 import email.Utils
 from zope.interface import implements
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
@@ -88,6 +89,45 @@ class ImmutableCalendar(CalendarMixin):
 
     def __iter__(self):
         return iter(self._events)
+
+
+def combine_calendars(*calendars):
+    r"""Combine events from several calendars into one read-only calendar.
+
+    Suppose you have several calendars with events
+
+        >>> from datetime import datetime, timedelta
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> e1 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
+        ...                          timedelta(minutes=15),
+        ...                          'Work on schoolbell.calendar.simple')
+        >>> calendar1 = ImmutableCalendar([e1])
+        >>> e2 = SimpleCalendarEvent(datetime(2005, 2, 2, 20, 28),
+        ...                          timedelta(minutes=10),
+        ...                          'Write a test for combine_calendars')
+        >>> calendar2 = ImmutableCalendar([e2])
+
+    You can combine them
+
+        >>> calendar = combine_calendars(calendar1, calendar2)
+        >>> titles = [e.title for e in calendar]
+        >>> titles.sort()
+        >>> print '\n'.join(titles)
+        Work on schoolbell.calendar.simple
+        Write a test for combine_calendars
+
+    This calendar is read-only
+
+        >>> from schoolbell.calendar.interfaces import IEditCalendar
+        >>> IEditCalendar.providedBy(calendar)
+        False
+
+        >>> from schoolbell.calendar.interfaces import ICalendar
+        >>> ICalendar.providedBy(calendar)
+        True
+
+    """
+    return ImmutableCalendar(itertools.chain(*calendars))
 
 
 def new_unique_id():
