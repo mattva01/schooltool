@@ -169,6 +169,47 @@ to create the necessary snapshots.  Do not restart the test server, or all
 saved snapshots will be gone.
 
 
+Unit test coverage
+------------------
+
+All code should be covered by unit tests.  The test runner can help you look
+for untested code by producing code coverage reports.
+
+To generate unit test coverage reports, run
+
+  make coverage
+
+This command will run the full SchoolTool unit test suite and produce a
+number of files (one for each Python module) in ./coverage/.  Every
+report file contains the source of the corresponding Python module.
+Each source line is annotated with a number that shows how many times
+this line was reached during testing.  Watch out for lines marked with
+'>>>>>>' as they indicate code that is not unit tested.
+
+There are some more helpful make targets:
+
+  make coverage-report-list
+
+    Lists all non-test modules from the schooltool package that contain
+    untested code.
+
+  make coverage-report
+
+    Like 'make coverage-report-list', but is somewhat slower and also
+    shows the number of untested lines in each module.
+
+  make vi-coverage-reports
+
+    Launches vi for all coverage reports listed by 'make
+    coverage-report-list'.  Type />>>>>> to search for untested code,
+    then type :next to look at the next report.
+
+  make edit-coverage-reports
+
+    Like 'make vi-coverage-reports' but uses $EDITOR rather than
+    hardcoding 'vi'.
+
+
 Translation
 -----------
 
