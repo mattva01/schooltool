@@ -34,7 +34,9 @@ You can choose to run unit tests (this is the default mode), functional tests
 Test cases are located in the directory tree starting at the location of this
 script, in subdirectories named 'tests' for unit tests and 'ftests' for
 functional tests, in Python modules named 'test*.py'.  They are then filtered
-according to pathname and test regexes.
+according to pathname and test regexes.  Alternatively, packages may just have
+'tests.py' and 'ftests.py' instead of subpackages 'tests' and 'ftests'
+respectively.
 
 A leading "!" in a regexp is stripped and negates the regexp.  Pathname
 regexp is applied to the whole path (package/package/module.py). Test regexp
@@ -149,14 +151,19 @@ def get_test_files(cfg):
     """Returns a list of test module filenames."""
     matcher = compile_matcher(cfg.pathname_regex)
     results = []
-    test_dirs = []
+    test_names = []
     if cfg.unit_tests:
-        test_dirs.append('tests')
+        test_names.append('tests')
     if cfg.functional_tests:
-        test_dirs.append('ftests')
+        test_names.append('ftests')
     baselen = len(cfg.basedir) + 1
     def visit(ignored, dir, files):
-        if os.path.basename(dir) not in test_dirs:
+        if os.path.basename(dir) not in test_names:
+            for name in test_names:
+                if name + '.py' in files:
+                    path = os.path.join(dir, name + '.py')
+                    if matcher(path[baselen:]):
+                        results.append(path)
             return
         if '__init__.py' not in files:
             print >> sys.stderr, "%s is not a package" % dir
