@@ -10,6 +10,8 @@ schooltool (0.8-1) unstable; urgency=low
   * Moved the persistent, zope, BTrees and ZDOB modules to /usr/lib and
     removed all links from /usr/share to /usr/lib.
   * Changed priority to extra.
+  * Fixed rules so that binary-arch and binary-indep targets build the
+    correct packages (Closes: Bug#278095).
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 

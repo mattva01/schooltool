@@ -59,37 +59,24 @@ debdirclean:
 clean::
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp install-stamp debian/import-sampleschool
+	rm -f build-stamp install-arch-stamp install-indep-stamp debian/import-sampleschool
 	-$(MAKE) realclean
 	dh_clean
 
-install: install-stamp
+install: install-arch install-indep
 
-install-stamp: build
+install-indep: install-indep-stamp
+install-indep-stamp:
 	dh_testdir
 	dh_testroot
-	dh_clean -k
-	dh_installdirs
-
-	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
-
-
-	###### Server Packages ######
-
-	# make server library package
-	# arch-dep files
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-		-name '*.so'  \
-		$(archdep)\
-	     -exec install -m 644 -D -p {} \
-		../debian/$(libpkg)/usr/lib/$(package)/{} \;
+	dh_clean -k -i
+	dh_installdirs -i
 
 	# make server package
 	# arch-indep files which can go into /usr/share
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt' -o -iname '*.so' -o\
+	     \( -name '*.py'  -o -name '*.pt' -o\
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
 		-name '*.xpm' -o -name '*.css' \) \
 		-not $(archdep) \
@@ -116,23 +103,11 @@ install-stamp: build
 	install -m 644 -D -p debian/$(package).conf.default \
 	    debian/$(package)/usr/share/$(package)/$(package).conf.default
 
-
-	###### Client Packages ######
-
-	# Make client library
-	# arch-dep files
-	cd src && \
-	find \( -name tests -o -name ftests \) -prune -o \
-	     -name '*.so' 	\
-	     $(archdep)		\
-	     $(clientfiles)	\
-	     -exec install -m 644 -D -p {} \
-		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
 	# Make client package
 	# arch-indep files
 	cd src && \
 	find \( -name 'tests' -o -name 'ftests' \) -prune -o\
-	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml' -o -name '*.so'\
+	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
 	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
 	     -not $(archdep)\
 	     $(clientfiles) \
@@ -141,9 +116,8 @@ install-stamp: build
 	# arch-indep files into /usr/lib becuse their modules depend on a .so
 	cd src && \
 	find \( -name 'tests' -o -name 'ftests' \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o\
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
+	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
+	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
 	     $(archdep) \
 	     $(clientfiles) \
 	     -exec install -m 644 -D -p {} \
@@ -161,11 +135,39 @@ install-stamp: build
 	    && PYTHONPATH=$$dir/src \
 	       python $$dir/src/schooltool/clients/datagen.py $(datagen_seed)
 
-	touch install-stamp
+	touch install-indep-stamp
 
-binary-indep: build install
+install-arch: install-arch-stamp
+install-arch-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k -s
+	dh_installdirs -s
 
-binary-arch: build install
+	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
+
+	# make server library package
+	# arch-dep files
+	cd src && \
+	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
+		-name '*.so'  \
+		$(archdep)\
+	     -exec install -m 644 -D -p {} \
+		../debian/$(libpkg)/usr/lib/$(package)/{} \;
+
+	# Make client library
+	# arch-dep files
+	cd src && \
+	find \( -name tests -o -name ftests \) -prune -o \
+	     -name '*.so' 	\
+	     $(archdep)		\
+	     $(clientfiles)	\
+	     -exec install -m 644 -D -p {} \
+		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
+
+	touch install-arch-stamp
+
+binary-common:
 	dh_testdir
 	dh_testroot
 	dh_installdocs
@@ -184,6 +186,12 @@ binary-arch: build install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
+
+binary-indep: build install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+binary-arch: build install-arch
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
 
 binary: binary-arch binary-indep
 
