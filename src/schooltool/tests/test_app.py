@@ -84,7 +84,7 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
     def testTraversal(self):
         from schooltool.app import Application
         a = Application()
-        self.assertEqual(a.traverse('utils'), a.utilityService)
+        self.assertEqual(a.traverse('utils', []), a.utilityService)
         marker = Location()
         a['foo'] = marker
         self.assertEqual(a.traverse('foo'), marker)

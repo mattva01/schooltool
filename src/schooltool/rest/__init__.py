@@ -493,10 +493,15 @@ class ItemTraverseView(View):
 
 
 class TraversableView(View):
-    """A view that supports traversing of ITraversable contexts."""
+    """A view that supports traversing of ITraversable contexts.
+
+    Implementation detail: TraversableView relies on the fact that none of the
+    ITraversable objects used in SchoolTool use or change the furtherPath
+    argument to `traverse`.
+    """
 
     def _traverse(self, name, request):
-        return getView(self.context.traverse(name))
+        return getView(self.context.traverse(name, []))
 
 
 class ViewError(UnicodeAwareException):

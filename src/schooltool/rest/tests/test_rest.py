@@ -344,9 +344,64 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.code, 401)
 
 
+def doctest_TraversableView():
+    """TraversableView is a View for ITraversables that defines `_traverse`.
+
+    We need a context that is traversable
+
+        >>> from zope.interface import implements
+        >>> from zope.app.traversing.interfaces import ITraversable
+        >>> from zope.app.traversing.interfaces import TraversalError
+        >>> class MyThing:
+        ...     def __repr__(self):
+        ...         return '<MyThing>'
+        >>> class MyTraversable:
+        ...     implements(ITraversable)
+        ...     thing = MyThing()
+        ...     def traverse(self, name, furtherPath):
+        ...         if name == 'thing':
+        ...             return self.thing
+        ...         raise TraversalError
+
+    We also need to register a view for MyThing
+
+        >>> from schooltool.rest import View
+        >>> class MyThingView(View):
+        ...     def __repr__(self):
+        ...         return '<MyThingView for %r>' % self.context
+        >>> from schooltool.component import registerViewForClass
+        >>> registerViewForClass(MyThing, MyThingView)
+
+    We can now create a view (request is not currently used by TraversableView,
+    so we can use None here)
+
+        >>> from schooltool.rest import TraversableView
+        >>> context = MyTraversable()
+        >>> request = None
+        >>> view = TraversableView(context)
+
+    Traversing the view should return the appropriate view of the object
+    reached through context.traverse:
+
+        >>> result = view._traverse('thing', request)
+        >>> result
+        <MyThingView for <MyThing>>
+        >>> result.context is context.thing
+        True
+
+    Traversal to nonexisting things raises a KeyError
+
+        >>> try: view._traverse('nosuchthing', request)
+        ... except KeyError: print '404 Not Found'
+        404 Not Found
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.rest'))
+    suite.addTest(DocTestSuite()) # this module
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestSchoolToolTraverse))
     suite.addTest(unittest.makeSuite(TestErrorViews))
