@@ -167,6 +167,10 @@ SchoolTool server RESTive interface
   GET /csvexport.zip
     returns a zip with four csv files, suitable for importing with csvclient.
 
+
+  GET /applog
+    returns the application log as text/plain
+
 In the above '...object' stands for a full path to an application object (i.e.
 a group, a person or a resource), for example '/persons/some_person_id'.
 
