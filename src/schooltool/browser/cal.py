@@ -32,7 +32,8 @@ from schooltool.browser.auth import TeacherAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
 from schooltool.browser.acl import ACLView
-from schooltool.cal import CalendarEvent, Period
+from schooltool.cal import CalendarEvent
+from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent

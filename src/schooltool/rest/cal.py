@@ -38,8 +38,9 @@ from schooltool.rest import read_file
 from schooltool.rest.acl import ACLView
 from schooltool.rest.auth import PublicAccess, TeacherAccess
 from schooltool.rest.auth import isManager, CalendarACLAccess
-from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
-from schooltool.cal import ical_text, ical_duration, Period
+from schooltool.icalendar import ICalReader, ICalParseError, Period
+from schooltool.icalendar import ical_text, ical_duration
+from schooltool.cal import CalendarEvent
 from schooltool.common import parse_date, parse_datetime, to_unicode
 from schooltool.component import getPath, traverse
 from schooltool.component import registerView
