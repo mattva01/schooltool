@@ -44,7 +44,7 @@ from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
 from zope.app.location.interfaces import ILocation
-from zope.app.security.interfaces import IAuthentication
+from zope.app.security.interfaces import IAuthentication2
 from zope.app.annotation.interfaces import IAnnotatable
 
 import pytz
@@ -309,7 +309,7 @@ class ISchoolBellApplication(IReadContainer):
     """
 
 
-class ISchoolBellAuthentication(IAuthentication):
+class ISchoolBellAuthentication(IAuthentication2):
     """A local authentication utility for SchoolBell"""
 
     def setCredentials(request, username, password):

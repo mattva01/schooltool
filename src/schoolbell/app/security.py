@@ -32,7 +32,7 @@ from zope.app.component.site import UtilityRegistration
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.location.interfaces import ILocation
-from zope.app.security.interfaces import IAuthentication, ILoginPassword
+from zope.app.security.interfaces import IAuthentication2, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
@@ -109,13 +109,13 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
         if not IBrowserRequest.providedBy(request) or request.method == 'PUT':
-            next = getNextUtility(self, IAuthentication)
+            next = getNextUtility(self, IAuthentication2)
             return next.unauthorized(id, request)
         if str(request.URL).endswith('.ics'):
             # Special case: testing shows that Mozilla Calendar does not send
             # the Authorization header unless challenged.  It is pointless
             # to redirect an iCalendar client to an HTML login form.
-            next = getNextUtility(self, IAuthentication)
+            next = getNextUtility(self, IAuthentication2)
             return next.unauthorized(id, request)
         app = getSchoolBellApplication()
         url = zapi.absoluteURL(app, request)
@@ -153,7 +153,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
                 # filling in principal.groups.
                 return Principal(id, group.title)
 
-        next = getNextUtility(self, IAuthentication)
+        next = getNextUtility(self, IAuthentication2)
         return next.getPrincipal(id)
 
     def setCredentials(self, request, username, password):
@@ -170,6 +170,9 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
             del session['username']
         except KeyError:
             pass
+
+    # See IAuthentication2
+    logout = clearCredentials
 
 
 def setUpLocalAuth(site, auth=None):
@@ -191,7 +194,7 @@ def setUpLocalAuth(site, auth=None):
     if 'SchoolBellAuth' not in default:
         # Add and register the auth utility
         default['SchoolBellAuth'] = auth
-        registration = UtilityRegistration('', IAuthentication, auth)
+        registration = UtilityRegistration('', IAuthentication2, auth)
         reg_manager.addRegistration(registration)
         registration.status = ActiveStatus
 
