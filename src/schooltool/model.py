@@ -198,7 +198,7 @@ class AbsenceEndedEvent(AttendanceEvent):
     implements(IAbsenceEndedEvent)
 
 
-class AbsenceTrackerMixin:
+class AbsenceTrackerMixin(Persistent):
 
     implements(IAbsenceTracker)
 

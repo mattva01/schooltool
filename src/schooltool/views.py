@@ -33,6 +33,7 @@ from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility, IFacet
 from schooltool.interfaces import IModuleSetup, IAbsenceTrackerUtility
+from schooltool.interfaces import IAbsenceTrackerFacet
 from schooltool.interfaces import ComponentLookupError, Unchanged
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
@@ -917,6 +918,10 @@ class AbsenceTrackerView(View):
                 for item in self.context.absences]
 
 
+class AbsenceTrackerFacetView(AbsenceTrackerView, FacetView):
+    pass
+
+
 def setUp():
     registerView(IPerson, PersonView)
     registerView(IGroup, GroupView)
@@ -928,5 +933,6 @@ def setUp():
     registerView(IEventLogUtility, EventLogView)
     registerView(IEventLogFacet, EventLogFacetView)
     registerView(IAbsenceTrackerUtility, AbsenceTrackerView)
+    registerView(IAbsenceTrackerFacet, AbsenceTrackerFacetView)
     registerView(IFacet, FacetView)
 

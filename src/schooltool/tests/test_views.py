@@ -615,7 +615,6 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
 
         context = XPathTestContext(self, result)
         try:
-            res = context.query("/schooltool/containers/container")
             containers = context.oneNode('/schooltool/containers')
             context.assertNumNodes(2, '/schooltool/containers/container')
             persons = context.oneNode(
@@ -1945,6 +1944,36 @@ class TestAbsenceTrackerView(RegistriesSetupMixin, unittest.TestCase):
                           "text/xml; charset=UTF-8")
 
 
+class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
+
+    def setUp(self):
+        from schooltool.model import Person, AbsenceTrackerFacet
+        from schooltool.model import AbsenceComment
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.views import AbsenceTrackerFacetView
+        from schooltool.interfaces import IAttendanceEvent
+        from schooltool.facet import FacetManager
+
+        self.setUpRegistries()
+        app = Application()
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.person = app['persons'].new("a", title="a")
+
+        self.facet = AbsenceTrackerFacet()
+        FacetManager(self.person).setFacet(self.facet)
+
+        self.person.reportAbsence(AbsenceComment(None, ""))
+        self.view = AbsenceTrackerFacetView(self.facet)
+
+
+    def testDelete(self):
+        request = RequestStub("http://localhost/persons/a/facets/001",
+                              method="DELETE")
+        result = self.view.render(request)
+        expected = "Facet removed"
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestHelpers))
@@ -1969,6 +1998,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAbsenceCommentParser))
     suite.addTest(unittest.makeSuite(TestRollcallView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerView))
+    suite.addTest(unittest.makeSuite(TestAbsenceTrackerFacetView))
     return suite
 
 if __name__ == '__main__':
