@@ -103,9 +103,10 @@ class TestFacetFunctions(unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IFacetAPI, IContainmentAPI
+        from schooltool.interfaces import IFacetAPI, IContainmentAPI, IURIAPI
         verifyObject(IFacetAPI, component)
         verifyObject(IContainmentAPI, component)
+        verifyObject(IURIAPI, component)
 
     def test_setFacet(self):
         from schooltool.component import setFacet
@@ -141,12 +142,69 @@ class TestFacetFunctions(unittest.TestCase):
         self.assertEqual(result, [(self.marker, self.facet)])
         self.assertRaises(TypeError, getFacetItems, object())
 
+class TestSpecificURI(unittest.TestCase):
+
+    def test_inspectSpecificURI(self):
+        from schooltool.component import inspectSpecificURI
+        from schooltool.interfaces import ISpecificURI
+        self.assertRaises(TypeError, inspectSpecificURI, object())
+        self.assertRaises(TypeError, inspectSpecificURI, I1)
+        self.assertRaises(TypeError, inspectSpecificURI, ISpecificURI)
+        class IURI(ISpecificURI):
+            """http://example.com/foo
+
+            Doc text
+            """
+        uri, doc = inspectSpecificURI(IURI)
+        self.assertEqual(uri, "http://example.com/foo")
+        self.assertEqual(doc, """Doc text
+            """)
+
+        class IURI2(ISpecificURI): """http://example.com/foo"""
+        uri, doc = inspectSpecificURI(IURI2)
+        self.assertEqual(uri, "http://example.com/foo")
+        self.assertEqual(doc, "")
+
+        class IURI3(ISpecificURI): """foo"""
+        self.assertRaises(ValueError, inspectSpecificURI, IURI3)
+
+        class IURI4(ISpecificURI):
+            """\
+            mailto:foo
+            """
+        uri, doc = inspectSpecificURI(IURI4)
+        self.assertEqual(uri, "mailto:foo")
+        self.assertEqual(doc, "")
+
+        class IURI5(ISpecificURI):
+            """
+            mailto:foo
+            """
+        self.assertRaises(ValueError, inspectSpecificURI, IURI5)
+
+    def test__isURI(self):
+        from schooltool.component import isURI
+        good = ["http://foo/bar?baz#quux",
+                "HTTP://foo/bar?baz#quux",
+                "mailto:root",
+                ]
+        bad = ["2HTTP://foo/bar?baz#quux",
+               "\nHTTP://foo/bar?baz#quux",
+               "mailto:postmaster ",
+               "mailto:postmaster text"
+               "nocolon",
+               ]
+        for string in good:
+            self.assert_(isURI(string), string)
+        for string in bad:
+            self.assert_(not isURI(string), string)
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGetAdapter))
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
+    suite.addTest(unittest.makeSuite(TestSpecificURI))
     return suite
 
 if __name__ == '__main__':

@@ -121,14 +121,13 @@ class IFacetAPI(Interface):
     def getFacetItems(ob):
         """Returns a sequence of (key, facet) for all facets of an object."""
 
-
 #
-# Relationships
+# URIs
 #
 
 class ISpecificURI(Interface):
     """All interfaces derived from this must have the URI they map on
-    to as the first part of their docstring. Examples::
+    to as the first line of their docstring. Examples::
 
         class ITutor(ISpecificURI):
             '''http://schooltool.org/ns/tutor'''
@@ -140,6 +139,25 @@ class ISpecificURI(Interface):
             '''
     """
 
+class IURIAPI(Interface):
+
+    def inspectSpecificURI(uri):
+        """Returns a tuple of a URI and the documentation of the ISpecificURI.
+
+        Raises a TypeError if the argument is not ISpecificURI.
+        Raises a ValueError if the URI's docstring does not conform.
+        """
+
+    def isURI(uri):
+        """Checks if the argument looks like a URI.
+
+        Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
+        We're only approximating to the spec.
+        """
+
+#
+# Relationships
+#
 
 class ILink(Interface):
     """A link is a 'view' of a relationship the relating objects have.

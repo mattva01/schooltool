@@ -21,12 +21,14 @@ The schooltool component.
 
 $Id$
 """
+import re
 from zope.interface import moduleProvides
-from schooltool.interfaces import IContainmentAPI, IFacetAPI
+from zope.interface.interfaces import IInterface
+from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
-from schooltool.interfaces import ComponentLookupError
+from schooltool.interfaces import ComponentLookupError, ISpecificURI
 
-moduleProvides(IContainmentAPI, IFacetAPI)
+moduleProvides(IContainmentAPI, IFacetAPI, IURIAPI)
 
 adapterRegistry = {}
 
@@ -103,4 +105,42 @@ def getFacetItems(ob):
     if not IFaceted.isImplementedBy(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
     return ob.__facets__.items()
+
+#
+# URI API
+#
+def inspectSpecificURI(uri):
+    """Returns a tuple of a URI and the documentation of the ISpecificURI.
+
+    Raises a TypeError if the argument is not ISpecificURI.
+    Raises a ValueError if the URI's docstring does not conform.
+    """
+    if not IInterface.isImplementedBy(uri):
+        raise TypeError("URI must be an interface (got %r)" % (uri,))
+
+    if not uri.extends(ISpecificURI, True):
+        raise TypeError("URI must strictly extend ISpecificURI (got %r)" %
+                        (uri,))
+
+    segments = uri.__doc__.split("\n", 1)
+    uri = segments[0].strip()
+    if not isURI(uri):
+        raise ValueError("This does not look like a URI: %r" % uri)
+
+    if len(segments) > 1:
+        doc = segments[1].lstrip()
+    else:
+        doc = ""
+
+    return uri, doc
+
+def isURI(uri):
+    """Checks if the argument looks like a URI.
+
+    Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
+    We're only approximating to the spec.
+    """
+    uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
+    return uri_re.search(uri)
+
 
