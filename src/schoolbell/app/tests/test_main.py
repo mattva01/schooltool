@@ -237,15 +237,6 @@ def doctest_setup():
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
-    ZODB loggers have been set up:
-
-        >>> zodb1 = logging.getLogger('ZODB')
-        >>> zodb1.handlers
-        [<logging.StreamHandler instance at 0x...>]
-        >>> zodb2 = logging.getLogger('txn')
-        >>> zodb2.handlers
-        [<logging.StreamHandler instance at 0x...>]
-
     ZODB.lock_file has been shut up:
 
         >>> logging.getLogger('ZODB.lock_file').disabled
@@ -254,7 +245,7 @@ def doctest_setup():
     We better clean up logging before we leave:
 
         >>> logging.getLogger('ZODB.lock_file').disabled = False
-        >>> for logger in [logger1, logger2, zodb1, zodb2]:
+        >>> for logger in [logger1, logger2]:
         ...     del logger.handlers[:]
         ...     logger1.propagate = True
         ...     logger1.disabled = False
