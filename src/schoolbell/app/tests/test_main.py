@@ -109,7 +109,7 @@ def doctest_load_options():
     Warnings about obsolete options are shown.
 
         >>> from schoolbell.app.main import load_options
-        >>> o = load_options(['sb.py', '-c', sample_config_file, '-d'])
+        >>> o = load_options(['sb.py', '-c', sample_config_file])
         Reading configuration from ...sample.conf
         sb.py: warning: ignored configuration option 'module'
         sb.py: warning: ignored configuration option 'domain'
@@ -123,7 +123,7 @@ def doctest_load_options():
         >>> o.config_file
         '...sample.conf'
         >>> o.daemon
-        True
+        False
 
     Some come from the config file
 
@@ -219,12 +219,18 @@ def doctest_setup():
         ...     web_access_log_file = ['STDOUT']
         >>> options.config = ConfigStub()
 
+    Workaround to fix a Windows failure:
+
+        >>> import logging
+        >>> del logging.getLogger(None).handlers[:]
+
+    And go!
+
         >>> setup(options)
         <ZODB.DB.DB object at ...>
 
     A web access logger has been set up:
 
-        >>> import logging
         >>> logger1 = logging.getLogger('accesslog')
         >>> logger1.propagate
         False
@@ -402,6 +408,7 @@ def test_setUpLogger():
 
     Let's clean up after ourselves (logging is messy):
 
+        >>> logger.handlers[1].close()
         >>> del logger.handlers[:]
         >>> logger.propagate = True
         >>> logger.disabled = False

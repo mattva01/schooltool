@@ -319,6 +319,9 @@ class StreamWrapper(object):
         for obj in seq:
             self.write(obj)
 
+    def close(self):
+        self.stm.close()
+
 
 class UnicodeFileHandler(logging.StreamHandler):
     """A handler class which writes records to disk files.

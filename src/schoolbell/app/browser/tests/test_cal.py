@@ -2621,8 +2621,8 @@ def doctest_WeeklyCalendarView():
         'http://127.0.0.1/calendar/2004-w33'
         >>> view.next()
         'http://127.0.0.1/calendar/2004-w35'
-        >>> fmt = 'http://127.0.0.1/calendar/%G-w%V'
-        >>> view.current() == date.today().strftime(fmt)
+        >>> fmt = 'http://127.0.0.1/calendar/%04d-w%02d'
+        >>> view.current() == fmt % date.today().isocalendar()[:2]
         True
 
     getCurrentWeek is a shortcut for view.getWeek(view.cursor)
