@@ -29,15 +29,36 @@ set -e
 # configuration purging, Section 6.7).
 
 package=schooltool
+sslcert=/etc/$package/$package.cert.pem
+sslkey=/etc/$package/$package.privkey.pem
+config=/etc/$package/$package.conf
+
+. /usr/share/debconf/confmodule
 
 case "$1" in
     purge)
-        rm /etc/$package/$package.conf || true
+        # Clean up configuration
+        rm $config || true
+        rm $sslcert || true
+        rm $sslkey || true
+        # Clean up logs
         for i in error rest-access web-access app;do
-            [ -e /var/log/$package/$i.log ] && rm -f /var/log/$package/$i.log* || true
+            [ -e /var/log/$package/$i.log ] \
+                && rm -f /var/log/$package/$i.log* || true
         done
         rmdir /var/log/$package || true
+        # Clean up database as reccomended in TODO
+        db_input high $package/purge_db || true
+        db_go || true
+        db_get $package/purge_db
+        if [ z"$RET" == ztrue ]; then
+            for i in database_ver Data.fs Data.fs.index \
+                    Data.fs.lock Data.fs.tmp ; do
+                rm /var/lib/$package/$i ||true
+            done
+        fi
         rmdir /var/lib/$package || true
+        # Clean up /var/run
         [ -e /var/run/$package/$package.pid ] && \
             rm -f /var/run/$package/$package.pid || true
         rmdir /var/run/$package || true

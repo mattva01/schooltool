@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-01 14:01+0100\n"
+"POT-Creation-Date: 2004-11-28 01:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,10 +116,42 @@ msgstr ""
 msgid "Enter the filename of the SSL certificate (in PEM format) to import."
 msgstr ""
 
+#. Type: boolean
+#. Description
+#: ../schooltool.templates:69
+msgid "Do you want to purge the database for SchoolTool?"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../schooltool.templates:69
+msgid ""
+"By default, databases are removed when a package is purged.  However, if you "
+"would like to retain the database for SchoolTool, this is your last chance.  "
+"Purging the database means that all the data will be irrevocably lost!  "
+"You've been warned!"
+msgstr ""
+
 #. Type: select
 #. Description
 #: ../schoolbell.templates:33
 msgid ""
 "You can create a self signed root certificate that can be imported into web "
 "browsers. The certificate can be copied from /etc/schoolbell/cert.pem."
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:69
+msgid "Do you want to purge the database for SchoolBell?"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:69
+msgid ""
+"By default, databases are removed when a package is purged.  However, if you "
+"would like to retain the database for SchoolBell, this is your last chance.  "
+"Purging the database means that all the data will be irrevocably lost!  "
+"You've been warned!"
 msgstr ""

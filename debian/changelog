@@ -1,3 +1,12 @@
+schooltool (0.8+svn) unstable; urgency=low
+
+  * Delete SSL cerificate on purge. Ask debconf question whether to purge
+    database, using the form used in the proposed database policy at
+    http://people.debian.org/~seanius/policy/dbapp-policy.html.
+    (Closes: Bug#282369)
+
+ -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
+
 schooltool (0.7.99+0.8rc1-1) unstable; urgency=low
 
   * New upstream release: 0.8 release candidate 1.

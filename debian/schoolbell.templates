@@ -62,3 +62,12 @@ Description: Should the previous database be removed?
  .
  Therefore the new version cannot be installed unless the existing database
  is removed first. All data in the existing database will be deleted.
+
+Template: schoolbell/purge_db
+Type: boolean
+Default: true
+_Description: Do you want to purge the database for SchoolBell?
+ By default, databases are removed when a package is purged.  However, if
+ you would like to retain the database for SchoolBell, this is your last
+ chance.  Purging the database means that all the data will be irrevocably
+ lost!  You've been warned!
