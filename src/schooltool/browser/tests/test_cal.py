@@ -1397,6 +1397,20 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'recurrence': 'on',
                                     'recurrence_shown': 'yes',
                                     'range': 'until',
+                                    'until': '2004-01-01'},
+                              method='POST')
+        content = view.render(request)
+        assert 'End date is earlier than start date' in content
+
+        view = self.createView()
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'duration': '100',
+                                    'recurrence_type' : 'daily',
+                                    'recurrence': 'on',
+                                    'recurrence_shown': 'yes',
+                                    'range': 'until',
                                     'count': '23'},
                               method='POST')
         content = view.render(request)

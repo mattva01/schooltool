@@ -1002,6 +1002,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     date = None
 
     def __init__(self, context):
+        # XXX Do we really have to do all this in __init__?
         View.__init__(self, context)
         self.title_widget = TextWidget('title', _('Title'))
         self.date_widget = TextWidget('start_date', _('Date'),
@@ -1029,9 +1030,8 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                                ('hidden', _('Hidden'))),
                                               value=default_privacy)
 
-        # Widgets for the recurrence editing
-        self.recurrence_widget = CheckboxWidget('recurrence',
-                                                _('Recurring'))
+        # Widgets for editing the recurrence
+        self.recurrence_widget = CheckboxWidget('recurrence', _('Recurring'))
 
         self.recurrence_type_widget = SelectionWidget(
             'recurrence_type', _('Recurs'),
@@ -1056,7 +1056,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.until_widget = TextWidget('until', _('Repeat until'),
                                        parser=dateParser)
 
-        # The display is done manually, so no formatter needed
+        # The display is done manually, so no formatter is needed
         self.weekdays_widget = SequenceWidget('weekdays', _('Weekdays'),
                                               parser=intsParser,
                                               validator=weekdaysValidator)
@@ -1112,6 +1112,12 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
             self.count_widget.require()
         if self.range_widget.value == 'until':
             self.until_widget.require()
+            start = self.date_widget.value
+            until = self.until_widget.value
+            if start and until and start > until:
+                # Is it good manners to set widget.error?
+                self.until_widget.error = _("End date is earlier"
+                                            " than start date")
 
         errors = (self.title_widget.error or self.date_widget.error or
                   self.time_widget.error or self.duration_widget.error or
