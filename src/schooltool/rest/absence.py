@@ -93,6 +93,7 @@ class RollCallView(View):
         of (person, present).
         """
         body = request.content.read()
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
         try:
             doc = libxml2.parseDoc(body)
         except libxml2.parserError:
@@ -202,6 +203,7 @@ class AbsenceCommentParser:
         """Parse and create an AbsenceComment from a given request body"""
         body = request.content.read()
 
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
         try:
             if not validate_against_schema(self.schema, body):
                 raise ValueError("Document not valid according to schema")

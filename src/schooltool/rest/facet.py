@@ -103,6 +103,7 @@ class FacetManagementView(View):
     def do_POST(self, request):
         body = request.content.read()
 
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
         try:
             if not validate_against_schema(self.schema, body):
                 return textErrorPage(request,

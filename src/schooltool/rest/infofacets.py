@@ -92,6 +92,7 @@ class PersonInfoFacetView(FacetView):
 
     def do_PUT(self, request):
         xml = request.content.read()
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,

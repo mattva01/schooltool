@@ -160,6 +160,7 @@ class SchooldayModelCalendarView(View):
 
     def do_PUT_text_xml(self, request):
         xml = request.content.read()
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
@@ -404,6 +405,7 @@ class BookingView(View):
 
     def do_POST(self, request):
         xml = request.content.read()
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
