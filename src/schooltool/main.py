@@ -460,10 +460,8 @@ class Request(http.Request):
 
     def _printTraceback(self, reason):
         """Print a timestamp preceding a traceback to the site log."""
-        for log in self.site.exception_logs:
-            print >> log, '--'
-            print >> log, str(datetime.datetime.now())
-            reason.printTraceback(log)
+        # XXX Do we really need a separate method here?
+        self.site.logger.error(reason.getTraceback(), exc_info=False)
 
     def _handle_exception(self, reason):
         """Generate an internal error page.
@@ -532,8 +530,7 @@ class Site(http.HTTPFactory):
 
     conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
 
-    def __init__(self, db, rootName, viewFactory, authenticate,
-                 exception_logs=[sys.stderr]):
+    def __init__(self, db, rootName, viewFactory, authenticate):
         """Create a site.
 
         Arguments:
@@ -541,14 +538,13 @@ class Site(http.HTTPFactory):
           rootName         name of the application object in the database
           viewFactory      factory for the application object views
           authenticate     authentication function (see IAuthenticator)
-          exception_logs   a sequence of file objects to log exceptions to
         """
         self.__super___init__(None)
         self.db = db
         self.viewFactory = viewFactory
         self.rootName = rootName
         self.authenticate = authenticate
-        self.exception_logs = exception_logs
+        self.logger = logging.getLogger('events')
 
     def buildProtocol(self, addr):
         channel = self.__super_buildProtocol(addr)
@@ -706,17 +702,9 @@ class Server:
         # Insert the metadefault for 'modules'
         self.config.module.insert(0, 'schooltool.main')
 
-        # Open the log files for exceptions
-        self.logfiles = []
-        for filename in self.config.event_log_file:
-            if filename == 'STDOUT':
-                self.logfiles.append(sys.stdin)
-            elif filename == 'STDERR':
-                self.logfiles.append(sys.stderr)
-            else:
-                f = file(filename, "a")
-                self.logfiles.append(f)
-
+        # Set up logging
+        self.setUpLogger('events', self.config.event_log_file,
+                         "--\n%(asctime)s\n%(message)s")
         self.setUpLogger('access', self.config.access_log_file)
 
         # Process any command line arguments that may override config file
@@ -727,11 +715,12 @@ class Server:
                 if twisted.python.runtime.platformType == 'posix':
                     self.daemon = True
                 else:
-                    sys.exit(_("Daemon mode not supported on your "
-                             "operating system"))
+                    sys.exit(_("Daemon mode is not supported on your"
+                               " operating system"))
 
-    def setUpLogger(self, name, filenames):
+    def setUpLogger(self, name, filenames, format=None):
         """Set up a named logger."""
+        formatter = logging.Formatter(format)
         logger = logging.getLogger(name)
         logger.propagate = False
         logger.setLevel(logging.INFO)
@@ -742,9 +731,8 @@ class Server:
                 handler = logging.StreamHandler(sys.stderr)
             else:
                 handler = logging.FileHandler(filename)
-            handler.setFormatter(logging.Formatter())
+            handler.setFormatter(formatter)
             logger.addHandler(handler)
-
 
     def help(self):
         """Print a help message."""
@@ -811,8 +799,7 @@ class Server:
 
         self.threadable_hook.init()
 
-        site = Site(self.db, self.appname, self.viewFactory, self.authenticate,
-                    self.logfiles)
+        site = Site(self.db, self.appname, self.viewFactory, self.authenticate)
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
