@@ -389,9 +389,9 @@ class RelationshipsView(View):
             type = self.extractKeyword(body, 'arcrole')
             role = self.extractKeyword(body, 'role')
             path = self.extractKeyword(body, 'href')
-            title = self.extractKeyword(body, 'title')
         except KeyError, e:
             request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
             return "Could not find a needed param: %s" % e
 
         try:
@@ -399,18 +399,32 @@ class RelationshipsView(View):
             role = getURI(role)
         except ComponentLookupError, e:
             request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
             return "Bad URI: %s" % e
 
         try:
             other = traverse(self.context, path)
         except TypeError, e:
             request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
             return "Nontraversable path: %s" % e
 
-        val = self.context.getValencies()[type, role]
+        try:
+            val = self.context.getValencies()[type, role]
+        except KeyError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return "Valency does not exist"
         kw = {val.this: self.context, val.other: other}
         val.schema(**kw)
         request.setResponseCode(201, 'Created')
+        request.setHeader('Content-Type', 'text/plain')
+        # XXX HTTP/1.1, section 9.5:
+        #     If a resource has been created on the origin server, the response
+        #     SHOULD be 201 (Created) and contain an entity which describes the
+        #     status of the request and refers to the new resource, and a
+        #     Location header (see section 14.30).
+        return "Relationship created"
 
     def extractKeyword(self, text, key):
         '''This is a temporary stub for validating XML parsing.

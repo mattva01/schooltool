@@ -44,13 +44,13 @@ class RequestStub:
 
     code = 200
     reason = 'OK'
-    content = StringIO()
 
-    def __init__(self, uri='', method='GET'):
+    def __init__(self, uri='', method='GET', body=''):
         self.headers = {}
         self.uri = uri
         self.method = method
         self.path = ''
+        self.content = StringIO(body)
         start = uri.find('/', uri.find('://')+3)
         if start >= 0:
             self.path = uri[start:]
@@ -281,7 +281,6 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
-        request.path = '/group'
         result = self.view.render(request)
         expected = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -327,7 +326,6 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
-        request.path = getPath(self.per)
         result = self.view.render(request)
         segments = dedent("""
             <person xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -354,6 +352,7 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
 
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
+
 
 class TestApplicationObjectTraverserView(RegistriesSetupMixin,
                                          unittest.TestCase):
@@ -780,17 +779,13 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             in result)
 
     def testPOST(self):
-        request = RequestStub("http://localhost/groups/sub/relationships/")
-        request.content = StringIO('''\
-            <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
-                  xlink:type="simple"
-                  xlink:role="http://schooltool.org/ns/membership/group"
-                  xlink:title="http://schooltool.org/ns/membership"
-                  xlink:arcrole="http://schooltool.org/ns/membership"
-                  xlink:href="/groups/new"/>
-            ''')
-        request.content.seek(0, 0)
-        request.method = "POST"
+        request = RequestStub("http://localhost/groups/sub/relationships/",
+            method='POST',
+            body='''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="/groups/new"/>''')
         self.assertEquals(len(self.sub.listLinks()), 2)
         self.assert_(self.new not in
                      [l.traverse() for l in self.sub.listLinks()])
@@ -799,6 +794,8 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(len(self.sub.listLinks()), 3)
         self.assert_(self.new in
                      [l.traverse() for l in self.sub.listLinks()])
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/plain")
 
     def testBadPOSTs(self):
         bad_requests = (
@@ -843,19 +840,19 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
             xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership/member"
             xlink:arcrole="http://schooltool.org/ns/membership"
-            xlink:role="http://schooltool.org/ns/membership"
             xlink:href="/groups/new"/>''',
             )
 
         for body in bad_requests:
-            request = RequestStub("http://localhost/groups/sub/relationships")
-            request.content = StringIO(body)
-            request.content.seek(0, 0)
-            request.method = "POST"
+            request = RequestStub("http://localhost/groups/sub/relationships",
+                                  method="POST", body=body)
             self.assertEquals(len(self.sub.listLinks()), 2)
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
+            self.assertEquals(request.headers['Content-Type'],
+                              "text/plain")
             self.assertEquals(len(self.sub.listLinks()), 2)
 
 
