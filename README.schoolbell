@@ -1,0 +1,15 @@
+SchoolBell
+==========
+
+SchoolBell is a free and open source application to allow groups and
+organizations to coordinate schedules and timetables.  Users may manage their
+personal calendars, group calendars and calendars for resources, e.g., rooms,
+projectors, etc, via a web interface, or using an iCalendar compliant client
+such as Mozilla calendar or iCal.
+
+SchoolBell is written in Python, integrating the Twisted framework, Zope Page
+Templates and selected Zope 3 packages.  It is part of the SchoolTool project,
+funded by the Shuttleworth Foundation.
+
+
+The original README of SchoolTool can be found in the README file.
