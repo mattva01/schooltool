@@ -418,6 +418,15 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.rdates, [datetime(2001, 2, 5, 4, 5, 6)])
         self.assertEquals(vevent.exdates, [datetime(2001, 2, 6, 4, 5, 6)])
 
+    def test_validate_location(self):
+        from schooltool.cal import VEvent, ICalParseError
+
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T040506')
+        vevent.add('location', 'Somewhere')
+        vevent.validate()
+        self.assertEquals(vevent.location, 'Somewhere')
+
     def test_extractListOfDates(self):
         from schooltool.cal import VEvent, Period, ICalParseError
 

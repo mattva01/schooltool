@@ -515,6 +515,7 @@ class VEvent:
           dtstart           start of the event (inclusive)
           dtend             end of the event (not inclusive)
           duration          length of the event
+          location          location of the event
           rdates            a list of recurrence dates or periods
           exdates           a list of exception dates
         """
@@ -549,6 +550,8 @@ class VEvent:
                 if self.all_day_event:
                     self.dtend += datetime.date.resolution
             self.duration = self.dtend - self.dtstart
+
+        self.location = self.getOne('LOCATION', None)
 
         if self.dtstart > self.dtend:
             raise ICalParseError("Event start time should precede end time")

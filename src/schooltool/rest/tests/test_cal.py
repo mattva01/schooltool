@@ -413,7 +413,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
                                    "Quick Lunch"))
         cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
                                    datetime.timedelta(minutes=60),
-                                   "Long\nLunch"))
+                                   "Long\nLunch", location="San Valentino"))
         self.do_test_get(dedent("""
             BEGIN:VCALENDAR
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
@@ -428,6 +428,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             BEGIN:VEVENT
             UID:-1822792810-/person/calendar@localhost
             SUMMARY:Long\\nLunch
+            LOCATION:San Valentino
             DTSTART:20030903T120000
             DURATION:PT1H
             DTSTAMP:20040102T030405Z

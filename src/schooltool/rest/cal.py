@@ -232,7 +232,10 @@ class CalendarReadView(View):
             result += [
                 "BEGIN:VEVENT",
                 "UID:%d-%s" % (uid_hash, uid_suffix),
-                "SUMMARY:%s" % ical_text(event.title),
+                "SUMMARY:%s" % ical_text(event.title)]
+            if event.location is not None:
+                result.append("LOCATION:%s" % ical_text(event.location))
+            result += [
                 "DTSTART:%s" % event.dtstart.strftime('%Y%m%dT%H%M%S'),
                 "DURATION:%s" % ical_duration(event.duration),
                 "DTSTAMP:%s" % dtstamp,
