@@ -808,6 +808,15 @@ body#path-login form.standalone {
     color: #888888;
 }
 
+#portlet-calendar-overlay a.go {
+    float: right;
+    top: -1.5em;
+    position: relative;
+}
+#portlet-calendar-overlay a.go img {
+    border: none;
+}
+
 /** Specific Page Styling **/
 
 .person-info {
