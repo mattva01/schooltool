@@ -15,4 +15,19 @@
       permission="zope.Public"
       />
 
+  <!-- Temporarily make index.html the default ZMI view for
+       ISchoolBellApplication -->
+  <menuItem
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      menu="zmi_views" title="View" action="index.html" />
+
+
+  <containerViews
+      for="schoolbell.app.interfaces.IPersonContainer"
+      index="zope.View"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+
 </configure>

@@ -2,6 +2,14 @@
            i18n_domain="schoolbell">
 
   <content class=".app.SchoolBellApplication">
+    <allow interface=".interfaces.ISchoolBellApplication" />
+  </content>
+
+  <content class=".app.PersonContainer">
+    <require permission="zope.View"
+             interface="zope.app.container.interfaces.IReadContainer" />
+    <require permission="zope.ManageContent"
+             interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <include package=".browser" />
