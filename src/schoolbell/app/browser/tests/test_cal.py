@@ -1901,6 +1901,42 @@ def doctest_CalendarEventEditView_getInitialData():
 
     """
 
+def doctest_CalendarEventEditView_getStartDate():
+    """Tests for CalendarEventEditView getStartDate().
+
+    Let's create an event:
+
+        >>> import datetime
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=61),
+        ...                       location="Kitchen")
+
+    And a view for the event:
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventEditTestView(event, request)
+
+    If the date is not passed in the request we should get the date of the event:
+
+        >>> view.getStartDate()
+        datetime.date(2004, 8, 13)
+
+    If the date is passed in request but has no sane value we should get None:
+
+        >>> request.form = {'field.start_date': "200"}
+        >>> view = CalendarEventEditTestView(event, request)
+        >>> view.getStartDate() is None
+        True
+
+    If the field in the form is left blang we should return None too:
+
+        >>> request.form = {'field.start_date': ""}
+        >>> view = CalendarEventEditTestView(event, request)
+        >>> view.getStartDate() is None
+        True
+
+    """
 
 class TestGetRecurrenceRule(unittest.TestCase):
 

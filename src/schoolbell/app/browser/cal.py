@@ -1228,10 +1228,7 @@ class CalendarEventViewMixin(object):
 
         Used to format checkboxes for weekly recurrences.
         """
-        try:
-            day = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            day = None
+        day = self.getStartDate()
         return bool(day and day.weekday() == int(weekday))
 
     def getMonthDay(self):
@@ -1239,10 +1236,7 @@ class CalendarEventViewMixin(object):
 
         Used by the page template to format monthly recurrence rules.
         """
-        try:
-            evdate = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            evdate = None
+        evdate = self.getStartDate()
         if evdate is None:
             return '??'
         else:
@@ -1255,10 +1249,7 @@ class CalendarEventViewMixin(object):
 
         Used by the page template to format monthly recurrence rules.
         """
-        try:
-            evdate = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            evdate = None
+        evdate = self.getStartDate()
         if evdate is None:
             return _("same weekday")
 
@@ -1277,10 +1268,7 @@ class CalendarEventViewMixin(object):
 
         Used by the page template to format monthly recurrence rules.
         """
-        try:
-            evdate = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            evdate = None
+        evdate = self.getStartDate()
 
         if evdate is None:
             return _("last weekday")
@@ -1293,6 +1281,15 @@ class CalendarEventViewMixin(object):
             weekday = evdate.weekday()
             day_of_week = day_of_week_names[weekday]
             return _("Last %(weekday)s") % {'weekday': day_of_week}
+
+    def getStartDate(self):
+        """If a start_date is set returns the value of the widget."""
+        try:
+            return self.start_date_widget.getInputValue()
+        except WidgetInputError:
+            return None
+        except ConversionError:
+            return None
 
 
 class CalendarEventAddView(CalendarEventViewMixin, AddView):
@@ -1455,23 +1452,11 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         return initial
 
-    def weekdayDisabled(self, weekday):
-        """Return True if the given weekday should be disabled.
-
-        The weekday of start_date is always disabled, all others are always
-        enabled. If a value of start_date is given in request use it insead of
-        using one from self.context.
-
-        Used to format checkboxes for weekly recurrences.
-        """
-        try:
-            day = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            if "field.start_date" in self.request:
-                day = None
-            else:
-                day = self.context.dtstart
-        return bool(day and day.weekday() == int(weekday))
+    def getStartDate(self):
+        if "field.start_date" in self.request:
+            return CalendarEventViewMixin.getStartDate(self)
+        else:
+            return self.context.dtstart.date()
 
     def update(self):
         return ''
