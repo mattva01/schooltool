@@ -55,7 +55,8 @@ def test_suite():
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
     dir = os.path.dirname(__file__)
-    filenames = [fn for fn in os.listdir(dir) if fn.endswith('.txt')]
+    filenames = [fn for fn in os.listdir(dir)
+                 if fn.endswith('.txt') and not fn.startswith('.')]
     suites = [FunctionalDocFileSuite(filename, optionflags=optionflags)
               for filename in filenames]
     return unittest.TestSuite(suites)
