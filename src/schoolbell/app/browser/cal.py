@@ -895,13 +895,19 @@ class DailyCalendarView(CalendarViewBase):
 class EventDeleteView(BrowserView):
     """A view for deleting events."""
 
-    __used_for__ = IContainedCalendarEvent
+    __used_for__ = ICalendar
 
-    def delete(self):
-        calendar = ICalendar(self.context)
-        calendar.removeEvent(self.context)
-        isodate = self.context.dtstart.date().isoformat()
-        url = '%s/%s' % (absoluteURL(calendar, self.request), isodate)
+    def __call__(self):
+        event_id = self.request['event_id']
+        try:
+            event = self.context.find(event_id)
+        except KeyError:
+            pass # Somebody else did the job for us, how nice of them.
+        else:
+            self.context.removeEvent(event)
+
+        isodate = self.request['date']
+        url = '%s/%s' % (absoluteURL(self.context, self.request), isodate)
         self.request.response.redirect(url)
 
 

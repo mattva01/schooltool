@@ -391,6 +391,13 @@
       menu="schoolbell_actions" title="New event"
       action="add.html" permission="schoolbell.view" />
 
+  <page
+      name="delete.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.EventDeleteView"
+      permission="zope.ManageContent"
+      />
+
   <menuItem
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       menu="schoolbell_actions" title="Open in iCal"
@@ -422,14 +429,6 @@
 
     <widget field="exceptions" width="20" height="5" />
   </addform>
-
-  <page
-      name="delete.html"
-      for="schoolbell.app.interfaces.IContainedCalendarEvent"
-      class=".cal.EventDeleteView"
-      permission="zope.ManageContent"
-      attribute="delete"
-      />
 
 <!-- Skin and resources -->
 

@@ -2234,17 +2234,21 @@ def doctest_EventDeleteView():
         >>> cal = Calendar()
         >>> directlyProvides(cal, IContainmentRoot)
         >>> dtstart = datetime(2005, 2, 3, 12, 15)
-        >>> martyr = CalendarEvent(dtstart, timedelta(hours=3), "Martyr")
+        >>> martyr = CalendarEvent(dtstart, timedelta(hours=3), "Martyr",
+        ...                        unique_id="killme")
         >>> cal.addEvent(martyr)
 
-        >>> innocent = CalendarEvent(dtstart, timedelta(hours=3), "Innocent")
+        >>> innocent = CalendarEvent(dtstart, timedelta(hours=3), "Innocent",
+        ...                          unique_id="leavemealone")
         >>> cal.addEvent(innocent)
 
     EventDeleteView can get rid of events for you.  Just ask:
 
         >>> from schoolbell.app.browser.cal import EventDeleteView
-        >>> view = EventDeleteView(martyr, TestRequest())
-        >>> view.delete()
+        >>> request = TestRequest(form={'event_id': 'killme',
+        ...                             'date': '2005-02-03'})
+        >>> view = EventDeleteView(cal, request)
+        >>> content = view()
 
         >>> martyr in cal
         False
@@ -2252,6 +2256,19 @@ def doctest_EventDeleteView():
         True
 
     As a side effect, you will be shown your way to the calendar view:
+
+        >>> view.request.response.getStatus()
+        302
+        >>> view.request.response.getHeaders()['Location']
+        'http://127.0.0.1/calendar/2005-02-03'
+
+    Invalid requests to delete events will be ignored, and you will be bounced
+    back to where you came from:
+
+        >>> request = TestRequest(form={'event_id': 'idontexist',
+        ...                             'date': '2005-02-03'})
+        >>> view = EventDeleteView(cal, request)
+        >>> content = view()
 
         >>> view.request.response.getStatus()
         302
