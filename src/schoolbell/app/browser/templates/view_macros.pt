@@ -79,3 +79,33 @@
   </body>
 </html>
 </metal:block>
+
+<metal:block define-macro="calendar-navigation" i18n:domain="schooltool">
+  <div id="calendar-navigation-context">
+    <table cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td align="left" width="33%">
+          <a id="calendar-navigation-context-previous"
+             tal:attributes="href view/prev"
+             ><img border="0" src="previous.png" alt="<<"
+                   tal:attributes="src context/++resource++previous.png" />
+              <span tal:replace="view/prev_title">Previous</span></a>
+        </td>
+        <td align="center">
+          <a id="calendar-navigation-context-current"
+             tal:attributes="href request/URL"
+             ><img border="0" src="current.png" alt=""
+                   tal:attributes="src context/++resource++current.png" />
+              <span tal:replace="view/current_title">Current</span></a>
+        </td>
+        <td align="right" width="33%">
+          <a id="calendar-navigation-context-next"
+             tal:attributes="href view/next"
+             ><span tal:replace="view/next_title">Next</span>
+              <img border="0" src="next.png" alt=">>"
+                   tal:attributes="src context/++resource++next.png" /></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</metal:block>

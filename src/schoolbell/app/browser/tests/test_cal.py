@@ -782,13 +782,15 @@ def doctest_WeeklyCalendarView():
         >>> view.title()
         u'February, 2005 (week 5)'
 
-    prevWeek() and nextWeek() are provided to get adjacent weeks:
+    prev() and next() return links for adjacent weeks:
 
         >>> view.cursor = date(2004, 8, 18)
-        >>> view.prevWeek()
-        datetime.date(2004, 8, 11)
-        >>> view.nextWeek()
-        datetime.date(2004, 8, 25)
+        >>> view.prev()
+        'http://127.0.0.1/calendar/weekly.html?date=2004-08-11'
+        >>> view.next()
+        'http://127.0.0.1/calendar/weekly.html?date=2004-08-25'
+
+    getCurrentWeek is a shortcut for view.getWeek(view.cursor)
 
         >>> view.cursor = "works"
         >>> view.getWeek = lambda x: "really " + x
@@ -822,7 +824,15 @@ def doctest_MonthlyCalendarView():
         >>> view.weekTitle(date(2005, 5, 17))
         u'Week 20'
 
-    getCurrentMonth "really works":
+    prev() and next() return links for adjacent months:
+
+        >>> view.cursor = date(2004, 8, 18)
+        >>> view.prev()
+        'http://127.0.0.1/calendar/monthly.html?date=2004-07-01'
+        >>> view.next()
+        'http://127.0.0.1/calendar/monthly.html?date=2004-09-01'
+
+    getCurrentWeek is a shortcut for view.getMonth(view.cursor)
 
         >>> view.cursor = "works"
         >>> view.getMonth = lambda x: "really " + x
@@ -856,13 +866,13 @@ def doctest_YearlyCalendarView():
         >>> view.shortDayOfWeek(date(2005, 8, 3))
         u'Wed'
 
-    prev() and next() provide dates forward/back a year:
+    prev() and next() return links for adjacent years:
 
         >>> view.cursor = date(2004, 8, 18)
-        >>> view.prevYear()
-        datetime.date(2003, 1, 1)
-        >>> view.nextYear()
-        datetime.date(2005, 1, 1)
+        >>> view.prev()
+        'http://127.0.0.1/calendar/yearly.html?date=2003-01-01'
+        >>> view.next()
+        'http://127.0.0.1/calendar/yearly.html?date=2005-01-01'
 
     renderRow() renders HTML for one week of events.  It is implemented
     in python for performance reasons.

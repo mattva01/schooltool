@@ -299,6 +299,10 @@ class WeeklyCalendarView(CalendarViewBase):
 
     __used_for__ = ICalendar
 
+    next_title = _("Next week")
+    current_title = _("Current week")
+    prev_title = _("Previous week")
+
     def title(self):
         month_name = unicode(self.month_names[self.cursor.month])
         args = {'month': month_name,
@@ -306,13 +310,13 @@ class WeeklyCalendarView(CalendarViewBase):
                 'week': self.cursor.isocalendar()[1]}
         return _('%(month)s, %(year)s (week %(week)s)') % args
 
-    def prevWeek(self):
-        """Return the day a week before."""
-        return self.cursor - timedelta(7)
+    def prev(self):
+        """Return the link for the previous week."""
+        return self.calURL('weekly', self.cursor - timedelta(weeks=1))
 
-    def nextWeek(self):
-        """Return the day a week after."""
-        return self.cursor + timedelta(7)
+    def next(self):
+        """Return the link for the next week."""
+        return self.calURL('weekly', self.cursor + timedelta(weeks=1))
 
     def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
@@ -322,10 +326,22 @@ class WeeklyCalendarView(CalendarViewBase):
 class MonthlyCalendarView(CalendarViewBase):
     """Monthly calendar view."""
 
+    next_title = _("Next month")
+    current_title = _("Current month")
+    prev_title = _("Previous month")
+
     def title(self):
         month_name = unicode(self.month_names[self.cursor.month])
         args = {'month': month_name, 'year': self.cursor.year}
         return _('%(month)s, %(year)s') % args
+
+    def prev(self):
+        """Return the link for the previous month."""
+        return self.calURL('monthly', self.prevMonth())
+
+    def next(self):
+        """Return the link for the next month."""
+        return self.calURL('monthly', self.nextMonth())
 
     def dayOfWeek(self, date):
         return unicode(self.day_of_week_names[date.weekday()])
@@ -341,19 +357,23 @@ class MonthlyCalendarView(CalendarViewBase):
 class YearlyCalendarView(CalendarViewBase):
     """Yearly calendar view."""
 
+    next_title = _("Next year")
+    current_title = _("Current year")
+    prev_title = _("Previous year")
+
+    def prev(self):
+        """Return the link for the previous year."""
+        return self.calURL('yearly', date(self.cursor.year - 1, 1, 1))
+
+    def next(self):
+        """Return the link for the next year."""
+        return self.calURL('yearly', date(self.cursor.year + 1, 1, 1))
+
     def monthTitle(self, date):
         return unicode(self.month_names[date.month])
 
     def shortDayOfWeek(self, date):
         return unicode(self.short_day_of_week_names[date.weekday()])
-
-    def prevYear(self):
-        """Return the first day of the next year."""
-        return date(self.cursor.year - 1, 1, 1)
-
-    def nextYear(self):
-        """Return the first day of the previous year."""
-        return date(self.cursor.year + 1, 1, 1)
 
     def renderRow(self, week, month):
         """Do some HTML rendering in Python for performance.

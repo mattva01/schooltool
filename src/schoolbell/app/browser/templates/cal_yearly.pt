@@ -1,10 +1,10 @@
 <!-- <html metal:use-macro="view/macros/calendarpage" i18n:domain="schooltool"> -->
 <tal:defs define="status view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-
-  <head>
-    <title metal:fill-slot="title" i18n:translate="">Calendar</title>
-  </head>
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Calendar</title>
+</head>
+<body>
 
   <h1 metal:fill-slot="h1" i18n:translate="">
     Calendar for <span tal:replace="context/__parent__/title"
@@ -21,32 +21,12 @@
   </metal:block>
   -->
 
-  <metal:block metal:fill-slot="body">
+<metal:block metal:fill-slot="body">
 
-    <h2 class="calendar-view-title"
-        tal:content="python:view.cursor.strftime('%Y')" />
+  <h2 class="calendar-view-title"
+      tal:content="python:view.cursor.strftime('%Y')" />
 
-      <div id="calendar-navigation-context">
-        <table cellpadding="0" cellspacing="0" width="100%">
-          <tr>
-            <td align="left" width="33%">
-              <a id="calendar-navigation-context-previous"
-                tal:attributes="href python:view.calURL('yearly', view.prevYear())"
-                i18n:translate="">Previous year</a>
-            </td>
-            <td align="center">
-              <a id="calendar-navigation-context-current"
-                tal:attributes="href request/URL"
-                i18n:translate="">Current year</a>
-            </td>
-            <td align="right" width="33%">
-              <a id="calendar-navigation-context-next"
-                tal:attributes="href python:view.calURL('yearly', view.nextYear())"
-                i18n:translate="">Next year</a>
-            </td>
-          </tr>
-        </table>
-      </div>
+  <div metal:use-macro="view/@@standard_macros/calendar-navigation" />
 
     <table id="calendar-view-year"
         cellpadding="0" cellspacing="0"
