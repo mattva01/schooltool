@@ -33,12 +33,12 @@ SchoolTool> follow 1
 Content-Type: text/xml; charset=UTF-8
 <group xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Root Group</name>
-  <item xlink:type="simple" xlink:title="Cleaners"
-        xlink:href="/groups/cleaners"/>
   <item xlink:type="simple" xlink:title="Teachers"
         xlink:href="/groups/teachers"/>
   <item xlink:type="simple" xlink:title="Students"
         xlink:href="/groups/students"/>
+  <item xlink:type="simple" xlink:title="Cleaners"
+        xlink:href="/groups/cleaners"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
                  xlink:href="root/relationships"/>
@@ -47,13 +47,13 @@ Content-Type: text/xml; charset=UTF-8
 </group>
 
 ==================================================
-1   Cleaners (/groups/cleaners)
-2   Teachers (/groups/teachers)
-3   Students (/groups/students)
+1   Teachers (/groups/teachers)
+2   Students (/groups/students)
+3   Cleaners (/groups/cleaners)
 4   Relationships (root/relationships)
 5   Facets (root/facets)
 
-SchoolTool> follow 1
+SchoolTool> follow 3
 200 OK
 Content-Type: text/xml; charset=UTF-8
 <group xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -238,21 +238,21 @@ Content-Type: text/xml; charset=UTF-8
           xlink:title="Steve"/>
     <item xlink:type="simple" xlink:href="/persons/Aiste"
           xlink:title="Aiste"/>
-    <item xlink:type="simple" xlink:href="/persons/Mark"
-          xlink:title="Mark"/>
-    <item xlink:type="simple" xlink:href="/persons/Albert"
-          xlink:title="Albert"/>
     <item xlink:type="simple" xlink:href="/persons/Marius"
           xlink:title="Marius"/>
+    <item xlink:type="simple" xlink:href="/persons/Albert"
+          xlink:title="Albert"/>
+    <item xlink:type="simple" xlink:href="/persons/Mark"
+          xlink:title="Mark"/>
   </items>
 </container>
 
 ==================================================
 1   Steve (/persons/Steve)
 2   Aiste (/persons/Aiste)
-3   Mark (/persons/Mark)
+3   Marius (/persons/Marius)
 4   Albert (/persons/Albert)
-5   Marius (/persons/Marius)
+5   Mark (/persons/Mark)
 
 SchoolTool> follow 4
 200 OK
