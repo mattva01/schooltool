@@ -16,7 +16,7 @@
 This module provides a DocTestSuite contructor for converting doctest
 tests to unit tests. 
 
-$Id: doctestunit.py,v 1.3 2003/06/29 05:07:50 tim_one Exp $
+$Id: doctestunit.py,v 1.6 2003/11/03 21:37:50 jeremy Exp $
 """
 
 from StringIO import StringIO
@@ -27,10 +27,66 @@ import sys
 import tempfile
 import unittest
 
-class DocTestTestFailure(Exception):
-    """A doctest test failed"""
+class DocTestTestCase(unittest.TestCase):
+    """A test case that wraps a test function.
 
-def DocTestSuite(module=None):
+    This is useful for slipping pre-existing test functions into the
+    PyUnit framework. Optionally, set-up and tidy-up functions can be
+    supplied. As with TestCase, the tidy-up ('tearDown') function will
+    always be called if the set-up ('setUp') function ran successfully.
+    """
+
+    def __init__(self, tester, name, doc, filename, lineno,
+                 setUp=None, tearDown=None):
+        unittest.TestCase.__init__(self)
+        (self.__tester, self.__name, self.__doc,
+         self.__filename, self.__lineno,
+         self.__setUp, self.__tearDown
+         ) = tester, name, doc, filename, lineno, setUp, tearDown
+
+    def setUp(self):
+        if self.__setUp is not None:
+            self.__setUp()
+
+    def tearDown(self):
+        if self.__tearDown is not None:
+            self.__tearDown()
+
+    def runTest(self):
+        old = sys.stdout
+        new = StringIO()
+        try:
+            sys.stdout = new
+            failures, tries = self.__tester.runstring(self.__doc, self.__name)
+        finally:
+            sys.stdout = old
+
+        if failures:
+            lname = '.'.join(self.__name.split('.')[-1:])
+            lineno = self.__lineno or "0 (don't know line no)"
+            raise self.failureException(
+                'Failed doctest test for %s\n'
+                '  File "%s", line %s, in %s\n\n%s'
+                % (self.__name, self.__filename, lineno, lname, new.getvalue())
+                )
+
+    def id(self):
+        return self.__name
+
+    def __repr__(self):
+        name = self.__name.split('.')
+        return "%s (%s)" % (name[-1], '.'.join(name[:-1]))
+
+    __str__ = __repr__
+
+    def shortDescription(self):
+        return "Doctest: " + self.__name
+
+
+def DocTestSuite(module=None,
+                 setUp=lambda: None,
+                 tearDown=lambda: None,
+                 ):
     """Convert doctest tests for a mudule to a unittest test suite
 
     This tests convers each documentation string in a module that
@@ -61,11 +117,11 @@ def DocTestSuite(module=None):
                 filename = filename[:-1]
             elif filename.endswith(".pyo"):
                 filename = filename[:-1]
-        suite.addTest(unittest.FunctionTestCase(
-            lambda args=(tester, name, doc, filename, lineno):
-            _test(*args),
-            description = "doctest of "+name
-            ))
+
+        suite.addTest(DocTestTestCase(
+            tester, name, doc, filename, lineno,
+            setUp, tearDown))
+                      
 
     return suite
 
@@ -80,26 +136,6 @@ def _normalizeModule(module):
         module = __import__(module, globals(), locals(), ["*"])
 
     return module
-
-def _test(tester, name, doc, filename, lineno):
-    old = sys.stdout
-    new = StringIO()
-    try:
-        sys.stdout = new
-        failures, tries = tester.runstring(doc, name)
-    finally:
-        sys.stdout = old
-
-    if failures:
-        mess = new.getvalue()
-        lname = '.'.join(name.split('.')[-1:])
-        lineno = lineno or "0 (don't know line no)"
-        raise DocTestTestFailure(
-            'Failed doctest test for %s\n'
-            '  File "%s", line %s, in %s\n\n%s'
-            % (name, filename, lineno, lname, new.getvalue())
-            )
-    
 
 def _doc(name, object, tests, prefix, filename='', lineno=''):
     doc = getattr(object, '__doc__', '')
