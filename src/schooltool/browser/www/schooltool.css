@@ -305,8 +305,8 @@ div.available {
 /* Calendars */
 
 div.day {
-  border: 0.5px solid gray;
-  background: white; /* #8af; */
+  border-bottom: 1px solid gray;
+  background: white;
   padding: 0.5ex 0.5em;
 }
 
@@ -334,6 +334,7 @@ div.ro_event {
 
 div.calweekly {
    border: 1px solid gray;
+   border-bottom-width: 0;
 }
 
 div.day h2,
@@ -353,7 +354,7 @@ table.cal_yearly {
 }
 
 td.cal_yearly_month {
-  border: 1px solid #ddf;
+  border: 1px solid gray;
   text-align: center;
 }
 
@@ -382,13 +383,13 @@ a.cal_yearly_day_busy {
 table.cal_monthly {
   table-layout: fixed;
   width: 90%;
-  border: 1px solid #888;
+  border: 1px solid gray;
   empty-cells: show;
   border-collapse: collapse;
 }
 
 td.cal_monthly_weekno {
-  border: 1px solid #ccc;
+  border: 1px solid gray;
 }
 
 a.cal_monthly_weekno {
@@ -398,7 +399,7 @@ a.cal_monthly_weekno {
 }
 
 td.cal_monthly_day {
-  border: 1px solid #ccc;
+  border: 1px solid gray;
   vertical-align: top;
 }
 
