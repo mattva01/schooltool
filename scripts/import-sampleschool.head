@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""
+A script to import sample school data into SchoolTool on Debian systems.
+"""
+
+import os
+
+# Please don't change the following lines unless you look in script.py first
+import sys
+# paths begin
+# paths end
+
+from schooltool.pathconfig import DATADIR
+
+datadir = os.path.join(DATADIR, '..', 'sampleschool')
