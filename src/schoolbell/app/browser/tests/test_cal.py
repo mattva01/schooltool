@@ -2881,12 +2881,29 @@ def doctest_AtomCalendarView():
         >>> from schoolbell.app.browser.cal import CalendarDay
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = AtomCalendarView(calendar, TestRequest())
+        >>> lastweek = CalendarEvent(datetime.now() - timedelta(8),
+        ...                           timedelta(hours=3), "Last Week")
+        >>> today = CalendarEvent(datetime.now(),
+        ...                           timedelta(hours=3), "Today")
+        >>> tomorrow = CalendarEvent(datetime.now() + timedelta(1),
+        ...                           timedelta(hours=3), "Tomorrow")
+        >>> calendar.addEvent(lastweek)
+        >>> calendar.addEvent(today)
+        >>> calendar.addEvent(tomorrow)
 
-    getCurrentWeek() returns the remainder of the current week as CalendarDays
+        >>> view = AtomCalendarView(calendar, TestRequest())
+        >>> events = []
+        >>> for day in view.getCurrentWeek():
+        ...     for event in day.events:
+        ...         events.append(event)
+
+    getCurrentWeek() returns the current week as CalendarDays.  The even
+    lastweek should not show up here.
 
         >>> isinstance(view.getCurrentWeek()[0], CalendarDay)
         True
+        >>> len(events)
+        2
 
     create ISO8601 date format for Atom spec
     TODO: this should probably go in schoolbell.calendar.utils
