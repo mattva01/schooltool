@@ -173,12 +173,16 @@ app-log-file app.log
 #   Specifies the locale of the messages to be used on the server.
 #   Several languages can be specified.
 #
+#   If a translation for a string is not found in a locale, the next listed
+#   locale is tried. If no translation is found, the string from the default
+#   locale is used.
+#
 # Default:
 #   lang en_US
 #
 # Examples:
 #   lang en_UK
-#   lang en_US
+#   lang en_US.UTF-8
 
 #
 # domain
