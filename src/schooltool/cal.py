@@ -470,6 +470,11 @@ class CalendarOwnerMixin(Persistent):
         events = []
         used_colors = Set(self.cal_colors.values())
         available_colors = [c for c in self.colors if c not in used_colors]
+
+        # If all colors are in use, loop through them again
+        if not available_colors:
+            available_colors = [c for c in self.colors]
+
         for obj in getRelatedObjects(self, URICalendarProvider):
             # XXX Assign a color
             if getPath(obj) not in self.cal_colors:
