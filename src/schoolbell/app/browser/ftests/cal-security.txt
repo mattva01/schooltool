@@ -1,0 +1,128 @@
+Functional doctest for calendaring
+==================================
+
+Set up
+------
+
+We will obviously need a SchoolBell instance.
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Let's create a person so that we can fool around with his calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd&\
+    ... field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Let's create more persons so that we can test access control.
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 114
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Toad&field.username=toad&field.password=doat&\
+    ... field.verify_password=doat&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Adding new events
+-----------------
+
+Let the Frog add an ordinary event that takes place on 3rd February, 2005:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Sleeping&field.start_date=2005-02-03&\
+    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar
+    ...
+
+Now let the Toad try on the Frog's calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic toad:doat
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Dreaming&field.start_date=2005-02-03&\
+    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+Let's grant the Toad the addEvent permission on Frog's calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.toad=1&\
+    ... sb.person.toad=schoolbell.addEvent&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar
+    ...
+
+Now the Toad can add events to Frog's calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic toad:doat
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Dreaming&field.start_date=2005-02-03&\
+    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar
+    ...
+
+
+Editing events
+--------------
+
+To be done together with functional tests for editing events.
