@@ -49,6 +49,11 @@ SchoolTool server RESTive interface
   POST /persons/person_id/absences/id
     add a comment to an absence
 
+  PUT /persons/person_id/password
+    set a password for a person
+  DELETE /persons/person_id/password
+    disable the account of a person
+
   GET ...object/facets
     lists all facets for an object and all available facet factories
   POST ...object/facets
