@@ -25,6 +25,7 @@ $Id$
 from zope.interface import implements
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IServiceManager, IEventTarget
+from schooltool.tests.helpers import normalize_xml, diff
 
 __metaclass__ = type
 
@@ -136,3 +137,25 @@ class EqualsSortedMixin:
         self.assertEquals(x, y)
 
     assertEqualSorted = assertEqualsSorted
+
+
+class XMLCompareMixin:
+
+    def assertEqualsXML(self, result, expected, recursively_sort=()):
+        """Assert that two XML documents are equivalent.
+
+        If recursively_sort is given, it is a sequence of tags that
+        will have test:sort="recursively" appended to their attribute lists
+        in 'result' text.  See the docstring for normalize_xml for more
+        information about this attribute.
+        """
+        for tag in recursively_sort:
+            result = result.replace('<%s' % tag,
+                                    '<%s test:sort="recursively"' % tag)
+            expected = expected.replace('<%s' % tag,
+                                      '<%s test:sort="recursively"' % tag)
+        result = normalize_xml(result)
+        expected = normalize_xml(expected)
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+    assertEqualXML = assertEqualsXML

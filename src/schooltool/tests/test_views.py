@@ -28,8 +28,9 @@ import sets
 import libxml2
 from zope.interface import Interface, implements
 from StringIO import StringIO
-from schooltool.tests.helpers import dedent, diff
+from schooltool.tests.helpers import diff
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
+from schooltool.tests.utils import XMLCompareMixin
 from schooltool.interfaces import IUtility, IFacet, IContainmentRoot
 from schooltool.interfaces import ITraversable
 
@@ -411,7 +412,7 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.reason, 'OK')
 
 
-class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
+class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import GroupView
@@ -440,23 +441,22 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
         result = self.view.render(request)
-        expected = dedent("""
-            <group xmlns:xlink="http://www.w3.org/1999/xlink">
-              <name>group</name>
-            ---8<---
-              <item xlink:type="simple" xlink:title="p"
-                    xlink:href="%s"/>
-            ---8<---
-              <item xlink:type="simple" xlink:title="subgroup"
-                    xlink:href="%s"/>
-            ---8<---
-            </group>
-            """ % (getPath(self.per), getPath(self.sub)))
-        for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result,
-                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <group xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>group</name>
+              <item xlink:type="simple" xlink:title="p"
+                    xlink:href="%s"/>
+              <item xlink:type="simple" xlink:title="subgroup"
+                    xlink:href="%s"/>
+              <facets xlink:type="simple" xlink:title="Facets"
+                      xlink:href="root/facets"/>
+              <relationships xlink:type="simple" xlink:title="Relationships"
+                             xlink:href="root/relationships"/>
+            </group>
+            """ % (getPath(self.per), getPath(self.sub)),
+            recursively_sort=['group'])
 
     def test_traverse(self):
         from schooltool.views import RelationshipsView, FacetManagementView
@@ -484,7 +484,7 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
                           request)
 
 
-class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
+class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import PersonView
@@ -528,17 +528,16 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/person")
         result = self.view.render(request)
-        segments = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <person xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>Pete</name>
               <groups>
-            ---8<---
                 <item xlink:type="simple" xlink:href="/groups/root"
                       xlink:title="group"/>
-            ---8<---
                 <item xlink:type="simple" xlink:href="/groups/subgroup"
                       xlink:title="subgroup"/>
-            ---8<---
               </groups>
               <relationships xlink:type="simple"
                              xlink:title="Relationships"
@@ -546,13 +545,7 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
               <facets xlink:type="simple" xlink:title="Facets"
                       xlink:href="p/facets"/>
             </person>
-            """).split("---8<---\n")
-
-        for chunk in segments:
-            self.assert_(chunk in result, chunk)
-
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
+            """, recursively_sort=['groups'])
 
 
 class TestApplicationObjectTraverserView(RegistriesSetupMixin,
@@ -587,7 +580,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
 
 
-class TestAppView(RegistriesSetupMixin, unittest.TestCase):
+class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import ApplicationView
@@ -637,8 +630,9 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/")
         result = self.view.render(request)
-
-        expected = dedent("""\
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
               <message>Welcome to the SchoolTool server</message>
               <roots>
@@ -656,9 +650,7 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
                          xlink:title="Foo utility"/>
               </utilities>
             </schooltool>
-            """)
-
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
+            """, recursively_sort=["schooltool"])
 
     def test__traverse(self):
         from schooltool.views import ApplicationObjectContainerView
@@ -672,7 +664,8 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(view.__class__ is UtilityServiceView)
 
 
-class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
+class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
+                              unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import ApplicationObjectContainerView
@@ -698,8 +691,9 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/groups")
         result = self.view.render(request)
-
-        expected = dedent("""\
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>groups</name>
               <items>
@@ -708,8 +702,6 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
               </items>
             </container>
             """)
-
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test_post(self, suffix="", method="POST", body=None, view=None):
         if view is None:
@@ -766,7 +758,8 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(view.name, 'newchild')
 
 
-class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
+class TestUtilityServiceView(XMLCompareMixin, RegistriesSetupMixin,
+                             unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import UtilityServiceView
@@ -786,8 +779,9 @@ class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/groups")
         result = self.view.render(request)
-
-        expected = dedent("""\
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>utils</name>
               <items>
@@ -797,8 +791,6 @@ class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
             </container>
             """)
 
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
-
     def test__traverse(self):
         from schooltool.views import UtilityView
         request = RequestStub("http://localhost/utils/foo")
@@ -807,7 +799,7 @@ class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(KeyError, view._traverse, 'moot', request)
 
 
-class TestUtilityView(RegistriesSetupMixin, unittest.TestCase):
+class TestUtilityView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import UtilityView
@@ -825,17 +817,16 @@ class TestUtilityView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/groups")
         result = self.view.render(request)
-
-        expected = dedent("""\
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <utility>
               <name>foo</name>
             </utility>
             """)
 
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
-
-class TestFacetView(RegistriesSetupMixin, unittest.TestCase):
+class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import FacetView
@@ -851,24 +842,26 @@ class TestFacetView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         request = RequestStub("http://localhost/some/object/facets/001")
         result = self.view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <facet active="active" owned="unowned">
               <class>FacetStub</class>
               <name>001</name>
             </facet>
             """)
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
         self.facet.active = False
         self.facet.owner = object()
         result = self.view.render(request)
-        expected = dedent("""\
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <facet active="inactive" owned="owned">
               <class>FacetStub</class>
               <name>001</name>
             </facet>
             """)
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test_delete_owned(self):
         request = RequestStub("http://localhost/some/object/facets/001",
@@ -896,7 +889,7 @@ class TestFacetView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
 
-class TestEventLogView(unittest.TestCase):
+class TestEventLogView(XMLCompareMixin, unittest.TestCase):
 
     def test_empty(self):
         from schooltool.views import EventLogView
@@ -908,11 +901,12 @@ class TestEventLogView(unittest.TestCase):
         view = EventLogView(context)
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <eventLog>
             </eventLog>
-        """)
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
+            """)
 
     def test_nonempty(self):
         from schooltool.views import EventLogView
@@ -932,12 +926,13 @@ class TestEventLogView(unittest.TestCase):
         view = EventLogView(context)
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <eventLog>
               <event ts="2003-10-01 11:12:13">Fake event</event>
             </eventLog>
-        """)
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
+            """)
 
     def test_clear(self):
         from schooltool.views import EventLogView
@@ -1131,7 +1126,8 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             self.assertEquals(len(self.sub.listLinks()), 2)
 
 
-class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
+class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
+                              unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.views import View, FacetManagementView
@@ -1180,26 +1176,19 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         context.setFacet(EventLogFacet(), owner=owner)
         view = FacetManagementView(context)
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <facets xmlns:xlink="http://www.w3.org/1999/xlink">
-            ---8<---
               <facet xlink:type="simple" active="inactive"
                      xlink:title="001" class="EventLogFacet"
                      owned="unowned" xlink:href="/person/facets/001"/>
-            ---8<---
               <facet xlink:type="simple" active="active"
                      xlink:title="002" class="EventLogFacet"
                      owned="owned" xlink:href="/person/facets/002"/>
-            ---8<---
               <facetFactory name="eventlog" title="Event Log Factory"/>
-            ---8<---
             </facets>
-            """)
-        for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result,
-                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
+            """, recursively_sort=["facets"])
 
     def test_post(self):
         from schooltool.views import FacetManagementView
@@ -1266,7 +1255,7 @@ class TestXMLPseudoParser(unittest.TestCase):
         self.assertRaises(KeyError, extr, text, 'shmoo')
 
 
-class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
+class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import LinkView
@@ -1290,7 +1279,9 @@ class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getPath
         request = RequestStub("http://localhost%s" % getPath(self.link))
         result = self.view.render(request)
-        expected = dedent("""\
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
         <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
                       xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/member"
@@ -1298,7 +1289,6 @@ class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:arcrole="http://schooltool.org/ns/membership"
                       xlink:href="/groups/subgroup"/>
         """)
-        self.assertEqual(expected, result, diff (expected, result))
 
     def testDELETE(self):
         from schooltool.component import getPath
@@ -1384,7 +1374,8 @@ class TestAbsenceCommentParser(unittest.TestCase):
                 self.fail("did not raise ValueError for\n\t%s" % body)
 
 
-class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
+class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
+                                unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.views import AbsenceManagementView, AbsenceView
@@ -1411,24 +1402,18 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
-            ---8<---
               <absence xlink:type="simple"
                        xlink:href="/person/absences/001" ended="ended"
                        xlink:title="001" resolved="resolved"/>
-            ---8<---
               <absence xlink:type="simple"
                        xlink:href="/person/absences/002" ended="unended"
                        xlink:title="002" resolved="unresolved"/>
-            ---8<---
             </absences>
-            """)
-        for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result,
-                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
+            """, recursively_sort=['absences'])
 
     def test_post(self):
         from schooltool.views import AbsenceManagementView
@@ -1504,7 +1489,8 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(result, "Text attribute missing")
 
 
-class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
+class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
+                      unittest.TestCase):
 
     def createAbsence(self):
         from schooltool.model import Person, Group, AbsenceComment
@@ -1530,7 +1516,9 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         view = AbsenceView(absence)
         request = RequestStub("http://localhost/person/absences/001")
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <absence xmlns:xlink="http://www.w3.org/1999/xlink"
                      xlink:type="simple" xlink:title="person"
                      resolved="unresolved" ended="ended"
@@ -1544,12 +1532,9 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
                        expected_presence="2003-03-03 00:00:00"
                        xlink:href="/reporter2" absentfrom="/group1"
                        datetime="2002-02-02 00:00:00" ended="ended">More text
-            </comment>
+              </comment>
             </absence>
-            """)
-        self.assertEquals(result, expected, "\n" + diff(expected, result))
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
+            """, recursively_sort=['absence'])
 
     def test_post(self):
         from schooltool.views import AbsenceView
@@ -1605,7 +1590,8 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(len(absence.comments), 2)
 
 
-class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
+class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
+                       unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -1644,32 +1630,24 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
         view = RollcallView(self.group)
         request = RequestStub("http://localhost/group/rollcall")
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
                       xlink:type="simple" xlink:title="group"
                       xlink:href="/groups/root">
-            ---8<---
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
-            ---8<---
               <person xlink:type="simple" xlink:href="/persons/b"
                       xlink:title="b" presence="absent"/>
-            ---8<---
               <person xlink:type="simple" xlink:href="/persons/c"
                       xlink:title="c"
                       expected_presence="2001-01-01 02:02:02"
                       presence="absent"/>
-            ---8<---
               <person xlink:type="simple" xlink:href="/persons/d"
                       xlink:title="d" presence="present"/>
-            ---8<---
             </rollcall>
-            """)
-        for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result,
-                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
+            """, recursively_sort=['rollcall'])
 
     def test_post(self):
         from schooltool.views import RollcallView
@@ -1910,7 +1888,8 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
             "Cannot resolve an absence for absent person /persons/b")
 
 
-class TestAbsenceTrackerView(RegistriesSetupMixin, unittest.TestCase):
+class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
+                             unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Person, AbsenceTrackerUtility
@@ -1931,7 +1910,9 @@ class TestAbsenceTrackerView(RegistriesSetupMixin, unittest.TestCase):
     def test_get(self):
         request = RequestStub("http://localhost/utils/absences/")
         result = self.view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
               <absence xlink:type="simple"
                        xlink:href="/persons/a/absences/001"
@@ -1939,12 +1920,6 @@ class TestAbsenceTrackerView(RegistriesSetupMixin, unittest.TestCase):
                        resolved="unresolved"/>
             </absences>
             """)
-        self.assertEqual(result, expected, diff(result, expected))
-        for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result,
-                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
 
 
 class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
@@ -1976,7 +1951,7 @@ class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
 
-class TestTreeView(RegistriesSetupMixin, unittest.TestCase):
+class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -2008,7 +1983,9 @@ class TestTreeView(RegistriesSetupMixin, unittest.TestCase):
         view = TreeView(self.group)
         request = RequestStub("http://localhost/groups/root/tree")
         result = view.render(request)
-        expected = dedent("""
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
               <group xlink:type="simple" xlink:href="/groups/root"
                      xlink:title="root group">
@@ -2026,11 +2003,7 @@ class TestTreeView(RegistriesSetupMixin, unittest.TestCase):
                 </group>
               </group>
             </tree>
-        """)
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
-        # XXX: Nondeterminism sucks
-        # self.assertEquals(result, expected, "\n" + diff(expected, result))
+            """, recursively_sort=['tree'])
 
 
 def test_suite():
