@@ -428,15 +428,16 @@ class RelationshipViewMixin:
 
     Subclasses must define:
 
-      linkrole = Attribute('URI of the role of the related object.')
+      linkrole = TextLine(title=u'URI of the role of the related object.')
 
-      relname = Attribute('Relationship name')
+      relname = TextLine(title=u'Relationship name')
+
+      errormessage = TextLine(title=u'A translated error that is displayed'
+                                     'when the relationship creation fails')
 
       def createRelationship(self, other):
           'Create the relationship between self.context and other'
 
-      errormessage = Attribute('A translated error that is displayed'
-                               'when the relationship creation fails'
     """
 
     errormessage = property(lambda self: _("Cannot create relationship between"

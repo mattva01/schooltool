@@ -323,7 +323,7 @@ class IValency(Interface):
 
 
 class IRelationshipValencies(Interface):
-    """Gives information on what relationships are pertinent to this object."""
+    """Give information on what relationships are pertinent to this object."""
 
     valencies = Tuple(
         title=u"A tuple of IValency objects",

@@ -71,4 +71,3 @@ def setUp():
         name='subject_group', title=_('Subject Group')))
     registerFacetFactory(FacetFactory(TeacherGroupFacet,
         name='teacher_group', title=_('Teacher Group')))
-

@@ -111,7 +111,7 @@ class FacetManager:
 def registerFacetFactory(factory):
     """Register the given facet factory by the given name.
 
-    factory must implement IFacetFactory
+    factory must implement IFacetFactory.
     """
     if not IFacetFactory.providedBy(factory):
         raise TypeError("factory must provide IFacetFactory", factory)

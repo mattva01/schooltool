@@ -196,6 +196,7 @@ def membersGetFacet(facet_class, facet_name=None, factory_name=None):
 
         class FooGroupFacet(FacetMixin, RelationshipValenciesMixin):
             membersGetFacet(FooFacet)
+
     """
     if factory_name is None:
         factory_name = facet_class.__name__
