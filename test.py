@@ -115,6 +115,8 @@ class Options:
     quiet = 0                   # do not print anything on success (-q)
     warn_omitted = False        # produce warnings when a test case is
                                 # not included in a test suite (-w)
+    print_import_time = True    # print time taken to import test modules
+                                # (currently hardcoded)
     progress = False            # show running progress (-p)
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
@@ -270,6 +272,7 @@ def get_test_cases(test_files, cfg, tracer=None):
     """Returns a list of test cases from a given list of test modules."""
     matcher = compile_matcher(cfg.test_regex)
     results = []
+    startTime = time.time()
     for file in test_files:
         module = import_module(file, cfg, tracer=tracer)
         try:
@@ -302,6 +305,12 @@ def get_test_cases(test_files, cfg, tracer=None):
             continue
         filtered = filter_testsuite(test_suite, matcher, cfg.level)
         results.extend(filtered)
+    stopTime = time.time()
+    timeTaken = float(stopTime - startTime)
+    if cfg.print_import_time:
+        nmodules = len(test_files)
+        print "Imported %d modules in %.3fs" % (nmodules, timeTaken)
+        print
     return results
 
 
