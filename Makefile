@@ -40,7 +40,7 @@ clean:
 		install-stamp
 
 realclean: clean
-	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
+	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags
 
 test: build
