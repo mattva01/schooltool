@@ -991,7 +991,11 @@ def weekdaysValidator(value):
 
 
 class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
-    """A base class for event adding and editing views."""
+    """A base class for event adding and editing views.
+
+    Used by EventAddView and EventEditView.
+    """
+    # XXX This class and its subclasses are begging for serious refactoring.
 
     __used_for__ = ICalendar
 
@@ -1357,9 +1361,6 @@ class EventEditView(EventViewBase):
             # code is not nice.
             raise Unauthorized
         if self.composite_event:
-            if ev.recurrence is not None:
-                raise NotImplementedError( # TODO XXX
-                            "Can't deal with external recurring events yet")
             orig_calendar.removeEvent(self.event)
             orig_calendar.addEvent(ev)
         elif self.tt_event:
@@ -1441,49 +1442,60 @@ class EventDeleteView(View, EventViewHelpers):
         # If it is an ordinary calendar event, remove it
         event = self._findOrdinaryEvent(event_id)
         if event is not None:
-            if event.recurrence is not None:
-                return self._deleteRepeatingEvent(event, date)
+            if event.recurrence is None:
+                return self._deleteOrdinaryEvent(self.context, event, date)
             else:
-                return self._deleteOrdinaryEvent(event, date)
+                return self._deleteRepeatingEvent(self.context, event, date)
 
         # If it is a composite calendar event, remove it from the
         # corresponding calendar
         event = self._findInheritedEvent(event_id, date)
         if event is not None:
-            return self._deleteInheritedEvent(event, date)
+            if not self.isManager():
+                # XXX embedding security policy decisions in the middle of view
+                # code is not nice.
+                raise Unauthorized # Only managers can delete composite events
+            calendar = event.calendar
+            real_event = event.calendar.find(event.unique_id)
+            if event.recurrence is None:
+                return self._deleteOrdinaryEvent(calendar, real_event, date)
+            else:
+                return self._deleteRepeatingEvent(calendar, real_event, date)
 
         # If it is a timetable event, show a confirmation form,
         # and then add a timetable exception (unless canceled).
         event = self._findTimetableEvent(event_id)
         if event is not None:
+            if not self.isManager():
+                raise Unauthorized # Only managers can delete timetable events
             return self._deleteTimetableEvent(event, date)
 
         # Dangling event ID
         return self._redirectToDailyView(date)
 
-    def _deleteOrdinaryEvent(self, event, date):
+    def _deleteOrdinaryEvent(self, calendar, event, date):
         """Delete an ordinary event."""
-        self.context.removeEvent(event)
+        calendar.removeEvent(event)
         return self._redirectToDailyView(date)
 
-    def _deleteRepeatingEvent(self, event, date):
+    def _deleteRepeatingEvent(self, calendar, event, date):
         """Delete a repeating event."""
         if 'CANCEL' in self.request.args:
             return self._redirectToDailyView(date)
         elif 'ALL' in self.request.args:
-            self.context.removeEvent(event)
+            calendar.removeEvent(event)
             return self._redirectToDailyView(date)
         elif 'FUTURE' in self.request.args:
-            self.context.removeEvent(event)
+            calendar.removeEvent(event)
             replacement = self._deleteFutureOccurrences(event, date)
             if replacement.hasOccurrences():
-                self.context.addEvent(replacement)
+                calendar.addEvent(replacement)
             return self._redirectToDailyView(date)
         elif 'CURRENT' in self.request.args:
-            self.context.removeEvent(event)
+            calendar.removeEvent(event)
             replacement = self._deleteOneOccurrence(event, date)
             if replacement.hasOccurrences():
-                self.context.addEvent(replacement)
+                calendar.addEvent(replacement)
             return self._redirectToDailyView(date)
         return self._showOccurrenceForm(event)
 
@@ -1506,26 +1518,10 @@ class EventDeleteView(View, EventViewHelpers):
 
     def _deleteTimetableEvent(self, event, date):
         """Delete a timetable event."""
-        if not self.isManager():
-            # XXX embedding security policy decisions in the middle of view
-            # code is not nice.
-            raise Unauthorized # Only managers can edit timetable events
         if 'CONFIRM' in self.request.args:
             self._addTimetableException(event, replacement=None)
         elif 'CANCEL' not in self.request.args:
             return self._showConfirmationForm(event)
-        return self._redirectToDailyView(date)
-
-    def _deleteInheritedEvent(self, event, date):
-        """Delete an inherited event from the corresponding calendar."""
-        if not self.isManager():
-            # XXX embedding security policy decisions in the middle of view
-            # code is not nice.
-            raise Unauthorized
-        if event.recurrence is not None:
-            raise NotImplementedError( # TODO XXX
-                            "Can't deal with external recurring events yet")
-        event.calendar.removeEvent(event)
         return self._redirectToDailyView(date)
 
     def _showOccurrenceForm(self, event):

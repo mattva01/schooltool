@@ -1865,21 +1865,30 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
             self.fail("view.isManager returns True so"
                       " _addTimetableException should get called")
 
-    def test_render_inherited_event(self):
+    def createCompositeView(self, recurrent=False):
         from schooltool.timetable import TimetableException
         from schooltool.cal import InheritedCalendarEvent
-        from schooltool.browser import Unauthorized
         from schooltool.model import Group
+        from schooltool.cal import DailyRecurrenceRule
 
-        group = Group("A group")
+        group = self.group = Group("A group")
         group.__name__ = 'other'
-        ev = createEvent('2004-08-16 13:45', '5 min', 'Foo', unique_id='uniq')
+        if recurrent:
+            rrule = DailyRecurrenceRule()
+        else:
+            rrule = None
+
+        ev = self.event = createEvent('2004-08-16 13:45', '5 min', 'Foo',
+                                      unique_id='uniq', recurrence=rrule)
         group.calendar.addEvent(ev)
         comp_cal = createCalendar()
         comp_cal.addEvent(InheritedCalendarEvent(ev, group.calendar))
         view = self.createView()
         self.person.makeCompositeCalendar = lambda start, end: comp_cal
+        return view
 
+    def test_render_inherited_event(self):
+        view = self.createCompositeView()
         request = RequestStub(args={'event_id': "uniq",
                                     'date': '2004-11-05'},
                               method='POST')
@@ -1890,20 +1899,58 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assert_('Foo' in content)
 
     def test_edit_inherited_event(self):
-        from schooltool.timetable import TimetableException
-        from schooltool.cal import InheritedCalendarEvent
+        view = self.createCompositeView()
+        request = RequestStub(args={'event_id': "uniq",
+                                    'title': 'Changed',
+                                    'location': 'Inbetween',
+                                    'start_date': '2004-08-16',
+                                    'start_time': '13:30',
+                                    'duration': '70',
+                                    'recurrence': 'recur',
+                                    'recurrence_shown': 'yes',
+                                    'recurrence_type': 'weekly',
+                                    'interval': '2',
+                                    'date': '2004-11-05',
+                                    'SUBMIT': 'Save'},
+                              method='POST')
+        content = view.render(request)
+
+        events = list(self.group.calendar)
+        self.assertEquals(len(events), 1)
+
+        # Check that the event has been touched.
+        event = events[0]
+        self.assertEquals(event.location, "Inbetween")
+        self.assertEquals(event.unique_id, 'uniq')
+        self.assertEquals(event.recurrence.interval, 2)
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/johndoe/calendar/'
+                          'daily.html?date=2004-08-16')
+
+    def test_edit_inherited_event_security(self):
         from schooltool.browser import Unauthorized
-        from schooltool.model import Group
+        view = self.createCompositeView()
+        view.isManager = lambda: False
+        view.request = RequestStub(args={'event_id': "uniq",
+                                         'title': 'Changed',
+                                         'location': 'Inbetween',
+                                         'start_date': '2004-08-16',
+                                         'start_time': '13:30',
+                                         'duration': '70',
+                                         'recurrence_shown': 'yes',
+                                         'recurrence_type': 'weekly',
+                                         'interval':'2',
+                                         'date': '2004-11-05',
+                                         'SUBMIT': 'Save'},
+                                   method='POST')
+        self.assertRaises(Unauthorized, view.do_GET, view.request)
+        self.assertEquals(list(self.group.calendar), [self.event])
 
-        group = Group("A group")
-        group.__name__ = 'other'
-        ev = createEvent('2004-08-16 13:45', '5 min', 'Die', unique_id='uniq')
-        group.calendar.addEvent(ev)
-        comp_cal = createCalendar()
-        comp_cal.addEvent(InheritedCalendarEvent(ev, group.calendar))
-        view = self.createView()
-        self.person.makeCompositeCalendar = lambda start, end: comp_cal
-
+    def test_edit_recurrent_event(self):
+        from schooltool.browser import Unauthorized
+        view = self.createCompositeView(recurrent=True)
         request = RequestStub(args={'event_id': "uniq",
                                     'title': 'Changed',
                                     'location': 'Inbetween',
@@ -1918,35 +1965,19 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                               method='POST')
         content = view.render(request)
 
-        events = list(group.calendar)
+        events = list(self.group.calendar)
         self.assertEquals(len(events), 1)
 
         # Check that the event has been touched.
         event = events[0]
         self.assertEquals(event.location, "Inbetween")
-        self.assertEquals(event.unique_id, ev.unique_id)
+        self.assertEquals(event.unique_id, 'uniq')
+        self.assertEquals(event.recurrence, None)
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/johndoe/calendar/'
                           'daily.html?date=2004-08-16')
-
-        # Make sure that people without permissions can't cause harm.
-        view.isManager = lambda: False
-        view.request = RequestStub(args={'event_id': "uniq",
-                                         'title': 'Changed',
-                                         'location': 'Inbetween',
-                                         'start_date': '2004-08-16',
-                                         'start_time': '13:30',
-                                         'duration': '70',
-                                         'recurrence_shown': 'yes',
-                                         'recurrence_type': 'weekly',
-                                         'interval':'2',
-                                         'date': '2004-11-05',
-                                         'SUBMIT': 'Save'},
-                                   method='POST')
-        self.assertRaises(Unauthorized, view.do_GET, request)
-        self.assertEquals(list(group.calendar), [event])
 
 
 class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
@@ -2135,13 +2166,32 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
         from schooltool.model import Person
         from schooltool.browser.cal import EventDeleteView
 
-        person = Person(title="Somebody")
+        person = self.person = Person(title="Somebody")
         setPath(person, '/persons/somebody')
         cal = createCalendar(events)
         cal.__name__ = 'calendar'
         cal.__parent__ = person
         view = EventDeleteView(cal)
         view.authorization = lambda x, y: True
+        view.isManager = lambda: True
+        return view
+
+    def createCompositeView(self):
+        from schooltool.cal import InheritedCalendarEvent
+        from schooltool.model import Group, Person
+        from schooltool.cal import DailyRecurrenceRule
+
+        group = self.group = Group("A group")
+        group.__name__ = 'other'
+        ev = self.event = createEvent('2004-08-16 13:45', '5 min',
+                                      'Bar', unique_id='uniq',
+                                      recurrence=DailyRecurrenceRule(count=5))
+        group.calendar.addEvent(ev)
+        comp_cal = self.comp_cal = createCalendar()
+        comp_cal.addEvent(InheritedCalendarEvent(ev, group.calendar))
+        view = self.createView([])
+        self.person.makeTimetableCalendar = lambda: createCalendar()
+        self.person.makeCompositeCalendar = lambda start, end: self.comp_cal
         return view
 
     def test_repeating_event(self):
@@ -2157,6 +2207,24 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
 
         # Nothing is deleted, and we aren't redirected anywhere
         self.assertEquals(list(view.context), [ev1])
+        self.assertNotEquals(request.code, 302)
+
+        doc = HTMLDocument(content)
+        self.assertHasHiddenField(doc, 'event_id', 'uniq')
+        self.assertHasHiddenField(doc, 'date', '2004-08-14')
+        self.assertHasSubmitButton(doc, 'CURRENT')
+        self.assertHasSubmitButton(doc, 'FUTURE')
+        self.assertHasSubmitButton(doc, 'ALL')
+        self.assertHasSubmitButton(doc, 'CANCEL')
+
+    def test_composite_repeating_event(self):
+        view = self.createCompositeView()
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14"})
+        content = view.render(request)
+
+        # Nothing is deleted, and we aren't redirected anywhere
+        self.assertEquals(list(self.group.calendar), [self.event])
         self.assertNotEquals(request.code, 302)
 
         doc = HTMLDocument(content)
@@ -2223,6 +2291,21 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
         self.assertRedirectedTo(request,
                                 'http://localhost:7001/persons/somebody/'
                                 'calendar/daily.html?date=2004-08-14')
+
+    def test_repeating_composite_event_future(self):
+        from schooltool.cal import DailyRecurrenceRule
+        view = self.createCompositeView()
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-20",
+                                    'FUTURE': 'future'})
+        content = view.render(request)
+        # The event is modified, we are redirected to calendar for 2004-08-20
+        ev1prime = self.event.replace(recurrence=DailyRecurrenceRule(
+                                    until=date(2004, 8, 19)))
+        self.assertEquals(list(self.group.calendar), [ev1prime])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-20')
 
     def test_repeating_event_future_last_occurrence(self):
         from schooltool.cal import DailyRecurrenceRule

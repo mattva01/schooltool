@@ -666,9 +666,9 @@ class TestExpandedCalendarEvent(TestCalendarEvent):
         assert IExpandedCalendarEvent.providedBy(eev)
 
 
-class TestInheritedCalendarEvent(TestCalendarEvent):
+class TestInheritedCalendarEvent(unittest.TestCase):
 
-    def test(self):
+    def test_inherit(self):
         from schooltool.cal import CalendarEvent, InheritedCalendarEvent
         from schooltool.interfaces import IInheritedCalendarEvent
         cal = object()

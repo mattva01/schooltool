@@ -386,6 +386,9 @@ class InheritedCalendarEvent(CalendarEvent):
                     unique_id=ev.unique_id, recurrence=ev.recurrence,
                     privacy=ev.privacy)
 
+    def replace(self, *args, **kwargs):
+        raise NotImplementedError("You should not call this method")
+
 
 class ACLCalendar(Calendar):
 
