@@ -89,7 +89,7 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
         for event in self.calendar.expand(first, last):
             intset.remove(event.dtstart, event.dtstart + event.duration)
 
-        for event in self.makeCalendar():
+        for event in self.makeTimetableCalendar():
             intset.remove(event.dtstart, event.dtstart + event.duration)
 
         return [(start, end - start) for start, end in intset

@@ -1363,7 +1363,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEqual(getPath(tt1),
                          '/stub/composite-timetables/2003-fall/sequential')
 
-    def test_makeCalendar(self):
+    def test_makeTimetableCalendar(self):
         from schooltool.timetable import TimetableActivity
         from schooltool.cal import Calendar, CalendarEvent
         tps = self.serviceManager.timePeriodService = {}
@@ -1405,7 +1405,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
 
         tt1.model = TimetableModelStub()
         tt2.model = TimetableModelStub()
-        cal = tm.makeCalendar()
+        cal = tm.makeTimetableCalendar()
         self.assertEquals(cal.events, cal1.events | cal2.events)
         self.assert_(cal.__parent__ is tm)
         self.assertEquals(cal.__name__, 'timetable-calendar')

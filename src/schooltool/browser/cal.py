@@ -726,7 +726,7 @@ class EventViewHelpers:
         """
         appobject = self.context.__parent__
         try:
-            return appobject.makeCalendar().find(event_id)
+            return appobject.makeTimetableCalendar().find(event_id)
         except KeyError:
             return None
 
@@ -1398,7 +1398,7 @@ class CalendarComboMixin(View):
     def iterEvents(self, first, last):
         """Iterate over the events of the calendars displayed."""
         return itertools.chain(self.context.expand(first, last),
-                               self.context.__parent__.makeCalendar())
+                               self.context.__parent__.makeTimetableCalendar())
 
 
 class ComboDailyCalendarView(CalendarComboMixin, DailyCalendarView):

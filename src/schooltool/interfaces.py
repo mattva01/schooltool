@@ -1596,7 +1596,7 @@ class ITimetabled(Interface):
         available composite timetables.
         """
 
-    def makeCalendar():
+    def makeTimetableCalendar():
         """Generate and return a calendar from all composite timetables."""
 
 

@@ -78,7 +78,7 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
         from schooltool.cal import Calendar, CalendarEvent
         obj = self.newObject()
         cal = Calendar()
-        obj.makeCalendar = lambda: cal
+        obj.makeTimetableCalendar = lambda: cal
         one_hour = timedelta(hours=1)
         three_hours = timedelta(hours=3)
         four_hours = timedelta(hours=4)
@@ -144,7 +144,7 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
         from schooltool.cal import Calendar, CalendarEvent, RecurrenceRule
         obj = self.newObject()
         cal = Calendar()
-        obj.makeCalendar = lambda: []
+        obj.makeTimetableCalendar = lambda: []
 
         # some convenience definitions
         day = timedelta(days=1)

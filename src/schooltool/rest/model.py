@@ -63,7 +63,7 @@ class ApplicationObjectTraverserView(View):
         elif name == 'calendar':
             return CalendarView(self.context.calendar)
         elif name == 'timetable-calendar':
-            return CalendarReadView(self.context.makeCalendar())
+            return CalendarReadView(self.context.makeTimetableCalendar())
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         elif name == 'composite-timetables':

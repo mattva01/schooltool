@@ -811,7 +811,7 @@ class TimetabledMixin:
                     keys.update(related.timetables.keys())
         return keys
 
-    def makeCalendar(self):
+    def makeTimetableCalendar(self):
         result = Calendar()
         result.__parent__ = self
         result.__name__ = 'timetable-calendar'

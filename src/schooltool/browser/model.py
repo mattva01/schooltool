@@ -127,7 +127,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
         elif name == 'calendar.ics':
             return RestCalendarView(self.context.calendar)
         elif name == 'timetable-calendar.ics':
-            return RestCalendarReadView(self.context.makeCalendar())
+            return RestCalendarReadView(self.context.makeTimetableCalendar())
         raise KeyError(name)
 
     def canEdit(self):

@@ -1158,7 +1158,7 @@ class EventTimetableTestHelpers:
 
     def createTTCal(self, person, events):
         ttcal = createCalendar()
-        person.makeCalendar = lambda: ttcal
+        person.makeTimetableCalendar = lambda: ttcal
         for event in events:
             ttcal.addEvent(event)
         return ttcal
@@ -1550,7 +1550,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         view = self.createView()
         ttcal = self.initTTCalendar(view.context)
         event = ttcal.find('uniq')
-        calendar = view.context.__parent__.makeCalendar()
+        calendar = view.context.__parent__.makeTimetableCalendar()
 
         exc = TimetableException(date=event.dtstart,
                                  period_id=event.period_id,
@@ -1750,7 +1750,7 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         ttcal = self.initTTCalendar(view.context)
         event = ttcal.find('uniq')
 
-        calendar = view.context.__parent__.makeCalendar()
+        calendar = view.context.__parent__.makeTimetableCalendar()
 
         exc = TimetableException(date=event.dtstart,
                                  period_id=event.period_id,
@@ -2026,10 +2026,10 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         self.ttevent = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
                                               timedelta(hours=1), "Math",
                                               period_id="P1", activity=act)
-        self.person.makeCalendar = self.makeCalendarStub
+        self.person.makeTimetableCalendar = self.makeTimetableCalendarStub
         return self.ttevent.unique_id
 
-    def makeCalendarStub(self):
+    def makeTimetableCalendarStub(self):
         ttevent = self.ttevent
         id_tup = (ttevent.dtstart.date(), ttevent.period_id, ttevent.activity)
         for exc in self.timetable.exceptions:
@@ -2042,7 +2042,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
 
     def combinedCalendar(self):
         """Combine the ordinary and timetable calendars."""
-        calendar = self.person.makeCalendar()
+        calendar = self.person.makeTimetableCalendar()
         calendar.update(self.calendar)
         return calendar
 
@@ -2100,7 +2100,7 @@ class TestCalendarComboMixin(unittest.TestCase):
         tcal.__parent__ = person
         tcal.__name__ = 'timetable-calendar'
 
-        person.makeCalendar = lambda: tcal
+        person.makeTimetableCalendar = lambda: tcal
 
         view = CalendarComboMixin(cal)
 
