@@ -104,6 +104,10 @@ class RequestStub:
         else:
             self.reason = reason
 
+    def redirect(self, url):
+        self.setResponseCode(302)
+        self.setHeader("location", url)
+
     def chooseMediaType(self, supported_types):
         from schooltool.main import chooseMediaType
         return chooseMediaType(supported_types, self.accept)
