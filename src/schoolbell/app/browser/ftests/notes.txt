@@ -1,0 +1,72 @@
+Creating SchoolBell Notes
+=========================
+
+Set up
+------
+
+We create a SchoolBell instance
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
+    ... 
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We add a person
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 126
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+
+Test
+----
+
+Add a note to the person
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/person/@@addNote.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 4348
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=My%20Note&field.body=This%20is%20the%20note&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We should see the note now:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+              <div id="notes">
+      <h5>Notes</h5>
+    <BLANKLINE>
+        <div class="note">
+          <h6>My Note</h6>
+          <p>This is the note</p>
+        </div>
+    <BLANKLINE>
+    </div>
+    ...
+
