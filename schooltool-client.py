@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.3
 """
 A script to start the schooltool client from the source directory.
 """

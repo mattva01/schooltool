@@ -11,6 +11,8 @@ schooltool (0.8+svn) unstable; urgency=low
     (Closes: Bug#280698)
   * On first installation, set default locale from default system locale.
   * Change the section of libschooltool and libschooltool-clients to libs.
+  * Fix python dependencies to cope with upcoming python version 2.4
+    - Use python 2.3 explicity.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

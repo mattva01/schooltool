@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.3
 """
 A script to generate sample school data.
 """

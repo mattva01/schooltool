@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.3
 """
 A script to import sample school data into SchoolTool.
 """
