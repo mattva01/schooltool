@@ -1163,7 +1163,7 @@ class ICalendarEvent(Interface):
 
     def replace(dtstart=Unchanged, duration=Unchanged, title=Unchanged,
                 owner=Unchanged, context=Unchanged, location=Unchanged,
-                unique_id=Unchanged):
+                unique_id=Unchanged, recurrence=Unchanged):
         """Return a calendar event with new specified fields."""
 
     def __eq__(other): """See if self == other."""

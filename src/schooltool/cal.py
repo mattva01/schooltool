@@ -993,7 +993,7 @@ class CalendarEvent(Persistent):
 
     def replace(self, dtstart=Unchanged, duration=Unchanged, title=Unchanged,
                 owner=Unchanged, context=Unchanged, location=Unchanged,
-                unique_id=Unchanged):
+                unique_id=Unchanged, recurrence=Unchanged):
         if dtstart is Unchanged: dtstart = self.dtstart
         if duration is Unchanged: duration = self.duration
         if title is Unchanged: title = self.title
@@ -1001,12 +1001,14 @@ class CalendarEvent(Persistent):
         if context is Unchanged: context = self.context
         if location is Unchanged: location = self.location
         if unique_id is Unchanged: unique_id = self.unique_id
+        if recurrence is Unchanged: recurrence = self.recurrence
         return CalendarEvent(dtstart, duration, title, owner, context,
-                             location, unique_id)
+                             location, unique_id, recurrence)
 
     def __tupleForComparison(self):
         return (self.dtstart, self.title, self.duration, self.owner,
-                self.context, self.location, self.unique_id)
+                self.context, self.location, self.unique_id,
+                self.recurrence)
 
     def __eq__(self, other):
         if not isinstance(other, CalendarEvent):
@@ -1095,7 +1097,7 @@ class RecurrenceRule:
                                  % (ex, ))
 
     def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
-                exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
+                exceptions=Unchanged):
         if interval is Unchanged:
             interval = self.interval
         if count is Unchanged:
@@ -1112,7 +1114,10 @@ class RecurrenceRule:
 
     def __eq__(self, other):
         """See if self == other."""
-        return self._tupleForComparison() == other._tupleForComparison()
+        if isinstance(other, RecurrenceRule):
+            return self._tupleForComparison() == other._tupleForComparison()
+        else:
+            return False
 
     def __ne__(self, other):
         """See if self != other."""

@@ -1124,6 +1124,7 @@ class TestCalendarEvent(unittest.TestCase):
 
     def test_replace(self):
         from schooltool.cal import CalendarEvent
+        from schooltool.cal import DailyRecurrenceRule
         owner = object()
         owner2 = object()
         context = object()
@@ -1139,7 +1140,8 @@ class TestCalendarEvent(unittest.TestCase):
                              'owner': owner2,
                              'context': context2,
                              'location': 'basement',
-                             'unique_id': 'uid2'}
+                             'unique_id': 'uid2',
+                             'recurrence': DailyRecurrenceRule(count=3)}
         all_fields = fields_to_replace.keys()
         for field, value in fields_to_replace.items():
             ce2 = ce.replace(**{field: value})
@@ -1157,6 +1159,7 @@ class TestCalendarEvent(unittest.TestCase):
 
     def test_comparisons(self):
         from schooltool.cal import CalendarEvent
+        from schooltool.cal import DailyRecurrenceRule
         owner = object()
         context = object()
         ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
@@ -1179,7 +1182,8 @@ class TestCalendarEvent(unittest.TestCase):
                              'owner': owner,
                              'context': context,
                              'location': 'basement',
-                             'unique_id': 'uid2'}
+                             'unique_id': 'uid2',
+                             'recurrence': DailyRecurrenceRule(count=3)}
         for field, value in fields_to_replace.items():
             ce2 = ce.replace(**{field: value})
             self.assert_(ce != ce2)
@@ -1257,10 +1261,14 @@ class TestRecurrenceRule:
     def test_comparison(self):
         d = self.createRule()
         d2 = d.replace()
+        d3 = d.replace(count=2)
         assert d is not d2
         self.assertEqual(d, d2)
         assert not d != d2
         self.assertEqual(hash(d), hash(d2))
+        assert d != None
+        assert d < None or d > None
+        assert d3 < d or d < d3
 
     def test_replace(self):
         rule = self.createRule(interval=1, until=date(2005, 1, 1))
