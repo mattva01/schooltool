@@ -142,6 +142,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/start')
+        self.assertEquals(request._outgoing_cookies['auth']['path'], '/')
         ticket = request._outgoing_cookies['auth']['value']
         username, password = \
                   getTicketService(view.context).verifyTicket(ticket)
@@ -159,6 +160,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/some/path')
+        self.assertEquals(request._outgoing_cookies['auth']['path'], '/')
         ticket = request._outgoing_cookies['auth']['value']
         username, password = \
                   getTicketService(view.context).verifyTicket(ticket)
@@ -1260,13 +1262,13 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         result = self.view.render(request)
         self.assert_(not self.view.by_periods)
         self.assertEquals(request._outgoing_cookies['cal_periods'],
-                          {'value': '', 'expires': Anything, 'path': None})
+                          {'value': '', 'expires': Anything, 'path': '/'})
 
         request = RequestStub(args={'PERIODS': ''}, authenticated_user=self.r1)
         result = self.view.render(request)
         self.assert_(self.view.by_periods)
         self.assertEquals(request._outgoing_cookies['cal_periods'],
-                          {'value': 'yes', 'expires': None, 'path': None})
+                          {'value': 'yes', 'expires': None, 'path': '/'})
 
 
 class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):

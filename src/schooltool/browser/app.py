@@ -131,7 +131,7 @@ class RootView(View):
             ticketService = getTicketService(self.context)
             ticket = ticketService.newTicket((username, password),
                                              session_time_limit)
-            request.addCookie('auth', ticket)
+            request.addCookie('auth', ticket, path='/')
             if 'url' in request.args:
                 url = request.args['url'][0]
             else:
@@ -706,10 +706,10 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
         """Process the request."""
         if 'HOURS' in self.request.args:
             self.by_periods = False
-            request.clearCookie('cal_periods')
+            request.clearCookie('cal_periods', path='/')
         elif 'PERIODS' in self.request.args:
             self.by_periods = True
-            request.addCookie('cal_periods', 'yes')
+            request.addCookie('cal_periods', 'yes', path='/')
         else:
             self.by_periods = bool(request.getCookie('cal_periods'))
         self.searching = False

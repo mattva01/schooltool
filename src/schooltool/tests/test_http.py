@@ -1000,7 +1000,7 @@ class TestRequest(unittest.TestCase):
     def test_clearCookie(self):
         from schooltool.http import Request
         rq = Request(None, True)
-        rq.clearCookie('chocolate')
+        rq.clearCookie('chocolate', path='/')
         cookies = [c for c in rq.cookies
                    if c.startswith('chocolate=; Expires=')]
         self.assert_(cookies)

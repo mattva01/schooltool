@@ -1028,7 +1028,7 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
                               args={'cal_periods': 'yes', 'date': '12'})
         view._traverse('daily.html', request)
         self.assertEquals(request._outgoing_cookies['cal_periods'],
-                          {'value': 'yes', 'expires': None, 'path': None})
+                          {'value': 'yes', 'expires': None, 'path': '/'})
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://server/calendar?date=12')
@@ -1037,7 +1037,7 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
                               args={'cal_periods': 'no', 'date': '123'})
         view._traverse('daily.html', request)
         self.assertEquals(request._outgoing_cookies['cal_periods'],
-                          {'value': '', 'expires': Anything, 'path': None})
+                          {'value': '', 'expires': Anything, 'path': '/'})
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://server/calendar?date=123')

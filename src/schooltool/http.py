@@ -553,10 +553,10 @@ class Request(http.Request):
         assert isinstance(value, (str, int)), "header value must be a string"
         http.Request.setHeader(self, header, value)
 
-    def clearCookie(self, cookie):
+    def clearCookie(self, cookie, **kw):
         """Clear a cookie by adding a Set-Cookie header that expires now."""
         now = datetime.datetime.utcnow().strftime("%a, %d-%h-%Y %H:%M:%S UTC")
-        self.addCookie(cookie, '', expires=now)
+        self.addCookie(cookie, '', expires=now, **kw)
 
     def render(self, resrc):
         """Render a resource.
