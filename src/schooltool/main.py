@@ -966,11 +966,11 @@ class Server:
         self.logger.info(_("Reading configuration from %s"), config_file)
 
     def notifyServerStarted(self, network_interface, port):
-        self.logger.info(_("Started HTTP server on %s:%s"),
+        self.logger.info(_("Started HTTP server for RESTive API on %s:%s"),
                          network_interface or "*", port)
 
     def notifyWebServerStarted(self, network_interface, port):
-        self.logger.info(_("Started web server on %s:%s"),
+        self.logger.info(_("Started HTTP server for web UI on %s:%s"),
                          network_interface or "*", port)
 
     def notifyDaemonized(self, pid):
