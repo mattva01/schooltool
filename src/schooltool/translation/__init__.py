@@ -24,16 +24,20 @@ The following names are available in this module:
   localedir     location of message catalogs
   catalog       catalog of translations for domain 'schooltool'
   ugettext      alias for catalog.ugettext
-  gettext       wrapper around ugettext
+  gettext       wrapper around ugettext that performs charset conversion
 
 Example usage:
 
-  from schooltool.translations import gettext as _
+  import sys
+  from schooltool.common import StreamWrapper
+  from schooltool.translations import ugettext as _
+  sys.stdout = StreamWrapper(sys.stdout)
   print _("Translated message")
 
-Note that SchoolTool server mostly deals with Unicode strings and thus should
-use ugettext, while the clients use 8-bit strings in locale encoding and thus
-should use gettext.
+You should prefer ugettext to gettext unless you're really sure you will need
+the string in locale encoding.  Output to the console does not use locale
+encoding on Windows.  wxPython does not use locale encoding on Windows, nor on
+Gtk2.  Output to a text file uses locale encoding everywhere.
 
 
 The following files were taken from Zope 3 CVS (src/zope/app/translation_files)

@@ -228,3 +228,108 @@ def from_locale(s):
     """
     return unicode(s, locale_charset)
 
+
+class StreamWrapper:
+    r"""Unicode-friendly wrapper for writable file-like objects.
+
+    Here the terms 'encoding' and 'charset' are used interchangeably.
+
+    The main use case for StreamWrapper is wrapping sys.stdout and sys.stder so
+    that you can forget worrying about charsets of your data.
+
+        >>> from StringIO import StringIO
+        >>> from schooltool import common
+        >>> old_locale_charset = common.locale_charset
+        >>> common.locale_charset = 'UTF-8'
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
+        >>> sw.stm.getvalue()
+        'Hello, world! \xc2\xb7\xe2\x98\xbb\xc2\xb7\n'
+
+    By default printing Unicode strings to stdout/stderr will raise Unicode
+    errors if the stream encoding does not include some characters you are
+    printing.  StreamWrapper will replace unconvertable characters to question
+    marks, therefore you should only use it for informative messages where such
+    loss of information is acceptable.
+
+        >>> common.locale_charset = 'US-ASCII'
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
+        >>> sw.stm.getvalue()
+        'Hello, world! ???\n'
+
+    StreamWrapper converts all unicode strings that are written to it to the
+    encoding defined in the wrapped stream's 'encoding' attribute, or, if that
+    is None, to the locale encoding.  Typically the stream's encoding attribute
+    is set when the stream is connected to a console device, and None when the
+    stream is connected to a file.  On Unix systems the console encoding
+    matches the locale charset, but on Win32 systems they differ.
+
+        >>> s = StringIO()
+        >>> s.encoding = 'ISO-8859-1'
+        >>> sw = StreamWrapper(s)
+        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
+        >>> sw.stm.getvalue()
+        'Hello, world! \xb7?\xb7\n'
+
+    You can print other kinds of objects:
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, 1, 2,
+        >>> print >> sw, 3
+        >>> sw.stm.getvalue()
+        '1 2 3\n'
+
+    but not 8-bit strings:
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, "\xff"
+        Traceback (most recent call last):
+          ...
+        UnicodeDecodeError: 'ascii' codec can't decode byte 0xff in position 0: ordinal not in range(128)
+
+    In addition to 'write' StreamWrapper provides 'flush' and 'writelines'
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> sw.write('xyzzy\n')
+        >>> sw.flush()
+        >>> sw.writelines(['a', 'b', 'c', 'd'])
+        >>> sw.stm.getvalue()
+        'xyzzy\nabcd'
+
+    """
+
+    def __init__(self, stm):
+        self.stm = stm
+        self.encoding = getattr(stm, 'encoding', None)
+        if self.encoding is None:
+            self.encoding = locale_charset
+
+    def write(self, obj):
+        self.stm.write(obj.encode(self.encoding, 'replace'))
+
+    def flush(self):
+        self.stm.flush()
+
+    def writelines(self, seq):
+        for obj in seq:
+            self.write(obj)
+
+
+class UnicodeAwareException(Exception):
+    r"""Unicode-friendly exception.
+
+        >>> e1 = UnicodeAwareException(u"\u2639")
+        >>> unicode(e1)
+        u'\u2639'
+
+        >>> e2 = UnicodeAwareException(u"\u2639", e1)
+        >>> unicode(e2)
+        u'\u2639 \u2639'
+
+    """
+
+    def __unicode__(self):
+        return u" ".join(map(unicode, self.args))
+
