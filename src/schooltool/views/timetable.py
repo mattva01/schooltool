@@ -221,6 +221,16 @@ class BaseTimetableTraverseView(View):
     """View for obj/timetable and obj/composite-timetable.
 
     context is an ITimetabled.
+
+    .../obj/timetable/2003-fall/weekly
+         ^      ^      ^         ^
+         |      |      |         |
+         |      |      |   TimetableReadWriteView(obj, ('2003-fall, 'weekly'))
+         |      |      |
+      ctx=obj   |    TimetableTraverseView(obj, '2003-fall')
+                |
+              TimetableTraverseView(obj, None)
+
     """
 
     def __init__(self, context, time_period=None):
