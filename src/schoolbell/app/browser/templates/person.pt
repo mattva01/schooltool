@@ -6,7 +6,6 @@
   <h1 metal:fill-slot="h1" i18n:translate="">
     Person info for <span tal:replace="context/title" i18n:name="title"/>
   </h1>
-
   <metal:block metal:fill-slot="body">
     <div class="row"><b i18n:translate="">Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>

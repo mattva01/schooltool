@@ -1,0 +1,28 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Disable person</title>
+</head>
+<body>
+  <metal:nothing metal:fill-slot="h1" />
+  <metal:block metal:fill-slot="body">
+
+  <form action="." method="POST" tal:attributes="action request/URL" class="standalone"
+        enctype="multipart/form-data">
+    <h3>
+      <span i18n:translate="">Disable <span tal:replace="context/title" i18n:name="user" /></span>
+    </h3>
+      <fieldset>
+        <div i18n:translate="">Do you really want to disable <span tal:replace="context/title" i18n:name="user" /> account ?</div>
+      </fieldset>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="UPDATE_DISABLE" value="Ok"
+             i18n:attributes="value" />
+      <input class="button-cancel" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+  </form>
+
+  </metal:block>
+</body>
+</html>

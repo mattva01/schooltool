@@ -286,6 +286,20 @@ class PersonEditView(BrowserView):
                 self.clear_photo_widget.setRenderedValue(False)
 
 
+class PersonDisableView(BrowserView):
+    """A view for editing a person."""
+
+    def update(self):
+        if 'UPDATE_DISABLE' in self.request:
+            self.context.setPassword(None)
+            url = zapi.absoluteURL(self.context.__parent__, self.request)
+            self.request.response.redirect(url)
+
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context.__parent__, self.request)
+            self.request.response.redirect(url)
+
+
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
 

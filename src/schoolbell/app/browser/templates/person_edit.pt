@@ -11,7 +11,6 @@
         enctype="multipart/form-data">
     <h3>
       <span i18n:translate="">Change info for <span tal:replace="context/title" i18n:name="user" /></span>
-      <span tal:condition="not:context/hasPassword" class="accountdisabled" i18n:translate="">(disabled)</span>
     </h3>
     <div class="info" tal:condition="view/message" tal:content="view/message" />
     <div class="error" tal:condition="view/error" tal:content="view/error" />
