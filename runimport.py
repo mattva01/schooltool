@@ -13,8 +13,6 @@ import urllib
 from schooltool.translation import _
 from schooltool.clients import csvclient
 
-schooltool.translation.setUp()
-
 if os.path.exists('Data.fs'):
     print _("Please remove Data.fs before creating a sample school")
     sys.exit(1)

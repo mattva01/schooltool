@@ -33,8 +33,6 @@ import sets
 import datetime
 from schooltool.translation import _
 
-schooltool.translation.setUp()
-
 names = _('David Deb Sue Martin Denise Vicki Lorne Jeff Michael '
           'Norma Nicola Wendy Lesley Carey Debbie Alden Carol Jay '
           'Heather Barbara John Peter Andrea Courtney Kathleen '
