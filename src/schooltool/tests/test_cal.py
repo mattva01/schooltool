@@ -490,13 +490,9 @@ class TestCalendarEvent(unittest.TestCase):
     def test_immutability(self):
         ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
                               timedelta(minutes=10), "something")
-        self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
-        self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
-        self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')
-        self.assertRaises(AttributeError, setattr, ce, 'owner', 'not-ro')
-        self.assertRaises(AttributeError, setattr, ce, 'context', 'not-ro')
-        self.assertRaises(AttributeError, setattr, ce, 'location', 'not-ro')
-        self.assertRaises(AttributeError, setattr, ce, 'unique_id', 'not-ro')
+        for attrname in ['dtstart', 'duration', 'title', 'owner', 'context',
+                         'location', 'unique_id']:
+            self.assertRaises(AttributeError, setattr, ce, attrname, 'not-ro')
 
     def test_replace(self):
         from schooltool.cal import DailyRecurrenceRule
@@ -781,6 +777,11 @@ class TestRecurrenceRule:
         self.assertEquals(rule.iCalRepresentation(None),
                           ['RRULE:FREQ=%s;INTERVAL=1' % freq,
                            'EXDATE;VALUE=DATE:20041006,20041008,20041010'])
+
+    def test_immutability(self):
+        r = self.createRule()
+        for attrname in ['interval', 'count', 'until', 'exceptions']:
+            self.assertRaises(AttributeError, setattr, r, attrname, 'not-ro')
 
 
 class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):

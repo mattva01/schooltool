@@ -403,15 +403,20 @@ class RecurrenceRule:
 
     implements(IRecurrenceRule)
 
+    interval = property(lambda self: self._interval)
+    count = property(lambda self: self._count)
+    until = property(lambda self: self._until)
+    exceptions = property(lambda self: self._exceptions)
+
     # A string that represents the recurrence frequency in iCalendar.
     # Must be overridden by subclasses.
     ical_freq = None
 
     def __init__(self, interval=1, count=None, until=None, exceptions=()):
-        self.interval = interval
-        self.count = count
-        self.until = until
-        self.exceptions = tuple(exceptions)
+        self._interval = interval
+        self._count = count
+        self._until = until
+        self._exceptions = tuple(exceptions)
         self._validate()
 
     def _validate(self):
@@ -556,15 +561,17 @@ class WeeklyRecurrenceRule(RecurrenceRule):
 
     implements(IWeeklyRecurrenceRule)
 
+    weekdays = property(lambda self: self._weekdays)
+
     ical_freq = 'WEEKLY'
 
     def __init__(self, interval=1, count=None, until=None, exceptions=(),
                  weekdays=()):
-        self.interval = interval
-        self.count = count
-        self.until = until
-        self.exceptions = tuple(exceptions)
-        self.weekdays = tuple(weekdays)
+        self._interval = interval
+        self._count = count
+        self._until = until
+        self._exceptions = tuple(exceptions)
+        self._weekdays = tuple(weekdays)
         self._validate()
 
     def __repr__(self):
@@ -635,15 +642,17 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     """
     implements(IMonthlyRecurrenceRule)
 
+    monthly = property(lambda self: self._monthly)
+
     ical_freq = 'MONTHLY'
 
     def __init__(self, interval=1, count=None, until=None, exceptions=(),
                  monthly="monthday"):
-        self.interval = interval
-        self.count = count
-        self.until = until
-        self.exceptions = tuple(exceptions)
-        self.monthly = monthly
+        self._interval = interval
+        self._count = count
+        self._until = until
+        self._exceptions = tuple(exceptions)
+        self._monthly = monthly
         self._validate()
 
     def __repr__(self):

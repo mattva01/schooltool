@@ -1114,11 +1114,11 @@ class IRecurrenceRule(Interface):
 
 
 class IDailyRecurrenceRule(IRecurrenceRule):
-    """Daily recurrence"""
+    """Daily recurrence."""
 
 
 class IYearlyRecurrenceRule(IRecurrenceRule):
-    """Yearly recurrence"""
+    """Yearly recurrence."""
 
 
 class IWeeklyRecurrenceRule(IRecurrenceRule):
