@@ -1,12 +1,14 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">
-    Add exception for <span tal:replace="event/title" />
+    Add exception for <span tal:replace="event/title"
+    i18n:name="event_title" />
   </title>
 </head>
 <body>
   <h1 metal:fill-slot="h1" i18n:translate="">
-    Add exception for <span tal:replace="event/title" />
+    Add exception for <span tal:replace="event/title"
+    i18n:name="event_title" />
   </h1>
   <metal:block metal:fill-slot="content">
 

@@ -85,7 +85,8 @@
 
   <p tal:condition="can_edit" i18n:translate="">To add a timetable exception,
   just edit or delete a timetable event in the <a tal:attributes="href
-  calendar_url">calendar</a>.
+  calendar_url" i18n:name="calendar" i18n:translate="">calendar</a>.
+  <!-- XXX: i18n:name and i18n:translate conflict in very bad ways -->
   </p>
 </tal:if>
 
