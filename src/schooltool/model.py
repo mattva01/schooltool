@@ -27,7 +27,7 @@ from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
 from schooltool.interfaces import IFaceted, IEventConfigurable, IQueryLinks
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
-from schooltool.interfaces import ISpecificURI, URIGroup, URIMember
+from schooltool.interfaces import ISpecificURI, URIGroup, URIMember, ILink
 from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentKeysSet, PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
@@ -36,10 +36,20 @@ __metaclass__ = type
 
 
 class GroupLink:
-    __slots__ = '_group'
+    """An object that represents membership in a group as a link."""
 
-    def __init__(self, group):
+    __slots__ = '_group', 'name', '__parent__'
+    implements(ILink)
+
+    def __init__(self, parent, group, name):
+        """The arguments are the following:
+             parent is the owner of this link (a group member)
+             group is the group at the opposite end of the relationship
+             name is the key of parent in the group
+        """
         self._group = group
+        self.name = name
+        self.__parent__ = parent
 
     def traverse(self):
         return self._group
@@ -49,10 +59,20 @@ class GroupLink:
 
 
 class MemberLink:
-    __slots__ = '_member'
+    """An object that represents containment of a group member as a link."""
 
-    def __init__(self, member):
+    __slots__ = '_member', 'name', '__parent__'
+    implements(ILink)
+
+    def __init__(self, parent, member, name):
+        """The arguments are the following:
+             parent is the owner of this link (a group)
+             member is the object at the opposite end of the relationship
+             name is the key of member in parent
+        """
         self._member = member
+        self.name = name
+        self.__parent__ = parent
 
     def traverse(self):
         return self._member
@@ -60,9 +80,6 @@ class MemberLink:
     role = URIMember
     title = "Membership"
 
-
-# A hook for tests
-_setFactory = PersistentKeysSet
 
 class GroupMember(Persistent):
     """A mixin providing the IGroupMember interface.
@@ -75,31 +92,32 @@ class GroupMember(Persistent):
     implements(IGroupMember, IQueryLinks)
 
     def __init__(self):
-        self._groups = _setFactory()
+        self._groups = PersistentKeysDict()
         self.__name__ = None
         self.__parent__ = None
 
     def groups(self):
         """See IGroupMember"""
-        return self._groups
+        return self._groups.keys()
 
     def notifyAdd(self, group, name):
         """See IGroupMember"""
-        self._groups.add(group)
+        self._groups[group] = name
         if self.__parent__ is None:
             self.__parent__ = group
             self.__name__ = str(name)
 
     def notifyRemove(self, group):
         """See IGroupMember"""
-        self._groups.remove(group)
+        del self._groups[group]
         if group == self.__parent__:
             self.__parent__ = None
             self.__name__ = None
 
     def listLinks(self, role=ISpecificURI):
         if URIGroup.extends(role, False):
-            return [GroupLink(group) for group in self.groups()]
+            return [GroupLink(self, group, name)
+                    for group, name in self._groups.iteritems()]
         else:
             return []
 
@@ -196,7 +214,8 @@ class Group(GroupMember, FacetedEventTargetMixin):
     def listLinks(self, role=ISpecificURI):
         links = GroupMember.listLinks(self, role)
         if URIMember.extends(role, False):
-            links += [MemberLink(member) for member in self.values()]
+            links += [MemberLink(self, member, name)
+                      for name, member in self.items()]
         return links
 
 

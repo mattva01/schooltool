@@ -212,6 +212,16 @@ class ILink(Interface):
         """Returns the object at the other end of the relationship."""
 
 
+class IRemovableLink(ILink):
+
+    def unlink(self):
+        """Removes a link.
+
+        Also removes the opposite direction of the relationship if the
+        relationship is bidirectional.
+        """
+
+
 class IRelatable(Interface):
     """An object which can take part in relationships."""
 

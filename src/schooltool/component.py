@@ -183,7 +183,7 @@ def isURI(uri):
 #
 
 def relate(title, a, role_a, b, role_b):
-
+    """See IRelationshipAPI"""
     link_a = Link(a, role_b)
     link_b = Link(b, role_a)
     Relationship(title, link_a, link_b)

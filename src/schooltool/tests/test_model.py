@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 from sets import Set
+from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember, IFacet, IFaceted
@@ -31,19 +32,8 @@ from schooltool.interfaces import IEventConfigurable
 
 __metaclass__ = type
 
-class MemberSetup:
-    def setUp(self):
-        import schooltool.model
-        from schooltool.db import PersistentListSet
-        self.__save = schooltool.model._setFactory
-        # PersistentListSet is used so that the order of items in the sets
-        # is preserved, so that we can compare output to a fixed string.
-        # This is a stricter requirement than the actual contract.
-        schooltool.model._setFactory = PersistentListSet
-
-    def tearDown(self):
-        import schooltool.model
-        schooltool.model._setFactory = self.__save
+class P(Persistent):
+    pass
 
 class MemberStub:
     added = None
@@ -96,17 +86,17 @@ class TestURIs(unittest.TestCase):
         inspectSpecificURI(URIMember)
 
 
-class TestGroupMember(MemberSetup, unittest.TestCase):
+class TestGroupMember(unittest.TestCase):
 
     def test_notifyAdd(self):
         from schooltool.model import GroupMember
         member = GroupMember()
-        group = object()
+        group = P()
         member.notifyAdd(group, 1)
         self.assertEqual(list(member.groups()), [group])
         self.assertEqual(member.__parent__, group)
         self.assertEqual(member.__name__, '1')
-        member.notifyAdd(object(), '2')
+        member.notifyAdd(P(), '2')
         self.assertEqual(member.__parent__, group)
         self.assertEqual(member.__name__, '1')
 
@@ -118,7 +108,7 @@ class TestGroupMember(MemberSetup, unittest.TestCase):
         for parent in (group, other):
             member.__parent__ = parent
             member.__name__ = 'spam'
-            member._groups = Set([group])
+            member._groups = {group: '1'}
             member.notifyRemove(group)
             self.assertEqual(list(member.groups()), [])
             self.assertRaises(KeyError, member.notifyRemove, group)
@@ -136,7 +126,7 @@ class TestGroupMember(MemberSetup, unittest.TestCase):
         member = GroupMember()
         verifyObject(IQueryLinks, member)
         self.assertEqual(member.listLinks(), [])
-        group = object()
+        group = P()
         member.notifyAdd(group, 1)
 
         for role in (URIGroup, ISpecificURI):
@@ -144,6 +134,7 @@ class TestGroupMember(MemberSetup, unittest.TestCase):
             self.assertEqual(len(links), 1, str(role))
             self.assertEqual(links[0].role, URIGroup)
             self.assertEqual(links[0].title, "Membership")
+            self.assertEqual(links[0].name, 1)
             self.assert_(links[0].traverse() is group)
 
         class URIFoo(URIGroup): "http://example.com/ns/foo"
@@ -153,7 +144,7 @@ class TestGroupMember(MemberSetup, unittest.TestCase):
             self.assertEqual(links, [], str(role))
 
 
-class TestGroup(MemberSetup, unittest.TestCase):
+class TestGroup(unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IGroup, IEventTarget
@@ -306,6 +297,35 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         setFacet(et, 4, FacetWithEventsStub(active=True, eventTable=[2]))
         self.assertEquals(et.getEventTable(), [0, 2])
 
+class TestMemberLink(unittest.TestCase):
+    def test(self):
+        from schooltool.model import MemberLink
+        from schooltool.interfaces import URIMember, ILink
+
+        group = object()
+        parent = object()
+        link = MemberLink(parent, group, 'name')
+        self.assertEqual(link.title, 'Membership')
+        self.assertEqual(link.name, 'name')
+        self.assert_(link.traverse() is group)
+        self.assert_(link.role is URIMember)
+        self.assert_(link.__parent__ is parent)
+        verifyObject(ILink, link)
+
+class TestGroupLink(unittest.TestCase):
+    def test(self):
+        from schooltool.model import GroupLink
+        from schooltool.interfaces import URIGroup, ILink
+
+        member = object()
+        parent = object()
+        link = GroupLink(parent, member, 'name')
+        self.assertEqual(link.title, 'Membership')
+        self.assertEqual(link.name, 'name')
+        self.assert_(link.traverse() is member)
+        self.assert_(link.role is URIGroup)
+        self.assert_(link.__parent__ is parent)
+        verifyObject(ILink, link)
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -316,6 +336,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestURIs))
+    suite.addTest(unittest.makeSuite(TestMemberLink))
+    suite.addTest(unittest.makeSuite(TestGroupLink))
     return suite
 
 if __name__ == '__main__':

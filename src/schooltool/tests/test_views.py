@@ -24,7 +24,6 @@ $Id$
 
 import unittest
 from helpers import dedent, diff
-from test_model import MemberSetup
 
 __metaclass__ = type
 
@@ -191,13 +190,12 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['Allow'], 'GET, HEAD')
 
 
-class TestGroupView(MemberSetup, unittest.TestCase):
+class TestGroupView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import GroupView
         from schooltool.model import RootGroup, Group, Person
 
-        MemberSetup.setUp(self)
         self.group = RootGroup("group")
         self.sub = Group("subgroup")
         self.per = Person("p")
@@ -245,7 +243,7 @@ class TestGroupView(MemberSetup, unittest.TestCase):
                           "text/xml; charset=UTF-8")
 
 
-class TestPersonView(MemberSetup, unittest.TestCase):
+class TestPersonView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import PersonView
@@ -253,7 +251,6 @@ class TestPersonView(MemberSetup, unittest.TestCase):
         from schooltool.interfaces import IContainmentRoot
         from zope.interface import directlyProvides
 
-        MemberSetup.setUp(self)
         self.group = Group("group")
         directlyProvides(self.group, IContainmentRoot)
         self.sub = Group("subgroup")
@@ -269,19 +266,24 @@ class TestPersonView(MemberSetup, unittest.TestCase):
         request.method = "GET"
         request.path = '/group/%s' % self.perkey
         result = self.view.render(request)
-        expected = dedent("""
+        segments = dedent("""
             <person xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>Pete</name>
               <groups>
+            ---8<---
                 <item xlink:type="simple" xlink:href="/"
                       xlink:title="group"/>
+            ---8<---
                 <item xlink:type="simple" xlink:href="/0"
                       xlink:title="subgroup"/>
+            ---8<---
               </groups>
             </person>
-            """)
-        self.assertEqual(result, expected,
-                         'expected != actual\n%s' % diff(expected, result))
+            """).split("---8<---\n")
+
+        for chunk in segments:
+            self.assert_(chunk in result, chunk)
+
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
 
