@@ -35,6 +35,12 @@ ftest: build
 run: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py
 
+runclient: build
+	PYTHONPATH=src $(PYTHON) src/schooltool/client.py
+
+runwxclient: build
+	PYTHONPATH=src $(PYTHON) src/schooltool/wxclient.py
+
 coverage: build
 	rm -rf coverage
 	$(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
