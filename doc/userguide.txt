@@ -125,3 +125,6 @@ can edit all information.
 The username for a user is set when the user is created and cannot be
 changed.  The password can be changed by the user themselves or a
 manager by right-clicking on a user and choosing "Change Password".
+
+People can be made into teachers and managers by adding them to the
+Teachers and System Managers groups respectively.
