@@ -89,7 +89,7 @@ class TestAppLog(unittest.TestCase):
         self.assert_("hackers" not in contents)
 
     def test_prev_filter_str(self):
-        request = RequestStub(args={'page': '1',
+        request = RequestStub(args={'page': '3',
                                     'prev_filter': 'vi',
                                     'filter': 'e'})
         request.site = SiteStub()
@@ -97,9 +97,9 @@ class TestAppLog(unittest.TestCase):
         self.view.pagesize = 1
         contents = self.view.render(request)
         self.assert_("Application log" in contents)
-        self.assert_("defaced" not in contents)
+        self.assert_("defaced" in contents)
         self.assert_("evil" not in contents)
-        self.assert_("hackers" in contents)
+        self.assert_("hackers" not in contents)
 
     def test_nextPageURL(self):
         request = RequestStub(args={'page':'1'})

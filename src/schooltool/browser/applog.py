@@ -58,12 +58,15 @@ class ApplicationLogView(View):
                 self.error = _("Invalid value for 'page' parameter.")
                 return View.do_GET(self, request)
         else:
-            page = -1
+            # Note: the ReSTive view returns the last page rather than
+            #       the first by default, but that would look very
+            #       unnatural on the HTML view.
+            page = 1
 
         if 'prev_filter' in request.args and self.filter_str is not None:
             prev_filter_str = to_unicode(request.args['prev_filter'][0])
             if prev_filter_str != self.filter_str:
-                page = -1
+                page = 1
 
         applog = self.openLog(path)
         self.query = ApplicationLogQuery(applog, filter_str=self.filter_str,
