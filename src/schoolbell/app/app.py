@@ -72,6 +72,14 @@ class PersonContainer(BTreeContainer):
         if protocol is ISchoolBellApplication:
             return self.__parent__
 
+    def __setitem__(self, key, person):
+        """See `IWriteContainer`
+
+        Ignores `key` and uses `person.username` as the key.
+        """
+        key = person.username
+        BTreeContainer.__setitem__(self, key, person)
+
 
 class GroupContainer(BTreeContainer):
     """Container of groups."""
@@ -104,8 +112,9 @@ class Person(Persistent, Contained):
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
-    def __init__(self, title=None):
+    def __init__(self, username=None, title=None):
         self.title = title
+        self.username = username
         self.calendar = Calendar(self)
 
     def setPassword(self, password):

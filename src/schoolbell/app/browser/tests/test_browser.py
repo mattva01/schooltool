@@ -117,7 +117,7 @@ def doctest_NavigationView():
 
       >>> from schoolbell.app.app import SchoolBellApplication, Person
 
-      >>> p = Person()
+      >>> p = Person('1')
       >>> app = SchoolBellApplication()
       >>> app['persons']['1'] = p
 
@@ -133,7 +133,7 @@ def doctest_NavigationView():
 def doctest_SchoolBellSized():
     """Unit tests for SchoolBellSized.
 
-      >>> from schoolbell.app.app import SchoolBellApplication
+      >>> from schoolbell.app.app import SchoolBellApplication, Person
       >>> from schoolbell.app.browser import SchoolBellSized
 
       >>> app = SchoolBellApplication()
@@ -143,13 +143,13 @@ def doctest_SchoolBellSized():
       (0, u'0 persons')
 
       >>> persons = app['persons']
-      >>> persons['gintas'] = object()
+      >>> persons['gintas'] = Person(u'gintas')
 
       >>> sized.sizeForSorting(), sized.sizeForDisplay()
       (1, u'1 person')
 
-      >>> persons['ignas'] = object()
-      >>> persons['mg'] = object()
+      >>> persons['ignas'] = Person(u'ignas')
+      >>> persons['marius'] = Person(u'marius')
 
       >>> sized.sizeForSorting(), sized.sizeForDisplay()
       (3, u'3 persons')

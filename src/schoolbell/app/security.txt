@@ -61,8 +61,7 @@ The utility knows about the users of the application:
 
     >>> from schoolbell.app.app import Person
     >>> from zope.app.security.interfaces import IPrincipal
-    >>> person = Person()
-    >>> person.title = "Frog"
+    >>> person = Person(username=u"frog", title="Frog")
     >>> app['persons']['frog'] = person
 
     >>> principal = auth.getPrincipal('frog')

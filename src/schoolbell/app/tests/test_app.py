@@ -94,13 +94,15 @@ def doctest_PersonContainer():
         >>> verifyObject(IPersonContainer, c)
         True
 
-    Let's make sure it acts like a proper container should act
+    PersonContainer uses the `username` attribute of persons as the key
 
-        >>> from zope.app.container.tests.test_btree import TestBTreeContainer
-        >>> class Test(TestBTreeContainer):
-        ...    def makeTestObject(self):
-        ...        return PersonContainer()
-        >>> run_unit_tests(Test)
+        >>> from schoolbell.app.app import Person
+        >>> person = Person(username="itsme")
+        >>> c['doesnotmatter'] = person
+        >>> c['itsme'] is person
+        True
+        >>> c.get('doesnotmatter') is None
+        True
 
     Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
     """
@@ -153,7 +155,7 @@ def doctest_Person():
 
         >>> from schoolbell.app.interfaces import IPersonContained
         >>> from schoolbell.app.app import Person
-        >>> person = Person()
+        >>> person = Person('person')
         >>> verifyObject(IPersonContained, person)
         True
 
@@ -283,7 +285,7 @@ def doctest_getSchoolBellApplication():
 
       >>> from schoolbell.app.app import SchoolBellApplication, Person
 
-      >>> p = Person()
+      >>> p = Person(u'1')
       >>> app = SchoolBellApplication()
       >>> app['persons']['1'] = p
 

@@ -95,7 +95,7 @@ def doctest_GroupListView():
     We will need a volunteer for this test:
 
         >>> from schoolbell.app.app import Person
-        >>> person = Person()
+        >>> person = Person(u'ignas')
 
     One requirement: the person has to know where he is.
 
@@ -200,9 +200,9 @@ def doctest_MemberListView():
         >>> pov = Group('PoV')
 
         >>> from schoolbell.app.app import Person
-        >>> gintas = Person('Gintas')
-        >>> ignas = Person('Ignas')
-        >>> alga = Person('Albertas')
+        >>> gintas = Person('gintas', 'Gintas')
+        >>> ignas = Person('ignas', 'Ignas')
+        >>> alga = Person('alga', 'Albertas')
 
     We need these objects to live in an application:
 
@@ -300,12 +300,12 @@ def doctest_GroupView():
     Let's relate some objects to our group:
 
         >>> from schoolbell.app.app import Person, Resource
-        >>> group.members.add(Person('First'))
-        >>> group.members.add(Person('Last'))
-        >>> group.members.add(Person('Intermediate'))
-        >>> group.members.add(Resource('Average'))
-        >>> group.members.add(Resource('Another'))
-        >>> group.members.add(Resource('The last'))
+        >>> group.members.add(Person(title='First'))
+        >>> group.members.add(Person(title='Last'))
+        >>> group.members.add(Person(title='Intermediate'))
+        >>> group.members.add(Resource(title='Average'))
+        >>> group.members.add(Resource(title='Another'))
+        >>> group.members.add(Resource(title='The last'))
 
     A person list from that view should be sorted by title.
 
