@@ -37,6 +37,7 @@
     <div id="columns">
       <metal:block define-slot="column-left">
         <div id="column-left">
+          <div tal:replace="structure context/@@schoolbell_navigation" />
           <metal:block define-slot="column-left-extra"/>
         </div>
       </metal:block>

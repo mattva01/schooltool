@@ -12,7 +12,7 @@
       <ul>
       <li><a class="action" tal:condition="view/canEdit"
              tal:attributes="href string:${context/@@absolute_url}/edit.html"
-             i18n:translate="">Edit</a>
+             i18n:translate="">Edit details</a>
       <li><a class="action" tal:condition="view/canChangePassword"
              tal:attributes="href
                              string:${context/@@absolute_url}/password.html"

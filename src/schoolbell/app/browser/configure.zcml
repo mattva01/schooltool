@@ -200,4 +200,14 @@
    <resource name="logo.png" file="schoolbell.png" />
    <resource name="schoolbell.js" file="schoolbell.js" />
 
+<!-- Navigation -->
+
+   <page
+       for="*"
+       name="schoolbell_navigation"
+       template="navigation.pt"
+       class=".NavigationView"
+       permission="zope.View"
+       />
+
 </configure>

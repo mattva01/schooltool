@@ -1,0 +1,6 @@
+<div class="portlet">
+<h4>Navigation</h4>
+<ul>
+   <li><a tal:attributes="href view/app/@@absolute_url">Top</a></li>
+</ul>
+</div>

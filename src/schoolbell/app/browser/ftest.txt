@@ -634,6 +634,59 @@ We should have a view for that resource as well:
     ...resource...
     ...
 
+Navigation view
+---------------
+
+The schoolbell_navigation view is registered for "*".  It will present
+a portlet with the navigation links depending on the authorized user.
+
+    >>> print http(r"""
+    ... GET /frogpond/schoolbell_navigation HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <div class="portlet">
+    <h4>Navigation</h4>
+    <ul>
+       <li><a href="http://localhost/frogpond">Top</a></li>
+    </ul>
+    </div>
+
+The main technical challenge in this view is finding the nearest
+ISchoolBellApplication instance, and providing the links relative to
+it.
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/Resource/schoolbell_navigation HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <div class="portlet">
+    <h4>Navigation</h4>
+    <ul>
+       <li><a href="http://localhost/frogpond">Top</a></li>
+    </ul>
+    </div>
+
+This view will break, though, if the context is not a descendant of
+ISchoolBellApplication:
+
+    >>> print http(r"""
+    ... GET /schoolbell_navigation HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 500 Internal Server Error
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+
 
 Appendix: Tips and tricks for writing functional doctests
 ---------------------------------------------------------
