@@ -169,9 +169,11 @@ class SchooldayModelCalendarView(View):
             ns = 'http://schooltool.org/ns/schooldays/0.1'
             xpathctx.xpathRegisterNs('tt', ns)
             schooldays = xpathctx.xpathEval('/tt:schooldays')[0]
+            first_attr = to_unicode(schooldays.nsProp('first', None))
+            last_attr = to_unicode(schooldays.nsProp('last', None))
             try:
-                first = parse_date(to_unicode(schooldays.nsProp('first', None)))
-                last = parse_date(to_unicode(schooldays.nsProp('last', None)))
+                first = parse_date(first_attr)
+                last = parse_date(last_attr)
                 holidays = [parse_date(to_unicode(node.content))
                             for node in xpathctx.xpathEval(
                                             '/tt:schooldays/tt:holiday/@date')]

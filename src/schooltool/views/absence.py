@@ -139,11 +139,13 @@ class RollCallView(View):
                                      % (path, getPath(self.context)))
                 person = traverse(self.context, path)
                 try:
-                    present = presence[to_unicode(node.nsProp('presence', None))]
+                    presence_attr = to_unicode(node.nsProp('presence', None))
+                    present = presence[presence_attr]
                 except KeyError:
                     raise ValueError("Bad presence value for %s" % path)
                 try:
-                    resolved = resolvedness[to_unicode(node.nsProp('resolved', None))]
+                    resolved_attr = to_unicode(node.nsProp('resolved', None))
+                    resolved = resolvedness[resolved_attr]
                 except KeyError:
                     raise ValueError("Bad resolved value for %s" % path)
                 if resolved is True and not present:
@@ -248,7 +250,8 @@ class AbsenceCommentParser:
                     raise ValueError("Bad value for resolved", resolved)
                 resolved = d[resolved]
 
-            expected_presence = to_unicode(node.nsProp('expected_presence', None))
+            expected_presence = to_unicode(node.nsProp('expected_presence',
+                                                       None))
             if expected_presence is None:
                 expected_presence = Unchanged
             else:
