@@ -49,6 +49,7 @@ Options:
   -q                    quiet (do not print anything on success)
   -w                    enable warnings about omitted test cases
   -d                    invoke pdb when an exception occurs
+  -1                    report only the first failure in doctests
   -p                    show progress bar (can be combined with -v or -vv)
   -u                    select unit tests (default)
   -f                    select functional tests
@@ -115,6 +116,7 @@ class Options:
     quiet = 0                   # do not print anything on success (-q)
     warn_omitted = False        # produce warnings when a test case is
                                 # not included in a test suite (-w)
+    first_doctest_failure = False # report first doctest failure (-1)
     print_import_time = True    # print time taken to import test modules
                                 # (currently hardcoded)
     progress = False            # show running progress (-p)
@@ -592,7 +594,7 @@ def main(argv):
 
     # Option processing
     try:
-        opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufwd',
+        opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufwd1',
                                ['list-files', 'list-tests', 'list-hooks',
                                 'level=', 'all-levels', 'coverage',
                                 'search-in=', 'immediate-errors',
@@ -623,6 +625,8 @@ def main(argv):
             cfg.postmortem = True
         elif k == '-w':
             cfg.warn_omitted = True
+        elif k == '-1':
+            cfg.first_doctest_failure = True
         elif k == '--list-files':
             cfg.list_files = True
             cfg.run_tests = False
@@ -711,6 +715,17 @@ def main(argv):
     import logging
     logging.basicConfig()
     logging.root.setLevel(logging.CRITICAL)
+
+    # Configure doctests
+    if cfg.first_doctest_failure:
+        # The doctest module in Python 2.3 does not have this feature
+        try:
+            from zope.testing import doctest
+        except ImportError:
+            print >> sys.stderr, ("cannot import zope.testing.doctest,"
+                                  " ignoring -1")
+        else:
+            doctest.set_unittest_reportflags(doctest.REPORT_ONLY_FIRST_FAILURE)
 
     # Running
     success = True
