@@ -132,7 +132,7 @@ def bootstrapSubscriber(event):
             print "Root folder already exists.  Replacing it with a SchoolBellApplication."
         installAppInRoot(db, root)
         transaction.commit()
-        connection.close()
+    connection.close()
 
 def installAppInRoot(db, root):
     from schoolbell.app.app import SchoolBellApplication
