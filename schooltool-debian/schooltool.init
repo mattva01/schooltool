@@ -29,7 +29,11 @@ case "$1" in
 	# Exit if the server has been disabled in /etc/default/$package
 	[ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
 
-	echo -n "Starting $DESC: $NAME"
+	# Make sure we have a /var/run sub-directory
+        [ -d /var/run/$package ] || mkdir -p /var/run/$package
+        chown $package:$package /var/run/$package
+
+        echo -n "Starting $DESC: $NAME"
 	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
 		--chuid $package --startas $DAEMON -- -d >/dev/null
 	echo "."
@@ -43,6 +47,10 @@ case "$1" in
   restart|force-reload)
 	# Exit if the server has been disabled in /etc/default/$package
 	[ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
+
+	# Make sure we have a /var/run sub-directory
+        [ -d /var/run/$package ] || mkdir -p /var/run/$package
+        chown $package:$package /var/run/$package
 
 	echo -n "Restarting $DESC: $NAME"
 	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \

@@ -11,6 +11,8 @@ schooltool (0.9.99+1.0rc1) unstable; urgency=low
   * Fold the clients (command line and import-sampleschool) into the library
     package as they would otherwise have been 2 lonely scripts in one big
     package.
+  * Add `mkdir -p /var/run/schooltool` to initscript because some people like
+    to mount tmpfs on /var/run.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 
