@@ -46,6 +46,7 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 
 from schoolbell.app.app import SchoolBellApplication, Person
+from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.security import setUpLocalAuth
 
 
@@ -69,6 +70,11 @@ No storage defined in the configuration file.
 
 If you're using the default configuration file, please edit it now and
 uncomment one of the ZODB storage sections.
+""".strip()
+
+
+incompatible_db_error_msg = """
+This is not a SchoolBell 1.0 database file, aborting.
 """.strip()
 
 
@@ -170,7 +176,11 @@ def setup(options):
                                   " is using it?")
         sys.exit(1)
 
-    bootstrapSchoolBell(db)
+    try:
+        bootstrapSchoolBell(db)
+    except TypeError:
+        print >> sys.stderr, incompatible_db_error_msg
+        sys.exit(1)
 
     notify(DatabaseOpened(db))
 
@@ -345,7 +355,8 @@ def bootstrapSchoolBell(db):
     """Bootstrap SchoolBell database."""
     connection = db.open()
     root = connection.root()
-    if not root.get(ZopePublication.root_name):
+    app_obj = root.get(ZopePublication.root_name)
+    if app_obj is None:
         app = SchoolBellApplication()
         directlyProvides(app, IContainmentRoot)
         root[ZopePublication.root_name] = app
@@ -355,6 +366,10 @@ def bootstrapSchoolBell(db):
         app['persons']['manager'] = manager
         IPrincipalRoleManager(app).assignRoleToPrincipal('zope.Manager',
                                                          'sb.person.manager')
+    elif not ISchoolBellApplication.providedBy(app_obj):
+        transaction.abort()
+        connection.close()
+        raise TypeError('incompatible database')
     transaction.commit()
     connection.close()
 

@@ -248,10 +248,6 @@ def doctest_setup():
         >>> logger2.disabled = False
         >>> logger2.setLevel(0)
 
-    TODO: perform checks!
-    TODO: clean up everything!
-    TODO: what do you mean in the comments above? -- gintas
-
     Clean up
 
         >>> from zope.app.testing import setup
@@ -323,7 +319,8 @@ def doctest_bootstrapSchoolBell():
     bootstrapSchoolBell doesn't do anything if it finds the root object already
     present in the database.
 
-        >>> root[ZopePublication.root_name] = 'even when the object is strange'
+        >>> from schoolbell.app.app import Person
+        >>> manager = app['persons']['user1'] = Person('user1')
         >>> transaction.commit()
         >>> connection.close()
 
@@ -331,8 +328,19 @@ def doctest_bootstrapSchoolBell():
 
         >>> connection = db.open()
         >>> root = connection.root()
-        >>> root.get(ZopePublication.root_name)
-        'even when the object is strange'
+        >>> 'user1' in root[ZopePublication.root_name]['persons']
+        True
+
+    However it fails if the application root is not a schoolbell application
+
+        >>> root[ZopePublication.root_name] = 'the object is strange'
+        >>> transaction.commit()
+        >>> connection.close()
+
+        >>> bootstrapSchoolBell(db)
+        Traceback (most recent call last):
+          ...
+        TypeError: incompatible database
 
     Clean up
 
