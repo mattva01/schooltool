@@ -24,6 +24,7 @@ $Id$
 
 import urllib
 from datetime import datetime, date, time, timedelta
+
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
 from schooltool.cal import Calendar, CalendarEvent, Period
@@ -131,8 +132,10 @@ class BookingView(View):
 class CalendarDay:
     """A single day in a calendar.
 
-    The attribute `date` is the day as a date() object,
-    `events` is list of events that took place that day, sorted by start time.
+    Attributes:
+       'date'   -- date of the day (a datetime.date instance)
+       'events' -- list of events that took place that day, sorted by start
+                   time (in ascending order).
 
     """
 
@@ -153,6 +156,9 @@ class CalendarViewBase(View):
 
     authorization = PrivateAccess
 
+    # Which day is considered to be the first day of the week (0 = Monday,
+    # 6 = Sunday).  Currently hardcoded.  A similair value is also hardcoded
+    # in schooltool.browser.timetable
     first_day_of_week = 0
 
     __url = None
@@ -223,12 +229,9 @@ class CalendarViewBase(View):
     def getWeek(self, dt):
         """Return the week that contains the day dt.
 
-        Returns a list of CalendarDay objects."""
-        # XXX use week_start from schooltool.browser.timetable
-        delta = dt.weekday() - self.first_day_of_week
-        if delta < 0:
-            delta += 7
-        start = dt - timedelta(delta)
+        Returns a list of CalendarDay objects.
+        """
+        start = week_start(dt, self.first_day_of_week)
         end = start + timedelta(7)
         return self.getDays(start, end)
 
@@ -239,16 +242,13 @@ class CalendarViewBase(View):
         months are included if they fall into a week that contains days in
         the current month.
         """
-        day = (date(dt.year, dt.month, 1))
-        prev_month = (dt.month == 1 and 12) or dt.month - 1
-
         weeks = []
-        while True:
-            week = self.getWeek(day)
-            if week[0].date.month not in (dt.month, prev_month):
-                break
-            weeks.append(week)
-            day += timedelta(days=7)
+        start_of_next_month = next_month(dt)
+        start_of_week = week_start(dt.replace(day=1), self.first_day_of_week)
+        while start_of_week < start_of_next_month:
+            start_of_next_week = start_of_week + timedelta(7)
+            weeks.append(self.getDays(start_of_week, start_of_next_week))
+            start_of_week = start_of_next_week
         return weeks
 
     def getYear(self, dt):
@@ -301,6 +301,9 @@ class DailyCalendarView(CalendarViewBase):
         # The following will be enough when getDays will include
         # events spanning several days into all CalendarDays.
         #
+        # XXX mg: I thought getDays does that already, but if I uncomment
+        #     the following two lines, unit tests fail.
+        #
         #day = self.getDays(date, date + timedelta(1))[0]
         #return day.events
 
@@ -311,7 +314,11 @@ class DailyCalendarView(CalendarViewBase):
         return events
 
     def getColumns(self):
-        """Return the maximum number of events overlapping"""
+        """Return the maximum number of events that are overlapping.
+
+        Extends the event so that start and end times fall on hour
+        boundaries before calculating overlaps.
+        """
         width = [0] * 24
         daystart = datetime.combine(self.cursor, time())
         for event in self.dayEvents(self.cursor):
@@ -326,17 +333,16 @@ class DailyCalendarView(CalendarViewBase):
         return max(width) or 1
 
     def _setRange(self, events):
-        """Sets the starthour and endhour attributes according to the events
+        """Set the starthour and endhour attributes according to events.
 
         The range of the hours to display is the union of the range
         8:00-18:00 and time spans of all the events in the events
         list.
         """
         for event in events:
-            start = (datetime.combine(self.cursor, time()) +
-                     timedelta(hours=self.starthour))
+            start = datetime.combine(self.cursor, time(self.starthour))
             end = (datetime.combine(self.cursor, time()) +
-                   timedelta(hours=self.endhour))
+                   timedelta(hours=self.endhour)) # endhour may be 24
             if event.dtstart < start:
                 newstart = max(datetime.combine(self.cursor, time()),
                                event.dtstart)
@@ -351,7 +357,19 @@ class DailyCalendarView(CalendarViewBase):
                     self.endhour = 24
 
     def getHours(self):
-        """Return an iterator over columns of the table"""
+        """Return an iterator over the rows of the table.
+
+        Every row is a dict with the following keys:
+
+            'time' -- row label (e.g. 8:00)
+            'cols' -- sequence of cell values for this row
+
+        A cell value can be one of the following:
+            None  -- if there is no event in this cell
+            event -- if an event starts in this cell
+            ''    -- if an event started above this cell
+
+        """
         nr_cols = self.getColumns()
         events = self.dayEvents(self.cursor)
         self._setRange(events)
@@ -387,60 +405,54 @@ class DailyCalendarView(CalendarViewBase):
             yield {'time': "%d:00" % hour, 'cols': tuple(cols)}
 
     def rowspan(self, event):
-        """Calculate how many hours the event will take today"""
+        """Calculate how many hours the event will take today."""
         start = datetime.combine(self.cursor, time(self.starthour))
         end = (datetime.combine(self.cursor, time()) +
-               timedelta(hours=self.endhour))
+               timedelta(hours=self.endhour)) # endhour may be 24
 
-        eventstart = event.dtstart
-        eventend = event.dtstart + event.duration
+        event_start = max(start, event.dtstart)
+        event_end = min(end, event.dtstart + event.duration)
 
-        if event.dtstart < start:
-            eventstart = start
-        if end < event.dtstart + event.duration:
-            eventend = end
-
-        duration = eventend - eventstart
+        duration = event_end - event_start
         seconds = duration.days * 24 * 3600 + duration.seconds
-        return (seconds - 1)/3600 + 1
+        return (seconds + 3600 - 1) // 3600 # round up
 
 
 class Slots(dict):
-    """A dict with integer indices which assigns the lowest unused index
+    """A dict with automatic key selection.
 
-    Add the first value:
+    The add method automatically selects the lowest unused numeric key
+    (starting from 0).
 
-    >>> s = Slots()
-    >>> s.add("first")
-    >>> s
-    {0: 'first'}
+    Example:
 
-    Add second value, it gets the index 1.
+      >>> s = Slots()
+      >>> s.add("first")
+      >>> s
+      {0: 'first'}
 
-    >>> s.add("second")
-    >>> s
-    {0: 'first', 1: 'second'}
+      >>> s.add("second")
+      >>> s
+      {0: 'first', 1: 'second'}
 
-    Remove first, add third.  It should get the index 0.
+    The keys can be reused:
 
-    >>> del s[0]
-    >>> s.add("third")
-    >>> s
-    {0: 'third', 1: 'second'}
+      >>> del s[0]
+      >>> s.add("third")
+      >>> s
+      {0: 'third', 1: 'second'}
+
     """
 
     def add(self, obj):
         i = 0
-        while True:
-            if i in self:
-                i += 1
-                continue
-            else:
-                self[i] = obj
-                break
+        while i in self:
+            i += 1
+        self[i] = obj
 
 
 class WeeklyCalendarView(CalendarViewBase):
+    """Weekly calendar view."""
 
     template = Template("www/cal_weekly.pt")
 
@@ -458,21 +470,17 @@ class WeeklyCalendarView(CalendarViewBase):
 
 
 class MonthlyCalendarView(CalendarViewBase):
+    """Monthly calendar view."""
 
     template = Template("www/cal_monthly.pt")
 
     def prevMonth(self):
         """Return the first day of the previous month."""
-        prev_lastday = (date(self.cursor.year, self.cursor.month, 1)
-                        - timedelta(days=1))
-        return date(prev_lastday.year, prev_lastday.month, 1)
+        return prev_month(self.cursor)
 
     def nextMonth(self):
         """Return the first day of the next month."""
-        # XXX merge this with next_month from schooltool.browser.timetable
-        next_someday = (date(self.cursor.year, self.cursor.month, 28)
-                        + timedelta(7))
-        return date(next_someday.year, next_someday.month, 1)
+        return next_month(self.cursor)
 
     def getCurrentMonth(self):
         """Return the current month as a nested list of CalendarDays."""
@@ -480,6 +488,7 @@ class MonthlyCalendarView(CalendarViewBase):
 
 
 class YearlyCalendarView(CalendarViewBase):
+    """Yearly calendar view."""
 
     template = Template('www/cal_yearly.pt')
 
@@ -524,6 +533,9 @@ class YearlyCalendarView(CalendarViewBase):
                     cssClass = 'cal_yearly_day_busy'
                 else:
                     cssClass = 'cal_yearly_day'
+                # Let us hope that URLs will not contain < > & or "
+                # This is somewhat related to
+                #   http://issues.schooltool.org/issue96
                 result.append('<a href="%s" class="%s">%s</a>' %
                               (self.calURL('daily', day.date), cssClass,
                                day.date.day))
@@ -559,6 +571,8 @@ class CalendarView(View):
         raise KeyError(name)
 
     def render(self, request):
+        # XXX: the str() here is completely bogus!
+        #      redirect returns an i18nized Unicode string!
         return str(request.redirect(
             absoluteURL(request, self.context) + '/daily.html'))
 
@@ -630,7 +644,7 @@ class EventViewBase(View):
         return self.redirect(url, request)
 
     def process(self, dtstart, duration, title, location):
-        raise NotImplementedError()
+        raise NotImplementedError("override this method in subclasses")
 
     def getLocations(self):
         """Get a list of titles for possible locations."""
@@ -710,9 +724,11 @@ class EventDeleteView(View):
 
 
 def EventSourceDecorator(e, source):
-    """A decorator for an ICalendarEvent that provides a 'source' attribute
+    """A decorator for an ICalendarEvent that provides a 'source' attribute.
 
-    Here we rely on the fact that CalendarEvents are immutable.
+    Here we rely on the fact that CalendarEvents are immutable, that is, we
+    can substitute an event instance with a (decorated) copy and not worry
+    about editing views making modifications to copies.
     """
     result = CalendarEvent(e.dtstart, e.duration, e.title, e.context,
                            e.owner, location=e.location, unique_id=e.unique_id)
@@ -721,7 +737,7 @@ def EventSourceDecorator(e, source):
 
 
 class CalendarComboMixin(View):
-    """Mixin for views over all calendars of a person.
+    """Mixin for views over the combined calendar of a person.
 
     The calendar events are decorated with a 'source' attribute, which
     is a name of the calendar the event is from.
@@ -779,7 +795,7 @@ class ComboCalendarView(CalendarView):
 
 
 class CalendarEventView(View):
-    """Renders the inside of the event box in various calendar views"""
+    """Renders the inside of the event box in various calendar views."""
 
     __used_for__ = ICalendarEvent
 
@@ -788,16 +804,18 @@ class CalendarEventView(View):
     template = Template("www/cal_event.pt")
 
     def duration(self):
-        ev = self.context
-        if ev.dtstart.date() == (ev.dtstart + ev.duration).date():
-            return "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
-                              (ev.dtstart + ev.duration).strftime('%H:%M'))
+        """Format the time span of the event."""
+        dtstart = self.context.dtstart
+        dtend = dtstart + self.context.duration
+        if dtstart.date() == dtend.date():
+            return "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
+                                    dtend.strftime('%H:%M'))
         else:
-            return "%s&ndash;%s" % (
-                ev.dtstart.strftime('%Y-%m-%d %H:%M'),
-                (ev.dtstart + ev.duration).strftime('%Y-%m-%d %H:%M'))
+            return "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
+                                    dtend.strftime('%Y-%m-%d %H:%M'))
 
     def cssClass(self):
+        """Choose a CSS class for the event."""
         if getattr(self.context, 'source', None) == 'timetable-calendar':
             return 'ro_event'
         else:
@@ -817,10 +835,12 @@ class CalendarEventView(View):
                                          end.strftime('%b&nbsp;%d'))
 
     def uniqueId(self):
+        """Format the event ID for inclusion in a URL."""
         return urllib.quote(self.context.unique_id)
 
 
 class ACLView(View):
+    """Calendar access list view."""
 
     authorization = PrivateAccess
 
@@ -881,6 +901,7 @@ class ACLView(View):
 
         for path in ('/groups', '/persons'):
             for obj in traverse(self.context, path).itervalues():
+                # XXX who uses __class__.__name__ in this way?! *thwap*
                 result.append((obj.__class__.__name__, obj.title, obj))
         result.sort()
         return [obj for cls, title, obj in result]
@@ -892,6 +913,7 @@ class ACLView(View):
         if 'DELETE' in self.request.args:
             for checkbox in self.request.args.get('CHECK', []):
                 perm, path = checkbox.split(':', 1)
+                # XXX handle traversal failures!
                 obj = traverse(self.context, path)
                 try:
                     self.context.remove((obj, perm))
@@ -922,4 +944,87 @@ class ACLView(View):
                      getPath(principal), principal.title))
                 return _("Granted permission %s to %s") % (permission,
                                                            principal.title)
+
+
+#
+# Calendaring functions
+# (Perhaps move them to schooltool.common?)
+#
+
+def prev_month(date):
+    """Calculate the first day of the previous month for a given date.
+
+       >>> prev_month(date(2004, 8, 1))
+       datetime.date(2004, 7, 1)
+       >>> prev_month(date(2004, 8, 31))
+       datetime.date(2004, 7, 1)
+       >>> prev_month(date(2004, 12, 15))
+       datetime.date(2004, 11, 1)
+       >>> prev_month(date(2005, 1, 28))
+       datetime.date(2004, 12, 1)
+
+    """
+    return (date.replace(day=1) - timedelta(1)).replace(day=1)
+
+
+def next_month(date):
+    """Calculate the first day of the next month for a given date.
+
+       >>> next_month(date(2004, 8, 1))
+       datetime.date(2004, 9, 1)
+       >>> next_month(date(2004, 8, 31))
+       datetime.date(2004, 9, 1)
+       >>> next_month(date(2004, 12, 15))
+       datetime.date(2005, 1, 1)
+       >>> next_month(date(2004, 2, 28))
+       datetime.date(2004, 3, 1)
+       >>> next_month(date(2004, 2, 29))
+       datetime.date(2004, 3, 1)
+       >>> next_month(date(2005, 2, 28))
+       datetime.date(2005, 3, 1)
+
+    """
+    return (date.replace(day=28) + timedelta(7)).replace(day=1)
+
+
+def week_start(date, first_day_of_week=0):
+    """Calculate the first day of the week for a given date.
+
+    Assuming that week starts on Mondays:
+
+       >>> week_start(date(2004, 8, 19))
+       datetime.date(2004, 8, 16)
+       >>> week_start(date(2004, 8, 15))
+       datetime.date(2004, 8, 9)
+       >>> week_start(date(2004, 8, 14))
+       datetime.date(2004, 8, 9)
+       >>> week_start(date(2004, 8, 21))
+       datetime.date(2004, 8, 16)
+       >>> week_start(date(2004, 8, 22))
+       datetime.date(2004, 8, 16)
+       >>> week_start(date(2004, 8, 23))
+       datetime.date(2004, 8, 23)
+
+    Assuming that week starts on Sundays:
+
+       >>> import calendar
+       >>> week_start(date(2004, 8, 19), calendar.SUNDAY)
+       datetime.date(2004, 8, 15)
+       >>> week_start(date(2004, 8, 15), calendar.SUNDAY)
+       datetime.date(2004, 8, 15)
+       >>> week_start(date(2004, 8, 14), calendar.SUNDAY)
+       datetime.date(2004, 8, 8)
+       >>> week_start(date(2004, 8, 21), calendar.SUNDAY)
+       datetime.date(2004, 8, 15)
+       >>> week_start(date(2004, 8, 22), calendar.SUNDAY)
+       datetime.date(2004, 8, 22)
+       >>> week_start(date(2004, 8, 23), calendar.SUNDAY)
+       datetime.date(2004, 8, 22)
+
+    """
+    assert 0 <= first_day_of_week < 7
+    delta = date.weekday() - first_day_of_week
+    if delta < 0:
+        delta += 7
+    return date - timedelta(delta)
 

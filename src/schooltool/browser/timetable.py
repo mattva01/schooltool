@@ -33,6 +33,7 @@ from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.widgets import TextWidget
+from schooltool.browser.cal import next_month, week_start
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
 from schooltool.interfaces import ITimetableSchemaService
@@ -299,6 +300,11 @@ class TimePeriodViewBase(View):
 
     template = Template("www/time-period.pt")
 
+    # Which day is considered to be the first day of the week (0 = Monday,
+    # 6 = Sunday).  Currently hardcoded.  A similair value is also hardcoded
+    # in schooltool.browser.cal
+    first_day_of_week = 0
+
     def __init__(self, context):
         View.__init__(self, context)
         self.start_widget = TextWidget('start', _('Start date'),
@@ -353,7 +359,7 @@ class TimePeriodViewBase(View):
                                 'year': start_of_month.year
                             }
             weeks = []
-            start_of_week = week_start(start_of_month)
+            start_of_week = week_start(start_of_month, self.first_day_of_week)
             start_of_next_month = min(next_month(start_of_month), limit)
             while start_of_week < start_of_next_month:
                 week_title = _('Week %d') % start_of_week.isocalendar()[1]
@@ -679,67 +685,3 @@ def format_time_range(start, duration):
         return '00:00-24:00' # special case
     else:
         return '%s-%s' % (start.strftime('%H:%M'), ends)
-
-
-def next_month(date):
-    """Calculate the first day of the next month from date.
-
-       >>> next_month(datetime.date(2004, 8, 1))
-       datetime.date(2004, 9, 1)
-       >>> next_month(datetime.date(2004, 8, 31))
-       datetime.date(2004, 9, 1)
-       >>> next_month(datetime.date(2004, 12, 15))
-       datetime.date(2005, 1, 1)
-       >>> next_month(datetime.date(2004, 2, 28))
-       datetime.date(2004, 3, 1)
-       >>> next_month(datetime.date(2004, 2, 29))
-       datetime.date(2004, 3, 1)
-       >>> next_month(datetime.date(2005, 2, 28))
-       datetime.date(2005, 3, 1)
-
-    """
-    return (date.replace(day=28) + datetime.timedelta(7)).replace(day=1)
-
-
-def week_start(date, first_day_of_week=0):
-    """Calculate the first day of the week of date.
-
-    Assuming that week starts on Mondays:
-
-       >>> import calendar
-       >>> week_start(datetime.date(2004, 8, 19))
-       datetime.date(2004, 8, 16)
-       >>> week_start(datetime.date(2004, 8, 15))
-       datetime.date(2004, 8, 9)
-       >>> week_start(datetime.date(2004, 8, 14))
-       datetime.date(2004, 8, 9)
-       >>> week_start(datetime.date(2004, 8, 21))
-       datetime.date(2004, 8, 16)
-       >>> week_start(datetime.date(2004, 8, 22))
-       datetime.date(2004, 8, 16)
-       >>> week_start(datetime.date(2004, 8, 23))
-       datetime.date(2004, 8, 23)
-
-    Assuming that week starts on Sundays:
-
-       >>> import calendar
-       >>> week_start(datetime.date(2004, 8, 19), calendar.SUNDAY)
-       datetime.date(2004, 8, 15)
-       >>> week_start(datetime.date(2004, 8, 15), calendar.SUNDAY)
-       datetime.date(2004, 8, 15)
-       >>> week_start(datetime.date(2004, 8, 14), calendar.SUNDAY)
-       datetime.date(2004, 8, 8)
-       >>> week_start(datetime.date(2004, 8, 21), calendar.SUNDAY)
-       datetime.date(2004, 8, 15)
-       >>> week_start(datetime.date(2004, 8, 22), calendar.SUNDAY)
-       datetime.date(2004, 8, 22)
-       >>> week_start(datetime.date(2004, 8, 23), calendar.SUNDAY)
-       datetime.date(2004, 8, 22)
-
-    """
-    assert 0 <= first_day_of_week < 7
-    delta = date.weekday() - first_day_of_week
-    if delta < 0:
-        delta += 7
-    return date - datetime.timedelta(delta)
-
