@@ -1,0 +1,106 @@
+SchoolTool server RESTive interface
+===================================
+
+  GET /
+    lists all application object containers, roots, utilities
+
+  GET /persons
+    lists all persons in the system
+  POST /persons
+    creates a new person in the system
+  PUT /persons/new_person_id
+    creates a new person in the system
+
+  GET /groups
+    lists all groups in the system
+  POST /groups
+    creates a new group in the system
+  PUT /groups/new_group_id
+    creates a new group in the system
+  GET /groups/group_id
+    shows the information for a group
+
+  GET /groups/group_id/tree
+    shows the tree of members rooted at this group
+
+  GET /groups/group_id/rollcall
+    get a roll-call template
+  POST /groups/group_id/rollcall
+    perform a roll call
+
+  GET /persons/person_id
+    shows the information for a person
+
+  GET /persons/person_id/absences
+    list a person's absences
+  POST /persons/person_id/absences
+    report a new absence or update the current absence
+  GET /persons/person_id/absences/id
+    show detailed information about an absence
+  POST /persons/person_id/absences/id
+    add a comment to an absence
+
+  GET /persons/person_id/timetable/time_period/schema
+    shows the specific timetable
+  PUT /persons/person_id/timetable/time_period/schema
+    creates or replaces the specific timetable
+  DELETE /persons/person_id/timetable/time_period/schema
+    removes the specific timetable
+  GET /persons/person_id/composite-timetable/time_period/schema
+    shows the specific composite timetable
+
+  GET ...object/facets
+    lists all facets for an object and all available facet factories
+  POST ...object/facets
+    creates a new facet for an object
+  DELETE ...object/facets/facet_name
+    removes the facet named 'facet_name' from an object
+
+  GET ...object/facets/eventlog
+    lists all events logged for an object (only if the object has an eventlog
+    facet)
+  PUT ...object/facets/eventlog
+    clears all events logged for an object accessible at '...object' (only if
+    the object has an eventlog facet)
+
+  GET ...object/facets/absences
+    lists all logged absences (only if the object has an absence tracker facet)
+
+  GET ...object/relationships
+    lists all relationships and valencies of an object
+  POST ...object/relationships
+    establish a new relationship
+  GET ...object/relationships/link_id
+    show information about the specific relationship
+  DELETE ...object/relationships/link_id
+    remove the relationship
+
+  GET /utils
+    lists all utilities
+
+  GET /utils/absences
+    lists all logged absences
+
+  GET /utils/eventlog
+    lists all logged events
+  PUT /utils/eventlog
+    clears the event log
+
+  GET /ttschemas
+    lists all defined timetable schemas
+  GET /ttschemas/schema_name
+    shows the timetable schema named 'schema_name'
+  PUT /ttschemas/schema_name
+    creates or updates timetable schema named 'schema_name'
+  DELETE /ttschemas/schema_name
+    deletes the timetable schema named 'schema_name'
+
+In the above '...object' stands for a full path to an application object (i.e.
+a group or a person), for example '/persons/some_person_id'.
+
+This list should be up-to-date (I think) with respect to SchoolTool revision
+440.  It has not been verified, so it might contain errors or omissions.
+
+Ideally all this should be automatically extracted from source code (e.g.
+docstrings for views).
+
