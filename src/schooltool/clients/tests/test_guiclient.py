@@ -1079,7 +1079,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                                 x_page='2', x_total_pages='3')
         client = self.newClient(response)
         logpage = client.getAppLogPage(page=4, pagesize=15,
-                                               filter='foo!')
+                                               filter_str='foo!')
         self.assertEquals(client._connections[0].path,
                           '/applog?page=4&pagesize=15&filter=foo%21')
         self.assertEquals(logpage.text, 'abc')
@@ -1089,6 +1089,11 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
     def test_getApplicationLogPage_errors(self):
         from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(500, 'not OK', 'abc'))
+        self.assertRaises(SchoolToolError, client.getAppLogPage, 3, 4)
+
+        response = ResponseStub(200, 'OK', 'abc',
+                                x_page='invalid', x_total_pages='numbers')
+        client = self.newClient(response)
         self.assertRaises(SchoolToolError, client.getAppLogPage, 3, 4)
 
 

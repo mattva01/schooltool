@@ -581,7 +581,14 @@ class SchoolToolClient:
         if response.status != 200:
             raise ResponseStatusError(response)
 
-    def getAppLogPage(self, page, pagesize, filter=None):
+    def getAppLogPage(self, page, pagesize, filter_str=None):
+        """Get a single page from the application log.
+
+        Only lines containing filter_str (optional) as a substring are taken
+        into account.
+
+        Returns an ApplicationLogPage.
+        """
         """Return a page from the application log.
 
         Pages are numbered starting from 1.  Negative numbers indicate counting
@@ -589,8 +596,8 @@ class SchoolToolClient:
         bounds are allowed and adjusted by the server.
         """
         args = [('page', page), ('pagesize', pagesize)]
-        if filter:
-            args.append(('filter', filter))
+        if filter_str:
+            args.append(('filter', filter_str))
         qs = urllib.urlencode(args)
         response = self.get('/applog?' + qs)
         if response.status != 200:
@@ -598,7 +605,7 @@ class SchoolToolClient:
         try:
             page = int(response.getheader('x-page'))
             total_pages = int(response.getheader('x-total-pages'))
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             raise SchoolToolError("Invalid headers received")
         text = to_unicode(response.read())
         return ApplicationLogPage(text, page, total_pages)

@@ -1800,7 +1800,7 @@ class AppLogFrame(wxDialog):
         try:
             log_page = self.client.getAppLogPage(page=self.page,
                                                  pagesize=self.pagesize,
-                                                 filter=self.filter_str)
+                                                 filter_str=self.filter_str)
         except SchoolToolError, e:
             wxMessageBox(_("Could not retrieve application log data: %s") % e,
                          _("Error"), wxICON_ERROR|wxOK)
