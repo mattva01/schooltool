@@ -29,10 +29,11 @@ from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
 from schooltool.browser import session_time_limit
 from schooltool.browser import valid_name
+from schooltool.browser.applog import ApplicationLogView
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.model import PersonView, GroupView, ResourceView
-from schooltool.browser.applog import ApplicationLogView
+from schooltool.browser.csv import CSVImportView
 from schooltool.component import getPath
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
@@ -116,6 +117,8 @@ class RootView(View):
             return StartView(request.authenticated_user)
         elif name == 'applog':
             return ApplicationLogView(self.context)
+        elif name == 'csvimport':
+            return CSVImportView(self.context)
         elif name == 'busysearch':
             return BusySearchView(self.context)
         elif name == 'ttschemas':

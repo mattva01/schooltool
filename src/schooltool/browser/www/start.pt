@@ -30,6 +30,8 @@
           i18n:translate="">Manage timetable schemas</a></p>
     <p><a class="action" href="/time-periods"
           i18n:translate="">Manage time periods</a></p>
+    <p><a class="action" href="/csvimport"
+          i18n:translate="">Import CSV data</a></p>
   </div>
 
   <div tal:condition="view/isTeacher" class="section">

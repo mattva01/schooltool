@@ -177,6 +177,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.timetable import TimetableSchemaServiceView
         from schooltool.browser.timetable import TimePeriodServiceView
         from schooltool.browser.timetable import NewTimePeriodView
+        from schooltool.browser.csv import CSVImportView
 
         view = self.createView()
         app = view.context
@@ -187,6 +188,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         self.assertTraverses(view, 'resources', ResourceContainerView,
                              app['resources'])
+        self.assertTraverses(view, 'csvimport', CSVImportView, app)
         self.assertTraverses(view, 'busysearch', BusySearchView, app)
         self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
                              app.timetableSchemaService)

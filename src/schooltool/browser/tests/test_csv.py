@@ -57,7 +57,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assert_('Data imported successfully' not in content)
 
         self.assert_('teachers' not in self.app['groups'].keys())
-        # TODO: applog
+        self.assertEquals(request.applog, [])
 
     def test_POST_empty_groups(self):
         request = RequestStub(args={'groups.csv': ''})
@@ -78,6 +78,13 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 
         self.assert_('year1' in self.app['groups'].keys())
         self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
+
+    def test_POST_groups_errors(self):
+        request = RequestStub(args={'groups.csv': '"year1","b0rk'})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' not in content)
+        self.assert_('Error in group data' in content)
+        self.assertEquals(request.applog, [])
 
 
 class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):

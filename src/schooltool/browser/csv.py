@@ -26,7 +26,8 @@ $Id$
 import datetime
 
 from schooltool.browser import View, Template
-from schooltool.clients.csvclient import CSVImporterBase  # XXX Foreign import
+from schooltool.browser.auth import ManagerAccess
+from schooltool.clients.csvclient import CSVImporterBase, DataError
 from schooltool.component import traverse, FacetManager
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
@@ -36,6 +37,8 @@ from schooltool.translation import ugettext as _
 class CSVImportView(View):
 
     __used_for__ = IApplication
+
+    authorization = ManagerAccess
 
     template = Template('www/csvimport.pt')
 
@@ -52,8 +55,13 @@ class CSVImportView(View):
             return self.do_GET(request)
 
         importer = CSVImporterZODB(self.context)
-        if groups_csv is not None:
-            importer.importGroupsCsv(groups_csv.splitlines())
+
+        try:
+            if groups_csv is not None:
+                importer.importGroupsCsv(groups_csv.splitlines())
+        except DataError, e:
+            self.error = unicode(e)
+            return self.do_GET(request)
 
         request.appLog(_("CSV data imported"))
         self.success = True
