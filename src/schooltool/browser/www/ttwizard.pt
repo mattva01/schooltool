@@ -19,7 +19,7 @@
        tal:content="view/name_error">
     Error.
   </div>
-  <label for="name">Name</label>
+  <label for="name" i18n:translate="">Name</label>
   <input class="text" type="text" name="name" id="name"
          tal:attributes="value view/name" />
 </div>
@@ -44,14 +44,14 @@ First, please define the days and periods of the timetable.
                tal:attributes="name string:COPY_DAY_$n;
                                tabindex python:n*3-1"
                value="C" title="Copy periods from previous day"
-               i18n:attributes="value title" />
+               i18n:attributes="value; title" />
       </th>
       <th class="day" width="1%">
         <input class="button" type="submit" tal:define="n repeat/day/number"
                tal:attributes="name string:DELETE_DAY_$n;
                                tabindex python:n*3"
                value="X" title="Remove this day"
-               i18n:attributes="value title" />
+               i18n:attributes="value; title" />
       </th>
     </tal:block></tr>
     <tr tal:repeat="row rows"><tal:block define="row_n repeat/row/number"
@@ -133,7 +133,7 @@ you made in the table above, use the Update button to refresh the form.
 <div class="form" tal:define="tabindex python:ncols*(nrows+3)+20">
   <table class="timetable">
     <tr>
-      <th class="day" i18n:translate=""></th>
+      <th class="day"></th>
       <th class="day" width="12%" i18n:translate="">Monday</th>
       <th class="day" width="12%" i18n:translate="">Tuesday</th>
       <th class="day" width="12%" i18n:translate="">Wednesday</th>

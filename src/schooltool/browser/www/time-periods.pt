@@ -37,6 +37,7 @@
   <div class="buttons">
     <input type="submit" class="button" name="DELETE"
            value="Delete time period"
+           tal:condition="periods"
            i18n:attributes="value" />
     <input type="submit" class="button" name="ADD"
            value="Add time period"

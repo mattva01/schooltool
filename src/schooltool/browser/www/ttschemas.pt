@@ -36,11 +36,12 @@
 
   <div class="buttons">
     <input type="submit" class="button" name="DELETE"
-          value="Delete timetable schema"
-          i18n:attributes="value" />
+           value="Delete timetable schema"
+           tal:condition="schemas"
+           i18n:attributes="value" />
     <input type="submit" class="button" name="ADD"
-          value="Add timetable schema"
-          i18n:attributes="value" />
+           value="Add timetable schema"
+           i18n:attributes="value" />
   </div>
 
 </form>
