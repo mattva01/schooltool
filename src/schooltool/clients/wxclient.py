@@ -591,7 +591,6 @@ class AbsenceFrame(wxDialog):
           a column in detailed mode (it makes sense to disable it when
           viewing absences for a single person)
         """
-        title = to_locale(title)
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
                           style=RESIZABLE_WIN_STYLE)
         self.client = client
