@@ -775,7 +775,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         self.group = app['groups'].new("root", title="group")
-        self.sub = app['groups'].new("subgroup", title="subgroup")
+        self.sub = app['groups'].new("sub", title="subgroup")
         self.new = app['groups'].new("new", title="New Group")
         self.per = app['persons'].new("p", title="Pete")
 
@@ -794,13 +794,13 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                       'role': 'http://schooltool.org/ns/membership/member',
                       'type': 'http://schooltool.org/ns/membership',
                       'title': 'Pete',
-                      'path': '/groups/subgroup/relationships/0002'}
+                      'path': '/groups/sub/relationships/0002'}
                      in result, pformat(result))
         self.assert_({'traverse': '/groups/root',
                       'role': 'http://schooltool.org/ns/membership/group',
                       'type': 'http://schooltool.org/ns/membership',
                       'title': 'group',
-                      'path': '/groups/subgroup/relationships/0001'}
+                      'path': '/groups/sub/relationships/0001'}
                      in result, pformat(result))
 
     def test_getValencies(self):
@@ -851,7 +851,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                      [l.traverse() for l in self.sub.listLinks()])
         self.assertEquals(request.headers['Content-Type'],
                           "text/plain")
-        location = "http://localhost/groups/new/relationships/0001"
+        location = "http://localhost/groups/sub/relationships/0003"
         self.assertEquals(request.headers['Location'], location)
         self.assert_(location in result)
 
@@ -901,6 +901,12 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             xlink:role="http://schooltool.org/ns/membership/member"
             xlink:arcrole="http://schooltool.org/ns/membership"
             xlink:href="/groups/new"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership/group"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="/groups/root"/>''',
             )
 
         for body in bad_requests:

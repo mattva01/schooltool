@@ -545,8 +545,14 @@ class RelationshipsView(View, XMLPseudoParser):
             return "Valency does not exist"
 
         kw = {val.this: self.context, val.other: other}
-        links = val.schema(**kw)
-        link = links[val.this]
+        try:
+            links = val.schema(**kw)
+        except ValueError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return "Cannot establish relationship: %s" % e
+
+        link = links[val.other]
         location = absoluteURL(request, getPath(link))
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
