@@ -50,7 +50,7 @@ OLDDB=
 
 DUMPDIR="/var/schooltool"
 
-# 4- If you need to use a sepcific python binary, set it here
+# 4- If you need to use a specific python binary, set it here
 #
 
 PYTHON=/usr/bin/python2.3
