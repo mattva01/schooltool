@@ -43,10 +43,11 @@ __metaclass__ = type
 
 class SchoolToolClient:
 
+    connectionFactory = httplib.HTTPConnection
+
     server = 'localhost'
     port = 8080
     status = ''
-    persons = ()
 
     def setServer(self, server, port):
         self.server = server
@@ -57,7 +58,7 @@ class SchoolToolClient:
         self.get('/')
 
     def get(self, path):
-        conn = httplib.HTTPConnection(self.server, self.port)
+        conn = self.connectionFactory(self.server, self.port)
         try:
             conn.request("GET", path)
             response = conn.getresponse()
@@ -74,10 +75,10 @@ class SchoolToolClient:
 
     def getListOfPersons(self):
         people = self.get('/people')
-        if people:
-            self.persons = tuple(self.parsePeopleList(people))
+        if people is not None:
+            return self.parsePeopleList(people)
         else:
-            self.persons = ()
+            return []
 
     def parsePeopleList(self, body):
         people = []
@@ -193,13 +194,16 @@ class MainFrame(wxFrame):
             for menu, title in items:
                 menubar.Append(menu, title)
             return menubar
+
         def menu(title, *items):
             menu = wxMenu()
             for item in items:
                 menu.AppendItem(item)
             return menu, title
+
         def separator():
             return wxMenuItem(kind=wxITEM_SEPARATOR)
+
         def item(title, description='', action=None, id=None):
             if not id:
                 id = wxNewId()
@@ -207,6 +211,7 @@ class MainFrame(wxFrame):
             if action:
                 EVT_MENU(self, id, action)
             return item
+
         def submenu(title, *items, **kw):
             description = kw.get('description', '')
             id = kw.get('id', None)
@@ -221,6 +226,10 @@ class MainFrame(wxFrame):
         self.SetMenuBar(menubar(
             menu("&File",
                 item("E&xit\tAlt+X", "Terminate the program", self.DoExit),
+                ),
+            menu("&View",
+                item("&Refresh\tAlt+R", "Refresh the list of persons",
+                     self.DoRefresh),
                 ),
             menu("&Settings",
                 item("&Server", "Server settings", self.DoServerSettings),
@@ -260,16 +269,26 @@ class MainFrame(wxFrame):
         dlg.Destroy()
 
     def DoSelectPerson(self, event):
-        person_id = event.GetString()
+        person_id = self.peopleListBox.GetStringSelection()
+        if not person_id:
+            return
         info = self.client.getPersonInfo(person_id)
+        if info is None:
+            info = 'Could not connect to server'
         self.personInfoText.SetPage(info)
+        self.SetStatusText(self.client.status)
+
+    def DoRefresh(self, event):
+        self.refresh()
 
     def refresh(self):
-        self.client.tryToConnect()
+        people = self.client.getListOfPersons()
         self.SetStatusText(self.client.status)
-        self.client.getListOfPersons()
-        self.peopleListBox.Set(list(self.client.persons))
+        old_selection = self.peopleListBox.GetStringSelection()
+        self.peopleListBox.Set(people)
+        self.peopleListBox.SetStringSelection(old_selection)
         self.personInfoText.SetPage('')
+        self.DoSelectPerson(None)
 
 
 class SchoolToolApp(wxApp):
