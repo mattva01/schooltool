@@ -346,10 +346,7 @@ def run_unit_tests(testcase):
         FAIL: test2 (schoolbell.app.tests.test_app.BadTestCase)
         ----------------------------------------------------------------------
         Traceback (most recent call last):
-          File "<doctest schoolbell.app.tests.test_app.run_unit_tests[3]>", line 3, in test2
-            self.assertEquals(2 * 2, 5)
-          File "/usr/lib/python2.3/unittest.py", line 302, in failUnlessEqual
-            raise self.failureException, \
+        ...
         AssertionError: 4 != 5
         <BLANKLINE>
         ----------------------------------------------------------------------
