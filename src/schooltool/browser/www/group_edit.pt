@@ -58,7 +58,7 @@
 <tal:block condition="request/args/ADD|nothing">
   <form method="POST" tal:attributes="action request/uri">
 
-  <p i18n:translate="">Enter a substring of the memeber name:</p>
+  <p i18n:translate="">Enter a substring of the member name:</p>
 
   <input type="text" class="field" name="SEARCH"/>
   <input type="submit" class="button" name="ADD2" value="Next"
