@@ -25,6 +25,7 @@ $Id$
 import time
 import urllib
 import logging
+import datetime
 
 import transaction
 from ZODB.POSException import ConflictError
@@ -551,6 +552,11 @@ class Request(http.Request):
         assert isinstance(header, str), "header name must be a string"
         assert isinstance(value, (str, int)), "header value must be a string"
         http.Request.setHeader(self, header, value)
+
+    def clearCookie(self, cookie):
+        """Clear a cookie by adding a Set-Cookie header that expires now."""
+        now = datetime.datetime.utcnow().strftime("%a, %d-%h-%Y %H:%M:%S UTC")
+        self.addCookie(cookie, '', expires=now)
 
     def render(self, resrc):
         """Render a resource.
