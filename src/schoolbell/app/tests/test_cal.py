@@ -35,6 +35,8 @@ def doctest_Calendar():
 
         >>> from schoolbell.app.cal import Calendar
         >>> cal = Calendar()
+        >>> cal.__name__
+        'calendar'
 
     The calendar should be an ILocation and it should implement IEditCalendar.
 
@@ -103,6 +105,13 @@ def doctest_Calendar():
         >>> cal.clear()
         >>> list(cal)
         []
+
+    By the way, you can specify the calendar's owner in the constructor:
+
+        >>> parent = object()
+        >>> cal2 = Calendar(parent)
+        >>> cal2.__parent__ is parent
+        True
 
     """
 

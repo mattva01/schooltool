@@ -38,11 +38,11 @@ class Calendar(Persistent, CalendarMixin):
 
     implements(IEditCalendar, ILocation)
 
-    __name__ = None
-    __parent__ = None
+    __name__ = 'calendar'
 
-    def __init__(self):
+    def __init__(self, owner=None):
         self.events = PersistentDict()
+        self.__parent__ = owner
 
     def __iter__(self):
         return self.events.itervalues()

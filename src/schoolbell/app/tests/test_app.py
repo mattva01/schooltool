@@ -213,6 +213,15 @@ def doctest_Person():
         >>> person.checkPassword(u'\u1234')
         True
 
+    Persons have a calendar:
+
+        >>> person.calendar.__name__
+        'calendar'
+        >>> person.calendar.__parent__ is person
+        True
+        >>> len(person.calendar)
+        0
+
     Persons can be adapted to ISchoolBellApplication
 
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
