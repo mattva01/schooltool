@@ -36,21 +36,24 @@ from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.interfaces import ISchooldayModel
-from schooltool.interfaces import ILocation
 from schooltool.interfaces import ITimetableActivity
+from schooltool.interfaces import ILocation
+from schooltool.interfaces import IContainmentRoot
 from schooltool.facet import FacetedMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
 
+class LocationStub(object):
+    implements(ILocation)
+
+
 class TraversableRoot(object):
-    pass
+    implements(IContainmentRoot)
 
 
 def setPath(obj, path):
     """Trick getPath(obj) into returning path."""
-    from schooltool.interfaces import ILocation
-    from schooltool.interfaces import IContainmentRoot
     assert path.startswith('/')
     obj.__name__ = path[1:]
     directlyProvides(obj, ILocation)
@@ -434,6 +437,73 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertEquals(tb.title, None)
         self.assertEquals(tb.owner, owner2)
 
+
+class TestTimetableExceptionList(EventServiceTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpEventService()
+
+    def test(self):
+        from schooltool.timetable import TimetableExceptionList
+        from schooltool.interfaces import ITimetableExceptionList
+        from schooltool.interfaces import ITimetableExceptionAddedEvent
+        from schooltool.interfaces import ITimetableExceptionRemovedEvent
+        timetable = LocationStub()
+        timetable.__parent__ = self.eventService
+        l = TimetableExceptionList(timetable)
+        verifyObject(ITimetableExceptionList, l)
+
+        # empty list
+        self.assertEquals(list(l), [])
+        self.assertEquals(len(l), 0)
+        self.assertEquals(l, [])
+        self.assertRaises(IndexError, l.__getitem__, 0)
+
+        ex1 = object()
+        l.append(ex1)
+        self.assertEquals(list(l), [ex1])
+        self.assertEquals(len(l), 1)
+        self.assertEquals(l, [ex1])
+        self.assert_(l[0] is ex1)
+        e1 = self.checkOneEventReceived()
+        self.assert_(ITimetableExceptionAddedEvent.providedBy(e1))
+        self.assert_(e1.timetable is timetable)
+        self.assert_(e1.exception is ex1)
+
+        timetable2 = object()
+        l2 = TimetableExceptionList(timetable2)
+        l2.append(ex1)
+        self.assertEquals(l, l2)
+
+        ex2 = object()
+        l.extend([ex2])
+        self.assertNotEquals(l, l2)
+        self.assertEquals(l, [ex1, ex2])
+
+        self.eventService.clearEvents()
+        l.remove(ex1)
+        self.assertEquals(l, [ex2])
+        e2 = self.checkOneEventReceived()
+        self.assert_(ITimetableExceptionRemovedEvent.providedBy(e2))
+        self.assert_(e1.timetable is timetable)
+        self.assert_(e1.exception is ex1)
+
+        self.assertRaises(ValueError, l.remove, ex1)
+
+
+class TestTimetableExceptionEvents(unittest.TestCase):
+
+    def test(self):
+        from schooltool.timetable import TimetableExceptionAddedEvent
+        from schooltool.timetable import TimetableExceptionRemovedEvent
+        from schooltool.interfaces import ITimetableExceptionAddedEvent
+        from schooltool.interfaces import ITimetableExceptionRemovedEvent
+        timetable = object()
+        exception = object()
+        e1 = TimetableExceptionAddedEvent(timetable, exception)
+        verifyObject(ITimetableExceptionAddedEvent, e1)
+        e2 = TimetableExceptionRemovedEvent(timetable, exception)
+        verifyObject(ITimetableExceptionRemovedEvent, e2)
 
 class TestTimetableException(unittest.TestCase):
 
@@ -1070,7 +1140,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
     def newTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
         tt = Timetable(("A", "B"))
-        tt.exceptions = ['exc1', 'exc2']
+        tt.exceptions.extend(['exc1', 'exc2'])
         tt["A"] = TimetableDay(("Green", "Blue"))
         tt["B"] = TimetableDay(("Green", "Blue"))
         return tt
@@ -1140,7 +1210,6 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         expected = composite.cloneEmpty()
         expected.update(composite)
         expected.update(private)
-        expected.exceptions = composite.exceptions + private.exceptions
         self.assertEqual(result, expected)
         self.assertEqual(tm.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
@@ -1157,7 +1226,6 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         expected = composite.cloneEmpty()
         expected.update(private)
         expected.update(parent_private)
-        expected.exceptions = composite.exceptions + private.exceptions
         self.assertEqual(result, expected)
         self.assertEqual(Set(result["B"]["Blue"]), Set([math]))
         self.assertEqual(Set(result["A"]["Green"]), Set([french]))
@@ -1354,6 +1422,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
+    suite.addTest(unittest.makeSuite(TestTimetableExceptionList))
+    suite.addTest(unittest.makeSuite(TestTimetableExceptionEvents))
     suite.addTest(unittest.makeSuite(TestTimetableException))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))

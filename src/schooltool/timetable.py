@@ -152,6 +152,10 @@ from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
+from schooltool.interfaces import ITimetableExceptionList
+from schooltool.interfaces import ITimetableExceptionEvent
+from schooltool.interfaces import ITimetableExceptionAddedEvent
+from schooltool.interfaces import ITimetableExceptionRemovedEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ISchooldayPeriod
@@ -161,6 +165,7 @@ from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ILocation, IMultiContainer
+from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import Unchanged
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
@@ -168,6 +173,7 @@ from schooltool.component import getTimePeriodService
 from schooltool.component import registerTimetableModel
 from schooltool.component import getPath
 from schooltool.uris import URIGroup
+from schooltool.event import EventMixin
 
 __metaclass__ = type
 
@@ -193,9 +199,11 @@ class Timetable(Persistent):
         self.day_ids = day_ids
         self.days = PersistentDict()
         self.model = None
-        self.exceptions = PersistentList()
+        self._exceptions = TimetableExceptionList(self)
         self.__parent__ = None
         self.__name__ = None
+
+    exceptions = property(lambda self: self._exceptions)
 
     def keys(self):
         return list(self.day_ids)
@@ -232,7 +240,7 @@ class Timetable(Persistent):
             raise ValueError("Timetables have different schemas")
         for day, period, activity in other.itercontent():
             self[day].add(period, activity)
-        self.exceptions += other.exceptions
+        self.exceptions.extend(other.exceptions)
 
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
@@ -369,6 +377,65 @@ class TimetableActivity:
                                  resources=resources, timetable=timetable)
 
 
+class TimetableExceptionList:
+
+    implements(ITimetableExceptionList)
+
+    def __init__(self, timetable):
+        self._list = PersistentList()
+        self._timetable = timetable
+
+    def __iter__(self):
+        return iter(self._list)
+
+    def __len__(self):
+        return len(self._list)
+
+    def __getitem__(self, index):
+        return self._list[index]
+
+    def __eq__(self, other):
+        return self._list == other
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def extend(self, exceptions):
+        self._list.extend(exceptions)
+
+    def append(self, exception):
+        self._list.append(exception)
+        tt = self._timetable
+        if ILocation.providedBy(tt) and IEventTarget.providedBy(tt.__parent__):
+            event = TimetableExceptionAddedEvent(self._timetable, exception)
+            event.dispatch(tt.__parent__)
+
+    def remove(self, exception):
+        self._list.remove(exception)
+        tt = self._timetable
+        if ILocation.providedBy(tt) and IEventTarget.providedBy(tt.__parent__):
+            event = TimetableExceptionRemovedEvent(self._timetable, exception)
+            event.dispatch(tt.__parent__)
+
+
+class TimetableExceptionEvent(EventMixin):
+
+    implements(ITimetableExceptionEvent)
+
+    def __init__(self, timetable, exception):
+        EventMixin.__init__(self)
+        self.timetable = timetable
+        self.exception = exception
+
+
+class TimetableExceptionAddedEvent(TimetableExceptionEvent):
+    implements(ITimetableExceptionAddedEvent)
+
+
+class TimetableExceptionRemovedEvent(TimetableExceptionEvent):
+    implements(ITimetableExceptionRemovedEvent)
+
+
 class TimetableException(Persistent):
 
     implements(ITimetableException)
@@ -390,6 +457,8 @@ class TimetableException(Persistent):
         self.date = date
         self.period_id = period_id
         self.activity = activity
+
+    # TODO: make date, period_id and activity read-only
 
     def __eq__(self, other):
         if ITimetableException.providedBy(other):

@@ -639,6 +639,21 @@ class IMemberRemovedEvent(IRelationshipRemovedEvent, IMembershipEvent):
     """
 
 
+class ITimetableExceptionEvent(IEvent):
+    """Base interface for timetable exception events."""
+
+    timetable = Attribute("""The timetable.""")
+    exception = Attribute("""The timetable exception.""")
+
+
+class ITimetableExceptionAddedEvent(ITimetableExceptionEvent):
+    """Event that gets sent when an exception is added to a timetable."""
+
+
+class ITimetableExceptionRemovedEvent(ITimetableExceptionEvent):
+    """Event that gets sent when an exception is removed from a timetable."""
+
+
 class IEventTarget(Interface):
     """An object that can receive events."""
 
@@ -1239,7 +1254,7 @@ class ITimetable(Interface):
         """A timetable model this timetable should be used with.""")
 
     exceptions = Attribute(
-        """A list of timetable exceptions (ITimetableException).""")
+        """A list of timetable exceptions (ITimetableExceptionList).""")
 
     def keys():
         """Return a sequence of identifiers for days within the timetable.
@@ -1419,6 +1434,47 @@ class ITimetableActivity(Interface):
 
     def __hash__():
         """Calculate the hash value of a timetable activity."""
+
+
+class ITimetableExceptionList(Interface):
+    """A list of timetable exceptions.
+
+    All items in this list are objects providing ITimetableException.
+    """
+
+    def __iter__():
+        """Iterate over all timetable exceptions."""
+
+    def __len__():
+        """Return the number of exceptions in the list."""
+
+    def __getitem__(index):
+        """Return the n-th exception in the list."""
+
+    def __eq__(other):
+        """Is this list equal to other?"""
+
+    def __ne__(other):
+        """Is this list not equal to other?"""
+
+    def append(exception):
+        """Add a timetable exception.
+
+        Sends an ITimetableExceptionAddedEvent.
+        """
+
+    def remove(exception):
+        """Remove a timetable exception.
+
+        Sends an ITimetableExceptionRemovedEvent.
+        """
+
+    def extend(exceptions):
+        """Extend the list with new exceptions.
+
+        This method should only be used for constructing composite timetables.
+        It does not send any events.
+        """
 
 
 class ITimetableException(Interface):
