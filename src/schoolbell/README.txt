@@ -1,5 +1,5 @@
-SchoolBell
-==========
+SchoolBell calendaring library
+==============================
 
 SchoolBell is a calendaring library for Zope 3.
 
