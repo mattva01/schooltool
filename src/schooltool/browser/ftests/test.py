@@ -109,7 +109,7 @@ class Browser(object):
             # Process HTTP redirects.
             location = self.headers.get('Location')
             # This might loop.  Let's hope it doesn't
-            self._open(location)
+            return self._open(location)
 
 
 #
@@ -135,6 +135,24 @@ class TestLogin(setup.TestCase):
         self.assert_('Start' in browser.content)
         link_to_password_form = site + '/persons/manager/password.html'
         self.assert_(link_to_password_form in browser.content)
+
+
+class TestPersonCreate(setup.TestCase):
+
+    def test(self):
+        browser = Browser()
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+        browser.post('http://localhost:8814/persons/add.html',
+                     {'first_name': 'Test', 'last_name': 'User',
+                      'optional_username': 'testuser', 'ADD': 'Add'})
+        self.assertEquals(browser.status, 200)
+        person_url = 'http://localhost:8814/persons/testuser'
+        self.assert_(browser.url.startswith(person_url))
+        browser.go('http://localhost:8814/persons/testuser')
+        self.assert_('Test User' in browser.content)
+
+        self._saveSnapshot('test-user-created')
 
 
 class TestPersonEdit(setup.TestCase):
@@ -196,10 +214,49 @@ class TestResetDB(setup.TestCase):
         self.assert_('Manager' in browser.content)
 
 
+class TestObjectDeletion(setup.TestCase):
+
+    fixture_name = "test-user-created"
+
+    def test(self):
+        # Log in
+        browser = Browser()
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+
+        # Make sure we have the right test fixture loaded
+        browser.go('http://localhost:8814/persons/testuser')
+        self.assertEquals(browser.status, 200)
+
+        # Go to the delete page
+        browser.go('http://localhost:8814/delete.html')
+        self.assert_('Search' in browser.content)
+
+        # Search for a person
+        browser.post('http://localhost:8814/delete.html',
+                     {'q': 'Test', 'SEARCH': 'Search'})
+        self.assert_('Search results' in browser.content)
+
+        # Select the person for deletion
+        browser.post('http://localhost:8814/delete.html',
+                     {'path': '/persons/testuser', 'DELETE': 'Delete'})
+        self.assert_('Confirm' in browser.content)
+
+        # Confirm deletion
+        browser.post('http://localhost:8814/delete.html',
+                     {'path': '/persons/testuser', 'CONFIRM': 'Confirm'})
+        self.assert_('Deleted Test User' in browser.content)
+
+        browser.go('http://localhost:8814/persons/testuser')
+        self.assertEquals(browser.status, 404)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLogin))
+    suite.addTest(unittest.makeSuite(TestPersonCreate))
     suite.addTest(unittest.makeSuite(TestPersonEdit))
+    suite.addTest(unittest.makeSuite(TestObjectDeletion))
     suite.addTest(unittest.makeSuite(TestResetDB))
     return suite
 
