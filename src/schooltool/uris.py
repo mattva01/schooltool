@@ -107,6 +107,9 @@ def getURI(str):
         raise ComponentLookupError(str)
 
 
+def listURIs():
+    return _uri_registry.values()
+
 #
 # Concrete URIs
 #

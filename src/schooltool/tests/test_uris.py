@@ -93,18 +93,22 @@ class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
 
     def testURIRegistry(self):
         from schooltool.interfaces import ComponentLookupError
-        from schooltool.uris import URIObject, getURI, registerURI
+        from schooltool.uris import URIObject, getURI, registerURI, listURIs
         URI1 = URIObject("http://example.com/foobar")
         URI2 = URIObject("http://example.com/foo")
         URI2Dupe = URIObject("http://example.com/foo")
 
+        self.assert_(URI1 not in listURIs())
+        self.assert_(URI2 not in listURIs())
         self.assertRaises(ComponentLookupError, getURI,
                           "http://example.com/foobar")
         registerURI(URI1)
         self.assert_(getURI("http://example.com/foobar") is URI1)
+        self.assert_(URI1 in listURIs())
 
         registerURI(URI2)
         registerURI(URI2)
+        self.assert_(URI2 in listURIs())
         self.assert_(getURI("http://example.com/foo") is URI2)
         self.assertRaises(ValueError, registerURI, URI2Dupe)
         self.assert_(getURI("http://example.com/foo") is URI2)

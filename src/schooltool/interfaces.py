@@ -310,6 +310,9 @@ class IURIAPI(Interface):
         We're only approximating the spec.
         """
 
+    def listURIs():
+        """Return a list of all registered URIObjects."""
+
 
 #
 # Relationships
