@@ -68,6 +68,15 @@ class TestTemplate(unittest.TestCase):
                      "text/html; charset=UTF-8")
         self.assertEquals(result, "code: 200\nfoo: Foo\nbar: Bar\n")
 
+    def test_content_type(self):
+        from schooltool.views import Template
+        templ = Template('sample_xml.pt', content_type='text/plain')
+        request = RequestStub()
+        result = templ(request, foo='Foo', bar='Bar')
+        self.assertEquals(request.headers['Content-Type'],
+                     "text/plain; charset=UTF-8")
+        self.assertEquals(result, "code: 200\n")
+
 
 class TestErrorViews(unittest.TestCase):
 
@@ -224,12 +233,14 @@ class TestGroupView(unittest.TestCase):
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>group</name>
               <item xlink:type="simple" xlink:title="subgroup"
-                    xlink:href="/%s" />
-              <item xlink:type="simple" xlink:title="p" xlink:href="/%s" />
+                    xlink:href="/%s"/>
+              <item xlink:type="simple" xlink:title="p" xlink:href="/%s"/>
             </group>
             """ % (self.subkey, self.perkey))
         self.assertEqual(result, expected,
                          'expected != actual\n%s' % diff(expected, result))
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
 
 
 class TestPersonView(unittest.TestCase):
@@ -260,14 +271,16 @@ class TestPersonView(unittest.TestCase):
               <name>Pete</name>
               <groups>
                 <item xlink:type="simple" xlink:href="/"
-                      xlink:title="group" />
+                      xlink:title="group"/>
                 <item xlink:type="simple" xlink:href="/0"
-                      xlink:title="subgroup" />
+                      xlink:title="subgroup"/>
               </groups>
             </person>
             """)
         self.assertEqual(result, expected,
                          'expected != actual\n%s' % diff(expected, result))
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
 
 
 def test_suite():

@@ -1,4 +1,5 @@
-<person xmlns:xlink="http://www.w3.org/1999/xlink">
+<person xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:tal="http://xml.zope.org/namespaces/tal">
   <name tal:content="view/context/name">Pete</name>
   <groups>
     <item tal:repeat="group view/getGroups"

@@ -1,4 +1,5 @@
-<group xmlns:xlink="http://www.w3.org/1999/xlink">
+<group xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:tal="http://xml.zope.org/namespaces/tal">
   <name tal:content="context/name">group</name>
   <item tal:repeat="item view/listItems"
       xlink:type="simple"

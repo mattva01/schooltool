@@ -43,7 +43,12 @@ class Template(PageTemplateFile):
     in the output charset, a UnicodeError will be raised when rendering.
     """
 
-    charset = 'UTF-8'
+    def __init__(self, filename, content_type='text/html', charset='UTF-8',
+                       _prefix=None):
+        _prefix = self.get_path_from_prefix(_prefix)
+        PageTemplateFile.__init__(self, filename, _prefix)
+        self.content_type = content_type
+        self.charset = charset
 
     def __call__(self, request, **kw):
         """Renders the page template.
@@ -52,7 +57,7 @@ class Template(PageTemplateFile):
         in the page template namespace.
         """
         request.setHeader('Content-Type',
-                          'text/html; charset=%s' % self.charset)
+                          '%s; charset=%s' % (self.content_type, self.charset))
         context = self.pt_getContext()
         context['request'] = request
         context.update(kw)
@@ -153,7 +158,7 @@ class View(Resource):
 class GroupView(View):
     """The view for a group"""
 
-    template = Template("www/group.pt")
+    template = Template("www/group.pt", content_type="text/xml")
 
     def _traverse(self, name, request):
         try:
@@ -175,7 +180,7 @@ class GroupView(View):
 class PersonView(View):
     """The view for a person object"""
 
-    template = Template("www/person1.pt")
+    template = Template("www/person1.pt", content_type="text/xml")
 
     def getGroups(self):
         return [{'name': group.name, 'path': getPath(group)}
