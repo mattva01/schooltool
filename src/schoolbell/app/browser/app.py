@@ -373,7 +373,7 @@ class PersonAddView(AddView):
     def getGroupList(self):
         """Return a sorted list of all groups in the system."""
         groups = self.context.__parent__['groups']
-        return sorted_by_title(groups.values())
+        return groups.values()
 
     def add(self, person):
         """Add `person` to the container.

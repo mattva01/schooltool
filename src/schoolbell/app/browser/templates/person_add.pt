@@ -39,9 +39,9 @@
         </div>
       </fieldset>
 
-      <fieldset>
+      <fieldset tal:define="groups view/getGroupList">
         <legend i18n:translate="">Add to groups</legend>
-        <div tal:repeat="group view/getGroupList">
+        <div tal:repeat="group groups/sortby:title">
           <label>
             <input type="checkbox"
                    tal:attributes="name string:group.${group/__name__};
