@@ -88,9 +88,9 @@ class install_data(_install_data):
     The primary purpose of this sub class it to make sure SchoolTool will
     know where it's data files are on installation.
     """
-    
+
     package = package
-    
+
     def initialize_options(self):
         self.build_base = None
         return _install_data.initialize_options(self)
@@ -108,7 +108,7 @@ class install_data(_install_data):
         try:
             data_file = open(os.path.join(self.build_base,
                 self.package + '_data_base'), 'w')
-            data_file.write(self.install_dir)
+            data_file.write(os.path.abspath(self.install_dir))
         finally:
             data_file.close()
         return _install_data.run(self)
