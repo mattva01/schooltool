@@ -1062,7 +1062,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
 
     def test_getAppLogPage(self):
         from schooltool.clients.guiclient import ApplicationLogPage
-        response = ResponseStub(200, 'OK', 'pwn3d',
+        body = u'pwn3d \u263B'
+        response = ResponseStub(200, 'OK', body.encode('UTF-8'),
                                 x_page='7', x_total_pages='7')
         client = self.newClient(response)
         logpage = client.getAppLogPage(page=-1, pagesize=5)
@@ -1070,7 +1071,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                           '/applog?page=-1&pagesize=5')
 
         self.assert_(isinstance(logpage, ApplicationLogPage))
-        self.assertEquals(logpage.text, 'pwn3d')
+        self.assertEquals(logpage.text, body)
         self.assertEquals(logpage.page, 7)
         self.assertEquals(logpage.total_pages, 7)
 
