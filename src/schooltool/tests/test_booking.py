@@ -1,0 +1,131 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2004 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+"""
+Unit tests for the schooltool.booking module.
+
+$Id$
+"""
+
+import unittest
+import datetime
+
+from schooltool.tests.utils import AppSetupMixin
+
+
+class TestTimetableExceptionSynchronizer(AppSetupMixin,
+                                         unittest.TestCase):
+    """Tests for TimetableExceptionSynchronizer.
+
+    The text fixture for this class 
+    """
+
+    def setUp(self):
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        from schooltool.timetable import TimetableActivity
+        self.setUpSampleApp()
+        tt = Timetable(['Day 1', 'Day 2'])
+        tt['Day 1'] = TimetableDay(['A', 'B'])
+        tt['Day 2'] = TimetableDay(['C', 'D'])
+        self.person.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
+        self.resource.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
+        self.location.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
+        act = TimetableActivity('Math', owner=self.person,
+                                resources=[self.resource, self.location])
+        for obj in (self.person, self.resource, self.location):
+            obj.timetables['2004-fall', 'simple']['Day 1'].add('A', act)
+
+    def test_exception_added_then_removed(self):
+        from schooltool.booking import TimetableExceptionSynchronizer
+        from schooltool.timetable import TimetableException
+        from schooltool.interfaces import IEvent
+
+        # Prepare test fixture
+        ttes = TimetableExceptionSynchronizer()
+        self.app.eventService.subscribe(ttes, IEvent)
+        tt = self.person.timetables['2004-fall', 'simple']
+        rtt = self.resource.timetables['2004-fall', 'simple']
+        ltt = self.location.timetables['2004-fall', 'simple']
+        act = tt.itercontent().next()[-1]
+
+        # Part 1: add the exception
+        exc = TimetableException(datetime.date(2004, 11, 02), 'A', act)
+        rtt.exceptions.append(exc)       # Sends out an event
+
+        # TimetableExceptionSynchronizer notices the event and adds the
+        # exception to the timetables of all resources and persons.  It
+        # takes care not to add the exception to a list if it is already
+        # in the list.
+        self.assertEquals(tt.exceptions, [exc])
+        self.assertEquals(rtt.exceptions, [exc])
+        self.assertEquals(ltt.exceptions, [exc])
+
+        # Part 2: remove the exception
+        ltt.exceptions.remove(exc)      # Sends out the event
+
+        # TimetableExceptionSynchronizer notices the event and adds the
+        # exception to the timetables of all resources and persons.
+        self.assertEquals(tt.exceptions, [])
+        self.assertEquals(rtt.exceptions, [])
+        self.assertEquals(ltt.exceptions, [])
+
+    def test_timetable_replaced(self):
+        from schooltool.booking import TimetableExceptionSynchronizer
+        from schooltool.timetable import TimetableActivity
+        from schooltool.timetable import TimetableException
+        from schooltool.interfaces import IEvent
+
+        # Prepare test fixture
+        ttes = TimetableExceptionSynchronizer()
+        self.app.eventService.subscribe(ttes, IEvent)
+        tt = self.person.timetables['2004-fall', 'simple']
+        act = tt.itercontent().next()[-1]
+        exc = TimetableException(datetime.date(2004, 11, 02), 'A', act)
+        tt.exceptions.append(exc)
+
+        tt = self.person.timetables['2004-fall', 'simple']
+        rtt = self.resource.timetables['2004-fall', 'simple']
+        ltt = self.location.timetables['2004-fall', 'simple']
+        self.assertEquals(tt.exceptions, [exc])
+        self.assertEquals(rtt.exceptions, [exc])
+        self.assertEquals(ltt.exceptions, [exc])
+
+        # Prepare a new timetable
+        new_tt = tt.cloneEmpty()
+        new_act = TimetableActivity('Lunch', owner=self.person,
+                                    resources=[self.resource])
+        new_tt['Day 2'].add('C', new_act)
+        new_exc = TimetableException(datetime.date(2004, 11, 03), 'C', new_act)
+        new_tt.exceptions.append(new_exc)
+
+        # Replace the timetable (sends out an event)
+        self.person.timetables['2004-fall', 'simple'] = new_tt
+
+        tt = self.person.timetables['2004-fall', 'simple']
+        rtt = self.resource.timetables['2004-fall', 'simple']
+        ltt = self.location.timetables['2004-fall', 'simple']
+        self.assertEquals(tt.exceptions, [new_exc])
+        self.assertEquals(rtt.exceptions, [new_exc])
+        self.assertEquals(ltt.exceptions, [])
+
+
+def test_suite():
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestTimetableExceptionSynchronizer))
+    return suite

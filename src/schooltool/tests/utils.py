@@ -61,9 +61,15 @@ class ServiceManager:
     def __init__(self):
         self.eventService = self
         self.events = []
+        self.targets = []
+
+    def register(self, target):
+        self.targets.append(target)
 
     def notify(self, e):
         self.events.append(e)
+        for target in self.targets:
+            e.dispatch(target)
 
     def clearEvents(self):
         self.events = []
