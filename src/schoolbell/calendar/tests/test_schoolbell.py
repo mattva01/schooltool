@@ -19,10 +19,6 @@
 """
 Unit tests for schoolbell.calendar
 
-When this module grows too big, it will be split into a number of modules in
-a package called tests.  Each of those new modules will be named test_foo.py
-and will test schoolbell.calendar.foo.
-
 $Id$
 """
 
