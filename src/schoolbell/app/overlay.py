@@ -54,6 +54,13 @@ Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
     [+] Developers (#eed680, #d1940c)
     [ ] Admins     (#c5d2c8, #83a67f)
 
+However 'in' checks for the presence of a calendar
+
+    >>> smith.calendar in john.overlaid_calendars
+    True
+    >>> Person(title="Newcomer").calendar in john.overlaid_calendars
+    False
+
 Clean up
 
     >>> tearDown()
@@ -144,6 +151,9 @@ class IOverlaidCalendarsProperty(Interface):
 
     def __len__():
         """Return the number of overlaid calendars."""
+
+    def __contains__(calendar):
+        """Check whether `calendar` is in the list."""
 
     def __iter__():
         """Iterate over all overlaid calendars.
@@ -259,6 +269,12 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
             color1, color2 = choose_color(DEFAULT_COLORS, used_colors)
         BoundRelationshipProperty.add(self, calendar,
                     CalendarOverlayInfo(calendar, show, color1, color2))
+
+    def __contains__(self, calendar):
+        for item in self:
+            if item.calendar is calendar:
+                return True
+        return False
 
     def __iter__(self):
         for link in IRelationshipLinks(self.this):
