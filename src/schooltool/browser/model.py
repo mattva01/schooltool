@@ -102,9 +102,9 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
             return PersonPasswordView(self.context)
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
-        elif name == 'calendar_weekly':
+        elif name == 'calendar_weekly.html':
             return WeeklyCalendarView(self.context.calendar)
-        elif name == 'calendar_monthly':
+        elif name == 'calendar_monthly.html':
             return MonthlyCalendarView(self.context.calendar)
         raise KeyError(name)
 
@@ -112,14 +112,19 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
         return isManager(self.request.authenticated_user)
 
     def editURL(self):
-        return absoluteURL(self.request, self.context) + '/edit.html'
+        return absoluteURL(self.request, self.context, 'edit.html')
 
     def canChangePassword(self):
         user = self.request.authenticated_user
         return isManager(user) or user is self.context
 
     def passwordURL(self):
-        return absoluteURL(self.request, self.context) + '/password.html'
+        return absoluteURL(self.request, self.context, 'password.html')
+
+    canViewCalendar = canChangePassword
+
+    def calendarURL(self):
+        return absoluteURL(self.request, self.context, 'calendar_weekly.html')
 
 
 class PersonPasswordView(View):

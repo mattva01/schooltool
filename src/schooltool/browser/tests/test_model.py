@@ -96,10 +96,10 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                              self.person)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.person)
-        self.assertTraverses(view, 'calendar_weekly', WeeklyCalendarView,
+        self.assertTraverses(view, 'calendar_weekly.html', WeeklyCalendarView,
                              self.person.calendar)
-        self.assertTraverses(view, 'calendar_monthly', MonthlyCalendarView,
-                             self.person.calendar)
+        self.assertTraverses(view, 'calendar_monthly.html',
+                             MonthlyCalendarView, self.person.calendar)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
     def test_getParentGroups(self):
@@ -121,6 +121,13 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         view.request = RequestStub()
         self.assertEquals(view.passwordURL(),
                 'http://localhost:7001/persons/johndoe/password.html')
+
+    def test_calendarURL(self):
+        from schooltool.browser.model import PersonView
+        view = PersonView(self.person)
+        view.request = RequestStub()
+        self.assertEquals(view.calendarURL(),
+                'http://localhost:7001/persons/johndoe/calendar_weekly.html')
 
     def test_timetables(self):
         from schooltool.browser.model import PersonView
