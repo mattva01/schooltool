@@ -1251,33 +1251,47 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         assert com.calendar.acl.allows(com, AddPermission)
 
 
-class TestDailyRecurrenceRule(unittest.TestCase):
-
-    def test(self):
-        from schooltool.cal import DailyRecurrenceRule
-        from schooltool.interfaces import IDailyRecurrenceRule
-        d = DailyRecurrenceRule()
-        verifyObject(IDailyRecurrenceRule, d)
+class TestRecurrenceRule:
+    """Base tests for the recurrence rules"""
 
     def test_comparison(self):
-        from schooltool.cal import DailyRecurrenceRule
-        from schooltool.interfaces import IDailyRecurrenceRule
-        d = DailyRecurrenceRule()
+        d = self.createRule()
         d2 = d.replace()
         assert d is not d2
-        assert d == d2
+        self.assertEqual(d, d2)
         assert not d != d2
-        assert hash(d) == hash(d2)
+        self.assertEqual(hash(d), hash(d2))
 
     def test_replace(self):
-        from schooltool.cal import DailyRecurrenceRule
-        from schooltool.interfaces import IDailyRecurrenceRule
-        rule = DailyRecurrenceRule(interval=1, until=date(2005, 1, 1))
+        rule = self.createRule(interval=1, until=date(2005, 1, 1))
         assert rule == rule.replace()
         rule2 = rule.replace(until=None, count=20)
         assert rule != rule2
-
         self.assertRaises(ValueError, rule.replace, count=20)
+
+
+class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+
+    def createRule(self, *args, **kwargs):
+        from schooltool.cal import DailyRecurrenceRule
+        return DailyRecurrenceRule(*args, **kwargs)
+
+    def test(self):
+        from schooltool.interfaces import IDailyRecurrenceRule
+        d = self.createRule()
+        verifyObject(IDailyRecurrenceRule, d)
+
+
+class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+
+    def createRule(self, *args, **kwargs):
+        from schooltool.cal import YearlyRecurrenceRule
+        return YearlyRecurrenceRule(*args, **kwargs)
+
+    def test(self):
+        from schooltool.interfaces import IYearlyRecurrenceRule
+        d = self.createRule()
+        verifyObject(IYearlyRecurrenceRule, d)
 
 
 def test_suite():
@@ -1294,4 +1308,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestACLCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
+    suite.addTest(unittest.makeSuite(TestYearlyRecurrenceRule))
     return suite

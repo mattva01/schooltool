@@ -37,7 +37,7 @@ from schooltool.interfaces import IACLCalendar
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
 from schooltool.interfaces import Unchanged
-from schooltool.interfaces import IDailyRecurrenceRule
+from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
 
 __metaclass__ = type
 
@@ -1074,12 +1074,7 @@ class CalendarOwnerMixin(Persistent):
         self.calendar.acl.add((self, ModifyPermission))
 
 
-class DailyRecurrenceRule:
-    """Daily recurrence rule.
-
-    Immutable hashable object.
-    """
-    implements(IDailyRecurrenceRule)
+class RecurrenceRule:
 
     def __init__(self, interval=None, count=None, until=None, exceptions=[]):
         self.interval = interval
@@ -1103,9 +1098,9 @@ class DailyRecurrenceRule:
             until = self.until
         if exceptions is Unchanged:
             exceptions = list(self.exceptions)
-        return DailyRecurrenceRule(interval, count, until, exceptions)
+        return self.__class__(interval, count, until, exceptions)
 
-    def __tupleForHash(self):
+    def _tupleForHash(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, tuple(self.exceptions))
 
@@ -1123,4 +1118,21 @@ class DailyRecurrenceRule:
         It is guaranteed that if recurrence rules compare equal, hash will
         return the same value.
         """
-        return hash(self.__tupleForHash())
+        return hash(self._tupleForHash())
+
+
+class DailyRecurrenceRule(RecurrenceRule):
+    """Daily recurrence rule.
+
+    Immutable hashable object.
+    """
+    implements(IDailyRecurrenceRule)
+
+
+
+class YearlyRecurrenceRule(DailyRecurrenceRule):
+    """Yearly recurrence rule.
+
+    Immutable hashable object.
+    """
+    implements(IYearlyRecurrenceRule)
