@@ -105,6 +105,36 @@ class TestWidget(unittest.TestCase):
         widget.require()
         self.assertEquals(widget.error, 'This field is required.')
 
+    def test_css_class(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label')
+        widget.css_class = None
+        self.assertEquals(widget._css_class(), '')
+        widget.css_class = 'foo'
+        self.assertEquals(widget._css_class(), ' class="foo"')
+        widget.css_class = '"'
+        self.assertEquals(widget._css_class(), ' class="&quot;"')
+
+    def test_row_class(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label')
+        widget.error = None
+        self.assertEquals(widget._row_class(), ' class="row"')
+        widget.error = 'Error!'
+        self.assertEquals(widget._row_class(), ' class="row error"')
+
+    def test_error_html(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label')
+        widget.error = None
+        self.assertEquals(widget._error_html(), '')
+        widget.error = 'Error!'
+        self.assertEquals(widget._error_html(),
+                          '<div class="error">Error!</div>\n')
+        widget.error = '&'
+        self.assertEquals(widget._error_html(),
+                          '<div class="error">&amp;</div>\n')
+
 
 class TestWidgetWithConverters(unittest.TestCase):
 
@@ -170,9 +200,9 @@ class TestWidgetWithConverters(unittest.TestCase):
 
 class TestTextWidget(XMLCompareMixin, unittest.TestCase):
 
-    def createWidget(self):
+    def createWidget(self, field="field", label="Label"):
         from schooltool.browser.widgets import TextWidget
-        widget = TextWidget('field', 'Label')
+        widget = TextWidget(field, label)
         return widget
 
     def test(self):
@@ -192,11 +222,26 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEqualsXML(widget().encode('UTF-8'),
                              expected.encode('UTF-8'))
 
+    def test_call_with_error(self):
+        widget = self.createWidget()
+        widget.error = u"An error! \u2639"
+        expected = u"""
+            <div class="row error">
+              <label for="field">Label</label>
+              <input class="text" type="text" name="field" id="field"
+                     value="" />
+              <div class="error">An error! \u2639</div>
+            </div>
+            """
+        self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
+
 class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
 
     def createWidget(self):
         from schooltool.browser.widgets import SelectionWidget
-        widget = SelectionWidget('field', 'Label', (('a', 'Aa'), ('b', 'Bb')))
+        widget = SelectionWidget('field', 'Label', [('a', 'Aa'), ('b', 'Bb')])
         return widget
 
     def test(self):
@@ -206,14 +251,30 @@ class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
     def test_call(self):
         widget = self.createWidget()
         widget.setValue(u'a')
-        expected = """<div class="row">
-                        <label for="field">Label</label>
-                        <select name="field" id="field">
-                          <option value="a" selected="selected">Aa</option>
-                          <option value="b">Bb</option>
-                        </select>
-                      </div>
-                      """
+        expected = """
+            <div class="row">
+              <label for="field">Label</label>
+              <select name="field" id="field">
+                <option value="a" selected="selected">Aa</option>
+                <option value="b">Bb</option>
+              </select>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+    def test_call_with_error(self):
+        widget = self.createWidget()
+        widget.error = u"An error!"
+        expected = """
+            <div class="row error">
+              <label for="field">Label</label>
+              <select name="field" id="field">
+                <option value="a">Aa</option>
+                <option value="b">Bb</option>
+              </select>
+              <div class="error">An error!</div>
+            </div>
+            """
         self.assertEqualsXML(widget(), expected)
 
 

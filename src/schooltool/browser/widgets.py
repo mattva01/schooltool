@@ -165,7 +165,7 @@ class Widget:
 
     implements(IWidget)
 
-    css_class = ''
+    css_class = None
 
     def __init__(self, name, label, parser=None, validator=None,
                  formatter=None):
@@ -224,6 +224,28 @@ class Widget:
         if self.raw_value is None:
             self.error = _("This field is required.")
 
+    def _css_class(self):
+        """Helper for subclasses."""
+        if self.css_class:
+            return ' class="%s"' % cgi.escape(self.css_class, True)
+        else:
+            return ''
+
+    def _row_class(self):
+        """Helper for subclasses."""
+        if self.error:
+            return ' class="row error"'
+            return 'row error'
+        else:
+            return ' class="row"'
+
+    def _error_html(self):
+        """Helper for subclasses."""
+        if self.error:
+            return '<div class="error">%s</div>\n' % cgi.escape(self.error)
+        else:
+            return ''
+
 
 class TextWidget(Widget):
     """Text field widget."""
@@ -233,62 +255,62 @@ class TextWidget(Widget):
     css_class = 'text'
 
     def __call__(self):
-        if self.error:
-            row_class = 'row error'
-            error = '<div class="error">%s</div>\n' % cgi.escape(self.error)
-        else:
-            row_class = 'row'
-            error = ''
-        return ('<div class="%(row_class)s">\n'
+        return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
-                '  <input class="%(css_class)s" type="text" name="%(name)s"'
+                '  <input%(css_class)s type="text" name="%(name)s"'
                         ' id="%(name)s" value="%(value)s" />\n'
-                '  %(error)s'
+                '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
                             'label': cgi.escape(self.label, True),
+                            'css_class': self._css_class(),
+                            'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or '', True),
-                            'css_class': cgi.escape(self.css_class, True),
-                            'row_class': cgi.escape(row_class, True),
-                            'error': error})
-
+                            'error': self._error_html()})
 
 
 class SelectionWidget(Widget):
-    """Selection field widget."""
+    """Drop-down list widget.
+
+    The constructor accepts an additional argument, choices, which is a
+    sequence of tuples (value, display_text).
+
+    Values should be comparable with ==.
+
+    There is a requirement that self.formatter(value) not return None for any
+    value listed in choices.
+
+    It is up to self.validator and/or self.parser to ensure that the raw_value
+    received from the request corresponds to one of the values in choices.
+    """
 
     implements(IWidget)
 
-    def __init__(self, name, label, values, parser=None, validator=None,
+    def __init__(self, name, label, choices, parser=None, validator=None,
                  formatter=None):
-        self._values = values
         Widget.__init__(self, name, label, parser=parser, validator=validator,
                         formatter=formatter)
+        self.choices = choices
 
     def __call__(self):
-        if self.error:
-            row_class = 'row error'
-            error = '<div class="error">%s</div>\n' % cgi.escape(self.error)
-        else:
-            row_class = 'row'
-            error = ''
+        options = []
+        for value, display in self.choices:
+            options.append('    <option value="%(value)s"%(selected)s>'
+                           '%(display)s</option>\n'
+                           % {'value': cgi.escape(self.formatter(value), True),
+                              'display': cgi.escape(display, True),
+                              'selected': (value == self.value
+                                           and ' selected="selected"'
+                                           or '')})
+        return ('<div%(row_class)s>\n'
+                '  <label for="%(name)s">%(label)s</label>\n'
+                '  <select%(css_class)s name="%(name)s" id="%(name)s">\n'
+                '%(options)s'
+                '  </select>\n'
+                '%(error)s'
+                '</div>' % {'name': cgi.escape(self.name, True),
+                            'label': cgi.escape(self.label, True),
+                            'css_class': self._css_class(),
+                            'row_class': self._row_class(),
+                            'options': ''.join(options),
+                            'error': self._error_html()})
 
-        result = []
-        result.append('<div class="%(row_class)s">\n'
-                      '  <label for="%(name)s">%(label)s</label>\n'
-                      '  <select name="%(name)s" id="%(name)s">' %
-                      {'name': cgi.escape(self.name, True),
-                       'label': cgi.escape(self.label, True),
-                       'row_class': cgi.escape(row_class, True),
-                       'error': error})
-
-        for value, display in self._values:
-            result.append('    <option value="%(value)s"%(selected)s>'
-                          '%(display)s</option>' %
-                          {'value': cgi.escape(self.formatter(value), True),
-                           'display': cgi.escape(display, True),
-                           'selected': (value == self.value
-                                        and " selected=\"selected\""
-                                        or "")})
-
-        result.append('  </select>\n  </div>\n%s'% error)
-        return "\n".join(result)
