@@ -35,6 +35,7 @@ from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
 from schooltool.interfaces import ITimetableCalendarEvent
+from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IModuleSetup
@@ -273,6 +274,23 @@ class TimetableCalendarEvent(CalendarEvent):
     def __init__(self, *args, **kwargs):
         self._period_id = kwargs.pop('period_id')
         self._activity = kwargs.pop('activity')
+        CalendarEvent.__init__(self, *args, **kwargs)
+
+    def replace(self, *args, **kwargs):
+        raise NotImplementedError()
+
+
+class ExceptionalTTCalendarEvent(CalendarEvent):
+
+    implements(IExceptionalTTCalendarEvent)
+
+    exception = property(lambda self: self._exception)
+
+    def __init__(self, *args, **kwargs):
+        self._exception = kwargs.pop('exception')
+        if not ITimetableException.providedBy(self._exception):
+            raise ValueError('%r is not a timetable exception'
+                             % self._exception)
         CalendarEvent.__init__(self, *args, **kwargs)
 
     def replace(self, *args, **kwargs):

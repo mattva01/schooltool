@@ -1381,6 +1381,13 @@ class ITimetableCalendarEvent(ICalendarEvent):
         """The activity from which this event was created.""")
 
 
+class IExceptionalTTCalendarEvent(ICalendarEvent):
+    """A calendar event that replaces a particular timetable event."""
+
+    exception = Attribute(
+        """The exception in which this event is stored.""")
+
+
 class ICompositeTimetableProvider(Interface):
     """An object which knows how to get the timetables for composition
     """

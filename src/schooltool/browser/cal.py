@@ -873,6 +873,7 @@ class EventEditView(EventViewBase):
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
+        # TODO: Handle the case when the event being edited is an exception.
         uid = self.event.unique_id
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,

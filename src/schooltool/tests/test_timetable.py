@@ -576,6 +576,28 @@ class TestTimetableCalendarEvent(unittest.TestCase):
             self.assertRaises(AttributeError, setattr, ev, attr, object())
 
 
+class TestExceptionalTTCalendarEvent(unittest.TestCase):
+
+    def test(self):
+        from schooltool.timetable import ExceptionalTTCalendarEvent
+        from schooltool.timetable import TimetableException
+        from schooltool.interfaces import IExceptionalTTCalendarEvent
+
+        period_id = 'Mathematics'
+        activity = object()
+        exc = TimetableException(date(2004, 10, 12), None, None, None)
+
+        ev = ExceptionalTTCalendarEvent(date(2004, 10, 13), timedelta(45),
+                                        "Math", exception=exc)
+        verifyObject(IExceptionalTTCalendarEvent, ev)
+        self.assert_(ev.exception is exc)
+
+        self.assertRaises(AttributeError, setattr, ev, 'exception', object())
+        self.assertRaises(ValueError, ExceptionalTTCalendarEvent,
+                          date(2004, 10, 13), timedelta(45), "Math",
+                          exception=object())
+
+
 class TestSchooldayPeriod(unittest.TestCase):
 
     def test(self):
@@ -1304,6 +1326,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableException))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestExceptionalTTCalendarEvent))
     suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
