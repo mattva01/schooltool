@@ -1007,9 +1007,6 @@ class EventDeleteView(View, EventViewHelpers):
            recurrence rule, or the end date of the repetition may be changed
            in the recurrence rule.
 
-           XXX This is not implemented yet in the code, but will be in the near
-           future.
-
         3. You are trying to delete an event that comes from a timetable: a
            confirmation form is shown, and if you accept it, a timetable
            exception is added.  Only managers are allowed to add timetable
@@ -1080,11 +1077,15 @@ class EventDeleteView(View, EventViewHelpers):
             return self._redirectToDailyView(date)
         elif 'FUTURE' in self.request.args:
             self.context.removeEvent(event)
-            self.context.addEvent(self._deleteFutureOccurrences(event, date))
+            replacement = self._deleteFutureOccurrences(event, date)
+            if replacement.hasOccurrences():
+                self.context.addEvent(replacement)
             return self._redirectToDailyView(date)
         elif 'CURRENT' in self.request.args:
             self.context.removeEvent(event)
-            self.context.addEvent(self._deleteOneOccurrence(event, date))
+            replacement = self._deleteOneOccurrence(event, date)
+            if replacement.hasOccurrences():
+                self.context.addEvent(replacement)
             return self._redirectToDailyView(date)
         return self._showOccurrenceForm(event)
 
@@ -1108,6 +1109,8 @@ class EventDeleteView(View, EventViewHelpers):
     def _deleteTimetableEvent(self, event, date):
         """Delete a timetable event."""
         if not self.isManager():
+            # XXX embedding security policy decisions in the middle of view
+            # code is not nice.
             raise Unauthorized # Only managers can edit timetable events
         if 'CONFIRM' in self.request.args:
             self._addTimetableException(event, replacement=None)

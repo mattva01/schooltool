@@ -1544,6 +1544,24 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
                                 'http://localhost:7001/persons/somebody/'
                                 'calendar/daily.html?date=2004-08-14')
 
+    def test_repeating_event_future_last_occurrence(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(count=5))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-12",
+                                    'FUTURE': 'future'})
+        content = view.render(request)
+
+        # The event is modified, we are redirected to calendar for 2004-08-12
+        self.assertEquals(list(view.context), [])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-12')
+
     def test_repeating_event_current(self):
         from schooltool.cal import DailyRecurrenceRule
         ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
@@ -1567,6 +1585,25 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
                                 'http://localhost:7001/persons/somebody/'
                                 'calendar/daily.html?date=2004-08-14')
 
+    def test_repeating_event_current_last_occurrence(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ev1 = createEvent('2004-08-12 14:35', '5 min', 'Repeating',
+                          unique_id='uniq',
+                          recurrence=DailyRecurrenceRule(
+                                count=2, exceptions=[date(2004, 8, 13)]))
+        view = self.createView([ev1])
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-12",
+                                    'CURRENT': 'current'})
+        content = view.render(request)
+
+        # The event is modified, we are redirected to calendar for 2004-08-12
+        self.assertEquals(list(view.context), [])
+        self.assertRedirectedTo(request,
+                                'http://localhost:7001/persons/somebody/'
+                                'calendar/daily.html?date=2004-08-12')
+
     def test_deleteOneOccurrence(self):
         from schooltool.cal import DailyRecurrenceRule
         view = self.createView()
@@ -1582,8 +1619,6 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
                           ev1.replace(recurrence=DailyRecurrenceRule(
                                 count=5, exceptions=[date(2004, 8, 13),
                                                      date(2004, 8, 14)])))
-
-        # XXX test case: you remove the only remaining repetition
 
     def test_deleteFutureOccurrences(self):
         from schooltool.cal import DailyRecurrenceRule
