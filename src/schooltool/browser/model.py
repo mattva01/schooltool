@@ -92,10 +92,10 @@ class PersonEditView(View, PersonInfoMixin):
     canonical_photo_size = (240, 240)
 
     def do_POST(self, request):
-        first_name = request.args['first_name'][0]
-        last_name = request.args['last_name'][0]
+        first_name = unicode(request.args['first_name'][0], 'utf-8')
+        last_name = unicode(request.args['last_name'][0], 'utf-8')
         dob_string = request.args['date_of_birth'][0]
-        comment = request.args['comment'][0]
+        comment = unicode(request.args['comment'][0], 'utf-8')
         photo = request.args['photo'][0]
 
         try:

@@ -126,11 +126,11 @@ class TestPersonEdit(unittest.TestCase):
         self.assert_('Edit person info' in browser.content)
 
         browser.post('http://localhost:8814/persons/manager/edit.html',
-                     {'first_name': 'xyzzy', 'last_name': 'foobar',
+                     {'first_name': 'xyzzy \xc4\x85', 'last_name': 'foobar',
                       'date_of_birth': '2004-08-04',
                       'comment': 'I can write!', 'photo': ''})
         self.assertEquals(browser.url, 'http://localhost:8814/persons/manager')
-        self.assert_('xyzzy' in browser.content)
+        self.assert_('xyzzy \xc4\x85' in browser.content)
         self.assert_('foobar' in browser.content)
         self.assert_('I can write!' in browser.content)
 

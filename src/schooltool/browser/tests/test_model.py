@@ -91,17 +91,17 @@ class TestPersonEditView(unittest.TestCase):
 
     def test_post(self):
         view = self.createView()
-        request = RequestStub(args={'first_name': u'I Changed',
-                                    'last_name': u'My Name Recently',
+        request = RequestStub(args={'first_name': 'I Changed \xc4\x85',
+                                    'last_name': 'My Name \xc4\x8d Recently',
                                     'date_of_birth': '2004-08-05',
-                                    'comment': u'For various reasons.',
+                                    'comment': 'For some \xc4\x99 reason.',
                                     'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
         view.do_POST(request)
 
-        self.assertEquals(self.info.first_name, u'I Changed')
-        self.assertEquals(self.info.last_name, u'My Name Recently')
+        self.assertEquals(self.info.first_name, u'I Changed \u0105')
+        self.assertEquals(self.info.last_name, u'My Name \u010d Recently')
         self.assertEquals(self.info.date_of_birth, datetime.date(2004, 8, 5))
-        self.assertEquals(self.info.comment, u'For various reasons.')
+        self.assertEquals(self.info.comment, u'For some \u0119 reason.')
         self.assert_('JFIF' in self.info.photo)
 
         self.assertEquals(request.code, 302)
@@ -109,10 +109,10 @@ class TestPersonEditView(unittest.TestCase):
                           'http://localhost:7001/persons/somebody')
 
         # Check that the photo doesn't get removed.
-        request = RequestStub(args={'first_name': u'I Changed',
-                                    'last_name': u'My Name Recently',
+        request = RequestStub(args={'first_name': 'I Changed',
+                                    'last_name': 'My Name Recently',
                                     'date_of_birth': '2004-08-06',
-                                    'comment': u'For various reasons.',
+                                    'comment': 'For various reasons.',
                                     'photo': ''})
         view.do_POST(request)
         self.assertEquals(self.info.date_of_birth, datetime.date(2004, 8, 6))
@@ -121,19 +121,19 @@ class TestPersonEditView(unittest.TestCase):
     def test_post_errors(self):
         for dob in ['bwahaha', '2004-13-01', '2004-08-05-01']:
             view = self.createView()
-            request = RequestStub(args={'first_name': u'I Changed',
-                                        'last_name': u'My Name Recently',
+            request = RequestStub(args={'first_name': 'I Changed',
+                                        'last_name': 'My Name Recently',
                                         'date_of_birth': dob,
-                                        'comment': u'For various reasons.',
+                                        'comment': 'For various reasons.',
                                         'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
             body = view.do_POST(request)
             self.assert_('Invalid date' in body)
 
         view = self.createView()
-        request = RequestStub(args={'first_name': u'I Changed',
-                                    'last_name': u'My Name Recently',
+        request = RequestStub(args={'first_name': 'I Changed',
+                                    'last_name': 'My Name Recently',
                                     'date_of_birth': '2004-08-05',
-                                    'comment': u'For various reasons.',
+                                    'comment': 'For various reasons.',
                                     'photo': 'eeevill'})
         body = view.do_POST(request)
         self.assert_('Invalid photo' in body, body)
