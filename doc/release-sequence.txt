@@ -57,3 +57,6 @@ start again. XXX explain how to delete the branch.
 11. Maybe write a new front page headline and short announcement.
 
 12. Send announcement, update news and web pages.
+
+13. Post a release to Freshmeat.net.
+
