@@ -1193,6 +1193,20 @@ class TestTimeFormatting(unittest.TestCase):
         self.assertEquals(formatHitTime(1083251124),
                           '29/Apr/2004:15:05:24 +0000')
 
+        # XXX This test fails on Mac OS X, which apparently does not understand
+        #     time zone specifications of the following form.  Try this on a
+        #     shell:
+        #
+        #       $ TZ=XXX-2 date -r 8506131627
+        #       Tue Jan 19 05:14:07 XXX 2038
+        #       $ TZ=XXX-2YYY date -r 8506131627
+        #       Tue Jan 19 03:14:07 GMT 2038
+        #       $ TZ= date -r 8506131627
+        #       Bus error.
+        #
+        #     Since the manual page for tzset(3) claims that this syntax
+        #     (STDoffsetDST) is supposed to work, I can only assume that there
+        #     is a bug in Mac OS X.
         self.setTZ('EET-2EEST')
         self.assertEquals(formatHitTime(1083251124),
                           '29/Apr/2004:18:05:24 +0300')
