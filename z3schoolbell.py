@@ -91,6 +91,10 @@ SITE_DEFINITION = """
              login="gandalf" password="123" />
   <grant role="zope.Manager" principal="zope.sample_manager" />
 
+  <principal id="zope.testmgr" title="test Manager"
+             login="mgr" password="mgrpw" />
+  <grant role="zope.Manager" principal="zope.testmgr" />
+
 </configure>
 """
 
