@@ -29,7 +29,9 @@
   <content class=".app.Person">
     <require permission="zope.View"
              interface="schoolbell.app.interfaces.IReadPerson" />
-    <require permission="zope.ManageContent"
+    <!-- This is not etirely corerect, but we want to let users
+         to modify their account info -->
+    <require permission="zope.View"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schoolbell.app.interfaces.IPerson" />
   </content>

@@ -66,6 +66,13 @@
       />
 
   <page
+      name="password.html"
+      for="schoolbell.app.interfaces.IPerson"
+      class="schoolbell.app.browser.app.PersonChangePasswordView"
+      template="change_person_password.pt"
+      permission="zope.View" />
+
+  <page
       name="photo"
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonPhotoView"
