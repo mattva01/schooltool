@@ -326,6 +326,22 @@ the individual files and directories for details of the licences.
   Zope3
   src/schooltool/translation
 
+The following files are (c) the GNOME Foundation under the GPL.
+
+  src/schooltool/browser/www/booking.png
+  src/schooltool/browser/www/calendar.png
+  src/schooltool/browser/www/current.png
+  src/schooltool/browser/www/day.png
+  src/schooltool/browser/www/information.png
+  src/schooltool/browser/www/manage.png
+  src/schooltool/browser/www/meeting.png
+  src/schooltool/browser/www/month.png
+  src/schooltool/browser/www/next.png
+  src/schooltool/browser/www/previous.png
+  src/schooltool/browser/www/week.png
+  src/schooltool/browser/www/year.png
+
+
 Files in the same directory as this README file are (c) Shuttleworth
 Foundation, with the exception of GPL, which is a copy of the Free Software
 Foundation's General Public License, and is (c) FSF.
