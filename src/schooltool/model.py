@@ -22,9 +22,11 @@ SchoolTool organisational model.
 $Id$
 """
 
+import datetime
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.interfaces import IAbsenceComment
+from schooltool.interfaces import IAvailabilitySearch
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
@@ -36,9 +38,85 @@ from schooltool.absence import Absence
 __metaclass__ = type
 
 
+class IntervalSet:
+    """An ordered set of disjoint intervals [a, b).
+
+    a and b can be numbers or something more exotic like datetime objects.
+
+    >>> i = IntervalSet(0, 10)
+    >>> list(i)
+    [(0, 10)]
+    >>> i.remove(5, 6)
+    >>> list(i)
+    [(0, 5), (6, 10)]
+    >>> i.remove(7, 4)
+    >>> list(i)
+    [(0, 5), (6, 10)]
+    >>> i.remove(-1, 1)
+    >>> list(i)
+    [(1, 5), (6, 10)]
+    >>> i.remove(9, 11)
+    >>> list(i)
+    [(1, 5), (6, 9)]
+    >>> i.remove(4, 7)
+    >>> list(i)
+    [(1, 4), (7, 9)]
+    >>> i.remove(11, 12)
+    >>> list(i)
+    [(1, 4), (7, 9)]
+    >>> i.remove(1, 4)
+    >>> list(i)
+    [(7, 9)]
+    >>> list(IntervalSet(0, 0))
+    []
+    >>> list(IntervalSet(1, 0))
+    []
+    """
+
+    def __init__(self, start, end):
+        """Create an interval set containing one interval [start, end)."""
+        self._intervals = []
+        if start < end:
+            self._intervals.append((start, end))
+
+    def remove(self, start, end):
+        """Remove interval [start, end) from the set.
+
+        Does nothing if start >= end
+        """
+        if start >= end:
+            return
+        res = []
+        for istart, iend in self._intervals:
+            a, b = istart, min(iend, start)
+            if a < b:
+                res.append((a, b))
+            c, d = max(end, istart), iend
+            if c < d:
+                res.append((c, d))
+            # Both invariants (see __iter__'s docstring) are maintained.
+            # The first one is checked explicitly above (a < b, c < d).
+            # The second one (b < c) is true because
+            #   b = min(start, x) <= start < end <= max(end, y) = c
+            # for any values of x and y.
+        self._intervals = res
+
+    def __iter__(self):
+        """Iterate over all intervals in the set.
+
+        For every interval [a, b) the following is true: a < b
+
+        For every pair of adjacent intervals [a, b) and [c, d) the following
+        is true: b < c
+        """
+        return iter(self._intervals)
+
+
 class ApplicationObjectMixin(FacetedEventTargetMixin,
                              RelationshipValenciesMixin,
                              CalendarOwnerMixin, TimetabledMixin):
+
+    implements(IAvailabilitySearch)
 
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
@@ -48,6 +126,38 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
         self.title = title
         self.__name__ = None
         self.__parent__ = None
+
+    def getFreeIntervals(self, first, last, time_periods, min_duration):
+        """See IAvailabilitySearch"""
+
+        # Day time is expressed as a timedelta from midnight because
+        # you cannot perform arithmetic with datetime.time objects
+        unavailable_hours = IntervalSet(datetime.timedelta(hours=0),
+                                        datetime.timedelta(hours=24))
+        for start_time, duration in time_periods:
+            start = datetime.timedelta(hours=start_time.hour,
+                                       minutes=start_time.minute)
+            unavailable_hours.remove(start, start + duration)
+
+        one_day = datetime.timedelta(days=1)
+        first = datetime.datetime.combine(first, datetime.time(0))
+        last = datetime.datetime.combine(last, datetime.time(0)) + one_day
+        intset = IntervalSet(first, last)
+
+        for a, b in unavailable_hours:
+            date = first
+            while date < last:
+                intset.remove(date + a, date + b)
+                date += one_day
+
+        for event in self.calendar:
+            intset.remove(event.dtstart, event.dtstart + event.duration)
+
+        for event in self.makeCalendar():
+            intset.remove(event.dtstart, event.dtstart + event.duration)
+
+        return [(start, end - start) for start, end in intset
+                                     if end >= start + min_duration]
 
     def getRelativePath(self, obj):
         if obj in self.__facets__:

@@ -23,11 +23,13 @@ $Id$
 """
 
 import unittest
-from datetime import datetime
+from datetime import datetime, time, date, timedelta
 from persistence import Persistent
+from zope.testing.doctestunit import DocTestSuite
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
+from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import EqualsSortedMixin, NiceDiffsMixin
 from schooltool.interfaces import ILink, IFacet
 
 __metaclass__ = type
@@ -53,7 +55,7 @@ class FacetStub(Persistent):
     __parent__ = None
 
 
-class ApplicationObjectsTestMixin(unittest.TestCase):
+class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
     """A base class for the tests of application objects.
 
     Subclasses must provide a newObject() method.
@@ -71,6 +73,72 @@ class ApplicationObjectsTestMixin(unittest.TestCase):
         verifyObject(IRelatable, obj)
         verifyObject(ITimetabled, obj)
         verifyObject(IMultiContainer, obj)
+
+    def test_getFreeIntervals(self):
+        from schooltool.cal import Calendar, CalendarEvent
+        obj = self.newObject()
+        cal = Calendar()
+        obj.makeCalendar = lambda: cal
+        one_hour = timedelta(hours=1)
+        three_hours = timedelta(hours=3)
+        four_hours = timedelta(hours=4)
+        five_hours = timedelta(hours=5)
+        eight_hours = timedelta(hours=8)
+        one_day = timedelta(days=1)
+        first = date(2004, 1, 1)
+        last = date(2004, 1, 3)
+        whole_day = [(time(0), one_day)]
+        working_hours = [(time(9), eight_hours)]
+        working_hours_with_lunch = [(time(9), three_hours),
+                                    (time(14), five_hours)]
+        self.assertEqual(obj.getFreeIntervals(first, last, whole_day,
+                                              one_hour),
+                         [(first, last - first + one_day)])
+        self.assertEqual(obj.getFreeIntervals(first, last, working_hours,
+                                             one_hour),
+                         [(datetime(2004, 1, 1, 9), eight_hours),
+                          (datetime(2004, 1, 2, 9), eight_hours),
+                          (datetime(2004, 1, 3, 9), eight_hours),
+                         ])
+        self.assertEqual(obj.getFreeIntervals(first, last,
+                                             working_hours_with_lunch,
+                                             one_hour),
+                         [(datetime(2004, 1, 1, 9), three_hours),
+                          (datetime(2004, 1, 1, 14), five_hours),
+                          (datetime(2004, 1, 2, 9), three_hours),
+                          (datetime(2004, 1, 2, 14), five_hours),
+                          (datetime(2004, 1, 3, 9), three_hours),
+                          (datetime(2004, 1, 3, 14), five_hours),
+                         ])
+        self.assertEqual(obj.getFreeIntervals(first, last,
+                                             working_hours_with_lunch,
+                                             four_hours),
+                         [(datetime(2004, 1, 1, 14), five_hours),
+                          (datetime(2004, 1, 2, 14), five_hours),
+                          (datetime(2004, 1, 3, 14), five_hours),
+                         ])
+        self.assertEqual(obj.getFreeIntervals(first, last,
+                                             working_hours_with_lunch,
+                                             five_hours),
+                         [(datetime(2004, 1, 1, 14), five_hours),
+                          (datetime(2004, 1, 2, 14), five_hours),
+                          (datetime(2004, 1, 3, 14), five_hours),
+                         ])
+        obj.calendar.addEvent(CalendarEvent(datetime(2004, 1, 2, 15),
+                                           one_hour, "Busy"))
+        self.assertEqual(obj.getFreeIntervals(first, last,
+                                             working_hours_with_lunch,
+                                             five_hours),
+                         [(datetime(2004, 1, 1, 14), five_hours),
+                          (datetime(2004, 1, 3, 14), five_hours),
+                         ])
+        cal.addEvent(CalendarEvent(datetime(2004, 1, 3, 15),
+                                   one_hour, "Busy"))
+        self.assertEqual(obj.getFreeIntervals(first, last,
+                                             working_hours_with_lunch,
+                                             five_hours),
+                         [(datetime(2004, 1, 1, 14), five_hours),
+                         ])
 
     def test_getRelativePath(self):
         from schooltool.component import FacetManager
@@ -236,7 +304,9 @@ class TestResource(ApplicationObjectsTestMixin):
 
 
 def test_suite():
+    import schooltool.model
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite(schooltool.model))
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestResource))

@@ -21,16 +21,17 @@ Unit tests for the schooltool.timetable module.
 
 $Id$
 """
+
 import calendar
 import unittest
 from sets import Set
 from pprint import pformat
 from datetime import date, time, timedelta, datetime
 from persistence import Persistent
-
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
 from schooltool.tests.helpers import diff, sorted
+from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -840,7 +841,7 @@ class TestTimetableDict(unittest.TestCase):
 
 
 class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
-                          unittest.TestCase):
+                          NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         self.setUpRegistries()

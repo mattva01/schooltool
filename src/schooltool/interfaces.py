@@ -1241,7 +1241,6 @@ class IAvailabilitySearch(Interface):
         duration       datetime.timedelta object specifying a minimum
                        interval of time we're searching for.
 
-
         The returned value is a sequence of (start_datetime, duration).
         """
 

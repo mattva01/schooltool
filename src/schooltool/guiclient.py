@@ -1168,7 +1168,7 @@ class SchoolTimetableInfo:
                             c = ""
                         else:
                             c = "/"
-                        result.append(' '*8 + 
+                        result.append(' '*8 +
                                       '<activity group="%s" title="%s"%s>'
                                       % (group, title, c))
                         for rtitle, rpath in resources:
