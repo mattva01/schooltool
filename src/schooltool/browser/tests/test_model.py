@@ -27,8 +27,9 @@ import datetime
 from logging import INFO
 
 from schooltool.browser.tests import RequestStub, setPath
-from schooltool.browser.tests import TraversalTestMixin, AppSetupMixin
+from schooltool.browser.tests import TraversalTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
+from schooltool.tests.utils import AppSetupMixin
 from schooltool.tests.helpers import sorted
 
 __metaclass__ = type

@@ -41,6 +41,7 @@ from schooltool.component import getRelatedObjects
 from schooltool.uris import URIGroup
 from schooltool.interfaces import ViewPermission, ModifyPermission
 from schooltool.interfaces import AddPermission, IACLOwner, ILocation
+from schooltool.auth import getACL, getAncestorGroups
 
 __metaclass__ = type
 
@@ -83,38 +84,9 @@ class ACLAccess:
         if isManager(request.authenticated_user):
             return True
         acl = getACL(context)
-        if request.authenticated_user is not None:
-            for group in self.getAncestorGroups(request.authenticated_user):
-                if acl.allows(group, self.permission):
-                    return True
         return acl.allows(request.authenticated_user, self.permission)
 
-    def getAncestorGroups(self, person):
-        """Return a set of ancestor groups of a person"""
-        ancestors = Set()
-        def getAncestors(obj):
-            for parent in getRelatedObjects(obj, URIGroup):
-                if parent not in ancestors:
-                    ancestors.add(parent)
-                    getAncestors(parent)
-        getAncestors(person)
-        return ancestors
 
 ACLViewAccess = ACLAccess(ViewPermission)
 ACLModifyAccess = ACLAccess(ModifyPermission)
 ACLAddAccess = ACLAccess(AddPermission)
-
-
-def getACL(context):
-    """Returns the ACL used for the context.
-
-    Raises a ValueError if context does not have an ACL.
-    """
-    obj = context
-    while True:
-        if IACLOwner.providedBy(obj):
-            return obj.acl
-        if ILocation.providedBy(obj):
-            obj = obj.__parent__
-            continue
-        raise ValueError("Could not find ACL for %r" % (context, ))

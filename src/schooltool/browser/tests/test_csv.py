@@ -25,8 +25,8 @@ $Id$
 import unittest
 import datetime
 from logging import INFO
-from schooltool.browser.tests import RequestStub, AppSetupMixin
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.browser.tests import RequestStub
+from schooltool.tests.utils import RegistriesSetupMixin, AppSetupMixin
 
 __metaclass__ = type
 

@@ -37,6 +37,9 @@ $Id: __init__.py 525 2004-01-02 20:21:50Z alga $
 from schooltool.component import getRelatedObjects, getPath
 from schooltool.uris import URIGroup
 from schooltool.interfaces import ILocation, IApplicationObject
+from schooltool.interfaces import ViewPermission, ModifyPermission
+from schooltool.interfaces import AddPermission, IACLOwner
+from schooltool.auth import getAncestorGroups
 
 __metaclass__ = type
 
@@ -111,3 +114,25 @@ def SystemAccess(context, request):
 
 SystemAccess = staticmethod(SystemAccess)
 
+
+def PrivateACLAccess(context,  request):
+    """Allows access to the owner of the object, and to the users in ACL"""
+    owner = getOwner(context)
+    if isManager(request.authenticated_user):
+        return True
+    if owner is not None and owner is request.authenticated_user:
+        return True
+    if IACLOwner.providedBy(context):
+        acl = context.acl
+        if (request.method in ('GET', 'HEAD') and
+            acl.allows(request.authenticated_user, ViewPermission)):
+            return True
+        elif (request.method == 'PUT' and
+              acl.allows(request.authenticated_user, AddPermission)):
+            return True
+        elif (request.method in ('POST', 'DELETE') and
+              acl.allows(request.authenticated_user, ModifyPermission)):
+            return True
+    return False
+
+PrivateACLAccess = staticmethod(PrivateACLAccess)

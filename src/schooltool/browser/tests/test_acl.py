@@ -27,7 +27,8 @@ import unittest
 from logging import INFO
 from datetime import datetime, date, timedelta
 
-from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
+from schooltool.browser.tests import RequestStub, setPath
+from schooltool.tests.utils import AppSetupMixin
 
 __metaclass__ = type
 

@@ -25,10 +25,9 @@ $Id$
 import unittest
 from sets import Set
 from zope.interface import directlyProvides
-from schooltool.browser.tests import AppSetupMixin
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import LocatableStub
-
+from schooltool.tests.utils import AppSetupMixin
 
 class AuthPolicyTestMixin(object):
 
@@ -151,37 +150,12 @@ class TestACLAccess(AppSetupMixin, AuthPolicyTestMixin, unittest.TestCase):
                           FacetManager(self.person))
         self.person.acl.add((self.teachers, ViewPermission))
 
-    def test_getAncestorGroups(self):
-        from schooltool.browser.auth import ACLAccess
-        from schooltool.interfaces import ViewPermission
-        from schooltool.membership import Membership
-        ViewAccess = ACLAccess(ViewPermission)
-        self.assertEquals(ViewAccess.getAncestorGroups(self.teacher),
-                          Set([self.teachers, self.root]))
-
-        g1 = self.app['groups'].new('g1')
-        g21 = self.app['groups'].new('g21')
-        g22 = self.app['groups'].new('g22')
-        g3 = self.app['groups'].new('g3')
-        unrelated = self.app['groups'].new('unrelated')
-
-        Membership(group=self.root, member=g1)
-        Membership(group=g1, member=g21)
-        Membership(group=g1, member=g22)
-        Membership(group=g21, member=g3)
-        Membership(group=g22, member=g3)
-        Membership(group=g22, member=unrelated)
-
-        self.assertEquals(ViewAccess.getAncestorGroups(g3),
-                          Set([self.root, g1, g21, g22]))
-
     def test_ACLFooAccess(self):
         from schooltool.browser.auth import ACLViewAccess
         from schooltool.browser.auth import ACLAddAccess
         from schooltool.browser.auth import ACLModifyAccess
 
-        for access in (ACLModifyAccess, ACLAddAccess,
-                       ACLViewAccess):
+        for access in (ACLModifyAccess, ACLAddAccess, ACLViewAccess):
             self.assertAllows(access,
                               [self.person, self.manager],
                               self.person.calendar)
@@ -190,22 +164,10 @@ class TestACLAccess(AppSetupMixin, AuthPolicyTestMixin, unittest.TestCase):
                               self.person.calendar)
 
 
-class TestGetACL(AppSetupMixin, unittest.TestCase):
-
-    def test(self):
-        from schooltool.browser.auth import getACL
-        from schooltool.component import FacetManager
-        assert getACL(self.person) is self.person.acl
-        assert getACL(FacetManager(self.person)) is self.person.acl
-        assert getACL(self.person.calendar) is self.person.calendar.acl
-        assert getACL(self.teachers) is self.teachers.acl
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBrowserAuthPolicies))
     suite.addTest(unittest.makeSuite(TestACLAccess))
-    suite.addTest(unittest.makeSuite(TestGetACL))
     return suite
 
 

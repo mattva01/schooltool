@@ -31,13 +31,16 @@ import itertools
 from persistent import Persistent
 from BTrees.OOBTree import OOBTree
 from zope.interface import implements
+from sets import Set
 
 from persistent.dict import PersistentDict
 from schooltool.db import PersistentPairKeysDict
 from schooltool.interfaces import AuthenticationError, IACL, ILocation
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
-
+from schooltool.interfaces import IACLOwner, IRelatable
+from schooltool.component import getRelatedObjects
+from schooltool.uris import URIGroup
 
 __metaclass__ = type
 
@@ -259,5 +262,37 @@ class ACL(Persistent):
         """Return whether the principal has the permission"""
         if permission in self._everybody:
             return True
-        else:
-            return (principal, permission) in self
+        if principal is not None:
+            for group in getAncestorGroups(principal):
+                if (group, permission) in self:
+                    return True
+        return (principal, permission) in self
+
+
+def getAncestorGroups(person):
+    """Returns a set of ancestor groups of a person"""
+    if not IRelatable.providedBy(person):
+        return ()
+    ancestors = Set()
+    def getAncestors(obj):
+        for parent in getRelatedObjects(obj, URIGroup):
+            if parent not in ancestors:
+                ancestors.add(parent)
+                getAncestors(parent)
+    getAncestors(person)
+    return ancestors
+
+
+def getACL(context):
+    """Returns the ACL used for the context.
+
+    Raises a ValueError if context does not have an ACL.
+    """
+    obj = context
+    while True:
+        if IACLOwner.providedBy(obj):
+            return obj.acl
+        if ILocation.providedBy(obj):
+            obj = obj.__parent__
+            continue
+        raise ValueError("Could not find ACL for %r" % (context, ))

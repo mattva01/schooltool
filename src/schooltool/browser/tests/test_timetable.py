@@ -29,9 +29,8 @@ from logging import INFO
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import TraversalTestMixin
-from schooltool.browser.tests.test_model import AppSetupMixin
 from schooltool.tests.utils import EqualsSortedMixin
-from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.tests.utils import NiceDiffsMixin, AppSetupMixin
 from schooltool.tests.helpers import sorted
 from schooltool.common import dedent
 

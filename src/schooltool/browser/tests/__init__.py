@@ -24,7 +24,6 @@ from schooltool.rest.tests import RequestStub              # reexport
 from schooltool.rest.tests import LocatableStub, setPath   # reexport
 from schooltool.tests.utils import RegistriesSetupMixin
 
-
 class TraversalTestMixin:
 
     def assertTraverses(self, view, name, viewclass, context=None,
@@ -42,64 +41,3 @@ class TraversalTestMixin:
         if context is not None:
             self.assert_(destination.context is context)
         return destination
-
-
-class AppSetupMixin(RegistriesSetupMixin):
-    """Mixin that creates a sample application structure for tests.
-
-    The application (self.app) contains three containers:
-
-      groups
-        root        (self.root)
-        locations   (self.locations)
-        managers    (self.managers)
-        teachers    (self.teachers)
-        pupils      (self.pupils)
-      persons
-        johndoe     (self.person)
-        nothohn     (self.person2)
-        manager     (self.manager)
-        teacher     (self.teacher)
-      resources
-        resource    (self.resource)
-        location    (self.location)
-        location2   (self.location2)
-
-    """
-
-    def setUpSampleApp(self):
-        from schooltool.model import Group, Person, Resource
-        from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership
-        from schooltool import membership
-        self.setUpRegistries()
-        membership.setUp()
-        self.app = app = Application()
-        app['groups'] = ApplicationObjectContainer(Group)
-        app['persons'] = ApplicationObjectContainer(Person)
-        app['resources'] = ApplicationObjectContainer(Resource)
-        self.root = app['groups'].new("root", title="root")
-        self.locations = app['groups'].new("locations", title="locations")
-        self.managers = app['groups'].new("managers", title="managers")
-        self.teachers = app['groups'].new("teachers", title="teachers")
-        self.pupils = app['groups'].new("pupils", title="pupils")
-        self.person = app['persons'].new("johndoe", title="John Doe")
-        self.person2 = app['persons'].new("notjohn", title="Not John Doe")
-        self.manager = app['persons'].new("manager", title="Manager")
-        self.teacher = app['persons'].new("teacher", title="Prof. Bar")
-        self.resource = app['resources'].new("resource", title="Kitchen sink")
-        self.location = app['resources'].new("location", title="Inside")
-        self.location2 = app['resources'].new("location2", title="Outside")
-
-        Membership(group=self.root, member=self.person)
-        Membership(group=self.root, member=self.teachers)
-        Membership(group=self.root, member=self.managers)
-        Membership(group=self.managers, member=self.manager)
-        Membership(group=self.teachers, member=self.teacher)
-        Membership(group=self.locations, member=self.location)
-        Membership(group=self.locations, member=self.location2)
-
-    setUp = setUpSampleApp
-
-    # tearDown is inherited from the RegistriesSetupMixin.
-

@@ -28,9 +28,9 @@ from logging import INFO
 from datetime import datetime, date, timedelta
 
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
+from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
-from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
 from schooltool.tests.helpers import diff
 from schooltool.common import dedent
 

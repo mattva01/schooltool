@@ -27,7 +27,7 @@ import unittest
 from twisted.python.failure import Failure
 from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
-from schooltool.browser.tests import AppSetupMixin
+from schooltool.tests.utils import AppSetupMixin
 
 __metaclass__ = type
 
