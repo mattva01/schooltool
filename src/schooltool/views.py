@@ -21,8 +21,12 @@ The views for the schooltool content objects.
 
 $Id$
 """
+
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
+
+__metaclass__ = type
+
 
 #
 # Page templates
@@ -116,7 +120,6 @@ class View(Resource):
 
     __super = Resource
     __super___init__ = __super.__init__
-    __super_getChild = __super.getChild
 
     def __init__(self, context):
         self.__super___init__()
@@ -129,7 +132,6 @@ class View(Resource):
             return self._traverse(name, request)
         except KeyError:
             return NotFoundView(404, "Not Found")
-        return self.__super_getChild(name, request)
 
     def _traverse(self, name, request):
         raise KeyError(name)
