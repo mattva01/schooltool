@@ -199,7 +199,6 @@ class Person(Persistent, Contained):
 class PersonPreferences(Persistent):
 
     implements(IPersonPreferences)
-    parent = None
 
     def __init__(self):
         self.timezone = "UTC"
@@ -213,7 +212,6 @@ def getPersonPreferences(person):
     annotations = IAnnotations(person)
     key = 'schoolbell.app.PersonPreferences'
     try:
-        annotations[key].__parent__ = person
         return annotations[key]
     except KeyError:
         annotations[key] = PersonPreferences()
