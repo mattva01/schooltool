@@ -1194,6 +1194,9 @@ class ITimetable(Interface):
     model = Attribute(
         """A timetable model this timetable should be used with""")
 
+    exceptions = Attribute(
+        """A list of timetable exceptions (ITimetableException).""")
+
     def keys():
         """Return a sequence of identifiers for days within the timetable"""
 
@@ -1320,6 +1323,28 @@ class ITimetableActivity(Interface):
 
         The activity is also present in the timetables of all resources
         assigned to this activity.
+        """)
+
+
+class ITimetableException(Interface):
+    """An exception in a timetable.
+
+    An exception specifies that on a particular day a particular activity
+    either does not occur, or occurs but at a different time, or is replaced
+    by a different activity.
+    """
+
+    date = Attribute("""Date of the exception (a datetime.date instance).""")
+
+    period_id = Attribute("""ID of the period that is exceptional.""")
+
+    activity = Attribute(
+        """The activity that does not occur (ITimetableActivity).""")
+
+    replacement = Attribute(
+        """Calendar event that should replace the exceptional activity.
+
+        If None, then the activity is simply removed.
         """)
 
 

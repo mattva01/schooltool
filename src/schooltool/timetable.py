@@ -25,8 +25,9 @@ $Id$
 import socket
 import datetime
 from sets import Set, ImmutableSet
-from persistence import Persistent
-from persistence.dict import PersistentDict
+from persistent import Persistent
+from persistent.list import PersistentList
+from persistent.dict import PersistentDict
 from zope.interface import implements, moduleProvides
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
@@ -65,6 +66,7 @@ class Timetable(Persistent):
         self.__parent__ = None
         self.__name__ = None
         self.model = None
+        self.exceptions = PersistentList()
 
     def keys(self):
         return list(self.day_ids)

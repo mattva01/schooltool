@@ -27,7 +27,7 @@ import unittest
 from sets import Set
 from pprint import pformat
 from datetime import date, time, timedelta, datetime
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
 from schooltool.tests.helpers import diff, sorted
@@ -833,7 +833,7 @@ class TestTimetableDict(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import TimetableDict
-        from persistence.dict import PersistentDict
+        from persistent.dict import PersistentDict
         from schooltool.interfaces import ILocation, IMultiContainer
 
         timetables = TimetableDict()
