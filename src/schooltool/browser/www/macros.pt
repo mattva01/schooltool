@@ -8,8 +8,9 @@
 <body metal:define-slot="body">
   <div class="header">
     <div class="logo">
-      <a href="/start" i18n:translate="">
-        <img src="/logo.png" alt="SchoolTool" class="logo"/>
+      <a href="/start">
+        <img src="/logo.png" alt="SchoolTool" class="logo"
+             i18n:attributes="alt" />
       </a>
     </div>
     <h1 metal:define-slot="h1" i18n:translate="">Welcome to SchoolTool</h1>

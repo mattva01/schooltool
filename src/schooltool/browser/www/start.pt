@@ -17,7 +17,7 @@
   <p><a class="action" href="/groups/root" i18n:translate=""
        >Browse groups and persons</a></p>
   <div class="section" tal:condition="view/isManager">
-    <h2>Administrative tasks</h2>
+    <h2 i18n:translate="">Administrative tasks</h2>
     <p><a class="action" href="/persons/add.html"
           i18n:translate="">Add a person</a></p>
     <p><a class="action" href="/groups/add.html"
@@ -33,13 +33,13 @@
   </div>
 
   <div tal:condition="view/isTeacher" class="section">
-    <h2>Teacher tasks</h2>
+    <h2 i18n:translate="">Teacher tasks</h2>
     <p><a class="action" href="/busysearch"
           i18n:translate="">Book a resource</a></p>
   </div>
 
   <div class="section">
-    <h2>User tasks</h2>
+    <h2 i18n:translate="">User tasks</h2>
     <p><a class="action" tal:attributes="href view/person_url"
           i18n:translate="">View your information page</a></p>
     <p><a class="action" i18n:translate=""
@@ -51,11 +51,11 @@
 
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
           class="action"  i18n:translate=""
-          >Use your calendar in an iCal client</a>
+          >Open your calendar in an iCal client</a>
     <p><a tal:attributes="href
                      string:${context/@@absolute_url}/timetable-calendar.ics"
           class="action" i18n:translate=""
-          >See your timetable calendar in an iCal client</a>
+          >Open your timetable calendar in an iCal client</a>
     <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
   </div>
 </div>

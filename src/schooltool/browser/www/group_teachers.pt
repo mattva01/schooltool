@@ -1,7 +1,7 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title">
-    Edit <span tal:replace="context/title"/>
+    Teachers for <span tal:replace="context/title"/>
   </title>
 </head>
 <body>
@@ -15,14 +15,18 @@
 
   <tal:block condition="not:request/args/ADD|nothing">
   <form method="POST"
-        tal:attributes="action request/uri">
-  <table>
+        tal:attributes="action request/uri"
+        tal:define="list view/list">
+  <p tal:condition="not:list" i18n:translate="">
+    There are no teachers.
+  </p>
+  <table tal:condition="list">
     <tr>
       <th>&nbsp;</th>
-      <th>Name</th>
+      <th i18n:translate="">Name</th>
     </tr>
 
-    <tr tal:repeat="teacher view/list">
+    <tr tal:repeat="teacher list">
       <td><input
               type="checkbox" name="CHECK"
               tal:attributes="value teacher/@@path">
@@ -32,9 +36,12 @@
     </tr>
   </table>
   <input type="submit" class="button" name="DELETE"
-         value="Remove selected teachers"/>
+         value="Remove selected teachers"
+         tal:condition="list"
+         i18n:attributes="value" />
   <input type="submit" class="button" name="ADD"
-         value="Add teachers"/>
+         value="Add teachers"
+         i18n:attributes="value" />
   </form>
   </tal:block>
 
@@ -42,13 +49,14 @@
   <form method="POST"
         tal:attributes="action request/uri">
   <select name="toadd">
-    <option>Select...</option>
+    <option i18n:translate="">Select...</option>
     <option tal:repeat="teacher view/addList"
             tal:attributes="value teacher/@@path"
             tal:content="teacher/title"/>
   </select>
   <input type="submit" class="button" name="FINISH_ADD"
-         value="Add teacher"/>
+         value="Add teacher"
+         i18n:attributes="value" />
   </form>
   </tal:block>
 
