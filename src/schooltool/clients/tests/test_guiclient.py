@@ -30,7 +30,6 @@ from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.uris import URIMembership, URIGroup # TODO: remove dependency
 
 __metaclass__ = type
 
@@ -128,16 +127,9 @@ class ResponseStub:
 class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                            RegistriesSetupMixin, unittest.TestCase):
 
-    uri_markup = dedent("""
-        <uriobjects>
-        </uriobjects>
-        """) # TODO
-
     def setUp(self):
         self.setUpLibxml2()
         self.setUpRegistries()
-        import schooltool.uris
-        schooltool.uris.setUp()
 
     def tearDown(self):
         self.tearDownRegistries()
@@ -180,7 +172,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         server = 'example.com'
         port = 8081
         version = 'UnitTest/0.0'
-        response = ResponseStub(200, 'OK', self.uri_markup, server=version)
+        dummy_uris = "<uriobjects></uriobjects>"
+        response = ResponseStub(200, 'OK', dummy_uris, server=version)
         client = self.newClient(response)
         client.getListOfURIs = lambda: None
         client.setServer(server, port)
@@ -566,8 +559,11 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.method, "DELETE")
 
     def test_getObjectRelationships(self):
-        from schooltool.clients.guiclient import RelationshipInfo
-        from schooltool.uris import URIObject
+        from schooltool.clients.guiclient import RelationshipInfo, URIObject
+        from schooltool.clients.guiclient import URIMembership_uri
+        from schooltool.clients.guiclient import URIGroup_uri
+        URIMembership = URIObject(URIMembership_uri)
+        URIGroup = URIObject(URIGroup_uri)
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -593,7 +589,10 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         client = self.newClient(ResponseStub(200, 'OK', body))
         arcrole1 = URIObject('test://arcrole1')
         role1 = URIObject('test://role1')
-        client.uriobjects = {arcrole1.uri: arcrole1, role1: role1}
+        client.uriobjects = {arcrole1.uri: arcrole1,
+                             role1.uri: role1,
+                             URIMembership_uri: URIMembership,
+                             URIGroup_uri: URIGroup}
         results = list(client.getObjectRelationships(group_id))
         expected = [RelationshipInfo(arcrole1, role1,
                                      'title1', 'href1', 'mhref1'),
@@ -976,7 +975,11 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
 
     def test_createRelationship(self):
-        from schooltool.uris import URIMembership, URIMember
+        from schooltool.clients.guiclient import URIObject
+        from schooltool.clients.guiclient import URIMembership_uri
+        from schooltool.clients.guiclient import URIMember_uri
+        URIMembership = URIObject(URIMembership_uri)
+        URIMember = URIObject(URIMember_uri)
         client = self.newClient(ResponseStub(201, 'Created',
                 location='http://localhost/persons/john/relationships/004'))
         result = client.createRelationship('/persons/john', '/groups/teachers',
@@ -999,7 +1002,11 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
 
     def test_createRelationship_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError
-        from schooltool.uris import URIMembership, URIMember
+        from schooltool.clients.guiclient import URIObject
+        from schooltool.clients.guiclient import URIMembership_uri
+        from schooltool.clients.guiclient import URIMember_uri
+        URIMembership = URIObject(URIMembership_uri)
+        URIMember = URIObject(URIMember_uri)
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createRelationship,
                 '/persons/john', '/groups/teachers', URIMembership, URIMember)
@@ -1134,8 +1141,6 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
     def setUp(self):
         self.setUpLibxml2()
         self.setUpRegistries()
-        import schooltool.uris
-        schooltool.uris.setUp()
 
     def tearDown(self):
         self.tearDownRegistries()
@@ -1231,6 +1236,10 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
     def test__parseRelationships(self):
         from schooltool.clients.guiclient import _parseRelationships
         from schooltool.clients.guiclient import RelationshipInfo, URIObject
+        from schooltool.clients.guiclient import URIMembership_uri
+        from schooltool.clients.guiclient import URIGroup_uri
+        URIMembership = URIObject(URIMembership_uri)
+        URIGroup = URIObject(URIGroup_uri)
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -1300,7 +1309,10 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         """)
         role1 = URIObject('test://role1')
         arcrole1 = URIObject('test://arcrole1')
-        uriobjects = {role1.uri: role1, arcrole1.uri: arcrole1}
+        uriobjects = {role1.uri: role1,
+                      arcrole1.uri: arcrole1,
+                      URIMembership_uri: URIMembership,
+                      URIGroup_uri: URIGroup}
         result = _parseRelationships(body, uriobjects)
         role3 = uriobjects['test://role3']
         arcrole3 = uriobjects['test://arcrole3']
@@ -2177,8 +2189,13 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
 
     def test_setTeacherRelationships(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
-        from schooltool.clients.guiclient import RelationshipInfo
-        from schooltool.uris import URITeaching, URITaught, URITeacher
+        from schooltool.clients.guiclient import RelationshipInfo, URIObject
+        from schooltool.clients.guiclient import URITeaching_uri, URITaught_uri
+        from schooltool.clients.guiclient import URIMembership_uri
+        URITeaching = URIObject(URITeaching_uri)
+        URITaught = URIObject(URITaught_uri)
+        URITeacher = URIObject('http://schooltool.org/ns/teaching/teacher')
+        URIMembership = URIObject(URIMembership_uri)
         st = SchoolTimetableInfo([('/path1', None, None),
                                   ('/path2', None, None)])
         st.setTeacherRelationships(0, [

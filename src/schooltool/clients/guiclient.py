@@ -508,7 +508,8 @@ class SchoolToolClient:
         """Create a relationship between two objects.
 
         Example:
-          from schooltool.uris import URIMembership, URIMember
+          URIMembership = client.uriobjects[URIMembership_uri]
+          URIMember = client.uriobjects[URIMember_uri]
           client.createRelationship('/persons/john', '/groups/teachers',
                                     URIMembership, URIMember)
         """
@@ -1119,6 +1120,9 @@ class URIObject:
 
 URITeaching_uri = 'http://schooltool.org/ns/teaching'
 URITaught_uri = 'http://schooltool.org/ns/teaching/taught'
+URIMembership_uri = 'http://schooltool.org/ns/membership'
+URIMember_uri = 'http://schooltool.org/ns/membership/member'
+URIGroup_uri = 'http://schooltool.org/ns/membership/group'
 
 
 class PersonInfo:
@@ -1167,8 +1171,8 @@ class MemberInfo:
 class RelationshipInfo:
     """Information about a relationship."""
 
-    arcrole = None              # Role of the target (IURIObject)
-    role = None                 # Role of the relationship (IURIObject)
+    arcrole = None              # Role of the target (URIObject)
+    role = None                 # Role of the relationship (URIObject)
     target_title = None         # Title of the target
     target_path = None          # Path of the target
     link_path = None            # Path of the link
