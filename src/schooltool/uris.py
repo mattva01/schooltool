@@ -70,7 +70,7 @@ class IURIAPI(Interface):
         """Return a tuple of a URI, title and the description of an
         ISpecificURI.
 
-        If translate is True, the title and the description are 
+        If translate is True, the title and the description are
         returned translated.
 
         Raises a TypeError if the argument is not ISpecificURI.

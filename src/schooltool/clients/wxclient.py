@@ -67,6 +67,7 @@ about_text = _("SchoolTool GUI client.\n"
 "the Free Software Foundation; either version 2 of the License, or\n"
 "(at your option) any later version.")
 
+
 #
 # Common sets of window style flags
 #
@@ -608,7 +609,8 @@ class AbsenceFrame(wxDialog):
             self.absence_list.InsertColumn(0, _("Date"), width=140)
             self.absence_list.InsertColumn(1, _("Ended?"), width=80)
             self.absence_list.InsertColumn(2, _("Resolved?"), width=80)
-            self.absence_list.InsertColumn(3, _("Expected Presence"), width=150)
+            self.absence_list.InsertColumn(3, _("Expected Presence"),
+                                           width=150)
             self.absence_list.InsertColumn(4, _("Last Comment"), width=200)
             if self.persons:
                 self.absence_list.InsertColumn(1, _("Person"), width=110)

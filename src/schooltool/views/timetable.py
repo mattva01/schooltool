@@ -321,7 +321,7 @@ class TimetableSchemaView(TimetableReadView):
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
-                                     _("Timetable not valid according to schema"))
+                                 _("Timetable not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, _("Not valid XML"))
         doc = libxml2.parseDoc(xml)
@@ -636,7 +636,8 @@ class SchoolTimetableView(View):
                             raise ViewError(_("Invalid group: %s") % path)
                         group = traverse(self.context, path)
                         if group not in groups[teacher_path]:
-                            raise ViewError(_("Invalid group %s for teacher %s")
+                            raise ViewError(_("Invalid group %s"
+                                              " for teacher %s")
                                             % (path, teacher_path))
                         resources = []
                         xpathctx.setContextNode(activity)

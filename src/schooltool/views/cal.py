@@ -125,7 +125,7 @@ class SchooldayModelCalendarView(View):
 
                 if has_complex_props:
                     return textErrorPage(request,
-                             _("Repeating events/exceptions not yet supported"))
+                         _("Repeating events/exceptions not yet supported"))
 
                 if summary == 'school period':
                     if (first is not None and
@@ -161,7 +161,8 @@ class SchooldayModelCalendarView(View):
                 return textErrorPage(request,
                             _("Schoolday model not valid according to schema"))
         except libxml2.parserError:
-            return textErrorPage(request, _("Schoolday model is not valid XML"))
+            return textErrorPage(request,
+                            _("Schoolday model is not valid XML"))
         doc = libxml2.parseDoc(xml)
         xpathctx = doc.xpathNewContext()
         try:
@@ -267,7 +268,7 @@ class CalendarView(CalendarReadView):
                                       map(event.hasProp, complex_prop_names))
                 if has_complex_props:
                     return textErrorPage(request,
-                             _("Repeating events/exceptions not yet supported"))
+                         _("Repeating events/exceptions not yet supported"))
                 events.append(CalendarEvent(event.dtstart, event.duration,
                                             event.summary))
         except ICalParseError, e:
