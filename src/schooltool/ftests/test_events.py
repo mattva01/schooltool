@@ -150,7 +150,8 @@ class TestEventSystem(unittest.TestCase):
         self.assertEquals(another_listener.received, [event1])
 
         # facets should receive events too (when they're active)
-        self.assertEquals(event_log_facet.received, [event1])
+        self.assertEquals([event for ts, event in event_log_facet.received],
+                          [event1])
 
 
 def test_suite():

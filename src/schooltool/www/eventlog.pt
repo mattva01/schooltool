@@ -1,4 +1,4 @@
 <eventLog xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <event tal:repeat="event context/received"
-         tal:content="event" />
+  <event tal:repeat="item view/items"
+         tal:attributes="ts item/timestamp" tal:content="item/event" />
 </eventLog>

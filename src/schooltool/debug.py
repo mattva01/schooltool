@@ -21,6 +21,7 @@ Utilities for debugging SchoolTool
 """
 
 import logging
+import datetime
 from persistence import Persistent
 from persistence.list import PersistentList
 from zope.interface import implements, Attribute
@@ -34,7 +35,12 @@ __metaclass__ = type
 class IEventLog(IEventTarget):
     """Event log that stores all received events persistently."""
 
-    received = Attribute("""List of received events""")
+    received = Attribute(
+        """List of received events and their timestamps.
+
+        Every item in the list is a tuple (timestamp, event), where timestamp
+        is a datetime.datetime instance (in UTC).
+        """)
 
     def clear():
         """Clear the list of received events."""
@@ -51,11 +57,13 @@ class EventLog(Persistent):
 
     implements(IEventLog)
 
+    datetime_hook = datetime.datetime
+
     def __init__(self):
         self.received = PersistentList()
 
     def notify(self, event):
-        self.received.append(event)
+        self.received.append((self.datetime_hook.utcnow(), event))
 
     def clear(self):
         del self.received[:]

@@ -23,14 +23,15 @@ $Id$
 """
 
 import unittest
+import datetime
 from zope.interface import Interface, implements
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.interfaces import IUtility
 
-
 __metaclass__ = type
+
 
 class I1(Interface):
     pass
@@ -551,13 +552,14 @@ class TestEventLogView(unittest.TestCase):
                 return "EventStub()"
 
         context = EventLogStub()
-        context.received = [EventStub()]
+        context.received = [(datetime.datetime(2003, 10, 01, 11, 12, 13),
+                             EventStub())]
         view = EventLogView(context)
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
         expected = dedent("""
             <eventLog>
-              <event>Fake event</event>
+              <event ts="2003-10-01 11:12:13">Fake event</event>
             </eventLog>
         """)
         self.assertEquals(result, expected, "\n" + diff(result, expected))
@@ -574,7 +576,8 @@ class TestEventLogView(unittest.TestCase):
             pass
 
         context = EventLogStub()
-        context.received = [EventStub()]
+        context.received = [(datetime.datetime(2003, 10, 01, 11, 12, 13),
+                             EventStub())]
         view = EventLogView(context)
         request = RequestStub("http://localhost/foo/eventlog", "PUT")
         result = view.render(request)

@@ -263,6 +263,10 @@ class EventLogView(View):
 
     template = Template("www/eventlog.pt", content_type="text/xml")
 
+    def items(self):
+        return [{'timestamp': ts.isoformat(' '), 'event': event}
+                for ts, event in self.context.received]
+
     def do_PUT(self, request):
         if request.content.read(1):
             return errorPage(request, 400, "Only PUT with an empty body"

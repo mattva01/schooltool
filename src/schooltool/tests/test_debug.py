@@ -24,6 +24,18 @@ import unittest
 import logging
 from zope.interface.verify import verifyObject
 
+__metaclass__ = type
+
+
+class DateTimeStub:
+
+    step = 10
+    start = 100 - step
+
+    def utcnow(self):
+        self.start += self.step
+        return self.start
+
 
 class TestEventLog(unittest.TestCase):
 
@@ -31,12 +43,13 @@ class TestEventLog(unittest.TestCase):
         from schooltool.debug import EventLog, IEventLog
         from schooltool.interfaces import IEventTarget
         event_log = EventLog()
+        event_log.datetime_hook = DateTimeStub()
         verifyObject(IEventTarget, event_log)
         verifyObject(IEventLog, event_log)
         event1, event2 = object(), object()
         event_log.notify(event1)
         event_log.notify(event2)
-        self.assertEquals(event_log.received, [event1, event2])
+        self.assertEquals(event_log.received, [(100, event1), (110, event2)])
 
         event_log.clear()
         self.assertEquals(event_log.received, [])
