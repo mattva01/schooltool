@@ -3,8 +3,8 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<h1 metal:fill-slot="h1">
-  Parent groups of <span tal:replace="context/title" />
+<h1 metal:fill-slot="h1" i18n:translate="">
+  Parent groups of <span i18n:name="title" tal:replace="context/title" />
 </h1>
 <metal:block metal:fill-slot="body">
 <tal:defs define="update view/update" />
