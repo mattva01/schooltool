@@ -203,7 +203,7 @@ class TestView(AppSetupMixin, unittest.TestCase):
         from schooltool.browser import View
         view = View(None)
         request = RequestStub('/some/path?arg=val&arg2=val2',
-                              authenticated_user='not None')
+                              authenticated_user=self.person)
         result = view.unauthorized(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],

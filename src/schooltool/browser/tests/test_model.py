@@ -63,6 +63,7 @@ class ResourceStub(UnknownObjectStub):
 
 class UserStub:
     title = 'Mango'
+    __name__ = 'mango'
 
     def listLinks(self, uri):
         return []
@@ -1219,7 +1220,7 @@ class TestPhotoView(unittest.TestCase):
 
     def test_nophoto(self):
         view = self.createView(None)
-        request = RequestStub(authenticated_user='not None')
+        request = RequestStub(authenticated_user=UserStub())
         result = view.render(request)
         self.assertEquals(request.code, 404)
 

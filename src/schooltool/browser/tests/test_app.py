@@ -127,7 +127,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
 
     def test_render_already_logged_in(self):
         view = self.createView()
-        request = RequestStub(authenticated_user='the_boss')
+        request = RequestStub(authenticated_user=PersonStub())
         result = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
