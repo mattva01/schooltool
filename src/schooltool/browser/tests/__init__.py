@@ -20,7 +20,8 @@
 Unit tests for the schooltool.browser package.
 """
 
-from schooltool.rest.tests import RequestStub, setPath     # reexport
+from schooltool.rest.tests import RequestStub              # reexport
+from schooltool.rest.tests import LocatableStub, setPath   # reexport
 from schooltool.tests.utils import RegistriesSetupMixin
 
 
@@ -44,6 +45,26 @@ class TraversalTestMixin:
 
 
 class AppSetupMixin(RegistriesSetupMixin):
+    """Mixin that creates a sample application structure for tests.
+
+    The application (self.app) contains three containers:
+
+      groups
+        root        (self.root)
+        locations   (self.locations)
+        managers    (self.managers)
+        teachers    (self.teachers)
+      persons
+        johndoe     (self.person)
+        nothohn     (self.person2)
+        manager     (self.manager)
+        teacher     (self.teacher)
+      resources
+        resource    (self.resource)
+        location    (self.location)
+        location2   (self.location2)
+
+    """
 
     def setUpSampleApp(self):
         from schooltool.model import Group, Person, Resource

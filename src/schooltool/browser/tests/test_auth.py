@@ -23,17 +23,75 @@ $Id$
 """
 
 import unittest
+from zope.interface import directlyProvides
+from schooltool.browser.tests import AppSetupMixin
+from schooltool.browser.tests import RequestStub
+from schooltool.browser.tests import LocatableStub
 
 
-class TestBrowserAuthPolicies(unittest.TestCase):
+class TestBrowserAuthPolicies(AppSetupMixin, unittest.TestCase):
 
-    def test(self):
-        from schooltool.browser.auth import PrivateAccess
+    # request.authenticated_user is None when the user is not logged in
+    anonymous = None
+
+    def createViewWithPolicy(self, policy):
+        class ViewStub:
+            authorize = policy
+        return ViewStub()
+
+    def assertAllows(self, policy, users, context=None):
+        view = self.createViewWithPolicy(policy)
+        for user in users:
+            request = RequestStub(authenticated_user=user)
+            self.assert_(view.authorize(context, request),
+                         "%s should allow access for %r"
+                         % (view.authorize.__name__, user))
+
+    def assertDenies(self, policy, users, context=None):
+        view = self.createViewWithPolicy(policy)
+        for user in users:
+            request = RequestStub(authenticated_user=user)
+            self.assert_(not view.authorize(context, request),
+                         "%s should deny access for %r"
+                         % (view.authorize.__name__, user))
+
+    def test_PublicAccess(self):
         from schooltool.browser.auth import PublicAccess
+        self.assertAllows(PublicAccess,
+                          [self.anonymous, self.person, self.person2,
+                           self.teacher, self.manager])
+
+    def test_AuthenticatedAccess(self):
         from schooltool.browser.auth import AuthenticatedAccess
-        from schooltool.browser.auth import ManagerAccess
+        self.assertDenies(AuthenticatedAccess, [self.anonymous])
+        self.assertAllows(AuthenticatedAccess,
+                          [self.person, self.person2, self.teacher,
+                           self.manager])
+
+    def test_TeacherAccess(self):
         from schooltool.browser.auth import TeacherAccess
-        # XXX write me
+        self.assertDenies(TeacherAccess,
+                          [self.anonymous, self.person, self.person2])
+        self.assertAllows(TeacherAccess, [self.teacher, self.manager])
+
+    def test_ManagerAccess(self):
+        from schooltool.browser.auth import ManagerAccess
+        self.assertDenies(ManagerAccess,
+                          [self.anonymous, self.person, self.person2,
+                           self.teacher])
+        self.assertAllows(ManagerAccess, [self.manager])
+
+    def test_PrivateAccess(self):
+        from schooltool.interfaces import ILocation
+        from schooltool.browser.auth import PrivateAccess
+        context = LocatableStub()
+        directlyProvides(context, ILocation)
+        context.__parent__ = self.person
+        self.assertDenies(PrivateAccess,
+                          [self.anonymous, self.person2, self.teacher],
+                          context)
+        self.assertAllows(PrivateAccess, [self.person, self.manager],
+                          context)
 
 
 def test_suite():
