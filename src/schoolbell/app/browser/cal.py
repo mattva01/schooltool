@@ -318,8 +318,8 @@ class CalendarViewBase(BrowserView):
         return _('%s, %s') % (day_of_week, day.strftime('%d %B, %Y'))
 
     def dayTitle(self, day):
-        if hasattr(self.request.principal, '_person'):
-            person = self.request.principal._person
+        person = IPerson(self.request.principal, None)
+        if person is not None:
             prefs = IPersonPreferences(person)
             if prefs.dateformat == "MM/DD/YY":
                 return self.usDate(day)
@@ -726,8 +726,8 @@ class DailyCalendarView(CalendarViewBase):
 
     def rowTitle(self, hour, minute):
         """Return the row title as HH:MM or H:MM am/pm."""
-        if hasattr(self.request.principal, '_person'):
-            person = self.request.principal._person
+        person = IPerson(self.request.principal, None)
+        if person is not None:
             prefs = IPersonPreferences(person)
             if prefs.timeformat == "H:MM am/pm":
                 # FIXME issues with 12 am - 1 am
