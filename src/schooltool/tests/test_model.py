@@ -54,7 +54,7 @@ class TestGroupMember(unittest.TestCase):
         member = GroupMember()
         group = object()
         member.notifyAdd(group)
-        self.assertEqual(member.groups(), Set([group]))
+        self.assertEqual(list(member.groups()), [group])
 
     def test_notifyRemove(self):
         from schooltool.model import GroupMember
@@ -62,7 +62,7 @@ class TestGroupMember(unittest.TestCase):
         group = object()
         member._groups = Set([group])
         member.notifyRemove(group)
-        self.assertEqual(member.groups(), Set([]))
+        self.assertEqual(list(member.groups()), [])
         self.assertRaises(KeyError, member.notifyRemove, group)
 
 class TestGroup(unittest.TestCase):
@@ -89,7 +89,7 @@ class TestGroup(unittest.TestCase):
         member = Group()
         key = group.add(member)
         self.assertEqual(member, group[key])
-        self.assertEqual(member.groups(), Set([group]))
+        self.assertEqual(list(member.groups()), [group])
 
     def test_remove(self):
         from schooltool.model import Group
@@ -104,14 +104,14 @@ class TestGroup(unittest.TestCase):
     def test_items(self):
         from schooltool.model import Group
         group = Group()
-        self.assertEquals(group.keys(), [])
-        self.assertEquals(group.values(), [])
-        self.assertEquals(group.items(), [])
+        self.assertEquals(list(group.keys()), [])
+        self.assertEquals(list(group.values()), [])
+        self.assertEquals(list(group.items()), [])
         member = MemberStub()
         key = group.add(member)
-        self.assertEquals(group.keys(), [key])
-        self.assertEquals(group.values(), [member])
-        self.assertEquals(group.items(), [(key, member)])
+        self.assertEquals(list(group.keys()), [key])
+        self.assertEquals(list(group.values()), [member])
+        self.assertEquals(list(group.items()), [(key, member)])
 
 
 def test_suite():

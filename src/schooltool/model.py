@@ -18,22 +18,27 @@
 #
 """
 SchoolTool organisational model.
+
+$Id$
 """
 
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IGroupMember
-from sets import Set
+from persistence import Persistent
+from zodb.btrees.OOBTree import OOSet
+from zodb.btrees.IOBTree import IOBTree
 
 __metaclass__ = type
 
 
+
 class GroupMember:
-    """A mixin providing the IGroupMember internface."""
+    """A mixin providing the IGroupMember interface."""
 
     implements(IGroupMember)
 
     def __init__(self):
-        self._groups = Set()
+        self._groups = OOSet()
 
     def groups(self):
         """See IGroupMember"""
@@ -41,14 +46,14 @@ class GroupMember:
 
     def notifyAdd(self, group):
         """See IGroupMember"""
-        self._groups.add(group)
+        self._groups.insert(group)
 
     def notifyRemove(self, group):
         """See IGroupMember"""
         self._groups.remove(group)
 
 
-class Person(GroupMember):
+class Person(Persistent, GroupMember):
 
     implements(IPerson)
 
@@ -56,13 +61,13 @@ class Person(GroupMember):
         self.name = name
         super(Person, self).__init__()
 
-class Group(GroupMember):
+class Group(Persistent, GroupMember):
 
     implements(IGroup, IGroupMember)
 
     def __init__(self):
         self._next_key = 0
-        self._members = {}
+        self._members = IOBTree()
         super(Group, self).__init__()
 
     def keys(self):
