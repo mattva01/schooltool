@@ -9,7 +9,7 @@
 <metal:block metal:fill-slot="content">
 
 <form tal:attributes="action request/uri" method="POST" class="standalone popup">
-  <h3>
+  <h3 i18n:translate="">
     Search for available resources
   </h3>
   <fieldset>

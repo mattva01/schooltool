@@ -13,7 +13,7 @@
           src="/schoolbell.js">
       </script>
       <metal:block define-slot="title">
-        <title>SchoolBell</title>
+        <title i18n:translate="">SchoolBell</title>
       </metal:block>
       <metal:block metal:define-slot="extrahead" />
     </head>
@@ -46,7 +46,7 @@
 
             <div class="portlet" id="portlet-navigation"
                 tal:condition="request/authenticated_user">
-              <h4>Navigation</h4>
+              <h4 i18n:translate="">Navigation</h4>
               <ul>
                 <li>
                   <a href="" id="portlet-navigation-calendar"
@@ -115,7 +115,7 @@
           src="/schoolbell.js">
       </script>
       <metal:block define-slot="title">
-        <title>SchoolBell</title>
+        <title i18n:translate="">SchoolBell</title>
       </metal:block>
       <metal:block metal:define-slot="extrahead" />
     </head>
@@ -201,7 +201,7 @@
     <tal:block define="notes python:view.getNotations(request)">
       <tal:if condition="notes">
         <div class="notes">
-          <h3>Notes</h3>
+          <h3 i18n:translate="">Notes</h3>
           <dl>
             <tal:loop repeat="note notes">
               <dt>
@@ -212,8 +212,9 @@
               <dd>
                 <div tal:content="note/body"></div>
                 <div class="byline"
+                    i18n:translate=""
                     tal:define="owner note/owner">
-                    By: <span tal:content="owner/title"/>
+                    By: <span tal:content="owner/title" i18n:name="owner"/>
                 </div>
               </dd>
             </tal:loop>
@@ -291,9 +292,9 @@
       <form class="center">
         <div>
           <select name="jump" onChange="jumpTo(this);">
-            <option value=''>Month</option>
+            <option value="" i18n:translate="">Month</option>
             <tal:loop repeat="month view/getJumpToMonths">
-              <option value="" i18n:translate=""
+              <option
                 tal:attributes="value string:monthly.html?date=2004-${month/value}-01"
                 tal:content="month/label" />
             </tal:loop>
@@ -331,7 +332,7 @@
           <!-- USERS Calendar is always visible -->
           <div class="row" style="background: #9db8d2">
             <input type="checkbox" checked="checked" disabled="disabled" />
-                <label>My Calendar</label>
+                <label i18n:translate="">My Calendar</label>
           </div>
 
           <!-- USERS frequently used calendars -->
@@ -346,7 +347,8 @@
               </label>
             </div>
           </tal:loop>
-          <input name="OVERLAY" type="submit" value="Overlay"/>
+          <input name="OVERLAY" type="submit" value="Overlay"
+                 i18n:attributes="value"/>
         </form>
       </div>
     </tal:if>
@@ -359,10 +361,15 @@
         <th colspan="7" class="month-title"
           tal:define="mtit python:view.monthTitle(month[1][0].date)">
           <a tal:content="mtit"
-            tal:attributes="href python:view.calURL('monthly', 
-            month[1][0].date);
-            title string:Go to $mtit"
-            />
+            tal:attributes="href python:view.calURL('monthly',
+                                                    month[1][0].date);
+                            title string:Go to $mtit"
+            i18n:attributes="title"
+            /><tal:comment condition="nothing">
+               XXX will i18n:attributes work correctly in this situation?
+               It should pass "Go to ${mtit}" to gettext and then
+               replace ${mtit} with the actual month title.
+            </tal:comment>
         </th>
       </tr>
       <tr tal:repeat="week month">

@@ -82,7 +82,7 @@
         tal:define="custodians context/getCustodians|nothing;
                     children context/getWards|nothing">
       <tal:if condition="children">
-        <h3>Children</h3>
+        <h3 i18n:translate="">Children</h3>
         <ul>
           <tal:loop repeat="child children">
             <li>
@@ -94,7 +94,7 @@
         </ul>
       </tal:if>
       <tal:if condition="custodians">
-        <h3>Guardians</h3>
+        <h3 i18n:translate="">Guardians</h3>
         <ul>
           <tal:loop repeat="custodian custodians">
             <li>
@@ -109,7 +109,7 @@
             i18n:translate="">Add or remove a guardian</a>
       </tal:if>
       <tal:if condition="not:custodians">
-        <h3>This person has no guardian defined.</h3>
+        <h3 i18n:translate="">This person has no guardian defined.</h3>
         <a class="action"
             tal:attributes="href string:${context/@@absolute_url}/guardian/?pid=${context/__name__}"
             i18n:translate="">Link to Guardian</a>
@@ -119,7 +119,7 @@
     <div class="residences"
         tal:define="residences context/getResidences"
         tal:condition="residences">
-      <h3>Residences</h3>
+      <h3 i18n:translate="">Residences</h3>
       <ul>
         <tal:loop repeat="residence residences">
           <li>
@@ -160,45 +160,46 @@
             <tr>
 
               <td>
-                <label for="groups">Groups</label>
+                <label for="groups" i18n:translate="">Groups</label>
                 <select multiple="multiple" id="groups" size="5"
-                    name="groups">
+                        name="groups">
                   <tal:loop repeat="group view/allGroups">
                     <option tal:content="group/title"
                         tal:attributes="value group/__name__;
-                        selected python:view.listedResource(group);
-                        disabled python:view.disabledResource(group)"/>
+                          selected python:view.listedResource(group);
+                          disabled python:view.disabledResource(group)"/>
                   </tal:loop>
                 </select>
               </td>
 
               <td>
-                <label for="people">People</label>
+                <label for="people" i18n:translate="">People</label>
                 <select multiple="multiple" id="people" size="5"
                     name="people">
                   <tal:loop repeat="person view/allPersons">
                     <option tal:content="person/title"
                         tal:attributes="value person/__name__;
-                        selected python:view.listedResource(person);
-                        disabled python:view.disabledResource(person)"/>
+                          selected python:view.listedResource(person);
+                          disabled python:view.disabledResource(person)"/>
                   </tal:loop>
                 </select>
               </td>
 
               <td>
-                <label for="resources">Resources</label>
+                <label for="resources" i18n:translate="">Resources</label>
                 <select multiple="multiple" id="resources" size="5"
                     name="resources">
                   <tal:loop repeat="resource view/allResources">
                     <option tal:content="resource/title"
                         tal:attributes="value resource/__name__;
-                        selected python:view.listedResource(resource)"/>
+                          selected python:view.listedResource(resource)"/>
                   </tal:loop>
                 </select>
               </td>
             </tr>
           </table>
-          <input type="submit" value="Update" name="CHOOSE_CALENDARS"/>
+          <input type="submit" value="Update" name="CHOOSE_CALENDARS"
+                 i18n:attributes="value" />
         </fieldset>
       </form>
     </tal:block>

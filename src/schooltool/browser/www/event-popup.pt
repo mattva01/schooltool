@@ -94,7 +94,7 @@
 <div tal:condition="view/error" class="error" tal:content="view/error" />
 <tal:block condition="not:view/error">
 
-  <p tal:condition="view/tt_event">
+  <p tal:condition="view/tt_event" i18n:translate="">
     You are trying to alter a timetable event.  An exception for this event
     will be generated in the timetable.
   </p>
@@ -238,7 +238,7 @@
              i18n:attributes="value" />
     </div>
 
-    <div class="info" tal:condition="view/bookingEvent">
+    <div class="info" tal:condition="view/bookingEvent" i18n:translate="">
        This event cannot be edited because it is a booking event.
     </div>
 

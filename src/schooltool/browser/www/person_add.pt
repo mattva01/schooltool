@@ -12,17 +12,17 @@
 
       <form class="standalone" method="POST" enctype="multipart/form-data"
             tal:attributes="action request/path">
-            <h3>Person Information</h3>
+            <h3 i18n:translate="">Person Information</h3>
         <div class="error"
             tal:condition="view/error"
             tal:content="view/error" />
         <fieldset>
-            <legend>Required Information</legend>
+            <legend i18n:translate="">Required Information</legend>
         <div class="row" tal:replace="structure view/first_name_widget" />
         <div class="row" tal:replace="structure view/last_name_widget" />
     </fieldset>
     <fieldset>
-        <legend>Optionl Information</legend>
+        <legend i18n:translate="">Optionl Information</legend>
         <div class="row" tal:replace="structure view/username_widget" />
         <div class="row" tal:replace="structure view/password_widget" />
         <div class="row" tal:replace="structure view/confirm_password_widget" />
@@ -34,7 +34,7 @@
         </div>
     </fieldset>
     <fieldset>
-        <legend>Add to groups</legend>
+        <legend i18n:translate="">Add to groups</legend>
         <div class="row" tal:replace="structure view/groups_widget" />
     </fieldset>
 
@@ -52,9 +52,9 @@
           </div>
         </tal:if>
         <tal:if condition="ward">
-          <input type="hidden" 
-            name="ward" 
-            value="" 
+          <input type="hidden"
+            name="ward"
+            value=""
             tal:attributes="value ward" />
           <div class="controls" tal:condition="view/duplicate_warning">
             <input class="button-ok" type="submit" name="CONFIRM" value="Add anyway"
