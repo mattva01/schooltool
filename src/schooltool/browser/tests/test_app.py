@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from schooltool.interfaces import AuthenticationError
 
 # XXX should schooltool.browser depend on schooltool.views?
 from schooltool.views.tests import RequestStub
@@ -31,19 +32,50 @@ from schooltool.views.tests import RequestStub
 __metaclass__ = type
 
 
+class SiteStub:
+
+    def authenticate(self, app, username, password):
+        if username == 'manager' and password == 'schooltool':
+            return "I'm a user object"
+        else:
+            raise AuthenticationError()
+
+
 class TestAppView(unittest.TestCase):
 
-    def test(self):
+    def createView(self):
         from schooltool.app import Application
         from schooltool.browser.app import LoginPage
         app = Application()
         view = LoginPage(app)
+        return view
+
+    def test(self):
+        view = self.createView()
         request = RequestStub()
-        view.authorization = lambda ctx, req: True
         result = view.render(request)
         self.assert_('Username' in result)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
+
+    def test_post(self):
+        view = self.createView()
+        request = RequestStub(method='POST',
+                              args={'username': 'manager',
+                                    'password': 'schooltool'})
+        request.site = SiteStub()
+        result = view.render(request)
+        self.assertEquals(result, 'OK')
+
+    def test_post_failed(self):
+        view = self.createView()
+        request = RequestStub(method='POST',
+                              args={'username': 'manager',
+                                    'password': '5ch001t001'})
+        request.site = SiteStub()
+        result = view.render(request)
+        self.assertEquals(result, 'Wrong')
+
 
 
 def test_suite():

@@ -17,34 +17,33 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Web-application views for the schooltool.app objects.
-
-$Id$
+Functional tests for SchoolTool web application
 """
 
-# XXX should schooltool.browser depend on schooltool.views?
-from schooltool.views import View, Template
-from schooltool.views.auth import PublicAccess
-from schooltool.interfaces import IApplication, AuthenticationError
-
-__metaclass__ = type
+import unittest
+import urllib
 
 
-class LoginPage(View):
+class TestWeb(unittest.TestCase):
 
-    __used_for__ = IApplication
+    def test(self):
+        f = urllib.urlopen('http://localhost:8814/')
+        content = f.read()
+        self.assert_('Welcome' in content)
+        self.assert_('Username' in content)
 
-    template = Template("www/login.pt")
-    authorization = lambda self, ctx, rq: True # XXX
+        data = urllib.urlencode({'username': 'manager',
+                                 'password': 'schooltool'})
+        f = urllib.urlopen('http://localhost:8814/', data=data)
+        content = f.read()
+        self.assertEquals('OK', content)
 
-    def do_POST(self, request):
-        request.setHeader('Content-Type', 'text/html')
-        try:
-            user = request.site.authenticate(self.context,
-                                             request.args['username'][0],
-                                             request.args['password'][0])
 
-            return 'OK'
-        except AuthenticationError:
-            return 'Wrong'
+def test_suite():
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestWeb))
+    return suite
 
+
+if __name__ == '__main__':
+    unittest.main()

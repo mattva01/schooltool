@@ -977,6 +977,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.reactor_hook = reactor = ReactorStub()
         server.notifyConfigFile = lambda x: None
         server.notifyServerStarted = lambda x, y: None
+        server.notifyWebServerStarted = lambda x, y: None
         server.notifyShutdown = lambda: None
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
@@ -1000,14 +1001,20 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(sys.path,
                           ['/xxxxx', '/yyyyy/zzzzz'] + self.original_path)
         self.assert_(reactor._suggested_thread_pool_size, 42)
-        self.assertEqual(len(reactor._tcp_listeners), 2)
+        self.assertEqual(len(reactor._tcp_listeners), 3)
         self.assertEquals(reactor._tcp_listeners[0][0], 123)
         self.assertEquals(reactor._tcp_listeners[0][2], self.defaulthost)
         self.assertEquals(reactor._tcp_listeners[1][0], 9999)
         self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
+        self.assertEquals(reactor._tcp_listeners[2][0], 48080)
+        self.assertEquals(reactor._tcp_listeners[2][2], self.defaulthost)
         site = reactor._tcp_listeners[0][1]
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is getView)
+        site = reactor._tcp_listeners[2][1]
+        self.assertEquals(site.rootName, 'schooltool')
+        from schooltool.browser.app import LoginPage
+        self.assert_(site.viewFactory is LoginPage)
 
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.uris import ISpecificURI, URIMembership
