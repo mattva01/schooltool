@@ -238,6 +238,8 @@ def chooseMediaType(supported_types, accept_list):
     supported_types should be a sequence of media types.  Media type can
     be a string or a tuples of (media_type, params_dict).
 
+    The accept list is in the same format as returned by parseAccept.
+
     Returns the media type that has the largest quality value as calculated
     by qualityOf.  If the largest quality value is 0, returns None.
     """
@@ -732,7 +734,12 @@ class Server:
                                " operating system"))
 
     def setUpLogger(self, name, filenames, format=None):
-        """Set up a named logger."""
+        """Set up a named logger.
+
+        Sets up a named logger to log into filenames with the given format.
+        Two filenames are special: 'STDOUT' means sys.stdout and 'STDERR'
+        means sys.stderr.
+        """
         formatter = logging.Formatter(format)
         logger = logging.getLogger(name)
         logger.propagate = False
