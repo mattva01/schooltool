@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" value="text/html; charset=UTF-8" />
-  <title metal:define-slot="title">Title</title>
+  <title metal:define-slot="title">[Title]</title>
   <link rel="stylesheet" href="/schooltool.css" />
 </head>
 <body metal:define-slot="body">
@@ -10,18 +10,22 @@
     <div class="logo">
       <img src="/logo.png" alt="SchoolTool" class="logo"/>
     </div>
-    <h1 metal:define-slot="h1">Welcome to SchoolTool</h1>
-    <div class="login" tal:condition="not:request/authenticated_user">
+    <h1 metal:define-slot="h1" i18n:translate="">Welcome to SchoolTool</h1>
+    <div class="login" tal:condition="not:request/authenticated_user"
+         i18n:translate="">
       Not logged in.
     </div>
     <div class="login" tal:condition="request/authenticated_user">
-      User: <a href="/start" tal:content="request/authenticated_user/title" />.
-      <a href="/logout"
-	 tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
+      <span class="userlabel" i18n:translate="">User:</span>
+      <a href="/start" tal:content="request/authenticated_user/title" />.
+      <a href="/logout" i18n:translate=""
+         tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
     </div>
   </div>
   <div class="content">
-  <p metal:define-slot="content">Content</p>
+
+    <p metal:define-slot="content">[Content]</p>
+
   </div>
 </body>
 </html>

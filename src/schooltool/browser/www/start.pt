@@ -1,27 +1,31 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Start page</title>
+  <title metal:fill-slot="title" i18n:translate="">Start page</title>
 </head>
 <body>
-<h1 metal:fill-slot="h1">
-  Start page for <span tal:replace="context/title"/>
-</h1>
+<!-- XXX according to what Jim said on IRC, the following should work.  It
+     doesn't (grep for "Start page for" in schooltool.pot after make
+     extract-translations).  Perhaps we need to upgrade i18nextractor or page
+     templates? -->
+<h1 metal:fill-slot="h1" i18n:translate=""
+    tal:content="string:Start page for ${context/title}" />
 <metal:block metal:fill-slot="content">
 
-<p>What do you want to do today?</p>
+<p i18n:translate="">What do you want to do today?</p>
 
 <div class="actions">
-  <p><a class="action" href="/groups/root">Browse groups and persons</a></p>
+  <p><a class="action" href="/groups/root" i18n:translate="">Browse groups and
+     persons</a></p>
   <p><a class="action" tal:condition="view/isManager"
-        href="/persons/add.html">Add a person</a></p>
+        href="/persons/add.html" i18n:translate="">Add a person</a></p>
   <p><a class="action" tal:condition="view/isManager"
-        href="/groups/add.html">Add a group</a></p>
-  <p><a class="action" tal:attributes="href view/person_url">View your
-     information page</a></p>
-  <p><a class="action"
+        href="/groups/add.html" i18n:translate="">Add a group</a></p>
+  <p><a class="action" tal:attributes="href view/person_url"
+        i18n:translate="">View your information page</a></p>
+  <p><a class="action" i18n:translate=""
         tal:attributes="href string:${view/person_url}/password.html">Change
      your password</a></p>
-  <p><a class="action" href="/logout">Log out</a></p>
+  <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
 </div>
 
 </metal:block>

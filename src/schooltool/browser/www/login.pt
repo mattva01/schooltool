@@ -1,36 +1,41 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Welcome to SchoolTool</title>
+  <title metal:fill-slot="title" i18n:translate="">
+    Welcome to SchoolTool
+  </title>
 </head>
 <body>
-<h1 metal:fill-slot="h1">Welcome to SchoolTool</h1>
+<h1 metal:fill-slot="h1" i18n:translate="">Welcome to SchoolTool</h1>
 <metal:block metal:fill-slot="content">
 
 <form action="." method="POST" tal:attributes="action request/path">
   <input type="hidden" name="url"
          tal:condition="request/args/url | nothing"
          tal:attributes="value python:request.args['url'][0]" />
-  <div class="error" tal:condition="request/args/forbidden | nothing">
+  <div class="error" tal:condition="request/args/forbidden | nothing"
+       i18n:translate="">
     You are not allowed to access this page.  You can click on the back button
     in your browser to go back, or ask a more privileged user to log in.
   </div>
-  <div class="info" tal:condition="request/args/expired | nothing">
+  <div class="info" tal:condition="request/args/expired | nothing"
+       i18n:translate="">
     Your session has expired.
   </div>
-  <div class="error" tal:condition="view/error">
+  <div class="error" tal:condition="view/error" i18n:translate="">
     Incorrect username or password.
   </div>
   <div class="row">
-    <label for="username">Username</label>
+    <label for="username" i18n:translate="">Username</label>
     <input id="username" name="username" type="text"
            tal:attributes="value view/username" />
   </div>
   <div class="row">
-    <label for="password">Password</label>
+    <label for="password" i18n:translate="">Password</label>
     <input id="password" name="password" type="password" />
   </div>
   <div class="buttons">
-    <input class="button" type="submit" value="Log in" accesskey="L" />
+    <input class="button" type="submit" value="Log in" accesskey="L"
+           i18n:attributes="value" />
   </div>
 </form>
 
