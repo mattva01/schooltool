@@ -1966,8 +1966,6 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
                                                         date(2004, 8, 20)),
                           ev2)
 
-        # XXX test case: you remove all remaining repetitions
-
 
 class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
 

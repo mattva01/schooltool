@@ -379,7 +379,10 @@ class TestTimetableActivity(unittest.TestCase):
         tf = TimetableActivity("Dancing", owner, [res2, res1])
         tg = TimetableActivity("Dancing", owner, [res1, res2],
                                timetable=object())
-        # XXX Do we really want to ignore timetable when hashing/comparing?
+
+        # Do we really want to ignore timetable when hashing/comparing?
+        # On further thought it does not matter -- we never compare activities
+        # that come from timetables with different keys.
 
         # __eq__
         self.assertEqual(ta, ta)

@@ -122,7 +122,6 @@ class TimetableView(View, AppObjectBreadcrumbsMixin):
     def do_POST(self, request):
         if not self.canEdit():
             return self.do_GET(request)
-        # TODO: synchronize with resource booking
         for exc in self._exceptionsToRemove(request):
             tt = exc.activity.timetable
             tt.exceptions.remove(exc)

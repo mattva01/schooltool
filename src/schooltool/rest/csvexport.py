@@ -52,7 +52,9 @@ class CSVExporter(View):
     argument to ZipFile in do_GET.
 
     XXX Group or facet factory names that contain spaces will prevent the
-        generated CSV files from being reimported.
+        generated CSV files from being reimported.  The web interface does
+        not allow users to create groups with spaces in their names.  The
+        REST interface does no checking at the moment, I believe.
     """
 
     authorization = PublicAccess

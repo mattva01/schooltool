@@ -49,7 +49,7 @@ class ApplicationLogView(View, ToplevelBreadcrumbsMixin):
             self.error = _("Application log not configured")
             return View.do_GET(self, request)
 
-        # XXX use widgets
+        # TODO: rewrite this view to use widgets
         self.filter_str = None
         if 'filter' in request.args:
             try:

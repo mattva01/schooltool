@@ -732,7 +732,6 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         ttd = self.createTimetabled()
         expected = self.createFullWithExceptions(ttd)
         self.do_test_put(ttd, key, self.full_xml_with_exceptions, expected)
-        # TODO: check timetable exceptions in resource timetables.
 
     def do_test_put(self, timetabled, key, xml, expected):
         view = self.createView(timetabled=timetabled, key=key)

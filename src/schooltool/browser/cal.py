@@ -752,8 +752,6 @@ class EventViewHelpers:
                     unique_id=replacement.unique_id,
                     exception=exception)
         exception.replacement = replacement
-        # TODO: add the same exception to the timetables of
-        #       all resources that are booked by this activity
 
     def _redirectToDailyView(self, date=None):
         """Redirect to the daily calendar view for a given date (or today)."""
