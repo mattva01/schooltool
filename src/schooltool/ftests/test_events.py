@@ -25,20 +25,20 @@ from sets import Set
 from persistence import Persistent
 from zope.interface import implements, Attribute
 from schooltool.interfaces import IEvent, IEventTarget, IRelatable, ILocation
+from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.event import EventMixin
 from transaction import get_transaction
-# XXX I've got no idea why, but if the following import is removed,
-#     TestEventSystem.test fails with a strange pickling error:
-#       TypeError: can't pickle function objects
-import twisted.web.resource
 
 __metaclass__ = type
+
 
 class IStudentEvent(IEvent):
     context = Attribute("Student")
 
+
 class IArbitraryEvent(IEvent):
     context = Attribute("Context")
+
 
 class ContextEvent(EventMixin):
     implements(IEvent)
@@ -53,6 +53,7 @@ class ContextEvent(EventMixin):
 
 class StudentEvent(ContextEvent):
     implements(IStudentEvent)
+
 
 class ArbitraryEvent(ContextEvent):
     implements(IArbitraryEvent)
@@ -69,13 +70,21 @@ class EventCatcher(Persistent):
         self.received.append(event)
 
 
-class TestEventSystem(unittest.TestCase):
+class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpRegistries()
+
+    def tearDown(self):
+        get_transaction().abort()
+        self.tearDownRegistries()
 
     def test(self):
         from zodb.db import DB
         from zodb.storage.mapping import MappingStorage
         db = DB(MappingStorage())
         datamgr = db.open()
+        get_transaction().begin()
 
         # Create some groups and persons and set up event routing tables:
         #

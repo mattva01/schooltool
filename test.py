@@ -261,7 +261,11 @@ def get_test_cases(test_files, cfg):
 def get_test_hooks(test_files, cfg):
     """Returns a list of test hooks from a given list of test modules."""
     results = []
-    dirs = list(Set(map(os.path.dirname, test_files)))
+    dirs = Set(map(os.path.dirname, test_files))
+    for dir in list(dirs):
+        if os.path.basename(dir) == 'ftests':
+            dirs.add(os.path.join(os.path.dirname(dir), 'tests'))
+    dirs = list(dirs)
     dirs.sort()
     for dir in dirs:
         filename = os.path.join(dir, 'checks.py')
