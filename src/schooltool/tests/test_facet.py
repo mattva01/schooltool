@@ -318,6 +318,78 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
         self.assertEqual(list(linkset.iterPlaceholders()), [])
 
 
+class TestMembersGetFacet(unittest.TestCase):
+
+    def test_simple(self):
+        from schooltool.uris import URIMembership, URIGroup
+        from schooltool.facet import membersGetFacet, FacetMixin
+        from schooltool.facet import FacetedRelationshipSchema, FacetFactory
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.membership import Membership
+
+        class SomeFacet(FacetMixin):
+            pass
+
+        class SomeClass(FacetMixin, RelationshipValenciesMixin):
+            membersGetFacet(SomeFacet)
+
+        self.assert_(hasattr(SomeClass, 'valencies'))
+        valencies = SomeClass().getValencies()
+        self.assert_((URIMembership, URIGroup) in valencies)
+        valency = valencies[URIMembership, URIGroup]
+        self.assert_(isinstance(valency.schema, FacetedRelationshipSchema))
+        self.assert_(valency.schema._schema is Membership)
+        factory = valency.schema._factories['member']
+        self.assert_(isinstance(factory, FacetFactory))
+        self.assert_(factory.factory is SomeFacet)
+        self.assertEquals(factory.name, 'SomeFacet')
+        self.assert_(factory.facet_name is None)
+
+    def test_bells_and_whistles(self):
+        from schooltool.uris import URIMembership, URIGroup
+        from schooltool.facet import membersGetFacet, FacetMixin
+        from schooltool.facet import FacetedRelationshipSchema, FacetFactory
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.membership import Membership
+
+        class SomeFacet(FacetMixin):
+            pass
+
+        class SomeClass(FacetMixin, RelationshipValenciesMixin):
+            membersGetFacet(SomeFacet, facet_name='my_facet',
+                            factory_name='some factory')
+
+        self.assert_(hasattr(SomeClass, 'valencies'))
+        valencies = SomeClass().getValencies()
+        self.assert_((URIMembership, URIGroup) in valencies)
+        valency = valencies[URIMembership, URIGroup]
+        self.assert_(isinstance(valency.schema, FacetedRelationshipSchema))
+        self.assert_(valency.schema._schema is Membership)
+        factory = valency.schema._factories['member']
+        self.assert_(isinstance(factory, FacetFactory))
+        self.assert_(factory.factory is SomeFacet)
+        self.assertEquals(factory.name, 'some factory')
+        self.assertEquals(factory.facet_name, 'my_facet')
+
+    def test_errors(self):
+        from schooltool.facet import membersGetFacet, FacetMixin
+        from schooltool.relationship import RelationshipValenciesMixin
+
+        class SomeFacet(FacetMixin):
+            pass
+
+        def try_to_define_without_facetness():
+            class SomeClass(RelationshipValenciesMixin):
+                membersGetFacet(SomeFacet)
+
+        def try_to_define_without_relationshipness():
+            class SomeClass(FacetMixin):
+                membersGetFacet(SomeFacet)
+
+        self.assertRaises(TypeError, try_to_define_without_facetness)
+        self.assertRaises(TypeError, try_to_define_without_relationshipness)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestFacetMixin))
@@ -326,6 +398,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestFacetedRelationshipSchema))
     suite.addTest(unittest.makeSuite(TestFacetDeactivation))
+    suite.addTest(unittest.makeSuite(TestMembersGetFacet))
     return suite
 
 if __name__ == '__main__':
