@@ -76,11 +76,13 @@ else:
                         " command line option, either schooltool or schoolbell")
     sys.exit(1)
 
-# Subclass the install-lib and install_data commands so that we can set
-# the data directory
+# Subclass some distutils commands so that we can set up the server on install
 
 from distutils.command.install_data import install_data as _install_data
 from distutils.command.install_lib import install_lib as _install_lib
+from distutils.command.install_scripts import \
+        install_scripts as _install_scripts
+
 
 class install_data(_install_data):
     """Specialized Python installer for schooltool and schoolbell.
@@ -124,8 +126,8 @@ class install_lib(_install_lib):
     package = package
 
     user_options = _install_lib.user_options + [
-            ('datafile-dir=', None, "override where schooltool thinks its "
-                    "data files are")]
+            ('datafile-dir=', None, "override where the python libraries think"
+                    " their data files are")]
 
     def initialize_options(self):
         self.datafile_dir = None
@@ -147,8 +149,7 @@ class install_lib(_install_lib):
             self.run_command('install_data')
             # Get the location of the installed data
             try:
-                data_file = open(
-                        os.path.join(self.build_base,
+                data_file = open(os.path.join(self.build_base,
                             self.package + '_data_base'), 'r')
                 self.datafile_dir = data_file.read()
             finally:
@@ -160,7 +161,6 @@ class install_lib(_install_lib):
             path_file.close()
         try:
             path_file = open(pathconfig, 'w')
-            print self.datafile_dir
             path_file.write(pathconfig_str.replace('os.path.dirname(__file__)',
                 "\"%s\"" % self.datafile_dir + self.package))
         finally:
@@ -172,6 +172,94 @@ class install_lib(_install_lib):
         outfiles = self.install()
         if outfiles is not None and self.distribution.has_pure_modules():
             self.byte_compile(outfiles)
+
+
+class install_scripts(_install_scripts):
+    """Specialized Python installer for schooltool and schoolbell.
+
+    The primary purpose of this sub class it to configure the scripts on
+    installation.
+    """
+    
+    package = package
+
+    user_options = _install_scripts.user_options + [
+            ('paths=', None, "a semi-colon separated list of paths that should"
+                " be added to the python path on script startup"),
+            ('default-config=', None, "location of the default server config"
+                    " file"),
+            ('datafile-dir=', None, "override where the schooltool startup"
+                    " scripts think their data files are")]
+
+    def initialize_options(self):
+        self.build_base = None
+        self.paths = None
+        self.default_config = None
+        self.datafile_dir = None
+        return _install_scripts.initialize_options(self)
+
+    def finalize_options(self):
+        self.set_undefined_options('install',
+                ('build_base', 'build_base'))
+        return _install_scripts.finalize_options(self)
+
+    def update_scripts(self):
+        # Find out what we should set the datafile directory as
+        if self.datafile_dir is None:
+            # Make sure that we have installed the data files
+            self.run_command('install_data')
+            # Get the location of the installed data
+            try:
+                data_file = open(os.path.join(self.build_base,
+                            self.package + '_data_base'), 'r')
+                self.datafile_dir = data_file.read()
+            finally:
+                pass
+        for script in self.get_outputs():
+            # Read the installed script
+            try:
+                script_file = open(script, 'r')
+                script_str = script_file.read()
+            finally:
+                script_file.close()
+            # Update the paths in the script
+            if self.paths:
+                paths_str = '\n'.join(['# paths begin']
+                        + ['sys.path.insert(0, \'%s\')' % path\
+                        for path in self.paths.split(';')] + ['# paths end'])
+            else:
+                paths_str = '\n'.join(['# paths begin', '# paths end'])
+            paths_regex = re.compile(r'# paths begin\n.*# paths end', re.S)
+            script_str = re.sub(paths_regex, paths_str, script_str)
+            # Update the default config file
+            if self.default_config:
+                config_str = '\n'.join(['# config begin',
+                        'sys.argv.insert(1, \'--config=%s\')'
+                        % self.default_config, '# config end'])
+            else:
+                config_str = '\n'.join(['# config begin', '# config end'])
+            config_regex = re.compile(r'# config begin\n.*# config end', re.S)
+            script_str = re.sub(config_regex, config_str, script_str)
+            # Update whers import-sampleschool looks for the sampleschool
+            sampledir = os.path.join(self.datafile_dir, 'sampleschool')
+            sampledir_str = '\n'.join(['# sampledir begin',
+                    'datadir = \'%s\')'
+                    % sampledir, '# sampledir end'])
+            sampledir_regex = re.compile(
+                    r'# sampledir begin\n.*# sampledir end', re.S)
+            script_str = re.sub(sampledir_regex, sampledir_str, script_str)
+            # Write the script again
+            try:
+                script_file = open(script, 'w')
+                script_file.write(script_str)
+            finally:
+                script_file.close()
+
+    def run(self):
+        ans =  _install_scripts.run(self)
+        self.update_scripts()
+        return ans
+
 
 #
 # Do the setup
@@ -203,6 +291,7 @@ if package == 'schooltool':
         version="0.10rc1",
         url='http://www.schooltool.org',
         cmdclass={'install_data': install_data,
+            'install_scripts': install_scripts,
             'install_lib': install_lib},
         package_dir={'': 'src'},
         packages=['schooltool', 'schooltool.interfaces',
@@ -229,6 +318,7 @@ elif package == 'schoolbell':
         version="1.0rc1",
         url='http://www.schooltool.org/schoolbell',
         cmdclass={'install_data': install_data,
+            'install_scripts': install_scripts,
             'install_lib': install_lib},
         package_dir={'': 'src'},
         packages=['schoolbell', 'schoolbell.relationship',

@@ -4,11 +4,10 @@ A script to import sample school data into SchoolTool on Debian systems.
 """
 
 import os
+
+# Please don't change the following lines unless you look in script.py first
 import sys
-
-datadir = '/usr/share/schooltool/sampleschool'
-sys.path.insert(0, '/usr/lib/schooltool')
-
-### the clients need the zope interfaces as well
-sys.path.insert(0, '/usr/lib/schoolbell')
-
+# paths begin
+# paths end
+# sampledir begin
+# sampledir end
