@@ -59,7 +59,7 @@ def absoluteURL(request, obj, suffix=''):
 
     Virtual hosting is supported:
 
-      >>> request.getHost = lambda: ('SSL', 'example.com', 443)
+      >>> request.setHost('example.com', 443, ssl=True)
 
       >>> absoluteURL(request, root)
       'https://example.com:443/'
@@ -76,12 +76,12 @@ def absoluteURL(request, obj, suffix=''):
       'https://example.com:443/obj/subobject'
 
     """
-    if request.getHost()[0] == 'SSL':
+    if request.isSecure():
         scheme = 'https'
     else:
         scheme = 'http'
     hostname = request.getRequestHostname()
-    port = request.getHost()[2]
+    port = request.getHost().port
     url = absolutePath(request, obj, suffix)
     return '%s://%s:%s%s' % (scheme, hostname, port, url)
 

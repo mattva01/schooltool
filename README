@@ -22,7 +22,7 @@ System requirements
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
-- Twisted 1.1.0 or newer (http://www.twistedmatrix.com/)
+- Twisted 1.3.0 or newer (http://www.twistedmatrix.com/)
   (needed for the server only)
 
 - Python Imaging library (http://www.pythonware.com/products/pil/index.htm)

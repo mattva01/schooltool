@@ -23,6 +23,7 @@ Unit tests for the schooltool.views package.
 from StringIO import StringIO
 from zope.interface import implements, directlyProvides
 from twisted.protocols import http
+from twisted.internet.address import IPv4Address
 from schooltool.interfaces import ITraversable, IContainmentRoot, IUtility
 from schooltool.interfaces import ILocation
 
@@ -52,7 +53,7 @@ class RequestStub:
                 self.request_headers[k.lower()] = v
         self.accept = list(accept)
         self.path = uri
-        self._transport = 'INET'
+        self._secure = False
         self._hostname = 'localhost'
         self._port = 7001
         if '://' in uri:
@@ -61,7 +62,7 @@ class RequestStub:
                 start = len(uri)
             self.path = uri[start:]
             if uri.startswith('https://'):
-                self._transport = 'SSL'
+                self._secure = True
             host_and_port = uri[uri.index('://')+3:start]
             if ':' not in host_and_port:
                 host_and_port += ':7001'
@@ -69,10 +70,18 @@ class RequestStub:
             self._port = int(port)
 
     def getRequestHostname(self):
-        return self.getHost()[1]
+        return self._hostname
 
     def getHost(self):
-        return (self._transport, self._hostname, self._port)
+        return IPv4Address('TCP', self._hostname, self._port, 'INET')
+
+    def setHost(self, hostname, port, ssl=False):
+        self._hostname = hostname
+        self._port = port
+        self._secure = ssl
+
+    def isSecure(self):
+        return self._secure
 
     def getHeader(self, header):
         # Twisted's getHeader returns None when the header does not exist

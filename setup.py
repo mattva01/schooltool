@@ -40,21 +40,22 @@ except ImportError:
     print >> sys.stderr
 else:
     import re
-    m = re.match(r"(\d+)[.](\d+)[.](\d+)$", twisted.copyright.version)
+    m = re.match(r"(\d+)[.](\d+)[.](\d+)(?:[a-z]+\d*)?$",
+                 twisted.copyright.version)
     if not m:
         print >> sys.stderr, ("%s: you have Twisted version %s."
                               % (sys.argv[0], twisted.copyright.version))
         print >> sys.stderr, ("I was unable to parse the version number."
                               "  You will not be able to run")
         print >> sys.stderr, ("the SchoolTool server if this version is"
-                              " older than 1.1.0.")
+                              " older than 1.3.0.")
         print >> sys.stderr
     else:
         ver = tuple(map(int, m.groups()))
-        if ver < (1, 1, 0):
+        if ver < (1, 3, 0):
             print >> sys.stderr, ("%s: you have Twisted version %s."
                                   % (sys.argv[0], twisted.copyright.version))
-            print >> sys.stderr, ("You need at least version 1.1.0 in order to"
+            print >> sys.stderr, ("You need at least version 1.3.0 in order to"
                                   " be able to run the SchoolTool")
             print >> sys.stderr, "server."
             print >> sys.stderr
@@ -135,6 +136,6 @@ ext_modules = [
 ]
 
 setup(name="schooltool",
-      version="0.0.1pre",
+      version="0.5.99pre",
       package_dir={'': 'src'},
       ext_modules=ext_modules)

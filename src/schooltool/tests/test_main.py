@@ -34,6 +34,7 @@ from zope.interface import directlyProvides, directlyProvidedBy
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.interfaces import IModuleSetup, AuthenticationError
+from twisted.internet.address import IPv4Address
 
 __metaclass__ = type
 
@@ -404,7 +405,10 @@ class TestRequest(unittest.TestCase):
         rq.path = '/++vh++https:www.example.com:443/foo/ba%72'
         rq.process()
         self.assertEqual(rq.postpath, ['foo', 'bar'])
-        self.assertEqual(rq.getHost(), ('SSL', 'www.example.com', 443))
+        host = rq.getHost()
+        self.assertEquals(host.host, 'www.example.com')
+        self.assertEquals(host.port, 443)
+        self.assert_(rq.isSecure())
 
         rq = Request(channel, True)
         rq.reactor_hook = ReactorStub()
@@ -416,27 +420,33 @@ class TestRequest(unittest.TestCase):
         from schooltool.main import Request
         channel = ChannelStub()
         rq = Request(channel, True)
-        rq.host = ('INET', 'localhost', 80)
+        rq.setHost('localhost', 80)
         rq.reactor_hook = ReactorStub()
         rq.postpath = ['++vh++https:host:443', 'groups', 'teachers']
         rq._handleVh()
         self.assertEqual(rq.postpath, ['groups', 'teachers'])
-        self.assertEqual(rq.getHost(), ('SSL', 'host', 443))
+        host = rq.getHost()
+        self.assertEquals(host.host, 'host')
+        self.assertEquals(host.port, 443)
+        self.assert_(rq.isSecure())
 
         # No vh directive
         rq = Request(channel, True)
-        rq.host = ('INET', 'localhost', 80)
+        rq.setHost('localhost', 80)
         rq.reactor_hook = ReactorStub()
         rq.postpath = ['groups', 'teachers']
         rq._handleVh()
         self.assertEqual(rq.postpath, ['groups', 'teachers'])
-        self.assertEqual(rq.getHost(), ('INET', 'localhost', 80))
+        host = rq.getHost()
+        self.assertEquals(host.host, 'localhost')
+        self.assertEquals(host.port, 80)
+        self.assert_(not rq.isSecure())
 
     def test_handleVh_errors(self):
         from schooltool.main import Request
         channel = ChannelStub()
         rq = Request(channel, True)
-        rq.host = ('INET', 'localhost', 80)
+        rq.setHost('localhost', 80)
         rq.reactor_hook = ReactorStub()
 
         # Too few colons
@@ -739,7 +749,7 @@ class TestRequest(unittest.TestCase):
         rq = Request(None, True)
         rq.user = 'manager'
         rq.uri = '/foo/bar'
-        rq.client = ("INET", "192.193.194.195", 123)
+        rq.client = IPv4Address("TCP", "192.193.194.195", 123, 'INET')
         rq.method = 'FOO'
         rq.clientproto = 'bar/1.2'
         rq.received_headers['referer'] = 'http://example.com'
