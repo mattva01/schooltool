@@ -360,19 +360,18 @@ timetable_model_registry = {}
 
 
 def resetTimetableModelRegistry():
+    """Replace the timetable model registry with an empty one."""
     global timetable_model_registry
     timetable_model_registry = {}
 
 
 def getTimetableModel(id):
     """Returns a timetable schema identified by a given id."""
-    global timetable_model_registry
     return timetable_model_registry[id]
 
 
 def registerTimetableModel(id, factory):
     """Registers a timetable schema identified by a given id."""
-    global timetable_model_registry
     if id not in timetable_model_registry:
         timetable_model_registry[id] = factory
     elif timetable_model_registry[id] is factory:
@@ -384,5 +383,5 @@ def registerTimetableModel(id, factory):
 def listTimetableModels():
     """Returns a sequence of keys of the timetable models in the
     registry."""
-    global timetable_model_registry
     return timetable_model_registry.keys()
+

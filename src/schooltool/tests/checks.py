@@ -54,7 +54,7 @@ class ComponentChecks:
         if self.class_view_registry != component.class_view_registry:
             warn("%s changed class view registry" % test)
         if self.timetable_model_registry != component.timetable_model_registry:
-            warn("%s changed class timetable model registry" % test)
+            warn("%s changed timetable model registry" % test)
 
 
 class TransactionChecks:
