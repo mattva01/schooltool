@@ -163,11 +163,11 @@ def createResources():
       title
     """
     f = open("resources.csv", "w")
-    print >> f, _('"Hall"')
+    print >> f, '"%s"' % (_('Hall'), )
     for i in range(1,10):
-        print >> f, _('"Room %d"') % i
+        print >> f, '"%s"' % (_('Room %d') % i, )
     for i in range(1,4):
-        print >> f, _('"Projector %d"') % i
+       print >> f, '"%s"' % (_('Projector %d') % i, )
     f.close()
 
 
