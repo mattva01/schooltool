@@ -809,9 +809,9 @@ def doctest_LoginView():
     If we have authentication utility:
 
         >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
-        >>> from zope.app.security.interfaces import IAuthentication2
+        >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolBellAuthenticationUtility()
-        >>> ztapi.provideUtility(IAuthentication2, auth)
+        >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
         >>> setUpSessions()
 
@@ -898,9 +898,9 @@ def doctest_LogoutView():
     Also, we have an authentication utility:
 
         >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
-        >>> from zope.app.security.interfaces import IAuthentication2
+        >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolBellAuthenticationUtility()
-        >>> ztapi.provideUtility(IAuthentication2, auth)
+        >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
         >>> setUpSessions()
 
@@ -1002,7 +1002,7 @@ def doctest_ACLView():
     If we have an authenticated group and an unauthenticated group, we
     get then as well:
 
-        >>> from zope.app.security.interfaces import IAuthentication2
+        >>> from zope.app.security.interfaces import IAuthentication
         >>> from zope.app.security.interfaces import IAuthenticatedGroup
         >>> from zope.app.security.interfaces import IUnauthenticatedGroup
         >>> from zope.app.security.principalregistry \
@@ -1019,7 +1019,7 @@ def doctest_ACLView():
         >>> ztapi.provideUtility(IAuthenticatedGroup, authenticated)
 
         >>> from zope.app.security.principalregistry import principalRegistry
-        >>> ztapi.provideUtility(IAuthentication2, principalRegistry)
+        >>> ztapi.provideUtility(IAuthentication, principalRegistry)
         >>> principalRegistry.registerGroup(unauthenticated)
         >>> principalRegistry.registerGroup(authenticated)
 

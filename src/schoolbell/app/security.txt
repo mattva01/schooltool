@@ -33,9 +33,9 @@ SchoolBell authentication utility
     Global auth utility:
 
     >>> from zope.app.security.principalregistry import principalRegistry
-    >>> from zope.app.security.interfaces import IAuthentication2
+    >>> from zope.app.security.interfaces import IAuthentication
     >>> from zope.app.tests import ztapi
-    >>> ztapi.provideUtility(IAuthentication2, principalRegistry)
+    >>> ztapi.provideUtility(IAuthentication, principalRegistry)
 
     Session setup:
 
@@ -69,13 +69,13 @@ SchoolBell is a possible site:
     ...
 
 
-The SchoolBellAuthenticationUtility is an IAuthentication2 utility that
+The SchoolBellAuthenticationUtility is an IAuthentication utility that
 lives in that site:
 
     >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
     >>> from schoolbell.app.interfaces import ISchoolBellAuthentication
     >>> auth = SchoolBellAuthenticationUtility()
-    >>> verifyObject(IAuthentication2, auth)
+    >>> verifyObject(IAuthentication, auth)
     True
     >>> verifyObject(ISchoolBellAuthentication, auth)
     True
@@ -91,7 +91,7 @@ Let's provide the location of auth:
 Now, we get our local authentication service:
 
     >>> from zope.app import zapi
-    >>> zapi.getUtility(IAuthentication2, context=app) is auth
+    >>> zapi.getUtility(IAuthentication, context=app) is auth
     True
     >>> verifyObject(ISite, app)
     True
