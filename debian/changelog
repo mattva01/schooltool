@@ -12,6 +12,8 @@ schooltool (0.8-1) unstable; urgency=low
   * Changed priority to extra.
   * Fixed rules so that binary-arch and binary-indep targets build the
     correct packages (Closes: Bug#278095).
+  * On log rotation, only restart the server once and do not produce any
+    output on success.
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 

@@ -2,14 +2,14 @@
 #Log files must be rotated occasionally so that they don't grow indefinitely;
 #the best way to do this is to drop a log rotation configuration file into
 #the directory /etc/logrotate.d and use the facilities provided by
-#logrotate.[56] Here is a good example for a logrotate config file
-#(for more information see logrotate(8)):
+#logrotate.[56]
 
 /var/log/schooltool/*.log {
     rotate 12
     weekly
     compress
+    sharedscripts
     postrotate
-    [ -x /etc/init.d/schooltool ] && /etc/init.d/schooltool restart
+    [ -x /etc/init.d/schooltool ] && /etc/init.d/schooltool restart > /dev/null
     endscript
 }
