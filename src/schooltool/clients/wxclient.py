@@ -1728,8 +1728,14 @@ class MainFrame(wxFrame):
         self.personListData = []
         self.relationshipListData = []
 
-        filename = os.path.join(os.path.dirname(__file__), 'schooltool.xpm')
-        icon = wxIcon(filename, wxBITMAP_TYPE_XPM)
+        if wxPlatform == '__WXMSW__':
+            filename = 'schooltool.ico'
+            bitmap_type = wxBITMAP_TYPE_ICON
+        else:
+            filename = 'schooltool.xpm'
+            bitmap_type = wxBITMAP_TYPE_XPM
+        filename = os.path.join(os.path.dirname(__file__), filename)
+        icon = wxIcon(filename, bitmap_type)
         self.SetIcon(icon)
 
         self.CreateStatusBar()
