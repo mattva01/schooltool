@@ -269,7 +269,7 @@ class TestClient(unittest.TestCase):
         self.assertEmitted("srvr2.example.com")
 
         self.emitted = ""
-        self.client.do_server("server 31337")
+        self.client.do_server("server 31337 plain")
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 31337)
         self.assertEqual(self.client.ssl, False)
