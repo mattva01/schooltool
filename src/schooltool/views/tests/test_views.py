@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.views.tests import LocatableStub, RequestStub, setPath
 
 __metaclass__ = type
@@ -275,6 +276,7 @@ class TestView(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite('schooltool.views'))
     suite.addTest(unittest.makeSuite(TestHelpers))
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))

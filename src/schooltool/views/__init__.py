@@ -59,6 +59,47 @@ def getURL(request, obj, suffix='', absolute=True):
         return url
 
 
+def absolutePath(request, obj, suffix=''):
+    """Return the absolute path of an object in context of request.
+
+    Example:
+
+      >>> from schooltool.views.tests import LocatableStub, setPath
+      >>> root, obj = LocatableStub(), LocatableStub()
+      >>> setPath(root, '/')
+      >>> setPath(obj, '/obj')
+      >>> from schooltool.views.tests import RequestStub
+      >>> request = RequestStub()
+
+      >>> absolutePath(request, root)
+      '/'
+      >>> absolutePath(request, obj)
+      '/obj'
+
+    The essential difference from schooltool.component.getPath is that
+    absolutePath considers request.virtualpath.
+
+      >>> request.virtualpath = '/virtual/path'
+      >>> absolutePath(request, root)
+      '/virtual/path'
+      >>> absolutePath(request, obj)
+      '/virtual/path/obj'
+
+    Sometimes you want to construct references to subobjects that are not
+    traversible or do not exist as application objects.
+
+      >>> absolutePath(request, root, 'subobject')
+      '/virtual/path/subobject'
+      >>> absolutePath(request, obj, 'subobject/subsubobject')
+      '/virtual/path/obj/subobject/subsubobject'
+
+    """
+    path = request.virtualpath.split('/')
+    path += getPath(obj).split('/')
+    path += suffix.split('/')
+    return '/' + '/'.join(filter(None, path))
+
+
 def read_file(fn):
     """Return the contents of the specified file.
 
