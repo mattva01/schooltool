@@ -1840,8 +1840,6 @@ class IApplication(IContainmentRoot, IServiceManager, ITraversable):
 class IApplicationObjectContainer(ILocation, ITraversable):
     """A collection of application objects."""
 
-    # XXX split this into read and write interfaces.
-
     def __getitem__(name):
         """Return the contained object that has the given name."""
 

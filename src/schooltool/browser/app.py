@@ -284,8 +284,6 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         if self.error:
             return self.do_GET(request)
 
-        # TODO: ensure uniqueness of (first_name, last_name)
-
         person = self._addUser(self.username_widget.value,
                                self.password_widget.value)
         if person is None:

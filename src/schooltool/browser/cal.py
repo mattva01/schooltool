@@ -941,8 +941,6 @@ class EventDeleteView(View, EventViewHelpers):
             elif 'CANCEL' not in request.args:
                 return self._showConfirmationForm(event)
             return self._redirectToDailyView(event.dtstart)
-        # TODO: Handle the case when the event has been created by a
-        #       replacing exception.
 
         # Dangling event ID
         return self._redirectToDailyView()

@@ -177,7 +177,6 @@ class TimetableDay(Persistent):
             raise TypeError("TimetableDay cannot set a "
                              "non-ITimetableActivity (got %r)" % (activity, ))
         if activity.timetable is None:
-            # XXX hacky
             activity = activity.replace(timetable=self.timetable)
         self.activities[period].add(activity)
 
