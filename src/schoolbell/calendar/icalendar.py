@@ -767,7 +767,7 @@ def _parse_recurrence_weekly(args):
     WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
 
     """
-    from schooltool.cal import WeeklyRecurrenceRule
+    from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
     weekdays = []
     days = args.get('BYDAY', None)
     if days is not None:
@@ -796,7 +796,7 @@ def _parse_recurrence_monthly(args):
     >>> _parse_recurrence_monthly({'BYDAY': '-1WE'})
     MonthlyRecurrenceRule(1, None, None, (), 'lastweekday')
     """
-    from schooltool.cal import MonthlyRecurrenceRule
+    from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
     if 'BYDAY' in args:
         if args['BYDAY'][0] == '-':
             monthly = 'lastweekday'
@@ -857,7 +857,8 @@ def parse_recurrence_rule(value):
     DailyRecurrenceRule(1, None, None, ())
 
     """
-    from schooltool.cal import DailyRecurrenceRule, YearlyRecurrenceRule
+    from schoolbell.calendar.recurrent import DailyRecurrenceRule
+    from schoolbell.calendar.recurrent import YearlyRecurrenceRule
 
     # split up the given value into parameters
     params = {}
