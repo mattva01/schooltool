@@ -1330,16 +1330,17 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
             self.update_status = ''
             try:
                 data = getWidgetsData(self, self.schema, names=self.fieldNames)
+            except WidgetsError, errors:
+                self.errors = errors
+                self.update_status = _("An error occured.")
+                return self.update_status
+            else:
                 args = [data[name] for name in self._arguments]
                 kw = {}
                 for name in self._keyword_arguments:
                     if name in data:
                         kw[str(name)] = data[name]
                 self.create(*args, **kw)
-            except WidgetsError, errors:
-                self.errors = errors
-                self.update_status = _("An error occured.")
-                return self.update_status
             # AddView.update() sets self.update_status and returns it.  Weird,
             # but let's copy that behavior.
             return self.update_status
