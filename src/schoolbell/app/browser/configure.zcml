@@ -11,7 +11,7 @@
   <page
       name="index.html"
       for="schoolbell.app.interfaces.ISchoolBellApplication"
-      template="index.pt"
+      template="templates/index.pt"
       permission="zope.Public"
       />
 
@@ -27,7 +27,7 @@
       name="index.html"
       for="schoolbell.app.interfaces.IPersonContainer"
       class="schoolbell.app.browser.app.PersonContainerView"
-      template="container.pt"
+      template="templates/container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -59,7 +59,7 @@
       name="index.html"
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonView"
-      template="person.pt"
+      template="templates/person.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -69,7 +69,7 @@
       name="password.html"
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonChangePasswordView"
-      template="change_person_password.pt"
+      template="templates/change_person_password.pt"
       permission="zope.View" />
 
   <page
@@ -84,7 +84,7 @@
       name="index.html"
       for="schoolbell.app.interfaces.IGroupContainer"
       class="schoolbell.app.browser.app.GroupContainerView"
-      template="container.pt"
+      template="templates/container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -116,7 +116,7 @@
       name="index.html"
       for="schoolbell.app.interfaces.IGroup"
       class="schoolbell.app.browser.app.GroupView"
-      template="group.pt"
+      template="templates/group.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -128,7 +128,7 @@
       name="index.html"
       for="schoolbell.app.interfaces.IResourceContainer"
       class="schoolbell.app.browser.app.ResourceContainerView"
-      template="container.pt"
+      template="templates/container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -160,7 +160,7 @@
       name="index.html"
       for="schoolbell.app.interfaces.IResource"
       class="schoolbell.app.browser.app.ResourceView"
-      template="resource.pt"
+      template="templates/resource.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
@@ -185,7 +185,7 @@
       name="view_macros"
       for="*"
       permission="zope.View"
-      template="view_macros.pt"
+      template="templates/view_macros.pt"
       layer=".skin.ISchoolBellSkin"
       />
 
@@ -205,7 +205,7 @@
    <page
        for="*"
        name="schoolbell_navigation"
-       template="navigation.pt"
+       template="templates/navigation.pt"
        class=".NavigationView"
        permission="zope.View"
        />
