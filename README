@@ -171,7 +171,6 @@ the individual files and directories for details of the licences.
   src/persistent
   src/transaction
   src/zLOG
-  src/zdaemon
   src/zope
 
 Files in the same directory as this README file are (c) Shuttleworth
