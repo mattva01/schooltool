@@ -641,8 +641,6 @@ class ResidenceAddView(ObjectAddView):
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
-        nexturl = absoluteURL(request, obj)
-
         paths = filter(None, request.args.get("toadd", []))
         for path in paths:
             pobj = traverse(self.context, path)
@@ -655,6 +653,7 @@ class ResidenceAddView(ObjectAddView):
                            % (self.relname, getPath(obj),
                               getPath(pobj)))
 
+        nexturl = absoluteURL(request, pobj)
         return self.redirect(nexturl, request)
 
 
