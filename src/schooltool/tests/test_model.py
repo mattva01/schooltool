@@ -27,18 +27,38 @@ from datetime import datetime
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IFaceted
-from schooltool.interfaces import IEventConfigurable
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
+from schooltool.interfaces import ILink, IFacet
 
 __metaclass__ = type
+
+
+class LinkStub:
+    implements(ILink)
+    __name__ = None
+    __parent__ = None
+    reltype = None
+    role = None
+    target = Persistent()
+
+    def traverse(self):
+        return self.target
+
+
+class FacetStub(Persistent):
+    implements(IFacet)
+    active = False
+    owner = None
+    __name__ = None
+    __parent__ = None
 
 
 class TestPerson(EventServiceTestMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IPerson, IEventTarget, IRelatable
+        from schooltool.interfaces import IEventConfigurable
         from schooltool.interfaces import IMultiContainer
         from schooltool.model import Person
         person = Person('John Smith')
@@ -49,31 +69,22 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         verifyObject(IMultiContainer, person)
 
     def test_getRelativePath(self):
-        from schooltool.interfaces import ILink
         from schooltool.model import Person, AbsenceComment
+        from schooltool.component import FacetManager
         person = Person('John Smith')
         person.__parent__ = self.eventService
         absence = person.addAbsence(AbsenceComment(None, None))
-
-        class LinkStub:
-            implements(ILink)
-            __name__ = None
-            __parent__ = None
-            reltype = None
-            role = None
-            target = Persistent()
-
-            def traverse(self):
-                return self.target
-
         link = LinkStub()
         person.__links__.add(link)
+        facet = FacetStub()
+        FacetManager(person).setFacet(facet)
 
         self.assertEquals(person.getRelativePath(absence),
                           'absences/%s' % absence.__name__)
         self.assertEquals(person.getRelativePath(link),
                           'relationships/%s' % link.__name__)
-        # XXX shouldn't facets get their own relative paths?
+        self.assertEquals(person.getRelativePath(facet),
+                          'facets/%s' % facet.__name__)
 
     def test_absenteeism(self):
         from schooltool.interfaces import IAbsence
@@ -141,7 +152,8 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
 class TestGroup(unittest.TestCase):
 
     def test(self):
-        from schooltool.interfaces import IGroup, IEventTarget, IRelatable
+        from schooltool.interfaces import IGroup, IFaceted, IRelatable
+        from schooltool.interfaces import IEventConfigurable, IEventTarget
         from schooltool.model import Group
         group = Group("root")
         verifyObject(IGroup, group)
@@ -149,6 +161,20 @@ class TestGroup(unittest.TestCase):
         verifyObject(IEventTarget, group)
         verifyObject(IEventConfigurable, group)
         verifyObject(IRelatable, group)
+
+    def test_getRelativePath(self):
+        from schooltool.model import Group
+        from schooltool.component import FacetManager
+        group = Group('MI5')
+        link = LinkStub()
+        group.__links__.add(link)
+        facet = FacetStub()
+        FacetManager(group).setFacet(facet)
+
+        self.assertEquals(group.getRelativePath(link),
+                          'relationships/%s' % link.__name__)
+        self.assertEquals(group.getRelativePath(facet),
+                          'facets/%s' % facet.__name__)
 
 
 class TestAbsenteeism(EventServiceTestMixin, unittest.TestCase):

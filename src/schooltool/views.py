@@ -449,7 +449,7 @@ class FacetManagementView(View, XMLPseudoParser):
                  'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
                  'class_name': facet.__class__.__name__,
-                 'path': 'facets/%s' % facet.__name__}
+                 'path': getPath(facet)}
                 for facet in self.context.iterFacets()]
 
     def listFacetFactories(self):

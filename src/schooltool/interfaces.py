@@ -647,7 +647,7 @@ class IRouteToGroupsAction(IEventAction):
 # Facets
 #
 
-class IFacet(Interface):
+class IFacet(ILocation):
     """A facet.
 
     A facet is a persistent adapter (a smart annotation) which

@@ -67,7 +67,8 @@ def getPath(obj):
                 segments.append(cur.__name__)
             cur = parent
         else:
-            raise TypeError("Cannot determine path for %s" % obj)
+            raise TypeError("Cannot determine path for %s, %s is neither "
+                            "ILocation nor IContainmentRoot" % (obj, cur))
 
 
 def getRoot(obj):

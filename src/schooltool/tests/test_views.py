@@ -25,11 +25,11 @@ $Id$
 import unittest
 import datetime
 import sets
-from zope.interface import Interface, implements
+from zope.interface import Interface, implements, directlyProvides
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.interfaces import IUtility, IFacet
+from schooltool.interfaces import IUtility, IFacet, IContainmentRoot
 
 __metaclass__ = type
 
@@ -37,8 +37,10 @@ __metaclass__ = type
 class I1(Interface):
     pass
 
+
 class C1:
     implements(I1)
+
 
 class RequestStub:
 
@@ -86,6 +88,17 @@ class FacetStub:
         self.__parent__ = parent
         self.active = active
         self.owner = owner
+
+
+class ContainmentRoot:
+    implements(IContainmentRoot)
+
+
+def setPath(obj, path):
+    """Trick getPath(obj) into returning path"""
+    assert path.startswith('/')
+    obj.__name__ = path[1:]
+    obj.__parent__ = ContainmentRoot()
 
 
 class TestHelpers(unittest.TestCase):
@@ -956,11 +969,13 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import FacetManager
         from schooltool.model import Person
         from schooltool.debug import EventLogFacet, setUp
+        from schooltool.interfaces import IContainmentRoot
         setUp() # register a facet factory
 
-        request = RequestStub("http://localhost/group/facets")
+        request = RequestStub("http://localhost/person/facets")
         facetable = Person()
         owner = Person()
+        setPath(facetable, '/person')
         context = FacetManager(facetable)
         facet = EventLogFacet()
         context.setFacet(facet)
@@ -973,11 +988,11 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
             ---8<---
               <facet xlink:type="simple" active="inactive"
                      xlink:title="001" class="EventLogFacet"
-                     owned="unowned" xlink:href="facets/001"/>
+                     owned="unowned" xlink:href="/person/facets/001"/>
             ---8<---
               <facet xlink:type="simple" active="active"
                      xlink:title="002" class="EventLogFacet"
-                     owned="owned" xlink:href="facets/002"/>
+                     owned="owned" xlink:href="/person/facets/002"/>
             ---8<---
               <facetFactory name="eventlog" title="Event Log Factory"/>
             ---8<---

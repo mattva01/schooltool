@@ -76,6 +76,8 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
     def getRelativePath(self, obj):
         if obj in self._absences:
             return 'absences/%s' % obj.__name__
+        if obj in self.__facets__:
+            return 'facets/%s' % obj.__name__
         return RelationshipValenciesMixin.getRelativePath(self, obj)
 
 
@@ -90,6 +92,11 @@ class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
         self.__name__ = None
         self.__parent__ = None
         self.valencies = Valency(Membership, 'group')
+
+    def getRelativePath(self, obj):
+        if obj in self.__facets__:
+            return 'facets/%s' % obj.__name__
+        return RelationshipValenciesMixin.getRelativePath(self, obj)
 
 
 class Absence(Persistent):
