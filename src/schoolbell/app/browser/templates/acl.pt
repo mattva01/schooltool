@@ -69,7 +69,45 @@
     <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
            i18n:attributes="value cancel-button" />
   </div>
+
 </form>
+
+<p> The permissions are inherited in the containment hierarchy.  For
+example, if you set a View Calendar permission for a user on the Persons Index,
+that user will be able to see the calendars of all persons.  If you
+want the user to be able to access just a calendar of some resource, you
+can set the View Calendar permission for that user on that resource.<p>
+
+<p>Below is a list of permission names with their respective meanings.
+
+<dl>
+  <dt>View</dt> <dd>This permission allows viewing names, titles,
+  photos, lists of objects, and other information.</dd>
+
+  <dt>Edit</dt> <dd>Lets to edit names, titles, descriptions, photos,
+  etc.</dd>
+
+  <dt>Create new objects</dt>
+  <dd>Lets the user to create new persons, groups, and resources.</dd>
+
+  <dt>View calendar</dt>
+  <dd>Allows viewing calendars of persons, groups, and resources.</dd>
+
+  <dt>Add events</dt>
+  <dd>Allows adding new events to calendars.</dd>
+
+  <dt>Modify/delete events</dt>
+  <dd>Allows editing and delete events in calendars.</dd>
+
+  <dt>Control access</dt>
+  <dd>Allows the user to use this form (Access control)</dd>
+
+  <dt>Manage membership</dt> <dd>Allows the user to add persons,
+  groups and resources to groups.  In order to add something to a
+  group, the user needs this permission only on the group.</dd>
+
+</dl>
+
 
 </metal:block>
 </body>
