@@ -238,6 +238,9 @@ class Person(ApplicationObjectMixin):
         else:
             return sha.sha(password).digest() == self._pwhash
 
+    def hasPassword(self):
+        return self._pwhash is not None
+
 
 class Group(ApplicationObjectMixin):
 

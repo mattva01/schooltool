@@ -34,6 +34,9 @@ label {
   font-weight: bold;
   color: #444422;
 }
+label.wide {
+  width: 12em;
+}
 
 div.info {
   margin: 0ex 0ex 2ex 0ex;
@@ -167,6 +170,13 @@ a.action:active {
   background: white;
   color: black;
   text-decoration: none
+}
+
+span.accountenabled {
+  color: green;
+}
+span.accountdisabled {
+  color: red;
 }
 
 div.logo {

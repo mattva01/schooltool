@@ -13,7 +13,10 @@
 <div class="actions">
   <p><a class="action" href="/groups/root">Browse groups and persons</a></p>
   <p><a class="action" tal:attributes="href view/person_url">View your
-      information page</a></p>
+     information page</a></p>
+  <p><a class="action"
+        tal:attributes="href string:${view/person_url}/password.html">Change
+     your password</a></p>
   <p><a class="action" href="/logout">Log out</a></p>
 </div>
 

@@ -32,10 +32,9 @@ from schooltool.tests.utils import RegistriesSetupMixin
 __metaclass__ = type
 
 
-class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
-                     unittest.TestCase):
+class AppSetupMixin(RegistriesSetupMixin):
 
-    def setUp(self):
+    def setUpSampleApp(self):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -48,10 +47,17 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
         self.root = app['groups'].new("root", title="root")
         self.managers = app['groups'].new("managers", title="managers")
         self.person = app['persons'].new("johndoe", title="John Doe")
+        self.person2 = app['persons'].new("notjohn", title="Not John Doe")
         self.manager = app['persons'].new("manager", title="Manager")
 
         Membership(group=self.root, member=self.person)
         Membership(group=self.managers, member=self.manager)
+
+
+class TestPersonView(TraversalTestMixin, AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
 
     def test(self):
         from schooltool.browser.app import PersonView
@@ -63,6 +69,19 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
         self.assert_('johndoe' in result)
         self.assert_('John Doe' in result)
         self.assert_('edit.html' not in result)
+        self.assert_('password.html' in result)
+
+    def test_otheruser(self):
+        from schooltool.browser.app import PersonView
+        view = PersonView(self.person)
+        request = RequestStub(authenticated_user=self.person2)
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_('johndoe' in result)
+        self.assert_('John Doe' in result)
+        self.assert_('edit.html' not in result)
+        self.assert_('password.html' not in result)
 
     def test_manager(self):
         from schooltool.browser.app import PersonView
@@ -74,13 +93,16 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
         self.assert_('johndoe' in result)
         self.assert_('John Doe' in result)
         self.assert_('edit.html' in result)
+        self.assert_('password.html' in result)
 
     def test_traverse(self):
         from schooltool.browser.model import PersonView, PhotoView
-        from schooltool.browser.model import PersonEditView
+        from schooltool.browser.model import PersonEditView, PersonPasswordView
         view = PersonView(self.person)
         self.assertTraverses(view, 'photo.jpg', PhotoView, self.person)
         self.assertTraverses(view, 'edit.html', PersonEditView, self.person)
+        self.assertTraverses(view, 'password.html', PersonPasswordView,
+                             self.person)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
     def test_getParentGroups(self):
@@ -91,6 +113,135 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
                           [{'url': 'http://localhost:7001/groups/root',
                             'title': 'root'}])
 
+    def test_editURL(self):
+        from schooltool.browser.model import PersonView
+        view = PersonView(self.person)
+        view.request = RequestStub()
+        self.assertEquals(view.editURL(),
+                          'http://localhost:7001/persons/johndoe/edit.html')
+
+    def test_passwordURL(self):
+        from schooltool.browser.model import PersonView
+        view = PersonView(self.person)
+        view.request = RequestStub()
+        self.assertEquals(view.passwordURL(),
+                'http://localhost:7001/persons/johndoe/password.html')
+
+
+class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def test_as_user(self):
+        from schooltool.browser.model import PersonPasswordView
+        view = PersonPasswordView(self.person)
+        request = RequestStub(authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('old_password' in result)
+        self.assert_('new_password' in result)
+        self.assert_('verify_password' in result)
+        self.assert_('Current password' in result)
+
+    def test_as_manager(self):
+        from schooltool.browser.model import PersonPasswordView
+        view = PersonPasswordView(self.person)
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('old_password' in result)
+        self.assert_('new_password' in result)
+        self.assert_('verify_password' in result)
+        self.assert_("Manager's password" in result)
+
+    def test_locked(self):
+        from schooltool.browser.model import PersonPasswordView
+        view = PersonPasswordView(self.person)
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('disabled' in result)
+
+    def test_unlocked(self):
+        from schooltool.browser.model import PersonPasswordView
+        self.person.setPassword('something')
+        view = PersonPasswordView(self.person)
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('enabled' in result)
+
+    def test_POST_as_manager(self):
+        from schooltool.browser.model import PersonPasswordView
+        self.manager.setPassword('mgrpw')
+        view = PersonPasswordView(self.person)
+        request = RequestStub(method='POST', args={'old_password': 'mgrpw',
+                                                   'new_password': 'newpw',
+                                                   'verify_password': 'newpw',
+                                                   'CHANGE': 'change'},
+                              authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('Password changed' in result)
+        self.assert_(self.person.checkPassword('newpw'))
+
+    def test_POST_as_user(self):
+        from schooltool.browser.model import PersonPasswordView
+        self.person.setPassword('oldpw')
+        view = PersonPasswordView(self.person)
+        request = RequestStub(method='POST', args={'old_password': 'oldpw',
+                                                   'new_password': 'newpw',
+                                                   'verify_password': 'newpw',
+                                                   'CHANGE': 'change'},
+                              authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('Password changed' in result)
+        self.assert_(self.person.checkPassword('newpw'))
+
+    def test_POST_passwords_do_not_match(self):
+        from schooltool.browser.model import PersonPasswordView
+        self.person.setPassword('oldpw')
+        view = PersonPasswordView(self.person)
+        request = RequestStub(method='POST', args={'old_password': 'oldpw',
+                                                   'new_password': 'newpw',
+                                                   'verify_password': 'newwp',
+                                                   'CHANGE': 'change'},
+                              authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('Passwords do not match' in result)
+        self.assert_(self.person.checkPassword('oldpw'))
+
+    def test_POST_bad_old_passwod(self):
+        from schooltool.browser.model import PersonPasswordView
+        self.person.setPassword('oldpw')
+        view = PersonPasswordView(self.person)
+        request = RequestStub(method='POST', args={'old_password': 'dunno',
+                                                   'new_password': 'newpw',
+                                                   'verify_password': 'newwp',
+                                                   'CHANGE': 'change'},
+                              authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('Incorrect password' in result)
+        self.assert_(self.person.checkPassword('oldpw'))
+
+    def test_POST_disable_account(self):
+        from schooltool.browser.model import PersonPasswordView
+        self.person.setPassword('oldpw')
+        self.manager.setPassword('mgrpw')
+        view = PersonPasswordView(self.person)
+        request = RequestStub(method='POST', args={'old_password': 'mgrpw',
+                                                   'new_password': 'newpw',
+                                                   'verify_password': 'newpw',
+                                                   'DISABLE': 'disable'},
+                              authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('Account disabled' in result)
+        self.assert_(not self.person.hasPassword())
 
 
 class TestPersonEditView(unittest.TestCase):
@@ -205,7 +356,6 @@ class TestPersonInfoMixin(unittest.TestCase):
 
         facet.photo = None
         self.assertEquals(mixin.photoURL(), '')
-
 
 
 class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
@@ -392,6 +542,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonInfoMixin))
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestPersonEditView))
+    suite.addTest(unittest.makeSuite(TestPersonPasswordView))
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestGroupEditView))
     suite.addTest(unittest.makeSuite(TestPhotoView))

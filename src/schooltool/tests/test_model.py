@@ -303,16 +303,20 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         self.assert_(absence in person.iterAbsences())
         self.assert_(person.getCurrentAbsence() is None)
 
-    def test_setPassword_checkPassword(self):
+    def test_setPassword_checkPassword_hasPassword(self):
         p = self.newObject()
+        self.assert_(not p.hasPassword())
         self.assert_(not p.checkPassword(""))
         p.setPassword("xyzzy")
+        self.assert_(p.hasPassword())
         self.assert_(p.checkPassword("xyzzy"))
         self.assert_(not p.checkPassword("XYZZY"))
         p.setPassword(None)
+        self.assert_(not p.hasPassword())
         self.assert_(not p.checkPassword(None))
         self.assert_(not p.checkPassword("xyzzy"))
         p.setPassword("")
+        self.assert_(p.hasPassword())
         self.assert_(p.checkPassword(""))
         self.assert_(not p.checkPassword(None))
 

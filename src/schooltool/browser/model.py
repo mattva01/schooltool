@@ -30,6 +30,7 @@ from StringIO import StringIO
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
+from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import isManager
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
@@ -53,6 +54,7 @@ class GetParentsMixin:
 
 
 class PersonInfoMixin:
+    """A helper for Person views."""
 
     def info(self):
         return FacetManager(self.context).facetByName('person_info')
@@ -66,6 +68,7 @@ class PersonInfoMixin:
 
 
 class PersonView(View, GetParentsMixin, PersonInfoMixin):
+    """Person information view (/persons/id)."""
 
     __used_for__ = IPerson
 
@@ -78,6 +81,8 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
             return PhotoView(self.context)
         elif name == 'edit.html':
             return PersonEditView(self.context)
+        elif name == 'password.html':
+            return PersonPasswordView(self.context)
         raise KeyError(name)
 
     def canEdit(self):
@@ -86,8 +91,55 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
     def editURL(self):
         return absoluteURL(self.request, self.context) + '/edit.html'
 
+    def canChangePassword(self):
+        user = self.request.authenticated_user
+        return isManager(user) or user is self.context
+
+    def passwordURL(self):
+        return absoluteURL(self.request, self.context) + '/password.html'
+
+
+class PersonPasswordView(View):
+    """Page for changing a person's password (/persons/id/password.html)."""
+
+    __used_for__ = IPerson
+
+    authorization = PrivateAccess
+
+    template = Template('www/password.pt')
+
+    error = None
+
+    message = None
+
+    def do_POST(self, request):
+        old_password = request.args['old_password'][0]
+        user = request.authenticated_user
+        if not user.checkPassword(old_password):
+            self.error = _('Incorrect password.')
+        else:
+            if 'DISABLE' in request.args:
+                self.message = _('Account disabled.')
+                self.context.setPassword(None)
+            elif 'CHANGE' in request.args:
+                new_password = request.args['new_password'][0]
+                verify_password = request.args['verify_password'][0]
+                if new_password != verify_password:
+                    self.error = _('Passwords do not match.')
+                else:
+                    self.message = _('Password changed.')
+                    self.context.setPassword(new_password)
+        return self.do_GET(request)
+
+    def manager(self):
+        return isManager(self.request.authenticated_user)
+
+    def contextURL(self):
+        return absoluteURL(self.request, self.context)
+
 
 class PersonEditView(View, PersonInfoMixin):
+    """Page for changing information about a person (/persons/id/edit.html)."""
 
     __used_for__ = IPerson
 
@@ -154,6 +206,7 @@ class PersonEditView(View, PersonInfoMixin):
 
 
 class GroupView(View, GetParentsMixin):
+    """Group information view (/group/id)."""
 
     __used_for__ = IGroup
 
@@ -162,7 +215,7 @@ class GroupView(View, GetParentsMixin):
     template = Template("www/group.pt")
 
     def _traverse(self, name, request):
-        if name == "edit":
+        if name == "edit.html":
             return GroupEditView(self.context)
         raise KeyError(name)
 
@@ -180,6 +233,7 @@ class GroupView(View, GetParentsMixin):
 
 
 class GroupEditView(View):
+    """Page for "editing" a Group (/group/id/edit.html)."""
 
     __used_for__ = IGroup
 
@@ -235,6 +289,7 @@ class GroupEditView(View):
 
 
 class PhotoView(View):
+    """View for displaying a person's photo (/persons/id/photo.jpg)."""
 
     __used_for__ = IPerson
 
@@ -246,3 +301,4 @@ class PhotoView(View):
             raise ValueError('Photo not available')
         request.setHeader('Content-Type', 'image/jpeg')
         return facet.photo
+

@@ -1310,6 +1310,14 @@ class IPerson(IApplicationObject):
         Returns True if the passwords match.
         """
 
+    def hasPassword():
+        """Check if the user has a password.
+
+        You can remove user's password (effectively disabling the account) by
+        passing None to setPassword.  You can reenable the account by passing
+        a new password to setPassword.
+        """
+
 
 class IResource(IApplicationObject):
     """A bookable resource used in."""

@@ -40,6 +40,7 @@ import random
 import datetime
 from schooltool.interfaces import AuthenticationError
 from schooltool.rest.auth import isManager
+from schooltool.rest.auth import PrivateAccess      # reexport
 
 
 __metaclass__ = type
