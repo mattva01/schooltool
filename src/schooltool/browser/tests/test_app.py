@@ -277,8 +277,8 @@ class TestPersonAddView(unittest.TestCase):
         self.assertEquals(persons[0].title, 'newbie')
 
     def test_errors(self):
-        # XXX We're not very i18n friendly by not allowing international
-        #     symbols in user names.
+        # We're not very i18n friendly by not allowing international
+        # symbols in user names.
         view = self.createView()
         for username in ('newbie \xc4\x85', 'new/bie', 'foo\000bar'):
             request = RequestStub(args={'username': username})
