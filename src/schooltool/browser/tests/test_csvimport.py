@@ -751,6 +751,18 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.assertIsRelated(self.app['persons']['curtin'], g2, False)
         self.assertEquals(imp.errors.groups, ['Nonexistent group'])
         self.assertEquals(imp.errors.persons, ['Bogus person'])
+        self.assertEquals(imp.errors.generic, [])
+
+    def test_importRoster_check_parent(self):
+        from schooltool.membership import Membership
+        master = self.app['groups'].new(title="Master")
+        slave = self.app['groups'].new(title="Slave")
+        Membership(group=master, member=slave)
+
+        imp = self.createImporter()
+        self.failIf(imp.importRoster("Slave\nLorch"))
+        self.assertEquals(imp.errors.generic,
+                          ['Lorch does not belong to a parent group of Slave'])
 
 
 def test_suite():

@@ -69,6 +69,23 @@ def checkForPotentialCycles(group, potential_member):
         last = new_last
 
 
+def belongsToParentGroup(member, group):
+    """Check if member belongs to a parent of group.
+
+    Returns False if member does not belong to a parent of the group,
+    (which means that member may not be added to the given group),
+    True otherwise.
+    """
+    parents = getRelatedObjects(group, URIGroup)
+    if parents:
+        possible_members = Set()
+        for parent in parents:
+            members = getRelatedObjects(parent, URIMember)
+            possible_members.update(members)
+        return member in possible_members
+    return True
+
+
 class MembershipEvent(RelationshipEvent):
 
     implements(IMembershipEvent)
@@ -154,15 +171,9 @@ class RestrictedMembershipPolicy:
         if (IBeforeMembershipEvent.providedBy(event) and
             IPerson.providedBy(event.member) and
             getOptions(event.group).restrict_membership):
-            parents = getRelatedObjects(event.group, URIGroup)
-            if parents:
-                possible_members = Set()
-                for parent in parents:
-                    members = getRelatedObjects(parent, URIMember)
-                    possible_members.update(members)
-                if event.member not in possible_members:
-                    raise ValueError(_('Only immediate members of parent'
-                                       ' groups can be members'))
+            if not belongsToParentGroup(event.member, event.group):
+                raise ValueError(_('Only immediate members of parent'
+                                   ' groups can be members'))
 
 
 def setUp():

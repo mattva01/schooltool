@@ -32,7 +32,7 @@ from schooltool.common import parse_date
 from schooltool.component import FacetManager, getFacetFactory
 from schooltool.component import getRelatedObjects, relate
 from schooltool.interfaces import IApplication
-from schooltool.membership import Membership, memberOf
+from schooltool.membership import Membership, memberOf, belongsToParentGroup
 from schooltool.teaching import Teaching
 from schooltool.timetable import TimetableActivity
 from schooltool.translation import ugettext as _
@@ -575,6 +575,7 @@ class TimetableCSVImporter:
 
         Returns True on success, False (and filled self.error) on failure.
         """
+        invalid = object()
         for dry_run in [True, False]:
             group = None
             for line in roster_txt.splitlines():
@@ -583,7 +584,7 @@ class TimetableCSVImporter:
                     group = self.findByTitle('groups', line,
                                              self.errors.groups)
                     if group is None:
-                        group = 'Invalid'
+                        group = invalid
                     continue
                 elif not line:
                     group = None
@@ -591,8 +592,14 @@ class TimetableCSVImporter:
                 else:
                     person = self.findByTitle('persons', line,
                                               self.errors.persons)
-                    if not dry_run and not memberOf(person, group):
-                        Membership(group=group, member=person)
+                    if group is not invalid:
+                        if not belongsToParentGroup(person, group):
+                            msg = _("%s does not belong to a parent group"
+                                    " of %s") % (person.title, group.title)
+                            self.errors.generic.append(msg)
+                        else:
+                            if not dry_run and not memberOf(person, group):
+                                Membership(group=group, member=person)
 
             if self.errors.anyErrors():
                 assert dry_run, ("Something bad happened,"
