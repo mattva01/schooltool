@@ -4,3 +4,7 @@ src/persistence/*.so
 src/zodb/*.so
 src/zodb/btrees/*.so
 src/zodb/storage/*.so
+src/schooltool/*.pyc
+src/schooltool/*~
+src/schooltool/tests/*.pyc
+src/schooltool/tests/*~
