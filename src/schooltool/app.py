@@ -75,6 +75,12 @@ class Application(Persistent):
         """See IApplication"""
         return self._appObjects[name]
 
+    def traverse(self, name):
+        """See ITraversable"""
+        if name == 'utils':
+            return self.utilityService
+        return self[name]
+
     def keys(self):
         """See IApplication"""
         return self._appObjects.keys()
@@ -94,6 +100,8 @@ class ApplicationObjectContainer(Persistent):
 
     def __getitem__(self, name):
         return self._contents[name]
+
+    traverse = __getitem__
 
     def _newName(self):
         thisid = self._nextid

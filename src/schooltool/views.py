@@ -194,20 +194,21 @@ class PersonView(View):
 
 
 class ItemTraverseView(View):
+
     def _traverse(self, name, request):
         return getView(self.context[name])
 
 
-class ApplicationView(View):
+class TraversableView(View):
+
+    def _traverse(self, name, request):
+        return getView(self.context.traverse(name))
+
+
+class ApplicationView(TraversableView):
     """The root view for the application"""
 
     template = Template("www/app.pt", content_type="text/xml")
-
-    def _traverse(self, name, request):
-        if name == 'utils':
-            return getView(self.context.utilityService)
-        else:
-            return getView(self.context[name])
 
     def getRoots(self):
         return [{'path': getPath(root), 'title': root.title}
@@ -218,7 +219,7 @@ class ApplicationView(View):
                 for utility in self.context.utilityService.values()]
 
 
-class ApplicationObjectContainerView(ItemTraverseView):
+class ApplicationObjectContainerView(TraversableView):
     """The view for the application object containers"""
 
     template = Template("www/aoc.pt", content_type="text/xml")

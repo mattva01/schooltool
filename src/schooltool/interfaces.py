@@ -699,7 +699,7 @@ class IPerson(IFaceted, ILocation):
     title = Attribute("Person's name")
 
 
-class IApplication(IContainmentRoot, IServiceManager):
+class IApplication(IContainmentRoot, IServiceManager, ITraversable):
     """The application object.
 
     Services (as given by IServiceManager) are found by attribute.
@@ -719,7 +719,7 @@ class IApplication(IContainmentRoot, IServiceManager):
         """List the names of application object containers."""
 
 
-class IApplicationObjectContainer(ILocation):
+class IApplicationObjectContainer(ILocation, ITraversable):
     """A collection of application objects."""
     # XXX split this into read and write interfaces.
 

@@ -35,6 +35,7 @@ class P(Persistent):
     pass
 
 class Location(Persistent):
+
     __slots__ = '__parent__', '__name__', 'optional'
     implements(ILocation)
 
@@ -44,6 +45,7 @@ class Location(Persistent):
         self.optional = optional
 
 class TestApplication(unittest.TestCase, EqualsSortedMixin):
+
     def test(self):
         from schooltool.app import Application
         a = Application()
@@ -53,6 +55,16 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         self.assert_(a.utilityService.__parent__ is a,
                      "__parent__ of utility service should be the application")
         self.assertEqual(a.utilityService.__name__, 'utils')
+
+    def testTraversal(self):
+        from schooltool.app import Application
+        a = Application()
+        self.assertEqual(a.traverse('utils'), a.utilityService)
+        marker = Location()
+        a['foo'] = marker
+        self.assertEqual(a.traverse('foo'), marker)
+        a['utils'] = marker
+        self.assertEqual(a.traverse('utils'), a.utilityService)
 
     def testRoots(self):
         from schooltool.app import Application
@@ -80,6 +92,7 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
 
 
 class TestApplicationObjectContainer(unittest.TestCase):
+
     def test(self):
         from schooltool.app import ApplicationObjectContainer
         factory = lambda: None
@@ -135,6 +148,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
         del a[name]
         self.assert_(obj.__parent__ is parent)
         self.assertEqual(obj.__name__, name)
+
 
 def test_suite():
     suite = unittest.TestSuite()
