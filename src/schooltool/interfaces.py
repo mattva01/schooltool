@@ -1243,6 +1243,9 @@ class IInheritedCalendarEvent(ICalendarEvent):
     to see in his personal calendar.  Such events implement this interface.
     """
 
+    calendar = Attribute(
+        """The calendar in which this event resides.""")
+
 
 class ICalendarOwner(Interface):
     """An object that has a calendar."""

@@ -200,11 +200,13 @@ class Calendar(Persistent):
         #   1. A CalendarEvent is created with owner == the user who booked
         #      the resource and context == the resource.
         #   2. That event is added to both the owner's calendar and the
-        #   resource's calendar.
+        #      resource's calendar.
         # When that event is removed from either the owner's or the resource's
         # calendar, it should be removed from the other one as well.
         owner_calendar = event.owner is not None and event.owner.calendar
         context_calendar = event.context is not None and event.context.calendar
+        # XXX fragile code: say, owner_calendar is not None,
+        #                   but context_calendar is.
         if self is owner_calendar or self is context_calendar:
             if owner_calendar is not None and owner_calendar is not self:
                 owner_calendar._removeEvent(event)
@@ -371,8 +373,11 @@ class InheritedCalendarEvent(CalendarEvent):
 
     implements(IInheritedCalendarEvent)
 
-    def __init__(self, ev):
+    calendar = property(lambda self: self._calendar)
+
+    def __init__(self, ev, calendar):
         """Create a clone of a given event that says that it is inherited."""
+        self._calendar = calendar
         CalendarEvent.__init__(self,
                     ev.dtstart, ev.duration, ev.title, owner=ev.owner,
                     context=ev.context, location=ev.location,
@@ -406,7 +411,7 @@ class CalendarOwnerMixin(Persistent):
         result.__name__ = 'composite-calendar'
         for obj in getRelatedObjects(self, URICalendarProvider):
             for event in obj.calendar.expand(start, end):
-                result.addEvent(InheritedCalendarEvent(event))
+                result.addEvent(InheritedCalendarEvent(event, obj.calendar))
         return result
 
     def addSelfToCalACL(self):

@@ -739,6 +739,19 @@ class EventViewHelpers:
         except KeyError:
             return None
 
+    def _findInheritedEvent(self, event_id, day):
+        """Return the event with the given ID from the ordinary calendar.
+
+        day is a date on which the event is happening.
+
+        Returns None if there is no event with the given ID in the calendar.
+        """
+        try:
+            obj = self.context.__parent__
+            return obj.makeCompositeCalendar(day, day).find(event_id)
+        except KeyError:
+            return None
+
     def _findTimetableEvent(self, event_id):
         """Return the event with the given ID from the timetable calendar.
 
@@ -1245,6 +1258,8 @@ class EventEditView(EventViewBase):
                                 privacy=privacy)
         if self.tt_event:
             if not self.isManager():
+                # XXX embedding security policy decisions in the middle of view
+                # code is not nice.
                 raise Unauthorized
             self._addTimetableException(self.event, replacement=ev)
         else:
@@ -1270,7 +1285,11 @@ class EventDeleteView(View, EventViewHelpers):
         1. You are trying to delete an ordinary, nonrepeating calendar event.
            The event is removed from the calendar.
 
-        2. You are trying to delete an instance of a repeating calendar event.
+        2. You are trying to delete an event that comes from a group
+           through the composite calendar.  The event is removed from the
+           group's calendar.
+
+        3. You are trying to delete an instance of a repeating calendar event.
            A form is shown where you can choose whether you want to remove
            all repetitions, just this one repetition, or this and future
            repetitions.  Depending on your choice the event can either be
@@ -1278,18 +1297,18 @@ class EventDeleteView(View, EventViewHelpers):
            recurrence rule, or the end date of the repetition may be changed
            in the recurrence rule.
 
-        3. You are trying to delete an event that comes from a timetable: a
+        4. You are trying to delete an event that comes from a timetable: a
            confirmation form is shown, and if you accept it, a timetable
            exception is added.  Only managers are allowed to add timetable
            exceptions.
 
-        4. You are trying to delete an event that comes from a timetable
+        5. You are trying to delete an event that comes from a timetable
            exception: a confirmation form is shown, and if you accept it, a
            timetable exception is modified to remove the event rather than
            replace it.  Only managers are allowed to change timetable
            exceptions.
 
-        5. The event_id does not point to an existing calendar event.  This can
+        6. The event_id does not point to an existing calendar event.  This can
            happen when someone removes a calendar event, and you click on a
            delete link in an outdated web page.  The request to delete a
            nonexisting event is silently ignored.
@@ -1325,13 +1344,17 @@ class EventDeleteView(View, EventViewHelpers):
             else:
                 return self._deleteOrdinaryEvent(event, date)
 
+        # If it is a composite calendar event, remove it from the
+        # corresponding calendar
+        event = self._findInheritedEvent(event_id, date)
+        if event is not None:
+            return self._deleteInheritedEvent(event, date)
+
         # If it is a timetable event, show a confirmation form,
         # and then add a timetable exception (unless canceled).
         event = self._findTimetableEvent(event_id)
         if event is not None:
             return self._deleteTimetableEvent(event, date)
-
-        # TODO: Handle events from composite calendar
 
         # Dangling event ID
         return self._redirectToDailyView(date)
@@ -1389,6 +1412,18 @@ class EventDeleteView(View, EventViewHelpers):
             self._addTimetableException(event, replacement=None)
         elif 'CANCEL' not in self.request.args:
             return self._showConfirmationForm(event)
+        return self._redirectToDailyView(date)
+
+    def _deleteInheritedEvent(self, event, date):
+        """Delete an inherited event from the corresponding calendar."""
+        if not self.isManager():
+            # XXX embedding security policy decisions in the middle of view
+            # code is not nice.
+            raise Unauthorized
+        if event.recurrence is not None:
+            raise NotImplementedError(
+                            "Can't deal with external recurring events yet")
+        event.calendar.removeEvent(event)
         return self._redirectToDailyView(date)
 
     def _showOccurrenceForm(self, event):

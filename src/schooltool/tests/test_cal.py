@@ -671,14 +671,16 @@ class TestInheritedCalendarEvent(TestCalendarEvent):
     def test(self):
         from schooltool.cal import CalendarEvent, InheritedCalendarEvent
         from schooltool.interfaces import IInheritedCalendarEvent
+        cal = object()
         ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                            timedelta(minutes=10),
                            "reality check", unique_id='uid',
                            privacy="hidden")
-        iev = InheritedCalendarEvent(ev)
+        iev = InheritedCalendarEvent(ev, cal)
         verifyObject(IInheritedCalendarEvent, iev)
-        self.assertEquals(ev, iev)
-        self.assertEquals(ev.dtstart, iev.dtstart)
+        self.assertEquals(iev, ev)
+        self.assertEquals(iev.dtstart, ev.dtstart)
+        self.assert_(iev.calendar is cal)
 
 
 class TestACLCalendar(unittest.TestCase):
@@ -769,6 +771,8 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
 
         for event in result.events:
             verifyObject(IInheritedCalendarEvent, event)
+            group = event.recurrence is None and gr1 or gr2
+            self.assert_(event.calendar is group.calendar)
 
         self.assert_(result.__parent__ is com)
         self.assertEquals(result.__name__, 'composite-calendar')

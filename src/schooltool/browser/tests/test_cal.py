@@ -1771,7 +1771,7 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         view.isManager = lambda: True
         return view
 
-    def test(self):
+    def test_ordinary_event(self):
         from schooltool.cal import CalendarEvent
         ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0),
                             timedelta(hours=1), "ev1")
@@ -1793,6 +1793,37 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
                           'daily.html?date=2004-08-14')
+
+    def test_delete_inherited_event(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.cal import InheritedCalendarEvent
+        from schooltool.browser import Unauthorized
+        from schooltool.model import Person
+
+        person = Person("The other guy")
+        person.__name__ = 'other'
+
+        ev = createEvent('2004-08-16 13:45', '5 min', 'Die', unique_id='uniq')
+        ev2 = createEvent('2004-08-15 13:45', '5 min', 'Stay', unique_id='not')
+        person.calendar.addEvent(InheritedCalendarEvent(ev, person.calendar))
+        person.calendar.addEvent(InheritedCalendarEvent(ev2, person.calendar))
+
+        view = self.createView()
+        makeCal = lambda start, end: person.calendar
+        view.context.__parent__.makeCompositeCalendar = makeCal
+
+        request = RequestStub(args={'event_id': "uniq", 'date': "2004-08-16"})
+        content = view.render(request)
+        self.assertEquals(list(person.calendar), [ev2])
+
+        # Test permission checking
+        person.calendar.addEvent(InheritedCalendarEvent(ev, person.calendar))
+        person.calendar.addEvent(InheritedCalendarEvent(ev2, person.calendar))
+        view.isManager = lambda: False
+        view.context.__parent__.makeCompositeCalendar = makeCal
+        request = RequestStub(args={'event_id': "uniq", 'date': "2004-08-16"})
+        self.assertRaises(Unauthorized, view.do_GET, request)
+        self.assert_(ev in person.calendar)
 
     def test_no_such_event(self):
         view = self.createView()
@@ -2234,7 +2265,7 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
 
     def createInheritedEvent(self):
         from schooltool.cal import InheritedCalendarEvent
-        return InheritedCalendarEvent(self.createOrdinaryEvent())
+        return InheritedCalendarEvent(self.createOrdinaryEvent(), None)
 
     # canEdit is tested in TestCalendarEventPermissionChecking
 
@@ -2387,7 +2418,7 @@ class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
                                             exception=exc)
 
         comp_ev = InheritedCalendarEvent(createEvent('2004-11-03 14:32',
-                                                     '1h', 'Whatever'))
+                                                     '1h', 'Whatever'), None)
 
         # convenience function
         anonymous = None
