@@ -49,6 +49,118 @@
   <p style="clear:both" i18n:translate="">
   Note that the import may take a while.  Please be patient.
   </p>
+  
+  <hr />
+  
+  <h2 i18n:translate="">Format of the files</h2>
+  
+    <p>You can create these files in a spreadsheet and export them in the comma
+             separated value format described below.
+  
+    <p style="clear:both" i18n:translate=""><strong>groups.csv</strong> contains
+    lines of comma-separated values with the following columns:</p>
+
+    <ul>
+    
+      <li i18n:translate=""><strong>name</strong> -- The name of this group.  
+             It is used for constructing object URIs
+             and cannot be changed.  A group with the name of x will be
+             accessible as /groups/x on the server.  Names should not contain
+             spaces.</li>
+      <li i18n:translate=""><strong>title</strong> -- A human-readable title of 
+             the group.</li>
+      <li i18n:translate=""><strong>parents</strong> -- A space separated list 
+             of names of the groups this group is a
+             member in.  The list can be empty.</li>
+      <li i18n:translate=""><strong>facets</strong>  -- A space separated list 
+             of facet factories to add to this group.
+             The list can be empty.</li>
+            
+    </ul>
+
+    <p i18n:translate="">The following two groups are always created and should 
+             not be defined explicitly:</p>
+    
+    <ul>
+      <li i18n:translate="">Pupils group (/groups/pupils).</li>
+      <li i18n:translate="">Teachers group (/groups/teachers) with 
+             teacher_group facet added to it.</li>
+    </ul>
+
+    <p i18n:translate="">Sample groups.cvs:</p>
+
+
+    <code i18n:translate="">"math","Mathematics Department","root",""<br />
+             "year1","Year 1","root",""<br />
+             "math1","Mathematics 1","math year1","subject_group"</code>
+
+
+    <p i18n:translate=""><strong>pupils.csv</strong> contains lines of 
+             comma-separated values with the following columns:</p>
+
+    <ul>
+      <li i18n:translate=""><strong>title</strong> -- The full name of a pupil.
+             </li>
+      <li i18n:translate=""><strong>groups</strong> -- A space-separated list 
+             of groups this pupil is a member in.</li>
+      <li i18n:translate=""><strong>birthday</strong> -- Date of birth in 
+             ISO 8601 format (YYYY-MM-DD).</li>
+      <li i18n:translate=""><strong>comment</strong>  -- A comment 
+             (a free form string).</li>
+    </ul>
+
+    <p i18n:translate="">Pupils are automatically added to the pupils group
+             (/groups/pupils).</p>
+
+    <p i18n:translate="">Sample pupils.csv:</p>
+
+    <code i18n:translate="">"James Cox","year1 math1 ling1",
+             "1994-03-10",""<br />
+             "Tom Hall","year1 biol1 math1","1994-07-20",""</code>
+
+    <p i18n:translate=""><strong>teachers.csv</strong> 
+             contains lines of comma-separated values with the 
+             following columns:</p>
+
+    <ul>
+      <li i18n:translate=""><strong>title</strong> -- The full name of 
+             a teacher.</li>
+      <li i18n:translate=""><strong>groups</strong> -- A space-separated list 
+             of groups this teacher teaches to.</li>
+      <li i18n:translate=""><strong>birthday</strong> -- Date of birth in
+             ISO 8601 format (YYYY-MM-DD).</li>
+      <li i18n:translate=""><strong>comment</strong> -- A comment 
+            (a free form string).</li>
+    </ul>
+
+    <p i18n:translate="">Teachers are automatically added to the teachers group
+             (/groups/teachers).</p>
+
+    <p i18n:translate="">Sample teachers.csv:</p>
+
+   <code i18n:translate="">"Nicola Smith","ling3","1952-12-06",""<br />
+             "Jeff Cox","biol3","1967-06-13",""</code>
+
+
+   <p i18n:translate=""><strong>resources.csv</strong> contains lines of 
+             comma-separated values with the following columns:</p>
+
+   <ul>   
+     <li i18n:translate=""><strong>title</strong> -- The human readable name of 
+             the resource.</li>
+     <li i18n:translate=""><strong>groups</strong> -- A space-separated list of 
+             groups that this resource belongs to.</li>
+   </ul>
+
+   <p i18n:translate="">Sample resources.csv:</p>
+
+    <code i18n:translate="">"Hall", "locations"<br />
+            "Stadium", "locations"<br />
+            "Projector 1", ""<br />
+            "Projector 2", ""<br />
+            "Room 1", "locations"<br />
+            "Room 2", "locations miscgroup"</code>
+  
 
 </metal:block>
 </body>
