@@ -364,6 +364,7 @@ def resetViewRegistry():
     view_registry = TypeRegistry()
     class_view_registry = {}
 
+
 def getView(obj):
     """See IViewAPI"""
     try:
@@ -379,9 +380,9 @@ def registerView(interface, factory):
     """See IViewAPI"""
     view_registry.register(interface, factory)
 
+
 def registerViewForClass(cls, factory):
     """See IViewAPI"""
-    global class_view_registry
     class_view_registry[cls] = factory
 
 

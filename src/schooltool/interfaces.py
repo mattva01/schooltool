@@ -373,14 +373,17 @@ class ISchemaInvocation(Interface):
     other = Attribute(
         """A keyword argument the schema takes for the other object""")
 
+
 class IValency(Interface):
     """An object signifying that the owner can participate in a
     certain relationship schema in a certain role.
     """
+
     schema = Attribute("""A relationship schema (IRelationshipSchema)""")
 
     keyword = Attribute(
         """A keyword argument the schema takes for this object""")
+
 
 class IRelationshipSchemaFactory(Interface):
 
@@ -403,7 +406,6 @@ class IRelationshipSchema(Interface):
     roles = Attribute(
         """A mapping of symbolic parameter names this schema expects
         to respective URIs""")
-
 
     def __call__(**parties):
         """Relate the parties to the relationship.
@@ -839,6 +841,7 @@ class IViewAPI(Interface):
 
     def registerViewForClass(cls, factory):
         """Register a view for a content class."""
+
 
 #
 # Utilities

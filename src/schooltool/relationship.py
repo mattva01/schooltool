@@ -392,6 +392,7 @@ class SchemaInvocation:
         self.this = this
         self.other = other
 
+
 class Valency:
 
     implements(IValency)
@@ -399,6 +400,7 @@ class Valency:
     def __init__(self, schema, keyword):
         self.schema = schema
         self.keyword = keyword
+
 
 def setUp():
     """Register the default relationship handler."""
