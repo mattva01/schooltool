@@ -5,24 +5,34 @@ Release Notes - SchoolTool/SchoolBell 0.9
 Upgrade Issues
 ~~~~~~~~~~~~~~
 
-Database Incompatibilities
---------------------------
+Database Upgrades
+-----------------
 
-The SchoolTool database in 0.9 is incompatible with earlier databases and the
-server will not be able to start with an old database. Currently there is no
-way to upgrade a database, so the only possibility is to delete the old one and
-re-create it.
+The SchoolTool/SchoolBell database in 0.9 is compatible with previous databases.
+Upgrades are strictly one way and are performed automatically by the new server.
 
-Partial database upgrades should be available from 0.9 to 1.0 and full upgrades
-from 1.0 onwards.
+Unfortunately only some database objects are currently upgraded [1]. The rest
+will be XXXed.
 
+Full upgrades from SchoolBell 1.0 onwards.
+
+[1] XXX - a list of upgradable database objects upgraded
 
 New Features in 0.9
 ~~~~~~~~~~~~~~~~~~~
 
 The new features in this release are primarily from the SchoolBell User
-Interface bounty. The full text of this bounty can be found at
+Interface bounty by etria and the ongoing conversion to Zope 3 by POV.
+And of course, bug fixes.
+
+The full text of the user interface bounty can be found at
 http://www.schooltool.org/bounties/ui/SchoolBell09.
+
+The Zope 3 conversion is not very visible to the user and will be finished by
+SchoolBell 1.0. The aim of this conversion is to remove the dependency on
+Twisted.
+
+The user visible parts of the changes from 0.8 to 0.9 are described below.
 
 Anonymous User
 --------------
