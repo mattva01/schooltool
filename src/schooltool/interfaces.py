@@ -869,10 +869,16 @@ class ICalendar(Interface):
     """
 
     def __iter__():
-        """Returns an iterator over the events in this calendar."""
+        """Return an iterator over the events in this calendar."""
+
+    def find(unique_id):
+        """Return an event with the given unique id.
+
+        Raises a KeyError if there is no event with this id.
+        """
 
     def byDate(date):
-        """Returns an ICalendar for the given date.
+        """Return an ICalendar for the given date.
 
         All events that overlap with the given day are included.  The timing of
         the events is not modified even if it falls outside the given date.

@@ -800,14 +800,12 @@ class EventEditView(EventViewBase):
 
     def update(self):
         self.event_id = to_unicode(self.request.args['event_id'][0])
-        # XXX bogosity!
-        for event in self.context:
-            if event.unique_id == self.event_id:
-                self.event = event
-                break
-        else:
-            # TODO: Create a traversal view for events
-            # and refactor the event edit view to take the event as context
+        try:
+            self.event = self.context.find(self.event_id)
+        except KeyError:
+            # Pehaps it would be better to create a traversal view for events
+            # and refactor the event edit view to take the event as context,
+            # then we would be able to simply display a standard 404 page.
             self.error = _("This event does not exist.")
             return
 
@@ -842,12 +840,16 @@ class EventDeleteView(View):
 
     def do_GET(self, request):
         event_id = to_unicode(request.args['event_id'][0])
-        for event in self.context:
-            if event.unique_id == event_id:
-                suffix = 'daily.html?date=%s' % event.dtstart.date()
-                self.context.removeEvent(event)
-                url = absoluteURL(request, self.context, suffix)
-                return self.redirect(url, request)
+        try:
+            event = self.context.find(event_id)
+        except KeyError:
+            suffix = 'daily.html'
+        else:
+            suffix = 'daily.html?date=%s' % event.dtstart.date()
+            # XXX this may break the invariant!
+            self.context.removeEvent(event)
+        url = absoluteURL(request, self.context, suffix)
+        return self.redirect(url, request)
 
 
 def EventSourceDecorator(e, source):

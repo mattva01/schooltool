@@ -904,6 +904,13 @@ class Calendar(Persistent):
     def __iter__(self):
         return iter(self.events)
 
+    def find(self, unique_id):
+        # We could speed it up by building and maintaining index
+        for event in self:
+            if event.unique_id == unique_id:
+                return event
+        raise KeyError(unique_id)
+
     def byDate(self, date):
         cal = Calendar()
         for event in self:

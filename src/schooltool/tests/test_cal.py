@@ -817,6 +817,19 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         cal.addEvent(ev1)
         self.assertEqual(list(cal), [ev1])
 
+    def test_find(self):
+        from schooltool.cal import Calendar
+        from schooltool.cal import CalendarEvent
+
+        cal = Calendar()
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+        cal.addEvent(ev1)
+
+        self.assert_(cal.find(ev1.unique_id) is ev1)
+        self.assertRaises(KeyError, cal.find, ev1.unique_id + '-not')
+
     def makeCal(self, events):
         from schooltool.cal import Calendar
         cal = Calendar()

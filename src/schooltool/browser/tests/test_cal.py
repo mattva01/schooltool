@@ -988,25 +988,27 @@ class TestEventEditView(AppSetupMixin, unittest.TestCase):
 
 class TestEventDeleteView(unittest.TestCase):
 
-    def test(self):
+    def createView(self):
         from schooltool.browser.cal import EventDeleteView
-        from schooltool.cal import CalendarEvent
-
         cal = createCalendar()
         setPath(cal, '/persons/somebody/calendar')
-
         view = EventDeleteView(cal)
         view.authorization = lambda x, y: True
+        return view
+
+    def test(self):
+        from schooltool.cal import CalendarEvent
         ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0),
                             timedelta(hours=1), "ev1")
         ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
                             timedelta(hours=1), "ev2",
                             unique_id="pick me")
+        view = self.createView()
+        cal = view.context
         cal.addEvent(ev1)
         cal.addEvent(ev2)
 
         request = RequestStub(args={'event_id': "pick me"})
-        view.request = request
         content = view.render(request)
 
         self.assertEquals(len(list(cal)), 1)
@@ -1017,6 +1019,15 @@ class TestEventDeleteView(unittest.TestCase):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
                           'daily.html?date=2004-08-12')
+
+    def test_no_such_event(self):
+        view = self.createView()
+        request = RequestStub(args={'event_id': "nosuchid"})
+        content = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/somebody/calendar/'
+                          'daily.html')
 
 
 class TestEventSourceDecorator(unittest.TestCase):
