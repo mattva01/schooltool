@@ -164,6 +164,10 @@ class CalendarViewBase(View):
         view = CalendarEventView(event)
         return view.cssClass()
 
+    def eventShort(self, event):
+        view = CalendarEventView(event)
+        return view.short()
+
     def update(self):
         if 'date' not in self.request.args:
             self.cursor = date.today()
@@ -197,9 +201,14 @@ class CalendarViewBase(View):
             dt += timedelta(days=1)
 
         for event in self.iterEvents():
-            event_start = event.dtstart.date()
-            if start <= event_start < end:
-                events[event_start].append(event)
+            event_day = event.dtstart.date()
+            event_start_date = event.dtstart.date()
+            event_end_date = (event.dtstart + event.duration).date()
+            while (event_start_date <= event_day <= event_end_date
+                   and start <= event_day < end):
+                events[event_day].append(event)
+                event_day += event_day.resolution
+
         days = []
         for day in events.keys():
             events[day].sort()
@@ -658,3 +667,16 @@ class CalendarEventView(View):
             return 'ro_event'
         else:
             return 'event'
+
+    def short(self):
+        """Short representation of the event for the monthly view"""
+        ev = self.context
+        end = ev.dtstart + ev.duration
+        if ev.dtstart.date() == end.date():
+            return "%s (%s&ndash;%s)" % (ev.title,
+                                         ev.dtstart.strftime('%H:%M'),
+                                         end.strftime('%H:%M'))
+        else:
+            return "%s (%s&ndash;%s)" % (ev.title,
+                                         ev.dtstart.strftime('%b&nbsp;%d'),
+                                         end.strftime('%b&nbsp;%d'))

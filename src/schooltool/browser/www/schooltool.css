@@ -396,6 +396,15 @@ div.event_weekly {
   padding: 1px;
 }
 
+
+.cal_monthly div.event,
+.cal_monthly div.ro_event {
+  font-size: smaller;
+  margin: 2px;
+  border-width: 0.5px;
+  padding: 1px;
+}
+
 table.daycal {
   border: 1px solid gray;
   width: 80%;

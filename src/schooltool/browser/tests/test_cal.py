@@ -226,19 +226,20 @@ class TestCalendarViewBase(unittest.TestCase):
         e2 = calEvent("first", datetime(2004, 8, 11, 11, 0))
         e3 = calEvent("long", datetime(2004, 8, 12, 23, 0), hours=4)
         e4 = calEvent("last", datetime(2004, 8, 15, 11, 0))
+        e5 = calEvent("all over", datetime(2004, 8, 10, 9, 0), hours=24 * 3)
 
         start = date(2004, 8, 10)
         end = date(2004, 8, 16)
         days = view.getDays(start, end)
 
         self.assertEquals(len(days), 6)
-        for i, day in enumerate(days): 
+        for i, day in enumerate(days):
             self.assertEquals(day.date, date(2004, 8, 10 + i))
 
-        self.assertEquals(days[0].events, [e0])
-        self.assertEquals(days[1].events, [e2, e1])
-        self.assertEquals(days[2].events, [e3])
-        self.assertEquals(days[3].events, [])
+        self.assertEquals(days[0].events, [e5, e0])
+        self.assertEquals(days[1].events, [e5, e2, e1])
+        self.assertEquals(days[2].events, [e5, e3])
+        self.assertEquals(days[3].events, [e5, e3])
         self.assertEquals(days[4].events, [])
         self.assertEquals(days[5].events, [e4])
 
@@ -927,6 +928,22 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         view = CalendarEventView(ev)
         self.assertEquals(view.duration(),
                           '2004-12-01 12:01&ndash;2004-12-02 12:01')
+
+    def test_short(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.browser.cal import CalendarEventView
+
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(hours=1), "Main event")
+        view = CalendarEventView(ev)
+        self.assertEquals(view.short(),
+                          'Main event (12:01&ndash;13:01)')
+
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(days=1), "Long event")
+        view = CalendarEventView(ev)
+        self.assertEquals(view.short(),
+                          'Long event (Dec&nbsp;01&ndash;Dec&nbsp;02)')
 
 
 def test_suite():
