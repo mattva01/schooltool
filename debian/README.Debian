@@ -10,11 +10,12 @@ If you don't want SchoolTool to start automatically on system boot, edit
 Look at /usr/share/doc/schooltool/examples/schooltool.conf.in for a full
 list of SchoolTool server configuration options.
 
-The simplest way to start playing with SchoolTool is as follows:
+The simplest way to start playing with SchoolTool SSL is as follows:
 
-  1. `apt-get install schooltool-server schooltool-clients`
-  2. Run `import-sampledata` to populate the database
-  3. Run `wxschooltool` or `schooltool-client` and play around
+  1. `apt-get install schooltool schooltool-clients`
+  2. Run `import-sampleschool` to populate the database
+     (If the server uses SSL, use the -s command line argument)
+  3. Run `wxschooltool` or `schooltool-client` and play around 
   4. Open http://localhost:7080/ in a web browser and play with the web
      frontend.
 
