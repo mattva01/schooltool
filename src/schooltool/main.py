@@ -48,7 +48,7 @@ from twisted.python import failure
 from schooltool import mockup
 from schooltool.model import RootGroup, Group, MarkingGroup, Person
 from schooltool.interfaces import ITeacher, IStudent
-from schooltool.views import GroupView
+from schooltool.views import GroupView, errorPage
 
 __metaclass__ = type
 
@@ -60,10 +60,125 @@ __metaclass__ = type
 SERVER_VERSION = "SchoolTool/0.1"
 
 class Request(server.Request):
-    """Threaded request processor, integrated with ZODB"""
+    """Threaded request processor, integrated with ZODB.
+
+    Another enhancement over Twisted's Request is that an attribute
+    called 'accept' is available that lists all acceptable content types
+    according to the provided HTTP Accept header.  See the docstring of
+    _parseAccept for more information about its structure.
+
+    Note that HTTP/1.1 allows the server to return responses which are
+    not acceptable according to the accept headers.  See RFC 2616 section
+    10.4.7 for more information.
+    """
 
     reactor_hook = reactor
     get_transaction_hook = get_transaction
+
+    def _parseAccept(self, value):
+        """Parses HTTP Accept: header.
+
+        See RFC 2616, section 14.1 for a formal grammar.
+
+        Returns a list of tuples
+          (qvalue, media_type, media_params, accept_params)
+
+        qvalue is a float in range 0..1 (inclusive)
+        media_type is a string "type/subtype", it can be "type/*" or "*/*"
+        media_params is a dict
+        accept_params is a dict
+        """
+        if not value:
+             return []
+
+        split = self._split
+        valid_token = self._valid_token
+        valid_media_type = self._valid_media_type
+
+        results = []
+        for media in map(str.strip, split(value, ',')):
+            if not media:
+                continue
+            items = split(media, ';')
+            media_type = items[0].strip()
+            if not valid_media_type(media_type):
+                raise ValueError('Invalid media type: %s' % media_type)
+            params = media_params = {}
+            accept_params = {}
+            q = 1.0
+            for item in items[1:]:
+                try:
+                    key, value = item.split('=', 1)
+                except ValueError:
+                    raise ValueError('Invalid parameter: %s' % item)
+                key = key.lstrip()
+                value = value.rstrip()
+                if not valid_token(key):
+                    raise ValueError('Invalid parameter name: %s' % key)
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]
+                else:
+                    if not valid_token(value):
+                        raise ValueError('Invalid parameter value: %s'
+                                         % value)
+                if key in ('q', 'Q'):
+                    try:
+                        q = float(value)
+                    except ValueError:
+                        raise ValueError('Invalid qvalue: %s' % q)
+                    else:
+                        if q < 0 or q > 1:
+                            raise ValueError('Invalid qvalue: %s' % q)
+                    params = accept_params
+                else:
+                    params[key] = value
+            results.append((q, media_type, media_params, accept_params))
+        return results
+
+    def _split(self, s, sep):
+        """Splits s using sep as the separator.
+
+        Does not split when sep occurs within a quoted string.
+        """
+        assert len(sep) == 1
+        results = []
+        start = 0
+        state = 0
+        for i, c in enumerate(s):
+            if state == 0 and c == sep:
+                results.append(s[start:i])
+                start = i + 1
+            elif state == 0 and c == '"':
+                state = 1
+            elif state == 1 and c == '"':
+                state = 0
+            elif state == 1 and c == '\\':
+                state = 2
+            elif state == 2:
+                state = 1
+        results.append(s[start:])
+        return results
+
+    def _valid_token(self, s):
+        """Checks wheter s is a syntactically valid token."""
+        invalid_chars = list('()<>@,;:\\"/[]?={}\177') + map(chr, range(33))
+        for c in s:
+            if c in invalid_chars:
+                return False
+        return s != ''
+
+    def _valid_media_type(self, s):
+        """Checks wheter s is a syntactically valid media type."""
+        if s.count('/') != 1:
+            return False
+        type, subtype = s.split('/')
+        if not self._valid_token(type):
+            return False
+        if not self._valid_token(subtype):
+            return False
+        if type == '*' and subtype != '*':
+            return False
+        return True
 
     def process(self):
         """Process the request"""
@@ -75,6 +190,17 @@ class Request(server.Request):
         self.setHeader('Content-Type', "text/html")
         self.prepath = []
         self.postpath = map(urllib.unquote, self.path[1:].split('/'))
+
+        # Parse the HTTP 'Accept' header:
+        try:
+            self.accept = self._parseAccept(self.getHeader('Accept'))
+        except ValueError, e:
+            self.accept = []
+            body = errorPage(self, 400, str(e))
+            self.setHeader('Content-Length', len(body))
+            self.write(body)
+            self.finish()
+            return
 
         # But perform traversal and rendering in a separate worker thread
         self.reactor_hook.callInThread(self._process)

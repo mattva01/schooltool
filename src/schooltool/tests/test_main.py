@@ -137,9 +137,124 @@ class TestSite(unittest.TestCase):
 
 class TestRequest(unittest.TestCase):
 
+    def test_parseAcept(self):
+        from schooltool.main import Request
+        rq = Request(ChannelStub(), True)
+        p = rq._parseAccept
+        self.assertEqual(p(None), [])
+        self.assertEqual(p(''), [])
+        self.assertEqual(p(', ,\t'), [])
+        self.assertEqual(p('*/*'), [(1.0, '*/*', {}, {})])
+        self.assertEqual(p('text/html;q=0.5'),
+                         [(0.5, 'text/html', {}, {})])
+        self.assertEqual(p('text/html;level=2;q=0.123'),
+                         [(0.123, 'text/html', {'level': '2'}, {})])
+        self.assertEqual(p('text/*; level=2; q=0.1; foo=xyzzy'),
+                         [(0.1, 'text/*', {'level': '2'}, {'foo': 'xyzzy'})])
+        self.assertEqual(p('text/html;q=0.5,\t'
+                           'text/html;level=2;q=0.123, '
+                           'text/*; level=2; q=0.1; foo=xyzzy,\r\n\t'
+                           'image/png,'),
+                         [(0.5, 'text/html', {}, {}),
+                          (0.123, 'text/html', {'level': '2'}, {}),
+                          (0.1, 'text/*', {'level': '2'}, {'foo': 'xyzzy'}),
+                          (1.0, 'image/png', {}, {})])
+        self.assertEqual(p('\ttext/html ; q="0.5" , '
+                           'text/html ; level=2 ; Q=0.123 , '
+                           'text/* ; level=2; q=0.1 ; foo=xyzzy ,\n\t'
+                           'image/png , '),
+                         [(0.5, 'text/html', {}, {}),
+                          (0.123, 'text/html', {'level': '2'}, {}),
+                          (0.1, 'text/*', {'level': '2'}, {'foo': 'xyzzy'}),
+                          (1.0, 'image/png', {}, {})])
+        self.assertEqual(p('text/x-foo;bar="fee fie foe foo";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': 'fee fie foe foo'}, {})])
+        self.assertEqual(p('text/x-foo; bar="fee fie foe foo" ; q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': 'fee fie foe foo'}, {})])
+        self.assertEqual(p(r'text/x-foo;bar="qu\"ux";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': r'qu\"ux'}, {})])
+        self.assertEqual(p(r'text/x-foo;bar="qu\\ux";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': r'qu\\ux'}, {})])
+        self.assertEqual(p(r'text/x-foo;bar="qu\\";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': r'qu\\'}, {})])
+        self.assertEqual(p(r'text/x-foo;bar="qu=ux";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': r'qu=ux'}, {})])
+        self.assertEqual(p(r'text/x-foo;bar="qu;ux";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': r'qu;ux'}, {})])
+        self.assertEqual(p(r'text/x-foo;bar="qu,ux";q=0.1'),
+                         [(0.1, 'text/x-foo', {'bar': r'qu,ux'}, {})])
+        # now check tolerance for invalid headers
+        self.assertRaises(ValueError, p, 'error')
+        self.assertRaises(ValueError, p, 'text/')
+        self.assertRaises(ValueError, p, '@%@%#/@%@%')
+        self.assertRaises(ValueError, p, 'foo/bar;')
+        self.assertRaises(ValueError, p, 'foo/bar;q=')
+        self.assertRaises(ValueError, p, 'foo/bar;q=xyzzy')
+        self.assertRaises(ValueError, p, 'foo/bar;q=1.001')
+        self.assertRaises(ValueError, p, 'foo/bar;Q="1.001"')
+        self.assertRaises(ValueError, p, 'foo/bar;q=-2')
+        self.assertRaises(ValueError, p, 'foo/bar;q=1.2.3')
+        self.assertRaises(ValueError, p, 'foo/bar;;q=1')
+        self.assertRaises(ValueError, p, 'foo/bar;arg')
+        self.assertRaises(ValueError, p, 'foo/bar;arg=a=b')
+        self.assertRaises(ValueError, p, 'foo/bar;x"y"z=w')
+        self.assertRaises(ValueError, p, 'foo /bar;q=1')
+        self.assertRaises(ValueError, p, 'foo/ bar;q=1')
+        self.assertRaises(ValueError, p, 'foo/bar;q =1')
+        self.assertRaises(ValueError, p, 'foo/bar;q= 1')
+
+    def test_split(self):
+        from schooltool.main import Request
+        split = Request(None, True)._split
+        self.assertEqual(split('', ','), [''])
+        self.assertEqual(split('xyzzy', ','), ['xyzzy'])
+        self.assertEqual(split('x,y,zzy', ','), ['x', 'y', 'zzy'])
+        self.assertEqual(split(',xyzzy', ','), ['', 'xyzzy'])
+        self.assertEqual(split('xyzzy,', ','), ['xyzzy', ''])
+        self.assertEqual(split('x,y,zzy', 'y'), ['x,', ',zz', ''])
+        self.assertEqual(split(',,,', ','), ['', '', '', ''])
+        self.assertEqual(split('"xy, zzy"', ','), ['"xy, zzy"'])
+        self.assertEqual(split('"x,y",z,"z",y', ','),
+                         ['"x,y"', 'z', '"z"', 'y'])
+        self.assertEqual(split(r'"x\"y,z","zy"', ','),
+                         [r'"x\"y,z"', '"zy"'])
+
+    def test_valid_token(self):
+        from schooltool.main import Request
+        valid_token = Request(None, True)._valid_token
+        self.assert_(valid_token('foo'))
+        self.assert_(valid_token('abcdefghijklmnopqrstuvwxyz'))
+        self.assert_(valid_token('ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
+        self.assert_(valid_token('0123456789'))
+        self.assert_(valid_token('`~!#$%^&*-_+\'|.'))
+        self.assert_(not valid_token(''))
+        for c in '()<>@,;:\\"/[]?={} \t':
+            self.assert_(not valid_token(c),
+                         '%r should not be a valid token' % c)
+        for c in range(33):
+            self.assert_(not valid_token(chr(c)),
+                         'chr(%r) should not be a valid token' % c)
+        self.assert_(not valid_token(chr(127)),
+                     'chr(127) should not be a valid token')
+
+    def test_valid_media_type(self):
+        from schooltool.main import Request
+        valid_media_type = Request(None, True)._valid_media_type
+        self.assert_(valid_media_type('foo/bar'))
+        self.assert_(valid_media_type('foo/*'))
+        self.assert_(valid_media_type('*/*'))
+        self.assert_(not valid_media_type(''))
+        self.assert_(not valid_media_type('foo'))
+        self.assert_(not valid_media_type('*'))
+        self.assert_(not valid_media_type('/'))
+        self.assert_(not valid_media_type('foo/'))
+        self.assert_(not valid_media_type('foo/bar/baz'))
+        self.assert_(not valid_media_type('foo / bar'))
+        self.assert_(not valid_media_type('*/bar'))
+        self.assert_(not valid_media_type('foo/"bar"'))
+
     def test_process(self):
         from schooltool.main import Request, SERVER_VERSION
-
         channel = ChannelStub()
         rq = Request(channel, True)
         rq.reactor_hook = ReactorStub()
@@ -152,6 +267,16 @@ class TestRequest(unittest.TestCase):
         self.assert_(http_date_rx.match(rq.headers['date']))
         self.assertEqual(rq.headers['content-type'], 'text/html')
         self.assertEqual(rq.reactor_hook._called_in_thread, [rq._process])
+        self.assertEqual(rq.accept, [])
+
+        rq.received_headers['accept'] = 'text/plain;q=0.5, text/html'
+        rq.process()
+        self.assertEqual(rq.accept, [(0.5, 'text/plain', {}, {}),
+                                     (1.0, 'text/html', {}, {})])
+
+        rq.received_headers['accept'] = 'invalid value for this header'
+        rq.process()
+        self.assertEqual(rq.code, 400)
 
     def do_test__process(self, path, render_stub, user=None):
         from schooltool.main import Request
