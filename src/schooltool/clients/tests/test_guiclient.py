@@ -915,10 +915,16 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.path, '/persons/john/relationships')
         self.assertEquals(conn.method, 'POST')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
-        self.assertEqualsXML(conn.body,
-                '<relationship href="/groups/teachers"'
-                    ' arcrole="http://schooltool.org/ns/membership"'
-                    ' role="http://schooltool.org/ns/membership/member" />')
+        expected = """
+            <relationship xmlns="http://schooltool.org/ns/model/0.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xlink:type="simple"
+                 xlink:href="/groups/teachers"
+                 xlink:arcrole="http://schooltool.org/ns/membership"
+                 xlink:role="http://schooltool.org/ns/membership/member"
+                 />
+                 """
+        self.assertEqualsXML(conn.body, expected)
 
     def test_createRelationship_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError

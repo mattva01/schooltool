@@ -482,7 +482,10 @@ class SchoolToolClient:
           client.createRelationship('/persons/john', '/groups/teachers',
                                     URIMembership, URIMember)
         """
-        body = ('<relationship href="%s" arcrole="%s" role="%s" />'
+        body = ('<relationship xmlns="http://schooltool.org/ns/model/0.1"'
+                ' xmlns:xlink="http://www.w3.org/1999/xlink"'
+                ' xlink:type="simple"'
+                ' xlink:href="%s" xlink:arcrole="%s" xlink:role="%s"/>'
                 % tuple(map(cgi.escape, [obj2_path, strURI(reltype),
                                          strURI(obj1_role)])))
         response = self.post('%s/relationships' % obj1_path, body)
