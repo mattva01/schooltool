@@ -9,6 +9,8 @@ schooltool (0.6+svn20040918) unstable; urgency=low
   * Use dh_installinit to install /etc/default/schooltool.
   * Use dh_installexamples to install example config file.
   * Added logrotation using logrotate script.
+  * Moved installation of clients into /usr/share as it is architecture
+    independent.
 
  -- Brian Sutherland <jinty@web.de>  Sat, 18 Sep 2004 13:05:48 +0200
 

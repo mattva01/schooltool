@@ -22,17 +22,18 @@ Description: common platform for school administration
  Website: http://www.schooltool.org/
 
 Package: schooltool-clients
-Architecture: any
+Architecture: all
 Conflicts: schooltool
 Replaces: schooltool
-Depends: python2.3 (>= 2.3.2), python2.3-xml, libxml2-python2.3 (>= 2.6.3-1), libwxgtk2.4-python (>= 2.4.2.4), ${shlibs:Depends}
+Depends: python2.3 (>= 2.3.2), python2.3-xml, libxml2-python2.3 (>= 2.6.3-1), libwxgtk2.4-python (>= 2.4.2.4), libschooltool-clients (= ${Source-Version})
 Description: common platform for school administration
  ** This package is not a part of Debian.
  .
  SchoolTool is a project to develop a common global school administration
  infrastructure that is freely available under an Open Source licence.
  .
- This package contains the SchoolTool clients (GUI and command line).
+ This package contains the the architecture independent parts of the 
+ SchoolTool clients (GUI and command line).
  .
  Website: http://www.schooltool.org/
 
@@ -47,5 +48,19 @@ Description: The architecture dependent part of schoolbell
  .
  This package contains all of the architecture dependent parts of SchoolTool 
  server.
+ .
+ Homepage: http://www.schooltool.org
+
+Package: libschooltool-clients
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The architecture dependent part of schoolbell 
+ ** This package is not a part of Debian.
+ .
+ SchoolTool is a project to develop a common global school administration
+ infrastructure that is freely available under an Open Source licence.
+ .
+ This package contains the the architecture dependent parts of the 
+ SchoolTool clients (GUI and command line).
  .
  Homepage: http://www.schooltool.org

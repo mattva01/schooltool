@@ -6,6 +6,9 @@ datagen_seed = schooltool-m4
 libpkg=libschooltool-server
 package=schooltool-server
 common=$(package)
+packageclients=schooltool-clients
+libpkgclients=libschooltool-clients
+
 
 build: build-stamp
 
@@ -75,14 +78,21 @@ install-stamp: build
 	    done
 	
 	rm -f debian/$(common)/usr/share/$(common)/trace.py
-		
+	# Make client libary
+	cd src && \
+	find zope/interface schooltool/clients \
+	    \( -name tests -o -name ftests \) -prune -o \
+	     \( -name '*.so' \) \
+	     -exec install -m 644 -D -p {} \
+		../debian/$(libpkgclients)/usr/lib/$(libpkgclients)/{} \;
+	
 	cd src && \
 	find zope/interface schooltool/clients \
 	     \( -name 'tests' -o -name 'ftests' \) -prune -o\
-	     \( -name '*.py' -o -name '*.so' -o -name '*.pt' -o -name '*.xml' \
+	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml' \
 	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
 	     -exec install -m 644 -D -p {} \
-		../debian/schooltool-clients/usr/lib/schooltool-clients/{} \;
+		../debian/$(packageclients)/usr/share/$(packageclients)/{} \;
 	for fn in schooltool/__init__.py \
 	          schooltool/common.py \
 	          schooltool/csvimport.py \
@@ -93,9 +103,21 @@ install-stamp: build
 	          zope/__init__.py; \
 	do \
 	    install -m 644 -D -p src/$$fn \
-		debian/schooltool-clients/usr/lib/schooltool-clients/$$fn; \
+		debian/schooltool-clients/usr/share/schooltool-clients/$$fn; \
 	done
 
+	# make symlinks from .so files to /usr/share for clients
+	cd debian/$(libpkgclients)/usr && \
+	find lib -iname '*.so' | \
+	    while read w; do\
+		tmp=`echo $$w | sed s/$(libpkgclients)/$(packageclients)/`;\
+		tmp2=`dirname ../../$(packageclients)/usr/share$${tmp:3}`;\
+		install -m 755 -d $$tmp2;\
+		cd $$tmp2;\
+		ln -s `echo $${w:4}|sed s/[^/]*/../g`/$$w;\
+		cd - ;\
+	    done
+	
 	install -m 755 -D -p debian/schooltool-server.py \
 		debian/$(common)/usr/bin/schooltool-server; \
 	install -m 644 -D -p debian/schooltool.logrotate \
