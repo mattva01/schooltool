@@ -360,6 +360,19 @@ class TestNote(unittest.TestCase):
         verifyObject(ILocation, note)
 
 
+class TestAddress(unittest.TestCase):
+
+    def newObject(self):
+        from schooltool.model import Address
+        return Address("Home Address")
+
+    def test(self):
+        from schooltool.interfaces import IAddress, IFaceted
+        address = self.newObject()
+        verifyObject(IAddress, address)
+        verifyObject(IFaceted, address)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.model'))
@@ -367,6 +380,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestResource))
     suite.addTest(unittest.makeSuite(TestNote))
+    suite.addTest(unittest.makeSuite(TestAddress))
     return suite
 
 if __name__ == '__main__':

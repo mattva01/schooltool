@@ -25,7 +25,8 @@ $Id$
 import datetime
 import sha
 from zope.interface import implements
-from schooltool.interfaces import IPerson, IGroup, IResource, INote
+from schooltool.interfaces import IPerson, IGroup, IResource
+from schooltool.interfaces import INote, IAddress
 from schooltool.interfaces import IAbsenceComment
 from schooltool.interfaces import IApplicationObject
 from schooltool.interfaces import Everybody, ViewPermission
@@ -206,6 +207,21 @@ class Note:
         self._url = url
         self.__name__ = None
         self.__parent__ = None
+
+
+class Address(FacetedEventTargetMixin,
+              RelationshipValenciesMixin):
+
+    implements(IAddress)
+
+    title = property(lambda self: self._title)
+    country = property(lambda self: self._country)
+
+    def __init__(self, title=None):
+        FacetedEventTargetMixin.__init__(self)
+        RelationshipValenciesMixin.__init__(self)
+        self._title = title
+        self._country = None
 
 
 class IntervalSet:

@@ -2019,12 +2019,42 @@ class IPersonInfoFacet(IFacet):
 
 
 class INote(ILocation):
-    """A note."""
+    """An abitrary notation on an IApplication Object."""
 
     title = Attribute("""The title of the note.""")
     body = Attribute("""The body of the note.""")
     owner = Attribute("""The object that created this note.""")
     url = Attribute("""The path of the object this note refers to. """)
+
+
+class IAddress(IRelatable, IFaceted):
+    """The base of a physical address 
+
+    Participates in URIOccupies as occupiedBy"""
+
+    country = Attribute("""ISO Country code""")
+
+
+class IAddressInfoFacet(IFacet):
+    """Default address attributes
+
+    The default info facet, hopefully will cover most use cases, its based on a
+    draft of the Address Data Interchange Specification (ADIS) version 04-1.
+    See http://www.upu.int/document/2004/an/cep_gan-3/d010.pdf for more info.
+
+    The examples show how the standard might map to a locale's terms.
+
+    Note: this is note a comprehensive implementation of the standard, but
+    enough to build relationships on.  The full standard should be added
+    later.
+    """
+    postcode = Attribute("""Postal service sorting code
+
+                         Ex. Zip in the US, DX in the UK""")
+    district = Attribute("""district, Ex. US State""")
+    town = Attribute("""town, Ex. US City""")
+    streetNr = Attribute("""street number""")
+    thoroughfareName = Attribute("""street name""")
 
 
 #
