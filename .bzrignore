@@ -420,3 +420,4 @@ src/zodb-old/zeo/auth/CVS/Data.fs*
 src/zodb-old/zeo/auth/CVS/*~
 src/zodb-old/zeo/auth/CVS/*.so
 ./Data.fs*
+./*.csv
