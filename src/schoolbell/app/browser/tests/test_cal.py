@@ -158,7 +158,7 @@ def createEvent(dtstart, duration, title, **kw):
     error reporting, but it's OK, as it is only used in unit tests.
     """
     from schoolbell.calendar.simple import SimpleCalendarEvent
-    from schoolbell.app.browser.cal import parse_datetime
+    from schoolbell.calendar.utils import parse_datetime
     if dtstart.count(':') == 0:         # YYYY-MM-DD
         dtstart = parse_datetime(dtstart+' 00:00:00') # add hh:mm:ss
     elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM

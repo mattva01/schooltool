@@ -22,11 +22,10 @@ SchoolBell calendar views.
 $Id$
 """
 
-from datetime import datetime, date, timedelta
-import re
+from datetime import date, datetime, timedelta
 
 from zope.interface import implements
-from zope.component import queryView
+from zope.component import queryView, adapts
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.publisher.browser import BrowserView
@@ -35,92 +34,15 @@ from zope.app.traversing.browser.absoluteurl import absoluteURL
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.calendar.interfaces import ICalendar
 from schoolbell.calendar.simple import SimpleCalendarEvent
-from schoolbell.calendar.utils import week_start
+from schoolbell.calendar.utils import week_start, parse_date
 from schoolbell.app.interfaces import ICalendarOwner
-
-
-# These two date parsing functions have been copied from schooltool.common.
-# It might be a good idea to put them somewhere in schoolbell.calendar.
-
-def parse_date(value):
-    """Parse a ISO-8601 YYYY-MM-DD date value.
-
-    Examples:
-
-        >>> parse_date('2003-09-01')
-        datetime.date(2003, 9, 1)
-        >>> parse_date('20030901')
-        Traceback (most recent call last):
-          ...
-        ValueError: Invalid date: '20030901'
-        >>> parse_date('2003-IX-01')
-        Traceback (most recent call last):
-          ...
-        ValueError: Invalid date: '2003-IX-01'
-        >>> parse_date('2003-09-31')
-        Traceback (most recent call last):
-          ...
-        ValueError: Invalid date: '2003-09-31'
-        >>> parse_date('2003-09-30-15-42')
-        Traceback (most recent call last):
-          ...
-        ValueError: Invalid date: '2003-09-30-15-42'
-
-    """
-    try:
-        y, m, d = map(int, value.split('-'))
-        return date(y, m, d)
-    except ValueError:
-        raise ValueError("Invalid date: %r" % value)
-
-
-def parse_datetime(s):
-    """Parse a ISO 8601 date/time value.
-
-    Only a small subset of ISO 8601 is accepted:
-
-      YYYY-MM-DD HH:MM:SS
-      YYYY-MM-DD HH:MM:SS.ssssss
-      YYYY-MM-DDTHH:MM:SS
-      YYYY-MM-DDTHH:MM:SS.ssssss
-
-    Returns a datetime.datetime object without a time zone.
-
-    Examples:
-
-        >>> parse_datetime('2003-04-05 11:22:33.456789')
-        datetime.datetime(2003, 4, 5, 11, 22, 33, 456789)
-
-        >>> parse_datetime('2003-04-05 11:22:33.456')
-        datetime.datetime(2003, 4, 5, 11, 22, 33, 456000)
-
-        >>> parse_datetime('2003-04-05 11:22:33.45678999')
-        datetime.datetime(2003, 4, 5, 11, 22, 33, 456789)
-
-        >>> parse_datetime('01/02/03')
-        Traceback (most recent call last):
-          ...
-        ValueError: Bad datetime: 01/02/03
-
-    """
-    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
-    if not m:
-        raise ValueError("Bad datetime: %s" % s)
-    ssssss = m.groups()[7]
-    if ssssss:
-        ssssss = int((ssssss + "00000")[:6])
-    else:
-        ssssss = 0
-    y, m, d, hh, mm, ss = map(int, m.groups()[:6])
-    return datetime(y, m, d, hh, mm, ss, ssssss)
 
 
 class CalendarOwnerTraverser(object):
     """A traverser that allows to traverse to a calendar owner's calendar."""
 
+    adapts(ICalendarOwner)
     implements(IBrowserPublisher)
-
-    __used_for__ = ICalendarOwner
 
     def __init__(self, context, request):
         self.context = context

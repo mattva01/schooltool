@@ -24,8 +24,9 @@ These include various date manipulation routines.
 $Id$
 """
 
+import re
 import calendar
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 
 def prev_month(date):
@@ -150,3 +151,77 @@ def check_weeknum(year, weeknum):
     weekstart, weekend = weeknum_bounds(year, weeknum)
     isoyear, isoweek, isoday = weekstart.isocalendar()
     return (year, weeknum) == (isoyear, isoweek)
+
+
+def parse_date(value):
+    """Parse a ISO-8601 YYYY-MM-DD date value.
+
+    Examples:
+
+        >>> parse_date('2003-09-01')
+        datetime.date(2003, 9, 1)
+        >>> parse_date('20030901')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '20030901'
+        >>> parse_date('2003-IX-01')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '2003-IX-01'
+        >>> parse_date('2003-09-31')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '2003-09-31'
+        >>> parse_date('2003-09-30-15-42')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '2003-09-30-15-42'
+
+    """
+    try:
+        y, m, d = map(int, value.split('-'))
+        return date(y, m, d)
+    except ValueError:
+        raise ValueError("Invalid date: %r" % value)
+
+
+def parse_datetime(s):
+    """Parse a ISO 8601 date/time value.
+
+    Only a small subset of ISO 8601 is accepted:
+
+      YYYY-MM-DD HH:MM:SS
+      YYYY-MM-DD HH:MM:SS.ssssss
+      YYYY-MM-DDTHH:MM:SS
+      YYYY-MM-DDTHH:MM:SS.ssssss
+
+    Returns a datetime.datetime object without a time zone.
+
+    Examples:
+
+        >>> parse_datetime('2003-04-05 11:22:33.456789')
+        datetime.datetime(2003, 4, 5, 11, 22, 33, 456789)
+
+        >>> parse_datetime('2003-04-05 11:22:33.456')
+        datetime.datetime(2003, 4, 5, 11, 22, 33, 456000)
+
+        >>> parse_datetime('2003-04-05 11:22:33.45678999')
+        datetime.datetime(2003, 4, 5, 11, 22, 33, 456789)
+
+        >>> parse_datetime('01/02/03')
+        Traceback (most recent call last):
+          ...
+        ValueError: Bad datetime: 01/02/03
+
+    """
+    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
+    if not m:
+        raise ValueError("Bad datetime: %s" % s)
+    ssssss = m.groups()[7]
+    if ssssss:
+        ssssss = int((ssssss + "00000")[:6])
+    else:
+        ssssss = 0
+    y, m, d, hh, mm, ss = map(int, m.groups()[:6])
+    return datetime(y, m, d, hh, mm, ss, ssssss)
+
