@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from helpers import dedent, diff
 
 __metaclass__ = type
 
@@ -184,9 +185,9 @@ class TestGroupView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import GroupView
-        from schooltool.model import Group, Person
+        from schooltool.model import RootGroup, Group, Person
 
-        self.group = Group("group")
+        self.group = RootGroup("group")
         self.sub = Group("subgroup")
         self.per = Person("p")
         self.subkey = self.group.add(self.sub)
@@ -219,16 +220,16 @@ class TestGroupView(unittest.TestCase):
         request.method = "GET"
         request.path = '/group'
         result = self.view.render(request)
-        expected = """\
-<group xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>group</name>
-  <item xlink:type="simple" xlink:title="subgroup"
-        xlink:href="/group/%(subkey)s" />
-  <item xlink:type="simple" xlink:title="p"
-        xlink:href="/group/%(perkey)s" />
-</group>
-""" % {'subkey': self.subkey, 'perkey': self.perkey}
-        self.assertEqual(result, expected)
+        expected = dedent("""
+            <group xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>group</name>
+              <item xlink:type="simple" xlink:title="subgroup"
+                    xlink:href="/%s" />
+              <item xlink:type="simple" xlink:title="p" xlink:href="/%s" />
+            </group>
+            """ % (self.subkey, self.perkey))
+        self.assertEqual(result, expected,
+                         'expected != actual\n%s' % diff(expected, result))
 
 
 class TestPersonView(unittest.TestCase):
@@ -254,18 +255,19 @@ class TestPersonView(unittest.TestCase):
         request.method = "GET"
         request.path = '/group/%s' % self.perkey
         result = self.view.render(request)
-        expected = """\
-<person xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>Pete</name>
-  <groups>
-    <item xlink:type="simple" xlink:href="/"
-          xlink:title="group" />
-    <item xlink:type="simple" xlink:href="/0"
-          xlink:title="subgroup" />
-  </groups>
-</person>
-"""
-        self.assertEqual(result, expected)
+        expected = dedent("""
+            <person xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>Pete</name>
+              <groups>
+                <item xlink:type="simple" xlink:href="/"
+                      xlink:title="group" />
+                <item xlink:type="simple" xlink:href="/0"
+                      xlink:title="subgroup" />
+              </groups>
+            </person>
+            """)
+        self.assertEqual(result, expected,
+                         'expected != actual\n%s' % diff(expected, result))
 
 
 def test_suite():

@@ -167,6 +167,10 @@ class GroupView(View):
         else:
             raise ComponentLookupError("view for %s" % item)
 
+    def listItems(self):
+        for item in self.context.values():
+            yield {'name': item.name, 'path': getPath(item)}
+
 
 class PersonView(View):
     """The view for a person object"""
