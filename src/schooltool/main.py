@@ -44,7 +44,7 @@ from schooltool.common import StreamWrapper, UnicodeAwareException
 from schooltool.translation import setCatalog, ugettext as _
 from schooltool.browser import BrowserRequest
 from schooltool.browser.app import RootView
-from schooltool.http import Site
+from schooltool.http import Site, SnapshottableDB
 
 
 __metaclass__ = type
@@ -171,6 +171,7 @@ class Server:
                             listen
                             database
                             event_logging
+                            test_mode
                             pid_file
                             error_log_file
                             access_log_file
@@ -338,6 +339,9 @@ class Server:
                 msg += _("Perhaps another SchoolTool instance is using it?")
             raise SchoolToolError(msg)
         self.prepareDatabase()
+
+        if self.config.test_mode:
+            self.db = SnapshottableDB(self.db)
 
         self.threadable_hook.init()
 

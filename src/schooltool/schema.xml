@@ -115,6 +115,19 @@
     </example>
   </key>
 
+  <key name="test-mode" datatype="boolean" default="off">
+    <description>
+      Enables or disables in-memory database snapshots that are used
+      for functional testing.  Do not use for live servers.  This option
+      is not guaranteed to work if you use ZODB storage other than
+      MappingStorage.
+    </description>
+    <example>
+      test-mode off
+    </example>
+  </key>
+
+
   <key name="pid-file" datatype="string">
     <description>
       Specifies the path of a pid file.

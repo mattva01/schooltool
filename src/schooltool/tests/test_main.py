@@ -42,6 +42,11 @@ def setUp():
     """Empty setUp. This is replaced by a unit test below."""
 
 
+class ThreadableStub:
+    def init(self):
+        self._initialized = True
+
+
 class ReactorStub:
 
     def __init__(self):
@@ -139,6 +144,7 @@ class TransactionStub:
 
 class ConfigStub:
     event_logging = False
+    test_mode = False
 
 
 class OpenSSLContextFactoryStub:
@@ -330,10 +336,6 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.browser import BrowserRequest
         from schooltool.browser.app import RootView
 
-        class ThreadableStub:
-            def init(self):
-                self._initialized = True
-
         server = Server()
         server.threadable_hook = threadable = ThreadableStub()
         server.reactor_hook = reactor = ReactorStub()
@@ -393,6 +395,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is RootView)
         self.assert_(site.requestFactory is BrowserRequest)
+        self.failIf(hasattr(site.db, 'makeSnapshot'))
 
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.uris import URIMembership
@@ -400,6 +403,25 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         x = getRelationshipHandlerFor(None)
         y = getRelationshipHandlerFor(URIMembership)
         self.assertNotEquals(x, y, "schooltool.membership.setUp not called")
+
+    def test_run_in_test_mode(self):
+        from schooltool.main import Server
+        from schooltool.http import SnapshottableDB
+        server = Server()
+        # XXX this stubbing is painful
+        server.threadable_hook = threadable = ThreadableStub()
+        server.reactor_hook = reactor = ReactorStub()
+        contextfactory = OpenSSLContextFactoryStub()
+        server.OpenSSLContextFactory_hook = contextfactory.setup
+        server.notifyConfigFile = lambda x: None
+        server.notifyServerStarted = lambda x, y, ssl=False: None
+        server.notifyWebServerStarted = lambda x, y, ssl=False: None
+        server.notifyShutdown = lambda: None
+        server.configure(['-c', self.getConfigFileName()])
+        server.config.test_mode = True
+        server.run()
+        site = reactor._tcp_listeners[0][1]
+        self.assert_(isinstance(site.db, SnapshottableDB))
 
     def test_prepareDatabase(self):
         from schooltool.main import Server
