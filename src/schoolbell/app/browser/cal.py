@@ -52,6 +52,7 @@ from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schoolbell.app.interfaces import IPerson
+from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
@@ -83,6 +84,12 @@ day_of_week_names = {
 short_day_of_week_names = {
     0: _("Mon"), 1: _("Tue"), 2: _("Wed"), 3: _("Thu"),
     4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
+}
+
+hours_map = {
+    0: 12, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10,
+    11: 11 , 12: 12, 13: 1, 14: 2, 15: 3, 16: 4, 17: 5, 18: 6, 19: 7,
+    20: 8, 21: 9, 22: 10, 23: 11
 }
 
 
@@ -325,12 +332,46 @@ class CalendarViewBase(BrowserView):
     __used_for__ = ISchoolBellCalendar
 
     # Which day is considered to be the first day of the week (0 = Monday,
-    # 6 = Sunday).  Currently hardcoded.
-    first_day_of_week = 0
+    # 6 = Sunday).  Based on authenticated user preference, defaults to Monday
 
-    def dayTitle(self, day):
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        if hasattr(self.request.principal, '_person'):
+            person = self.request.principal._person
+            prefs = IPersonPreferences(person)
+            if prefs.weekstart == "Sunday":
+                self.first_day_of_week = 6
+            else:
+                self.first_day_of_week = 0
+        else:
+            self.first_day_of_week = 0
+
+
+    def internationalDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
         return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
+
+    def usDate(self, day):
+        day_of_week = day_of_week_names[day.weekday()]
+        return _('%s, %s') % (day_of_week, day.strftime('%m/%d/%Y'))
+
+    def longDate(self, day):
+        day_of_week = day_of_week_names[day.weekday()]
+        return _('%s, %s') % (day_of_week, day.strftime('%d %B, %Y'))
+
+    def dayTitle(self, day):
+        if hasattr(self.request.principal, '_person'):
+            person = self.request.principal._person
+            prefs = IPersonPreferences(person)
+            if prefs.dateformat == "MM/DD/YY":
+                return self.usDate(day)
+            elif prefs.dateformat == "Day Month, Year":
+                return self.longDate(day)
+            else:
+                return self.internationalDate(day)
+        else:
+            return self.internationalDate(day)
 
     __url = None
 
@@ -835,6 +876,22 @@ class DailyCalendarView(CalendarViewBase):
                 if self.endhour == 0:
                     self.endhour = 24
 
+    def rowTitle(self, hour, minute):
+        """Return the row title as HH:MM or H:MM am/pm."""
+        if hasattr(self.request.principal, '_person'):
+            person = self.request.principal._person
+            prefs = IPersonPreferences(person)
+            if prefs.timeformat == "H:MM am/pm":
+                # FIXME issues with 12 am - 1 am
+                if hour < 13:
+                    return '%d:%02d am' % (hour, minute)
+                else:
+                    return '%d:%02d pm' % (hours_map[hour], minute)
+            else:
+                return '%d:%02d' % (hour, minute)
+
+        return '%d:%02d' % (hour, minute)
+
     def calendarRows(self):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
@@ -847,7 +904,7 @@ class DailyCalendarView(CalendarViewBase):
         start = today + timedelta(hours=self.starthour)
         for end in row_ends:
             duration = end - start
-            yield ('%d:%02d' % (start.hour, start.minute), start, duration)
+            yield (self.rowTitle(start.hour, start.minute), start, duration)
             start = end
 
     def getHours(self):
@@ -1399,6 +1456,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
 
 class ICalendarEventEditForm(ICalendarEventAddForm):
     pass
+
 
 class CalendarEventEditView(CalendarEventViewMixin, EditView):
     """A view for editing an event."""

@@ -296,7 +296,7 @@ class IPersonPreferencesForm(Interface):
 
     dateformat = Choice(title=u"Date Format",
                     description=u"Date Format",
-                    values=("MM-DD-YY", "YYYY-DD-MM"))
+                    values=("MM/DD/YY", "YYYY-DD-MM", "Day Month, Year"))
 
     weekstart = Choice(title=u"Week starts on:",
                     description=u"Start display of weeks on Sunday or Monday",

@@ -261,7 +261,7 @@ def doctest_PersonPreferences():
         >>> prefs.timezone
         'UTC'
         >>> prefs.weekstart
-        'Sunday'
+        'Monday'
 
     """
 

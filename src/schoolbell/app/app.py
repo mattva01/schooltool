@@ -204,7 +204,7 @@ class PersonPreferences(Persistent):
         self.timezone = "UTC"
         self.dateformat = "YYYY-MM-DD"
         self.timeformat = "HH:MM"
-        self.weekstart = "Sunday"
+        self.weekstart = "Monday"
 
 
 def getPersonPreferences(person):

@@ -92,7 +92,7 @@
   </content>
 
   <content class=".app.PersonPreferences">
-    <require permission="schoolbell.view"
+    <require permission="schoolbell.edit"
         interface="schoolbell.app.interfaces.IPersonPreferences"
         set_schema="schoolbell.app.browser.app.IPersonPreferencesForm" />
   </content>

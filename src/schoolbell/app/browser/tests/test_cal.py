@@ -354,28 +354,75 @@ def createEvent(dtstart, duration, title, **kw):
     return CalendarEvent(dtstart, dur, title, **kw)
 
 
+class PrincipalStub:
+    from schoolbell.app.app import Person
+
+    def __conform__(self, interface):
+        if interface is IPerson:
+            return PersonStub()
+
+    _person = Person()
+
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
     def test_dayTitle(self):
         from schoolbell.app.browser.cal import CalendarViewBase
-        view = CalendarViewBase(None, None)
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
+        view = CalendarViewBase(None, request)
         dt = datetime(2004, 7, 1)
         self.assertEquals(view.dayTitle(dt), "Thursday, 2004-07-01")
 
+        # set the dateformat preference to the long format
+        prefs = IPersonPreferences(request.principal._person)
+        prefs.dateformat = "Day Month, Year"
+
+        self.assertEquals(view.dayTitle(dt), "Thursday, 01 July, 2004")
+
+
     def test_ellipsizeTitle(self):
         from schoolbell.app.browser.cal import CalendarViewBase
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
 
         under17 = '1234567890123456'
         over17 = '12345678901234567'
 
-        view = CalendarViewBase(None, None)
+        view = CalendarViewBase(None, request)
         self.assertEquals(view.ellipsizeTitle(under17), under17)
         self.assertEquals(view.ellipsizeTitle(over17), '123456789012345...')
 
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
-        view = CalendarViewBase(None, None)
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
+        view = CalendarViewBase(None, request)
+
         view.cursor = date(2004, 8, 18)
         self.assertEquals(view.prevMonth(), date(2004, 7, 1))
         self.assertEquals(view.nextMonth(), date(2004, 9, 1))
@@ -385,10 +432,27 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getWeek(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
 
         cal = Calendar()
-        view = CalendarViewBase(cal, None)
+        view = CalendarViewBase(cal, request)
         self.assertEquals(view.first_day_of_week, 0) # Monday by default
+
+        # set the weekstart to sunday
+        prefs = IPersonPreferences(request.principal._person)
+        prefs.weekstart = "Sunday"
+
+        view_sunday = CalendarViewBase(cal, request)
+        self.assertEquals(view_sunday.first_day_of_week, 6)
 
         def getDaysStub(start, end):
             return [CalendarDay(start), CalendarDay(end)]
@@ -406,12 +470,23 @@ class TestCalendarViewBase(unittest.TestCase):
                           [CalendarDay(date(2004, 8, 16)),
                            CalendarDay(date(2004, 8, 23))])
 
+
     def test_getWeek_first_day_of_week(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
 
         cal = Calendar()
-        view = CalendarViewBase(cal, None)
+        view = CalendarViewBase(cal, request)
         view.first_day_of_week = 2 # Wednesday
 
         def getDaysStub(start, end):
@@ -440,9 +515,19 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getMonth(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
 
         cal = Calendar()
-        view = CalendarViewBase(cal, None)
+        view = CalendarViewBase(cal, request)
 
         def getDaysStub(start, end):
             return [CalendarDay(start), CalendarDay(end)]
@@ -475,9 +560,19 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getYear(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
+        from schoolbell.app.app import getPersonPreferences
+        from schoolbell.app.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        request = TestRequest()
+        request.setPrincipal(PrincipalStub())
 
         cal = Calendar()
-        view = CalendarViewBase(cal, None)
+        view = CalendarViewBase(cal, request)
 
         def getMonthStub(dt):
             return dt
