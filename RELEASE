@@ -13,16 +13,14 @@ server will not be able to start with an old database. Currently there is no
 way to upgrade a database, so the only possibility is to delete the old one and
 re-create it.
 
-Additionally it also may not be possible to upgrade or export a 0.9 database
-to later versions.
-
-Bear in mind that this is still an early stage of development.
+Partial database upgrades should be available from 0.9 to 1.0 and full upgrades
+from 1.0 onwards.
 
 
 New Features in 0.9
 ~~~~~~~~~~~~~~~~~~~
 
-The new features in this release are primarily from the schoolbell User
+The new features in this release are primarily from the SchoolBell User
 Interface bounty. The full text of this bounty can be found at
 http://www.schooltool.org/bounties/ui/SchoolBell09.
 
