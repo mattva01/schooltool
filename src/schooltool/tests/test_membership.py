@@ -183,29 +183,34 @@ class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
         from schooltool.interfaces import IRelationshipSchema
         verifyObject(IRelationshipSchema, Membership)
 
+class TestCyclicConstraint(RelationshipTestMixin, EventServiceTestMixin,
+                           unittest.TestCase):
+
     def testCyclicMembership(self):
         self.setUpEventService()
         # Not bothering to register a relationship especially for membership.
         # Standard relationships will do.
-        from schooltool.membership import Membership
+        from schooltool.membership import Membership, checkForCycles
         from schooltool.component import registerRelationship
         from schooltool.interfaces import ISpecificURI
-        from schooltool.relationship import RelatableMixin, defaultRelate
+        from schooltool.relationship import defaultRelate
         registerRelationship(ISpecificURI, defaultRelate)
         Relatable = lambda: BasicRelatable(self.serviceManager)
         g = Relatable()
 
         # Test a cycle of a group with itself.
-        self.assertRaises(ValueError, Membership, group=g, member=g)
+        self.assertRaises(ValueError, checkForCycles, g, g)
 
         # Test a two-group cycle.
         g1 = Relatable()
         g2 = Relatable()
+        checkForCycles(g1, g2)
+        checkForCycles(g2, g1)
         links = Membership(group=g1, member=g2)
         self.assertEquals(links['member'].traverse(), g2)
         self.assertEquals(links['group'].traverse(), g1)
-        self.assertRaises(ValueError, Membership, group=g2, member=g1)
-
+        self.assertRaises(ValueError, checkForCycles, g2, g1)
+        self.assertRaises(ValueError, checkForCycles, g1, g2)
 
 
 class TestEvents(unittest.TestCase):
@@ -259,6 +264,32 @@ class TestEvents(unittest.TestCase):
         self.assertRaises(TypeError, MemberAddedEvent, links)
 
 
+class TestMembershipRelate(RelationshipTestMixin, EventServiceTestMixin,
+                           unittest.TestCase):
+
+    def test_membershipRelate(self):
+        self.setUpEventService()
+
+        from schooltool import membership
+        membership.setUp()
+        Relatable = lambda: BasicRelatable(self.serviceManager)
+        g = Relatable()
+
+        # Test a cycle of a group with itself.
+        self.assertRaises(ValueError, membership.Membership,
+                          group=g, member=g)
+
+        # Test a two-group cycle.
+        g1 = Relatable()
+        g2 = Relatable()
+        links = membership.Membership(group=g1, member=g2)
+        self.assertEquals(links['member'].traverse(), g2)
+        self.assertEquals(links['group'].traverse(), g1)
+        for events in g1.events, g2.events:
+            self.assertEquals(len(events), 1)
+            self.assertEquals(type(events[0]), membership.MemberAddedEvent)
+        self.assertRaises(ValueError, membership.Membership,
+                          group=g2, member=g1)
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -266,7 +297,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestMembershipRelationship))
     suite.addTest(unittest.makeSuite(TestMemberMixin))
     suite.addTest(unittest.makeSuite(TestURIs))
+    suite.addTest(unittest.makeSuite(TestCyclicConstraint))
     suite.addTest(unittest.makeSuite(TestEvents))
+    suite.addTest(unittest.makeSuite(TestMembershipRelate))
     return suite
 
 if __name__ == '__main__':

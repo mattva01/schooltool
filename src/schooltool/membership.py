@@ -129,19 +129,21 @@ class GroupMixin(Persistent):
         pass
 
 
-class _MembershipSchema(RelationshipSchema):
-    def __call__(self, **parties):
-        # Check that adding this relationship would not create a cycle.
-        # To do this, check that 'group' is not a member (transitively) of
-        # 'member'.
-        member = parties['member']
-        group = parties['group']
+Membership = RelationshipSchema(URIMembership,
+                                group=URIGroup, member=URIMember)
+
+def checkForCycles(group, potential_member):
+    """Raises ValueError if adding potential_member would create a
+    cycle in membership relationships.
+    """
+    for a, b in (group, potential_member), (potential_member, group):
         seen = Set()
         last = Set()
-        last.add(group)
+        last.add(a)
         while last:
-            if member in last:
-                raise ValueError('Cannot create cyclic group membership')
+            if b in last:
+                raise ValueError('Group %r is a transitive member of %r' %
+                                 (a, b))
             seen |= last
             new_last = Set()
             for obj in last:
@@ -150,12 +152,6 @@ class _MembershipSchema(RelationshipSchema):
                     new_last |= Set([link.traverse() for link in links])
             new_last.difference_update(seen)
             last = new_last
-
-        return RelationshipSchema.__call__(self, **parties)
-
-
-Membership= _MembershipSchema(URIMembership, group=URIGroup, member=URIMember)
-
 
 class MembershipEvent(RelationshipEvent):
 
@@ -191,9 +187,9 @@ class MemberRemovedEvent(MembershipEvent):
 def membershipRelate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipFactory"""
 
+    checkForCycles(a, b)
     links = relationship.relate(relationship_type,
                                 (a, role_a), (b, role_b), title)
-
     event = MemberAddedEvent(links)
     event.dispatch(a)
     event.dispatch(b)
