@@ -402,6 +402,7 @@ def test_setUpLogger():
 
     Let's clean up after ourselves (logging is messy):
 
+        >>> logger.handlers[1].close()
         >>> del logger.handlers[:]
         >>> logger.propagate = True
         >>> logger.disabled = False
