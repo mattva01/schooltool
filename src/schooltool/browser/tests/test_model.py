@@ -280,6 +280,13 @@ class TestPersonEditView(unittest.TestCase):
         self.info = FacetManager(self.person).facetByName('person_info')
         return PersonEditView(self.person)
 
+    def test_get(self):
+        view = self.createView()
+        view.authorization = lambda x, y: True
+        request = RequestStub()
+        result = view.render(request)
+        self.assert_('Mr. Wise Guy' in result)
+
     def test_post(self):
         view = self.createView()
         request = RequestStub(args={'first_name': 'I Changed \xc4\x85',
