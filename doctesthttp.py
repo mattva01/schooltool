@@ -57,10 +57,10 @@ def make_http_request(host, port, request_string):
         if h.lower() == 'content-length':
             continue
         if h.lower() == 'authorization' and v.startswith('Basic '):
-            v = 'Basic ' + v[len('Basic '):].encode('base64')
+            v = 'Basic ' + v[len('Basic '):].encode('base64').strip()
         headers[h] = v
     headers['Host'] = 'localhost'
-    body = instream.read()
+    body = instream.read().rstrip()
 
     connection = httplib.HTTPConnection(host, port)
 ##  connection.set_debuglevel(1)
