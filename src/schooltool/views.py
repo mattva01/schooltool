@@ -34,6 +34,7 @@ from schooltool.interfaces import ComponentLookupError
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
 from schooltool.component import FacetManager, iterFacetFactories
+from schooltool.component import getFacetFactory
 from schooltool.debug import IEventLog, IEventLogUtility, IEventLogFacet
 
 __metaclass__ = type
@@ -342,7 +343,23 @@ class EventLogFacetView(EventLogView, FacetView):
     """A view for IEventLogFacet."""
 
 
-class FacetManagementView(View):
+class XMLPseudoParser:
+    """This is a temporary stub for validating XML parsing."""
+
+    def extractKeyword(self, text, key):
+        """Extracts values of key="value" format from a string.
+
+        Throws a KeyError if key is not found.
+        """
+        pat = re.compile(r'\b%s="([^"]*)"' % key)
+        match = pat.search(text)
+        if match:
+            return match.group(1)
+        else:
+            raise KeyError("%r not in text" % (key,))
+
+
+class FacetManagementView(View, XMLPseudoParser):
     """A view of IFacetManager."""
 
     template = Template("www/facets.pt", content_type="text/xml")
@@ -363,8 +380,34 @@ class FacetManagementView(View):
     def listFacetFactories(self):
         return iterFacetFactories()
 
+    def do_POST(self, request):
+        body = request.content.read()
 
-class RelationshipsView(View):
+        try:
+            factory_name = self.extractKeyword(body, 'factory')
+        except KeyError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return "Could not find a needed param: %s" % e
+
+        try:
+            factory = getFacetFactory(factory_name)
+        except KeyError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return "Factory does not exist: %s" % e
+
+        facet = factory()
+        self.context.setFacet(facet)
+
+        location = '%s/%s' % (request.uri, facet.__name__)
+        request.setResponseCode(201, 'Created')
+        request.setHeader('Content-Type', 'text/plain')
+        request.setHeader('Location', location)
+        return "Facet created: %s" % location
+
+
+class RelationshipsView(View, XMLPseudoParser):
     """A view of relationships on IRelatable which is also
     IRelationshipValencies.
 
@@ -429,20 +472,6 @@ class RelationshipsView(View):
         #     status of the request and refers to the new resource, and a
         #     Location header (see section 14.30).
         return "Relationship created"
-
-    def extractKeyword(self, text, key):
-        '''This is a temporary stub for validating XML parsing.
-
-        Extracts values of key="value" format from a string.
-
-        Throws a KeyError if key is not found.
-        '''
-        pat = re.compile('\\b%s="([^"]*)"' % key)
-        match =  pat.search(text)
-        if match:
-            return match.group(1)
-        else:
-            raise KeyError("%r not in text" % (key,))
 
 
 def setUp():

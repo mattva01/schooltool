@@ -104,7 +104,7 @@ class EventLogFacetFactory:
 
     implements(IFacetFactory)
 
-    name = "Event Log Factory"
+    name = "eventlog"
     title = "Event Log Factory"
     __call__ = EventLogFacet
 

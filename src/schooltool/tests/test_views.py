@@ -743,27 +743,6 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                             'role':'http://schooltool.org/ns/membership/group'
                             }])
 
-    def test_extractKeyword(self):
-        request = RequestStub("http://localhost/groups/sub/relationships/")
-        text = '''This is not even XML, it\'s just some random text.
-               xlink:type="simple"
-               xlink:title="http://schooltool.org/ns/membership"
-               xlink:arcrole="http://schooltool.org/ns/membership"
-               xlink:role="http://schooltool.org/ns/membership/group"
-               xlink:href="/groups/new"
-               '''
-        extr = self.view.extractKeyword
-        self.assertEquals(extr(text, 'type'), 'simple')
-        self.assertEquals(extr(text, 'xlink:role'),
-                          'http://schooltool.org/ns/membership/group')
-        self.assertEquals(extr(text, 'role'),
-                          'http://schooltool.org/ns/membership/group')
-        self.assertEquals(extr(text, 'xlink:arcrole'),
-                          'http://schooltool.org/ns/membership')
-        self.assertEquals(extr(text, 'href'),
-                          '/groups/new')
-        self.assertRaises(KeyError, extr, text, 'shmoo')
-
     def testGET(self):
         request = RequestStub("http://localhost/groups/sub/relationships/")
         result = self.view.render(request)
@@ -887,7 +866,7 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         child = view._traverse('foo', request)
         self.assertEquals(child.context, facet)
 
-    def test_render(self):
+    def test_get(self):
         from schooltool.views import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
@@ -915,8 +894,7 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
                      xlink:title="002" class="EventLogFacet"
                      owned="owned" xlink:href="facets/002"/>
             ---8<---
-              <facetFactory name="Event Log Factory"
-                            title="Event Log Factory"/>
+              <facetFactory name="eventlog" title="Event Log Factory"/>
             ---8<---
             </facets>
             """)
@@ -925,6 +903,70 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
                          "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
+
+    def test_post(self):
+        from schooltool.views import FacetManagementView
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+        from schooltool.debug import EventLogFacet, setUp
+        setUp() # register a facet factory
+
+        request = RequestStub("http://localhost/group/facets",
+                              method="POST",
+                              body="<facet factory=\"eventlog\"/>")
+        facetable = Person()
+        context = FacetManager(facetable)
+        view = FacetManagementView(context)
+        result = view.render(request)
+        self.assertEquals(request.code, 201)
+        self.assertEquals(request.reason, "Created")
+        self.assertEquals(request.headers['Location'],
+                          "http://localhost/group/facets/001")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assert_("http://localhost/group/facets/001" in result)
+        self.assertEquals(len(list(context.iterFacets())), 1)
+        facet = context.facetByName('001')
+        self.assert_(facet.__class__ is EventLogFacet)
+
+    def test_post_errors(self):
+        from schooltool.views import FacetManagementView
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+        facetable = Person()
+        context = FacetManager(facetable)
+        view = FacetManagementView(context)
+        for body in ("", "foo", "facet factory=\"nosuchfactory\""):
+            request = RequestStub("http://localhost/group/facets",
+                                  method="POST",
+                                  body=body)
+            result = view.render(request)
+            self.assertEquals(request.code, 400,
+                              "%s != 400 for %s" % (request.code, body))
+            self.assertEquals(request.headers['Content-Type'], "text/plain")
+
+
+class TestXMLPseudoParser(unittest.TestCase):
+
+    def test_extractKeyword(self):
+        from schooltool.views import XMLPseudoParser
+        text = '''This is not even XML, it\'s just some random text.
+               xlink:type="simple"
+               xlink:title="http://schooltool.org/ns/membership"
+               xlink:arcrole="http://schooltool.org/ns/membership"
+               xlink:role="http://schooltool.org/ns/membership/group"
+               xlink:href="/groups/new"
+               '''
+        extr = XMLPseudoParser().extractKeyword
+        self.assertEquals(extr(text, 'type'), 'simple')
+        self.assertEquals(extr(text, 'xlink:role'),
+                          'http://schooltool.org/ns/membership/group')
+        self.assertEquals(extr(text, 'role'),
+                          'http://schooltool.org/ns/membership/group')
+        self.assertEquals(extr(text, 'xlink:arcrole'),
+                          'http://schooltool.org/ns/membership')
+        self.assertEquals(extr(text, 'href'),
+                          '/groups/new')
+        self.assertRaises(KeyError, extr, text, 'shmoo')
 
 
 def test_suite():
@@ -943,6 +985,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventLogView))
     suite.addTest(unittest.makeSuite(TestFacetManagementView))
     suite.addTest(unittest.makeSuite(TestRelationshipsView))
+    suite.addTest(unittest.makeSuite(TestXMLPseudoParser))
     return suite
 
 if __name__ == '__main__':
