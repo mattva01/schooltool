@@ -34,7 +34,9 @@ from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
 from schooltool.browser.acl import ACLView
 from schooltool.auth import getACL
-from schooltool.cal import CalendarEvent
+from schooltool.cal import CalendarEvent, DailyRecurrenceRule
+from schooltool.cal import WeeklyRecurrenceRule, MonthlyRecurrenceRule
+from schooltool.cal import YearlyRecurrenceRule
 from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
@@ -43,10 +45,13 @@ from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ModifyPermission
+from schooltool.interfaces import IDailyRecurrenceRule, IWeeklyRecurrenceRule
+from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
+from schooltool.browser.widgets import TextAreaWidget, CheckboxWidget
 from schooltool.browser.widgets import dateParser, timeParser, intParser
 from schooltool.browser.widgets import timeFormatter
 
@@ -789,6 +794,31 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                                choices, value='')
         self.other_location_widget = TextWidget('location_other',
                                                 _('Specify other location'))
+
+        # Widgets for the recurrence editing
+        self.recurrence_widget = CheckboxWidget('recurrence',
+                                                'Recurring')
+
+        self.recurrence_type_widget = SelectionWidget(
+            'recurrence_type', 'Recurs',
+            (('daily', 'Day'), ('weekly',  'Week'),
+             ('monthly', 'Month'), ('yearly', 'Year')))
+
+
+        self.interval_widget = TextWidget('interval', 'Repeat every',
+                                          parser=intParser, value=1)
+
+
+##         self.count_widget = TextWidget('count', 'Number of events')
+##         self.until_widget = TextWidget('until', 'Repeat until',
+##                                        parser=dateParser)
+
+##         self.weekdays_widget = TextWidget('weekdays', 'Weekdays')
+##         self.monthly_widget = TextWidget('monthly', 'Monthly')
+
+##         self.exceptions_widget = TextAreaWidget('exceptions',
+##                                                 'Exception dates')
+
         self.error = None
 
     def update(self):
@@ -800,6 +830,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.duration_widget.update(request)
         self.location_widget.update(request)
         self.other_location_widget.update(request)
+        self.recurrence_widget.update(request)
+        self.recurrence_type_widget.update(request)
+        self.interval_widget.update(request)
 
     def do_GET(self, request):
         self.update()
@@ -836,6 +869,26 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     def process(self, dtstart, duration, title, location):
         raise NotImplementedError("override this method in subclasses")
 
+    def getRecurrenceRule(self):
+       """Returns a recurrence rule according to the widgets in request
+
+       Must be called after update()
+       """
+       if self.recurrence_widget.value:
+          interval = self.interval_widget.value
+          if interval is None:
+             interval = 1
+          if self.recurrence_type_widget.value == 'daily':
+             return DailyRecurrenceRule(interval=interval)
+          elif self.recurrence_type_widget.value == 'weekly':
+             return WeeklyRecurrenceRule(interval=interval)
+          elif self.recurrence_type_widget.value == 'monthly':
+             return MonthlyRecurrenceRule(interval=interval)
+          elif self.recurrence_type_widget.value == 'yearly':
+             return YearlyRecurrenceRule(interval=interval)
+       else:
+          return None
+
     def getLocations(self):
         """Get a list of titles for possible locations."""
         location_group = traverse(self.context, '/groups/locations')
@@ -856,7 +909,8 @@ class EventAddView(EventViewBase):
     def process(self, dtstart, duration, title, location):
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
-                           location=location)
+                           location=location,
+                           recurrence=self.getRecurrenceRule())
         self.context.addEvent(ev)
 
 
@@ -892,13 +946,29 @@ class EventEditView(EventViewBase):
         else:
             self.location_widget.setValue('')
             self.other_location_widget.setValue(event.location)
+
+        if event.recurrence is not None:
+           self.recurrence_widget.setValue(True)
+
+           if IDailyRecurrenceRule.providedBy(event.recurrence):
+              self.recurrence_type_widget.setValue('daily')
+           elif IWeeklyRecurrenceRule.providedBy(event.recurrence):
+              self.recurrence_type_widget.setValue('weekly')
+           elif IMonthlyRecurrenceRule.providedBy(event.recurrence):
+              self.recurrence_type_widget.setValue('monthly')
+           elif IYearlyRecurrenceRule.providedBy(event.recurrence):
+              self.recurrence_type_widget.setValue('yearly')
+
+           self.interval_widget.setValue(event.recurrence.interval)
+
         self.event = event
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
         uid = self.event.unique_id
         ev = self.event.replace(dtstart=dtstart, duration=duration,
-                                title=title, location=location, unique_id=uid)
+                                title=title, location=location, unique_id=uid,
+                                recurrence=self.getRecurrenceRule())
         if self.tt_event:
             if not self.isManager():
                 raise Unauthorized
@@ -1050,15 +1120,6 @@ class ComboCalendarView(CalendarView):
             return EventDeleteView(self.context)
         elif name == 'acl.html':
             return ACLView(self.context.acl)
-        elif name == 'populate':
-            # XXX this is a hack for fabricating recurring events until we have
-            # a recurring event view
-            from schooltool.cal import DailyRecurrenceRule
-            self.context.addEvent(CalendarEvent(
-                datetime(2004, 1, 1, 9),
-                timedelta(minutes=30),
-                "Coffee", recurrence=DailyRecurrenceRule()))
-            return self
         raise KeyError(name)
 
 

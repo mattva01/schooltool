@@ -29,6 +29,21 @@
     <div class="row" tal:replace="structure view/other_location_widget" />
     <div class="row" tal:replace="structure view/duration_widget" />
 
+    <div class="row" tal:replace="structure view/recurrence_widget" />
+  <div style="border: 1px solid blue">
+    <div class="row" tal:replace="structure view/interval_widget" />
+    <div class="row" tal:replace="structure view/recurrence_type_widget" />
+    <!--
+    <div class="row" tal:replace="structure view/count_widget" />
+    <div class="row" tal:replace="structure view/until_widget" />
+
+    <div class="row" tal:replace="structure view/weekdays_widget" />
+    <div class="row" tal:replace="structure view/monthly_widget" />
+
+    <div class="row" tal:replace="structure view/exceptions_widget" />
+    -->
+  </div>
+
     <div class="buttons">
       <input class="button" name="CONFIRM_ADD" type="submit" value="Submit"
              i18n:attributes="value" />
