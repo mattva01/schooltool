@@ -142,18 +142,6 @@ POST> .
 Content-Type: text/plain; charset=UTF-8
 Facet created: http://localhost:8813/persons/Marius/facets/eventlog
 
-SchoolTool> post /persons/Steve/relationships
-POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
-POST>               xmlns="http://schooltool.org/ns/model/0.1"
-POST>               xlink:type="simple"
-POST>               xlink:arcrole="http://schooltool.org/ns/teaching"
-POST>               xlink:role="http://schooltool.org/ns/teaching/teacher"
-POST>               xlink:href="/groups/students"/>
-POST> .
-201 Created
-Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/persons/Steve/relationships/0002
-
 SchoolTool> put /resources/hall
 PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Hall"/>
 PUT> .

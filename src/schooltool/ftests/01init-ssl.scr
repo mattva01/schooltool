@@ -1,7 +1,6 @@
 Basic tests for SSL.
-This probably needs to be fixed and added to (See issue25)
 
-SchoolTool> links off                
+SchoolTool> links off
 
 SchoolTool> server localhost 8815 ssl
 200 OK
@@ -41,6 +40,18 @@ Content-Type: text/xml; charset=UTF-8
 </schooltool>
 %% END XML
 
+
+SchoolTool> post /persons/Steve/relationships
+POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+POST>               xmlns="http://schooltool.org/ns/model/0.1"
+POST>               xlink:type="simple"
+POST>               xlink:arcrole="http://schooltool.org/ns/teaching"
+POST>               xlink:role="http://schooltool.org/ns/teaching/teacher"
+POST>               xlink:href="/groups/students"/>
+POST> .
+201 Created
+Content-Type: text/plain; charset=UTF-8
+Relationship created: https://localhost:8815/persons/Steve/relationships/0002
 
 SchoolTool> get /calendars.html
 200 OK
@@ -90,9 +101,9 @@ Content-Type: text/html; charset=UTF-8
         <a href="https://localhost:8815/persons/manager/timetable-calendar">
         Manager (timetable)</a></li>
     <li><a href="https://localhost:8815/persons/Aiste/calendar">
-        Aiste Kesminaite (private calendar)</a>,
+        Aiste (private calendar)</a>,
         <a href="https://localhost:8815/persons/Aiste/timetable-calendar">
-        Aiste Kesminaite (timetable)</a></li>
+        Aiste (timetable)</a></li>
     <li><a href="https://localhost:8815/persons/Albert/calendar">
         Albert (private calendar)</a>,
         <a href="https://localhost:8815/persons/Albert/timetable-calendar">
