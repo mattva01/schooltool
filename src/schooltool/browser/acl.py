@@ -30,6 +30,7 @@ from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.interfaces import IPerson, IGroup
 from schooltool.browser.widgets import SelectionWidget
+from schooltool.browser import absoluteURL
 
 __metaclass__ = type
 
@@ -43,6 +44,9 @@ class ACLView(View):
 
     def __init__(self, context):
         View.__init__(self, context)
+
+        # XXX "principal" is heavy Zope 3 jargon that is guaranteed to be
+        # misunderstood in school contexts.  Rename it to "user"
 
         self.principal_widget = SelectionWidget(
             'principal', _('Principal'),
@@ -94,12 +98,27 @@ class ACLView(View):
         if value not in (ViewPermission, AddPermission, ModifyPermission, None):
             raise ValueError(_("Please select a permission"))
 
-    def checkbox(self, principal, permission):
-        """Format the checkbox id"""
-        if principal == Everybody:
-            return '%s:%s' % (permission, principal)
-        else:
-            return '%s:%s' % (permission, getPath(principal))
+    def list(self):
+        """List all grants."""
+        grants = []
+        for user, permission in self.context:
+            if user == Everybody:
+                stone = 1 # make it heavy so it ends up at the bottom
+                title = _('Everybody')
+                value = '%s:%s' % (permission, user)
+                url = None
+            else:
+                stone = 0
+                title = user.title
+                value = '%s:%s' % (permission, getPath(user))
+                url = absoluteURL(self.request, user)
+            # XXX: i18nize the permission name.  The tricky part is to make
+            # i18nextractor see the set of allowed values.
+            grants.append((stone, title, {'title': title, 'url': url,
+                                          'permission': permission,
+                                          'value': value}))
+        grants.sort()
+        return [item for heavy_stone, title, item in grants]
 
     def allPrincipals(self):
         """Return a list of objects available for addition"""

@@ -26,12 +26,13 @@ import unittest
 from logging import INFO
 
 from schooltool.browser.tests import RequestStub
-from schooltool.tests.utils import AppSetupMixin
+from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
+from schooltool.common import dedent
 
 __metaclass__ = type
 
 
-class TestACLView(AppSetupMixin, unittest.TestCase):
+class TestACLView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
     def createView(self):
         from schooltool.browser.acl import ACLView
@@ -42,6 +43,40 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(authenticated_user=self.manager)
         result = view.render(request)
         self.assertEquals(request.code, 200)
+
+    def test_list(self):
+        from schooltool.interfaces import Everybody
+        from schooltool.interfaces import ViewPermission, AddPermission
+        view = self.createView()
+        view.request = RequestStub(authenticated_user=self.manager)
+        grants = view.list()
+
+        result = "\n".join(["%(title)s | %(permission)-6s | %(value)s" % item
+                            for item in grants])
+        expected = dedent("""
+            Not John Doe | Add    | Add:/persons/notjohn
+            Not John Doe | Modify | Modify:/persons/notjohn
+            Not John Doe | View   | View:/persons/notjohn
+        """).strip()
+        self.assertEquals(result, expected)
+
+        view.context.add((self.person, AddPermission))
+        view.context.add((Everybody, ViewPermission))
+        grants = view.list()
+        result = "\n".join(["%(title)-12s | %(permission)-6s | %(value)s"
+                            % item for item in grants])
+        expected = dedent("""
+            John Doe     | Add    | Add:/persons/johndoe
+            Not John Doe | Add    | Add:/persons/notjohn
+            Not John Doe | Modify | Modify:/persons/notjohn
+            Not John Doe | View   | View:/persons/notjohn
+            Everybody    | View   | View:Everybody
+        """).strip()
+        self.assertEquals(result, expected)
+        self.assertEquals([item['url'] for item in grants],
+                          ['http://localhost:7001/persons/johndoe'] +
+                          ['http://localhost:7001/persons/notjohn'] * 3 +
+                          [None])
 
     def test_update_delete(self):
         from schooltool.interfaces import ViewPermission

@@ -91,6 +91,7 @@ form, div.form {
   padding: 1ex;
   background: #e2e2e2; /* #ffffd3; */
   border: 1px solid #b34848;
+  clear: left;
 }
 form {
   float: left;
@@ -618,4 +619,10 @@ table.schooldaymodel td label {
   float: none;
   width: auto;
   color: inherit;
+}
+
+/* ACLs */
+
+table.acl th {
+  background: #cccccc;
 }

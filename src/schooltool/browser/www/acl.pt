@@ -10,49 +10,49 @@
   </h1>
 <metal:block metal:fill-slot="content">
 
+<form method="POST" tal:attributes="action request/uri"
+      tal:define="status view/update; list view/list">
+  <div class="info" tal:condition="status" tal:content="status" />
 
-<form method="POST" tal:attributes="action request/uri">
-  <div class="info" tal:define="status view/update"
-       tal:condition="status" tal:content="status" />
-
-  <p tal:condition="not:python:list(context)" i18n:translate="">
-    The ACL is empty
+  <p tal:condition="not:list" i18n:translate="">
+    The ACL is empty.
   </p>
-  <table tal:condition="python:list(context)">
+  <table class="acl" tal:condition="list">
     <tr>
       <th>&nbsp;</th>
-      <th i18n:translate="">Principal</th>
+      <th i18n:translate="">User</th>
       <th i18n:translate="">Permission</th>
     </tr>
-
-    <tr tal:repeat="item context">
-      <tal:block define="person python:item[0];
-                         permission python:item[1]">
-      <td><input
-              type="checkbox" name="CHECK"
-              tal:attributes="value python:view.checkbox(person, permission)">
+    <tr tal:repeat="item list">
+      <td><input type="checkbox" name="CHECK"
+                 tal:attributes="value item/value;
+                                 id string:check.${repeat/item/number}" />
       </td>
-      <td><a tal:attributes="href person/@@absolute_url|nothing"
-             tal:content="person/title|person"/></td>
-      <td tal:content="permission" i18n:translate=""/>
-      </tal:block>
+      <td><label class="invisible"
+                 tal:omit-tag="item/url"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <a tal:omit-tag="not:item/url"
+               tal:attributes="href item/url" tal:content="item/title" />
+          </label></td>
+      <td><label class="invisible"
+                 tal:attributes="for string:check.${repeat/item/number}"
+                 tal:content="item/permission" /></td>
     </tr>
   </table>
-
-  <div class="buttons">
+  <div class="buttons" tal:condition="list">
     <input type="submit" class="button" name="DELETE"
            value="Revoke permission"
-           tal:condition="python:list(context)"
            i18n:attributes="value" />
   </div>
+</form>
+<form method="POST" tal:attributes="action request/uri">
+  <div tal:replace="structure view/principal_widget" />
+  <div tal:replace="structure view/permission_widget" />
   <div class="buttons">
-    <div tal:replace="structure view/principal_widget" />
-    <div tal:replace="structure view/permission_widget" />
     <input type="submit" class="button" name="ADD"
            value="Grant permission"
            i18n:attributes="value" />
   </div>
-
 </form>
 
 </metal:block>
