@@ -12,7 +12,6 @@ PYTHON=python$(PYTHON_VERSION)
 sourcepackage=schooltool
 package=schooltool
 libpkg=libschooltool
-dummy=schooltool-server
 
 # Schooltool server packages
 bellpackage=schoolbell
@@ -63,12 +62,16 @@ build-stamp: $(scripts)
 
 debdirclean:
 	#This rule is only meant to be called from the top level makefile
-	for i in $(dummy) $(libpkg) $(package) $(packageclients) $(libpkgclients) $(bellpackage);do\
+	for i in $(libpkg) $(package) $(packageclients) $(libpkgclients) $(bellpackage);do\
 	    rm -rf debian/$$i;\
 	done
 	rm -f debian/*.substvars
 	rm -f debian/*.debhelper
-	rm -f debian/import-sampleschool
+	rm -f debian/import-sampleschool.py
+	rm -f debian/schooltool.py
+	rm -f debian/schoolbell.py
+	rm -f debian/schooltool-client.py
+	rm -f debian/import-sampleschool.py.template
 	rm -f debian/files
 	rm -f debian/po/templates.pot
 	rm -f build-stamp install-arch-stamp install-indep-stamp
@@ -263,4 +266,4 @@ binary-arch: build install-arch
 
 binary: binary-arch binary-indep
 
-.PHONY: build clean binary-indep binary-arch binary install
+.PHONY: build clean binary-indep binary-arch binary install debdirclean
