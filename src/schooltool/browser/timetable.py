@@ -298,7 +298,12 @@ class TimetableSchemaWizard(View, TabindexMixin):
         # We could build a custom widget for the model radio buttons, but I do
         # not think it is worth the trouble.
         self.model_error = None
-        self.model_name = to_unicode(self.request.args.get('model', [None])[0])
+        try:
+            raw_value = self.request.args.get('model', [None])[0]
+            self.model_name = to_unicode(raw_value)
+        except UnicodeError:
+            self.model_name = None
+            self.model_error = _("Invalid UTF-8 data.")
 
         self.ttschema = self._buildSchema()
         self.day_templates = self._buildDayTemplates()
@@ -328,7 +333,11 @@ class TimetableSchemaWizard(View, TabindexMixin):
         day_idxs = []
         while 'day%d' % n in self.request.args:
             if 'DELETE_DAY_%d' % n not in self.request.args:
-                day_id = to_unicode(self.request.args['day%d' % n][0]).strip()
+                try:
+                    raw_value = self.request.args['day%d' % n][0]
+                    day_id = to_unicode(raw_value).strip()
+                except UnicodeError:
+                    day_id = None
                 if not day_id:
                     day_id = _('Day %d' % (len(day_ids) + 1))
                 day_ids.append(day_id)
@@ -351,7 +360,10 @@ class TimetableSchemaWizard(View, TabindexMixin):
                 periods = []
                 while 'day%d.period%d' % (idx, n) in self.request.args:
                     raw_value = self.request.args['day%d.period%d' % (idx, n)]
-                    periods.append(to_unicode(raw_value[0]).strip())
+                    try:
+                        periods.append(to_unicode(raw_value[0]).strip())
+                    except UnicodeError:
+                        pass
                     n += 1
                 periods = filter(None, periods)
                 if not periods:
@@ -384,11 +396,18 @@ class TimetableSchemaWizard(View, TabindexMixin):
         self.discarded_some_periods = False
         while 'time%d.period' % n in self.request.args:
             raw_value = self.request.args['time%d.period' % n][0]
-            period = to_unicode(raw_value).strip()
+            try:
+                period = to_unicode(raw_value).strip()
+            except UnicodeError:
+                n += 1
+                continue
             for day in range(7):
                 raw_value = self.request.args.get('time%d.day%d' % (n, day),
                                                   [''])[0]
-                value = to_unicode(raw_value).strip()
+                try:
+                    value = to_unicode(raw_value).strip()
+                except UnicodeError:
+                    continue
                 if not value:
                     continue
                 try:

@@ -799,10 +799,10 @@ class EventEditView(EventViewBase):
     page_title = _("Edit event")
 
     def update(self):
-        self.event_id = to_unicode(self.request.args['event_id'][0])
         try:
+            self.event_id = to_unicode(self.request.args['event_id'][0])
             self.event = self.context.find(self.event_id)
-        except KeyError:
+        except (KeyError, UnicodeError):
             # Pehaps it would be better to create a traversal view for events
             # and refactor the event edit view to take the event as context,
             # then we would be able to simply display a standard 404 page.
@@ -838,10 +838,10 @@ class EventDeleteView(View):
     authorization = ACLModifyAccess
 
     def do_GET(self, request):
-        event_id = to_unicode(request.args['event_id'][0])
         try:
+            event_id = to_unicode(request.args['event_id'][0])
             event = self.context.find(event_id)
-        except KeyError:
+        except (KeyError, UnicodeError):
             suffix = 'daily.html'
         else:
             suffix = 'daily.html?date=%s' % event.dtstart.date()
