@@ -47,7 +47,7 @@ from schooltool.browser.widgets import dateParser, intParser
 from schooltool.common import to_unicode
 from schooltool.component import FacetManager
 from schooltool.component import getPath, traverse
-from schooltool.component import getTicketService
+from schooltool.component import getTicketService, getTimetableSchemaService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.membership import Membership
@@ -744,17 +744,27 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             value=self.context.timetable_privacy,
             validator=privacy_validator)
 
+        tts_service = getTimetableSchemaService(self.context)
+        self.default_tts_widget = SelectionWidget(
+            'default_tts',
+            _('The default timetable schema'),
+            [(k, k) for k in tts_service.keys()],
+            value=tts_service.default_id)
+
     def update(self, request):
         self.new_event_privacy_widget.update(request)
         self.timetable_privacy_widget.update(request)
+        self.default_tts_widget.update(request)
 
     def do_POST(self, request):
         self.update(request)
         self.new_event_privacy_widget.require()
         self.timetable_privacy_widget.require()
+        self.default_tts_widget.require()
 
         if (self.new_event_privacy_widget.error or
-            self.timetable_privacy_widget.error):
+            self.timetable_privacy_widget.error or
+            self.default_tts_widget.error):
             self.error = "There were errors"
             return self.do_GET(request)
 
@@ -764,5 +774,7 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             self.context.new_event_privacy = newpriv
         if ttpriv is not None:
             self.context.timetable_privacy = ttpriv
+        service = getTimetableSchemaService(self.context)
+        service.default_id = self.default_tts_widget.value
 
         return self.redirect('/', request)

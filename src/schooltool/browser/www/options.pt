@@ -8,6 +8,7 @@
   <form method="POST" tal:attributes="action request/path">
     <div class="row" tal:replace="structure view/new_event_privacy_widget" />
     <div class="row" tal:replace="structure view/timetable_privacy_widget" />
+    <div class="row" tal:replace="structure view/default_tts_widget" />
     <div class="buttons">
       <input class="button" name="SUBMIT" type="submit" value="Save"
              i18n:attributes="value" />

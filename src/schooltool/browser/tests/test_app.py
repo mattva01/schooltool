@@ -1097,6 +1097,21 @@ class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):
 
 class TestOptionsView(AppSetupMixin, unittest.TestCase):
 
+    def setUp(self):
+        from schooltool.timetable import Timetable, TimetableDay
+
+        AppSetupMixin.setUp(self)
+
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(("Green", "Blue"))
+        tt["B"] = TimetableDay(("Red", "Yellow"))
+        self.app.timetableSchemaService['super'] = tt
+
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(("Orange", "Yellow"))
+        tt["B"] = TimetableDay(("Brown", "Maroon"))
+        self.app.timetableSchemaService['duper'] = tt
+
     def createView(self):
         from schooltool.browser.app import OptionsView
         return OptionsView(self.app)
@@ -1117,16 +1132,19 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
 
         self.assertSelected(doc, 'new_event_privacy', 'hidden')
         self.assertSelected(doc, 'timetable_privacy', 'public')
+        self.assertSelected(doc, 'default_tts', 'super')
 
     def test_do_POST(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager,
                               method="POST",
                               args={'new_event_privacy': 'hidden',
-                                    'timetable_privacy': 'private'})
+                                    'timetable_privacy': 'private',
+                                    'default_tts': 'duper'})
         result = view.render(request)
         self.assertEqual(self.app.new_event_privacy, 'hidden')
         self.assertEqual(self.app.timetable_privacy, 'private')
+        self.assertEqual(self.app.timetableSchemaService.default_id, 'duper')
         self.assertEqual(request.code, 302)
         self.assertEqual(request.headers['location'],
                          'http://localhost:7001/')
@@ -1137,7 +1155,8 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(authenticated_user=self.manager,
                               method="POST",
                               args={'new_event_privacy': 'nonconformant',
-                                    'timetable_privacy': 'public'})
+                                    'timetable_privacy': 'public',
+                                    'default_tts': 'super'})
         result = view.render(request)
         self.assertEqual(self.app.new_event_privacy, 'public')
         self.assertEqual(self.app.timetable_privacy, 'public')
@@ -1149,7 +1168,8 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(authenticated_user=self.manager,
                               method="POST",
                               args={'new_event_privacy': 'nonconformant',
-                                    'timetable_privacy': 'public'})
+                                    'timetable_privacy': 'public',
+                                    'default_tts': 'super'})
         result = view.render(request)
         self.assertEqual(self.app.new_event_privacy, 'public')
         self.assertEqual(self.app.timetable_privacy, 'public')
