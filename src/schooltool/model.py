@@ -29,14 +29,14 @@ import sha
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.interfaces import INote, IResidence
-from schooltool.interfaces import IAbsenceComment
+from schooltool.interfaces import IAbsence, IAbsenceComment
 from schooltool.interfaces import IApplicationObject
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.event import EventTargetMixin
 from schooltool.membership import Membership
-from schooltool.db import PersistentKeysSetWithNames
+from schooltool.db import PersistentKeysSetContainer
 from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.timetable import getPeriodsForDay
@@ -141,11 +141,6 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
                         yield (dtstart, period.duration, period.title)
             day += one_day
 
-    def getRelativePath(self, obj):
-        if obj in self.__facets__:
-            return 'facets/%s' % obj.__name__
-        return RelationshipValenciesMixin.getRelativePath(self, obj)
-
     def __repr__(self):
         return "<%s object %s at 0x%x>" % (self.__class__.__name__,
                                            self.title, id(self))
@@ -169,7 +164,7 @@ class Person(ApplicationObjectMixin):
     def __init__(self, title=None):
         ApplicationObjectMixin.__init__(self, title)
         self.valencies = Valency(Membership, 'member')
-        self._absences = PersistentKeysSetWithNames()
+        self.absences = PersistentKeysSetContainer('absences', self, IAbsence)
         self._current_absence = None
         self._pwhash = None
         first_name = last_name = None
@@ -178,10 +173,10 @@ class Person(ApplicationObjectMixin):
         self.addSelfToCalACL()
 
     def iterAbsences(self):
-        return iter(self._absences)
+        return iter(self.absences)
 
     def getAbsence(self, key):
-        return self._absences.valueForName(key)
+        return self.absences.valueForName(key)
 
     def getCurrentAbsence(self):
         return self._current_absence
@@ -192,18 +187,10 @@ class Person(ApplicationObjectMixin):
         absence = self.getCurrentAbsence()
         if absence is None:
             absence = Absence(self)
-            absence.__parent__ = self
-            self._absences.add(absence)
+            self.absences.add(absence)
             self._current_absence = absence
         absence.addComment(comment)
         return absence
-
-    def getRelativePath(self, obj):
-        if obj in self._absences:
-            return 'absences/%s' % obj.__name__
-        if obj in self.__facets__:
-            return 'facets/%s' % obj.__name__
-        return RelationshipValenciesMixin.getRelativePath(self, obj)
 
     def setPassword(self, password):
         if password is None:

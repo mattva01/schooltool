@@ -36,21 +36,16 @@ from schooltool.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
+from schooltool.tests.utils import TraversableRoot, LocationStub
 from schooltool.interfaces import ISchooldayModel
 from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ILocation
-from schooltool.interfaces import IContainmentRoot, IOptions
+from schooltool.interfaces import IOptions
 from schooltool.facet import FacetedMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
-
-class LocationStub(object):
-    implements(ILocation)
-
-
-class TraversableRoot(object):
-    implements(IContainmentRoot)
+__metaclass__ = type
 
 
 def setPath(obj, path):
@@ -62,7 +57,6 @@ def setPath(obj, path):
     obj.__name__ = path[1:]
     directlyProvides(obj, ILocation)
     obj.__parent__ = TraversableRoot()
-    directlyProvides(obj.__parent__, IContainmentRoot)
     directlyProvides(obj.__parent__, IOptions)
 
 
@@ -915,8 +909,10 @@ class BaseTestTimetableModel:
         return result
 
 
-class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
+class TestSequentialDaysTimetableModel(NiceDiffsMixin, RegistriesSetupMixin,
+                                       unittest.TestCase,
                                        BaseTestTimetableModel):
+                                       
 
     def test_interface(self):
         from schooltool.timetable import SequentialDaysTimetableModel
@@ -1092,7 +1088,8 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
             [])
 
 
-class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
+class TestWeeklyTimetableModel(RegistriesSetupMixin, unittest.TestCase,
+                               BaseTestTimetableModel):
 
     def test(self):
         from schooltool.timetable import WeeklyTimetableModel
@@ -1227,13 +1224,11 @@ class TestTimetableDict(EventServiceTestMixin, unittest.TestCase):
     def test(self):
         from schooltool.timetable import TimetableDict
         from persistent.dict import PersistentDict
-        from schooltool.interfaces import ILocation, IMultiContainer
-        from schooltool.interfaces import IEventTarget
+        from schooltool.interfaces import ILocation, IEventTarget
 
         timetables = TimetableDict()
         self.assert_(isinstance(timetables, PersistentDict))
         verifyObject(ILocation, timetables)
-        verifyObject(IMultiContainer, timetables)
         verifyObject(IEventTarget, timetables)
 
     def test_notify(self):
@@ -1323,19 +1318,6 @@ class TestTimetableDict(EventServiceTestMixin, unittest.TestCase):
         td.clear()
         self.assertEquals(td.keys(), [])
         self.assertEquals(len(self.eventService.events), 2)
-
-    def test_getRelativePath(self):
-        from schooltool.timetable import TimetableDict
-        from schooltool.interfaces import IContainmentRoot
-        from schooltool.component import getPath
-        from zope.interface import directlyProvides
-
-        td = TimetableDict()
-        item = PersistentLocatableStub()
-        directlyProvides(td, IContainmentRoot)
-
-        td['a', 'b'] = item
-        self.assertEqual(getPath(item), '/a/b')
 
 
 class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,

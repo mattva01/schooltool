@@ -28,6 +28,8 @@ from twisted.internet.address import IPv4Address
 from schooltool.interfaces import ITraversable, IContainmentRoot, IUtility
 from schooltool.interfaces import ILocation
 from schooltool.security import SecurityPolicy
+from schooltool.tests.utils import setPath, TraversableRoot
+from schooltool.tests.utils import TraversableStub, LocationStub
 
 __metaclass__ = type
 
@@ -110,6 +112,9 @@ class RequestStub:
         return ctype
 
     def setHeader(self, header, value):
+        assert isinstance(value, (str, int)), (
+                "Value %r for header %r must be"
+                " an integer or a string" % (value, header))
         self.headers[header.lower()] = value
 
     def getCookie(self, key):
@@ -134,7 +139,7 @@ class RequestStub:
 
     def redirect(self, url):
         self.setResponseCode(302)
-        self.setHeader("location", url)
+        self.setHeader("location", str(url))
 
     def chooseMediaType(self, supported_types):
         from schooltool.http import chooseMediaType
@@ -142,38 +147,6 @@ class RequestStub:
 
     def appLog(self, message, level=logging.INFO):
         self.applog.append((self.authenticated_user, message, level))
-
-
-class TraversableStub:
-
-    implements(ITraversable)
-
-    def __init__(self, **kw):
-        self.children = kw
-
-    def traverse(self, name):
-        return self.children[name]
-
-
-class TraversableRoot(TraversableStub):
-
-    implements(IContainmentRoot)
-
-
-class LocatableStub:
-    pass
-
-
-def setPath(obj, path, root=None):
-    """Trick getPath(obj) into returning path."""
-    assert path.startswith('/')
-    obj.__name__ = path[1:]
-    if root is None:
-        directlyProvides(obj, ILocation)
-        obj.__parent__ = TraversableRoot()
-    else:
-        assert IContainmentRoot.providedBy(root)
-        obj.__parent__ = root
 
 
 class Libxml2ErrorLogger:

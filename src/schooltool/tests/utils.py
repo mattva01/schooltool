@@ -28,8 +28,8 @@ import sys
 import time
 import unittest
 from pprint import pformat
-from zope.interface import implements
-from schooltool.interfaces import ILocation, IContainmentRoot
+from zope.interface import implements, directlyProvides
+from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IServiceManager, IEventTarget
 from schooltool.tests.helpers import normalize_xml, diff
 from zope.testing.cleanup import CleanUp
@@ -52,6 +52,30 @@ class _Anything:
 Anything = _Anything()
 
 
+class TraversableStub:
+
+    implements(ITraversable)
+
+    def __init__(self, **kw):
+        self.children = kw
+
+    def traverse(self, name, path=None):
+        return self.children[name]
+
+
+class LocationStub(object):
+    implements(ILocation)
+
+    def __init__(self, name=None, parent=None):
+        self.__name__ = name
+        self.__parent__ = parent
+
+
+class TraversableRoot(TraversableStub):
+
+    implements(IContainmentRoot)
+
+
 class LocatableEventTargetMixin:
     """Object that is locatable and acts as an event target.
 
@@ -71,6 +95,18 @@ class LocatableEventTargetMixin:
 
     def clearEvents(self):
         self.events = []
+
+
+def setPath(obj, path, root=None):
+    """Trick getPath(obj) into returning path."""
+    assert path.startswith('/')
+    obj.__name__ = path[1:]
+    if root is None:
+        directlyProvides(obj, ILocation)
+        obj.__parent__ = TraversableRoot()
+    else:
+        assert IContainmentRoot.providedBy(root)
+        obj.__parent__ = root
 
 
 class ServiceManager:
@@ -342,3 +378,11 @@ class LinkStub:
 
     def traverse(self):
         return self._friend
+
+
+class SchoolToolSetup(RegistriesSetupMixin, unittest.TestCase):
+    """A base class for SchoolTool tests that need components to be set up.
+
+    This is here mainly to save typing.  In the future it is possible that
+    we will use PlacelessSetup from Zope3 instead of this class.
+    """

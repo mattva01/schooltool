@@ -37,7 +37,7 @@ from schooltool.interfaces import IPlaceholder
 from schooltool.interfaces import IRelationshipValencies
 from schooltool.event import EventTargetMixin
 from schooltool.component import FacetManager
-from schooltool.db import PersistentKeysSetWithNames
+from schooltool.db import PersistentKeysSetContainer
 from schooltool.relationship import Valency
 from schooltool.membership import Membership
 
@@ -78,7 +78,7 @@ class FacetedMixin:
     implements(IFaceted)
 
     def __init__(self):
-        self.__facets__ = PersistentKeysSetWithNames()
+        self.__facets__ = PersistentKeysSetContainer('facets', self, IFacet)
 
 
 class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
@@ -108,8 +108,8 @@ class FacetedRelationshipSchema:
         self.roles = relationship_schema.roles
         for factory in self._factories.itervalues():
             if not IFacetFactory.providedBy(factory):
-                raise TypeError(
-                        "Facet factory does not implement IFacetFactory")
+                raise TypeError("Facet factory %r does not"
+                                " implement IFacetFactory" % (factory, ))
 
     def __call__(self, **parties):
         """See IRelationshipSchema"""

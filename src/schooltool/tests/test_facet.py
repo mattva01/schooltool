@@ -206,7 +206,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         facet = facet_list[0]
 
         self.assert_(facet.active, 'facet.active')
-        self.assertEqual(facet.__parent__, child)
+        self.assertEqual(facet.__parent__.__parent__, child)
         self.assertEqual(facet.owner, links['child'])
         self.assertEqual(facet.__name__, 'wonderfacet')
 
@@ -258,7 +258,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assert_(facet is facet_list[0])
 
         self.assert_(facet.active, 'facet.active')
-        self.assertEqual(facet.__parent__, child)
+        self.assertEqual(facet.__parent__.__parent__, child)
         self.assertEqual(facet.owner, links['child'])
 
 

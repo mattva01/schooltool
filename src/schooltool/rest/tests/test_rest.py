@@ -27,6 +27,7 @@ from zope.testing.doctestunit import DocTestSuite
 from schooltool.rest.tests import RequestStub
 from schooltool.interfaces import IContainmentRoot, ILocation
 from zope.interface.declarations import implements, directlyProvides
+from schooltool.tests.utils import SchoolToolSetup
 
 __metaclass__ = type
 
@@ -68,7 +69,7 @@ class ContextStub:
         self.vars = {}
 
 
-class TestTemplate(unittest.TestCase):
+class TestTemplate(SchoolToolSetup):
 
     def test_call(self):
         from schooltool.rest import Template
@@ -140,7 +141,7 @@ class TestTemplate(unittest.TestCase):
                           '<span>/foo/bar</span>\n')
 
 
-class TestSchoolToolTraverse(unittest.TestCase):
+class TestSchoolToolTraverse(SchoolToolSetup):
 
     def test(self):
         from schooltool.rest import schooltoolTraverse

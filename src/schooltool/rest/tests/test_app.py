@@ -25,7 +25,7 @@ $Id$
 import unittest
 from zope.testing.cleanup import CleanUp
 from schooltool.common import dedent
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, SchoolToolSetup
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.tests.utils import QuietLibxml2Mixin, NiceDiffsMixin
 from schooltool.rest.tests import RequestStub, UtilityStub
@@ -41,16 +41,15 @@ class TimetableStub:
         return self
 
 
-class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
+class TestAppView(XMLCompareMixin, SchoolToolSetup):
 
     def setUp(self):
         from schooltool.rest.app import ApplicationView
         from schooltool.model import Group, Person, Note
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool import membership, rest
+        from schooltool import membership
         self.setUpRegistries()
         membership.setUp()
-        rest.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
@@ -182,8 +181,8 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.assert_(view.context is self.view.context)
 
 
-class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
-                              QuietLibxml2Mixin, unittest.TestCase):
+class TestAppObjContainerView(XMLCompareMixin, QuietLibxml2Mixin,
+                              SchoolToolSetup):
 
     def setUp(self):
         from schooltool.rest.app import ApplicationObjectContainerView
@@ -295,13 +294,14 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(view.name, 'newchild')
 
 
-class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
-                                EqualsSortedMixin):
+class TestAvailabilityQueryView(SchoolToolSetup,
+                                XMLCompareMixin, EqualsSortedMixin):
 
     def setUp(self):
         from schooltool.rest.app import AvailabilityQueryView
         from schooltool.model import Resource, Person
         from schooltool.app import Application, ApplicationObjectContainer
+        self.setUpRegistries()
         self.app = Application()
         self.app['resources'] = ApplicationObjectContainer(Resource)
         self.room1 = self.app['resources'].new('room1', title='Room 1')
@@ -442,7 +442,7 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
 
 
 class TestUriObjectListView(NiceDiffsMixin, XMLCompareMixin,
-                            RegistriesSetupMixin, unittest.TestCase):
+                            SchoolToolSetup):
 
     def setUp(self):
         from schooltool.rest.app import UriObjectListView

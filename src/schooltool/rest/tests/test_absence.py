@@ -26,7 +26,7 @@ import datetime
 from logging import INFO
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
-from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup
 from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.tests.helpers import diff, dedent
 from schooltool.rest.tests import RequestStub
@@ -41,13 +41,15 @@ class AbsenceTrackerStub:
         self.absences = []
 
 
-class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
+class TestAbsenceCommentParser(QuietLibxml2Mixin, SchoolToolSetup):
 
     def setUp(self):
         self.setUpLibxml2()
+        self.setUpRegistries()
 
     def tearDown(self):
         self.tearDownLibxml2()
+        self.tearDownRegistries()
 
     def test_parseComment(self):
         from schooltool.interfaces import Unchanged
@@ -145,10 +147,11 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
 
 
 class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
-                                unittest.TestCase):
+                                SchoolToolSetup):
 
     def setUp(self):
         self.setUpEventService()
+        self.setUpRegistries()
 
     def test_traverse(self):
         from schooltool.rest.absence import AbsenceManagementView, AbsenceView
@@ -288,10 +291,11 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
 
 
 class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
-                      unittest.TestCase):
+                      SchoolToolSetup):
 
     def setUp(self):
         self.setUpEventService()
+        self.setUpRegistries()
 
     def createAbsence(self):
         from schooltool.model import Person, Group

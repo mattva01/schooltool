@@ -25,99 +25,38 @@ $Id$
 from zope.interface import moduleProvides, implements, providedBy, Interface
 from zope.interface import directlyProvides
 from zope.interface.adapter import AdapterRegistry
-from zope.component import serviceManager, getService
+from zope.app.traversing.adapters import Traverser, DefaultTraversable
+from zope.app.traversing.adapters import RootPhysicallyLocatable
+from zope.app.traversing.interfaces import ITraverser, ITraversable
+from zope.app.traversing.interfaces import IPhysicallyLocatable
+from zope.app.location.traversing import LocationPhysicallyLocatable
+from zope.app.location.interfaces import ILocation
+from zope.component import serviceManager, getService, provideAdapter
 from zope.component import getUtility, queryUtility, getUtilitiesFor
-from zope.component.utility import IGlobalUtilityService
-from zope.component.utility import GlobalUtilityService
+from zope.component.adapter import IGlobalAdapterService, GlobalAdapterService
+from zope.component.utility import IGlobalUtilityService, GlobalUtilityService
 from zope.component.exceptions import ComponentLookupError
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
-from schooltool.interfaces import IContainmentAPI, IFacetAPI
-from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
-from schooltool.interfaces import IMultiContainer
+from schooltool.interfaces import IFacetAPI, IFacetManager
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
-from schooltool.interfaces import IFacetManager
+from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import IRelationshipFactory
-from schooltool.interfaces import IUtilityService
-from schooltool.interfaces import ITimetableModelRegistry
+from schooltool.interfaces import ITimetableModelRegistry, IUtilityService
 from schooltool.interfaces import ITimetableModelFactory
-from schooltool.interfaces import IOptions
+from schooltool.interfaces import IOptions, IModuleSetup
 from schooltool.interfaces import IDynamicSchemaField, IDynamicSchema
 from schooltool.interfaces import IDynamicSchemaService
-from schooltool.interfaces import IModuleSetup
+# XXX Reexport zope traversing API.
+from zope.app.traversing.api import getPath, getRoot, traverse, TraversalError
 
-moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
-               IRelationshipAPI, IViewAPI, ITimetableModelRegistry,
-               IModuleSetup)
+moduleProvides(IFacetAPI, IServiceAPI, IRelationshipAPI, IViewAPI,
+               ITimetableModelRegistry, IModuleSetup)
 
 __metaclass__ = type
-
-
-#
-# IContainmentAPI
-#
-
-def getPath(obj):
-    """See IContainmentAPI."""
-
-    if IContainmentRoot.providedBy(obj):
-        return '/'
-    cur = obj
-    segments = []
-    while True:
-        if IContainmentRoot.providedBy(cur):
-            segments.append('')
-            segments.reverse()
-            return '/'.join(segments)
-        elif ILocation.providedBy(cur):
-            parent = cur.__parent__
-            if IMultiContainer.providedBy(parent):
-                segments.append(parent.getRelativePath(cur))
-            else:
-                segments.append(cur.__name__)
-            cur = parent
-        else:
-            raise TypeError("Cannot determine path for %s, %s is neither "
-                            "ILocation nor IContainmentRoot" % (obj, cur))
-
-
-def getRoot(obj):
-    """See IContainmentAPI."""
-    cur = obj
-    while not IContainmentRoot.providedBy(cur):
-        if ILocation.providedBy(cur):
-            cur = cur.__parent__
-        else:
-            raise TypeError("Cannot determine path for %s" % obj)
-    return cur
-
-
-def traverse(obj, path):
-    """See IContainmentAPI."""
-    if path.startswith('/'):
-        cur = getRoot(obj)
-    else:
-        cur = obj
-    for name in path.split('/'):
-        if name in ('', '.'):
-            continue
-        if name == '..':
-            if IContainmentRoot.providedBy(cur):
-                continue
-            elif ILocation.providedBy(cur):
-                cur = cur.__parent__
-                continue
-            else:
-                raise TypeError('Could not traverse', cur, name)
-        if ITraversable.providedBy(cur):
-            cur = cur.traverse(name)
-        else:
-            raise TypeError('Could not traverse', cur, name)
-
-    return cur
 
 
 #
@@ -142,20 +81,19 @@ class FacetManager:
         assert (facet.__parent__ is None,
                 "Trying to add a facet that already has a parent")
         ob.__facets__.add(facet, name=name)  # This sets facet.__name__
-        facet.__parent__ = ob
         if owner is not None:
             facet.owner = owner
         facet.active = True
 
     def removeFacet(self, facet):
-        """Set a facet on a faceted object."""
+        """Remove a facet from a faceted object."""
         ob = self.__parent__
         ob.__facets__.remove(facet)  # This leaves facet.__name__ intact
         facet.active = False
         facet.__parent__ = None
 
     def iterFacets(self):
-        """Returns an iterator all facets of an object."""
+        """Returns an iterator over all facets of an object."""
         ob = self.__parent__
         return iter(ob.__facets__)
 
@@ -495,6 +433,23 @@ def registerTimetableModel(id, factory):
     utilities.provideUtility(ITimetableModelFactory, factory, id)
 
 
+#
+# Zope3 component setup
+#
+
+def setUpTraversal():
+    """Set up traversal adapters."""
+    provideAdapter(Traverser, [None], ITraverser)
+    provideAdapter(DefaultTraversable, [None], ITraversable)
+    provideAdapter(RootPhysicallyLocatable, [IContainmentRoot],
+                   IPhysicallyLocatable)
+    provideAdapter(LocationPhysicallyLocatable, [ILocation],
+                   IPhysicallyLocatable)
+
+
 def setUp():
+    serviceManager.defineService('Adapters', IGlobalAdapterService)
+    serviceManager.provideService('Adapters', GlobalAdapterService())
     serviceManager.defineService('Utilities', IGlobalUtilityService)
     serviceManager.provideService('Utilities', GlobalUtilityService())
+    setUpTraversal()

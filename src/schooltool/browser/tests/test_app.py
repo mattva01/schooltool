@@ -29,9 +29,8 @@ from datetime import date, time, timedelta
 from zope.testing.doctest import DocTestSuite
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
 from schooltool.browser.tests import HTMLDocument
+from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup, Anything
 from schooltool.tests.utils import EqualsSortedMixin
-from schooltool.tests.utils import AppSetupMixin
-from schooltool.tests.utils import Anything
 
 __metaclass__ = type
 
@@ -48,7 +47,7 @@ class PersonStub:
     title = 'The Mgmt'
 
 
-class TestAppView(unittest.TestCase, TraversalTestMixin):
+class TestAppView(SchoolToolSetup, TraversalTestMixin):
 
     def createView(self):
         from schooltool.app import Application
@@ -269,7 +268,7 @@ class TestLogoutView(unittest.TestCase):
                           getTicketService(view.context).verifyTicket, ticket)
 
 
-class TestStartView(unittest.TestCase):
+class TestStartView(SchoolToolSetup):
 
     def createView(self):
         from schooltool.browser.app import StartView
@@ -287,7 +286,7 @@ class TestStartView(unittest.TestCase):
         self.assertEquals(request.code, 200)
 
 
-class TestPersonAddView(unittest.TestCase):
+class TestPersonAddView(SchoolToolSetup):
 
     def createView(self):
         from schooltool.model import Person
@@ -583,10 +582,11 @@ class TestPersonAddView(unittest.TestCase):
                                    ' (/persons/auto)', INFO)])
 
 
-class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
+class TestObjectContainerView(SchoolToolSetup, TraversalTestMixin):
 
     def setUp(self):
         from schooltool.browser.app import ObjectContainerView
+        self.setUpRegistries()
 
         class ViewStub:
 
@@ -1044,12 +1044,13 @@ class TestResidenceAddView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.related_person, [])
 
 
-class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
+class TestBusySearchView(SchoolToolSetup, EqualsSortedMixin):
 
     def setUp(self):
         from schooltool.model import Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.browser.app import BusySearchView
+        self.setUpRegistries()
         app = Application()
         self.app = app
         r = app['resources'] = ApplicationObjectContainer(Resource)

@@ -39,8 +39,7 @@ from schooltool.browser.tests import assertRedirectedTo
 from schooltool.browser.tests import assertHasHiddenField
 from schooltool.browser.tests import assertHasSubmitButton
 from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
-from schooltool.tests.utils import XMLCompareMixin
-from schooltool.tests.utils import Anything
+from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup, Anything
 from schooltool.tests.helpers import diff
 
 __metaclass__ = type
@@ -2018,7 +2017,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                           'daily.html?date=2004-08-16')
 
 
-class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
+class TestEventDeleteView(SchoolToolSetup, EventTimetableTestHelpers):
 
     assertHasHiddenField = assertHasHiddenField
     assertHasSubmitButton = assertHasSubmitButton
@@ -2194,7 +2193,7 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
                           'daily.html?date=2004-08-14')
 
 
-class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
+class TestEventDeleteViewWithRepeatingEvents(SchoolToolSetup):
 
     assertRedirectedTo = assertRedirectedTo
     assertHasHiddenField = assertHasHiddenField

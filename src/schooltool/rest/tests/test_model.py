@@ -25,7 +25,7 @@ $Id$
 import unittest
 import datetime
 from logging import INFO
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, SchoolToolSetup
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.rest.tests import RequestStub, viewClass, setPath
@@ -408,7 +408,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
             """, recursively_sort=['groups'])
 
 
-class TestPersonPasswordView(unittest.TestCase):
+class TestPersonPasswordView(SchoolToolSetup):
 
     def test_do_PUT(self):
         from schooltool.model import Person
@@ -447,12 +447,13 @@ class TestPersonPasswordView(unittest.TestCase):
         self.assert_(not p.checkPassword("foo"))
 
 
-class TestResourceView(XMLCompareMixin, unittest.TestCase):
+class TestResourceView(XMLCompareMixin, SchoolToolSetup):
 
     def setUp(self):
         from schooltool.rest.model import ResourceView
         from schooltool.model import Resource
         from schooltool.app import Application, ApplicationObjectContainer
+        self.setUpRegistries()
         app = Application()
         app['resources'] = ApplicationObjectContainer(Resource)
         self.resource = app['resources'].new('room3', title='Room 3')

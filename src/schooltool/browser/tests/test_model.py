@@ -31,8 +31,8 @@ from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.browser.tests import HTMLDocument
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
-from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
-from schooltool.tests.utils import AppSetupMixin
+from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup
 from schooltool.tests.helpers import sorted
 
 __metaclass__ = type
@@ -406,7 +406,7 @@ class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
                             INFO)])
 
 
-class TestPersonEditView(unittest.TestCase):
+class TestPersonEditView(SchoolToolSetup):
 
     def createView(self):
         from schooltool.browser.model import PersonEditView
@@ -573,7 +573,7 @@ class TestPersonEditView(unittest.TestCase):
         self.assert_(self.info.photo is None)
 
 
-class TestPersonInfoMixin(unittest.TestCase):
+class TestPersonInfoMixin(SchoolToolSetup):
 
     def test_info(self):
         from schooltool.browser.model import PersonInfoMixin
@@ -604,8 +604,7 @@ class TestPersonInfoMixin(unittest.TestCase):
         self.assertEquals(mixin.photoURL(), '')
 
 
-class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
-                    unittest.TestCase):
+class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -721,7 +720,7 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
                             'empty': False}])
 
 
-class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
+class TestGroupEditView(SchoolToolSetup):
 
     def setUp(self):
         from schooltool.model import Group, Person, Resource
@@ -902,7 +901,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(result, 'Cannot add Teachers to Teachers')
 
 
-class TestGroupSubgroupView(RegistriesSetupMixin, unittest.TestCase):
+class TestGroupSubgroupView(SchoolToolSetup):
 
     def setUp(self):
         # XXX Clone of TestGroupEditView.setUp().
@@ -976,8 +975,7 @@ class TestGroupSubgroupView(RegistriesSetupMixin, unittest.TestCase):
                           ['Group'])
 
 
-class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
-                            unittest.TestCase):
+class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
 
     def setUp(self):
         from schooltool.model import Group, Person, Resource
@@ -1131,7 +1129,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
-class TestResourceEditView(unittest.TestCase):
+class TestResourceEditView(SchoolToolSetup):
 
     def createView(self):
         from schooltool.browser.model import ResourceEditView
@@ -1238,7 +1236,7 @@ class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assert_("Note 1 Title" in content)
         self.assert_("Note 1 Body" in content)
 
-class TestResidenceMoveView(RegistriesSetupMixin, unittest.TestCase):
+class TestResidenceMoveView(SchoolToolSetup):
 
     def setUp(self):
         from schooltool.model import Residence, Person, Resource

@@ -23,9 +23,11 @@ $Id$
 """
 
 import UserDict
+import itertools
 from persistent import Persistent
 from persistent.dict import PersistentDict
-import itertools
+from schooltool.interfaces import ILocation
+from zope.interface import implements
 
 __metaclass__ = type
 
@@ -315,3 +317,32 @@ class PersistentPairKeysDictWithNames(PersistentPairKeysDict,
         name = self[key].__name__
         PersistentPairKeysDict.__delitem__(self, key)
         self.removeName(name)
+
+
+class PersistentKeysSetContainer(PersistentKeysSetWithNames):
+    """A container based on PersistentKeysSetWithNames.
+
+    This container sets __parent__ of added objects to self.  In addition,
+    it can check that all added objects implement an interface.
+    """
+    # XXX I'm not entirely sure that this class belongs in schooltool.db:
+    #     it deals with interfaces and locations; none of the other classes do.
+
+    implements(ILocation)
+
+    def __init__(self, name, parent, value_interface=None):
+        PersistentKeysSetWithNames.__init__(self)
+        self.__name__ = name
+        self.__parent__ = parent
+        self.value_interface = value_interface
+
+    def add(self, obj, name=None):
+        if (self.value_interface is not None
+            and not self.value_interface.providedBy(obj)):
+            raise ValueError("%r does not implement %r"
+                             % (obj, self.value_interface))
+        PersistentKeysSetWithNames.add(self, obj, name=name)
+        # TODO: check if obj implements ILocation?
+        obj.__parent__ = self
+
+    # TODO: override remove() to set obj.__parent__ = None?

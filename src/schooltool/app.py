@@ -114,7 +114,7 @@ class Application(Persistent):
         """See IApplication"""
         return self._appObjects[name]
 
-    def traverse(self, name):
+    def traverse(self, name, path=None):
         """See ITraversable"""
         if name == 'utils':
             return self.utilityService
@@ -143,7 +143,7 @@ class ApplicationObjectContainer(Persistent):
         self._contents = PersistentDict()
         self._nextid = 1
 
-    def __getitem__(self, name):
+    def __getitem__(self, name, path=None):
         return self._contents[name]
 
     traverse = __getitem__

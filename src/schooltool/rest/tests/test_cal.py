@@ -29,7 +29,7 @@ from schooltool.rest.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.tests.utils import AppSetupMixin
+from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup
 from schooltool.tests.helpers import dedent, diff, sorted
 
 __metaclass__ = type
@@ -935,8 +935,7 @@ class TestCalendarViewBookingEvents(NiceDiffsMixin, AppSetupMixin,
         self.assertEquals(len(list(self.resource.calendar)), 0)
 
 
-class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
-                      unittest.TestCase):
+class TestBookingView(SchoolToolSetup, QuietLibxml2Mixin):
 
     def setUp(self):
         from schooltool.rest.cal import BookingView
@@ -1115,7 +1114,7 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
                             INFO)])
 
 
-class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
+class TestAllCalendarsView(XMLCompareMixin, SchoolToolSetup):
 
     def createApp(self):
         from schooltool.app import Application, ApplicationObjectContainer

@@ -52,35 +52,49 @@ def absoluteURL(request, obj, suffix=''):
 
     Example:
 
-      >>> from schooltool.rest.tests import LocatableStub, setPath
-      >>> root, obj = LocatableStub(), LocatableStub()
+    We need the location adapters to be set up:
+
+      >>> from schooltool.tests.utils import RegistriesSetupMixin
+      >>> initializer = RegistriesSetupMixin()
+      >>> initializer.setUpRegistries()
+
+    Let's create a few objects to play with:
+
+      >>> from schooltool.rest.tests import LocationStub, setPath
+      >>> root, obj = LocationStub(), LocationStub()
       >>> setPath(root, '/')
       >>> setPath(obj, '/obj')
       >>> from schooltool.rest.tests import RequestStub
       >>> request = RequestStub('http://example.org:7001/')
 
+    Simple examples:
+
       >>> absoluteURL(request, root)
-      'http://example.org:7001/'
+      u'http://example.org:7001/'
       >>> absoluteURL(request, obj)
-      'http://example.org:7001/obj'
+      u'http://example.org:7001/obj'
 
     Virtual hosting is supported:
 
       >>> request.setHost('example.com', 443, ssl=True)
 
       >>> absoluteURL(request, root)
-      'https://example.com:443/'
+      u'https://example.com:443/'
       >>> absoluteURL(request, obj)
-      'https://example.com:443/obj'
+      u'https://example.com:443/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absoluteURL(request, root, 'subobject/or/two')
-      'https://example.com:443/subobject/or/two'
+      u'https://example.com:443/subobject/or/two'
       >>> absoluteURL(request, obj, 'subobject')
-      'https://example.com:443/obj/subobject'
+      u'https://example.com:443/obj/subobject'
+
+    Let's clean up after ourselves.
+
+      >>> initializer.tearDownRegistries()
 
     """
     if request.isSecure():
@@ -105,31 +119,41 @@ def absolutePath(request, obj, suffix=''):
 
     Example:
 
-      >>> from schooltool.rest.tests import LocatableStub, setPath
-      >>> root, obj = LocatableStub(), LocatableStub()
+    We need the location adapters to be set up:
+
+      >>> from schooltool.tests.utils import RegistriesSetupMixin
+      >>> initializer = RegistriesSetupMixin()
+      >>> initializer.setUpRegistries()
+
+    Let's create a few objects to play with:
+
+      >>> from schooltool.rest.tests import LocationStub, setPath
+      >>> root, obj = LocationStub(), LocationStub()
       >>> setPath(root, '/')
       >>> setPath(obj, '/obj')
       >>> from schooltool.rest.tests import RequestStub
       >>> request = RequestStub()
 
+    Some simple examples:
+
       >>> absolutePath(request, root)
-      '/'
+      u'/'
       >>> absolutePath(request, obj)
-      '/obj'
+      u'/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absolutePath(request, root, 'subobject')
-      '/subobject'
+      u'/subobject'
       >>> absolutePath(request, obj, 'subobject/subsubobject')
-      '/obj/subobject/subsubobject'
+      u'/obj/subobject/subsubobject'
 
     """
     path = getPath(obj).split('/')
     path += suffix.split('/')
-    return '/' + '/'.join(filter(None, path))
+    return u'/' + u'/'.join(filter(None, path))
 
 
 def read_file(fn, basedir=None):

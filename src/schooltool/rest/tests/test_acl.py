@@ -109,7 +109,7 @@ class TestACLView(AppSetupMixin, QuietLibxml2Mixin,
 
     def test_do_POST_errors(self):
         view = self.createView()
-        bodies = ("""<acl xmlns="http://schooltool.org/ns/model/0.1">
+        bodies = ["""<acl xmlns="http://schooltool.org/ns/model/0.1">
                        <allow principal="Some guy"  permission="View"/>
                      </acl>
                      """,
@@ -120,7 +120,7 @@ class TestACLView(AppSetupMixin, QuietLibxml2Mixin,
                   """<acl>
                        <allow principal="Everybody"  permission="View"/>
                      </acl>
-                     """)
+                     """]
 
         for body in bodies:
             request = RequestStub(authenticated_user=self.manager,

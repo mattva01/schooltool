@@ -869,10 +869,10 @@ class TimePeriodCreatorView(SchooldayModelCalendarView):
         try:
             path = getPath(self.service[self.key])
             del self.service[self.key]
-            request.appLog(_("Time period %s deleted") % getPath(self.context))
         except KeyError:
             return notFoundPage(request)
         else:
+            request.appLog(_("Time period %s deleted") % getPath(self.context))
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
 
@@ -885,4 +885,3 @@ def setUp():
     """See IModuleSetup."""
     registerView(ITimetableSchemaService, TimetableSchemaServiceView)
     registerView(ITimePeriodService, TimePeriodServiceView)
-

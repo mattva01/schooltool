@@ -24,18 +24,17 @@ $Id$
 
 import unittest
 from sets import Set
+from persistent import Persistent
 from zope.interface import Interface, implements
 from zope.interface import directlyProvides, classProvides
 from zope.interface.verify import verifyObject
 from zope.component.exceptions import ComponentLookupError, Invalid
 from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
-from schooltool.interfaces import IUtility, IUtilityService
+from schooltool.interfaces import IUtility, IUtilityService, IViewAPI
 from schooltool.interfaces import IServiceAPI, IServiceManager
-from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
-from schooltool.interfaces import ITraversable, IMultiContainer
+from schooltool.interfaces import IContainmentRoot, ILocation, ITraversable
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
-from schooltool.interfaces import IViewAPI
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin, RegistriesCleanupMixin
@@ -76,13 +75,6 @@ class LocationStub:
         return "LocationStub(%r, %r)" % (self.__parent__, self.__name__)
 
 
-class MulticontainerStub(LocationStub):
-    implements(IMultiContainer)
-
-    def getRelativePath(self, obj):
-        return 'magic/' + obj.__name__
-
-
 class TraversableStub:
     implements(ITraversable)
 
@@ -93,87 +85,18 @@ class TraversableStub:
         return self.children[name]
 
 
-class TestCanonicalPath(unittest.TestCase):
-
-    def test_api(self):
-        from schooltool import component
-        verifyObject(IContainmentAPI, component)
-
-    def buildTree(self):
-        a = LocationStub(None, 'root')
-        directlyProvides(a, IContainmentRoot)
-        b = LocationStub(a, 'foo')
-        c = LocationStub(b, 'bar')
-        d = MulticontainerStub(b, 'baz')
-        e = LocationStub(d, 'quux')
-        return a, b, c, d, e
-
-    def test_getPath(self):
-        from schooltool.component import getPath
-
-        x = LocationStub(None, 'root')
-        self.assertRaises(TypeError, getPath, x)
-        self.assertRaises(TypeError, getPath, object())
-
-        a, b, c, d, e = self.buildTree()
-        self.assertEqual(getPath(a), '/')
-        self.assertEqual(getPath(b), '/foo')
-        self.assertEqual(getPath(c), '/foo/bar')
-        self.assertEqual(getPath(d), '/foo/baz')
-        self.assertEqual(getPath(e), '/foo/baz/magic/quux')
-
-    def test_getRoot(self):
-        from schooltool.component import getRoot
-
-        x = LocationStub(None, 'root')
-        self.assertRaises(TypeError, getRoot, x)
-        self.assertRaises(TypeError, getRoot, object())
-
-        a, b, c, d, e = self.buildTree()
-        self.assertEqual(getRoot(a), a)
-        self.assertEqual(getRoot(b), a)
-        self.assertEqual(getRoot(c), a)
-
-    def test_traverse(self):
-        from schooltool.component import traverse
-
-        x = LocationStub(None, 'root')
-        y = object()
-
-        a, b, c, d, e = self.buildTree()
-        for path in ('', '.', './', './.', './/'):
-            self.assertEqual(traverse(x, path), x)
-            self.assertEqual(traverse(y, path), y)
-            self.assertEqual(traverse(a, path), a)
-            self.assertEqual(traverse(b, path), b)
-            self.assertEqual(traverse(c, path), c)
-        for path in ('/', '//', '/..', '/.', '../.././/../..'):
-            self.assertRaises(TypeError, traverse, x, path)
-            self.assertRaises(TypeError, traverse, y, path)
-            self.assertEqual(traverse(a, path), a)
-            self.assertEqual(traverse(b, path), a)
-            self.assertEqual(traverse(c, path), a)
-        u = TraversableStub()
-        v = TraversableStub()
-        u.children['v'] = v
-        for path in ('v', './v', 'v/', 'v/.', 'v//'):
-            self.assertEqual(traverse(u, 'v'), v)
-        self.assertRaises(TypeError, traverse, u, '..')
-        self.assertRaises(TypeError, traverse, u, '/')
-        self.assertRaises(TypeError, traverse, x, 'y')
-        self.assertRaises(KeyError, traverse, u, 'y')
-
-
 class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
+        from schooltool.db import PersistentKeysSetContainer
 
         class Stub:
             implements(IFaceted)
-            __facets__ = PersistentKeysSetWithNames()
-            __facets__._data = {}
 
-        class FacetStub:
+            def __init__(self):
+                self.__facets__ = PersistentKeysSetContainer('facets', self)
+
+        class FacetStub(Persistent):
             implements(IFacet)
             active = False
             owner = None
@@ -199,7 +122,7 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(TypeError, fm.setFacet, object())
         fm.setFacet(self.facet)
         self.assert_(self.facet.owner is owner_marker)
-        self.assert_(self.facet.__parent__ is self.ob)
+        self.assert_(self.facet.__parent__ is self.ob.__facets__)
         self.assert_(self.facet.active)
         self.assert_(self.facet in self.ob.__facets__)
         fm.removeFacet(self.facet)
@@ -623,7 +546,6 @@ class TestComponentArchitecture(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestCanonicalPath))
     suite.addTest(unittest.makeSuite(TestFacetManager))
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
     suite.addTest(unittest.makeSuite(TestServiceAPI))

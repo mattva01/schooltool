@@ -25,7 +25,7 @@ $Id$
 from sets import Set
 import unittest
 from persistent import Persistent
-from zope.interface import implements, directlyProvides
+from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
 from schooltool.interfaces import ILinkSet, IPlaceholder, IContainmentRoot
@@ -34,7 +34,8 @@ from schooltool.uris import URIObject
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, TraversableRoot
+from schooltool.tests.utils import LocationStub
 
 
 URITutor = URIObject("http://schooltool.org/ns/tutor")
@@ -45,12 +46,14 @@ URISuperior = URIObject("http://army.gov/ns/superior")
 URIReport = URIObject("http://army.gov/ns/report")
 
 
-class Relatable(LocatableEventTargetMixin):
+class Relatable(LocatableEventTargetMixin, Persistent):
     implements(IRelatable)
 
     def __init__(self, parent=None, name='does not matter'):
+        from schooltool.relationship import LinkSet
         LocatableEventTargetMixin.__init__(self, parent, name)
-        self.__links__ = Set()
+        Persistent.__init__(self)
+        self.__links__ = LinkSet(self)
 
 
 class LinkStub(Persistent):
@@ -67,16 +70,18 @@ class LinkStub(Persistent):
         return self._target
 
 
-class TestRelationship(EventServiceTestMixin, unittest.TestCase):
+class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
+                       unittest.TestCase):
     """Conceptual relationships are really represented by three
     closely bound objects -- two links and a median relationship
     object.  This test tests the whole construct.
     """
 
     def setUp(self):
-        from schooltool.relationship import _LinkRelationship
-        from schooltool.relationship import Link
+        from schooltool.relationship import _LinkRelationship, Link
         self.setUpEventService()
+        self.setUpRegistries()
+
         self.klass = Relatable(self.serviceManager)
         self.tutor = Relatable(self.serviceManager)
         self.klass.title = '5C'
@@ -84,6 +89,9 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.lklass = Link(self.klass, URITutor)
         self.ltutor = Link(self.tutor, URIRegClass)
         self.rel = _LinkRelationship(URIClassTutor, self.ltutor, self.lklass)
+
+    def tearDown(self):
+        self.tearDownRegistries()
 
     def test_interface(self):
         from schooltool.interfaces import IRemovableLink
@@ -135,8 +143,10 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(list(self.tutor.__links__), [])
         self.assert_(self.ltutor.traverse() is self.klass)
         self.assert_(self.lklass.traverse() is self.tutor)
-        self.assert_(self.ltutor.__parent__ is self.tutor)
-        self.assert_(self.lklass.__parent__ is self.klass)
+        self.assert_(self.ltutor.source is self.tutor)
+        self.assert_(self.lklass.source is self.klass)
+        self.assert_(self.ltutor.__parent__ is None)
+        self.assert_(self.lklass.__parent__ is None)
 
         self.assert_(tutor_callback.callable_link is self.ltutor)
         self.assert_(tutor_callback.notify_link is None)
@@ -153,6 +163,23 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assert_(self.lklass in e.links)
         self.assertEquals(self.klass.events, [e])
         self.assertEquals(self.tutor.events, [e])
+
+    def test_getPath(self):
+        from schooltool.relationship import RelatableMixin
+        from schooltool.component import getPath
+
+        root = TraversableRoot()
+        parent = RelatableMixin()
+        parent.__name__ = 'obj'
+        parent.__parent__ = root
+
+        link = LinkStub(role=URISuperior, reltype=URICommand,
+                        target=LinkStub())
+        parent.__links__.add(link)
+        self.assertEqual(getPath(link), '/obj/relationships/0001')
+
+        bystander = LocationStub('0000', parent)
+        self.assertEqual(getPath(bystander), '/obj/0000')
 
 
 class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
@@ -220,12 +247,12 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
 
         verifyObject(ILink, link_to_superior)
         self.assert_(link_to_superior.role is URISuperior)
-        self.assert_(link_to_superior.__parent__ is report)
+        self.assert_(link_to_superior.source is report)
         self.assert_(link_to_superior.traverse() is superior)
 
         verifyObject(ILink, link_to_report)
         self.assert_(link_to_report.role is URIReport)
-        self.assert_(link_to_report.__parent__ is superior)
+        self.assert_(link_to_report.source is superior)
         self.assert_(link_to_report.traverse() is report)
 
 
@@ -280,8 +307,8 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(links[1].reltype, URICommand)
 
         linka, linkb = links
-        self.assertEqual(len(a.__links__), 1)
-        self.assertEqual(len(b.__links__), 1)
+        self.assertEqual(len(list(a.__links__)), 1)
+        self.assertEqual(len(list(b.__links__)), 1)
         self.assertEqual(list(a.__links__)[0], linka)
         self.assertEqual(list(b.__links__)[0], linkb)
         self.assertEqual(list(a.__links__)[0].traverse(), b)
@@ -297,14 +324,12 @@ class TestRelatableMixin(unittest.TestCase):
     def test(self):
         from schooltool.relationship import RelatableMixin, relate
         from schooltool.interfaces import IRelatable, IQueryLinks
-        from schooltool.interfaces import IMultiContainer
 
         a = RelatableMixin()
         b = RelatableMixin()
 
         verifyObject(IQueryLinks, a)
         verifyObject(IRelatable, a)
-        verifyObject(IMultiContainer, a)
 
         la ,lb = relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
 
@@ -337,23 +362,6 @@ class TestRelatableMixin(unittest.TestCase):
         self.assertEqual(a.listLinks(URIEmployee), [e])
         self.assertEqual(a.listLinks(URIJanitor), [j])
         self.assertEqual(a.listLinks(URIWindowWasher), [])
-
-    def test_getRelativePath(self):
-        from schooltool.relationship import RelatableMixin
-        from schooltool.component import getPath
-
-        parent = RelatableMixin()
-        directlyProvides(parent, IContainmentRoot)
-        link = LinkStub(role=URISuperior, reltype=URICommand,
-                        target=LinkStub())
-        parent.__links__.add(link)
-        link.__parent__ = parent
-        self.assertEqual(getPath(link), '/relationships/0001')
-
-        bystander = LinkStub()
-        bystander.__name__ = '0000'
-        bystander.__parent__ = parent
-        self.assertEqual(getPath(bystander), '/0000')
 
 
 class SimplePlaceholder:
@@ -390,6 +398,8 @@ class TestLinkSet(unittest.TestCase):
         self.assertEquals(sorted([a, b]), sorted(s))
         self.assert_(a.__name__ is not None)
         self.assert_(b.__name__ is not None)
+        self.assert_(a.__parent__ is s)
+        self.assert_(b.__parent__ is s)
         self.assert_(s.getLink(a.__name__) is a)
         self.assert_(s.getLink(b.__name__) is b)
 

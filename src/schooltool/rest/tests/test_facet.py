@@ -26,6 +26,7 @@ import sets
 from logging import INFO
 import unittest
 from zope.interface import implements
+from persistent import Persistent
 from schooltool.interfaces import IFacet, IFaceted
 from schooltool.tests.helpers import diff
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -40,7 +41,7 @@ class IFacetStub(IFacet):
     pass
 
 
-class FacetStub:
+class FacetStub(Persistent):
 
     implements(IFacetStub)
 
@@ -56,7 +57,10 @@ class FacetedStub:
     implements(IFaceted)
 
     def __init__(self, initial=()):
-        self.__facets__ = sets.Set(initial)
+        from schooltool.db import PersistentKeysSetContainer
+        self.__facets__ = PersistentKeysSetContainer('facets', self, IFacet)
+        for facet in initial:
+            self.__facets__.add(facet, name=None)
 
 
 class FacetManagerStub:
@@ -71,20 +75,24 @@ class FacetManagerStub:
 class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.rest.facet import FacetView
-        from schooltool import rest
         self.setUpRegistries()
+        from schooltool import rest
         rest.setUp()
-        self.facet = FacetStub(name="001")
-        self.view = FacetView(self.facet)
-        self.view.authorization = lambda ctx, rq: True
 
     def tearDown(self):
         self.tearDownRegistries()
 
+    def createView(self, facet_name="001"):
+        from schooltool.rest.facet import FacetView
+        self.facet = FacetStub(name=facet_name)
+        view = FacetView(self.facet)
+        view.authorization = lambda ctx, rq: True
+        return view
+
     def test_render(self):
+        view = self.createView()
         request = RequestStub("http://localhost/some/object/facets/001")
-        result = self.view.render(request)
+        result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
@@ -96,7 +104,7 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         self.facet.active = False
         self.facet.owner = object()
-        result = self.view.render(request)
+        result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
@@ -107,26 +115,27 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
             """)
 
     def test_delete_owned(self):
+        view = self.createView()
         request = RequestStub("http://localhost/some/object/facets/001",
                               method="DELETE")
         self.facet.owner = object()
-        result = self.view.render(request)
+        result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.applog, [])
         self.assertEquals(result, "Owned facets may not be deleted manually")
 
     def test_delete_unowned(self):
+        view = self.createView(facet_name=None)
         facetedstub = FacetedStub([self.facet])
         setPath(facetedstub, '/person')
-        self.facet.__parent__ = facetedstub
         request = RequestStub("http://localhost/some/object/facets/001",
                               method="DELETE")
-        result = self.view.render(request)
-        expected = "Facet /person/001 (FacetStub) removed"
+        result = view.render(request)
+        expected = "Facet /person/facets/001 (FacetStub) removed"
         self.assertEquals(result, expected, "\n" + diff(expected, result))
         self.assertEquals(request.applog,
-                  [(None, "Facet /person/001 (FacetStub) removed", INFO)])
+                  [(None, expected, INFO)])
 
 
 class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,

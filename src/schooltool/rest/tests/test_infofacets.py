@@ -32,12 +32,12 @@ from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import ILocation
 from schooltool.rest.tests import RequestStub
 from schooltool.rest.tests import setPath
-from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup
 
 __metaclass__ = type
 
 
-class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
+class TestPersonInfoFacetView(SchoolToolSetup, XMLCompareMixin):
 
     def createView(self, context=None):
         from schooltool.rest.infofacets import PersonInfoFacetView
@@ -70,8 +70,10 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         self.assertEqualsXML(result, empty_xml)
 
     def test_put(self):
+        from schooltool.facet import PersistentKeysSetContainer
         from schooltool.infofacets import PersonInfoFacet
         from schooltool.model import Person
+        from schooltool.interfaces import IFacet
         body = """
             <person_info xmlns="http://schooltool.org/ns/model/0.1">
               <first_name>John \xe2\x98\xbb</first_name>
@@ -84,9 +86,8 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         setPath(person, '/persons/007')
 
         context = PersonInfoFacet()
-        context.__parent__ = person
-        context.__name__ = 'info'
-        directlyProvides(context, ILocation)
+        facets = PersistentKeysSetContainer('facets', person, IFacet)
+        facets.add(context, 'info')
 
         view = self.createView(context)
         view.authorization = lambda ct, rq: True
@@ -142,7 +143,7 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(result, context.photo)
 
 
-class TestPhotoView(unittest.TestCase):
+class TestPhotoView(SchoolToolSetup):
 
     def test_get(self):
         from schooltool.rest.infofacets import PhotoView

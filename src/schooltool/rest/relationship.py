@@ -28,7 +28,7 @@ from zope.component.exceptions import ComponentLookupError
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission
 from schooltool.interfaces import IURIObject
-from schooltool.component import traverse, getPath
+from schooltool.component import traverse, getPath, TraversalError
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest import absoluteURL, absolutePath
@@ -105,7 +105,7 @@ class RelationshipsView(View):
 
         try:
             other = traverse(self.context, path)
-        except TypeError, e:
+        except TraversalError, e:
             return textErrorPage(request, _("Nontraversable path: %s") % e)
 
         try:
@@ -125,7 +125,7 @@ class RelationshipsView(View):
         request.appLog(_("Relationship '%s' between %s and %s created")
                        % (link.reltype.name, getPath(self.context),
                           getPath(other)))
-        request.setHeader('Location', location)
+        request.setHeader('Location', str(location))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         return _("Relationship created: %s") % location
@@ -146,7 +146,7 @@ class LinkView(View):
     def do_DELETE(self, request):
         msg = (_("Relationship '%s' between %s and %s removed") %
                (self.context.reltype.name,
-                getPath(self.context.__parent__),
+                getPath(self.context.source),
                 getPath(self.context.traverse())))
         self.context.unlink()
         request.appLog(msg)

@@ -23,7 +23,7 @@ $Id$
 """
 
 from schooltool.interfaces import Everybody
-from schooltool.component import traverse, getPath
+from schooltool.component import traverse, getPath, TraversalError
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest.auth import SystemAccess
@@ -74,7 +74,7 @@ class ACLView(View):
                 else:
                     try:
                         principal = traverse(self.context, path)
-                    except TypeError:
+                    except TraversalError:
                         return textErrorPage(request, _("Bad path %r") % path)
                 self.context.add((principal, permission))
         finally:

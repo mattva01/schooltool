@@ -64,7 +64,6 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
     def testAppObjectInterfaces(self):
         from schooltool.interfaces import IFaceted, IRelatable
         from schooltool.interfaces import IEventConfigurable, IEventTarget
-        from schooltool.interfaces import IMultiContainer
         from schooltool.interfaces import ITimetabled
         obj = self.newObject()
         verifyObject(IFaceted, obj)
@@ -72,7 +71,6 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
         verifyObject(IEventConfigurable, obj)
         verifyObject(IRelatable, obj)
         verifyObject(ITimetabled, obj)
-        verifyObject(IMultiContainer, obj)
 
     def test_getFreeIntervals(self):
         from schooltool.cal import Calendar, CalendarEvent
@@ -247,19 +245,6 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
                                     (datetime(2004, 9, 3, 9, 0),
                                      timedelta(minutes=45), 'C')])
 
-    def test_getRelativePath(self):
-        from schooltool.component import FacetManager
-        obj = self.newObject()
-        link = LinkStub()
-        obj.__links__.add(link)
-        facet = FacetStub()
-        FacetManager(obj).setFacet(facet)
-
-        self.assertEquals(obj.getRelativePath(link),
-                          'relationships/%s' % link.__name__)
-        self.assertEquals(obj.getRelativePath(facet),
-                          'facets/%s' % facet.__name__)
-
     def test_hash(self):
         from schooltool.interfaces import IContainmentRoot
         class C:
@@ -293,26 +278,6 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         facet = FacetManager(p).facetByName("person_info")
         verifyObject(IPersonInfoFacet, facet)
 
-    def test_getRelativePath(self):
-        from schooltool.model import Person
-        from schooltool.absence import AbsenceComment
-        from schooltool.component import FacetManager
-        person = Person('John Smith')
-        person.__parent__ = self.eventService
-        person.__name__ = 'foo'
-        absence = person.reportAbsence(AbsenceComment())
-        link = LinkStub()
-        person.__links__.add(link)
-        facet = FacetStub()
-        FacetManager(person).setFacet(facet)
-
-        self.assertEquals(person.getRelativePath(absence),
-                          'absences/%s' % absence.__name__)
-        self.assertEquals(person.getRelativePath(link),
-                          'relationships/%s' % link.__name__)
-        self.assertEquals(person.getRelativePath(facet),
-                          'facets/%s' % facet.__name__)
-
     def test_absence(self):
         from schooltool.interfaces import IAbsence
         from schooltool.model import Person
@@ -336,7 +301,7 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         self.assert_(IAbsence.providedBy(absence))
         self.assert_(comment1 in absence.comments)
         self.assert_(absence.person is person)
-        self.assert_(absence.__parent__ is person)
+        self.assert_(absence.__parent__ is person.absences)
         self.assert_(not absence.ended)
         self.assert_(not absence.resolved)
         self.assert_(person.getAbsence(absence.__name__) is absence)

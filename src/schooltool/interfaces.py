@@ -41,14 +41,15 @@ $Id$
 __metaclass__ = type
 
 import datetime
-
+from schooltool.unchanged import Unchanged  # reexport from here
 from zope.interface import Interface, implements
 from zope.interface.interfaces import IInterface
+from zope.app.location.interfaces import ILocation
+from zope.app.traversing.interfaces import IContainmentRoot, ITraversable
 from zope.schema import Field, Object, Int, TextLine, Text, List, Set, Tuple
 from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes, BytesLine
 from zope.schema import URI as URIField
 from zope.schema.interfaces import IField
-from schooltool.unchanged import Unchanged  # reexport from here
 
 
 #
@@ -75,158 +76,6 @@ class Timedelta(Field):
     _type = datetime.timedelta
 
     implements(ITimeDelta)
-
-
-#
-# Containment
-#
-
-class IContainmentAPI(Interface):
-    """Containment API.
-
-    Many of the objects in SchoolTool form a hierarchy with the main
-    application object at the top.  The root object (the application)
-    provides the IContainmentRoot interface, branches and leaves provide
-    ILocation.
-
-    Every object (except the root) has a reference to its parent (also known
-    as its container), and a name.  Often you can traverse a container to get
-    an object when you know its name (this is not always implemented, though):
-
-       >>> container = obj.__parent__
-       >>> name = obj.__name__
-       >>> traverse(container, name) is obj
-       True
-
-    Every object has a unique path.  Given a path, you can get the object
-    at that path by traversing the root object:
-
-       >>> root = getRoot(obj)
-       >>> path = getPath(obj)
-       >>> obj is traverse(root, path)
-       True
-
-    """
-
-    def getPath(obj):
-        """Return the unique path of an object in the containment hierarchy.
-
-        The object must implement ILocation or IContainmentRoot and must be
-        attached to the hierarchy (i.e. following parent references should not
-        reach None).  If either of those conditions is not met, raises a
-        TypeError.
-
-        The path of the root object is '/'.  The path of first-level objects
-        (those that have the root object as their parent) is '/' + the name
-        of the object.  The path of any other object is the path of the parent
-        object + '/' + the name of the object, except when the parent
-        implements IMultiContainer.  See also IMultiContainer.
-        """
-
-    def getRoot(obj):
-        """Return the containment root for obj.
-
-        The object must implement ILocation or IContainmentRoot and
-        must be attached to the hierarchy (i.e. following parent
-        references should not reach None).  If either of those
-        conditions is not met, raises a TypeError.
-        """
-
-    def traverse(obj, path):
-        """Return the object accessible as path from obj.
-
-        Path is a list of names separated with forward slashes.  Multiple
-        adjacent slashes are equivalent to a single slash.  Special names
-        are '.' and '..'; they are treated as is customary in file systems.
-        Traversing to '..' at the root keeps you at the root.
-
-        If path starts with a slash, then the traversal starts from
-        getRoot(obj), otherwise the traversal starts from obj.
-
-        Traversing to '..' requires the object to provide either ILocation
-        or IContainmentRoot.  Traversing to a non-empty name requires the
-        object to provide ITraversable.
-        """
-
-
-class ILocation(Interface):
-    """An object located in a containment hierarchy.
-
-    From the location information, a unique path can be computed for
-    an object. By definition, an object cannot be at two locations in
-    a hierarchy.
-    """
-
-    __parent__ = Field(
-        title=u"The parent of an object.",
-        description=u"""
-        This value is None when the object is not attached to the hierarchy.
-        Otherwise parent must implement either ILocation or IContainmentRoot.
-        """)
-
-    __name__ = TextLine(
-        title=u"The name of the object within the parent.",
-        description=u"""
-        This is a name that the parent can be traversed with to get the child.
-        """)
-
-
-class IContainmentRoot(Interface):
-    """A marker interface for the top level application object."""
-
-
-class ITraversable(Interface):
-    """An object that can be traversed."""
-
-    def traverse(name):
-        """Return an object reachable as name.
-
-        Raises a KeyError if the name cannot be traversed.
-
-        Traversables do not have to handle special names '.' or '..'.
-        """
-
-
-class IMultiContainer(Interface):
-    """A container that chooses names for its children.
-
-    Use this interface when the intermediate container is a dumb one (e.g. a
-    Python dict) that does not provide ILocation/ITraversable.  For example,
-    imagine a hyphotetical LunchBox object located at /lunchbox that has
-    two kinds of children:
-
-      - food items (e.g. sandwich), stored in an dict LunchBox.food
-      - insects (e.g. ant), stored in a dict LunchBox.insects
-
-    We want the foot items to have paths like /lunchbox/food/sandwich, and
-    insects to have paths like /lunchbox/insects/ant.  To achieve this we
-    can set the __parent__ of both the sandwich and the ant to refer directly
-    to the lunchbox, and then make the LunchBox a multi-container:
-
-        class LunchBox:
-            implements(ILunchBox, IMultiContainer)
-
-            def getRelativePath(self, obj):
-                if obj in self.food.values():
-                    return 'food/%s' % obj.__name__
-                else:
-                    return 'insects/%s' % obj.__name__
-
-    Traversal of multi-containers is complicated and usually not implemented
-    (i.e. the objects providing IMultiContainer usually do not provide
-    ITraversal).
-
-    We actually use this to make an object be able to tell the correct way to
-    traverse to its relationships or facets.  Traversal in those cases is
-    hardcoded in view classes, and not with ITraversal interfaces.
-    """
-
-    def getRelativePath(child):
-        """Return the path of child relative to self.
-
-        The relative path may contain several path segments separated by
-        slashes, but it should not start nor end with a slash.
-        """
 
 
 #
@@ -285,7 +134,7 @@ class IURIObject(Interface):
 # Relationships
 #
 
-class ILinkSet(Interface):
+class ILinkSet(ILocation):
     """A set of links.
 
     Raises ValueError on an attempt to add duplicate members.
@@ -328,7 +177,7 @@ class ILinkSet(Interface):
         """Returns a link by a name"""
 
 
-class IRelatable(Interface):
+class IRelatable(ILocation):
     """An object which can take part in relationships."""
 
     __links__ = Set(
@@ -359,6 +208,10 @@ class ILink(ILocation):
         description=u"""
         This is how the object got by traverse() relates to my __parent__.
         """)
+
+    source = Object(
+        title=u"The object that this link points from.",
+        schema=IRelatable)
 
     __parent__ = Object(
         title=u"The object at this end of the relationship.",
@@ -1600,7 +1453,7 @@ class ITimetableException(Interface):
         """See if self != other."""
 
 
-class ITimetable(Interface):
+class ITimetable(ILocation):
     """A timetable.
 
     A timetable is an ordered collection of timetable days that contain

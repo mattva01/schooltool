@@ -25,6 +25,7 @@ $Id$
 import unittest
 from persistent import Persistent
 from schooltool.tests.utils import EqualsSortedMixin
+from zope.interface import Interface, directlyProvides
 
 
 class P(Persistent):
@@ -586,6 +587,45 @@ class TestPersistentPairKeysDictWithNames(unittest.TestCase,
         self.assertRaises(KeyError, s.valueForName, y.__name__)
 
 
+class TestPersistentKeysSetContainer(unittest.TestCase):
+
+    def test(self):
+        from schooltool.db import PersistentKeysSetContainer
+        parent = object()
+        c = PersistentKeysSetContainer('box', parent)
+        self.assertEquals(c.__name__, 'box')
+        self.assert_(c.__parent__ is parent)
+        p = P()
+        p2 = P()
+        p.__name__ = p.__parent__ = None
+        p2.__name__ = p2.__parent__ = None
+
+        c.add(p)
+        c.add(p2, name='another_one')
+
+        self.assert_(c.valueForName('001') is p)
+        self.assertEquals(p.__name__, '001')
+        self.assert_(p.__parent__ is c)
+
+        self.assert_(c.valueForName('another_one') is p2)
+        self.assertEquals(p2.__name__, 'another_one')
+        self.assert_(p2.__parent__ is c)
+
+    def test_check_interface(self):
+        from schooltool.db import PersistentKeysSetContainer
+        class IRoundThing(Interface): pass
+        c = PersistentKeysSetContainer('round_box', None, IRoundThing)
+        self.assertEquals(c.__name__, 'round_box')
+        p = P()
+        p.__name__ = p.__parent__ = None
+        directlyProvides(p, IRoundThing)
+        p2 = P()
+        p2.__name__ = p2.__parent__ = None
+        c.add(p)
+        self.assert_(c.valueForName('001') is p)
+        self.assertRaises(ValueError, c.add, p2)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
@@ -596,6 +636,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestUniqueNamesMixin))
     suite.addTest(unittest.makeSuite(TestPersistentKeysSetWithNames))
     suite.addTest(unittest.makeSuite(TestPersistentPairKeysDictWithNames))
+    suite.addTest(unittest.makeSuite(TestPersistentKeysSetContainer))
     return suite
 
 if __name__ == '__main__':

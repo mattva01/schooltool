@@ -26,6 +26,7 @@ import unittest
 from StringIO import StringIO
 
 from schooltool.browser.tests import RequestStub, setPath
+from schooltool.tests.utils import SchoolToolSetup
 
 __metaclass__ = type
 
@@ -38,10 +39,11 @@ class SiteStub:
     applog_path = 'anywhere'
 
 
-class TestAppLog(unittest.TestCase):
+class TestAppLog(SchoolToolSetup):
 
     def setUp(self):
         from schooltool.browser.applog import ApplicationLogView
+        self.setUpRegistries()
         app = ApplicationStub()
         setPath(app, '/')
         self.view = ApplicationLogView(app)

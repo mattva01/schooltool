@@ -37,7 +37,7 @@ from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import IRelationshipValencies
 from schooltool.interfaces import IFaceted, ISchemaInvocation
 from schooltool.interfaces import IModuleSetup, IValency
-from schooltool.interfaces import IUnlinkHook, IMultiContainer
+from schooltool.interfaces import IUnlinkHook
 from schooltool.interfaces import IURIObject
 from schooltool.component import getPath, registerRelationship
 from schooltool import component
@@ -58,13 +58,14 @@ class Link(Persistent):
 
     implements(IRemovableLink)
 
-    def __init__(self, parent, role):
+    __name__ = __parent__ = None
+
+    def __init__(self, source, role):
         if not IURIObject.providedBy(role):
             raise TypeError("Role must be a URIObject (got %r)" % (role,))
-        if not IRelatable.providedBy(parent):
-            raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
-        self.__parent__ = parent
-        self.__name__ = None
+        if not IRelatable.providedBy(source):
+            raise TypeError("Parent must be IRelatable (got %r)" % (source, ))
+        self.source = source
         self.role = role
         self.callbacks = MaybePersistentKeysSet()
         # self.relationship is set when this link becomes part of a
@@ -72,7 +73,7 @@ class Link(Persistent):
 
     def _getTitle(self):
         # XXX this is an ad-hoc bogosity (who said a link's target has a
-        #     title?) that will need to be rethought later
+        #     title?) that will need to be rethought later.
         return self.traverse().title
 
     title = property(_getTitle)
@@ -83,10 +84,10 @@ class Link(Persistent):
     reltype = property(_getReltype)
 
     def traverse(self):
-        return self.relationship.traverse(self).__parent__
+        return self.relationship.traverse(self).source
 
     def unlink(self):
-        self.__parent__.__links__.remove(self)
+        self.__parent__.remove(self)
         otherlink = self.relationship.traverse(self)
         self.traverse().__links__.remove(otherlink)
         event = RelationshipRemovedEvent((self, otherlink))
@@ -114,7 +115,7 @@ class Link(Persistent):
 
 
 class _LinkRelationship(Persistent):
-    """A central part of a relationship.
+    """The central part of a relationship.
 
     This an internal API for links.  Basically, it holds references to
     two links and its name.
@@ -124,12 +125,11 @@ class _LinkRelationship(Persistent):
         self.reltype = reltype
         self.a = a
         self.b = b
-        a.relationship = self
-        b.relationship = self
-        assert IRelatable.providedBy(a.__parent__)
-        a.__parent__.__links__.add(a)
-        assert IRelatable.providedBy(b.__parent__)
-        b.__parent__.__links__.add(b)
+        for obj in a, b:
+            obj.relationship = self
+            relatable = obj.source
+            assert IRelatable.providedBy(relatable)
+            relatable.__links__.add(obj)
 
     def traverse(self, link):
         """Returns the link that is at the other end to the link passed in."""
@@ -139,7 +139,7 @@ class _LinkRelationship(Persistent):
         elif link is self.b:
             return self.a
         else:
-            raise ValueError("Not one of my links: %r" % (link,))
+            raise ValueError("Not one of my links: %r" % (link, ))
 
 
 def relate(reltype, (a, role_of_a), (b, role_of_b)):
@@ -249,7 +249,11 @@ class LinkSet:
 
     implements(ILinkSet)
 
-    def __init__(self):
+    __name__ = 'relationships'
+    __parent__ = None
+
+    def __init__(self, parent=None):
+        self.__parent__ = parent
         self._data = PersistentPairKeysDictWithNames()
 
     def add(self, link):
@@ -258,19 +262,20 @@ class LinkSet:
         If an equivalent link (with the same reltype, role and target)
         already exists in the set, raises a ValueError.
         """
-        if ILink.providedBy(link):
-            key = (link.traverse(), (link.reltype, link.role))
-            value = self._data.get(key)
-            if value is None:
-                self._data[key] = link
-            elif IPlaceholder.providedBy(value):
-                self._data[key] = link
-                value.replacedBy(link)
-            else:
-                assert ILink.providedBy(value)
-                raise ValueError('duplicate link', link)
-        else:
+        if not ILink.providedBy(link):
             raise TypeError('link must provide ILink', link)
+
+        key = (link.traverse(), (link.reltype, link.role))
+        value = self._data.get(key)
+        if value is None:
+            self._data[key] = link
+        elif IPlaceholder.providedBy(value):
+            self._data[key] = link
+            value.replacedBy(link)
+        else:
+            assert ILink.providedBy(value)
+            raise ValueError('duplicate link', link)
+        link.__parent__ = self
 
     def _removeLink(self, link):
         key = (link.traverse(), (link.reltype, link.role))
@@ -283,6 +288,7 @@ class LinkSet:
             del self._data[key]
         else:
             raise ValueError('link not in set', link)
+        link.__parent__ = None
 
     def _removePlaceholder(self, placeholder):
         for key, value in self._data.iteritems():
@@ -337,10 +343,12 @@ class LinkSet:
 
 class RelatableMixin(Persistent):
 
-    implements(IRelatable, IQueryLinks, IMultiContainer)
+    implements(IRelatable, IQueryLinks)
+
+    __name__ = __parent__ = None
 
     def __init__(self):
-        self.__links__ = LinkSet()
+        self.__links__ = LinkSet(self)
 
     def listLinks(self, role=None):
         """See IQueryLinks"""
@@ -348,12 +356,6 @@ class RelatableMixin(Persistent):
             return list(self.__links__)
         else:
             return [link for link in self.__links__ if link.role == role]
-
-    def getRelativePath(self, obj):
-        """See IMultiContainer"""
-        if obj in self.__links__:
-            return 'relationships/%s' % obj.__name__
-        return obj.__name__
 
     def getLink(self, name):
         return self.__links__.getLink(name)
@@ -423,6 +425,5 @@ class Valency:
 
 
 def setUp():
-    """Register the default relationship handler."""
+    # Register the default relationship handler.
     registerRelationship(None, defaultRelate)
-

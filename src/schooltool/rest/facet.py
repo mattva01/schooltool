@@ -70,7 +70,8 @@ class FacetView(View):
             return textErrorPage(request,
                                  _("Owned facets may not be deleted manually"))
         path = getPath(self.context)
-        FacetManager(self.context.__parent__).removeFacet(self.context)
+        faceted = self.context.__parent__.__parent__
+        FacetManager(faceted).removeFacet(self.context)
         msg = (_("Facet %s (%s) removed") %
                (path, self.context.__class__.__name__))
         request.appLog(msg)
@@ -144,7 +145,7 @@ class FacetManagementView(View):
                        (getPath(facet), facet.__class__.__name__))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
-        request.setHeader('Location', location)
+        request.setHeader('Location', str(location))
         return _("Facet created: %s") % location
 
 

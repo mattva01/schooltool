@@ -168,7 +168,7 @@ from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
-from schooltool.interfaces import ILocation, IMultiContainer
+from schooltool.interfaces import ILocation
 from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import Unchanged
 from schooltool.cal import ImmutableCalendar, CalendarEvent
@@ -179,7 +179,9 @@ from schooltool.component import registerTimetableModel
 from schooltool.component import getPath, getOptions
 from schooltool.uris import URIGroup
 from schooltool.event import EventMixin
-from zope.interface import directlyProvides
+from zope.app.location.traversing import LocationPhysicallyLocatable
+from zope.component import provideAdapter, adapts
+from zope.interface import directlyProvides, implements, moduleProvides
 
 __metaclass__ = type
 
@@ -192,7 +194,7 @@ moduleProvides(IModuleSetup)
 
 class Timetable(Persistent):
 
-    implements(ITimetable, ITimetableWrite, ILocation)
+    implements(ITimetable, ITimetableWrite)
 
     def __init__(self, day_ids):
         """Create a new empty timetable.
@@ -817,7 +819,7 @@ class WeeklyTimetableModel(BaseTimetableModel):
 
 class TimetableDict(PersistentDict):
 
-    implements(ILocation, IMultiContainer, IEventTarget)
+    implements(ILocation, IEventTarget)
 
     __name__ = 'timetables'
     __parent__ = None
@@ -830,8 +832,8 @@ class TimetableDict(PersistentDict):
         value.__parent__ = self
         value.__name__ = key
         PersistentDict.__setitem__(self, key, value)
-        self.notify(TimetableReplacedEvent(self.__parent__, key,
-                                           old_value, value))
+        event = TimetableReplacedEvent(self.__parent__, key, old_value, value)
+        self.notify(event)
 
     def __delitem__(self, key):
         value = self[key]
@@ -843,13 +845,6 @@ class TimetableDict(PersistentDict):
     def clear(self):
         for key, value in self.items():
             del self[key]
-
-    def getRelativePath(self, child):
-        if self[child.__name__]  != child:
-            raise TypeError("Cannot determine path of %r, because it does"
-                            " not appear to be a child of %r" %
-                            (child, self))
-        return "/".join(child.__name__)
 
     def notify(self, event):
         if IEventTarget.providedBy(self.__parent__):
@@ -1058,7 +1053,27 @@ def getPeriodsForDay(date, context):
 # Module setup
 #
 
+class TimetablePhysicallyLocatable(LocationPhysicallyLocatable):
+    """A traversal adapter for timetables.
+
+    Timetables are special in that they have tuples (schema_id, period_id)
+    as their __name__, so the standard getPath() will not work on them.
+    """
+
+    adapts(ITimetable)
+
+    def getPath(self):
+        if ITimetableSchemaService.providedBy(self.context.__parent__):
+            # XXX Hacky!
+            path = LocationPhysicallyLocatable.getPath(self)
+        else:
+            path = (getPath(self.context.__parent__) + "/"
+                    + u"/".join(self.context.__name__))
+        return path
+
+
 def setUp():
+    provideAdapter(TimetablePhysicallyLocatable)
     registerTimetableModel('SequentialDaysTimetableModel',
                            SequentialDaysTimetableModel)
     registerTimetableModel('WeeklyTimetableModel', WeeklyTimetableModel)

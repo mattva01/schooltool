@@ -94,7 +94,8 @@ class PersonInfoFacet(Persistent):
     def _updateTitle(self):
         if self._first_name or self._last_name:
             title = "%s %s" % (self._first_name or '', self._last_name or '')
-            self.__parent__.title = title.strip()
+            person = self.__parent__.__parent__
+            person.title = title.strip()
 
     def addField(self, name, value = None):
         pass

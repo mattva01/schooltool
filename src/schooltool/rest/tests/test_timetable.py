@@ -33,10 +33,9 @@ from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.interfaces import ITraversable, IEventTarget
 from schooltool.rest.tests import RequestStub, TraversableRoot, setPath
 from schooltool.tests.helpers import dedent
+from schooltool.tests.utils import SchoolToolSetup, RegistriesSetupMixin
+from schooltool.tests.utils import QuietLibxml2Mixin, EventServiceTestMixin
 from schooltool.tests.utils import XMLCompareMixin
-from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
@@ -92,7 +91,7 @@ class ResourceStub(TimetabledStub):
 class ResourceContainer(dict):
     implements(ITraversable)
 
-    def traverse(self, name):
+    def traverse(self, name, path=None):
         return self[name]
 
 
@@ -132,7 +131,7 @@ class ServiceManagerStub:
         self.resources['lab2'] = ResourceStub('lab2', 'CS Lab 2',
                                                self.eventService)
 
-    def traverse(self, name):
+    def traverse(self, name, path=None):
         return {'resources': self.resources}[name]
 
 
@@ -160,7 +159,7 @@ class TestTimetableContentNegotiation(unittest.TestCase):
         self.assertEquals(cn.chooseRepresentation(rq), 'wxhtml')
 
 
-class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
+class TestTimetableTraverseViews(XMLCompareMixin, SchoolToolSetup):
 
     def do_test(self, view_class, tt_view_class, xml=None, html=None,
                 path='/..object', kwargs=None):
@@ -351,7 +350,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
 
 class TestTimetableReadView(XMLCompareMixin, EventServiceTestMixin,
-                            unittest.TestCase):
+                            SchoolToolSetup):
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -518,7 +517,11 @@ class TestTimetableReadView(XMLCompareMixin, EventServiceTestMixin,
 
     def setUp(self):
         self.setUpEventService()
+        self.setUpRegistries()
         self.root = ServiceManagerStub(eventService=self.eventService)
+
+    def tearDown(self):
+        self.tearDownRegistries()
 
     def createTimetabled(self):
         timetabled = TimetabledStub()
@@ -679,12 +682,14 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
     def setUp(self):
         from schooltool.booking import TimetableResourceSynchronizer
         TestTimetableReadView.setUp(self)
+        self.setUpRegistries()
         self.setUpLibxml2()
         self.root = ServiceManagerStub(self.createEmpty(),
                                        eventService=self.eventService)
         self.eventService.register(TimetableResourceSynchronizer())
 
     def tearDown(self):
+        self.tearDownRegistries()
         self.tearDownLibxml2()
 
     def createTimetabled(self):
@@ -977,8 +982,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                               replacement_node, exc)
 
 
-class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
-                              TestTimetableReadView):
+class TestTimetableSchemaView(QuietLibxml2Mixin, TestTimetableReadView):
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -1362,7 +1366,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.do_test_error(xml=self.bad_weekday_xml)
 
 
-class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
+class TestTimetableSchemaServiceView(XMLCompareMixin, SchoolToolSetup):
 
     def test_get(self):
         from schooltool.timetable import TimetableSchemaService, Timetable
@@ -1419,8 +1423,8 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(result.key, 'newone')
 
 
-class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
-                              QuietLibxml2Mixin, unittest.TestCase):
+class TestSchoolTimetableView(XMLCompareMixin, SchoolToolSetup,
+                              QuietLibxml2Mixin):
 
     example_xml = """
         <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
@@ -1759,7 +1763,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
             self.assertEquals(request.applog, [])
 
 
-class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
+class TestTimePeriodServiceView(XMLCompareMixin, SchoolToolSetup):
 
     def test_get(self):
         from schooltool.timetable import TimePeriodService
@@ -1814,7 +1818,7 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(result.key, '2004 fall')
 
 
-class TestTimePeriodCreatorView(unittest.TestCase):
+class TestTimePeriodCreatorView(SchoolToolSetup):
 
     def test_get(self):
         from schooltool.timetable import TimePeriodService

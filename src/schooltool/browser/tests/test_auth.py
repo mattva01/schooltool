@@ -25,7 +25,7 @@ $Id$
 import unittest
 from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
-from schooltool.browser.tests import LocatableStub
+from schooltool.browser.tests import LocationStub
 from schooltool.tests.utils import AppSetupMixin
 
 
@@ -94,9 +94,7 @@ class TestBrowserAuthPolicies(AuthPolicyTestMixin, AppSetupMixin,
     def test_PrivateAccess(self):
         from schooltool.interfaces import ILocation
         from schooltool.browser.auth import PrivateAccess
-        context = LocatableStub()
-        directlyProvides(context, ILocation)
-        context.__parent__ = self.person
+        context = LocationStub(None, self.person)
         self.assertDenies(PrivateAccess,
                           [self.anonymous, self.person2, self.teacher],
                           context)

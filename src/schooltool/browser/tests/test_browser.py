@@ -29,7 +29,7 @@ from StringIO import StringIO
 from twisted.python.failure import Failure
 from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
-from schooltool.tests.utils import AppSetupMixin
+from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup
 from twisted.internet.address import IPv4Address
 
 __metaclass__ = type
@@ -322,11 +322,12 @@ class TestNotFound(unittest.TestCase):
         self.assert_("Not found: /path" in result)
 
 
-class TestBreadcrumbsMixins(unittest.TestCase):
+class TestBreadcrumbsMixins(SchoolToolSetup):
 
     def setUp(self):
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Person
+        self.setUpRegistries()
         self.app = Application()
         self.app['persons'] = ApplicationObjectContainer(Person)
         self.persons = self.app['persons']

@@ -123,9 +123,9 @@ class PersonInfoFacetView(FacetView):
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
+        person = self.context.__parent__.__parent__
         request.appLog(_("Person info updated on %s (%s)") %
-                       (self.context.__parent__.title,
-                        getPath(self.context.__parent__)))
+                       (person.title, getPath(person)))
         request.setHeader('Content-Type', 'text/plain')
         return _("Updated")
 
