@@ -69,7 +69,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
     implements(ICalendarEvent)
 
     def __init__(self, dtstart, duration, title, description=None,
-                 location=None, unique_id=None, recurrence=None):
+                 location=None, unique_id=None, recurrence=None, allday=False):
         assert title is not None, 'title is required'
         self.dtstart = dtstart
         self.duration = duration
@@ -77,6 +77,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
         self.description = description
         self.location = location
         self.recurrence = recurrence
+        self.allday = allday
         self.unique_id = unique_id
         if not self.unique_id:
             self.unique_id = new_unique_id()

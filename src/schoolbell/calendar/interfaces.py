@@ -41,7 +41,7 @@ $Id$
 
 from zope.interface import Interface
 from zope.schema import Text, TextLine, Int, Datetime, Date, Timedelta
-from zope.schema import List, Set, Choice, Field, Object
+from zope.schema import List, Set, Choice, Field, Object, Bool
 
 
 Unchanged = object() # marker
@@ -340,6 +340,10 @@ class ICalendarEvent(Interface):
         description=u"""
         The recurrence rule, if this is a recurring event, otherwise None.
         """)
+
+    allday = Bool(
+            title=u"All Day Event",
+            required=False)
 
     def replace(**kw):
         """Return a calendar event with new specified fields.

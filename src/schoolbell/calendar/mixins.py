@@ -173,6 +173,8 @@ class CalendarEventMixin(object):
         >>> all_attrs = getFieldNames(ICalendarEvent)
         >>> 'unique_id' in all_attrs
         True
+        >>> 'allday' in all_attrs
+        True
         >>> '__eq__' not in all_attrs
         True
 
@@ -234,9 +236,10 @@ class CalendarEventMixin(object):
     def __eq__(self, other):
         """Check whether two calendar events are equal."""
         return (self.unique_id, self.dtstart, self.duration, self.title,
-                self.description, self.location, self.recurrence) \
+                self.description, self.location, self.recurrence, self.allday)\
                == (other.unique_id, other.dtstart, other.duration, other.title,
-                   other.description, other.location, other.recurrence)
+                   other.description, other.location, other.recurrence,
+                   other.allday)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -311,7 +314,7 @@ class CalendarEventMixin(object):
         # The import is here to avoid cyclic dependencies
         from schoolbell.calendar.simple import SimpleCalendarEvent
         for attr in ['dtstart', 'duration', 'title', 'description', 'location',
-                     'unique_id', 'recurrence']:
+                     'unique_id', 'recurrence', 'allday']:
             kw.setdefault(attr, getattr(self, attr))
         # We explicitly return SimpleCalendarEvent instead of using
         # self.__class__ here because self.class might be unsuitable.  E.g.
