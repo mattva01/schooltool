@@ -8,8 +8,6 @@
 
 <metal:block metal:fill-slot="content">
 
-  <!-- TODO: links, breadcrumbs -->
-
   <ul>
     <li tal:repeat="obj view/sortedObjects">
       <a tal:content="obj/title"

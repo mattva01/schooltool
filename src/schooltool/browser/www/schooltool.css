@@ -85,6 +85,35 @@ a.action:active {
   text-decoration: none
 }
 
+a.sitemap {
+  display: block;
+  padding: 6px 6px;
+  text-decoration: none
+}
+
+a.sitemap:link,
+a.sitemap:visited {
+  color: blue;
+}
+
+a.sitemap:active,
+a.sitemap:hover {
+  background: #ccf;
+  color: black;
+}
+
+div.sitemap p {
+  margin: 0;
+}
+
+div.sitemap div.section {
+  margin: 2ex 0;
+}
+
+div.sitemap div.section h2 {
+  margin: 1ex 0;
+}
+
 /* Forms */
 
 form, div.form {

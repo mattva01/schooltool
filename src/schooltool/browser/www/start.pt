@@ -8,56 +8,64 @@
 </h1>
 <metal:block metal:fill-slot="content">
 
-<p i18n:translate="">What do you want to do today?</p>
+<p i18n:translate="">You may choose an action from the list below.</p>
 
-<div class="actions">
-  <p><a class="action" href="/groups/root" i18n:translate=""
-       >Browse groups and persons</a></p>
+<div class="sitemap">
+  <div class="section" tal:condition="view/isManager">
+    <h2 i18n:translate="">Browsing</h2>
+    <p><a class="sitemap" href="/groups/root" i18n:translate=""
+         >Browse groups and persons</a></p>
+    <p><a class="sitemap" href="/persons" i18n:translate=""
+         >View the person index</a></p>
+    <p><a class="sitemap" href="/groups" i18n:translate=""
+         >View the group index</a></p>
+    <p><a class="sitemap" href="/resources" i18n:translate=""
+         >View the resource index</a></p>
   <div class="section" tal:condition="view/isManager">
     <h2 i18n:translate="">Administrative tasks</h2>
-    <p><a class="action" href="/persons/add.html"
+    <p><a class="sitemap" href="/persons/add.html"
           i18n:translate="">Add a person</a></p>
-    <p><a class="action" href="/groups/add.html"
+    <p><a class="sitemap" href="/groups/add.html"
           i18n:translate="">Add a group</a></p>
-    <p><a class="action" href="/resources/add.html"
+    <p><a class="sitemap" href="/resources/add.html"
           i18n:translate="">Add a resource</a></p>
-    <p><a class="action" href="/applog"
+    <p><a class="sitemap" href="/applog"
           i18n:translate="">View the application log</a></p>
-    <p><a class="action" href="/ttschemas"
+    <p><a class="sitemap" href="/ttschemas"
           i18n:translate="">Manage timetable schemas</a></p>
-    <p><a class="action" href="/time-periods"
+    <p><a class="sitemap" href="/time-periods"
           i18n:translate="">Manage time periods</a></p>
-    <p><a class="action" href="/csvimport.html"
+    <p><a class="sitemap" href="/csvimport.html"
           i18n:translate="">Import CSV data</a></p>
-    <p><a class="action" href="/reset_db.html"
+    <p><a class="sitemap" href="/reset_db.html"
           i18n:translate="">Reset the database</a></p>
   </div>
 
   <div tal:condition="view/isTeacher" class="section">
     <h2 i18n:translate="">Teacher tasks</h2>
-    <p><a class="action" href="/busysearch"
+    <p><a class="sitemap" href="/busysearch"
           i18n:translate="">Book a resource</a></p>
   </div>
 
   <div class="section">
     <h2 i18n:translate="">User tasks</h2>
-    <p><a class="action" tal:attributes="href view/person_url"
+    <p><a class="sitemap" tal:attributes="href view/person_url"
           i18n:translate="">View your information page</a></p>
-    <p><a class="action" i18n:translate=""
+    <p><a class="sitemap" i18n:translate=""
           tal:attributes="href string:${view/person_url}/password.html"
           >Change your password</a></p>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
-          class="action"  i18n:translate=""
+          class="sitemap"  i18n:translate=""
           >Use your calendar</a>
 
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
-          class="action"  i18n:translate=""
+          class="sitemap"  i18n:translate=""
           >Open your calendar in an iCal client</a>
     <p><a tal:attributes="href
                      string:${context/@@absolute_url}/timetable-calendar.ics"
-          class="action" i18n:translate=""
+          class="sitemap" i18n:translate=""
           >Open your timetable calendar in an iCal client</a>
-    <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
+    <p><a class="sitemap" href="/logout" i18n:translate="">Log out</a></p>
   </div>
 </div>
 
