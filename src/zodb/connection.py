@@ -303,6 +303,8 @@ class Connection(ExportImport, object):
         if obj._p_jar is not None and obj._p_jar is not self:
             raise InvalidObjectReference(obj, obj._p_jar)
         if obj._p_jar is None:
+            # Setting _p_changed has a side-effect of adding obj to
+            # _p_jar._registered, so it must be set after _p_jar.
             obj._p_jar = self
             obj._p_oid = self.newObjectId()
             obj._p_changed = True

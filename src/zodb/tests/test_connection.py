@@ -173,7 +173,8 @@ class ConnectionTests(IDataManagerTests):
         self.obj._p_jar = object()
         self.assertRaises(InvalidObjectReference, self.datamgr.add, self.obj)
 
-    def testAdd(self):
+    def testAdding(self):
+        # This is a more 'functional' test than test_add
         self.datamgr.add(self.obj)
         oid = self.obj._p_oid
         self.datamgr.root()["obj"] = self.obj
@@ -183,7 +184,8 @@ class ConnectionTests(IDataManagerTests):
         r2 = cn2.root()
         obj2 = r2["obj"]
         self.assertEqual(obj2._p_oid, oid)
-        self.assertEqual(cn2.get(oid), obj2)
+        self.assert_(cn2.get(oid) is obj2, "cn2.get(oid) is not obj2")
+        self.assert_(self.obj is not obj2, "self.obj is obj2")
 
     def tearDown(self):
         get_transaction().abort()
