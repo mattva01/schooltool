@@ -3,6 +3,6 @@
   <name tal:content="view/getName" />
   <items>
     <item xlink:type="simple" tal:repeat="root view/items"
-          tal:attributes="xlink:title root/title; xlink:href root/path" />
+          tal:attributes="xlink:title root/title; xlink:href root/href" />
   </items>
 </container>

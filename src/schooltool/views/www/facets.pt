@@ -7,7 +7,7 @@
     tal:attributes="active item/active;
                     owned item/owned;
                     xlink:title item/title;
-                    xlink:href item/path"
+                    xlink:href item/href"
   />
   <facetFactory
     tal:repeat="item view/listFacetFactories"

@@ -1,5 +1,5 @@
 <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink"
              xmlns:tal="http://xml.zope.org/namespaces/tal">
   <period tal:repeat="period view/periods" xlink:type="simple"
-          tal:attributes="xlink:title period/name; xlink:href period/path" />
+          tal:attributes="xlink:title period/name; xlink:href period/href" />
 </timePeriods>

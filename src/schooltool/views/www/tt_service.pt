@@ -1,5 +1,5 @@
 <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink"
                   xmlns:tal="http://xml.zope.org/namespaces/tal">
   <schema tal:repeat="schema view/schemas" xlink:type="simple"
-          tal:attributes="xlink:title schema/name; xlink:href schema/path" />
+          tal:attributes="xlink:title schema/name; xlink:href schema/href" />
 </timetableSchemas>

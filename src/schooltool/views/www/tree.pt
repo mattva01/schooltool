@@ -1,4 +1,4 @@
 <tree xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:xlink="http://www.w3.org/1999/xlink">
-  <group tal:replace="structure python: view.generate(context, request)"/>
+  <group tal:replace="structure python: view.generate(context)"/>
 </tree>

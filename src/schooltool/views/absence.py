@@ -55,8 +55,8 @@ class RollCallView(View):
     template = Template('www/rollcall.pt', content_type="text/xml")
     authorization = TeacherAccess
 
-    def groupPath(self):
-        return getPath(self.context)
+    def groupHref(self):
+        return getURL(self.request, self.context, absolute=False)
 
     def listPersons(self, group=None, _already_added=None):
         if group is None:
@@ -77,7 +77,9 @@ class RollCallView(View):
                     if expected_presence:
                         expected_presence = expected_presence.isoformat(' ')
                 _already_added.add(member)
-                results.append({'title': member.title, 'href': getPath(member),
+                results.append({'title': member.title,
+                                'href': getURL(self.request, member,
+                                              absolute=False),
                                 'presence': presence,
                                 'expected_presence': expected_presence})
             if IGroup.providedBy(member):
@@ -283,7 +285,7 @@ class AbsenceListViewMixin:
             if titles:
                 person_title = absence.person.title
             yield {'title': absence.__name__,
-                   'path': getPath(absence),
+                   'href': getURL(self.request, absence, absolute=False),
                    'person_title': person_title,
                    'datetime': absence.comments[0].datetime.isoformat(' '),
                    'expected_presence': expected_presence,
@@ -345,7 +347,7 @@ class AbsenceView(View, AbsenceCommentParser):
             return None
 
     def person_href(self):
-        return getPath(self.context.person)
+        return getURL(self.request, self.context.person, absolute=False)
 
     def person_title(self):
         return self.context.person.title
@@ -356,7 +358,8 @@ class AbsenceView(View, AbsenceCommentParser):
         for comment in self.context.comments:
             absent_from_title = absent_from_href = None
             if comment.absent_from is not None:
-                absent_from_href = getPath(comment.absent_from)
+                absent_from_href = getURL(self.request, comment.absent_from,
+                                          absolute=False)
                 absent_from_title = comment.absent_from.title
             if comment.expected_presence is Unchanged:
                 expected_presence = None
@@ -367,7 +370,8 @@ class AbsenceView(View, AbsenceCommentParser):
             yield {'datetime': comment.datetime.isoformat(' '),
                    'text': comment.text,
                    'reporter_title': comment.reporter.title,
-                   'reporter_href': getPath(comment.reporter),
+                   'reporter_href': getURL(self.request, comment.reporter,
+                                           absolute=False),
                    'absent_from_title': absent_from_title,
                    'absent_from_href': absent_from_href,
                    'ended': endedness[comment.ended],

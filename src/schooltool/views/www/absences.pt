@@ -3,7 +3,7 @@
   <absence tal:repeat="item view/listAbsences"
            xlink:type="simple"
            tal:attributes="xlink:title item/title;
-                           xlink:href item/path;
+                           xlink:href item/href;
                            person_title item/person_title;
                            datetime item/datetime;
                            expected_presence item/expected_presence;

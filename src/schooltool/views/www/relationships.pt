@@ -12,7 +12,7 @@
     >
       <manage xlink:type="simple"
               tal:attributes="xlink:title r/title;
-                              xlink:href  r/path" />
+                              xlink:href  r/href" />
     </relationship>
   </existing>
   <valencies>

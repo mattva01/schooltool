@@ -25,7 +25,7 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 import libxml2
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI
-from schooltool.component import getPath, traverse
+from schooltool.component import traverse
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
 from schooltool.views import getURL
@@ -50,11 +50,12 @@ class RelationshipsView(View):
     authorization = PublicAccess
 
     def listLinks(self):
-        return [{'traverse': getPath(link.traverse()),
+        return [{'traverse': getURL(self.request, link.traverse(),
+                                    absolute=False),
                  'title': link.title,
                  'type': strURI(link.reltype),
                  'role': strURI(link.role),
-                 'path': getPath(link)}
+                 'href': getURL(self.request, link, absolute=False)}
                 for link in self.context.listLinks()]
 
     def getValencies(self):
@@ -132,7 +133,8 @@ class LinkView(View):
         return {'role': strURI(self.context.role),
                 'arcrole': strURI(self.context.reltype),
                 'title': self.context.title,
-                'href': getPath(self.context.traverse())}
+                'href': getURL(self.request, self.context.traverse(),
+                               absolute=False)}
 
     def do_DELETE(self, request):
         self.context.unlink()

@@ -5,5 +5,5 @@
                        xlink:href href;
                        xmlns:xlink nothing">
   <group tal:repeat="child children"
-         tal:replace="structure python: generate(child, request)"/>
+         tal:replace="structure python: generate(child)"/>
 </group>

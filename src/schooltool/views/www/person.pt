@@ -5,24 +5,24 @@
   <name tal:content="view/context/title">Pete</name>
   <groups>
     <item tal:repeat="group view/getGroups" xlink:type="simple"
-          tal:attributes="xlink:title group/title; xlink:href group/path" />
+          tal:attributes="xlink:title group/title; xlink:href group/href" />
   </groups>
   <relationships xlink:type="simple" xlink:title="Relationships"
       i18n:attributes="xlink:title Relationships"
-      tal:attributes="xlink:href string:${view/path}/relationships" />
+      tal:attributes="xlink:href string:${view/href}/relationships" />
   <facets xlink:type="simple" xlink:title="Facets"
       i18n:attributes="xlink:title Facets"
-      tal:attributes="xlink:href string:${view/path}/facets" />
+      tal:attributes="xlink:href string:${view/href}/facets" />
   <timetables xlink:type="simple" xlink:title="Own timetables"
       i18n:attributes="xlink:title Own_timetables"
-      tal:attributes="xlink:href string:${view/path}/timetables" />
+      tal:attributes="xlink:href string:${view/href}/timetables" />
   <timetables xlink:type="simple" xlink:title="Composite timetables"
       i18n:attributes="xlink:title Composite_timetables"
-      tal:attributes="xlink:href string:${view/path}/composite-timetables" />
+      tal:attributes="xlink:href string:${view/href}/composite-timetables" />
   <calendar xlink:type="simple" xlink:title="Private calendar"
       i18n:attributes="xlink:title Private_calendar"
-      tal:attributes="xlink:href string:${view/path}/calendar" />
+      tal:attributes="xlink:href string:${view/href}/calendar" />
   <calendar xlink:type="simple" xlink:title="Calendar derived from timetables"
       i18n:attributes="xlink:title Calendar_derived_from_timetables"
-      tal:attributes="xlink:href string:${view/path}/timetable-calendar" />
+      tal:attributes="xlink:href string:${view/href}/timetable-calendar" />
 </person>

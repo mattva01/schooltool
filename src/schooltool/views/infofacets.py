@@ -29,9 +29,9 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
-from schooltool.component import getPath
 from schooltool.views import View, Template
 from schooltool.views import notFoundPage, textErrorPage
+from schooltool.views import getURL
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date, to_unicode
@@ -80,8 +80,8 @@ class PersonInfoFacetView(FacetView):
         </grammar>
     """
 
-    def path(self):
-        return getPath(self.context)
+    def photo_href(self):
+        return getURL(self.request, self.context, 'photo', absolute=False)
 
     def _traverse(self, name, request):
         if name == 'photo':

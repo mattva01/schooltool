@@ -9,5 +9,5 @@
   <comment tal:content="context/comment"/>
   <photo xlink:type="simple" xlink:title="Photo"
          i18n:attributes="xlink:title Photo"
-         tal:attributes="xlink:href string:${view/path}/photo"/>
+         tal:attributes="xlink:href string:${view/photo_href}"/>
 </person_info>

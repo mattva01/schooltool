@@ -27,7 +27,7 @@ import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource
-from schooltool.component import getPath, traverse
+from schooltool.component import traverse
 from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import TraversableView
@@ -65,18 +65,20 @@ class ApplicationView(TraversableView):
             return TraversableView._traverse(self, name, request)
 
     def getRoots(self):
-        return [{'path': getPath(root), 'title': root.title}
+        return [{'href': getURL(self.request, root, absolute=False),
+                 'title': root.title}
                 for root in self.context.getRoots()]
 
     def getContainers(self):
-        base = getPath(self.context)
+        base = getURL(self.request, self.context, absolute=False)
         if not base.endswith('/'):
             base += '/'
-        return [{'path': '%s%s' % (base, key), 'title': key}
+        return [{'href': '%s%s' % (base, key), 'title': key}
                 for key in self.context.keys()]
 
     def getUtilities(self):
-        return [{'path': getPath(utility), 'title': utility.title}
+        return [{'href': getURL(self.request, utility, absolute=False),
+                 'title': utility.title}
                 for utility in self.context.utilityService.values()]
 
 
@@ -142,7 +144,8 @@ class ApplicationObjectContainerView(TraversableView,
 
     def items(self):
         c = self.context
-        return [{'path': getPath(c[key]), 'title': c[key].title}
+        return [{'href': getURL(self.request, c[key], absolute=False),
+                 'title': c[key].title}
                 for key in self.context.keys()]
 
     def _traverse(self, name, request):
@@ -268,7 +271,8 @@ class AvailabilityQueryView(View):
                     res_slots.append(
                         {'start': start.strftime("%Y-%m-%d %H:%M:%S"),
                          'duration': mins})
-                results.append({'path': getPath(resource),
+                results.append({'href': getURL(self.request, resource,
+                                               absolute=False),
                                 'title': resource.title,
                                 'slots': res_slots})
         return results

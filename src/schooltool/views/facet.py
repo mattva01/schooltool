@@ -26,7 +26,6 @@ import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IFacet
-from schooltool.component import getPath
 from schooltool.component import registerView, getView
 from schooltool.component import FacetManager
 from schooltool.component import getFacetFactory, iterFacetFactories
@@ -90,7 +89,7 @@ class FacetManagementView(View):
         return [{'active': activeness[bool(facet.active)],
                  'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
-                 'path': getPath(facet)}
+                 'href': getURL(self.request, facet, absolute=False)}
                 for facet in self.context.iterFacets()]
 
     def listFacetFactories(self):

@@ -54,7 +54,9 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
         Membership(group=self.group, member=self.per)
         Membership(group=self.sub, member=self.per)
 
+        self.request = RequestStub("http://localhost/groups/sub/relationships")
         self.view = RelationshipsView(self.sub)
+        self.view.request = self.request
         self.view.authorization = lambda ctx, rq: True
         self.setUpLibxml2()
 
@@ -64,24 +66,22 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
 
     def test_listLinks(self):
         from pprint import pformat
-        request = RequestStub("http://localhost/groups/sub/relationships/")
         result = self.view.listLinks()
         self.assertEquals(len(result), 2)
         self.assert_({'traverse': '/persons/p',
                       'role': 'http://schooltool.org/ns/membership/member',
                       'type': 'http://schooltool.org/ns/membership',
                       'title': 'Pete',
-                      'path': '/groups/sub/relationships/0002'}
+                      'href': '/groups/sub/relationships/0002'}
                      in result, pformat(result))
         self.assert_({'traverse': '/groups/root',
                       'role': 'http://schooltool.org/ns/membership/group',
                       'type': 'http://schooltool.org/ns/membership',
                       'title': 'group',
-                      'path': '/groups/sub/relationships/0001'}
+                      'href': '/groups/sub/relationships/0001'}
                      in result, pformat(result))
 
     def test_getValencies(self):
-        request = RequestStub("http://localhost/groups/sub/relationships/")
         result = self.view.getValencies()
         self.assertEquals(result,
                           [{'type':'http://schooltool.org/ns/membership',

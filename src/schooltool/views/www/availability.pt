@@ -1,7 +1,7 @@
 <availability xmlns:tal="http://xml.zope.org/namespaces/tal"
               xmlns:xlink="http://www.w3.org/1999/xlink">
    <resource tal:repeat="res view/listResources" xlink:type="simple"
-             tal:attributes="xlink:href res/path; xlink:title res/title">
+             tal:attributes="xlink:href res/href; xlink:title res/title">
      <slot  tal:repeat="slot res/slots"
             tal:attributes="start slot/start; duration slot/duration"/>
    </resource>

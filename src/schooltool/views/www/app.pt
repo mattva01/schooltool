@@ -5,21 +5,24 @@
   <message i18n:translate="">Welcome to the SchoolTool server</message>
   <roots>
     <root xlink:type="simple" tal:repeat="root view/getRoots"
-          tal:attributes="xlink:title root/title; xlink:href root/path"/>
+          tal:attributes="xlink:title root/title; xlink:href root/href"/>
   </roots>
   <containers>
     <container xlink:type="simple" tal:repeat="container view/getContainers"
                tal:attributes="xlink:title container/title;
-                               xlink:href container/path"/>
+                               xlink:href container/href"/>
   </containers>
   <utilities>
     <utility xlink:type="simple" tal:repeat="utility view/getUtilities"
-         tal:attributes="xlink:title utility/title; xlink:href utility/path"/>
+         tal:attributes="xlink:title utility/title; xlink:href utility/href"/>
   </utilities>
   <schooltt xlink:type="simple" xlink:title="Whole school timetables"
-  xlink:href="/schooltt" i18n:attributes="xlink:title Whole_school_timetables"/>
+            xlink:href="/schooltt"
+            i18n:attributes="xlink:title Whole_school_timetables" />
   <ttschemas xlink:type="simple" xlink:title="Timetable schemas"
-             xlink:href="/ttschemas" i18n:attributes="xlink:title Timetable_schemas"/>
+             xlink:href="/ttschemas"
+             i18n:attributes="xlink:title Timetable_schemas"/>
   <time-periods xlink:type="simple" xlink:title="Time periods"
-             xlink:href="/time-periods" i18n:attributes="xlink:title Time_periods"/>
+                xlink:href="/time-periods"
+                i18n:attributes="xlink:title Time_periods"/>
 </schooltool>

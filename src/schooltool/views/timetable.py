@@ -38,7 +38,7 @@ from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.common import to_unicode
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
-from schooltool.component import registerView, getPath, traverse
+from schooltool.component import registerView, traverse
 from schooltool.component import getRelatedObjects
 from schooltool.component import getTimetableModel
 from schooltool.schema.rng import validate_against_schema
@@ -105,10 +105,12 @@ class TimetableReadView(View, TimetableContentNegotiation):
         return _("%s's complete timetable for %s") % (timetabled.title,
                                                    ", ".join(self.key))
 
+    def getURL(self, obj):
+        return getURL(self.request, obj, absolute=False)
+
     def do_GET(self, request):
         template = self.chooseRepresentation(request)
-        return template(request, view=self, context=self.context,
-                        getPath=getPath)
+        return template(request, view=self, context=self.context)
 
     def rows(self):
         rows = []
@@ -449,7 +451,7 @@ class TimetableTraverseView(BaseTimetableTraverseView):
             uri = '%s/%s/%s' % (baseuri, period_id, schema_id)
             results.append({'schema': schema_id,
                             'period': period_id,
-                            'path': path,
+                            'href': path,
                             'uri': uri})
         return results
 
@@ -480,7 +482,7 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
             uri = '%s/%s/%s' % (baseuri, period_id, schema_id)
             results.append({'schema': schema_id,
                             'period': period_id,
-                            'path': path,
+                            'href': path,
                             'uri': uri})
         return results
 
@@ -514,7 +516,7 @@ class SchoolTimetableTraverseView(BaseTimetableTraverseView):
                 uri = '%s/%s/%s' % (baseuri, period_id, schema_id)
                 results.append({'schema': schema_id,
                                 'period': period_id,
-                                'path': path,
+                                'href': path,
                                 'uri': uri})
         return results
 
@@ -536,8 +538,8 @@ class TimetableSchemaServiceView(View):
     authorization = PublicAccess
 
     def schemas(self):
-        base = getPath(self.context)
-        return [{'name': key, 'path': '%s/%s' % (base, key)}
+        base = getURL(self.request, self.context, absolute=False)
+        return [{'name': key, 'href': '%s/%s' % (base, key)}
                 for key in self.context.keys()]
 
     def _traverse(self, key, request):
@@ -587,7 +589,7 @@ class SchoolTimetableView(View):
                     return textErrorPage(request, _("Invalid path: %s") % path)
                 groups[path] = list(getRelatedObjects(teacher, URITaught))
                 for group in groups[path]:
-                    path = getPath(group)
+                    path = getURL(self.request, group, absolute=False)
                     if path in timetables:
                         continue
                     if self.key in group.timetables:
@@ -671,8 +673,8 @@ class SchoolTimetableView(View):
             result.append((teacher, tt))
         return result
 
-    def getPath(self, obj):
-        return getPath(obj)
+    def getURL(self, obj):
+        return getURL(self.request, obj, absolute=False)
 
 
 class TimePeriodServiceView(View):
@@ -682,8 +684,8 @@ class TimePeriodServiceView(View):
     authorization = PublicAccess
 
     def periods(self):
-        base = getPath(self.context)
-        return [{'name': key, 'path': '%s/%s' % (base, key)}
+        base = getURL(self.request, self.context, absolute=False)
+        return [{'name': key, 'href': '%s/%s' % (base, key)}
                 for key in self.context.keys()]
 
     def _traverse(self, key, request):
