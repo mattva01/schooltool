@@ -251,8 +251,81 @@ def doctest_WriteCalendar():
         >>> cal.find('e2').title
         'Event II'
 
-    TODO: modify existing events instead of clearing the calendar and
-    creating all events anew.
+    """
+
+
+def doctest_WriteCalendar_sophisticated():
+    r"""Tests for WriteCalendar.
+
+    We start with three calendar events.
+
+        >>> from datetime import datetime, timedelta
+        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> cal = Calendar()
+        >>> event1 = CalendarEvent(title='Play Doom',
+        ...                        dtstart=datetime(2005, 2, 28),
+        ...                        duration=timedelta(hours=2),
+        ...                        unique_id=u'id1')
+        >>> cal.addEvent(event1)
+        >>> event2 = CalendarEvent(title='Play chess',
+        ...                        dtstart=datetime(2005, 3, 1),
+        ...                        duration=timedelta(hours=2),
+        ...                        unique_id=u'id2')
+        >>> cal.addEvent(event2)
+        >>> event3 = CalendarEvent(title='Sleep',
+        ...                        dtstart=datetime(2005, 3, 2),
+        ...                        duration=timedelta(hours=2),
+        ...                        unique_id=u'id3')
+        >>> cal.addEvent(event3)
+
+    We will now upload a new calendar that does not change event1, removes
+    event2, modifies event3 and adds a new event, event4.
+    
+        >>> from schoolbell.app.cal import WriteCalendar
+        >>> writer = WriteCalendar(cal)
+        >>> writer.write(dedent('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... BEGIN:VEVENT
+        ... UID:id1
+        ... SUMMARY:Play Doom
+        ... DTSTART:20050228T000000
+        ... DURATION:PT2H
+        ... END:VEVENT
+        ... BEGIN:VEVENT
+        ... UID:id3
+        ... SUMMARY:Sleep (zzz)
+        ... DTSTART:20050302T000000
+        ... DURATION:PT8H
+        ... END:VEVENT
+        ... BEGIN:VEVENT
+        ... UID:id4
+        ... SUMMARY:Wake up
+        ... DTSTART:20050302T080000
+        ... DURATION:PT0H
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... '''))
+
+    The calendar now contains three events -- event2 is gone, event4 has
+    appeared.
+
+        >>> ids = [e.unique_id for e in cal]
+        >>> ids.sort()
+        >>> ids
+        [u'id1', u'id3', u'id4']
+
+    event1 is unchanged, and, in fact, it is the same object
+
+        >>> cal.find('id1') is event1
+        True
+
+    event3 was modified in place
+
+        >>> cal.find('id3') is event3
+        True
+        >>> event3.duration == timedelta(hours=8)
+        True
 
     """
 

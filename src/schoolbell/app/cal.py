@@ -133,12 +133,24 @@ class WriteCalendar(object):
         self.calendar = context
 
     def write(self, data):
-        events = []
-        for vevent in self.read_icalendar(data):
-            kwargs = dict([(attr, getattr(vevent, attr))
-                           for attr in self._event_attrs])
-            events.append(CalendarEvent(**kwargs))
-        self.calendar.clear()
-        for e in events:
-            self.calendar.addEvent(e)
+        changes = {} # unique_id -> (old_event, new_event)
+        for e in self.calendar:
+            changes[e.unique_id] = (e, None)
+
+        for event in self.read_icalendar(data):
+            old_event = changes.get(event.unique_id, (None, ))[0]
+            changes[event.unique_id] = (old_event, event)
+
+        for old_event, new_event in changes.itervalues():
+            if old_event is None:
+                # new_event is a SimpleCalendarEvent, we need a CalendarEvent
+                kwargs = dict([(attr, getattr(new_event, attr))
+                               for attr in self._event_attrs])
+                self.calendar.addEvent(CalendarEvent(**kwargs))
+            elif new_event is None:
+                self.calendar.removeEvent(old_event)
+            elif old_event != new_event:
+                # modify in place
+                for attr in self._event_attrs:
+                    setattr(old_event, attr, getattr(new_event, attr))
 
