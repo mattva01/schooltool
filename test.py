@@ -46,6 +46,7 @@ Options:
   -h            print this help message
   -v            verbose (print dots for each test run)
   -vv           very verbose (print test names)
+  -q            quiet (do not print anything on success)
   -w            enable warnings about omitted test cases
   -p            show progress bar (can be combined with -v or -vv)
   -u            select unit tests (default)
@@ -65,6 +66,7 @@ Options:
 import re
 import os
 import sys
+import time
 import types
 import getopt
 import unittest
@@ -100,10 +102,11 @@ class Options:
     run_tests = True            # run tests (disabled by --list-foo)
 
     # output verbosity
-    verbosity = 0               # verbosity level (-p)
+    verbosity = 0               # verbosity level (-v)
+    quiet = 0                   # do not print anything on success (-q)
     warn_omitted = False        # produce warnings when a test case is
                                 # not included in a test suite (-w)
-    progress = False            # show running progress (-v)
+    progress = False            # show running progress (-p)
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
     immediate_errors = False    # show tracebacks twice (currently hardcoded)
@@ -397,8 +400,32 @@ class CustomTestRunner(unittest.TextTestRunner):
             self.hooks = []
 
     def run(self, test):
+        """Run the given test case or test suite."""
         self.count = test.countTestCases()
-        return self.__super_run(test)
+        result = self._makeResult()
+        startTime = time.time()
+        test(result)
+        stopTime = time.time()
+        timeTaken = float(stopTime - startTime)
+        result.printErrors()
+        run = result.testsRun
+        if not self.cfg.quiet:
+            self.stream.writeln(result.separator2)
+            self.stream.writeln("Ran %d test%s in %.3fs" %
+                                (run, run != 1 and "s" or "", timeTaken))
+            self.stream.writeln()
+        if not result.wasSuccessful():
+            self.stream.write("FAILED (")
+            failed, errored = map(len, (result.failures, result.errors))
+            if failed:
+                self.stream.write("failures=%d" % failed)
+            if errored:
+                if failed: self.stream.write(", ")
+                self.stream.write("errors=%d" % errored)
+            self.stream.writeln(")")
+        elif not self.cfg.quiet:
+            self.stream.writeln("OK")
+        return result
 
     def _makeResult(self):
         return CustomTestResult(self.stream, self.descriptions, self.verbosity,
@@ -435,7 +462,7 @@ def main(argv):
             pass
 
     # Option processing
-    opts, args = getopt.gnu_getopt(argv[1:], 'hvpufw',
+    opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufw',
                                    ['list-files', 'list-tests', 'list-hooks',
                                     'level=', 'all-levels', 'coverage'])
     for k, v in opts:
@@ -444,8 +471,14 @@ def main(argv):
             return 0
         elif k == '-v':
             cfg.verbosity += 1
+            cfg.quiet = False
         elif k == '-p':
             cfg.progress = True
+            cfg.quiet = False
+        elif k == '-q':
+            cfg.verbosity = 0
+            cfg.progress = False
+            cfg.quiet = True
         elif k == '-u':
             cfg.unit_tests = True
         elif k == '-f':
@@ -503,6 +536,7 @@ def main(argv):
     logging.root.setLevel(logging.CRITICAL)
 
     # Running
+    success = True
     if cfg.list_files:
         baselen = len(cfg.basedir) + 1
         print "\n".join([fn[baselen:] for fn in test_files])
@@ -520,7 +554,7 @@ def main(argv):
             ignoredirs = [sys.prefix, sys.exec_prefix]
             tracer = trace.Trace(count=True, trace=False,
                         ignoremods=ignoremods, ignoredirs=ignoredirs)
-            tracer.runfunc(runner.run, suite)
+            success = tracer.runfunc(runner.run, suite).wasSuccessful()
             results = tracer.results()
             results.write_results(show_missing=True, coverdir=cfg.coverdir)
             # trace.py in Python 2.3.1 is buggy:
@@ -530,10 +564,13 @@ def main(argv):
             #    and in general the prefix used seems to be arbitrary
             # these bugs are fixed in src/trace.py
         else:
-            runner.run(suite)
+            success = runner.run(suite).wasSuccessful()
 
     # That's all
-    return 0
+    if success:
+        return 0
+    else:
+        return 1
 
 
 if __name__ == '__main__':
