@@ -1222,9 +1222,33 @@ class ITimePeriodService(ILocation):
 # Application objects
 #
 
+class IAvailabilitySearch(Interface):
+    """An interface for querying the availability of resources."""
+
+    def getFreeIntervals(first, last, time_periods, duration):
+        """Returns all intervals of time not shorter than duration
+        when the object is free within a range of dates [first, last]
+        during the times of day specified by time_periods.
+
+        fist, last     datetime.datetime objects specifying a range of
+                       dates.
+
+        time_periods   a sequence of tuples (start_time, duration)
+                       specifying a the time of day.  These are
+                       respectively datetime.time and
+                       datetime.timedelta objects
+
+        duration       datetime.timedelta object specifying a minimum
+                       interval of time we're searching for.
+
+
+        The returned value is a sequence of (start_datetime, duration).
+        """
+
+
 class IApplicationObject(ILocation, IRelatable, IEventTarget,
                          IEventConfigurable, IFaceted, ICalendarOwner,
-                         ITimetabled):
+                         ITimetabled, IAvailabilitySearch):
     """A collection of interfaces common to all application objects."""
 
     title = Attribute("""Title of the application object""")

@@ -33,7 +33,7 @@ from schooltool.interfaces import ITimetableActivity, ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IModuleSetup
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
-from schooltool.interfaces import ITimetableSchemaService
+from schooltool.interfaces import ITimetableSchemaService, IAvailabilitySearch
 from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ILocation, IMultiContainer
 from schooltool.cal import Calendar, CalendarEvent
@@ -415,7 +415,7 @@ class TimetabledMixin:
     ICompositeTimetableProvider facets.
     """
 
-    implements(ITimetabled, ICompositeTimetableProvider)
+    implements(ITimetabled, ICompositeTimetableProvider, IAvailabilitySearch)
 
     timetableSource = ((URIGroup, True), )
 
@@ -480,6 +480,10 @@ class TimetabledMixin:
             cal = tt.model.createCalendar(schoolday_model, tt)
             result.update(cal)
         return result
+
+    def getFreeIntervals(self, first, last, time_periods, duration):
+        """See IAvailabilitySearch"""
+        raise NotImplementedError
 
 
 class TimetableSchemaService(Persistent):
