@@ -921,6 +921,12 @@ def doctest_ACLView():
         >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
         ...                      AnnotationPrincipalPermissionManager)
 
+    Let's set the security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> old = setSecurityPolicy(ZopeSecurityPolicy)
+
     Suppose we have a SchoolBell app:
 
         >>> from schoolbell.app.app import SchoolBellApplication
@@ -963,20 +969,27 @@ def doctest_ACLView():
     If we have an authenticated group and an unauthenticated group, we
     get then as well:
 
+        >>> from zope.app.security.interfaces import IAuthentication
         >>> from zope.app.security.interfaces import IAuthenticatedGroup
         >>> from zope.app.security.interfaces import IUnauthenticatedGroup
         >>> from zope.app.security.principalregistry \
         ...     import UnauthenticatedGroup
         >>> from zope.app.security.principalregistry \
         ...     import AuthenticatedGroup
-        >>> ztapi.provideUtility(IUnauthenticatedGroup,
-        ...                      UnauthenticatedGroup('zope.unauthenticated',
-        ...                                           'Unauthenticated users',
-        ...                                           ''))
-        >>> ztapi.provideUtility(IAuthenticatedGroup,
-        ...                      AuthenticatedGroup('zope.authenticated',
-        ...                                         'Authenticated users',
-        ...                                         ''))
+        >>> unauthenticated = UnauthenticatedGroup('zope.unauthenticated',
+        ...                                        'Unauthenticated users',
+        ...                                        '')
+        >>> ztapi.provideUtility(IUnauthenticatedGroup, unauthenticated)
+        >>> authenticated = AuthenticatedGroup('zope.authenticated',
+        ...                                    'Authenticated users',
+        ...                                    '')
+        >>> ztapi.provideUtility(IAuthenticatedGroup, authenticated)
+
+        >>> from zope.app.security.principalregistry import principalRegistry
+        >>> ztapi.provideUtility(IAuthentication, principalRegistry)
+        >>> principalRegistry.registerGroup(unauthenticated)
+        >>> principalRegistry.registerGroup(authenticated)
+
         >>> pprint(view.groups)
         [{'perms': [], 'id': 'zope.authenticated', 'title': 'Authenticated users'},
          {'perms': [], 'id': 'zope.unauthenticated', 'title': 'Unauthenticated users'},
@@ -1121,7 +1134,7 @@ def doctest_ACLView():
 
         >>> pprint(view.persons)
         [{'id': u'sb.person.albert',
-          'perms': ['schoolbell.edit', 'schoolbell.view'],
+          'perms': ['schoolbell.view', 'schoolbell.edit'],
           'title': 'Albert'},
          {'id': u'sb.person.marius',
           'perms': ['schoolbell.create'],
@@ -1278,9 +1291,180 @@ def doctest_ACLView():
         >>> url = zapi.absoluteURL(app, request)
         >>> request.response.getHeader('Location') == url
         True
+    """
+
+def doctest_ACLView_inheritance():
+    r"""This test is to check that the ACL view deals correctly with
+    the inherited permissions.  If a person has a permission due to a
+    grant on some ancestor object in the containment hierarchy, the
+    view should display a checked checkbox for that permission.  If
+    that checkbox is unchecked, a local Deny grant should  be added.
+
+    Set up for local grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Suppose we have a SchoolBell app:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> setUpLocalAuth(app)
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    We have a couple of persons and groups:
+
+        >>> from schoolbell.app.app import Person
+        >>> app['persons']['1'] = Person('albert', title='Albert')
+        >>> app['persons']['2'] = Person('marius', title='Marius')
+
+    Let's set the security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> old = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Let's set some permissions on the app object:
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.grantPermissionToPrincipal('schoolbell.controlAccess',
+        ...                                  'sb.person.albert')
+        >>> perms.grantPermissionToPrincipal('schoolbell.manageMembership',
+        ...                                  'sb.person.marius')
+
+    Let's create an ACLView on a subobject of the object that holds
+    the grants:
+
+        >>> from schoolbell.app.browser.app import ACLView
+        >>> View = SimpleViewClass("../templates/acl.pt", bases=(ACLView, ))
+        >>> request = TestRequest()
+        >>> view = View(app['persons'], request)
+
+    Now, view.persons shows the principals have the permissions:
+
+        >>> pprint(view.persons)
+        [{'id': u'sb.person.albert',
+          'perms': ['schoolbell.controlAccess'],
+          'title': 'Albert'},
+         {'id': u'sb.person.marius',
+          'perms': ['schoolbell.manageMembership'],
+          'title': 'Marius'}]
+
+    Now, let's post a form that unchecked the permission for Marius,
+    but left the one for Albert:
+
+        >>> request = TestRequest(form={
+        ...     'sb.person.albert': 'schoolbell.controlAccess',
+        ...     'UPDATE_SUBMIT': 'Set'})
+        >>> view = View(app['persons'], request)
+        >>> result = view.update()
+
+    Now, Albert should have no new permissions on app['persons']:
+
+        >>> perms = IPrincipalPermissionManager(app['persons'])
+        >>> perms.getPermissionsForPrincipal('sb.person.albert')
+        []
+
+    As for Marius, he should have gotten a grant that denies the
+    permission he has got from app:
+
+        >>> perms = IPrincipalPermissionManager(app['persons'])
+        >>> perms.getPermissionsForPrincipal('sb.person.marius')
+        [('schoolbell.manageMembership', PermissionSetting: Deny)]
+
+    Permissions on app are unchanged (unsurprisingly):
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.getPermissionsForPrincipal('sb.person.albert')
+        [('schoolbell.controlAccess', PermissionSetting: Allow)]
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.getPermissionsForPrincipal('sb.person.marius')
+        [('schoolbell.manageMembership', PermissionSetting: Allow)]
 
     """
 
+def doctest_hasPermission():
+    r"""The Zope security machinery does not have tools to check
+    whether a random principal has some permission on some object.  So
+    we need co construct our own.
+
+    Set up for local grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+
+    Let's set the Zope security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> old = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Suppose we have a Schoolbell object:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> setUpLocalAuth(app)
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    In it, we have a principal:
+
+        >>> from schoolbell.app.app import Person
+        >>> app['persons']['1'] = Person('joe', title='Joe')
+
+    He does not have a 'super' permission on our schoolbell app:
+
+        >>> from schoolbell.app.browser.app import hasPermission
+        >>> hasPermission('super', app, 'sb.person.joe')
+        False
+
+    However, we can add a local grant:
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.grantPermissionToPrincipal('super', 'sb.person.joe')
+
+    Now, hasPermission returns true:
+
+        >>> hasPermission('super', app, 'sb.person.joe')
+        True
+
+    The same works for subobjects:
+
+        >>> hasPermission('super', app['persons'], 'sb.person.joe')
+        True
+        >>> hasPermission('super', app['persons']['joe'], 'sb.person.joe')
+        True
+
+    Also, it works gracefully for None or random objects:
+
+        >>> hasPermission('super', None, 'sb.person.joe')
+        False
+        >>> hasPermission('super', object(), 'sb.person.joe')
+        False
+    """
 
 def test_suite():
     suite = unittest.TestSuite()

@@ -40,6 +40,8 @@ from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.app.security.settings import Allow
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.security import checkPermission
+from zope.security.interfaces import IParticipation
+from zope.security.management import getSecurityPolicy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
@@ -473,10 +475,9 @@ class ACLView(BrowserView):
 
     def permsForPrincipal(self, principalid):
         """Return a list of permissions allowed for principal"""
-        map = IPrincipalPermissionManager(self.context)
-        return [perm for perm, setting
-                in map.getPermissionsForPrincipal(principalid)
-                if setting == Allow]
+        return [perm
+                for perm, title in self.permissions
+                if hasPermission(perm, self.context, principalid)]
 
     def groups(self):
         app = getSchoolBellApplication()
@@ -509,17 +510,44 @@ class ACLView(BrowserView):
             # this view is protected by schooltool.controlAccess
             map = removeSecurityProxy(map)
             auth = zapi.getUtility(IAuthentication)
+
+            def permChecked(perm, principalid):
+                """Returns if a checkbox for (perm, principalid) is checked"""
+                if principalid in self.request:
+                    return (perm in self.request[principalid] or
+                            perm == self.request[principalid])
+                return False
+
             for info in self.persons + self.groups:
                 principalid = info['id']
                 for perm, permtitle in self.permissions:
-                    if (principalid in self.request and
-                        (perm in self.request[principalid] or
-                         perm == self.request[principalid])):
+                    parent = self.context.__parent__
+                    checked_in_request = permChecked(perm, principalid)
+                    grant_in_parent = hasPermission(perm, parent, principalid)
+                    if checked_in_request and not grant_in_parent:
                         map.grantPermissionToPrincipal(perm, principalid)
+                    elif not checked_in_request and grant_in_parent:
+                        map.denyPermissionToPrincipal(perm, principalid)
                     else:
                         map.unsetPermissionForPrincipal(perm, principalid)
-
 
     def __call__(self):
         self.update()
         return self.index()
+
+
+class ProbeParticipation:
+    """A stub participation for use in hasPermission"""
+    implements(IParticipation)
+    def __init__(self, principal):
+        self.principal = principal
+        self.interaction = None
+
+
+def hasPermission(permission, object, principalid):
+    """Returns if the principal has access according to the security policy"""
+
+    principal = zapi.getUtility(IAuthentication).getPrincipal(principalid)
+    participation = ProbeParticipation(principal)
+    interaction = getSecurityPolicy()(participation)
+    return interaction.checkPermission(permission, object)
