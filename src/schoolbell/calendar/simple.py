@@ -68,6 +68,8 @@ class SimpleCalendarEvent(CalendarEventMixin):
 
     implements(ICalendarEvent)
 
+    allday = False
+
     def __init__(self, dtstart, duration, title, description=None,
                  location=None, unique_id=None, recurrence=None, allday=False):
         assert title is not None, 'title is required'
