@@ -136,7 +136,7 @@ person's composite timetable.
 Mozilla Calendar or a similar calendaring application has to be used
 to access the calendars.  A list of all calendars, available at
 http://localhost:8080/calendars.html (if the SchoolTool server is
-running on localhost port 8080) can be helpfull in adding a calendar
+running on localhost port 8080) can be helpful in adding a calendar
 to the calendaring application.
 
 
