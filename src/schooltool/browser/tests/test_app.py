@@ -27,7 +27,8 @@ from logging import INFO
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
-from schooltool.tests.utils import EqualsSortedMixin, RegistriesSetupMixin
+from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import AppSetupMixin
 from datetime import date, time, timedelta
 
 __metaclass__ = type
@@ -600,32 +601,18 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         assert '2004-08-11 15:00' in result
 
 
-class TestDatabaseResetView(RegistriesSetupMixin, unittest.TestCase):
+class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool import membership
-        self.setUpRegistries()
-        membership.setUp()
-
-        # Register the teacher_group facet.
+        self.setUpSampleApp()
         import schooltool.teaching
         schooltool.teaching.setUp()
 
-    # tearDown inherited from RegistriesSetupMixin
-
-    def test_render(self):
+    def createView(self):
         from schooltool.browser.app import DatabaseResetView
-        view = DatabaseResetView(None)
-        view.authorization = lambda x, y: True
-        request = RequestStub()
-        content = view.render(request)
-        self.assert_('Confirm' in content)
+        return DatabaseResetView(self.app)
 
-    def test_POST(self):
-        from schooltool.browser.app import DatabaseResetView
-        from schooltool.app import Application
-        view = DatabaseResetView(None)
-        request = RequestStub(args={'confirm': 'yes'})
+    def createRequest(self, *args, **kw):
 
         class ConnectionStub:
 
@@ -639,12 +626,45 @@ class TestDatabaseResetView(RegistriesSetupMixin, unittest.TestCase):
 
             rootName = 'app'
 
+        request = RequestStub(*args, **kw)
         request.zodb_conn = ConnectionStub()
         request.site = SiteStub()
-        content = view.do_POST(request)
+        return request
 
-        root = request.zodb_conn.root()
-        self.assert_(isinstance(root['app'], Application))
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        content = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assert_('Confirm' in content)
+
+    def test_POST(self):
+        from schooltool.app import Application
+        view = self.createView()
+        request = self.createRequest(method='POST', args={'confirm': 'yes'},
+                                     authenticated_user=self.manager)
+        content = view.render(request)
+        new_app = request.zodb_conn.root()['app']
+        self.assert_(isinstance(new_app, Application))
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/')
+
+    def test_POST_preserves_authentication(self):
+        from schooltool.component import getTicketService
+        view = self.createView()
+        ticket = getTicketService(self.app).newTicket(('gandalf', '123'))
+        request = self.createRequest(method='POST', args={'confirm': ''},
+                                     authenticated_user=self.manager,
+                                     cookies={'auth': ticket})
+        content = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/')
+        new_app = request.zodb_conn.root()['app']
+        username, password = getTicketService(new_app).verifyTicket(ticket)
+        self.assertEquals(username, 'gandalf')
+        self.assertEquals(password, '123')
 
 
 def test_suite():

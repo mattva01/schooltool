@@ -357,17 +357,21 @@ class BusySearchView(View, AvailabilityQueryView):
 
 
 class DatabaseResetView(View):
+    """View for clearing the database (/reset_db.html)."""
 
-    __used_for__ = IApplicationObjectContainer
+    __used_for__ = IApplication
 
     authorization = ManagerAccess
 
     template = Template('www/resetdb.pt')
 
     def do_POST(self, request):
-        # TODO: Set the manager password immediately after resetting the db.
         if 'confirm' in request.args:
+            old_ticket_service = self.context.ticketService
             root = request.zodb_conn.root()
             rootname = request.site.rootName
             root[rootname] = create_application()
+            self.context = root[rootname]
+            self.context.ticketService = old_ticket_service
         return self.redirect('/', request)
+
