@@ -136,9 +136,9 @@ A set of "standard" URIs is defined in the schooltool.uris module.
 Relationships and valencies
 ---------------------------
 
-There is an infrastructure for persistently storing relationships
-between objects.  The relationships are stored in the __links__
-attributes of objects, but are accessed using the API defined in
+There is infrastructure for persistently storing relationships
+between objects.  Relationships are stored in the __links__
+attribute of objects, but are accessed using the API defined in
 schooltool.interface.relationship.
 
 The relationships are implemented as three auxiliary objects:
@@ -158,8 +158,6 @@ arguments.  For example::
     from schooltool.membership import Membership
     Membership(group=group1, member=person1)
 
-XXX Mention trouble with SchemaInvocations specific to a relationship.
-
 Relationship types are identified by URIs.  Also, both parties in a
 relationship have roles, identified by URIs.  In the case of membership,
 these are:
@@ -173,7 +171,7 @@ participate in Membership as groups.  This makes it possible to post
 to the relationships view of a group and create a membership
 relationship to another group, person, or resource from it.
 
-Only relationships advertised as valencies can be created via the
+Only relationships advertised as valencies can be created through the
 RESTive interface.
 
 
@@ -339,7 +337,10 @@ Calendar has a set of CalendarEvents and can be either iterated over or
 queried for events that happened on a certain date.  A calendar may also
 be merged with another calendar.
 
-TODO: calendarevent subclasses
+There are several subclasses of calendar event (TimetableCalendarEvent,
+ExceptionalTTCalendarEvent, ExpandedCalendarEvent and
+InheritedCalendarEvent), but they are for mostly internal use.  See their
+docstrings for more information.
 
 If you need a functionally defined calendar for internal use, you should
 use ImmutableCalendar, so that you do not accidentally try to modify a

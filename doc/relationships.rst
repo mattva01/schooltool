@@ -4,19 +4,20 @@ Relationships
 Overview
 --------
 
-XXX This "overview" is a mess!
+Relationships are a way to establish a link between two relatively
+independent objects.  The primary advantage of using relationships is
+that when one object is deleted and its links are removed, the other
+object's side of the link is removed as well, so no dangling references
+remain.
 
-* relationships create arbitrary links between objects
+
+Some facts:
 
 * valencies are constraints that relationships may exist
 
-* never see a relationship as such, only links
-XXX Fragment.
+* links are traversable, semantics provided by a role
 
-* links are traversable, semantics given by a role
-
-* roles are described by URIs. In python, interfaces that extend SpecificURI.
-XXX Fragment.
+* roles are described by URIs
 
 * URIs don't have a strong concept of implication / extension like
   interfaces do, so we'll agree not to use that for now.
@@ -33,11 +34,11 @@ Glossary
 --------
 
 :Link:
+An object that reflects one side of a relationship.
 
 :Relationship:
+An object that has two links which have references to participating
+objects.
 
 :URI:
-
-:Interface:
-
-:SpecificURI:
+An interface that is derived from SpecificURI.
