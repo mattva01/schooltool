@@ -54,6 +54,10 @@ not migrated.
 
 Full upgrades will be maintained from this release onwards.
 
+For more information on migrating from 0.9 -> 1.0, refer to the
+schoolbell-export.py and schoolbell-import.py scripts in the scripts/
+directory.
+
 Unimplemented features from SchoolBell 0.9
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
