@@ -1,4 +1,4 @@
-#!/usr/bin/python2.3
+#!/usr/bin/@PYTHON@
 """
 A script to import sample school data into SchoolTool on Debian systems.
 """

@@ -27,6 +27,8 @@ schooltool (0.8+svn) unstable; urgency=low
   * Re-wrote the package templates for DTSG compliance, patch thanks to,
     Martin Quinson and Christian Perrier. (Closes: Bug#288805)
   * Added chezh translation, patch thanks to Miroslav Kure.
+  * Reduced the changes necessary to update packages to a new python version
+    to one line. Thanks to a suggestion from Matthias Klose.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python2.3
+#!/usr/bin/@PYTHON@
 """
 A script to start the schooltool client in a Debian system.
 """

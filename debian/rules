@@ -3,6 +3,11 @@
 # If you change the seed, you will have to recreate ttconfig.data as well.
 datagen_seed = schooltool-m4
 
+# This number and the dependencies should be the only thing needed to change
+# the python version
+PYTHON_VERSION=2.3
+PYTHON=python$(PYTHON_VERSION)
+
 # Server Packages
 sourcepackage=schooltool
 package=schooltool
@@ -15,6 +20,10 @@ bellpackage=schoolbell
 # Client Packages
 packageclients=schooltool-clients
 libpkgclients=libschooltool-clients
+
+# Executable Scripts
+scripts=debian/schoolbell debian/schooltool debian/import-sampleschool \
+	debian/schooltool-client
 
 # list of files/directories which are required for the clients
 clientfiles=\(							\
@@ -30,16 +39,27 @@ clientfiles=\(							\
 	    -o -path './schooltool/translation/__init__.py' 	\
 	    \)
 
+#
+# Rules to build tree
+#
+
 build: build-stamp
 
-build-stamp:
+debian/import-sampleschool.py: debian/import-sampleschool.head
+	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
+	    import-sampleschool.py) > $@
+
+$(scripts): %: %.py
+	cat $< | sed s/@PYTHON@/$(PYTHON)/ > $@
+
+build-stamp: $(scripts)
 	dh_testdir
-	$(MAKE)
-	(cat debian/import-sampleschool.head && \
-	 sed -ne '/^# -- Do not remove this line --$$/,$$p' \
-	     import-sampleschool.py) > debian/import-sampleschool
-	chmod 755 debian/import-sampleschool
+	$(MAKE) PYTHON=$(PYTHON) PYTHONDIR=/usr/bin/$(PYTHON)
 	touch build-stamp
+
+#
+# Cleaning Rules
+#
 
 debdirclean:
 	#This rule is only meant to be called from the top level makefile
@@ -59,6 +79,10 @@ clean::
 	-$(MAKE) realclean
 	dh_clean
 	debconf-updatepo
+
+#
+# Rules to install packages
+#
 
 install: install-arch install-indep
 
@@ -85,7 +109,7 @@ install-indep-stamp:
 		../debian/$(package)/usr/lib/$(package)/{} \;
 	rm -f debian/$(package)/usr/lib/$(package)/trace.py
 	# executables
-	install -m 755 -D -p debian/$(package).py \
+	install -m 755 -D -p debian/$(package) \
 		debian/$(package)/usr/bin/$(package); \
 	# configuration
 	install -m 644 -D -p debian/$(package).logrotate \
@@ -107,7 +131,7 @@ install-indep-stamp:
 		../debian/$(bellpackage)/usr/lib/$(package)/{} \;
 	rm -f debian/$(bellpackage)/usr/lib/$(package)/trace.py
 	# executables
-	install -m 755 -D -p debian/$(bellpackage).py \
+	install -m 755 -D -p debian/$(bellpackage) \
 		debian/$(bellpackage)/usr/bin/$(bellpackage); \
 	# configuration
 	install -m 644 -D -p debian/$(bellpackage).logrotate \
@@ -189,7 +213,7 @@ binary-common:
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_python -V 2.3
+	dh_python -V $(PYTHON_VERSION)
 	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
