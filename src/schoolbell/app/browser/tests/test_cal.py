@@ -289,12 +289,14 @@ def doctest_CalendarDay():
         True
 
     You can test a calendar day to see if its date is today
-    TODO: I'm not sure that this test is i18n safe, it passes here but maybe
-    not in other locales
 
-        >>> day3 = CalendarDay(datetime.now().date())
-        >>> day3.isToday()
-        True
+        >>> day = CalendarDay(date.today())
+        >>> day.today()
+        'today'
+
+        >>> day = CalendarDay(date.today() - date.resolution)
+        >>> day.today()
+        ''
 
     """
 

@@ -276,8 +276,9 @@ class CalendarDay(object):
     def __cmp__(self, other):
         return cmp(self.date, other.date)
 
-    def isToday(self):
-        return self.date == datetime.now().date()
+    def today(self):
+        """Return 'today' if self.date is today, otherwise return ''."""
+        return self.date == date.today() and 'today' or ''
 
 
 #

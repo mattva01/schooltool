@@ -7,9 +7,9 @@
       <tal:loop repeat="day days">
         <th class="day-title"
             tal:define="start repeat/day/start"
-            tal:attributes="class python:start and 'day-title first'
-                                               or 'day-title';
-                            id python:day.isToday() and 'today' or None">
+            tal:attributes="class python:' '.join(filter(None, ['day-title',
+                                                   start and 'first' or '',
+                                                   day.today()]))">
           <a tal:content="day/title"
              tal:attributes="href python:view.calURL('daily', day.date)" />
         </th>
