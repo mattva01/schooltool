@@ -6,19 +6,24 @@
   <h1 metal:fill-slot="h1" i18n:translate="">
     Person info for <span tal:replace="context/title" i18n:name="title"/>
   </h1>
-  <metal:block metal:fill-slot="body" tal:define="info context">
-    <div class="actions">
-      <a class="action" tal:condition="view/canEdit"
-         tal:attributes="href string:${context/@@absolute_url}/edit.html"
-         i18n:translate="">Edit (XXX NOT IMPLEMENTED)</a>
-      <a class="action" tal:condition="view/canChangePassword"
-         tal:attributes="href string:${context/@@absolute_url}/password.html"
-         i18n:translate="">Change password (XXX NOT IMPLEMENTED)</a>
-      <a class="action" tal:condition="view/canViewCalendar"
-         tal:attributes="href string:${context/@@absolute_url}/calendar"
-         i18n:translate="">View calendar (XXX NOT IMPLEMENTED)</a>
+
+    <div class="portlet" metal:fill-slot="column-left-extra">
+      <h4>Actions</h4>
+      <ul>
+      <li><a class="action" tal:condition="view/canEdit"
+             tal:attributes="href string:${context/@@absolute_url}/edit.html"
+             i18n:translate="">Edit</a>
+      <li><a class="action" tal:condition="view/canChangePassword"
+             tal:attributes="href
+                             string:${context/@@absolute_url}/password.html"
+             i18n:translate="">Change password</a>
+      <li><a class="action" tal:condition="view/canViewCalendar"
+             tal:attributes="href string:${context/@@absolute_url}/calendar"
+             i18n:translate="">View calendar</a>
+      </ul>
     </div>
 
+  <metal:block metal:fill-slot="body" tal:define="info context">
     <div tal:condition="not:view/canChooseCalendars" class="groups">
       <h3 i18n:translate="">Groups (XXX NOT IMPLEMENTED)</h3>
       <tal tal:condition="nothing">
