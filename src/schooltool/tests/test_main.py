@@ -73,15 +73,23 @@ class EventLogStub:
 
 class AppStub:
 
-    def __init__(self):
+    def __init__(self, old_version=False):
         self.utilityService = {'eventlog': EventLogStub()}
+        if not old_version:
+            self.ticketService = None
 
 
 class ConnectionStub:
-    app = AppStub()
 
-    def __init__(self):
-        self._root = {'app': self.app}
+    app = AppStub()
+    old_app = AppStub(True)
+
+    def __init__(self, old_version=False):
+        if old_version:
+            app = self.old_app
+        else:
+            app = self.app
+        self._root = {'app': app}
         self.closed = False
 
     def root(self):
@@ -93,11 +101,12 @@ class ConnectionStub:
 
 class DbStub:
 
-    def __init__(self):
+    def __init__(self, old_version=False):
         self._connections = []
+        self.old_version = old_version
 
     def open(self):
-        conn = ConnectionStub()
+        conn = ConnectionStub(self.old_version)
         self._connections.append(conn)
         return conn
 
@@ -381,6 +390,21 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.config.event_logging = False
         server.prepareDatabase()
         self.assertEquals(event_log.enabled, False)
+
+    def test_prepareDatabase_oldversion(self):
+        from schooltool.main import Server, SchoolToolError
+        server = Server()
+        transaction = TransactionStub()
+        server.get_transaction_hook = lambda: transaction
+        server.db = DbStub(True)
+        server.appname = 'app'
+        server.config = ConfigStub()
+        self.assertRaises(SchoolToolError, server.prepareDatabase)
+        self.assertEquals(len(server.db._connections), 1)
+        conn = server.db._connections[0]
+        self.assert_(conn.closed)
+        self.assert_(conn.root()['app'] is ConnectionStub.old_app)
+        self.assertEquals(transaction.history, 'A')
 
     def test_authenticate(self):
         from schooltool.main import Server

@@ -93,6 +93,11 @@ No storage defined in the configuration file.  Unable to start the server.
 If you're using the default configuration file, please edit it now and
 uncomment one of the ZODB storage sections.""")
 
+incompatible_version_msg = _("""\
+Old database format is incompatible with the new SchoolTool version.
+Please remove your Data.fs and try again.  Note that you will lose all
+the data.""")
+
 usage_msg = _("""\
 Usage: %s [options]
 Options:
@@ -389,6 +394,12 @@ class Server:
             root[self.appname] = self.appFactory()
             self.get_transaction_hook().commit()
         app = root[self.appname]
+
+        # Database schema change from 0.6 to 0.7
+        if not hasattr(app, 'ticketService'):
+            self.get_transaction_hook().abort()
+            conn.close()
+            raise SchoolToolError(incompatible_version_msg)
 
         # Enable or disable global event logging
         eventlog = app.utilityService['eventlog']
