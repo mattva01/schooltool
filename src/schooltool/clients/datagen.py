@@ -141,12 +141,27 @@ def createTeachers():
     f.close()
 
 
+def createResources():
+    """Create a generated resources.csv in the current directory.
+
+    Format of the file:
+      title
+    """
+    f = open("resources.csv", "w")
+    print >> f, '"Hall"'
+    for i in range(1,10):
+        print >> f, '"Room %d"' % i
+    for i in range(1,4):
+        print >> f, '"Projector %d"' % i
+    f.close()
+
 def main():
     if len(sys.argv) > 1:
         random.seed(sys.argv[1])
     createGroups()
     createPupils()
     createTeachers()
+    createResources()
 
 if __name__ == '__main__':
     main()

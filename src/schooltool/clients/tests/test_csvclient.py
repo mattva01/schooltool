@@ -129,6 +129,15 @@ class TestCSVImporter(unittest.TestCase):
                            'factory="Super Facet"'),
                           ])
 
+
+    def test_importResource(self):
+        from schooltool.clients.csvclient import CSVImporter
+
+        im = CSVImporter()
+
+        requests = im.importResource('Room 3')
+        self.assertEqual(requests, [('/resources', 'POST', 'title="Room 3"')])
+
     def test_importPupil(self):
         from schooltool.clients.csvclient import CSVImporter
 
@@ -240,6 +249,8 @@ class TestCSVImporter(unittest.TestCase):
                 return StringIO('"Jay Hacker","group1 group2"')
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1"')
+            if name == 'resources.csv':
+                return StringIO('"Hall"')
         im.file = file
 
         results = []
@@ -289,7 +300,8 @@ class TestCSVImporter(unittest.TestCase):
                     ('POST', '/groups/group2/relationships',
                      'arcrole="http://schooltool.org/ns/membership"\n'
                      'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/persons/quux"\n')]
+                     'href="/persons/quux"\n'),
+                    ('POST', '/resources', 'title="Hall"')]
 
         self.assertEqual(results, expected,
                          diff(pformat(results), pformat(expected)))
@@ -307,6 +319,8 @@ class TestCSVImporter(unittest.TestCase):
                 return StringIO('"Jay Hacker","group1 group2"')
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1"')
+            if name == 'resources.csv':
+                return StringIO('"Hall"')
         im.file = file
 
         class ResponseStub:
@@ -325,6 +339,8 @@ class TestCSVImporter(unittest.TestCase):
                 return StringIO('"Jay Hacker","group1 group2","what is this"')
             if name == 'teachers.csv':
                 return StringIO('"Doc Doc","group1"')
+            if name == 'resources.csv':
+                return StringIO('"Hall"')
         im.file = file
         self.assertRaises(DataError, im.run)
 
@@ -335,6 +351,8 @@ class TestCSVImporter(unittest.TestCase):
                 return StringIO('"Jay Hacker","group1 group2"')
             if name == 'teachers.csv':
                 return StringIO('kria kria')
+            if name == 'resources.csv':
+                return StringIO('"Hall"')
         im.file = file
         self.assertRaises(DataError, im.run)
 
@@ -345,9 +363,31 @@ class TestCSVImporter(unittest.TestCase):
                 return StringIO('"Jay Hacker","group1 group2"')
             if name == 'teachers.csv':
                 return StringIO('1,"2')
+            if name == 'resources.csv':
+                return StringIO('"Hall"')
         im.file = file
         self.assertRaises(DataError, im.run)
 
+        def file(name):
+            if name == 'groups.csv':
+                return StringIO('"year1","Year 1","root",')
+            if name == 'pupils.csv':
+                return StringIO('"Jay Hacker","group1 group2"')
+            if name == 'teachers.csv':
+                return StringIO('"Doc Doc","group1"')
+            if name == 'resources.csv':
+                return StringIO('"Hall","Schmall"')
+        im.file = file
+        self.assertRaises(DataError, im.run)
+
+    def test_process(self):
+        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import DataError
+        im = CSVImporter()
+        im.server.http = HTTPStub
+        im.process("POST", "/people/001/password", "foo")
+        self.assertEqual(im.server.lastconn.sent_headers['authorization'],
+                         'Basic bWFuYWdlcjpzY2hvb2x0b29s')
 
 def test_suite():
     suite = unittest.TestSuite()

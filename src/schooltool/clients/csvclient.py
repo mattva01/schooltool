@@ -54,6 +54,7 @@ $Id$
 import httplib
 import csv
 import sys
+import base64
 
 
 class DataError(Exception):
@@ -68,11 +69,14 @@ class HTTPClient:
         self.host = host
         self.port = port
 
-    def request(self, method, resource, body=None):
+    def request(self, method, resource, body=None, headers={}):
         conn = self.http(self.host, self.port)
+        self.lastconn = conn
         conn.putrequest(method, resource)
         if body is not None:
             conn.putheader('Content-Length', len(body))
+        for header, value in headers.items():
+            conn.putheader(header, value)
         conn.endheaders()
         if body is not None:
             conn.send(body)
@@ -83,6 +87,8 @@ class CSVImporter:
 
     file = file
     verbose = True
+    user = 'manager'
+    password = 'schooltool'
 
     def  __init__(self,  host='localhost', port=8080):
         self.server = HTTPClient(host, port)
@@ -120,6 +126,12 @@ class CSVImporter:
         """
         return [('/persons', 'POST', 'title="%s"' % title)]
 
+    def importResource(self, title):
+        """Returns a list of tuples of (path, method, body) to run
+        through the server to import this resource.
+        """
+        return [('/resources', 'POST', 'title="%s"' % title)]
+
     def importPupil(self, name, parents):
         """Adds a pupil to the groups.  Need a name (generated path
         element), so it is separate from importPerson()
@@ -148,7 +160,11 @@ class CSVImporter:
         return loc[last+1:]
 
     def process(self, method, resource, body):
-        response = self.server.request(method, resource, body=body)
+        creds = "%s:%s" % (self.user, self.password)
+        auth = "Basic " + base64.encodestring(creds).strip()
+        headers = {'Authorization': auth}
+        response = self.server.request(method, resource,
+                                       body=body, headers=headers)
         if response.status == 200:
             sys.stdout.write('.')
         if response.status == 201:
@@ -230,6 +246,23 @@ class CSVImporter:
                 for resource, method, body in self.importPupil(name, groups):
                     self.process(method, resource, body=body)
                 line += 1
+
+            if self.verbose:
+                print
+                print "Creating resources... "
+
+            line = 1
+            file = "resources.csv"
+            for row in csv.reader(self.file(file)):
+                if len(row) != 1:
+                    raise DataError("Error in %s line %d:"
+                                    " expected 1 column, got %d" %
+                                    (file, line, len(row)))
+                title = row[0]
+                for resource, method, body in self.importResource(title):
+                    response = self.process(method, resource, body=body)
+                    name = self.getPersonName(response)
+
             if self.verbose:
                 print
         except DataError:
