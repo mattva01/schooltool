@@ -85,56 +85,6 @@ class IServiceManager(Interface):
 
 
 #
-# Facets
-#
-
-class IFacet(Interface):
-    """A facet.
-
-    A facet is a persistent adapter (a smart annotation) which
-    implements some additional functionality and/or stores additional
-    data.
-    """
-
-    active = Attribute("""The facet is active""")
-
-
-class IFacetFactory(Interface):
-
-    def __call__():
-        """Returns a new facet."""
-
-
-class IFaceted(Interface):
-    """Denotes that the object can have facets.
-    """
-
-    __facets__ = Attribute("""A dictionary of facets.""")
-
-
-class IFacetAPI(Interface):
-    """Facet API"""
-
-    def setFacet(ob, key, facet):
-        """Set the facet identified by the key on the object."""
-
-    def getFacet(ob, key):
-        """Get a facet of an object.
-
-        Raises KeyError if no facet with a given key exists.
-        """
-
-    def queryFacet(ob, key, default=None):
-        """Get a facet of an object.
-
-        Returns default if no facet with a given key exists.
-        """
-
-    def getFacetItems(ob):
-        """Returns a sequence of (key, facet) for all facets of an object."""
-
-
-#
 # URIs
 #
 
@@ -246,7 +196,7 @@ class IRemovableLink(ILink):
         """
 
     def registerUnlinkCallback(callback):
-        """Register an object that is called after the link is unlinked.
+        """Register an object that is notified after the link is unlinked.
 
         The callback must conform to IUnlinkHook and be pickleable.
 
@@ -404,85 +354,6 @@ class IRelationshipAPI(Interface):
 
 
 #
-# Groups and membership
-#
-
-class IGroupRead(Interface):
-    """A set of group members.
-
-    All group members must implement IGroupMember.  If facetFactory is not
-    None, they also must implement IFaceted.
-    """
-
-    facetFactory = Attribute(
-        """Factory for facets set on new members.
-
-        Can be None.  Factory gets called with a single argument that is
-        the member the facet will be set on.
-
-        Note that if you change facetFactory once some members have
-        been added (and possibly removed), those members will keep their
-        old facets.
-        """)
-
-    def __getitem__(key):
-        """Returns a member with the given key.
-
-        Raises a KeyError if there is no such member.
-        """
-
-    def keys():
-        """Returns a sequence of member keys."""
-
-    def values():
-        """Returns a sequence of members."""
-
-    def items():
-        """Returns a sequence of (key, member) pairs."""
-
-
-class IGroupWrite(Interface):
-    """Modification access to a group."""
-
-    def add(memeber):
-        """Adds a new member to this group.
-
-        Returns the key assigned to this member.
-
-        If facetFactory is not None, creates a facet for this member
-        if it does not already have one, and marks it as active.
-        Member facets are keyed by the group.
-        """
-
-    def __delitem__(key):
-        """Removes a member from the group.
-
-        Raises a KeyError if there is no such member.
-
-        If facetFactory is not None, marks the facet keyed by this
-        group as inactive.
-        """
-
-
-class IGroup(IGroupWrite, IGroupRead, IFaceted):
-    __doc__ = IGroupRead.__doc__
-
-
-class IGroupMember(ILocation):
-
-    name = Attribute("A human readable name of this member.")
-
-    def groups():
-        """Returns a set for all groups this object is a member of."""
-
-    def notifyAdded(group, name):
-        """Notifies the member that it's added to a group."""
-
-    def notifyRemoved(group):
-        """Notifies the member that it's removed from a group."""
-
-
-#
 # Events
 #
 
@@ -627,6 +498,149 @@ class IRouteToGroupsAction(IEventAction):
 
     This is equivalent to IRouteToRelationshipsAction with role URIGroup.
     """
+
+
+#
+# Facets
+#
+
+class IFacet(Interface):
+    """A facet.
+
+    A facet is a persistent adapter (a smart annotation) which
+    implements some additional functionality and/or stores additional
+    data.
+    """
+
+    active = Attribute("""The facet is active""")
+
+
+class IFacetFactory(Interface):
+    """Facet factories must conform to this interface but need not
+    actually provide it.
+    """
+
+    def __call__():
+        """Returns a new facet."""
+
+
+class IFacetedRelationshipSchemaFactory(Interface):
+
+    def __call__(relationsip_schema_factory, **facet_factories):
+        pass
+
+
+class IFacetedRelationshipSchema(IRelationshipSchema):
+    """A relationship schema that sets facets on the parties after relating.
+    """
+
+
+class IFaceted(Interface):
+    """Denotes that the object can have facets.
+    """
+
+    __facets__ = Attribute("""A dictionary of facets.""")
+
+
+class IFacetAPI(Interface):
+    """Facet API"""
+
+    def setFacet(ob, key, facet):
+        """Set the facet identified by the key on the object."""
+
+    def getFacet(ob, key):
+        """Get a facet of an object.
+
+        Raises KeyError if no facet with a given key exists.
+        """
+
+    def queryFacet(ob, key, default=None):
+        """Get a facet of an object.
+
+        Returns default if no facet with a given key exists.
+        """
+
+    def getFacetItems(ob):
+        """Returns a sequence of (key, facet) for all facets of an object."""
+
+
+#
+# Groups and membership
+#
+
+class IGroupRead(Interface):
+    """A set of group members.
+
+    All group members must implement IGroupMember.  If facetFactory is not
+    None, they also must implement IFaceted.
+    """
+
+    facetFactory = Attribute(
+        """Factory for facets set on new members.
+
+        Can be None.  Factory gets called with a single argument that is
+        the member the facet will be set on.
+
+        Note that if you change facetFactory once some members have
+        been added (and possibly removed), those members will keep their
+        old facets.
+        """)
+
+    def __getitem__(key):
+        """Returns a member with the given key.
+
+        Raises a KeyError if there is no such member.
+        """
+
+    def keys():
+        """Returns a sequence of member keys."""
+
+    def values():
+        """Returns a sequence of members."""
+
+    def items():
+        """Returns a sequence of (key, member) pairs."""
+
+
+class IGroupWrite(Interface):
+    """Modification access to a group."""
+
+    def add(memeber):
+        """Adds a new member to this group.
+
+        Returns the key assigned to this member.
+
+        If facetFactory is not None, creates a facet for this member
+        if it does not already have one, and marks it as active.
+        Member facets are keyed by the group.
+        """
+
+    def __delitem__(key):
+        """Removes a member from the group.
+
+        Raises a KeyError if there is no such member.
+
+        If facetFactory is not None, marks the facet keyed by this
+        group as inactive.
+        """
+
+
+class IGroup(IGroupWrite, IGroupRead, IFaceted):
+    __doc__ = IGroupRead.__doc__
+
+
+class IGroupMember(ILocation):
+
+    name = Attribute("A human readable name of this member.")
+
+    def groups():
+        """Returns a set for all groups this object is a member of."""
+
+    def notifyAdded(group, name):
+        """Notifies the member that it's added to a group."""
+
+    def notifyRemoved(group):
+        """Notifies the member that it's removed from a group."""
 
 
 #
