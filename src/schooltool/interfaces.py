@@ -835,6 +835,8 @@ class IViewAPI(Interface):
     def registerView(interface, factory):
         """Register a view for an interface."""
 
+    def registerViewForClass(cls, factory):
+        """Register a view for a content class."""
 
 #
 # Utilities

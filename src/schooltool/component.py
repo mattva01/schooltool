@@ -355,18 +355,22 @@ def getRelatedObjects(obj, role):
 #
 
 view_registry = TypeRegistry()
-
+class_view_registry = {}
 
 def resetViewRegistry():
     """Replace the view registry with an empty one."""
     global view_registry
+    global class_view_registry
     view_registry = TypeRegistry()
-
+    class_view_registry = {}
 
 def getView(obj):
     """See IViewAPI"""
     try:
-        return view_registry.getAllForObject(obj)[0](obj)
+        if obj.__class__ in class_view_registry:
+            return class_view_registry[obj.__class__](obj)
+        else:
+            return view_registry.getAllForObject(obj)[0](obj)
     except IndexError:
         raise ComponentLookupError("No view found for %r" % (obj,))
 
@@ -374,6 +378,11 @@ def getView(obj):
 def registerView(interface, factory):
     """See IViewAPI"""
     view_registry.register(interface, factory)
+
+def registerViewForClass(cls, factory):
+    """See IViewAPI"""
+    global class_view_registry
+    class_view_registry[cls] = factory
 
 
 #

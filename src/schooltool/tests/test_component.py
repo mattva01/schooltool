@@ -530,13 +530,19 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
 
     def testViewRegistry(self):
         from schooltool.component import registerView, getView, view_registry
+        from schooltool.component import registerViewForClass
 
         class SomeView:
             def __init__(self, context):
                 self.context = context
 
+        class ClassView:
+            def __init__(self, context):
+                self.context = context
+
         class I1(Interface): pass
         class C1: implements(I1)
+        class C2: pass
 
         registerView(I1, SomeView)
         self.assert_(getView(C1()).__class__ is SomeView)
@@ -545,6 +551,11 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
         registerView(I1, SomeView)
         records2 = len(view_registry)
         self.assertEqual(records1, records2)
+
+        registerViewForClass(C2, ClassView)
+        registerViewForClass(C1, ClassView)
+        self.assert_(getView(C2()).__class__ is ClassView)
+        self.assert_(getView(C1()).__class__ is ClassView)
 
         self.assertRaises(TypeError, registerView, object(), object())
 
