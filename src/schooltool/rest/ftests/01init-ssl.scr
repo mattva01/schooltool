@@ -2,6 +2,9 @@ Basic tests for SSL.
 
 SchoolTool> links off
 
+SchoolTool> load_snapshot objects-half-created
+200 OK
+
 SchoolTool> server localhost 8815 ssl
 200 OK
 Content-Type: text/xml; charset=UTF-8
@@ -143,5 +146,7 @@ Content-Type: text/html; charset=UTF-8
 %% END XML
 
 
-SchoolTool> quit
+SchoolTool> save_snapshot objects-created
+200 OK
+
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

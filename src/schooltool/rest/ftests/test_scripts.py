@@ -37,6 +37,7 @@ import sys
 from threading import Thread
 
 import schooltool
+from schooltool.ftests import setup
 from schooltool.tests.helpers import unidiff, normalize_xml
 
 __metaclass__ = type
@@ -69,10 +70,9 @@ class Reader(Thread):
         self.pipe.close()
 
 
-class ScriptTestCase(unittest.TestCase):
+class ScriptTestCase(setup.TestCase):
 
     prefix = re.compile('^SchoolTool> |^PUT> |^POST> ')
-    client_args = '-p 8813'
     child_startup = 'user manager schooltool\n'
     child_startup_expected = ['User manager\n', '\n']
 
@@ -87,9 +87,12 @@ class ScriptTestCase(unittest.TestCase):
         self.test_id = full_filename.replace(os.path.sep, '.')
         self.client = os.path.abspath(os.path.join(os.path.dirname(basedir),
                                                    'schooltool-client.py'))
+        server = self.rest_server.split('://')[1]
+        host, port = server.split(':')
+        self.client_args = '-h %s -p %s' % (host, port)
 
     def __str__(self):
-        return self.id()
+        return self.test_id
 
     def id(self):
         return self.test_id

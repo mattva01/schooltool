@@ -4,6 +4,9 @@ Postconditions: timetable schema service contains a schema called 'weekly'
 
 SchoolTool> links off
 
+SchoolTool> load_snapshot objects-created-and-time-periods-set-up
+200 OK
+
 SchoolTool> get /ttschemas
 200 OK
 Content-Type: text/xml; charset=UTF-8
@@ -150,5 +153,8 @@ Content-Type: text/xml; charset=UTF-8
           xlink:title="weekly"/>
 </timetableSchemas>
 
+
+SchoolTool> save_snapshot objects-created-and-timetables-set-up
+200 OK
 
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

@@ -2,6 +2,9 @@ Search for resources
 
 SchoolTool> links off
 
+SchoolTool> load_snapshot objects-created-and-school-timetable-set-up
+200 OK
+
 SchoolTool> get /busysearch
 400 Bad Request
 Content-Type: text/plain; charset=UTF-8

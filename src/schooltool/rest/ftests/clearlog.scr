@@ -1,5 +1,8 @@
 Sample functional test scenario.
 
+SchoolTool> load_snapshot objects-created
+200 OK
+
 SchoolTool> put /utils/eventlog
 SchoolTool> .
 200 OK
@@ -23,7 +26,7 @@ POST>               xlink:href="/persons/Marius"/>
 POST> .
 201 Created
 Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/groups/pupils/relationships/0003
+Relationship created: http://localhost:8813/groups/pupils/relationships/0002
 
 SchoolTool> get /utils/eventlog
 200 OK

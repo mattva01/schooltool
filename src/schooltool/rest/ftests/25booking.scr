@@ -1,5 +1,8 @@
 Booking a resource
 
+SchoolTool> load_snapshot objects-created-and-calendar-uploaded
+200 OK
+
 SchoolTool> post /resources/hall/booking text/xml
 POST> <booking xmlns="http://schooltool.org/ns/calendar/0.1">
 POST> <owner path="/persons/Aiste"/>
@@ -146,3 +149,4 @@ DTSTAMP:*
 END:VEVENT
 END:VCALENDAR
 
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1 fdm=expr:

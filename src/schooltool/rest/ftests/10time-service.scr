@@ -4,6 +4,9 @@ Postconditions: time period service contains a time period called '2003-fall'
 
 SchoolTool> links off
 
+SchoolTool> load_snapshot objects-created
+200 OK
+
 SchoolTool> get /time-periods
 200 OK
 Content-Type: text/xml; charset=UTF-8
@@ -638,5 +641,8 @@ DTSTART;VALUE=DATE:20031231
 DTSTAMP:*
 END:VEVENT
 END:VCALENDAR
+
+SchoolTool> save_snapshot objects-created-and-time-periods-set-up
+200 OK
 
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

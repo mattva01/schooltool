@@ -163,4 +163,7 @@ PUT> .
 Content-Type: text/plain; charset=UTF-8
 Object created: http://localhost:8813/resources/room2
 
+SchoolTool> save_snapshot objects-half-created
+200 OK
+
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

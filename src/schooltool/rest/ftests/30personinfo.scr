@@ -2,6 +2,9 @@ Person info facet tests
 
 SchoolTool> links off
 
+SchoolTool> load_snapshot objects-created-and-school-timetable-set-up
+200 OK
+
 SchoolTool> get /persons/Aiste/facets/person_info
 200 OK
 Content-Type: text/xml; charset=UTF-8

@@ -1,5 +1,8 @@
 Check calendars on things.
 
+SchoolTool> load_snapshot objects-created-and-school-timetable-set-up
+200 OK
+
 SchoolTool> get /persons/Aiste/timetable-calendar
 200 OK
 Content-Type: text/calendar; charset=UTF-8
@@ -170,5 +173,8 @@ DURATION:P1D
 DTSTAMP:*
 END:VEVENT
 END:VCALENDAR
+
+SchoolTool> save_snapshot objects-created-and-calendar-uploaded
+200 OK
 
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1 fdm=expr:

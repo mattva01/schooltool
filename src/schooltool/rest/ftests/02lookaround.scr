@@ -2,6 +2,9 @@ Generic look-around.
 
 SchoolTool> links off
 
+SchoolTool> load_snapshot objects-created
+200 OK
+
 SchoolTool> get /
 200 OK
 Content-Type: text/xml; charset=UTF-8
