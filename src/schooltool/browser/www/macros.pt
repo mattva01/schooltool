@@ -33,6 +33,7 @@
        i18n:translate="">
        Back to <span tal:replace="context/title" i18n:name="title"/></a>
     </metal:block>
+    &nbsp;
   </div>
   <div class="content">
 
