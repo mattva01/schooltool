@@ -827,7 +827,9 @@ class IModuleSetup(Interface):
 class IViewAPI(Interface):
 
     def getView(object):
-        """Select a view for an object by its interface.
+        """Select a view for an object by its class or its interface.
+
+        Views registered for a class take precedence.
 
         Returns a View object for obj.
         """
