@@ -1,0 +1,200 @@
+===========================
+SCHOOLTOOL DEVELOPER MANUAL
+===========================
+
+This document describes Schooltool milestone 4.
+
+1. Application Architecture
+===========================
+
+Schooltool is a client-server application.  The server and client use
+HTTP to communicate and follow the REST architectural style.  The
+Relax NG schemas of the XML documents the client and server use to
+communicate are in the src/schooltool/schema directory.
+
+There are several clients produced:
+
+   * a GUI client using the wxPython library
+   * a scriptable command line client for debugging and functional
+     testing
+   * an auxillary client to import initial data from CSV files.
+
+
+2. Server Architecture
+======================
+
+The server was designed for high flexibility and configurability by
+introduction of such concepts as facets, relationships, and events.
+
+The overview of these APIs can be found in the schooltool.interfaces
+module.
+
+Most important global halper functions (including pseudo adapters) can
+be found in the schooltool.component module.
+
+
+Application objects
+-------------------
+
+There are three kinds of first-class objects (called application
+objects) in schooltool: persons, groups, and resources.
+
+Application objects live in application object containers, which serve
+as factories and containers for application objects.  When
+initializing the application, three application object containers are
+created: 'persons', 'groups', and 'resources'.
+
+All people, including pupils, teachers, and administrators, are
+organized into a tree of groups.
+
+
+Paths
+-----
+
+All object that need to be traversible through the HTTP interface need
+to have a path.  That is, they need to implement the ILocation
+interface.  That interface just specifies two attributes: a __name__
+and a __parent__.  Parent must also have a path.
+
+
+Views
+-----
+
+All objects accessable over HTTP have auxillary objects called views,
+which take care of publishing objects in XML and parsing the put or
+posted XML representations and applying the changes to the objects.
+
+Usually, the view classes take an instance of an object published
+(called context) as the first argument of the constructor.
+
+Views are Resources in terms of twisted.web.
+
+
+Facets
+------
+
+The groups and persons can exhibit certain polymorphic behaviour.  For
+instance, the same person might be a pupil and later become a teacher.
+Or, more commonly, a teacher might periodically become an
+administrator.
+
+There might be some data pertinent to a teacher, which is not relevant
+when a person is not a teacher.  In order to  accomodate these cases,
+a concept of a facet is introduced.
+
+A facet is a persistent auxillary object that is stored in the
+__facets__ attribute of an object and implies certain semantics.
+
+The facets are accessed using the schooltool.component.FacetManager
+adapter.  The facets must implement the schooltool.interfaces.IFacet
+interface.
+
+Examples:
+  schooltool.teaching.TeacherFacet,
+  schooltool.absence.AbsenceTrackerFacet
+
+
+URIs
+------
+
+Relationships, roles, and other things are uniquely identified by
+URIs.  URIs are really Interfaces (so we can use the TypeRegistry to
+lookup things identified by URIs).
+
+URIs have to be derived from the schooltool.interfaces.ISpecificURI
+interface.
+
+There is a special convention about the docstring of URIs.  The first
+line of the docstring is the URI, followed by an empty line, followed
+by a description of the URI.
+
+Conventionally, the names of URIs have a URI prefix:  URIMembership,
+URITeaching, etc.
+
+The URIs are defined in the schooltool.uris module.
+
+
+Relationships and valencies
+---------------------------
+
+There is an infrastructure for persistently storing relationships
+between objects.  The relationships are stored in the __links__
+attributes of objects, but are accessed using the API defined in
+schooltool.interface.
+
+The relationships are created by invoking a relationship schema, and
+passing the two related objects as arguments.  For example::
+
+    from schooltool.membership import Membership
+    Membership(group=group1, member=person1)
+
+The relationships are identified by URIs.  Also, both parties in a
+relationship have roles, identified by URIs.  In the case of
+membership, these are:
+
+    from schooltool.uris import URIMembership, URIMember, URIGroup
+
+
+Events
+------
+
+There is an infrastructure for events.
+
+The main idea is that an event is injected where it was originated, is
+being resent to related objects according to the event routing tables
+on objects, and keeps a list of objects it has visited so it does not
+get sent to the same object twice.
+
+Events are non persistent.
+
+XXX: need APIs and examples.
+
+Currently, events are used for logging modifications of relationships
+and absence tracking.
+
+
+
+3. Domain specific functionality
+================================
+
+
+Attendance tracking
+-------------------
+
+All persons can be tracked for absence.
+
+XXX: Absences, Absence Comments, when the absences are created,
+closed, etc.
+
+XXX: AbsenceTrackerFacet, AbsenceTrackerUtility
+
+Timetabling
+-----------
+
+Every group or person can have a number of timetables.  First, the
+timetables can vary in the timetable schema.  For instance, in a
+school with a 4-day rotating timetable there might be some events
+recurring weekly.  Second, there are separate timetables for different
+time periods, such as semesters.
+
+Every group or person can have a number of own timetables and a number
+of composite timetables.  Own timetables consist of the events private
+to a group or person, and composite timetables consist of all events
+related to a group or person.  For example, a composite timetable for
+a teacher will contain all the lessons they are teaching, and a
+composite timetable of a pupil will contain all the events from the
+private timetables of the groups the're in, in other words -- all the
+lessons they need to attend.
+
+The objects having a timetable have to implement ITimetabled.  All of
+the application objects are timetabled.
+
+Calendaring
+-----------
+
+Every group and person has two calendars: a private calendar which can
+be edited and a read-only calendar formed out of the group's or
+person's composite timetable.
+
+The calendar views publish and accept the calendars in the iCalendar
+representation (RFC 2445).
