@@ -1023,6 +1023,8 @@ class TestDailyCalendarView(unittest.TestCase):
         view.request = TestRequest()
 
         self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 08:00', '1h', "")), 0)
+        self.assertEquals(view.eventTop(
                             createEvent('2004-08-12 09:00', '1h', "")), 4)
         self.assertEquals(view.eventTop(
                             createEvent('2004-08-12 10:00', '1h', "")), 8)
@@ -1032,6 +1034,86 @@ class TestDailyCalendarView(unittest.TestCase):
                             createEvent('2004-08-12 10:30', '1h', "")), 10)
         self.assertEquals(view.eventTop(
                             createEvent('2004-08-12 10:45', '1h', "")), 11)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:46', '1h', "")), 11)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:44', '1h', "")), 11)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-11 10:00', '24h', "")), 0)
+
+    def doctest_snapToGrid(self):
+        """Tests for DailyCalendarView.snapToGrid
+
+        DailyCalendarView displays events in a grid.  The grid starts
+        at view.starthour and ends at view.endhour, both on the same
+        day (view.cursor).  Gridlines are spaced at 15 minute intervals.
+
+            >>> from schoolbell.app.browser.cal import DailyCalendarView
+            >>> view = DailyCalendarView(None, TestRequest())
+            >>> view.starthour = 8
+            >>> view.endhour = 18
+            >>> view.cursor = date(2004, 8, 1)
+
+        snapToGrid returns the number of the gridline.  Topmost
+        gridline is number 0 and it corresponds to starthour.
+
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 0))
+            0
+
+        Timestamps are rounded to the nearest gridline
+
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 1))
+            0
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 7))
+            0
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 8))
+            1
+            >>> view.snapToGrid(datetime(2004, 8, 1, 8, 15))
+            1
+
+        Timestamps before starthour are clipped to 0
+
+            >>> view.snapToGrid(datetime(2004, 8, 1, 7, 30))
+            0
+            >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30))
+            0
+
+        Timestamps after endhour are clipped to the bottom
+
+            >>> view.snapToGrid(datetime(2004, 8, 1, 18, 0))
+            40
+            >>> view.snapToGrid(datetime(2004, 8, 1, 18, 20))
+            40
+            >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40))
+            40
+
+        Corner case: starthour == 0, endhour == 24
+
+            >>> view.starthour = 0
+            >>> view.endhour = 24
+
+            >>> view.snapToGrid(datetime(2004, 8, 1, 0, 0))
+            0
+            >>> view.snapToGrid(datetime(2004, 8, 1, 2, 0))
+            8
+            >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30))
+            0
+            >>> view.snapToGrid(datetime(2004, 8, 1, 23, 55))
+            96
+            >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40))
+            96
+
+        """
+    def test_snapToGrid(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        view = DailyCalendarView(None, TestRequest())
+        view.starthour = 8
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+
+        self.assertEquals(view.snapToGrid(datetime(2004, 8, 12, 8, 0)), 0)
+        self.assertEquals(view.snapToGrid(datetime(2004, 8, 12, 8, 0)), 0)
+        self.assertEquals(view.snapToGrid(datetime(2004, 8, 12, 8, 0)), 0)
 
     def test_eventHeight(self):
         from schoolbell.app.browser.cal import DailyCalendarView
@@ -1055,6 +1137,18 @@ class TestDailyCalendarView(unittest.TestCase):
                             createEvent('2004-08-12 10:00', '2h+30m', "")), 10)
         self.assertEquals(view.eventHeight(
                             createEvent('2004-08-12 10:00', '2h+45m', "")), 11)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+46m', "")), 11)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+44m', "")), 11)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:02', '2h+44m', "")), 11)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '24h+44m', "")), 32)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-11 10:00', '48h+44m', "")), 40)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-11 10:00', '24h', "")), 8)
 
     def test_do_POST(self):
         return # XXX TODO

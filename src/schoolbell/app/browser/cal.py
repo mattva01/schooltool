@@ -686,6 +686,23 @@ class DailyCalendarView(CalendarViewBase):
                 count += 1
         return count
 
+    def snapToGrid(self, dt):
+        """Snap a datetime to the nearest position in the grid.
+
+        Returns the grid line index where 0 corresponds to the top of
+        the display box (self.starthour), and each subsequent line represents
+        a 15 minute increment.
+
+        Clips dt so that it is never outside today's box.
+        """
+        base = datetime.combine(self.cursor, time())
+        display_start = base + timedelta(hours=self.starthour)
+        display_end = base + timedelta(hours=self.endhour)
+        clipped_dt = max(display_start, min(dt, display_end))
+        td = clipped_dt - display_start
+        offset_in_minutes = td.seconds / 60 + td.days * 24 * 60
+        return (offset_in_minutes + 7) / 15 # round to nearest quarter
+
     def eventTop(self, event):
         """Calculate the position of the top of the event block in the display.
 
@@ -695,11 +712,7 @@ class DailyCalendarView(CalendarViewBase):
           (2 * 4) + (15 / 15) = 9
 
         """
-
-        top = ((event.dtstart.hour - self.starthour) * 4
-                + event.dtstart.minute / 15)
-
-        return top
+        return self.snapToGrid(event.dtstart)
 
     def eventHeight(self, event):
         """Calculate the height of the event block in the display.
@@ -707,8 +720,8 @@ class DailyCalendarView(CalendarViewBase):
         Each hour is made up of 4 units ('em' currently).  Need to round 1 -
         14 minute intervals up to 1 display unit.
         """
-        minutes = event.duration.seconds / 60
-        return max(1, (minutes + 14) / 15)
+        dtend = event.dtstart + event.duration
+        return max(1, self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
 
     def update(self):
         # Create self.cursor
