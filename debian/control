@@ -1,7 +1,7 @@
 Source: schooltool
 Section: misc
 Priority: optional
-Maintainer: Marius Gedminas <marius@pov.lt>
+Maintainer: Brian Sutherland <jinty@web.de>
 Build-Depends: debhelper (>> 4), python2.3 (>= 2.3.2), python2.3-dev (>= 2.3.2)
 Standards-Version: 3.6.1
 
