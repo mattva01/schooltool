@@ -523,8 +523,8 @@ def doctest_PersonEditView():
     You can change person's title and photo
 
         >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.title':u'newTitle',
-        ...                             'field.photo':'PHOTO'})
+        ...                             'field.title': u'newTitle',
+        ...                             'field.photo': 'PHOTO'})
         >>> view = PersonEditView(person, request)
 
         >>> view.update()
@@ -534,7 +534,7 @@ def doctest_PersonEditView():
         >>> person.photo
         'PHOTO'
 
-    You can clear person's photo
+    You can clear the person's photo:
         >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
         ...                             'field.title':u'newTitle',
         ...                             'field.clear_photo':'on'})
@@ -593,68 +593,6 @@ def doctest_PersonEditView():
     """
 
 
-def doctest_PersonAddAdapter():
-    r"""Doctest for the PersonAddAdapter.
-
-        >>> setup.placelessSetUp()
-
-        >>> from schoolbell.app.app import Person
-        >>> from schoolbell.app.interfaces import IPerson
-        >>> from schoolbell.app.browser.app import IPersonAddForm
-        >>> from schoolbell.app.browser.app import PersonAddAdapter
-        >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
-
-    If you assign the same password to `password` and `verify_password`
-    attributes, the person's password is set.
-
-        >>> person = Person()
-        >>> adapter = IPersonAddForm(person)
-        >>> adapter.password = 'foo'
-        >>> adapter.verify_password = 'foo'
-        >>> person.checkPassword('foo')
-        True
-
-    However if you try that with differing passwords, you get an exception,
-    and the password is not changed.
-
-        >>> adapter = IPersonAddForm(person)
-        >>> adapter.password = 'baz'
-        >>> adapter.verify_password = 'bar'
-        Traceback (most recent call last):
-          ...
-        ValueError: passwords do not match
-
-        >>> person.checkPassword('foo')
-        True
-
-    It even works for disabling the account (though I fail to see need for
-    this -- mg):
-
-        >>> adapter = IPersonAddForm(person)
-        >>> adapter.password = None
-        >>> adapter.verify_password = None
-        >>> person.hasPassword()
-        False
-
-    Other fields of IPersonAddForm are nonmagical, they simply set the value
-    on the person
-
-        >>> adapter = IPersonAddForm(person)
-        >>> adapter.title = u'Ignas M.'
-        >>> adapter.username = u'ignas'
-        >>> adapter.photo = 'JFIFmugshot'
-        >>> person.title
-        u'Ignas M.'
-        >>> person.username
-        u'ignas'
-        >>> person.photo
-        'JFIFmugshot'
-
-        >>> setup.placelessTearDown()
-
-    """
-
-
 def doctest_PersonAddView():
     r"""Test for PersonAddView
 
@@ -673,8 +611,6 @@ def doctest_PersonAddView():
 
         >>> from schoolbell.app.interfaces import IPerson
         >>> from schoolbell.app.browser.app import IPersonAddForm
-        >>> from schoolbell.app.browser.app import PersonAddAdapter
-        >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
 
     Let's create a PersonContainer
 
@@ -694,6 +630,7 @@ def doctest_PersonAddView():
         ...                             'field.username': u'jdoe',
         ...                             'field.password': u'secret',
         ...                             'field.verify_password': u'secret',
+        ...                             'field.photo': None,
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
@@ -711,6 +648,7 @@ def doctest_PersonAddView():
         ...                             'field.username': u'jdoe',
         ...                             'field.password': u'pass',
         ...                             'field.verify_password': u'pass',
+        ...                             'field.photo': None,
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
@@ -724,6 +662,7 @@ def doctest_PersonAddView():
         ...                             'field.username': u'coo',
         ...                             'field.password': u'secret',
         ...                             'field.verify_password': u'plain',
+        ...                             'field.photo': None,
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
@@ -745,6 +684,7 @@ def doctest_PersonAddView():
         ...                             'field.username': u'gintas',
         ...                             'field.password': u'denied',
         ...                             'field.verify_password': u'denied',
+        ...                             'field.photo': ':)',
         ...                             'group.pov': 'on',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
@@ -754,6 +694,9 @@ def doctest_PersonAddView():
         ()
         >>> print view.error
         None
+
+        >>> pc['gintas'].photo
+        ':)'
 
     Now the person belongs to the group that we have selected:
 

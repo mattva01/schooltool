@@ -33,7 +33,6 @@ from zope.app.form.interfaces import WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
-from zope.component import adapts
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
@@ -298,55 +297,6 @@ class IPersonAddForm(Interface):
         description=u"""Photo (in JPEG format)""")
 
 
-marker = object()
-
-
-class PersonAddAdapter(object):
-    """An adapter for the person add form.
-
-    We want to reuse a Zope 3 adding form, but we want to use a slightly
-    different schema (IPersonAddForm instead of IPerson), because IPerson
-    lacks certain fields (namely `password` and `confirm_password`).  Because
-    Zope's AddView adapts the created object to the schema in `createAndAdd`,
-    we need this adapter.
-    """
-
-    adapts(IPerson)
-    implements(IPersonAddForm)
-
-    _password = marker
-
-    def __init__(self, context):
-        self.context = context
-
-    def setPassword(self, password):
-        # XXX I'd say this is a bit evil, but it will do for now.
-        if self._password is marker:
-            self._password = password
-        elif self._password == password:
-            self.context.setPassword(password)
-        else:
-            raise ValueError("passwords do not match")
-
-    password = property(None, setPassword)
-    verify_password = property(None, setPassword)
-
-    def setTitle(self, title):
-        self.context.title = title
-
-    title = property(None, setTitle)
-
-    def setUsername(self, username):
-        self.context.username = username
-
-    username = property(None, setUsername)
-
-    def setPhoto(self, photo):
-        self.context.photo = photo
-
-    photo = property(None, setPhoto)
-
-
 class PersonAddView(AddView):
     """A view for adding a person."""
 
@@ -358,10 +308,10 @@ class PersonAddView(AddView):
     # Override some fields of AddView
     schema = IPersonAddForm
     _factory = Person
-    _arguments = ()
-    _keyword_arguments = ()
-    _set_before_add = getFieldNamesInOrder(schema)
-    _set_after_add = ()
+    _arguments = ['title', 'username', 'password', 'photo']
+    _keyword_arguments = []
+    _set_before_add = [] # getFieldNamesInOrder(schema)
+    _set_after_add = []
 
     def createAndAdd(self, data):
         """Create a Person from form data and add it to the container."""
@@ -378,6 +328,13 @@ class PersonAddView(AddView):
         """Return a sorted list of all groups in the system."""
         groups = self.context.__parent__['groups']
         return groups.values()
+
+    def create(self, title, username, password, photo):
+        person = Person(title)
+        person.username = username
+        person.setPassword(password)
+        person.photo = photo
+        return person
 
     def add(self, person):
         """Add `person` to the container.

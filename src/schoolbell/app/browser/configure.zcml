@@ -92,11 +92,6 @@
       permission="zope.View"
       menu="schoolbell_actions" title="New person" />
 
-  <zope:adapter
-      for="schoolbell.app.interfaces.IPerson"
-      provides=".app.IPersonAddForm"
-      factory=".app.PersonAddAdapter"/>
-
   <page
       name="photo"
       for="schoolbell.app.interfaces.IPerson"
