@@ -42,8 +42,6 @@ from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
 
-
-
 class TestTimetable(unittest.TestCase):
 
     def test_interface(self):

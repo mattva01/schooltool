@@ -28,7 +28,7 @@ import operator
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
-from schooltool.interfaces import IResource, IApplicationObject
+from schooltool.interfaces import IApplicationObject
 from schooltool.views import View, Template, absoluteURL
 from schooltool.views import textErrorPage, notFoundPage
 from schooltool.views import read_file
@@ -204,7 +204,9 @@ class CalendarReadView(View):
             "VERSION:2.0",
         ]
         uid_hash = None
-        for event in self.context:
+        events = list(self.context)
+        events.sort()
+        for event in events:
             uid_hash = hash((event.title, event.dtstart, event.duration))
             result += [
                 "BEGIN:VEVENT",

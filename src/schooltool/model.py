@@ -176,6 +176,7 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
             raise TypeError("%r cannot be hashed because it doesn't "
                             "have a path: %s" % (self, e))
 
+
 class Person(ApplicationObjectMixin):
 
     implements(IPerson)

@@ -168,7 +168,6 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(hash(ob), hash(ob2))
 
 
-
 class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
                  EqualsSortedMixin):
 
