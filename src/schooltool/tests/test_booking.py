@@ -43,6 +43,7 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         tt = Timetable(['Day 1', 'Day 2'])
         tt['Day 1'] = TimetableDay(['A', 'B'])
         tt['Day 2'] = TimetableDay(['C', 'D'])
+        self.tt = tt
         self.person.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
         self.resource.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
         self.location.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
@@ -123,6 +124,19 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         self.assertEquals(tt.exceptions, [new_exc])
         self.assertEquals(rtt.exceptions, [new_exc])
         self.assertEquals(ltt.exceptions, [])
+
+        # Remove the timetable (sends out an event)
+        #   Catches two bugs:
+        #     - the code did not check for a event.new_timetable being None
+        #     - the code did not catch KeyErrors when a timetable was gone
+        del self.person.timetables['2004-fall', 'simple']
+        self.assertEquals(rtt.exceptions, [])
+        self.assertEquals(ltt.exceptions, [])
+
+        # Add a timetable (sends out an event)
+        #   Catches a bug:
+        #     - the code did not check for a event.old_timetable being None
+        self.person.timetables['2004-fall', 'simple'] = self.tt.cloneEmpty()
 
 
 def test_suite():

@@ -55,7 +55,8 @@ can be broken when an activity is added or removed from a timetable, or when
 a timetable exception is added/removed/modified, therefore we have event
 handlers watching for those changes and fixing broken invariants.
 
-TODO: Hook up TimetableExceptionSynchronizer to make the above paragraph true.
+The event handler is hooked up in schooltool.app.create_application.
+
 
 Calendaring
 -----------
@@ -106,10 +107,12 @@ class TimetableExceptionSynchronizer:
             self.notifyTimetableExceptionRemoved(event)
 
     def notifyTimetableReplaced(self, event):
-        for exception in event.old_timetable.exceptions:
-            self._exceptionRemoved(exception, event.key)
-        for exception in event.new_timetable.exceptions:
-            self._exceptionAdded(exception, event.key)
+        if event.old_timetable is not None:
+            for exception in event.old_timetable.exceptions:
+                self._exceptionRemoved(exception, event.key)
+        if event.new_timetable is not None:
+            for exception in event.new_timetable.exceptions:
+                self._exceptionAdded(exception, event.key)
 
     def notifyTimetableExceptionAdded(self, event):
         self._exceptionAdded(event.exception, event.timetable.__name__)
@@ -128,8 +131,8 @@ class TimetableExceptionSynchronizer:
     def _exceptionRemoved(self, exception, key):
         activity = exception.activity
         for obj in [activity.owner] + list(activity.resources):
-            tt = obj.timetables[key]
-            if exception in tt.exceptions:
+            tt = obj.timetables.get(key)
+            if tt is not None and exception in tt.exceptions:
                 # Note that this call causes (unintentional but harmless)
                 # recursion.
                 tt.exceptions.remove(exception)
