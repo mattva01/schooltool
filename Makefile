@@ -5,7 +5,7 @@
 
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
-TESTFLAGS=
+TESTFLAGS=-w
 
 all: build
 

@@ -44,6 +44,7 @@ Options:
   -h            print this help message
   -v            verbose (print dots for each test run)
   -vv           very verbose (print test names)
+  -w            enable warnings about omitted test cases
   -p            show progress bar (can be combined with -v or -vv)
   -u            select unit tests (default)
   -f            select functional tests
@@ -96,8 +97,8 @@ class Options:
 
     # output verbosity
     verbosity = 0               # verbosity level (-p)
-    warn_omitted = True         # produce warnings when a test case is
-                                # not included in a test suite (hardcoded)
+    warn_omitted = False        # produce warnings when a test case is
+                                # not included in a test suite (-w)
     progress = False            # show running progress (-v)
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
@@ -376,14 +377,16 @@ def main(argv):
     # Figure out terminal size
     try:
         import curses
-    except ImportError:
+        curses.setupterm()
+    except (ImportError, curses.error):
         pass
     else:
-        curses.setupterm()
-        cfg.screen_width = curses.tigetnum('cols')
+        cols = curses.tigetnum('cols')
+        if cols > 0:
+            cfg.screen_width = cols
 
     # Option processing
-    opts, args = getopt.getopt(argv[1:], 'hvpuf',
+    opts, args = getopt.getopt(argv[1:], 'hvpufw',
                                ['list-files', 'list-tests', 'level=',
                                 'all-levels', 'coverage'])
     for k, v in opts:
@@ -398,6 +401,8 @@ def main(argv):
             cfg.unit_tests = True
         elif k == '-f':
             cfg.functional_tests = True
+        elif k == '-w':
+            cfg.warn_omitted = True
         elif k == '--list-files':
             cfg.list_files = True
             cfg.run_tests = False
