@@ -245,6 +245,14 @@ def doctest_Group():
         >>> verifyObject(IGroupContained, group)
         True
 
+    Groups can have titles and descriptions too
+
+        >>> illuminati = Group(title='Illuminati', description='Secret Group')
+        >>> illuminati.title
+        'Illuminati'
+        >>> illuminati.description
+        'Secret Group'
+
     Groups can be adapted to ISchoolBellApplication
 
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
@@ -265,6 +273,14 @@ def doctest_Resource():
         >>> resource = Resource()
         >>> verifyObject(IResourceContained, resource)
         True
+
+    Resources can have titles and descriptions too
+
+        >>> blender = Resource(title='Blender', description="It's broken.")
+        >>> blender.title
+        'Blender'
+        >>> blender.description
+        "It's broken."
 
     Resources can be adapted to ISchoolBellApplication
 
