@@ -22,7 +22,6 @@ Views for calendaring.
 $Id$
 """
 
-import datetime
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.views import View, textErrorPage

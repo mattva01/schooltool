@@ -534,7 +534,7 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
 class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
 
     def test(self):
-        from schooltool.cal import WeeklyTimetableModel, daterange
+        from schooltool.cal import WeeklyTimetableModel
         from schooltool.cal import SchooldayTemplate, SchooldayPeriod
         from schooltool.interfaces import ITimetableModel
         from schooltool.cal import Timetable, TimetableDay, TimetableActivity
@@ -672,7 +672,6 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
     def test_byDate(self):
         from schooltool.cal import Calendar
         from schooltool.cal import CalendarEvent
-        from schooltool.interfaces import ICalendar
 
         cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
 

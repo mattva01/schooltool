@@ -194,6 +194,7 @@ def printSummaryLegend(model):
         print "    %s: %s" % (day[0], day)
     print
 
+
 def printCalendarSummary(cal, model):
     gen = model._dayGenerator()
     pp = PrintPacker(2)

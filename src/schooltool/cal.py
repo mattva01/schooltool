@@ -438,6 +438,7 @@ class Calendar:
         else:
             return False
 
+
 class CalendarEvent:
     implements(ICalendarEvent)
 

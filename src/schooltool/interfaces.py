@@ -1013,7 +1013,7 @@ class ICalendar(Interface):
     """A calendar, containing days which in turn contain events.
     """
 
-    daterange = Attribute("""IDaterange covered by this calendar.""")
+    daterange = Attribute("""IDateRange covered by this calendar.""")
 
     def __iter__():
         """Returns an iterator over the events in this calendar."""
@@ -1130,6 +1130,7 @@ class ISchooldayTemplate(Interface):
         template.
         """
 
+
 class ISchooldayTemplateWrite(Interface):
 
     def add(obj):
@@ -1193,7 +1194,8 @@ class ITimetableModel(Interface):
     """
 
     timetableDayIds = Attribute(
-        """Returns a sequence of day_ids which can be used in the timetable.""")
+        """Returns a sequence of day_ids which can be used in the timetable.
+        """)
 
     dayTemplates = Attribute(
         """A mapping of weekdays (calendar.MONDAY,...) to ISchooldayTemplates.
