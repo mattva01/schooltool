@@ -27,7 +27,8 @@ from logging import INFO
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
-
+from schooltool.tests.utils import EqualsSortedMixin
+from datetime import date, time, timedelta
 
 __metaclass__ = type
 
@@ -162,6 +163,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
         from schooltool.browser.app import ResourceContainerView
+        from schooltool.browser.app import BusySearchView
         from schooltool.browser.applog import ApplicationLogView
         view = self.createView()
         app = view.context
@@ -172,10 +174,11 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         self.assertTraverses(view, 'resources', ResourceContainerView,
                              app['resources'])
+        self.assertTraverses(view, 'busysearch', BusySearchView, app)
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
-        css = self.assertTraverses(view, 'logo.png', StaticFile)
-        self.assertEquals(css.content_type, 'image/png')
+        logo = self.assertTraverses(view, 'logo.png', StaticFile)
+        self.assertEquals(logo.content_type, 'image/png')
         user = object()
         request = RequestStub(authenticated_user=user)
         self.assertTraverses(view, 'start', StartView, user, request=request)
@@ -521,6 +524,55 @@ class TestResourceAddView(unittest.TestCase):
         self.assertEquals(view.redirect_to_edit, False)
 
 
+class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
+
+    def setUp(self):
+        from schooltool.model import Resource
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.browser.app import BusySearchView
+        app = Application()
+        self.app = app
+        r = app['resources'] = ApplicationObjectContainer(Resource)
+        self.r1 = r.new('r1', title='Resource 1')
+        self.r2 = r.new('r2', title='Resource 2')
+        self.view = BusySearchView(app)
+
+    def test_allResources(self):
+        self.assertEqual(self.view.allResources(), [self.r1, self.r2])
+
+    def test_update(self):
+        self.view.request = RequestStub(args={'first': '2004-08-11',
+                                              'last': '2004-08-11',
+                                              'duration': '30',
+                                              'hours': [13, 14]})
+        result = self.view.update()
+        assert result is None, result
+
+        self.assertEquals(self.view.first, date(2004, 8, 11))
+        self.assertEquals(self.view.last, date(2004, 8, 11))
+        self.assertEquals(self.view.duration, timedelta(minutes=30))
+        self.assertEquals(self.view.hours, [(time(13, 0), timedelta(hours=2))])
+        self.assertEqualsSorted(self.view.resources, [self.r1, self.r2])
+
+    def test_render(self):
+        request = RequestStub(args={}, authenticated_user=self.r1)
+        result = self.view.render(request)
+        assert 'Resource 1' in result, result
+        assert 'Search' in result
+
+        request = RequestStub(args={'first': '2004-08-11',
+                                    'last': '2004-08-11',
+                                    'duration': '30',
+                                    'hours': [13, 14]},
+                              authenticated_user=self.r1)
+        result = self.view.render(request)
+        assert 'Resource 1' in result, result
+        assert 'Search' in result
+        assert 'Book' in result
+        assert '2004-08-11 13:00' in result
+        assert '2004-08-11 15:00' in result
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
@@ -534,6 +586,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))
+    suite.addTest(unittest.makeSuite(TestBusySearchView))
     return suite
 
 

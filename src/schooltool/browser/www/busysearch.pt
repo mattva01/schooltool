@@ -1,0 +1,101 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Search for resources</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1">
+    Search for available resources
+  </h1>
+  <metal:block metal:fill-slot="content">
+    <form tal:attributes="action request/uri"
+          method="POST" class="busysearch">
+      <div class="error" tal:define="status view/update"
+           tal:content="status"
+           tal:condition="python:status and 'SUBMIT' in request.args" />
+      <table class="busysearch">
+        <tr>
+         <td>
+      <h3>Resource</h3>
+      <select multiple="yes" name="resources">
+        <tal:block repeat="resource view/allResources">
+        <option tal:define="path resource/@@path"
+                tal:content="resource/title"
+                tal:attributes="value path;
+                  selected python:('resources' in request.args and
+                                   path in request.args['resources'])" />
+        </tal:block>
+      </select>
+         </td>
+         <td>
+
+      <h3>Hours</h3>
+      <select multiple="yes" name="hours">
+        <option tal:repeat="hr python:range(24)"
+                tal:attributes="value hr;
+                  selected python:('hours' in request.args and
+                                   str(hr) in request.args['hours'])"
+                tal:content="python:'%02d:00' % hr" />
+      </select>
+
+         </td>
+         <td>
+
+      <h3>Dates</h3>
+      <div class="row">
+        <label>First </label>
+        <input type="text" name="first"
+               tal:attributes="value request/args/first/pop|view/today"/>
+      </div>
+      <div class="row">
+        <label>Last </label>
+        <input type="text" name="last"
+               tal:attributes="value request/args/last/pop|view/today"/><br/>
+      </div>
+
+      <h3>Duration</h3>
+      <div class="row">
+        <input type="text" name="duration"
+          tal:attributes="value request/args/duration/pop|view/defaultDur"/>
+       min.
+      <div class="row">
+
+      <input type="submit" name="SUBMIT" value="Search" class="button"
+             i18n:attributes="value" />
+          </td>
+         </tr>
+       </table>
+    </form>
+
+    <div tal:condition="python:getattr(view, 'resources', None)"
+         class="available">
+    <h3>Available time slots</h3>
+    <table class="available">
+      <tr>
+        <th>Resource</th>
+        <th>Start</th>
+        <th>End</th>
+        <th></th>
+      </tr>
+      <tal:block repeat="resource view/listResources">
+      <tr tal:repeat="slot resource/slots">
+        <td tal:content="resource/title">Resource</td>
+        <td tal:content="slot/start">Start</td>
+        <td tal:content="slot/end">Duration</td>
+        <td>
+          <form method="POST" class="invisible"
+            tal:attributes="action string:${resource/href}/book">
+             <input type="hidden" name="start"
+                    tal:attributes="value slot/start"/>
+             <input type="hidden" name="mins"
+                    tal:attributes="value request/args/duration"/>
+             <input type="submit" name="BOOK" value="Book" class="button"
+                    i18n:attributes="values"/>
+          </form>
+        </td>
+      </tr>
+      </tal:block>
+    </table>
+    </div>
+  </metal:block>
+</body>
+</html>

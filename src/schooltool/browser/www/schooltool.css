@@ -90,6 +90,13 @@ form {
   float: left;
 }
 
+form.invisible {
+  padding: 0;
+  background: white;
+  border: none;
+  float: none;
+}
+
 label {
   display: block;
   width: 7em;
@@ -129,6 +136,12 @@ input.button {
   font-weight: bold;
   padding: 2px 4px;
 }
+
+form.invisible input.button {
+  padding: 0;
+  margin: 1px;
+}
+
 
 input.button:hover {
   background: #dedede;
@@ -248,4 +261,34 @@ pre.traceback span.expr {
 }
 pre.traceback span.source {
   color: black;
+}
+
+form.busysearch select {
+  height: 20ex;
+  width: 10em;
+}
+
+table.busysearch {
+}
+
+table.busysearch td {
+  vertical-align: top;
+  padding: 0.5em;
+}
+
+table.available {
+  border-collapse: collapse;
+}
+table.available th {
+  border: 1px solid brown;
+  background: #cccccc;
+}
+
+table.available td {
+   border: 1px solid brown;
+   padding: 0 0.5em;
+}
+
+div.available {
+  clear: both;
 }

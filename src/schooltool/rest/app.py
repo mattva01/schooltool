@@ -187,7 +187,7 @@ class AvailabilityQueryView(View):
     authorization = PublicAccess
 
     def do_GET(self, request):
-        """Parse the query and call the template rengering.
+        """Parse the query and call the template rendering.
 
         Required arguments in the request query string:
 
@@ -209,10 +209,20 @@ class AvailabilityQueryView(View):
             ========= =========== ===========
 
         """
+        status = self.update()
+        if status:
+            return textErrorPage(request, status)
+        return View.do_GET(self, request)
+
+    def update(self):
+        """Parse the request args.
+
+        Return an error message or None if there are no errors.
+        """
+        request = self.request
         for arg in 'first', 'last', 'duration':
             if arg not in request.args:
-                return textErrorPage(request,
-                                     _("%r argument must be provided") % arg)
+                return _("%r argument must be provided") % arg
         try:
             arg = 'first'
             self.first = parse_date(request.args['first'][0])
@@ -227,8 +237,7 @@ class AvailabilityQueryView(View):
             else:
                 self.hours = self.parseHours(request.args['hours'])
         except ValueError:
-            return textErrorPage(request,
-                                 _("%r argument is invalid") % arg)
+            return _("%r argument is invalid") % arg
         self.resources = []
         if 'resources' not in request.args:
             resource_container = traverse(self.context, 'resources')
@@ -238,13 +247,10 @@ class AvailabilityQueryView(View):
                 try:
                     resource = traverse(self.context, path)
                 except KeyError:
-                    return textErrorPage(request,
-                                         _("Invalid resource: %r") % path)
+                    return _("Invalid resource: %r") % path
                 if not IResource.providedBy(resource):
-                    return textErrorPage(request,
-                                         _("%r is not a resource") % path)
+                    return _("%r is not a resource") % path
                 self.resources.append(resource)
-        return View.do_GET(self, request)
 
     def parseHours(self, hours):
         hrs = map(int, hours)
@@ -274,10 +280,13 @@ class AvailabilityQueryView(View):
                 res_slots = []
                 for start, duration in slots:
                     mins = duration.days * 60 * 24 + duration.seconds / 60
+                    end = start + duration
                     res_slots.append(
                         {'start': start.strftime("%Y-%m-%d %H:%M:%S"),
-                         'duration': mins})
+                         'duration': mins,
+                         'end': end.strftime("%Y-%m-%d %H:%M:%S") })
                 results.append({'href': absolutePath(self.request, resource),
+                                'path': getPath(resource),
                                 'title': resource.title,
                                 'slots': res_slots})
         return results

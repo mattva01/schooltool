@@ -35,7 +35,8 @@ from schooltool.component import getPath
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.translation import ugettext as _
-from schooltool.component import getTicketService
+from schooltool.component import getTicketService, traverse
+from schooltool.rest.app import AvailabilityQueryView
 __metaclass__ = type
 
 
@@ -110,6 +111,8 @@ class RootView(View):
             return StartView(request.authenticated_user)
         elif name == 'applog':
             return ApplicationLogView(self.context)
+        elif name == 'busysearch':
+            return BusySearchView(self.context)
         raise KeyError(name)
 
 
@@ -299,3 +302,22 @@ class ResourceContainerView(ObjectContainerView):
 
     add_view = ResourceAddView
     obj_view = ResourceView
+
+
+class BusySearchView(View, AvailabilityQueryView):
+
+    authorization = AuthenticatedAccess
+    template = Template("www/busysearch.pt")
+
+    defaultDur = 30
+
+    def today(self):
+        return str(datetime.date.today())
+
+    def allResources(self):
+        """Return a list of resources"""
+        resources = traverse(self.context, '/resources')
+        result = [(obj.title, obj) for obj in resources.itervalues()]
+        result.sort()
+        return [obj for title, obj in result]
+
