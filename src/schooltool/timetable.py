@@ -299,6 +299,10 @@ class ExceptionalTTCalendarEvent(CalendarEvent):
 
     def __init__(self, *args, **kwargs):
         self._exception = kwargs.pop('exception')
+        if not ITimetableException.providedBy(self._exception):
+            raise ValueError('%r is not a timetable exception'
+                             % self._exception)
+
         CalendarEvent.__init__(self, *args, **kwargs)
 
     def replace(self, *args, **kwargs):
