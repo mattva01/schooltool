@@ -1105,9 +1105,6 @@ class ISchooldayPeriod(Interface):
     tstart = Attribute("datetime.time of the start of the event")
     duration = Attribute("datetime.timedelta of the duration of the event")
 
-    # XXX Maybe the following should be considered an implementation detail
-    #     and not the public interface.
-
     def __eq__(other):
         """SchooldayPeriods are equal if all three of their
         attributes are equal.
@@ -1420,6 +1417,7 @@ class IApplication(IContainmentRoot, IServiceManager, ITraversable):
 
 class IApplicationObjectContainer(ILocation, ITraversable):
     """A collection of application objects."""
+
     # XXX split this into read and write interfaces.
 
     def __getitem__(name):

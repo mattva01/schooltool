@@ -48,10 +48,11 @@ class EventLogView(View):
                 for ts, event in self.context.getReceived()]
 
     def do_PUT(self, request):
-        # XXX RFC 2616, section 9.6:
+        # XXX RFC 2616, section 9.6 (PUT method definition):
         #   The recipient of the entity MUST NOT ignore any Content-* (e.g.
         #   Content-Range) headers that it does not understand or implement
         #   and MUST return a 501 (Not Implemented) response in such cases.
+        # We happily ignore those headers.
         if request.content.read(1):
             return textErrorPage(request, _("Only PUT with an empty body"
                                             " is defined for event logs"))

@@ -292,8 +292,8 @@ class CalendarView(CalendarReadView):
                     # old events
                     events.remove(event)
                 elif event.owner or event.context:
-                    # XXX: this business logic shoud be in an event
-                    # handler, not, in a view.
+                    # XXX: This business logic should be in an event
+                    #      handler, not in a view.
 
                     # owner and context are not represented in the
                     # iCalendar representation

@@ -964,9 +964,9 @@ class TestTimeFormatting(unittest.TestCase):
         #     time zone specifications of the following form.  Try this on a
         #     shell:
         #
-        #       $ TZ=XXX-2 date -r 8506131627
-        #       Tue Jan 19 05:14:07 XXX 2038
-        #       $ TZ=XXX-2YYY date -r 8506131627
+        #       $ TZ=TTT-2 date -r 8506131627
+        #       Tue Jan 19 05:14:07 TTT 2038
+        #       $ TZ=TTT-2YYY date -r 8506131627
         #       Tue Jan 19 03:14:07 GMT 2038
         #       $ TZ= date -r 8506131627
         #       Bus error.

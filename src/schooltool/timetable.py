@@ -88,7 +88,7 @@ class Timetable(Persistent):
 
     def update(self, other):
         # XXX Right now we're trusting the user that the periods of
-        # XXX the timetable days are compatible.  Maybe that'll be enough?
+        #     the timetable days are compatible.  Maybe that'll be enough?
 
         if self.day_ids != other.day_ids:
             raise ValueError("Cannot update -- timetables have different"

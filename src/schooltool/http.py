@@ -397,7 +397,6 @@ class Request(http.Request):
                             txn.abort()
                         else:
                             txn.note("%s %s" % (self.method, self.uri))
-                            # XXX getUser only uses HTTP auth
                             txn.setUser(self.getUser()) # anonymous is ""
                             txn.commit()
                     except ConflictError:
@@ -567,7 +566,7 @@ class Request(http.Request):
         """Log a hit into an access log in Apache combined log format."""
         self.hitlogger.info('%s - %s [%s] "%s" %s %s "%s" "%s"' %
                 (self.getClientIP() or '-',
-                self.getUser() or '-', # XXX getUser only uses HTTP auth
+                self.getUser() or '-',
                 self.hit_time,
                 '%s %s %s' % (self.method, self.uri, self.clientproto),
                 self.code,

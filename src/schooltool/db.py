@@ -81,7 +81,6 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
             raise KeyError, key
 
     def keys(self):
-        # XXX returning a lazy sequence is one optimization we might make
         jar = self._p_jar
         return ([jar[key] for key in self._data] +
                 [key for key, value in self._tmpdata.itervalues()])

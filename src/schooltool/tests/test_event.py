@@ -148,7 +148,7 @@ class TestEventActionMixins(unittest.TestCase):
         honeypot = TargetStub()
         callback = honeypot.notify
         ca = CallAction(callback)
-        # XXX cannot use verifyObject here due to incorrect assumtions it makes
+        # XXX Can't use verifyObject here due to incorrect assumptions it makes
         #     verifyObject(ICallAction, ca)
         verifyObject(IEventAction, ca)
         self.assert_(IEventAction.providedBy(ca))

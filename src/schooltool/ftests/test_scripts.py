@@ -200,7 +200,8 @@ class AppLogSetup(unittest.TestCase):
     This should be moved to a global test setup, once there is such a
     thing.
 
-    XXX: This might not work on windows.
+    XXX: This might not work on Windows, because the log file may already
+         be opened by another process.
     """
 
     def test(self):

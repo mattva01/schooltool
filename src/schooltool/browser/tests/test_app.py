@@ -37,7 +37,6 @@ class PersonStub:
     title = 'The Mgmt'
 
 
-
 class TestAppView(unittest.TestCase, TraversalTestMixin):
 
     def createView(self):

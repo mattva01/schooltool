@@ -514,7 +514,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         result = client.getPersonPhoto('/persons/jfk')
         self.assert_(result is None)
 
-        client = self.newClient(ResponseStub(401, 'Unauthorized', 'XXX'))
+        client = self.newClient(ResponseStub(401, 'Unauthorized', 'errmsg'))
         self.assertRaises(SchoolToolError, client.getPersonPhoto, '/persons/x')
 
     def test_savePersonPhoto(self):

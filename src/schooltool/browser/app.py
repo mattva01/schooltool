@@ -191,6 +191,7 @@ class PersonAddView(View):
 
         # XXX Do we really want to allow empty passwords?
         # XXX Should we care about Unicode vs. UTF-8 passwords?
+        #     (see http://issues.schooltool.org/issue96)
 
         person = self.context.new(username, title=username)
         person.setPassword(password)
