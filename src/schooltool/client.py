@@ -152,7 +152,8 @@ class XLinkHandler(ContentHandler):
     def startElementNS(self, name, qname, attrs):
         link = {}
         for namespace, attr in attrs.getNames():
-            link[attr] = attrs.get((namespace, attr))
+            if namespace == u"http://www.w3.org/1999/xlink":
+                link[attr] = attrs.get((namespace, attr))
         if link:
             self.links.append(link)
 

@@ -187,7 +187,9 @@ class TestXLinkHandler(unittest.TestCase):
         link = ("""<top xmlns:xlink="http://www.w3.org/1999/xlink">
                      <tag xlink:type="simple"
                           xlink:title="foo"
-                          xlink:href="bar" />
+                          xlink:href="bar"
+                          name="Bond"
+                          />
 
                      <noxlinks />
                      <tag xlink:type="simple"
