@@ -81,10 +81,6 @@ class Person(Persistent, Contained):
     implements(IPersonContained, IAttributeAnnotatable)
 
     title = None
-    first_name = None
-    last_name = None
-    date_of_birth = None
-    comment = None
     photo = None
     username = None
     _hashed_password = None

@@ -41,21 +41,8 @@ from zope.app.container.constraints import contains, containers
 class IReadPerson(Interface):
     """Publically accessible part of IPerson."""
 
-    title = TextLine(title=u"Display name",
+    title = TextLine(title=u"Full name",
         description=u"Name that should be displayed")
-
-    first_name = TextLine(title=u"First name",
-        required=False)
-
-    last_name = TextLine(title=u"Last name",
-        required=False)
-
-    date_of_birth = Date(title=u"Date of birth",
-        required=False)
-
-    comment = Text(title=u"Comment",
-        required=False,
-        description=u"""Free form comments.""")
 
     photo = Bytes(title=u"Photo",
         required=False,
