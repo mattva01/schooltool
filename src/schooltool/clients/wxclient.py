@@ -52,6 +52,7 @@ from schooltool.uris import URITeaching, URITaught
 from schooltool.uris import nameURI
 from schooltool.common import parse_date, parse_time
 from schooltool.translation import gettext as _
+from schooltool.translation import charset
 
 __metaclass__ = type
 
@@ -2134,11 +2135,8 @@ class MainFrame(wxFrame):
         for idx, item in enumerate(self.relationshipListData):
             self.relationshipListCtrl.InsertStringItem(idx, item.target_title)
             self.relationshipListCtrl.SetItemData(idx, idx)
-            role = nameURI(item.role).encode(locale.getpreferredencoding(),
-                                             'replace')
-            arcrole = nameURI(item.arcrole).encode(
-                                             locale.getpreferredencoding(),
-                                             'replace')
+            role = nameURI(item.role).encode(charset, 'replace')
+            arcrole = nameURI(item.arcrole).encode(charset, 'replace')
             self.relationshipListCtrl.SetStringItem(idx, 1, role)
             self.relationshipListCtrl.SetStringItem(idx, 2, arcrole)
         self.relationshipListCtrl.Thaw()
