@@ -217,11 +217,12 @@ class ACL(Persistent):
 
     implements(IACL, ILocation)
 
+    __name__ = 'acl'
+    __parent__ = None
+
     def __init__(self):
         self._data = PersistentPairKeysDict()
         self._everybody = PersistentDict()
-        self.__name__ = 'acl'
-        self.__parent__ = None
 
     def __iter__(self):
         """Iterate over tuples of (principal, permission)."""

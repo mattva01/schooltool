@@ -39,6 +39,8 @@ moduleProvides(IModuleSetup)
 __metaclass__ = type
 
 
+# XXX Why are these interfaces not in interfaces.event?
+
 class IEventLog(IEventTarget):
     """Event log that stores all received events persistently."""
 
@@ -93,10 +95,11 @@ class EventLogUtility(EventLog):
 
     implements(IEventLogUtility)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self):
         EventLog.__init__(self)
-        self.__parent__ = None
-        self.__name__ = None
         self.title = _("Event Log")
 
 
@@ -115,9 +118,8 @@ class EventLogger(Persistent):
 
     implements(IEventTarget, ILocation)
 
-    def __init__(self):
-        self.__parent__ = None
-        self.__name__ = None
+    __name__ = None
+    __parent__ = None
 
     def notify(self, event):
         logging.debug('Event: %r' % event)

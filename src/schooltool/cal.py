@@ -82,11 +82,12 @@ class SchooldayModel(DateRange, Persistent):
 
     implements(ISchooldayModel, ISchooldayModelWrite, ILocation)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self, first, last):
         DateRange.__init__(self, first, last)
         self._schooldays = Set()
-        self.__parent__ = None
-        self.__name__ = None
 
     def _validate(self, date):
         if not date in self:
@@ -199,10 +200,11 @@ class Calendar(Persistent, ImmutableCalendar):
 
     implements(ICalendar, ICalendarWrite, ILocation)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self):
         self.events = PersistentDict()
-        self.__name__ = None
-        self.__parent__ = None
 
     def __iter__(self):
         return self.events.itervalues()

@@ -197,6 +197,9 @@ class Timetable(Persistent):
 
     implements(ITimetable, ITimetableWrite)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self, day_ids):
         """Create a new empty timetable.
 
@@ -209,8 +212,6 @@ class Timetable(Persistent):
         self.days = PersistentDict()
         self.model = None
         self._exceptions = TimetableExceptionList(self)
-        self.__parent__ = None
-        self.__name__ = None
 
     exceptions = property(lambda self: self._exceptions)
 

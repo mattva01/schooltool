@@ -47,6 +47,9 @@ class Absence(Persistent):
 
     implements(IAbsence)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self, person, expected_presence=None, ended=False,
                  resolved=False):
         self.person = person
@@ -54,8 +57,6 @@ class Absence(Persistent):
         self.ended = ended
         self.resolved = resolved
         self.comments = []
-        self.__name__ = None
-        self.__parent__ = None
 
     def addComment(self, comment):
         if not IAbsenceComment.providedBy(comment):
@@ -98,6 +99,8 @@ class AbsenceComment:
 
     implements(IAbsenceComment)
 
+    __parent__ = None
+
     def __init__(self, reporter=None, text=None, dt=None, absent_from=None,
                  expected_presence=Unchanged, ended=Unchanged,
                  resolved=Unchanged):
@@ -116,7 +119,6 @@ class AbsenceComment:
             self.resolved = Unchanged
         else:
             self.resolved = bool(resolved)
-        self.__parent__ = None
 
 
 class AttendanceEvent(EventMixin):

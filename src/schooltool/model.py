@@ -65,14 +65,15 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
 
     implements(IApplicationObject)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
         RelationshipValenciesMixin.__init__(self)
         CalendarOwnerMixin.__init__(self)
         TimetabledMixin.__init__(self)
         self.title = title
-        self.__name__ = None
-        self.__parent__ = None
 
         self.acl = ACL()
         self.acl.__name__ = 'acl'
@@ -240,6 +241,9 @@ class Note(RelationshipValenciesMixin, EventTargetMixin):
 
     implements(INote)
 
+    __name__ = None
+    __parent__ = None
+
     title = None
     body = None
     owner = None
@@ -251,8 +255,6 @@ class Note(RelationshipValenciesMixin, EventTargetMixin):
         self.title = title
         self.body = body
         self.owner = owner
-        self.__name__ = None
-        self.__parent__ = None
         self.created = datetime.datetime.today()
 
     def getRelated(self):
@@ -262,6 +264,9 @@ class Note(RelationshipValenciesMixin, EventTargetMixin):
 class Residence(RelationshipValenciesMixin, FacetedEventTargetMixin):
 
     implements(IResidence)
+
+    __name__ = None
+    __parent__ = None
 
     title = None
     country = None
@@ -273,8 +278,6 @@ class Residence(RelationshipValenciesMixin, FacetedEventTargetMixin):
         self.country = country
         address = AddressFacet()
         FacetManager(self).setFacet(address, self, "address_info")
-        self.__name__ = None
-        self.__parent__ = None
 
     def getPeople(self):
         return getRelatedObjects(self, URICurrentlyResides)
