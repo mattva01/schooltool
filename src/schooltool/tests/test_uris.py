@@ -110,6 +110,9 @@ class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
         getURI("http://schooltool.org/ns/occupies")
         getURI("http://schooltool.org/ns/occupies/currentlyresides")
         getURI("http://schooltool.org/ns/occupies/currentresidence")
+        getURI("http://schooltool.org/ns/guardian")
+        getURI("http://schooltool.org/ns/guardian/custodian")
+        getURI("http://schooltool.org/ns/guardian/ward")
 
 
 def test_suite():

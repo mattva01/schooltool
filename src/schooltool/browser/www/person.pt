@@ -95,6 +95,32 @@
         <img src="photo.jpg" tal:attributes="src view/photoURL" />
       </p>
     </div>
+
+    <div class="family-relationships"
+      tal:define="family context/getFamily">
+      <tal:if condition="family">
+        <h3>Guardians</h3>
+        <ul>
+          <tal:loop repeat="member family">
+            <li>
+              <a href="" tal:attributes="href member/@@absolute_url"
+                tal:content="member/title">
+              </a>
+            </li>
+          </tal:loop>
+        </ul>
+        <a class="action"
+            tal:attributes="href string:${context/@@absolute_url}/guardian/?pid=${context/__name__}"
+            i18n:translate="">Add or remove a guardian</a>
+      </tal:if>
+      <tal:if condition="not:family">
+        <h3>This person has no guardian defined.</h3>
+        <a class="action"
+            tal:attributes="href string:${context/@@absolute_url}/guardian/?pid=${context/__name__}"
+            i18n:translate="">Link to Guardian</a>
+      </tal:if>
+    </div>
+
     <div class="residences"
         tal:define="residences context/getResidences"
         tal:condition="residences">
@@ -108,7 +134,6 @@
               <span tal:content="address/streetNr"/> <span tal:content="address/thoroughfareName"/><br/>
               <span tal:content="address/town"/> <span tal:content="address/district"/>, <span tal:content="address/postcode"/>
               </address>
-              
           </li>
         </tal:loop>
       </ul>

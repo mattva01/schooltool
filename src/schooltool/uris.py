@@ -197,6 +197,22 @@ URINotandum = URIObject(
                 _("Notandum"),
                 _("The role of a object in Noted"))
 
+URIGuardian = URIObject(
+                "http://schooltool.org/ns/guardian",
+                _("Guardian"),
+                _("The guardian relationship"))
+
+URICustodian = URIObject(
+                "http://schooltool.org/ns/guardian/custodian",
+                _("Custodian"),
+                _("The role of a responsible adult in Guardian"))
+
+URIWard = URIObject(
+                "http://schooltool.org/ns/guardian/ward",
+                _("Ward"),
+                _("The role of a student in the Guardian relationship"))
+
+
 #
 #  Configuration
 #
@@ -218,5 +234,8 @@ def setUp():
     registerURI(URINoted)
     registerURI(URINotation)
     registerURI(URINotandum)
+    registerURI(URIGuardian)
+    registerURI(URICustodian)
+    registerURI(URIWard)
 
 moduleProvides(IModuleSetup, IURIAPI)

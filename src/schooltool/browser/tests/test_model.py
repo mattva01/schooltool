@@ -193,6 +193,12 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                             'url': '%s/timetables/2004-spring/default' % pp,
                             'empty': False}])
 
+    def test_dynamicfacets(self):
+        from schooltool.browser.model import PersonView
+        view = PersonView(self.person)
+        view.request = RequestStub()
+        self.assertEquals(view.getDynamicFacets(), [])
+
     def test_timetables_empty(self):
         from schooltool.browser.model import PersonView
         from schooltool.timetable import Timetable

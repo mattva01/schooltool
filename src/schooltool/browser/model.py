@@ -49,10 +49,12 @@ from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import getOptions
 from schooltool.interfaces import IPerson, IGroup, IResource, INote, IResidence
 from schooltool.membership import Membership
+from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
+from schooltool.uris import URIGuardian, URICustodian, URIWard
 from schooltool.uris import URICurrentResidence
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
 from schooltool.uris import URICalendarProvider, URINotation
@@ -141,6 +143,8 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
             return RestCalendarView(self.context.calendar)
         elif name == 'timetable-calendar.ics':
             return RestCalendarReadView(self.context.makeTimetableCalendar())
+        elif name == 'guardian':
+            return GuardianEditView(self.context)
         raise KeyError(name)
 
     def canEdit(self):
@@ -359,6 +363,7 @@ class PersonInfoEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
                                      value=info.date_of_birth)
         self.comment_widget = TextAreaWidget('comment', _('Comment'),
                                              value=info.comment)
+
     def facets(self):
         return FacetManager(self.context).iterFacets()
 
@@ -474,6 +479,48 @@ class RelationshipViewMixin:
                 request.appLog(_("Relationship '%s' between %s and %s created")
                                % (self.relname, getPath(obj),
                                   getPath(self.context)))
+
+
+class GuardianEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+    """View for relating students to their guardian"""
+
+    title = _("Relate to a parent or Guardian")
+
+    template = Template('www/guardian.pt')
+
+    authorization = ACLModifyAccess
+
+    linkrole = URIWard
+
+    relname = property(lambda self: _('Guardian'))
+
+    def addList(self):
+        """Return a list of objects available for adding."""
+        try:
+            searchstr = to_unicode(self.request.args['SEARCH'][0]).lower()
+        except UnicodeError:
+            return []
+        members = sets.Set(getRelatedObjects(self.context, URICustodian))
+        addable = []
+        restrict_membership = getOptions(self.context).restrict_membership
+        for obj in self._source(restrict_membership):
+            if (searchstr in obj.title.lower() and obj not in members):
+                addable.append(obj)
+        # 'obj not in members' is not strong enough; we should check for
+        # transitive membership as well
+        return self._list(addable)
+
+    def _source(self, restrict_membership):
+        if restrict_membership:
+            parents = getRelatedObjects(self.context, URIGuardian)
+            siblings = itertools.chain(*[getRelatedObjects(parent, URICustodian)
+                                         for parent in parents])
+            return [member for member in siblings if IPerson.providedBy(member)]
+        else:
+            return itertools.chain(traverse(self.context, '/persons').itervalues())
+
+    def createRelationship(self, other):
+        Guardian(custodian=self.context, ward=other)
 
 
 class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):

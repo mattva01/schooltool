@@ -1,0 +1,115 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Add parent or guardian.
+  </title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Add parent or guardian.
+  </h1>
+<metal:block metal:fill-slot="content">
+
+  <div tal:define="status view/update"
+       tal:condition="status" tal:content="status" class="error"/>
+
+<tal:block condition="not:request/args/ADD|nothing">
+ <tal:block condition="not:request/args/SEARCH|nothing">
+  <form method="POST" tal:attributes="action request/uri"
+        tal:define="list view/list">
+  <h3 i18n:translate="">Guardians</h3>
+  <p tal:condition="not:list" i18n:translate="">
+    There are none.
+  </p>
+  <table tal:condition="list">
+    <tr tal:repeat="item view/list">
+      <td><input type="checkbox" name="CHECK"
+                 tal:attributes="value item/path;
+                                 id string:check.${repeat/item/number}" /></td>
+      <td><label class="plain"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <img tal:attributes="src item/icon_url; alt item/icon_text" />
+          </label>
+      </td>
+      <td><label class="plain"
+                 tal:attributes="for string:check.${repeat/item/number}"
+                 tal:content="item/title" /></td>
+    </tr>
+  </table>
+  <div class="buttons">
+    <input type="submit" class="button" name="DELETE"
+           value="Remove"
+           tal:condition="list"
+           i18n:attributes="value" />
+    <input type="submit" class="button" name="ADD"
+           value="Add..."
+           i18n:attributes="value" />
+  </div>
+  </form>
+
+  <p style="clear:both" i18n:translate="">
+  The "Add..." button above lets you add already existing people as guardians
+  of this student. You can also add a completely new person to the system and
+  make it a guardian of this student by using the button below:
+  </p>
+
+  <div class="actions">
+    <a class="action"
+       tal:attributes="href
+                    string:/groups/add.html?parentgroup=${context/__name__}"
+       i18n:translate="">Create a new person</a>
+  </div>
+
+ </tal:block>
+</tal:block>
+
+<tal:block condition="request/args/ADD|nothing">
+  <form method="POST" tal:attributes="action request/uri">
+
+    <p i18n:translate="">
+    Enter a substring of the guardian or parent's name:</p>
+
+  <input type="text" class="field" name="SEARCH"/>
+  <input type="submit" class="button" name="ADD2" value="Next"
+         i18n:attributes="value" />
+  </form>
+</tal:block>
+
+<tal:block condition="request/args/SEARCH|nothing">
+  <form method="POST" tal:attributes="action request/uri"
+        tal:define="list view/addList">
+
+  <p tal:condition="not:list" i18n:translate="">
+  Sorry, there are no people that could be added to this this child's guardian.
+  </p>
+
+ <tal:if condition="list">
+   <p i18n:translate="">
+    Select a person you want to add as a guardian:</p>
+
+  <table>
+    <tr tal:repeat="item list">
+      <td><input
+              type="checkbox" name="toadd"
+              tal:attributes="value item/path;
+                              id string:check.${repeat/item/number}">
+      </td>
+      <td><label class="plain"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <img tal:attributes="src item/icon_url; alt item/icon_text" />
+          </label>
+      <td><label class="plain"
+                 tal:attributes="for string:check.${repeat/item/number}"
+                 tal:content="item/title"/></td>
+    </tr>
+  </table>
+
+  <input type="submit" class="button" name="FINISH_ADD" value="Add"
+         i18n:attributes="value" />
+ </tal:if>
+  </form>
+</tal:block>
+
+</metal:block>
+</body>
+</html>

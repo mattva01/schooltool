@@ -800,6 +800,27 @@ class INotedRemovedEvent(IRelationshipRemovedEvent, INotedEvent):
     """Event that gets sent out after a note has been removed from an object
     """
 
+class IGuardianEvent(IRelationshipEvent):
+    """Base interface for noted events.
+
+    This is a special case of IRelationshipEvent where one side has
+    the role of URIGroup, and the other side has the role of URIMember.
+    """
+
+    notandum = Attribute("""The noted object""")
+    notation = Attribute("""The note""")
+
+
+class IGuardianAddedEvent(IRelationshipAddedEvent, IGuardianEvent):
+    """Event that gets sent out after a note is associated with an object.
+    """
+
+
+class IGuardianRemovedEvent(IRelationshipRemovedEvent, IGuardianEvent):
+    """Event that gets sent out after a note has been removed from an object
+    """
+
+
 
 #
 # Facets
