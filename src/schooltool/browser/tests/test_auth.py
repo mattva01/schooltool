@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from sets import Set
 from zope.interface import directlyProvides
 from schooltool.browser.tests import AppSetupMixin
 from schooltool.browser.tests import RequestStub
@@ -116,6 +117,50 @@ class TestACLCalendarAccess(AppSetupMixin, AuthPolicyTestMixin,
         self.assertDenies(ViewAccess,
                           [self.anonymous, self.person2, self.teacher],
                           self.person.calendar)
+
+    def test(self):
+        from schooltool.browser.auth import ACLCalendarAccess
+        from schooltool.interfaces import ViewPermission
+        ViewAccess = ACLCalendarAccess(ViewPermission)
+        self.person.calendar.acl.add((self.teachers, ViewPermission))
+        self.assertAllows(ViewAccess,
+                          [self.person, self.manager, self.teacher],
+                          self.person.calendar)
+        self.assertDenies(ViewAccess,
+                          [self.anonymous, self.person2],
+                          self.person.calendar)
+
+        self.person.calendar.acl.add((self.person2, ViewPermission))
+        self.assertAllows(ViewAccess,
+                          [self.person, self.manager,
+                           self.teacher, self.person2],
+                          self.person.calendar)
+        self.assertDenies(ViewAccess, [self.anonymous],
+                          self.person.calendar)
+
+    def test_getAncestorGroups(self):
+        from schooltool.browser.auth import ACLCalendarAccess
+        from schooltool.interfaces import ViewPermission
+        from schooltool.membership import Membership
+        ViewAccess = ACLCalendarAccess(ViewPermission)
+        self.assertEquals(ViewAccess.getAncestorGroups(self.teacher),
+                          Set([self.teachers, self.root]))
+
+        g1 = self.app['groups'].new('g1')
+        g21 = self.app['groups'].new('g21')
+        g22 = self.app['groups'].new('g22')
+        g3 = self.app['groups'].new('g3')
+        unrelated = self.app['groups'].new('unrelated')
+
+        Membership(group=self.root, member=g1)
+        Membership(group=g1, member=g21)
+        Membership(group=g1, member=g22)
+        Membership(group=g21, member=g3)
+        Membership(group=g22, member=g3)
+        Membership(group=g22, member=unrelated)
+
+        self.assertEquals(ViewAccess.getAncestorGroups(g3),
+                          Set([self.root, g1, g21, g22]))
 
 
 def test_suite():

@@ -34,8 +34,11 @@ Example:
 $Id$
 """
 
+from sets import Set
 from schooltool.rest.auth import isManager, isTeacher
 from schooltool.rest.auth import PrivateAccess      # reexport
+from schooltool.component import getRelatedObjects
+from schooltool.uris import URIGroup
 
 __metaclass__ = type
 
@@ -77,5 +80,19 @@ class ACLCalendarAccess:
     def __call__(self, context, request):
         if isManager(request.authenticated_user):
             return True
+        if request.authenticated_user is not None:
+            for group in self.getAncestorGroups(request.authenticated_user):
+                if context.acl.allows(group, self.permission):
+                    return True
         return context.acl.allows(request.authenticated_user, self.permission)
 
+    def getAncestorGroups(self, person):
+        """Return a set of ancestor groups of a person"""
+        ancestors = Set()
+        def getAncestors(obj):
+            for parent in  getRelatedObjects(obj, URIGroup):
+                if parent not in ancestors:
+                    ancestors.add(parent)
+                    getAncestors(parent)
+        getAncestors(person)
+        return ancestors

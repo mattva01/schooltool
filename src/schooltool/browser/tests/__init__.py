@@ -92,6 +92,8 @@ class AppSetupMixin(RegistriesSetupMixin):
         self.location2 = app['resources'].new("location2", title="Outside")
 
         Membership(group=self.root, member=self.person)
+        Membership(group=self.root, member=self.teachers)
+        Membership(group=self.root, member=self.managers)
         Membership(group=self.managers, member=self.manager)
         Membership(group=self.teachers, member=self.teacher)
         Membership(group=self.locations, member=self.location)
