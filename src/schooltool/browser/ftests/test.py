@@ -143,7 +143,7 @@ class TestPersonCreate(setup.TestCase):
 
     def test(self):
         browser = Browser()
-        browser.post('http://localhost:8814/',
+        browser.post('http://localhost:8814/login',
                      {'username': 'manager', 'password': 'schooltool'})
         browser.post('http://localhost:8814/persons/add.html',
                      {'first_name': 'Test', 'last_name': 'User',
@@ -161,7 +161,7 @@ class TestPersonEdit(setup.TestCase):
 
     def test(self):
         browser = Browser()
-        browser.post('http://localhost:8814/',
+        browser.post('http://localhost:8814/login',
                      {'username': 'manager', 'password': 'schooltool'})
         browser.go('http://localhost:8814/persons/manager/edit.html')
         self.assert_('Edit person info' in browser.content)
@@ -192,7 +192,7 @@ class TestResetDB(setup.TestCase):
     def test(self):
         # Log in
         browser = Browser()
-        browser.post('http://localhost:8814/',
+        browser.post('http://localhost:8814/login',
                      {'username': 'manager', 'password': 'schooltool'})
 
         # Change something in the database
@@ -223,7 +223,7 @@ class TestObjectDeletion(setup.TestCase):
     def test(self):
         # Log in
         browser = Browser()
-        browser.post('http://localhost:8814/',
+        browser.post('http://localhost:8814/login',
                      {'username': 'manager', 'password': 'schooltool'})
 
         # Make sure we have the right test fixture loaded
@@ -258,7 +258,7 @@ class TestImportSchoolTimetable(setup.TestCase):
     def test(self):
         # Log in
         browser = Browser()
-        browser.post('http://localhost:8814/',
+        browser.post('http://localhost:8814/login',
                      {'username': 'manager', 'password': 'schooltool'})
 
         # Go to the school timetable import page
