@@ -183,6 +183,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
+              <meta http-equiv="Content-Type"
+                    content="text/html; charset=UTF-8" />
               <title>Timetables for Foo</title>
             </head>
             <body>
@@ -219,6 +221,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
+              <meta http-equiv="Content-Type"
+                    content="text/html; charset=UTF-8" />
               <title>Timetables for Foo</title>
             </head>
             <body>
@@ -254,6 +258,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
+              <meta http-equiv="Content-Type"
+                    content="text/html; charset=UTF-8" />
               <title>Composite timetables for Foo</title>
             </head>
             <body>
@@ -289,6 +295,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                 """, """
                 <html>
                 <head>
+                  <meta http-equiv="Content-Type"
+                        content="text/html; charset=UTF-8" />
                   <title>School timetables</title>
                 </head>
                 <body>
@@ -333,6 +341,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html_template = """
         <html>
         <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
           <title>
             John Smith's %(tt_type)s timetable for 2003 fall, weekly
           </title>
@@ -399,6 +408,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     full_html_template = """
         <html>
         <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
           <title>
             John Smith's %(tt_type)s timetable for 2003 fall, weekly
           </title>
@@ -865,6 +875,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
     empty_html = """
         <html>
         <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
           <title>Timetable schema: weekly</title>
           <style type="text/css">
             table { border-collapse: collapse; }
