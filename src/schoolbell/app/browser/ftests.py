@@ -25,6 +25,7 @@ $Id$
 import os
 import unittest
 
+from zope.testing import doctest
 from zope.app.tests.functional import FunctionalTestSetup
 from zope.app.tests.functional import FunctionalDocFileSuite
 
@@ -51,7 +52,10 @@ def test_suite():
         if str(e) != 'Already configured with a different config file':
             raise
     return unittest.TestSuite([
-                FunctionalDocFileSuite('ftest.txt'),
+                FunctionalDocFileSuite('ftest.txt',
+                    optionflags=(doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                                 doctest.NORMALIZE_WHITESPACE |
+                                 doctest.REPORT_ONLY_FIRST_FAILURE)),
            ])
 
 if __name__ == '__main__':
