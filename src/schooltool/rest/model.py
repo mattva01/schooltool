@@ -71,7 +71,7 @@ class ApplicationObjectTraverserView(View):
 
 
 class GroupView(ApplicationObjectTraverserView):
-    """The view for a group"""
+    """A view for a group."""
 
     template = Template("www/group.pt", content_type="text/xml")
     authorization = PublicAccess
@@ -90,6 +90,7 @@ class GroupView(ApplicationObjectTraverserView):
 
 
 class TreeView(View):
+    """XXX what does this do?"""
 
     template = Template('www/tree.pt', content_type='text/xml')
     node_template = Template('www/tree_node.pt',
@@ -106,7 +107,7 @@ class TreeView(View):
 
 
 class PersonView(ApplicationObjectTraverserView):
-    """The view for a person object"""
+    """A view for a Person."""
 
     template = Template("www/person.pt", content_type="text/xml")
     authorization = PublicAccess
@@ -125,6 +126,7 @@ class PersonView(ApplicationObjectTraverserView):
 
 
 class PersonPasswordView(View):
+    """A view on the password of a Person."""
 
     do_GET = staticmethod(notFoundPage)
     authorization = PrivateAccess
@@ -147,7 +149,7 @@ class PersonPasswordView(View):
 
 
 class ResourceView(ApplicationObjectTraverserView):
-    """A view on a resource"""
+    """A view on a resource."""
 
     template = Template("www/resource.pt", content_type="text/xml")
     authorization = PublicAccess
