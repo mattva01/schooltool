@@ -9,5 +9,7 @@ import os
 import sys
 # paths begin
 # paths end
-# sampledir begin
-# sampledir end
+
+from schooltool.pathconfig import DATADIR
+
+datadir = os.path.join(DATADIR, '..', 'sampleschool')

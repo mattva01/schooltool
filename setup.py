@@ -180,41 +180,21 @@ class install_scripts(_install_scripts):
     The primary purpose of this sub class it to configure the scripts on
     installation.
     """
-    
+
     package = package
 
     user_options = _install_scripts.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
                 " be added to the python path on script startup"),
             ('default-config=', None, "location of the default server config"
-                    " file"),
-            ('datafile-dir=', None, "override where the schooltool startup"
-                    " scripts think their data files are")]
+                    " file")]
 
     def initialize_options(self):
-        self.build_base = None
         self.paths = None
         self.default_config = None
-        self.datafile_dir = None
         return _install_scripts.initialize_options(self)
 
-    def finalize_options(self):
-        self.set_undefined_options('install',
-                ('build_base', 'build_base'))
-        return _install_scripts.finalize_options(self)
-
     def update_scripts(self):
-        # Find out what we should set the datafile directory as
-        if self.datafile_dir is None:
-            # Make sure that we have installed the data files
-            self.run_command('install_data')
-            # Get the location of the installed data
-            try:
-                data_file = open(os.path.join(self.build_base,
-                            self.package + '_data_base'), 'r')
-                self.datafile_dir = data_file.read()
-            finally:
-                pass
         for script in self.get_outputs():
             # Read the installed script
             try:
@@ -225,7 +205,7 @@ class install_scripts(_install_scripts):
             # Update the paths in the script
             if self.paths:
                 paths_str = '\n'.join(['# paths begin']
-                        + ['sys.path.insert(0, \'%s\')' % path\
+                        + ['sys.path.insert(0, %s)' % repr(path)\
                         for path in self.paths.split(';')] + ['# paths end'])
             else:
                 paths_str = '\n'.join(['# paths begin', '# paths end'])
@@ -237,17 +217,12 @@ class install_scripts(_install_scripts):
                         'sys.argv.insert(1, \'--config=%s\')'
                         % self.default_config, '# config end'])
             else:
-                config_str = '\n'.join(['# config begin', '# config end'])
+                config_str = '\n'.join(['# config begin',
+                        "sys.argv.insert(1, \'--config=%s\' % "
+                        "__file__ + \'.conf\')",
+                        '# config end'])
             config_regex = re.compile(r'# config begin\n.*# config end', re.S)
             script_str = re.sub(config_regex, config_str, script_str)
-            # Update whers import-sampleschool looks for the sampleschool
-            sampledir = os.path.join(self.datafile_dir, 'sampleschool')
-            sampledir_str = '\n'.join(['# sampledir begin',
-                    'datadir = \'%s\')'
-                    % sampledir, '# sampledir end'])
-            sampledir_regex = re.compile(
-                    r'# sampledir begin\n.*# sampledir end', re.S)
-            script_str = re.sub(sampledir_regex, sampledir_str, script_str)
             # Write the script again
             try:
                 script_file = open(script, 'w')

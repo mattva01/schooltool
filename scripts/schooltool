@@ -3,6 +3,7 @@
 A script to start the SchoolTool server in a Debian system.
 """
 
+# Please don't modify the following lines until you have looked in setup.py
 import sys
 # paths begin
 # paths end

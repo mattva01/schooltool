@@ -16,8 +16,8 @@ datadir = basedir
 sys.path.insert(0, os.path.join(basedir, 'src'))
 sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
-# If you modify something above, take a look at debian/rules and
-# debian/import-sampleschool.head, too.
+# If you modify something above, take a look at Makefile and
+# scripts/import-sampleschool.head, too.
 # -- Do not remove this line --
 
 import urllib
