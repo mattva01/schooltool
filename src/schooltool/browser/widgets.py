@@ -523,11 +523,19 @@ class CheckboxWidget(Widget):
         else:
             return ''
 
+    def update(self, request):
+        if ("%s_shown" % self.name) in request.args:
+            if self.getRawValue(request):
+                self.setValue(True)
+            else:
+                self.setValue(False)
+
     def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
                 '  <input %(css_class)s type="checkbox" name="%(name)s"'
                 '         id="%(name)s" %(tabindex)s %(checked)s/>\n'
                 '  <label class="plain" for="%(name)s">%(label)s</label>\n'
+                '  <input type="hidden" name="%(name)s_shown" value="yes"/>\n'
                 '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),

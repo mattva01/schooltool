@@ -442,6 +442,7 @@ class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
             <div class="row">
               <input type="checkbox" name="field" id="field"/>
               <label class="plain" for="field">Label</label>
+              <input name="field_shown" type="hidden" value="yes"/>
             </div>
             """
         self.assertEqualsXML(widget(), expected)
@@ -458,11 +459,19 @@ class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
               <input type="checkbox" class="extra"
                      id="field" name="field" tabindex="11" checked="checked" />
               <label class="plain" for="field">Label</label>
+              <input name="field_shown" type="hidden" value="yes"/>
               <span class="unit">(blah blah blah)</span>
               <div class="error">An error!</div>
             </div>
             """
         self.assertEqualsXML(widget(), expected)
+
+    def test_update(self):
+        widget = self.createWidget()
+        widget.setValue(True)
+        request = RequestStub(args={'field_shown': 'yes'})
+        widget.update(request)
+        self.assertEquals(widget.value, False)
 
 
 def test_suite():
