@@ -85,6 +85,10 @@ class RelationshipEvent(object):
         'a'
         >>> event['Group']
         'b'
+        >>> event['Bogus']
+        Traceback (most recent call last):
+          ...
+        KeyError: 'Bogus'
 
     """
 

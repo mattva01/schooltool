@@ -332,6 +332,11 @@ def doctest_RelationshipSchema():
           ...
         TypeError: Missing a 'manager' keyword argument.
 
+        >>> Management(manager=c, friend=d)
+        Traceback (most recent call last):
+          ...
+        TypeError: Missing a 'report' keyword argument.
+
     You should not give extra arguments either
 
         >>> Management(report=c, manager=b, friend=d)
