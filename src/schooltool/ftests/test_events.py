@@ -83,6 +83,7 @@ class TestEventSystem(unittest.TestCase):
         from schooltool.event import RouteToGroupsAction, RouteToMembersAction
         root = RootGroup("root")
         datamgr.root()['root'] = root
+        datamgr.add(root)
         root.eventTable.append(RouteToMembersAction(IStudentEvent))
 
         students = Group("students")

@@ -29,13 +29,10 @@ from schooltool.interfaces import IFaceted, IEventConfigurable, IQueryLinks
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.interfaces import ISpecificURI, URIGroup, URIMember
 from schooltool.component import queryFacet, setFacet, getFacetItems
-from schooltool.db import PersistentKeysSet, PersistentKeysDict
+from schooltool.db import PersistentKeysSet, PersistentKeysDict, HookablePJar
 from schooltool.event import EventTargetMixin, EventService
 
 __metaclass__ = type
-
-# A hook for tests
-_setFactory = PersistentKeysSet
 
 
 class GroupLink:
@@ -64,7 +61,10 @@ class MemberLink:
     title = "Membership"
 
 
-class GroupMember:
+# A hook for tests
+_setFactory = PersistentKeysSet
+
+class GroupMember(Persistent):
     """A mixin providing the IGroupMember interface.
 
     Also, it implements ILocation by setting the first group the
@@ -103,6 +103,13 @@ class GroupMember:
         else:
             return []
 
+    def setDataManager(self, datamanager):
+        # Can be in the process of being unghostified, need to be careful.
+        if hasattr(self, '_groups'):
+            datamanager.add(self._groups)
+
+    _p_jar = HookablePJar(setDataManager)
+
 
 class FacetedMixin:
 
@@ -126,7 +133,7 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
         return sum(tables, [])
 
 
-class Person(Persistent, GroupMember, FacetedEventTargetMixin):
+class Person(GroupMember, FacetedEventTargetMixin):
 
     implements(IPerson)
 
@@ -137,7 +144,7 @@ class Person(Persistent, GroupMember, FacetedEventTargetMixin):
         self.name = name
 
 
-class Group(Persistent, GroupMember, FacetedEventTargetMixin):
+class Group(GroupMember, FacetedEventTargetMixin):
 
     implements(IGroup, IGroupMember)
 
@@ -170,6 +177,8 @@ class Group(Persistent, GroupMember, FacetedEventTargetMixin):
         """See IGroup"""
         if not IGroupMember.isImplementedBy(member):
             raise TypeError("A member has to implement IGroupMember")
+        if self._p_jar is not None:
+            self._p_jar.add(member)
         key = self._next_key
         self._next_key += 1
         self._members[key] = member

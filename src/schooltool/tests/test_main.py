@@ -596,6 +596,7 @@ class TestServer(MemberSetup, unittest.TestCase):
         server.notifyServerStarted = lambda x, y: None
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
+        server.db = DbStub()
         server.run()
 
         self.assert_(threadable._initialized)
@@ -631,7 +632,7 @@ class TestServer(MemberSetup, unittest.TestCase):
         transaction = TransactionStub()
         server.get_transaction_hook = lambda: transaction
         cookie = object()
-        server.appFactory = lambda: cookie
+        server.appFactory = lambda conn: cookie
         db = DbStub()
         appname = 'foo'
         server.ensureAppExists(db, appname)
@@ -645,7 +646,10 @@ class TestServer(MemberSetup, unittest.TestCase):
     def test_createApplication(self):
         from schooltool.main import Server
         server = Server()
-        app = server.createApplication()
+        class DummyDataManager:
+            def add(self, object):
+                pass
+        app = server.createApplication(DummyDataManager())
         a = app[0][0]
         b = app[1][0]
         c = app[2][0]

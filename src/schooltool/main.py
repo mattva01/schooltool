@@ -351,6 +351,8 @@ class Server:
         """
         try:
             self.configure(args)
+            self.db = self.config.database.open()
+            self.ensureAppExists(self.db, self.appname)
         except getopt.GetoptError, e:
             print >> self.stderr, "schooltool: %s" % e
             print >> self.stderr, "run schooltool -h for help"
@@ -440,10 +442,7 @@ class Server:
         self.threadable_hook.init()
         self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
 
-        db = self.config.database.open()
-        self.ensureAppExists(db, self.appname)
-
-        site = Site(db, self.appname, self.viewFactory)
+        site = Site(self.db, self.appname, self.viewFactory)
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
@@ -458,13 +457,14 @@ class Server:
         conn = db.open()
         root = conn.root()
         if root.get(appname) is None:
-            root[appname] = self.appFactory()
+            root[appname] = self.appFactory(conn)
             self.get_transaction_hook().commit()
         conn.close()
 
-    def createApplication(self):
+    def createApplication(self, datamgr):
         """Instantiate a new application"""
         root = RootGroup("root")
+        datamgr.add(root)
         teachers = Group("teachers")
         students = Group("students")
         cleaners = Group("cleaners")

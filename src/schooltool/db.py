@@ -25,6 +25,8 @@ import UserDict
 from persistence import Persistent
 from persistence.list import PersistentList
 from persistence.dict import PersistentDict
+from transaction import get_transaction
+from transaction.txn import Status
 
 __metaclass__ = type
 
@@ -228,7 +230,8 @@ class HookablePJar:
 
     def __set__(self, inst, value):
         Persistent._p_jar.__set__(inst, value)
-        if self._afterSet is not None:
+        if (self._afterSet is not None and
+            get_transaction().status() == Status.ACTIVE):
             self._afterSet(inst, value)
 
     def __delete__(self, inst):
@@ -260,7 +263,9 @@ class PersistentKeysSet(Persistent):
         return len(self._data)
 
     def setDataManager(self, datamanager):
-        datamanager.add(self._data)
+        # Can be in the process of being unghostified, need to be careful.
+        if hasattr(self, '_data'):
+            datamanager.add(self._data)
 
     _p_jar = HookablePJar(setDataManager)
 
