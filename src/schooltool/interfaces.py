@@ -1374,6 +1374,76 @@ class ICalendarOwner(Interface):
 # Timetabling
 #
 
+
+class ISchooldayTemplate(Interface):
+    """A school-day template represents the times that periods are
+    scheduled during a prototypical school day.
+
+    Some schools need only one school-day template. For example, they
+    have seven periods in a day, and the periods are always in the
+    sequence 1 to 7, and start and end at the same time on each school
+    day.
+
+    Other schools will need more than one school-day template. For
+    example, a school that has shorter school days on Wednesdays will
+    have one template for Wednesdays, and one other template for
+    Monday, Tuesday, Thursday and Friday.
+
+    Other schools will want to re-order the periods on different days,
+    so they will have one template with periods ABCDEF in that order,
+    and another template with periods DEFABC.
+    """
+
+    def __iter__():
+        """Return an iterator over the ISchooldayPeriods of this template."""
+
+
+class ISchooldayTemplateWrite(Interface):
+    """Write access to schoolday templates."""
+
+    def add(obj):
+        """Add an ISchooldayPeriod to the template.
+
+        Raises a TypeError if obj is not an ISchooldayPeriod."""
+
+    def remove(obj):
+        """Remove an object from the template."""
+
+
+class ISchooldayPeriod(Interface):
+    """An object binding a timetable period to a concrete time
+    interval within a schoolday template.
+    """
+
+    title = TextLine(
+        title=u"Period id of this event")
+
+    tstart = Time(
+        title=u"Time of the start of the event")
+
+    duration = Timedelta(
+        title=u"Timedelta of the duration of the event")
+
+    def __eq__(other):
+        """SchooldayPeriods are equal if all three of their
+        attributes are equal.
+
+        Raises TypeError if other does not implement ISchooldayPeriod.
+        """
+
+    def __ne__(other):
+        """SchooldayPeriods are not equal if any of their three
+        attributes are not equal.
+
+        Raises TypeError if other does not implement ISchooldayPeriod.
+        """
+
+    def __hash__():
+        """Hashes of ISchooldayPeriods are equal iff those
+        ISchooldayPeriods are equal.
+        """
+
+
 class ITimetableModel(Interface):
     """A timetable model knows how to create an ICalendar object when
     it is given a School-day model and a Timetable.
@@ -1400,8 +1470,8 @@ class ITimetableModel(Interface):
     dayTemplates = Dict(
         title=u"Schoolday templates",
         key_type=Int(title=u"Weekday", required=False),
-        value_type=Field(title=u"Schoolday template"),
-                         # XXX schema=ISchooldayTemplate),
+        value_type=Object(title=u"Schoolday template",
+                          schema=ISchooldayTemplate),
         description=u"""
         Schoolday templates.
 
@@ -1437,11 +1507,11 @@ class ITimetableActivity(Interface):
         title=u"The group or person or other object that owns the activity.",
         description=u"""
         The activity lives in the owner's timetable.
-        """) # XXX Object(schema=ITimetabled)?
+        """)
 
     resources = Set(
         title=u"A set of resources assigned to this activity.",
-        value_type=Field(title=u"A resource"), # XXX, schema=IResource),
+        value_type=Field(title=u"A resource"),
         description=u"""
         The activity is also present in the timetables of all resources
         assigned to this activity.
@@ -1449,7 +1519,6 @@ class ITimetableActivity(Interface):
 
     timetable = Field(
         title=u"The timetable that contains this activity.",
-        # XXX schema=ITimetable,
         description=u"""
         This attribute refers to the timetable of `owner`.  It never refers
         to a composite timetable or a timetable of a resource.
@@ -1498,7 +1567,7 @@ class ITimetableException(Interface):
 
     replacement = Field(
         title=u"A replacement calendar event",
-        # XXX schema=IExceptionalTTCalendarEvent,
+        # schema=IExceptionalTTCalendarEvent,
         required=False,
         description=u"""
         A calendar event that should replace the exceptional activity.
@@ -1866,75 +1935,6 @@ class ITimetableReplacedEvent(IEvent):
         title=u"The new timetable (can be None).",
         schema=ITimetable,
         required=False)
-
-
-class ISchooldayTemplate(Interface):
-    """A school-day template represents the times that periods are
-    scheduled during a prototypical school day.
-
-    Some schools need only one school-day template. For example, they
-    have seven periods in a day, and the periods are always in the
-    sequence 1 to 7, and start and end at the same time on each school
-    day.
-
-    Other schools will need more than one school-day template. For
-    example, a school that has shorter school days on Wednesdays will
-    have one template for Wednesdays, and one other template for
-    Monday, Tuesday, Thursday and Friday.
-
-    Other schools will want to re-order the periods on different days,
-    so they will have one template with periods ABCDEF in that order,
-    and another template with periods DEFABC.
-    """
-
-    def __iter__():
-        """Return an iterator over the ISchooldayPeriods of this template."""
-
-
-class ISchooldayTemplateWrite(Interface):
-    """Write access to schoolday templates."""
-
-    def add(obj):
-        """Add an ISchooldayPeriod to the template.
-
-        Raises a TypeError if obj is not an ISchooldayPeriod."""
-
-    def remove(obj):
-        """Remove an object from the template."""
-
-
-class ISchooldayPeriod(Interface):
-    """An object binding a timetable period to a concrete time
-    interval within a schoolday template.
-    """
-
-    title = TextLine(
-        title=u"Period id of this event")
-
-    tstart = Time(
-        title=u"Time of the start of the event")
-
-    duration = Timedelta(
-        title=u"Timedelta of the duration of the event")
-
-    def __eq__(other):
-        """SchooldayPeriods are equal if all three of their
-        attributes are equal.
-
-        Raises TypeError if other does not implement ISchooldayPeriod.
-        """
-
-    def __ne__(other):
-        """SchooldayPeriods are not equal if any of their three
-        attributes are not equal.
-
-        Raises TypeError if other does not implement ISchooldayPeriod.
-        """
-
-    def __hash__():
-        """Hashes of ISchooldayPeriods are equal iff those
-        ISchooldayPeriods are equal.
-        """
 
 
 class ITimetableModelRegistry(Interface):
