@@ -17,7 +17,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.main
+Unit tests for schooltool.views
+
+$Id$
 """
 
 import unittest
@@ -45,7 +47,7 @@ class RequestStub:
 class TestTemplate(unittest.TestCase):
 
     def test_call(self):
-        from schooltool.main import Template
+        from schooltool.views import Template
         templ = Template('sample.pt')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
@@ -57,7 +59,7 @@ class TestTemplate(unittest.TestCase):
 class TestErrorViews(unittest.TestCase):
 
     def test_ErrorView(self):
-        from schooltool.main import ErrorView
+        from schooltool.views import ErrorView
         view = ErrorView(747, "Not ready to take off")
         request = RequestStub()
         result = view.render(request)
@@ -69,7 +71,7 @@ class TestErrorViews(unittest.TestCase):
         self.assert_('<h1>747 - Not ready to take off</h1>' in result)
 
     def test_NotFoundView(self):
-        from schooltool.main import NotFoundView
+        from schooltool.views import NotFoundView
         view = NotFoundView(404, "No Boeing found")
         request = RequestStub(uri='/hangar')
         result = view.render(request)
@@ -82,7 +84,7 @@ class TestErrorViews(unittest.TestCase):
         self.assert_('/hangar' in result)
 
     def test_errorPage(self):
-        from schooltool.main import errorPage
+        from schooltool.views import errorPage
         request = RequestStub()
         result = errorPage(request, 747, "Not ready to take off")
         self.assertEquals(request.code, 747)

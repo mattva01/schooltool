@@ -98,24 +98,17 @@ class TestPeople(ConnectionMixin, unittest.TestCase):
     """Tests the /people resource."""
 
     def test_get(self):
-        response = self.make_request("GET", "/people")
-        self.assertEqual(response.status, 200)
-        ctype = response.getheader("Content-Type")
-        self.assert_(ctype == "text/html" or ctype.startswith("text/html;"))
-        body = response.read()
-        self.assert_('john' in body)
-        self.assert_('smith' in body)
-        self.assert_('george' in body)
+        for resource in ("/people", "/people/"):
+            response = self.make_request("GET", "/people")
+            self.assertEqual(response.status, 200)
+            ctype = response.getheader("Content-Type")
+            self.assert_(ctype == "text/html"
+                         or ctype.startswith("text/html;"))
+            body = response.read()
+            self.assert_('John' in body)
+            self.assert_('Steve' in body)
+            self.assert_('Mark' in body)
 
-    def test_get_with_a_slash(self):
-        response = self.make_request("GET", "/people/")
-        self.assertEqual(response.status, 200)
-        ctype = response.getheader("Content-Type")
-        self.assert_(ctype == "text/html" or ctype.startswith("text/html;"))
-        body = response.read()
-        self.assert_('john' in body)
-        self.assert_('smith' in body)
-        self.assert_('george' in body)
 
     def test_other_methods(self):
         response = self.make_request("POST", "/people")
@@ -130,29 +123,29 @@ class TestPerson(ConnectionMixin, unittest.TestCase):
     """Tests the /people/someone resource."""
 
     def test_get(self):
-        response = self.make_request("GET", "/people/john")
+        response = self.make_request("GET", "/people/0")
         self.assertEqual(response.status, 200)
         ctype = response.getheader("Content-Type")
         self.assert_(ctype == "text/html" or ctype.startswith("text/html;"))
         body = response.read()
-        self.assert_('john' in body)
+        self.assert_('John' in body)
 
     def test_get_with_a_slash(self):
-        response = self.make_request("GET", "/people/john")
+        response = self.make_request("GET", "/people/0")
         self.assertEqual(response.status, 200)
         ctype = response.getheader("Content-Type")
         self.assert_(ctype == "text/html" or ctype.startswith("text/html;"))
 
     def test_other_methods(self):
-        response = self.make_request("POST", "/people/john")
+        response = self.make_request("POST", "/people/0")
         self.assertEqual(response.status, 405)
-        response = self.make_request("PUT", "/people/john")
+        response = self.make_request("PUT", "/people/0")
         self.assertEqual(response.status, 405)
-        response = self.make_request("DELETE", "/people/john")
+        response = self.make_request("DELETE", "/people/0")
         self.assertEqual(response.status, 405)
 
     def test_photo(self):
-        response = self.make_request("GET", "/people/john/photo")
+        response = self.make_request("GET", "/people/0/photo")
         self.assertEqual(response.status, 200)
         ctype = response.getheader("Content-Type")
         self.assertEqual(ctype, "image/jpeg")
