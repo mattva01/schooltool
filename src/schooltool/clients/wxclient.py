@@ -54,6 +54,19 @@ from schooltool.translation import _
 __metaclass__ = type
 
 
+about_text = _("""SchoolTool GUI client.
+
+SchoolTool is a common information systems platform for school administration
+Visit http://www.schooltool.org/
+
+Copyright (c) 2003 Shuttleworth Foundation
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+""")
+
 #
 # Common sets of window style flags
 #
@@ -2064,7 +2077,7 @@ class MainFrame(wxFrame):
 
         Accessible from Help|About.
         """
-        dlg = wxMessageDialog(self, __doc__, _("About SchoolTool"), wxOK)
+        dlg = wxMessageDialog(self, about_text, _("About SchoolTool"), wxOK)
         dlg.ShowModal()
         dlg.Destroy()
 
