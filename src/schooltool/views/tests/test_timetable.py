@@ -1136,9 +1136,10 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                               QuietLibxml2Mixin, unittest.TestCase):
 
     example_xml = """
-        <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+        <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                   xmlns:xlink="http://www.w3.org/1999/xlink">
-          <teacher path="/persons/p2">
+          <teacher xlink:type="simple" xlink:title="Marius"
+                   xlink:href="/persons/p2">
             <day id="A">
               <period id="Blue">
               </period>
@@ -1156,7 +1157,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
               </period>
             </day>
           </teacher>
-          <teacher path="/persons/p1">
+          <teacher xlink:type="simple" xlink:title="Albert"
+                   xlink:href="/persons/p1">
             <day id="A">
               <period id="Blue">
                 <activity group="/groups/sg2" title="Slashdot">
@@ -1238,9 +1240,10 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub()
         result = self.view.render(request)
         expected = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher path="/persons/p2">
+              <teacher xlink:type="simple" xlink:title="Marius"
+                       xlink:href="/persons/p2">
                 <day id="A">
                   <period id="Blue">
                   </period>
@@ -1254,7 +1257,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                   </period>
                 </day>
               </teacher>
-              <teacher path="/persons/p1">
+              <teacher xlink:type="simple" xlink:title="Albert"
+                       xlink:href="/persons/p1">
                 <day id="A">
                   <period id="Blue">
                   </period>
@@ -1356,10 +1360,11 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
 
     def test_PUT_empty(self):
         xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/persons/p2">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
+              <teacher xlink:type="simple" xlink:href="/persons/p2">
               </teacher>
-              <teacher path="/persons/p1">
+              <teacher xlink:type="simple" xlink:href="/persons/p1">
               </teacher>
             </schooltt>
             """
@@ -1367,6 +1372,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': 'text/xml'})
         result = self.view.render(request)
+        self.assertEquals(result, "OK")
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -1385,29 +1391,29 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
     def test_PUT_badxml(self):
         nonxml = "<schooltt parse error>"
         badxml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <coach path="/persons/p2">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+              <coach xlink:type="simple" xlink:href="/persons/p2">
               </coach>
             </schooltt>
             """
         bad_path_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/persons/p3">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+              <teacher xlink:type="simple" xlink:href="/persons/p3">
               </teacher>
-              <teacher path="/persons/p1">
+              <teacher xlink:type="simple" xlink:href="/persons/p1">
               </teacher>
             </schooltt>
             """
         bad_day_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/persons/p1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+              <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="bad"/>
               </teacher>
             </schooltt>
             """
         bad_period_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/persons/p1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+              <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="A">
                   <period id="bad"/>
                 </day>
@@ -1415,8 +1421,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
             </schooltt>
             """
         bad_group_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/persons/p1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+              <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="A">
                   <period id="Blue">
                     <activity group="/persons/p1">Haxoring</activity>
@@ -1426,15 +1432,15 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
             </schooltt>
             """
         bad_teacher_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/persons/p1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+              <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="A">
                   <period id="Blue">
                     <activity group="/groups/sg3">Instead of p2</activity>
                   </period>
                 </day>
               </teacher>
-              <teacher path="/persons/p2" />
+              <teacher xlink:type="simple" xlink:href="/persons/p2" />
             </schooltt>
             """
         for body in (nonxml, badxml, bad_path_xml, bad_day_xml, bad_period_xml,

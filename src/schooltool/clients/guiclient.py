@@ -1318,7 +1318,7 @@ class SchoolTimetableInfo:
             raise SchoolToolError(_("Could not parse school timetable"))
         ctx = doc.xpathNewContext()
         try:
-            schooltt = "http://schooltool.org/ns/schooltt/0.1"
+            schooltt = "http://schooltool.org/ns/schooltt/0.2"
             xlink = "http://www.w3.org/1999/xlink"
             ctx.xpathRegisterNs("st", schooltt)
             ctx.xpathRegisterNs("xlink", xlink)
@@ -1336,7 +1336,7 @@ class SchoolTimetableInfo:
                     period_id = to_unicode(period_node.nsProp('id', None))
                     self.periods.append((day_id, period_id))
             for teacher_node in teacher_nodes:
-                teacher_path = to_unicode(teacher_node.nsProp('path', None))
+                teacher_path = to_unicode(teacher_node.nsProp('href', xlink))
                 self.teachers.append((teacher_path, None, None))
                 tt_row = []
                 ctx.setContextNode(teacher_node)
@@ -1393,10 +1393,11 @@ class SchoolTimetableInfo:
     def toXML(self):
         result = []
         result.append(
-            '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"\n'
+            '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"\n'
             '          xmlns:xlink="http://www.w3.org/1999/xlink">')
         for i, teacher in enumerate(self.teachers):
-            result.append('  <teacher path="%s">' % to_xml(teacher[0]))
+            result.append('  <teacher xlink:type="simple" xlink:href="%s">'
+                          % to_xml(teacher[0]))
             last_day = None
             for j, (day, period) in enumerate(self.periods):
                 if last_day != day:

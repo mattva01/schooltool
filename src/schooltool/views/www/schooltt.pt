@@ -1,8 +1,10 @@
-<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:tal="http://xml.zope.org/namespaces/tal">
   <teacher tal:repeat="item view/getTeachersTimetables"
-           tal:attributes="path python: view.absolutePath(item[0])">
+           xlink:type="simple"
+           tal:attributes="xlink:title python: item[0].title;
+                           xlink:href python: view.absolutePath(item[0])">
     <day tal:condition="python: item[1] is not None"
          tal:repeat="day python: item[1].items()"
          tal:attributes="id python: day[0]">

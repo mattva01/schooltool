@@ -33,9 +33,9 @@ put /time-periods/2003-fall text/xml
 </schooldays>
 .
 put /schooltt/2003-fall/default text/xml
-<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
           xmlns:xlink="http://www.w3.org/1999/xlink">
-  <teacher path="/persons/000010">
+  <teacher xlink:type="simple" xlink:href="/persons/000010">
     <day id="Day 1">
       <period id="A">
       </period>
@@ -53,7 +53,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000005">
+  <teacher xlink:type="simple" xlink:href="/persons/000005">
     <day id="Day 1">
       <period id="A">
       </period>
@@ -74,7 +74,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000008">
+  <teacher xlink:type="simple" xlink:href="/persons/000008">
     <day id="Day 1">
       <period id="A">
         <activity group="/groups/phys1" title="Physics 1">
@@ -96,7 +96,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000003">
+  <teacher xlink:type="simple" xlink:href="/persons/000003">
     <day id="Day 1">
       <period id="A">
         <activity group="/groups/ling2"
@@ -120,7 +120,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000009">
+  <teacher xlink:type="simple" xlink:href="/persons/000009">
     <day id="Day 1">
       <period id="A">
       </period>
@@ -139,7 +139,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000006">
+  <teacher xlink:type="simple" xlink:href="/persons/000006">
     <day id="Day 1">
       <period id="A">
       </period>
@@ -158,7 +158,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000002">
+  <teacher xlink:type="simple" xlink:href="/persons/000002">
     <day id="Day 1">
       <period id="A">
         <activity group="/groups/math3"
@@ -188,7 +188,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000001">
+  <teacher xlink:type="simple" xlink:href="/persons/000001">
     <day id="Day 1">
       <period id="A">
         <activity group="/groups/phys3" title="Physics 3">
@@ -232,7 +232,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000004">
+  <teacher xlink:type="simple" xlink:href="/persons/000004">
     <day id="Day 1">
       <period id="A">
       </period>
@@ -256,7 +256,7 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000007">
+  <teacher xlink:type="simple" xlink:href="/persons/000007">
     <day id="Day 1">
       <period id="A">
         <activity group="/groups/biol1" title="Biology 1">

@@ -61,7 +61,7 @@ moduleProvides(IModuleSetup)
 # HTTP server
 #
 
-SERVER_VERSION = "SchoolTool/0.4"
+SERVER_VERSION = "SchoolTool/0.5"
 
 
 def parseAccept(value):

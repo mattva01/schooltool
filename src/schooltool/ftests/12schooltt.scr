@@ -14,9 +14,9 @@ SchoolTool> get /schooltt/2003-fall/weekly
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=schooltt
-<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
           xmlns:xlink="http://www.w3.org/1999/xlink">
-  <teacher path="/persons/Mark">
+  <teacher xlink:href="/persons/Mark" xlink:title="Mark" xlink:type="simple">
     <day id="Monday">
       <period id="0">
       </period>
@@ -128,7 +128,8 @@ Content-Type: text/xml; charset=UTF-8
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/Steve">
+  <teacher xlink:href="/persons/Steve" xlink:title="Steve"
+           xlink:type="simple">
     <day id="Monday">
       <period id="0">
       </period>
@@ -245,9 +246,9 @@ Content-Type: text/xml; charset=UTF-8
 
 
 SchoolTool> put /schooltt/2003-fall/weekly text/xml
-PUT> <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+PUT> <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
 PUT>           xmlns:xlink="http://www.w3.org/1999/xlink">
-PUT>   <teacher path="/persons/Mark">
+PUT>   <teacher xlink:type="simple" xlink:href="/persons/Mark">
 PUT>     <day id="Monday">
 PUT>       <period id="0">
 PUT>       </period>
@@ -359,7 +360,7 @@ PUT>       <period id="9">
 PUT>       </period>
 PUT>     </day>
 PUT>   </teacher>
-PUT>   <teacher path="/persons/Steve">
+PUT>   <teacher xlink:type="simple" xlink:href="/persons/Steve">
 PUT>     <day id="Monday">
 PUT>       <period id="0">
 PUT>       </period>
@@ -484,9 +485,9 @@ SchoolTool> get /schooltt/2003-fall/weekly
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=schooltt
-<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
           xmlns:xlink="http://www.w3.org/1999/xlink">
-  <teacher path="/persons/Mark">
+  <teacher xlink:type="simple" xlink:title="Mark" xlink:href="/persons/Mark">
     <day id="Monday">
       <period id="0">
       </period>
@@ -598,7 +599,7 @@ Content-Type: text/xml; charset=UTF-8
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/Steve">
+  <teacher xlink:type="simple" xlink:title="Steve" xlink:href="/persons/Steve">
     <day id="Monday">
       <period id="0">
       </period>

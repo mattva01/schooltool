@@ -654,9 +654,9 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
     def test_getSchoolTimetable(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
         body1 = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher path="/persons/0013">
+              <teacher xlink:type="simple" xlink:href="/persons/0013">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/002" title="French">
@@ -677,7 +677,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                   </period>
                 </day>
               </teacher>
-              <teacher path="/persons/0014">
+              <teacher xlink:type="simple" xlink:href="/persons/0014">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/006" title="Geography"/>
@@ -1901,9 +1901,9 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
         from schooltool.clients.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher path="/persons/0013">
+              <teacher xlink:type="simple" xlink:href="/persons/0013">
                 <day id="A \xe2\x9c\xb0">
                   <period id="Green \xe2\x9c\xb0">
                     <activity group="/groups/002" title="French \xe2\x9c\xb0">
@@ -1928,7 +1928,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
                   </period>
                 </day>
               </teacher>
-              <teacher path="/persons/0014">
+              <teacher xlink:type="simple" xlink:href="/persons/0014">
                 <day id="A \xe2\x9c\xb0">
                   <period id="Green">
                     <activity group="/groups/006" title="Geography"/>
@@ -1979,7 +1979,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
         from schooltool.clients.guiclient import SchoolToolError
         st = SchoolTimetableInfo()
         data = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
             </schooltt>
             """)
@@ -1998,9 +1998,9 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
                                   ("2", "A"), ("2", "B")])
         result = st.toXML()
         expected = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher path="a">
+              <teacher xlink:type="simple" xlink:href="a">
                 <day id="1">
                   <period id="A">
                   </period>
@@ -2014,7 +2014,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
                   </period>
                 </day>
               </teacher>
-              <teacher path="b">
+              <teacher xlink:type="simple" xlink:href="b">
                 <day id="1">
                   <period id="A">
                   </period>
@@ -2062,9 +2062,9 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
         from schooltool.clients.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher path="/persons/0013">
+              <teacher xlink:type="simple" xlink:href="/persons/0013">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/002" title="French">
@@ -2086,7 +2086,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
                   </period>
                 </day>
               </teacher>
-              <teacher path="/persons/0014">
+              <teacher xlink:type="simple" xlink:href="/persons/0014">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/006" title="Geography"/>

@@ -569,7 +569,7 @@ class SchoolTimetableView(View):
 
         try:
             doc = libxml2.parseDoc(xml)
-            ns = 'http://schooltool.org/ns/schooltt/0.1'
+            ns = 'http://schooltool.org/ns/schooltt/0.2'
             xpathctx = doc.xpathNewContext()
             xpathctx.xpathRegisterNs('st', ns)
             xlink = "http://www.w3.org/1999/xlink"
@@ -580,7 +580,7 @@ class SchoolTimetableView(View):
             schema = service[self.key[1]]
             groups = {}
             for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-                path = to_unicode(teacher_node.nsProp('path', None))
+                path = to_unicode(teacher_node.nsProp('href', xlink))
                 try:
                     teacher = traverse(self.context, path)
                 except KeyError:
@@ -623,7 +623,7 @@ class SchoolTimetableView(View):
     def _walkXml(self, xpathctx, schema, timetables, groups):
         xlink = "http://www.w3.org/1999/xlink"
         for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-            teacher_path = to_unicode(teacher_node.nsProp('path', None))
+            teacher_path = to_unicode(teacher_node.nsProp('href', xlink))
             xpathctx.setContextNode(teacher_node)
             for day in xpathctx.xpathEval('st:day'):
                 day_id = to_unicode(day.nsProp('id', None))
