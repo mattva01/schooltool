@@ -881,6 +881,9 @@ class EventEditView(EventViewBase):
             # then we would be able to simply display a standard 404 page.
             self.error = _("This event does not exist.")
             return
+        if self.tt_event and not self.isManager():
+            # Only managers may add timetable exceptions
+            raise Unauthorized
 
         self.title_widget.setValue(event.title)
         self.date_widget.setValue(event.dtstart.date())

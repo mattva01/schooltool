@@ -1130,7 +1130,26 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertEquals(exc.replacement.duration, timedelta(minutes=70))
         self.assertEquals(exc.replacement.unique_id, event.unique_id)
 
-    def testTimetableEventPermissionChecking(self):
+    def test_update_timetable_event_permission_checking(self):
+        from schooltool.browser import Unauthorized
+        view = self.createView()
+        view.request = RequestStub(args={'event_id': '123'})
+        event = createEvent('2004-08-16 13:45', '5 min', 'Anything',
+                            unique_id='123')
+        view._findOrdinaryEvent = lambda uid: None
+        view._findTimetableEvent = lambda uid: event
+
+        # Manager
+        view.isManager = lambda: True
+        view.update()
+        assert view.event is event
+        assert view.tt_event
+
+        # Not manager
+        view.isManager = lambda: False
+        self.assertRaises(Unauthorized, view.update)
+
+    def test_process_timetable_event_permission_checking(self):
         from schooltool.browser import Unauthorized
         view = self.createView()
         view.event = createEvent('2004-08-16 13:45', '5 min', 'Anything')
