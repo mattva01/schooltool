@@ -1093,8 +1093,7 @@ class IWeeklyRecurrenceRule(IRecurrenceRule):
     weekdays = Attribute(
         """A set of weekdays when this event occurs.
 
-        Meaningful only when frequency == 'weekly'.  Weekdays are
-        represented as integers from 0 (Monday) to 6 (Sunday).
+        Weekdays are represented as integers from 0 (Monday) to 6 (Sunday).
 
         The event repeats on the weekday of the first occurence even
         if that weekday is not in this set.
@@ -1107,7 +1106,7 @@ class IMonthlyRecurrenceRule(IRecurrenceRule):
         """Specification of a monthly occurence.
 
         Can be one of three values: 'monthday', 'weekday', 'lastweekday',
-        or None.  Meaningful only when frequency == 'monthly'.
+        or None.
 
         'monthday'    specifies that the event recurs on the same
                       monthday.
