@@ -462,14 +462,19 @@ class TestCalendarViewBase(unittest.TestCase):
 
         request2 = TestRequest()
         request2.setPrincipal(PrincipalStub())
+        self.assertEquals(view1.timezone, 'UTC')
 
-        # set the dateformat preference to the long format
+        # set the dateformat preference to the long format and change the
+        # timezone preference
+
         prefs = IPersonPreferences(request2.principal._person)
         prefs.dateformat = "Day Month, Year"
+        prefs.timezone = timezone("US/Eastern")
 
         view2 = CalendarViewBase(None, request2)
 
         self.assertEquals(view2.dayTitle(dt), "Thursday, 01 July, 2004")
+        self.assertEquals(view2.timezone.tzname(datetime.now()), 'EST')
 
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
