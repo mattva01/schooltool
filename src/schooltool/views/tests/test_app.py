@@ -284,12 +284,14 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
     def test_args(self):
         from datetime import date, time, timedelta
         expected = """
-            <availability>
-              <resource path="/resources/room1">
+            <availability xmlns:xlink="http://www.w3.org/1999/xlink">
+              <resource xlink:href="/resources/room1" xlink:title="Room 1"
+                        xlink:type="simple">
                 <slot duration="135" start="2004-01-02 11:45:00"/>
                 <slot duration="180" start="2004-01-03 11:00:00"/>
               </resource>
-              <resource path="/resources/room2">
+              <resource xlink:href="/resources/room2" xlink:title="Room 2"
+                        xlink:type="simple">
                 <slot duration="180" start="2004-01-02 11:00:00"/>
                 <slot duration="60" start="2004-01-03 11:00:00"/>
               </resource>
@@ -313,7 +315,7 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
         self.assertEqualsXML(result, expected)
 
     def test_no_hours(self):
-        from datetime import date, time, timedelta
+        from datetime import time, timedelta
         request = RequestStub('/availability', method="GET")
         request.args.update({'first': ['2004-01-02'],
                              'last': ['2004-01-03'],

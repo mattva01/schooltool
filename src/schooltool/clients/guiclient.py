@@ -35,6 +35,7 @@ import httplib
 import socket
 import libxml2
 import datetime
+import urllib
 import cgi
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, nameURI
@@ -392,6 +393,21 @@ class SchoolToolClient:
         response = self.delete(object_path)
         if response.status != 200:
             raise ResponseStatusError(response)
+
+    def availabilitySearch(self, first, last, duration, hours, resources):
+        """Search for available resources.
+
+        Returns a list of ResourceTimeSlot instances.
+        """
+        qs = urllib.urlencode([('first', first.strftime('%Y-%m-%d')),
+                               ('last', last.strftime('%Y-%m-%d')),
+                               ('duration', str(duration)),
+                               ('hours', hours),
+                               ('resources', resources)], True)
+        response = self.get('/busysearch?' + qs)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parseAvailabilityResults(response.read())
 
 
 class Response:
@@ -778,6 +794,40 @@ def _parseTimetableSchemas(body):
             title = schema_node.nsProp('title', xlink)
             schemas.append(title)
         return schemas
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
+
+
+def _parseAvailabilityResults(body):
+    """Parse a list of resource availability slots."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse resource availability slots")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        slots = []
+        for resource_node in ctx.xpathEval("/availability/resource"):
+            path = resource_node.nsProp('href', xlink)
+            title = resource_node.nsProp('title', xlink)
+            ctx.setContextNode(resource_node)
+            for slot_node in ctx.xpathEval('slot'):
+                start = slot_node.nsProp('start', None)
+                duration = slot_node.nsProp('duration', None)
+                try:
+                    start_dt = parse_datetime(start)
+                except ValueError, e:
+                    raise SchoolToolError("Bad datetime: %r" % start)
+                try:
+                    duration_td = datetime.timedelta(minutes=int(duration))
+                except ValueError, e:
+                    raise SchoolToolError("Bad duration: %r" % duration)
+                slot = ResourceTimeSlot(title, path, start_dt, duration_td)
+                slots.append(slot)
+        return slots
     finally:
         doc.freeDoc()
         ctx.xpathFreeContext()
@@ -1199,6 +1249,35 @@ class SchoolTimetableInfo:
     def __repr__(self):
         return 'SchoolTimetableInfo(%r, %r, %r)' % (
             self.teachers, self.periods, self.tt)
+
+
+class ResourceTimeSlot:
+    """Information about an available time slot for a resource."""
+
+    resource_title = None
+    resource_path = None
+    available_from = None
+    available_for = None
+
+    def __init__(self, title, path, start_time, duration):
+        self.resource_title = title
+        self.resource_path = path
+        self.available_from = start_time
+        self.available_for = duration
+
+    def __cmp__(self, other):
+        if not isinstance(other, ResourceTimeSlot):
+            raise NotImplementedError("cannot compare %r with %r"
+                                      % (self, other))
+        return cmp((self.resource_title, self.resource_path,
+                    self.available_from, self.available_for),
+                   (other.resource_title, other.resource_path,
+                    other.available_from, other.available_for))
+
+    def __repr__(self):
+        return "%s(%r, %r, %r, %r)" % (self.__class__.__name__,
+               self.resource_title, self.resource_path, self.available_from,
+               self.available_for)
 
 
 #

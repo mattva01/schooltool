@@ -219,13 +219,15 @@ class AvailabilityQueryView(View):
             slots = resource.getFreeIntervals(self.first, self.last,
                                               self.hours, self.duration)
             if slots:
-                res_dict = {'path': getPath(resource), 'slots': []}
-                results.append(res_dict)
+                res_slots = []
                 for start, duration in slots:
                     mins = duration.days * 60 * 24 + duration.seconds / 60
-                    res_dict['slots'].append(
+                    res_slots.append(
                         {'start': start.strftime("%Y-%m-%d %H:%M:%S"),
                          'duration': mins})
+                results.append({'path': getPath(resource),
+                                'title': resource.title,
+                                'slots': res_slots})
         return results
 
 

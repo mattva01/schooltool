@@ -52,6 +52,16 @@ __metaclass__ = type
 
 
 #
+# Common sets of window style flags
+#
+
+DEFAULT_DLG_STYLE = wxCAPTION | wxSYSTEM_MENU | wxDIALOG_MODAL
+RESIZABLE_WIN_STYLE = (wxCAPTION | wxSYSTEM_MENU | wxMINIMIZE_BOX
+                       | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxTHICK_FRAME)
+RESIZABLE_DLG_STYLE = (RESIZABLE_WIN_STYLE | wxDIALOG_MODAL) &~ wxMINIMIZE_BOX
+
+
+#
 # Helpers for building wxWindows menus
 #
 
@@ -303,8 +313,7 @@ class RollCallInfoDlg(wxDialog):
     """More info popup of the roll call dialog"""
 
     def __init__(self, parent, title, show_resolved):
-        wxDialog.__init__(self, parent, -1, title,
-                          style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
+        wxDialog.__init__(self, parent, -1, title, style=DEFAULT_DLG_STYLE)
         self.show_resolved = show_resolved
 
         vsizer = wxBoxSizer(wxVERTICAL)
@@ -390,9 +399,7 @@ class RollCallDlg(wxDialog):
 
     def __init__(self, parent, group_title, group_path, rollcall, client):
         title = "Roll Call for %s" % group_title
-        wxDialog.__init__(self, parent, -1, title,
-            style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|
-                  wxTHICK_FRAME)
+        wxDialog.__init__(self, parent, -1, title, style=RESIZABLE_DLG_STYLE)
         self.title = title
         self.group_title = group_title
         self.group_path = group_path
@@ -529,7 +536,7 @@ class AbsenceFrame(wxDialog):
           viewing absences for a single person)
         """
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
-              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+                          style=RESIZABLE_WIN_STYLE)
         self.client = client
         self.title = title
         self.path = path
@@ -738,8 +745,7 @@ class ResourceSelectionDlg(wxDialog):
     def __init__(self, parent, activity_title, teacher_title, period_key,
                  choices):
         title = "Resource Assignment"
-        wxDialog.__init__(self, parent, -1, title,
-                          style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
+        wxDialog.__init__(self, parent, -1, title, style=DEFAULT_DLG_STYLE)
 
         self.choices = list(choices)
         self.choices.sort()
@@ -795,8 +801,7 @@ class ActivitySelectionDlg(wxDialog):
 
     def __init__(self, parent, teacher_title, period_key, choices, resources):
         title = "Activity Selection"
-        wxDialog.__init__(self, parent, -1, title,
-                          style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
+        wxDialog.__init__(self, parent, -1, title, style=DEFAULT_DLG_STYLE)
 
         self.teacher_title = teacher_title
         self.period_key = period_key
@@ -926,8 +931,7 @@ class SchoolTimetableFrame(wxDialog):
     def __init__(self, client, key, tt, resources, parent=None, id=-1):
         title = "School Timetable (%s, %s)" % key
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
-              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxMAXIMIZE_BOX|
-                    wxTHICK_FRAME)
+                          style=RESIZABLE_WIN_STYLE)
         self.title = title
         self.client = client
         self.key = key
@@ -989,7 +993,7 @@ class BrowserFrame(wxDialog):
 
     def __init__(self, title, url, parent=None, id=-1):
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
-              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+                          style=RESIZABLE_WIN_STYLE)
 
         main_sizer = wxBoxSizer(wxVERTICAL)
         self.htmlwin = wxHtmlWindow(self, -1)
@@ -1041,7 +1045,7 @@ class AvailabilitySearchFrame(wxDialog):
     def __init__(self, client, parent=None, id=-1):
         title = "Search for Available Resources"
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
-            style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+                          style=RESIZABLE_WIN_STYLE)
         self.client = client
         self.title = title
         self.ok = False
@@ -1099,6 +1103,7 @@ class AvailabilitySearchFrame(wxDialog):
         grid_sizer.Add(self.duration_ctrl, 1)
         grid_sizer.Add(wxStaticText(panel1, -1, "min"))
         find_btn = wxButton(self, -1, "&Find")
+        EVT_BUTTON(self, find_btn.GetId(), self.DoFind)
         sizer1c.Add(grid_sizer)
         sizer1c.Add(wxPanel(panel1, -1), 1)
         sizer1c.Add(find_btn, 0, wxALIGN_RIGHT|wxTOP, 16)
@@ -1112,7 +1117,7 @@ class AvailabilitySearchFrame(wxDialog):
         label2 = wxStaticText(panel2, -1, "Results")
         self.result_list = wxListCtrl(panel2, -1,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
-        self.result_list.InsertColumn(0, "Resource", width=300)
+        self.result_list.InsertColumn(0, "Resource", width=280)
         self.result_list.InsertColumn(1, "Available from", width=140)
         self.result_list.InsertColumn(2, "Available until", width=140)
         sizer2 = wxBoxSizer(wxVERTICAL)
@@ -1142,8 +1147,40 @@ class AvailabilitySearchFrame(wxDialog):
 
     def DoFind(self, event=None):
         """Find available resources."""
+        try:
+            ctrl = self.first_date_ctrl
+            first = parse_date(ctrl.GetValue())
+            ctrl = self.last_date_ctrl
+            last = parse_date(ctrl.GetValue())
+            ctrl = self.duration_ctrl
+            duration = int(ctrl.GetValue())
+        except ValueError:
+            ctrl.SetFocus()
+            wxBell()
+            return
+        hours = self.hour_list.GetSelections()
+        resources = [self.resources[idx][1]
+                     for idx in self.resource_list.GetSelections()]
         self.result_list.DeleteAllItems()
-        # XXX TODO
+
+        try:
+            results = self.client.availabilitySearch(first=first, last=last,
+                          duration=duration, hours=hours, resources=resources)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the list of available resources: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+            return
+        else:
+            results.sort()
+
+        for idx, slot in enumerate(results):
+            self.result_list.InsertStringItem(idx, slot.resource_title)
+            self.result_list.SetItemData(idx, idx)
+            available_until = slot.available_from + slot.available_for
+            start = slot.available_from.strftime('%Y-%m-%d %H:%M')
+            end = available_until.strftime('%Y-%m-%d %H:%M')
+            self.result_list.SetStringItem(idx, 1, start)
+            self.result_list.SetStringItem(idx, 2, end)
 
 
 #

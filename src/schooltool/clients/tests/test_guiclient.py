@@ -24,6 +24,7 @@ import unittest
 import socket
 import datetime
 import libxml2
+import urllib
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
@@ -800,6 +801,40 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
         #     without a trailing slash?
 
+    def test_availabilitySearch(self):
+        from schooltool.clients.guiclient import ResourceTimeSlot
+        body = """
+            <availability xmlns:xlink="http://www.w3.org/1999/xlink">
+               <resource xlink:type="simple"
+                         xlink:href="/resources/room101" xlink:title="101">
+                 <slot duration="1440" start="2004-01-01 00:00:00"/>
+               </resource>
+               <resource xlink:type="simple"
+                         xlink:href="/resources/hall" xlink:title="Hall">
+                 <slot duration="1440" start="2004-01-01 00:00:00"/>
+                 <slot duration="30" start="2004-01-02 12:30:00"/>
+               </resource>
+            </availability>
+        """
+        expected = [ResourceTimeSlot('101', '/resources/room101',
+                                     datetime.datetime(2004, 1, 1),
+                                     datetime.timedelta(minutes=1440)),
+                    ResourceTimeSlot('Hall', '/resources/hall',
+                                     datetime.datetime(2004, 1, 1),
+                                     datetime.timedelta(minutes=1440)),
+                    ResourceTimeSlot('Hall', '/resources/hall',
+                                     datetime.datetime(2004, 1, 2, 12, 30),
+                                     datetime.timedelta(minutes=30))]
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.availabilitySearch(first=datetime.date(2004, 1, 1),
+                        last=datetime.date(2004, 1, 2), duration=30,
+                        hours=[0, 12], resources=['room101', 'hall'])
+        self.assertEquals(results, expected)
+        qs = urllib.urlencode([('first', '2004-01-01'), ('last', '2004-01-02'),
+                               ('duration', '30'), ('hours', [0, 12]),
+                               ('resources', ['room101', 'hall'])], True)
+        self.checkConnPath(client, '/busysearch?' + qs)
+
 
 class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                          unittest.TestCase):
@@ -1350,6 +1385,58 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseTimetableSchemas, body)
 
+    def test__parseAvailabilityResults(self):
+        from schooltool.clients.guiclient import _parseAvailabilityResults
+        from schooltool.clients.guiclient import ResourceTimeSlot
+        body = """
+            <availability xmlns:xlink="http://www.w3.org/1999/xlink">
+               <resource xlink:type="simple"
+                         xlink:href="/resources/room101" xlink:title="101">
+                 <slot duration="1440" start="2004-01-01 00:00:00"/>
+               </resource>
+               <resource xlink:type="simple"
+                         xlink:href="/resources/hall" xlink:title="Hall">
+                 <slot duration="1440" start="2004-01-01 00:00:00"/>
+                 <slot duration="30" start="2004-01-02 12:30:00"/>
+               </resource>
+            </availability>
+        """
+        expected = [ResourceTimeSlot('101', '/resources/room101',
+                                     datetime.datetime(2004, 1, 1),
+                                     datetime.timedelta(minutes=1440)),
+                    ResourceTimeSlot('Hall', '/resources/hall',
+                                     datetime.datetime(2004, 1, 1),
+                                     datetime.timedelta(minutes=1440)),
+                    ResourceTimeSlot('Hall', '/resources/hall',
+                                     datetime.datetime(2004, 1, 2, 12, 30),
+                                     datetime.timedelta(minutes=30))]
+        results = _parseAvailabilityResults(body)
+        self.assertEquals(results, expected)
+
+    def test__parseAvailabilityResults_errors(self):
+        from schooltool.clients.guiclient import _parseAvailabilityResults
+        from schooltool.clients.guiclient import SchoolToolError
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, _parseAvailabilityResults, body)
+        body = """
+            <availability xmlns:xlink="http://www.w3.org/1999/xlink">
+               <resource xlink:type="simple"
+                         xlink:href="/resources/room101" xlink:title="101">
+                 <slot duration="1440" start="not a datetime"/>
+               </resource>
+            </availability>
+        """
+        self.assertRaises(SchoolToolError, _parseAvailabilityResults, body)
+        body = """
+            <availability xmlns:xlink="http://www.w3.org/1999/xlink">
+               <resource xlink:type="simple"
+                         xlink:href="/resources/room101" xlink:title="101">
+                 <slot duration="a month" start="2001-01-01 00:00:00"/>
+               </resource>
+            </availability>
+        """
+        self.assertRaises(SchoolToolError, _parseAvailabilityResults, body)
+
 
 class InfoClassTestMixin:
     """Mixin for testing classes that are tuple replacements."""
@@ -1423,6 +1510,12 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
         from schooltool.clients.guiclient import AbsenceComment
         self._test_repr(AbsenceComment, 9)
         self._test_cmp(AbsenceComment, 9, ('datetime', ))
+
+    def test_ResourceTimeSlot(self):
+        from schooltool.clients.guiclient import ResourceTimeSlot
+        self._test_repr(ResourceTimeSlot, 4)
+        self._test_cmp(ResourceTimeSlot, 4,
+                       ('resource_title', 'resource_path', 'available_from'))
 
 
 class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):

@@ -1,5 +1,7 @@
 Search for resources
 
+SchoolTool> links off
+
 SchoolTool> get /busysearch
 400 Bad Request
 Content-Type: text/plain
@@ -8,42 +10,56 @@ Content-Type: text/plain
 SchoolTool> get /busysearch?first=2004-01-01&last=2004-01-01&duration=60
 200 OK
 Content-Type: text/xml; charset=UTF-8
-<availability>
-   <resource path="/resources/room2">
+%% XML recursively_sort=availability
+<availability xmlns:xlink="http://www.w3.org/1999/xlink">
+   <resource xlink:type="simple" xlink:title="Hall"
+             xlink:href="/resources/hall">
      <slot duration="1440" start="2004-01-01 00:00:00"/>
    </resource>
-   <resource path="/resources/hall">
+   <resource xlink:type="simple" xlink:title="Room 1"
+             xlink:href="/resources/room1">
      <slot duration="1440" start="2004-01-01 00:00:00"/>
    </resource>
-   <resource path="/resources/room1">
+   <resource xlink:type="simple" xlink:title="Room 2"
+             xlink:href="/resources/room2">
      <slot duration="1440" start="2004-01-01 00:00:00"/>
    </resource>
 </availability>
+%% END XML
 
 
 SchoolTool> get /busysearch?first=2003-10-17&last=2003-10-17&duration=180&hours=9&hours=10&hours=11&hours=12
 200 OK
 Content-Type: text/xml; charset=UTF-8
-<availability>
-   <resource path="/resources/room2">
-     <slot duration="240" start="2003-10-17 09:00:00"/>
-   </resource>
-   <resource path="/resources/hall">
+%% XML recursively_sort=availability
+<availability xmlns:xlink="http://www.w3.org/1999/xlink">
+   <resource xlink:type="simple" xlink:title="Hall"
+             xlink:href="/resources/hall">
      <slot duration="180" start="2003-10-17 10:00:00"/>
    </resource>
-   <resource path="/resources/room1">
+   <resource xlink:type="simple" xlink:title="Room 1"
+             xlink:href="/resources/room1">
+     <slot duration="240" start="2003-10-17 09:00:00"/>
+   </resource>
+   <resource xlink:type="simple" xlink:title="Room 2"
+             xlink:href="/resources/room2">
      <slot duration="240" start="2003-10-17 09:00:00"/>
    </resource>
 </availability>
+%% END XML
 
 
 SchoolTool> get /busysearch?first=2003-10-17&last=2003-10-17&duration=180&hours=9&hours=10&hours=11&hours=12&resources=/resources/hall
 200 OK
 Content-Type: text/xml; charset=UTF-8
-<availability>
-   <resource path="/resources/hall">
+%% XML recursively_sort=availability
+<availability xmlns:xlink="http://www.w3.org/1999/xlink">
+   <resource xlink:type="simple" xlink:title="Hall"
+             xlink:href="/resources/hall">
      <slot duration="180" start="2003-10-17 10:00:00"/>
    </resource>
 </availability>
+%% END XML
 
 
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1 fdm=expr:
