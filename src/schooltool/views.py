@@ -659,6 +659,16 @@ class AbsenceCommentParser(XMLPseudoParser):
             ended = d[ended]
 
         try:
+            resolved = self.extractKeyword(body, 'resolved')
+        except KeyError:
+            resolved = Unchanged
+        else:
+            d = {'resolved': True, 'unresolved': False}
+            if resolved not in d:
+                raise ValueError("Bad value for resolved", resolved)
+            resolved = d[resolved]
+
+        try:
             expected_presence = self.extractKeyword(body, 'expected_presence')
         except KeyError:
             expected_presence = Unchanged
@@ -666,7 +676,7 @@ class AbsenceCommentParser(XMLPseudoParser):
             expected_presence = parse_datetime(expected_presence)
 
         comment = AbsenceComment(reporter, text, absent_from=absent_from,
-                                 dt=dt, ended=ended,
+                                 dt=dt, ended=ended, resolved=resolved,
                                  expected_presence=expected_presence)
 
         return comment
@@ -682,9 +692,11 @@ class AbsenceManagementView(View, AbsenceCommentParser):
 
     def listAbsences(self):
         endedness = {False: 'unended', True: 'ended'}
+        resolvedness = {False: 'unresolved', True: 'resolved'}
         return [{'title': item.__name__,
                  'path': getPath(item),
-                 'ended': endedness[item.ended]}
+                 'ended': endedness[item.ended],
+                 'resolved': resolvedness[item.resolved]}
                 for item in self.context.iterAbsences()]
 
     def do_POST(self, request):
@@ -716,6 +728,12 @@ class AbsenceView(View, AbsenceCommentParser):
         else:
             return "unended"
 
+    def resolved(self):
+        if self.context.resolved:
+            return "resolved"
+        else:
+            return "unresolved"
+
     def expected_presence(self):
         if self.context.expected_presence:
             return self.context.expected_presence.isoformat(' ')
@@ -727,6 +745,7 @@ class AbsenceView(View, AbsenceCommentParser):
 
     def listComments(self):
         endedness = {Unchanged: None, False: 'unended', True: 'ended'}
+        resolvedness = {Unchanged: None, False: 'unresolved', True: 'resolved'}
         def format_presence(pr):
             if pr is not Unchanged:
                 return comment.expected_presence.isoformat(' ')
@@ -738,6 +757,7 @@ class AbsenceView(View, AbsenceCommentParser):
              'absent_from': (comment.absent_from is not None
                              and getPath(comment.absent_from) or None),
              'ended': endedness[comment.ended],
+             'resolved': resolvedness[comment.resolved],
              'expected_presence': format_presence(comment.expected_presence),
              'reporter_href': getPath(comment.reporter)}
             for comment in self.context.comments]
@@ -827,6 +847,8 @@ class RollcallView(View):
 
             items = []
             presence = {'present': True, 'absent': False}
+            resolvedness = {None: Unchanged, 'resolved': True,
+                            'unresolved': False}
             seen = sets.Set()
             members = sets.Set([item['href'] for item in self.listPersons()])
             for node in ctx.xpathEval("/rollcall/person"):
@@ -845,7 +867,14 @@ class RollcallView(View):
                     present = presence[node.nsProp('presence', None)]
                 except KeyError:
                     raise ValueError("Bad presence value for %s" % path)
-                items.append((person, present))
+                try:
+                    resolved = resolvedness[node.nsProp('resolved', None)]
+                except KeyError:
+                    raise ValueError("Bad resolved value for %s" % path)
+                if resolved is True and not present:
+                    raise ValueError("Cannot resolve an absence for absent"
+                                     " person %s" % path)
+                items.append((person, present, resolved))
             if seen != members:
                 missing = list(members - seen)
                 missing.sort()
@@ -864,7 +893,7 @@ class RollcallView(View):
         except ValueError, e:
             request.setResponseCode(400, 'Bad request')
             return str(e)
-        for person, present in items:
+        for person, present, resolved in items:
             if not present:
                 person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
                                                     absent_from=self.context))
@@ -872,7 +901,8 @@ class RollcallView(View):
             if present and person.getCurrentAbsence() is not None:
                 person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
                                                     absent_from=self.context,
-                                                    ended=True))
+                                                    ended=True,
+                                                    resolved=resolved))
                 npresences += 1
         return "%d absences and %d presences reported" % (nabsences, npresences)
 

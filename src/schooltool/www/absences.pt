@@ -4,5 +4,6 @@
            xlink:type="simple"
            tal:attributes="xlink:title item/title;
                            xlink:href item/path;
-                           ended item/ended" />
+                           ended item/ended;
+                           resolved item/resolved" />
 </absences>

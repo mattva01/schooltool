@@ -817,12 +817,13 @@ class IAbsence(ILocation):
     located in IPersons.absences by its __name__.
 
     All attributes are read-only.  They can be changed by adding new
-    comments, therefore the list of comments also double as an audit log.
+    comments, therefore the list of comments also doubles as an audit log.
     """
 
     person = Attribute("""Person that was absent""")
     comments = Attribute("""Comments (a sequence of IAbsenceComment)""")
     ended = Attribute("""Has this absence been ended?""")
+    resolved = Attribute("""Has this absence been resolved?""")
     expected_presence = Attribute(
         """Date and time after which the person is expected to be present""")
 
@@ -869,6 +870,7 @@ Unchanged = UnchangedClass()
 
 class IAbsenceComment(Interface):
 
+    __parent__ = Attribute("""The absence this comment belongs to""")
     datetime = Attribute("""Date and time of the comment""")
     reporter = Attribute("""Person that made this comment""")
     text = Attribute("""Text of the comment""")
@@ -877,6 +879,8 @@ class IAbsenceComment(Interface):
         from (can be None)""")
     ended = Attribute(
         """New value of ended (True, False or Unchanged)""")
+    resolved = Attribute(
+        """New value of resolved (True, False or Unchanged)""")
     expected_presence = Attribute(
         """New value of expected_presence (datetime, None, or Unchanged)""")
 

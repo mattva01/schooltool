@@ -105,10 +105,12 @@ class Absence(Persistent):
 
     implements(IAbsence)
 
-    def __init__(self, person, expected_presence=None, ended=False):
+    def __init__(self, person, expected_presence=None, ended=False,
+                 resolved=False):
         self.person = person
         self.expected_presence = expected_presence
         self.ended = ended
+        self.resolved = resolved
         self.comments = []
         self.__name__ = None
         self.__parent__ = None
@@ -116,6 +118,8 @@ class Absence(Persistent):
     def addComment(self, comment):
         if not IAbsenceComment.isImplementedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
+        if comment.__parent__ is not None:
+            raise ValueError("comment is already added to an absence", comment)
         event = AbsenceEvent(self, comment)
         if comment.ended is not Unchanged:
             if self.ended and not comment.ended:
@@ -123,12 +127,19 @@ class Absence(Persistent):
                     raise ValueError("Cannot reopen an absence when another"
                                      " one is not ended", self, comment)
                 self.person._current_absence = self
+                self.resolved = False
             elif not self.ended and comment.ended:
                 self.person._current_absence = None
                 event = AbsenceEndedEvent(self, comment)
             self.ended = comment.ended
+        if comment.resolved is not Unchanged:
+            if not self.ended:
+                raise ValueError("Cannot resolve an unended absence",
+                                 self, comment)
+            self.resolved = comment.resolved
         if comment.expected_presence is not Unchanged:
             self.expected_presence = comment.expected_presence
+        comment.__parent__ = self
         self.comments.append(comment)
         self.comments = self.comments
         if event is not None:
@@ -145,8 +156,9 @@ class AbsenceComment:
 
     implements(IAbsenceComment)
 
-    def __init__(self, reporter, text, dt=None, absent_from=None,
-                 expected_presence=Unchanged, ended=Unchanged):
+    def __init__(self, reporter=None, text=None, dt=None, absent_from=None,
+                 expected_presence=Unchanged, ended=Unchanged,
+                 resolved=Unchanged):
         if dt is None:
             dt = datetime.utcnow()
         self.reporter = reporter
@@ -154,7 +166,15 @@ class AbsenceComment:
         self.datetime = dt
         self.absent_from = absent_from
         self.expected_presence = expected_presence
-        self.ended = ended
+        if ended is Unchanged:
+            self.ended = Unchanged
+        else:
+            self.ended = bool(ended)
+        if resolved is Unchanged:
+            self.resolved = Unchanged
+        else:
+            self.resolved = bool(resolved)
+        self.__parent__ = None
 
 
 class AttendanceEvent(EventMixin):

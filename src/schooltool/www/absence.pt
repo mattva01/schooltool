@@ -4,6 +4,7 @@
          xlink:title="person"
          tal:attributes="xlink:href view/getPathOfPerson;
                          ended view/ended;
+                         resolved view/resolved;
                          expected_presence view/expected_presence">
   <comment tal:repeat="comment view/listComments"
            xlink:type="simple"
@@ -11,6 +12,7 @@
            tal:attributes="datetime comment/datetime;
                            absentfrom comment/absent_from;
                            ended comment/ended;
+                           resolved comment/resolved;
                            expected_presence comment/expected_presence;
                            xlink:href comment/reporter_href"
            tal:content="comment/text">

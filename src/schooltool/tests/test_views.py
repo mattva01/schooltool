@@ -1219,6 +1219,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
         self.assert_(lower_limit <= comment.datetime <= upper_limit)
         self.assert_(comment.absent_from is None)
         self.assert_(comment.ended is Unchanged)
+        self.assert_(comment.resolved is Unchanged)
         self.assert_(comment.expected_presence is Unchanged)
 
         # Everything
@@ -1227,6 +1228,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
                         reporter="/persons/john"
                         absent_from="/groups/aa"
                         ended="ended"
+                        resolved="unresolved"
                         datetime="2004-04-04 04:04:04"
                         expected_presence="2005-05-05 05:05:05"
                     """)
@@ -1234,7 +1236,8 @@ class TestAbsenceCommentParser(unittest.TestCase):
         self.assertEquals(comment.text, "Foo")
         self.assertEquals(comment.reporter, john)
         self.assertEquals(comment.absent_from, group)
-        self.assert_(comment.ended)
+        self.assertEquals(comment.ended, True)
+        self.assertEquals(comment.resolved, False)
         self.assertEquals(comment.datetime,
                           datetime.datetime(2004, 4, 4, 4, 4, 4))
         self.assertEquals(comment.expected_presence,
@@ -1252,6 +1255,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
             'text="" reporter="/obj" datetime="now"',
             'text="" reporter="/obj" absent_from="/does/not/exist"',
             'text="" reporter="/obj" ended="mu"',
+            'text="" reporter="/obj" resolved="mu"',
             'text="" reporter="/obj" expected_presence="dunno"',
         )
         for body in bad_requests:
@@ -1271,7 +1275,7 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        absence = context.reportAbsence(AbsenceComment(None, ''))
+        absence = context.reportAbsence(AbsenceComment())
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
         result = view._traverse(absence.__name__, request)
@@ -1285,8 +1289,8 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        context.reportAbsence(AbsenceComment(None, '', ended=True))
-        context.reportAbsence(AbsenceComment(None, ''))
+        context.reportAbsence(AbsenceComment(ended=True, resolved=True))
+        context.reportAbsence(AbsenceComment())
         self.assertEquals(len(list(context.iterAbsences())), 2)
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
@@ -1296,11 +1300,11 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
             ---8<---
               <absence xlink:type="simple"
                        xlink:href="/person/absences/001" ended="ended"
-                       xlink:title="001"/>
+                       xlink:title="001" resolved="resolved"/>
             ---8<---
               <absence xlink:type="simple"
                        xlink:href="/person/absences/002" ended="unended"
-                       xlink:title="002"/>
+                       xlink:title="002" resolved="unresolved"/>
             ---8<---
             </absences>
             """)
@@ -1342,7 +1346,7 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        absence = context.reportAbsence(AbsenceComment(None, ''))
+        absence = context.reportAbsence(AbsenceComment())
         basepath = "/person/absences/"
         baseurl = "http://localhost%s" % basepath
         view = AbsenceManagementView(context)
@@ -1398,10 +1402,10 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         setPath(person, '/person', root=self.serviceManager)
         absence = person.reportAbsence(AbsenceComment(reporter1, 'Some text',
                 dt=datetime.datetime(2001, 1, 1)))
-        person.reportAbsence(AbsenceComment(reporter2, 'More text',
+        person.reportAbsence(AbsenceComment(reporter2, 'More text\n',
                 absent_from=group1, dt=datetime.datetime(2002, 2, 2),
                 expected_presence=datetime.datetime(2003, 03, 03),
-                ended=True))
+                ended=True, resolved=False))
         return absence
 
     def test_get(self):
@@ -1413,16 +1417,18 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         expected = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink"
                      xlink:type="simple" xlink:title="person"
-                     ended="ended" xlink:href="/person"
+                     resolved="unresolved" ended="ended"
+                     xlink:href="/person"
                      expected_presence="2003-03-03 00:00:00">
               <comment xlink:type="simple" xlink:title="reporter"
                        xlink:href="/reporter1"
                        datetime="2001-01-01 00:00:00">Some text</comment>
               <comment xlink:type="simple" xlink:title="reporter"
-                       ended="ended"
+                       resolved="unresolved"
                        expected_presence="2003-03-03 00:00:00"
                        xlink:href="/reporter2" absentfrom="/group1"
-                       datetime="2002-02-02 00:00:00">More text</comment>
+                       datetime="2002-02-02 00:00:00" ended="ended">More text
+            </comment>
             </absence>
             """)
         self.assertEquals(result, expected, "\n" + diff(expected, result))
@@ -1466,7 +1472,7 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.views import AbsenceView
         from schooltool.model import AbsenceComment
         absence = self.createAbsence()
-        absence.person.reportAbsence(AbsenceComment(None, ""))
+        absence.person.reportAbsence(AbsenceComment())
         self.assertEquals(len(absence.comments), 2)
         basepath = "/person/absences/001/"
         setPath(absence, basepath[:-1])
@@ -1516,7 +1522,7 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
     def test_get(self):
         from schooltool.views import RollcallView
         from schooltool.model import AbsenceComment
-        self.personb.reportAbsence(AbsenceComment(None, ""))
+        self.personb.reportAbsence(AbsenceComment())
         self.personc.reportAbsence(AbsenceComment(None, "",
                 expected_presence=datetime.datetime(2001, 1, 1, 2, 2, 2)))
         view = RollcallView(self.group)
@@ -1552,8 +1558,8 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
     def test_post(self):
         from schooltool.views import RollcallView
         from schooltool.model import AbsenceComment
-        personc_absence = self.personc.reportAbsence(AbsenceComment(None, ""))
-        persond_absence = self.persond.reportAbsence(AbsenceComment(None, ""))
+        personc_absence = self.personc.reportAbsence(AbsenceComment())
+        persond_absence = self.persond.reportAbsence(AbsenceComment())
         view = RollcallView(self.group)
         text = "I just did a roll call and noticed Mr. B. is missing again"
         request = RequestStub("http://localhost/group/rollcall",
@@ -1569,7 +1575,7 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
               <person xlink:type="simple" xlink:href="/persons/b"
                       xlink:title="b" presence="absent"/>
               <person xlink:type="simple" xlink:href="/persons/c"
-                      xlink:title="c" presence="present"/>
+                      xlink:title="c" presence="present" resolved="resolved"/>
               <person xlink:type="simple" xlink:href="/persons/d"
                       xlink:title="d" presence="absent"/>
             </rollcall>
@@ -1600,6 +1606,7 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(comment.reporter is self.persona)
         self.assertEquals(comment.text, text)
         self.assertEquals(comment.ended, True)
+        self.assertEquals(comment.resolved, True)
         self.assertEquals(comment.datetime,
                           datetime.datetime(2001, 2, 3, 4, 5, 6))
 
@@ -1713,6 +1720,23 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:title="d" presence="absent"/>
             </rollcall>""",
             "Bad presence value for /persons/a")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent" resolved="xyzzy"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Bad resolved value for /persons/b")
 
     def test_post_logic_errors(self):
         self.post_errors("""
@@ -1783,6 +1807,23 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:title="d" presence="absent"/>
             </rollcall>""",
             "Persons not mentioned: /persons/a, /persons/c")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent" resolved="resolved"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Cannot resolve an absence for absent person /persons/b")
 
 
 def test_suite():

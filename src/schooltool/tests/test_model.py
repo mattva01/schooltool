@@ -73,7 +73,7 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
         from schooltool.component import FacetManager
         person = Person('John Smith')
         person.__parent__ = self.eventService
-        absence = person.reportAbsence(AbsenceComment(None, None))
+        absence = person.reportAbsence(AbsenceComment())
         link = LinkStub()
         person.__links__.add(link)
         facet = FacetStub()
@@ -109,6 +109,7 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
         self.assert_(absence.person is person)
         self.assert_(absence.__parent__ is person)
         self.assert_(not absence.ended)
+        self.assert_(not absence.resolved)
         self.assert_(person.getAbsence(absence.__name__) is absence)
         self.assertRaises(KeyError, person.getAbsence, absence.__name__ + "X")
         self.assertEquals([absence], list(person.iterAbsences()))
@@ -144,24 +145,23 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
 
         # Add comments to absences directly, rather than via Person.
         # Check that ending an absence multiple times is ok.
-        absence4.addComment(AbsenceComment(None, "", ended=True))
+        absence4.addComment(AbsenceComment(ended=True))
         self.assert_(person.getCurrentAbsence() is None)
-        absence4.addComment(AbsenceComment(None, "", ended=True))
+        absence4.addComment(AbsenceComment(ended=True))
         self.assert_(person.getCurrentAbsence() is None)
         # Unending a previously ended absence makes it into the current
         # absence.
-        absence.addComment(AbsenceComment(None, "", ended=False))
+        absence.addComment(AbsenceComment(ended=False))
         self.assert_(person.getCurrentAbsence() is absence)
-        absence.addComment(AbsenceComment(None, "", ended=False))
+        absence.addComment(AbsenceComment(ended=False))
         self.assert_(person.getCurrentAbsence() is absence)
-        absence4.addComment(AbsenceComment(None, "", ended=True))
+        absence4.addComment(AbsenceComment(ended=True))
         self.assert_(person.getCurrentAbsence() is absence)
         # Check that you cannot re-open an absence while another absence is
         # unended.
         old_len = len(absence4.comments)
         self.assertRaises(ValueError, absence4.addComment,
-                          AbsenceComment(None, "", ended=False,
-                                         expected_presence=dt))
+                          AbsenceComment(ended=False, expected_presence=dt))
         self.assertEquals(len(absence4.comments), old_len)
         self.assert_(absence4.ended)
         self.assert_(absence4.expected_presence is None)
@@ -172,9 +172,11 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
         person = Person('John Smith')
         person.__parent__ = self.eventService
 
-        comment = AbsenceComment(object(), "some text", ended=True)
+        comment = AbsenceComment(object(), "some text", ended=True,
+                                 resolved=True)
         absence = person.reportAbsence(comment)
         self.assert_(absence.ended)
+        self.assert_(absence.resolved)
         self.assert_(absence in person.iterAbsences())
         self.assert_(person.getCurrentAbsence() is None)
 
@@ -277,6 +279,7 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Absence
         self.setUpEventService()
         self.person = LocatableEventTargetMixin(self.eventService)
+        self.person.getCurrentAbsence = lambda: None
         self.absence = Absence(self.person)
 
     def test(self):
@@ -285,12 +288,24 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(self.absence.person, self.person)
         self.assertEquals(self.absence.comments, [])
         self.assert_(not self.absence.ended)
+        self.assert_(not self.absence.resolved)
 
     def test_addComment_raises(self):
         self.assertRaises(TypeError, self.absence.addComment, object())
         self.assertEquals(len(self.absence.comments), 0)
         self.assertEquals(len(self.eventService.events), 0)
         self.assertEquals(len(self.person.events), 0)
+
+    def test_addComment_twice(self):
+        from schooltool.model import Absence, AbsenceComment
+        comment = AbsenceComment()
+        self.absence.addComment(comment)
+        self.assertRaises(ValueError, self.absence.addComment, comment)
+
+        comment = AbsenceComment()
+        self.absence.addComment(comment)
+        absence = Absence(self.person)
+        self.assertRaises(ValueError, absence.addComment, comment)
 
     def test_addComment(self):
         from schooltool.model import AbsenceComment
@@ -331,6 +346,35 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         e = self.checkOneEventReceived([self.person, group1, group2, group3])
         self.assert_(IAbsenceEndedEvent.isImplementedBy(e))
 
+    def test_addComment_resolves(self):
+        from schooltool.model import AbsenceComment
+        from schooltool.interfaces import Unchanged
+        self.assert_(not self.absence.resolved)
+        self.assert_(not self.absence.ended)
+        # Cannot resolve unended absences
+        self.assertRaises(ValueError, self.absence.addComment,
+                          AbsenceComment(resolved=True))
+        self.assert_(not self.absence.resolved)
+        self.assert_(not self.absence.ended)
+        self.absence.addComment(AbsenceComment(resolved=True, ended=True))
+        self.assert_(self.absence.ended)
+        self.assert_(self.absence.resolved)
+        self.absence.addComment(AbsenceComment(resolved=Unchanged))
+        self.assert_(self.absence.resolved)
+        self.absence.addComment(AbsenceComment(resolved=False))
+        self.assert_(not self.absence.resolved)
+        self.absence.addComment(AbsenceComment(resolved=Unchanged))
+        self.assert_(not self.absence.resolved)
+        self.absence.addComment(AbsenceComment(resolved=True))
+        self.assert_(self.absence.resolved)
+
+    def test_addComment_reopening_clears_resolution(self):
+        from schooltool.model import AbsenceComment
+        from schooltool.interfaces import Unchanged
+        self.absence.addComment(AbsenceComment(resolved=True, ended=True))
+        self.assert_(self.absence.resolved)
+        self.absence.addComment(AbsenceComment(ended=False))
+        self.assert_(not self.absence.resolved)
 
     def testAbsenceEvents(self):
         from schooltool.model import AbsenceEvent, AttendanceEvent
@@ -352,7 +396,6 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         verifyObject(IAbsenceEndedEvent, event)
         verifyObject(IAttendanceEvent, event)
 
-
     def testAbsenceComment(self):
         from schooltool.model import AbsenceComment
         from schooltool.interfaces import IAbsenceComment, Unchanged
@@ -367,20 +410,26 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(comment1.absent_from, None)
         self.assert_(lower_limit <= comment1.datetime <= upper_limit)
         self.assert_(comment1.ended is Unchanged)
+        self.assert_(comment1.resolved is Unchanged)
         self.assert_(comment1.expected_presence is Unchanged)
 
         dt = datetime(2003, 10, 28)
         dt2 = datetime(2003, 10, 29, 9, 0)
         group = object()
         comment2 = AbsenceComment(reporter, text, dt=dt, absent_from=group,
-                                  ended=True,
+                                  ended=True, resolved=False,
                                   expected_presence=dt2)
         self.assertEquals(comment2.reporter, reporter)
         self.assertEquals(comment2.text, text)
         self.assertEquals(comment2.absent_from, group)
         self.assertEquals(comment2.datetime, dt)
         self.assertEquals(comment2.ended, True)
+        self.assertEquals(comment2.resolved, False)
         self.assertEquals(comment2.expected_presence, dt2)
+
+        comment3 = AbsenceComment(ended=0, resolved=1)
+        self.assert_(comment3.ended is False)
+        self.assert_(comment3.resolved is True)
 
 
 class TestAbsenceTrackerMixin(EventServiceTestMixin, EqualsSortedMixin,
