@@ -61,12 +61,12 @@ class XMLDocument(object):
     def __init__(self, body, schema=None):
         """Parse the document (and validate with a RelaxNG schema if given).
 
-        Ill-formed documents cause XMLError to be raised.
+        Ill-formed documents cause XMLParseError to be raised.
 
             >>> XMLDocument("<ill></formed>")
             Traceback (most recent call last):
               ...
-            XMLError: Ill-formed document.
+            XMLParseError: Ill-formed document.
 
         Documents can be validated according to a RelaxNG schema.
 
@@ -83,7 +83,7 @@ class XMLDocument(object):
             >>> XMLDocument("<bad_example>I'm invalid!</bad_example>", schema)
             Traceback (most recent call last):
               ...
-            XMLError: Document not valid according to schema.
+            XMLValidationError: Document not valid according to schema.
 
             >>> XMLDocument("<sample>Hi!</sample>", schema).free()
 
@@ -91,11 +91,12 @@ class XMLDocument(object):
         self._doc = self._xpathctx = None # __del__ wants them
         if schema is not None:
             if not validate_against_schema(schema, body):
-                raise XMLError(_("Document not valid according to schema."))
+                raise XMLValidationError(
+                            _("Document not valid according to schema."))
         try:
             self._doc = libxml2.parseDoc(body)
         except libxml2.parserError:
-            raise XMLError(_("Ill-formed document."))
+            raise XMLParseError(_("Ill-formed document."))
         self._xpathctx = self._doc.xpathNewContext()
         self.namespaces = {}
 
@@ -147,7 +148,7 @@ class XMLDocument(object):
             >>> doc.query('@!#%!@%!@#%')
             Traceback (most recent call last):
               ...
-            XMLError: Ill-formed XPath query ('@!#%!@%!@#%').
+            XMLXPathError: Ill-formed XPath query ('@!#%!@%!@#%').
 
         As usual, it is a good idea to free the resources explicitly.
 
@@ -159,7 +160,8 @@ class XMLDocument(object):
             return [XMLNode(node, self)
                     for node in self._xpathctx.xpathEval(xpath_query)]
         except libxml2.xpathError:
-            raise XMLError(_('Ill-formed XPath query (%r).') % xpath_query)
+            raise XMLXPathError(_('Ill-formed XPath query (%r).')
+                                % xpath_query)
 
     def free(self):
         """Free libxml2 data structures.
@@ -269,12 +271,12 @@ class XMLNode(object):
             >>> node.get('unregistered_ns:anything')
             Traceback (most recent call last):
               ...
-            XMLError: Unregistered namespace prefix (unregistered_ns:anything).
+            XMLNamespaceError: Unregistered namespace prefix (unregistered_ns:anything).
 
             >>> node.get('too:many:colons')
             Traceback (most recent call last):
               ...
-            XMLError: Ill-formed attribute name (too:many:colons).
+            XMLAttributeError: Ill-formed attribute name (too:many:colons).
 
         As usual, it is a good idea to free the resources explicitly.
 
@@ -285,11 +287,13 @@ class XMLNode(object):
             try:
                 ns, attr = name.split(':')
             except (KeyError, ValueError):
-                raise XMLError(_("Ill-formed attribute name (%s).") % name)
+                raise XMLAttributeError(_("Ill-formed attribute name (%s).")
+                                        % name)
             try:
                 uri = self._doc.namespaces[ns]
             except (KeyError, ValueError):
-                raise XMLError(_("Unregistered namespace prefix (%s).") % name)
+                raise XMLNamespaceError(
+                            _("Unregistered namespace prefix (%s).") % name)
         else:
             attr = name
             uri = None
@@ -343,12 +347,12 @@ class XMLNode(object):
             >>> node['unregistered_ns:anything']
             Traceback (most recent call last):
               ...
-            XMLError: Unregistered namespace prefix (unregistered_ns:anything).
+            XMLNamespaceError: Unregistered namespace prefix (unregistered_ns:anything).
 
             >>> node['too:many:colons']
             Traceback (most recent call last):
               ...
-            XMLError: Ill-formed attribute name (too:many:colons).
+            XMLAttributeError: Ill-formed attribute name (too:many:colons).
 
         As usual, it is a good idea to free the resources explicitly.
 
@@ -377,7 +381,7 @@ class XMLNode(object):
             >>> node.query('@!#%!@%!@#%')
             Traceback (most recent call last):
               ...
-            XMLError: Ill-formed XPath query ('@!#%!@%!@#%').
+            XMLXPathError: Ill-formed XPath query ('@!#%!@%!@#%').
 
         As usual, it is a good idea to free the resources explicitly.
 
@@ -390,9 +394,25 @@ class XMLNode(object):
             return [XMLNode(node, self)
                     for node in xpathctx.xpathEval(xpath_query)]
         except libxml2.xpathError:
-            raise XMLError(_('Ill-formed XPath query (%r).') % xpath_query)
+            raise XMLXPathError(_('Ill-formed XPath query (%r).')
+                                % xpath_query)
 
 
 class XMLError(UnicodeAwareException):
-    pass
+    """Base class for XML errors."""
+
+class XMLParseError(XMLError):
+    """Ill-formed XML document."""
+
+class XMLValidationError(XMLError):
+    """Invalid XML document."""
+
+class XMLXPathError(XMLError):
+    """Ill-formed XPath query."""
+
+class XMLNamespaceError(XMLError):
+    """Unregistered XML namespace."""
+
+class XMLAttributeError(XMLError):
+    """Ill-formed XML attribute name."""
 
