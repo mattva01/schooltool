@@ -42,6 +42,7 @@ from schooltool.translation import ugettext as _
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import SchooldayPeriod
+from schooltool.cal import SchooldayModel
 from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
 from schooltool.common import parse_date
@@ -344,7 +345,74 @@ class NewTimePeriodView(View):
         self.name_widget.update(request)
         self.start_widget.update(request)
         self.end_widget.update(request)
+        self.model = self._buildModel(request)
+        if 'CREATE' in request.args:
+            self.name_widget.require()
+            self.start_widget.require()
+            self.end_widget.require()
+            if not (self.name_widget.error or self.start_widget.error or
+                    self.end_widget.error) and self.model is not None:
+                self.context[self.name_widget.value] = self.model
+                return self.redirect("/time-periods", request)
         return View.do_GET(self, request)
+
+    def _buildModel(self, request):
+        first = self.start_widget.value
+        last = self.end_widget.value
+        if first is None or last is None or last < first:
+            return None
+        model = SchooldayModel(first, last)
+        model.addWeekdays(0, 1, 2, 3, 4, 5, 6)
+        for holiday in self.request.args.get('holiday', []):
+            try:
+                model.remove(parse_date(holiday))
+            except ValueError:
+                continue
+        return model
+
+    def calendar(self):
+        if self.model is None:
+            return []
+        calendar = []
+        start_of_month = self.model.first
+        limit = self.model.last + datetime.timedelta(1)
+        index = 0
+        while start_of_month < limit:
+            month_title = _('%(month)s %(year)s') % {
+                                'month': start_of_month.strftime('%B'),
+                                'year': start_of_month.year
+                            }
+            weeks = []
+            start_of_week = week_start(start_of_month)
+            start_of_next_month = min(next_month(start_of_month), limit)
+            while start_of_week < start_of_next_month:
+                week_title = _('Week %d') % start_of_week.isocalendar()[1]
+                days = []
+                day = start_of_week
+                for n in range(7):
+                    if start_of_month <= day < start_of_next_month:
+                        index += 1
+                        checked = not self.model.isSchoolday(day)
+                        if checked:
+                            css_class = 'holiday'
+                        else:
+                            css_class = 'schoolday'
+                        days.append({'number': day.day, 'class': css_class,
+                                     'date': day.strftime('%Y-%m-%d'),
+                                     'onClick': 'javascript:toggle(%d)'%index,
+                                     'index': index,
+                                     'checked': checked})
+                    else:
+                        days.append({'number': None, 'class': None,
+                                     'date': None, 'checked': None,
+                                     'index': None, 'onClick': None})
+                    day += datetime.timedelta(1)
+                weeks.append({'title': week_title,
+                              'days': days})
+                start_of_week += datetime.timedelta(7)
+            calendar.append({'title': month_title, 'weeks': weeks})
+            start_of_month = start_of_next_month
+        return calendar
 
 
 class ContainerServiceViewBase(View):
@@ -527,3 +595,67 @@ def format_time_range(start, duration):
         return '00:00-24:00' # special case
     else:
         return '%s-%s' % (start.strftime('%H:%M'), ends)
+
+
+def next_month(date):
+    """Calculate the first day of the next month from date.
+
+       >>> next_month(datetime.date(2004, 8, 1))
+       datetime.date(2004, 9, 1)
+       >>> next_month(datetime.date(2004, 8, 31))
+       datetime.date(2004, 9, 1)
+       >>> next_month(datetime.date(2004, 12, 15))
+       datetime.date(2005, 1, 1)
+       >>> next_month(datetime.date(2004, 2, 28))
+       datetime.date(2004, 3, 1)
+       >>> next_month(datetime.date(2004, 2, 29))
+       datetime.date(2004, 3, 1)
+       >>> next_month(datetime.date(2005, 2, 28))
+       datetime.date(2005, 3, 1)
+
+    """
+    return (date.replace(day=28) + datetime.timedelta(7)).replace(day=1)
+
+
+def week_start(date, first_day_of_week=0):
+    """Calculate the first day of the week of date.
+
+    Assuming that week starts on Mondays:
+
+       >>> import calendar
+       >>> week_start(datetime.date(2004, 8, 19))
+       datetime.date(2004, 8, 16)
+       >>> week_start(datetime.date(2004, 8, 15))
+       datetime.date(2004, 8, 9)
+       >>> week_start(datetime.date(2004, 8, 14))
+       datetime.date(2004, 8, 9)
+       >>> week_start(datetime.date(2004, 8, 21))
+       datetime.date(2004, 8, 16)
+       >>> week_start(datetime.date(2004, 8, 22))
+       datetime.date(2004, 8, 16)
+       >>> week_start(datetime.date(2004, 8, 23))
+       datetime.date(2004, 8, 23)
+
+    Assuming that week starts on Sundays:
+
+       >>> import calendar
+       >>> week_start(datetime.date(2004, 8, 19), calendar.SUNDAY)
+       datetime.date(2004, 8, 15)
+       >>> week_start(datetime.date(2004, 8, 15), calendar.SUNDAY)
+       datetime.date(2004, 8, 15)
+       >>> week_start(datetime.date(2004, 8, 14), calendar.SUNDAY)
+       datetime.date(2004, 8, 8)
+       >>> week_start(datetime.date(2004, 8, 21), calendar.SUNDAY)
+       datetime.date(2004, 8, 15)
+       >>> week_start(datetime.date(2004, 8, 22), calendar.SUNDAY)
+       datetime.date(2004, 8, 22)
+       >>> week_start(datetime.date(2004, 8, 23), calendar.SUNDAY)
+       datetime.date(2004, 8, 22)
+
+    """
+    assert 0 <= first_day_of_week < 7
+    delta = date.weekday() - first_day_of_week
+    if delta < 0:
+        delta += 7
+    return date - datetime.timedelta(delta)
+

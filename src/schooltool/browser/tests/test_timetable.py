@@ -30,6 +30,8 @@ from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.browser.tests.test_model import AppSetupMixin
 from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.common import dedent
 
 __metaclass__ = type
 
@@ -552,7 +554,7 @@ class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
                           'http://localhost:7001/newtimeperiod')
 
 
-class TestNewTimePeriodView(AppSetupMixin, unittest.TestCase):
+class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
@@ -578,6 +580,51 @@ class TestNewTimePeriodView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.start_widget.error, None)
         self.assertEquals(view.end_widget.value, None)
         self.assertEquals(view.end_widget.error, None)
+        self.assertEquals(view.model, None)
+
+    def test_create_without_data(self):
+        view = self.createView()
+        request = view.request
+        request.args['CREATE'] = ['Create']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(view.name_widget.value, None)
+        self.assertNotEquals(view.name_widget.error, None)
+        self.assertEquals(view.start_widget.value, None)
+        self.assertNotEquals(view.start_widget.error, None)
+        self.assertEquals(view.end_widget.value, None)
+        self.assertNotEquals(view.end_widget.error, None)
+        self.assertEquals(view.model, None)
+
+    def test_create(self):
+        view = self.createView()
+        request = view.request
+        request.args['name'] = ['2005-spring']
+        request.args['start'] = ['2005-01-01']
+        request.args['end'] = ['2005-05-31']
+        request.args['holiday'] = ['2005-05-30']
+        request.args['CREATE'] = ['Create']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/time-periods')
+        model = view.context['2005-spring']
+        self.assertEquals(model, view.model)
+        self.assertEquals(model.first, datetime.date(2005, 1, 1))
+        self.assertEquals(model.last, datetime.date(2005, 5, 31))
+        self.assert_(model.isSchoolday(datetime.date(2005, 5, 31)))
+        self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
+
+    def test_with_dates(self):
+        view = self.createView()
+        request = view.request
+        request.args['start'] = ['2004-09-01']
+        request.args['end'] = ['2004-09-30']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        model = view.model
+        self.assertEquals(model.first, datetime.date(2004, 9, 1))
+        self.assertEquals(model.last, datetime.date(2004, 9, 30))
 
     def test_name_missing(self):
         view = self.createView()
@@ -647,6 +694,131 @@ class TestNewTimePeriodView(AppSetupMixin, unittest.TestCase):
         view.render(view.request)
         self.assertEquals(view.end_widget.value, datetime.date(2004, 1, 2))
         self.assertEquals(view.end_widget.error, None)
+
+    def test_buildModel(self):
+        view = self.createView()
+        request = view.request
+        request.args['start'] = ['2004-09-01']
+        request.args['end'] = ['2004-09-30']
+        request.args['holiday'] = ['2004-09-07', '2004-09-12', 'ignore errors']
+        view.start_widget.update(request)
+        view.end_widget.update(request)
+        model = view._buildModel(request)
+        self.assertEquals(model.first, datetime.date(2004, 9, 1))
+        self.assertEquals(model.last, datetime.date(2004, 9, 30))
+        self.assert_(model.isSchoolday(datetime.date(2004, 9, 6)))
+        self.assert_(not model.isSchoolday(datetime.date(2004, 9, 7)))
+        self.assert_(model.isSchoolday(datetime.date(2004, 9, 8)))
+        self.assert_(not model.isSchoolday(datetime.date(2004, 9, 12)))
+
+    def test_calendar(self):
+        self.checkCalendar(2004, 8, 1, 2004, 8, 31, """
+                *                        August 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 31:                           1
+                Week 32:   2   3   4   5   6   7   8
+                Week 33:   9  10  11  12  13  14  15
+                Week 34:  16  17  18  19  20  21  22
+                Week 35:  23  24  25  26  27  28  29
+                Week 36:  30  31
+                """)
+        self.checkCalendar(2004, 8, 2, 2004, 9, 1, """
+                *                        August 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 32:   2   3   4   5   6   7   8
+                Week 33:   9  10  11  12  13  14  15
+                Week 34:  16  17  18  19  20  21  22
+                Week 35:  23  24  25  26  27  28  29
+                Week 36:  30  31
+                *                     September 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 36:           1
+                """)
+        self.checkCalendar(2004, 8, 3, 2004, 8, 3, """
+                *                        August 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 32:       3
+                """)
+        self.checkCalendar(2004, 12, 30, 2005, 1, 3, """
+                *                      December 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:              30  31
+                *                       January 2005
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:                       1   2
+                Week 1 :   3
+                """)
+
+    def test_calendar_day_indices(self):
+        self.checkCalendar(2004, 12, 30, 2005, 1, 3, """
+                *                      December 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:               1   2
+                *                       January 2005
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:                       3   4
+                Week 1 :   5
+                """, day_format='%(index)4s')
+
+    def test_calendar_dates(self):
+        self.checkCalendar(2004, 12, 30, 2005, 1, 3, """
+                *                      December 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:             2004-12-30 2004-12-31
+                *                       January 2005
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:                     2005-01-01 2005-01-02
+                Week 1 : 2005-01-03
+                """, day_format=' %(date)s')
+
+    def test_calendar_checked(self):
+        self.checkCalendar(2004, 12, 30, 2005, 1, 3, """
+                *                      December 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:             False False
+                *                       January 2005
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:                     True True
+                Week 1 : False
+                """, day_format=' %(checked)s')
+
+    def test_calendar_class(self):
+        self.checkCalendar(2004, 12, 30, 2005, 1, 3, """
+                *                      December 2004
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:             schoolday schoolday
+                *                       January 2005
+                         Mon Tue Wed Thu Fri Sat Sun
+                Week 53:                     holiday holiday
+                Week 1 : schoolday
+                """, day_format=' %(class)s')
+
+    def checkCalendar(self, y1, m1, d1, y2, m2, d2, expected,
+                      day_format='%(number)4d', no_day_format='    '):
+        from schooltool.cal import SchooldayModel
+        view = self.createView()
+        view.model = SchooldayModel(datetime.date(y1, m1, d1),
+                                    datetime.date(y2, m2, d2))
+        view.model.addWeekdays(0, 1, 2, 3, 4)
+        result = self.format_calendar(view.calendar(), day_format=day_format,
+                                      no_day_format=no_day_format)
+        self.assertEquals(result, dedent(expected).rstrip())
+
+    def format_calendar(self, calendar,
+                        day_format='%(number)4d', no_day_format='    '):
+        output = []
+        for month in calendar:
+            output.append('*%35s' % month['title'])
+            output.append('         Mon Tue Wed Thu Fri Sat Sun')
+            for week in month['weeks']:
+                row = ['%-7s:' % week['title']]
+                for day in week['days']:
+                    if day['number'] is None:
+                        row.append(no_day_format % day)
+                    else:
+                        row.append(day_format % day)
+                output.append(''.join(row).rstrip())
+        return '\n'.join(output)
 
 
 def test_suite():

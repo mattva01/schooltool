@@ -549,3 +549,35 @@ table.timetable td.buttons {
   text-align: right;
 }
 
+/* Time periods */
+
+table.schooldaymodel {
+  width: 90%;
+}
+
+table.schooldaymodel th {
+  background: #cccccc;
+}
+table.schooldaymodel tr.legend td {
+  text-align: center;
+}
+table.schooldaymodel tr.legend td.legend {
+  text-align: left;
+}
+table.schooldaymodel td.holiday {
+  background: #ccccff;
+}
+table.schooldaymodel td.schoolday {
+  background: #eeeeee;
+}
+table.schooldaymodel td {
+  background: transparent;
+  text-align: right;
+  padding: 0ex 1ex;
+}
+table.schooldaymodel td label {
+  display: inline;
+  font-weight: normal;
+  float: none;
+  width: auto;
+}

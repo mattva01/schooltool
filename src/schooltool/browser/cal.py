@@ -223,6 +223,7 @@ class CalendarViewBase(View):
         """Return the week that contains the day dt.
 
         Returns a list of CalendarDay objects."""
+        # XXX use week_start from schooltool.browser.timetable
         delta = dt.weekday() - self.first_day_of_week
         if delta < 0:
             delta += 7
@@ -467,6 +468,7 @@ class MonthlyCalendarView(CalendarViewBase):
 
     def nextMonth(self):
         """Return the first day of the next month."""
+        # XXX merge this with next_month from schooltool.browser.timetable
         next_someday = (date(self.cursor.year, self.cursor.month, 28)
                         + timedelta(7))
         return date(next_someday.year, next_someday.month, 1)

@@ -26,6 +26,7 @@ import cgi
 
 from zope.interface import Interface, Attribute, implements
 from schooltool.common import to_unicode
+from schooltool.translation import ugettext as _
 
 
 __metaclass__ = type
@@ -108,6 +109,12 @@ class IWidget(Interface):
         sets self.raw_value to a normalized raw value by calling the formatter,
         and sets self.error to None.  If there were errors, sets self.raw_value
         to None and puts the error message into self.error.
+        """
+
+    def require():
+        """Require the value to be supplied.
+
+        If self.raw_value is None, sets self.error.
         """
 
 
@@ -212,6 +219,10 @@ class Widget:
         else:
             self.error = None
             self.raw_value = self.formatter(self.value)
+
+    def require(self):
+        if self.raw_value is None:
+            self.error = _("This field is required.")
 
 
 class TextWidget(Widget):

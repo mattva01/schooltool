@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" value="text/html; charset=UTF-8" />
   <title metal:define-slot="title">[Title]</title>
   <link rel="stylesheet" href="/schooltool.css" />
+  <metal:block metal:define-slot="extrahead" />
 </head>
 <body metal:define-slot="body">
   <div class="header">

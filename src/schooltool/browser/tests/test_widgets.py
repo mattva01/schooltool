@@ -97,6 +97,18 @@ class TestWidget(unittest.TestCase):
         self.assertEquals(widget.value, u'\u263B')
         self.assertEquals(widget.error, None)
 
+    def test_require(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label')
+        widget.setRawValue('foo')
+        widget.require()
+        self.assert_(widget.error is None)
+
+        widget.setRawValue(None)
+        self.assert_(widget.error is None)
+        widget.require()
+        self.assertEquals(widget.error, 'This field is required.')
+
 
 class TestWidgetWithConverters(unittest.TestCase):
 

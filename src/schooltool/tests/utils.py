@@ -152,7 +152,11 @@ class NiceDiffsMixin:
 
     def assertEquals(self, results, expected, msg=None):
         if msg is None:
-            msg = "\n" + diff(pformat(expected), pformat(results))
+            if (isinstance(expected, basestring)
+                and isinstance(results, basestring)):
+                msg = "\n" + diff(expected, results)
+            else:
+                msg = "\n" + diff(pformat(expected), pformat(results))
         unittest.TestCase.assertEquals(self, results, expected, msg)
 
     assertEqual = assertEquals
