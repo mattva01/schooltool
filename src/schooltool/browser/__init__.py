@@ -167,8 +167,6 @@ class View(_View):
 
     def redirect(self, url, request):
         """Redirect to a URL and show an HTML page explaining the redirect."""
-        url = str(url)
-        # TODO: escape special characters in URL
         if not url.startswith('http://') and not url.startswith('https://'):
             if not url.startswith('/'):
                 url = '/' + url

@@ -23,6 +23,7 @@ $Id$
 """
 
 import os
+import urllib
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from zope.tales.tales import ExpressionEngine
@@ -70,27 +71,27 @@ def absoluteURL(request, obj, suffix=''):
     Simple examples:
 
       >>> absoluteURL(request, root)
-      u'http://example.org:7001/'
+      'http://example.org:7001/'
       >>> absoluteURL(request, obj)
-      u'http://example.org:7001/obj'
+      'http://example.org:7001/obj'
 
     Virtual hosting is supported:
 
       >>> request.setHost('example.com', 443, ssl=True)
 
       >>> absoluteURL(request, root)
-      u'https://example.com:443/'
+      'https://example.com:443/'
       >>> absoluteURL(request, obj)
-      u'https://example.com:443/obj'
+      'https://example.com:443/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absoluteURL(request, root, 'subobject/or/two')
-      u'https://example.com:443/subobject/or/two'
+      'https://example.com:443/subobject/or/two'
       >>> absoluteURL(request, obj, 'subobject')
-      u'https://example.com:443/obj/subobject'
+      'https://example.com:443/obj/subobject'
 
     Let's clean up after ourselves.
 
@@ -137,23 +138,32 @@ def absolutePath(request, obj, suffix=''):
     Some simple examples:
 
       >>> absolutePath(request, root)
-      u'/'
+      '/'
       >>> absolutePath(request, obj)
-      u'/obj'
+      '/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absolutePath(request, root, 'subobject')
-      u'/subobject'
+      '/subobject'
       >>> absolutePath(request, obj, 'subobject/subsubobject')
-      u'/obj/subobject/subsubobject'
+      '/obj/subobject/subsubobject'
+
+    There should be no funny characters in paths, but they are escaped
+    as a precaution:
+
+      >>> obj.__name__ = u"Hi \\u362B"
+      >>> absolutePath(request, obj)
+      '/Hi%20%E3%98%AB'
 
     """
-    path = getPath(obj).split('/')
+    path = getPath(obj)
+    path = urllib.quote(path.encode('UTF-8'))
+    path = str(path).split('/')
     path += suffix.split('/')
-    return u'/' + u'/'.join(filter(None, path))
+    return '/' + '/'.join(filter(None, path))
 
 
 def read_file(fn, basedir=None):

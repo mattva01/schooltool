@@ -145,7 +145,7 @@ class FacetManagementView(View):
                        (getPath(facet), facet.__class__.__name__))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
-        request.setHeader('Location', str(location))
+        request.setHeader('Location', location)
         return _("Facet created: %s") % location
 
 

@@ -137,7 +137,7 @@ class ApplicationObjectCreator:
         location = absoluteURL(request, obj)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
-        request.setHeader('Location', str(location))
+        request.setHeader('Location', location)
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
         return _("Object created: %s") % location

@@ -322,7 +322,7 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
             return textErrorPage(request, str(e))
         absence = self.context.reportAbsence(comment)
         location = absoluteURL(request, absence)
-        request.setHeader('Location', str(location))
+        request.setHeader('Location', location)
         request.setHeader('Content-Type', 'text/plain')
         if len(absence.comments) == 1:
             path = getPath(absence)

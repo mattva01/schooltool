@@ -139,7 +139,7 @@ class RequestStub:
 
     def redirect(self, url):
         self.setResponseCode(302)
-        self.setHeader("location", str(url))
+        self.setHeader("location", url)
 
     def chooseMediaType(self, supported_types):
         from schooltool.http import chooseMediaType

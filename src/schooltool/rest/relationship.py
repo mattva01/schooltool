@@ -125,7 +125,7 @@ class RelationshipsView(View):
         request.appLog(_("Relationship '%s' between %s and %s created")
                        % (link.reltype.name, getPath(self.context),
                           getPath(other)))
-        request.setHeader('Location', str(location))
+        request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         return _("Relationship created: %s") % location
