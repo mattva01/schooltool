@@ -300,76 +300,6 @@ class IURIAPI(Interface):
 # Relationships
 #
 
-class ILink(ILocation):
-    """A link is a 'view' of a relationship the relating objects have.
-
-             A<--->Link<---->Relationship<---->Link<--->B
-
-    """
-
-    reltype = URIField(
-        title=u"The SpecificURI of the relationship type.",
-        required=False)
-
-    title = TextLine(
-        title=u"The title of the target of the link.")
-
-    role = Object(
-        title=u"The role implied by traversing this link.",
-        schema=IURIObject,
-        description=u"""
-        This is how the object got by traverse() relates to my __parent__.
-        """)
-
-    __parent__ = Field(
-        title=u"The object at this end of the relationship.")
-
-    __name__ = TextLine(
-        title=u"Unique name within the parent's links.")
-
-    def traverse():
-        """Return the object at the other end of the relationship.
-
-        The object returned by traversing a link is known as the link's target.
-        """
-
-
-class IRemovableLink(ILink):
-
-    def unlink():
-        """Remove a link.
-
-        Also removes the opposite direction of the relationship if the
-        relationship is bidirectional.
-
-        Sends a IRelationshipRemovedEvent to both previous participants
-        of the relationship after the relationship has been broken.
-        """
-
-    def registerUnlinkCallback(callback):
-        """Register an object that is notified after the link is unlinked.
-
-        The callback must conform to IUnlinkHook and be pickleable.
-
-        All callbacks will be unregistered when unlink is called.
-        Callbacks are a set. If you register an identical callback more than
-        once, it will still be called only once.
-        """
-
-
-class IUnlinkHook(Interface):
-
-    def notifyUnlinked(link):
-        """The given link was unlinked."""
-
-
-class IPlaceholder(Interface):
-    """A placeholder for a link."""
-
-    def replacedBy(link):
-        """The placeholder was replaced in the link set by the given link."""
-
-
 class ILinkSet(Interface):
     """A set of links.
 
@@ -422,6 +352,77 @@ class IRelatable(Interface):
 
     def getLink(name):
         """Return a link by a name within this relatable."""
+
+
+class ILink(ILocation):
+    """A link is a 'view' of a relationship the relating objects have.
+
+             A<--->Link<---->Relationship<---->Link<--->B
+
+    """
+
+    reltype = Object(
+        title=u"The SpecificURI of the relationship type.",
+        schema=IURIObject)
+
+    title = TextLine(
+        title=u"The title of the target of the link.")
+
+    role = Object(
+        title=u"The role implied by traversing this link.",
+        schema=IURIObject,
+        description=u"""
+        This is how the object got by traverse() relates to my __parent__.
+        """)
+
+    __parent__ = Object(
+        title=u"The object at this end of the relationship.",
+        schema=IRelatable)
+
+    __name__ = TextLine(
+        title=u"Unique name within the parent's links.")
+
+    def traverse():
+        """Return the object at the other end of the relationship.
+
+        The object returned by traversing a link is known as the link's target.
+        """
+
+
+class IRemovableLink(ILink):
+
+    def unlink():
+        """Remove a link.
+
+        Also removes the opposite direction of the relationship if the
+        relationship is bidirectional.
+
+        Sends a IRelationshipRemovedEvent to both previous participants
+        of the relationship after the relationship has been broken.
+        """
+
+    def registerUnlinkCallback(callback):
+        """Register an object that is notified after the link is unlinked.
+
+        The callback must conform to IUnlinkHook and be pickleable.
+
+        All callbacks will be unregistered when unlink is called.
+        Callbacks are a set. If you register an identical callback more than
+        once, it will still be called only once.
+        """
+
+
+class IUnlinkHook(Interface):
+
+    def notifyUnlinked(link):
+        """The given link was unlinked."""
+
+
+class IPlaceholder(Interface):
+    """A placeholder for a link."""
+
+    def replacedBy(link):
+        """The placeholder was replaced in the link set by the given link."""
 
 
 class IQueryLinks(Interface):
@@ -630,11 +631,13 @@ class IMembershipEvent(IRelationshipEvent):
     the role of URIGroup, and the other side has the role of URIMember.
     """
 
-    group = Field(
-        title=u"The membership group")
+    group = Object(
+        title=u"The membership group",
+        schema=IRelatable)
 
-    member = Field(
-        title=u"The membership member")
+    member = Object(
+        title=u"The membership member",
+        schema=IRelatable)
 
 
 class IBeforeMembershipEvent(IMembershipEvent):
@@ -770,17 +773,20 @@ class IRouteToGroupsAction(IEventAction):
 
 
 class IOccupiesEvent(IRelationshipEvent):
-    """Base interface for membership events.
+    """Base interface for residence events.
 
     This is a special case of IRelationshipEvent where one side has
-    the role of URIGroup, and the other side has the role of URIMember.
+    the role of URICurrentlyResides, and the other side has the role of
+    URICurrentResidence.
     """
 
-    resides = Field(
-        title=u"The person")
+    resides = Object(
+        title=u"The person",
+        schema=IRelatable)
 
-    residence = Field(
-        title=u"The address")
+    residence = Object(
+        title=u"The address",
+        schema=IRelatable)
 
 
 class IOccupiesAddedEvent(IRelationshipAddedEvent, IOccupiesEvent):
@@ -794,11 +800,13 @@ class IOccupiesRemovedEvent(IRelationshipRemovedEvent, IOccupiesEvent):
 class INotedEvent(IRelationshipEvent):
     """Base interface for noted events."""
 
-    notandum = Field(
-        title=u"The noted object")
+    notandum = Object(
+        title=u"The noted object",
+        schema=IRelatable)
 
-    notation = Field(
-        title=u"The note")
+    notation = Object(
+        title=u"The note",
+        schema=IRelatable)
 
 
 class INotedAddedEvent(IRelationshipAddedEvent, INotedEvent):
@@ -812,11 +820,13 @@ class INotedRemovedEvent(IRelationshipRemovedEvent, INotedEvent):
 class IGuardianEvent(IRelationshipEvent):
     """Base interface for guardian events."""
 
-    notandum = Field(
-        title=u"The noted object")
+    custodian = Object(
+        title=u"Custodian",
+        schema=IRelatable)
 
-    notation = Field(
-        title=u"The note")
+    ward = Object(
+        title=u"Ward",
+        schema=IRelatable)
 
 
 class IGuardianAddedEvent(IRelationshipAddedEvent, IGuardianEvent):
@@ -842,14 +852,24 @@ class IFacet(ILocation):
         title=u"Unique name within the parent's facets")
 
     __parent__ = Field(
-        title=u"The object this facet is augmenting")
+        title=u"The object this facet is augmenting"
+        description=u"""
+        The object will provide IFaceted, but we cannot declare that without
+        creating a dependency cycle.
+        """)
 
     active = Bool(
         title=u"The facet is active")
 
     owner = Field(
-        title=u"The agent responsible for adding this facet to its __parent__")
-
+        title=u"The agent responsible for adding this facet to its __parent__",
+        description=u"""
+        Some facets are attached to an object because the user requested them
+        to be added.  Other facets appear on object automatically as a side
+        effect of, for example, group membership.  The second sort of facets
+        (called "owned facets") will have the `owner` attribute set and will
+        not be removable by the user.
+        """)
 
 class IFacetedRelationshipSchemaFactory(Interface):
 
