@@ -433,7 +433,7 @@ class CalendarViewBase(BrowserView):
 
     def getCalendars(self):
         """Get a list of calendars to display.
-        
+
         Yields tuples (calendar, color1, color2)"""
         yield (self.context, '#9db8d2', '#7590ae')
         user = IPerson(self.request.principal, None)
