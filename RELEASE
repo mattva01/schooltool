@@ -12,6 +12,7 @@ a good basis going forward.
 SchoolBell can now be used as a stand alone server as well as a Zope 3
 component integrated with the ZMI.
 
+
 Major Changes from 0.9
 ----------------------
 
@@ -40,8 +41,19 @@ Contributions by `Etria, LLP`_:
 .. _`Etria, LLP`: http://etria.com/
 .. _POV: http://pov.lt/
 
+
 Known Issues
 ------------
+
+Zope Version Compatibility
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This version of SchoolBell has been developed and tested with the Zope 3
+trunk revision 29357. It may, but probably won't, work with other revisions.
+
+For this reason, included in the official tarball, is a stripped down Zope3 of
+this revision with enough libraries to run SchoolBell as a stand alone server.
+
 
 Database Upgrades
 ~~~~~~~~~~~~~~~~~
@@ -61,6 +73,7 @@ Note that these scripts require the libraries that come with SchoolTool 0.9.
 If you already installed SchoolBell 1.0 or removed your previous installation
 simply download and build (but do not install) the 0.9 release.
 
+
 Unimplemented features from SchoolBell 0.9
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -75,6 +88,7 @@ and those which don't, will be dropped.
 * Resource Booking
 * TCPWrapper integration
 
+
 Planned Features
 ----------------
 
@@ -82,6 +96,7 @@ Planned Features
 * Start of week selection
 * AllDayEvents
 * exporting FreeBusy
+
 
 Download and Installation
 -------------------------
