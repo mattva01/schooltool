@@ -60,8 +60,8 @@ class CSVImportView(View):
         importer = CSVImporterZODB(self.context)
 
         try:
-            ##if groups_csv: (until start setup is fixed)
-            importer.importGroupsCsv(groups_csv.splitlines())
+            if groups_csv:
+                importer.importGroupsCsv(groups_csv.splitlines())
             if resources_csv:
                 importer.importResourcesCsv(resources_csv.splitlines())
             if teachers_csv:
