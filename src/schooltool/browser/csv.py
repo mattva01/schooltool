@@ -31,6 +31,7 @@ from schooltool.clients.csvclient import CSVImporterBase, DataError
 from schooltool.component import traverse, FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
+from schooltool.teaching import Teaching
 from schooltool.translation import ugettext as _
 
 
@@ -79,7 +80,7 @@ class CSVImporterZODB(CSVImporterBase):
     def importGroup(self, name, title, parents, facets):
         group = self.groups.new(__name__=name, title=title)
         for parent in parents.split():
-            other = traverse(self.groups, parent) # XXX TODO exceptions
+            other = traverse(self.groups, parent) # XXX exceptions
             Membership(group=other, member=group)
         for facet_name in facets.split():
             factory = getFacetFactory(facet_name)
@@ -89,13 +90,23 @@ class CSVImporterZODB(CSVImporterBase):
 
     def importPerson(self, title, parent, groups, teaching=False):
         person = self.persons.new(title=title)
-        # TODO: process other arguments
+        if parent:
+            Membership(group=self.groups[parent], member=person)
+
+        if not teaching:
+            for group in groups.split():
+                Membership(group=self.groups[group], member=person)
+        else:
+            for group in groups.split():
+                # XXX Doesn't work!  "No handler registered for URITeaching"
+                Teaching(teacher=person, taught=self.groups[group])
+
         return person.__name__
 
     def importResource(self, title, groups):
         resource = self.resources.new(title=title)
         for group in groups.split():
-            other = traverse(self.groups, group) # XXX TODO exceptions
+            other = traverse(self.groups, group) # XXX exceptions
             Membership(group=other, member=resource)
         return resource.__name__
 
@@ -109,5 +120,3 @@ class CSVImporterZODB(CSVImporterBase):
         date_elements = [int(el) for el in dob.split('-')]
         infofacet.dob = datetime.date(*date_elements)
         infofacet.comment = comment
-
-

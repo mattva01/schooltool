@@ -152,16 +152,35 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(SubjectGroupFacet in classes)
 
     def test_importPerson(self):
-        name = self.im.importPerson('Smith', 'group1', 'group2', '')
+        name = self.im.importPerson('Smith', 'group1', 'group2')
         person = self.persons[name]
         self.assertEquals(person.title, 'Smith')
-        # TODO: other arguments
+
+        objs = [link.traverse() for link in person.listLinks()]
+        self.assertEquals(len(objs), 2)
+        self.assert_(self.group1 in objs)
+        self.assert_(self.group2 in objs)
+
+#    def test_importPerson_teacher(self):
+#        name = self.im.importPerson('Wesson', 'group1', 'group2',
+#                                    teaching=True)
+#        person = self.persons[name]
+#        self.assertEquals(person.title, 'Wesson')
+#
+#        objs = [link.traverse() for link in person.listLinks()]
+#        self.assertEquals(len(objs), 2)
+#        self.assert_(self.group1 in objs)
+#        self.assert_(self.group2 in objs)
 
     def test_importResource(self):
         name = self.im.importResource('Stool', 'group1 group2')
         resource = self.resources[name]
         self.assertEquals(resource.title, 'Stool')
-        self.assertEquals(len(resource.listLinks()), 2) # TODO examine links
+
+        objs = [link.traverse() for link in resource.listLinks()]
+        self.assertEquals(len(objs), 2)
+        self.assert_(self.group1 in objs)
+        self.assert_(self.group2 in objs)
 
     def test_importPersonInfo(self):
         from schooltool.component import FacetManager
