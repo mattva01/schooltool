@@ -207,11 +207,7 @@ class ILink(Interface):
         The value of reltype may be None.
         """)
 
-    title = Attribute(
-        """A title of the whole relationship.
-
-        The title should be the same on both links of a relationship.
-        """)
+    title = Attribute("""A title of the target of the link.""")
 
     role = Attribute(
         """The role implied by traversing this link.
@@ -395,7 +391,7 @@ class IRelationshipFactory:
 
 class IRelationshipAPI(Interface):
 
-    def relate(relationship_type, (a, role_a), (b, role_b), title=None):
+    def relate(relationship_type, (a, role_a), (b, role_b)):
         """Relate a and b via the roles and the relationship_type.
 
         Returns a tuple of links attached to a and b respectively.

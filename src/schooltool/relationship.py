@@ -70,12 +70,9 @@ class Link(Persistent):
         # Relationship
 
     def _getTitle(self):
-        return self.relationship.title
+        return self.traverse().title
 
-    def _setTitle(self, name):
-        self.relationship.title = unicode(title)
-
-    title = property(_getTitle, _setTitle)
+    title = property(_getTitle)
 
     def _getReltype(self):
         return self.relationship.reltype
@@ -121,8 +118,7 @@ class _LinkRelationship(Persistent):
     two links and its name.
     """
 
-    def __init__(self, reltype, title, a, b):
-        self.title = unicode(title)
+    def __init__(self, reltype, a, b):
         self.reltype = reltype
         self.a = a
         self.b = b
@@ -144,18 +140,16 @@ class _LinkRelationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
-def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
+def relate(reltype, (a, role_of_a), (b, role_of_b)):
     """Sets up a relationship between two IRelatables with
     Link-_LinkRelationship-Link structure.
 
     Returns links attached to objects a and b respectively.
     """
 
-    if title is None:
-        title, doc = inspectSpecificURI(reltype)
     link_a = Link(a, role_of_b)
     link_b = Link(b, role_of_a)
-    _LinkRelationship(reltype, title, link_a, link_b)
+    _LinkRelationship(reltype, link_a, link_b)
     return link_a, link_b
 
 
@@ -190,7 +184,7 @@ class RelationshipSchema:
                                 " Got %r" % (name, parties))
             L.append((party, uri))
             N.append(name)
-        links = component.relate(self.type, L[0], L[1], title=self.title)
+        links = component.relate(self.type, L[0], L[1])
         return {N[1]: links[0], N[0]: links[1]}
 
 
@@ -229,9 +223,9 @@ class RelationshipRemovedEvent(RelationshipEvent):
     implements(IRelationshipRemovedEvent)
 
 
-def defaultRelate(reltype, (a, role_of_a), (b, role_of_b), title=None):
+def defaultRelate(reltype, (a, role_of_a), (b, role_of_b)):
     """See IRelationshipFactory"""
-    links = relate(reltype, (a, role_of_a), (b, role_of_b), title)
+    links = relate(reltype, (a, role_of_a), (b, role_of_b))
     event = RelationshipAddedEvent(links)
     directlyProvides(event, reltype)
     event.dispatch(a)

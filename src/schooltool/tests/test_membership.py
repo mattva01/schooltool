@@ -66,7 +66,6 @@ class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,
             self.assert_(reltype is URIMembership)
             self.assert_((m, URIMember) in [(a, role_of_a), (b, role_of_b)])
             self.assert_((g, URIGroup) in [(a, role_of_a), (b, role_of_b)])
-            self.assertEquals(title, "http://schooltool.org/ns/membership")
             return (cookie, cookie)
 
         registerRelationship(URIMembership, handler)

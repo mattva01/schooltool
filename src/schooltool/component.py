@@ -325,10 +325,10 @@ def getRelationshipHandlerFor(rel_type):
     return handlers[0]
 
 
-def relate(relationship_type, (a, role_a), (b, role_b), title=None):
+def relate(relationship_type, (a, role_a), (b, role_b)):
     """See IRelationshipAPI"""
     handler = getRelationshipHandlerFor(relationship_type)
-    return handler(relationship_type, (a, role_a), (b, role_b), title=title)
+    return handler(relationship_type, (a, role_a), (b, role_b))
 
 
 def getRelatedObjects(obj, role):

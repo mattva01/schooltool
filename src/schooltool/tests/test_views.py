@@ -728,12 +728,12 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         self.assert_({'path': '/persons/p',
                       'role': 'http://schooltool.org/ns/membership/member',
                       'type': 'http://schooltool.org/ns/membership',
-                      'title': 'http://schooltool.org/ns/membership'}
+                      'title': 'Pete'}
                      in result, pformat(result))
         self.assert_({'path': '/groups/root',
                       'role': 'http://schooltool.org/ns/membership/group',
                       'type': 'http://schooltool.org/ns/membership',
-                      'title': 'http://schooltool.org/ns/membership'}
+                      'title': 'group'}
                      in result, pformat(result))
 
     def test_getValencies(self):

@@ -489,11 +489,10 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
 
         m, g = object(), object()
         args = (URISomething, (m, URISomething), (g, URISomething))
-        self.assertEquals(relate(*args), ('stub2', args, {'title': None}))
+        self.assertEquals(relate(*args), ('stub2', args, {}))
         title = 'foo'
         args = (ISpecificURI, (m, URISomething), (g, URISomething))
-        self.assertEquals(relate(title=title, *args),
-                          ('stub', args, {'title': title}))
+        self.assertEquals(relate(*args), ('stub', args, {}))
 
 
 class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):

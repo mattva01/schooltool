@@ -94,12 +94,12 @@ class MemberAddedEvent(MembershipEvent):
 class MemberRemovedEvent(MembershipEvent):
     implements(IMemberRemovedEvent)
 
-def membershipRelate(relationship_type, (a, role_a), (b, role_b), title=None):
+def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
     """See IRelationshipFactory"""
 
     checkForPotentialCycles(a, b)
     links = relationship.relate(relationship_type,
-                                (a, role_a), (b, role_b), title)
+                                (a, role_a), (b, role_b))
     event = MemberAddedEvent(links)
     event.dispatch(a)
     event.dispatch(b)

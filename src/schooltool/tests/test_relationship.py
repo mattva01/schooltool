@@ -84,10 +84,11 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.setUpEventService()
         self.klass = Relatable(self.serviceManager)
         self.tutor = Relatable(self.serviceManager)
+        self.klass.title = '5C'
+        self.tutor.title = 'John Jones'
         self.lklass = Link(self.klass, URITutor)
         self.ltutor = Link(self.tutor, URIRegClass)
-        self.rel = _LinkRelationship(URIClassTutor, "Tutor of a class",
-                                     self.ltutor, self.lklass)
+        self.rel = _LinkRelationship(URIClassTutor, self.ltutor, self.lklass)
 
     def test_interface(self):
         from schooltool.interfaces import IRemovableLink
@@ -105,9 +106,8 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
     def test(self):
         from schooltool.interfaces import IRelationshipRemovedEvent
 
-        self.assertEquals(self.rel.title, "Tutor of a class")
-        self.assertEquals(self.lklass.title, "Tutor of a class")
-        self.assertEquals(self.ltutor.title, "Tutor of a class")
+        self.assertEquals(self.lklass.title, "John Jones")
+        self.assertEquals(self.ltutor.title, "5C")
         self.assertEquals(self.lklass.role, URITutor)
         self.assertEquals(self.ltutor.role, URIRegClass)
         self.assert_(self.ltutor.traverse() is self.klass)
@@ -222,6 +222,8 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
 
             superior = Relatable(self.serviceManager)
             report = Relatable(self.serviceManager)
+            superior.title = 'superior'
+            report.title = 'report'
             links = schema(superior=superior, report=report)
 
             link_to_superior = links.pop('superior')
@@ -285,16 +287,13 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assert_(e.links is links)
 
     def doChecks(self, relate):
-        title = 'a title'
         a, role_a = Relatable(self.serviceManager), URISuperior
         b, role_b = Relatable(self.serviceManager), URIReport
-        links = relate(URICommand, (a, role_a), (b, role_b), title=title)
+        links = relate(URICommand, (a, role_a), (b, role_b))
 
         self.assertEqual(len(links), 2)
         self.assertEquals(Set([l.traverse() for l in links]), Set([a, b]))
         self.assertEquals(Set([l.role for l in links]), Set([role_a, role_b]))
-        self.assertEquals(links[0].title, title)
-        self.assertEquals(links[1].title, title)
         self.assertEquals(links[0].reltype, URICommand)
         self.assertEquals(links[1].reltype, URICommand)
 
@@ -307,8 +306,6 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(list(b.__links__)[0].traverse(), a)
         self.assertEqual(list(a.__links__)[0].role, role_b)
         self.assertEqual(list(b.__links__)[0].role, role_a)
-        self.assertEqual(list(a.__links__)[0].title, title)
-        self.assertEqual(list(b.__links__)[0].title, title)
 
         return a, b, links
 
