@@ -26,7 +26,7 @@ import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub, viewClass
+from schooltool.views.tests import RequestStub, viewClass, setPath
 
 __metaclass__ = type
 
@@ -337,6 +337,7 @@ class TestPersonPasswordView(unittest.TestCase):
         from schooltool.model import Person
         from schooltool.views.model import PersonPasswordView
         p = Person("John")
+        setPath(p, '/persons/001')
         v = PersonPasswordView(p)
         v.authorization = lambda ctx, rq: True
 
@@ -347,6 +348,8 @@ class TestPersonPasswordView(unittest.TestCase):
         request = RequestStub(method="PUT", body=passwd)
         result = v.render(request)
         self.assertEqual(request.code, 200)
+        self.assertEquals(request.site.applog,
+                [(None, "Password changed for /persons/001 (John)", 'INFO')])
         self.assertEqual(result, "Password changed")
         self.assert_(p.checkPassword("Foo bar"))
 
@@ -354,12 +357,15 @@ class TestPersonPasswordView(unittest.TestCase):
         from schooltool.model import Person
         from schooltool.views.model import PersonPasswordView
         p = Person("John")
+        setPath(p, '/persons/002')
         p.setPassword("foo")
         v = PersonPasswordView(p)
         v.authorization = lambda ctx, rq: True
         request = RequestStub(method="DELETE")
         result = v.render(request)
         self.assertEqual(request.code, 200)
+        self.assertEquals(request.site.applog,
+                [(None, "Account disabled for /persons/002 (John)", 'INFO')])
         self.assertEqual(result, "Account disabled")
         self.assert_(not p.checkPassword("foo"))
 

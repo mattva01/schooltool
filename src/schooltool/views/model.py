@@ -132,11 +132,17 @@ class PersonPasswordView(View):
         password = request.content.read()
         password = password.strip()
         self.context.setPassword(password)
+        path = absolutePath(request, self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                "Password changed for %s (%s)" % (path, self.context.title))
         request.setHeader('Content-Type', 'text/plain')
         return _("Password changed")
 
     def do_DELETE(self, request):
         self.context.setPassword(None)
+        path = absolutePath(request, self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                "Account disabled for %s (%s)" % (path, self.context.title))
         request.setHeader('Content-Type', 'text/plain')
         return _("Account disabled")
 
