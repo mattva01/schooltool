@@ -910,7 +910,7 @@ class ACLView(View):
 
     def checkbox(self, principal, permission):
         """Format the checkbox id"""
-        if principal is Everybody:
+        if principal == Everybody:
             return '%s:%s' % (permission, principal)
         else:
             return '%s:%s' % (permission, getPath(principal))
