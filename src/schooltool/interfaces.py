@@ -1443,8 +1443,7 @@ class ITimetableDayWrite(Interface):
 class ITimetableActivity(Interface):
     """An event in a timetable.
 
-    Something that happens on a certain period_id in a certain
-    day_id.
+    Something that happens on a certain period_id in a certain day_id.
 
     Timetable activities are immutable and can be hashed or compared for
     equality.

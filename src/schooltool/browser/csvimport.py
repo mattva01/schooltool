@@ -33,6 +33,7 @@ from schooltool.component import FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
 from schooltool.teaching import Teaching
+from schooltool.timetable import Timetable, TimetableActivity
 from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
 
@@ -289,7 +290,7 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
         try:
             # TODO timetable_csv = unicode(timetable_csv, charset) ?
             unicode(timetable_csv, charset)
-            unicode(roster_txt, charset)
+            roster_txt = unicode(roster_txt, charset)
         except UnicodeError:
             self.error = _('Could not convert data to Unicode'
                            ' (incorrect charset?).')
@@ -315,11 +316,20 @@ class TimetableCSVImporter:
     def __init__(self, app):
         self.app = app
         self.groups = self.app['groups']
+        self.persons = self.app['persons']
 
     def importTimetable(self, timetable_csv):
+        """Import timetables from CSV data."""
         lines = timetable_csv.splitlines()
         reader = csv.reader(lines)
-        periods = reader.next()[1:]
+        # TODO: error checking
+        self.ttschema_name, self.period_id = reader.next()
+        self.day_ids = reader.next()
+        try:
+            periods = reader.next()[1:]
+        except StopIteration:
+            return
+
         for period in periods:
             pass # TODO: check existence of periods
 
@@ -332,10 +342,38 @@ class TimetableCSVImporter:
             for period, subject, teacher in zip(periods, subjects, teachers):
                 pass # TODO: register
 
-    def _clearTimetables(self, ttname, ttschema):
-        for group in self.groups.itervalues():
-            if (ttname, ttschema) in group.timetables.keys():
-                group.timetables[ttname, ttschema].clear()
+    def _findByTitle(self, container, title):
+        # XXX Could be sped up by constructing a dict
+        for obj in container.itervalues():
+            if obj.title == title:
+                return obj
+        else:
+            raise KeyError("Group %r not found" % subject)
 
-    def importRoster(self, timetable_csv):
+    def _clearTimetables(self):
+        """Delete timetables of the period and schema we are dealing with."""
+        for group in self.groups.itervalues():
+            if (self.period_id, self.ttschema_name) in group.timetables.keys():
+                del group.timetables[self.period_id, self.ttschema_name]
+
+    def _scheduleClass(self, period, subject, teacher):
+        """Schedule a class of subject during a given period."""
+        group = self._findByTitle(self.groups, subject)
+        teacher = self._findByTitle(self.persons, teacher)
+
+        # Create the timetable if it does not exist yet.
+        if (self.period_id, self.ttschema_name) not in group.timetables.keys():
+            tt = self.app.timetableSchemaService[self.ttschema_name]
+            group.timetables[self.period_id, self.ttschema_name] = tt
+        else:
+            tt = group.timetables[self.period_id, self.ttschema_name]
+
+        # Add a new activity to the timetable
+        act = TimetableActivity(title=subject, owner=teacher)
+        # TODO: resources
+        for day_id in self.day_ids:
+            tt[day_id].add(period, act)
+
+    def importRoster(self, roster_txt):
+        """Import timetables from provided unicode data."""
         pass # TODO
