@@ -2542,14 +2542,12 @@ class MainFrame(wxFrame):
         except SchoolToolError, e:
             self.SetStatusText(to_wx(unicode(e)))
         else:
-            dlg = wxDialog(None, -1, _("Application log"),
-                           style=(DEFAULT_DLG_STYLE | wxRESIZE_BORDER
-                                  | wxDIALOG_MODAL))
+            dlg = wxDialog(self, -1, _("Application log"),
+                           style=(DEFAULT_DLG_STYLE | wxRESIZE_BORDER))
             dlg.text_ctrl = wxTextCtrl(dlg, -1,
                                        style=wxTE_MULTILINE | wxTE_READONLY)
             dlg.text_ctrl.SetValue(to_wx(log))
-            dlg.ShowModal()
-            dlg.Destroy()
+            dlg.Show()
 
 
 class SchoolToolApp(wxApp):
