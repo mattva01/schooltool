@@ -23,7 +23,7 @@
  <tal:block condition="not:request/args/SEARCH|nothing">
   <form method="POST" tal:attributes="action request/uri"
         tal:define="list view/list">
-  <h3>Members and Sub-groups</h3>
+  <h3 i18n:translate="">Members and Sub-groups</h3>
   <p tal:condition="not:list" i18n:translate="">
     There are none.
   </p>
