@@ -643,8 +643,60 @@ class IPerson(IGroupMember, IFaceted):
     name = Attribute("Person's name")
 
 
+# XXX The IRootGroup needs to be refactored out.
 class IRootGroup(IGroup, IContainmentRoot, IServiceManager):
     """An interface for the application root group."""
+
+class IApplication(IContainmentRoot, IServiceManager):
+    """The application object.
+
+    Services (as given by IServiceManager) are found by attribute.
+
+    Root application objects are found by getRoots().
+
+    Application object containers are found by __getitem__.
+    """
+
+    def getRoots():
+        """Returns the set of root application objects."""
+
+    def __getitem__(name):
+        """Get the named application object container."""
+
+    def keys():
+        """List the names of application object containers."""
+
+    # __setitem__ is used to set app object containers, but it is not in this
+    # interface, as this is a reading-only interface.
+
+
+class IApplicationObjectContainer(ILocation):
+    """A collection of application objects."""
+    # XXX split this into read and write interfaces.
+
+    def __getitem__(name):
+        """Returns the contained object that has the given name."""
+
+    def new(name=None):
+        """Creates and returns a new contained object.
+
+        If name is None, a name is chosen for the object. Otherwise,
+        name is a unicode or seven bit safe string.
+
+        If the given name is already taken, raises a KeyError.
+
+        The contained object will be an ILocation, and will have this
+        container as its __parent__, and the name as its __name__.
+        """
+
+    def __delitem__(name):
+        """Removes the contained object that has the given name.
+
+        Raises a KeyError if there is no such object.
+        """
+
+    def keys():
+        """Returns a list of the names of contained objects."""
 
 
 #

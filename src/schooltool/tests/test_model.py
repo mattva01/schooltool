@@ -31,8 +31,10 @@ from schooltool.interfaces import IEventConfigurable
 
 __metaclass__ = type
 
+
 class P(Persistent):
     pass
+
 
 class MemberStub:
     implements(IGroupMember, IFaceted)
@@ -48,6 +50,7 @@ class MemberStub:
     def notifyRemoved(self, group):
         self.removed = group
 
+
 class GroupStub(Persistent):
     deleted = None
 
@@ -57,6 +60,7 @@ class GroupStub(Persistent):
     def add(self, thing):
         self.added = thing
         thing.notifyAdded(self, 'foo')
+
 
 class FacetStub:
     implements(IFacet)
@@ -107,6 +111,7 @@ class TestRootGroup(unittest.TestCase):
         from schooltool.model import RootGroup
         group = RootGroup("root")
         verifyObject(IRootGroup, group)
+
 
 def test_suite():
     suite = unittest.TestSuite()

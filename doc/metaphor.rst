@@ -1,3 +1,4 @@
+===============
 System metaphor
 ===============
 
@@ -11,4 +12,15 @@ System metaphor
 
   We're interested in the smart "ends" and the generic "middle".
   See "A World of Ends"
+
+
+==================
+Recurring patterns
+==================
+
+Containment / locations
+-----------------------
+
+Using __parent__ and __name__ to express a location.
+Using __getitem__ and keys() and iterkeys() to express containment.
 
