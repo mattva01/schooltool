@@ -492,8 +492,11 @@ class RecurrenceRule:
         result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
                   % (self.ical_freq, args, self.interval)]
         if self.exceptions:
-            row = 'EXDATE:' + ','.join([ical_date_time(d)
-                                        for d in self.exceptions])
+            exctime = dtstart.time()
+            exception_datetimes = [dtstart.combine(d, exctime)
+                                   for d in self.exceptions]
+            row = 'EXDATE:' + ','.join([ical_date_time(dt)
+                                        for dt in exception_datetimes])
             result.append(row)
         return result
 
