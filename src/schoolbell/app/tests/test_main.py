@@ -109,7 +109,7 @@ def doctest_load_options():
     Warnings about obsolete options are shown.
 
         >>> from schoolbell.app.main import load_options
-        >>> o = load_options(['sb.py', '-c', sample_config_file, '-d'])
+        >>> o = load_options(['sb.py', '-c', sample_config_file])
         Reading configuration from ...sample.conf
         sb.py: warning: ignored configuration option 'module'
         sb.py: warning: ignored configuration option 'domain'
@@ -123,7 +123,7 @@ def doctest_load_options():
         >>> o.config_file
         '...sample.conf'
         >>> o.daemon
-        True
+        False
 
     Some come from the config file
 
