@@ -238,6 +238,8 @@ class TestPersonAddView(unittest.TestCase):
                 self.persons = []
 
             def new(self, username, title):
+                if username == 'conflict':
+                    raise KeyError(username)
                 person = Person(title=title)
                 person.__name__ = username
                 person.__parent__ = self
@@ -272,7 +274,7 @@ class TestPersonAddView(unittest.TestCase):
         self.assertEquals(persons[0].__name__, 'newbie')
         self.assertEquals(persons[0].title, 'newbie')
 
-    def test_errors(self):
+    def test_errors_invalidnames(self):
         # We're not very i18n friendly by not allowing international
         # symbols in user names.
         for username in ('newbie \xc4\x85', 'new/bie', 'foo\000bar'):
@@ -280,18 +282,29 @@ class TestPersonAddView(unittest.TestCase):
             request = RequestStub(args={'username': username,
                                         'password': 'bar',
                                         'verify_password': 'bar'})
-            view.do_POST(request)
-            self.assertEquals(view.error, u'Invalid username')
+            content = view.do_POST(request)
+            self.assert_('Add person' in content)
+            self.assert_('Invalid username' in content)
 
+    def test_errors_badpass(self):
         view = self.createView()
         request = RequestStub(args={'username': 'badpass',
                                     'password': 'foo',
                                     'verify_password': 'bar'})
-        view.do_POST(request)
-        self.assertEquals(view.error, u'Passwords do not match')
-        self.assertEquals(view.prev_username, 'badpass')
+        content = view.do_POST(request)
+        self.assert_('Add person' in content)
+        self.assert_('Passwords do not match' in content)
+        self.assert_('badpass' in content)
 
-
+    def test_errors_conflict(self):
+        view = self.createView()
+        request = RequestStub(args={'username': 'conflict',
+                                    'password': 'foo',
+                                    'verify_password': 'foo'})
+        content = view.do_POST(request)
+        self.assert_('Add person' in content)
+        self.assert_('Username already registered' in content)
+        self.assert_('conflict' in content)
 
 
 class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
@@ -381,6 +394,8 @@ class TestObjectAddView(unittest.TestCase):
                 self.objs = []
 
             def new(self, name, title):
+                if name == 'conflict':
+                    raise KeyError(name)
                 obj = ApplicationObjectMixin(title=title)
                 obj.__name__ = name
                 obj.__parent__ = self
@@ -426,12 +441,21 @@ class TestObjectAddView(unittest.TestCase):
 
     def test_POST_errors(self):
         view = self.createView()
-        request = RequestStub(args={'name': 'new/obj'})
+        request = RequestStub(args={'name': 'new/obj', 'title': 'abc'})
         content = view.do_POST(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])
         self.assert_('Add object' in content)
         self.assert_('Invalid name' in content)
+
+    def test_POST_conflict(self):
+        view = self.createView()
+        request = RequestStub(args={'name': 'conflict', 'title': 'foo'})
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.applog, [])
+        self.assert_('Add object' in content)
+        self.assert_('Name already taken' in content)
 
 
 class TestGroupAddView(unittest.TestCase):

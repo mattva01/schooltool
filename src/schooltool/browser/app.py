@@ -173,7 +173,12 @@ class PersonAddView(View):
         # XXX Should we care about Unicode vs. UTF-8 passwords?
         #     (see http://issues.schooltool.org/issue96)
 
-        person = self.context.new(username, title=username)
+        try:
+            person = self.context.new(username, title=username)
+        except KeyError:
+            self.error = _('Username already registered')
+            return self.do_GET(request)
+
         person.setPassword(password)
 
         # We could say 'Person created', but we want consistency
@@ -211,7 +216,12 @@ class ObjectAddView(View):
 
         title = unicode(request.args['title'][0], 'utf-8')
 
-        obj = self.context.new(name, title=title)
+        try:
+            obj = self.context.new(name, title=title)
+        except KeyError:
+            self.error = _('Name already taken')
+            return self.do_GET(request)
+
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
