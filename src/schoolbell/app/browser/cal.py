@@ -1055,4 +1055,4 @@ def makeRecurrenceRule(interval=None, until=None,
     elif recurrence_type == 'yearly':
         return YearlyRecurrenceRule(**kwargs)
     else:
-        raise "Not implemented!"
+        raise NotImplementedError()
