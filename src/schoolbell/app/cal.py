@@ -28,7 +28,7 @@ from zope.interface import implements
 from zope.app.location.interfaces import ILocation
 from zope.app.container.contained import Contained
 
-from schoolbell.calendar.interfaces import IEditCalendar
+from schoolbell.calendar.interfaces import ICalendar, IEditCalendar
 from schoolbell.calendar.interfaces import IExpandedCalendarEvent
 from schoolbell.calendar.recurrent import ExpandedCalendarEvent
 from schoolbell.calendar.mixins import CalendarMixin
@@ -47,7 +47,9 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
         SimpleCalendarEvent.__init__(self, *args, **kwargs)
         self.__name__ = self.unique_id
 
-    # TODO: add a __conform__ to ICalendar
+    def __conform__(self, interface):
+        if interface is ICalendar:
+            return self.__parent__
 
 
 class Calendar(Persistent, CalendarMixin):
