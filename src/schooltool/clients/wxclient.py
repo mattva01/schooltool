@@ -1664,6 +1664,10 @@ class MainFrame(wxFrame):
         self.personListData = []
         self.relationshipListData = []
 
+        filename = os.path.join(os.path.dirname(__file__), 'schooltool.xpm')
+        icon = wxIcon(filename, wxBITMAP_TYPE_XPM)
+        self.SetIcon(icon)
+
         self.CreateStatusBar()
 
         self.SetMenuBar(menubar(
