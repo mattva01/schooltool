@@ -1235,6 +1235,46 @@ class ITimetableModel(Interface):
         onto the real-world calendar.
         """
 
+class ICompositeTimetableProvider(Interface):
+    """An object which knows how to get the timetables for composition
+    """
+
+    timetableSource = Attribute(
+        """A specification of how the timetables of related object
+        should be composed together to provide a composed timetable of
+        this object.
+
+        Actually it is a sequence of tuples with the following members:
+
+               link_role    The role URI of a link to traverse
+               composed     A boolean value specifying whether to use
+                            the composed timetable, otherwise private.
+
+               filter       A callable which decides whether the
+                            ITimetableActivity passed should be included
+                            or not.
+        """)
+
+class ITimetabled(Interface):
+    """A facet on an object that has a timetable related to it --
+    either its own, or composed of the timetables of related objects.
+    """
+
+    timetable = Attribute(
+        """A private timetable of this object.
+
+        It can be directly manipulated.  For a lot of objects this
+        timetable will be empty.
+        """)
+
+    def getCompositeTimetable():
+        """Returns a composite timetable for a given object.
+
+        The timetable returned includes the events from the timetables
+        of parent groups, groups taught, etc.
+
+        This function can return None if the object has no timetable.
+        """
 
 #
 # Exceptions
