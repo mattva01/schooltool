@@ -281,7 +281,7 @@ class TestVirtualHosting(setup.TestCase):
     def test(self):
         # Log in
         browser = Browser()
-        browser.post('http://localhost:8814/',
+        browser.post('http://localhost:8814/login',
                      {'username': 'manager', 'password': 'schooltool'})
 
         browser.go('http://localhost:8814/'
