@@ -110,9 +110,8 @@ class SchoolToolClient:
             people = []
             for anchor in [node.content for node in res]:
                 if anchor.startswith('/persons/'):
-                    person = anchor[len('/persons/'):]
-                    if '/' not in person:
-                        people.append(person)
+                    if '/' not in anchor[len('/persons/'):]:
+                        people.append(anchor)
             return people
         finally:
             doc.freeDoc()
@@ -120,7 +119,7 @@ class SchoolToolClient:
 
     def getPersonInfo(self, person_id):
         """Return information page about a person."""
-        person = self.get('/persons/%s' % person_id)
+        person = self.get(person_id)
         return person
 
     def getGroupTree(self):
@@ -186,4 +185,9 @@ class SchoolToolClient:
         except (libxml2.parserError, KeyError):
             self.status = "could not parse group tree"
             return []
+
+    def getGroupInfo(self, group_id):
+        """Return information page about a group."""
+        group = self.get(group_id)
+        return group
 

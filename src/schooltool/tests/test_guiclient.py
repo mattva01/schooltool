@@ -166,7 +166,7 @@ class TestSchoolToolClient(unittest.TestCase):
         """)
         client = SchoolToolClient()
         result = client._parsePeopleList(body)
-        self.assertEquals(result, ['fred', 'barney'])
+        self.assertEquals(result, ['/persons/fred', '/persons/barney'])
 
     def test__parsePeopleListEmpty(self):
         from schooltool.guiclient import SchoolToolClient
@@ -198,7 +198,7 @@ class TestSchoolToolClient(unittest.TestCase):
         client = SchoolToolClient()
         client.connectionFactory = factory
         result = client.getListOfPersons()
-        self.assertEquals(result, ['fred', 'barney'])
+        self.assertEquals(result, ['/persons/fred', '/persons/barney'])
         self.assertEquals(len(factory.connections), 1)
         conn = factory.connections[0]
         self.assertEquals(conn.path, '/persons')
@@ -221,7 +221,7 @@ class TestSchoolToolClient(unittest.TestCase):
             </html>
         """)
         version = 'UnitTest/0.0'
-        person_id = 'foo'
+        person_id = '/persons/foo'
         response = ResponseStub(200, 'OK', body, server=version)
         factory = ConnectionFactory(response)
         client = SchoolToolClient()

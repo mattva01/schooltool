@@ -184,11 +184,11 @@ class MainFrame(wxFrame):
         splitter = wxSplitterWindow(self, -1)
         self.groupTreeCtrl = wxTreeCtrl(splitter, ID_GROUP_TREE,
                                         style=wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT)
-        self.personInfoText = wxHtmlWindow(splitter, -1)
+        self.groupInfoText = wxHtmlWindow(splitter, -1)
         splitter.SetMinimumPaneSize(20)
-        splitter.SplitVertically(self.groupTreeCtrl, self.personInfoText, 150)
+        splitter.SplitVertically(self.groupTreeCtrl, self.groupInfoText, 150)
 
-##        EVT_LISTBOX(self, ID_GROUP_TREE, self.DoSelectPerson)
+        EVT_TREE_SEL_CHANGED(self, ID_GROUP_TREE, self.DoSelectGroup)
 
         self.SetSizeHints(minW=100, minH=100)
         self.refresh()
@@ -210,20 +210,17 @@ class MainFrame(wxFrame):
         dlg.ShowModal()
         dlg.Destroy()
 
-##  def DoSelectPerson(self, event):
-##      person_id = self.peopleListBox.GetStringSelection()
-##      if not person_id:
-##          return
-##      info = self.client.getPersonInfo(person_id)
-##      if info is None:
-##          info = 'Could not connect to server'
-##      else:
-##          # XXX: horrible, but good enough for a proof-of-concept prototype
-##          info = info.replace('<img src="/people',
-##                              '<img src="http://%s:%s/people'
-##                              % (self.client.server, self.client.port))
-##      self.personInfoText.SetPage(info)
-##      self.SetStatusText(self.client.status)
+    def DoSelectGroup(self, event):
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            self.groupInfoText.SetPage("")
+            return
+        group_id = self.groupTreeCtrl.GetPyData(item)
+        info = self.client.getGroupInfo(group_id)
+        if info is None:
+            info = 'Could not connect to server'
+        self.groupInfoText.SetPage(info)
+        self.SetStatusText(self.client.status)
 
     def DoRefresh(self, event):
         self.refresh()
@@ -259,6 +256,7 @@ class MainFrame(wxFrame):
         root = self.groupTreeCtrl.AddRoot("Roots")
         self.groupTreeCtrl.Expand(root)
         stack = [(root, None)]
+        selected_anything = False
         for level, title, href in group_tree:
             del stack[level+1:]
             assert len(stack) == level+1
@@ -266,13 +264,13 @@ class MainFrame(wxFrame):
             if level == 1 or stack[-1][1] in expanded:
                 self.groupTreeCtrl.Expand(stack[-1][0])
             self.groupTreeCtrl.SetPyData(item, href)
-            if href == old_selection:
+            if href == old_selection and not selected_anything:
+                selected_anything = True
                 self.groupTreeCtrl.SelectItem(item)
             stack.append((item, href))
 
-## XXX
-##      self.personInfoText.SetPage('')
-##      self.DoSelectPerson(None)
+        if not selected_anything:
+            self.groupInfoText.SetPage("")
 
 
 class SchoolToolApp(wxApp):
