@@ -19,7 +19,8 @@ System requirements
 -------------------
 
 - Python 2.3 (http://www.python.org/)
-  (Debian users will need both python2.3 and python2.3-xml packages)
+  (Debian users will need python2.3, python2.3-xml and python2.3-pyopenssl
+   packages)
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
