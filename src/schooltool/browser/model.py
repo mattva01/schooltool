@@ -22,12 +22,12 @@ Web-application views for the schooltool.model objects.
 $Id$
 """
 
-import PIL.Image
+import sets
 from StringIO import StringIO
 
 from schooltool.rest.cal import CalendarView as RestCalendarView
 from schooltool.rest.cal import CalendarReadView as RestCalendarReadView
-
+from schooltool.rest.infofacets import resize_photo
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
@@ -46,6 +46,7 @@ from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.teaching import Teaching
 from schooltool.common import parse_date
+from schooltool.common import to_unicode
 
 __metaclass__ = type
 
@@ -182,15 +183,16 @@ class PersonEditView(View, PersonInfoMixin):
 
     error = None
 
+    # schooltool.rest.infofacets.PhotoView also defines canonical_photo_size
     canonical_photo_size = (240, 240)
 
     back = True
 
     def do_POST(self, request):
-        first_name = unicode(request.args['first_name'][0], 'utf-8')
-        last_name = unicode(request.args['last_name'][0], 'utf-8')
+        first_name = to_unicode(request.args['first_name'][0])
+        last_name = to_unicode(request.args['last_name'][0])
         dob_string = request.args['date_of_birth'][0]
-        comment = unicode(request.args['comment'][0], 'utf-8')
+        comment = to_unicode(request.args['comment'][0])
         photo = request.args['photo'][0]
 
         # XXX use a widget
@@ -205,7 +207,8 @@ class PersonEditView(View, PersonInfoMixin):
 
         if photo:
             try:
-                photo = self.processPhoto(photo)
+                photo = resize_photo(StringIO(photo),
+                                     self.canonical_photo_size)
             except IOError:
                 self.error = _('Invalid photo')
                 return self.do_GET(request)
@@ -226,18 +229,6 @@ class PersonEditView(View, PersonInfoMixin):
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
-
-    def processPhoto(self, photo):
-        # XXX The code has been copy&pasted from
-        #     schooltool.rest.infofacets.PhotoView.do_PUT().
-        #     It does not have tests.
-        photo_file = StringIO(photo)
-        img = PIL.Image.open(photo_file)
-        size = maxspect(img.size, self.canonical_photo_size)
-        img2 = img.resize(size, PIL.Image.ANTIALIAS)
-        buf = StringIO()
-        img2.save(buf, 'JPEG')
-        return buf.getvalue()
 
 
 class GroupView(View, GetParentsMixin, TimetabledViewMixin):
@@ -303,9 +294,7 @@ class RelationshipViewMixin:
     def update(self):
         request = self.request
         if "DELETE" in request.args:
-            paths = []
-            if "CHECK" in request.args:
-                paths += request.args["CHECK"]
+            paths = sets.Set(request.args.get("CHECK", []))
             for link in self.context.listLinks(self.linkrole):
                 if getPath(link.traverse()) in paths:
                     link.unlink()
@@ -344,13 +333,14 @@ class GroupEditView(View, RelationshipViewMixin):
         """Return a list of objects available for addition"""
         result = []
 
-        searchstr = self.request.args['SEARCH'][0].lower()
+        searchstr = to_unicode(self.request.args['SEARCH'][0]).lower()
         members = getRelatedObjects(self.context, URIMember)
 
         for path in ('/groups', '/persons', '/resources'):
             for obj in traverse(self.context, path).itervalues():
                 if (searchstr in obj.title.lower() and
                     obj not in members):
+                    # XXX using __class__.__name__ here is bogus!
                     result.append((obj.__class__.__name__, obj.title, obj))
         result.sort()
         return [obj for cls, title, obj in result]
@@ -425,7 +415,7 @@ class ResourceEditView(View):
     back = True
 
     def do_POST(self, request):
-        title = unicode(request.args['title'][0], 'utf-8')
+        title = to_unicode(request.args['title'][0])
         self.context.title = title
 
         request.appLog(_("Resource %s modified") % getPath(self.context))

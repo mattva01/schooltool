@@ -23,8 +23,10 @@ $Id$
 """
 
 import unittest
-from logging import INFO
 import datetime
+from StringIO import StringIO
+from logging import INFO
+import PIL.Image
 from zope.interface import directlyProvides
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import ILocation
@@ -168,7 +170,7 @@ class TestPhotoView(unittest.TestCase):
         from schooltool.infofacets import PersonInfoFacet
 
         photo = 'P6\n1 1\n255\n\xff\xff\xff'
-        ctype = "image/jpeg"
+        ctype = "image/x-portable-pixmap"
 
         context = PersonInfoFacet()
         setPath(context, "/my/dog's/photo")
@@ -219,10 +221,22 @@ class TestPhotoView(unittest.TestCase):
         self.assert_(context.photo is None)
 
 
+class TestPhotoResizing(unittest.TestCase):
+
+    def test(self):
+        from schooltool.rest.infofacets import resize_photo
+        photo = 'P6\n1 1\n255\n\xff\xff\xff'
+        resized = resize_photo(StringIO(photo), (2, 3))
+        img = PIL.Image.open(StringIO(resized))
+        self.assertEquals(img.size, (2, 2))
+        self.assertEquals(img.getpixel((1, 1)), (0xff, 0xff, 0xff))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersonInfoFacetView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
+    suite.addTest(unittest.makeSuite(TestPhotoResizing))
     suite.addTest(DocTestSuite('schooltool.rest.infofacets'))
     return suite
 
