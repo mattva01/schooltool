@@ -1,6 +1,7 @@
 <div class="portlet">
-<h4>Navigation</h4>
+<h4 i18n:translate="">Navigation</h4>
 <ul>
-   <li><a tal:attributes="href view/app/@@absolute_url">Top</a></li>
+   <li><a tal:attributes="href view/app/@@absolute_url"
+          i18n:translate="">Top</a></li>
 </ul>
 </div>

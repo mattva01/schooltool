@@ -6,92 +6,37 @@
   <h1 metal:fill-slot="h1" i18n:translate="">
     Person info for <span tal:replace="context/title" i18n:name="title"/>
   </h1>
-  <metal:block metal:fill-slot="body">
-    <div class="row"><b i18n:translate="">Username:</b>
-      <span tal:replace="python:context.__name__">not_doe</span>
+<metal:block metal:fill-slot="body">
+  <div class="row">
+    <strong i18n:translate="">Username:</strong>
+    <span tal:replace="context/zope:name">not_doe</span>
+  </div>
+  <div class="row">
+    <strong i18n:translate="">Title:</strong>
+    <span tal:replace="context/title">John, but not Doe</span>
+  </div>
+  <div class="row">
+    <strong i18n:translate="">Photo:</strong>
+    <tal:block condition="not:context/photo"
+               i18n:translate="">N/A</tal:block>
+    <p tal:condition="context/photo">
+      <img src="photo"
+           tal:attributes="src string:${context/@@absolute_url}/photo" />
+    </p>
+  </div>
+
+  <div class="groups" tal:define="groups context/groups/sortby:title">
+    <h3 i18n:translate="">Groups</h3>
+    <ul>
+      <li tal:repeat="group groups">
+        <a tal:attributes="href group/@@absolute_url"
+           tal:content="group/title"></a>
+      </li>
+    </ul>
+    <div tal:condition="not:groups" i18n:translate="">
+      This person does not belong to any groups.
     </div>
-    <div class="row"><b i18n:translate="">Title:</b>
-      <span tal:replace="context/title">John, but not Doe</span>
-    </div>
-    <div class="row">
-      <b i18n:translate="">Photo:</b>
-      <tal:block condition="not:context/photo"
-                 i18n:translate="">N/A</tal:block>
-      <p tal:condition="context/photo">
-        <img src="photo"
-             tal:attributes="src string:${context/@@absolute_url}/photo" />
-      </p>
-    </div>
-
-    <div class="groups" tal:define="groups context/groups/sortby:title">
-      <h3 i18n:translate="">Groups</h3>
-      <ul>
-        <li tal:repeat="group groups">
-          <a tal:attributes="href group/@@absolute_url"
-             tal:content="group/title"></a>
-        </li>
-      </ul>
-      <div tal:condition="not:groups">
-        This person does not belong to any groups.
-      </div>
-    </div>
-
-    <!--
-    <tal:block condition="view/canChooseCalendars">
-      <a id="calendar-form"></a>
-      <form method="POST">
-        <fieldset>
-          <legend i18n:translate="">
-            Choose calendars for portlet
-          </legend>
-          <table tal:condition="nothing">
-            <tr>
-
-              <td>
-                <label for="groups" i18n:translate="">Groups</label>
-                <select multiple="multiple" id="groups" size="5"
-                        name="groups">
-                  <tal:loop repeat="group view/allGroups">
-                    <option tal:content="group/title"
-                        tal:attributes="value group/__name__;
-                          selected python:view.listedResource(group);
-                          disabled python:view.disabledResource(group)"/>
-                  </tal:loop>
-                </select>
-              </td>
-
-              <td>
-                <label for="people" i18n:translate="">People</label>
-                <select multiple="multiple" id="people" size="5"
-                    name="people">
-                  <tal:loop repeat="person view/allPersons">
-                    <option tal:content="person/title"
-                        tal:attributes="value person/__name__;
-                          selected python:view.listedResource(person);
-                          disabled python:view.disabledResource(person)"/>
-                  </tal:loop>
-                </select>
-              </td>
-
-              <td>
-                <label for="resources" i18n:translate="">Resources</label>
-                <select multiple="multiple" id="resources" size="5"
-                    name="resources">
-                  <tal:loop repeat="resource view/allResources">
-                    <option tal:content="resource/title"
-                        tal:attributes="value resource/__name__;
-                          selected python:view.listedResource(resource)"/>
-                  </tal:loop>
-                </select>
-              </td>
-            </tr>
-          </table>
-          <input type="submit" value="Update" name="CHOOSE_CALENDARS"
-                 i18n:attributes="value" />
-        </fieldset>
-      </form>
-    </tal:block>
-    -->
+  </div>
 
 </metal:block>
 </body>

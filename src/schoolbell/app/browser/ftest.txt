@@ -85,7 +85,7 @@ How does it look inside?
       <head>
         <title>Z3: frogpond</title>
     ...
-    <h2>Welcome to SchoolBell</h2>
+    <h1>Welcome to SchoolBell</h1>
     ...
 
 We can traverse to the person index

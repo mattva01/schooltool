@@ -11,7 +11,7 @@
              tal:define="possible_members view/getMemberList">
 
 <form method="POST" tal:attributes="action request/URL">
-<p tal:condition="not:possible_members">
+<p tal:condition="not:possible_members" i18n:translate="">
   There are none.
 </p>
 <div class="member_list" tal:condition="possible_members">
