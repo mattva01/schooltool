@@ -33,11 +33,25 @@ compared with what the command line client outputs.
 import unittest
 import os
 import re
-from popen2 import Popen4
 from threading import Thread
 from schooltool.tests.helpers import unidiff, normalize_xml
 
 __metaclass__ = type
+
+try:
+    from popen2 import Popen4
+except ImportError:
+    # Win32 does not have Popen4
+    from popen2 import popen4
+
+    class Popen4:
+
+        def __init__(self, cmd):
+            self.tochild, self.fromchild = popen4(cmd)
+
+        def wait(self):
+            # Is there a way to get the real status code on Win32?
+            return 0
 
 
 class Reader(Thread):
