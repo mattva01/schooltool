@@ -21,12 +21,20 @@ Checks for the unit tests.
 """
 
 import sys
+import sets
+import logging
 
 __metaclass__ = type
 
 
 def warn(msg):
     print >> sys.stderr, msg
+
+
+def sorted(l):
+    l = list(l) # make a copy
+    l.sort()
+    return l
 
 
 class ComponentChecks:
@@ -172,10 +180,64 @@ class LibxmlChecks:
         libxml2.registerErrorHandler(on_error_callback, None)
 
 
+class LoggingChecks:
+    """Detect unit tests that fiddle with the logging package.
+
+    This class looks for the following fiddlings:
+
+      import logging
+      logging.getLogger('foo').disabled = True
+      logging.getLogger('foo').propagate = False
+      logging.getLogger('foo').setLevel(bar)
+      logging.getLogger('foo').addHandler(handler)
+      logging.getLogger('foo').removeHandler(handler)
+    """
+
+    def __init__(self, verbose=True):
+        self.verbose = verbose
+
+    def startTest(self, test):
+        self.snapshot = self.makeSnapshot()
+
+    def stopTest(self, test):
+        new_snapshot = self.makeSnapshot()
+        if new_snapshot != self.snapshot:
+            warn("%s changed logging configuration" % test)
+            if self.verbose:
+                old_loggers = sets.Set(self.snapshot.keys())
+                new_loggers = sets.Set(new_snapshot.keys())
+                for name in sorted(old_loggers | new_loggers):
+                    if name not in new_loggers:
+                        warn("  logger %s disappeared" % name)
+                    elif name not in old_loggers:
+                        warn("  new logger: %s" % name)
+                    else:
+                        old = self.snapshot[name]
+                        new = new_snapshot[name]
+                        if old != new:
+                            warn("  logger %s was changed" % name)
+
+    def makeSnapshot(self):
+        import logging
+        info = {}
+        for name, logger in logging.root.manager.loggerDict.items():
+            if isinstance(logger, logging.PlaceHolder):
+                continue
+            if (logger.level == 0 and logger.propagate and not logger.disabled
+                and not logger.handlers):
+                continue
+            info[name] = {'level': logger.level,
+                          'disabled': logger.disabled,
+                          'propagate': logger.propagate,
+                          'handlers': list(logger.handlers)}
+        return info
+
+
 def test_hooks():
     return [
         StdoutChecks(),     # should be the first one
         ComponentChecks(),
         TransactionChecks(),
         LibxmlChecks(),
+        LoggingChecks(),
     ]

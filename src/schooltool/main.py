@@ -761,24 +761,23 @@ class Server:
         logger.setLevel(logging.INFO)
         for filename in filenames:
             if filename == 'STDOUT':
-                handler = logging.StreamHandler(sys.stdout)
+                handler = logging.StreamHandler(self.stdout)
             elif filename == 'STDERR':
-                handler = logging.StreamHandler(sys.stderr)
+                handler = logging.StreamHandler(self.stderr)
             else:
-                # RotatingFileHandler might help solve log rotation issues
-                handler = logging.FileHandler(filename)
+                handler = UnicodeFileHandler(filename)
             handler.setFormatter(formatter)
             logger.addHandler(handler)
 
     def help(self):
         """Print a help message."""
         progname = os.path.basename(sys.argv[0])
-        print >> sys.stdout, usage_msg % progname
+        print >> self.stdout, usage_msg % progname
 
     def noStorage(self):
         """Print an informative message when the config file does not define a
         storage."""
-        print >> sys.stderr, no_storage_error_msg
+        print >> self.stderr, no_storage_error_msg
 
     def findDefaultConfigFile(self):
         """Return the default config file pathname.
@@ -974,6 +973,21 @@ class Server:
             if name not in ('STDOUT', 'STDERR'):
                 return name
         return None
+
+
+class UnicodeFileHandler(logging.StreamHandler):
+    """A handler class which writes records to disk files.
+
+    This class differs from logging.FileHandler in that it can handle Unicode
+    strings with graceful degradation.
+    """
+
+    def __init__(self, filename):
+        stm = StreamWrapper(open(filename, 'a'))
+        logging.StreamHandler.__init__(self, stm)
+
+    def close(self):
+        self.stream.close()
 
 
 def setUpModules(module_names):

@@ -223,9 +223,11 @@ class TestSite(unittest.TestCase):
         site.applogger = AppLoggerStub()
         site.logAppEvent(None, '/where/where?', 'Hello')
         site.logAppEvent(UserStub('me'), '/here', 'Bye', level=logging.WARNING)
+        site.logAppEvent(None, '/path', u'\u263B')
         self.assertEquals(site.applogger.applog,
                           [(logging.INFO, "(UNKNOWN) [/where/where?] Hello"),
-                           (logging.WARNING, "(me) [/here] Bye")])
+                           (logging.WARNING, "(me) [/here] Bye"),
+                           (logging.INFO, u"(UNKNOWN) [/path] \u263B")])
 
 
 class TestAcceptParsing(unittest.TestCase):
@@ -396,6 +398,12 @@ class TestAcceptParsing(unittest.TestCase):
 
 
 class TestRequest(unittest.TestCase):
+
+    def tearDown(self):
+        hitlogger = logging.getLogger('schooltool.access')
+        del hitlogger.handlers[:]
+        hitlogger.propagate = True
+        hitlogger.setLevel(0)
 
     def test_reset(self):
         from schooltool.main import Request
@@ -826,6 +834,14 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def tearDown(self):
         sys.path[:] = self.original_path
         self.tearDownRegistries()
+        for name in ['ZODB', 'ZODB.lock_file', 'txn', 'libxml2',
+                     'schooltool.access', 'schooltool.app', 'schooltool.error',
+                     'schooltool.server']:
+            logger = logging.getLogger(name)
+            del logger.handlers[:]
+            logger.propagate = True
+            logger.disabled = False
+            logger.setLevel(0)
 
     def getConfigFileName(self, filename='sample.conf'):
         dirname = os.path.dirname(__file__)
@@ -877,9 +893,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
         hitlogger = logging.getLogger('schooltool.access')
         self.assertEquals(hitlogger.propagate, False)
-        # handlers[0] is implicitly created by the logging module
-        self.assert_(isinstance(hitlogger.handlers[1], logging.StreamHandler))
-        self.assertEquals(hitlogger.handlers[1].stream, sys.stdout)
+        self.assertEquals(len(hitlogger.handlers), 1)
+        self.assert_(isinstance(hitlogger.handlers[0], logging.StreamHandler))
+        self.assertEquals(hitlogger.handlers[0].stream, server.stdout)
 
     def test_configure_with_args(self):
         from schooltool.main import Server
