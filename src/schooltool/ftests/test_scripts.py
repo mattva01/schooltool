@@ -194,6 +194,21 @@ class ScriptTestCase(unittest.TestCase):
                                                     unidiff(expected, result)))
 
 
+class AppLogSetup(unittest.TestCase):
+    """This just clears the app log and fills it up with some data.
+
+    This should be moved to a global test setup, once there is such a
+    thing.
+
+    XXX: This might not work on windows.
+    """
+    def test(self):
+        log = file("testserver_app.log", "w")
+        for l in range(1, 21):
+            print >> log, "Ftest log line %d" % l
+        log.close()
+
+
 def find_scripts():
     dirname = os.path.dirname(__file__)
     files = [fn for fn in os.listdir(dirname) if fn.endswith('.scr')]
@@ -203,6 +218,7 @@ def find_scripts():
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(AppLogSetup))
     for script in find_scripts():
         suite.addTest(ScriptTestCase(script))
     return suite

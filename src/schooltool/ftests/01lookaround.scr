@@ -757,5 +757,41 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /applog?filter=log+line+12
+200 OK
+Content-Type: text/plain
+Ftest log line 12
+
+
+SchoolTool> get /applog?pagesize=10&page=1
+200 OK
+Content-Type: text/plain
+Ftest log line 1
+Ftest log line 2
+Ftest log line 3
+Ftest log line 4
+Ftest log line 5
+Ftest log line 6
+Ftest log line 7
+Ftest log line 8
+Ftest log line 9
+Ftest log line 10
+
+
+SchoolTool> get /applog?pagesize=10&page=2
+200 OK
+Content-Type: text/plain
+Ftest log line 11
+Ftest log line 12
+Ftest log line 13
+Ftest log line 14
+Ftest log line 15
+Ftest log line 16
+Ftest log line 17
+Ftest log line 18
+Ftest log line 19
+Ftest log line 20
+
+
 SchoolTool> quit
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:
