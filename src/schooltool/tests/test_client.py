@@ -95,16 +95,12 @@ class TestClient(unittest.TestCase):
     def test_setupPrompt_noninteractive(self):
         class StdinStub:
             isatty = lambda self: False
-        old_stdin = sys.stdin
-        try:
-            sys.stdin = StdinStub()
-            self.client.prompt = "# "
-            self.client.intro = "Hello"
-            self.client._setupPrompt()
-            self.assertEquals(self.client.prompt, "")
-            self.assertEquals(self.client.intro, "")
-        finally:
-            sys.stdin = old_stdin
+        self.client.stdin = StdinStub()
+        self.client.prompt = "# "
+        self.client.intro = "Hello"
+        self.client._setupPrompt()
+        self.assertEquals(self.client.prompt, "")
+        self.assertEquals(self.client.intro, "")
 
     def test_setupPrompt_no_curses(self):
         class StdinStub:
@@ -113,17 +109,15 @@ class TestClient(unittest.TestCase):
             error = Exception
             def setupterm(self):
                 raise self.error, "testing"
-        old_stdin = sys.stdin
         try:
-            sys.stdin = StdinStub()
             sys.modules['curses'] = CursesStub()
+            self.client.stdin = StdinStub()
             self.client.prompt = "# "
             self.client.intro = "Hello"
             self.client._setupPrompt()
             self.assertEquals(self.client.prompt, "# ")
             self.assertEquals(self.client.intro, "Hello")
         finally:
-            sys.stdin = old_stdin
             try:
                 del sys.modules['curses']
             except KeyError:
@@ -139,17 +133,15 @@ class TestClient(unittest.TestCase):
                 pass
             def tigetstr(self, s):
                 return self._terminfo.get(s)
-        old_stdin = sys.stdin
         try:
-            sys.stdin = StdinStub()
             sys.modules['curses'] = CursesStub()
+            self.client.stdin = StdinStub()
             self.client.prompt = "# "
             self.client.intro = "Hello"
             self.client._setupPrompt()
             self.assertEquals(self.client.prompt, "# ")
             self.assertEquals(self.client.intro, "Hello")
         finally:
-            sys.stdin = old_stdin
             try:
                 del sys.modules['curses']
             except KeyError:
@@ -165,10 +157,9 @@ class TestClient(unittest.TestCase):
                 pass
             def tigetstr(self, s):
                 return self._terminfo.get(s)
-        old_stdin = sys.stdin
         try:
-            sys.stdin = StdinStub()
             sys.modules['curses'] = CursesStub()
+            self.client.stdin = StdinStub()
             self.client.prompt = "# "
             self.client.intro = "Hello"
             self.client._setupPrompt()
@@ -176,7 +167,6 @@ class TestClient(unittest.TestCase):
                               "\001<B>\002SchoolTool>\001<N>\002 ")
             self.assertEquals(self.client.intro, "Hello")
         finally:
-            sys.stdin = old_stdin
             try:
                 del sys.modules['curses']
             except KeyError:
@@ -282,6 +272,16 @@ class TestClient(unittest.TestCase):
                        xlink:title="Kate"/>
             </index>
             """))
+
+    def test_quit(self):
+        self.assert_(self.client.do_quit(""))
+
+    def test_default(self):
+        self.assert_(self.client.default("EOF"))
+        self.assertEqual(self.emitted, "quit")
+        self.emitted = ""
+        self.assert_(not self.client.default("somethingelse"))
+        self.assertEqual(self.emitted, "I beg your pardon?")
 
 
 class TestXLinkHandler(unittest.TestCase):

@@ -21,11 +21,8 @@
 Schooltool command line client.
 """
 
-import os
-import sys
 import socket
 import httplib
-import readline
 from cmd import Cmd
 from StringIO import StringIO
 from xml.sax import make_parser, SAXParseException
@@ -54,17 +51,17 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     port = 80
 
     def __init__(self, *args):
-        self._setupPrompt()
         Cmd.__init__(self, *args)
+        self._setupPrompt()
 
     def _setupPrompt(self):
         """Sets up the prompt suitable to operating environment.
 
-        Noninteractive sessions (sys.stdin is not a tty) get no prompt.
+        Noninteractive sessions (self.stdin is not a tty) get no prompt.
         Interactive sessions get a coloured prompt if the terminal supports
         it, or just a simple prompt otherwise.
         """
-        if not sys.stdin.isatty():
+        if not self.stdin.isatty():
             self.prompt = ""
             self.intro = ""
         else:
@@ -82,14 +79,14 @@ welcome to change it and/or distribute copies of it under certain conditions."""
 
     def emit(self, *args):
         """Output the arguments.  A hook for tests"""
-        print ' '.join(args)
+        print >> self.stdout, ' '.join(args)
 
     def default(self, line):
         """This is called when a nonexistent command is invoked."""
         if line == "EOF":
-            if sys.stdin.isatty():
+            if self.stdin.isatty():
                 self.emit("quit")
-            self.do_quit(line)
+            return self.do_quit(line)
         else:
             self.emit("I beg your pardon?")
 
@@ -98,7 +95,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
 
     def do_quit(self, line):
         """Exit the client."""
-        sys.exit(0);
+        return True
 
     def do_server(self, line):
         """Set the server to talk to.
@@ -147,10 +144,8 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                     parser.setContentHandler(handler)
                     parser.setFeature(feature_namespaces, 1)
                     parser.parse(StringIO(data))
-                    nr = 0
                     self.resources = []
-                    for link in handler.links:
-                        nr += 1
+                    for nr, link in enumerate(handler.links):
                         if 'title' in link:
                             title = link['title']
                         else:
@@ -162,7 +157,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                             href = "no href"
                         try:
                             self.resources.append(http_join(resource, href))
-                            self.emit("%-3d %s (%s)" % (nr, title, href))
+                            self.emit("%-3d %s (%s)" % (nr + 1, title, href))
                         except (IndexError, ValueError):
                             pass
                 except SAXParseException, e:
