@@ -82,12 +82,14 @@ class Person(Persistent, Contained):
 
     implements(IPersonContained, IAttributeAnnotatable)
 
-    title = None
     photo = None
     username = None
     _hashed_password = None
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
+
+    def __init__(self, title=None):
+        self.title = title
 
     def setPassword(self, password):
         self._hashed_password = hash_password(password)
@@ -136,11 +138,12 @@ class Group(Persistent, Contained):
 
     implements(IGroupContained, IAttributeAnnotatable)
 
-    title = None
-
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
+
+    def __init__(self, title=None):
+        self.title = title
 
 
 class Resource(Persistent, Contained):
@@ -148,6 +151,7 @@ class Resource(Persistent, Contained):
 
     implements(IResourceContained, IAttributeAnnotatable)
 
-    title = None
-
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
+
+    def __init__(self, title=None):
+        self.title = title

@@ -109,7 +109,7 @@ class IPersonContained(IPerson, IContained):
     containers(IPersonContainer)
 
 
-class IGroup(IGroupMember):
+class IGroup(Interface):
     """Group."""
 
     title = TextLine(title=u"Title",
