@@ -332,8 +332,14 @@ div.available {
 
 /* Calendars */
 
+div.calweekly {
+  border: none;
+  border-top: 1px solid gray;
+}
+
 div.day {
-  border-bottom: 1px solid gray;
+  border: 1px solid gray;
+  border-top: none;
   background: white;
   padding: 0.5ex 0.5em;
 }
@@ -352,13 +358,6 @@ div.ro_event {
   margin: 1ex;
   padding: 0.5ex 0.5em;
   font-size: smaller;
-}
-
-
-
-div.calweekly {
-   border: 1px solid gray;
-   border-bottom-width: 0;
 }
 
 div.day h2,
