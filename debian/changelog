@@ -1,8 +1,8 @@
-schooltool (0.7.2) unstable; urgency=low
+schooltool (0.7.2-1) unstable; urgency=low
 
   * Changed maintainer name.
   * Moved logic for cleaning debian directory into debian/rules.
-  * Use dh_makeshlibs and dh_shlibdeps in rules. 
+  * Use dh_makeshlibs and dh_shlibdeps in rules.
   * Created libschooltool-server package for arch dep server files.
   * Added Zope Public License 2.0 and 2.1 to copyright files and merged
     them into one.
@@ -18,7 +18,7 @@ schooltool (0.7.2) unstable; urgency=low
     a dummy package depending on schooltool).
   * Cleaned up debian/rules.
   * Updated docs.
-  * Add pre-seedable debconf configuration for server ports and SSL 
+  * Add pre-seedable debconf configuration for server ports and SSL
     certificates.
 
  -- Brian Sutherland <jinty@web.de>  Sat, 18 Sep 2004 13:05:48 +0200

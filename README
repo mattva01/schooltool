@@ -33,9 +33,17 @@ System requirements
 - wxPython 2.4 (http://www.wxpython.org/)
   (needed for the wxWindows client only)
 
+- pyOpenSSL (http://sourceforge.net/projects/pyopenssl/)
+  (needed for the server only)
+
 - Development environment and a C compiler
   (precompiled binaries are available for Windows users)
 
+Optional Extras
+---------------
+
+- PyTCPWrap (http://ples.sourceforge.net/index.cgi?PyTCPWrap)
+  (useful for the server only)
 
 Building SchoolTool
 -------------------
