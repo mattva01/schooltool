@@ -421,7 +421,7 @@ class CustomTestResult(unittest._TextTestResult):
             self._maxWidth = cfg.screen_width - len("xxxx/xxxx (xxx.x%): ") - 1
 
     def startTest(self, test):
-        n = self.testsRun + test.countTestCases()
+        n = self.testsRun + 1
         if self.cfg.progress:
             # verbosity == 0: 'xxxx/xxxx (xxx.x%)'
             # verbosity == 1: 'xxxx/xxxx (xxx.x%): test name'
@@ -515,17 +515,19 @@ class CustomTestRunner(unittest.TextTestRunner):
     __super_init = __super.__init__
     __super_run = __super.run
 
-    def __init__(self, cfg, hooks=None, stream=sys.stderr):
+    def __init__(self, cfg, hooks=None, stream=sys.stderr, count=None):
         self.__super_init(verbosity=cfg.verbosity, stream=stream)
         self.cfg = cfg
         if hooks is not None:
             self.hooks = hooks
         else:
             self.hooks = []
+        self.count = count
 
     def run(self, test):
         """Run the given test case or test suite."""
-        self.count = test.countTestCases()
+        if self.count is None:
+            self.count = test.countTestCases()
         result = self._makeResult()
         startTime = time.time()
         test(result)
@@ -717,7 +719,7 @@ def main(argv):
     if cfg.list_hooks:
         print "\n".join([str(hook) for hook in test_hooks])
     if cfg.run_tests:
-        runner = CustomTestRunner(cfg, test_hooks)
+        runner = CustomTestRunner(cfg, test_hooks, count=len(test_cases))
         suite = unittest.TestSuite()
         suite.addTests(test_cases)
         if tracer is not None:
