@@ -34,6 +34,15 @@
       trusted="yes"
       />
 
+    <!--
+  <zope:adapter
+      for="schoolbell.calendar.browser.CalendarVfbView"
+      provides="zope.app.filerepresentation.interfaces.IReadFile"
+      factory=".cal.enableVfbView"
+      trusted="yes"
+      />
+    -->
+
 <!-- Actions menu -->
 
   <menu id="schoolbell_actions" title="Actions" />
@@ -412,6 +421,16 @@
       attribute="show"
       menu="zmi_views"
       title="iCalendar"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar.vfb"
+      permission="zope.Public"
+      class="schoolbell.calendar.browser.CalendarVfbView"
+      attribute="show"
+      menu="zmi_views"
+      title="Free/Busy"
       />
 
   <menuItem

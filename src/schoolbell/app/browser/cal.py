@@ -40,7 +40,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
-from zope.app.filerepresentation.interfaces import IWriteFile
+from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -109,7 +109,7 @@ class CalendarOwnerTraverser(object):
     def publishTraverse(self, request, name):
         if name == 'calendar':
             return self.context.calendar
-        elif name == 'calendar.ics':
+        elif name in ('calendar.ics', 'calendar.vfb'):
             calendar = self.context.calendar
             view = queryMultiAdapter((calendar, request), name=name)
             if view is not None:
@@ -1717,6 +1717,8 @@ def datesParser(raw_dates):
                 results.append(d)
     return tuple(results)
 
+def enableVfbView(ical_view):
+    return IReadFile(ical_view.context)
 
 def enableICalendarUpload(ical_view):
     """An adapter that enables HTTP PUT for calendars.

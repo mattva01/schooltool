@@ -188,14 +188,13 @@ def convert_calendar_to_vfb(calendar):
         VERSION:2.0
         PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
         METHOD:PUBLISH
-        DTSTAMP:...
         BEGIN:VFREEBUSY
         FREEBUSY:20041116T100729/20041116T11072900Z
         FREEBUSY:20041216T100729/20041216T12072900Z
         END:VFREEBUSY
         END:VCALENDAR
 
-    Not sure yet how VFB is supposed to handle empty calendars.
+    XXX VFREEBUSY should just expand every occurence
 
         >>> lines = convert_calendar_to_vfb(ImmutableCalendar())
         >>> print "\n".join(lines)
@@ -203,7 +202,6 @@ def convert_calendar_to_vfb(calendar):
         VERSION:2.0
         PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
         METHOD:PUBLISH
-        DTSTAMP:...
         BEGIN:VFREEBUSY
         END:VFREEBUSY
         END:VCALENDAR
@@ -215,7 +213,6 @@ def convert_calendar_to_vfb(calendar):
         "VERSION:2.0",
         "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
         "METHOD:PUBLISH",
-        "DTSTAMP: %s" % datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"),
         "BEGIN:VFREEBUSY"
     ]
     footer = [
