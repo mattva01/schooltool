@@ -41,8 +41,9 @@ $Id$
 __metaclass__ = type
 
 from zope.interface import Interface
+from zope.interface.interfaces import IInterface
 from zope.schema import Field, Object, Int, TextLine, Text, List, Set, Tuple
-from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes
+from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes, BytesLine
 from zope.schema import URI as URIField
 from schooltool.unchanged import Unchanged  # reexport from here
 
@@ -132,7 +133,7 @@ class ILocation(Interface):
         description=u"""
         This value is None when the object is not attached to the hierarchy.
         Otherwise parent must implement either ILocation or IContainmentRoot.
-        """) # XXX Object; schema=...
+        """)
 
     __name__ = TextLine(
         title=u"The name of the object within the parent.",
@@ -289,7 +290,7 @@ class ILink(ILocation):
         schema=IURIObject,
         description=u"""
         This is how the object got by traverse() relates to my __parent__.
-        """) # XXX Fix description
+        """)
 
     __parent__ = Field(
         title=u"The object at this end of the relationship.")
@@ -387,8 +388,8 @@ class IRelatable(Interface):
     """An object which can take part in relationships."""
 
     __links__ = Set(
-        title=u"A set of objects implementing ILinkSet.", # TODO: fix title
-        value_type=Object(schema=ILinkSet)) # TODO: title
+        title=u"A set of link sets.",
+        value_type=Object(title=u"A link set", schema=ILinkSet))
 
     def getLink(name):
         """Return a link by a name within this relatable."""
@@ -407,12 +408,12 @@ class IRelationshipSchema(Interface):
     """Object that represents a relationship."""
 
     type = Object(
-        title=u"An IURIObject for the type of this relationship.", # XXX title
+        title=u"A URI for the type of this relationship.",
         schema=IURIObject)
 
     roles = Dict(
-        title=u"Roles", # TODO clarify
-        key_type=TextLine(title=u"Symbolic parameter name"), # XXX title
+        title=u"Roles",
+        key_type=TextLine(title=u"Symbolic parameter name"),
         value_type=Object(schema=IURIObject),
         description=u"""
         A mapping of symbolic parameter names which this schema expects
@@ -438,14 +439,12 @@ class IValency(Interface):
         title=u"A relationship schema",
         schema=IRelationshipSchema)
 
-    keyword = Field( # XXX What is this?
+    keyword = BytesLine(
         title=u"A keyword argument the schema takes for this object")
 
 
 class IRelationshipValencies(Interface):
-    """Gives information on what relationships are pertinent to this
-    object.
-    """
+    """Gives information on what relationships are pertinent to this object."""
 
     valencies = Tuple(
         title=u"A tuple of IValency objects",
@@ -468,10 +467,10 @@ class ISchemaInvocation(Interface):
         title=u"A relationship schema",
         schema=IRelationshipSchema)
 
-    this = Field( # XXX What is this?
+    this = BytesLine(
         title=u"A keyword argument the schema takes for this object")
 
-    other = Field( # XXX What is this?
+    other = BytesLine(
         title=u"A keyword argument the schema takes for the other object")
 
 
@@ -583,8 +582,8 @@ class IRelationshipEvent(IEvent):
     """Base interface for relationship events"""
 
     links = Tuple(
-        title=u"Tuple containing the links of the relationship")
-        # TODO value_type
+        title=u"The links of the relationship",
+        value_type=Object(title=u"A link", schema=ILink))
 
 
 class IRelationshipAddedEvent(IRelationshipEvent):
@@ -603,12 +602,10 @@ class IMembershipEvent(IRelationshipEvent):
     """
 
     group = Field(
-        title=u"The group")
+        title=u"The membership group")
 
     member = Field(
-        title=u"The member")
-
-    # TODO fix titles
+        title=u"The membership member")
 
 
 class IBeforeMembershipEvent(IMembershipEvent):
@@ -678,9 +675,9 @@ class IEventService(IEventTarget):
 class IEventAction(Interface):
     """Represents an action to be taken for certain types of events."""
 
-    eventType = Field(
-        title=u"Interface of an event this action pertains to")
-    # XXX Object(schema=Interface)?
+    eventType = Object(
+        title=u"Interface of an event this action pertains to",
+        schema=IInterface)
 
     def handle(event, target):
         """Handle the event for a given target.
@@ -694,14 +691,21 @@ class IEventConfigurable(Interface):
 
     eventTable = List(
         title=u"Sequence of event table rows",
-        value_type=Object(schema=IEventAction))
+        value_type=Object(title=u"Event table row", schema=IEventAction))
+
+
+class IEventCallback(Interface):
+
+    def __call__(self, event):
+        """Invoke the callback."""
 
 
 class ICallAction(IEventAction):
     """Event action that calls a callable."""
 
-    callback = Field(
-        title=u"Callback that will be called with an event as its argument.")
+    callback = Object(
+        title=u"Callback that will be called with an event as its argument.",
+        schema=IEventCallback)
 
 
 class ILookupAction(IEventAction):
@@ -709,16 +713,17 @@ class ILookupAction(IEventAction):
     table.
     """
 
-    # XXX Same as in IEventConfigurable?
     eventTable = List(
         title=u"Sequence of event table rows",
-        value_type=Object(schema=IEventAction))
+        value_type=Object(title=u"Event table row", schema=IEventAction))
 
 
 class IRouteToRelationshipsAction(IEventAction):
     """Event action that routes this event to relationships of this object."""
 
-    role = Field(title=u"Role of the relationship") # TODO Object()
+    role = Object(
+        title=u"Role of the relationship",
+        schema=IURIObject)
 
 
 class IRouteToMembersAction(IEventAction):
@@ -748,8 +753,6 @@ class IOccupiesEvent(IRelationshipEvent):
     residence = Field(
         title=u"The address")
 
-    # XXX fix titles
-
 
 class IOccupiesAddedEvent(IRelationshipAddedEvent, IOccupiesEvent):
     """Event that is sent after a person is associated with an address."""
@@ -760,11 +763,7 @@ class IOccupiesRemovedEvent(IRelationshipRemovedEvent, IOccupiesEvent):
 
 
 class INotedEvent(IRelationshipEvent):
-    """Base interface for noted events.
-
-    This is a special case of IRelationshipEvent where one side has
-    the role of URIGroup, and the other side has the role of URIMember.
-    """
+    """Base interface for noted events."""
 
     notandum = Field(
         title=u"The noted object")
@@ -782,11 +781,7 @@ class INotedRemovedEvent(IRelationshipRemovedEvent, INotedEvent):
 
 
 class IGuardianEvent(IRelationshipEvent):
-    """Base interface for noted events.
-
-    This is a special case of IRelationshipEvent where one side has
-    the role of URIGroup, and the other side has the role of URIMember.
-    """
+    """Base interface for guardian events."""
 
     notandum = Field(
         title=u"The noted object")
@@ -794,15 +789,13 @@ class IGuardianEvent(IRelationshipEvent):
     notation = Field(
         title=u"The note")
 
-    # XXX Clone of IOccupiesEvent
-
 
 class IGuardianAddedEvent(IRelationshipAddedEvent, IGuardianEvent):
-    """Event that is sent after a note is associated with an object."""
+    """Event that is sent after a guardian is associated with an object."""
 
 
 class IGuardianRemovedEvent(IRelationshipRemovedEvent, IGuardianEvent):
-    """Event that is sent after a note has been removed from an object."""
+    """Event that is sent after a guardian has been removed from an object."""
 
 
 #
@@ -843,8 +836,8 @@ class IFaceted(Interface):
     """Denotes that the object can have facets."""
 
     __facets__ = Set(
-        title=u"A set of facets that manages unique names.")
-        # TODO: value_type
+        title=u"A set of facets that manages unique names.",
+        value_type=Object(title=u"Facet", schema=IFacet))
 
 
 class IFacetFactory(Interface):
@@ -1036,37 +1029,26 @@ class ISchooldayModelWrite(Interface):
         Raises a ValueError if the date is outside of the period covered.
         """
 
-    def addWeekdays(*weekdays):
-        """Mark that all days of week with a number in weekdays within the
-        period will be schooldays.
-
-        The numbering used is the same as one used by
-        datetime.date.weekday() method, or the calendar module:
-        0 is Monday, 1 is Tuesday, etc.
-        """
-
-    def removeWeekdays(*weekdays):
-        """Mark that all days of week with a number in weekdays within the
-        period will be holidays.
-
-        The numbering used is the same as one used by
-        datetime.date.weekday() method, or the calendar module.
-        0 is Monday, 1 is Tuesday, etc.
-        """
-
-    def toggleWeekdays(*weekdays):
-        """Toggle the state of all days of week with a number in weekdays.
-
-        The numbering used is the same as one used by
-        datetime.date.weekday() method, or the calendar module.
-        0 is Monday, 1 is Tuesday, etc.
-        """
-
     def reset(first, last):
         """Change the period and mark all days as holidays.
 
         If first is later than last, a ValueError is raised.
         """
+
+    # The functions below use the same numbering as one used by
+    # datetime.date.weekday() method, or the calendar module:
+    # 0 is Monday, 1 is Tuesday, etc.
+
+    def addWeekdays(*weekdays):
+        """Mark that all days of week with a number in weekdays within the
+        period will be schooldays."""
+
+    def removeWeekdays(*weekdays):
+        """Mark that all days of week with a number in weekdays within the
+        period will be holidays."""
+
+    def toggleWeekdays(*weekdays):
+        """Toggle the state of all days of week with a number in weekdays."""
 
 
 class ICalendar(Interface):
@@ -1122,11 +1104,13 @@ class IRecurrenceRule(Interface):
     """Base interface of the recurrence rules."""
 
     interval = Int(
-        title=u"Interval of recurrence (a positive integer).",
+        title=u"Interval of recurrence.",
         description=u"""
+        A positive integer.
+
         For example, for yearly recurrence the interval equal to 2
         will indicate that the event will recur once in two years.
-        """) # TODO fix description
+        """)
 
     count = Int(
         title=u"Number of times the event is repeated.",
@@ -1135,7 +1119,7 @@ class IRecurrenceRule(Interface):
         Can be None or an integer value.  If count is not None then
         until must be None.  If both count and until are None the
         event repeats forever.
-        """) # TODO fix description
+        """)
 
     until = Date(
         title=u"The date of the last recurrence of the event.",
@@ -1143,7 +1127,7 @@ class IRecurrenceRule(Interface):
         description=u"""
         If until is not None then count must be None.  If both count and until
         are None the event repeats forever.
-        """) # TODO fix description
+        """)
 
     exceptions = List(
         title=u"A list of days when this event does not occur.",
@@ -1215,12 +1199,11 @@ class IWeeklyRecurrenceRule(IRecurrenceRule):
 
 class IMonthlyRecurrenceRule(IRecurrenceRule):
 
-    monthly = TextLine( # XXX fix type
+    monthly = Choice(
         title=u"Specification of a monthly occurence.",
+        required=False,
+        values=['monthday', 'weekday', 'lastweekday'],
         description=u"""
-        Can be one of three values: 'monthday', 'weekday', 'lastweekday',
-        or None.
-
         'monthday'    specifies that the event recurs on the same
                       monthday.
 
@@ -1254,7 +1237,7 @@ class ICalendarEvent(Interface):
     dtstart = Datetime(
         title=u"The datetime.datetime of the start of the event.")
 
-    duration = Field( # TODO: type
+    duration = Field( # XXX: type
         title=u"The duration of the event (datetime.timedelta).")
 
     title = TextLine(
@@ -1283,18 +1266,18 @@ class ICalendarEvent(Interface):
         """)
 
     privacy = Choice(
-        title=u"Privacy", # TODO fix title
+        title=u"The privacy setting",
         values=['public', 'private', 'hidden'],
         default=u"public",
         description=u"""
         Events that are "private" will be rendered as busy blocks to
         other users, and events that are "hidden" will not be shown to
         other users at all.
-        """) # TODO fix description
+        """)
 
     replace_kw = List(
-        title=u"A sequence of keywords that can be passed to replace()")
-        # TODO value_type
+        title=u"A sequence of keywords that can be passed to replace()",
+        value_type=BytesLine(title=u"Keyword"))
 
     def replace(**kw):
         """Return a calendar event with new specified fields."""
@@ -1386,13 +1369,16 @@ class ITimetableModel(Interface):
         value_type=TextLine(title=u"Day id"))
 
     dayTemplates = Dict(
+        title=u"Schoolday templates",
         key_type=Int(title=u"Weekday", required=False),
         value_type=Field(title=u"Schoolday template"),
                          # XXX schema=ISchooldayTemplate),
         description=u"""
+        Schoolday templates.
+
         The template with the key of None is used if there is no template
         for a particular weekday.
-        """) # XXX fix description
+        """)
 
     def createCalendar(schoolday_model, timetable):
         """Return an ICalendar composed out of schoolday_model and timetable.
@@ -1400,7 +1386,7 @@ class ITimetableModel(Interface):
         This method has model-specific knowledge as to how the schooldays,
         weekends and holidays map affects the mapping of the timetable
         onto the real-world calendar.
-        """ # XXX fix description
+        """
 
     def periodsInDay(schoolday_model, timetable, date):
         """Return a sequence of periods defined in this day"""
@@ -1422,7 +1408,7 @@ class ITimetableActivity(Interface):
         title=u"The group or person or other object that owns the activity.",
         description=u"""
         The activity lives in the owner's timetable.
-        """) # TODO fix description, use Object()?
+        """) # XXX Object(schema=ITimetabled)?
 
     resources = Set(
         title=u"A set of resources assigned to this activity.",
@@ -1430,7 +1416,7 @@ class ITimetableActivity(Interface):
         description=u"""
         The activity is also present in the timetables of all resources
         assigned to this activity.
-        """) # TODO fix description
+        """)
 
     timetable = Field(
         title=u"The timetable that contains this activity.",
@@ -1438,7 +1424,7 @@ class ITimetableActivity(Interface):
         description=u"""
         This attribute refers to the timetable of `owner`.  It never refers
         to a composite timetable or a timetable of a resource.
-        """) # TODO fix description
+        """)
 
     def replace(title=Unchanged, owner=Unchanged, resources=Unchanged,
                 timetable=Unchanged):
@@ -1482,12 +1468,13 @@ class ITimetableException(Interface):
         schema=ITimetableActivity)
 
     replacement = Field(
-        title=u"Calendar event that should replace the exceptional activity.",
+        title=u"A replacement calendar event",
         # XXX schema=IExceptionalTTCalendarEvent,
         required=False,
         description=u"""
+        A calendar event that should replace the exceptional activity.
         If None, then the activity is simply removed.
-        """) # TODO fix description
+        """)
 
     def __eq__(other):
         """See if self == other."""
@@ -1559,7 +1546,7 @@ class ITimetable(Interface):
 
 
 class ITimetableWrite(Interface):
-    # XXX docstring
+    """Write access to timetables."""
 
     def __setitem__(key, value):
         """Set an ITimetableDay for a given day id.
@@ -1769,7 +1756,7 @@ class ICompositeTimetableProvider(Interface):
     """
 
     timetableSource = List(
-        title=u"Timetable source", # XXX fix title
+        title=u"Timetable source",
         description=u"""
         A specification of how the timetables of related object
         should be composed together to provide a composed timetable of
@@ -1781,7 +1768,7 @@ class ICompositeTimetableProvider(Interface):
                composed     A boolean value specifying whether to use
                             the composed timetable, otherwise private.
         """,
-        value_type=Tuple()) # TODO tuple contents?
+        value_type=Tuple())
 
 
 class ITimetabled(Interface):
@@ -1790,13 +1777,15 @@ class ITimetabled(Interface):
     """
 
     timetables = Dict(
-        title=u"A mapping of private timetables of this object.",
-        key_type=Tuple(), # TODO describe tuple contents
+        title=u"Private timetables of this object",
+        key_type=Tuple(title=u"Time period and timetable schema ids",
+                       description=u"""
+                       Tuples of (time_period_id, timetable_schema_id), e.g.,
+                       ('2004-autumn-semester', 'weekly')
+                       """),
         value_type=Object(schema=ITimetable),
         description=u"""
-        The keys of this mapping are tuples of
-        (time_period_id, timetable_schema_id), e.g.
-        ('2004-autumn-semester', 'weekly')
+        A mapping of private timetables of this object.
 
         These timetables can be directly manipulated.  Adding, changing
         or removing a timetable will result in a ITimetableReplacedEvent
@@ -1829,8 +1818,9 @@ class ITimetabled(Interface):
 class ITimetableReplacedEvent(IEvent):
     """Event that gets sent when a timetable is replaced."""
 
-    object = Field(
-        title=u"The owner of the timetable.") # XXX is this right? Object()
+    object = Object(
+        title=u"The owner of the timetable.",
+        schema=ITimetabled)
 
     key = Tuple(
         title=u"Tuple (time_period_id, schema_id).",
@@ -1873,6 +1863,7 @@ class ISchooldayTemplate(Interface):
 
 
 class ISchooldayTemplateWrite(Interface):
+    """Write access to schoolday templates."""
 
     def add(obj):
         """Add an ISchooldayPeriod to the template.
@@ -2094,7 +2085,7 @@ class IResource(IApplicationObject):
 
 
 class IAbsenceComment(Interface):
-    # XXX docstring
+    """An absence comment."""
 
     __parent__ = Field(
         title=u"The absence this comment belongs to")
@@ -2114,14 +2105,17 @@ class IAbsenceComment(Interface):
         required=False,
         schema=IApplicationObject)
 
-    ended = Field( # XXX type
-        title=u"New value of ended (True, False or Unchanged)")
+    ended = Choice(
+        title=u"New value of ended",
+        values=[True, False, Unchanged])
 
-    resolved = Field( # XXX type
-        title=u"New value of resolved (True, False or Unchanged)")
+    resolved = Choice(
+        title=u"New value of resolved",
+        values=[True, False, Unchanged])
 
-    expected_presence = Field( # XXX type
-        title=u"New value of expected_presence (datetime, None, or Unchanged)")
+    expected_presence = Field(
+        title=u"New value of expected_presence (datetime, None, or Unchanged)",
+        required=False)
 
 
 class IAbsence(ILocation):
@@ -2164,7 +2158,8 @@ class IAttendanceEvent(IEvent):
     """Event that gets sent out when an absence is recorded or updated."""
 
     absence = Object(
-        schema=IAbsence) # XXX title
+        title=u"The absence",
+        schema=IAbsence)
 
     comment = Object(
         title=u"The absence comment that describes the change",
@@ -2281,8 +2276,10 @@ class IDynamicSchemaField(Interface):
 class IDynamicSchema(Interface):
     """General informational attributes for person and address objects"""
 
-    fields = Dict(
-        title=u"Dict of field data") # XXX key_type, value_type
+    fields = List(
+        title=u"Dict of field data",
+        value_type=Object(title=u"A dynamic schema field",
+                          schema=IDynamicSchemaField))
 
     def hasField(name):
         """Test for the existence of a field."""
@@ -2360,7 +2357,7 @@ class IPersonInfoFacet(IFacet):
 
 
 class INote(ILocation, IRelatable):
-    """An abitrary notation on an IApplication Object."""
+    """An abitrary notation on an IApplicationObject."""
 
     title = TextLine(
         title=u"The title of the note.")
@@ -2368,8 +2365,9 @@ class INote(ILocation, IRelatable):
     body = Text(
         title=u"The body of the note.")
 
-    owner = Field(
-        title=u"The object that created this note.") # XXX Object()
+    owner = Object(
+        title=u"The object that created this note.",
+        schema=IApplicationObject)
 
     created = Datetime(
         title=u"The time the note was created.")
@@ -2381,7 +2379,7 @@ class IResidence(ILocation, IRelatable, IFaceted):
     Participates in URIOccupies as occupiedBy.
     """
 
-    country = TextLine(
+    country = BytesLine(
         title=u"ISO Country code")
 
 
@@ -2460,7 +2458,7 @@ class IViewAPI(Interface):
 #
 
 class ComponentLookupError(Exception):
-    """An exception for component architecture."""
+    """An exception used by the component architecture."""
 
 
 class AuthenticationError(Exception):
@@ -2508,8 +2506,6 @@ class IServiceAPI(Interface):
 
 class IServiceManager(Interface):
     """Container of services"""
-
-    # TODO: Object()s
 
     eventService = Object(
         title=u"Event service for this application",

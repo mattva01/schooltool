@@ -207,6 +207,7 @@ class DynamicSchemaField(Persistent):
     implements(IDynamicSchemaField)
 
     def __init__(self, name, label, ftype=None, value=None, vocabulary=[]):
+        # XXX Mutable default argument!
         self.name = name
         self.label = label
         self.ftype = ftype
@@ -276,6 +277,7 @@ class DynamicSchema(Persistent):
 
     def addField(self, name, label, ftype, value=None, vocabulary=[]):
         """Add a new field"""
+        # XXX Mutable default argument!
         field = DynamicSchemaField(name, label, ftype, value, vocabulary)
         self.fields.append(field)
 
