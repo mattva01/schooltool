@@ -1141,6 +1141,7 @@ class TestGroupSubgroupView(SchoolToolSetup):
 class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
 
     def setUp(self):
+        # XXX This text fixture is way too fat...
         from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -1148,12 +1149,17 @@ class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
         from schooltool import membership
         from schooltool import relationship
         from schooltool import teaching
+        from zope.component import getUtility
+        from schooltool.interfaces import IFacetFactory
+        from schooltool.facet import FacetManager
+        from schooltool.uris import URIMembership, URIGroup
+
         self.setUpRegistries()
         membership.setUp()
         relationship.setUp()
         teaching.setUp()
-        app = Application()
-        self.app = app
+        self.app = app = Application()
+
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
@@ -1161,12 +1167,22 @@ class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
         self.group = app['groups'].new("new", title="Group")
         self.per = app['persons'].new("p", title="Pete")
         self.per3 = app['persons'].new("lj", title="Longjohn")
-        self.teachers = self.app['groups'].new('teachers', title='Teachers')
         self.teacher = self.app['persons'].new('josh', title='Josh')
+
+        # Set up the teacher group.
+        self.teachers = self.app['groups'].new('teachers', title='Teachers')
+        facet_factory = getUtility(IFacetFactory, 'teacher_group')
+        facet = facet_factory()
+        fm = FacetManager(self.teachers)
+        fm.setFacet(facet, name=facet_factory.facet_name)
+
+        # Add people who may be teachers to the teacher group.
+        val = self.teachers.getValencies()[URIMembership, URIGroup]
+        val.schema(group=self.teachers, member=self.teacher)
+        val.schema(group=self.teachers, member=self.per3)
 
         Membership(group=self.root, member=self.group)
         Membership(group=self.group, member=self.per)
-        Membership(group=self.teachers, member=self.teacher)
         Teaching(teacher=self.per3, taught=self.group)
 
     def test(self):
@@ -1250,6 +1266,19 @@ class TestGroupTeachersView(SchoolToolSetup, NiceDiffsMixin):
         result = view.update() # second update will fail
         self.assertEquals(sorted(view.request.applog), [])
         self.assertEquals(result, 'Cannot add teacher Josh to Group')
+
+    def test_update_ADD_error(self):
+        from schooltool.browser.model import GroupTeachersView
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URITeacher
+        view = GroupTeachersView(self.group)
+        view.request = RequestStub(args={"FINISH_ADD":"Add selected",
+                                         "toadd": '/persons/p'})
+        result = view.update()
+        self.assertEquals(result, "Cannot add teacher Pete to Group")
+        teachers = getRelatedObjects(self.group, URITeacher)
+        assert self.per not in teachers, teachers
+        self.assertEquals(view.request.applog, [])
 
 
 class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):

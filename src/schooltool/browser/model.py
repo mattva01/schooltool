@@ -55,7 +55,8 @@ from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.translation import ugettext as _
-from schooltool.uris import URIMembership, URIMember, URIGroup, URITeacher
+from schooltool.uris import URIMembership, URIMember, URIGroup
+from schooltool.uris import URITeaching, URITeacher
 from schooltool.uris import URIGuardian, URICustodian, URIWard
 from schooltool.uris import URICurrentResidence
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
@@ -639,7 +640,11 @@ class GroupTeachersView(View, RelationshipViewMixin,
         return self._list(addable)
 
     def createRelationship(self, other):
-        Teaching(taught=self.context, teacher=other)
+        try:
+            val = other.getValencies()[URITeaching, URITeacher]
+        except KeyError:
+            raise ValueError()
+        val.schema(taught=self.context, teacher=other)
 
 
 class ResourceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
