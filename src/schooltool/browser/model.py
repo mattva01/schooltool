@@ -484,7 +484,7 @@ class RelationshipViewMixin:
 class GuardianEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
     """View for relating students to their guardian"""
 
-    title = _("Relate to a parent or Guardian")
+    title = property(lambda self: _("Relate to a parent or guardian"))
 
     template = Template('www/guardian.pt')
 
@@ -804,11 +804,11 @@ class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     linkrole = URICurrentResidence
 
-    relname = _('Occupies')
+    relname = property(lambda self: _("Occupies"))
 
     back = True
 
-    errormessage = _("Cannot add %(person)s to %(this)s")
+    errormessage = property(lambda self: _("Cannot add %(person)s to %(this)s"))
 
     def info(self):
         return FacetManager(self.context).facetByName('address_info')

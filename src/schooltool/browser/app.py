@@ -581,11 +581,11 @@ class NoteAddView(View):
 class ResidenceAddView(ObjectAddView):
     """View for adding residences """
 
-    title = _("Add residence")
+    title = property(lambda self: _("Add residence"))
 
     error = u""
 
-    relname = _('Occupies')
+    relname = property(lambda self: _("Occupies"))
 
     template = Template('www/residence_add.pt')
 
@@ -738,8 +738,8 @@ class ResidenceContainerView(ObjectContainerView):
     template = Template('www/residence_container.pt')
     add_view = ResidenceAddView
     obj_view = ResidenceView
-    index_title = _("Residences")
-    add_title = _("Add a new residence")
+    index_title = property(lambda self: _("Residences"))
+    add_title = property(lambda self: _("Add a new residence"))
 
 
 class BusySearchView(View, ToplevelBreadcrumbsMixin):
