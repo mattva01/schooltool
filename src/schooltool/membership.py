@@ -44,25 +44,25 @@ Membership = RelationshipSchema(URIMembership,
 
 
 def checkForPotentialCycles(group, potential_member):
-    """Raises ValueError if adding potential_member would create a
-    cycle in membership relationships.
+    """Check if adding potential_member to group would create a cycle.
+
+    Raises ValueError if that is the case.
     """
-    for a, b in (group, potential_member), (potential_member, group):
-        seen = Set()
-        last = Set()
-        last.add(a)
-        while last:
-            if b in last:
-                raise ValueError('Group %r is a transitive member of %r' %
-                                 (a, b))
-            seen |= last
-            new_last = Set()
-            for obj in last:
-                if IQueryLinks.providedBy(obj):
-                    links = obj.listLinks(URIGroup)
-                    new_last |= Set([link.traverse() for link in links])
-            new_last.difference_update(seen)
-            last = new_last
+    seen = Set()
+    last = Set()
+    last.add(group)
+    while last:
+        if potential_member in last:
+            raise ValueError('Group %r is a transitive member of %r' %
+                             (group, potential_member))
+        seen |= last
+        new_last = Set()
+        for obj in last:
+            if IQueryLinks.providedBy(obj):
+                links = obj.listLinks(URIGroup)
+                new_last |= Set([link.traverse() for link in links])
+        new_last.difference_update(seen)
+        last = new_last
 
 
 class MembershipEvent(RelationshipEvent):
@@ -100,7 +100,14 @@ class MemberRemovedEvent(MembershipEvent):
 def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
     """See IRelationshipFactory"""
 
-    checkForPotentialCycles(a, b)
+    if role_a == URIGroup:
+        group, potential_member = a, b
+    else:
+        group, potential_member = b, a
+    checkForPotentialCycles(group, potential_member)
+    if memberOf(potential_member, group):
+        raise ValueError('%r is already a member of %r'
+                         % (potential_member, group))
     links = relationship.relate(relationship_type,
                                 (a, role_a), (b, role_b))
     event = MemberAddedEvent(links)

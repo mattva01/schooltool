@@ -102,6 +102,8 @@ class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertRaises(ValueError, checkForPotentialCycles, g, g)
 
         # Test a two-group cycle.
+        #   g1
+        #   +-g2
         g1 = Relatable()
         g2 = Relatable()
         checkForPotentialCycles(g1, g2)
@@ -110,7 +112,19 @@ class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEquals(links['member'].traverse(), g2)
         self.assertEquals(links['group'].traverse(), g1)
         self.assertRaises(ValueError, checkForPotentialCycles, g2, g1)
-        self.assertRaises(ValueError, checkForPotentialCycles, g1, g2)
+        checkForPotentialCycles(g1, g2)
+
+        # Test a three-group cycle
+        #   g1
+        #   +-g2
+        #     +-g3
+        g1 = Relatable()
+        g2 = Relatable()
+        g3 = Relatable()
+        Membership(group=g1, member=g2)
+        Membership(group=g2, member=g3)
+        self.assertRaises(ValueError, checkForPotentialCycles, g3, g1)
+        checkForPotentialCycles(g1, g3)
 
 
 class TestEvents(unittest.TestCase):
@@ -186,8 +200,19 @@ class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
         for events in g1.events, g2.events:
             self.assertEquals(len(events), 1)
             self.assertEquals(type(events[0]), membership.MemberAddedEvent)
+
+        # g2 is already a member of g1
         self.assertRaises(ValueError, membership.Membership,
                           group=g2, member=g1)
+
+        # Test a three-group cycle
+        g1 = Relatable()
+        g2 = Relatable()
+        g3 = Relatable()
+        membership.Membership(group=g1, member=g2)
+        membership.Membership(group=g2, member=g3)
+        self.assertRaises(ValueError, membership.Membership,
+                          group=g3, member=g1)
 
 
 class TestHelpers(AppSetupMixin, unittest.TestCase):
