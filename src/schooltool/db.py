@@ -23,7 +23,6 @@ $Id$
 """
 import UserDict
 from persistence import Persistent
-from persistence.list import PersistentList
 from persistence.dict import PersistentDict
 
 __metaclass__ = type
