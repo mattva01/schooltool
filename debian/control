@@ -24,7 +24,7 @@ Package: schooltool-clients
 Architecture: any
 Conflicts: schooltool
 Replaces: schooltool
-Depends: python2.3 (>= 2.3.2), python2.3-xml, libxml2-python2.3 (>= 2.6.3-1), libwxgtk2.4-python (>= 2.4.2.4)
+Depends: python2.3 (>= 2.3.2), python2.3-xml, libxml2-python2.3 (>= 2.6.3-1), libwxgtk2.4-python (>= 2.4.2.4), ${shlibs:Depends}
 Description: common platform for school administration
  ** This package is not a part of Debian.
  .
