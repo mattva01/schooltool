@@ -1,4 +1,4 @@
-schoolbell (0.9.99+1.0rc1-1) unstable; urgency=low
+schoolbell (1.0-1) unstable; urgency=low
 
   * Split the schoolbell and schooltool packages. Schoolbell is now spilt into
     2 packages, a configuration package, an arch dependent library package
