@@ -23,7 +23,25 @@ $Id$
 """
 
 import unittest
+
 from zope.testing import doctest
+
+
+def setUpRelationships():
+    """Set up the adapter from IAnnotatable to IRelationshipLinks.
+
+    This function is created for use in unit tests.  You should call
+    zope.app.tests.setup.placelessSetUp before calling this function
+    (and don't forget to call zope.app.tests.setup.placelessTearDown after
+    you're done).  You should also call zope.app.tests.setup.setUpAnnotations
+    to get a complete test fixture.
+    """
+    from zope.app.tests import ztapi
+    from zope.app.annotation.interfaces import IAnnotatable
+    from schoolbell.relationship.interfaces import IRelationshipLinks
+    from schoolbell.relationship.annotatable import getRelationshipLinks
+    ztapi.provideAdapter(IAnnotatable, IRelationshipLinks,
+                         getRelationshipLinks)
 
 
 def doctest_URIObject():
@@ -107,10 +125,114 @@ def doctest_URIObject():
 
     """
 
+
+def doctest_getRelationshipLinks():
+    r"""Test for schoolbell.relationship.annotatable.getRelationshipLinks.
+
+    We need to set up Zope 3 annotations
+
+        >>> from zope.app.tests import setup
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+
+    We need to have an annotatable object
+
+        >>> from zope.interface import implements
+        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> class SomeAnnotatable(object):
+        ...     implements(IAttributeAnnotatable)
+
+        >>> obj = SomeAnnotatable()
+
+    Now we can check that a new LinkSet is created automatically
+
+        >>> from schoolbell.relationship.annotatable \
+        ...         import getRelationshipLinks
+        >>> linkset = getRelationshipLinks(obj)
+
+        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> from zope.interface.verify import verifyObject
+        >>> verifyObject(IRelationshipLinks, linkset)
+        True
+
+    If you do it more than once, you will get the same link set
+
+        >>> linkset is getRelationshipLinks(obj)
+        True
+
+    """
+
+
+def doctest_relate():
+    """Tests for relate
+
+    getRelatedObjects relies on adapters to IRelationshipLinks.  For the
+    purposes of this test it is simpler to just implement IRelationshipLinks
+    directly in the object
+
+        >>> from zope.interface import implements
+        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> from schoolbell.relationship.relationship import Link
+
+        >>> class Relatable:
+        ...     implements(IRelationshipLinks)
+        ...     def __init__(self, name):
+        ...         self._name = name
+        ...     def __repr__(self):
+        ...         return self._name
+        ...     def add(self, link):
+        ...         print 'Linking %s with %s (the %s in %s)' % (self,
+        ...                 link.target, link.role, link.rel_type)
+
+        >>> fred = Relatable('Fred')
+        >>> wilma = Relatable('Wilma')
+
+    Now we can test relate
+
+        >>> from schoolbell.relationship.relationship import relate
+        >>> relate('marriage', (fred, 'husband'), (wilma, 'wife'))
+        Linking Fred with Wilma (the wife in marriage)
+        Linking Wilma with Fred (the husband in marriage)
+
+    """
+
+def doctest_getRelatedObjects():
+    """Tests for getRelatedObjects
+
+    getRelatedObjects relies on adapters to IRelationshipLinks.  For the
+    purposes of this test it is simpler to just implement IRelationshipLinks
+    directly in the object
+
+        >>> from zope.interface import implements
+        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> from schoolbell.relationship.relationship import Link
+
+        >>> class Relatable:
+        ...     implements(IRelationshipLinks)
+        ...     def __iter__(self):
+        ...         return iter([Link('a', 'role_of_a', 'rel_type_a'),
+        ...                      Link('b', 'role_of_b', 'rel_type_b')])
+
+        >>> obj = Relatable()
+
+    Now we can test getRelatedObjects
+
+        >>> from schoolbell.relationship.relationship import getRelatedObjects
+        >>> getRelatedObjects(obj, 'role_of_a')
+        ['a']
+        >>> getRelatedObjects(obj, 'role_of_b')
+        ['b']
+        >>> getRelatedObjects(obj, 'role_of_c')
+        []
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocFileSuite('README.txt'),
                 doctest.DocTestSuite('schoolbell.relationship.uri'),
+                doctest.DocTestSuite('schoolbell.relationship.relationship'),
                 doctest.DocTestSuite(),
            ])
 

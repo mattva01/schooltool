@@ -17,12 +17,28 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Many-to-many relationships.
+Relationship interfaces
 
-See the README.txt file in this package for a detailed overview with working
-code examples.
+$Id$
 """
 
-from schoolbell.relationship.uri import URIObject, IURIObject      # reexport
-from schoolbell.relationship.relationship import relate            # reexport
-from schoolbell.relationship.relationship import getRelatedObjects # reexport
+from zope.interface import Interface, Attribute
+
+
+class IRelationshipLinks(Interface):
+    """A set of relationship links."""
+
+    def __iter__():
+        """Iterate over all links."""
+
+    def add(link):
+        """Add a new link."""
+
+
+class IRelationshipLink(Interface):
+    """One half of a relationship."""
+
+    rel_type = Attribute("""Relationship type.""")
+    target = Attribute("""The other member of the relationship.""")
+    role = Attribute("""Role of `target`.""")
+

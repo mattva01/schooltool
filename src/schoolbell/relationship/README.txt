@@ -21,4 +21,51 @@ following URIs:
     >>> URIMember = URIObject('http://schooltool.org/ns/membership/member',
     ...                       'Member', 'A group member role.')
 
-TODO
+To demonstrate relationships we need some objects that can be related.  Any
+object that has an adapter to IRelationshipLinks can be used in relationships.
+Since schoolbell.relationship provides a default adapter from IAnnotatable
+to IRelationshipLinks, it is enough to declare that our objects are
+IAttributeAnnotatable.
+
+    >>> from zope.interface import implements
+    >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+    >>> class SomeObject(object):
+    ...     implements(IAttributeAnnotatable)
+    ...     def __init__(self, name):
+    ...         self._name = name
+    ...     def __repr__(self):
+    ...         return self._name
+
+We need some set up to make Zope 3 annotations work.
+
+    >>> from zope.app.tests import setup
+    >>> setup.placelessSetUp()
+    >>> setup.setUpAnnotations()
+    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> setUpRelationships()
+
+You can create relationships by calling the `relate` function
+
+    >>> from schoolbell.relationship import relate
+    >>> frogs = SomeObject('frogs')
+    >>> frogger = SomeObject('frogger')
+    >>> relate(URIMembership, (frogs, URIGroup), (frogger, URIMember))
+
+You can query relationships by calling the `getRelatedObjects` function.
+For example, you can get a list of all members of the `frogs` group like
+this:
+
+    >>> from schoolbell.relationship import getRelatedObjects
+    >>> getRelatedObjects(frogs, URIMember)
+    [frogger]
+
+The relationship is bidirectional, so you can ask an object what groups it
+belongs to
+
+    >>> getRelatedObjects(frogger, URIGroup)
+    [frogs]
+
+TODO: API to remove relationships
+TODO: API to list all relationships?
+TODO: events
+
