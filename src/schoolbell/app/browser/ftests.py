@@ -29,10 +29,27 @@ from zope.app.tests.functional import FunctionalTestSetup
 from zope.app.tests.functional import FunctionalDocFileSuite
 
 
+def find_ftesting_zcml():
+    """Find ftesting.zcml in the closest parent directory."""
+    dir = os.path.abspath(os.path.dirname(__file__))
+    while True:
+        filename = os.path.join(dir, 'ftesting.zcml')
+        if os.path.exists(filename):
+            return filename
+        dir = os.path.dirname(dir)
+        if dir == os.path.dirname(dir): # we're looping at the filesystem root
+            raise RuntimeError("I can't find ftesting.zcml!")
+
+
 def test_suite():
-    # Trigger the loading of ftesting.zcml to avoid bloating the time of the
-    # first test.  This is a no-operation if done already.
-    FunctionalTestSetup()
+    # Find SchoolTool's ftesting.zcml and load it.
+    try:
+        FunctionalTestSetup(find_ftesting_zcml())
+    except NotImplementedError, e:
+        # It appears that some other ftesting.zcml was already loaded, which
+        # is perfectly fine -- the user might be running Zope 3 tests.
+        if str(e) != 'Already configured with a different config file':
+            raise
     return unittest.TestSuite([
                 FunctionalDocFileSuite('ftest.txt'),
            ])
