@@ -727,3 +727,66 @@ should have the event we have just created in the Tomorrow's events box.
            </ul>
          </div>
     ...
+
+
+A Sunbird weekly recurrence workaround
+======================================
+
+It seems that Mozilla Calendar does not include the weekday of the
+first occurence of the event to the BYDAY list of weekdays the event
+recurs on.  So, in the recurrence editing form, we must always
+consider the weekday of the first recurrence of the event to be on, by
+adding a hidden input field beside a disabled checkbox:
+
+Let's add an event on 2005-01-01 (Saturday):
+
+    >>> print http(r"""
+    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... Host: localhost:7080
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 244
+    ... Content-Type: text/calendar
+    ...
+    ... BEGIN:VCALENDAR
+    ... VERSION:2.0
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... BEGIN:VEVENT
+    ... UID:important@event
+    ... SUMMARY:Important event
+    ... DTSTART:20050101T100000
+    ... DURATION:PT1H
+    ... DTSTAMP:20050203T150000
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    Set-Cookie: ...
+    <BLANKLINE>
+
+Now, let's see the edit form for it:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/important@event/edit.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+             <!-- weekly box -->
+             <fieldset id="weekly_row">
+               <legend>Weekly</legend>
+               <p id="weekly_par">
+                 This section only applies when weekly recurrence is selected.
+               </p>
+    ...
+              <span>
+                <input type="checkbox"
+                       name="field.weekdays:list"
+                       disabled="disabled" checked="checked"
+                       id="weekday_5" value="5" />
+                <input type="hidden" name="field.weekdays:list"
+                       id="weekday_5_hidden" value="5" />
+                <label class="plain" for="weekday_5">Sat</label>
+              </span>
+    ...
+
