@@ -668,6 +668,7 @@ class Server:
                             pid_file
                             error_log_file
                             access_log_file
+                            app_log_file
         """
         # Defaults
         config_file = self.findDefaultConfigFile()
@@ -712,6 +713,8 @@ class Server:
         self.setUpLogger('schooltool.error', self.config.error_log_file,
                          "--\n%(asctime)s\n%(message)s")
         self.setUpLogger('schooltool.access', self.config.access_log_file)
+        self.setUpLogger('schooltool.app', self.config.app_log_file,
+                         "%(asctime)s %(message)s")
 
         # Shut up ZODB lock_file, because it logs tracebacks when unable
         # to lock the database file, and we don't want that.

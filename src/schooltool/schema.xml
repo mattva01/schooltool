@@ -110,4 +110,17 @@
       access-log-file STDOUT
     </example>
   </multikey>
+
+  <multikey name="app-log-file" datatype="string">
+    <description>
+      Specifies the path of a file used for the application log.
+      Special values STDERR and STDOUT mean standard error and standard
+      output respectively.
+    </description>
+    <default>STDOUT</default>
+    <example>
+      app-log-file /var/log/schooltool/app.log
+    </example>
+  </multikey>
+
 </schema>
