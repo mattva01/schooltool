@@ -63,6 +63,8 @@
              set_schema="schoolbell.app.interfaces.IResource" />
   </content>
 
+  <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
+
   <content class="schoolbell.app.cal.CalendarEvent">
     <require permission="zope.View"
              interface="schoolbell.calendar.interfaces.ICalendarEvent" />
