@@ -1,6 +1,10 @@
 <html>
 <head>
   <title>Timetable <em tal:replace="request/uri">path</em></title>
+  <style type="text/css">
+    table { border-collapse: collapse; }
+    td, th { border: 1px solid black; }
+  </style>
 </head>
 <body>
   <h1>Timetable <em tal:replace="request/uri">path</em></h1>

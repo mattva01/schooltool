@@ -65,6 +65,15 @@ class TimetableReadView(View):
 
     def do_GET(self, request):
         mtype = request.chooseMediaType(['text/xml', 'text/html'])
+        try:
+            user_agent = request.getHeader('User-Agent')
+        except KeyError:
+            pass
+        else:
+            if 'Mozilla' in user_agent:
+                # A hack to override content negotiation for Mozilla, IE and
+                # other common browsers that won't know what to do with XML
+                mtype = 'text/html'
         if mtype == 'text/html':
             return self.html_template(request, view=self, context=self.context)
         else:
@@ -273,6 +282,16 @@ class BaseTimetableTraverseView(View):
             return notFoundPage(request)
         else:
             mtype = request.chooseMediaType(['text/xml', 'text/html'])
+            try:
+                user_agent = request.getHeader('User-Agent')
+            except KeyError:
+                pass
+            else:
+                if 'Mozilla' in user_agent:
+                    # A hack to override content negotiation for Mozilla, IE
+                    # and other common browsers that won't know what to do with
+                    # XML
+                    mtype = 'text/html'
             if mtype == 'text/html':
                 return self.html_template(request, view=self,
                                           context=self.context)

@@ -249,6 +249,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         <html>
         <head>
           <title>Timetable ...object/timetables/x/y</title>
+          <style type="text/css">
+            table { border-collapse: collapse; }
+            td, th { border: 1px solid black; }
+          </style>
         </head>
         <body>
           <h1>Timetable ...object/timetables/x/y</h1>
@@ -299,6 +303,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         <html>
         <head>
           <title>Timetable ...object/timetables/x/y</title>
+          <style type="text/css">
+            table { border-collapse: collapse; }
+            td, th { border: 1px solid black; }
+          </style>
         </head>
         <body>
           <h1>Timetable ...object/timetables/x/y</h1>
