@@ -948,9 +948,114 @@ class RollcallView(View):
 class AbsenceTrackerView(View, AbsenceListViewMixin):
 
     template = Template('www/absences.pt', content_type='text/xml')
+    template_html = Template('www/absences_html.pt', content_type='text/html')
+
+    utcnow = datetime.datetime.utcnow
+
+    def format_reason(self, reason):
+        if reason is None:
+            return ''
+        else:
+            return ' (%s)' % reason
+
+    def format_date(self, date, now):
+        if date.date() == now.date():
+            return 'today'
+        else:
+            return date.strftime('%Y-%m-%d')
+
+    def text_template(self, request):
+        request.setHeader('Content-Type', 'text/plain; charset=UTF-8')
+        result = []
+        now = self.utcnow()
+        format_reason = self.format_reason
+        format_date = self.format_date
+        header = "Absences at %s" % (now.strftime("%H:%M%P %Y-%m-%d UTC"))
+        result.append("%s\n%s\n" % (header, "=" * len(header)))
+        result.append("Unexpected absences\n"
+                      "-------------------\n")
+        unexpected = self.unexpected(now)
+        if not unexpected:
+            result.append("None")
+        else:
+            for absence in unexpected:
+                if absence.expected_presence:
+                    when_expected = absence.expected_presence
+                    age = now - when_expected
+                    seconds_in_day = 86400
+                    agestring = '%dh%dm' % divmod(
+                        (age.days * seconds_in_day + age.seconds) / 60, 60)
+                    reason = absence.comments[-1].text
+                    result.append("%s expected %s ago, at %s %s%s" %
+                                  (absence.person.title,
+                                   agestring,
+                                   when_expected.strftime("%I:%M%P"),
+                                   format_date(when_expected, now),
+                                   format_reason(reason)
+                                   ))
+                else:
+                    start = absence.comments[0].datetime
+                    age = now - start
+                    seconds_in_day = 86400
+                    agestring = '%dh%dm' % divmod(
+                        (age.days * seconds_in_day + age.seconds) / 60, 60)
+                    reason = absence.comments[-1].text
+                    result.append("%s absent for %s, since %s %s%s" %
+                                  (absence.person.title,
+                                   agestring,
+                                   start.strftime("%I:%M%P"),
+                                   format_date(start, now),
+                                   format_reason(reason)
+                                   ))
+        result.append("\n"
+                      "Expected absences\n"
+                      "-----------------\n")
+        expected = self.expected(now)
+        if not expected:
+            result.append("None")
+        else:
+            for absence in expected:
+                when_expected = absence.expected_presence
+                age = when_expected - now
+                seconds_in_day = 86400
+                agestring = '%dh%dm' % divmod(
+                    (age.days * seconds_in_day + age.seconds) / 60, 60)
+                reason = absence.comments[-1].text
+                result.append("%s expected in %s, at %s %s%s" %
+                              (absence.person.title,
+                               agestring,
+                               when_expected.strftime("%I:%M%P"),
+                               format_date(when_expected, now),
+                               format_reason(reason)
+                               ))
+        result.append("")
+        return "\n".join(result)
+
+    def unexpected(self, now):
+        L = [(absence.expected_presence or absence.comments[0].datetime,
+              absence)
+             for absence in self.context.absences
+             if absence.expected_presence is None or
+             absence.expected_presence < now]
+        L.sort()
+        return [absence for sortkey, absence in L]
+
+    def expected(self, now):
+        L = [(absence.expected_presence, absence)
+             for absence in self.context.absences
+             if absence.expected_presence is not None and
+             absence.expected_presence >= now]
+        L.sort()
+        return [absence for sortkey, absence in L]
 
     def listAbsences(self):
         return self._listAbsences(self.context.absences, True)
+
+    def do_GET(self, request):
+        if 'text/plain' in [row[1] for row in request.accept]:
+            return self.text_template(request)
+        else:
+            return self.template(request, view=self, context=self.context)
 
 
 class AbsenceTrackerFacetView(AbsenceTrackerView, FacetView):

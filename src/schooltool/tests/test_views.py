@@ -28,7 +28,7 @@ import sets
 import libxml2
 from zope.interface import Interface, implements
 from StringIO import StringIO
-from schooltool.tests.helpers import diff
+from schooltool.tests.helpers import diff, dedent
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.interfaces import IUtility, IFacet, IContainmentRoot
@@ -149,6 +149,8 @@ class RequestStub:
         if start >= 0:
             self.path = uri[start:]
         self._hostname = 'localhost'
+        self.accept = []
+
 
     def getRequestHostname(self):
         return self._hostname
@@ -1953,6 +1955,93 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
             """)
 
 
+class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
+                                 unittest.TestCase):
+
+    def test_get_text(self):
+        from schooltool.model import Person, AbsenceTrackerUtility
+        from schooltool.model import AbsenceComment
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.views import AbsenceTrackerView
+        from schooltool.interfaces import IAttendanceEvent
+        app = Application()
+        self.tracker = AbsenceTrackerUtility()
+        app.utilityService['absences'] = self.tracker
+        app.eventService.subscribe(self.tracker, IAttendanceEvent)
+        self.persons = app['persons'] = ApplicationObjectContainer(Person)
+        self.view = AbsenceTrackerView(self.tracker)
+        self.view.utcnow = lambda: datetime.datetime(2003, 11, 3, 12, 35)
+
+        request = RequestStub("http://localhost/utils/absences/")
+        request.accept = [('1', 'text/plain', {}, {})]
+        result = self.view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/plain; charset=UTF-8")
+
+        steve = self.persons.new('steve', title='Steve Alexander')
+        marius = self.persons.new('marius', title='Marius Gedminas')
+        aiste = self.persons.new('aiste', title='Aiste Kesminaite')
+        albert = self.persons.new('albert', title='Albertas Agejevas')
+        vika = self.persons.new('vika', title='Viktorija Zaksiene')
+
+        expected = dedent("""
+            Absences at 12:35pm 2003-11-03 UTC
+            ==================================
+
+            Unexpected absences
+            -------------------
+
+            None
+
+            Expected absences
+            -----------------
+
+            None
+            """)
+        self.assertEquals(result, expected, diff(result, expected))
+
+        dt = datetime.datetime(2003, 11, 3, 10, 0, 0)
+        albert.reportAbsence(AbsenceComment(dt=dt))
+
+        exp = datetime.datetime(2003, 11, 3, 13, 40, 0)
+        dt = datetime.datetime(2003, 11, 3, 9, 0, 0)
+        aiste.reportAbsence(AbsenceComment(dt=dt, expected_presence=exp,
+                                           text='chiropodist appointment'))
+
+        exp = datetime.datetime(2003, 11, 3, 10, 5, 0)
+        dt = datetime.datetime(2003, 11, 3, 9, 0, 0)
+        marius.reportAbsence(AbsenceComment(dt=dt, expected_presence=exp,
+                                           text='dentist'))
+
+        exp = datetime.datetime(2003, 11, 2, 11, 35, 0)
+        dt = datetime.datetime(2003, 11, 2, 9, 0, 0)
+        steve.reportAbsence(AbsenceComment(dt=dt, expected_presence=exp))
+
+        exp = datetime.datetime(2003, 11, 4, 9, 0, 0)
+        dt = datetime.datetime(2003, 11, 1, 9, 0, 0)
+        vika.reportAbsence(AbsenceComment(dt=dt, expected_presence=exp,
+                                          text='vacation'))
+        result = self.view.render(request)
+        expected = dedent("""
+            Absences at 12:35pm 2003-11-03 UTC
+            ==================================
+
+            Unexpected absences
+            -------------------
+
+            Steve Alexander expected 25h0m ago, at 11:35am 2003-11-02
+            Albertas Agejevas absent for 2h35m, since 10:00am today
+            Marius Gedminas expected 2h30m ago, at 10:05am today (dentist)
+
+            Expected absences
+            -----------------
+
+            Aiste Kesminaite expected in 1h5m, at 01:40pm today (chiropodist appointment)
+            Viktorija Zaksiene expected in 20h25m, at 09:00am 2003-11-04 (vacation)
+            """)
+        self.assertEquals(result, expected, diff(result, expected))
+
+
 class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
 
     def setUp(self):
@@ -2061,6 +2150,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAbsenceCommentParser))
     suite.addTest(unittest.makeSuite(TestRollcallView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerView))
+    suite.addTest(unittest.makeSuite(TestAbsenceTrackerTextView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerFacetView))
     suite.addTest(unittest.makeSuite(TestTreeView))
     return suite
