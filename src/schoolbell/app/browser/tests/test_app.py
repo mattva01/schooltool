@@ -124,7 +124,7 @@ def doctest_GroupListView():
 
     First, all groups should be listed:
 
-        >>> group_titles = [g.title for g in view.getGroupList()]
+        >>> group_titles = [g.title for g in view.getAllGroups()]
         >>> group_titles.sort()
         >>> group_titles
         ['Etria', 'Others', 'PoV']
@@ -226,7 +226,7 @@ def doctest_MemberListView():
 
     First, all persons should be listed in alphabetical order:
 
-        >>> [g.title for g in view.getMemberList()]
+        >>> [g.title for g in view.getPotentialMembers()]
         ['Albertas', 'Gintas', 'Ignas']
 
     Let's make Ignas a member of PoV:

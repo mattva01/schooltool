@@ -36,7 +36,7 @@
       </div>
     </fieldset>
 
-    <fieldset tal:define="groups view/getGroupList" tal:condition="groups">
+    <fieldset tal:define="groups view/getAllGroups" tal:condition="groups">
       <legend i18n:translate="">Add to groups</legend>
       <div tal:repeat="group groups/sortby:title">
         <label>

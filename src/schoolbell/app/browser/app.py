@@ -117,15 +117,15 @@ class GroupListView(BrowserView):
 
     __used_for__ = IGroupMember
 
-    def getGroupList(self):
-        """Return a sorted list of all groups in the system."""
+    def getAllGroups(self):
+        """Return a list of all groups in the system."""
         return ISchoolBellApplication(self.context)['groups'].values()
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
         if 'UPDATE_SUBMIT' in self.request:
             context_groups = removeSecurityProxy(self.context.groups)
-            for group in self.getGroupList():
+            for group in self.getAllGroups():
                 want = bool('group.' + group.__name__ in self.request)
                 have = bool(group in context_groups)
                 # add() and remove() could throw an exception, but at the
@@ -167,8 +167,8 @@ class MemberViewBase(BrowserView):
 
     container_name = None
 
-    def getMemberList(self):
-        """Return a sorted list of all possible members."""
+    def getPotentialMembers(self):
+        """Return a list of all possible members."""
         container = ISchoolBellApplication(self.context)[self.container_name]
         return container.values()
 
@@ -177,7 +177,7 @@ class MemberViewBase(BrowserView):
         context_url = zapi.absoluteURL(self.context, self.request)
         if 'UPDATE_SUBMIT' in self.request:
             context_members = removeSecurityProxy(self.context.members)
-            for member in self.getMemberList():
+            for member in self.getPotentialMembers():
                 want = bool('member.' + member.__name__ in self.request)
                 have = bool(member in context_members)
                 # add() and remove() could throw an exception, but at the
@@ -328,8 +328,8 @@ class PersonAddView(AddView):
                 [ValidationError('This username is already used!')])
         return AddView.createAndAdd(self, data)
 
-    def getGroupList(self):
-        """Return a sorted list of all groups in the system."""
+    def getAllGroups(self):
+        """Return a list of all groups in the system."""
         return ISchoolBellApplication(self.context)['groups'].values()
 
     def create(self, title, username, password, photo):
@@ -345,7 +345,7 @@ class PersonAddView(AddView):
         Uses the username of `person` as the object ID (__name__).
         """
         person_groups = removeSecurityProxy(person.groups)
-        for group in self.getGroupList():
+        for group in self.getAllGroups():
             if 'group.' + group.__name__ in self.request:
                 person.groups.add(removeSecurityProxy(group))
         name = person.username

@@ -8,7 +8,7 @@
   Members of <span i18n:name="title" tal:replace="context/title" />
 </h1>
 <metal:block metal:fill-slot="body"
-             tal:define="possible_members view/getMemberList">
+             tal:define="possible_members view/getPotentialMembers">
 
 <form method="POST" tal:attributes="action request/URL">
 <p tal:condition="not:possible_members" i18n:translate="">
