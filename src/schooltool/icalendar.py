@@ -24,28 +24,9 @@ $Id$
 
 import re
 import datetime
-import calendar
-import email.Utils
 from sets import Set
-from zope.interface import implements
-from persistent import Persistent
-from schooltool.auth import ACL
-from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
-from schooltool.interfaces import ILocation, IDateRange
-from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
-from schooltool.interfaces import ICalendarOwner
-from schooltool.interfaces import IACLCalendar
-from schooltool.interfaces import ViewPermission
-from schooltool.interfaces import ModifyPermission, AddPermission
-from schooltool.interfaces import Unchanged
-from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
-from schooltool.interfaces import IWeeklyRecurrenceRule, IMonthlyRecurrenceRule
 
 __metaclass__ = type
-
-#
-# iCalendar parsing
-#
 
 
 class ICalParseError(Exception):

@@ -22,7 +22,6 @@ SchoolTool calendaring stuff.
 $Id$
 """
 
-import re
 import datetime
 import calendar
 import email.Utils

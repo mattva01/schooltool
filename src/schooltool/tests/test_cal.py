@@ -25,12 +25,8 @@ $Id$
 import sets
 import unittest
 import calendar
-from pprint import pformat
 from datetime import date, timedelta, datetime
-from StringIO import StringIO
 from zope.interface.verify import verifyObject
-from zope.testing.doctestunit import DocTestSuite
-from schooltool.tests.helpers import diff, dedent, sorted
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.interfaces import ISchooldayModel
 
@@ -310,7 +306,7 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
                             "German")
         cal = self.makeCal([ev1, ev2])
         cal.update(self.makeCal([ev2, ev3]))
-        self.assertEquals(sorted(list(cal)), sorted([ev1, ev2, ev3]))
+        self.assertEqualSorted(list(cal), [ev1, ev2, ev3])
 
 
 class TestCalendarPersistence(unittest.TestCase):
