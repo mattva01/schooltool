@@ -585,6 +585,8 @@ class TestClient(unittest.TestCase):
     def assertEmitted(self, what):
         self.assertEqual(self.emitted, what, "\n" + diff(what, self.emitted))
 
+    # TODO: unit tests for load_snapshot and save_snapshot would be nice
+
 
 class TestXLinkHandler(unittest.TestCase):
 

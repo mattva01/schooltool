@@ -200,7 +200,8 @@ welcome to change it and/or distribute copies of it under certain conditions.
             user = 'Anonymous'
         self.emit("User %s" % user)
 
-    def _request(self, method, resource, headers=(), body=None):
+    def _request(self, method, resource, headers=(), body=None,
+                 ignore_data=False):
         """Perform an HTTP request.
 
         Displays the response (if it is text/*), stores it for later
@@ -228,6 +229,8 @@ welcome to change it and/or distribute copies of it under certain conditions.
                 conn.send(body)
             response = conn.getresponse()
             self.emit("%s %s" % (response.status, response.reason))
+            if ignore_data:
+                return
             ctype = response.getheader('Content-Type',
                                        'application/octet-stream')
             self.emit("Content-Type: %s" % ctype)
@@ -404,6 +407,33 @@ welcome to change it and/or distribute copies of it under certain conditions.
             self.do_get(link)
         except (IndexError, ValueError):
             self.emit("Wrong link number")
+
+    def do_save_snapshot(self, line):
+        """Save a snapshot of database state.
+
+        Only available in functional tests.
+
+        save_snapshot snapshot1
+        """
+        name = line.strip()
+        if not line:
+            self.emit("Please specify a name.")
+        self._request('GET', '/', [('X-Testing-Save-Snapshot', name)],
+                      ignore_data=True)
+
+    def do_load_snapshot(self, line):
+        """Load a snapshot of database state.
+
+        Only available in functional tests.
+
+        load_snapshot snapshot1
+        """
+        name = line.strip()
+        if not line:
+            self.emit("Please specify a name.")
+            return
+        self._request('GET', '/', [('X-Testing-Load-Snapshot', name)],
+                      ignore_data=True)
 
 
 class XLinkHandler(ContentHandler):
