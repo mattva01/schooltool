@@ -568,6 +568,16 @@ class Request(http.Request):
         """Choose a media type for presentation according to Accept: header."""
         return chooseMediaType(supported_types, self.accept)
 
+    def getContentType(self):
+        """Return the content type of the request entity, without attributes.
+
+        May return None.
+        """
+        ctype = self.getHeader('Content-Type')
+        if ctype and ';' in ctype:
+            ctype = ctype.split(';', 1)[0]
+        return ctype
+
     def logHit(self):
         """Log a hit into an access log in Apache combined log format."""
         self.hitlogger.info('%s - %s [%s] "%s" %s %s "%s" "%s"' %

@@ -208,9 +208,7 @@ class TimetableReadWriteView(TimetableReadView):
             return TimetableReadView.do_GET(self, request)
 
     def do_PUT(self, request):
-        ctype = request.getHeader('Content-Type')
-        if ';' in ctype:
-            ctype = ctype[:ctype.index(';')]
+        ctype = request.getContentType()
         if ctype != 'text/xml':
             return textErrorPage(request,
                                  _("Unsupported content type: %s") % ctype)
@@ -370,9 +368,7 @@ class TimetableSchemaView(TimetableReadView):
             return _("Deleted timetable schema")
 
     def do_PUT(self, request):
-        ctype = request.getHeader('Content-Type')
-        if ';' in ctype:
-            ctype = ctype[:ctype.index(';')]
+        ctype = request.getContentType()
         if ctype != 'text/xml':
             return textErrorPage(request,
                                  _("Unsupported content type: %s") % ctype)

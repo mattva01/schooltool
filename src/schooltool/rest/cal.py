@@ -95,9 +95,7 @@ class SchooldayModelCalendarView(View):
         return "\r\n".join(result)
 
     def do_PUT(self, request):
-        ctype = request.getHeader('Content-Type')
-        if ';' in ctype:
-            ctype = ctype[:ctype.index(';')]
+        ctype = request.getContentType()
         if ctype == 'text/calendar':
             return self.do_PUT_text_calendar(request)
         elif ctype == 'text/xml':
@@ -264,9 +262,7 @@ class CalendarView(CalendarReadView):
     authorization = PrivateAccess
 
     def do_PUT(self, request):
-        ctype = request.getHeader('Content-Type')
-        if ';' in ctype:
-            ctype = ctype[:ctype.index(';')]
+        ctype = request.getContentType()
         if ctype != 'text/calendar':
             return textErrorPage(request,
                                  _("Unsupported content type: %s") % ctype)

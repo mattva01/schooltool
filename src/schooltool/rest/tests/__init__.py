@@ -101,6 +101,12 @@ class RequestStub:
         # Twisted's getHeader returns None when the header does not exist
         return self.request_headers.get(header.lower())
 
+    def getContentType(self):
+        ctype = self.getHeader('Content-Type')
+        if ctype and ';' in ctype:
+            ctype = ctype.split(';', 1)[0]
+        return ctype
+
     def setHeader(self, header, value):
         self.headers[header.lower()] = value
 

@@ -906,6 +906,18 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(rq.headers['www-authenticate'],
                          'basic realm="SchoolTool"')
 
+    def test_getContentType(self):
+        from schooltool.http import Request
+        rq = Request(None, True)
+
+        def test(ctype):
+            rq.getHeader = lambda h: {'content-type': ctype}[h.lower()]
+            return rq.getContentType()
+
+        self.assertEquals(test('text/html'), 'text/html')
+        self.assertEquals(test('text/html; charset=UTF-8'), 'text/html')
+        self.assertEquals(test(None), None)
+
 
 class TestTimeFormatting(unittest.TestCase):
 
