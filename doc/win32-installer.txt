@@ -46,7 +46,7 @@ Index: build-win32-dist.py
 +import os
 +import shutil
 +
-+VERSION = "Milestone 5"
++VERSION = "Milestone 6"
 +
 +def die(msg):
 +    print >> sys.stderr, msg
@@ -205,25 +205,11 @@ Index: build-win32-dist.py
 +    die('Setup.exe not created.')
 +
 +print "You're done!"
-Index: src/schooltool/clients/wxclient.py
-===================================================================
---- src/schooltool/clients/wxclient.py	(revision 920)
-+++ src/schooltool/clients/wxclient.py	(working copy)
-@@ -54,6 +54,9 @@
- 
- __metaclass__ = type
- 
-+# __file__ is not defined in py2exe archives
-+import sys
-+__file__ = sys.argv[0]
- 
- #
- # Common sets of window style flags
 Index: setup.py
 ===================================================================
---- setup.py	(revision 920)
-+++ setup.py	(working copy)
-@@ -65,6 +65,7 @@
+--- setup.py    (revision 1034)
++++ setup.py    (working copy)
+@@ -66,6 +66,7 @@
  #
  
  from distutils.core import setup, Extension
@@ -231,12 +217,9 @@ Index: setup.py
  
  # Set up dependencies for the BTrees package
  base_btrees_depends = [
-@@ -135,6 +136,18 @@
- ]
- 
+@@ -138,4 +139,16 @@
  setup(name="schooltool",
--      version="0.0.1pre",
-+      version="0.0.1", # XXX py2exe does not like non-integer versions
+       version="0.6",
        package_dir={'': 'src'},
 -      ext_modules=ext_modules)
 +      ext_modules=ext_modules,
@@ -252,3 +235,17 @@ Index: setup.py
 +                         "resources.csv", "ttconfig.data"])],
 +      options = {"py2exe": {"packages": ["encodings"]}},
 +     )
+Index: src/schooltool/clients/wxclient.py
+===================================================================
+--- src/schooltool/clients/wxclient.py  (revision 1031)
++++ src/schooltool/clients/wxclient.py  (working copy)
+@@ -54,6 +54,9 @@
+ 
+ __metaclass__ = type
+ 
++# __file__ is not defined in py2exe archives
++import sys
++__file__ = sys.argv[0]
+ 
+ #
+ # Common sets of window style flags
