@@ -64,7 +64,7 @@ moduleProvides(IModuleSetup)
 # HTTP server
 #
 
-SERVER_VERSION = "SchoolTool/0.1"
+SERVER_VERSION = "SchoolTool/0.2"
 
 
 class Request(server.Request):
