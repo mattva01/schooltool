@@ -76,7 +76,9 @@ class RootView(View):
     username = ''
 
     def do_GET(self, request):
-        if request.authenticated_user is not None:
+        logged_in = request.authenticated_user is not None
+        forbidden = 'forbidden' in request.args
+        if logged_in and not forbidden:
             return self.redirect('/start', request)
         else:
             return View.do_GET(self, request)

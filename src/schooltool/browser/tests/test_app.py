@@ -90,7 +90,8 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
 
     def test_render_forbidden(self):
         view = self.createView()
-        request = RequestStub('/?forbidden=1', args={'forbidden': '1'})
+        request = RequestStub('/?forbidden=1', args={'forbidden': '1'},
+                              authenticated_user=PersonStub())
         result = view.render(request)
         self.assert_('Username' in result)
         self.assert_('expired' not in result)
