@@ -41,7 +41,7 @@ from schoolbell.relationship.interfaces import DuplicateRelationship
 from schoolbell.relationship.interfaces import NoSuchRelationship
 
 
-def relate(rel_type, (a, role_of_a), (b, role_of_b)):
+def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
     """Establish a relationship between objects `a` and `b`."""
     for link in IRelationshipLinks(a):
         if (link.target is b and link.role == role_of_b
@@ -50,8 +50,10 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b)):
     zope.event.notify(BeforeRelationshipEvent(rel_type,
                                               (a, role_of_a),
                                               (b, role_of_b)))
-    IRelationshipLinks(a).add(Link(role_of_a, b, role_of_b, rel_type))
-    IRelationshipLinks(b).add(Link(role_of_b, a, role_of_a, rel_type))
+    IRelationshipLinks(a).add(Link(role_of_a, b, role_of_b, rel_type,
+                                   extra_info))
+    IRelationshipLinks(b).add(Link(role_of_b, a, role_of_a, rel_type,
+                                   extra_info))
     zope.event.notify(RelationshipAddedEvent(rel_type,
                                              (a, role_of_a),
                                              (b, role_of_b)))
@@ -338,10 +340,10 @@ class BoundRelationshipProperty(object):
             if link.role == self.other_role and link.rel_type == self.rel_type:
                 yield link.target
 
-    def add(self, other):
+    def add(self, other, extra_info=None):
         """Establish a relationship between `self.this` and `other`."""
         relate(self.rel_type, (self.this, self.my_role),
-                              (other, self.other_role))
+                              (other, self.other_role), extra_info)
 
     def remove(self, other):
         """Unlink a relationship between `self.this` and `other`."""
@@ -379,11 +381,12 @@ class Link(Persistent):
 
     implements(IRelationshipLink)
 
-    def __init__(self, my_role, target, role, rel_type):
+    def __init__(self, my_role, target, role, rel_type, extra_info=None):
         self.my_role = my_role
         self.target = target
         self.role = role
         self.rel_type = rel_type
+        self.extra_info = extra_info
 
 
 class LinkSet(Persistent):

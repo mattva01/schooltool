@@ -331,6 +331,62 @@ Note that if you use symmetric relationships, you cannot use `__getitem__`
 on IBeforeRelationshipEvents.
 
 
+Annotated relationships
+-----------------------
+
+Sometimes you may want to attach some extra information to a relationship (e.g.
+a label).  You can do so by passing an extra argument to `relate` and
+`unrelate`:
+
+    >>> relate(URIFriendship, (kermit, URIFriend), (frogger, URIFriend),
+    ...        'kermit and frogger know each other for years')
+    Relationship Friendship added between kermit (Friend) and frogger (Friend)
+
+This extra argument should be either a read-only object, or a subclass of
+persistent.Persistent, because references to this object will be stored from
+both relationship sides.
+
+You can access this extra information from relationship links directly:
+
+    >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+    >>> for link in IRelationshipLinks(kermit):
+    ...     if link.extra_info:
+    ...         print link.extra_info
+    kermit and frogger know each other for years
+
+Since this is very inconvenient, I expect you will write your own access
+properties that mimic RelationshipProperty, and override the `__iter__`
+method.  For example:
+
+    >>> from schoolbell.relationship.relationship import BoundRelationshipProperty
+    >>> class FriendshipProperty(object):
+    ...     def __get__(self, instance, owner):
+    ...         if instance is None: return self
+    ...         return BoundFriendshipProperty(instance)
+    >>> class BoundFriendshipProperty(BoundRelationshipProperty):
+    ...     def __init__(self, this):
+    ...         BoundRelationshipProperty.__init__(self, this, URIFriendship,
+    ...                                            URIFriend, URIFriend)
+    ...     def __iter__(self):
+    ...         for link in IRelationshipLinks(self.this):
+    ...             if link.role == self.other_role and link.rel_type == self.rel_type:
+    ...                 yield link.target, link.extra_info
+
+You can then use it like this:
+
+    >>> class Friend(SomeObject):
+    ...     friends = FriendshipProperty()
+
+    >>> fluffy = Friend('fluffy')
+    >>> fluffy.friends.add(kermit,
+    ...         'fluffy just met kermit, but fluffy is very friendly')
+    Relationship Friendship added between fluffy (Friend) and kermit (Friend)
+
+    >>> for friend, extra_info in fluffy.friends:
+    ...     print '%s: %s' % (friend, extra_info)
+    kermit: fluffy just met kermit, but fluffy is very friendly
+
+
 Caveats
 -------
 

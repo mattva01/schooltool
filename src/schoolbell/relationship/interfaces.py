@@ -50,7 +50,7 @@ class IRelationshipProperty(Interface):
     def __iter__():
         """Iterate over all related objects."""
 
-    def add(other):
+    def add(other, extra_info=None):
         """Establish a relationship with `other`."""
 
     def remove(other):
@@ -68,6 +68,7 @@ class IRelationshipLink(Interface):
     target = Attribute("""The other member of the relationship.""")
     role = Attribute("""Role of `target`.""")
     my_role = Attribute("""Role of the object that has this link.""")
+    extra_info = Attribute("""Extra information that was passed to `relate`.""")
 
 
 class IRelationshipLinks(Interface):
