@@ -122,13 +122,30 @@ configuration file (hint: make runtestserver) and then do
 
   python2.3 test.py -fpv
 
-Note that unlike unit tests functional tests do not run in isolation, and
+Note that unlike unit tests, functional tests do not run in isolation, and
 therefore you need to stop and restart the SchoolTool server if you want to
 run them again.
 
 The test runner has more options and features.  To find out about them, do
 
   python2.3 test.py -h
+
+
+Translation
+-----------
+
+Translation files live in src/schooltool/translations.  There is a directory
+for each language that contains a subdirectory called LC_MESSAGES that
+contains two files: schooltool.po and schooltool.mo.
+
+To start a new translation create a language directory and LC_MESSAGES, and
+use src/schooltool/translations/schooltool.pot as a template.  Generate
+schooltool.mo with msgfmt (or by calling make update-translations).
+
+When you change the translatable strings in the source code or page templates,
+be sure to run
+
+  make extract-translations
 
 
 Copyright information

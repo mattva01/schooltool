@@ -36,7 +36,6 @@ import sets
 import libxml2
 import datetime
 import threading
-import gettext
 from cStringIO import StringIO
 from wxPython.wx import *
 from wxPython.grid import *
@@ -2473,11 +2472,12 @@ class SchoolToolApp(wxApp):
 
 def main():
     import schooltool.uris
+    import schooltool.translation
     schooltool.uris.setUp()
+    schooltool.translation.setUp()
     # Do not output XML parsing errors to the terminal
     libxml2.registerErrorHandler(lambda ctx, error: None, None)
     wxInitAllImageHandlers()
-    gettext.install('schooltool')
     client = SchoolToolClient()
     app = SchoolToolApp(client)
     app.MainLoop()

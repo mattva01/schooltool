@@ -13,6 +13,18 @@ all: build
 build:
 	$(PYTHON) setup.py build_ext -i
 
+extract-translations:
+	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
+			-o translation/
+	$(MAKE) update-translations
+
+update-translations:
+	for f in `find src/schooltool/translation/ -name 'schooltool.po'`; \
+	do								   \
+	     msgmerge -U $$f src/schooltool/translation/schooltool.pot;	   \
+	     msgfmt -o $${f%.po}.mo $$f;				   \
+	done
+
 clean:
 	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build

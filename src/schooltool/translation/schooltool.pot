@@ -1,0 +1,806 @@
+##############################################################################
+#
+# Copyright (c) 2003 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Zope 3 (unknown version)\n"
+"POT-Creation-Date: Fri Apr  2 18:32:45 2004\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/translation_files/extract.py\n"
+
+#: src/schooltool/clients/wxclient.py:1044
+msgid "School Timetable (%s, %s)"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1061
+msgid "&Fit Cells"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1063
+msgid "&Edit Cell"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1120
+msgid "&Back"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1122
+msgid "&Forward"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1160
+msgid "Search for Available Resources"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1170
+#: src/schooltool/clients/wxclient.py:2435
+msgid "Could not get the list of resources: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1190
+msgid "Hours"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1205
+#: src/schooltool/clients/wxclient.py:1374
+msgid "min"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1210
+msgid "First date"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1215
+msgid "Last date"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1219
+#: src/schooltool/clients/wxclient.py:1370
+msgid "Duration"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1224
+msgid "&Find"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1237
+msgid "Results"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1240
+#: src/schooltool/clients/wxclient.py:1350
+msgid "Resource"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1241
+msgid "Available from"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1242
+msgid "Available until"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1254
+msgid "Book Resource"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1300
+msgid "Could not get the list of available resources: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1333
+msgid "Resource Booking"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1342
+#: src/schooltool/clients/wxclient.py:1858
+msgid "Could not get a list of persons: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1366
+msgid "Time"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1377
+msgid "Ignore conflicts"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1437
+msgid "Could not book the resource: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1447
+msgid "Change Password for %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1456
+msgid "Username: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1460
+msgid "New password"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1463
+msgid "Confirm password"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1494
+msgid "Could not change password: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1513
+msgid "Could not get person information: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1520
+#: src/schooltool/clients/wxclient.py:1629
+msgid "Could not get person photo: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1535
+msgid "First Name"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1540
+msgid "Last Name"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1549
+msgid "Date of Birth"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1600
+msgid "Could not update person information: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1608
+msgid "Choose a new photo"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1617
+msgid "Could not read %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1623
+msgid "Could not update person photo: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1689
+msgid "&File"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1690
+msgid "Create a new person"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1690
+msgid "New &Person"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1692
+msgid "Create a new group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1692
+msgid "New &Group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1695
+msgid "E&xit\tCtrl+Q"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1695
+msgid "Terminate the program"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1698
+msgid "&View"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1699
+msgid "All &Absences"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1699
+msgid "List all absences in the system"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1701
+msgid "&School Timetable"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1702
+msgid "Edit a timetable for the whole school"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1704
+msgid "Search &for Available Resources"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1705
+msgid "Search for available resources"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1708
+msgid "&Refresh\tCtrl+R"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1708
+msgid "Refresh data from the server"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1711
+msgid "&Settings"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1712
+msgid "&Server"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1712
+msgid "Server settings"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1715
+msgid "&Help"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1716
+msgid "&About"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1716
+#: src/schooltool/clients/wxclient.py:2067
+msgid "About SchoolTool"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1729
+msgid "Do a roll call"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1729
+msgid "Roll &Call"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1730
+msgid "&Absence Tracker"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1731
+msgid "Inspect the absence tracker for this group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1733
+#: src/schooltool/clients/wxclient.py:1760
+msgid "View &Timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1734
+msgid "View a list of groups's timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1736
+msgid "View C&omposite Timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1737
+msgid "View a list of group's composite timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1740
+msgid "Refresh"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1740
+msgid "&Refresh"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1749
+msgid "Members"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1755
+msgid "View Person &Info"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1756
+msgid "View person's information"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1757
+msgid "View &Absences"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1758
+msgid "View a list of person's absences"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1761
+msgid "View a list of person's timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1763
+msgid "View &Composite Timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1764
+msgid "View a list of person's composite timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1766
+msgid "Change &Password"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1767
+msgid "Change the password of a person"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1770
+msgid "Add &Member"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1770
+#: src/schooltool/clients/wxclient.py:1791
+msgid "Add a person to this group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1772
+msgid "Remove a person from this group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1772
+msgid "&Remove Member"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1783
+msgid "Relationships"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1787
+#: src/schooltool/clients/wxclient.py:1832
+msgid "Title"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1788
+msgid "Role"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1789
+msgid "Relationship"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1791
+msgid "&Add Member"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1793
+msgid "Add &Teacher"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1793
+msgid "Add a teacher to this group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1795
+msgid "Add a group to this group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1795
+msgid "Add &Subgroup"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1797
+msgid "Remove selected relationship"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1797
+msgid "&Remove Relationship"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1832
+#: src/schooltool/clients/wxclient.py:1839
+msgid "New Group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1838
+msgid "Could not create a group: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1850
+#: src/schooltool/clients/wxclient.py:1890
+#: src/schooltool/clients/wxclient.py:1931
+#: src/schooltool/clients/wxclient.py:1987
+#: src/schooltool/clients/wxclient.py:2021
+#: src/schooltool/clients/wxclient.py:2211
+#: src/schooltool/clients/wxclient.py:2325
+#: src/schooltool/clients/wxclient.py:2366
+#: src/schooltool/clients/wxclient.py:2385
+msgid "No group selected"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1859
+#: src/schooltool/clients/wxclient.py:1899
+#: src/schooltool/clients/wxclient.py:1908
+#: src/schooltool/clients/wxclient.py:1918
+msgid "Add Teacher"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1866
+msgid "Select a person to add to %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1867
+#: src/schooltool/clients/wxclient.py:1877
+msgid "Add Member"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1876
+msgid "Could not add member: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1898
+msgid "Could not get a list of teachers: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1907
+msgid "Select a teacher to add to %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1917
+msgid "Could not add teacher: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1939
+msgid "Could not get a list of groups: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1940
+#: src/schooltool/clients/wxclient.py:1948
+#: src/schooltool/clients/wxclient.py:1958
+msgid "Add Subgroup"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1947
+msgid "Select a group to add to %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1957
+msgid "Could not add subgroup: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1970
+#: src/schooltool/clients/wxclient.py:2233
+#: src/schooltool/clients/wxclient.py:2248
+#: src/schooltool/clients/wxclient.py:2264
+#: src/schooltool/clients/wxclient.py:2283
+#: src/schooltool/clients/wxclient.py:2302
+msgid "No person selected"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1981
+msgid "Selected person is not a member of this group"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1992
+msgid "Really remove %s from %s?"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1994
+#: src/schooltool/clients/wxclient.py:2001
+msgid "Remove Person"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2000
+msgid "Could not remove member: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2013
+msgid "No relationship selected"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2026
+msgid "Really remove %s (%s) from %s?"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2029
+#: src/schooltool/clients/wxclient.py:2036
+msgid "Remove Relationship"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2035
+msgid "Could not remove relationship: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2175
+msgid "Roots"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2254
+msgid "%s's absences"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2287
+msgid "%s's composite timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2315
+msgid "All absences"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2330
+msgid "Absences of %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2337
+msgid "Do you want to create a new absence tracker facet and put it on %s?"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2344
+msgid "Could not create an absence tracker: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2370
+#: src/schooltool/clients/wxclient.py:2389
+msgid "%s's timetables"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2404
+msgid "Could not get the list of time periods: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2405
+#: src/schooltool/clients/wxclient.py:2414
+#: src/schooltool/clients/wxclient.py:2421
+#: src/schooltool/clients/wxclient.py:2429
+#: src/schooltool/clients/wxclient.py:2436
+msgid "School Timetable"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2413
+msgid "Could not get the list of timetable schemas: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2420
+msgid "Select a timetable to edit"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2428
+msgid "Could not get the school timetable: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:255
+msgid "Server"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:257
+msgid "Port"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:259
+#: src/schooltool/clients/wxclient.py:943
+msgid "Username"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:261
+#: src/schooltool/clients/wxclient.py:944
+msgid "Password"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:263
+msgid "Ok"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:264
+#: src/schooltool/clients/wxclient.py:389
+#: src/schooltool/clients/wxclient.py:496
+#: src/schooltool/clients/wxclient.py:814
+#: src/schooltool/clients/wxclient.py:872
+#: src/schooltool/clients/wxclient.py:975
+#: src/schooltool/clients/wxclient.py:1067
+#: src/schooltool/clients/wxclient.py:1388
+#: src/schooltool/clients/wxclient.py:1476
+#: src/schooltool/clients/wxclient.py:1581
+msgid "Cancel"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:276
+msgid "Server Settings"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:364
+#: src/schooltool/clients/wxclient.py:465
+msgid "Unset"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:368
+msgid "Resolve"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:373
+msgid "Do not resolve"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:387
+#: src/schooltool/clients/wxclient.py:495
+#: src/schooltool/clients/wxclient.py:813
+#: src/schooltool/clients/wxclient.py:871
+#: src/schooltool/clients/wxclient.py:973
+#: src/schooltool/clients/wxclient.py:1065
+#: src/schooltool/clients/wxclient.py:1384
+#: src/schooltool/clients/wxclient.py:1472
+#: src/schooltool/clients/wxclient.py:1577
+msgid "OK"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:439
+msgid "Roll Call for %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:461
+msgid "reported absent"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:469
+msgid "Present"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:474
+msgid "Absent"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:555
+#: src/schooltool/clients/wxclient.py:1093
+msgid "Could not submit the roll call: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:590
+msgid "Absences"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:595
+#: src/schooltool/clients/wxclient.py:614
+#: src/schooltool/clients/wxclient.py:1360
+msgid "Date"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:596
+#: src/schooltool/clients/wxclient.py:617
+msgid "Ended?"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:597
+#: src/schooltool/clients/wxclient.py:618
+msgid "Resolved?"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:598
+#: src/schooltool/clients/wxclient.py:619
+msgid "Expected Presence"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:599
+msgid "Last Comment"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:601
+#: src/schooltool/clients/wxclient.py:1355
+msgid "Person"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:603
+msgid "Absence"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:611
+#: src/schooltool/clients/wxclient.py:1556
+msgid "Comments"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:615
+msgid "Reporter"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:616
+msgid "Absent From"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:620
+msgid "Comment"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:631
+#: src/schooltool/clients/wxclient.py:1124
+#: src/schooltool/clients/wxclient.py:1260
+msgid "Close"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:660
+#: src/schooltool/clients/wxclient.py:2351
+msgid "Could not get the list of absences: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:678
+#: src/schooltool/clients/wxclient.py:680
+#: src/schooltool/clients/wxclient.py:731
+#: src/schooltool/clients/wxclient.py:734
+msgid "Yes"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:678
+#: src/schooltool/clients/wxclient.py:680
+#: src/schooltool/clients/wxclient.py:731
+#: src/schooltool/clients/wxclient.py:734
+msgid "No"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:787
+msgid "Resource Assignment"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:795
+msgid ""
+"%s, %s\n"
+"Teacher: %s\n"
+"Activity: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:800
+#: src/schooltool/clients/wxclient.py:1183
+msgid "Resources"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:843
+msgid "Activity Selection"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:853
+msgid ""
+"%s, %s\n"
+"Teacher: %s"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:857
+msgid "Activities"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:869
+msgid "&Assign Resources"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:937
+msgid "New Person"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:942
+msgid "Name"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:945
+msgid "Password (again)"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:989
+#: src/schooltool/clients/wxclient.py:1487
+msgid "Passwords do not match"
+msgstr ""
+
+#: src/schooltool/clients/wxclient.py:999
+msgid "Could not create a new person: %s"
+msgstr ""
+
