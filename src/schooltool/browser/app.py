@@ -29,7 +29,7 @@ from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess, globalTicketService
-from schooltool.browser.model import PersonView, GroupView
+from schooltool.browser.model import PersonView, GroupView, ResourceView
 from schooltool.component import getPath
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
@@ -94,8 +94,10 @@ class RootView(View):
     def _traverse(self, name, request):
         if name == 'persons':
             return PersonContainerView(self.context['persons'])
-        if name == 'groups':
+        elif name == 'groups':
             return GroupContainerView(self.context['groups'])
+        elif name == 'resources':
+            return ResourceContainerView(self.context['resources'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logo.png':
@@ -219,6 +221,7 @@ class GroupAddView(ObjectAddView):
 class ResourceAddView(ObjectAddView):
 
     title = _("Add resource")
+    # XXX The user will be redirected to the nonexistent edit.html.
 
 
 class ObjectContainerView(View):
@@ -259,3 +262,8 @@ class GroupContainerView(ObjectContainerView):
     add_view = GroupAddView
     obj_view = GroupView
 
+
+class ResourceContainerView(ObjectContainerView):
+
+    add_view = ResourceAddView
+    obj_view = ResourceView

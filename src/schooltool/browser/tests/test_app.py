@@ -42,11 +42,12 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Person, Group
+        from schooltool.model import Person, Group, Resource
         from schooltool.browser.app import RootView
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
         app['groups'] = ApplicationObjectContainer(Group)
+        app['resources'] = ApplicationObjectContainer(Resource)
         view = RootView(app)
         return view
 
@@ -158,12 +159,15 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import StartView
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
+        from schooltool.browser.app import ResourceContainerView
         view = self.createView()
         app = view.context
         self.assertTraverses(view, 'logout', LogoutView, app)
         self.assertTraverses(view, 'persons', PersonContainerView,
                              app['persons'])
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
+        self.assertTraverses(view, 'resources', ResourceContainerView,
+                             app['resources'])
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
         css = self.assertTraverses(view, 'logo.png', StaticFile)
@@ -352,6 +356,18 @@ class TestGroupContainerView(TestObjectContainerView):
         self.obj_view = GroupView
 
 
+class TestResourceContainerView(TestObjectContainerView):
+
+    def setUp(self):
+        from schooltool.browser.app import ResourceContainerView
+        from schooltool.browser.app import ResourceAddView
+        from schooltool.browser.model import ResourceView
+        TestObjectContainerView.setUp(self)
+        self.view = ResourceContainerView
+        self.add_view = ResourceAddView
+        self.obj_view = ResourceView
+
+
 class TestObjectAddView(unittest.TestCase):
 
     def createView(self):
@@ -430,7 +446,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestObjectContainerView))
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
-    #suite.addTest(unittest.makeSuite(TestResourceContainerView))
+    suite.addTest(unittest.makeSuite(TestResourceContainerView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))
