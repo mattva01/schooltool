@@ -60,6 +60,14 @@ Options:
 """.strip()
 
 
+no_storage_error_msg = """
+No storage defined in the configuration file.
+
+If you're using the default configuration file, please edit it now and
+uncomment one of the ZODB storage sections.
+""".strip()
+
+
 class Options(object):
     """SchoolBell process options."""
 
@@ -90,6 +98,8 @@ def main(argv=sys.argv):
 def load_options(argv):
     """Parse the command line and read the configuration file."""
     options = Options()
+
+    # Parse command line
     progname = os.path.basename(argv[0])
     try:
         opts, args = getopt.gnu_getopt(argv[1:], 'c:hd',
@@ -106,6 +116,8 @@ def load_options(argv):
             options.config_file = v
         if k in ('-d', '--daemon'):
             options.daemon = True
+
+    # Read configuration file
     schema = ZConfig.loadSchema(ZCONFIG_SCHEMA)
     print "Reading configuration from %s" % options.config_file
     try:
@@ -114,6 +126,11 @@ def load_options(argv):
     except ZConfig.ConfigurationError, e:
         print >> sys.stderr, "%s: %s" % (progname, e)
         sys.exit(1)
+    if options.config.database.config.storage is None:
+        print >> sys.stderr, "%s: %s" % (progname, no_storage_error_msg)
+        sys.exit(1)
+
+    # XXX path, module, listen, ssl, event logging, test-mode, pid-file, log-files, domain, lang
     # TODO: warn about unsupported options in config file
     # TODO: complain about -d if we don't have os.fork
     # TODO: raise an error if options.config.database.config.storage is None.
@@ -193,8 +210,8 @@ SITE_DEFINITION = """
   <include package="zope.app.session" />
   <include package="zope.app.server" />
 
-  <!-- Workaround to shut down a DeprecationWarning that gets because we do not
-       include zope.app.onlinehelp and the rotterdam skin tries to look for
+  <!-- Workaround to shut down a DeprecationWarning that appears because we do
+       not include zope.app.onlinehelp and the rotterdam skin tries to look for
        this menu -->
   <browser:menu id="help_actions" />
 

@@ -84,10 +84,13 @@ def doctest_main():
 def doctest_load_options():
     """Tests for load_options().
 
+    We will use a sample configuration file that comes with these tests.
+
         >>> import os
         >>> from schoolbell.app import tests
         >>> test_dir = os.path.dirname(tests.__file__)
         >>> sample_config_file = os.path.join(test_dir, 'sample.conf')
+        >>> empty_config_file = os.path.join(test_dir, 'empty.conf')
 
     Load options parses command line arguments and the configuration file.
 
@@ -131,6 +134,8 @@ def doctest_load_options():
         >>> old_stderr = sys.stderr
         >>> sys.stderr = sys.stdout
 
+    Here's what happens, when you use an unknown command line option.
+
         >>> try:
         ...     o = load_options(['sb.py', '-q'])
         ... except SystemExit, e:
@@ -139,6 +144,8 @@ def doctest_load_options():
         Run sb.py -h for help.
         [exited with status 1]
 
+    Here's what happens when the configuration file cannot be found
+
         >>> try:
         ...     o = load_options(['sb.py', '-c', 'nosuchfile'])
         ... except SystemExit, e:
@@ -146,6 +153,22 @@ def doctest_load_options():
         Reading configuration from nosuchfile
         sb.py: error opening file ...nosuchfile: ...
         [exited with status 1]
+
+    Here's what happens if you do not specify a storage section in the
+    configuration file.
+
+        >>> try:
+        ...     o = load_options(['sb.py', '-c', empty_config_file])
+        ... except SystemExit, e:
+        ...     print '[exited with status %s]' % e
+        Reading configuration from ...empty.conf
+        sb.py: No storage defined in the configuration file.
+        <BLANKLINE>
+        If you're using the default configuration file, please edit it now and
+        uncomment one of the ZODB storage sections.
+        [exited with status 1]
+
+    Cleaning up.
 
         >>> sys.stderr = old_stderr
 
