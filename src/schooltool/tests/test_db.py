@@ -70,36 +70,39 @@ class FalseP(Persistent):
     def __nonzero__(self):
         return False
 
-class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
-
-    def setUp(self):
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
-        self.db = DB(MappingStorage())
-        self.datamgr = self.db.open()
+class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
 
     def tearDown(self):
         from transaction import get_transaction
         get_transaction().abort()
 
-    def test_setitem(self):
+    def maybeAdd(self, obj):
+        if self.datamgr is not None:
+            self.datamgr.add(obj)
+
+    def doSet(self):
         from schooltool.db import PersistentKeysDict
         ob = object()
-        p = P()
+        p1 = P()
+        p2 = P()
         d = PersistentKeysDict()
-        d[p] = 2
-        self.assertRaises(TypeError, d.__setitem__, ob, 1)
+        self.maybeAdd(p1)
+        self.maybeAdd(d)
+        d[p1] = 1
+        d[p2] = 2
+        return d, p1, p2
+
+    def test_setitem(self):
+        d, p1, p2 = self.doSet()
+        self.assertRaises(TypeError, d.__setitem__, object(), 1)
 
         from transaction import get_transaction
         get_transaction().commit()
 
     def test_getitem(self):
-        from schooltool.db import PersistentKeysDict
-        ob = object()
-        p = P()
-        d = PersistentKeysDict()
-        d[p] = 2
-        self.assertEqual(d[p], 2)
+        d, p1, p2 = self.doSet()
+        self.assertEqual(d[p1], 1)
+        self.assertEqual(d[p2], 2)
         self.assertRaises(TypeError, d.__getitem__, object())
         self.assertRaises(KeyError, d.__getitem__, P())
 
@@ -107,15 +110,13 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         get_transaction().commit()
 
     def test_delitem(self):
-        from schooltool.db import PersistentKeysDict
-        ob = object()
-        p = P()
-        d = PersistentKeysDict()
-        d[p] = 2
-        self.assertEqual(d[p], 2)
-        del d[p]
-        self.assertRaises(KeyError, d.__getitem__, p)
-        self.assertRaises(KeyError, d.__delitem__, p)
+        d, p1, p2 = self.doSet()
+        del d[p1]
+        del d[p2]
+        self.assertRaises(KeyError, d.__getitem__, p1)
+        self.assertRaises(KeyError, d.__delitem__, p1)
+        self.assertRaises(KeyError, d.__getitem__, p1)
+        self.assertRaises(KeyError, d.__delitem__, p2)
         self.assertRaises(KeyError, d.__delitem__, P())
         self.assertRaises(TypeError, d.__delitem__, object())
 
@@ -123,33 +124,36 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         get_transaction().commit()
 
     def test_keys_iter_len(self):
-        from schooltool.db import PersistentKeysDict
-        ob = object()
-        p = P()
-        p2 = P()
-        d = PersistentKeysDict()
-        d[p] = 2
-        d[p2] = 3
-        self.assertEqualsSorted(d.keys(), [p, p2])
-        self.assertEqualsSorted(list(d), [p, p2])
+        d, p1, p2 = self.doSet()
+        self.assertEqualsSorted(d.keys(), [p1, p2])
+        self.assertEqualsSorted(list(d), [p1, p2])
         self.assertEqual(len(d), 2)
 
         from transaction import get_transaction
         get_transaction().commit()
 
     def test_contains(self):
-        from schooltool.db import PersistentKeysDict
-        ob = object()
-        p = P()
-        d = PersistentKeysDict()
-        d[p] = 2
-        self.assert_(p in d)
+        d, p1, p2 = self.doSet()
+        self.assert_(p1 in d)
+        self.assert_(p2 in d)
         self.assertRaises(TypeError, d.__contains__, object())
         self.assert_(P() not in d)
 
         from transaction import get_transaction
         get_transaction().commit()
 
+class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
+
+    def setUp(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        self.db = DB(MappingStorage())
+        self.datamgr = self.db.open()
+
+class TestPersistentKeysDictBare(BaseTestPersistentKeysDict):
+
+    def setUp(self):
+        self.datamgr = None
 
 class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
 
@@ -193,5 +197,6 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
     suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
-    suite.addTest(unittest.makeSuite(TestPersistentKeysDict))
+    suite.addTest(unittest.makeSuite(TestPersistentKeysDictBare))
+    suite.addTest(unittest.makeSuite(TestPersistentKeysDictWithDataManager))
     return suite
