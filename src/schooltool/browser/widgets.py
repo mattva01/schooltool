@@ -375,7 +375,11 @@ class Widget:
             self.raw_value = self.formatter(self.value)
 
     def require(self):
-        if not self.error and not self.raw_value: # XXX workaround
+        # XXX It would be best to get rid of require and just add a
+        #     keyword argument to the constructor.  Then, if 'required'
+        #     has been specified, check for the empty field somewhere,
+        #     perhaps in update()?
+        if not self.error and not self.raw_value:
             self.error = _("This field is required.")
 
     def _css_class(self):

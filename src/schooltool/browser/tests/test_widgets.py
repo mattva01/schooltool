@@ -130,6 +130,11 @@ class TestWidget(unittest.TestCase):
         widget.require()
         self.assertEquals(widget.error, 'This field is required.')
 
+        widget.setRawValue('')
+        widget.error = 'Other error'
+        widget.require()
+        self.assertEquals(widget.error, 'Other error')
+
     def test_css_class(self):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')
