@@ -21,10 +21,11 @@ sys.path.insert(0, os.path.join(basedir, 'src'))
 
 import urllib
 import getopt
-from schooltool.translation import gettext as _
+from schooltool.common import StreamWrapper, UnicodeAwareException
+from schooltool.translation import ugettext as _
 
 
-class Error(Exception):
+class Error(UnicodeAwareException):
     pass
 
 
@@ -40,6 +41,8 @@ class SampleSchoolImporter:
 
     def main(self, argv):
         """Generate and import sample school data."""
+        sys.stdout = StreamWrapper(sys.stdout)
+        sys.stderr = StreamWrapper(sys.stderr)
         try:
             self.process_args(argv)
             self.check_data_files()
@@ -48,7 +51,7 @@ class SampleSchoolImporter:
             self.import_csv_files()
             self.import_timetable_data()
         except Error, e:
-            print >> sys.stderr, str(e)
+            print >> sys.stderr, unicode(e)
             return 1
         else:
             return 0
@@ -58,7 +61,7 @@ class SampleSchoolImporter:
         try:
             opts, args = getopt.getopt(argv[1:], 'h:p:', ['host=', 'port='])
         except getopt.error, e:
-            raise Error(str(e))
+            raise Error(e)
 
         for k, v in opts:
             if k in ('-h', '--host'):
@@ -116,7 +119,7 @@ class SampleSchoolImporter:
         try:
             importer.run()
         except DataError, e:
-            raise Error(str(e))
+            raise Error(e)
 
     def import_timetable_data(self):
         """Import timetable data from ttconfig.data."""

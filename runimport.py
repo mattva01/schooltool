@@ -4,14 +4,22 @@ Run the server asynchronously, then run the CSV client, and stop the server.
 
 This script is supposed to be run from the Makefile.
 
+I consider this script to be deprecated, use import-sampleschool.py instead.
+Other developers may disagree.
+
 $Id$
 """
 import os
 import sys
 import time
 import urllib
-from schooltool.translation import gettext as _
+from schooltool.common import StreamWrapper
+from schooltool.translation import ugettext as _
 from schooltool.clients import csvclient
+
+# Deal with encodings
+sys.stdout = StreamWrapper(sys.stdout)
+sys.stderr = StreamWrapper(sys.stderr)
 
 if os.path.exists('Data.fs'):
     print _("Please remove Data.fs before creating a sample school")

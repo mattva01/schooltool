@@ -117,11 +117,11 @@ import cgi
 import sys
 import base64
 import httplib
-from schooltool.translation import gettext as _
-from schooltool.common import locale_charset
+from schooltool.translation import ugettext as _
+from schooltool.common import UnicodeAwareException, from_locale
 
 
-class DataError(Exception):
+class DataError(UnicodeAwareException):
     pass
 
 
@@ -291,6 +291,7 @@ class CSVImporter:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
                                     (file, line, len(row)))
+                row = map(from_locale, row)
                 for resource, method, body in self.importGroup(*row):
                     self.process(method, resource, body=body)
                 line += 1
@@ -306,7 +307,7 @@ class CSVImporter:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
                                     (file, line, len(row)))
-                title, groups, dob, comment = row
+                title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
                     name = self.getPersonName(response)
@@ -330,7 +331,7 @@ class CSVImporter:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
                                     (file, line, len(row)))
-                title, groups, dob, comment = row
+                title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
                     name = self.getPersonName(response)
@@ -354,7 +355,7 @@ class CSVImporter:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 1 column, got %d") %
                                     (file, line, len(row)))
-                title = row[0]
+                title = from_locale(row[0])
                 for resource, method, body in self.importResource(title):
                     response = self.process(method, resource, body=body)
                     name = self.getPersonName(response)
@@ -375,22 +376,19 @@ def to_xml(s):
         >>> to_xml('<brackets> & "quotes"')
         '&lt;brackets&gt; &amp; &quot;quotes&quot;'
 
-    It also converts from locale charset to UTF-8.
+    It also converts Unicode objects to UTF-8.
 
-        >>> from schooltool.clients import csvclient
-        >>> old_locale_charset = csvclient.locale_charset
-        >>> csvclient.locale_charset = 'ISO-8859-13'
-
-        >>> to_xml('\xe0')
+        >>> to_xml(u'\u0105')
         '\xc4\x85'
 
-        >>> csvclient.locale_charset = old_locale_charset
-
     """
-    return cgi.escape(unicode(s, locale_charset).encode('UTF-8'), True)
+    return cgi.escape(s.encode('UTF-8'), True)
 
 
 def main():
+    from schooltool.common import StreamWrapper
+    sys.stdout = StreamWrapper(sys.stdout)
+    sys.stderr = StreamWrapper(sys.stderr)
     importer = CSVImporter()
     try:
         importer.run()
