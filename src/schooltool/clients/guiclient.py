@@ -282,6 +282,39 @@ class SchoolToolClient:
         if response.status / 100 != 2:
             raise ResponseStatusError(response)
 
+    def getPersonPhoto(self, person_path):
+        """Return the photo of a person.
+
+        Returns an 8-bit string with JPEG data.
+
+        Returns None if the person does not have a photo.
+        """
+        response = self.get(person_path + '/facets/person_info/photo')
+        if response.status == 404:
+            return None
+        elif response.status != 200:
+            raise ResponseStatusError(response)
+        else:
+            return response.read()
+
+    def savePersonPhoto(self, person_path, person_photo):
+        """Upload a photo for a person.
+
+        photo should be an 8-bit string with image data.
+        """
+        path = person_path + '/facets/person_info/photo'
+        response = self.put(path, person_photo,
+                        headers={'Content-Type': 'application/octet-stream'})
+        if response.status / 100 != 2:
+            raise ResponseStatusError(response)
+
+    def removePersonPhoto(self, person_path):
+        """Remove a person's photo."""
+        path = person_path + '/facets/person_info/photo'
+        response = self.delete(path)
+        if response.status / 100 != 2:
+            raise ResponseStatusError(response)
+
     def getObjectRelationships(self, object_path):
         """Return relationships of an application object (group or person).
 

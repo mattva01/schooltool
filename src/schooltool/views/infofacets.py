@@ -137,7 +137,10 @@ class PhotoView(View):
             return self.context.photo
 
     def do_PUT(self, request):
-        img = PIL.Image.open(request.content)
+        try:
+            img = PIL.Image.open(request.content)
+        except IOError, e:
+            return textErrorPage(request, str(e))
         size = maxspect(img.size, self.canonical_photo_size)
         img2 = img.resize(size, PIL.Image.ANTIALIAS)
         buf = StringIO()

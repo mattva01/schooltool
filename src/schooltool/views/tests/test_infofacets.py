@@ -164,6 +164,22 @@ class TestPhotoView(unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assert_(context.photo is not None)
 
+    def test_put_errors(self):
+        from schooltool.views.infofacets import PhotoView
+        from schooltool.infofacets import PersonInfoFacet
+
+        photo = 'this is not a picture'
+        ctype = "image/jpeg"
+
+        context = PersonInfoFacet()
+        view = PhotoView(context)
+        view.authorization = lambda ct, rq: True
+        request = RequestStub(method='PUT', body=photo,
+                              headers={'Content-Type': ctype})
+        result = view.render(request)
+        self.assertEquals(result, 'cannot identify image file')
+        self.assertEquals(request.code, 400)
+
     def test_delete(self):
         from schooltool.views.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet

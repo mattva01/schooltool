@@ -31,10 +31,12 @@ the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 """
 
+import os
 import sets
 import libxml2
 import datetime
 import threading
+from cStringIO import StringIO
 from wxPython.wx import *
 from wxPython.grid import *
 from wxPython.calendar import *
@@ -1491,15 +1493,20 @@ class PersonInfoDlg(wxDialog):
             wxMessageBox("Could not get person information: %s" % e,
                          self.title, wxICON_ERROR|wxOK)
             return
-        else:
-            self.ok = True
+
+        try:
+            photo = self.client.getPersonPhoto(self.person_path)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get person photo: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+            return
 
         wxDialog.__init__(self, parent, -1, self.title,
                           style=NONMODAL_DLG_STYLE)
 
         vsizer = wxBoxSizer(wxVERTICAL)
 
-        # XXX insert photo here
+        hsizer = wxBoxSizer(wxHORIZONTAL)
 
         grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
         grid_sizer.AddGrowableCol(1)
@@ -1529,7 +1536,19 @@ class PersonInfoDlg(wxDialog):
                        wxALIGN_TOP)
         grid_sizer.Add(self.comments_ctrl, 1, wxEXPAND)
 
-        vsizer.Add(grid_sizer, 0, wxEXPAND|wxALL, 8)
+        hsizer.Add(grid_sizer, 0, wxEXPAND)
+
+        if photo is None:
+            filename = os.path.join(os.path.dirname(__file__), 'nophoto.png')
+            photo = wxBitmap(filename, wxBITMAP_TYPE_PNG)
+        else:
+            photo = wxBitmapFromImage(wxImageFromStream(StringIO(photo)))
+        self.photo_ctrl = wxBitmapButton(self, -1, photo,
+                                         size=wxSize(250, 250))
+        EVT_BUTTON(self, self.photo_ctrl.GetId(), self.OnPhoto)
+        hsizer.Add(self.photo_ctrl, 0, wxLEFT, 8)
+
+        vsizer.Add(hsizer, 0, wxEXPAND|wxALL, 8)
 
         vsizer.Add(wxStaticLine(self, -1), 0, wxEXPAND, 0)
 
@@ -1547,6 +1566,8 @@ class PersonInfoDlg(wxDialog):
         self.Layout()
         self.CenterOnScreen(wx.wxBOTH)
 
+        self.ok = True
+
     def OnOk(self, event=None):
         person_info = PersonInfo(self.first_name_ctrl.GetValue(),
                                  self.last_name_ctrl.GetValue(),
@@ -1559,6 +1580,42 @@ class PersonInfoDlg(wxDialog):
                          % e, self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
+
+    def OnPhoto(self, event=None):
+        global previous_photo_dir
+        filename = wxFileSelector("Choose a new photo", wildcard="*.jpg",
+                                  default_path=previous_photo_dir,
+                                  flags=wxOPEN|wxFILE_MUST_EXIST)
+        if not filename:
+            return
+        previous_photo_dir = os.path.dirname(filename)
+        try:
+            photo = file(filename, 'rb').read()
+        except IOError, e:
+            wxMessageBox("Could not read %s" % filename, self.title,
+                         wxICON_ERROR|wxOK)
+            return
+        try:
+            self.client.savePersonPhoto(self.person_path, photo)
+        except SchoolToolError, e:
+            wxMessageBox("Could not update person photo: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+            return
+        try:
+            photo = self.client.getPersonPhoto(self.person_path)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get person photo: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+            return
+        else:
+            photo = wxBitmapFromImage(wxImageFromStream(StringIO(photo)))
+            self.photo_ctrl.SetBitmapLabel(photo)
+            self.photo_ctrl.SetBitmapSelected(photo)
+            self.photo_ctrl.SetBitmapFocus(photo)
+            self.photo_ctrl.SetBitmapDisabled(photo)
+            self.Layout()
+
+previous_photo_dir = ""
 
 
 #
@@ -1723,7 +1780,6 @@ class MainFrame(wxFrame):
 
         # finishing touches
         self.SetSizeHints(minW=100, minH=150)
-        self.DoRefresh()
 
     def DoNewPerson(self, event):
         """Create a new person.

@@ -459,6 +459,39 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.path, '/persons/albert/facets/person_info')
         self.assertEquals(conn.method, "PUT")
 
+    def test_getPersonPhoto(self):
+        from schooltool.clients.guiclient import SchoolToolError
+        body = "[pretend this is JPEG]"
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        result = client.getPersonPhoto('/persons/jfk')
+        self.assertEquals(result, body)
+        self.checkConnPath(client, '/persons/jfk/facets/person_info/photo')
+
+        client = self.newClient(ResponseStub(404, 'Not found', 'Not found'))
+        result = client.getPersonPhoto('/persons/jfk')
+        self.assert_(result is None)
+
+        client = self.newClient(ResponseStub(401, 'Unauthorized', 'XXX'))
+        self.assertRaises(SchoolToolError, client.getPersonPhoto, '/persons/x')
+
+    def test_savePersonPhoto(self):
+        body = "[pretend this is JPEG]"
+        client = self.newClient(ResponseStub(200, 'OK', 'Uploaded'))
+        client.savePersonPhoto('/persons/jfk', body)
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.path, '/persons/jfk/facets/person_info/photo')
+        self.assertEquals(conn.headers['Content-Type'],
+                          'application/octet-stream')
+        self.assertEquals(conn.method, "PUT")
+
+    def test_removePersonPhoto(self):
+        client = self.newClient(ResponseStub(200, 'OK', 'Deleted'))
+        client.removePersonPhoto('/persons/jfk')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons/jfk/facets/person_info/photo')
+        self.assertEquals(conn.method, "DELETE")
+
     def test_getObjectRelationships(self):
         from schooltool.clients.guiclient import RelationshipInfo
         body = dedent("""
