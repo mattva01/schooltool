@@ -64,6 +64,31 @@ from schooltool.browser.widgets import timeFormatter
 __metaclass__ = type
 
 
+def getPeriodsForDay(request, context, date):
+    """Returns a list of timetable periods defined for today.
+
+    Empty list is returned when it is impossible to get timetable
+    data for today.
+    """
+
+    schooldays = ttschema = None
+    day_periods = []
+    if request.getCookie('cal_periods'):
+        # Get a period date is in and a default timetable schema
+        periodservice = getTimePeriodService(context)
+        for periodid in periodservice.keys():
+            if date in periodservice[periodid]:
+                schooldays = periodservice[periodid]
+                break
+        ttservice = getTimetableSchemaService(context)
+        if ttservice.default_id is not None:
+            ttschema = ttservice.getDefault()
+        if schooldays is not None and ttschema is not None:
+            day_periods = ttschema.model.periodsInDay(
+                schooldays, ttschema, date)
+    return day_periods
+
+
 class BookingView(View, AppObjectBreadcrumbsMixin):
 
     __used_for__ = IResource
@@ -475,35 +500,11 @@ class DailyCalendarView(CalendarViewBase):
                 if self.endhour == 0:
                     self.endhour = 24
 
-    def getPeriodsForDay(self, date):
-        """Returns a list of timetable periods defined for today.
-
-        Empty list is returned when it is impossible to get timetable
-        data for today.
-        """
-
-        schooldays = ttschema = None
-        day_periods = []
-        if self.request.getCookie('cal_periods'):
-            # Get a period self.cursor is in and a default timetable schema
-            periodservice = getTimePeriodService(self.context)
-            for periodid in periodservice.keys():
-                if self.cursor in periodservice[periodid]:
-                    schooldays = periodservice[periodid]
-                    break
-            ttservice = getTimetableSchemaService(self.context)
-            if ttservice.default_id is not None:
-                ttschema = ttservice.getDefault()
-            if schooldays is not None and ttschema is not None:
-                day_periods = ttschema.model.periodsInDay(
-                    schooldays, ttschema, date)
-        return day_periods
-
     def calendarRows(self):
         """Iterates over (title, start, duration) of time slots that make up
         the daily calendar.
         """
-        periods = self.getPeriodsForDay(self.cursor)
+        periods = getPeriodsForDay(self.request, self.context, self.cursor)
         today = datetime.combine(self.cursor, time())
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
@@ -777,6 +778,8 @@ class CalendarView(View):
             uri = request.uri
             if '?' in uri:
                 uri = uri[:uri.rindex('?')]
+            if 'date' in request.args:
+                uri = "%s?date=%s" % (uri, request.args['date'][0])
             self.redirect(uri, request)
         if name == 'daily.html':
             return DailyCalendarView(self.context)
@@ -1617,16 +1620,34 @@ class CalendarEventView(View):
         else:
             return 'event'
 
+    def getPeriod(self):
+        """Returns the title of the period this event coincides with.
+
+        Or None.
+        """
+        periods = getPeriodsForDay(self.request, self.calendar,
+                                   self.context.dtstart.date())
+        for period in periods:
+            if (period.tstart == self.context.dtstart.time() and
+                period.duration == self.context.duration):
+                return period.title
+
     def duration(self):
         """Format the time span of the event."""
         dtstart = self.context.dtstart
         dtend = dtstart + self.context.duration
         if dtstart.date() == dtend.date():
-            return "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
-                                    dtend.strftime('%H:%M'))
+            span =  "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
+                                     dtend.strftime('%H:%M'))
         else:
-            return "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
+            span = "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
                                     dtend.strftime('%Y-%m-%d %H:%M'))
+
+        period = self.getPeriod()
+        if period:
+            return "Period %s (%s)" % (period, span)
+        else:
+            return span
 
     def full(self, request, date):
         """Full representation of the event for daily/weekly views."""
@@ -1648,13 +1669,16 @@ class CalendarEventView(View):
         else:
             title = _("Busy")
         if ev.dtstart.date() == end.date():
-            return "%s (%s&ndash;%s)" % (title,
-                                         ev.dtstart.strftime('%H:%M'),
-                                         end.strftime('%H:%M'))
+            period = self.getPeriod()
+            if period:
+                duration = "Period %s" % period
+            else:
+                duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
+                                             end.strftime('%H:%M'))
         else:
-            return "%s (%s&ndash;%s)" % (title,
-                                         ev.dtstart.strftime('%b&nbsp;%d'),
+            duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%b&nbsp;%d'),
                                          end.strftime('%b&nbsp;%d'))
+        return "%s (%s)" % (title, duration)
 
     def editLink(self):
         """Return the link for editing this event."""

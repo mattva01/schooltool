@@ -860,21 +860,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
-
-class TestDailyCalendarViewPeriods(AppSetupMixin, NiceDiffsMixin,
-                                   unittest.TestCase):
-
-    def createSchema(self, days, *periods_for_each_day):
-        """Create a timetable schema.
-        """
-
-        from schooltool.timetable import Timetable
-        from schooltool.timetable import TimetableDay
-        from schooltool.timetable import SequentialDaysTimetableModel
-        schema = Timetable(days)
-        for day, periods in zip(days, periods_for_each_day):
-            schema[day] = TimetableDay(list(periods))
-        return schema
+class DefaultTimetableSetup(AppSetupMixin):
 
     def setUp(self):
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
@@ -904,6 +890,23 @@ class TestDailyCalendarViewPeriods(AppSetupMixin, NiceDiffsMixin,
         calendar = SchooldayModel(date(2005, 11, 4), date(2005, 11, 10))
         calendar.addWeekdays(0, 1, 2, 3, 4)
         getTimePeriodService(self.app)['nextyear'] = calendar
+
+    def createSchema(self, days, *periods_for_each_day):
+        """Create a timetable schema.
+        """
+
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        from schooltool.timetable import SequentialDaysTimetableModel
+        schema = Timetable(days)
+        for day, periods in zip(days, periods_for_each_day):
+            schema[day] = TimetableDay(list(periods))
+        return schema
+
+
+
+class TestDailyCalendarViewPeriods(DefaultTimetableSetup, NiceDiffsMixin,
+                                   unittest.TestCase):
 
     def test_calendarRows(self):
         from schooltool.browser.cal import DailyCalendarView
@@ -1020,23 +1023,23 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
     def test_period_switch(self):
         from schooltool.browser.cal import CalendarView
         view = CalendarView(self.person.calendar)
-        request = RequestStub(uri='http://server/calendar?periods=yes',
-                              args={'cal_periods': 'yes'})
+        request = RequestStub(uri='http://server/calendar?date=12&periods=yes',
+                              args={'cal_periods': 'yes', 'date': '12'})
         view._traverse('daily.html', request)
         self.assertEquals(request._outgoing_cookies['cal_periods'], 'yes')
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://server/calendar')
+                          'http://server/calendar?date=12')
 
-        request = RequestStub(uri='http://server/calendar?periods=no',
-                              args={'cal_periods': 'no'})
+        request = RequestStub(uri='http://server/calendar?periods=no&date=123',
+                              args={'cal_periods': 'no', 'date': '123'})
         view._traverse('daily.html', request)
         self.assertEquals(request._outgoing_cookies['cal_periods'][0], 'yes')
         # a date like 'Fri, 05-Nov-2004 19:35:06 UTC'
         self.assertEquals(len(request._outgoing_cookies['cal_periods'][1]), 29)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://server/calendar')
+                          'http://server/calendar?date=123')
 
     def test_render(self):
         from schooltool.browser.cal import CalendarView
@@ -2450,10 +2453,12 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
 
     def test_duration(self):
         view = self.createView()
+        view.request = RequestStub()
         self.assertEquals(view.duration(), '12:01&ndash;13:01')
 
         ev = createEvent('2004-12-01 12:01', '1d', 'Long event')
         view = self.createView(ev)
+        view.request = RequestStub()
         self.assertEquals(view.duration(),
                           '2004-12-01 12:01&ndash;2004-12-02 12:01')
 
@@ -2547,6 +2552,39 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
         params = 'date=2004-12-02&event_id=s%40me%3Did'
         self.assertEquals(view.deleteLink(), 'delete_event.html?' + params)
         self.assertEquals(view.editLink(), 'edit_event.html?' + params)
+
+
+class TestCalendarEventPeriods(DefaultTimetableSetup, unittest.TestCase):
+
+    def test_duration(self):
+        from schooltool.browser.cal import CalendarEventView
+        cal = self.person.calendar
+        ev = createEvent('2004-11-04 10:15', '45min', 'Tea')
+        cal.addEvent(ev)
+        view = CalendarEventView(ev, cal)
+        view.request = RequestStub(cookies={'cal_periods': 'yes'})
+        self.assertEquals(view.duration(), '10:15&ndash;11:00')
+
+        ev = createEvent('2004-11-04 10:15', '1h', 'Lesson')
+        cal.addEvent(ev)
+        view = CalendarEventView(ev, cal)
+        view.request = RequestStub(cookies={'cal_periods': 'yes'})
+        self.assertEquals(view.duration(), 'Period 2 (10:15&ndash;11:15)')
+
+    def test_short(self):
+        from schooltool.browser.cal import CalendarEventView
+        cal = self.person.calendar
+        ev = createEvent('2004-11-04 10:15', '45min', 'Tea')
+        cal.addEvent(ev)
+        view = CalendarEventView(ev, cal)
+        request = RequestStub(cookies={'cal_periods': 'yes'})
+        self.assertEquals(view.short(request), 'Tea (10:15&ndash;11:00)')
+
+        ev = createEvent('2004-11-04 10:15', '1h', 'Lesson')
+        cal.addEvent(ev)
+        view = CalendarEventView(ev, cal)
+        request = RequestStub(cookies={'cal_periods': 'yes'})
+        self.assertEquals(view.short(request), 'Lesson (Period 2)')
 
 
 class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
@@ -2678,6 +2716,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventDeleteViewWithRepeatingEvents))
     suite.addTest(unittest.makeSuite(TestEventDeleteViewPermissionChecking))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
+    suite.addTest(unittest.makeSuite(TestCalendarEventPeriods))
     suite.addTest(unittest.makeSuite(TestCalendarEventPermissionChecking))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
