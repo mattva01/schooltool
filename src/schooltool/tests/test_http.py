@@ -748,6 +748,7 @@ class TestRequest(unittest.TestCase):
         rq.zodb_conn = ConnectionStub()
         rq.authenticate('fred', 'wilma')
         self.assert_(rq.authenticated_user is SiteStub.fred)
+        self.assertEquals(rq.getUser(), 'fred')
 
     def test_authenticate_failure(self):
         rq = self.newRequest('/')
@@ -756,6 +757,7 @@ class TestRequest(unittest.TestCase):
         self.assertRaises(AuthenticationError, rq.authenticate, 'fred', 'wima')
         self.assertRaises(AuthenticationError, rq.authenticate, 'fed', 'wilma')
         self.assert_(rq.authenticated_user is None)
+        self.assertEquals(rq.getUser(), '')
         self.assertEquals(rq.applogger.applog,
                   [(logging.WARNING, "Failed login, username: 'fred'"),
                    (logging.WARNING, "Failed login, username: 'fed'")])

@@ -475,8 +475,10 @@ class Request(http.Request):
         try:
             self.authenticated_user = self.site.authenticate(app, username,
                                                              password)
+            self.user = username
         except AuthenticationError:
             self.authenticated_user = None
+            self.user = ''
             self.applogger.warn(_("Failed login, username: %r") % username)
             raise
 
