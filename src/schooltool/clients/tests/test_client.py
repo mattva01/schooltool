@@ -250,7 +250,7 @@ class TestClient(unittest.TestCase):
         self.assertEmitted("This help.")
 
     def test_server(self):
-        self.client.do_get('x y z')
+        self.client.do_server('x y z w')
         self.assertEmitted("Extra arguments provided")
 
         self.emitted = ""
@@ -296,6 +296,13 @@ class TestClient(unittest.TestCase):
         # Make sure the SSL option has been reset.
         self.assertEqual(self.client.ssl, False)
         self.assertEmitted("Error: could not connect to server:31337")
+
+        self.emitted = ""
+        self.client.do_server("ignored 567 bogus")
+        self.assertEmitted("'ssl' or 'plain' expected, got 'bogus'")
+        self.assertEqual(self.client.server, "server")
+        self.assertEqual(self.client.port, 31337)
+        self.assertEqual(self.client.ssl, False)
 
     def test_accept(self):
         self.client.do_accept(" ")

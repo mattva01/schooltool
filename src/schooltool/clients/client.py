@@ -145,6 +145,11 @@ welcome to change it and/or distribute copies of it under certain conditions.
             if len(args) > 2:
                 if args[2].upper() == 'SSL':
                     ssl = True
+                elif args[2].upper() == 'plain':
+                    pass # ssl is already False
+                else:
+                    self.emit("'ssl' or 'plain' expected, got '%s'" % args[2])
+                    return
             if len(args) > 1:
                 try:
                     port = int(args[1])
