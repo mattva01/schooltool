@@ -143,24 +143,6 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(member, group[key])
         self.assertEqual(list(member.groups()), [group])
 
-    def test_facet_management(self):
-        from schooltool.model import Group
-        from schooltool.component import getFacet
-        group = Group("root", FacetStub)
-        member = MemberStub()
-        key = group.add(member)
-        facet = getFacet(member, group)
-        self.assertEquals(facet.context, member)
-        self.assert_(facet.active)
-
-        del group[key]
-        self.assert_(getFacet(member, group) is facet)
-        self.assert_(not facet.active)
-
-        key = group.add(member)
-        self.assert_(getFacet(member, group) is facet)
-        self.assert_(facet.active)
-
     def testQueryLinks(self):
         from schooltool.model import Group
         from schooltool.interfaces import IQueryLinks, URIGroup, URIMember

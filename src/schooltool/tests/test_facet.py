@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from sets import Set
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
@@ -72,12 +73,12 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         from schooltool.model import FacetedEventTargetMixin
         from schooltool.component import setFacet
         et = FacetedEventTargetMixin()
-        et.__facets__ = {} # use a simple dict instead of PersistentKeysDict
+        et.__facets__ = Set()
         et.eventTable.append(0)
-        setFacet(et, 1, FacetStub())
-        setFacet(et, 2, FacetStub(active=True))
-        setFacet(et, 3, FacetWithEventsStub(eventTable=[1]))
-        setFacet(et, 4, FacetWithEventsStub(active=True, eventTable=[2]))
+        setFacet(et, FacetStub())
+        setFacet(et, FacetStub(active=True))
+        setFacet(et, FacetWithEventsStub(eventTable=[1]))
+        setFacet(et, FacetWithEventsStub(active=True, eventTable=[2]))
         self.assertEquals(et.getEventTable(), [0, 2])
 
 

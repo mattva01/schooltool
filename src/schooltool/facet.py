@@ -30,8 +30,8 @@ $Id$
 from zope.interface import implements
 from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.event import EventTargetMixin
-from schooltool.component import getFacetItems
-from schooltool.db import PersistentKeysDict
+from schooltool.component import iterFacets
+from schooltool.db import PersistentKeysSet
 
 __metaclass__ = type
 
@@ -41,7 +41,7 @@ class FacetedMixin:
     implements(IFaceted)
 
     def __init__(self):
-        self.__facets__ = PersistentKeysDict()
+        self.__facets__ = PersistentKeysSet()
 
 
 class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
@@ -52,7 +52,7 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
 
     def getEventTable(self):
         tables = [self.eventTable]
-        for key, facet in getFacetItems(self):
+        for facet in iterFacets(self):
             if facet.active and IEventConfigurable.isImplementedBy(facet):
                 tables.append(facet.eventTable)
         return sum(tables, [])

@@ -106,10 +106,9 @@ class TestFacetFunctions(unittest.TestCase):
         from schooltool.interfaces import IFaceted
         class Stub:
             implements(IFaceted)
-            __facets__ = {}
+            __facets__ = Set()
 
         self.ob = Stub()
-        self.marker = object()
         self.facet = object()
 
     def test_api(self):
@@ -117,39 +116,19 @@ class TestFacetFunctions(unittest.TestCase):
         from schooltool.interfaces import IFacetAPI
         verifyObject(IFacetAPI, component)
 
-    def test_setFacet(self):
-        from schooltool.component import setFacet
-        setFacet(self.ob, self.marker, self.facet)
-        self.assert_(self.ob.__facets__[self.marker] is self.facet)
-        self.assertRaises(TypeError,
-                          setFacet, object(), self.marker, self.facet)
+    def test_setFacet_removeFacet(self):
+        from schooltool.component import setFacet, removeFacet
+        setFacet(self.ob, self.facet)
+        self.assert_(self.facet in self.ob.__facets__)
+        self.assertRaises(TypeError, setFacet, object(), self.facet)
+        removeFacet(self.ob, self.facet)
+        self.assert_(self.facet not in self.ob.__facets__)
 
-    def test_getFacet(self):
-        from schooltool.component import getFacet
-        self.ob.__facets__[self.marker] = self.facet
-        result = getFacet(self.ob, self.marker)
-        self.assertEqual(result, self.facet)
-        self.assertRaises(KeyError, getFacet, self.ob, object())
-        self.assertRaises(TypeError, getFacet, object(), self.marker)
-
-    def test_queryFacet(self):
-        from schooltool.component import queryFacet
-        self.ob.__facets__[self.marker] = self.facet
-        result = queryFacet(self.ob, self.marker)
-        self.assertEqual(result, self.facet)
-        result = queryFacet(self.ob, object())
-        self.assertEqual(result, None)
-        cookie = object()
-        result = queryFacet(self.ob, object(), cookie)
-        self.assertEqual(result, cookie)
-        self.assertRaises(TypeError, queryFacet, object(), self.marker)
-
-    def test_getFacetItems(self):
-        from schooltool.component import getFacetItems
-        self.ob.__facets__[self.marker] = self.facet
-        result = getFacetItems(self.ob)
-        self.assertEqual(result, [(self.marker, self.facet)])
-        self.assertRaises(TypeError, getFacetItems, object())
+    def test_iterFacets(self):
+        from schooltool.component import iterFacets
+        self.ob.__facets__.add(self.facet)
+        self.assertEqual(list(iterFacets(self.ob)), [self.facet])
+        self.assertRaises(TypeError, iterFacets, object())
 
 
 class TestServiceAPI(unittest.TestCase):

@@ -26,7 +26,7 @@ from zope.interface import implements
 from schooltool.interfaces import IEventConfigurable
 from schooltool.interfaces import IPerson, IGroup, IRootGroup
 from schooltool.interfaces import ISpecificURI
-from schooltool.component import queryFacet, setFacet, getFacetItems
+from schooltool.component import setFacet, iterFacets
 from schooltool.db import PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 from schooltool.membership import MemberMixin, GroupMixin
@@ -63,19 +63,6 @@ class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
         RelatableMixin.__init__(self)
         self.name = name
         self.facetFactory = facetFactory
-
-    def _addhook(self, member):
-        if self.facetFactory is not None:
-            facet = queryFacet(member, self)
-            if facet is None:
-                facet = self.facetFactory(member)
-                setFacet(member, self, facet)
-            facet.active = True
-
-    def _deletehook(self, member):
-        facet = queryFacet(member, self)
-        if facet is not None:
-            facet.active = False
 
     def listLinks(self, role=ISpecificURI):
         links = MemberMixin.listLinks(self, role)

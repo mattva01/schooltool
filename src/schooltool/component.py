@@ -90,32 +90,23 @@ def getPath(obj):
 # IFacetAPI
 #
 
-def setFacet(ob, key, facet):
-    """Set a facet marked with a key on a faceted object."""
+def setFacet(ob, facet):
+    """Set a facet on a faceted object."""
     if not IFaceted.isImplementedBy(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
-    ob.__facets__[key] = facet
+    ob.__facets__.add(facet)
 
-def getFacet(ob, key):
-    """Get a facet of an object"""
+def removeFacet(ob, facet):
+    """Set a facet on a faceted object."""
     if not IFaceted.isImplementedBy(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
-    return ob.__facets__[key]
+    ob.__facets__.remove(facet)
 
-def queryFacet(ob, key, default=None):
-    """Get a facet of an object, return the default value if there is
-    none.
-    """
-    try:
-        return getFacet(ob, key)
-    except KeyError:
-        return default
-
-def getFacetItems(ob):
-    """Returns a sequence of (key, facet) for all facets of an object."""
+def iterFacets(ob):
+    """Returns an iterator all facets of an object."""
     if not IFaceted.isImplementedBy(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
-    return ob.__facets__.items()
+    return iter(ob.__facets__)
 
 
 #

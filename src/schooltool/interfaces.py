@@ -545,23 +545,14 @@ class IFaceted(Interface):
 class IFacetAPI(Interface):
     """Facet API"""
 
-    def setFacet(ob, key, facet):
-        """Set the facet identified by the key on the object."""
+    def setFacet(ob, facet):
+        """Set the facet on the object."""
 
-    def getFacet(ob, key):
-        """Get a facet of an object.
+    def removeFacet(ob, facet):
+        """Set the facet on the object."""
 
-        Raises KeyError if no facet with a given key exists.
-        """
-
-    def queryFacet(ob, key, default=None):
-        """Get a facet of an object.
-
-        Returns default if no facet with a given key exists.
-        """
-
-    def getFacetItems(ob):
-        """Returns a sequence of (key, facet) for all facets of an object."""
+    def iterFacets(ob):
+        """Returns an iterator over facets of an object."""
 
 
 #
