@@ -162,7 +162,7 @@ def setUpLocalAuth(site, auth=None):
     default = zapi.traverse(site, '++etc++site/default')
     reg_manager = default.getRegistrationManager()
 
-    if 'SchoolBellAuth' not in default:
+    if 'Utilities' not in default:
         # Set up the utility service
         utils = LocalUtilityService()
         default['Utilities'] = utils
@@ -170,6 +170,7 @@ def setUpLocalAuth(site, auth=None):
         reg_manager.addRegistration(registration)
         registration.status = 'Active'
 
+    if 'SchoolBellAuth' not in default:
         # Add and register the auth utility
         default['SchoolBellAuth'] = auth
         registration = UtilityRegistration('', IAuthentication, auth)

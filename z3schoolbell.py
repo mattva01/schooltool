@@ -137,6 +137,9 @@ def installAppInRoot(db, root):
     service_manager = getServiceManager(app)
     ensureService(service_manager, app, Utilities, LocalUtilityService)
 
+    from schoolbell.app.security import setUpLocalAuth
+    setUpLocalAuth(app)
+
     # Evil hack, continued:
     #    1. We open the db, DatabaseOpened event gets published
     #    2. zope.app.appsetup.bootstrap.bootStrapSubscriber adds a RootFolder
