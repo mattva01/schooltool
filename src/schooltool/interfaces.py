@@ -704,8 +704,8 @@ class IFacetAPI(Interface):
         Raises TypeError if the object is not IFaceted.
         """
 
-    def getFacetFctory(name):
-        """Returns the factory with the given name."""
+    def getFacetFactory(name):
+        """Return the factory with the given name."""
 
     def registerFacetFactory(factory):
         """Register the facet factory.
