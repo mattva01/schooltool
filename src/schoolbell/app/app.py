@@ -26,6 +26,7 @@ import sha
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
+from persistent.list import PersistentList
 from zope.interface import implements
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
@@ -40,6 +41,7 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
+from schoolbell.app.interfaces import INotes, INote
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.relationship import RelationshipProperty
@@ -253,6 +255,78 @@ class Resource(Persistent, Contained):
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
             return self.__parent__.__parent__
+
+
+class Note(Persistent):
+    """A Note.
+
+    Your basic simple content ojbect:
+
+    >>> note = Note(title='Potluck Theme!', 
+    ...             body="We're going Mexican! Bring tequila and tacos!")
+    >>> note.title
+    'Potluck Theme!'
+    >>> note.body
+    "We're going Mexican! Bring tequila and tacos!"
+
+    """
+
+    implements(INote)
+
+    def __init__(self, title=None, body=None):
+        self.title = title
+        self.body = body
+
+
+class Notes(Persistent):
+    """A list of Note objects.
+
+    Notes are just a container for Note objects
+
+    >>> notes = Notes()
+
+    Add a few notes
+
+    >>> note1 = Note(title="note1")
+    >>> note2 = Note(title="note2")
+    >>> notes.add(note1)
+    >>> notes.add(note2)
+
+    Iterate over the notes
+
+    >>> [n.title for n in notes]
+    ['note1', 'note2']
+
+    Remove a note
+
+    >>> notes.remove(note1)
+    >>> [n.title for n in notes]
+    ['note2']
+
+    Remove all the notes
+
+    >>> notes.clear()
+    >>> [n for n in notes]
+    []
+
+    """
+
+    implements(INotes)
+
+    def __init__(self):
+        self._notes = PersistentList()
+
+    def __iter__(self):
+        return iter(self._notes)
+
+    def add(self, note):
+        self._notes.append(note)
+
+    def remove(self, note):
+        self._notes.remove(note)
+
+    def clear(self):
+        del self._notes[:]
 
 
 def getSchoolBellApplication(obj):

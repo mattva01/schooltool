@@ -51,6 +51,38 @@ from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 class IContainedCalendarEvent(ICalendarEvent, IContained):
     """An event that is contained in a calendar."""
 
+class INote(Interface):
+    """A note."""
+
+    title = TextLine(title=u"Title",
+        description=u"Title of the note.")
+
+    body = Text(title=u"Body",
+        description=u"Body of the note.")
+
+
+class INotes(Interface):
+    """A set of notes.
+
+    Objects that can have notes are those that have an adapter to INotes.
+
+    See also `INote`.
+    """
+
+    def __iter__():
+        """Iterate over all notes."""
+
+    def add(note):
+        """Add a new note."""
+
+    def remove(note):
+        """Remove a note.
+
+        Raises ValueError if note is not in the set.
+        """
+
+    def clear():
+        """Remove all notes."""
 
 class ICalendarOwner(Interface):
     """An object that has a calendar."""
