@@ -22,12 +22,16 @@ The views for the schooltool content objects.
 $Id$
 """
 
+from zope.interface.interfaces import IInterface
+from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
+from schooltool.interfaces import IModuleSetup
 from schooltool.component import getPath, getRelatedObjects
 from schooltool.component import ComponentLookupError
+from schooltool.component import getView, registerView
 
 __metaclass__ = type
 
@@ -206,19 +210,9 @@ class ApplicationObjectContainerView(ItemTraverseView):
                 for key in self.context.keys()]
 
 
-def getView(obj):
-    """Selects a view for an object.
+def setUp():
+    registerView(IPerson, PersonView)
+    registerView(IGroup, GroupView)
+    registerView(IApplication, ApplicationView)
+    registerView(IApplicationObjectContainer, ApplicationObjectContainerView)
 
-    Returns a View object for obj.
-    """
-
-    if IPerson.isImplementedBy(obj):
-        return PersonView(obj)
-    elif IGroup.isImplementedBy(obj):
-        return GroupView(obj)
-    elif IApplication.isImplementedBy(obj):
-        return ApplicationView(obj)
-    elif IApplicationObjectContainer.isImplementedBy(obj):
-        return ApplicationObjectContainerView(obj)
-    else:
-        raise ComponentLookupError("No view found for %r" % (obj,))

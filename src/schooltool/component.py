@@ -30,11 +30,11 @@ from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IServiceAPI, IServiceManager
-from schooltool.interfaces import IRelationshipAPI
+from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI,
-               IRelationshipAPI)
+               IRelationshipAPI, IViewAPI)
 
 __metaclass__ = type
 
@@ -262,4 +262,35 @@ def relate(relationship_type, (a, role_a), (b, role_b), title=None):
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""
     return [link.traverse() for link in obj.listLinks(role)]
+
+
+#
+#  Views
+#
+
+view_registry = TypeRegistry()
+
+
+def resetViewRegistry():
+    """Clears the view registry"""
+    global view_registry
+    view_registry = TypeRegistry()
+
+
+def getView(obj):
+    """Selects a view for an object.
+
+    Returns a View object for obj.
+    """
+    try:
+        return view_registry.getAllForObject(obj)[0](obj)
+    except IndexError:
+        raise ComponentLookupError("No view found for %r" % (obj,))
+
+
+def registerView(interface, factory):
+    if not IInterface.isImplementedBy(interface):
+        raise TypeError("Expected an interface, got %r", (interface,))
+    view_registry.register(interface, factory)
+
 

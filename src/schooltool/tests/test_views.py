@@ -25,9 +25,15 @@ $Id$
 import unittest
 from helpers import dedent, diff
 from schooltool.tests.utils import RelationshipTestMixin
+from zope.interface import Interface, implements
 
 __metaclass__ = type
 
+class I1(Interface):
+    pass
+
+class C1:
+    implements(I1)
 
 class RequestStub:
 
@@ -287,9 +293,10 @@ class TestAppView(RelationshipTestMixin, unittest.TestCase):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
-        from schooltool import membership 
+        from schooltool import membership, views
         self.setUpRelationshipRegistry()
         membership.setUp()
+        views.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
@@ -297,6 +304,11 @@ class TestAppView(RelationshipTestMixin, unittest.TestCase):
         self.app.addRoot(self.group)
 
         self.view = ApplicationView(self.app)
+
+    def tearDown(self):
+        from schooltool.component import resetViewRegistry
+        resetViewRegistry()
+        RelationshipTestMixin.tearDown(self)
 
     def test_render(self):
         from schooltool.component import getPath
@@ -332,9 +344,10 @@ class TestAppObjContainerView(RelationshipTestMixin, unittest.TestCase):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
-        from schooltool import membership 
+        from schooltool import membership, views
         self.setUpRelationshipRegistry()
         membership.setUp()
+        views.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
@@ -342,6 +355,11 @@ class TestAppObjContainerView(RelationshipTestMixin, unittest.TestCase):
         self.app.addRoot(self.group)
 
         self.view = ApplicationObjectContainerView(self.app['groups'])
+
+    def tearDown(self):
+        from schooltool.component import resetViewRegistry
+        resetViewRegistry()
+        RelationshipTestMixin.tearDown(self)
 
     def test_render(self):
         from schooltool.component import getPath
@@ -370,25 +388,6 @@ class TestAppObjContainerView(RelationshipTestMixin, unittest.TestCase):
         self.assertRaises(KeyError, view._traverse, 'moot', request)
 
 
-class TestGetView(unittest.TestCase):
-
-    def test(self):
-        from schooltool.views import getView
-        from schooltool.model import Person, Group
-        from schooltool.app import ApplicationObjectContainer, Application
-        from schooltool.views import GroupView, PersonView
-        from schooltool.views import ApplicationObjectContainerView
-        from schooltool.views import ApplicationView
-        from schooltool.component import ComponentLookupError
-
-        self.assert_(getView(Person(":)")).__class__ is PersonView)
-        self.assert_(getView(Group(":)")).__class__ is GroupView)
-        self.assert_(getView(Application()).__class__ is ApplicationView)
-        self.assert_(getView(ApplicationObjectContainer(Group)).__class__ is
-                     ApplicationObjectContainerView)
-
-        self.assertRaises(ComponentLookupError, getView, object())
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
@@ -398,7 +397,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
-    suite.addTest(unittest.makeSuite(TestGetView))
     return suite
 
 if __name__ == '__main__':

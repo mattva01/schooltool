@@ -693,6 +693,21 @@ class IModuleSetup(Interface):
 
 
 #
+# Views
+#
+
+class IViewAPI(Interface):
+
+    def getView(object):
+        """Selects a view for an object by its interface.
+
+        Returns a View object for obj.
+        """
+
+    def registerView(interface, factory):
+        """Register a view for an interface."""
+
+#
 # Exceptions
 #
 

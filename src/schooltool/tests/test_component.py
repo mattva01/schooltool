@@ -377,6 +377,58 @@ class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
                           ('stub', args, {'title': title}))
 
 
+class TestViewRegistry(unittest.TestCase):
+
+    def testApi(self):
+        from schooltool import component
+        from schooltool.interfaces import IViewAPI
+
+        verifyObject(IViewAPI, component)
+
+    def setUp(self):
+        import schooltool.views
+        schooltool.views.setUp()
+
+    def tearDown(self):
+        from schooltool.component import resetViewRegistry
+        resetViewRegistry()
+
+    def test(self):
+        from schooltool.component import getView, ComponentLookupError
+        from schooltool.model import Person, Group
+        from schooltool.app import ApplicationObjectContainer, Application
+        from schooltool.views import GroupView, PersonView, ApplicationView
+        from schooltool.views import ApplicationObjectContainerView
+
+        self.assert_(getView(Person(":)")).__class__ is PersonView)
+        self.assert_(getView(Group(":)")).__class__ is GroupView)
+        self.assert_(getView(Application()).__class__ is ApplicationView)
+        self.assert_(getView(ApplicationObjectContainer(Group)).__class__ is
+                     ApplicationObjectContainerView)
+
+        self.assertRaises(ComponentLookupError, getView, object())
+
+    def testViewRegistry(self):
+        from schooltool.component import registerView, getView, view_registry
+
+        class SomeView:
+            def __init__(self, context):
+                self.context = context
+
+        class I1(Interface): pass
+        class C1: implements(I1)
+
+        registerView(I1, SomeView)
+        self.assert_(getView(C1()).__class__ is SomeView)
+
+        records1 = len(view_registry)
+        registerView(I1, SomeView)
+        records2 = len(view_registry)
+        self.assertEqual(records1, records2)
+
+        self.assertRaises(TypeError, registerView, object(), object())
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGetAdapter))
@@ -385,6 +437,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
     suite.addTest(unittest.makeSuite(TestRelationships))
+    suite.addTest(unittest.makeSuite(TestViewRegistry))
     return suite
 
 if __name__ == '__main__':

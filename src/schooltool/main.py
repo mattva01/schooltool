@@ -47,7 +47,7 @@ from twisted.python import failure
 from schooltool import mockup
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model
-from schooltool.views import GroupView, errorPage
+from schooltool.views import ApplicationView, errorPage
 from schooltool.membership import Membership
 
 __metaclass__ = type
@@ -384,7 +384,7 @@ class Server:
         # Defaults
         config_file = self.findDefaultConfigFile()
         self.appname = 'schooltool'
-        self.viewFactory = GroupView
+        self.viewFactory = ApplicationView # XXX getView
         self.appFactory = self.createApplication
 
         # Process command line arguments
@@ -483,6 +483,7 @@ class Server:
         Group = app['groups'].new
 
         root = Group(title="root")
+        app.addRoot(root)
         teachers = Group("teachers", title="teachers")
         students = Group("students", title="students")
         cleaners = Group("cleaners", title="cleaners")
