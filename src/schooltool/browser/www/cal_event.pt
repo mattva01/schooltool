@@ -15,4 +15,6 @@
   </tal:block>
   <h3 tal:condition="not:editable" tal:content="context/title" />
   <span tal:replace="structure view/duration" />
+  <span tal:condition="context/location"
+        tal:replace="string:(${context/location})" />
 </div>

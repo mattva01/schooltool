@@ -1051,6 +1051,7 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
                     '  \n'
                     '  \n'
                     '  12:01&ndash;13:01\n'
+                    '  \n'
                     '</div>\n')
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
@@ -1072,11 +1073,23 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
                     '  \n'
                     '  <h3>Main event</h3>\n'
                     '  12:01&ndash;13:01\n'
+                    '  \n'
                     '</div>\n')
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
 
         self.assertEquals(view.cssClass(), 'ro_event')
+
+    def test_location(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.browser.cal import CalendarEventView
+
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(hours=1), "Main event",
+                           unique_id="id", location="Office")
+        view = CalendarEventView(ev)
+        content = view.render(RequestStub())
+        self.assert_(content, '(Office)' in content)
 
     def test_duration(self):
         from schooltool.cal import CalendarEvent
