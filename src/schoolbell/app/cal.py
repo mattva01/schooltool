@@ -27,10 +27,14 @@ from zope.interface import implements
 from zope.app.location.interfaces import ILocation
 
 from schoolbell.calendar.interfaces import IEditCalendar
+from schoolbell.calendar.mixins import CalendarMixin
 
 
-class Calendar(Persistent):
+class Calendar(Persistent, CalendarMixin):
     """A persistent calendar."""
+
+    # We use the expand() implementation from CalendarMixin
+    # (although we do override find())
 
     implements(IEditCalendar, ILocation)
 
@@ -59,6 +63,3 @@ class Calendar(Persistent):
 
     def find(self, unique_id):
         return self.events[unique_id]
-
-    def expand(self, first, last):
-        raise NotImplementedError() # XXX
