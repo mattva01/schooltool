@@ -3,11 +3,11 @@
   <title metal:fill-slot="title">404 Not Found</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">
-    Not Found
-  </h1>
-  <metal:block metal:fill-slot="content">
-    <p>Not found: <tal:x replace="request/uri" /></p>
-  </metal:block>
+<h1 metal:fill-slot="h1">Not Found</h1>
+<metal:block metal:fill-slot="content">
+
+<p>Not found: <tal:x replace="request/uri" /></p>
+
+</metal:block>
 </body>
 </html>

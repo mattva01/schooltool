@@ -7,6 +7,14 @@
 </head>
 <body metal:define-slot="body">
   <h1 metal:define-slot="h1">Welcome to SchoolTool</h1>
+  <div class="login" tal:condition="not:request/authenticated_user">
+    Not logged in.
+  </div>
+  <div class="login" tal:condition="request/authenticated_user">
+    User: <tal:x replace="request/authenticated_user/title" />.
+    <a href="/logout"
+       tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
+  </div>
   <p metal:define-slot="content">Content</p>
 </body>
 </html>

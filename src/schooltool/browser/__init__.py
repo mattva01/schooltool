@@ -70,6 +70,11 @@ class View(_View):
                 request.authenticate(*credentials)
             except AuthenticationError:
                 pass
+        # TODO: _View.render can return a textErrorPage for 405 Method Not
+        #       Allowed.  We should return a nice HTML page instead.
+        #       There are also some calls to textErrorPage and other ad-hoc
+        #       text-only exception formattin in schooltool.main, and I'm not
+        #       sure how to hook into those.
         return _View.render(self, request)
 
     def unauthorized(self, request):
@@ -106,7 +111,7 @@ class View(_View):
             port = request.getHost().port
             url = '%s://%s:%s%s' % (scheme, hostname, port, url)
         request.redirect(url)
-        return self.redirect_template(request, destination=url)
+        return self.redirect_template(request, destination=url, view=self)
 
 
 class StaticFile(View):

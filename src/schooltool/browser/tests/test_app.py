@@ -156,16 +156,48 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
 
     def test_traversal(self):
         from schooltool.browser import StaticFile
+        from schooltool.browser.app import LogoutView
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
         view = self.createView()
         app = view.context
+        self.assertTraverses(view, 'logout', LogoutView, app)
         self.assertTraverses(view, 'persons', PersonContainerView,
                              app['persons'])
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+
+class TestLogoutView(unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import LogoutView
+        view = LogoutView(None)
+        return view
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/')
+
+    def test_render_with_auth(self):
+        from schooltool.interfaces import AuthenticationError
+        from schooltool.browser.auth import globalTicketService
+        view = self.createView()
+        ticket = globalTicketService.newTicket(('usr', 'pwd'))
+        request = RequestStub(cookies={'auth': ticket})
+        request.authenticate = lambda username, password: None
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/')
+        self.assertRaises(AuthenticationError,
+                          globalTicketService.verifyTicket, ticket)
 
 
 class TestPersonContainerView(unittest.TestCase, TraversalTestMixin):
@@ -213,6 +245,7 @@ class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
+    suite.addTest(unittest.makeSuite(TestLogoutView))
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     return suite

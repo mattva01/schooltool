@@ -1,14 +1,16 @@
-<html>
+<html metal:use-macro="view/macros/page">
 <head>
-<title>Redirecting to <tal:x replace="destination" /></title>
-<link rel="stylesheet" href="/schooltool.css" />
+  <title metal:fill-slot="title">Redirecting to
+    <tal:x replace="destination" /></title>
 </head>
 <body>
-<h1>Redirecting</h1>
+<h1 metal:fill-slot="h1">Redirecting</h1>
+<metal:block metal:fill-slot="content">
 
 <p>Your browser is now being redirected to <a tal:attributes="href destination"
 tal:content="destination" />.  If the redirect does not work, please click on
 the link manually.</p>
 
+</metal:block>
 </body>
 </html>

@@ -82,7 +82,21 @@ class RootView(View):
             return GroupContainerView(self.context['groups'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
+        elif name == 'logout':
+            return LogoutView(self.context)
         raise KeyError(name)
+
+
+class LogoutView(View):
+
+    __used_for__ = IApplication
+
+    authorization = PublicAccess
+
+    def do_GET(self, request):
+        auth_cookie = request.getCookie('auth')
+        globalTicketService.expire(auth_cookie)
+        return self.redirect('/', request)
 
 
 class PersonContainerView(View):

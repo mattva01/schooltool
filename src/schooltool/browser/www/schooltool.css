@@ -4,6 +4,13 @@ h1 {
   color: #44d344;
 }
 
+div.login {
+  position: absolute;
+  right: 1ex;
+  top: 1ex;
+  color: #888888;
+}
+
 form {
   padding: 1ex;
   background: #ffffd3;
