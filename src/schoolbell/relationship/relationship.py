@@ -35,6 +35,8 @@ from schoolbell.relationship.interfaces import IRelationshipLink
 from schoolbell.relationship.interfaces import IRelationshipProperty
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipAddedEvent
+from schoolbell.relationship.interfaces import IBeforeRemovingRelationshipEvent
+from schoolbell.relationship.interfaces import IRelationshipRemovedEvent
 from schoolbell.relationship.interfaces import DuplicateRelationship
 from schoolbell.relationship.interfaces import NoSuchRelationship
 
@@ -59,6 +61,9 @@ def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
     """Break a relationship between objects `a` and `b`."""
     links_of_a = IRelationshipLinks(a)
     links_of_b = IRelationshipLinks(b)
+    zope.event.notify(BeforeRemovingRelationshipEvent(rel_type,
+                                                      (a, role_of_a),
+                                                      (b, role_of_b)))
     try:
         link_a_to_b = links_of_a.find(role_of_a, b, role_of_b, rel_type)
         link_b_to_a = links_of_b.find(role_of_b, a, role_of_a, rel_type)
@@ -66,6 +71,9 @@ def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
         raise NoSuchRelationship
     links_of_a.remove(link_a_to_b)
     links_of_b.remove(link_b_to_a)
+    zope.event.notify(RelationshipRemovedEvent(rel_type,
+                                               (a, role_of_a),
+                                               (b, role_of_b)))
 
 
 class RelationshipEvent(object):
@@ -124,6 +132,36 @@ class RelationshipAddedEvent(RelationshipEvent):
     """
 
     implements(IRelationshipAddedEvent)
+
+
+class BeforeRemovingRelationshipEvent(RelationshipEvent):
+    """A relationship is about to be broken.
+
+        >>> from zope.interface.verify import verifyObject
+        >>> event = BeforeRemovingRelationshipEvent('example:Membership',
+        ...                 ('a', 'example:Member'),
+        ...                 ('letters', 'example:Group'))
+        >>> verifyObject(IBeforeRemovingRelationshipEvent, event)
+        True
+
+    """
+
+    implements(IBeforeRemovingRelationshipEvent)
+
+
+class RelationshipRemovedEvent(RelationshipEvent):
+    """A relationship has been broken.
+
+        >>> from zope.interface.verify import verifyObject
+        >>> event = RelationshipRemovedEvent('example:Membership',
+        ...                                  ('a', 'example:Member'),
+        ...                                  ('letters', 'example:Group'))
+        >>> verifyObject(IRelationshipRemovedEvent, event)
+        True
+
+    """
+
+    implements(IRelationshipRemovedEvent)
 
 
 def getRelatedObjects(obj, role, rel_type=None):

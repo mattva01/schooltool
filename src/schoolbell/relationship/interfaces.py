@@ -114,6 +114,18 @@ class IRelationshipAddedEvent(IRelationshipEvent):
     """A relationship has been established."""
 
 
+class IBeforeRemovingRelationshipEvent(IRelationshipEvent):
+    """A relationship is about to be broken.
+
+    You can register subscribers for this event to implement constraints
+    (by raising exceptions).
+    """
+
+
+class IRelationshipRemovedEvent(IRelationshipEvent):
+    """A relationship has been broken."""
+
+
 class InvalidRelationship(Exception):
     """Invalid relationship."""
 

@@ -263,6 +263,32 @@ When you establish a relationship, a RelationshipAddedEvent is sent out.
     >>> Membership(member=kermit, group=frogs)
     Relationship Membership added between kermit (Member) and frogs (Group)
 
+Before you break a relationship, a BeforeRemovingRelationshipEvent is sent out.
+You can implement constraints by raising exceptions in the subscriber (e.g.
+prevent members from leaving a group before they do something they have to
+do).
+
+When you break a relationship, a RelationshipRemovedEvent is sent out.
+
+    >>> from schoolbell.relationship.interfaces \
+    ...         import IBeforeRemovingRelationshipEvent
+    >>> from schoolbell.relationship.interfaces \
+    ...         import IRelationshipRemovedEvent
+    >>> def my_subscriber(event):
+    ...     if IBeforeRemovingRelationshipEvent.providedBy(event):
+    ...         if event[URIMember] is kermit:
+    ...             print "Please don't leave us!"
+    ...     if IRelationshipRemovedEvent.providedBy(event):
+    ...         print 'Relationship %s between %s (%s) and %s (%s) removed' % (
+    ...                     event.rel_type.name,
+    ...                     event.participant1, event.role1.name,
+    ...                     event.participant2, event.role2.name)
+    >>> zope.event.subscribers.append(my_subscriber)
+
+    >>> Membership.unlink(member=kermit, group=frogs)
+    Please don't leave us!
+    Relationship Membership between kermit (Member) and frogs (Group) removed
+
 
 Symmetric relationships
 -----------------------
@@ -291,8 +317,6 @@ Symmetric relationships work too:
 Note that if you use symmetric relationships, you cannot use `__getitem__`
 on IBeforeRelationshipEvents.
 
-TODO: API to remove relationships
-TODO: API to list all relationships?
 
 Cleaning up:
 
