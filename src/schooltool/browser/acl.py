@@ -30,7 +30,8 @@ from schooltool.translation import ugettext as _
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.interfaces import IACL, IPerson, IGroup, ICalendar
-from schooltool.browser.widgets import SelectionWidget
+from schooltool.browser.widgets import SelectionWidget, MultiCheckboxWidget
+from schooltool.browser.widgets import sequenceFormatter
 from schooltool.browser import absoluteURL
 
 __metaclass__ = type
@@ -71,14 +72,13 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
             formatter=self.formatUser,
             validator=self.userValidator)
 
-        self.permission_widget = SelectionWidget(
-            'permission', _('Permission'),
-            [(None, _('Select a permission'))] +
+        self.permission_widget = MultiCheckboxWidget(
+            'permissions', _('Permissions'),
             [(ViewPermission, _('View')),
              (AddPermission, _('Add')),
              (ModifyPermission, _('Modify'))],
             validator=self.permissionValidator,
-            formatter=self.formatPermission
+            formatter=sequenceFormatter(self.formatPermission)
             )
 
     def userParser(self, value):
@@ -112,8 +112,9 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
     def permissionValidator(self, value):
         if value is None:
             return
-        if value not in (ViewPermission, AddPermission, ModifyPermission):
-            raise ValueError(_("Please select a permission"))
+        for perm  in value:
+            if perm not in (ViewPermission, AddPermission, ModifyPermission):
+                raise ValueError(_("Please select a permission"))
 
     def list(self):
         """List all grants."""
@@ -179,17 +180,22 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
             if not (self.user_widget.error or
                     self.permission_widget.error):
                 user = self.user_widget.value
-                permission = self.permission_widget.value
-                if (user, permission) in self.context:
-                    return _("%s already has permission %s") % \
-                           (self.printUser(user), _(permission))
-                self.context.add((user, permission))
-                self.request.appLog(
-                    _("Granted permission %s on %s to %s") %
-                    (permission, getPath(self.context),
-                     self.printUser(user)))
-                return _("Granted permission %s to %s") % \
-                       (_(permission), self.printUser(user))
+                permissions = self.permission_widget.value
+                result = []
+                for permission in permissions:
+                    if (user, permission) in self.context:
+                        result.append( _("%s already has permission %s.") %
+                                       (self.printUser(user), _(permission)))
+                        continue
+                    self.context.add((user, permission))
+                    self.request.appLog(
+                        _("Granted permission %s on %s to %s.") %
+                        (permission, getPath(self.context),
+                         self.printUser(user)))
+                    result.append( _("Granted permission %s to %s.") % \
+                                   (_(permission), self.printUser(user)))
+                return "\n".join(result)
+
 
     def printUser(self, user):
         if user == Everybody:
