@@ -34,7 +34,7 @@ if sys.version_info < (2, 3):
     sys.exit(1)
 
 import os
-basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(basedir, 'src'))
 
 from wxPython.wx import *
@@ -52,7 +52,10 @@ class BoaApp(wxApp):
         self.main = schooltool.clients.wxgraph.create(None)
         # needed when running from Boa under Windows 9X
         self.SetTopWindow(self.main)
-        self.main.Show(); self.main.Hide(); self.main.Show()
+        self.main.Show()
+        # XXX apparently the following is needed on Windows, but crashes
+        #     wxGtk
+        self.main.Hide(); self.main.Show()
         return True
 
 def main():

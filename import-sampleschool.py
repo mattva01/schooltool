@@ -11,7 +11,7 @@ if sys.version_info < (2, 3):
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 datadir = basedir
 sys.path.insert(0, os.path.join(basedir, 'src'))
 
