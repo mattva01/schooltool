@@ -103,10 +103,6 @@ src/schooltool/ftests/*~
 src/schooltool/ftests/*.so
 src/schooltool/tests/Data.fs*
 src/schooltool/tests/*.so
-src/schooltool/www/*.pyc
-src/schooltool/www/Data.fs*
-src/schooltool/www/*~
-src/schooltool/www/*.so
 src/transaction/*.pyc
 src/transaction/Data.fs*
 src/transaction/*~
@@ -375,3 +371,7 @@ src/zope/testing/CVS/*.pyc
 src/zope/testing/CVS/Data.fs*
 src/zope/testing/CVS/*~
 src/zope/testing/CVS/*.so
+src/schooltool/views/www/*.pyc
+src/schooltool/views/www/Data.fs*
+src/schooltool/views/www/*~
+src/schooltool/views/www/*.so
