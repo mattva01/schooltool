@@ -93,7 +93,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
                 return self.getPrincipal('sb.person.' + login)
 
     def _checkPassword(self, username, password):
-        app = getSchoolBellApplication(self)
+        app = getSchoolBellApplication()
         if username in app['persons']:
             person = app['persons'][username]
             return person.checkPassword(password)
@@ -104,7 +104,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
-        app = getSchoolBellApplication(self)
+        app = getSchoolBellApplication()
         url = zapi.absoluteURL(app, request)
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"
                                   % (url, request.URL))
@@ -114,7 +114,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
         Returns principals for groups and persons.
         """
-        app = getSchoolBellApplication(self)
+        app = getSchoolBellApplication()
         if id.startswith(self.person_prefix):
             username = id[len(self.person_prefix):]
             if username in app['persons']:

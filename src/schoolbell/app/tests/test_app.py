@@ -26,6 +26,9 @@ import unittest
 
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
+from zope.interface import directlyProvides
+from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.testing import setup
 
 
 def doctest_SchoolBellApplication():
@@ -300,47 +303,27 @@ def doctest_getSchoolBellApplication():
     Let's say we have a SchoolBell app, a persons container and a person.
 
       >>> from schoolbell.app.app import SchoolBellApplication, Person
-
-      >>> p = Person(u'1')
+      >>> from schoolbell.app.security import setUpLocalAuth
       >>> app = SchoolBellApplication()
-      >>> app['persons']['1'] = p
+      >>> root = setup.placefulSetUp(True)
+      >>> directlyProvides(app, IContainmentRoot)
+      >>> setUpLocalAuth(app) # makes it a site
 
-    getSchoolBellApplication returns the app object for all these contexts:
+    If site is not a SchoolBellApplication, we get an error
 
       >>> from schoolbell.app.app import getSchoolBellApplication
-      >>> getSchoolBellApplication(app) is app
-      True
-
-      >>> getSchoolBellApplication(app['persons']) is app
-      True
-
-      >>> getSchoolBellApplication(p) is app
-      True
-
-    However, this function raises an error if the object does not have
-    an ISchoolBellApplication among its ancestors:
-
-      >>> from zope.interface import implements
-      >>> from zope.app.location.interfaces import ILocation
-      >>> class Foo:
-      ...     implements(ILocation)
-      ...     __parent__ = None
-      ...     def __repr__(self):
-      ...         return "Foo()"
-      ...
-      >>> foo = Foo()
-      >>> getSchoolBellApplication(foo)
+      >>> getSchoolBellApplication()
       Traceback (most recent call last):
       ...
-      ValueError: can't get a SchoolBellApplication from Foo()
+      ValueError: can't get a SchoolBellApplication
 
-    Also, it raises the same error if the object is not a location:
+    If current site is a SchoolBellApplication, we get it:
 
-      >>> getSchoolBellApplication("string")
-      Traceback (most recent call last):
-      ...
-      ValueError: can't get a SchoolBellApplication from 'string'
+      >>> from zope.app.component.hooks import setSite
+      >>> setSite(app)
 
+      >>> getSchoolBellApplication() is app
+      True
     """
 
 

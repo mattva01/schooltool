@@ -467,7 +467,7 @@ class ACLView(BrowserView):
         ]
 
     def getPersons(self):
-        app = getSchoolBellApplication(self.context)
+        app = getSchoolBellApplication()
         map = IPrincipalPermissionManager(self.context)
         auth = zapi.getUtility(IAuthentication)
         result = []
@@ -482,7 +482,7 @@ class ACLView(BrowserView):
         return result
 
     def getGroups(self):
-        app = getSchoolBellApplication(self.context)
+        app = getSchoolBellApplication()
         auth = zapi.getUtility(IAuthentication)
         map = IPrincipalPermissionManager(self.context)
         result = []

@@ -35,6 +35,7 @@ from zope.app.container.interfaces import INameChooser
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
+from zope.app.component.hooks import setSite, getSite
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
@@ -259,16 +260,11 @@ class Resource(Persistent, Contained):
             return self.__parent__.__parent__
 
 
-def getSchoolBellApplication(obj):
-    """Return the nearest ISchoolBellApplication from ancestors of obj."""
-    cur = obj
-    while True:
-        if ISchoolBellApplication.providedBy(cur):
-            return cur
-        elif ILocation.providedBy(cur):
-            cur = cur.__parent__
-        else:
-            cur = None
+def getSchoolBellApplication():
+    """Return the nearest ISchoolBellApplication"""
 
-        if cur is None:
-            raise ValueError("can't get a SchoolBellApplication from %r" % obj)
+    candidate = getSite()
+    if ISchoolBellApplication.providedBy(candidate):
+        return candidate
+    else:
+        raise ValueError("can't get a SchoolBellApplication")

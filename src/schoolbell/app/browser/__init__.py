@@ -53,7 +53,7 @@ class NavigationView(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
-        self.app = getSchoolBellApplication(context)
+        self.app = getSchoolBellApplication()
 
 
 class SchoolBellAPI(object):
@@ -84,7 +84,7 @@ class SchoolBellAPI(object):
             </a>
 
         """
-        return getSchoolBellApplication(self.context)
+        return getSchoolBellApplication()
     app = property(app)
 
     def person(self):

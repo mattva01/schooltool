@@ -23,8 +23,8 @@ $Id$
 """
 
 import unittest
-from zope.testing import doctest
 from zope.interface import implements
+from zope.testing import doctest
 from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
 
@@ -42,7 +42,12 @@ def doctest_SchoolBellAPI():
     'context/schoolbell:app' returns the nearest ISchoolBellApplication
 
         >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from zope.app.component.hooks import setSite
+        >>> from zope.app.component.site import LocalSiteManager
         >>> app = SchoolBellApplication()
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
         >>> SchoolBellAPI(app['persons']).app is app
         True
 
@@ -75,7 +80,7 @@ def doctest_SchoolBellAPI():
         ...     import Principal, UnauthenticatedPrincipal
         >>> root = Principal('root', 'Admin', 'Supreme user', 'root', 'secret')
         >>> anonymous = UnauthenticatedPrincipal('anonymous', 'Anonymous',
-        ...                             "Anyone who didn't bother to log in")
+        ...                             "Anyone who did not bother to log in")
 
         >>> SchoolBellAPI(root).authenticated
         True
@@ -158,9 +163,12 @@ def doctest_NavigationView():
     This view works for any ILocatable object within a SchoolBell instance.
 
       >>> from schoolbell.app.app import SchoolBellApplication, Person
-
-      >>> p = Person('1')
+      >>> from zope.app.component.hooks import setSite
+      >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolBellApplication()
+      >>> app.setSiteManager(LocalSiteManager(app))
+      >>> setSite(app)
+      >>> p = Person('1')
       >>> app['persons']['1'] = p
 
     It makes the application available as `view.app`:

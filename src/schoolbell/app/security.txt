@@ -85,6 +85,8 @@ Let's provide the location of auth:
     >>> root['frogpond'] = app
     >>> from schoolbell.app.security import setUpLocalAuth
     >>> setUpLocalAuth(app, auth)
+    >>> from zope.app.component.hooks import setSite
+    >>> setSite(app)
 
 Now, we get our local authentication service:
 

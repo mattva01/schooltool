@@ -31,7 +31,7 @@ from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-
+from zope.app.component.hooks import setSite
 
 def doctest_PersonView():
     r"""Test for PersonView
@@ -744,8 +744,11 @@ def doctest_LoginView():
     Suppose we have a SchoolBell app and a person:
 
         >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.security import setUpLocalAuth
         >>> app = SchoolBellApplication()
         >>> directlyProvides(app, IContainmentRoot)
+        >>> setUpLocalAuth(app)
+        >>> setSite(app)
         >>> persons = app['persons']
 
         >>> from schoolbell.app.app import Person
@@ -848,8 +851,11 @@ def doctest_LogoutView():
     Suppose we have a SchoolBell app and a person:
 
         >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.security import setUpLocalAuth
         >>> app = SchoolBellApplication()
         >>> directlyProvides(app, IContainmentRoot)
+        >>> setUpLocalAuth(app)
+        >>> setSite(app)
         >>> persons = app['persons']
 
         >>> from schoolbell.app.app import Person
