@@ -75,7 +75,7 @@ class SchoolBellAPI(object):
         pass
 
     def app(self):
-        """Adapt context to ISchoolBellApplication.
+        """Return the ISchoolBellApplication.
 
         Sample usage in a page template:
 
