@@ -581,11 +581,16 @@ def main(argv):
             pass
 
     # Option processing
-    opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufwd',
-                                   ['list-files', 'list-tests', 'list-hooks',
-                                    'level=', 'all-levels', 'coverage',
-                                    'search-in=', 'immediate-errors',
-                                    'delayed-errors', 'help'])
+    try:
+        opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufwd',
+                               ['list-files', 'list-tests', 'list-hooks',
+                                'level=', 'all-levels', 'coverage',
+                                'search-in=', 'immediate-errors',
+                                'delayed-errors', 'help'])
+    except getopt.error, e:
+        print >> sys.stderr, '%s: %s' % (argv[0], e)
+        print >> sys.stderr, 'run %s -h for help'
+        return 1
     for k, v in opts:
         if k in ['-h', '--help']:
             print __doc__
