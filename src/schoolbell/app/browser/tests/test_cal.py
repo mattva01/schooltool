@@ -421,13 +421,16 @@ class TestCalendarViewBase(unittest.TestCase):
         cal = Calendar()
         view = CalendarViewBase(cal, request)
         self.assertEquals(view.first_day_of_week, 0) # Monday by default
+        self.assertEquals(view.time_fmt, '%H:%M')
 
-        # set the weekstart to sunday
+        # change our preferences
         prefs = IPersonPreferences(request.principal._person)
         prefs.weekstart = "Sunday"
+        prefs.timeformat = "H:MM am/pm"
 
         view_sunday = CalendarViewBase(cal, request)
         self.assertEquals(view_sunday.first_day_of_week, 6)
+        self.assertEquals(view_sunday.time_fmt, "%I:%M %p")
 
         def getDaysStub(start, end):
             return [CalendarDay(start), CalendarDay(end)]
@@ -593,6 +596,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> class PreferenceStub:
             ...     def __init__(self):
             ...         self.weekstart = "Monday"
+            ...         self.timeformat = "%H:%M"
             >>> from schoolbell.app.interfaces import IPersonPreferences
             >>> class PersonStub:
             ...     def __conform__(self, interface):

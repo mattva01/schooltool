@@ -301,9 +301,14 @@ class CalendarViewBase(BrowserView):
                 self.first_day_of_week = 6
             else:
                 self.first_day_of_week = 0
+
+            if prefs.timeformat == "H:MM am/pm":
+                self.time_fmt = '%I:%M %p'
+            else:
+                self.time_fmt = '%H:%M'
         else:
             self.first_day_of_week = 0
-
+            self.time_fmt = '%H:%M'
 
     def internationalDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
@@ -731,13 +736,7 @@ class DailyCalendarView(CalendarViewBase):
 
     def rowTitle(self, hour, minute):
         """Return the row title as HH:MM or H:MM am/pm."""
-        person = IPerson(self.request.principal, None)
-        prefs = IPersonPreferences(person, None)
-        if prefs is not None and prefs.timeformat == "H:MM am/pm":
-            fmt = '%I:%M %p'
-        else:
-            fmt = '%H:%M'
-        return time(hour, minute).strftime(fmt)
+        return time(hour, minute).strftime(self.time_fmt)
 
     def calendarRows(self):
         """Iterate over (title, start, duration) of time slots that make up

@@ -48,8 +48,8 @@
                                title ev/title">
               <span tal:replace="ev/shortTitle" />
               <span class="start-end">
-                (<span tal:content="python:ev.dtstart.strftime('%H:%M')"/> -
-                <span tal:content="python:ev.dtend.strftime('%H:%M')"/>)
+                (<span tal:content="python:ev.dtstart.strftime(view.time_fmt)"/> -
+                <span tal:content="python:ev.dtend.strftime(view.time_fmt)"/>)
               </span>
             </a>
           </h6>
