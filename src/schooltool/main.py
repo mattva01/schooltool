@@ -437,10 +437,10 @@ class Server:
 
         Must be called after configure.
         """
-        import schooltool.relationships
+        import schooltool.relationship
         import schooltool.membership
 
-        schooltool.relationships.setUp()
+        schooltool.relationship.setUp()
         schooltool.membership.setUp()
 
         db_configuration = self.config.database

@@ -30,7 +30,7 @@ from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 from schooltool.membership import MemberMixin, GroupMixin
-from schooltool.relationships import RelatableMixin
+from schooltool.relationship import RelatableMixin
 
 __metaclass__ = type
 

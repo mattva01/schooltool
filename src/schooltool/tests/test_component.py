@@ -274,7 +274,7 @@ class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
                         unittest.TestCase):
 
     def setUp(self):
-        from schooltool.relationships import setUp as setUpRelationships
+        from schooltool.relationship import setUp as setUpRelationships
         self.setUpRelationshipRegistry()
         setUpRelationships()
         self.setUpEventService()

@@ -34,7 +34,7 @@ from schooltool.interfaces import IMemberAddedEvent
 from schooltool.interfaces import IMemberRemovedEvent
 from schooltool.interfaces import IModuleSetup
 from schooltool.db import PersistentKeysDict
-from schooltool.relationships import RelationshipSchema, RelationshipEvent
+from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool.component import registerRelationship
 
 moduleProvides(IModuleSetup)

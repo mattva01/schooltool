@@ -62,8 +62,8 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
     """
 
     def setUp(self):
-        from schooltool.relationships import _LinkRelationship
-        from schooltool.relationships import Link
+        from schooltool.relationship import _LinkRelationship
+        from schooltool.relationship import Link
         self.setUpEventService()
         self.klass = Relatable(self.serviceManager)
         self.tutor = Relatable(self.serviceManager)
@@ -78,15 +78,15 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         verifyObject(IRemovableLink, self.ltutor)
 
     def testLinkChecksURIs(self):
-        from schooltool.relationships import Link
+        from schooltool.relationship import Link
         self.assertRaises(TypeError, Link, Relatable(), "my tutor")
 
     def testLinkChecksParent(self):
-        from schooltool.relationships import Link
+        from schooltool.relationship import Link
         self.assertRaises(TypeError, Link, object(), URITutor)
 
     def test(self):
-        from schooltool.relationships import Link
+        from schooltool.relationship import Link
         from schooltool.interfaces import IRelationshipRemovedEvent
         self.assertEquals(self.rel.title, "Tutor of a class")
         self.assertEquals(self.lklass.title, "Tutor of a class")
@@ -117,7 +117,7 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
 class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
 
     def test_interfaces(self):
-        from schooltool.relationships import RelationshipSchema
+        from schooltool.relationship import RelationshipSchema
         from schooltool.interfaces import IRelationshipSchemaFactory
         from schooltool.interfaces import IRelationshipSchema
         verifyClass(IRelationshipSchema, RelationshipSchema)
@@ -126,7 +126,7 @@ class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
         ##verifyObject(IRelationshipSchemaFactory, RelationshipSchema)
 
     def testBadConstructor(self):
-        from schooltool.relationships import RelationshipSchema
+        from schooltool.relationship import RelationshipSchema
         self.assertRaises(TypeError, RelationshipSchema,
                           URICommand, '13', '14',
                           superior=URISuperior, report=URIReport)
@@ -141,7 +141,7 @@ class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
                           report=URIReport, superior=URISuperior)
 
     def testBadCreateRelationship(self):
-        from schooltool.relationships import RelationshipSchema
+        from schooltool.relationship import RelationshipSchema
         schema = RelationshipSchema(URICommand,
                                     superior=URISuperior, report=URIReport)
         self.assertRaises(TypeError, schema)
@@ -152,7 +152,7 @@ class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
                           superior=Relatable(), report=Relatable())
 
     def test(self):
-        from schooltool.relationships import RelationshipSchema
+        from schooltool.relationship import RelationshipSchema
 
         title1, doc = inspectSpecificURI(URICommand)
         schema1 = RelationshipSchema(URICommand,
@@ -194,8 +194,8 @@ class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
 class TestEvents(unittest.TestCase):
 
     def test_relationship_events(self):
-        from schooltool.relationships import RelationshipAddedEvent
-        from schooltool.relationships import RelationshipRemovedEvent
+        from schooltool.relationship import RelationshipAddedEvent
+        from schooltool.relationship import RelationshipRemovedEvent
         from schooltool.interfaces import IRelationshipAddedEvent
         from schooltool.interfaces import IRelationshipRemovedEvent
         links = (object(), object())
@@ -219,11 +219,11 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         return e
 
     def test__relate(self):
-        from schooltool.relationships import _relate
+        from schooltool.relationship import _relate
         self.doChecks(_relate)
 
     def test_defaultRelate(self):
-        from schooltool.relationships import defaultRelate
+        from schooltool.relationship import defaultRelate
         from schooltool.interfaces import IRelationshipAddedEvent
 
         a, b, links  = self.doChecks(defaultRelate)
@@ -264,7 +264,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
 class TestRelatableMixin(unittest.TestCase):
 
     def test(self):
-        from schooltool.relationships import RelatableMixin, _relate
+        from schooltool.relationship import RelatableMixin, _relate
         from schooltool.interfaces import IRelatable, IQueryLinks
 
         a = RelatableMixin()
@@ -279,7 +279,7 @@ class TestRelatableMixin(unittest.TestCase):
         self.assert_(b.listLinks(URIClassTutor)[0].traverse() is a)
 
     def test_listLinks(self):
-        from schooltool.relationships import RelatableMixin
+        from schooltool.relationship import RelatableMixin
         a = RelatableMixin()
 
         class URIEmployee(ISpecificURI): "foo:employee"
