@@ -26,6 +26,8 @@ import datetime
 from persistent.dict import PersistentDict
 from persistent import Persistent
 from zope.interface import implements
+from zope.schema import getFieldNames
+from zope.component import adapts
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
 from zope.app.filerepresentation.interfaces import IWriteFile
@@ -33,9 +35,9 @@ from zope.app.location.interfaces import ILocation
 
 from schoolbell.calendar.icalendar import read_icalendar
 from schoolbell.calendar.interfaces import ICalendar
-from schoolbell.calendar.interfaces import IExpandedCalendarEvent
-from schoolbell.calendar.mixins import CalendarMixin, ExpandedCalendarEvent
-from schoolbell.calendar.simple import SimpleCalendarEvent, ImmutableCalendar
+from schoolbell.calendar.interfaces import ICalendarEvent
+from schoolbell.calendar.mixins import CalendarMixin
+from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.app.interfaces import IContainedCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 
@@ -94,23 +96,47 @@ class Calendar(Persistent, CalendarMixin):
 
 
 class WriteCalendar(object):
-    """An adapter that allows to modify the calendar."""
+    """An adapter that allows writing iCalendar date to a calendar.
 
+        >>> calendar = Calendar()
+        >>> adapter = WriteCalendar(calendar)
+        >>> adapter.write('''
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... SUMMARY:LAN party
+        ... DTSTART:20050226T160000
+        ... DURATION:P6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''')
+        >>> for e in calendar:
+        ...     print e.dtstart.strftime('%Y-%m-%d %H:%M'), e.title
+        2005-02-26 16:00 LAN party
+
+    """
+
+    adapts(ISchoolBellCalendar)
     implements(IWriteFile)
 
-    # XXX I'd like this to be moved elsewhere.
-    _event_attrs = ['dtstart', 'duration', 'title', 'description',
-                    'location', 'unique_id', 'recurrence']
-
+    # Hook for unit tests.
     read_icalendar = staticmethod(read_icalendar)
+
+    _event_attrs = getFieldNames(ICalendarEvent)
 
     def __init__(self, context):
         self.calendar = context
 
     def write(self, data):
-        self.calendar.clear() # TODO: modify existing events
-        for event in self.read_icalendar(data):
-            kwargs = dict([(attr, getattr(event, attr))
+        events = []
+        for vevent in self.read_icalendar(data):
+            kwargs = dict([(attr, getattr(vevent, attr))
                            for attr in self._event_attrs])
-            orig = CalendarEvent(**kwargs)
-            self.calendar.addEvent(orig)
+            events.append(CalendarEvent(**kwargs))
+        self.calendar.clear()
+        for e in events:
+            self.calendar.addEvent(e)
+
