@@ -38,8 +38,8 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.schema import Text, TextLine, Int, Datetime, Date, List, Set, Choice
-from zope.schema import Field, Object
+from zope.schema import Text, TextLine, Int, Datetime, Date, Timedelta
+from zope.schema import List, Set, Choice, Field, Object
 
 
 Unchanged = object() # marker
@@ -304,7 +304,7 @@ class ICalendarEvent(Interface):
         Date and time when the event starts.
         """)
 
-    duration = Field( # zope.schema does not have TimeInterval
+    duration = Timedelta(
         title=u"Duration",
         description=u"""
         The duration of the event (datetime.timedelta).

@@ -24,9 +24,9 @@ $Id$
 
 import datetime
 import calendar
-from zope.interface import implements
 from sets import Set
 
+from zope.interface import implements
 from schoolbell.calendar.icalendar import ical_weekdays
 from schoolbell.calendar.icalendar import ical_date, ical_datetime
 from schoolbell.calendar.simple import SimpleCalendarEvent
