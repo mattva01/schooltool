@@ -337,10 +337,12 @@ elif package == 'schoolbell':
             * Importable and exportable to iCal clients
                 (e.g. Apple's iCal or Mozilla Sunbird)
 
-            And will be:
-            * Time Zone Aware
+            And will:
+            * Time zone aware
+            * Provide resource rooking
+            * Do anything else that makes sense
 
-            All of this is accessable through a web interface which is simple,
+            All of this is accessible through a web interface which is simple,
             powerful and beautiful.
 
             For developers SchoolBell offers:
