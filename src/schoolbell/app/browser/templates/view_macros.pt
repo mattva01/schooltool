@@ -192,6 +192,12 @@
       <title i18n:translate="">Calendar</title>
     </metal:block>
 
+    <metal:block fill-slot="extrahead">
+      <link rel="service.feed" type="application/atom+xml"
+            title="Upcoming Events" href=""
+            tal:attributes="href string:${context/@@absolute_url}/atom.xml" />
+    </metal:block>
+
     <metal:block fill-slot="content-header">
       <h1 i18n:translate="">
         Calendar for <span tal:replace="context/title"
