@@ -708,7 +708,7 @@ class Server:
 
         # Open the log files for exceptions
         self.logfiles = []
-        for filename in self.config.log_file:
+        for filename in self.config.event_log_file:
             if filename == 'STDOUT':
                 self.logfiles.append(sys.stdin)
             elif filename == 'STDERR':

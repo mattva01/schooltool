@@ -63,7 +63,7 @@
 pid-file schooltool.pid
 
 #
-# log-file
+# event-log-file
 #
 #   Specifies the path of a log file used for exceptions. Special
 #   values STDERR and STDOUT mean standard error and standard output
@@ -73,14 +73,14 @@ pid-file schooltool.pid
 #   to all the log files.
 #
 # Default:
-#    log-file STDERR
+#    event-log-file STDERR
 #
 # Examples:
-#    log-file /var/log/schooltool/error.log
-#    log-file STDERR
+#    event-log-file /var/log/schooltool/error.log
+#    event-log-file STDERR
 #
-log-file schooltool.log
-log-file STDERR
+event-log-file schooltool.log
+event-log-file STDERR
 
 #
 # access-log-file
