@@ -1,7 +1,7 @@
 <div class="calevent" i18n:domain="schooltool">
   <div class="dellink" tal:condition="view/canEdit" >
     <a tal:attributes="href view/deleteLink" i18n:translate="">[delete]</a>
-    <div tal:content="view/privacy">Publik</div>
+    <div tal:content="view/privacy">Public</div>
   </div>
   <h3 tal:condition="view/canView">
     <a tal:attributes="href view/editLink" tal:omit-tag="not:view/canEdit"
