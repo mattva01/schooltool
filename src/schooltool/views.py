@@ -400,7 +400,9 @@ class FacetManagementView(View, XMLPseudoParser):
         facet = factory()
         self.context.setFacet(facet)
 
-        location = '%s/%s' % (request.uri, facet.__name__)
+        location = ('http://%s%s/%s'
+                    % (request.getRequestHostname(), request.path,
+                       facet.__name__))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)

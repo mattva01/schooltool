@@ -54,6 +54,10 @@ class RequestStub:
         start = uri.find('/', uri.find('://')+3)
         if start >= 0:
             self.path = uri[start:]
+        self._hostname = 'localhost'
+
+    def getRequestHostname(self):
+        return self._hostname
 
     def setHeader(self, header, value):
         self.headers[header] = value
