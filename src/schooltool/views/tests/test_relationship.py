@@ -124,6 +124,9 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
                      [l.traverse() for l in self.sub.listLinks()])
         result = self.view.render(request)
         self.assertEquals(request.code, 201)
+        self.assertEquals(request.site.applog,
+                [(None, 'Relationship created: /groups/sub/relationships/0003',
+                  'INFO')])
         self.assertEquals(len(self.sub.listLinks()), 3)
         self.assert_(self.new in
                      [l.traverse() for l in self.sub.listLinks()])
@@ -216,8 +219,8 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
             self.assertEquals(len(self.sub.listLinks()), 2)
             result = self.view.render(request)
             self.assertEquals(request.code, 400,
-                              "%d: %s\n%s" % (bad_requests.index(body),
-                                              result, body))
+                    "%d: %s\n%s" % (bad_requests.index(body), result, body))
+            self.assertEquals(request.site.applog, [])
             self.assertEquals(request.headers['content-type'],
                               "text/plain; charset=UTF-8")
             self.assertEquals(len(self.sub.listLinks()), 2)
@@ -265,6 +268,9 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub(url, method="DELETE")
         self.assertEqual(len(self.sub.listLinks()), 1)
         result = self.view.render(request)
+        self.assertEqual(request.site.applog,
+                         [(None, 'Link removed: /groups/root/0001', 'INFO')])
+        self.assertEqual(result, 'Link removed')
         self.assertEqual(len(self.sub.listLinks()), 0)
 
 
