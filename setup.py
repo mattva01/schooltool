@@ -64,6 +64,18 @@ else:
             print >> sys.stderr
 
 
+# which package are we setting up
+if sys.argv[1] == 'schooltool':
+    package = 'schooltool'
+    sys.argv[1:2] = []
+elif sys.argv[1] == 'schoolbell':
+    package = 'schoolbell'
+    sys.argv[1:2] = []
+else:
+    print >> sys.stderr, ("You must specify the package to build as the first"
+                        " command line option, either schooltool or schoolbell")
+    sys.exit(1)
+
 # Subclass the install-lib and install_data commands so that we can set
 # the data directory
 
@@ -71,12 +83,14 @@ from distutils.command.install_data import install_data as _install_data
 from distutils.command.install_lib import install_lib as _install_lib
 
 class install_data(_install_data):
-    """Specialized Python installer for schooltool.
+    """Specialized Python installer for schooltool and schoolbell.
 
     The primary purpose of this sub class it to make sure SchoolTool will
     know where it's data files are on installation.
     """
-
+    
+    package = package
+    
     def initialize_options(self):
         self.build_base = None
         return _install_data.initialize_options(self)
@@ -92,7 +106,8 @@ class install_data(_install_data):
         self.run_command('build')
         # write where we have installed the data files to build/data_base
         try:
-            data_file = open(os.path.join(self.build_base, 'data_base'), 'w')
+            data_file = open(os.path.join(self.build_base,
+                self.package + '_data_base'), 'w')
             data_file.write(self.install_dir)
         finally:
             data_file.close()
@@ -100,11 +115,13 @@ class install_data(_install_data):
 
 
 class install_lib(_install_lib):
-    """Specialized Python installer for schooltool.
+    """Specialized Python installer for schooltool and schoolbell.
 
     The primary purpose of this sub class it to make sure SchoolTool will
     know where it's data files are on installation.
     """
+
+    package = package
 
     user_options = _install_lib.user_options + [
             ('datafile-dir=', None, "override where schooltool thinks its "
@@ -124,14 +141,15 @@ class install_lib(_install_lib):
 
     def update_pathconfig(self):
         # Write the new location to the pathconfig.py file.
-        pathconfig = os.path.join(self.build_lib, 'schooltool', 'pathconfig.py')
+        pathconfig = os.path.join(self.build_lib, self.package, 'pathconfig.py')
         if self.datafile_dir is None:
             # Make sure that we have installed the data files
             self.run_command('install_data')
             # Get the location of the installed data
             try:
                 data_file = open(
-                        os.path.join(self.build_base, 'data_base'), 'r')
+                        os.path.join(self.build_base,
+                            self.package + '_data_base'), 'r')
                 self.datafile_dir = data_file.read()
             finally:
                 data_file.close()
@@ -160,18 +178,6 @@ class install_lib(_install_lib):
 #
 
 from distutils.core import setup
-
-# which package are we setting up
-if sys.argv[1] == 'schooltool':
-    package = 'schooltool'
-    sys.argv[1:2] = []
-elif sys.argv[1] == 'schoolbell':
-    package = 'schoolbell'
-    sys.argv[1:2] = []
-else:
-    print >> sys.stderr, ("You must specify the package to build as the first"
-                        " command line option, either schooltool or schoolbell")
-    sys.exit(1)
 
 # Set a default manifest
 if sys.argv[1] == 'sdist':
@@ -222,6 +228,8 @@ elif package == 'schoolbell':
     setup(name="schoolbell",
         version="1.0rc1",
         url='http://www.schooltool.org/schoolbell',
+        cmdclass={'install_data': install_data,
+            'install_lib': install_lib},
         package_dir={'': 'src'},
         packages=['schoolbell', 'schoolbell.relationship',
             'schoolbell.calendar', 'schoolbell.app', 'schoolbell.app.browser'],
