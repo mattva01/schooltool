@@ -196,15 +196,31 @@ class CSVImporter:
         for method, resource, body in result:
             self.process(method, resource, body=body)
 
-    def importPerson(self, title):
+    def importPerson(self, title, parent, groups, relation):
         """Import a person.
 
         Returns the name of the created person object.
+
+        parent is the parent group name (usually 'pupils' or 'teachers').
+
+        relation is a method that takes a group name and an object name,
+        and returns a tuple for process().  It is usually either
+        self.membership or self.teaching.
         """
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
                 ' title="%s"/>' % to_xml(title))
         response = self.process('POST', '/persons', body=body)
-        return self.getName(response)
+        name = self.getName(response)
+
+        result = []
+        result.append(self.membership(parent, "/persons/%s" % name))
+        for group in groups.split():
+            result.append(relation(group, "/persons/%s" % name))
+
+        for method, resource, body in result:
+            self.process(method, resource, body=body)
+
+        return name
 
     def importResource(self, title, groups):
         """Import a resource and add it to each of `groups`.
@@ -219,32 +235,6 @@ class CSVImporter:
         result = []
         for group in groups.split():
             result.append(self.membership(group, "/resources/%s" % name))
-        for method, resource, body in result:
-            self.process(method, resource, body=body)
-
-    def importPupil(self, name, parents):
-        """Add a pupil to groups.
-
-        Needs a name (generated path element), so it is separate from
-        importPerson().
-        """
-        result = []
-        result.append(self.membership('pupils', "/persons/%s" % name))
-        for parent in parents.split():
-            result.append(self.membership(parent, "/persons/%s" % name))
-        for method, resource, body in result:
-            self.process(method, resource, body=body)
-
-    def importTeacher(self, name, taught):
-        """Add a teacher to groups.
-
-        Needs a name (generated path element), so it is separate from
-        importPerson().
-        """
-        result = []
-        result.append(self.membership('teachers', "/persons/%s" % name))
-        for group in taught.split():
-            result.append(self.teaching(name, group))
         for method, resource, body in result:
             self.process(method, resource, body=body)
 
@@ -309,37 +299,21 @@ class CSVImporter:
             raise DataError(_("Error in group data line %d: %s")
                             % (lineno + 1, e))
 
-    def importTeachersCsv(self, csvdata):
+    def importPeopleCsv(self, csvdata, parent_group, relation):
         lineno = 0
         try:
             for lineno, row in enumerate(csv.reader(csvdata)):
                 if len(row) != 4:
-                    raise DataError(_("Error in teacher data line %d:"
+                    raise DataError(_("Error in %s data line %d:"
                                       " expected 4 columns, got %d") %
-                                    (lineno + 1, len(row)))
+                                    (parent_group, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
-                name = self.importPerson(title)
-                self.importTeacher(name, groups)
+                name = self.importPerson(title, parent_group, groups,
+                                         relation=relation)
                 self.importPersonInfo(name, title, dob, comment)
         except csv.Error, e:
-            raise DataError(_("Error in teacher data line %d: %s")
-                            % (lineno + 1, e))
-
-    def importPupilsCsv(self, csvdata):
-        lineno = 0
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 4:
-                    raise DataError(_("Error in pupil data line %d:"
-                                      " expected 4 columns, got %d") %
-                                    (lineno + 1, len(row)))
-                title, groups, dob, comment = map(from_locale, row)
-                name = self.importPerson(title)
-                self.importPupil(name, groups)
-                self.importPersonInfo(name, title, dob, comment)
-        except csv.Error, e:
-            raise DataError(_("Error in pupil data line %d: %s")
-                            % (lineno + 1, e))
+            raise DataError(_("Error in %s parent_group data line %d: %s")
+                            % (parent_group, lineno + 1, e))
 
     def importResourcesCsv(self, csvdata):
         lineno = 0
@@ -370,9 +344,11 @@ class CSVImporter:
             self.blather(_("Creating groups... "))
             self.importGroupsCsv(self.fopen('groups.csv'))
             self.blather(_("Creating teachers... "))
-            self.importTeachersCsv(self.fopen('teachers.csv'))
+            self.importPeopleCsv(self.fopen('teachers.csv'), 'teachers',
+                                 self.teaching)
             self.blather(_("Creating pupils... "))
-            self.importPupilsCsv(self.fopen('pupils.csv'))
+            self.importPeopleCsv(self.fopen('pupils.csv'), 'pupils',
+                                 self.membership)
             self.blather(_("Creating resources... "))
             self.importResourcesCsv(self.fopen('resources.csv'))
             self.blather(_("Import finished successfully"))

@@ -188,55 +188,24 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                            ' factory="ff2"/>'),
                           ])
 
-    def test_importPupil(self):
+    def test_importPerson(self):
         from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
         im.getName = lambda response: 'quux'
 
         im.process = processStub()
-        im.importPerson('Joe Hacker')
+        im.importPerson('Joe Hacker', 'pupils', 'foo bar', im.membership)
         self.assertEqual(im.process.requests,
                          [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                           ' title="Joe Hacker"/>')])
-
-        im.process = processStub()
-        im.importPupil('007', 'foo bar')
-        self.assertEqual(im.process.requests,
-                         [('POST', '/groups/pupils/relationships',
-                           membership_pattern % "/persons/007"),
+                           ' title="Joe Hacker"/>'),
+                          ('POST', '/groups/pupils/relationships',
+                           membership_pattern % "/persons/quux"),
                           ('POST', '/groups/foo/relationships',
-                           membership_pattern % "/persons/007"),
+                           membership_pattern % "/persons/quux"),
                           ('POST', '/groups/bar/relationships',
-                           membership_pattern % "/persons/007")])
-
-    def test_importTeacher(self):
-        from schooltool.clients.csvclient import CSVImporter
-
-        im = CSVImporter()
-        im.process = processStub()
-        im.getName = lambda response: 'quux'
-
-        im.importPerson('Joe Hacker')
-        self.assertEqual(im.process.requests,
-                         [('POST', '/persons',
-                           '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                           ' title="Joe Hacker"/>')])
-
-        im.process = processStub()
-        im.importTeacher('007', 'foo bar')
-        expected = [('POST', '/groups/teachers/relationships',
-                     membership_pattern % "/persons/007"),
-                    ('POST', '/groups/foo/relationships',
-                     teaching_pattern % "/persons/007"),
-                    ('POST', '/groups/bar/relationships',
-                     teaching_pattern % "/persons/007"),
-                    ]
-
-        self.assertEqual(im.process.requests, expected, "\n" +
-                         diff(pformat(expected),
-                              pformat(im.process.requests)))
+                           membership_pattern % "/persons/quux")])
 
     def test_importResource(self):
         from schooltool.clients.csvclient import CSVImporter
@@ -286,56 +255,26 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
         name = im.getName(FakeResponse())
         self.assertEqual(name, '123')
 
-    def test_run_empty(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter()
-        im.verbose = False
-
-        def fopen(name):
-            return StringIO()
-        im.fopen = fopen
-
-        results = []
-        def process(method, resource, body):
-            results.append((method, resource, body))
-            class ResponseStub:
-                def getheader(self, header):
-                    return 'foo://bar/baz/quux'
-            return ResponseStub()
-        im.process = process
-        im.run()
-        expected = [
-            ('PUT', '/groups/teachers',
-             '<object xmlns="http://schooltool.org/ns/model/0.1" '
-             'title="Teachers"/>'),
-            ('POST', '/groups/root/relationships',
-             membership_pattern % "/groups/teachers"),
-            ('POST', '/groups/teachers/facets',
-             '<facet xmlns="http://schooltool.org/ns/model/0.1"'
-             ' factory="teacher_group"/>'),
-            ('PUT', '/groups/pupils',
-             '<object xmlns="http://schooltool.org/ns/model/0.1"'
-             ' title="Pupils"/>'),
-            ('POST', '/groups/root/relationships',
-             membership_pattern % "/groups/pupils")]
-
-        self.assertEqual(results, expected, diff(pformat(results),
-                                                 pformat(expected)))
-
-    def test_run_verbose(self):
+    def test_run(self):
         from schooltool.clients.csvclient import CSVImporter
         im = CSVImporter()
         im.verbose = True
+        im.fopen = lambda f: f
 
         messages = []
         def blatherStub(msg):
             messages.append(msg)
         im.blather = blatherStub
+        im.membership = '<membership>'
+        im.teaching = '<teaching>'
 
-        im.importGroupsCsv = lambda fn: None
-        im.importTeachersCsv = lambda fn: None
-        im.importPupilsCsv = lambda fn: None
-        im.importResourcesCsv = lambda fn: None
+        calls = []
+        im.importGroupsCsv = lambda f: calls.append('groups: %s' % f)
+        def importPeopleCsvStub(csvdata, parent_group, relation):
+            calls.append('people: %s %s %s'
+                         % (csvdata, parent_group, relation))
+        im.importPeopleCsv = importPeopleCsvStub
+        im.importResourcesCsv = lambda f: calls.append('resources: %s' % f)
 
         im.run()
         self.assertEquals(messages, [u'Creating groups... ',
@@ -343,84 +282,59 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                                      u'Creating pupils... ',
                                      u'Creating resources... ',
                                      u'Import finished successfully'])
+        self.assertEquals(calls, ['groups: groups.csv',
+                                  'people: teachers.csv teachers <teaching>',
+                                  'people: pupils.csv pupils <membership>',
+                                  'resources: resources.csv'])
 
-    def test_run(self):
+    def test_importGroupsCsv(self):
         from schooltool.clients.csvclient import CSVImporter
         im = CSVImporter()
-        im.verbose = False
 
-        def fopen(name):
-            if name == 'groups.csv':
-                return StringIO('"year1","Year 1","root",')
-            if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
-            if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1","1968-01-01",""')
-            if name == 'resources.csv':
-                return StringIO('"Hall","locations"')
-        im.fopen = fopen
-        im.getName = lambda response: 'quux'
+        groups = []
+        def importGroupStub(name, title, parents, facets):
+            groups.append((name, title, parents, facets))
+        im.importGroup = importGroupStub
 
-        im.process = processStub()
-        im.run()
-        expected = [('PUT', '/groups/teachers',
-                     '<object xmlns="http://schooltool.org/ns/model/0.1" '
-                     'title="Teachers"/>'),
-                    ('POST', '/groups/root/relationships',
-                     membership_pattern % "/groups/teachers"),
-                    ('POST', '/groups/teachers/facets',
-                     '<facet xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' factory="teacher_group"/>'),
-                    ('PUT', '/groups/pupils',
-                     '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' title="Pupils"/>'),
-                    ('POST', '/groups/root/relationships',
-                     membership_pattern % "/groups/pupils"),
-                    ('PUT', '/groups/year1',
-                     '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' title="Year 1"/>'),
-                    ('POST', '/groups/root/relationships',
-                     membership_pattern % "/groups/year1"),
-                    ('POST', '/persons',
-                     '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' title="Doc Doc"/>'),
-                    ('POST', '/groups/teachers/relationships',
-                     membership_pattern % "/persons/quux"),
-                    ('POST', '/groups/group1/relationships',
-                     teaching_pattern % "/persons/quux"),
-                    ('PUT',
-                     '/persons/quux/facets/person_info',
-                     '<person_info xmlns="http://schooltool.org/ns/model/0.1" '
-                     'xmlns:xlink="http://www.w3.org/1999/xlink">'
-                     '<first_name>Doc</first_name><last_name>Doc</last_name>'
-                     '<date_of_birth>1968-01-01</date_of_birth>'
-                     '<comment></comment></person_info>'),
-                    ('POST', '/persons',
-                     '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' title="Jay Hacker"/>'),
-                    ('POST', '/groups/pupils/relationships',
-                     membership_pattern % "/persons/quux"),
-                    ('POST', '/groups/group1/relationships',
-                     membership_pattern % "/persons/quux"),
-                    ('POST', '/groups/group2/relationships',
-                     membership_pattern % "/persons/quux"),
-                    ('PUT',
-                     '/persons/quux/facets/person_info',
-                     '<person_info xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' xmlns:xlink="http://www.w3.org/1999/xlink">'
-                     '<first_name>Jay</first_name>'
-                     '<last_name>Hacker</last_name>'
-                     '<date_of_birth>1998-01-01</date_of_birth>'
-                     '<comment></comment></person_info>'),
-                    ('POST', '/resources',
-                     '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' title="Hall"/>'),
-                    ('POST', '/groups/locations/relationships',
-                     membership_pattern % "/resources/quux")]
+        im.importGroupsCsv(['"year1","Year 1","root",'])
+        self.assertEquals(groups,
+                          [('teachers', u'Teachers', 'root', 'teacher_group'),
+                           ('pupils', u'Pupils', 'root', ''),
+                           (u'year1', u'Year 1', u'root', u'')])
 
-        self.assertEqual(im.process.requests, expected,
-                         diff(pformat(im.process.requests),
-                              pformat(expected)))
+    def test_importResourcesCsv(self):
+        from schooltool.clients.csvclient import CSVImporter
+        im = CSVImporter()
+
+        resources = []
+        def importResourceStub(title, groups):
+            resources.append((title, groups))
+        im.importResource = importResourceStub
+
+        im.importResourcesCsv(['"Hall","locations"'])
+        self.assertEquals(resources, [(u'Hall', u'locations')])
+
+    def test_importPeopleCsv(self):
+        from schooltool.clients.csvclient import CSVImporter
+        im = CSVImporter()
+
+        persons = []
+        def importPersonStub(title, parent, groups, relation):
+            persons.append((title, parent, groups, relation))
+            return title
+        im.importPerson = importPersonStub
+
+        personinfo = []
+        def importPersonInfoStub(name, title, dob, comment):
+            personinfo.append((name, title, dob, comment))
+        im.importPersonInfo = importPersonInfoStub
+
+        im.importPeopleCsv(['"Jay Hacker","group1 group2","1998-01-01",""'],
+                           'teachers', '<rel>')
+        self.assertEquals(persons, [(u'Jay Hacker', 'teachers',
+                                     u'group1 group2', '<rel>')])
+        self.assertEquals(personinfo, [(u'Jay Hacker', u'Jay Hacker',
+                                        u'1998-01-01', u'')])
 
     def test_import_badData(self):
         from schooltool.clients.csvclient import CSVImporter
@@ -434,17 +348,22 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
 
         im.process = lambda x, y, body=None: ResponseStub()
 
-        def raisesDataError(method, row):
-            im.fopen = lambda fn: StringIO(row)
-            self.assertRaises(DataError, method, "fn")
+        def raisesDataError(method, *args):
             im.fopen = lambda fn: StringIO('"invalid","csv')
             self.assertRaises(DataError, method, "fn")
 
-        raisesDataError(im.importGroupsCsv, '"year1","Year 1","root"')
-        raisesDataError(im.importTeachersCsv, '"Foo","bar","baz"')
-        raisesDataError(im.importPupilsCsv,
-                        '"Jay Hacker","group1 group2","1998-12-01"')
-        raisesDataError(im.importResourcesCsv, '"Hall"')
+        self.assertRaises(DataError, im.importGroupsCsv,
+                          ['"year1","Year 1","root"'])
+        self.assertRaises(DataError, im.importResourcesCsv,
+                          ['"year1","Year 1","root"'])
+        self.assertRaises(DataError, im.importPeopleCsv,
+                          ['"Foo","bar","baz"'], 'pupils', im.membership)
+
+        self.assertRaises(DataError, im.importGroupsCsv, ['"invalid","csv'])
+        self.assertRaises(DataError, im.importResourcesCsv, ['"b0rk","b0rk'])
+        self.assertRaises(DataError, im.importPeopleCsv, ['"invalid","csv'],
+                          'pupils', im.membership)
+
 
     def test_process(self):
         from schooltool.clients.csvclient import CSVImporter
