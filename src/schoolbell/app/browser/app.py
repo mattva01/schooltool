@@ -39,6 +39,7 @@ from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.app.security.settings import Allow
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.security import checkPermission
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
@@ -124,8 +125,10 @@ class GroupListView(BrowserView):
     __used_for__ = IGroupMember
 
     def getAllGroups(self):
-        """Return a list of all groups in the system."""
-        return ISchoolBellApplication(self.context)['groups'].values()
+        """Return a list of groups the current user can add to"""
+        groups = ISchoolBellApplication(self.context)['groups']
+        return [group for group in groups.values()
+                if checkPermission('schoolbell.manageMembership', group)]
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)

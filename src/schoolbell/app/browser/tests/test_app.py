@@ -118,6 +118,25 @@ def doctest_GroupListView():
         >>> world = app['groups']['the_world'] = Group("Others")
         >>> etria = app['groups']['etria'] = Group("Etria")
         >>> pov = app['groups']['pov'] = Group("PoV")
+        >>> canonical = app['groups']['canonical'] = Group("Canonical")
+        >>> ms = app['groups']['ms'] = Group("The Enemy")
+
+    Let's set up a security policy that lets the person join only
+    Etria, Others and PoV:
+
+        >>> class SecurityPolicy(object):
+        ...     def checkPermission(self, perm,  obj, interaction=None):
+        ...         if (obj in (world, etria, pov) and
+        ...             perm == 'schoolbell.manageMembership'):
+        ...             return True
+        ...         return False
+        ...
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.security.management import newInteraction
+        >>> from zope.security.management import endInteraction
+        >>> prev = setSecurityPolicy(SecurityPolicy)
+        >>> endInteraction()
+        >>> newInteraction()
 
     Let's create a view for a person:
 
@@ -195,6 +214,8 @@ def doctest_GroupListView():
         >>> request.response.getHeaders()['Location']
         'http://127.0.0.1/persons/ignas'
 
+
+        >>> endInteraction()
     """
 
 
