@@ -14,7 +14,7 @@
     </div>
     <div class="row">
       <label for="title">Title</label>
-      <input id="first_name" name="first_name" type="text"
+      <input id="title" name="title" type="text"
              tal:attributes="value context/title" />
     </div>
     <div class="buttons">
