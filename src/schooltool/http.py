@@ -39,6 +39,7 @@ from twisted.python import failure
 from schooltool.rest import textErrorPage
 from schooltool.interfaces import AuthenticationError
 from schooltool.translation import ugettext as _
+from schooltool.security import SecurityPolicy
 
 try:
     from pytcpwrap.tcpwrap import TCPWrap
@@ -311,6 +312,7 @@ class Request(http.Request):
         self.applogger = logging.getLogger('schooltool.app')
         self.hit_time = formatHitTime()
         self.authenticated_user = None
+        self.security = SecurityPolicy(None)
         http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):
@@ -507,6 +509,7 @@ class Request(http.Request):
         try:
             self.authenticated_user = self.site.authenticate(app, username,
                                                              password)
+            self.security = SecurityPolicy(self.authenticated_user)
             self.user = username
         except AuthenticationError:
             self.authenticated_user = None

@@ -769,20 +769,26 @@ class TestRequest(unittest.TestCase):
         self.assert_(rq.authenticated_user is SiteStub.fred)
 
     def test_authenticate_success(self):
+        from schooltool.security import ISecurityPolicy
         rq = self.newRequest('/')
         rq.applogger = AppLoggerStub()
         rq.zodb_conn = ConnectionStub()
         rq.authenticate('fred', 'wilma')
         self.assert_(rq.authenticated_user is SiteStub.fred)
+        self.assert_(ISecurityPolicy.providedBy(rq.security))
+        self.assert_(rq.security.user is SiteStub.fred)
         self.assertEquals(rq.getUser(), 'fred')
 
     def test_authenticate_failure(self):
+        from schooltool.security import ISecurityPolicy
         rq = self.newRequest('/')
         rq.applogger = AppLoggerStub()
         rq.zodb_conn = ConnectionStub()
         self.assertRaises(AuthenticationError, rq.authenticate, 'fred', 'wima')
         self.assertRaises(AuthenticationError, rq.authenticate, 'fed', 'wilma')
         self.assert_(rq.authenticated_user is None)
+        self.assert_(ISecurityPolicy.providedBy(rq.security))
+        self.assert_(rq.security.user is None)
         self.assertEquals(rq.getUser(), '')
         self.assertEquals(rq.applogger.applog,
                   [(logging.WARNING, "Failed login, username: 'fred'"),

@@ -30,7 +30,7 @@ from datetime import datetime, date, time, timedelta
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser import Unauthorized
-from schooltool.browser.auth import TeacherAccess, PublicAccess
+from schooltool.browser.auth import AuthenticatedAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
 from schooltool.browser.acl import ACLView
@@ -66,7 +66,7 @@ class BookingView(View, AppObjectBreadcrumbsMixin):
 
     __used_for__ = IResource
 
-    authorization = TeacherAccess
+    authorization = AuthenticatedAccess
 
     template = Template('www/booking.pt')
 
@@ -76,10 +76,7 @@ class BookingView(View, AppObjectBreadcrumbsMixin):
 
     def __init__(self, context):
         View.__init__(self, context)
-        everyone = self.listAllPersons()
-        self.owner_widget = SelectionWidget('owner', _('Owner'), everyone,
-                                            parser=self.parse_owner,
-                                            formatter=self.format_owner)
+        # self.owner_widget created in do_GET()
         self.date_widget = TextWidget('start_date', _('Date'),
                                       parser=dateParser)
         self.time_widget = TextWidget('start_time', _('Time'),
@@ -91,10 +88,11 @@ class BookingView(View, AppObjectBreadcrumbsMixin):
                                           validator=durationValidator,
                                           value=30)
 
-    def listAllPersons(self):
+    def listPersons(self):
         person_container = traverse(self.context, '/persons')
         persons = [(person.title, person)
-                   for person in person_container.itervalues()]
+                   for person in person_container.itervalues()
+                   if self.request.security.canBook(person, self.context)]
         persons.sort()
         return [(person, title) for title, person in persons]
 
@@ -113,6 +111,10 @@ class BookingView(View, AppObjectBreadcrumbsMixin):
         return value.__name__
 
     def do_GET(self, request):
+        people = self.listPersons()
+        self.owner_widget = SelectionWidget('owner', _('Owner'), people,
+                                            parser=self.parse_owner,
+                                            formatter=self.format_owner)
         self.update()
         return View.do_GET(self, request)
 
@@ -158,6 +160,10 @@ class BookingView(View, AppObjectBreadcrumbsMixin):
                     self.error = _("The resource is busy"
                                    " at the specified time.")
                     return False
+        if not self.request.security.canBook(owner, self.context):
+            self.error = _("Sorry, you don't have permissions to book this"
+                           " resource")
+            return False
 
         title = _('%s booked by %s') % (self.context.title, owner.title)
         ev = CalendarEvent(start, duration, title, owner, self.context)
@@ -1261,6 +1267,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
             return _("Last %(weekday)s") % {'weekday':
                                             weekdays[evdate.weekday()]}
 
+    def bookingEvent(self):
+        return False
+
 
 class EventAddView(EventViewBase):
     """A view for adding events."""
@@ -1373,6 +1382,9 @@ class EventEditView(EventViewBase):
         else:
             self.calendar.removeEvent(self.event)
             self.calendar.addEvent(ev)
+
+    def bookingEvent(self):
+        return self.event.owner != self.event.context
 
 
 class EventDeleteView(View, EventViewHelpers):

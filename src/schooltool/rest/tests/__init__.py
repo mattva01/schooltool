@@ -27,6 +27,7 @@ from twisted.protocols import http
 from twisted.internet.address import IPv4Address
 from schooltool.interfaces import ITraversable, IContainmentRoot, IUtility
 from schooltool.interfaces import ILocation
+from schooltool.security import SecurityPolicy
 
 __metaclass__ = type
 
@@ -43,6 +44,7 @@ class RequestStub:
         self.path = ''
         self.content = StringIO(body)
         self.authenticated_user = authenticated_user
+        self.security = SecurityPolicy(authenticated_user)
         self.headers = {}
         self.args = {}
         if args:

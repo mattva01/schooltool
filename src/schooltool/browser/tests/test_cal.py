@@ -133,7 +133,7 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         content = view.render(request)
         self.assert_('Book' in content)
 
-    def test_book(self):
+    def test_render_book(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager,
                               args={'conflicts': 'ignore',
@@ -147,6 +147,21 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         self.assert_('2004-08-10' in content)
         self.assert_('19:01' in content)
         self.assert_('61' in content)
+
+    def test_render_book_noperm(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.person,
+                              args={'owner': 'johndoe',
+                                    'conflicts': 'ignore',
+                                    'start_date': '2004-08-10',
+                                    'start_time': '19:01',
+                                    'duration': '61',
+                                    'BOOK': 'Book'})
+        content = view.render(request)
+        error = ("Sorry, you don't have permissions to book this"
+                 " resource")
+        self.assert_(error in content)
+        self.assertEquals(view.booked, False)
 
     def test_owner(self):
         view = self.createView()
@@ -193,7 +208,8 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
     def test_confirm_book(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.teacher,
-                              args={'conflicts': 'ignore',
+                              args={'owner': 'teacher',
+                                    'conflicts': 'ignore',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
                                     'duration': '61',
@@ -233,6 +249,17 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.applog, [])
         self.assertEquals(view.error,
                           "The resource is busy at the specified time.")
+
+    def test_listPersons(self):
+        view = self.createView()
+        view.request = RequestStub(authenticated_user=self.manager)
+        self.assertEquals(view.listPersons(), [(self.person, 'John Doe'),
+                                               (self.manager, 'Manager'),
+                                               (self.person2, 'Not John Doe'),
+                                               (self.teacher, 'Prof. Bar')])
+
+        view.request = RequestStub(authenticated_user=self.teacher)
+        self.assertEquals(view.listPersons(), [(self.teacher, 'Prof. Bar')])
 
 
 class TestCalendarDay(unittest.TestCase):

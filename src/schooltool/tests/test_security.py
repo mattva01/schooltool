@@ -46,6 +46,14 @@ class TestSecurity(AppSetupMixin, unittest.TestCase):
         policy =  SecurityPolicy(self.manager)
         self.assertEquals(policy.canBook(self.person2, self.location), True)
 
+        # The teacher can book if he has access to the person's calendar
+        policy =  SecurityPolicy(self.teacher)
+        self.assertEquals(policy.canBook(self.teacher, self.location), True)
+        self.assertEquals(policy.canBook(self.person2, self.location), False)
+
+        self.person2.calendar.acl.add((self.teacher, AddPermission))
+        self.assertEquals(policy.canBook(self.person2, self.location), True)
+
         # The user has to have the add permission for both the resource's
         # and the owner's calendar.
         user = self.person
@@ -68,6 +76,17 @@ class TestSecurity(AppSetupMixin, unittest.TestCase):
 
         # The manager can modify anything
         policy =  SecurityPolicy(self.manager)
+        self.assertEquals(policy.canModifyBooking(self.person2, self.location),
+                          True)
+
+        # The teacher can edit if he has access to the person's calendar
+        policy =  SecurityPolicy(self.teacher)
+        self.assertEquals(policy.canModifyBooking(self.teacher, self.location),
+                          True)
+        self.assertEquals(policy.canModifyBooking(self.person2, self.location),
+                          False)
+
+        self.person2.calendar.acl.add((self.teacher, ModifyPermission))
         self.assertEquals(policy.canModifyBooking(self.person2, self.location),
                           True)
 

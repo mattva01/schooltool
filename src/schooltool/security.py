@@ -61,6 +61,8 @@ class SecurityPolicy:
         """Can the current user book a resource on behalf of a person?"""
         if isManager(self.user):
             return True
+        if isTeacher(self.user):
+            return person.calendar.acl.allows(self.user, AddPermission)
         if (person.calendar.acl.allows(self.user, AddPermission) and
             resource.calendar.acl.allows(self.user, AddPermission)):
             return True
@@ -72,6 +74,8 @@ class SecurityPolicy:
         """
         if isManager(self.user):
             return True
+        if isTeacher(self.user):
+            return person.calendar.acl.allows(self.user, ModifyPermission)
         if (person.calendar.acl.allows(self.user, ModifyPermission) and
             resource.calendar.acl.allows(self.user, ModifyPermission)):
             return True
