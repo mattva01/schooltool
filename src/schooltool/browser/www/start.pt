@@ -21,6 +21,7 @@
          >View the group index</a></p>
     <p><a class="sitemap" href="/resources" i18n:translate=""
          >View the resource index</a></p>
+  </div>
   <div class="section" tal:condition="view/isManager">
     <h2 i18n:translate="">Administrative tasks</h2>
     <p><a class="sitemap" href="/persons/add.html"
