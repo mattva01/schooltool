@@ -829,11 +829,12 @@ class DailyCalendarView(CalendarViewBase):
 
 
 class EventDeleteView(BrowserView):
+    """A view for deleting events."""
 
     __used_for__ = IContainedCalendarEvent
 
     def delete(self):
-        calendar = self.context.__parent__
+        calendar = ICalendar(self.context)
         calendar.removeEvent(self.context)
 
 

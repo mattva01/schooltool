@@ -55,13 +55,22 @@ def doctest_CalendarEvent():
         >>> event.__parent__ is None
         True
 
+    The calendar in which the event resides is referenced in __parent__,
+    but you should just use adaptation to ICalendar:
+
+        >>> event.__parent__ = object()
+
+        >>> from schoolbell.calendar.interfaces import ICalendar
+        >>> ICalendar(event) is event.__parent__
+        True
+
     As CalendarEvents are mutable, you can modify attributes at will:
 
         >>> event.dtend = timedelta(hours=1)
         >>> event.dtend
         datetime.timedelta(0, 3600)
 
-    It is not wise to touch the __name__ or unique_id of events.
+    It is very unwise to touch the __name__ or unique_id of events.
     TODO: enforce this restriction.
 
     """
