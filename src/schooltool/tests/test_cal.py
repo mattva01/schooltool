@@ -982,6 +982,12 @@ class TestCalendarEvent(unittest.TestCase):
                            "reality check")
         verifyObject(ICalendarEvent, ce)
 
+        ce_id = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10),
+                              "reality check",
+                              unique_id="I am unique")
+        self.assertEquals(ce_id.unique_id, "I am unique")
+
         ce1 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                             timedelta(minutes=10),
                             "reality check")

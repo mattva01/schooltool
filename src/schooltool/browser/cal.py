@@ -476,7 +476,8 @@ class CalendarView(View):
             absoluteURL(request, self.context) + '/daily.html'))
 
 
-class EventAddView(View):
+class EventViewBase(View):
+    """A base class for event adding and editing views."""
 
     authorization = PrivateAccess
 
@@ -521,13 +522,42 @@ class EventAddView(View):
             return self.do_GET(request)
 
         duration = timedelta(minutes=duration)
-        ev = CalendarEvent(start, duration, self.title,
-                           self.context.__parent__, self.context.__parent__)
-        self.context.addEvent(ev)
+
+        self.process(start, duration, self.title)
 
         suffix = 'daily.html?date=%s' % start.date()
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)
+
+    def process(self, dtstart, duration, title):
+        raise NotImplementedError()
+
+
+class EventAddView(EventViewBase):
+    """A view for adding events."""
+
+    __used_for__ = ICalendar
+
+    def process(self, dtstart, duration, title):
+        ev = CalendarEvent(dtstart, duration, title,
+                           self.context.__parent__, self.context.__parent__)
+        self.context.addEvent(ev)
+
+
+class EventEditView(EventViewBase):
+    """A view for editing events."""
+
+    # __used_for__ = ICalendar
+
+    def update(self):
+        # self.title = 
+        # self.start_date = 
+        # self.start_time = 
+        # self.duration = 
+        EventViewBase.update(self)
+
+    def process(self, dtstart, duration, title):
+        pass
 
 
 def EventSourceDecorator(e, source):

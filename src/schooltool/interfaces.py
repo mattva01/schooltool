@@ -835,6 +835,7 @@ class ICalendarWrite(Interface):
 class ICalendarEvent(Interface):
     """A calendar event."""
 
+    unique_id = Attribute("""A unique id of this calendar event.""")
     dtstart = Attribute("""The datetime.datetime of the start of the event.""")
     duration = Attribute("""The duration of the event (datetime.timedelta)""")
     title = Attribute("""The title of the event""")
