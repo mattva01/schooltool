@@ -28,7 +28,7 @@ from zope.interface import implements
 
 
 def doctest_getSchoolBellApplication():
-    """Tests for ContainerView.
+    """Tests for getSchoolBellApplication.
 
     Let's say we have a SchoolBell app, a persons container and a person.
 
