@@ -83,6 +83,7 @@ def doctest_weeknum_bounds():
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocFileSuite('../README.txt'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.mixins'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.simple'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.recurrent'))
