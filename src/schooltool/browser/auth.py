@@ -39,6 +39,7 @@ $Id$
 import random
 import datetime
 from schooltool.interfaces import AuthenticationError
+from schooltool.views.auth import isManager
 
 
 __metaclass__ = type
@@ -186,3 +187,10 @@ def AuthenticatedAccess(context, request):
     return request.authenticated_user is not None
 
 AuthenticatedAccess = staticmethod(AuthenticatedAccess)
+
+
+def ManagerAccess(context, request):
+    """Allows access for managers only."""
+    return isManager(request.authenticated_user)
+
+ManagerAccess = staticmethod(ManagerAccess)

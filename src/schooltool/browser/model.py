@@ -25,7 +25,7 @@ $Id$
 import cgi
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
-from schooltool.browser.auth import AuthenticatedAccess
+from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects
 from schooltool.interfaces import IPerson
@@ -76,7 +76,7 @@ class PersonEditView(View):
 
     __used_for__ = IPerson
 
-    authorization = AuthenticatedAccess
+    authorization = ManagerAccess
 
     template = Template('www/person_edit.pt')
 

@@ -24,6 +24,10 @@ import unittest
 import urllib
 
 
+#
+# Helper classes and functions
+#
+
 class URLOpener(urllib.URLopener):
 
     def http_error(self, url, fp, errcode, errmsg, headers, data=None):
@@ -93,6 +97,10 @@ class Browser(object):
             # This might loop.  Let's hope it doesn't
             self._open(location)
 
+
+#
+# Tests
+#
 
 class TestLogin(unittest.TestCase):
 
