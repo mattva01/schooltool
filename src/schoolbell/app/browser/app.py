@@ -223,9 +223,6 @@ class ResourceView(BrowserView):
     def canEdit(self):
         return True # TODO: implement permission checking
 
-    def getParentGroups(self):
-        pass
-
 
 class IPersonEditForm(Interface):
     """Schema for a person's edit form."""
