@@ -168,7 +168,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                 self.emit("use save <filename> to save it")
                 return
             self.emit(data)
-            if self.links and ctype == 'text/xml':
+            if self.links and ctype.startswith('text/xml'):
                 try:
                     parser = make_parser()
                     handler = XLinkHandler()

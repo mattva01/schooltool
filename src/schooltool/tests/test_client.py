@@ -98,7 +98,7 @@ class ResponseStub:
             elif self.request.resource == "/binfile":
                 return 'application/octet-stream'
             elif self.request.resource == "/doc.xml":
-                return 'text/xml'
+                return 'text/xml; charset=UTF-8'
             else:
                 return 'text/plain'
         return default
@@ -433,6 +433,10 @@ class TestClient(unittest.TestCase):
             2   Kate (student2)"""))
         self.assertEqual(self.client.resources,
                          ['/student1', '/student2'])
+
+        self.emitted = ""
+        self.client.do_get("/")
+        self.assertEqual(self.emitted, "Welcome")
 
     def test_follow(self):
         self.client.links = False
