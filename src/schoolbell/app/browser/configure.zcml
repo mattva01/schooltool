@@ -449,6 +449,7 @@
       template="templates/event_add.pt"
       class=".cal.CalendarEventAddView">
 
+    <widget field="description" height="5" />
     <widget field="exceptions" width="20" height="5" />
   </addform>
 
@@ -463,6 +464,8 @@
       class=".cal.CalendarEventEditView"
       permission="schoolbell.modifyEvent"
       template="templates/event_add.pt">
+
+    <widget field="description" height="5" />
     <widget field="exceptions" width="20" height="5" />
   </editform>
 
