@@ -177,8 +177,10 @@ class PersonAddView(View):
         person.setPassword(password)
 
         # We could say 'Person created', but we want consistency
-        # (AKA wart-compatibility).
-        request.appLog(_("Object created: %s") % getPath(person))
+        # (wart-compatibility in this case).
+        request.appLog(_("Object %s of type %s created") %
+                       (getPath(person), person.__class__.__name__))
+
         url = absoluteURL(request, person) + '/edit.html'
         return self.redirect(url, request)
 
@@ -209,7 +211,8 @@ class ObjectAddView(View):
         title = unicode(request.args['title'][0], 'utf-8')
 
         obj = self.context.new(name, title=title)
-        request.appLog(_("Object created: %s") % getPath(obj))
+        request.appLog(_("Object %s of type %s created") %
+                       (getPath(obj), obj.__class__.__name__))
 
         url = absoluteURL(request, obj) + '/edit.html'
         return self.redirect(url, request)

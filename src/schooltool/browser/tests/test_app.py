@@ -261,7 +261,8 @@ class TestPersonAddView(unittest.TestCase):
                                     'verify_password': 'foo'})
         result = view.do_POST(request)
         self.assertEquals(request.applog,
-                          [(None, u'Object created: /persons/newbie', INFO)])
+                          [(None, u'Object /persons/newbie of type'
+                            ' Person created', INFO)])
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/newbie/edit.html')
@@ -405,7 +406,8 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/objects/newobj/edit.html')
         self.assertEquals(request.applog,
-                          [(None, 'Object created: /objects/newobj', INFO)])
+                          [(None, u'Object /objects/newobj of type'
+                            ' ApplicationObjectMixin created', INFO)])
 
         self.assertEquals(len(self.container.objs), 1)
         obj = self.container.objs[0]
