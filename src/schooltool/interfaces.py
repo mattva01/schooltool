@@ -947,6 +947,7 @@ class ISchooldayModel(Interface):
     for a certain period of time.
     """
 
+    # XXX this should be an IDateRange
     first = Attribute("The date of the first day of the period")
 
     last = Attribute("The date of the last day of the period")
@@ -997,26 +998,41 @@ class ISchooldayModelWrite(Interface):
         """Mark all days as holidays."""
 
 
+class IDateRange(Interface):
+
+    first = Attribute("""The first day of the period of time covered.""")
+
+    last = Attribute("""The last day of the period covered.""")
+
+    def __iter__():
+        """Iterates over all dates in the range from the first to the last."""
+
+    def __contains__(date):
+        """Returns True if the date is within the range, otherwise False.
+
+        Raises a TypeError if date is not a datetime.date.
+        """
+
+    def __len__():
+        """Returns the number of dates covered by the range."""
+
+
 class ICalendar(Interface):
     """A calendar, containing days which in turn contain events.
     """
 
-    first = Attribute(
-        """The first day of the period of time covered by the calendar""")
-
-    last = Attribute("""The last day of the period covered by the calendar""")
-
-    def __getitem__(date):
-        """Returns an ICalendarDay for a given date"""
-
-
-class ICalendarDay(Interface):
-    """A set of events for a day"""
-
-    date = Attribute("""The datetime.date of this calendar day.""")
+    daterange = Attribute("""IDaterange covered by this calendar.""")
 
     def __iter__():
-        """Returns an iterator over IEvents of this day."""
+        """Returns an iterator over the events in this calendar."""
+
+    def byDate(date):
+        """Returns an ICalendar for the given date.
+
+        All events that overlap with the given date range are
+        included.  The timing of the events is not modified even if it
+        falls outside the given date.
+        """
 
 
 class ICalendarEvent(Interface):
@@ -1138,6 +1154,9 @@ class ISchooldayPeriodEvent(Interface):
     tstart = Attribute("datetime.time of the start of the event")
     duration = Attribute("datetime.timedelta of the duration of the event")
 
+    # XXX Maybe the following should be considered an implementation detail
+    #     and not the public interface.
+
     def __eq__(other):
         """SchooldayPeriodEvents are equal if all three of their
         attributes are equal.
@@ -1156,6 +1175,41 @@ class ISchooldayPeriodEvent(Interface):
         """Hashes of ISchooldayPeriodEvents are equal iff those
         ISchooldayPeriodEvents are equal.
         """
+
+
+class ITimetableModel(Interface):
+    """A timetable model knows how to create an ICalendar object when
+    it is given a School-day model and a Timetable.
+
+    The implementation of the timetable model knows how to arrange
+    timetable days within the available school days.
+
+    For example, a school with four timetable days 1, 2, 3, 4 has its
+    timetable days laid out in sequence across consecutive school
+    days. A school with a timetable days for Monday through Friday has
+    its timetable days laid out to match the day of the week that a
+    school day occurs on.
+
+    The ICalendar produced will use an appropriate school-day template
+    for each day, depending on (for example) what day of the week that
+    day occurs on, or whatever other rules the implementation of the
+    timetable model is coded to use.
+    """
+
+    timetableDayIds = Attribute(
+        """Returns a sequence of day_ids which can be used in the timetable.""")
+
+    dayTemplates = Attribute(
+        """Returns a set of schoolday templates to be used with this model.""")
+
+    def createCalendar(schoolday_model, timetable):
+        """Returns an ICalendar composed out of schoolday_model and timetable.
+
+        This method has model-specific knowledge as to how schooldays,
+        weekends and holidays map affect the mapping of the timetable
+        onto the real-world calendar.
+        """
+
 
 #
 # Exceptions
