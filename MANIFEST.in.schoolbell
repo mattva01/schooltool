@@ -7,6 +7,11 @@ include ttconfig.data
 include ftesting.zcml
 include remove-stale-bytecode.py
 
+include debian/rules debian/changelog debian/compat debian/control
+include debian/copyright debian/README.Debian debian/TODO
+include debian/*schoolbell* debian/ssl-cert.cnf
+include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
+
 include images/schoolbell.svg
 include scripts/schoolbell
 include scripts/schoolbell-export.py
