@@ -39,7 +39,6 @@ from schooltool.interfaces import ILocation, IMultiContainer
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
-from schooltool.component import getTimetableSchemaService
 from schooltool.component import registerTimetableModel
 from schooltool.uris import URIGroup
 
