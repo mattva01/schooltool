@@ -48,7 +48,7 @@ moduleProvides(IModuleSetup)
 
 def absoluteURL(request, path):
     """Returns the absulute URL of the object adddressed with path"""
-    if not len(path) or path[0] != '/':
+    if not path.startswith('/'):
         raise ValueError("Path must be absolute")
     return 'http://%s%s' % (request.getRequestHostname(), path)
 

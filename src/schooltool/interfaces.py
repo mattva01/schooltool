@@ -331,6 +331,7 @@ class IRelatable(Interface):
     def getLink(name):
         """Returns a link by a name within this relatable"""
 
+
 class IQueryLinks(Interface):
     """An interface for querying a collection of links for those that
     meet certain conditions.

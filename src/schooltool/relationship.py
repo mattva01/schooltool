@@ -21,6 +21,7 @@ The schooltool relationships.
 
 $Id$
 """
+
 from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements, classProvides, moduleProvides
@@ -327,6 +328,7 @@ class LinkSet:
     def getLink(self, name):
         return self._data.valueForName(name)
 
+
 class RelatableMixin(Persistent):
 
     implements(IRelatable, IQueryLinks, IMultiContainer)
@@ -351,6 +353,7 @@ class RelatableMixin(Persistent):
     def getLink(self, name):
         return self.__links__.getLink(name)
 
+
 class RelationshipValenciesMixin(RelatableMixin):
 
     implements(IRelationshipValencies)
@@ -368,6 +371,7 @@ class RelationshipValenciesMixin(RelatableMixin):
                     and facet.active):
                     result.update(facet.getValencies())
         return result
+
 
 class Valency:
 
