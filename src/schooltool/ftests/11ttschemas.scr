@@ -26,7 +26,7 @@ Content-Type: text/html; charset=UTF-8
 SchoolTool> put /ttschemas/weekly text/xml
 PUT> <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
 PUT>   <model factory="schooltool.timetable.SequentialDaysTimetableModel">
-PUT>     <daytemplate id="Normal">
+PUT>     <daytemplate>
 PUT>       <used when="default" />
 PUT>       <period id="0" tstart="8:00" duration="60" />
 PUT>       <period id="1" tstart="9:00" duration="60" />
@@ -118,7 +118,7 @@ Content-Type: text/xml; charset=UTF-8
 SchoolTool> put /ttschemas/x text/xml
 PUT> <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
 PUT>   <model factory="schooltool.timetable.SequentialDaysTimetableModel">
-PUT>     <daytemplate id="Normal">
+PUT>     <daytemplate>
 PUT>       <used when="default" />
 PUT>       <period id="A" tstart="9:00" duration="60" />
 PUT>     </daytemplate>

@@ -30,7 +30,6 @@ RelaxNG grammar for a timetable.
         </attribute>
         <oneOrMore>
           <element name="daytemplate">
-            <ref name="idattr"/>
             <element name="used">
               <attribute name="when">
                 <ref name="daysofweek"/>

@@ -2,7 +2,7 @@
            xmlns:tal="http://xml.zope.org/namespaces/tal">
   <model tal:attributes="factory context/model/__class__/__name__">
     <daytemplate tal:repeat="day view/daytemplates">
-      <used tal:attributes="for day/used"/>
+      <used tal:attributes="when day/used"/>
       <period tal:repeat="period day/periods"
               tal:attributes="id period/id;
                               tstart period/tstart;

@@ -571,14 +571,14 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
-              <used for="Friday Thursday"/>
+              <used when="Friday Thursday"/>
               <period duration="60" id="A" tstart="08:00"/>
               <period duration="60" id="B" tstart="11:00"/>
               <period duration="60" id="C" tstart="08:00"/>
               <period duration="60" id="D" tstart="11:00"/>
             </daytemplate>
             <daytemplate>
-              <used for="default"/>
+              <used when="default"/>
               <period duration="60" id="A" tstart="09:00"/>
               <period duration="60" id="B" tstart="10:00"/>
               <period duration="60" id="C" tstart="09:00"/>
@@ -760,14 +760,14 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <model factory="schooltool.timetable.SequentialDaysTimetableModel">
-            <daytemplate id="Normal">
+            <daytemplate>
               <used when="default" />
               <period id="A" tstart="9:00" duration="60" />
               <period id="C" tstart="9:00" duration="60" />
               <period id="B" tstart="10:00" duration="60" />
               <period id="D" tstart="10:00" duration="60" />
             </daytemplate>
-            <daytemplate id="Friday">
+            <daytemplate>
               <used when="Friday Thursday" />
               <period id="A" tstart="8:00" duration="60" />
               <period id="C" tstart="8:00" duration="60" />
