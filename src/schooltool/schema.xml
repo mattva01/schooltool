@@ -85,16 +85,16 @@
     </example>
   </key>
 
-  <multikey name="event-log-file" datatype="string">
+  <multikey name="error-log-file" datatype="string">
     <description>
-      Specifies the path of a log file used for events and exceptions. Special
+      Specifies the path of a log file used for exceptions. Special
       values STDERR and STDOUT mean standard error and standard output
       respectively.
     </description>
     <default>STDERR</default>
     <example>
-      event-log-file /var/log/schooltool/error.log
-      event-log-file STDERR
+      error-log-file /var/log/schooltool/error.log
+      error-log-file STDERR
     </example>
   </multikey>
 

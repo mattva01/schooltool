@@ -731,7 +731,7 @@ class TestRequest(unittest.TestCase):
     def test_logHit(self):
         from schooltool.main import Request
         buffer = StringIO()
-        hitlogger = logging.getLogger('access')
+        hitlogger = logging.getLogger('schooltool.access')
         hitlogger.propagate = False
         hitlogger.setLevel(logging.INFO)
         hitlogger.addHandler(logging.StreamHandler(buffer))
@@ -814,7 +814,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         # Check that configure does not change sys.path
         self.assertEquals(sys.path, self.original_path)
 
-        hitlogger = logging.getLogger('access')
+        hitlogger = logging.getLogger('schooltool.access')
         self.assertEquals(hitlogger.propagate, False)
         # handlers[0] is implicitly created by the logging module
         self.assert_(isinstance(hitlogger.handlers[1], logging.StreamHandler))

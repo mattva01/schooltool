@@ -306,7 +306,7 @@ class Request(http.Request):
 
     def __init__(self, *args, **kwargs):
         self.get_transaction_hook = get_transaction
-        self.hitlogger = logging.getLogger('access')
+        self.hitlogger = logging.getLogger('schooltool.access')
         self.hit_time = formatHitTime()
         http.Request.__init__(self, *args, **kwargs)
 
@@ -544,7 +544,7 @@ class Site(http.HTTPFactory):
         self.viewFactory = viewFactory
         self.rootName = rootName
         self.authenticate = authenticate
-        self.logger = logging.getLogger('events')
+        self.logger = logging.getLogger('schooltool.error')
 
     def buildProtocol(self, addr):
         channel = self.__super_buildProtocol(addr)
@@ -703,9 +703,9 @@ class Server:
         self.config.module.insert(0, 'schooltool.main')
 
         # Set up logging
-        self.setUpLogger('events', self.config.event_log_file,
+        self.setUpLogger('schooltool.error', self.config.error_log_file,
                          "--\n%(asctime)s\n%(message)s")
-        self.setUpLogger('access', self.config.access_log_file)
+        self.setUpLogger('schooltool.access', self.config.access_log_file)
 
         # Process any command line arguments that may override config file
         # settings here.
