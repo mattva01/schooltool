@@ -25,9 +25,7 @@ $Id$
 
 import unittest
 import os
-import re
-from threading import Thread
-from schooltool.tests.helpers import unidiff, normalize_xml
+from schooltool.tests.helpers import unidiff
 
 __metaclass__ = type
 

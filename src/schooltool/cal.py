@@ -244,8 +244,10 @@ def parse_date_time(value):
 def parse_period(value):
     """Parse iCalendar PERIOD value.  Returns a Period instance.
 
-    >>> parse_period('20030405T060708/20030405T060709')
-    Period(datetime.datetime(2003, 4, 5, 6, 7, 8), datetime.datetime(2003, 4, 5, 6, 7, 9))
+    >>> p = parse_period('20030405T060708/20030405T060709')
+    >>> print repr(p).replace('),', '),\\n      ')
+    Period(datetime.datetime(2003, 4, 5, 6, 7, 8),
+           datetime.datetime(2003, 4, 5, 6, 7, 9))
     >>> parse_period('20030405T060708/PT1H1M1S')
     Period(datetime.datetime(2003, 4, 5, 6, 7, 8), datetime.timedelta(0, 3661))
     >>> parse_period('xyzzy')
