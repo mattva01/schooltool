@@ -490,8 +490,12 @@ class TestRequest(unittest.TestCase):
         rq.setHost('localhost', 80)
         rq.reactor_hook = ReactorStub()
         rq.postpath = ['++vh++https:host:443', 'groups', 'teachers']
+        rq.path = '/++vh++https:host:443/groups/teachers'
+        rq.uri = '/++vh++https:host:443/groups/teachers?foo=bar&baz=quux'
         rq._handleVh()
         self.assertEqual(rq.postpath, ['groups', 'teachers'])
+        self.assertEqual(rq.path, '/groups/teachers')
+        self.assertEqual(rq.uri, '/groups/teachers?foo=bar&baz=quux')
         host = rq.getHost()
         self.assertEquals(host.host, 'host')
         self.assertEquals(host.port, 443)
@@ -502,8 +506,12 @@ class TestRequest(unittest.TestCase):
         rq.setHost('localhost', 80)
         rq.reactor_hook = ReactorStub()
         rq.postpath = ['groups', 'teachers']
+        rq.path = '/groups/teachers'
+        rq.uri = '/groups/teachers'
         rq._handleVh()
         self.assertEqual(rq.postpath, ['groups', 'teachers'])
+        self.assertEqual(rq.path, '/groups/teachers')
+        self.assertEqual(rq.uri, '/groups/teachers')
         host = rq.getHost()
         self.assertEquals(host.host, 'localhost')
         self.assertEquals(host.port, 80)

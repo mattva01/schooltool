@@ -280,6 +280,32 @@ def formatHitTime(seconds=None):
     return time.strftime('%d/%b/%Y:%H:%M:%S ', tt) + timezone
 
 
+def strip_first_uri_element(uri):
+    """Strip the first element in uri.
+
+        >>> strip_first_uri_element('/anything')
+        '/'
+        >>> strip_first_uri_element('/anything?q=a')
+        '/?q=a'
+        >>> strip_first_uri_element('/anything/')
+        '/'
+        >>> strip_first_uri_element('/anything/b/c')
+        '/b/c'
+        >>> strip_first_uri_element('/anything/?q=a')
+        '/?q=a'
+
+    """
+    pos1 = uri[1:].find('/') + 1
+    pos2 = uri[1:].find('?') + 1
+    if pos1:
+        pos = pos1
+        if pos2 and pos2 < pos1:
+            pos = pos2
+    else:
+        return '/' + (pos2 and uri[pos2:] or '')
+    return uri[pos:]
+
+
 class Request(http.Request):
     """Threaded request processor, integrated with ZODB.
 
@@ -399,6 +425,9 @@ class Request(http.Request):
             port = int(port)
 
             self.setHost(host, port, secure)
+
+            self.path = strip_first_uri_element(self.path)
+            self.uri = strip_first_uri_element(self.uri)
 
     def _process(self):
         """Process the request in a separate thread.

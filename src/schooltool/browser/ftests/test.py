@@ -274,6 +274,20 @@ class TestImportSchoolTimetable(setup.TestCase):
 #       self.assert_('imported successfully' in browser.content)
 
 
+class TestVirtualHosting(setup.TestCase):
+
+    def test(self):
+        # Log in
+        browser = Browser()
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+
+        browser.go('http://localhost:8814/'
+                   '++vh++http:foo-bar-baz.lt:57/delete.html')
+        self.assert_('++vh++' not in browser.content)
+        self.assert_('form action="/delete.html"' in browser.content)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLogin))
@@ -282,6 +296,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestObjectDeletion))
     suite.addTest(unittest.makeSuite(TestResetDB))
     suite.addTest(unittest.makeSuite(TestImportSchoolTimetable))
+    suite.addTest(unittest.makeSuite(TestVirtualHosting))
     return suite
 
 
