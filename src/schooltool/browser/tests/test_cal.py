@@ -345,6 +345,7 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         from schooltool.browser.cal import CalendarViewBase
         from schooltool.model import Person
         from schooltool.cal import DailyRecurrenceRule
+        from schooltool.timetable import TimetableCalendarEvent
 
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
@@ -370,7 +371,13 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         self.assertEquals(result, [])
 
         ev1 = createEvent('2004-08-12 12:00', '1h', 'ev1')
-        ev2 = createEvent('2004-08-12 13:00', '1h', 'ev2')
+        tt = TimetableStub()
+        act = TimetableActivityStub(tt)
+        ev_tt = TimetableCalendarEvent(datetime(2004, 8, 12, 13, 0),
+                                       timedelta(hours=1), "Math",
+                                       unique_id="uniq",
+                                       period_id="period 1",
+                                       activity=act)
         ev3 = createEvent('2004-01-01 9:00', '1h', 'coffee',
                           recurrence=DailyRecurrenceRule(), unique_id="42")
         ev3_1 = ev3.replace(dtstart=datetime(2004, 8, 12, 9, 0))
@@ -378,14 +385,15 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         ev4 = createEvent('2004-08-12 17:00', '1h', 'ev4')
         cal.addEvent(ev1)
         cal.addEvent(ev3)
-        tcal.addEvent(ev2)
+        tcal.addEvent(ev_tt)
         ccal.addEvent(ev4)
 
         result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
         result.sort()
-        expected = [ev3_1, ev1, ev2, ev4, ev3_2]
+        expected = [ev3_1, ev1, ev_tt, ev4, ev3_2]
         self.assertEquals(result, expected,
                           diff(pformat(result), pformat(expected)))
+        self.assert_(result[2].__class__ is TimetableCalendarEvent)
 
     def test_getWeek(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay

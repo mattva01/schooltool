@@ -288,7 +288,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         timetable_cal = self.context.__parent__.makeTimetableCalendar()
         composite_cal = self.context.__parent__.makeCompositeCalendar()
         return itertools.chain(private_cal.expand(first, last),
-                               timetable_cal.expand(first, last),
+                               timetable_cal,
                                composite_cal.expand(first, last))
 
     def getDays(self, start, end):
