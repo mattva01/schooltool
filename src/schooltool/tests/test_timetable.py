@@ -163,6 +163,8 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Green", english)
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
+        exc1 = object()
+        tt.exceptions.append(exc1)
 
         tt2 = self.createTimetable()
         french = TimetableActivity("French")
@@ -171,6 +173,8 @@ class TestTimetable(unittest.TestCase):
         tt2["A"].add("Green", french)
         tt2["A"].add("Blue", math2)
         tt2["B"].add("Blue", geo)
+        exc2 = object()
+        tt2.exceptions.append(exc2)
 
         tt.update(tt2)
 
@@ -181,6 +185,8 @@ class TestTimetable(unittest.TestCase):
         items = [(p, Set(i)) for p, i in tt["B"].items()]
         self.assertEqual(items, [("Green", Set([bio])),
                                  ("Blue", Set([geo]))])
+
+        self.assertEqual(tt.exceptions, [exc1, exc2])
 
         tt3 = Timetable(("A", ))
         tt3["A"] = TimetableDay(('Green', 'Blue'))

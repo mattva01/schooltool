@@ -115,6 +115,7 @@ class Timetable(Persistent):
             for period, activities in other[day_id].items():
                 for activity in activities:
                     self[day_id].add(period, activity)
+        self.exceptions += other.exceptions
 
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
@@ -577,7 +578,6 @@ class TimetabledMixin:
         result = timetables[0].cloneEmpty()
         for tt in timetables:
             result.update(tt)
-            result.exceptions.extend(tt.exceptions)
 
         parent = TimetableDict()
         parent.__parent__ = self
