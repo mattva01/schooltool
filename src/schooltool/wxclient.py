@@ -35,9 +35,11 @@ import sets
 import libxml2
 import threading
 from wxPython.wx import *
+from wxPython.lib.dialogs import wxMultipleChoiceDialog
 from wxPython.lib.scrolledpanel import wxScrolledPanel
-from guiclient import SchoolToolClient, Unchanged, RollCallEntry
-from guiclient import SchoolToolError, ResponseStatusError
+from schooltool.guiclient import SchoolToolClient, Unchanged, RollCallEntry
+from schooltool.guiclient import SchoolToolError, ResponseStatusError
+from schooltool.uris import URIMembership, URIGroup
 
 __metaclass__ = type
 
@@ -642,7 +644,9 @@ class MainFrame(wxFrame):
                 item("View &Absences", "View a list of person's absences",
                      self.DoViewPersonAbsences),
                 separator(),
-                item("&Remove", "Remove a person from this group",
+                item("&Add Member", "Add a person to this group",
+                     self.DoAddMember),
+                item("&Remove Member", "Remove a person from this group",
                      self.DoRemoveMember),
             )
         EVT_RIGHT_DOWN(self.personListCtrl, self.DoPersonRightDown)
@@ -719,6 +723,40 @@ class MainFrame(wxFrame):
             wxMessageBox("Could not create a group: %s" % e,
                          "New Group", wxICON_ERROR|wxOK)
             return
+
+    def DoAddMember(self, event):
+        """Add a person from the current group.
+
+        Accessible from person list popup menu.
+        """
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            # should not happen
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+
+        persons = self.client.getListOfPersons()
+        persons.sort()
+        # wxGetMultipleChoice is defined in wxWindows API documentation,
+        # but wxPython 2.4.2.4 does NOT have it.
+        choice = wxGetSingleChoiceIndex(
+                        "Select a person to add to %s" % group_title,
+                        "Add Member", [p[0] for p in persons])
+        if choice == -1:
+            return
+
+        person_path = persons[choice][1]
+        try:
+            self.client.createRelationship(group_path, person_path,
+                                           URIMembership, URIGroup)
+        except SchoolToolError, e:
+            wxMessageBox("Could not add member: %s" % e,
+                         "Add Member", wxICON_ERROR|wxOK)
+            return
+        else:
+            self.DoRefresh()
 
     def DoRemoveMember(self, event):
         """Remove a person from the current group.

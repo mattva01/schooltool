@@ -36,6 +36,7 @@ import socket
 import libxml2
 import datetime
 import cgi
+from schooltool.uris import strURI
 # XXX: parse_datetime should be split into a separate common module shared by
 # both the client and the server
 from schooltool.views import parse_datetime
@@ -150,6 +151,16 @@ class SchoolToolClient:
             raise SchoolToolError(self.status)
 
     # SchoolTool specific methods
+
+    def getListOfPersons(self):
+        """Return the list of all persons.
+
+        Returns a sequence of tuples (person_title, person_path).
+        """
+        response = self.get('/persons')
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return self._parseContainer(response.read())
 
     def getGroupTree(self):
         """Return the tree of groups.
@@ -289,6 +300,22 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return self._pathFromResponse(response)
 
+    def createRelationship(self, obj1_path, obj2_path, reltype, obj1_role):
+        """Create a relationship between two objects.
+
+        Example:
+          from schooltool.uris import URIMembership, URIMember
+          client.createRelationship('/persons/john', '/groups/teachers',
+                                    URIMembership, URIMember)
+        """
+        body = ('<relationship href="%s" arcrole="%s" role="%s" />'
+                % tuple(map(cgi.escape, [obj2_path, strURI(reltype),
+                                         strURI(obj1_role)])))
+        response = self.post('%s/relationships' % obj1_path, body)
+        if response.status != 201:
+            raise ResponseStatusError(response)
+        return self._pathFromResponse(response)
+
     def _pathFromResponse(self, response):
         """Return the path portion of the Location header in the response."""
         location = response.getheader('Location')
@@ -303,6 +330,32 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
 
     # Parsing
+
+    def _parseContainer(self, body):
+        """Parse the contents of a container.
+
+        Returns a list of tuples (object_title, object_href).
+        """
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse item list")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/container/items/item[@xlink:href]")
+            items = []
+            for node in res:
+                href = node.nsProp('href', xlink)
+                title = node.nsProp('title', xlink)
+                if title is None:
+                    title = href.split('/')[-1]
+                items.append((title, href))
+            return items
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
 
     def _parseGroupTree(self, body):
         """Parse the tree of groups returned from the server.

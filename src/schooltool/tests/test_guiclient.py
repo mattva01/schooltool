@@ -211,6 +211,31 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(client.version, '')
         self.assert_(conn.closed)
 
+    def test_getListOfPersons(self):
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/persons/fred" xlink:title="Fred" />
+                <item xlink:href="/persons/barney" xlink:title="Barney"/>
+               </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getListOfPersons()
+        expected = [('Fred', '/persons/fred'),
+                    ('Barney', '/persons/barney')]
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
+        self.checkConnPath(client, '/persons')
+
+    def test_getListOfPersons_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(error=socket.error(23, 'out of persons'))
+        self.assertRaises(SchoolToolError, client.getListOfPersons)
+
+        client = self.newClient(ResponseStub(500, 'Internal Error'))
+        self.assertRaises(SchoolToolError, client.getListOfPersons)
+
     def test_getGroupTree(self):
         body = dedent("""
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -482,6 +507,29 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
 
+    def test_createRelationship(self):
+        from schooltool.uris import URIMembership, URIMember
+        client = self.newClient(ResponseStub(201, 'Created',
+                location='http://localhost/persons/john/relationships/004'))
+        result = client.createRelationship('/persons/john', '/groups/teachers',
+                                           URIMembership, URIMember)
+        self.assertEquals(result, '/persons/john/relationships/004')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons/john/relationships')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<relationship href="/groups/teachers"'
+                    ' arcrole="http://schooltool.org/ns/membership"'
+                    ' role="http://schooltool.org/ns/membership/member" />')
+
+    def test_createRelationship_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        from schooltool.uris import URIMembership, URIMember
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        self.assertRaises(SchoolToolError, client.createRelationship,
+                '/persons/john', '/groups/teachers', URIMembership, URIMember)
+
     def test_deleteObject(self):
         client = self.newClient(ResponseStub(200, 'OK', 'Deleted'))
         client.deleteObject('/path/to/object')
@@ -506,6 +554,23 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         #     header, or returns an ill-formed location header, or something
         #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
         #     without a trailing slash?
+
+    def test__parseContainer(self):
+        from schooltool.guiclient import SchoolToolClient
+        client = SchoolToolClient()
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/persons/fred" xlink:title="Fred" />
+                <item xlink:href="/persons/barney"/>
+               </items>
+            </container>
+        """)
+        results = client._parseContainer(body)
+        expected = [('Fred', '/persons/fred'),
+                    ('barney', '/persons/barney')]
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
 
     def test__parseGroupTree(self):
         from schooltool.guiclient import SchoolToolClient
