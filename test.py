@@ -52,6 +52,7 @@ Options:
   --all-levels  select all tests
   --list-files  list all selected test files
   --list-tests  list all selected test cases
+  --list-hooks  list all loaded test hooks
   --coverage    create code coverage reports
 """
 #
@@ -93,6 +94,7 @@ class Options:
     # actions to take
     list_files = False          # --list-files
     list_tests = False          # --list-tests
+    list_hooks = False          # --list-hooks
     run_tests = True            # run tests (disabled by --list-foo)
 
     # output verbosity
@@ -256,6 +258,20 @@ def get_test_cases(test_files, cfg):
     return results
 
 
+def get_test_hooks(test_files, cfg):
+    """Returns a list of test hooks from a given list of test modules."""
+    results = []
+    dirs = list(Set(map(os.path.dirname, test_files)))
+    dirs.sort()
+    for dir in dirs:
+        filename = os.path.join(dir, 'checks.py')
+        if os.path.exists(filename):
+            module = import_module(filename, cfg)
+            hooks = module.test_hooks()
+            results.extend(hooks)
+    return results
+
+
 class CustomTestResult(unittest._TextTestResult):
     """Customised TestResult.
 
@@ -266,12 +282,14 @@ class CustomTestResult(unittest._TextTestResult):
     __super = unittest._TextTestResult
     __super_init = __super.__init__
     __super_startTest = __super.startTest
+    __super_stopTest = __super.stopTest
     __super_printErrors = __super.printErrors
 
-    def __init__(self, stream, descriptions, verbosity, count, cfg):
+    def __init__(self, stream, descriptions, verbosity, count, cfg, hooks):
         self.__super_init(stream, descriptions, verbosity)
         self.count = count
         self.cfg = cfg
+        self.hooks = hooks
         if cfg.progress:
             self.dots = False
             self._lastWidth = 0
@@ -298,6 +316,13 @@ class CustomTestResult(unittest._TextTestResult):
                 self._lastWidth = width
             self.stream.flush()
         self.__super_startTest(test)
+        for hook in self.hooks:
+            hook.startTest(test)
+
+    def stopTest(self, test):
+        for hook in self.hooks:
+            hook.stopTest(test)
+        self.__super_stopTest(test)
 
     def getShortDescription(self, test):
         s = self.getDescription(test)
@@ -349,9 +374,13 @@ class CustomTestRunner(unittest.TextTestRunner):
     __super_init = __super.__init__
     __super_run = __super.run
 
-    def __init__(self, cfg):
+    def __init__(self, cfg, hooks=None):
         self.__super_init(verbosity=cfg.verbosity)
         self.cfg = cfg
+        if hooks is not None:
+            self.hooks = hooks
+        else:
+            self.hooks = []
 
     def run(self, test):
         self.count = test.countTestCases()
@@ -359,7 +388,8 @@ class CustomTestRunner(unittest.TextTestRunner):
 
     def _makeResult(self):
         return CustomTestResult(self.stream, self.descriptions, self.verbosity,
-                                cfg=self.cfg, count=self.count)
+                                cfg=self.cfg, count=self.count,
+                                hooks=self.hooks)
 
 
 def main(argv):
@@ -391,8 +421,8 @@ def main(argv):
 
     # Option processing
     opts, args = getopt.getopt(argv[1:], 'hvpufw',
-                               ['list-files', 'list-tests', 'level=',
-                                'all-levels', 'coverage'])
+                               ['list-files', 'list-tests', 'list-hooks',
+                                'level=', 'all-levels', 'coverage'])
     for k, v in opts:
         if k == '-h':
             print __doc__
@@ -412,6 +442,9 @@ def main(argv):
             cfg.run_tests = False
         elif k == '--list-tests':
             cfg.list_tests = True
+            cfg.run_tests = False
+        elif k == '--list-hooks':
+            cfg.list_hooks = True
             cfg.run_tests = False
         elif k == '--coverage':
             cfg.coverage = True
@@ -445,6 +478,7 @@ def main(argv):
     # Finding and importing
     test_files = get_test_files(cfg)
     test_cases = get_test_cases(test_files, cfg)
+    test_hooks = get_test_hooks(test_files, cfg)
 
     # Configure the logging module
     import logging
@@ -456,8 +490,10 @@ def main(argv):
         print "\n".join(test_files)
     if cfg.list_tests:
         print "\n".join([test.id() for test in test_cases])
+    if cfg.list_hooks:
+        print "\n".join([str(hook) for hook in test_hooks])
     if cfg.run_tests:
-        runner = CustomTestRunner(cfg)
+        runner = CustomTestRunner(cfg, test_hooks)
         suite = unittest.TestSuite()
         suite.addTests(test_cases)
         if cfg.coverage:
