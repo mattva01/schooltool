@@ -99,11 +99,27 @@ SchoolTool server RESTive interface
   DELETE /ttschemas/schema_name
     deletes the timetable schema named 'schema_name'
 
+  GET /time-periods
+    lists all defined time periods
+  GET /time-periods/period_name
+    shows the time period named 'period_name'
+  PUT /time-periods/period_name
+    creates or updates time period named 'period_name'
+  DELETE /time-periods/period_name
+    deletes the time period named 'period_name'
+
+  GET /schooltt/timetables
+    shows the list of all possible school timetables
+  GET /schooltt/timetables/time_period/schema
+    shows the specific school timetable
+  PUT /schooltt/timetables/time_period/schema
+    creates or replaces the specific school timetable
+
 In the above '...object' stands for a full path to an application object (i.e.
 a group or a person), for example '/persons/some_person_id'.
 
 This list should be up-to-date (I think) with respect to SchoolTool revision
-440.  It has not been verified, so it might contain errors or omissions.
+480.  It has not been verified, so it might contain errors or omissions.
 
 Ideally all this should be automatically extracted from source code (e.g.
 docstrings for views).
