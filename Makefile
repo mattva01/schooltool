@@ -10,7 +10,7 @@ TESTFLAGS=-w
 all: build
 
 build:
-	$(PYTHON) setup.py build_ext -i
+	$(PYTHON) $(PWD)/setup.py build_ext -i
 
 clean:
 	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
@@ -20,17 +20,17 @@ realclean: clean
 	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
 
 test: build
-	$(PYTHON) test.py $(TESTFLAGS) schooltool
+	$(PYTHON) $(PWD)/test.py $(TESTFLAGS) src.schooltool
 
 testall: build
-	$(PYTHON) test.py $(TESTFLAGS)
+	$(PYTHON) $(PWD)/test.py $(TESTFLAGS)
 
 ftest: build
 	@PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/main.py -m -c test.conf & \
 	pid=$$! ; \
 	sleep 2 ; \
 	ps -p $$pid > /dev/null && (\
-	$(PYTHON) test.py -f $(TESTFLAGS) ; \
+	$(PYTHON) $(PWD)/test.py -f $(TESTFLAGS) ; \
 	kill $$pid )
 
 run: build
