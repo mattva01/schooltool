@@ -505,8 +505,8 @@ class CustomTestRunner(unittest.TextTestRunner):
     __super_init = __super.__init__
     __super_run = __super.run
 
-    def __init__(self, cfg, hooks=None):
-        self.__super_init(verbosity=cfg.verbosity)
+    def __init__(self, cfg, hooks=None, stream=sys.stderr):
+        self.__super_init(verbosity=cfg.verbosity, stream=stream)
         self.cfg = cfg
         if hooks is not None:
             self.hooks = hooks
