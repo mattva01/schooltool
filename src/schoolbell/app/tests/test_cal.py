@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from datetime import date, datetime, timedelta
 
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
@@ -35,7 +36,6 @@ def doctest_CalendarEvent():
     is that CalendarEvents are mutable and IContained.
 
         >>> from schoolbell.app.cal import CalendarEvent, Calendar
-        >>> from datetime import datetime, timedelta
 
         >>> event = CalendarEvent(datetime(2005, 2, 7, 16, 24),
         ...                       timedelta(hours=3),
@@ -167,6 +167,74 @@ def doctest_Calendar():
         >>> cal2 = Calendar(parent)
         >>> cal2.__parent__ is parent
         True
+
+
+    Let's check that expand() works correctly with ordinary and recurrent
+    events.  We will create a pair of events first:
+
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+
+        >>> dtstart = datetime(2005, 2, 3, 4, 5)
+        >>> duration = timedelta(hours=4)
+        >>> evt_simple = CalendarEvent(dtstart, duration, "Simple")
+
+        >>> dtstart = datetime(2005, 2, 4, 4, 5)
+        >>> duration = timedelta(hours=4)
+        >>> rrule = DailyRecurrenceRule()
+        >>> evt_recurrent = CalendarEvent(dtstart, duration, "Recurring",
+        ...                               recurrence=rrule)
+
+    Then we add the events to the calendar:
+
+        >>> calendar = Calendar()
+        >>> calendar.addEvent(evt_simple)
+        >>> calendar.addEvent(evt_recurrent)
+
+    Now let's invoke expand() with various parameters.  We'll use a little
+    helper.
+
+        >>> def expand(start_day, end_day):
+        ...     return list(calendar.expand(date(2005, 2, start_day),
+        ...                                 date(2005, 2, end_day)))
+        >>> def sorted(l):
+        ...     l.sort()
+        ...     return l
+
+    First some trivial experiments:
+
+        >>> expand(1, 2)
+        []
+
+        >>> expand(2, 3) == [evt_simple]
+        True
+
+    Now let's see if the recurrent events are handled correctly:
+
+        >>> events = expand(2, 4)
+        >>> sorted([evt.title for evt in events])
+        ['Recurring', 'Simple']
+        >>> sorted([evt.dtstart.day for evt in events])
+        [3, 4]
+
+        >>> events = expand(2, 5)
+        >>> sorted([evt.title for evt in events])
+        ['Recurring', 'Recurring', 'Simple']
+        >>> sorted([evt.dtstart.day for evt in events])
+        [3, 4, 5]
+
+        >>> events = expand(10, 12)
+        >>> sorted([evt.title for evt in events])
+        ['Recurring', 'Recurring', 'Recurring']
+        >>> sorted([evt.dtstart.day for evt in events])
+        [10, 11, 12]
+
+    Note that expand() always returns ExpandedCalendarEvents even if the
+    original event was not recurrent:
+
+        >>> from schoolbell.calendar.interfaces import IExpandedCalendarEvent
+        >>> [IExpandedCalendarEvent.providedBy(evt) for evt in expand(1, 5)]
+        [True, True, True]
 
     """
 

@@ -68,6 +68,16 @@
              interface="schoolbell.calendar.interfaces.ICalendarEvent" />
   </content>
 
+  <content class="schoolbell.app.cal.ExpandedCalendarEvent">
+    <require permission="zope.View"
+             interface="schoolbell.calendar.interfaces.ICalendarEvent" />
+  </content>
+
+  <content class="schoolbell.app.cal.ImmutableCalendar">
+    <require permission="zope.View"
+             interface="schoolbell.calendar.interfaces.ICalendar" />
+  </content>
+
   <content class=".app.Calendar">
     <require permission="zope.View"
              interface="schoolbell.calendar.interfaces.IEditCalendar" />

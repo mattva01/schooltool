@@ -21,6 +21,7 @@ SchoolBell calendaring objects.
 
 $Id$
 """
+import datetime
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
@@ -28,12 +29,15 @@ from zope.app.location.interfaces import ILocation
 from zope.app.container.contained import Contained
 
 from schoolbell.calendar.interfaces import IEditCalendar
+from schoolbell.calendar.interfaces import IExpandedCalendarEvent
+from schoolbell.calendar.recurrent import ExpandedCalendarEvent
 from schoolbell.calendar.mixins import CalendarMixin
-from schoolbell.calendar.simple import SimpleCalendarEvent
+from schoolbell.calendar.simple import SimpleCalendarEvent, ImmutableCalendar
 from schoolbell.app.interfaces import IContainedCalendarEvent
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
+    """A persistent calendar event contained in a persistent calendar."""
 
     implements(IContainedCalendarEvent)
 
@@ -83,3 +87,24 @@ class Calendar(Persistent, CalendarMixin):
 
     def find(self, unique_id):
         return self.events[unique_id]
+
+    def expand(self, first, last):
+        # TODO Move into schoolbell.calendar.
+        events = []
+        for event in self:
+            if event.recurrence is not None: # event is recurrent
+                starttime = event.dtstart.time()
+                for recdate in event.recurrence.apply(event, last):
+                    if first <= recdate <= last:
+                        start = datetime.datetime.combine(recdate, starttime)
+                        evt = ExpandedCalendarEvent(event, dtstart=start)
+                        events.append(evt)
+            else: # event is not recurrent
+                event_start = event.dtstart.date()
+                event_end = (event.dtstart + event.duration).date()
+                if (first <= event_start <= last or
+                    event_start <= first <= event_end):
+                    # XXX Couldn't we just add the original event?
+                    evt = ExpandedCalendarEvent(event, event.dtstart)
+                    events.append(evt)
+        return ImmutableCalendar(events)

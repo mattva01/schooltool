@@ -36,6 +36,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
+from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.utils import parse_date
 from schoolbell.app.interfaces import ICalendarOwner
@@ -187,8 +188,15 @@ class PlainCalendarView(BrowserView):
                 if i % 2:
                     description = 'Description for %s' % title
 
+                recurrence = None
+                if i > 3:
+                    interval = random.randint(1, 5)
+                    count = random.randint(1, 10)
+                    recurrence = DailyRecurrenceRule(interval=interval,
+                                                     count=count)
+
                 event = CalendarEvent(dtstart, length, title,
-                        description=description)
+                        description=description, recurrence=recurrence)
                 self.context.addEvent(event)
 
 
