@@ -33,8 +33,7 @@ the Free Software Foundation; either version 2 of the License, or
 
 import sets
 from wxPython.wx import *
-from wxPython.html import wxHtmlWindow
-from guiclient import SchoolToolClient
+from guiclient import SchoolToolClient, SchoolToolError
 
 __metaclass__ = type
 
@@ -181,16 +180,39 @@ class MainFrame(wxFrame):
             ))
 
         # client area
-        splitter = wxSplitterWindow(self, -1)
+        splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
         self.groupTreeCtrl = wxTreeCtrl(splitter, ID_GROUP_TREE,
-                                        style=wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT)
-        self.groupInfoText = wxHtmlWindow(splitter, -1)
+                style=wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT|wxSUNKEN_BORDER)
+        splitter2 = wxSplitterWindow(splitter, -1, style=wxSP_NOBORDER)
+
+        panel2a = wxPanel(splitter2, -1)
+        label2a = wxStaticText(panel2a, -1, "Members")
+        self.personListCtrl = wxListCtrl(panel2a, style=wxSUNKEN_BORDER)
+        sizer2a = wxBoxSizer(wxVERTICAL)
+        sizer2a.Add(label2a)
+        sizer2a.Add(self.personListCtrl, 1, wxEXPAND)
+        panel2a.SetSizer(sizer2a)
+
+        panel2b = wxPanel(splitter2, -1)
+        label2b = wxStaticText(panel2b, -1, "Relationships")
+        self.relationshipListCtrl = wxListCtrl(panel2b,
+                style=wxSUNKEN_BORDER|wxLC_REPORT)
+        self.relationshipListCtrl.InsertColumn(0, "Title", width=110)
+        self.relationshipListCtrl.InsertColumn(1, "Role", width=110)
+        self.relationshipListCtrl.InsertColumn(2, "Relationship", width=110)
+        sizer2b = wxBoxSizer(wxVERTICAL)
+        sizer2b.Add(label2b)
+        sizer2b.Add(self.relationshipListCtrl, 1, wxEXPAND)
+        panel2b.SetSizer(sizer2b)
+
+        splitter2.SetMinimumPaneSize(50)
+        splitter2.SplitHorizontally(panel2a, panel2b, 150)
         splitter.SetMinimumPaneSize(20)
-        splitter.SplitVertically(self.groupTreeCtrl, self.groupInfoText, 150)
+        splitter.SplitVertically(self.groupTreeCtrl, splitter2, 150)
 
         EVT_TREE_SEL_CHANGED(self, ID_GROUP_TREE, self.DoSelectGroup)
 
-        self.SetSizeHints(minW=100, minH=100)
+        self.SetSizeHints(minW=100, minH=150)
         self.refresh()
 
     def DoExit(self, event):
@@ -211,23 +233,59 @@ class MainFrame(wxFrame):
         dlg.Destroy()
 
     def DoSelectGroup(self, event):
+        self.personListData = []
+        self.personListCtrl.DeleteAllItems()
+        self.relationshipListData = []
+        self.relationshipListCtrl.DeleteAllItems()
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
-            self.groupInfoText.SetPage("")
             return
         group_id = self.groupTreeCtrl.GetPyData(item)
-        info = self.client.getGroupInfo(group_id)
-        if info is None:
-            info = 'Could not connect to server'
-        self.groupInfoText.SetPage(info)
+
+        try:
+            info = self.client.getGroupInfo(group_id)
+        except SchoolToolError, e:
+            self.SetStatusText(str(e))
+            return
         self.SetStatusText(self.client.status)
+        self.personListData = info.members
+        for idx, (title, person_id) in enumerate(self.personListData):
+            self.personListCtrl.InsertStringItem(idx, title)
+            self.personListCtrl.SetItemData(idx, idx)
+
+        def compare(x, y):
+            return cmp(self.personListData[x], self.personListData[y])
+
+        self.personListCtrl.SortItems(compare)
+
+        try:
+            self.relationshipListData = self.client.getObjectRelationships(
+                                                                    group_id)
+        except SchoolToolError, e:
+            self.SetStatusText(str(e))
+            return
+        self.SetStatusText(self.client.status)
+        self.relationshipListData.sort()
+        for idx, (arcrole, role, title, href) in enumerate(
+                                                    self.relationshipListData):
+            self.relationshipListCtrl.InsertStringItem(idx, title)
+            self.relationshipListCtrl.SetItemData(idx, idx)
+            self.relationshipListCtrl.SetStringItem(idx, 1, role)
+            self.relationshipListCtrl.SetStringItem(idx, 2, arcrole)
 
     def DoRefresh(self, event):
         self.refresh()
 
     def refresh(self):
-        group_tree = self.client.getGroupTree()
-        self.SetStatusText(self.client.status)
+        # XXX reentrancy problems -- hold down Alt-R and watch
+
+        try:
+            group_tree = self.client.getGroupTree()
+        except SchoolToolError, e:
+            self.SetStatusText(str(e))
+            group_tree = []
+        else:
+            self.SetStatusText(self.client.status)
 
         # Remember current selection
         old_selection = None
@@ -270,7 +328,8 @@ class MainFrame(wxFrame):
             stack.append((item, href))
 
         if not selected_anything:
-            self.groupInfoText.SetPage("")
+            self.groupTreeCtrl.Unselect()
+            self.DoSelectGroup(None)
 
 
 class SchoolToolApp(wxApp):

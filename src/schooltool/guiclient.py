@@ -39,36 +39,49 @@ __metaclass__ = type
 
 
 class SchoolToolClient:
-    """Client for the SchoolTool HTTP server."""
+    """Client for the SchoolTool HTTP server.
+
+    Every method that communicates with the server sets the status and version
+    attributes.
+    """
 
     connectionFactory = httplib.HTTPConnection
 
     server = 'localhost'
     port = 8080
     status = ''
+    version = ''
+
+    role_names = {'http://schooltool.org/ns/membership/member': 'Member',
+                  'http://schooltool.org/ns/membership/group': 'Group',
+                  'http://schooltool.org/ns/membership': 'Membership'}
 
     # Generic HTTP methods
 
     def setServer(self, server, port):
         """Set the server name and port number.
 
-        Tries to connect to the server and sets the status message."""
+        Tries to connect to the server and sets the status message.
+        """
         self.server = server
         self.port = port
         self.tryToConnect()
 
     def tryToConnect(self):
         """Try to connect to the server and set the status message."""
-        self.get('/')
+        try:
+            self.get('/')
+        except SchoolToolError, e:
+            self.status = str(e)
+            self.version = ''
 
     def get(self, path):
         """Perform an HTTP GET request for a given path.
 
         Returns the response body as a string.
 
-        Sets status and version attributes.
-
-        Returns None on error.  XXX: should raise an exception instead
+        Sets status and version attributes if the communication succeeds.
+        Raises SchoolToolError if the communication fails.
         """
         conn = self.connectionFactory(self.server, self.port)
         try:
@@ -81,41 +94,17 @@ class SchoolToolClient:
             return body
         except socket.error, e:
             conn.close()
-            self.status = str(e)
-            self.version = ''
-            return None
+            errno, message = e.args
+            self.status = "%s (%d)" % (message, errno)
+            self.version = ""
+            raise SchoolToolError(self.status)
 
     # SchoolTool specific methods
 
     def getListOfPersons(self):
         """Return a list of person IDs."""
         people = self.get('/persons')
-        if people is not None:
-            return self._parsePeopleList(people)
-        else:
-            return []
-
-    def _parsePeopleList(self, body):
-        """Parse the list of persons returned from the server."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            self.status = "could not parse people list"
-            return []
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/container/items/item/@xlink:href")
-            people = []
-            for anchor in [node.content for node in res]:
-                if anchor.startswith('/persons/'):
-                    if '/' not in anchor[len('/persons/'):]:
-                        people.append(anchor)
-            return people
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+        return self._parsePeopleList(people)
 
     def getPersonInfo(self, person_id):
         """Return information page about a person."""
@@ -148,10 +137,44 @@ class SchoolToolClient:
         # XXX this url is hardcoded, we could instead find out all roots
         # by getting /
         tree = self.get('/groups/root/tree')
-        if tree is not None:
-            return self._parseGroupTree(tree)
-        else:
-            return []
+        return self._parseGroupTree(tree)
+
+    def getGroupInfo(self, group_id):
+        """Return information page about a group."""
+        group = self.get(group_id)
+        persons = self._parseMemberList(group)
+        return GroupInfo(persons)
+
+    def getObjectRelationships(self, object_id):
+        """Return relationships of an application object (group or person).
+
+        Returns a list of tuples (arcrole, role, title, href_of_target).
+        """
+        result = self.get('%s/relationships' % object_id)
+        return self._parseRelationships(result)
+
+    # Parsing
+
+    def _parsePeopleList(self, body):
+        """Parse the list of persons returned from the server."""
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse people list")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/container/items/item/@xlink:href")
+            people = []
+            for anchor in [node.content for node in res]:
+                if anchor.startswith('/persons/'):
+                    if '/' not in anchor[len('/persons/'):]:
+                        people.append(anchor)
+            return people
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
 
     def _parseGroupTree(self, body):
         """Parse the tree of groups returned from the server.
@@ -165,29 +188,103 @@ class SchoolToolClient:
             def __init__(self):
                 self.level = 0
                 self.result = []
+                self.exception = None
 
             def startElement(self, tag, attrs):
+                if self.exception:
+                    return
                 if tag == 'group':
-                    title = attrs['xlink:title']
-                    href = attrs['xlink:href']
+                    href = attrs and attrs.get('xlink:href', None)
+                    if not href:
+                        self.exception = SchoolToolError("Group tag does not"
+                                                         " have xlink:href")
+                        return
+                    title = attrs.get('xlink:title', None)
+                    if title is None:
+                        title = href.split('/')[-1]
                     self.result.append((self.level, title, href))
                     self.level += 1
 
             def endElement(self, tag):
+                if self.exception:
+                    return
                 if tag == 'group':
                     self.level -= 1
 
         try:
             handler = Handler()
             ctx = libxml2.createPushParser(handler, body, len(body), "")
-            ctx.parseChunk("", 0, True)
+            retval = ctx.parseChunk("", 0, True)
+            if handler.exception:
+                raise handler.exception
+            if retval:
+                raise SchoolToolError("Could not parse group tree")
             return handler.result
-        except (libxml2.parserError, KeyError):
-            self.status = "could not parse group tree"
-            return []
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse group tree")
 
-    def getGroupInfo(self, group_id):
-        """Return information page about a group."""
-        group = self.get(group_id)
-        return group
+    def _parseMemberList(self, body):
+        """Parse the list of group members (persons only)."""
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse member list")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/group/item[@xlink:href]")
+            people = []
+            for node in res:
+                anchor = node.nsProp('href', xlink)
+                if anchor.startswith('/persons/'):
+                    name =  anchor[len('/persons/'):]
+                    if '/' not in name:
+                        title = node.nsProp('title', xlink)
+                        if title is None:
+                            title = name
+                        people.append((title, anchor))
+            return people
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
+    def _parseRelationships(self, body):
+        """Parse the list of relationships."""
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse relationship list")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/relationships/existing/relationship")
+            relationships = []
+            for node in res:
+                href = node.nsProp('href', xlink)
+                role = node.nsProp('role', xlink)
+                arcrole = node.nsProp('arcrole', xlink)
+                if not href or not role or not arcrole:
+                    continue
+                title = node.nsProp('title', xlink)
+                if title is None:
+                    title = href.split('/')[-1]
+                role = self.role_names.get(role, role)
+                arcrole = self.role_names.get(arcrole, arcrole)
+                relationships.append((arcrole, role, title, href))
+            return relationships
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
+
+class GroupInfo:
+
+    def __init__(self, members):
+        self.members = members
+
+
+class SchoolToolError(Exception):
+    """Communication error"""
 
