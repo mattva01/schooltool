@@ -680,8 +680,7 @@ class IEventService(IEventTarget):
         """
 
     def unsubscribe(target, event_type):
-        """Unsubscribe a target from receiving events for a given event
-        type.
+        """Unsubscribe a target from receiving events for a given event type.
 
         event_type is treated as an exact type rather than the root of a
         hierarchy.  In other words, unsubscribing from IEvent will not remove
