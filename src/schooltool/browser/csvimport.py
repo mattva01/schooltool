@@ -44,15 +44,14 @@ __metaclass__ = type
 
 class CharsetMixin:
 
-    charsets = [('UTF-8', _('Unicode (UTF-8)')),
-                ('ISO-8859-1', _('Western (ISO-8859-1)')),
-                ('ISO-8859-15', _('Western (ISO-8859-15)')),
-                ('Windows-1252', _('Western (Windows-1252)')),
-                ('', _('Other (please specify)'))]
-
     def __init__(self, context):
+        charsets = [('UTF-8', _('Unicode (UTF-8)')),
+                    ('ISO-8859-1', _('Western (ISO-8859-1)')),
+                    ('ISO-8859-15', _('Western (ISO-8859-15)')),
+                    ('Windows-1252', _('Western (Windows-1252)')),
+                    ('', _('Other (please specify)'))]
         self.charset_widget = SelectionWidget('charset', _('Charset'),
-                                              self.charsets,
+                                              charsets,
                                               validator=self.validate_charset)
         self.other_charset_widget = TextWidget('other_charset',
                                                _('Specify other charset'),
