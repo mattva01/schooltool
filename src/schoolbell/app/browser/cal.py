@@ -1001,8 +1001,8 @@ class EventDeleteView(BrowserView):
         # We could not find the event in the current calendar, so we scan
         # the overlaid ones.  We only need to look if the current calendar
         # is the owner's (otherwise the overlays are not active).
-        owner = IPerson(self.request.principal)
-        if owner.username == self.context.__parent__.username:
+        owner = IPerson(self.request.principal, None)
+        if owner and owner.username == self.context.__parent__.username:
             for info in owner.overlaid_calendars:
                 try:
                     return info.calendar.find(event_id)
