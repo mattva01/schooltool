@@ -947,9 +947,9 @@ class ISchooldayModel(Interface):
     for a certain period of time.
     """
 
-    start = Attribute("The date of the start of the period")
+    start = Attribute("The date of the first day of the period")
 
-    end = Attribute("The date of the end of the period""")
+    end = Attribute("The date after the last day of the period")
 
     def __contains__(date):
         """Returns whether the date is within the period covered."""
@@ -997,6 +997,7 @@ class ICalendar(Interface):
 
     start = Attribute(
         """The start of the period of time covered by the calendar""")
+
     end = Attribute("""The end of the period covered by the calendar""")
 
     def __getitem__(date):
@@ -1027,6 +1028,7 @@ class ITimetable(Interface):
     A timetable represents the repeating lesson schedule for just one
     pupil, or one teacher, or one bookable resource.
     """
+
     def keys():
         """Returns a sequence of identifiers for days within the timetable"""
 
@@ -1072,7 +1074,6 @@ class ITimetableDay(Interface):
 
     def __delitem__(key):
         """Remove the activity planned for a given period"""
-
 
 
 class ITimetableActivity(Interface):
@@ -1128,7 +1129,9 @@ class ISchooldayPeriodEvent(Interface):
         attributes are equal."""
 
 
+#
 # Exceptions
+#
 
 class ComponentLookupError(Exception):
     """An exception for component architecture."""

@@ -23,7 +23,7 @@ $Id$
 """
 from sets import Set
 from zope.interface import implements
-from schooltool.interfaces import ISchooldayModel
+from schooltool.interfaces import ISchooldayModel, ILocation
 from schooltool.interfaces import ITimetable, ITimetableDay, ITimetableActivity
 from schooltool.interfaces import ISchooldayPeriodEvent, ISchooldayTemplate
 import datetime
@@ -34,12 +34,14 @@ __metaclass__ = type
 
 class SchooldayModel:
 
-    implements(ISchooldayModel)
+    implements(ISchooldayModel, ILocation)
 
     def __init__(self, start, end):
         self.start = start
         self.end = end
         self._schooldays = Set()
+        self.__parent__ = None
+        self.__name__ = None
 
     def _validate(self, date):
         if not date in self:
@@ -252,6 +254,7 @@ class SchooldayPeriodEvent:
 
     def __hash__(self):
         return hash((self.title, self.tstart, self.duration))
+
 
 class SchooldayTemplate:
 

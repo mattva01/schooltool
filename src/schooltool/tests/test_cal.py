@@ -21,6 +21,7 @@ Unit tests for the schooltool.calendar module.
 
 $Id$
 """
+
 import unittest
 import calendar
 from zope.interface.verify import verifyObject
@@ -29,18 +30,19 @@ from zope.testing.doctestunit import DocTestSuite
 from datetime import date, time, timedelta
 from StringIO import StringIO
 
+
 class TestSchooldayModel(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.interfaces import ISchooldayModel
+        from schooltool.interfaces import ISchooldayModel, ILocation
 
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 12, 24))
         verifyObject(ISchooldayModel, cal)
+        verifyObject(ILocation, cal)
 
     def testAddRemoveSchoolday(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.interfaces import ISchooldayModel
 
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
 
@@ -180,7 +182,7 @@ class TestICalReader(unittest.TestCase):
         self.assertEqual(vevent.dtstart, date(2003, 12, 26))
 
     def test_readRecord(self):
-        from schooltool.cal import ICalReader, SchooldayModel
+        from schooltool.cal import ICalReader
         file = StringIO("key1\n"
                         " :value1\n"
                         "key2\n"
@@ -256,6 +258,7 @@ class TestTimetable(unittest.TestCase):
         self.assertEqual(t.items(),
                          [("Mo", monday), ("Tu", tuesday), ("We", None),
                           ("Th", None), ("Fr", None)])
+
 
 class TestTimetableDay(unittest.TestCase):
 
