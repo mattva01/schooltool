@@ -318,9 +318,24 @@ class CustomTestRunner(unittest.TextTestRunner):
 def main(argv):
     """Main program."""
 
+    # Environment
+    if sys.version_info < (2, 3):
+        print >> sys.stderr, '%s: need Python 2.3 or later' % argv[0]
+        print >> sys.stderr, 'your python is %s' % sys.version
+        return 1
+
     # Defaults
     cfg = Options()
     cfg.basedir = os.path.join(os.path.dirname(argv[0]), 'src')
+
+    # Figure out terminal size
+    try:
+        import curses
+    except ImportError:
+        pass
+    else:
+        curses.setupterm()
+        cfg.screen_width = curses.tigetnum('cols')
 
     # Option processing
     opts, args = getopt.getopt(argv[1:], 'hvpuf',
@@ -367,12 +382,6 @@ def main(argv):
         return 1
     if not cfg.unit_tests and not cfg.functional_tests:
         cfg.unit_tests = True
-
-    # Environment
-    if sys.version_info < (2, 3):
-        print >> sys.stderr, '%s: need Python 2.3 or later' % argv[0]
-        print >> sys.stderr, 'your python is %s' % sys.version
-        return 1
 
     # Set up the python path
     sys.path[0] = cfg.basedir
