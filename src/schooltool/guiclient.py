@@ -213,15 +213,15 @@ class SchoolToolClient:
         body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n'
                 '<reporter xlink:type="simple" xlink:href="%s"/>\n'
                 % cgi.escape(reporter_id, True)]
-        for href, presence, comment, resolved in rollcall:
-            href = cgi.escape(href, True)
-            if presence is None: presence = ''
-            elif presence: presence = ' presence="present"'
+        for entry in rollcall:
+            href = cgi.escape(entry.person_href, True)
+            if entry.presence is Unchanged: presence = ''
+            elif entry.presence: presence = ' presence="present"'
             else: presence = ' presence="absent"'
-            if not comment: comment = ''
-            else: comment = ' comment="%s"' % cgi.escape(comment, True)
-            if resolved is None: resolved = ''
-            elif resolved: resolved = ' resolved="resolved"'
+            if not entry.comment: comment = ''
+            else: comment = ' comment="%s"' % cgi.escape(entry.comment, True)
+            if entry.resolved is Unchanged: resolved = ''
+            elif entry.resolved: resolved = ' resolved="resolved"'
             else: resolved = ' resolved="unresolved"'
             body.append('<person xlink:type="simple" xlink:href="%s"%s%s%s/>\n'
                         % (href, presence, comment, resolved))
@@ -413,7 +413,7 @@ class SchoolToolClient:
                 if presence not in ('present', 'absent'):
                     raise SchoolToolError("Unrecognized presence value: %s"
                                           % presence)
-                persons.append(RollCallEntry(title, href, presence == 'present'))
+                persons.append(RollCallInfo(title, href, presence == 'present'))
             return persons
         finally:
             doc.freeDoc()
@@ -590,6 +590,10 @@ class Response:
 # Application object representation
 #
 
+
+Unchanged = "Unchanged"
+
+
 class GroupInfo:
     """Information about a group."""
 
@@ -599,7 +603,7 @@ class GroupInfo:
         self.members = members
 
 
-class RollCallEntry:
+class RollCallInfo:
     """Information about a person participating in a roll call"""
 
     person_title = None         # Person (title)
@@ -612,7 +616,7 @@ class RollCallEntry:
         self.present = present
 
     def __cmp__(self, other):
-        if not isinstance(other, RollCallEntry):
+        if not isinstance(other, RollCallInfo):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
         return cmp((self.person_title, self.person_href, self.present),
@@ -621,6 +625,26 @@ class RollCallEntry:
     def __repr__(self):
         return "%s(%r, %r, %r)" % (self.__class__.__name__, self.person_title,
                                    self.person_href, self.present)
+
+
+class RollCallEntry:
+    """Information about a person participating in a roll call"""
+
+    person_href = None          # Person (href)
+    presence = Unchanged        # Present (True/False/Unchanged)?
+    comment = None              # Comment (or None)
+    resolved = Unchanged        # Resolved (True/False/Unchanged)?
+
+    def __init__(self, href, presence=Unchanged, comment=None,
+                 resolved=Unchanged):
+        self.person_href = href
+        self.presence = presence
+        self.comment = comment
+        self.resolved = resolved
+
+    def __repr__(self):
+        return "%s(%r, %r, %r)" % (self.__class__.__name__, self.person_href,
+                                   self.present, self.comment, self.resolved)
 
 
 class AbsenceInfo:
@@ -726,9 +750,6 @@ class AbsenceInfo:
                     self.expected_presence)
 
 
-Unchanged = "Unchanged"
-
-
 class AbsenceComment:
     """Information about an absence comment."""
 
@@ -790,6 +811,8 @@ class ResponseStatusError(SchoolToolError):
 
     def __init__(self, response):
         errmsg = "%d %s" % (response.status, response.reason)
+        if response.getheader('Content-Type') == 'text/plain':
+            errmsg += '\n%s' % response.read()
         SchoolToolError.__init__(self, errmsg)
         self.status = response.status
         self.reason = response.reason

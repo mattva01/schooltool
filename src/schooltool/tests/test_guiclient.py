@@ -358,14 +358,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                           group_id)
 
     def test_getRollCall(self):
-        from schooltool.guiclient import RollCallEntry
+        from schooltool.guiclient import RollCallInfo
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
                       presence="present" />
             </rollcall>
         """)
-        expected = [RollCallEntry('person 1', '/persons/p1', True)]
+        expected = [RollCallInfo('person 1', '/persons/p1', True)]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
         results = client.getRollCall(group_id)
@@ -383,11 +383,12 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.getRollCall, group_id)
 
     def test_submitRollCall(self):
+        from schooltool.guiclient import RollCallEntry, Unchanged
         client = self.newClient(ResponseStub(200, 'OK', 'Accepted'))
         group_id = '/groups/group1'
-        rollcall = [('/persons/p1', True, 'foo', True),
-                    ('/persons/p2', False, 'bar', False),
-                    ('/persons/p3', None, None, None)]
+        rollcall = [RollCallEntry('/persons/p1', True, 'foo', True),
+                    RollCallEntry('/persons/p2', False, 'bar', False),
+                    RollCallEntry('/persons/p3', Unchanged, None, Unchanged)]
         client.submitRollCall(group_id, rollcall)
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '%s/rollcall' % group_id)
@@ -405,10 +406,10 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
             """))
 
     def test_submitRollCall_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.guiclient import SchoolToolError, RollCallEntry
         client = self.newClient(ResponseStub(400, 'Bad Request', 'No foo'))
         group_id = '/groups/group1'
-        rollcall = [('/persons/p3', None, None, None)]
+        rollcall = [RollCallEntry('/persons/p3')]
         self.assertRaises(SchoolToolError,
                           client.submitRollCall, group_id, rollcall)
 
@@ -652,7 +653,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseRelationships, body)
 
     def test__parseRollCall(self):
-        from schooltool.guiclient import SchoolToolClient, RollCallEntry
+        from schooltool.guiclient import SchoolToolClient, RollCallInfo
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
@@ -665,9 +666,9 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                       presence="absent" />
             </rollcall>
         """)
-        expected = [RollCallEntry('person 1', '/persons/p1', True),
-                    RollCallEntry('p2',       '/persons/p2', False),
-                    RollCallEntry('p4',       '/persons/p4', False)]
+        expected = [RollCallInfo('person 1', '/persons/p1', True),
+                    RollCallInfo('p2',       '/persons/p2', False),
+                    RollCallInfo('p4',       '/persons/p4', False)]
         client = SchoolToolClient()
         results = client._parseRollCall(body)
         self.assertEquals(results, expected, "\n" +
@@ -979,20 +980,20 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
 
 
-class TestRollCallEntry(unittest.TestCase):
+class TestRollCallInfo(unittest.TestCase):
 
     def test_cmp(self):
-        from schooltool.guiclient import RollCallEntry
+        from schooltool.guiclient import RollCallInfo
         nargs = 3 # number of constructor arguments
-        ai = RollCallEntry(*range(nargs))
+        ai = RollCallInfo(*range(nargs))
         self.assertEquals(ai, ai)
         for i in range(nargs):
             args = range(nargs)
             args[i] = -1
-            self.assertNotEquals(ai, RollCallEntry(*args))
+            self.assertNotEquals(ai, RollCallInfo(*args))
 
-        a1 = RollCallEntry(*([1] * nargs))
-        a2 = RollCallEntry(*([2] * nargs))
+        a1 = RollCallInfo(*([1] * nargs))
+        a2 = RollCallInfo(*([2] * nargs))
         self.assert_(a1 < a2)
         a1.person_title = 2
         a2.person_title = 1
@@ -1085,7 +1086,7 @@ class TestAbsenceInfo(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
-    suite.addTest(unittest.makeSuite(TestRollCallEntry))
+    suite.addTest(unittest.makeSuite(TestRollCallInfo))
     suite.addTest(unittest.makeSuite(TestAbsenceInfo))
     return suite
 

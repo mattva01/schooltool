@@ -36,7 +36,7 @@ import libxml2
 import threading
 from wxPython.wx import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
-from guiclient import SchoolToolClient, Unchanged
+from guiclient import SchoolToolClient, Unchanged, RollCallEntry
 from guiclient import SchoolToolError, ResponseStatusError
 
 __metaclass__ = type
@@ -121,12 +121,97 @@ class ServerSettingsDlg(wxDialog):
         self.EndModal(wxID_OK)
 
 
+class RollCallInfoDlg(wxDialog):
+    """More info popup of the roll call dialog"""
+
+    def __init__(self, parent, title, show_resolved):
+        wxDialog.__init__(self, parent, -1, title,
+                          style=wxDIALOG_MODAL|wxCAPTION)
+        self.show_resolved = show_resolved
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+        hsizer = wxBoxSizer(wxHORIZONTAL)
+
+        self.text_ctrl = wxTextCtrl(self, -1, style=wxTE_MULTILINE,
+                                    size=wxSize(300, 100))
+        hsizer.Add(self.text_ctrl, 1, wxEXPAND)
+
+        radio_sizer = wxBoxSizer(wxVERTICAL)
+        self.undecided_btn = wxRadioButton(self, -1, "Unset", style=wxRB_GROUP)
+        self.undecided_btn.Hide()
+
+        self.resolve_btn = wxRadioButton(self, -1, "Resolve")
+        if not show_resolved:
+            self.resolve_btn.Hide()
+        radio_sizer.Add(self.resolve_btn)
+
+        self.dont_resolve_btn = wxRadioButton(self, -1, "Do not resolve")
+        if not show_resolved:
+            self.dont_resolve_btn.Hide()
+        radio_sizer.Add(self.dont_resolve_btn)
+
+        if show_resolved:
+            hsizer.Add(radio_sizer, 0, wxLEFT, 4)
+
+        vsizer.Add(hsizer, 1, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        vsizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn.SetDefault()
+        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+
+    def OnOk(self, event):
+        """Verify that all data is entered before closing the dialog."""
+        if self.show_resolved:
+            if self.resolve_btn.GetValue() == self.dont_resolve_btn.GetValue():
+                self.resolve_btn.SetFocus()
+                wxBell()
+                return
+        self.EndModal(wxID_OK)
+
+    def setComment(self, comment):
+        if comment is None:
+            self.text_ctrl.SetValue("")
+        else:
+            self.text_ctrl.SetValue(comment)
+
+    def getComment(self):
+        return self.text_ctrl.GetValue()
+
+    def setResolved(self, resolved):
+        if resolved is Unchanged:
+            self.undecided_btn.SetValue(True)
+        elif resolved:
+            self.resolve_btn.SetValue(True)
+        else:
+            self.dont_resolve_btn.SetValue(True)
+
+    def getResolved(self):
+        if self.resolve_btn.GetValue():
+            return True
+        elif self.dont_resolve_btn.GetValue():
+            return False
+        else:
+            return Unchanged
+
+
 class RollCallDlg(wxDialog):
     """Roll call dialog."""
 
     def __init__(self, parent, group_title, group_href, rollcall, client):
         title = "Roll Call for %s" % group_title
-        wxDialog.__init__(self, parent, -1,title,
+        wxDialog.__init__(self, parent, -1, title,
               style=wxDIALOG_MODAL|wxCAPTION|wxRESIZE_BORDER|wxTHICK_FRAME)
         self.title = title
         self.group_title = group_title
@@ -138,46 +223,40 @@ class RollCallDlg(wxDialog):
         scrolled_panel = wxScrolledPanel(self, -1)
         grid = wxFlexGridSizer(len(rollcall), 5, 4, 8)
         self.items = []
-        for entry in rollcall:
-            grid.Add(wxStaticText(scrolled_panel, -1, entry.person_title),
+        self.entries_by_id = {}
+        for item in rollcall:
+            entry = RollCallEntry(item.person_href)
+            entry.item = item
+            grid.Add(wxStaticText(scrolled_panel, -1, item.person_title),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
-            if entry.present:
+
+            if item.present:
                 presence = ""
             else:
-                presence = "reported\nabsent"
+                presence = "reported absent"
             grid.Add(wxStaticText(scrolled_panel, -1, presence),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
-            radio_sizer = wxBoxSizer(wxVERTICAL)
+
             unknown_btn = wxRadioButton(scrolled_panel, -1, "Unset",
                                         style=wxRB_GROUP)
             unknown_btn.Hide()
+
             present_btn = wxRadioButton(scrolled_panel, -1, "Present")
+            self.entries_by_id[present_btn.GetId()] = entry
+            EVT_RADIOBUTTON(self, present_btn.GetId(), self.OnPresentSelected)
+            grid.Add(present_btn)
+
             absent_btn = wxRadioButton(scrolled_panel, -1, "Absent")
-            if not entry.present:
-                EVT_RADIOBUTTON(self, absent_btn.GetId(),
-                                self.OnPresenceChanged)
-                EVT_RADIOBUTTON(self, present_btn.GetId(),
-                                self.OnPresenceChanged)
-            radio_sizer.Add(present_btn)
-            radio_sizer.Add(absent_btn)
-            grid.Add(radio_sizer)
-            text_ctrl = wxTextCtrl(scrolled_panel, -1, style=wxTE_MULTILINE)
-            grid.Add(text_ctrl, 1, wxEXPAND)
-            radio_sizer = wxBoxSizer(wxVERTICAL)
-            undecided_btn = wxRadioButton(scrolled_panel, -1, "Unset",
-                                          style=wxRB_GROUP)
-            undecided_btn.Hide()
-            resolve_btn = wxRadioButton(scrolled_panel, -1, "Resolve")
-            dont_resolve_btn = wxRadioButton(scrolled_panel, -1,
-                                             "Do not resolve")
-            resolve_btn.Disable()
-            dont_resolve_btn.Disable()
-            radio_sizer.Add(resolve_btn)
-            radio_sizer.Add(dont_resolve_btn)
-            grid.Add(radio_sizer)
-            self.items.append((entry.person_href, not entry.present,
-                               absent_btn, present_btn, text_ctrl,
-                               resolve_btn, dont_resolve_btn))
+            self.entries_by_id[absent_btn.GetId()] = entry
+            EVT_RADIOBUTTON(self, absent_btn.GetId(), self.OnAbsentSelected)
+            grid.Add(absent_btn)
+
+            more_btn = wxButton(scrolled_panel, -1, "...", style=wxBU_EXACTFIT)
+            self.entries_by_id[more_btn.GetId()] = entry
+            EVT_BUTTON(self, more_btn.GetId(), self.OnMoreInfo)
+            grid.Add(more_btn, 0, wxRIGHT, 4)
+
+            self.items.append((entry, present_btn))
         scrolled_panel.SetSizer(grid)
         scrolled_panel.SetupScrolling(scroll_x=False)
         grid.AddGrowableCol(3)
@@ -200,30 +279,50 @@ class RollCallDlg(wxDialog):
         vsizer.SetSizeHints(self)
         self.Layout()
 
-    def OnPresenceChanged(self, event):
-        """Enable/disable resolved radio buttons when presence is set."""
-        for (href, was_absent, absent, present, comment,
-             resolve, dontresolve) in self.items:
-             if was_absent:
-                 enabled = present.GetValue()
-                 resolve.Enable(enabled)
-                 dontresolve.Enable(enabled)
+    def OnPresentSelected(self, event):
+        """Mark the person as present or absent."""
+        entry = self.entries_by_id[event.GetId()]
+        entry.presence = True
+        if not entry.item.present and entry.resolved is Unchanged:
+            self.moreInfoDlg(entry)
+
+    def OnAbsentSelected(self, event):
+        """Mark the person as present or absent."""
+        entry = self.entries_by_id[event.GetId()]
+        entry.presence = False
+
+    def OnMoreInfo(self, event):
+        """Show the more info dialog."""
+        entry = self.entries_by_id[event.GetId()]
+        self.moreInfoDlg(entry)
+
+    def moreInfoDlg(self, entry):
+        """Show the more info for an entry."""
+        show_resolved = not entry.item.present and entry.presence == True
+        dlg = RollCallInfoDlg(self, entry.item.person_title,
+                              show_resolved=show_resolved)
+        dlg.setComment(entry.comment)
+        dlg.setResolved(entry.resolved)
+        if dlg.ShowModal() == wxID_OK:
+            entry.comment = dlg.getComment()
+            entry.resolved = dlg.getResolved()
+        dlg.Destroy()
 
     def OnOk(self, event):
-        """Verify that all required data is entered before closing the dialog.
-        """
-        for (href, was_absent, absent, present, comment,
-             resolve, dontresolve) in self.items:
-            if absent.GetValue() == present.GetValue():
-                present.SetFocus()
+        """Verify that all data is entered before closing the dialog."""
+        rollcall = []
+        for (entry, present_btn) in self.items:
+            if entry.presence is Unchanged:
+                present_btn.SetFocus()
                 wxBell()
                 return
-            if (present.GetValue() and was_absent
-                and resolve.GetValue() == dontresolve.GetValue()):
-                resolve.SetFocus()
+            show_resolved = not entry.item.present and entry.presence == True
+            if show_resolved and entry.resolved is Unchanged:
                 wxBell()
-                return
-        rollcall = self.getRollCall()
+                self.moreInfoDlg(entry)
+            if not entry.presence:
+                entry.resolved = Unchanged
+            rollcall.append(entry)
         try:
             self.client.submitRollCall(self.group_href, rollcall)
         except SchoolToolError, e:
@@ -231,25 +330,6 @@ class RollCallDlg(wxDialog):
                          self.title, wxICON_ERROR|wxOK)
         else:
             self.EndModal(wxID_OK)
-
-    def getRollCall(self):
-        """Collect the data for sending a roll call."""
-        rollcall = []
-        for (href, was_absent, absent, present, comment,
-             resolve, dontresolve) in self.items:
-            if absent.GetValue() == present.GetValue():
-                presence = None
-            else:
-                presence = present.GetValue()
-            if resolve.GetValue() == dontresolve.GetValue():
-                resolved = None
-            else:
-                resolved = resolve.GetValue()
-            if (presence is not None) and not presence:
-                resolved = None
-            comment = comment.GetValue()
-            rollcall.append((href, presence, comment, resolved))
-        return rollcall
 
 
 class AbsenceFrame(wxFrame):
