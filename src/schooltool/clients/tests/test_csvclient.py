@@ -221,28 +221,14 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
         im.getName = lambda response: 'quux'
 
         im.process = processStub()
-        im.importPerson('Joe Hacker', 'pupils', 'foo bar', '')
+        im.importPerson('', 'Hacker', 'Joe', 'pupils')
         self.assertEqual(im.process.requests,
                          [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Joe Hacker"/>'),
                           ('POST', '/groups/pupils/relationships',
-                           membership_pattern % "/persons/quux"),
-                          ('POST', '/groups/foo/relationships',
-                           membership_pattern % "/persons/quux"),
-                          ('POST', '/groups/bar/relationships',
                            membership_pattern % "/persons/quux")])
 
-        im.process = processStub()
-        im.importPerson('Prof. Whiz', 'teachers', '', 'group1')
-        self.assertEqual(im.process.requests,
-                         [('POST', '/persons',
-                           '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                           ' title="Prof. Whiz"/>'),
-                          ('POST', '/groups/teachers/relationships',
-                           membership_pattern % "/persons/quux"),
-                          ('POST', '/groups/group1/relationships',
-                           teaching_pattern % "/persons/quux")])
 
     def test_importResource(self):
         from schooltool.clients.csvclient import CSVImporterHTTP
@@ -267,7 +253,7 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
         im = CSVImporterHTTP()
         im.process = processStub()
 
-        im.importPersonInfo('123','Joe Hacker', '1978-01-02', 'comment')
+        im.importPersonInfo('123','Hacker',  'Joe', '1978-01-02', 'comment')
         self.assertEquals(im.process.requests, [(
             'PUT', '/persons/123/facets/person_info',
             ('<person_info xmlns="http://schooltool.org/ns/model/0.1"'
@@ -307,20 +293,18 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
 
         calls = []
         im.importGroupsCsv = lambda f: calls.append('groups: %s' % f)
-        def importPersonsCsvStub(csvdata, parent_group):
-            calls.append('people: %s %s' % (csvdata, parent_group))
+        def importPersonsCsvStub(csvdata):
+            calls.append('people: %s' % (csvdata))
         im.importPersonsCsv = importPersonsCsvStub
         im.importResourcesCsv = lambda f: calls.append('resources: %s' % f)
 
         im.run()
         self.assertEquals(messages, [u'Creating groups... ',
-                                     u'Creating teachers... ',
-                                     u'Creating pupils... ',
+                                     u'Creating people... ',
                                      u'Creating resources... ',
                                      u'Import finished successfully'])
         self.assertEquals(calls, ['groups: groups.csv',
-                                  'people: teachers.csv teachers',
-                                  'people: pupils.csv pupils',
+                                  'people: persons.csv',
                                   'resources: resources.csv'])
 
     def test_process(self):

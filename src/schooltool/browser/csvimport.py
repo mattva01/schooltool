@@ -110,15 +110,15 @@ class CSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
 
         groups_csv = request.args['groups.csv'][0]
         resources_csv = request.args['resources.csv'][0]
-        teachers_csv = request.args['teachers.csv'][0]
-        pupils_csv = request.args['pupils.csv'][0]
+        persons_csv = request.args['persons.csv'][0]
 
-        if not (groups_csv or resources_csv or pupils_csv or teachers_csv):
+
+        if not (groups_csv or resources_csv or persons_csv):
             self.error = _('No data provided.')
             return self.do_GET(request)
 
         try:
-            for csv in [groups_csv, resources_csv, teachers_csv, pupils_csv]:
+            for csv in [groups_csv, resources_csv, persons_csv]:
                 unicode(csv, charset)
         except UnicodeError:
             self.error = _('Could not convert data to Unicode'
@@ -132,12 +132,8 @@ class CSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
                 importer.importGroupsCsv(groups_csv.splitlines())
             if resources_csv:
                 importer.importResourcesCsv(resources_csv.splitlines())
-            if teachers_csv:
-                importer.importPersonsCsv(teachers_csv.splitlines(),
-                                          'teachers')
-            if pupils_csv:
-                importer.importPersonsCsv(pupils_csv.splitlines(),
-                                          'pupils')
+            if persons_csv:
+                importer.importPersonsCsv(persons_csv.splitlines())
         except DataError, e:
             self.error = _("Import failed: %s") % e
             return self.do_GET(request)
@@ -191,18 +187,21 @@ class CSVImporterZODB(CSVImporterBase):
         self.logs.append(_('Imported group: %s') % name)
         return group.__name__
 
-    def importPerson(self, title, parent, groups, teaches=None):
-        try:
-            person = self.persons.new(title=title)
-        except KeyError, e:
-            raise DataError(_("Person already exists: %r") % name)
-
-        if parent:
+    def importPerson(self, name, surname, given_name, groups):
+        title = ' '.join([given_name, surname])
+        if not name:
             try:
-                Membership(group=self.groups[parent], member=person)
-            except KeyError:
-                raise DataError(_("Invalid group: %s") % parent)
+                person = self.persons.new(title=title)
+            except KeyError, e:
+                raise DataError(_("Person already exists: %r") % name)
+        else:
+            try:
+                person = self.persons.new(__name__=name, title=title)
+            except KeyError, e:
+                raise DataError(_("Person already exists: %r") % name)
+            
         Membership(group=self.groups['root'], member=person)
+        
         for group in groups.split():
             try:
                 Membership(group=self.groups[group], member=person)
@@ -211,15 +210,6 @@ class CSVImporterZODB(CSVImporterBase):
             except ValueError:
                 raise DataError(_("Cannot add %r to %r") % (person, group))
         self.logs.append(_('Imported person: %s') % title)
-        if teaches:
-            for group in teaches.split():
-                try:
-                    Teaching(teacher=person, taught=self.groups[group])
-                except KeyError, e:
-                    raise DataError(_("No such group: %r") % group)
-                except ValueError:
-                    raise DataError(_("Cannot add %r as a teacher for %r")
-                                    % (person, group))
 
         return person.__name__
 
@@ -237,16 +227,16 @@ class CSVImporterZODB(CSVImporterBase):
         self.logs.append(_('Imported resource: %s') % title)
         return resource.__name__
 
-    def importPersonInfo(self, name, title, dob, comment):
+    def importPersonInfo(self, name, surname, given_name, dob, comment):
         person = self.persons[name]
         infofacet = FacetManager(person).facetByName('person_info')
 
         try:
-            infofacet.first_name, infofacet.last_name = title.split(None, 1)
+            infofacet.first_name = given_name
+            infofacet.last_name = surname
         except ValueError:
             infofacet.first_name = ''
-            infofacet.last_name = title
-
+            infofacet.last_name = name        
         if dob:
             infofacet.date_of_birth = parse_date(dob)
         else:

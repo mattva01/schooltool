@@ -20,13 +20,8 @@
     </div>
 
     <div class="row">
-      <label for="teachers.csv" i18n:translate="">teachers.csv</label>
-      <input id="teachers.csv" type="file" name="teachers.csv" />
-    </div>
-
-    <div class="row">
-      <label for="pupils.csv" i18n:translate="">pupils.csv</label>
-      <input id="pupils.csv" type="file" name="pupils.csv" />
+      <label for="persons.csv" i18n:translate="">persons.csv</label>
+      <input id="persons.csv" type="file" name="persons.csv" />
     </div>
 
     <div class="row">
@@ -102,54 +97,34 @@
              "math1","Mathematics 1","math year1","subject_group"</code>
 
 
-    <p i18n:translate=""><strong>pupils.csv</strong> contains lines of
+    <p i18n:translate=""><strong>persons.csv</strong> contains lines of
              comma-separated values with the following columns:</p>
 
     <ul>
-      <li i18n:translate=""><strong>title</strong> -- The full name of a pupil.
-             </li>
+      <li i18n:translate=""><strong>id</strong> -- Unique id for the person.
+      One word, lowercase letters or numbers. </li>
+      <li i18n:translate=""><strong>last name</strong> -- The last name of the
+      person.  This field is mandatory.</li>
+      <li i18n:translate=""><strong>first name</strong> -- The last name of the
+      person. </li>
       <li i18n:translate=""><strong>groups</strong> -- A space-separated list
-             of groups this pupil is a member in.</li>
+             of groups this person is a member of.</li>
       <li i18n:translate=""><strong>birthday</strong> -- Date of birth
              (YYYY-MM-DD).</li>
       <li i18n:translate=""><strong>comment</strong>  -- A comment
              (a free form string).</li>
-      <li i18n:translate=""><strong>blank</strong>  --  A blank column.</li>
-    </ul>
+
 
     <p i18n:translate="">Pupils are automatically added to the pupils group
              (/groups/pupils).</p>
 
     <p i18n:translate="">Sample pupils.csv:</p>
 
-    <code i18n:translate="">"James Cox","year1 math1 ling1",
-             "1994-03-10","", ""<br />
-             "Tom Hall","year1 biol1 math1","1994-07-20","", ""</code>
+    <code i18n:translate="">"jcox","Cox","James","year1 math1 ling1",
+             "1994-03-10","Transfer, fall of 2003."<br />
+             "","Hall","Tom","year1 biol1 math1","","", ""</code>
 
-    <p i18n:translate=""><strong>teachers.csv</strong>
-             contains lines of comma-separated values with the
-             following columns:</p>
 
-    <ul>
-      <li i18n:translate=""><strong>title</strong> -- The full name of
-             a teacher.</li>
-      <li i18n:translate=""><strong>groups</strong> -- A space-separated list
-             of groups this teacher is a member of (but doesn't teach to).</li>
-      <li i18n:translate=""><strong>birthday</strong> -- Date of birth in
-             ISO 8601 format (YYYY-MM-DD).</li>
-      <li i18n:translate=""><strong>comment</strong> -- A comment
-            (a free form string).</li>
-      <li i18n:translate=""><strong>teaches</strong> -- A space-separated list
-             of groups (classes/sections) that this person teaches.</li>
-    </ul>
-
-    <p i18n:translate="">Teachers are automatically added to the teachers group
-             (/groups/teachers).</p>
-
-    <p i18n:translate="">Sample teachers.csv:</p>
-
-   <code i18n:translate="">"Nicola Smith","","1952-12-06","","ling3"<br />
-             "Jeff Cox","griffindor","1967-06-13","","biol3"</code>
 
 
    <p i18n:translate=""><strong>resources.csv</strong> contains lines of

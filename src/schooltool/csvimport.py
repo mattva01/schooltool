@@ -55,20 +55,21 @@ class CSVImporterBase:
             raise DataError(_("Error in group data line %d: %s")
                             % (lineno + 1, e))
 
-    def importPersonsCsv(self, csvdata, parent_group):
+    def importPersonsCsv(self, csvdata):
         lineno = 0
         try:
             for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 5:
-                    raise DataError(_("Error in %s data line %d:"
-                                      " expected 5 columns, got %d") %
-                                    (parent_group, lineno + 1, len(row)))
-                title, groups, dob, comment, teaches = map(self.recode, row)
-                name = self.importPerson(title, parent_group, groups, teaches)
-                self.importPersonInfo(name, title, dob, comment)
+                if len(row) != 6:
+                    raise DataError(_("Error in persons data line %d:"
+                                      " expected 6 columns, got %d") %
+                                    (lineno + 1, len(row)))
+                name, surname, given_name, groups, dob, comment = \
+                    map(self.recode, row)
+                name = self.importPerson(name, surname, given_name, groups)
+                self.importPersonInfo(name, surname, given_name, dob, comment)
         except csv.Error, e:
-            raise DataError(_("Error in %s parent_group data line %d: %s")
-                            % (parent_group, lineno + 1, e))
+            raise DataError(_("Error in persons data line %d: %s")
+                            % (lineno + 1, e))
 
     def importResourcesCsv(self, csvdata):
         lineno = 0
@@ -89,11 +90,11 @@ class CSVImporterBase:
     def importGroup(self, name, title, parents, facets):
         raise NotImplementedError()
 
-    def importPerson(self, title, parent, groups, teaches):
+    def importPerson(self, name, surname, given_name, groups):
         raise NotImplementedError()
 
     def importResource(self, title, groups):
         raise NotImplementedError()
 
-    def importPersonInfo(self, name, title, dob, comment):
+    def importPersonInfo(self, name, surname, given_name, dob, comment):
         raise NotImplementedError()

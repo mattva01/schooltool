@@ -43,7 +43,7 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
                 self.personinfo = []
 
             def recode(self, value):
-                return value.lower()
+                return unicode(value.lower())
 
             def importGroup(self, name, title, parents, facets):
                 self.groups.append((name, title, parents, facets))
@@ -51,12 +51,13 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
             def importResource(self, title, groups):
                 self.resources.append((title, groups))
 
-            def importPerson(self, title, parent, groups, teaches=None):
-                self.persons.append((title, parent, groups, teaches))
+            def importPerson(self, name, surname, given_name, groups):
+                title = ' '.join([given_name, surname])
+                self.persons.append((name, title, groups))
                 return title
 
-            def importPersonInfo(self, name, title, dob, comment):
-                self.personinfo.append((name, title, dob, comment))
+            def importPersonInfo(self, title, surname, given_name, dob, comment):
+                self.personinfo.append((title, surname, given_name, dob,comment))
 
         return Importer()
 
@@ -72,12 +73,18 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
 
     def test_importPersonsCsv(self):
         im = self.createImporter()
-        csv = '"Jay Hacker","group1 group2","1998-01-01","yay","class1 class2"'
-        im.importPersonsCsv([csv], 'teachers')
-        self.assertEquals(im.persons, [(u'jay hacker', u'teachers',
-                                        u'group1 group2', 'class1 class2')])
-        self.assertEquals(im.personinfo, [(u'jay hacker', u'jay hacker',
-                                           u'1998-01-01', u'yay')])
+        csv = '"jhacker","Hacker","Jay","group1 group2","1998-01-01","yay"'
+        im.importPersonsCsv([csv])
+        self.assertEquals(im.persons, [(u'jhacker', u'jay hacker', 
+                                        u'group1 group2')])
+        self.assertEquals(im.personinfo, [(u'jay hacker',u'hacker',u'jay',u'1998-01-01', u'yay')])
+        
+    def test_importPersonsCsv_noID(self):
+        im = self.createImporter()
+        csv = '"","Hacker","Jay","group1 group2",1998-01-01,"yay"'
+        im.importPersonsCsv([csv])
+        self.assertEquals(im.persons, [(u'', u'jay hacker',u'group1 group2')])
+        self.assertEquals(im.personinfo, [(u'jay hacker',u'hacker',u'jay',u'1998-01-01', u'yay')])
 
     def test_import_badData(self):
         from schooltool.csvimport import DataError
@@ -100,12 +107,11 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
         self.assertRaises(DataError, im.importResourcesCsv,
                           ['"year1","Year 1","root"'])
         self.assertRaises(DataError, im.importPersonsCsv,
-                          ['"Foo","bar","baz","fourth"'], 'pupils')
+                          ['"foo","Bar","Baz","foo", "bar"'])
 
         self.assertRaises(DataError, im.importGroupsCsv, ['"invalid","csv'])
         self.assertRaises(DataError, im.importResourcesCsv, ['"b0rk","b0rk'])
-        self.assertRaises(DataError, im.importPersonsCsv, ['"invalid","csv'],
-                          'pupils')
+        self.assertRaises(DataError, im.importPersonsCsv, ['"invalid","csv'])
 
 
 def test_suite():

@@ -78,8 +78,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
     def test_POST_empty(self):
         request = RequestStub(args={'groups.csv': '',
                                     'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
+                                    'persons.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -93,8 +92,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         from schooltool.teaching import TeacherGroupFacet
         request = RequestStub(args={'groups.csv':'"year1","Year 1","root",""',
                                     'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
+                                    'persons.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -109,8 +107,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
     def test_POST_groups_errors(self):
         request = RequestStub(args={'groups.csv': '"year1","b0rk',
                                     'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
+                                    'persons.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -124,8 +121,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'groups.csv':
                                         '"year1","\xe2\x98\xbb","root",""',
                                     'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
+                                    'persons.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -141,8 +137,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
     def test_POST_groups_invalid_charset(self):
         request = RequestStub(args={'groups.csv':'"year1","\xff","root",""',
                                     'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
+                                    'persons.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -153,8 +148,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
     def test_POST_resources(self):
         request = RequestStub(args={'resources.csv':'"Stool",""',
                                     'groups.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
+                                    'persons.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -169,10 +163,9 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                        (None, u'Imported resource: Stool', INFO),
                        (None, u'CSV data import finished successfully', INFO)])
 
-    def test_POST_pupils(self):
-        request = RequestStub(args={'pupils.csv':'"A B","","1922-11-22","",""',
+    def test_POST_persons(self):
+        request = RequestStub(args={'persons.csv':'"ab","B","A","","1929-1-1",""',
                                     'groups.csv': '',
-                                    'teachers.csv': '',
                                     'resources.csv': '',
                                     'charset': 'UTF-8'})
         self.view.request = request
@@ -185,29 +178,8 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.applog,
            [(None, u'CSV data import started', INFO),
             (None, u'Imported person: A B', INFO),
-            (None, u'Imported person info for 000001 (A B, 1922-11-22)', INFO),
+            (None, u'Imported person info for ab (A B, 1929-01-01)', INFO),
             (None, u'CSV data import finished successfully', INFO)])
-
-    def test_POST_teachers(self):
-        request = RequestStub(args={'teachers.csv':
-                                        '"C D","","1922-11-22","",""',
-                                    'groups.csv': '',
-                                    'pupils.csv': '',
-                                    'resources.csv': '',
-                                    'charset': 'UTF-8'})
-        self.view.request = request
-        content = self.view.do_POST(request)
-        self.assert_('Data imported successfully' in content)
-
-        titles = [resource.title
-                  for resource in self.app['persons'].itervalues()]
-        self.assert_('C D' in titles)
-        self.assertEquals(request.applog,
-           [(None, u'CSV data import started', INFO),
-            (None, u'Imported person: C D', INFO),
-            (None, u'Imported person info for 000001 (C D, 1922-11-22)', INFO),
-            (None, u'CSV data import finished successfully', INFO)])
-
 
 class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
@@ -273,10 +245,10 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(self.im.logs, [])
 
     def test_importPerson(self):
-        name = self.im.importPerson('Smith', 'group1', 'group2')
-        self.assertEquals(self.im.logs, ["Imported person: Smith"])
+        name = self.im.importPerson('','Smith', 'Joe', 'group1 group2')
+        self.assertEquals(self.im.logs, ["Imported person: Joe Smith"])
         person = self.persons[name]
-        self.assertEquals(person.title, 'Smith')
+        self.assertEquals(person.title, 'Joe Smith')
 
         objs = [link.traverse() for link in person.listLinks()]
         self.assertEquals(len(objs), 3)
@@ -284,30 +256,13 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.group2 in objs)
         self.assert_(self.root in objs)
 
-    def test_importPerson_teacher(self):
-        name = self.im.importPerson('Wesson', 'group1', 'group2',
-                                    'group3')
-        self.assertEquals(self.im.logs, ["Imported person: Wesson"])
-        person = self.persons[name]
-        self.assertEquals(person.title, 'Wesson')
-
-        objs = [link.traverse() for link in person.listLinks()]
-        self.assertEquals(len(objs), 4)
-        self.assert_(self.group1 in objs)
-        self.assert_(self.group2 in objs)
-        self.assert_(self.group3 in objs)
-        self.assert_(self.root in objs)
-
     def test_importPerson_errors(self):
         from schooltool.browser.csvimport import DataError
         self.assertRaises(DataError, self.im.importPerson,
-                          'Smith', 'invalid_group', 'group2')
+                          '', 'Smith', 'Jim', 'invalid_group')
         self.assertRaises(DataError, self.im.importPerson,
-                          'Smith', 'group1', 'invalid_group')
-        self.assertRaises(DataError, self.im.importPerson,
-                          'Smith', 'invalid_group', 'group2')
-        self.assertRaises(DataError, self.im.importPerson,
-                          'Smith', 'group1', 'invalid_group')
+                          '', 'Smith', 'Jim', 'group1 invalid_group')
+
         self.assertEquals(self.im.logs, [])
 
     def test_importResource(self):
@@ -329,7 +284,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
     def test_importPersonInfo(self):
         from schooltool.component import FacetManager
-        self.im.importPersonInfo('person1', 'Foo Bayer',
+        self.im.importPersonInfo('person1', 'Bayer', 'Foo',
                                  '1922-12-12', 'Wazzup?')
         self.assertEquals(self.im.logs, ["Imported person info for person1"
                                          " (Foo Bayer, 1922-12-12)"])
@@ -342,10 +297,9 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
     def test_importPersonInfo2(self):
         from schooltool.component import FacetManager
-        self.im.importPersonInfo('person1', 'Anonymous',
-                                 '', 'Wazzup?')
+        self.im.importPersonInfo('person1','Anonymous','','1922-1-1','Wazzup?')
         self.assertEquals(self.im.logs, ["Imported person info for person1"
-                                         " ( Anonymous, None)"])
+                                         " ( Anonymous, 1922-01-01)"])
         info = FacetManager(self.person1).facetByName('person_info')
         self.assertEquals(info.first_name, '')
         self.assertEquals(info.last_name, 'Anonymous')

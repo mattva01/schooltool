@@ -21,7 +21,7 @@ Random sample data generation script.
 
 Accepts a random seed as an optional argument.
 
-Generates four CSV files: groups.csv, pupils.csv, teachers.csv and
+Generates three CSV files: groups.csv, persons.csv and
 resources.csv
 
 $Id$
@@ -45,8 +45,8 @@ surnames = _('Moore McCullogh Buckingham Butler Davies Clark Cooper '
              'Eastwood Baggins').split()
 
 years = 3
-nr_teachers = 10
 nr_pupils = 60
+nr_teachers = 10
 subjects = {
     'ling': _('Linguistics'),
     'phys': _('Physics'),
@@ -59,7 +59,7 @@ teacher_age_end = 1980      # Youngest teachers
 
 
 def random_name():
-    return "%s %s" % (random.choice(names), random.choice(surnames))
+    return (random.choice(surnames), random.choice(names))
 
 
 def random_date(start, end):
@@ -91,45 +91,35 @@ def createGroups():
     f.close()
 
 
-def createPupils(nr=nr_pupils):
-    """Create a randomly generated pupils.csv in the current directory.
+def createPersons():
+    """Create a randomly generated persons.csv in the current directory.
 
     Format of the file:
-      pupil_title, groups, birth date, comment
+      id, surname, name, groups, dob, comments
     where
       groups is a space separated list of groups this pupils is a member of
     """
-    f = open("pupils.csv", "w")
+    f = open("persons.csv", "w")
     names = sets.Set()
-    for i in range(nr):
-        year = i / (nr/years) + 1
+    for i in range(nr_pupils):
+        year = i / (nr_pupils/years) + 1
         groups = ["%s%d" % (subj, year) for subj in subjects.keys()]
-        subject1 = random.choice(groups)
-        groups.remove(subject1)
-        subject2 = random.choice(groups)
         birthday = random_date(datetime.date(pupil_age_end - year + 1, 1, 1),
                                datetime.date(pupil_age_end - year + 2, 1, 1))
-
+        
+        #subject1 = random.choice(groups)
+        #groups.remove(subject1)
+        #subject2 = random.choice(groups)
+        
         for counter in range(20):
-            name = random_name()
+            surname, name = random_name()
             if name not in names:
                 break
 
         names.add(name)
-        groups_str = " ".join(("year%d" % year, subject1, subject2))
-        print >> f, '"%s","%s","%s","",""' % (name, groups_str, birthday)
-    f.close()
-
-
-def createTeachers():
-    """Create a randomly generated teachers.csv in the current directory.
-
-    Format of the file:
-      title, groups, birthday, comment
-    where
-      groups is a space separated list of groups this teacher teaches
-    """
-    f = open("teachers.csv", "w")
+        groups_str = 'year%s %s' % (year, 'pupils')
+        print >> f, '"","%s","%s","%s","%s",""' % (surname, name, 
+                                                   groups_str, birthday)
 
     teachers = []
     for i in range(nr_teachers):
@@ -145,13 +135,14 @@ def createTeachers():
     for dept in subjects.keys():
         for year in range(1, years + 1):
             teacher = pool.pop()
-            teacher.append("%s%d" % (dept, year))
-
-    for groups in teachers:
-        birthday = random_date(datetime.date(teacher_age_start, 1, 1),
-                               datetime.date(teacher_age_end, 1, 1))
-        print >> f, '"%s","","%s","","%s"' % (random_name(),birthday,
-                                              " ".join(groups))
+            surname, name = random_name()
+            #teacher.append("%s %s" % (dept, 'teachers'))
+            birthday = random_date(datetime.date(teacher_age_start, 1, 1),
+                                   datetime.date(teacher_age_end, 1, 1))
+            print >> f, '"","%s","%s","%s teachers","%s",""' % (surname, name, 
+                                                           dept, birthday)
+        surname, name = random_name()
+        #print >> f, '"", "%s","%s","%s"' % (surname, name," ".join(groups))
     f.close()
 
 
@@ -173,9 +164,7 @@ def createResources():
 def main(argv):
     if len(argv) > 1:
         random.seed(argv[1])
-    createGroups()
-    createPupils()
-    createTeachers()
+    createPersons()
     createResources()
 
 if __name__ == '__main__':

@@ -25,8 +25,7 @@ for an executable script.
 The importer expects to find the following files in the current directory:
 
   groups.csv
-  pupils.csv
-  teachers.csv
+  persons.csv
   resources.csv
 
 There's a script called datagen.py (see generate-sampleschool.py at the project
@@ -60,39 +59,20 @@ Sample groups.cvs::
   "math1","Mathematics 1","math year1","subject_group"
 
 
-pupils.csv contains lines of comma-separated values with the following columns:
+persons.csv contains lines of comma-separated values with the following columns:
 
-  title    -- The full name of a pupil.
-  groups   -- A space-separated list of groups this pupil is a member in.
-  birthday -- Date of birth in ISO 8601 format (YYYY-MM-DD).
-  comment  -- A comment (a free form string).
-  blank    -- Leave a blank column.
+  id          -- unique id of person (optional)
+  surname     -- person's surname
+  given_name  -- person's given name
+  groups      -- A space-separated list of groups this person is a member of.
+  dob         -- Date of birth in ISO 8601 format (YYYY-MM-DD).
+  comment     -- a comment
 
-Pupils are implicitly added to the pupils group (/groups/pupils).
 
 Sample pupils.csv::
 
-  "James Cox","year1 math1 ling1","1994-03-10","",""
-  "Tom Hall","year1 biol1 math1","1994-07-20","",""
-
-
-teachers.csv contains lines of comma-separated values with the following
-columns:
-
-  title    -- The full name of a teacher.
-  groups   -- A space-separated list of groups this teacher is a member of.
-  birthday -- Date of birth in ISO 8601 format (YYYY-MM-DD).
-  comment  -- A comment (a free form string).
-  teaches  -- A space-separated list of groups (classes/sections)
-              this person teaches.
-
-
-Teachers are implicitly added to the teachers group (/groups/teachers).
-
-Sample teachers.csv::
-
-  "Nicola Smith","","1952-12-06","","ling3"
-  "Jeff Cox","griffindor","1967-06-13","","bio3"
+  "jcox","Cox","James","pupils year1 esl","1990-04-25","Splay footed."
+  "","Smith","Nicola","teachers bio","",""
 
 
 resources.csv contains lines of comma-separated values with the following
@@ -175,10 +155,8 @@ class CSVImporterHTTP(CSVImporterBase):
         try:
             self.blather(_("Creating groups... "))
             self.importGroupsCsv(self.fopen('groups.csv'))
-            self.blather(_("Creating teachers... "))
-            self.importPersonsCsv(self.fopen('teachers.csv'), 'teachers')
-            self.blather(_("Creating pupils... "))
-            self.importPersonsCsv(self.fopen('pupils.csv'), 'pupils')
+            self.blather(_("Creating people... "))
+            self.importPersonsCsv(self.fopen('persons.csv'))
             self.blather(_("Creating resources... "))
             self.importResourcesCsv(self.fopen('resources.csv'))
             self.blather(_("Import finished successfully"))
@@ -226,29 +204,22 @@ class CSVImporterHTTP(CSVImporterBase):
         for method, resource, body in result:
             self.process(method, resource, body=body)
 
-    def importPerson(self, title, parent, groups, teaches):
+    def importPerson(self, name, surname, given_name, groups):
+        
         """Import a person.
-
         Returns the name of the created person object.
-
-        parent is the parent group name (usually 'pupils' or 'teachers').
-
-        If teaching is True, then teaching relationships will be formed with
-        provided groups.
         """
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
-                ' title="%s"/>' % to_xml(title))
+                ' title="%s"/>' % to_xml(' '.join([given_name, surname])))
+        path = '/persons/%s' % (name)
         response = self.process('POST', '/persons', body=body)
         name = self.getName(response)
 
         result = []
-        result.append(self.membership(parent, "/persons/%s" % name))
+
 
         for group in groups.split():
             result.append(self.membership(group, "/persons/%s" % name))
-
-        for group in teaches.split():
-            result.append(self.teaching(group, "/persons/%s" % name))
 
         for method, resource, body in result:
             self.process(method, resource, body=body)
@@ -271,16 +242,15 @@ class CSVImporterHTTP(CSVImporterBase):
         for method, resource, body in result:
             self.process(method, resource, body=body)
 
-    def importPersonInfo(self, name, title, dob, comment):
+    def importPersonInfo(self, name, surname, given_name, dob, comment):
         """Add a person info facet to a person"""
-        first_name, last_name = title.split(None, 1)
         body = ('<person_info xmlns="http://schooltool.org/ns/model/0.1"'
                 ' xmlns:xlink="http://www.w3.org/1999/xlink">'
                 '<first_name>%s</first_name>'
                 '<last_name>%s</last_name>'
                 '<date_of_birth>%s</date_of_birth>'
                 '<comment>%s</comment>'
-                '</person_info>' % (to_xml(first_name), to_xml(last_name),
+                '</person_info>' % (to_xml(given_name), to_xml(surname),
                                     to_xml(dob), to_xml(comment)))
         self.process('PUT', '/persons/%s/facets/person_info' % name,
                      body=body)
