@@ -40,7 +40,7 @@ import base64
 import cgi
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, nameURI
-from schooltool.common import parse_datetime
+from schooltool.common import parse_datetime, parse_date
 
 __metaclass__ = type
 
@@ -253,6 +253,34 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         members = _parseMemberList(response.read())
         return GroupInfo(members)
+
+    def getPersonInfo(self, person_path):
+        """Return information about a person.
+
+        Returns a PersonInfo object.
+        """
+        response = self.get(person_path + '/facets/person_info')
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parsePersonInfo(response.read())
+
+    def savePersonInfo(self, person_path, person_info):
+        """Put a PersonInfo object to a person's person_info facet."""
+        path = person_path + '/facets/person_info'
+        body = ("""
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name>%s</first_name>
+              <last_name>%s</last_name>
+              <date_of_birth>%s</date_of_birth>
+              <comment>%s</comment>
+            </person_info>
+        """ % (person_info.first_name, person_info.last_name,
+               person_info.date_of_birth, person_info.comment))
+
+        response = self.put(path, body)
+        if response.status / 100 != 2:
+            raise ResponseStatusError(response)
 
     def getObjectRelationships(self, object_path):
         """Return relationships of an application object (group or person).
@@ -897,6 +925,41 @@ def _parseAvailabilityResults(body):
         doc.freeDoc()
         ctx.xpathFreeContext()
 
+def _parsePersonInfo(body):
+    """Parse the data provided by the person info facet"""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse person info")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        xmlns = "http://schooltool.org/ns/model/0.1"
+        ctx.xpathRegisterNs("m", xmlns)
+        try:
+            node = ctx.xpathEval("/m:person_info/m:first_name")[0]
+            first_name = node.content
+            node = ctx.xpathEval("/m:person_info/m:last_name")[0]
+            last_name = node.content
+            node = ctx.xpathEval("/m:person_info/m:date_of_birth")[0]
+            datestr = node.content
+            comment = ctx.xpathEval("/m:person_info/m:comment")[0].content
+        except IndexError:
+            raise SchoolToolError("Insufficient data in the person info")
+
+        dob = None
+        if datestr:
+            try:
+                dob = parse_date(datestr)
+            except ValueError, e:
+                raise SchoolToolError("Bad datetime: %r" % datestr)
+
+        return PersonInfo(first_name, last_name, dob, comment)
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
+
 
 #
 # Application object representation
@@ -905,6 +968,15 @@ def _parseAvailabilityResults(body):
 
 Unchanged = "Unchanged"
 
+class PersonInfo:
+    """An object containing the data for a person"""
+
+    def __init__(self, first_name=None, last_name=None,
+                 dob=None, comment=None):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = dob
+        self.comment = comment
 
 class GroupInfo:
     """Information about a group."""

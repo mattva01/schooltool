@@ -1455,7 +1455,7 @@ class IAuthenticator(Interface):
 
 
 class IPersonInfoFacet(IFacet):
-    """Some attributes fora person object"""
+    """Some attributes for a person object"""
 
     first_name = Attribute("First name")
     last_name = Attribute("Last name")

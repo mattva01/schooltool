@@ -42,7 +42,7 @@ from wxPython.lib.popupctl import wxPopupControl
 from wxPython.lib.scrolledpanel import wxScrolledPanel
 from wxPython.html import wxHtmlWindow
 from schooltool.clients.guiclient import SchoolToolClient, Unchanged
-from schooltool.clients.guiclient import RollCallEntry
+from schooltool.clients.guiclient import RollCallEntry, PersonInfo
 from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
@@ -256,6 +256,8 @@ class ServerSettingsDlg(wxDialog):
         self.__set_properties()
         self.__do_layout()
         # end wxGlade
+
+        self.CenterOnScreen(wx.wxBOTH)
 
         EVT_BUTTON(self, wxID_OK, self.OnOk)
 
@@ -1474,6 +1476,91 @@ class PasswordDlg(wxDialog):
             self.Close(True)
 
 
+class PersonInfoDlg(wxDialog):
+    """Person info dialog."""
+
+    def __init__(self, parent, client, person):
+        self.title = person.person_title
+        self.person_path = person.person_path
+        self.client = client
+        self.ok = False
+
+        try:
+            person_info = client.getPersonInfo(person.person_path)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get person information: %s" % e,
+                         self.title, wxICON_ERROR|wxOK)
+            return
+        else:
+            self.ok = True
+
+        wxDialog.__init__(self, parent, -1, self.title,
+                          style=NONMODAL_DLG_STYLE)
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+
+        # XXX insert photo here
+
+        grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
+        grid_sizer.AddGrowableCol(1)
+
+        self.first_name_ctrl = wxTextCtrl(self, -1, person_info.first_name)
+        grid_sizer.Add(wxStaticText(self, -1, "First Name"), 0,
+                       wxALIGN_CENTER_VERTICAL)
+        grid_sizer.Add(self.first_name_ctrl, 1, wxEXPAND)
+
+        self.last_name_ctrl = wxTextCtrl(self, -1, person_info.last_name)
+        grid_sizer.Add(wxStaticText(self, -1, "Last Name"), 0,
+                       wxALIGN_CENTER_VERTICAL)
+        grid_sizer.Add(self.last_name_ctrl, 1, wxEXPAND)
+
+        self.date_of_birth_ctrl = DateCtrl(self, -1)
+        if person_info.date_of_birth is not None:
+            date_of_birth = person_info.date_of_birth.strftime('%Y-%m-%d')
+            self.date_of_birth_ctrl.SetValue(date_of_birth)
+        grid_sizer.Add(wxStaticText(self, -1, "Date of Birth"), 0,
+                       wxALIGN_CENTER_VERTICAL)
+        grid_sizer.Add(self.date_of_birth_ctrl, 1, wxEXPAND)
+
+        self.comments_ctrl = wxTextCtrl(self, -1, person_info.comment,
+                                        style=wxTE_MULTILINE,
+                                        size=wxSize(200, 100))
+        grid_sizer.Add(wxStaticText(self, -1, "Comments"), 0,
+                       wxALIGN_TOP)
+        grid_sizer.Add(self.comments_ctrl, 1, wxEXPAND)
+
+        vsizer.Add(grid_sizer, 0, wxEXPAND|wxALL, 8)
+
+        vsizer.Add(wxStaticLine(self, -1), 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        ok_btn.SetDefault()
+        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxALIGN_CENTER|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
+
+    def OnOk(self, event=None):
+        person_info = PersonInfo(self.first_name_ctrl.GetValue(),
+                                 self.last_name_ctrl.GetValue(),
+                                 self.date_of_birth_ctrl.GetValue(),
+                                 self.comments_ctrl.GetValue())
+        try:
+            self.client.savePersonInfo(self.person_path, person_info)
+        except SchoolToolError, e:
+            wxMessageBox("Could not update person information: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+        else:
+            self.Close(True)
+
+
 #
 # Main application window
 #
@@ -1575,7 +1662,10 @@ class MainFrame(wxFrame):
         ID_PERSON_LIST = wxNewId()
         self.personListCtrl = wxListCtrl(panel2a, ID_PERSON_LIST,
                 style=wxSUNKEN_BORDER|wxLC_LIST|wxLC_SINGLE_SEL)
+        EVT_LIST_ITEM_ACTIVATED(self, ID_PERSON_LIST, self.DoViewPersonInfo)
         self.personPopupMenu = popupmenu(
+                item("View Person &Info",
+                     "View person's information", self.DoViewPersonInfo),
                 item("View &Absences", "View a list of person's absences",
                      self.DoViewPersonAbsences),
                 item("View &Timetables", "View a list of person's timetables",
@@ -2042,6 +2132,21 @@ class MainFrame(wxFrame):
         if dlg.ShowModal() == wxID_OK:
             self.SetStatusText(self.client.status)
         dlg.Destroy()
+
+    def DoViewPersonInfo(self, event=None):
+        """Open the person info dialog.
+
+        Accessible from person list popup menu.
+        """
+        item = self.personListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No person selected")
+            return
+        key = self.personListCtrl.GetItemData(item)
+        member = self.personListData[key]
+        dlg = PersonInfoDlg(parent=self, client=self.client, person=member)
+        if dlg.ok:
+            dlg.Show()
 
     def DoViewPersonAbsences(self, event=None):
         """Open the absences window for the currently selected person.

@@ -418,6 +418,47 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
 
+    def test_getPersonInfo(self):
+        from schooltool.clients.guiclient import PersonInfo
+        body = dedent("""
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name>Albertas</first_name>
+              <last_name>Agejevas</last_name>
+              <date_of_birth>1978-05-17</date_of_birth>
+              <comment>Programmer</comment>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/albert/facets/person_info/photo"/>
+            </person_info>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        person_path = '/persons/albert'
+        result = client.getPersonInfo(person_path)
+        self.assertEquals(result.first_name, 'Albertas')
+        self.assertEquals(result.last_name, 'Agejevas')
+        self.assertEquals(result.date_of_birth, datetime.date(1978, 5, 17))
+        self.assertEquals(result.comment, 'Programmer')
+
+    def test_getPersonInfo(self):
+        from schooltool.clients.guiclient import PersonInfo
+        body = dedent("""
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name>Albertas</first_name>
+              <last_name>Agejevas</last_name>
+              <date_of_birth>1978-05-17</date_of_birth>
+              <comment>Hacker</comment>
+            </person_info>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK'))
+        data = PersonInfo('Albertas', 'Agejevas', datetime.date(1978, 5, 17),
+                          'Hacker')
+        result = client.savePersonInfo('/persons/albert', data)
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.path, '/persons/albert/facets/person_info')
+        self.assertEquals(conn.method, "PUT")
+
     def test_getObjectRelationships(self):
         from schooltool.clients.guiclient import RelationshipInfo
         body = dedent("""
@@ -1542,6 +1583,71 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         """
         self.assertRaises(SchoolToolError, _parseAvailabilityResults, body)
 
+    def test__parsePersonInfo(self):
+        from schooltool.clients.guiclient import _parsePersonInfo
+        from schooltool.clients.guiclient import SchoolToolError
+        body = """
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name>John</first_name>
+              <last_name>Doe</last_name>
+              <date_of_birth>2001-01-01</date_of_birth>
+              <comment>Foo bar baz</comment>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/000033/facets/person_info/photo"/>
+            </person_info>
+        """
+        result = _parsePersonInfo(body)
+        self.assertEquals(result.first_name, 'John')
+        self.assertEquals(result.last_name, 'Doe')
+        self.assertEquals(result.date_of_birth, datetime.date(2001, 1, 1))
+        self.assertEquals(result.comment, 'Foo bar baz')
+
+        body = """
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name/>
+              <last_name/>
+              <date_of_birth/>
+              <comment/>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/000033/facets/person_info/photo"/>
+            </person_info>
+        """
+        result = _parsePersonInfo(body)
+        self.assertEquals(result.first_name, '')
+        self.assertEquals(result.last_name, '')
+        self.assertEquals(result.date_of_birth, None)
+        self.assertEquals(result.comment, '')
+
+    def test__parsePersonInfo_errors(self):
+        from schooltool.clients.guiclient import _parsePersonInfo
+        from schooltool.clients.guiclient import SchoolToolError
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, _parsePersonInfo, body)
+        body = """
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name></first_name>
+              <last_name></last_name>
+              <date_of_birth>baddate</date_of_birth>
+              <comment></comment>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/Aiste/facets/person_info/photo"/>
+            </person_info>
+        """
+        self.assertRaises(SchoolToolError, _parsePersonInfo, body)
+        body = """
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <last_name>asd</last_name>
+              <comment>asdfasdf</comment>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/Aiste/facets/person_info/photo"/>
+            </person_info>
+        """
+        self.assertRaises(SchoolToolError, _parsePersonInfo, body)
+
 
 class InfoClassTestMixin:
     """Mixin for testing classes that are tuple replacements."""
@@ -1549,6 +1655,7 @@ class InfoClassTestMixin:
     def _test_repr(self, cls, nargs):
         """Test the __repr__ method of a class."""
         obj = cls(*range(nargs))
+
         result = repr(obj)
         expected = "%s(%s)" % (cls.__name__, ', '.join(map(str, range(nargs))))
         self.assertEquals(result, expected)
