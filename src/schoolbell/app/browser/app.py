@@ -101,4 +101,3 @@ class PersonPhotoView(object):
             raise NotFound(self.context, u'photo', self.request)
         self.request.response.setHeader('Content-Type', "image/jpeg")
         return photo
-

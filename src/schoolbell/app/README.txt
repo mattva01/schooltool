@@ -23,6 +23,5 @@ This is an early development version of SchoolBell.  To get it running
       <include package="schoolbell.app" />
 
 6. Start z3.py
-7. Go to http://localhost:8080/@@manage, log in as 'gandalf' with password '123',
-   add a SchoolBell instance from the menu on the left.
-
+7. Go to http://localhost:8080/@@manage, log in as 'gandalf' with
+   password '123', add a SchoolBell instance from the menu on the left.

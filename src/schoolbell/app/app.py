@@ -40,8 +40,8 @@ from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 class SchoolBellApplication(Persistent, SampleContainer):
     """The main application object.
 
-    TODO: this object can be added as a regular content object to a folder, or
-    it can be used as the application root object.
+    This object can be added as a regular content object to a folder,
+    TODO: or it can be used as the application root object.
     """
 
     implements(ISchoolBellApplication)
@@ -112,10 +112,10 @@ def hash_password(password):
 
     To avoid problems with a multitude of 8-bit encodings, they are forbidden
 
-        >>> hash_password('\xFF')
+        >>> hash_password('\xFF') # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
-        UnicodeDecodeError: 'ascii' codec can't decode byte 0xff in position 0: ordinal not in range(128)
+        UnicodeDecodeError: 'ascii' codec can't decode byte 0xff in ...
 
     None means "no password set, account is locked":
 

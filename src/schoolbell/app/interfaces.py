@@ -163,6 +163,6 @@ class ISchoolBellApplication(IReadContainer):
         'groups' - IGroupContainer
         'resources' - IResourceContainer
 
-    TODO: this object can be added as a regular content object to a folder, or
-    it can be used as the application root object.
+    This object can be added as a regular content object to a folder, or
+    TODO: it can be used as the application root object.
     """
