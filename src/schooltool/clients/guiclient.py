@@ -1490,7 +1490,6 @@ class ResourceTimeSlot:
                self.available_for)
 
 
-
 class ApplicationLogPage:
     """A single page of the application log."""
 

@@ -142,6 +142,7 @@ class StdoutChecks:
         import pdb
         pdb.set_trace = self.old_pdb_set_trace
 
+
 class LibxmlChecks:
 
     def __init__(self):
