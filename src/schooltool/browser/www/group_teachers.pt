@@ -1,0 +1,57 @@
+<html metal:use-macro="view/macros/page">
+<head>
+  <title metal:fill-slot="title">
+    Edit <span tal:replace="context/title"/>
+  </title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1">
+    Teachers for <span tal:replace="context/title"/>
+  </h1>
+  <metal:block metal:fill-slot="content">
+
+  <div tal:define="status view/update"
+       tal:condition="status" tal:content="status" class="status"/>
+
+  <tal:block condition="not:request/args/ADD|nothing">
+  <form method="POST"
+        tal:attributes="action request/uri">
+  <table>
+    <tr>
+      <th>&nbsp;</th>
+      <th>Name</th>
+    </tr>
+
+    <tr tal:repeat="item view/teachersList">
+      <td><input
+              type="checkbox" name="CHECK"
+              tal:attributes="value python:item[1]">
+      </td>
+      <td><a tal:attributes="href python:item[2]"
+             tal:content="python:item[0]"/></td>
+    </tr>
+  </table>
+  <input type="submit" class="button" name="DELETE"
+         value="Remove selected teachers"/>
+  <input type="submit" class="button" name="ADD"
+         value="Add teachers"/>
+  </form>
+  </tal:block>
+
+  <tal:block condition="request/args/ADD|nothing">
+  <form method="POST"
+        tal:attributes="action request/uri">
+  <select name="teacher">
+    <option>Select...</option>
+    <option tal:repeat="obj view/allTeachers"
+            tal:attributes="value python:obj[1]"
+            tal:content="python:obj[0]"/>
+  </select>
+  <input type="submit" class="button" name="FINISH_ADD"
+         value="Add teacher"/>
+  </form>
+  </tal:block>
+
+  </metal:block>
+</body>
+</html>

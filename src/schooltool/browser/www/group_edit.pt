@@ -83,7 +83,6 @@
          value="Add selected"/>
   </form>
   </tal:block>
-
   </metal:block>
 </body>
 </html>

@@ -40,7 +40,8 @@ from schooltool.interfaces import IGroup
 from schooltool.membership import Membership
 from schooltool.rest.infofacets import maxspect
 from schooltool.translation import ugettext as _
-from schooltool.uris import URIMember, URIGroup
+from schooltool.uris import URIMember, URIGroup, URITeacher
+from schooltool.teaching import Teaching
 
 __metaclass__ = type
 
@@ -228,6 +229,8 @@ class GroupView(View, GetParentsMixin):
     def _traverse(self, name, request):
         if name == "edit.html":
             return GroupEditView(self.context)
+        if name == "teachers.html":
+            return GroupTeachersView(self.context)
         raise KeyError(name)
 
     def getOtherMembers(self, request):
@@ -304,6 +307,52 @@ class GroupEditView(View):
                 obj = traverse(self.context, path)
                 Membership(group=self.context, member=obj)
 
+
+class GroupTeachersView(View):
+
+    __used_for__ = IGroup
+
+    authorization = ManagerAccess
+
+    template = Template('www/group_teachers.pt')
+
+    def teachersList(self):
+        """Lists teachers of this group"""
+        result = [(obj.title, getPath(obj), absoluteURL(self.request, obj))
+                  for obj in getRelatedObjects(self.context, URITeacher)]
+        result.sort()
+        return result
+
+    def allTeachers(self):
+        """Lists all members of the Teachers group except current teachers.
+        """
+        result = []
+        request = self.request
+        current_teachers = getRelatedObjects(self.context, URITeacher)
+        teachers = traverse(self.context, '/groups/teachers')
+        for obj in getRelatedObjects(teachers, URIMember):
+            if obj not in current_teachers:
+                result.append((obj.title, getPath(obj),
+                               absoluteURL(request, obj)))
+        result.sort()
+        return result
+
+    def update(self):
+        request = self.request
+        if "DELETE" in request.args:
+            paths = []
+            if "CHECK" in request.args:
+                paths += request.args["CHECK"]
+            for link in self.context.listLinks(URITeacher):
+                if getPath(link.traverse()) in paths:
+                    link.unlink()
+        if "FINISH_ADD" in request.args:
+            paths = []
+            if "teacher" in request.args:
+                paths += request.args["teacher"]
+            for path in paths:
+                obj = traverse(self.context, path)
+                Teaching(taught=self.context, teacher=obj)
 
 class PhotoView(View):
     """View for displaying a person's photo (/persons/id/photo.jpg)."""
