@@ -126,10 +126,10 @@ class View(Resource):
 
     Subclasses could provide the following methods and attributes:
 
-        template    attribute that contains a Template instance for rendering
-        _traverse   method that should return a view for a contained object
-                    or raise a KeyError
-        do_XXX      methot that processes HTTP requests XXX for various values
+        template    Attribute that contains a Template instance for rendering.
+        _traverse   Method that should return a view for a contained object
+                    or raise a KeyError.
+        do_XXX      Method that processes HTTP requests XXX for various values
                     of XXX.  Its signature should match render.
 
     """
