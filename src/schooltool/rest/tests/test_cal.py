@@ -450,7 +450,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             DTSTART:20030903T120000
             DURATION:PT1H
             DTSTAMP:20040102T030405Z
-            CLASS:HIDDEN
+            CLASS:X-HIDDEN
             END:VEVENT
             END:VCALENDAR
         """)

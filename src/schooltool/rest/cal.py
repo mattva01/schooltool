@@ -252,11 +252,13 @@ class CalendarReadView(View):
             if event.recurrence is not None:
                 start = event.dtstart
                 result.extend(event.recurrence.iCalRepresentation(start))
+            privacy_map = {'private': 'PRIVATE', 'public' : 'PUBLIC',
+                           'hidden': 'X-HIDDEN'}
             result += [
                 "DTSTART:%s" % event.dtstart.strftime('%Y%m%dT%H%M%S'),
                 "DURATION:%s" % ical_duration(event.duration),
                 "DTSTAMP:%s" % dtstamp,
-                "CLASS:%s" % event.privacy.upper(),
+                "CLASS:%s" % privacy_map[event.privacy],
                 "END:VEVENT",
             ]
         if not events:
