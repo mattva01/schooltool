@@ -33,6 +33,7 @@ __metaclass__ = type
 
 
 class TargetStub:
+
     events = ()
 
     def notify(self, event):
@@ -98,6 +99,13 @@ class EventAStub:
 
     def dispatch(self, target):
         self.dispatched_to.append(target)
+
+
+class EventANotifyStub(EventAStub):
+
+    def dispatch(self, target):
+        self.dispatched_to.append(target)
+        target.notify("EventA")
 
 
 class EventActionStub:
@@ -315,18 +323,18 @@ class TestEventService(SchoolToolSetup):
         es.subscribe(target2, IEvent)
         es.subscribe(target2, IEventA)
 
-        # Register a handler in the Zope3 event system to check that events are
-        # propagated properly.
+        # Register a handler in the Zope3 event system to check that
+        # events are propagated properly.
         adapters = getService('Adapters')
-        log = []
-        def handler(event):
-            log.append(event)
-        adapters.subscribe([IEventA], None, handler)
+        adapters.subscribe([IEventA], None, target2.notify)
 
-        event = EventAStub()
+        event = EventANotifyStub()
+
         es.notify(event)
-        self.assertEquals(log, [event])
         self.assertEquals(event.dispatched_to, [target2, target2])
+        self.assertEquals(target2.events, ('EventA', 'EventA', event))
+        # The first two events were sent by EventService.notify, while the
+        # third one arrived through the Zope3 event system.
 
     def test_nonevents(self):
         from zope.interface import Interface, directlyProvides

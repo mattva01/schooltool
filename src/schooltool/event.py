@@ -178,8 +178,12 @@ class EventService(Persistent):
         return tuple(self._subscriptions)
 
     def notify(self, event):
-        '''See IEventTarget'''
-        zope.event.notify(event)
+        """Send the event to all subscribers and forward it to Zope3.
+
+        The event is sent out to the Zope3 event system after it has been
+        processed by all interested subscribers.
+        """
         for t, e in self._subscriptions:
             if e.providedBy(event):
                 event.dispatch(t)
+        zope.event.notify(event)
