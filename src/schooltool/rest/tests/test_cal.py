@@ -57,12 +57,16 @@ def reorder_vcal(body):
     events.sort()
     return head + marker.join(events) + tail
 
+manager_marker = object()
 
 class CalendarTestBase(AppSetupMixin, unittest.TestCase):
 
-    def do_test_get(self, expected, uri='http://localhost/calendar'):
+    def do_test_get(self, expected, uri='http://localhost/calendar',
+                    authenticated_user=manager_marker):
         """Bind self.view to a view before calling this."""
-        request = RequestStub(uri, authenticated_user=self.manager)
+        if authenticated_user is manager_marker:
+            authenticated_user = self.manager
+        request = RequestStub(uri, authenticated_user=authenticated_user)
         result = self.view.render(request)
         expected = "\r\n".join(expected.splitlines()) # normalize line endings
         result = reorder_vcal(result)
@@ -386,10 +390,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
         return CalendarReadView(context)
 
     def _create(self):
-        from schooltool.cal import ACLCalendar
-        context = ACLCalendar()
-        setPath(context, '/person/calendar')
-        context.__parent__.title = "A Person"
+        context = self.person.calendar
         self.view = self._newView(context)
         self.view.datetime_hook = DatetimeStub()
         return context
@@ -401,7 +402,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:placeholder-/person/calendar@localhost
+            UID:placeholder-/persons/johndoe/calendar@localhost
             SUMMARY:Empty calendar
             DTSTART;VALUE=DATE:20040102
             DTSTAMP:20040102T030405Z
@@ -409,7 +410,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             END:VCALENDAR
         """))
 
-    def test_get(self):
+    def test_get_owner(self):
         from schooltool.cal import CalendarEvent
         cal = self._create()
         cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
@@ -418,10 +419,61 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
         cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
                                    datetime.timedelta(minutes=60),
                                    "Long\nLunch", location="San Valentino",
-                                   unique_id="2003890074"))
+                                   unique_id="2003890074", privacy="private"))
         cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
                                    datetime.timedelta(minutes=60),
-                                   None, unique_id="999"))
+                                   None, unique_id="999", privacy="hidden"))
+        expected = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:-474248539
+            SUMMARY:Quick Lunch
+            DTSTART:20030902T154000
+            DURATION:PT20M
+            DTSTAMP:20040102T030405Z
+            CLASS:PUBLIC
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:2003890074
+            SUMMARY:Long\\nLunch
+            LOCATION:San Valentino
+            DTSTART:20030903T120000
+            DURATION:PT1H
+            DTSTAMP:20040102T030405Z
+            CLASS:PRIVATE
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:999
+            SUMMARY:
+            DTSTART:20030903T120000
+            DURATION:PT1H
+            DTSTAMP:20040102T030405Z
+            CLASS:HIDDEN
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        self.do_test_get(expected, authenticated_user=self.manager)
+        self.do_test_get(expected, authenticated_user=self.person)
+
+    def test_get_other(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import ViewPermission
+        cal = self._create()
+        cal.acl.add((self.person2, ViewPermission))
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                                   datetime.timedelta(minutes=20),
+                                   "Quick Lunch", unique_id="-474248539",
+                                   privacy="public"))
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
+                                   datetime.timedelta(minutes=60),
+                                   "Long\nLunch", location="San Valentino",
+                                   unique_id="2003890074",
+                                   privacy="private"))
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
+                                   datetime.timedelta(minutes=60),
+                                   None, unique_id="999", privacy="hidden"))
         self.do_test_get(dedent("""
             BEGIN:VCALENDAR
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
@@ -432,24 +484,18 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
+            CLASS:PUBLIC
             END:VEVENT
             BEGIN:VEVENT
             UID:2003890074
-            SUMMARY:Long\\nLunch
-            LOCATION:San Valentino
+            SUMMARY:Busy
             DTSTART:20030903T120000
             DURATION:PT1H
             DTSTAMP:20040102T030405Z
-            END:VEVENT
-            BEGIN:VEVENT
-            UID:999
-            SUMMARY:
-            DTSTART:20030903T120000
-            DURATION:PT1H
-            DTSTAMP:20040102T030405Z
+            CLASS:PRIVATE
             END:VEVENT
             END:VCALENDAR
-        """))
+        """), authenticated_user=self.person2)
 
     def test_get_recurrent_events(self):
         from schooltool.cal import CalendarEvent, DailyRecurrenceRule
@@ -470,6 +516,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
+            CLASS:PUBLIC
             END:VEVENT
             END:VCALENDAR
         """))
@@ -494,7 +541,8 @@ class TestCalendarView(TestCalendarReadView):
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
                           [(request.authenticated_user,
-                            'Calendar /person/calendar for A Person imported',
+                            'Calendar /persons/johndoe/calendar for'
+                            ' John Doe imported',
                             INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
@@ -509,7 +557,7 @@ class TestCalendarView(TestCalendarReadView):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:placeholder-/person/calendar@localhost
+            UID:placeholder-/persons/johndoe/calendar@localhost
             SUMMARY:Empty calendar
             DTSTART;VALUE=DATE:20040103
             DTSTAMP:20040103T030405Z
@@ -560,7 +608,8 @@ class TestCalendarView(TestCalendarReadView):
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
                           [(request.authenticated_user,
-                            'Calendar /person/calendar for A Person imported',
+                            'Calendar /persons/johndoe/calendar for'
+                            ' John Doe imported',
                             INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],

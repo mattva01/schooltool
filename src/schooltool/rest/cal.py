@@ -219,6 +219,12 @@ class CalendarReadView(View):
     datetime_hook = datetime.datetime
 
     def do_GET(self, request):
+        if (request.authenticated_user is self.context.__parent__ or
+            isManager(request.authenticated_user)):
+            owner = True
+        else:
+            owner = False
+
         dtstamp = self.datetime_hook.utcnow().strftime("%Y%m%dT%H%M%SZ")
         result = [
             "BEGIN:VCALENDAR",
@@ -228,12 +234,21 @@ class CalendarReadView(View):
         events = list(self.context)
         events.sort()
         for event in events:
+            if event.privacy == 'hidden' and not owner:
+                continue
+            if event.privacy == 'private' and not owner:
+                title = _('Busy')
+                location = None
+            else:
+                title = event.title or ""
+                location = event.location
+
             result += [
                 "BEGIN:VEVENT",
                 "UID:%s" % ical_text(event.unique_id),
-                "SUMMARY:%s" % ical_text(event.title or "")]
-            if event.location is not None:
-                result.append("LOCATION:%s" % ical_text(event.location))
+                "SUMMARY:%s" % ical_text(title)]
+            if location is not None:
+                result.append("LOCATION:%s" % ical_text(location))
             if event.recurrence is not None:
                 start = event.dtstart
                 result.extend(event.recurrence.iCalRepresentation(start))
@@ -241,6 +256,7 @@ class CalendarReadView(View):
                 "DTSTART:%s" % event.dtstart.strftime('%Y%m%dT%H%M%S'),
                 "DURATION:%s" % ical_duration(event.duration),
                 "DTSTAMP:%s" % dtstamp,
+                "CLASS:%s" % event.privacy.upper(),
                 "END:VEVENT",
             ]
         if not events:
