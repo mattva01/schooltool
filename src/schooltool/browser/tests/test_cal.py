@@ -919,7 +919,53 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
         self.assert_('Invalid value' in content)
 
 
-class TestEventEditView(AppSetupMixin, unittest.TestCase):
+class EventTimetableTestHelpers:
+
+    def createTTCal(self, person, events):
+        ttcal = createCalendar()
+        person.makeCalendar = lambda: ttcal
+        for event in events:
+            ttcal.addEvent(event)
+        return ttcal
+
+    def createTimetableEvent(self):
+        from schooltool.timetable import TimetableCalendarEvent
+        period = "P1"
+        tt = TimetableStub()
+        act = TimetableActivityStub()
+        act.timetable = tt
+        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                    timedelta(hours=1), "Math",
+                                    unique_id="uniq",
+                                    period_id=period,
+                                    activity=act)
+        return ev
+
+    def createDummyEvent(self, unique_id):
+        from schooltool.timetable import TimetableCalendarEvent
+        return TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                      timedelta(minutes=1), "A",
+                                      period_id="foo", activity=object())
+
+    def initTTCalendar(self, obj):
+        """Add some dummies and a TT event to an application object's calendar.
+
+        The event is created by calling self.createTimetableEvent()
+
+        Adds events to the object's calendar and to its timetable.
+        Returns the timetable calendar of the object.
+        """
+        obj.addEvent(self.createDummyEvent("a"))
+        obj.addEvent(self.createDummyEvent("b"))
+        ttcal = self.createTTCal(obj.__parent__,
+                                 [self.createDummyEvent('c'),
+                                  self.createTimetableEvent(),
+                                  self.createDummyEvent('d')])
+        return ttcal
+
+
+class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
+                        unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
@@ -986,8 +1032,54 @@ class TestEventEditView(AppSetupMixin, unittest.TestCase):
                           'http://localhost:7001/persons/johndoe/calendar/'
                           'daily.html?date=2004-08-16')
 
+    def test_render_tt_event(self):
+        view = self.createView()
+        ttcal = self.initTTCalendar(view.context)
 
-class TestEventDeleteView(unittest.TestCase):
+        request = RequestStub(args={'event_id': "uniq"})
+        content = view.render(request)
+
+        self.assert_('timetable event' in content)
+        self.assert_('2004-08-12' in content)
+        self.assert_('12:00' in content)
+        self.assert_('Math' in content)
+
+    def test_change_tt_event(self):
+        view = self.createView()
+        ttcal = self.initTTCalendar(view.context)
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'title': 'Changed',
+                                    'location': 'Inbetween',
+                                    'start_date': '2004-08-16',
+                                    'start_time': '13:30',
+                                    'duration': '70'},
+                              method='POST')
+        content = view.render(request)
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/johndoe/calendar/'
+                          'daily.html?date=2004-08-16')
+
+        event = ttcal.find('uniq')
+        exceptions = event.activity.timetable.exceptions
+        self.assertEquals(len(exceptions), 1)
+
+        exc = exceptions[0]
+        self.assertEquals(exc.date, date(2004, 8, 12))
+        self.assertEquals(exc.period_id, "P1")
+        self.assert_(exc.activity is event.activity)
+
+        self.assertEquals(exc.replacement.title, 'Changed')
+        self.assertEquals(exc.replacement.location, 'Inbetween')
+        self.assertEquals(exc.replacement.dtstart,
+                          datetime(2004, 8, 16, 13, 30))
+        self.assertEquals(exc.replacement.duration, timedelta(minutes=70))
+        self.assertEquals(exc.replacement.unique_id, event.unique_id)
+
+
+class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
 
     def createView(self):
         from schooltool.model import Person
@@ -1001,26 +1093,6 @@ class TestEventDeleteView(unittest.TestCase):
         view = EventDeleteView(cal)
         view.authorization = lambda x, y: True
         return view
-
-    def createTTCal(self, person, events):
-        ttcal = createCalendar()
-        person.makeCalendar = lambda: ttcal
-        for event in events:
-            ttcal.addEvent(event)
-        return ttcal
-
-    def createTimetableEvent(self):
-        from schooltool.timetable import TimetableCalendarEvent
-        period = "P1"
-        tt = TimetableStub()
-        act = TimetableActivityStub()
-        act.timetable = tt
-        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                    timedelta(hours=1), "Math",
-                                    unique_id="uniq",
-                                    period_id=period,
-                                    activity=act)
-        return ev
 
     def test(self):
         from schooltool.cal import CalendarEvent
@@ -1055,27 +1127,8 @@ class TestEventDeleteView(unittest.TestCase):
                           'daily.html')
 
     def test_tt_event(self):
-        from schooltool.cal import Calendar, CalendarEvent
-        from schooltool.timetable import TimetableCalendarEvent
-        period = "Math"
-        act = object()
-
-        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
-                                    timedelta(hours=1), "Math",
-                                    unique_id="uniq",
-                                    period_id=period,
-                                    activity=act)
         view = self.createView()
-        # some decoys
-        td1 = timedelta(1)
-        dummy1 = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0), td1, "A",
-                                        period_id="foo", activity=object())
-        dummy2 = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0), td1, "B",
-                                        period_id="bar", activity=object())
-        view.context.addEvent(dummy1)
-        view.context.addEvent(dummy2)
-
-        ttcal = self.createTTCal(view.context.__parent__, [dummy1, ev, dummy2])
+        ttcal = self.initTTCalendar(view.context)
 
         request = RequestStub(args={'event_id': "uniq"})
         content = view.render(request)
@@ -1087,21 +1140,10 @@ class TestEventDeleteView(unittest.TestCase):
         self.assert_("uniq" in content)
 
     def test_tt_event_confirm(self):
-        from schooltool.cal import Calendar, CalendarEvent
-        from schooltool.timetable import TimetableCalendarEvent
-
-        td1 = timedelta(1)
-        dummy1 = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0), td1, "A",
-                                        period_id="foo", activity=object())
-        dummy2 = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0), td1, "B",
-                                        period_id="bar", activity=object())
-
-        ev = self.createTimetableEvent()
-        tt = ev.activity.timetable
         view = self.createView()
-        view.context.addEvent(dummy1)
-        view.context.addEvent(dummy2)
-        ttcal = self.createTTCal(view.context.__parent__, [dummy1, ev, dummy2])
+        ttcal = self.initTTCalendar(view.context)
+        event = ttcal.find('uniq')
+        tt = event.activity.timetable
 
         request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm'})
         content = view.render(request)
@@ -1112,8 +1154,8 @@ class TestEventDeleteView(unittest.TestCase):
         exc = tt.exceptions[0]
         self.assertEquals(exc.date, date(2004, 8, 12))
         self.assertEquals(exc.period_id, "P1")
-        self.assertEquals(exc.activity, ev.activity)
-        self.assertEquals(exc.replacement, None)
+        self.assert_(exc.activity is event.activity)
+        self.assert_(exc.replacement is None)
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -1197,7 +1239,7 @@ class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
 
 class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
 
-    def test(self):
+    def test_render(self):
         from schooltool.cal import CalendarEvent
         from schooltool.browser.cal import CalendarEventView
         ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
@@ -1214,9 +1256,9 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
               <div class="dellink">
                 <a href="delete_event.html?event_id=id%21">[delete]</a>
               </div>
-                <h3>
-                  <a href="edit_event.html?event_id=id%21">Main event</a>
-                </h3>
+              <h3>
+                <a href="edit_event.html?event_id=id%21">Main event</a>
+              </h3>
               12:01&ndash;13:01
             </div>
             """)
@@ -1224,32 +1266,6 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
                           "\n" + diff(content, expected))
 
         self.assertEquals(view.cssClass(), 'event')
-
-    def test_tt_event(self):
-        from schooltool.browser.cal import CalendarEventView
-        from schooltool.timetable import TimetableCalendarEvent
-        ev = TimetableCalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event",
-                           unique_id="id", period_id=None, activity=None)
-        view = CalendarEventView(ev)
-        request = RequestStub()
-
-        content = view.render(request)
-        # eat trailing whitespace and empty lines
-        content = re.sub(r'\s+\n', '\n', content)
-        expected = dedent("""
-                     <div class="calevent">
-                       <div class="dellink">
-                         <a href="delete_event.html?event_id=id">[delete]</a>
-                       </div>
-                       <h3>Main event</h3>
-                       12:01&ndash;13:01
-                     </div>
-                    """)
-        self.assertEquals(content, expected,
-                          "\n" + diff(content, expected))
-
-        self.assertEquals(view.cssClass(), 'tt_event')
 
     def test_location(self):
         from schooltool.cal import CalendarEvent

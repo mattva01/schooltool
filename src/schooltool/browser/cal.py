@@ -690,7 +690,56 @@ class CalendarView(View):
         return self.redirect(url, request)
 
 
-class EventViewBase(View, CalendarBreadcrumbsMixin):
+class EventViewHelpers:
+    """Helpers for the event views."""
+
+    def _findOrdinaryEvent(self, event_id):
+        """Return the event with the given ID from the ordinary calendar.
+
+        Returns None if there is no event with the given ID in the calendar.
+        """
+        try:
+            return self.context.find(event_id)
+        except KeyError:
+            return None
+
+    def _findTimetableEvent(self, event_id):
+        """Return the event with the given ID from the timetable calendar.
+
+        Returns None if there is no event with the given ID in the calendar.
+        """
+        appobject = self.context.__parent__
+        try:
+            return appobject.makeCalendar().find(event_id)
+        except KeyError:
+            return None
+
+    def _showConfirmationForm(self, event):
+        """Render the notification/confirmation form for a timetable event."""
+        self.event = event
+        return View.do_GET(self, self.request)
+
+    def _addTimetableException(self, event, replacement):
+        """Add a timetable exception replaces or removes this event."""
+        exception = TimetableException(event.dtstart.date(),
+                                       event.period_id,
+                                       event.activity, replacement)
+        tt = event.activity.timetable
+        tt.exceptions.append(exception)
+        # TODO: add the same exception to the timetables of
+        #       all resources that are booked by this activity
+
+    def _redirectToDailyView(self, date=None):
+        """Redirect to the daily calendar view for a given date (or today)."""
+        if date is not None:
+            suffix = 'daily.html?date=%s' % date.strftime('%Y-%m-%d')
+        else:
+            suffix = 'daily.html'
+        url = absoluteURL(self.request, self.context, suffix)
+        return self.redirect(url, self.request)
+
+
+class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     """A base class for event adding and editing views."""
 
     __used_for__ = ICalendar
@@ -699,6 +748,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
 
     template = Template('www/event.pt')
     page_title = None # overridden by subclasses
+    tt_event = False
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -761,9 +811,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
 
         self.process(start, duration, self.title_widget.value, location)
 
-        suffix = 'daily.html?date=%s' % start.date()
-        url = absoluteURL(request, self.context, suffix)
-        return self.redirect(url, request)
+        return self._redirectToDailyView(date=start.date())
 
     def process(self, dtstart, duration, title, location):
         raise NotImplementedError("override this method in subclasses")
@@ -798,38 +846,45 @@ class EventEditView(EventViewBase):
     page_title = _("Edit event")
 
     def update(self):
-        try:
-            self.event_id = to_unicode(self.request.args['event_id'][0])
-            self.event = self.context.find(self.event_id)
-        except (KeyError, UnicodeError):
+        self.event_id = to_unicode(self.request.args['event_id'][0])
+
+        event = self._findOrdinaryEvent(self.event_id)
+        if event is None:
+            event = self._findTimetableEvent(self.event_id)
+            self.tt_event = (event is not None)
+        if event is None:
             # Pehaps it would be better to create a traversal view for events
             # and refactor the event edit view to take the event as context,
             # then we would be able to simply display a standard 404 page.
             self.error = _("This event does not exist.")
             return
 
-        self.title_widget.setValue(self.event.title)
-        self.date_widget.setValue(self.event.dtstart.date())
-        self.time_widget.setValue(self.event.dtstart.time())
-        self.duration_widget.setValue(self.event.duration.seconds // 60)
-        if self.event.location in self.locations:
-            self.location_widget.setValue(self.event.location)
+        self.title_widget.setValue(event.title)
+        self.date_widget.setValue(event.dtstart.date())
+        self.time_widget.setValue(event.dtstart.time())
+        self.duration_widget.setValue(event.duration.seconds // 60)
+        if event.location in self.locations:
+            self.location_widget.setValue(event.location)
             self.other_location_widget.setValue('')
         else:
             self.location_widget.setValue('')
-            self.other_location_widget.setValue(self.event.location)
+            self.other_location_widget.setValue(event.location)
+        self.event = event
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
         uid = self.event.unique_id
-        self.context.removeEvent(self.event)
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
                            location=location, unique_id=uid)
-        self.context.addEvent(ev)
+        if self.tt_event:
+            self._addTimetableException(self.event, replacement=ev)
+        else:
+            self.context.removeEvent(self.event)
+            self.context.addEvent(ev)
 
 
-class EventDeleteView(View):
+class EventDeleteView(View, EventViewHelpers):
     """A view for deleting events.
 
     This view is used to either delete ordinary calendar events or add
@@ -843,6 +898,9 @@ class EventDeleteView(View):
     authorization = ACLModifyAccess
 
     event = None # The event to be removed.  Set before rendering the template.
+
+    def __init__(self, context):
+        View.__init__(self, context)
 
     def do_GET(self, request):
         event_id = to_unicode(request.args['event_id'][0])
@@ -858,60 +916,15 @@ class EventDeleteView(View):
         event = self._findTimetableEvent(event_id)
         if event is not None:
             if 'CONFIRM' in request.args:
-                self._addTimetableException(event)
+                self._addTimetableException(event, replacement=None)
             elif 'CANCEL' not in request.args:
                 return self._showConfirmationForm(event)
             return self._redirectToDailyView(event.dtstart)
         # TODO: Handle the case when the event has been created by a
         #       replacing exception.
 
-        # Danglign event ID
+        # Dangling event ID
         return self._redirectToDailyView()
-
-    def _findOrdinaryEvent(self, event_id):
-        """Return the event with the given ID from the ordinary calendar.
-
-        Returns None if there is no event with the given ID in the calendar.
-        """
-        try:
-            return self.context.find(event_id)
-        except KeyError:
-            return None
-
-    def _findTimetableEvent(self, event_id):
-        """Return the event with the given ID from the timetable calendar.
-
-        Returns None if there is no event with the given ID in the calendar.
-        """
-        appobject = self.context.__parent__
-        try:
-            return appobject.makeCalendar().find(event_id)
-        except KeyError:
-            return None
-
-    def _showConfirmationForm(self, event):
-        """Render the notification/confirmation form for a timetable event."""
-        self.event = event
-        return View.do_GET(self, self.request)
-
-    def _addTimetableException(self, event):
-        """Add a timetable exception that removes this event."""
-        exception = TimetableException(event.dtstart.date(),
-                                       event.period_id,
-                                       event.activity, None)
-        tt = event.activity.timetable
-        tt.exceptions.append(exception)
-        # TODO: add the same exception to the timetables of
-        #       all resources that are booked by this activity
-
-    def _redirectToDailyView(self, date=None):
-        """Redirect to the daily calendar view for a given date (or today)."""
-        if date is not None:
-            suffix = 'daily.html?date=%s' % date.strftime('%Y-%m-%d')
-        else:
-            suffix = 'daily.html'
-        url = absoluteURL(self.request, self.context, suffix)
-        return self.redirect(url, self.request)
 
 
 class CalendarComboMixin(View):
