@@ -80,7 +80,7 @@ install-indep-stamp:
 	# arch-indep files which can go into /usr/share
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt' -o\
+	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
 		-name '*.xpm' -o -name '*.css' \) \
 		-not $(archdep) \
@@ -90,7 +90,7 @@ install-indep-stamp:
 	# arch-indep files into /usr/lib becuse their modules depend on a .so
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o\
+	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
 		-name '*.xpm' -o -name '*.css' \) \
 		$(archdep)\
