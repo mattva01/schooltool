@@ -1,0 +1,6 @@
+<facet
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  tal:attributes="active view/active; owned view/owned">
+  <class tal:content="context/__class__/__name__"></class>
+  <name tal:content="context/__name__"></name>
+</facet>

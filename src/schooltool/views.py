@@ -27,12 +27,12 @@ from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IUtilityService, IUtility
+from schooltool.interfaces import IUtilityService, IUtility, IFacet
 from schooltool.interfaces import ComponentLookupError
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
 from schooltool.component import FacetManager
-from schooltool.debug import IEventLog, IEventLogUtility
+from schooltool.debug import IEventLog, IEventLogUtility, IEventLogFacet
 
 __metaclass__ = type
 
@@ -276,6 +276,35 @@ class UtilityView(View):
     template = Template('www/utility.pt', content_type="text/xml")
 
 
+class FacetView(View):
+    """View for facets in general.
+
+    Specific facets should provide more informative views.
+    """
+
+    template = Template('www/facet.pt', content_type="text/xml")
+
+    def active(self):
+        if self.context.active:
+            return "active"
+        else:
+            return "inactive"
+
+    def owned(self):
+        if self.context.owner is not None:
+            return "owned"
+        else:
+            return "unowned"
+
+    def do_DELETE(self, request):
+        if self.context.owner is not None:
+            return errorPage(request, 400,
+                             "Owned facets may not be deleted manually")
+        FacetManager(self.context.__parent__).removeFacet(self.context)
+        request.setHeader('Content-Type', 'text/plain')
+        return "Facet removed"
+
+
 class EventLogView(View):
     """View for EventLogFacet."""
 
@@ -295,10 +324,15 @@ class EventLogView(View):
                                            " is defined for event logs")
         n = len(self.context.received)
         self.context.clear()
+        request.setHeader('Content-Type', 'text/plain')
         if n == 1:
             return "1 event cleared"
         else:
             return "%d events cleared" % n
+
+
+class EventLogFacetView(EventLogView, FacetView):
+    """A view for IEventLogFacet."""
 
 
 class FacetManagementView(View):
@@ -310,7 +344,10 @@ class FacetManagementView(View):
         return getView(self.context.facetByName(name))
 
     def listFacets(self):
-        return [{'active': {False: None, True: 'active'}[bool(facet.active)],
+        activness = {False: 'inactive', True: 'active'}
+        ownedness = {False: 'unowned', True: 'owned'}
+        return [{'active': activness[bool(facet.active)],
+                 'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
                  'class_name': facet.__class__.__name__,
                  'path': facet.__name__}
@@ -393,3 +430,6 @@ def setUp():
     registerView(IUtility, UtilityView)
     registerView(IEventLog, EventLogView)
     registerView(IEventLogUtility, EventLogView)
+    registerView(IEventLogFacet, EventLogFacetView)
+    registerView(IFacet, FacetView)
+

@@ -24,11 +24,12 @@ $Id$
 
 import unittest
 import datetime
+import sets
 from zope.interface import Interface, implements
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.interfaces import IUtility
+from schooltool.interfaces import IUtility, IFacet
 
 __metaclass__ = type
 
@@ -67,6 +68,16 @@ class Utility:
 
     def __init__(self, title):
         self.title = title
+
+
+class FacetStub:
+    implements(IFacet)
+
+    def __init__(self, name=None, active=True, parent=None, owner=None):
+        self.__name__ = name
+        self.__parent__ = parent
+        self.active = active
+        self.owner = owner
 
 
 class TestTemplate(unittest.TestCase):
@@ -261,7 +272,6 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
-        request.method = "GET"
         request.path = '/group'
         result = self.view.render(request)
         expected = dedent("""
@@ -308,7 +318,6 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
     def test_render(self):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
-        request.method = "GET"
         request.path = getPath(self.per)
         result = self.view.render(request)
         segments = dedent("""
@@ -358,7 +367,6 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         from schooltool.interfaces import IFacetManager
 
         request = RequestStub("http://localhost/people/p")
-        request.method = "GET"
         result = self.view._traverse('relationships', request)
         self.assert_(isinstance(result, RelationshipsView))
 
@@ -396,7 +404,6 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_render(self):
         request = RequestStub("http://localhost/")
-        request.method = "GET"
         result = self.view.render(request)
 
         expected = dedent("""\
@@ -413,13 +420,12 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
             </schooltool>
             """)
 
-        self.assertEquals(result, expected, "\n" + diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test__traverse(self):
         from schooltool.views import ApplicationObjectContainerView
         from schooltool.views import UtilityServiceView
         request = RequestStub("http://localhost/groups")
-        request.method = "GET"
         view = self.view._traverse('groups', request)
         self.assert_(view.__class__ is ApplicationObjectContainerView)
         self.assertRaises(KeyError, view._traverse, 'froups', request)
@@ -453,7 +459,6 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_render(self):
         request = RequestStub("http://localhost/groups")
-        request.method = "GET"
         result = self.view.render(request)
 
         expected = dedent("""\
@@ -466,12 +471,11 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
             </container>
             """)
 
-        self.assertEquals(result, expected, "\n" + diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test__traverse(self):
         from schooltool.views import GroupView
         request = RequestStub("http://localhost/groups/root")
-        request.method = "GET"
         view = self.view._traverse('root', request)
         self.assert_(view.__class__ is GroupView)
         self.assertRaises(KeyError, view._traverse, 'moot', request)
@@ -496,7 +500,6 @@ class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_render(self):
         request = RequestStub("http://localhost/groups")
-        request.method = "GET"
         result = self.view.render(request)
 
         expected = dedent("""\
@@ -509,12 +512,11 @@ class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
             </container>
             """)
 
-        self.assertEquals(result, expected, diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test__traverse(self):
         from schooltool.views import UtilityView
         request = RequestStub("http://localhost/utils/foo")
-        request.method = "GET"
         view = self.view._traverse('foo', request)
         self.assert_(view.__class__ is UtilityView)
         self.assertRaises(KeyError, view._traverse, 'moot', request)
@@ -533,13 +535,10 @@ class TestUtilityView(RegistriesSetupMixin, unittest.TestCase):
         self.view = UtilityView(self.app.utilityService['foo'])
 
     def tearDown(self):
-        from schooltool.component import resetViewRegistry
-        resetViewRegistry()
-        RegistriesSetupMixin.tearDown(self)
+        self.tearDownRegistries()
 
     def test_render(self):
         request = RequestStub("http://localhost/groups")
-        request.method = "GET"
         result = self.view.render(request)
 
         expected = dedent("""\
@@ -548,7 +547,68 @@ class TestUtilityView(RegistriesSetupMixin, unittest.TestCase):
             </utility>
             """)
 
-        self.assertEquals(result, expected, diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+
+class TestFacetView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import FacetView
+        from schooltool import views
+        self.setUpRegistries()
+        views.setUp()
+        self.facet = FacetStub(name="001")
+        self.view = FacetView(self.facet)
+
+    def tearDown(self):
+        self.tearDownRegistries()
+
+    def test_render(self):
+        request = RequestStub("http://localhost/some/object/facets/001")
+        result = self.view.render(request)
+        expected = dedent("""
+            <facet active="active" owned="unowned">
+              <class>FacetStub</class>
+              <name>001</name>
+            </facet>
+            """)
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+        self.facet.active = False
+        self.facet.owner = object()
+        result = self.view.render(request)
+        expected = dedent("""\
+            <facet active="inactive" owned="owned">
+              <class>FacetStub</class>
+              <name>001</name>
+            </facet>
+            """)
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+    def test_delete_owned(self):
+        request = RequestStub("http://localhost/some/object/facets/001",
+                              method="DELETE")
+        self.facet.owner = object()
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason,
+                          "Owned facets may not be deleted manually")
+
+    def test_delete_unowned(self):
+        from schooltool.interfaces import IFaceted
+
+        class FacetedStub:
+            implements(IFaceted)
+
+            def __init__(self, initial=[]):
+                self.__facets__ = sets.Set(initial)
+
+        self.facet.__parent__ = FacetedStub([self.facet])
+        request = RequestStub("http://localhost/some/object/facets/001",
+                              method="DELETE")
+        result = self.view.render(request)
+        expected = "Facet removed"
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
 
 class TestEventLogView(unittest.TestCase):
@@ -567,7 +627,7 @@ class TestEventLogView(unittest.TestCase):
             <eventLog>
             </eventLog>
         """)
-        self.assertEquals(result, expected, "\n" + diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test_nonempty(self):
         from schooltool.views import EventLogView
@@ -592,7 +652,7 @@ class TestEventLogView(unittest.TestCase):
               <event ts="2003-10-01 11:12:13">Fake event</event>
             </eventLog>
         """)
-        self.assertEquals(result, expected, "\n" + diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test_clear(self):
         from schooltool.views import EventLogView
@@ -612,11 +672,11 @@ class TestEventLogView(unittest.TestCase):
         request = RequestStub("http://localhost/foo/eventlog", "PUT")
         result = view.render(request)
         expected = "1 event cleared"
-        self.assertEquals(result, expected, "\n" + diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
         result = view.render(request)
         expected = "0 events cleared"
-        self.assertEquals(result, expected, "\n" + diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
         request = RequestStub("http://localhost/foo/eventlog", "PUT")
         request.content.write("something")
@@ -654,7 +714,6 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
     def test_listLinks(self):
         from pprint import pformat
         request = RequestStub("http://localhost/groups/sub/relationships/")
-        request.method = "GET"
         result = self.view.listLinks()
         self.assertEquals(len(result), 2)
         self.assert_({'path': '/persons/p',
@@ -670,7 +729,6 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_getValencies(self):
         request = RequestStub("http://localhost/groups/sub/relationships/")
-        request.method = "GET"
         result = self.view.getValencies()
         self.assertEquals(result,
                           [{'type':'http://schooltool.org/ns/membership',
@@ -699,9 +757,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(KeyError, extr, text, 'shmoo')
 
     def testGET(self):
-        # from schooltool.component import getPath
         request = RequestStub("http://localhost/groups/sub/relationships/")
-        request.method = "GET"
         result = self.view.render(request)
         self.assert_('<valencies>' in result)
         self.assert_('<existing>' in result)
@@ -843,12 +899,13 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         expected = dedent("""
             <facets xmlns:xlink="http://www.w3.org/1999/xlink">
             ---8<---
-              <facet xlink:type="simple" xlink:title="001"
-                     class="EventLogFacet" xlink:href="001"/>
+              <facet xlink:type="simple" active="inactive"
+                     xlink:title="001" class="EventLogFacet"
+                     owned="unowned" xlink:href="001"/>
             ---8<---
               <facet xlink:type="simple" active="active"
                      xlink:title="002" class="EventLogFacet"
-                     xlink:href="002"/>
+                     owned="owned" xlink:href="002"/>
             ---8<---
             </facets>
             """)
@@ -871,6 +928,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
     suite.addTest(unittest.makeSuite(TestUtilityServiceView))
     suite.addTest(unittest.makeSuite(TestUtilityView))
+    suite.addTest(unittest.makeSuite(TestFacetView))
     suite.addTest(unittest.makeSuite(TestEventLogView))
     suite.addTest(unittest.makeSuite(TestFacetManagementView))
     suite.addTest(unittest.makeSuite(TestRelationshipsView))
