@@ -36,6 +36,67 @@ from schooltool.interfaces import ITraversable
 __metaclass__ = type
 
 
+class Libxml2ErrorLogger:
+
+    def __init__(self):
+        self.log = []
+
+    def __call__(self, ctx, error):
+        self.log.append(error)
+
+
+class XpathTestContext:
+    """xpath context for use in tests that check rendered xml.
+
+    You must call the free() method at the end of the test.
+
+    XXX add option for validating result against a schema
+    """
+
+    namespaces = {'xlink':'http://www.w3.org/1999/xlink'}
+
+    def __init__(self, test, result):
+        import libxml2  # import here so we only import if we need it
+        self.errorlogger = Libxml2ErrorLogger()
+        libxml2.registerErrorHandler(self.errorlogger, None)
+        self.test = test
+        self.doc = libxml2.parseDoc(result)
+        self.context = self.doc.xpathNewContext()
+        for nsname, ns in self.namespaces.iteritems():
+            self.context.xpathRegisterNs(nsname, ns)
+
+    def oneNode(self, expression):
+        nodes = self.context.xpathEval(expression)
+        self.test.assertEquals(len(nodes), 1)
+        return nodes[0]
+
+    def assertNumNodes(self, num, expression):
+        nodes = self.context.xpathEval(expression)
+        self.test.assertEquals(num, len(nodes))
+
+    def assertAttrEquals(self, node, name, value):
+        name_parts = name.split(':')
+        if len(name_parts) > 2:
+            raise ValueError('max one colon in attribute name', name)
+        elif len(name_parts) == 1:
+            localname = name_parts[0]
+            ns = None
+        else:
+            nsname, localname = name_parts
+            ns = self.namespaces[nsname]
+        self.test.assertEquals(node.nsProp(localname, ns), value)
+
+    def query(self, expression):
+        return self.context.xpathEval(expression)
+
+    def free(self):
+        self.doc.freeDoc()
+        self.context.xpathFreeContext()
+
+    def assertNoErrors(self):
+        self.test.assertEquals(self.errorlogger.log, [])
+
+
 class I1(Interface):
     pass
 
@@ -387,7 +448,8 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(isinstance(result, RollcallView))
         self.assert_(result.context is self.group)
 
-        self.assertRaises(KeyError, self.view._traverse, "otherthings", request)
+        self.assertRaises(KeyError, self.view._traverse, "otherthings",
+                          request)
 
 
 class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
@@ -493,6 +555,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
 
 
+
 class TestAppView(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
@@ -517,6 +580,29 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import resetViewRegistry
         resetViewRegistry()
         RegistriesSetupMixin.tearDown(self)
+
+    def test_render_Usingxpath(self):
+        request = RequestStub("http://localhost/")
+        result = self.view.render(request)
+
+        context = XpathTestContext(self, result)
+        try:
+            res = context.query("/schooltool/containers/container")
+            containers = context.oneNode('/schooltool/containers')
+            context.assertNumNodes(2, '/schooltool/containers/container')
+            persons = context.oneNode(
+                '/schooltool/containers/container[@xlink:href="/persons"]')
+            groups = context.oneNode(
+                '/schooltool/containers/container[@xlink:href="/groups"]')
+
+            context.assertAttrEquals(persons, 'xlink:type', 'simple')
+            context.assertAttrEquals(persons, 'xlink:title', 'persons')
+
+            context.assertAttrEquals(groups, 'xlink:type', 'simple')
+            context.assertAttrEquals(groups, 'xlink:title', 'groups')
+        finally:
+            context.free()
+        context.assertNoErrors()
 
     def test_render(self):
         request = RequestStub("http://localhost/")
