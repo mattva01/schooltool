@@ -20,7 +20,7 @@
 
     <div class="row">
       <label for="timetable_csv" i18n:translate="">timetable.csv</label>
-      <input id="timtable_csv" type="file" name="roster.txt" />
+      <input id="timetable_csv" type="file" name="timetable.csv" />
     </div>
 
     <div class="row">

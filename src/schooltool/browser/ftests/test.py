@@ -23,6 +23,7 @@ Functional tests for SchoolTool web application
 import unittest
 import urllib
 
+from schooltool.common import dedent
 from schooltool.ftests import setup
 
 
@@ -251,6 +252,29 @@ class TestObjectDeletion(setup.TestCase):
         self.assertEquals(browser.status, 404)
 
 
+class TestImportSchoolTimetable(setup.TestCase):
+
+    def test(self):
+        # Log in
+        browser = Browser()
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+
+        # Go to the school timetable import page
+        browser.go('http://localhost:8814/tt_csvimport.html')
+        self.assert_('Submit' in browser.content)
+
+#       TODO: set up an environment (timetable schema, persons, groups, etc.)
+#       # Submit CSV
+#       tt_csv = dedent('"2004-fall","default"')
+#       browser.post('http://localhost:8814/tt_csvimport.html',
+#                    {'timetable.csv': tt_csv,
+#                     'roster.txt': '',
+#                     'charset': 'ASCII',
+#                     'SUBMIT': 'Submit'})
+#       self.assert_('imported successfully' in browser.content)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLogin))
@@ -258,6 +282,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonEdit))
     suite.addTest(unittest.makeSuite(TestObjectDeletion))
     suite.addTest(unittest.makeSuite(TestResetDB))
+    suite.addTest(unittest.makeSuite(TestImportSchoolTimetable))
     return suite
 
 

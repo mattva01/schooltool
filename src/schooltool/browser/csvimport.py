@@ -295,17 +295,18 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
                            ' (incorrect charset?).')
             return self.do_GET(request)
 
-        importer = TimetableCSVImporter()
+        importer = TimetableCSVImporter(self.context)
         try:
             if timetable_csv:
-                self.importTimetable(timetable_csv)
+                importer.importTimetable(timetable_csv)
             if roster_txt:
-                self.importRoster(roster_txt)
+                importer.importRoster(roster_txt)
         except DataError, e:
             self.error = _("Import failed: %s") % e
             return self.do_GET(request)
 
         # TODO: log import
+        self.success = _("School timetable imported successfully.")
         return self.do_GET(request)
 
 
@@ -337,7 +338,7 @@ class TimetableCSVImporter:
         self.period_id, self.ttschema = rows[0]
         state = 'day_ids'
         for row in rows[2:]:
-            if not row:
+            if len(row) == 1 and row[0] == '':
                 state = 'day_ids'
                 continue
             elif state == 'day_ids':
@@ -348,7 +349,6 @@ class TimetableCSVImporter:
                 periods = row[1:]
                 for period in periods:
                     pass # TODO: check existence of periods
-
                 state = 'content'
                 continue
 

@@ -369,12 +369,16 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.code, 302, result)
         self.assert_('forbidden' in result)
 
-    def test_post(self):
+    def test_POST(self):
         view = self.createView()
-        request = RequestStub(authenticated_user=self.manager)
-        # TODO
+        request = RequestStub(authenticated_user=self.manager,
+                              method='POST',
+                              args={'timetable.csv': '"period","schema"',
+                                    'roster.txt': '',
+                                    'charset': 'UTF-8'})
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
+        self.assert_('imported successfully' in result)
 
     def test_POST_empty(self):
         view = self.createView()
@@ -462,7 +466,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "","A","B","C"
                 "Inside","Math1|Curtin","Math2|Guzman","Math3|Curtin"
                 "Outside","English1|Lorch","English2|Lorch","English3|Lorch"
-
+                ""
                 "Wednesday"
                 "","A","B","C"
                 "Outside","Math1|Curtin","Math3|Guzman","Math2|Curtin"
@@ -552,7 +556,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                   [("Math", "Whiz"), ("Comp", "Geek")]),
                  (["Math |  Long  Name  ", " Comp|Geek "],
                   [("Math", "Long  Name"), ("Comp", "Geek")]),
-                 ([" Biology|Nut", "", "Chemistry|Nerd"],
+                 (["Biology|Nut", "", "Chemistry|Nerd"],
                   [("Biology", "Nut"), None, ("Chemistry", "Nerd")])]:
             self.assertEquals(imp.parseRecordRow(row), expected)
 
