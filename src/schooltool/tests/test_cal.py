@@ -1020,9 +1020,8 @@ class TestCalendarOwnerMixin(unittest.TestCase):
 
 
 def test_suite():
-    import schooltool.cal
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite(schooltool.cal))
+    suite.addTest(DocTestSuite('schooltool.cal'))
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestSchooldayModel))
     suite.addTest(unittest.makeSuite(TestPeriod))

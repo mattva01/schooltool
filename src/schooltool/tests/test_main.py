@@ -973,9 +973,8 @@ class TestSetUpModules(unittest.TestCase):
 
 
 def test_suite():
-    import schooltool.main
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite(schooltool.main))
+    suite.addTest(DocTestSuite('schooltool.main'))
     suite.addTest(unittest.makeSuite(TestSite))
     suite.addTest(unittest.makeSuite(TestAcceptParsing))
     suite.addTest(unittest.makeSuite(TestRequest))

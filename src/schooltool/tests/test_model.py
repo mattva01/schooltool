@@ -338,9 +338,8 @@ class TestResource(ApplicationObjectsTestMixin):
 
 
 def test_suite():
-    import schooltool.model
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite(schooltool.model))
+    suite.addTest(DocTestSuite('schooltool.model'))
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestResource))
