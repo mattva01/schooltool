@@ -497,7 +497,7 @@ div.event_weekly {
 
 
 .cal_monthly div.event,
-.cal_monthly div.ro_event {
+.cal_monthly div.tt_event {
   font-size: smaller;
   margin: 2px;
   border-width: 0.5px;
@@ -523,7 +523,7 @@ table.daycal td.event{
   font-size: smaller;
 }
 
-table.daycal td.ro_event {
+table.daycal td.tt_event {
   border: 1px solid #007;
   background: #9af;
   padding: 1ex 0.5em;
@@ -540,8 +540,8 @@ td.daycalhour {
 
 .event h2,
 .event h3,
-.ro_event h2,
-.ro_event h3 {
+.tt_event h2,
+.tt_event h3 {
   font-size: smaller;
   color: navy;
   margin: 0;
