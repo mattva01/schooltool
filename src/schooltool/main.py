@@ -67,7 +67,7 @@ SERVER_VERSION = "SchoolTool/0.5"
 
 
 def parseAccept(value):
-    """Parses HTTP Accept: header.
+    """Parse HTTP Accept: header.
 
     See RFC 2616, section 14.1 for a formal grammar.
 
@@ -158,7 +158,7 @@ def validToken(s):
 
 
 def validMediaType(s):
-    """Checks whether s is a syntactically valid media type."""
+    """Check whether s is a syntactically valid media type."""
     if s.count('/') != 1:
         return False
     type, subtype = s.split('/')
@@ -233,7 +233,7 @@ def qualityOf(media_type, params, accept_list):
 
 
 def chooseMediaType(supported_types, accept_list):
-    """Chooses the best matching media type.
+    """Choose the best matching media type.
 
     supported_types should be a sequence of media types.  Media type can
     be a string or a tuples of (media_type, params_dict).
@@ -362,7 +362,7 @@ class Request(http.Request):
         http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):
-        """Resets the state of the request.
+        """Reset the state of the request.
 
         Clears all cookies, headers.  In other words, undoes any changes
         caused by calling setHeader, addCookie, setResponseCode, redirect,
@@ -384,7 +384,7 @@ class Request(http.Request):
         self.setResponseCode(http.OK)
 
     def process(self):
-        """Process the request"""
+        """Process the request."""
 
         # Do all the things twisted.web.server.Request.process would do
         self.site = self.channel.site
@@ -510,7 +510,7 @@ class Request(http.Request):
         return body
 
     def _printTraceback(self, reason):
-        """Prints the timestamp preceding the traceback to the site log"""
+        """Print a timestamp preceding a traceback to the site log."""
         for log in self.site.exception_logs:
             print >> log, '--'
             print >> log, str(datetime.datetime.now())
@@ -585,7 +585,7 @@ class Site(http.HTTPFactory):
 
     def __init__(self, db, rootName, viewFactory, authenticate,
                  exception_logs=[sys.stderr]):
-        """Creates a site.
+        """Create a site.
 
         Arguments:
           db               ZODB database
@@ -673,7 +673,7 @@ class Server:
         self.get_transaction_hook = get_transaction
 
     def main(self, args):
-        """Starts the SchoolTool HTTP server.
+        """Start the SchoolTool HTTP server.
 
         args contains command line arguments, usually it is sys.argv[1:].
 
@@ -786,17 +786,17 @@ class Server:
                              "operating system"))
 
     def help(self):
-        """Prints a help message."""
+        """Print a help message."""
         progname = os.path.basename(sys.argv[0])
         print >> sys.stdout, usage_msg % progname
 
     def noStorage(self):
-        """Prints an informative message when the config file does not define a
+        """Print an informative message when the config file does not define a
         storage."""
         print >> sys.stderr, no_storage_error_msg
 
     def findDefaultConfigFile(self):
-        """Returns the default config file pathname.
+        """Return the default config file pathname.
 
         Looks for a file called 'schooltool.conf' in the directory two levels
         above the location of this module.  In the extracted source archive
@@ -810,7 +810,7 @@ class Server:
         return config_file
 
     def loadConfig(self, config_file):
-        """Loads configuration from a given config file."""
+        """Load configuration from a given config file."""
         dirname = os.path.dirname(__file__)
         schema = ZConfig.loadSchema(os.path.join(dirname, 'schema.xml'))
         self.notifyConfigFile(config_file)
@@ -914,7 +914,7 @@ class Server:
         conn.close()
 
     def createApplication():
-        """Instantiate a new application"""
+        """Instantiate a new application."""
         app = Application()
 
         event_log = EventLogUtility()
@@ -1007,7 +1007,7 @@ def setUp():
 
 
 def main():
-    """Starts the SchoolTool HTTP server."""
+    """Start the SchoolTool HTTP server."""
     sys.exit(Server().main(sys.argv[1:]))
 
 
