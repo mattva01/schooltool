@@ -46,6 +46,12 @@ class TestWidget(unittest.TestCase):
         widget.validator('foo')
         widget.validator(123)
 
+    def test_with_value(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label', value=123)
+        self.assertEquals(widget.value, 123)
+        self.assertEquals(widget.raw_value, '123')
+
     def test_getRawValue(self):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')
@@ -121,7 +127,7 @@ class TestWidget(unittest.TestCase):
         widget.error = None
         self.assertEquals(widget._row_class(), ' class="row"')
         widget.error = 'Error!'
-        self.assertEquals(widget._row_class(), ' class="row error"')
+        self.assertEquals(widget._row_class(), ' class="row row_error"')
 
     def test_error_html(self):
         from schooltool.browser.widgets import Widget
@@ -134,6 +140,18 @@ class TestWidget(unittest.TestCase):
         widget.error = '&'
         self.assertEquals(widget._error_html(),
                           '<div class="error">&amp;</div>\n')
+
+    def test_unit_html(self):
+        from schooltool.browser.widgets import Widget
+        widget = Widget('field', 'Field Label')
+        widget.unit = None
+        self.assertEquals(widget._unit_html(), '')
+        widget.unit = 'seconds'
+        self.assertEquals(widget._unit_html(),
+                          '<span class="unit">seconds</span>\n')
+        widget.unit = '&'
+        self.assertEquals(widget._unit_html(),
+                          '<span class="unit">&amp;</span>\n')
 
 
 class TestWidgetWithConverters(unittest.TestCase):
@@ -200,9 +218,9 @@ class TestWidgetWithConverters(unittest.TestCase):
 
 class TestTextWidget(XMLCompareMixin, unittest.TestCase):
 
-    def createWidget(self, field="field", label="Label"):
+    def createWidget(self, field="field", label="Label", **kw):
         from schooltool.browser.widgets import TextWidget
-        widget = TextWidget(field, label)
+        widget = TextWidget(field, label, **kw)
         return widget
 
     def test(self):
@@ -226,10 +244,64 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
         widget = self.createWidget()
         widget.error = u"An error! \u2639"
         expected = u"""
-            <div class="row error">
+            <div class="row row_error">
               <label for="field">Label</label>
               <input class="text" type="text" name="field" id="field"
                      value="" />
+              <div class="error">An error! \u2639</div>
+            </div>
+            """
+        self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
+    def test_call_with_unit(self):
+        widget = self.createWidget(label="Length", unit="mm, > 0")
+        widget.error = "Error"
+        expected = u"""
+            <div class="row row_error">
+              <label for="field">Length</label>
+              <input class="text" type="text" name="field" id="field"
+                     value="" />
+              <span class="unit">mm, &gt; 0</span>
+              <div class="error">Error</div>
+            </div>
+            """
+        self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
+
+class TestTextAreaWidget(XMLCompareMixin, unittest.TestCase):
+
+    def createWidget(self, field="field", label="Label"):
+        from schooltool.browser.widgets import TextAreaWidget
+        widget = TextAreaWidget(field, label)
+        return widget
+
+    def test(self):
+        from schooltool.browser.widgets import IWidget
+        verifyObject(IWidget, self.createWidget())
+
+    def test_call(self):
+        widget = self.createWidget()
+        widget.setValue(u'some\n<text>\n\u263B')
+        expected = u"""
+            <div class="row">
+              <label for="field">Label</label>
+              <textarea class="text" name="field" id="field">some
+            &lt;text&gt;
+            \u263B</textarea>
+            </div>
+            """
+        self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
+    def test_call_with_error(self):
+        widget = self.createWidget()
+        widget.error = u"An error! \u2639"
+        expected = u"""
+            <div class="row row_error">
+              <label for="field">Label</label>
+              <textarea class="text" name="field" id="field"></textarea>
               <div class="error">An error! \u2639</div>
             </div>
             """
@@ -266,7 +338,7 @@ class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
         widget = self.createWidget()
         widget.error = u"An error!"
         expected = """
-            <div class="row error">
+            <div class="row row_error">
               <label for="field">Label</label>
               <select name="field" id="field">
                 <option value="a">Aa</option>
@@ -284,6 +356,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWidget))
     suite.addTest(unittest.makeSuite(TestWidgetWithConverters))
     suite.addTest(unittest.makeSuite(TestTextWidget))
+    suite.addTest(unittest.makeSuite(TestTextAreaWidget))
     suite.addTest(unittest.makeSuite(TestSelectionWidget))
     return suite
 

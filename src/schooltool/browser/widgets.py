@@ -26,6 +26,7 @@ import cgi
 
 from zope.interface import Interface, Attribute, implements
 from schooltool.common import to_unicode
+from schooltool.common import parse_date
 from schooltool.translation import ugettext as _
 
 
@@ -50,13 +51,15 @@ class IWidget(Interface):
 
     label = Attribute("Label")
 
+    unit = Attribute("Text displayed after the widget")
+
     # Widget state
 
     raw_value = Attribute("Raw field value extracted from the request")
 
-    value = Attribute("Processed field value.")
+    value = Attribute("Processed field value")
 
-    error = Attribute("Error message (optional).")
+    error = Attribute("Error message (optional)")
 
     # Conversion and validation
 
@@ -160,6 +163,27 @@ def defaultFormatter(value):
     return unicode(value)
 
 
+def dateParser(raw_date):
+    """Parser for dates.
+
+      >>> dateParser(None)
+      >>> dateParser(' ')
+      >>> dateParser('1980-02-28')
+      datetime.date(1980, 2, 28)
+      >>> dateParser('01/02/03')
+      Traceback (most recent call last):
+        ...
+      ValueError: Invalid date.  Please specify YYYY-MM-DD.
+
+    """
+    if raw_date is None or not raw_date.strip():
+        return None
+    try:
+        return parse_date(raw_date)
+    except ValueError:
+        raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
+
+
 class Widget:
     """Base class for widgets."""
 
@@ -168,7 +192,7 @@ class Widget:
     css_class = None
 
     def __init__(self, name, label, parser=None, validator=None,
-                 formatter=None):
+                 formatter=None, unit=None, value=None):
         if parser is None:
             parser = defaultParser
         if validator is None:
@@ -177,12 +201,15 @@ class Widget:
             formatter = defaultFormatter
         self.name = name
         self.label = label
+        self.unit = unit
         self.parser = parser
         self.validator = validator
         self.formatter = formatter
         self.raw_value = None
         self.value = None
         self.error = None
+        if value is not None:
+            self.setValue(value)
 
     def __call__(self):
         raise NotImplementedError('%s did not override Widget.__call__'
@@ -234,8 +261,7 @@ class Widget:
     def _row_class(self):
         """Helper for subclasses."""
         if self.error:
-            return ' class="row error"'
-            return 'row error'
+            return ' class="row row_error"'
         else:
             return ' class="row"'
 
@@ -243,6 +269,13 @@ class Widget:
         """Helper for subclasses."""
         if self.error:
             return '<div class="error">%s</div>\n' % cgi.escape(self.error)
+        else:
+            return ''
+
+    def _unit_html(self):
+        """Helper for subclasses."""
+        if self.unit:
+            return '<span class="unit">%s</span>\n' % cgi.escape(self.unit)
         else:
             return ''
 
@@ -259,12 +292,35 @@ class TextWidget(Widget):
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <input%(css_class)s type="text" name="%(name)s"'
                         ' id="%(name)s" value="%(value)s" />\n'
+                '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
                             'label': cgi.escape(self.label, True),
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or '', True),
+                            'unit': self._unit_html(),
+                            'error': self._error_html()})
+
+
+class TextAreaWidget(Widget):
+    """Text area widget."""
+
+    implements(IWidget)
+
+    css_class = 'text'
+
+    def __call__(self):
+        return ('<div%(row_class)s>\n'
+                '  <label for="%(name)s">%(label)s</label>\n'
+                '  <textarea%(css_class)s name="%(name)s"'
+                        ' id="%(name)s">%(value)s</textarea>\n'
+                '%(error)s'
+                '</div>' % {'name': cgi.escape(self.name, True),
+                            'label': cgi.escape(self.label, True),
+                            'css_class': self._css_class(),
+                            'row_class': self._row_class(),
+                            'value': cgi.escape(self.raw_value or ''),
                             'error': self._error_html()})
 
 
