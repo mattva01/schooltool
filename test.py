@@ -422,8 +422,6 @@ class CustomTestResult(unittest._TextTestResult):
 
     def startTest(self, test):
         n = self.testsRun + test.countTestCases()
-        self.__super_startTest(test)  # increments testsRun by one
-        self.testsRun = n # override the testsRun calculation
         if self.cfg.progress:
             # verbosity == 0: 'xxxx/xxxx (xxx.x%)'
             # verbosity == 1: 'xxxx/xxxx (xxx.x%): test name'
@@ -442,6 +440,8 @@ class CustomTestResult(unittest._TextTestResult):
                 self.stream.write(": %s" % name)
                 self._lastWidth = width
             self.stream.flush()
+        self.__super_startTest(test)  # increments testsRun by one and prints
+        self.testsRun = n # override the testsRun calculation
         for hook in self.hooks:
             hook.startTest(test)
 
