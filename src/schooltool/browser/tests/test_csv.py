@@ -106,6 +106,10 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.setUpRegistries()
         membership.setUp()
 
+        # Register the teacher_group facet.
+        import schooltool.teaching
+        schooltool.teaching.setUp()
+
         self.groups = ApplicationObjectContainer(Group)
         self.group1 = self.groups.new(__name__='group1')
         self.group2 = self.groups.new(__name__='group2')
@@ -128,11 +132,20 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.im.resources is self.resources)
 
     def test_importGroup(self):
-        self.im.importGroup('gr0wl', 'A tiny group', 'group1 group2', '')
+        from schooltool.component import FacetManager
+        from schooltool.teaching import TeacherGroupFacet
+        self.im.importGroup('gr0wl', 'A tiny group', 'group1 group2',
+                            'teacher_group subject_group')
         group = self.groups['gr0wl']
         self.assertEquals(group.title, 'A tiny group')
-        self.assertEquals(len(group.listLinks()), 2) # TODO examine links
-        # TODO: facets
+
+        objs = [link.traverse() for link in group.listLinks()]
+        self.assertEquals(len(objs), 2)
+        self.assert_(self.group1 in objs)
+        self.assert_(self.group2 in objs)
+
+        facet = FacetManager(group).facetByName('001') # XXX Why 001?
+        self.assert_(isinstance(facet, TeacherGroupFacet))
 
     def test_importPerson(self):
         name = self.im.importPerson('Smith', 'group1', 'group2', '')
