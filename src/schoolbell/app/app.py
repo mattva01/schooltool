@@ -179,4 +179,3 @@ class Resource(Persistent, Contained):
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
             return self.__parent__.__parent__
-

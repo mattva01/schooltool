@@ -134,7 +134,7 @@ class SortBy(object):
         return [row[-1] for row in items]
 
 
-class SchoolBellSized:
+class SchoolBellSized(object):
     """An adapter to provide number of persons in a SchoolBell instance."""
 
     implements(ISized)
