@@ -424,6 +424,7 @@ class ResourceEditView(View):
         title = unicode(request.args['title'][0], 'utf-8')
         self.context.title = title
 
+        request.appLog(_("Resource %s modified") % getPath(self.context))
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
 

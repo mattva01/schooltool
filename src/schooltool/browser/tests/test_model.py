@@ -751,6 +751,8 @@ class TestResourceEditView(unittest.TestCase):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/resources/foo')
+        self.assertEquals(request.applog,
+                          [(None, 'Resource /resources/foo modified', INFO)])
 
 
 class TestPhotoView(unittest.TestCase):
