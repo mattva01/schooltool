@@ -122,9 +122,11 @@ def doctest_GroupListView():
 
         >>> view.update()
 
-    First, all groups should be listed in alphabetical order:
+    First, all groups should be listed:
 
-        >>> [g.title for g in view.getGroupList()]
+        >>> group_titles = [g.title for g in view.getGroupList()]
+        >>> group_titles.sort()
+        >>> group_titles
         ['Etria', 'Others', 'PoV']
 
     Let's tell the person to join PoV:

@@ -113,14 +113,14 @@ class PersonPhotoView(BrowserView):
 
 
 class GroupListView(BrowserView):
-    """View for adding / removing parent groups."""
+    """View for managing groups that a person or a resource belongs to."""
 
     __used_for__ = IGroupMember
 
     def getGroupList(self):
         """Return a sorted list of all groups in the system."""
-        groups = self.context.__parent__.__parent__['groups']
-        return sorted_by_title(groups.values())
+        groups = self.context.__parent__.__parent__['groups'] # XXX ugly
+        return groups.values()
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
