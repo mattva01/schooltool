@@ -356,6 +356,10 @@ def parse_period(value):
     Traceback (most recent call last):
       ...
     ValueError: Invalid iCalendar period: 'xyzzy'
+    >>> parse_period('foo/foe')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar period: 'foo/foe'
     """
     parts = value.split('/')
     if len(parts) != 2:

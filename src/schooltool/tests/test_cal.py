@@ -255,6 +255,9 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.getOne('DUR-FOO4'), timedelta(hours=2))
         self.assertRaises(ValueError, vevent.getOne, 'dur-bad1')
 
+        vevent.add('unknown', 'magic', {'VALUE': 'UNKNOWN-TYPE'})
+        self.assertEquals(vevent.getOne('unknown'), 'magic')
+
     def test_iterDates(self):
         from schooltool.cal import VEvent
         vevent = VEvent()

@@ -158,6 +158,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
         a.new('foo')
         self.assertRaises(KeyError, a.new, 'foo')
 
+        a.new('%06i' % 4)
         for count in 1, 2, 3, 4, 5, 6, 7, 8:
             a.new()
 
