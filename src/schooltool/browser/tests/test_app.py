@@ -353,63 +353,62 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
 
-# XXX 
-#    def test_traversal(self):
-#        from schooltool.browser import StaticFile
-#        from schooltool.browser.app import LogoutView
-#        from schooltool.browser.app import DatabaseResetView
-#        from schooltool.browser.app import StartView
-#        from schooltool.browser.app import PersonContainerView
-#        from schooltool.browser.app import GroupContainerView
-#        from schooltool.browser.app import ResourceContainerView
-#        from schooltool.browser.app import NoteContainerView
-#        from schooltool.browser.app import BusySearchView
-#        from schooltool.browser.app import OptionsView
-#        from schooltool.browser.app import DeleteView
-#        from schooltool.browser.applog import ApplicationLogView
-#        from schooltool.browser.timetable import TimetableSchemaWizard
-#        from schooltool.browser.timetable import TimetableSchemaServiceView
-#        from schooltool.browser.timetable import TimePeriodServiceView
-#        from schooltool.browser.timetable import NewTimePeriodView
-#        from schooltool.browser.csvimport import CSVImportView
-#        from schooltool.browser.csvimport import TimetableCSVImportView
-#
-#        view = self.createView()
-#        app = view.context
-#        self.assertTraverses(view, 'logout', LogoutView, app)
-#        self.assertTraverses(view, 'reset_db.html', DatabaseResetView, app)
-#        self.assertTraverses(view, 'options.html', OptionsView, app)
-#        self.assertTraverses(view, 'applog', ApplicationLogView, app)
-#        self.assertTraverses(view, 'persons', PersonContainerView,
-#                             app['persons'])
-#        self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
-#        self.assertTraverses(view, 'resources', ResourceContainerView,
-#                             app['resources'])
-#        self.assertTraverses(view, 'notes', NoteContainerView,
-#                             app['notes'])
-#        self.assertTraverses(view, 'delete.html', DeleteView, app)
-#        self.assertTraverses(view, 'csvimport.html', CSVImportView, app)
-#        self.assertTraverses(view, 'tt_csvimport.html',
-#                             TimetableCSVImportView, app)
-#        self.assertTraverses(view, 'busysearch', BusySearchView, app)
-#        self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
-#                             app.timetableSchemaService)
-#        self.assertTraverses(view, 'newttschema', TimetableSchemaWizard,
-#                             app.timetableSchemaService)
-#        self.assertTraverses(view, 'time-periods', TimePeriodServiceView,
-#                             app.timePeriodService)
-#        view2 = self.assertTraverses(view, 'newtimeperiod', NewTimePeriodView,
-#                                    None)
-#        self.assert_(view2.service is app.timePeriodService)
-#        css = self.assertTraverses(view, 'schooltool.css', StaticFile)
-#        self.assertEquals(css.content_type, 'text/css')
-#        for picture in ('logo.png', 'group.png', 'person.png', 'resource.png'):
-#            image = self.assertTraverses(view, picture, StaticFile)
-#            self.assertEquals(image.content_type, 'image/png')
-#        user = object()
-#        request = RequestStub(authenticated_user=user)
-#        self.assertTraverses(view, 'start', StartView, user, request=request)
-#        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+    def test_traversal(self):
+        from schooltool.browser import StaticFile
+        from schooltool.browser.app import LogoutView
+        from schooltool.browser.app import DatabaseResetView
+        from schooltool.browser.app import StartView
+        from schooltool.browser.app import PersonContainerView
+        from schooltool.browser.app import GroupContainerView
+        from schooltool.browser.app import ResourceContainerView
+        from schooltool.browser.app import NoteContainerView
+        from schooltool.browser.app import BusySearchView
+        from schooltool.browser.app import OptionsView
+        from schooltool.browser.app import DeleteView
+        from schooltool.browser.applog import ApplicationLogView
+        from schooltool.browser.timetable import TimetableSchemaWizard
+        from schooltool.browser.timetable import TimetableSchemaServiceView
+        from schooltool.browser.timetable import TimePeriodServiceView
+        from schooltool.browser.timetable import NewTimePeriodView
+        from schooltool.browser.csvimport import CSVImportView
+        from schooltool.browser.csvimport import TimetableCSVImportView
+
+        view = self.createView()
+        app = view.context
+        self.assertTraverses(view, 'logout', LogoutView, app)
+        self.assertTraverses(view, 'reset_db.html', DatabaseResetView, app)
+        self.assertTraverses(view, 'options.html', OptionsView, app)
+        self.assertTraverses(view, 'applog', ApplicationLogView, app)
+        self.assertTraverses(view, 'persons', PersonContainerView,
+                             app['persons'])
+        self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
+        self.assertTraverses(view, 'resources', ResourceContainerView,
+                             app['resources'])
+        self.assertTraverses(view, 'notes', NoteContainerView,
+                             app['notes'])
+        self.assertTraverses(view, 'delete.html', DeleteView, app)
+        self.assertTraverses(view, 'csvimport.html', CSVImportView, app)
+        self.assertTraverses(view, 'tt_csvimport.html',
+                             TimetableCSVImportView, app)
+        self.assertTraverses(view, 'busysearch', BusySearchView, app)
+        self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
+                             app.timetableSchemaService)
+        self.assertTraverses(view, 'newttschema', TimetableSchemaWizard,
+                             app.timetableSchemaService)
+        self.assertTraverses(view, 'time-periods', TimePeriodServiceView,
+                             app.timePeriodService)
+        view2 = self.assertTraverses(view, 'newtimeperiod', NewTimePeriodView,
+                                    None)
+        self.assert_(view2.service is app.timePeriodService)
+        css = self.assertTraverses(view, 'schooltool.css', StaticFile)
+        self.assertEquals(css.content_type, 'text/css')
+        for picture in ('logo.png', 'group.png', 'person.png', 'resource.png'):
+            image = self.assertTraverses(view, picture, StaticFile)
+            self.assertEquals(image.content_type, 'image/png')
+        user = object()
+        request = RequestStub(authenticated_user=user)
+        self.assertTraverses(view, 'start', StartView, user, request=request)
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
 class TestLogoutView(unittest.TestCase):
