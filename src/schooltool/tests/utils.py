@@ -36,6 +36,21 @@ from schooltool.tests.helpers import normalize_xml, diff
 __metaclass__ = type
 
 
+class _Anything:
+    """An object that is equal to any other object."""
+
+    def __eq__(self, other):
+        return True
+
+    def __ne__(self, other):
+        return False
+
+    def __repr__(self):
+        return 'Anything'
+
+Anything = _Anything()
+
+
 class LocatableEventTargetMixin:
     """Object that is locatable and acts as an event target.
 

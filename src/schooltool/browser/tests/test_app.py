@@ -31,6 +31,7 @@ from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
 from schooltool.browser.tests import HTMLDocument
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.tests.utils import AppSetupMixin
+from schooltool.tests.utils import Anything
 
 __metaclass__ = type
 
@@ -141,7 +142,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/start')
-        ticket = request._outgoing_cookies['auth']
+        ticket = request._outgoing_cookies['auth']['value']
         username, password = \
                   getTicketService(view.context).verifyTicket(ticket)
         self.assertEquals(username, 'manager')
@@ -158,7 +159,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/some/path')
-        ticket = request._outgoing_cookies['auth']
+        ticket = request._outgoing_cookies['auth']['value']
         username, password = \
                   getTicketService(view.context).verifyTicket(ticket)
         self.assertEquals(username, 'manager')
@@ -1258,12 +1259,14 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         request = RequestStub(args={'HOURS': ''}, authenticated_user=self.r1)
         result = self.view.render(request)
         self.assert_(not self.view.by_periods)
-        self.assertEquals(request._outgoing_cookies['cal_periods'][0], '')
+        self.assertEquals(request._outgoing_cookies['cal_periods'],
+                          {'value': '', 'expires': Anything, 'path': None})
 
         request = RequestStub(args={'PERIODS': ''}, authenticated_user=self.r1)
         result = self.view.render(request)
         self.assert_(self.view.by_periods)
-        self.assertEquals(request._outgoing_cookies['cal_periods'], 'yes')
+        self.assertEquals(request._outgoing_cookies['cal_periods'],
+                          {'value': 'yes', 'expires': None, 'path': None})
 
 
 class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):

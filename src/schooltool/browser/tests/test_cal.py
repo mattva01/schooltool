@@ -40,6 +40,7 @@ from schooltool.browser.tests import assertHasHiddenField
 from schooltool.browser.tests import assertHasSubmitButton
 from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import Anything
 from schooltool.tests.helpers import diff
 
 __metaclass__ = type
@@ -1026,7 +1027,8 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         request = RequestStub(uri='http://server/calendar?date=12&periods=yes',
                               args={'cal_periods': 'yes', 'date': '12'})
         view._traverse('daily.html', request)
-        self.assertEquals(request._outgoing_cookies['cal_periods'], 'yes')
+        self.assertEquals(request._outgoing_cookies['cal_periods'],
+                          {'value': 'yes', 'expires': None, 'path': None})
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://server/calendar?date=12')
@@ -1034,9 +1036,8 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         request = RequestStub(uri='http://server/calendar?periods=no&date=123',
                               args={'cal_periods': 'no', 'date': '123'})
         view._traverse('daily.html', request)
-        self.assertEquals(request._outgoing_cookies['cal_periods'][0], '')
-        # a date like 'Fri, 05-Nov-2004 19:35:06 UTC'
-        self.assertEquals(len(request._outgoing_cookies['cal_periods'][1]), 29)
+        self.assertEquals(request._outgoing_cookies['cal_periods'],
+                          {'value': '', 'expires': Anything, 'path': None})
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://server/calendar?date=123')
