@@ -47,6 +47,48 @@ from schooltool.uris import URITeaching, URITaught
 __metaclass__ = type
 
 
+def setupPopupMenu(control, menu):
+    """Hook up a popup menu to the control."""
+
+    # Event handlers
+
+    def list_mouse_down(event):
+        """Right mouse button down (on a list control)"""
+        item, flags = control.HitTest(event.GetPosition())
+        if item != -1:
+            control.Select(item)
+        event.Skip()
+
+    def tree_mouse_down(event):
+        """Right mouse button down (on a tree control)"""
+        item, flags = control.HitTest(event.GetPosition())
+        if item.IsOk():
+            control.SelectItem(item)
+        event.Skip()
+
+    def mouse_up(event):
+        """Right mouse button up"""
+        control.PopupMenu(menu, event.GetPosition())
+
+    def click(event):
+        """Right mouse button click"""
+        # event is a wxCommandEvent and, sadly, does not have GetPosition()
+        pos = control.ScreenToClient(wxGetMousePosition())
+        control.PopupMenu(menu, pos)
+
+    # This is tricky.  Tree controls need as much as four event
+    # handlers for the popup menu to work correctly on all platforms.
+    # List controls need "only" three.
+    if isinstance(control, wxListCtrl):
+        EVT_RIGHT_DOWN(control, list_mouse_down)
+    if isinstance(control, wxTreeCtrl):
+        EVT_RIGHT_DOWN(control, tree_mouse_down)
+        EVT_TREE_ITEM_RIGHT_CLICK(control, control.GetId(), click)
+    # The following ones work for all controls
+    EVT_RIGHT_UP(control, mouse_up)
+    EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), click)
+
+
 class ServerSettingsDlg(wxDialog):
     """Server Settings dialog."""
 
@@ -956,20 +998,6 @@ class MainFrame(wxFrame):
                 ),
             ))
 
-        def setupPopupMenu(control, menu):
-
-            def mouse_handler(event):
-                control.PopupMenu(menu, event.GetPosition())
-
-            def handler(event):
-                pos = control.ScreenToClient(wxGetMousePosition())
-                control.PopupMenu(menu, pos)
-
-            EVT_RIGHT_UP(control, mouse_handler)
-            EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), handler)
-            if isinstance(control, wxTreeCtrl):
-                EVT_TREE_ITEM_RIGHT_CLICK(control, control.GetId(), handler)
-
         # client area: vertical splitter
         splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
 
@@ -991,7 +1019,6 @@ class MainFrame(wxFrame):
                 separator(),
                 item("&Refresh", "Refresh", self.DoRefresh)
             )
-        EVT_RIGHT_DOWN(self.groupTreeCtrl, self.DoTreeRightDown)
         setupPopupMenu(self.groupTreeCtrl, self.treePopupMenu)
 
         # right pane of the splitter: horizontal splitter
@@ -1017,7 +1044,6 @@ class MainFrame(wxFrame):
                 item("&Remove Member", "Remove a person from this group",
                      self.DoRemoveMember),
             )
-        EVT_RIGHT_DOWN(self.personListCtrl, self.DoPersonRightDown)
         setupPopupMenu(self.personListCtrl, self.personPopupMenu)
         sizer2a = wxBoxSizer(wxVERTICAL)
         sizer2a.Add(label2a)
@@ -1043,7 +1069,6 @@ class MainFrame(wxFrame):
                 item("&Remove Relationship", "Remove selected relationship",
                      self.DoRemoveRelationship),
             )
-        EVT_RIGHT_DOWN(self.relationshipListCtrl, self.DoRelationshipRightDown)
         setupPopupMenu(self.relationshipListCtrl, self.relationshipPopupMenu)
         sizer2b = wxBoxSizer(wxVERTICAL)
         sizer2b.Add(label2b)
@@ -1372,39 +1397,6 @@ class MainFrame(wxFrame):
             self.relationshipListCtrl.SetStringItem(idx, 1, item.role)
             self.relationshipListCtrl.SetStringItem(idx, 2, item.arcrole)
         self.relationshipListCtrl.Thaw()
-
-    def DoTreeRightDown(self, event):
-        """Select the group under mouse cursor.
-
-        Called when the right mouse buton is pressed on the group tree
-        control.
-        """
-        item, flags = self.groupTreeCtrl.HitTest(event.GetPosition())
-        if item.IsOk():
-            self.groupTreeCtrl.SelectItem(item)
-        event.Skip()
-
-    def DoPersonRightDown(self, event):
-        """Select the person under mouse cursor.
-
-        Called when the right mouse buton is pressed on the person list
-        control.
-        """
-        item, flags = self.personListCtrl.HitTest(event.GetPosition())
-        if flags & wxLIST_HITTEST_ONITEM:
-            self.personListCtrl.Select(item)
-        event.Skip()
-
-    def DoRelationshipRightDown(self, event):
-        """Select the relationship under mouse cursor.
-
-        Called when the right mouse buton is pressed on the relationship list
-        control.
-        """
-        item, flags = self.relationshipListCtrl.HitTest(event.GetPosition())
-        if flags & wxLIST_HITTEST_ONITEM:
-            self.relationshipListCtrl.Select(item)
-        event.Skip()
 
     def DoRefresh(self, event=None):
         """Refresh data from the server.
