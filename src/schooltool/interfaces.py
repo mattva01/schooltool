@@ -196,13 +196,10 @@ class IGroupMember(ILocation):
 class IEvent(Interface):
     """Base interface for events."""
 
-    context = Attribute("""Default target for this event.""")
-
-    def dispatch(target=None):
+    def dispatch(target):
         """Dispatches the event to target (which can propagate it further).
 
-        Target must implement IEventTarget.  If target is None, context is
-        used.
+        Target must implement IEventTarget.
 
         It is guaranteed that no object will see the same event more than
         once, even if dispatch is called multiple times with the same target.
@@ -212,7 +209,7 @@ class IEvent(Interface):
 class IEventTarget(Interface):
     """An object that can receive events."""
 
-    def handle(event):
+    def notify(event):
         """Handles the event.
 
         Event routing can be achieved by calling event.dispatch(other_target).

@@ -33,7 +33,7 @@ __metaclass__ = type
 class TargetStub:
     events = ()
 
-    def handle(self, event):
+    def notify(self, event):
         self.events += (event, )
 
 class TestEventMixin(unittest.TestCase):
@@ -41,23 +41,14 @@ class TestEventMixin(unittest.TestCase):
     def test(self):
         from schooltool.event import EventMixin
         from schooltool.interfaces import IEvent
-        marker = object()
-        e = EventMixin(marker)
+        e = EventMixin()
         verifyObject(IEvent, e)
-        self.assertEquals(e.context, marker)
 
     def test_dispatch(self):
         from schooltool.event import EventMixin
         target = TargetStub()
         e = EventMixin()
         e.dispatch(target)
-        self.assertEquals(target.events, (e, ))
-
-    def test_dispatch_default_arg(self):
-        from schooltool.event import EventMixin
-        target = TargetStub()
-        e = EventMixin(target)
-        e.dispatch()
         self.assertEquals(target.events, (e, ))
 
     def test_dispatch_repeatedly(self):
@@ -110,7 +101,7 @@ class TestEventTargetMixin(unittest.TestCase):
         handler_b = EventActionStub(IEventB)
         et.eventTable.extend([handler_a, handler_b])
         event = EventAStub()
-        et.handle(event)
+        et.notify(event)
         self.assertEqual(handler_a.calls, [(event, et)])
         self.assertEqual(handler_b.calls, [])
 

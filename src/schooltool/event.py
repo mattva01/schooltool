@@ -36,16 +36,13 @@ class EventMixin:
 
     implements(IEvent)
 
-    def __init__(self, context=None):
-        self.context = context
+    def __init__(self):
         self.__seen = Set()
 
-    def dispatch(self, target=None):
-        if target is None:
-            target = self.context
+    def dispatch(self, target):
         if target not in self.__seen:
             self.__seen.add(target)
-            target.handle(self)
+            target.notify(self)
 
 
 class EventTargetMixin:
@@ -59,7 +56,7 @@ class EventTargetMixin:
         # this method can be overriden in subclasses
         return self.eventTable
 
-    def handle(self, event):
+    def notify(self, event):
         for action in self.getEventTable():
             if action.eventType.isImplementedBy(event):
                 action.handle(event, self)
