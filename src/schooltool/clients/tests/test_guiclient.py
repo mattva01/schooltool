@@ -748,7 +748,10 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.path, '/p/facets')
         self.assertEquals(conn.method, 'POST')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
-        self.assertEqualsXML(conn.body, '<facet factory="foo&quot;factory"/>')
+        self.assertEqualsXML(
+            conn.body,
+            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+            ' factory="foo&quot;factory"/>')
 
     def test_createFacet_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError

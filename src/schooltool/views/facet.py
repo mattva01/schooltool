@@ -22,6 +22,7 @@ Views for facets.
 $Id$
 """
 
+import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IFacet
@@ -30,9 +31,10 @@ from schooltool.component import registerView, getView
 from schooltool.component import FacetManager
 from schooltool.component import getFacetFactory, iterFacetFactories
 from schooltool.views import View, Template, textErrorPage
-from schooltool.views import XMLPseudoParser
+from schooltool.views import read_file
 from schooltool.views import absoluteURL
 from schooltool.views.auth import PublicAccess
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -70,10 +72,11 @@ class FacetView(View):
         return "Facet removed"
 
 
-class FacetManagementView(View, XMLPseudoParser):
+class FacetManagementView(View):
     """A view of IFacetManager."""
 
     template = Template("www/facets.pt", content_type="text/xml")
+    schema = read_file("../schema/facet.rng")
     authorization = PublicAccess
 
     def _traverse(self, name, request):
@@ -95,10 +98,23 @@ class FacetManagementView(View, XMLPseudoParser):
         body = request.content.read()
 
         try:
-            factory_name = self.extractKeyword(body, 'factory')
-        except KeyError, e:
-            return textErrorPage(request,
-                                 "Could not find a needed param: %s" % e)
+            if not validate_against_schema(self.schema, body):
+                return textErrorPage(request,
+                                     "Document not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Document not valid XML")
+
+        doc = libxml2.parseDoc(body)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/model/0.1'
+            xpathctx.xpathRegisterNs('m', ns)
+            nodes = xpathctx.xpathEval('/m:facet/@factory')
+            if nodes:
+                factory_name = nodes[0].content
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
 
         try:
             factory = getFacetFactory(factory_name)

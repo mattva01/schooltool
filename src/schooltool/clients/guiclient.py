@@ -364,7 +364,8 @@ class SchoolToolClient:
 
         Returns the URI of the new facet.
         """
-        body = '<facet factory="%s"/>' % cgi.escape(factory_name, True)
+        body = ('<facet xmlns="http://schooltool.org/ns/model/0.1" '
+                'factory="%s"/>' % cgi.escape(factory_name, True))
         response = self.post('%s/facets' % object_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)

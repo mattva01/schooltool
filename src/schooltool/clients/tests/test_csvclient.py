@@ -130,7 +130,8 @@ class TestCSVImporter(unittest.TestCase):
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Title"/>'),
                           ('/groups/Name/facets', 'POST',
-                           'factory="Super Facet"'),
+                           '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                           ' factory="Super Facet"/>'),
                           ])
 
     def test_importResource(self):
@@ -239,7 +240,9 @@ class TestCSVImporter(unittest.TestCase):
              'arcrole="http://schooltool.org/ns/membership"\n'
              'role="http://schooltool.org/ns/membership/group"\n'
              'href="/groups/teachers"\n'),
-            ('POST', '/groups/teachers/facets', 'factory="teacher_group"'),
+            ('POST', '/groups/teachers/facets',
+             '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+             ' factory="teacher_group"/>'),
             ('PUT', '/groups/pupils',
              '<object xmlns="http://schooltool.org/ns/model/0.1"'
              ' title="Pupils"/>'),
@@ -284,7 +287,8 @@ class TestCSVImporter(unittest.TestCase):
                      'role="http://schooltool.org/ns/membership/group"\n'
                      'href="/groups/teachers"\n'),
                     ('POST', '/groups/teachers/facets',
-                     'factory="teacher_group"'),
+                     '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                     ' factory="teacher_group"/>'),
                     ('PUT', '/groups/pupils',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Pupils"/>'),

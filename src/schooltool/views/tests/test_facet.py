@@ -180,11 +180,12 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool.model import Person
         from schooltool.eventlog import EventLogFacet
         import schooltool.eventlog
-        schooltool.eventlog.setUp() # register a facet factory
+        schooltool.eventlog.setUp()
 
+        xml = '''<facet xmlns="http://schooltool.org/ns/model/0.1"
+                        factory="eventlog"/>'''
         request = RequestStub("http://localhost/group/facets",
-                              method="POST",
-                              body="<facet factory=\"eventlog\"/>")
+                              method="POST", body=xml)
         facetable = Person()
         context = FacetManager(facetable)
         view = FacetManagementView(context)
@@ -208,11 +209,15 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool.views.facet import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
+        import schooltool.eventlog
+        schooltool.eventlog.setUp()
         facetable = Person()
         context = FacetManager(facetable)
         view = FacetManagementView(context)
         view.authorization = lambda ctx, rq: True
-        for body in ("", "foo", "facet factory=\"nosuchfactory\""):
+        for body in ("foo", '<facet factory="eventlog">',
+                     '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                     ' factory="nosuchfactory"/>', ):
             request = RequestStub("http://localhost/group/facets",
                                   method="POST",
                                   body=body)

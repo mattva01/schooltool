@@ -119,7 +119,8 @@ class CSVImporter:
             result.append(self.membership(parent, "/groups/%s" % name))
         if facet:
             result.append(('/groups/%s/facets' % name, 'POST',
-                           'factory="%s"' % facet))
+                           '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                           ' factory="%s"/>' % facet))
         return result
 
     def importPerson(self, title):

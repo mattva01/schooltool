@@ -9,7 +9,8 @@ Content-Type: text/plain
 Object created: http://localhost:8813/groups/teachers
 
 SchoolTool> post /groups/teachers/facets
-POST> factory="teacher_group"
+POST> <facet xmlns="http://schooltool.org/ns/model/0.1"
+POST>        factory="teacher_group"/>
 POST> .
 201 Created
 Content-Type: text/plain
@@ -137,7 +138,8 @@ Content-Type: text/plain
 Relationship created: http://localhost:8813/groups/cleaners/relationships/0003
 
 SchoolTool> post /persons/Marius/facets
-POST> factory="eventlog"
+POST> <facet xmlns="http://schooltool.org/ns/model/0.1"
+POST>        factory="eventlog"/>
 POST> .
 201 Created
 Content-Type: text/plain
