@@ -372,8 +372,8 @@ class SchoolToolClient:
         return self._pathFromResponse(response)
 
     def createPerson(self, person_title, name=None, password=None):
-        body = ('<object xmlns="http://schooltool.org/ns/model/0.1" title="%s"/>'
-                % cgi.escape(person_title, True))
+        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
+                ' title="%s"/>' % cgi.escape(person_title, True))
         if name:
             path = '/persons/' + name
             response = self.put(path, body)
@@ -389,8 +389,8 @@ class SchoolToolClient:
         return path
 
     def createGroup(self, group_title):
-        body = ('<object xmlns="http://schooltool.org/ns/model/0.1" title="%s"/>'
-                % cgi.escape(group_title, True))
+        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
+                ' title="%s"/>' % cgi.escape(group_title, True))
         response = self.post('/groups', body)
         if response.status != 201:
             raise ResponseStatusError(response)

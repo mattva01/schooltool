@@ -101,6 +101,7 @@ class TestHTTPClient(unittest.TestCase):
         result = h.request('GET', '/')
         self.assertEqual(result.read(), "Welcome")
 
+
 membership_pattern = (
     '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
     ' xmlns="http://schooltool.org/ns/model/0.1"'
@@ -116,6 +117,7 @@ teaching_pattern = (
     ' xlink:arcrole="http://schooltool.org/ns/teaching"'
     ' xlink:role="http://schooltool.org/ns/teaching/taught"'
     ' xlink:href="%s"/>')
+
 
 class TestCSVImporter(unittest.TestCase):
 
@@ -391,7 +393,6 @@ class TestCSVImporter(unittest.TestCase):
 
     def test_process(self):
         from schooltool.clients.csvclient import CSVImporter
-        from schooltool.clients.csvclient import DataError
         im = CSVImporter()
         im.server.http = HTTPStub
         im.process("POST", "/people/001/password", "foo")

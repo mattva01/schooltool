@@ -22,7 +22,6 @@ The views for the schooltool content objects.
 $Id$
 """
 
-import re
 import os
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile

@@ -768,8 +768,8 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.method, 'POST')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
-                             '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                                    ' title="John &quot;mad cat&quot; Doe"/>')
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="John &quot;mad cat&quot; Doe"/>')
 
         client = self.newClientMulti([
             ResponseStub(201, 'OK', 'Created',
@@ -783,8 +783,8 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.method, 'PUT')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
-                             '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                                    ' title="John &quot;mad cat&quot; Doe"/>')
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="John &quot;mad cat&quot; Doe"/>')
         conn = client.connectionFactory.connections[1]
         self.assertEquals(conn.path, '/persons/root/password')
         self.assertEquals(conn.method, 'PUT')
