@@ -10,4 +10,13 @@ server to use nonpersistent in-memory storage.  Look at the (heavily commented)
 /usr/share/doc/schooltool/examples/schooltool.conf file for more information
 about SchoolTool server configuration.
 
- -- Marius Gedminas <marius@pov.lt>, Wed, 28 Jan 2004 19:07:03 +0200
+The simplest way to start playing with SchoolTool is as follows:
+
+  1. run schooltool-server
+  2. in a different terminal run import-sampledata
+  3. run wxschooltool or schooltool-client and play around
+
+By default a user 'manager' with password 'schooltool' is created with full
+access and modification privileges.
+
+ -- Marius Gedminas <marius@pov.lt>, Thu, 29 Jan 2004 15:16:50 +0200

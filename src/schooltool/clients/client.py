@@ -62,8 +62,8 @@ welcome to change it and/or distribute copies of it under certain conditions.
     file_hook = file
     input_hook = raw_input
 
-    def __init__(self, *args):
-        Cmd.__init__(self, *args)
+    def __init__(self, *args, **kw):
+        Cmd.__init__(self, *args, **kw)
         self._setupPrompt()
         self.last_data = None
         self.resources = []

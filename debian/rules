@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+datagen_seed = schooltool-m4
+
 build: build-stamp
 
 build-stamp:
@@ -35,10 +37,19 @@ install-stamp: build
 	install -m 755 -p debian/schooltool-server debian/schooltool/usr/bin/
 	install -m 755 -p debian/schooltool-client debian/schooltool/usr/bin/
 	install -m 755 -p debian/wxschooltool debian/schooltool/usr/bin/
+	install -m 755 -p debian/import-sampleschool debian/schooltool/usr/bin/
 
 	install -m 644 -p debian/schooltool.conf debian/schooltool/etc/
 	install -m 644 -D -p debian/example.conf \
 	    debian/schooltool/usr/share/doc/schooltool/examples/schooltool.conf
+
+	install -m 644 -D -p ttconfig.data \
+	    debian/schooltool/usr/share/schooltool/sampleschool/ttconfig.data
+
+	dir=$$PWD \
+	    && cd debian/schooltool/usr/share/schooltool/sampleschool/ \
+	    && PYTHONPATH=$$dir/src \
+	       python $$dir/src/schooltool/clients/datagen.py $(datagen_seed)
 
 	touch install-stamp
 

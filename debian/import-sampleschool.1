@@ -1,0 +1,18 @@
+.TH import-sampleschool 1
+.SH NAME
+import-sampleschool \- imports sample school data into SchoolTool
+.SH SYNOPSIS
+.B import-sampleschool
+.SH DESCRIPTION
+.B import-sampleschool
+is a script that imports sample school data into a running SchoolTool server.
+The server must be running, and it must not contain any data, or the import
+will fail.
+.SH BUGS
+.B import-sampleschool
+assumes the server is running on localhost port 7001.
+.PP
+The import script performs up to six HTTP requests per object imported and
+is very sluggish.
+.SH "SEE ALSO"
+schooltool-server(1), schooltool-client(1), wxschooltool(1).

@@ -1,0 +1,88 @@
+#!/usr/bin/python2.3
+"""
+A script to import sample school data.
+"""
+
+import os
+import sys
+import urllib
+
+
+class Error(Exception):
+    pass
+
+
+class SampleSchoolImporter:
+
+    host = 'localhost'
+    port = 7001
+
+    expected_version = 'SchoolTool/0.4'
+
+    datadir = '/usr/share/schooltool/sampleschool'
+    ttconfig_filename = datadir + '/ttconfig.data'
+
+    def main(self, argv):
+        """Generate and import sample school data."""
+        try:
+            self.check_server_running()
+            self.check_server_empty()
+            self.import_csv_files()
+            self.import_timetable_data()
+        except Error, e:
+            print >> sys.stderr, str(e)
+            return 1
+        else:
+            return 0
+
+    def check_server_running(self):
+        """Check that the server is running, and it is the correct version."""
+        try:
+            # urllib.urlopen uses FancyURLopener which is too fancy
+            f = urllib.URLopener().open("http://%s:%s"
+                                        % (self.host, self.port))
+        except IOError:
+            raise Error("SchoolTool server not listening on %s:%s"
+                        % (self.host, self.port))
+        else:
+            version = f.info().getheader('Server')
+            if version != self.expected_version:
+                raise Error("Server version is %s, expected %s"
+                            % (version, self.expected_version))
+
+    def check_server_empty(self):
+        """Check that the server is running, and it is the correct version."""
+        for path in '/groups/teachers', '/ttschemas/default':
+            try:
+                # urllib.urlopen uses FancyURLopener which is too fancy
+                f = urllib.URLopener().open("http://%s:%s%s"
+                                            % (self.host, self.port, path))
+            except IOError:
+                # good, we got a 404
+                return
+            else:
+                raise Error("SchoolTool server already has data imported."
+                            " Remove your Data.fs if necessary,\n"
+                            "restart the server and try again.")
+
+    def import_csv_files(self):
+        """Import data from CSV files."""
+        import schooltool.clients.csvclient
+        os.chdir(self.datadir)
+        schooltool.clients.csvclient.main()
+
+    def import_timetable_data(self):
+        """Import data from CSV files."""
+        import schooltool.clients.client
+        ttconfig = file(self.ttconfig_filename)
+        c = schooltool.clients.client.Client(stdin=ttconfig)
+        c.use_rawinput = False
+        c.input_hook = lambda prompt: ttconfig.readline()[:-1]
+        c.server = self.host
+        c.port = self.port
+        c.cmdloop()
+
+
+if __name__ == '__main__':
+    sys.path.insert(0, '/usr/lib/schooltool')
+    sys.exit(SampleSchoolImporter().main(sys.argv))

@@ -171,13 +171,13 @@ def createResources():
     f.close()
 
 
-def main():
-    if len(sys.argv) > 1:
-        random.seed(sys.argv[1])
+def main(argv):
+    if len(argv) > 1:
+        random.seed(argv[1])
     createGroups()
     createPupils()
     createTeachers()
     createResources()
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
