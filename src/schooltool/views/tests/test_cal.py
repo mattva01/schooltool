@@ -36,7 +36,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         from schooltool.cal import SchooldayModel
         from schooltool.views.cal import SchooldayModelCalendarView
         self.sm = SchooldayModel(datetime.date(2003, 9, 1),
-                                 datetime.date(2003, 10, 1))
+                                 datetime.date(2003, 9, 30))
         setPath(self.sm, '/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
 
@@ -76,7 +76,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             DTEND;VALUE=DATE:20030930
             END:VEVENT
         """)
-        for date in daterange(self.sm.start, self.sm.end):
+        for date in daterange(self.sm.first, self.sm.last):
             if date.weekday() not in (5, 6):
                 s = date.strftime("%Y%m%d")
                 expected += dedent("""
@@ -120,9 +120,9 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result, "Calendar imported")
-        self.assertEquals(self.sm.start, datetime.date(2004, 9, 1))
-        self.assertEquals(self.sm.end, datetime.date(2004, 10, 1))
-        for date in daterange(self.sm.start, self.sm.end):
+        self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
+        self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
+        for date in daterange(self.sm.first, self.sm.last):
             if date == datetime.date(2004, 9, 12):
                 self.assert_(self.sm.isSchoolday(date))
             else:
@@ -137,8 +137,8 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result, "Unsupported content type: text/plain")
-        self.assertEquals(self.sm.start, datetime.date(2003, 9, 1))
-        self.assertEquals(self.sm.end, datetime.date(2003, 10, 1))
+        self.assertEquals(self.sm.first, datetime.date(2003, 9, 1))
+        self.assertEquals(self.sm.last, datetime.date(2003, 9, 30))
         self.assert_(self.sm.isSchoolday(datetime.date(2003, 9, 15)))
 
 

@@ -40,7 +40,7 @@ class SchooldayModelCalendarView(View):
 
     def do_GET(self, request):
         request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
-        end_date = self.context.end - datetime.date.resolution
+        end_date = self.context.last
         uid_suffix = "%s@%s" % (getPath(self.context),
                                 request.getRequestHostname())
         result = [
@@ -50,11 +50,11 @@ class SchooldayModelCalendarView(View):
             "BEGIN:VEVENT",
             "UID:school-period-%s" % uid_suffix,
             "SUMMARY:School Period",
-            "DTSTART;VALUE=DATE:%s" % self.context.start.strftime("%Y%m%d"),
+            "DTSTART;VALUE=DATE:%s" % self.context.first.strftime("%Y%m%d"),
             "DTEND;VALUE=DATE:%s" % end_date.strftime("%Y%m%d"),
             "END:VEVENT",
         ]
-        for date in daterange(self.context.start, self.context.end):
+        for date in daterange(self.context.first, self.context.last):
             if self.context.isSchoolday(date):
                 s = date.strftime("%Y%m%d")
                 result += [
@@ -82,8 +82,8 @@ class SchooldayModelCalendarView(View):
         reader = ICalReader(request.content)
         for event in reader.read():
             if event.get('summary', '').lower() == 'school period':
-                self.context.start = event.dtstart
-                self.context.end = event.dtend + datetime.date.resolution
+                self.context.first = event.dtstart
+                self.context.last = event.dtend
             elif event.get('summary', '').lower() == 'schoolday':
                 self.context.add(event.dtstart)
         request.setHeader('Content-Type', 'text/plain')

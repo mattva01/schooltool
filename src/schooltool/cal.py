@@ -23,9 +23,12 @@ $Id$
 """
 from sets import Set
 from zope.interface import implements
-from schooltool.interfaces import ISchooldayModel, ILocation
-from schooltool.interfaces import ITimetable, ITimetableDay, ITimetableActivity
-from schooltool.interfaces import ISchooldayPeriodEvent, ISchooldayTemplate
+from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
+from schooltool.interfaces import ILocation, ISchooldayPeriodEvent
+from schooltool.interfaces import ITimetable, ITimetableWrite
+from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
+from schooltool.interfaces import ITimetableActivity
+from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 import datetime
 
 
@@ -34,22 +37,22 @@ __metaclass__ = type
 
 class SchooldayModel:
 
-    implements(ISchooldayModel, ILocation)
+    implements(ISchooldayModel, ISchooldayModelWrite, ILocation)
 
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
+    def __init__(self, first, last):
+        self.first = first
+        self.last = last
         self._schooldays = Set()
         self.__parent__ = None
         self.__name__ = None
 
     def _validate(self, date):
         if not date in self:
-            raise ValueError("Date %r not in period [%r, %r)" %
-                             (date, self.start, self.end))
+            raise ValueError("Date %r not in period [%r, %r]" %
+                             (date, self.first, self.last))
 
     def __contains__(self, date):
-        return self.start <= date < self.end
+        return self.first <= date <= self.last
 
     def isSchoolday(self, date):
         self._validate(date)
@@ -66,12 +69,12 @@ class SchooldayModel:
         self._schooldays.remove(date)
 
     def addWeekdays(self, *weekdays):
-        for date in daterange(self.start, self.end):
+        for date in daterange(self.first, self.last):
             if date.weekday() in weekdays:
                 self.add(date)
 
     def removeWeekdays(self, *weekdays):
-        for date in daterange(self.start, self.end):
+        for date in daterange(self.first, self.last):
             if date.weekday() in weekdays and self.isSchoolday(date):
                 self.remove(date)
 
@@ -83,14 +86,14 @@ def daterange(date1, date2):
     """Returns a generator of the range of dates from date1 to date2.
 
     >>> from datetime import date
-    >>> list(daterange(date(2003, 9, 1), date(2003, 9, 4)))
+    >>> list(daterange(date(2003, 9, 1), date(2003, 9, 3)))
     [datetime.date(2003, 9, 1), datetime.date(2003, 9, 2), datetime.date(2003, 9, 3)]
     >>> list(daterange(date(2003, 9, 2), date(2003, 9, 1)))
     []
 
     """
     date = date1
-    while date < date2:
+    while date <= date2:
         yield date
         date += datetime.date.resolution
 
@@ -170,7 +173,7 @@ class ICalReader:
 
 class Timetable:
 
-    implements(ITimetable)
+    implements(ITimetable, ITimetableWrite)
 
     def __init__(self, day_ids=()):
         """day_ids is a sequence of the day ids of this timetable.
@@ -198,7 +201,7 @@ class Timetable:
 
 class TimetableDay:
 
-    implements(ITimetableDay)
+    implements(ITimetableDay, ITimetableDayWrite)
 
     def __init__(self, periods=()):
         self.periods = periods
@@ -261,7 +264,7 @@ class SchooldayPeriodEvent:
 
 class SchooldayTemplate:
 
-    implements(ISchooldayTemplate)
+    implements(ISchooldayTemplate, ISchooldayTemplateWrite)
 
     def __init__(self):
         self.events = Set()

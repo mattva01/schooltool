@@ -35,16 +35,18 @@ class TestSchooldayModel(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.interfaces import ISchooldayModel, ILocation
+        from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
+        from schooltool.interfaces import ILocation
 
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 12, 24))
         verifyObject(ISchooldayModel, cal)
+        verifyObject(ISchooldayModelWrite, cal)
         verifyObject(ILocation, cal)
 
     def testAddRemoveSchoolday(self):
         from schooltool.cal import SchooldayModel
 
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 14))
 
         self.assert_(not cal.isSchoolday(date(2003, 9, 1)))
         self.assert_(not cal.isSchoolday(date(2003, 9, 2)))
@@ -62,7 +64,7 @@ class TestSchooldayModel(unittest.TestCase):
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
         cal.addWeekdays(1, 3, 5)
         cal.clear()
-        for d in daterange(cal.start, cal.end):
+        for d in daterange(cal.first, cal.last):
             self.assert_(not cal.isSchoolday(d))
 
     def testMarkWeekday(self):
@@ -88,7 +90,7 @@ class TestSchooldayModel(unittest.TestCase):
 
     def test_contains(self):
         from schooltool.cal import SchooldayModel
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 17))
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 16))
         self.assert_(date(2003, 8, 31) not in cal)
         self.assert_(date(2003, 9, 17) not in cal)
         for day in range(1, 17):
@@ -217,10 +219,11 @@ class TestTimetable(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.cal import Timetable
-        from schooltool.interfaces import ITimetable
+        from schooltool.interfaces import ITimetable, ITimetableWrite
 
         t = Timetable()
         verifyObject(ITimetable, t)
+        verifyObject(ITimetableWrite, t)
 
     def test_keys(self):
         from schooltool.cal import Timetable
@@ -272,10 +275,11 @@ class TestTimetableDay(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.cal import TimetableDay
-        from schooltool.interfaces import ITimetableDay
+        from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 
         td = TimetableDay()
         verifyObject(ITimetableDay, td)
+        verifyObject(ITimetableDayWrite, td)
 
     def test_keys(self):
         from schooltool.cal import TimetableDay
@@ -378,9 +382,11 @@ class TestSchooldayTemplate(unittest.TestCase):
     def test_interface(self):
         from schooltool.cal import SchooldayTemplate
         from schooltool.interfaces import ISchooldayTemplate
+        from schooltool.interfaces import ISchooldayTemplateWrite
 
         tmpl = SchooldayTemplate()
         verifyObject(ISchooldayTemplate, tmpl)
+        verifyObject(ISchooldayTemplateWrite, tmpl)
 
     def test_add_remove_iter(self):
         from schooltool.cal import SchooldayTemplate, SchooldayPeriodEvent

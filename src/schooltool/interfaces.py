@@ -947,9 +947,9 @@ class ISchooldayModel(Interface):
     for a certain period of time.
     """
 
-    start = Attribute("The date of the first day of the period")
+    first = Attribute("The date of the first day of the period")
 
-    end = Attribute("The date after the last day of the period")
+    last = Attribute("The date of the last day of the period")
 
     def __contains__(date):
         """Returns whether the date is within the period covered."""
@@ -959,6 +959,9 @@ class ISchooldayModel(Interface):
 
         Raises a ValueError if the date is outside of the period covered.
         """
+
+
+class ISchooldayModelWrite(Interface):
 
     def add(day):
         """Marks the day as a schoolday.
@@ -998,10 +1001,10 @@ class ICalendar(Interface):
     """A calendar, containing days which in turn contain events.
     """
 
-    start = Attribute(
-        """The start of the period of time covered by the calendar""")
+    first = Attribute(
+        """The first day of the period of time covered by the calendar""")
 
-    end = Attribute("""The end of the period covered by the calendar""")
+    last = Attribute("""The last day of the period covered by the calendar""")
 
     def __getitem__(date):
         """Returns an ICalendarDay for a given date"""
@@ -1041,6 +1044,9 @@ class ITimetable(Interface):
     def __getitem__(key):
         """Returns an ITimetableDay for a given day id"""
 
+
+class ITimetableWrite(Interface):
+
     def __setitem__(key, value):
         """Sets an ITimetableDay for a given day id.
 
@@ -1067,6 +1073,9 @@ class ITimetableDay(Interface):
 
         If there is no activity for the period, returns None.
         """
+
+
+class ITimetableDayWrite(Interface):
 
     def __setitem__(key, value):
         """Sets an ITimetableActivity for a given period.
@@ -1109,6 +1118,8 @@ class ISchooldayTemplate(Interface):
         template.
         """
 
+class ISchooldayTemplateWrite(Interface):
+
     def add(obj):
         """Add an ISchooldayPeriodEvent to the template.
 
@@ -1129,8 +1140,22 @@ class ISchooldayPeriodEvent(Interface):
 
     def __eq__(other):
         """SchooldayPeriodEvents are equal if all three of their
-        attributes are equal."""
+        attributes are equal.
 
+        Raises TypeError if other does not implement ISchooldayPeriodEvent.
+        """
+
+    def __ne__(other):
+        """SchooldayPeriodEvents are not equal if any of their three
+        attributes are not equal.
+
+        Raises TypeError if other does not implement ISchooldayPeriodEvent.
+        """
+
+    def __hash__():
+        """Hashes of ISchooldayPeriodEvents are equal iff those
+        ISchooldayPeriodEvents are equal.
+        """
 
 #
 # Exceptions
