@@ -437,8 +437,19 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
 
     def test_update_delete(self):
         view = self.createView()
-        request = RequestStub(args={'DELETE': 'Why not', 'CHECK': 'weekly'})
-        
+        view.request = RequestStub(args={'DELETE': 'Why not',
+                                         'CHECK': 'weekly'})
+        view.update()
+        self.assertEquals(view.context.keys(), ['bimonthly'])
+
+    def test_update_add(self):
+        view = self.createView()
+        view.request = RequestStub(args={'ADD': 'Why not'})
+        view.update()
+        self.assertEquals(view.request.code, 302)
+        self.assertEquals(view.request.headers['location'],
+                          'http://localhost:7001/newttschema')
+
 
 def test_suite():
     suite = unittest.TestSuite()

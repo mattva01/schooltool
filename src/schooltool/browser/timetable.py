@@ -40,6 +40,7 @@ from schooltool.timetable import SchooldayPeriod
 from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
 from schooltool.component import getTimetableModel
+from schooltool.rest import absoluteURL
 
 __metaclass__ = type
 
@@ -261,7 +262,9 @@ class TimetableSchemaServiceView(View):
                 del self.context[name]
             result = _('Deleted %s.') % ", ".join(self.request.args['CHECK'])
         if 'ADD' in self.request.args:
-            self.request.redirect('/newttschema')
+            self.request.redirect(absoluteURL(self.request,
+                                              self.context.__parent__,
+                                              '/newttschema'))
         return result
 
 

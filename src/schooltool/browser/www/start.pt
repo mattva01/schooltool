@@ -26,6 +26,8 @@
           i18n:translate="">Add a resource</a></p>
     <p><a class="action" href="/applog"
           i18n:translate="">View the application log</a></p>
+    <p><a class="action" href="/ttschemas"
+          i18n:translate="">Manage timetable schemas</a></p>
   </div>
 
   <div tal:condition="view/isTeacher" class="section">
