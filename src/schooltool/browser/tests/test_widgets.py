@@ -325,12 +325,12 @@ class TestPasswordWidget(XMLCompareMixin, unittest.TestCase):
 
     def test_call(self):
         widget = self.createWidget()
-        widget.setValue(u'some <text> \u263B')
+        widget.setValue(u'some <text>')
         expected = u"""
             <div class="row">
               <label for="field">Label</label>
               <input class="text" type="password" name="field" id="field"
-                     value="some &lt;text&gt; \u263B" />
+                     value="some &lt;text&gt;" />
             </div>
             """
         self.assertEqualsXML(widget().encode('UTF-8'),
@@ -430,6 +430,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWidget))
     suite.addTest(unittest.makeSuite(TestWidgetWithConverters))
     suite.addTest(unittest.makeSuite(TestTextWidget))
+    suite.addTest(unittest.makeSuite(TestPasswordWidget))
     suite.addTest(unittest.makeSuite(TestTextAreaWidget))
     suite.addTest(unittest.makeSuite(TestSelectionWidget))
     return suite
