@@ -33,6 +33,8 @@ from zope.app.form.interfaces import WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
+from zope.app.security.interfaces import IAuthentication
+
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
@@ -415,3 +417,22 @@ class LoginView(BrowserView):
     """A login view"""
 
     error = None
+    title = "wtf view"
+
+    def __call__(self):
+        self.update()
+        return self.index()
+
+    def update(self):
+        if ('LOGIN' in self.request and 'username' in self.request and
+            'password' in self.request):
+            auth = zapi.getUtility(IAuthentication)
+            try:
+                auth.setCredentials(self.request, self.request['username'],
+                                    self.request['password'])
+            except ValueError:
+                self.error = _("Username or password is incorrect")
+            else:
+                nexturl = zapi.absoluteURL(self.context, self.request)
+                self.request.response.redirect(nexturl)
+

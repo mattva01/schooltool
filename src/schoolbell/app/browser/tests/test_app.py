@@ -735,6 +735,21 @@ def doctest_PersonAddView():
 
 def doctest_SchoolBellLoginView():
     """
+    Set up the session machinery:
+
+        >>> from zope.app.session.session import ClientId, Session
+        >>> from zope.app.session.session import PersistentSessionDataContainer
+        >>> from zope.publisher.interfaces import IRequest
+        >>> from zope.app.session.http import CookieClientIdManager
+        >>> from zope.app.session.interfaces import ISessionDataContainer
+        >>> from zope.app.session.interfaces import IClientId
+        >>> from zope.app.session.interfaces import IClientIdManager, ISession
+        >>> ztapi.provideAdapter(IRequest, IClientId, ClientId)
+        >>> ztapi.provideAdapter(IRequest, ISession, Session)
+        >>> ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
+        >>> sdc = PersistentSessionDataContainer()
+        >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
+
     Suppose we have a SchoolBell app and a person:
 
         >>> from schoolbell.app.app import SchoolBellApplication
@@ -758,8 +773,62 @@ def doctest_SchoolBellLoginView():
         >>> request.setPrincipal(StubPrincipal())
         >>> View = SimpleViewClass('../templates/login.pt', bases=(LoginView,))
         >>> view = View(app, request)
-        >>> content = view()
 
+    Render it with an empty request:
+
+        >>> content = view()
+        >>> '<h3>Please log in</h3>' in content
+        True
+
+    If we have authentication utility:
+
+        >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+        >>> from zope.app.security.interfaces import IAuthentication
+        >>> auth = SchoolBellAuthenticationUtility()
+        >>> ztapi.provideUtility(IAuthentication, auth)
+        >>> auth.__parent__ = app
+
+    It does not authenticate our session:
+
+        >>> auth.authenticate(request)
+
+    However, if we pass valid credentials, we get authenticated:
+
+        >>> request = TestRequest(form={'username': 'frog',
+        ...                             'password': 'pond',
+        ...                             'LOGIN': 'Log in'})
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+        >>> content = view()
+        >>> view.error
+        >>> request.response.getStatus()
+        302
+        >>> auth.authenticate(request)
+        <schoolbell.app.security.Principal object at 0x...>
+
+    If we pass bad credentials, we get a nice error and a form.
+
+        >>> request = TestRequest(form={'username': 'snake',
+        ...                             'password': 'pw',
+        ...                             'LOGIN': 'Log in'})
+        >>> auth.setCredentials(request, 'frog', 'pond')
+        >>> request.setPrincipal(auth.authenticate(request))
+        >>> view = View(app, request)
+        >>> content = view()
+        >>> view.error
+        u'Username or password is incorrect'
+        >>> view.error in content
+        True
+        >>> 'Please log in' in content
+        True
+
+    The previous credentials are not lost if a new login fails:
+
+        >>> principal = auth.authenticate(request)
+        >>> principal
+        <schoolbell.app.security.Principal object at 0x...>
+        >>> principal.id
+        'sb.person.frog'
 
     """
 
@@ -840,7 +909,8 @@ def tearDown(test):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                       optionflags=doctest.ELLIPSIS))
     return suite
 
 
