@@ -1105,12 +1105,17 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         from schooltool.cal import CalendarOwnerMixin
         from schooltool.interfaces import ICalendarOwner
         from schooltool.interfaces import IACLCalendar, IACL
+        from schooltool.interfaces import ViewPermission, ModifyPermission
+        from schooltool.interfaces import AddPermission
         com = CalendarOwnerMixin()
         verifyObject(ICalendarOwner, com)
         verifyObject(IACLCalendar, com.calendar)
         verifyObject(IACL, com.calendar.acl)
         self.assert_(com.calendar.__parent__ is com)
         self.assertEquals(com.calendar.__name__, 'calendar')
+        assert com.calendar.acl.allows(com, ViewPermission)
+        assert com.calendar.acl.allows(com, ModifyPermission)
+        assert com.calendar.acl.allows(com, AddPermission)
 
 
 class TestACL(unittest.TestCase):
@@ -1181,6 +1186,7 @@ class TestACL(unittest.TestCase):
         assert (Everybody, ViewPermission) not in self.acl
         self.assertEquals(list(iter(self.acl)), [])
         assert not self.acl.allows(Everybody, ViewPermission)
+        assert not self.acl.allows(None, ViewPermission)
 
     def test_iter(self):
         from schooltool.interfaces import ViewPermission

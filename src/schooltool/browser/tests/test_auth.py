@@ -29,7 +29,7 @@ from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import LocatableStub
 
 
-class TestBrowserAuthPolicies(AppSetupMixin, unittest.TestCase):
+class AuthPolicyTestMixin(object):
 
     # request.authenticated_user is None when the user is not logged in
     anonymous = None
@@ -54,6 +54,10 @@ class TestBrowserAuthPolicies(AppSetupMixin, unittest.TestCase):
             self.assert_(not view.authorize(context, request),
                          "%s should deny access for %r"
                          % (view.authorize.__name__, user))
+
+
+class TestBrowserAuthPolicies(AuthPolicyTestMixin, AppSetupMixin,
+                              unittest.TestCase):
 
     def test_PublicAccess(self):
         from schooltool.browser.auth import PublicAccess
@@ -93,10 +97,24 @@ class TestBrowserAuthPolicies(AppSetupMixin, unittest.TestCase):
         self.assertAllows(PrivateAccess, [self.person, self.manager],
                           context)
 
+class TestACLCalendarAccess(AppSetupMixin, AuthPolicyTestMixin,
+                            unittest.TestCase):
+
+    def test_defaults(self):
+        from schooltool.browser.auth import ACLCalendarAccess
+        from schooltool.interfaces import ViewPermission
+        ViewAccess = ACLCalendarAccess(ViewPermission)
+        self.assertAllows(ViewAccess, [self.person, self.manager],
+                          self.person.calendar)
+        self.assertDenies(ViewAccess,
+                          [self.anonymous, self.person2, self.teacher],
+                          self.person.calendar)
+
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBrowserAuthPolicies))
+    suite.addTest(unittest.makeSuite(TestACLCalendarAccess))
     return suite
 
 

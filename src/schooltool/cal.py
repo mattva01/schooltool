@@ -1011,7 +1011,7 @@ class ACLCalendar(Calendar):
         Calendar.__init__(self)
 
 
-class CalendarOwnerMixin:
+class CalendarOwnerMixin(Persistent):
 
     implements(ICalendarOwner)
 
@@ -1019,6 +1019,9 @@ class CalendarOwnerMixin:
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
+        self.calendar.acl.add((self, ViewPermission))
+        self.calendar.acl.add((self, AddPermission))
+        self.calendar.acl.add((self, ModifyPermission))
 
 
 class ACL(Persistent):
@@ -1050,6 +1053,8 @@ class ACL(Persistent):
             raise ValueError("Bad permission: %r" % (permission,))
         if principal == Everybody:
             return permission in self._everybody
+        if principal is None:
+            return False
         else:
             return (principal, permission) in self._data
 

@@ -1211,11 +1211,11 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
         from schooltool.browser.cal import ACLView
-        return ACLView(self.person.calendar.acl)
+        return ACLView(self.person2.calendar.acl)
 
     def test(self):
         view = self.createView()
-        request = RequestStub(authenticated_user=self.person)
+        request = RequestStub(authenticated_user=self.manager)
         result = view.render(request)
         self.assertEquals(request.code, 200)
 
@@ -1224,17 +1224,17 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         view.context.add((self.person, ViewPermission))
         assert view.context.allows(self.person, ViewPermission)
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'DELETE': 'revoke',
                                          'CHECK': 'View:/persons/johndoe'})
         result = view.update()
         assert not view.context.allows(self.person, ViewPermission)
         self.assertEquals(view.request.applog,
-                          [(self.person,
+                          [(self.manager,
                            'Revoked permission View on'
-                           ' /persons/johndoe/calendar/acl from'
+                           ' /persons/notjohn/calendar/acl from'
                            ' /persons/johndoe (John Doe)', INFO)])
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'DELETE': 'revoke'})
         result = view.update()
 
@@ -1243,17 +1243,17 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         view.context.add((Everybody, ViewPermission))
         assert view.context.allows(Everybody, ViewPermission)
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'DELETE': 'revoke',
                                          'CHECK': 'View:Everybody'})
         result = view.update()
         assert not view.context.allows(Everybody, ViewPermission)
         self.assertEquals(view.request.applog,
-                          [(self.person,
+                          [(self.manager,
                            'Revoked permission View on'
-                           ' /persons/johndoe/calendar/acl from'
+                           ' /persons/notjohn/calendar/acl from'
                            ' Everybody', INFO)])
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'DELETE': 'revoke'})
         result = view.update()
 
@@ -1261,16 +1261,16 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
     def test_update_add(self):
         from schooltool.interfaces import ViewPermission
         view = self.createView()
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'add',
                                          'principal': '/persons/johndoe',
                                          'permission': 'View'})
         result = view.update()
         assert view.context.allows(self.person, ViewPermission), result
         self.assertEquals(view.request.applog,
-                          [(self.person,
+                          [(self.manager,
                            'Granted permission View on'
-                           ' /persons/johndoe/calendar/acl to'
+                           ' /persons/notjohn/calendar/acl to'
                            ' /persons/johndoe (John Doe)', INFO)])
         self.assertEquals(result,
                           'Granted permission View to'
@@ -1278,7 +1278,7 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
         result = view.update()
         self.assertEquals(result, 'John Doe already has permission View')
 
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'grant permission',
                                          'principal': ''})
         result = view.update()
@@ -1286,7 +1286,7 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
                           "Please select a principal")
         self.assertEquals(view.request.applog, [])
 
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'grant permission',
                                          'principal':'foo', 'permission': ''})
         result = view.update()
@@ -1296,7 +1296,7 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
     def test_update_add_Everybody(self):
         from schooltool.interfaces import ViewPermission, Everybody
         view = self.createView()
-        view.request = RequestStub(authenticated_user=self.person,
+        view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'add',
                                          'principal': 'Everybody',
                                          'permission': 'View'})

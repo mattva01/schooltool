@@ -66,3 +66,15 @@ def TeacherAccess(context, request):
     return isTeacher(request.authenticated_user)
 
 TeacherAccess = staticmethod(TeacherAccess)
+
+
+class ACLCalendarAccess:
+    def __init__(self, permission):
+        self.permission = permission
+        self.__name__ = self.__class__.__name__
+
+    def __call__(self, context, request):
+        if isManager(request.authenticated_user):
+            return True
+        return context.acl.allows(request.authenticated_user, self.permission)
+    
