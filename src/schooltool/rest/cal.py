@@ -292,6 +292,15 @@ class CalendarView(CalendarReadView):
             return ACLView(self.context.acl)
         raise KeyError(name)
 
+    def _getPrivacy(self, event):
+        cls = event.getOne('CLASS', 'PUBLIC')
+        if cls == 'X-HIDDEN':
+            return 'hidden'
+        elif cls == 'PRIVATE':
+            return 'private'
+        else:
+            return 'public'
+
     def do_PUT(self, request):
         ctype = request.getContentType()
         if ctype != 'text/calendar':
@@ -317,7 +326,8 @@ class CalendarView(CalendarReadView):
                                             event.summary,
                                             location=event.location,
                                             unique_id=event.uid,
-                                            recurrence=event.rrule))
+                                            recurrence=event.rrule,
+                                            privacy=self._getPrivacy(event)))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
 

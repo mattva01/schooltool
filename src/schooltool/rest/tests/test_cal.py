@@ -579,6 +579,7 @@ class TestCalendarView(TestCalendarReadView):
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
+            CLASS:PUBLIC
             END:VEVENT
             BEGIN:VEVENT
             UID:uid2
@@ -587,12 +588,14 @@ class TestCalendarView(TestCalendarReadView):
             DTSTART:20030903T120000
             DURATION:PT1H
             DTSTAMP:20040102T030405Z
+            CLASS:PRIVATE
             END:VEVENT
             BEGIN:VEVENT
             UID:uid3
             SUMMARY:Something else
             DTSTART;VALUE=DATE:20030904
             DTSTAMP:20040102T030405Z
+            CLASS:X-HIDDEN
             END:VEVENT
             END:VCALENDAR
         """)
@@ -619,15 +622,15 @@ class TestCalendarView(TestCalendarReadView):
             CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
                           datetime.timedelta(minutes=20),
                           "Quick Lunch",
-                          unique_id="uid1"),
+                          unique_id="uid1", privacy="public"),
             CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
                           datetime.timedelta(minutes=60),
                           "Long\nLunch", location="Far far away",
-                          unique_id="uid2"),
+                          unique_id="uid2", privacy="private"),
             CalendarEvent(datetime.datetime(2003, 9, 4, 0, 0),
                           datetime.timedelta(days=1),
                           "Something else",
-                          unique_id="uid3"),
+                          unique_id="uid3", privacy="hidden"),
         ]
         self.assertEquals(sorted(events), sorted(expected))
         # ICalendarEvent requires dtstart to be a datetime.datetime instance
