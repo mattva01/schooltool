@@ -371,7 +371,8 @@ def parse_recurrence_rule(value):
 
     >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000Z')
     DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
-    XXX bug: parse UNTIL=date
+    >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008')
+    DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
 
     Of course, other recurrence frequencies may be used:
 
@@ -415,7 +416,11 @@ def parse_recurrence_rule(value):
         count = int(count)
     until = params.pop('UNTIL', None)
     if until is not None:
-        until = parse_date_time(until)
+        if len(until) == 8:
+            until = datetime.datetime.combine(parse_date(until),
+                                              datetime.time(0, 0))
+        else:
+            until = parse_date_time(until)
 
     # instantiate the corresponding recurrence rule
     freq = params.pop('FREQ', None)
