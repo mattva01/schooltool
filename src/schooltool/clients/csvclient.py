@@ -45,7 +45,7 @@ groups.csv contains lines of comma-separated values with the following columns:
   title   -- A human-readable title of the group.
   parents -- A space separated list of names of the groups this group is a
              member in.  The list can be empty.
-  facet   -- A space separated list of facet factories to add to this group.
+  facets  -- A space separated list of facet factories to add to this group.
              The list can be empty.
 
 The following two groups are always created and should not be defined
@@ -99,12 +99,12 @@ columns:
 
 Sample resources.csv::
 
-  "Hall", ""
+  "Hall", "locations"
   "Stadium", "locations"
-  "Room 1", ""
-  "Room 2", ""
   "Projector 1", ""
-  "Vilnius", "locations"
+  "Projector 2", ""
+  "Room 1", "locations"
+  "Room 2", "locations miscgroup"
 
 
 $Id$
@@ -162,8 +162,8 @@ class CSVImporter:
         self.server = HTTPClient(host, port, ssl)
 
     def membership(self, group, member_path):
-        """A tuple (path, method, body) to add a member to a group"""
-        return ('/groups/%s/relationships' % group, 'POST',
+        """Return a tuple (method, path, body) to add a member to a group."""
+        return ('POST', '/groups/%s/relationships' % group,
                 '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
                 ' xmlns="http://schooltool.org/ns/model/0.1"'
                 ' xlink:type="simple"'
@@ -172,8 +172,8 @@ class CSVImporter:
                 ' xlink:href="%s"/>' % to_xml(member_path))
 
     def teaching(self, teacher, taught):
-        """A tuple (path, method, body) to add a teacher to a group"""
-        return ('/groups/%s/relationships' % taught, 'POST',
+        """A tuple (method, path, body) to add a teacher to a group"""
+        return ('POST', '/groups/%s/relationships' % taught,
                 '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
                 ' xmlns="http://schooltool.org/ns/model/0.1"'
                 ' xlink:type="simple"'
@@ -182,75 +182,85 @@ class CSVImporter:
                 ' xlink:href="/persons/%s"/>' % to_xml(teacher))
 
     def importGroup(self, name, title, parents, facets):
-        """Returns a list of tuples of (path, method, body) to run
-        through the server to import this group.
-        """
+        """Import a group."""
         result = []
-        result.append(('/groups/%s' % name, 'PUT',
+        result.append(('PUT', '/groups/%s' % name,
                        '<object xmlns="http://schooltool.org/ns/model/0.1" '
                        'title="%s"/>' % to_xml(title)))
         for parent in parents.split():
             result.append(self.membership(parent, "/groups/%s" % name))
         for facet in facets.split():
-            result.append(('/groups/%s/facets' % name, 'POST',
+            result.append(('POST', '/groups/%s/facets' % name,
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
                            ' factory="%s"/>' % to_xml(facet)))
-        return result
+        for method, resource, body in result:
+            self.process(method, resource, body=body)
 
     def importPerson(self, title):
-        """Returns a list of tuples of (path, method, body) to run
-        through the server to import this person.
-        """
-        return [('/persons', 'POST',
-                 '<object xmlns="http://schooltool.org/ns/model/0.1" '
-                 'title="%s"/>' % to_xml(title))]
+        """Import a person.
 
-    def importResource(self, title):
-        """Returns a list of tuples of (path, method, body) to run
-        through the server to import this resource.
+        Returns the name of the created person object.
         """
-        return [('/resources', 'POST',
-                 '<object xmlns="http://schooltool.org/ns/model/0.1" '
-                 'title="%s"/>' % to_xml(title))]
+        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
+                ' title="%s"/>' % to_xml(title))
+        response = self.process('POST', '/persons', body=body)
+        return self.getName(response)
 
-    def addResourceToGroups(self, name, groups):
+    def importResource(self, title, groups):
+        """Import a resource and add it to each of `groups`.
+
+        `groups` is a string of group names separated by spaces.
+        """
+        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
+                ' title="%s"/>' % to_xml(title))
+        response = self.process('POST', '/resources', body=body)
+
+        name = self.getName(response)
         result = []
         for group in groups.split():
             result.append(self.membership(group, "/resources/%s" % name))
-        return result
+        for method, resource, body in result:
+            self.process(method, resource, body=body)
 
     def importPupil(self, name, parents):
-        """Adds a pupil to the groups.  Need a name (generated path
-        element), so it is separate from importPerson()
+        """Add a pupil to groups.
+
+        Needs a name (generated path element), so it is separate from
+        importPerson().
         """
         result = []
         result.append(self.membership('pupils', "/persons/%s" % name))
         for parent in parents.split():
             result.append(self.membership(parent, "/persons/%s" % name))
-        return result
+        for method, resource, body in result:
+            self.process(method, resource, body=body)
 
     def importTeacher(self, name, taught):
-        """Adds a teacher to the groups.  Need a name (generated path
-        element), so it is separate from importPerson()
+        """Add a teacher to groups.
+
+        Needs a name (generated path element), so it is separate from
+        importPerson().
         """
         result = []
         result.append(self.membership('teachers', "/persons/%s" % name))
         for group in taught.split():
             result.append(self.teaching(name, group))
-        return result
+        for method, resource, body in result:
+            self.process(method, resource, body=body)
 
     def importPersonInfo(self, name, title, dob, comment):
-        """Add the Person Info to this person"""
+        """Add a person info facet to a person"""
         first_name, last_name = title.split(None, 1)
-        return [('/persons/%s/facets/person_info' % name, 'PUT',
-                 '<person_info xmlns="http://schooltool.org/ns/model/0.1"'
-                 ' xmlns:xlink="http://www.w3.org/1999/xlink">'
-                 '<first_name>%s</first_name>'
-                 '<last_name>%s</last_name>'
-                 '<date_of_birth>%s</date_of_birth>'
-                 '<comment>%s</comment>'
-                 '</person_info>' % (to_xml(first_name), to_xml(last_name),
-                                     to_xml(dob), to_xml(comment)))]
+        body = ('<person_info xmlns="http://schooltool.org/ns/model/0.1"'
+                ' xmlns:xlink="http://www.w3.org/1999/xlink">'
+                '<first_name>%s</first_name>'
+                '<last_name>%s</last_name>'
+                '<date_of_birth>%s</date_of_birth>'
+                '<comment>%s</comment>'
+                '</person_info>' % (to_xml(first_name), to_xml(last_name),
+                                    to_xml(dob), to_xml(comment)))
+        self.process('PUT', '/persons/%s/facets/person_info' % name,
+                     body=body)
 
     def getName(self, response):
         loc = response.getheader('Location')
@@ -284,13 +294,8 @@ class CSVImporter:
 
     def importGroupsCsv(self, filename):
         lineno = 0
-        for resource, method, body in self.importGroup(
-                "teachers", _("Teachers"), "root", 'teacher_group'):
-            self.process(method, resource, body=body)
-
-        for resource, method, body in self.importGroup(
-                "pupils", _("Pupils"), "root", ''):
-            self.process(method, resource, body=body)
+        self.importGroup("teachers", _("Teachers"), "root", 'teacher_group')
+        self.importGroup("pupils", _("Pupils"), "root", '')
 
         try:
             for lineno, row in enumerate(csv.reader(self.fopen(filename))):
@@ -298,9 +303,8 @@ class CSVImporter:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
                                     (filename, lineno + 1, len(row)))
-                row = map(from_locale, row)
-                for resource, method, body in self.importGroup(*row):
-                    self.process(method, resource, body=body)
+                name, title, parents, facets = map(from_locale, row)
+                self.importGroup(name, title, parents, facets)
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
                             % (filename, lineno + 1, e))
@@ -314,16 +318,9 @@ class CSVImporter:
                                       " expected 4 columns, got %d") %
                                     (filename, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
-                for resource, method, body in self.importPerson(title):
-                    response = self.process(method, resource, body=body)
-                name = self.getName(response)
-
-                for resource, method, body in self.importTeacher(name, groups):
-                    response = self.process(method, resource, body=body)
-
-                for path, meth, body in self.importPersonInfo(name, title,
-                                                              dob, comment):
-                    response = self.process(meth, path, body=body)
+                name = self.importPerson(title)
+                self.importTeacher(name, groups)
+                self.importPersonInfo(name, title, dob, comment)
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
                             % (filename, lineno + 1, e))
@@ -337,16 +334,9 @@ class CSVImporter:
                                       " expected 4 columns, got %d") %
                                     (filename, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
-                for resource, method, body in self.importPerson(title):
-                    response = self.process(method, resource, body=body)
-                name = self.getName(response)
-
-                for resource, method, body in self.importPupil(name, groups):
-                    self.process(method, resource, body=body)
-
-                for path, meth, body in self.importPersonInfo(name, title,
-                                                              dob, comment):
-                    response = self.process(meth, path, body=body)
+                name = self.importPerson(title)
+                self.importPupil(name, groups)
+                self.importPersonInfo(name, title, dob, comment)
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
                             % (filename, lineno + 1, e))
@@ -360,13 +350,7 @@ class CSVImporter:
                                       " expected 2 columns, got %d") %
                                     (filename, lineno + 1, len(row)))
                 title, groups = map(from_locale, row)
-                for resource, method, body in self.importResource(title):
-                    response = self.process(method, resource, body=body)
-                name = self.getName(response)
-
-                for resource, method, body in \
-                        self.addResourceToGroups(name, groups):
-                    self.process(method, resource, body=body)
+                self.importResource(title, groups)
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
                             % (filename, lineno + 1, e))
@@ -378,7 +362,10 @@ class CSVImporter:
             print message
 
     def run(self):
-        """Run batch import."""
+        """Run the batch import.
+
+        Used by the command-line client.
+        """
         try:
             self.blather(_("Creating groups... "))
             self.importGroupsCsv('groups.csv')

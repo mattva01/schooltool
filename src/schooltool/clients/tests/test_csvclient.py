@@ -135,131 +135,142 @@ teaching_pattern = (
     ' xlink:href="%s"/>')
 
 
+class processStub:
+
+    def __init__(self):
+        self.requests = []
+
+    def __call__(self, method, path, body):
+        self.requests.append((method, path, body))
+
+
 class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
 
     def test_importGroup(self):
         from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
+        im.process = processStub()
 
-        requests = im.importGroup('Name', 'Title', 'root foo', '')
-        self.assertEqual(requests,[
-            ('/groups/Name', 'PUT',
+        im.importGroup('Name', 'Title', 'root foo', '')
+        self.assertEqual(im.process.requests,[
+            ('PUT', '/groups/Name',
              '<object xmlns="http://schooltool.org/ns/model/0.1"'
              ' title="Title"/>'),
-            ('/groups/root/relationships', 'POST',
+            ('POST', '/groups/root/relationships',
              membership_pattern % "/groups/Name"),
-            ('/groups/foo/relationships', 'POST',
-              membership_pattern % "/groups/Name"),
+            ('POST', '/groups/foo/relationships',
+             membership_pattern % "/groups/Name"),
             ])
 
-        requests = im.importGroup('Name', 'Title', '', 'super_facet')
-        self.assertEqual(requests,
-                         [('/groups/Name', 'PUT',
+        im.process = processStub()
+        im.importGroup('Name', 'Title', '', 'super_facet')
+        self.assertEqual(im.process.requests,
+                         [('PUT', '/groups/Name',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Title"/>'),
-                          ('/groups/Name/facets', 'POST',
+                          ('POST', '/groups/Name/facets',
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
                            ' factory="super_facet"/>'),
                           ])
 
-        requests = im.importGroup('Name', 'Title', '', 'ff1 ff2')
-        self.assertEqual(requests,
-                         [('/groups/Name', 'PUT',
+        im.process = processStub()
+        im.importGroup('Name', 'Title', '', 'ff1 ff2')
+        self.assertEqual(im.process.requests,
+                         [('PUT', '/groups/Name',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Title"/>'),
-                          ('/groups/Name/facets', 'POST',
+                          ('POST', '/groups/Name/facets',
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
                            ' factory="ff1"/>'),
-                          ('/groups/Name/facets', 'POST',
+                          ('POST', '/groups/Name/facets',
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
                            ' factory="ff2"/>'),
                           ])
-
-    def test_importResource(self):
-        from schooltool.clients.csvclient import CSVImporter
-
-        im = CSVImporter()
-
-        requests = im.importResource('Room 3')
-        self.assertEqual(requests, [
-            ('/resources', 'POST',
-             '<object xmlns="http://schooltool.org/ns/model/0.1"'
-             ' title="Room 3"/>')])
-
-    def test_addResourceToGroups(self):
-        from schooltool.clients.csvclient import CSVImporter
-
-        im = CSVImporter()
-
-        requests = im.addResourceToGroups('r123', 'locations misc')
-        self.assertEqual(requests, [
-            ('/groups/locations/relationships', 'POST',
-             membership_pattern % "/resources/r123"),
-            ('/groups/misc/relationships', 'POST',
-             membership_pattern % "/resources/r123")])
 
     def test_importPupil(self):
         from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
+        im.getName = lambda response: 'quux'
 
-        requests = im.importPerson('Joe Hacker')
-        self.assertEqual(requests,
-                         [('/persons', 'POST',
+        im.process = processStub()
+        im.importPerson('Joe Hacker')
+        self.assertEqual(im.process.requests,
+                         [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Joe Hacker"/>')])
 
-        requests = im.importPupil('007', 'foo bar')
-        self.assertEqual(requests,
-                         [('/groups/pupils/relationships', 'POST',
+        im.process = processStub()
+        im.importPupil('007', 'foo bar')
+        self.assertEqual(im.process.requests,
+                         [('POST', '/groups/pupils/relationships',
                            membership_pattern % "/persons/007"),
-                          ('/groups/foo/relationships', 'POST',
+                          ('POST', '/groups/foo/relationships',
                            membership_pattern % "/persons/007"),
-                          ('/groups/bar/relationships', 'POST',
-                           membership_pattern % "/persons/007"),
-                          ])
+                          ('POST', '/groups/bar/relationships',
+                           membership_pattern % "/persons/007")])
 
     def test_importTeacher(self):
         from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
+        im.process = processStub()
+        im.getName = lambda response: 'quux'
 
-        requests = im.importPerson('Joe Hacker')
-        self.assertEqual(requests,
-                         [('/persons', 'POST',
+        im.importPerson('Joe Hacker')
+        self.assertEqual(im.process.requests,
+                         [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Joe Hacker"/>')])
 
-        requests = im.importTeacher('007', 'foo bar')
-        expected = [('/groups/teachers/relationships', 'POST',
+        im.process = processStub()
+        im.importTeacher('007', 'foo bar')
+        expected = [('POST', '/groups/teachers/relationships',
                      membership_pattern % "/persons/007"),
-                    ('/groups/foo/relationships', 'POST',
+                    ('POST', '/groups/foo/relationships',
                      teaching_pattern % "/persons/007"),
-                    ('/groups/bar/relationships', 'POST',
+                    ('POST', '/groups/bar/relationships',
                      teaching_pattern % "/persons/007"),
                     ]
 
-        self.assertEqual(requests, expected, "\n" +
-                         diff(pformat(expected), pformat(requests)))
+        self.assertEqual(im.process.requests, expected, "\n" +
+                         diff(pformat(expected),
+                              pformat(im.process.requests)))
+
+    def test_importResource(self):
+        from schooltool.clients.csvclient import CSVImporter
+
+        im = CSVImporter()
+        im.process = processStub()
+        im.getName = lambda response: 'r123'
+
+        im.importResource('Room 3', 'locations misc')
+        self.assertEqual(im.process.requests, [
+            ('POST', '/resources',
+             '<object xmlns="http://schooltool.org/ns/model/0.1"'
+             ' title="Room 3"/>'),
+            ('POST', '/groups/locations/relationships',
+             membership_pattern % "/resources/r123"),
+            ('POST', '/groups/misc/relationships',
+             membership_pattern % "/resources/r123")])
 
     def test_importPersonInfo(self):
         from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
+        im.process = processStub()
 
-        requests = im.importPersonInfo('123','Joe Hacker',
-                                       '1978-01-02', 'comment')
-        self.assertEqual(requests, [(
-            '/persons/123/facets/person_info', 'PUT',
-            '<person_info xmlns="http://schooltool.org/ns/model/0.1"'
-            ' xmlns:xlink="http://www.w3.org/1999/xlink">'
-            '<first_name>Joe</first_name>'
-            '<last_name>Hacker</last_name>'
-            '<date_of_birth>1978-01-02</date_of_birth>'
-            '<comment>comment</comment>'
-            '</person_info>'
-            )])
+        im.importPersonInfo('123','Joe Hacker', '1978-01-02', 'comment')
+        self.assertEquals(im.process.requests, [(
+            'PUT', '/persons/123/facets/person_info',
+            ('<person_info xmlns="http://schooltool.org/ns/model/0.1"'
+             ' xmlns:xlink="http://www.w3.org/1999/xlink">'
+             '<first_name>Joe</first_name>'
+             '<last_name>Hacker</last_name>'
+             '<date_of_birth>1978-01-02</date_of_birth>'
+             '<comment>comment</comment>'
+             '</person_info>'))])
 
     def test_getName(self):
         from schooltool.clients.csvclient import CSVImporter
@@ -271,6 +282,7 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                 if header.lower() == 'location':
                     return 'http://localhost/people/123'
                 return default
+
         name = im.getName(FakeResponse())
         self.assertEqual(name, '123')
 
@@ -325,15 +337,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
             if name == 'resources.csv':
                 return StringIO('"Hall","locations"')
         im.fopen = fopen
+        im.getName = lambda response: 'quux'
 
-        results = []
-        def process(method, resource, body):
-            results.append((method, resource, body))
-            class ResponseStub:
-                def getheader(self, header):
-                    return 'foo://bar/baz/quux'
-            return ResponseStub()
-        im.process = process
+        im.process = processStub()
         im.run()
         expected = [('PUT', '/groups/teachers',
                      '<object xmlns="http://schooltool.org/ns/model/0.1" '
@@ -390,8 +396,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                     ('POST', '/groups/locations/relationships',
                      membership_pattern % "/resources/quux")]
 
-        self.assertEqual(results, expected,
-                         diff(pformat(results), pformat(expected)))
+        self.assertEqual(im.process.requests, expected,
+                         diff(pformat(im.process.requests),
+                              pformat(expected)))
 
     def test_import_badData(self):
         from schooltool.clients.csvclient import CSVImporter
