@@ -25,6 +25,7 @@ $Id$
 import unittest
 import re
 import os
+from StringIO import StringIO
 
 __metaclass__ = type
 
@@ -434,11 +435,26 @@ class TestServer(unittest.TestCase):
         self.assertEquals(server.viewFactory, RootView)
         self.assertEquals(server.appFactory, FakeApplication)
 
+        server.help = lambda: None
+        self.assertRaises(SystemExit, server.configure, ['-h'])
+        self.assertRaises(SystemExit, server.configure, ['--help'])
+
     def test_configure_bad_args(self):
         import getopt
         from schooltool.main import Server
         server = Server()
         self.assertRaises(getopt.GetoptError, server.configure, ['-x'])
+        self.assertRaises(getopt.GetoptError, server.configure, ['xyzzy'])
+
+    def test_main(self):
+        import getopt
+        from schooltool.main import Server
+        stdout = StringIO()
+        stderr = StringIO()
+        server = Server(stdout, stderr)
+        server.run = lambda: None
+        server.main(['--invalid-arg'])
+        self.assert_(stderr.getvalue() != '')
 
     def test_run(self):
         from schooltool.main import Server

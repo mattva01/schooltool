@@ -20,6 +20,13 @@
 """
 Schooltool HTTP server.
 
+Usage: schooltool.py [options]
+Options:
+
+  -c, --config xxx  use this configuration file instead of the default
+  -m, --mockup      start a mockup application
+  -h, --help        show this help message
+
 $Id$
 """
 
@@ -206,13 +213,29 @@ class Server:
     reactor_hook = reactor
     get_transaction_hook = get_transaction
 
+    def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
+        self.stdout = stdout
+        self.stderr = stderr
+
     def main(self, args):
         """Starts the SchoolTool HTTP server.
 
         args contains command line arguments, usually it is sys.argv[1:].
+
+        Returns zero on normal exit, nonzero on error.  Return value should
+        be passed to sys.exit.
         """
-        self.configure(args)
-        self.run()
+        try:
+            self.configure(args)
+        except getopt.GetoptError, e:
+            print >> self.stderr, "schooltool: %s" % e
+            print >> self.stderr, "run schooltool -h for help"
+            return 1
+        except SystemExit, e:
+            return e.args[0]
+        else:
+            self.run()
+            return 0
 
     def configure(self, args):
         """Process command line arguments and configuration files.
@@ -239,7 +262,15 @@ class Server:
         self.appFactory = self.createApplication
 
         # Process command line arguments
-        opts, args = getopt.getopt(args, 'c:m', ['config=', 'mockup'])
+        opts, args = getopt.getopt(args, 'c:hm', ['config=', 'help', 'mockup'])
+
+        for k, v in opts:
+            if k in ('-h', '--help'):
+                self.help()
+                raise SystemExit(0)
+
+        if args:
+            raise getopt.GetoptError("too many arguments")
 
         # Read configuration file
         for k, v in opts:
@@ -254,6 +285,11 @@ class Server:
                 self.appname = 'mockup'
                 self.viewFactory = mockup.RootView
                 self.appFactory = mockup.FakeApplication
+
+    def help(self):
+        """Prints a help message."""
+        message = __doc__.strip().splitlines()[:-1]
+        print >> sys.stdout, "\n".join(message)
 
     def findDefaultConfigFile(self):
         """Returns the default config file pathname."""
@@ -319,15 +355,16 @@ class Server:
         return root
 
     def notifyConfigFile(self, config_file):
-        print "Reading configuration from %s" % config_file
+        print >> self.stdout, "Reading configuration from %s" % config_file
 
     def notifyServerStarted(self, network_interface, port):
-        print "Started HTTP server on %s:%s" % (network_interface or "*", port)
+        print >> self.stdout, ("Started HTTP server on %s:%s"
+                               % (network_interface or "*", port))
 
 
 def main():
     """Starts the SchoolTool HTTP server."""
-    Server().main(sys.argv[1:])
+    sys.exit(Server().main(sys.argv[1:]))
 
 
 if __name__ == '__main__':
