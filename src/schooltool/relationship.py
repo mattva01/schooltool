@@ -37,7 +37,7 @@ from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import IRelationshipValencies
 from schooltool.interfaces import ISpecificURI, IFaceted, IValency
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IUnlinkHook
+from schooltool.interfaces import IUnlinkHook, IMultiContainer
 from schooltool.component import inspectSpecificURI, registerRelationship
 from schooltool.component import strURI, getPath
 from schooltool import component
@@ -327,17 +327,24 @@ class LinkSet:
 
 class RelatableMixin(Persistent):
 
-    implements(IRelatable, IQueryLinks)
+    implements(IRelatable, IQueryLinks, IMultiContainer)
 
     def __init__(self):
         self.__links__ = LinkSet()
 
     def listLinks(self, role=ISpecificURI):
+        """See IQueryLinks"""
         result = []
         for link in self.__links__:
             if link.role.extends(role, False):
                 result.append(link)
         return result
+
+    def getRelativePath(self, obj):
+        """See IMultiContainer"""
+        if obj in self.__links__:
+            return 'relationships/%s' % obj.__name__
+        return obj.__name__
 
 
 class RelationshipValenciesMixin(RelatableMixin):

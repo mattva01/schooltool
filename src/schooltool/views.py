@@ -420,10 +420,11 @@ class RelationshipsView(View, XMLPseudoParser):
     template = Template("www/relationships.pt", content_type="text/xml")
 
     def listLinks(self):
-        return [{'path': getPath(link.traverse()),
+        return [{'traverse': getPath(link.traverse()),
                  'title': link.title,
                  'type': strURI(link.reltype),
-                 'role': strURI(link.role)}
+                 'role': strURI(link.role),
+                 'path': getPath(link)}
                 for link in self.context.listLinks()]
 
     def getValencies(self):

@@ -24,10 +24,10 @@ $Id$
 from sets import Set
 import unittest
 from persistence import Persistent
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import ISpecificURI, IRelatable, ILink, IUnlinkHook
-from schooltool.interfaces import ILinkSet, IPlaceholder
+from schooltool.interfaces import ILinkSet, IPlaceholder, IContainmentRoot
 from schooltool.component import inspectSpecificURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -59,7 +59,7 @@ class Relatable(LocatableEventTargetMixin):
         LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = Set()
 
-class LinkStub:
+class LinkStub(Persistent):
     implements(ILink)
 
     def __init__(self, reltype=None, role=None, target=None, title=None):
@@ -315,12 +315,14 @@ class TestRelatableMixin(unittest.TestCase):
     def test(self):
         from schooltool.relationship import RelatableMixin, relate
         from schooltool.interfaces import IRelatable, IQueryLinks
+        from schooltool.interfaces import IMultiContainer
 
         a = RelatableMixin()
         b = RelatableMixin()
 
         verifyObject(IQueryLinks, a)
         verifyObject(IRelatable, a)
+        verifyObject(IMultiContainer, a)
 
         relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
 
@@ -350,6 +352,23 @@ class TestRelatableMixin(unittest.TestCase):
         self.assertEqual(a.listLinks(URIEmployee), [e, j])
         self.assertEqual(a.listLinks(URIJanitor), [j])
         self.assertEqual(a.listLinks(URIWindowWasher), [])
+
+    def test_getRelativePath(self):
+        from schooltool.relationship import RelatableMixin
+        from schooltool.component import getPath
+
+        parent = RelatableMixin()
+        directlyProvides(parent, IContainmentRoot)
+        link = LinkStub(role=URISuperior, reltype=URICommand,
+                        target=LinkStub())
+        parent.__links__.add(link)
+        link.__parent__ = parent
+        self.assertEqual(getPath(link), '/relationships/0001')
+
+        bystander = LinkStub()
+        bystander.__name__ = '0000'
+        bystander.__parent__ = parent
+        self.assertEqual(getPath(bystander), '/0000')
 
 
 class SimplePlaceholder:

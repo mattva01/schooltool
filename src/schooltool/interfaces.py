@@ -43,11 +43,10 @@ class IContainmentAPI(Interface):
     def getRoot(obj):
         """Return the containment root for obj.
 
-        The object must implement ILocation or IContainmentRoot or
-        IMultiContained and must be attached to the hierarchy
-        (i.e. following parent references should not reach None).  If
-        either of those conditions is not met, raises a TypeError.
-        """
+        The object must implement ILocation or IContainmentRoot and
+        must be attached to the hierarchy (i.e. following parent
+        references should not reach None).  If either of those
+        conditions is not met, raises a TypeError.  """
 
     def traverse(obj, path):
         """Return the object accessible as path from obj.
