@@ -27,12 +27,12 @@ from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
-from schooltool.browser.auth import globalTicketService
-from schooltool.browser.model import PersonView, GroupView, PersonInfoMixin
-from schooltool.interfaces import IApplication
-from schooltool.interfaces import IApplicationObjectContainer
-from schooltool.interfaces import IPerson
-from schooltool.interfaces import AuthenticationError
+from schooltool.browser.auth import ManagerAccess, globalTicketService
+from schooltool.browser.model import PersonView, GroupView
+from schooltool.component import getPath
+from schooltool.interfaces import IApplication, IApplicationObjectContainer
+from schooltool.interfaces import IPerson, AuthenticationError
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -144,7 +144,6 @@ class PersonContainerView(View):
     for that person.
     """
 
-
     __used_for__ = IApplicationObjectContainer
 
     authorization = PublicAccess
@@ -152,7 +151,44 @@ class PersonContainerView(View):
     do_GET = staticmethod(notFoundPage)
 
     def _traverse(self, name, request):
-        return PersonView(self.context[name])
+        if name == 'add.html':
+            return PersonAddView(self.context)
+        else:
+            return PersonView(self.context[name])
+
+
+class PersonAddView(View):
+
+    __used_for__ = IApplicationObjectContainer
+
+    authorization = ManagerAccess
+
+    template = Template('www/person_add.pt')
+
+    error = None
+    username = ''
+
+    def do_POST(self, request):
+        username = request.args['username'][0]
+        # XXX The wx client will not allow us to create a user with a non-ascii
+        #     username (in an ugly way BTW).  I'm not sure of our policy
+        #     with regard to this, so for now an unhandled exception is raised.
+        try:
+            username = unicode(username)
+            if '/' in username or username == u'':
+                raise ValueError()
+        except (UnicodeDecodeError, ValueError):
+            self.error = _('Invalid username')
+            self.username = username
+            return self.do_GET(request)
+
+        person = self.context.new(username, title=username)
+
+        # We could say 'Person created', but we want consistency
+        # (AKA wart-compatibility).
+        request.appLog(_("Object created: %s") % getPath(person))
+        url = absoluteURL(request, person) + '/edit.html'
+        return self.redirect(url, request)
 
 
 class GroupContainerView(View):

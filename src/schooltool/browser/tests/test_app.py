@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from logging import INFO
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
@@ -224,10 +225,65 @@ class TestPersonContainerView(unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
         from schooltool.browser.model import PersonView
+        from schooltool.browser.app import PersonAddView
         view = self.createView()
         person = view.context['person']
         self.assertTraverses(view, 'person', PersonView, person)
+        self.assertTraverses(view, 'add.html', PersonAddView, view.context)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+
+class TestPersonAddView(unittest.TestCase):
+
+    def createView(self):
+        from schooltool.model import Person
+        from schooltool.browser.app import PersonAddView
+
+        class PersonContainerStub:
+
+            def __init__(self):
+                self.persons = []
+
+            def new(self, username, title):
+                person = Person(title=title)
+                person.__name__ = username
+                person.__parent__ = self
+                self.persons.append(person)
+                return person
+
+        self.person_container = PersonContainerStub()
+        setPath(self.person_container, '/persons')
+
+        return PersonAddView(self.person_container)
+
+    def test(self):
+        view = self.createView()
+
+        request = RequestStub()
+        result = view.do_GET(request)
+        self.assert_('Add person' in result)
+
+        request = RequestStub(args={'username': 'newbie'})
+        result = view.do_POST(request)
+        self.assertEquals(request.applog,
+                          [(None, u'Object created: /persons/newbie', INFO)])
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/newbie/edit.html')
+
+        persons = self.person_container.persons
+        self.assertEquals(len(persons), 1)
+        self.assertEquals(persons[0].__name__, 'newbie')
+        self.assertEquals(persons[0].title, 'newbie')
+
+    def test_errors(self):
+        # XXX We're not very i18n friendly by not allowing international
+        #     symbols in user names.
+        view = self.createView()
+        for username in ('newbie \xc4\x85', 'new/bie', ''):
+            request = RequestStub(args={'username': username})
+            view.do_POST(request)
+            self.assertEquals(view.error, 'Invalid username')
 
 
 class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
@@ -257,6 +313,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestLogoutView))
     suite.addTest(unittest.makeSuite(TestStartView))
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
+    suite.addTest(unittest.makeSuite(TestPersonAddView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     return suite
 
