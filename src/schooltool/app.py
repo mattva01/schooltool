@@ -149,7 +149,7 @@ class ApplicationObjectContainer(Persistent):
         obj = self._contents[name]
         if obj.__parent__ is self:
             obj.__parent__ = None
-            obj.__name__ = None
+            # Do not change obj.__name__ as that breaks hashing
         del self._contents[name]
 
     def keys(self):

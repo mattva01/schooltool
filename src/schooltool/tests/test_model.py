@@ -185,7 +185,7 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
         ob = self.newObject()
         ob.__name__ = 'foo'
         ob.__parent__ = parent
-        self.assertEquals(hash(ob), hash((ob.__class__.__name__, '/foo')))
+        self.assertEquals(hash(ob), hash((ob.__class__.__name__, 'foo')))
         ob2 = self.newObject()
         ob2.__name__ = 'foo'
         ob2.__parent__ = parent

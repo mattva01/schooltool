@@ -47,6 +47,13 @@ __metaclass__ = type
 class ApplicationObjectMixin(FacetedEventTargetMixin,
                              RelationshipValenciesMixin,
                              CalendarOwnerMixin, TimetabledMixin):
+    """Mixin that implements IApplicationObject.
+
+    One important note: do not change __name__ after the object is
+    in use (meaning that it may be added to a dict or a set somewhere).
+    Changing __name__ changes the object's hash value, and can result
+    in unpleasantness.
+    """
 
     implements(IApplicationObject)
 
@@ -105,11 +112,10 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
                                            self.title, id(self))
 
     def __hash__(self):
-        try:
-            return hash((self.__class__.__name__, getPath(self)))
-        except (ValueError, TypeError), e:
+        if self.__name__ is None:
             raise TypeError("%r cannot be hashed because it doesn't "
-                            "have a path: %s" % (self, e))
+                            "have a name" % self)
+        return hash((self.__class__.__name__, self.__name__))
 
 
 class Person(ApplicationObjectMixin):

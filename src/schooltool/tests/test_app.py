@@ -148,7 +148,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
             self.assertEqual(list(a.itervalues()), [obj])
             del a[name]
             self.assertRaises(KeyError, a.__getitem__, name)
-            self.assertEqual(obj.__name__, None)
+            self.assertEqual(obj.__name__, name)
             self.assertEqual(obj.__parent__, None)
 
     def testNameCollision(self):
