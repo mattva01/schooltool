@@ -449,7 +449,7 @@
   </addform>
 
   <editform
-      for="schoolbell.app.interfaces.IContainedCalendarEvent"
+      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
       name="edit.html"
       label="Edit Event"
       schema=".cal.ICalendarEventEditForm"

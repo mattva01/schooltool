@@ -43,10 +43,10 @@ def doctest_CalendarEvent():
         ...                       "A sample event",
         ...                       unique_id="*the* event")
 
-    The event implements IContainedCalendarEvent:
+    The event implements ISchoolBellCalendarEvent:
 
-        >>> from schoolbell.app.interfaces import IContainedCalendarEvent
-        >>> verifyObject(IContainedCalendarEvent, event)
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendarEvent
+        >>> verifyObject(ISchoolBellCalendarEvent, event)
         True
 
     It has a name, which is equal to its unique id, and can have a parent:
@@ -58,6 +58,8 @@ def doctest_CalendarEvent():
 
     The calendar in which the event resides is referenced in __parent__,
     but you should just use adaptation to ICalendar:
+
+    XXX mg: I have second thoughts about using adaptation to navigate.
 
         >>> event.__parent__ = object()
 
@@ -173,10 +175,17 @@ def doctest_Calendar():
 
     By the way, you can specify the calendar's owner in the constructor:
 
-        >>> parent = object()
+        >>> class PersonStub:
+        ...     title = 'A person'
+        >>> parent = PersonStub()
         >>> cal2 = Calendar(parent)
         >>> cal2.__parent__ is parent
         True
+
+    The calendar's `title` is its owner's title:
+
+        >>> cal2.title
+        'A person'
 
     We will trust that `expand` inherited from CalendarMixin has been unit
     tested.

@@ -38,14 +38,14 @@ from schoolbell.calendar.interfaces import ICalendar
 from schoolbell.calendar.interfaces import ICalendarEvent
 from schoolbell.calendar.mixins import CalendarMixin
 from schoolbell.calendar.simple import SimpleCalendarEvent
-from schoolbell.app.interfaces import IContainedCalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     """A persistent calendar event contained in a persistent calendar."""
 
-    implements(IContainedCalendarEvent)
+    implements(ISchoolBellCalendarEvent)
 
     __parent__ = None
 
@@ -67,6 +67,8 @@ class Calendar(Persistent, CalendarMixin):
 
     __name__ = 'calendar'
 
+    title = property(lambda self: self.__parent__.title)
+
     def __init__(self, owner=None):
         self.events = PersistentDict()
         self.__parent__ = owner
@@ -78,7 +80,7 @@ class Calendar(Persistent, CalendarMixin):
         return len(self.events)
 
     def addEvent(self, event):
-        assert IContainedCalendarEvent.providedBy(event)
+        assert ISchoolBellCalendarEvent.providedBy(event)
         assert event.__parent__ is None, "Event already belongs to a calendar"
         if event.unique_id in self.events:
             raise ValueError('an event with this unique_id already exists')

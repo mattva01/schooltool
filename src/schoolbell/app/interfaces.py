@@ -52,12 +52,15 @@ from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
 class ISchoolBellCalendar(IEditCalendar, ILocation):
     """A SchoolBell calendar.
 
-    Calendars stored within all provide IContainedCalendarEvent.
+    Calendars stored within all provide ISchoolBellCalendarEvent.
     """
 
+    title = TextLine(title=u"Title",
+        description=u"Title of the calendar.")
 
-class IContainedCalendarEvent(ICalendarEvent, IContained):
-    """An event that is contained in a calendar."""
+
+class ISchoolBellCalendarEvent(ICalendarEvent, IContained):
+    """An event that is contained in a SchoolBell calendar."""
 
 
 class INote(Interface):

@@ -49,7 +49,8 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canWrite, canAccess
 
 from schoolbell.app.cal import CalendarEvent
-from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
+from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
@@ -198,7 +199,7 @@ class CalendarDay(object):
 class PlainCalendarView(BrowserView):
     """A calendar view purely for testing purposes."""
 
-    __used_for__ = ICalendar
+    __used_for__ = ISchoolBellCalendar
 
     num_events = 5
     evt_range = 60*24*14 # two weeks
@@ -240,7 +241,7 @@ class CalendarViewBase(BrowserView):
     This class provides functionality that is useful to several calendar views.
     """
 
-    __used_for__ = ICalendar
+    __used_for__ = ISchoolBellCalendar
 
     # XXX I'd rather these constants would go somewhere in schoolbell.calendar.
     month_names = {
@@ -492,7 +493,7 @@ class CalendarViewBase(BrowserView):
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""
 
-    __used_for__ = ICalendar
+    __used_for__ = ISchoolBellCalendar
 
     next_title = _("Next week")
     current_title = _("Current week")
@@ -682,7 +683,7 @@ class DailyCalendarView(CalendarViewBase):
     the boxes illustrate the duration of the events.
     """
 
-    __used_for__ = ICalendar
+    __used_for__ = ISchoolBellCalendar
 
     starthour = 8
     endhour = 19
@@ -880,7 +881,7 @@ class DailyCalendarView(CalendarViewBase):
 class EventDeleteView(BrowserView):
     """A view for deleting events."""
 
-    __used_for__ = ICalendar
+    __used_for__ = ISchoolBellCalendar
 
     def handleEvent(self):
         """Handle a request to delete an event.
@@ -1200,7 +1201,7 @@ class CalendarEventViewMixin(object):
 class CalendarEventAddView(CalendarEventViewMixin, AddView):
     """A view for adding an event."""
 
-    __used_for__ = ICalendar
+    __used_for__ = ISchoolBellCalendar
     schema = ICalendarEventAddForm
 
     error = None
