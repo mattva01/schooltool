@@ -29,9 +29,49 @@ from schooltool.browser.tests import RequestStub
 
 class TestRequest(unittest.TestCase):
 
-    def test(self):
+    def createRequest(self):
         from schooltool.browser import BrowserRequest
-        rq = BrowserRequest(None, True)
+        return BrowserRequest(None, True)
+
+    def createRequestWithStubbedAuth(self, auth_cookie, user):
+        from schooltool.interfaces import AuthenticationError
+        request = self.createRequest()
+        def authenticate(username, password):
+            if username == 'username' and password == 'password':
+                request.authenticated_user = user
+            else:
+                request.authenticated_user = None
+                raise AuthenticationError
+        request.authenticate = authenticate
+        request.getCookie = {'auth': auth_cookie}.get
+        return request
+
+    def test_maybeAuthenticate_no_auth(self):
+        request = self.createRequest()
+        request.maybeAuthenticate()
+        self.assert_(request.authenticated_user is None)
+
+    def test_maybeAuthenticate_auth(self):
+        from schooltool.browser.auth import globalTicketService
+        ticket = globalTicketService.newTicket(('username', 'password'))
+        user = object()
+        request = self.createRequestWithStubbedAuth(ticket, user)
+        request.maybeAuthenticate()
+        self.assert_(request.authenticated_user is user)
+
+    def test_maybeAuthenticate_password_changed(self):
+        from schooltool.browser.auth import globalTicketService
+        ticket = globalTicketService.newTicket(('username', 'oldpassword'))
+        user = object()
+        request = self.createRequestWithStubbedAuth(ticket, user)
+        request.maybeAuthenticate()
+        self.assert_(request.authenticated_user is None)
+
+    def test_maybeAuthenticate_bad_auth(self):
+        user = object()
+        request = self.createRequestWithStubbedAuth('faketicket', user)
+        request.maybeAuthenticate()
+        self.assert_(request.authenticated_user is None)
 
 
 class TestView(unittest.TestCase):
@@ -59,62 +99,6 @@ class TestView(unittest.TestCase):
         request = RequestStub(method='POST')
         result = view.do_POST(request)
         self.assertEquals(result, 'Something')
-
-    def test_render_no_auth(self):
-        view = self.createConcreteView()
-        request = RequestStub()
-        result = view.render(request)
-        self.assert_(request.authenticated_user is None)
-
-    def test_render_auth(self):
-        from schooltool.browser.auth import globalTicketService
-        from schooltool.interfaces import AuthenticationError
-        view = self.createConcreteView()
-        ticket = globalTicketService.newTicket(('username', 'password'))
-        user = object()
-
-        request = RequestStub(cookies={'auth': ticket})
-        def authenticate(username, password):
-            if username == 'username' and password == 'password':
-                request.authenticated_user = user
-            else:
-                request.authenticated_user = None
-                raise AuthenticationError
-        request.authenticate = authenticate
-
-        result = view.render(request)
-        self.assert_(request.authenticated_user is user)
-
-    def test_render_bad_auth(self):
-        from schooltool.browser.auth import globalTicketService
-        from schooltool.interfaces import AuthenticationError
-        view = self.createConcreteView()
-        ticket = globalTicketService.newTicket(('username', 'password'))
-        user = object()
-
-        request = RequestStub(cookies={'auth': ticket})
-        def authenticate(username, password):
-            if username == 'username' and password == 'new':
-                request.authenticated_user = user
-            else:
-                request.authenticated_user = None
-                raise AuthenticationError
-        request.authenticate = authenticate
-
-        result = view.render(request)
-        self.assert_(request.authenticated_user is None)
-
-    def test_render_password_changed(self):
-        view = self.createConcreteView()
-
-        request = RequestStub(cookies={'auth': 'faketicket'})
-        def authenticate(username, password):
-            request.authenticated_user = None
-            raise AuthenticationError
-        request.authenticate = authenticate
-
-        result = view.render(request)
-        self.assert_(request.authenticated_user is None)
 
     def test_unauthorized(self):
         from schooltool.browser import View

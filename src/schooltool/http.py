@@ -293,6 +293,7 @@ class Request(http.Request):
         self.hitlogger = logging.getLogger('schooltool.access')
         self.applogger = logging.getLogger('schooltool.app')
         self.hit_time = formatHitTime()
+        self.authenticated_user = None
         http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):

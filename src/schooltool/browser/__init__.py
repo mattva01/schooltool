@@ -41,6 +41,20 @@ class BrowserRequest(Request):
     authentication and HTML error messages.
     """
 
+    def maybeAuthenticate(self):
+        """Try to authenticate if the authentication cookie is there."""
+        auth_cookie = self.getCookie('auth')
+        if auth_cookie:
+            try:
+                credentials = globalTicketService.verifyTicket(auth_cookie)
+                self.authenticate(*credentials)
+            except AuthenticationError:
+                # Do nothing if the cookie has expired -- if the user is not
+                # allowed to view the page, the normal authorization mechanism
+                # will redirect him to a login page and say that her session
+                # has expired.
+                pass
+
 
 class View(_View):
     """View for the web application.
@@ -64,27 +78,6 @@ class View(_View):
     redirect_template = Template('www/redirect.pt')
 
     macros = property(lambda self: self.macros_template.macros)
-
-    def render(self, request):
-        """Process the request.
-
-        Hooks in the usual request processing to perform cookie-based
-        authentication and override request.authenticated_user before
-        authorization takes place.
-        """
-        auth_cookie = request.getCookie('auth')
-        if auth_cookie:
-            try:
-                credentials = globalTicketService.verifyTicket(auth_cookie)
-                request.authenticate(*credentials)
-            except AuthenticationError:
-                pass
-        # TODO: _View.render can return a textErrorPage for 405 Method Not
-        #       Allowed.  We should return a nice HTML page instead.
-        #       There are also some calls to textErrorPage and other ad-hoc
-        #       text-only exception formattin in schooltool.main, and I'm not
-        #       sure how to hook into those.
-        return _View.render(self, request)
 
     def unauthorized(self, request):
         """Render an unauthorized page."""
