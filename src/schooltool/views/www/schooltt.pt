@@ -1,4 +1,4 @@
-<schooltt xmlns="http://schooltool.org/ns/timetable/0.1"
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
           xmlns:tal="http://xml.zope.org/namespaces/tal">
   <teacher tal:repeat="item view/getTeachersTimetables"
            tal:attributes="path python: view.getPath(item[0])">

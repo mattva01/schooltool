@@ -24,12 +24,13 @@ $Id$
 
 import unittest
 import libxml2
-import sets
+from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.views.tests import RequestStub, setPath
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -60,7 +61,7 @@ class TimetabledStub:
             return copy
 
     def listCompositeTimetables(self):
-        return sets.Set(self.timetables.keys() + self.overlay.keys())
+        return Set(self.timetables.keys() + self.overlay.keys())
 
 
 class ServiceManagerStub:
@@ -254,8 +255,8 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
               <activity>Maths</activity>
             </period>
             <period id="B">
-              <activity>English</activity>
-              <activity>French</activity>
+              <activity> English</activity>
+              <activity>French </activity>
             </period>
           </day>
           <day id="Day 2">
@@ -669,6 +670,48 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
 class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                               unittest.TestCase):
 
+    example_xml = """
+        <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+          <teacher path="/persons/p2">
+            <day id="A">
+              <period id="Blue">
+              </period>
+              <period id="Green">
+              </period>
+            </day>
+            <day id="B">
+              <period id="Red">
+                <activity group="/groups/sg3">
+                  Email
+                </activity>
+              </period>
+              <period id="Yellow">
+              </period>
+            </day>
+          </teacher>
+          <teacher path="/persons/p1">
+            <day id="A">
+              <period id="Blue">
+                <activity group="/groups/sg2">
+                  Slashdot
+                </activity>
+              </period>
+              <period id="Green">
+                <activity group="/groups/sg1">
+                  Slacking
+                </activity>
+              </period>
+            </day>
+            <day id="B">
+              <period id="Red">
+              </period>
+              <period id="Yellow">
+              </period>
+            </day>
+          </teacher>
+        </schooltt>
+        """
+
     def setUp(self):
         from schooltool.views.timetable import SchoolTimetableView
         from schooltool.model import Group, Person
@@ -676,12 +719,14 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool.membership import Membership
         from schooltool.teaching import TeacherFacet, Teaching
         from schooltool.component import FacetManager
+        from schooltool.component import getTimetableSchemaService
         from schooltool import membership
         from schooltool import relationship
+        from schooltool.timetable import Timetable, TimetableDay
         self.setUpRegistries()
         membership.setUp()
         relationship.setUp()
-        app = Application()
+        app = self.app = Application()
 
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
@@ -705,13 +750,21 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         Teaching(teacher=self.teacher2, taught=self.sg3)
         Teaching(teacher=self.teacher2, taught=self.sg4)
 
-        self.view = SchoolTimetableView(app, key=('2003-spring', '2day'))
+        self.key = ('2003-spring', '2day')
+        self.view = SchoolTimetableView(app, key=self.key)
+
+        service = getTimetableSchemaService(self.app)
+
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(("Green", "Blue"))
+        tt["B"] = TimetableDay(("Red", "Yellow"))
+        service[self.key[1]] = tt
 
     def testEmpty(self):
         request = RequestStub()
         result = self.view.render(request)
         expected = """
-            <schooltt xmlns="http://schooltool.org/ns/timetable/0.1">
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
               <teacher path="/persons/p2">
               </teacher>
               <teacher path="/persons/p1">
@@ -719,69 +772,141 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
             </schooltt>
             """
         self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
+        self.assert_(validate_against_schema(self.view.schema, result),
+                     "Doesn't validate:\n" + result)
 
-    def testNonempty(self):
-        from schooltool.timetable import Timetable, TimetableDay
+    def setUpTimetables(self):
+        from schooltool.component import getTimetableSchemaService
         from schooltool.timetable import TimetableActivity
 
-        tt = Timetable(("A", "B"))
-        tt["A"] = TimetableDay(("Green", "Blue"))
-        tt["B"] = TimetableDay(("Red", "Yellow"))
+        tt = getTimetableSchemaService(self.app)[self.key[1]]
         tt["A"].add("Green", TimetableActivity("Slacking", self.sg1))
-        self.sg1.timetables['2003-spring', '2day'] = tt
+        self.sg1.timetables[self.key] = tt
 
         tt = tt.cloneEmpty()
         tt["A"].add("Blue", TimetableActivity("Slashdot", self.sg2))
-        self.sg2.timetables['2003-spring', '2day'] = tt
+        self.sg2.timetables[self.key] = tt
 
         tt = tt.cloneEmpty()
         tt["B"].add("Red", TimetableActivity("Email", self.sg3))
-        self.sg3.timetables['2003-spring', '2day'] = tt
+        self.sg3.timetables[self.key] = tt
 
+    def testNonempty(self):
+        self.setUpTimetables()
         request = RequestStub()
         result = self.view.render(request)
-        expected = """
-            <schooltt xmlns="http://schooltool.org/ns/timetable/0.1">
+        expected = self.example_xml
+        self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
+        self.assert_(validate_against_schema(self.view.schema, result),
+                     "Doesn't validate:\n" + result)
+
+    def test_PUT(self):
+        from schooltool.timetable import TimetableActivity
+
+        xml = self.example_xml
+        request = RequestStub(method="PUT", body=xml,
+                              headers={'Content-Type': 'text/xml'})
+        result = self.view.render(request)
+
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+
+        self.assertEquals(self.sg4.timetables[self.key],
+                          self.sg4.timetables[self.key].cloneEmpty())
+
+        tt1 = self.sg1.timetables[self.key]
+        self.assertEquals(Set(tt1["A"]["Green"]),
+                          Set([TimetableActivity("Slacking", self.sg1)]))
+        self.assertEquals(Set(tt1["A"]["Blue"]), Set())
+        self.assertEquals(Set(tt1["B"]["Red"]), Set())
+        self.assertEquals(Set(tt1["B"]["Yellow"]), Set())
+
+        tt2 = self.sg2.timetables[self.key]
+        self.assertEquals(Set(tt2["A"]["Blue"]),
+                          Set([TimetableActivity("Slashdot", self.sg2)]))
+        self.assertEquals(Set(tt2["A"]["Green"]), Set())
+        self.assertEquals(Set(tt2["B"]["Red"]), Set())
+        self.assertEquals(Set(tt2["B"]["Yellow"]), Set())
+
+        tt3 = self.sg3.timetables[self.key]
+        self.assertEquals(Set(tt3["A"]["Blue"]), Set())
+        self.assertEquals(Set(tt3["A"]["Green"]), Set())
+        self.assertEquals(Set(tt3["B"]["Red"]),
+                          Set([TimetableActivity("Email", self.sg3)]))
+        self.assertEquals(Set(tt3["B"]["Yellow"]), Set())
+
+    def test_PUT_empty(self):
+        xml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
               <teacher path="/persons/p2">
+              </teacher>
+              <teacher path="/persons/p1">
+              </teacher>
+            </schooltt>
+            """
+        request = RequestStub(method="PUT", body=xml,
+                              headers={'Content-Type': 'text/xml'})
+        result = self.view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(self.sg1.timetables[self.key],
+                          self.sg1.timetables[self.key].cloneEmpty())
+        self.assertEquals(self.sg2.timetables[self.key],
+                          self.sg2.timetables[self.key].cloneEmpty())
+        self.assertEquals(self.sg3.timetables[self.key],
+                          self.sg3.timetables[self.key].cloneEmpty())
+        self.assertEquals(self.sg4.timetables[self.key],
+                          self.sg4.timetables[self.key].cloneEmpty())
+
+    def test_PUT_badxml(self):
+        nonxml = "<schooltt parse error>"
+        badxml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <coach path="/persons/p2">
+              </coach>
+            </schooltt>
+            """
+        bad_path_xml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/persons/p3">
+              </teacher>
+              <teacher path="/persons/p1">
+              </teacher>
+            </schooltt>
+            """
+        bad_day_xml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/persons/p1">
+                <day id="bad"/>
+              </teacher>
+            </schooltt>
+            """
+        bad_period_xml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/persons/p1">
                 <day id="A">
-                  <period id="Blue">
-                  </period>
-                  <period id="Green">
-                  </period>
-                </day>
-                <day id="B">
-                  <period id="Red">
-                    <activity group="/groups/sg3">
-                      Email
-                    </activity>
-                  </period>
-                  <period id="Yellow">
-                  </period>
+                  <period id="bad"/>
                 </day>
               </teacher>
+            </schooltt>
+            """
+        bad_group_xml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
               <teacher path="/persons/p1">
                 <day id="A">
                   <period id="Blue">
-                    <activity group="/groups/sg2">
-                      Slashdot
-                    </activity>
-                  </period>
-                  <period id="Green">
-                    <activity group="/groups/sg1">
-                      Slacking
-                    </activity>
-                  </period>
-                </day>
-                <day id="B">
-                  <period id="Red">
-                  </period>
-                  <period id="Yellow">
+                    <activity group="/persons/p1">Haxoring</activity>
                   </period>
                 </day>
               </teacher>
             </schooltt>
             """
-        self.assertEqualsXML(result, expected, recursively_sort=['schooltt'])
+        for body in (nonxml, badxml, bad_path_xml, bad_day_xml, bad_period_xml,
+                     bad_group_xml):
+            request = RequestStub(method="PUT", body=body,
+                                  headers={'Content-Type': 'text/xml'})
+            result = self.view.render(request)
+            self.assertEquals(request.code, 400)
 
 
 class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):

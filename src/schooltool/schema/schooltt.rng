@@ -3,7 +3,7 @@
 RelaxNG grammar for a timetable for the whole school.
 -->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-         ns="http://schooltool.org/ns/timetable/0.1"
+         ns="http://schooltool.org/ns/schooltt/0.1"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 
   <define name="idattr">
@@ -23,7 +23,7 @@ RelaxNG grammar for a timetable for the whole school.
           <attribute name="path">
             <text/>
           </attribute>
-          <oneOrMore>
+          <zeroOrMore>
             <element name="day">
               <ref name="idattr"/>
               <zeroOrMore>
@@ -40,7 +40,7 @@ RelaxNG grammar for a timetable for the whole school.
                 </element>
               </zeroOrMore>
             </element>
-          </oneOrMore>
+          </zeroOrMore>
         </element>
       </oneOrMore>
     </element>
