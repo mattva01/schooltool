@@ -86,7 +86,6 @@ scripts:
   schooltool-server.py      starts the SchoolTool server
   schoolbell-server.py      starts the SchoolBell server
   schooltool-client.py      starts the command line client
-  wxschooltool.py           starts the wxWidgets GUI client
   generate-sampleschool.py  generates sample school data
   import-sampleschool.py    imports sample data into the server
 
@@ -115,7 +114,6 @@ backwards-compatibility:
                             automated functional tests)
 
   make runclient            starts the command line client
-  make runwxclient          starts the wxWidgets GUI client
 
 These commands are superseded by executable Python scripts in the top-level
 directory.

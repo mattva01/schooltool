@@ -133,7 +133,7 @@ install-indep-stamp:
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
 	# executables
-	for p in schooltool-client wxschooltool import-sampleschool; do \
+	for p in schooltool-client import-sampleschool; do \
 	    install -m 755 -D -p debian/$$p \
 		    debian/$(packageclients)/usr/bin/$$p; \
 	done

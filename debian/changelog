@@ -18,6 +18,7 @@ schooltool (0.8+svn) unstable; urgency=low
     installation. There are now a _LOT_ of lintian warnings about arch-indep
     files in /usr/lib, but this is the lesser evil.
   * Fix package description style to conform to some new lintian warnings.
+  * Disabled the wxschooltool client and removed it from the packages.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
