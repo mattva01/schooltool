@@ -1296,7 +1296,6 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     __used_for__ = ISchoolBellCalendar
     schema = ICalendarEventAddForm
 
-    _redirectToDate = None
     title = _("Add event")
     submit_button_title = _("Add")
 
