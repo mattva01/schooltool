@@ -809,11 +809,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(SystemExit, server.configure, ['--help'])
 
     def test_configure_bad_args(self):
-        import getopt
-        from schooltool.main import Server
+        from schooltool.main import Server, ConfigurationError
         server = Server()
-        self.assertRaises(getopt.GetoptError, server.configure, ['-x'])
-        self.assertRaises(getopt.GetoptError, server.configure, ['xyzzy'])
+        self.assertRaises(ConfigurationError, server.configure, ['-x'])
+        self.assertRaises(ConfigurationError, server.configure, ['xyzzy'])
 
     def test_configure_no_storage(self):
         from schooltool.main import Server

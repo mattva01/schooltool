@@ -48,8 +48,8 @@ from schooltool.membership import Membership
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
+from schooltool.common import StreamWrapper, UnicodeAwareException
 from schooltool.translation import ugettext as _
-from schooltool.common import to_locale
 
 __metaclass__ = type
 
@@ -550,19 +550,23 @@ def profile(fn, extension='prof'):
 # Main loop
 #
 
-no_storage_error_msg = to_locale(_("""\
+no_storage_error_msg = _("""\
 No storage defined in the configuration file.  Unable to start the server.
 
 If you're using the default configuration file, please edit it now and
-uncomment one of the ZODB storage sections."""))
+uncomment one of the ZODB storage sections.""")
 
-usage_msg = to_locale(_("""\
+usage_msg = _("""\
 Usage: %s [options]
 Options:
 
   -c, --config xxx  use this configuration file instead of the default
   -h, --help        show this help message
-  -d, --daemon      go to background after starting"""))
+  -d, --daemon      go to background after starting""")
+
+
+class ConfigurationError(UnicodeAwareException):
+    pass
 
 
 class Server:
@@ -572,8 +576,8 @@ class Server:
     reactor_hook = reactor
 
     def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
-        self.stdout = stdout
-        self.stderr = stderr
+        self.stdout = StreamWrapper(stdout)
+        self.stderr = StreamWrapper(stderr)
         self.get_transaction_hook = get_transaction
 
     def main(self, args):
@@ -586,9 +590,9 @@ class Server:
         """
         try:
             self.configure(args)
-        except getopt.error, e:
-            print >> self.stderr, "schooltool: %s" % e
-            print >> self.stderr, to_locale(_("run schooltool -h for help"))
+        except ConfigurationError, e:
+            print >> self.stderr, u"schooltool: %s" % unicode(e)
+            print >> self.stderr, _("run schooltool -h for help")
             return 1
         except SystemExit, e:
             return e.args[0]
@@ -625,8 +629,11 @@ class Server:
         self.daemon = False
 
         # Process command line arguments
-        opts, args = getopt.getopt(args, 'c:hmd',
-                                   ['config=', 'help', 'daemon'])
+        try:
+            opts, args = getopt.getopt(args, 'c:hmd',
+                                       ['config=', 'help', 'daemon'])
+        except getopt.error, e:
+            raise ConfigurationError(str(e))
 
         for k, v in opts:
             if k in ('-h', '--help'):
@@ -634,7 +641,7 @@ class Server:
                 raise SystemExit(0)
 
         if args:
-            raise getopt.error(to_locale(_("too many arguments")))
+            raise ConfigurationError(_("too many arguments"))
 
         # Read configuration file
         for k, v in opts:
@@ -852,19 +859,17 @@ class Server:
     authenticate = staticmethod(authenticate)
 
     def notifyConfigFile(self, config_file):
-        print >> self.stdout, (to_locale(_("Reading configuration from %s"))
-                               % config_file)
+        print >> self.stdout, _("Reading configuration from %s") % config_file
 
     def notifyServerStarted(self, network_interface, port):
-        print >> self.stdout, (to_locale(_("Started HTTP server on %s:%s"))
+        print >> self.stdout, (_("Started HTTP server on %s:%s")
                                % (network_interface or "*", port))
 
     def notifyDaemonized(self, pid):
-        print >> self.stdout, (to_locale(_("Going background, daemon pid %d"))
-                               % pid)
+        print >> self.stdout, _("Going background, daemon pid %d") % pid
 
     def notifyShutdown(self):
-        print >> self.stdout, (to_locale(_("Shutting down")))
+        print >> self.stdout, _("Shutting down")
 
 
 def setUpModules(module_names):
