@@ -63,7 +63,9 @@ class ResponseStub:
     def read(self):
         if self.request.resource == "/":
             return "Welcome"
-        if self.request.resource == "/doc.xml":
+        elif self.request.resource == "/binfile":
+            return "(binary data)"
+        elif self.request.resource == "/doc.xml":
             return dedent("""
                 <index xmlns:xlink="http://www.w3.org/1999/xlink">
                   <student xlink:type="simple"
@@ -76,6 +78,18 @@ class ResponseStub:
                 """)
         else:
             return "404 :-)"
+
+    def getheader(self, name, default=None):
+        if name.lower() == 'content-type':
+            if self.request.resource == "/":
+                return 'text/plain'
+            elif self.request.resource == "/binfile":
+                return 'application/octet-stream'
+            elif self.request.resource == "/doc.xml":
+                return 'text/xml'
+            else:
+                return 'text/plain'
+        return default
 
 
 class TestClient(unittest.TestCase):
@@ -210,18 +224,72 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.emitted, 'text/plain')
 
         self.emitted = ""
-        self.client.do_accept("text/xml; text/plain;  text/*   ")
-        self.assertEqual(self.emitted, 'text/xml; text/plain; text/*')
+        self.client.do_accept("text/xml, text/plain,  text/*   ")
+        self.assertEqual(self.emitted, 'text/xml, text/plain, text/*')
 
     def test_get(self):
         self.client.server = 'localhost'
         self.client.do_get("/")
         self.assertEqual(self.emitted, "Welcome")
+        self.assertEqual(self.client.last_data, "Welcome")
+
+    def test_get_binary(self):
+        self.client.server = 'localhost'
+        self.client.do_get("/binfile")
+        self.assertEqual(self.emitted,
+                         "Resource is not text: application/octet-stream\n"
+                         "use save <filename> to save it")
+        self.assertEqual(self.client.last_data, "(binary data)")
 
     def test_get_error(self):
         self.client.server = 'badhost'
         self.client.do_get("/")
         self.assertEqual(self.emitted, "Error: could not connect to badhost")
+        self.assert_(self.client.last_data is None)
+
+    def test_save_no_get(self):
+        self.client.do_save("tempfile")
+        self.assertEqual(self.emitted, "Perform a get first")
+
+    def test_save_no_filename(self):
+        self.client.last_data = "xyzzy"
+        self.client.do_save("")
+        self.assertEqual(self.emitted, "No filename")
+
+    def test_save(self):
+        instances = []
+        class FileStub(StringIO):
+            def __init__(self, filename, mode):
+                StringIO.__init__(self)
+                self.filename = filename
+                self.mode = mode
+                self.closed = False
+                instances.append(self)
+            def close(self):
+                self.closed = True
+        filename = "tempfile"
+        self.client.last_data = data = "xyzzy"
+        self.client.file_hook = FileStub
+        self.client.do_save(filename)
+        self.assertEqual(len(instances), 1)
+        file = instances[0]
+        self.assertEqual(file.filename, filename)
+        self.assertEqual(file.mode, 'wb')
+        self.assertEqual(file.getvalue(), data)
+        self.assert_(file.closed)
+        self.assertEqual(self.emitted, "Saved %s: %d bytes"
+                         % (filename, len(data)))
+
+    def test_save_failure(self):
+        class FileStub:
+            msg = 'simulated failure'
+            def __init__(self, filename, mode):
+                raise EnvironmentError(self.msg)
+        filename = "tempfile"
+        self.client.last_data = data = "xyzzy"
+        self.client.file_hook = FileStub
+        self.client.do_save(filename)
+        self.assertEqual(self.emitted, FileStub.msg)
 
     def test_links(self):
         self.assertEqual(self.client.links, False)

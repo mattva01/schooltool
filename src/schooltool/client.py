@@ -50,9 +50,12 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     http = httplib.HTTPConnection
     port = 80
 
+    file_hook = file
+
     def __init__(self, *args):
         Cmd.__init__(self, *args)
         self._setupPrompt()
+        self.last_data = None
 
     def _setupPrompt(self):
         """Sets up the prompt suitable to operating environment.
@@ -127,6 +130,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
 
         get <resource>
         """
+        self.last_data = None
         try:
             conn = self.http(self.server, self.port)
             resource = line.split()[0]
@@ -134,7 +138,13 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             conn.putheader('Accept', self.accept)
             conn.endheaders()
             response = conn.getresponse()
-            data = response.read()
+            self.last_data = data = response.read()
+            ctype = response.getheader('Content-Type',
+                                       'application/octet-stream')
+            if not ctype.startswith('text/'):
+                self.emit("Resource is not text: %s" % ctype)
+                self.emit("use save <filename> to save it")
+                return
             self.emit(data)
             if self.links:
                 self.emit("=" * 50)
@@ -164,6 +174,27 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                     self.emit("Could not extract links: %s" % e)
         except socket.error:
             self.emit('Error: could not connect to %s' % self.server)
+
+    def do_save(self, line):
+        """Save the last downloaded resource to a file.
+
+        save <filename>
+        """
+        if not line:
+            self.emit("No filename")
+            return
+        filename = line
+        if not self.last_data:
+            self.emit("Perform a get first")
+            return
+        try:
+            f = self.file_hook(filename, 'wb')
+            f.write(self.last_data)
+            f.close()
+        except EnvironmentError, e:
+            self.emit(str(e))
+        else:
+            self.emit("Saved %s: %d bytes" % (filename, len(self.last_data)))
 
     def do_links(self, line):
         """Toggle the display of xlinks found in the response.
