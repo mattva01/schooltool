@@ -413,7 +413,7 @@ class TestVEvent(unittest.TestCase):
         vevent.add('uid', 'unique5', {})
         vevent.add('location', 'Somewhere')
         vevent.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
-        vevent.add('exdate', '19960402T010000Z,19960404T010000Z',)
+        vevent.add('exdate', '19960402T010000,19960404T010000',)
         vevent.validate()
 
         self.assertEquals(vevent.rrule.interval, 1)
