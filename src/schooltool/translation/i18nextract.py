@@ -108,7 +108,7 @@ msgstr ""
 "MIME-Version: 1.0\\n"
 "Content-Type: text/plain; charset=%(charset)s\\n"
 "Content-Transfer-Encoding: %(encoding)s\\n"
-"Generated-By: schooltool/translation/i18nextract.py.py\\n"
+"Generated-By: schooltool/translation/i18nextract.py\\n"
 
 '''
 
