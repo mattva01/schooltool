@@ -81,7 +81,7 @@ class CalendarTraverser(object):
     adapts(ICalendarOwner)
     implements(IBrowserPublisher)
 
-    queryMultiAdapter = queryMultiAdapter
+    queryMultiAdapter = staticmethod(queryMultiAdapter)
 
     def __init__(self, context, request):
         self.context = context
