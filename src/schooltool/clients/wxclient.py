@@ -33,7 +33,6 @@ the Free Software Foundation; either version 2 of the License, or
 
 import os
 import sets
-import locale
 import libxml2
 import datetime
 import threading

@@ -397,7 +397,7 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(rq.code, 400)
 
     def test_process_vh(self):
-        from schooltool.main import Request, SERVER_VERSION
+        from schooltool.main import Request
         channel = ChannelStub()
         rq = Request(channel, True)
         rq.reactor_hook = ReactorStub()
@@ -468,7 +468,6 @@ class TestRequest(unittest.TestCase):
         rq.postpath = ['++vh++https:host:www', 'virtual1', 'virtual2', '++',
                        'groups', 'teachers']
         self.assertRaises(ValueError, rq._handleVh)
-
 
     def newRequest(self, path, render_stub=None, traverse_stub=None,
                    user=None, password=None):

@@ -374,7 +374,6 @@ class Request(http.Request):
             if virtual:
                 self.virtualpath = '/' + '/'.join(virtual)
 
-
     def _process(self):
         """Process the request in a separate thread.
 
@@ -770,7 +769,6 @@ class Server:
         if self.config.pid_file:
             os.unlink(self.config.pid_file)
 
-
     def daemonize(self):
         """Daemonize with a double fork and close the standard IO."""
         pid = os.fork()
@@ -790,7 +788,6 @@ class Server:
         os.open('/dev/null', os.O_RDWR)
         os.dup(0)
         os.dup(0)
-
 
     def prepareDatabase(self):
         """Prepare the database.

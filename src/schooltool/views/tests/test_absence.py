@@ -30,7 +30,6 @@ from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.tests.helpers import diff, dedent
 from schooltool.views.tests import RequestStub
 from schooltool.views.tests import TraversableStub, TraversableRoot, setPath
-from schooltool.common import to_unicode
 
 __metaclass__ = type
 
