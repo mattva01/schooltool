@@ -1079,9 +1079,9 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                                 x_page='2', x_total_pages='3')
         client = self.newClient(response)
         logpage = client.getAppLogPage(page=4, pagesize=15,
-                                               filter_str='foo!')
+                                               filter_str=u'foo! \u263B')
         self.assertEquals(client._connections[0].path,
-                          '/applog?page=4&pagesize=15&filter=foo%21')
+                          '/applog?page=4&pagesize=15&filter=foo%21+%E2%98%BB')
         self.assertEquals(logpage.text, 'abc')
         self.assertEquals(logpage.page, 2)
         self.assertEquals(logpage.total_pages, 3)

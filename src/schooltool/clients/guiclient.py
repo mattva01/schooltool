@@ -590,7 +590,7 @@ class SchoolToolClient:
         """
         args = [('page', page), ('pagesize', pagesize)]
         if filter_str:
-            args.append(('filter', filter_str))
+            args.append(('filter', filter_str.encode('UTF-8')))
         qs = urllib.urlencode(args)
         response = self.get('/applog?' + qs)
         if response.status != 200:
