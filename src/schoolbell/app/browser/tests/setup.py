@@ -2,7 +2,7 @@
 Setup code for SchoolBell unit tests.
 """
 
-from zope.interface import directlyProvides
+from zope.interface import directlyProvides, implements
 from zope.app.testing import setup, ztapi
 from zope.app.session.session import ClientId, Session
 from zope.app.session.session import PersistentSessionDataContainer
@@ -32,7 +32,7 @@ from zope.app.traversing.interfaces import IPathAdapter
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.publisher.browser.menu import MenuAccessView
-from zope.app.publisher.interfaces.browser import IMenuItemType
+from zope.app.publisher.interfaces.browser import IMenuItemType, IBrowserMenu
 from zope.app.component.hooks import setSite
 
 from schoolbell.relationship.tests import setUpRelationships
@@ -64,6 +64,26 @@ def setUpSchoolBellSite():
     setUpLocalAuth(app)
     setSite(app)
     return app
+
+class BrowserMenuStub(object):
+    """A stub that fakes browser menu.
+
+    So we could display schoolbell_actions menu in unit tests.
+    """
+
+    implements(IBrowserMenu)
+
+    id = None
+    title = None
+    description = None
+
+    def __init__(self, id, title=u'', description=u''):
+        self.id = id
+        self.title = title
+        self.description = description
+
+    def getMenuItems(self, object, request):
+        return []
 
 
 def setUp(test=None):
@@ -147,11 +167,8 @@ def setUp(test=None):
 
     # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
-    class ZMIMenu(object):
-        pass
-    directlyProvides(ZMIMenu, IMenuItemType)
-    ztapi.provideUtility(IMenuItemType, ZMIMenu, 'zmi_views')
-    ztapi.provideUtility(IMenuItemType, ZMIMenu, 'schoolbell_actions')
+    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('zmi_views'), 'zmi_views')
+    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schoolbell_actions'), 'schoolbell_actions')
 
 
 def tearDown(test=None):
