@@ -1388,6 +1388,8 @@ class ITimetableDay(Interface):
 
     timetable = Attribute("""The timetable that contains this day.""")
 
+    day_id = Attribute("""The day id of this timetable day.""")
+
     periods = Attribute("""A list of periods IDs for this day.""")
 
     def keys():
@@ -1491,7 +1493,6 @@ class ITimetableActivityAddedEvent(IEvent):
     """Event that gets sent when an activity is added to a timetable day."""
 
     activity = Attribute("""A timetable activity.""")
-    key = Attribute("""Tuple (time_period_id, schema_id).""")
     day_id = Attribute("""The day_id of the containing timetable day.""")
     period_id = Attribute("""The period_id of the activity.""")
 

@@ -107,12 +107,15 @@ class TestTimetable(unittest.TestCase):
         class DayStub:
             implements(ITimetableDay)
             timetable = None
+            day_id = None
 
         self.assertRaises(TypeError, t.__setitem__, "Mo", object())
         self.assertRaises(ValueError, t.__setitem__, "Mon", DayStub())
         monday = DayStub()
         t["Mo"] = monday
         self.assertEqual(t["Mo"], monday)
+        self.assert_(monday.timetable is t)
+        self.assert_(monday.day_id is 'Mo')
 
     def test_items(self):
         from schooltool.timetable import Timetable
@@ -340,7 +343,6 @@ class TestTimetableDay(EventServiceTestMixin, unittest.TestCase):
         td.add("1", math)
         e1 = self.checkOneEventReceived()
         self.assert_(ITimetableActivityAddedEvent.providedBy(e1))
-        self.assertEquals(e1.key, ('a', 'key'))
         self.assertEquals(e1.day_id, 'td')
         self.assertEquals(e1.period_id, '1')
 
@@ -551,10 +553,9 @@ class TestTimetableEvents(unittest.TestCase):
         from schooltool.timetable import TimetableActivityAddedEvent
         from schooltool.interfaces import ITimetableActivityAddedEvent
         obj = object()
-        key = ('a', 'b')
         day_id = 'Monday'
         period_id = 'autumn'
-        e = TimetableActivityAddedEvent(obj, key, day_id, period_id)
+        e = TimetableActivityAddedEvent(obj, day_id, period_id)
         verifyObject(ITimetableActivityAddedEvent, e)
 
 

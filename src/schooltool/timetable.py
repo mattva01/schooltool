@@ -231,6 +231,7 @@ class Timetable(Persistent):
             raise ValueError("%r already belongs to timetable %r"
                              % (value, value.timetable))
         value.timetable = self
+        value.day_id = key
         self.days[key] = value
 
     def clear(self):
@@ -275,6 +276,7 @@ class TimetableDay(Persistent):
     implements(ITimetableDay, ITimetableDayWrite)
 
     timetable = None
+    day_id = None
 
     def __init__(self, periods=()):
         self.periods = periods
@@ -315,18 +317,8 @@ class TimetableDay(Persistent):
         self.activities[period].add(activity)
 
         if original and IEventTarget.providedBy(self.timetable.__parent__):
-            key, day_id = self._getTTDayInfo()
-            event = TimetableActivityAddedEvent(activity, key, day_id, period)
+            event = TimetableActivityAddedEvent(activity, self.day_id, period)
             event.dispatch(self.timetable.__parent__)
-
-    def _getTTDayInfo(self):
-        # XXX A temporary workaround, to be removed ASAP.
-        for k, td in self.timetable.items():
-            if td is self:
-                day_id = k
-                break
-        key = self.timetable.__name__
-        return key, day_id
 
     def remove(self, period, value):
         if period not in self.periods:
@@ -461,16 +453,11 @@ class TimetableActivityAddedEvent(EventMixin):
 
     implements(ITimetableActivityAddedEvent)
 
-    def __init__(self, activity, key, day_id, period_id):
+    def __init__(self, activity, day_id, period_id):
         EventMixin.__init__(self)
         self.activity = activity
-        self.key = key
         self.day_id = day_id
         self.period_id = period_id
-
-    def __unicode__(self):
-        return ("TimetableActivityAddedEvent object=%s (%s) key=%s"
-                % (getPath(self.object), self.object.title, self.key))
 
 
 class TimetableExceptionEvent(EventMixin):

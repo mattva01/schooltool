@@ -116,8 +116,9 @@ class TimetableResourceSynchronizer:
             raise TypeError("Unknown event: %r" % event)
 
     def notifyActivityAdded(self, event):
-        self._activityAdded(event.activity, event.key, event.day_id,
-                            event.period_id, event.activity.timetable)
+        self._activityAdded(event.activity, event.activity.timetable.__name__,
+                            event.day_id, event.period_id,
+                            event.activity.timetable)
 
     def notifyTimetableReplaced(self, event):
         if event.old_timetable is not None:
