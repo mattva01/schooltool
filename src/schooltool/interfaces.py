@@ -1275,7 +1275,7 @@ class IPerson(IApplicationObject):
     Participates in URIMembership as URIMember.
     """
 
-    title = Attribute("""Person's name""")
+    title = Attribute("""Person's full name""")
 
     username = Attribute("""The username of this person""")
 
@@ -1301,11 +1301,13 @@ class IPerson(IApplicationObject):
         """
 
     def setPassword(password):
-        """Sets the password in a hashed form, so it can be verified later"""
+        """Set the password in a hashed form, so it can be verified later."""
 
     def checkPassword(password):
-        """Retuns True if the password is the same as the one set
+        """Check if the provided password is the same as the one set
         earlier using setPassword.
+
+        Returns True if the passwords match.
         """
 
 
