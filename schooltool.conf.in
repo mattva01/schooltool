@@ -1,6 +1,14 @@
 # Sample SchoolTool HTTP server configuration file
 
 #
+# path /path/to/add
+# path /another/path/to/add
+#
+#  Specifies a path to add to the beginning of Python's module search path
+#  There can be zero or more 'path' directives
+#
+
+#
 # listen port
 # listen interface:port
 #

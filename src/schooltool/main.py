@@ -408,6 +408,12 @@ class Server:
                 config_file = v
         self.config = self.loadConfig(config_file)
 
+        # Add directories to the pythonpath
+        path = self.config.path[:]
+        path.reverse()
+        for dir in path:
+            sys.path.insert(0, dir)
+
         # Process any command line arguments that may override config file
         # settings here.
         for k, v in opts:

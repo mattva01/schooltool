@@ -21,6 +21,18 @@
     </example>
   </section>
 
+  <multikey name="path" datatype="string">
+    <description>
+      This specifies additional paths directories that are inserted into
+      the beginning of Python's module search path.  The set of directories
+      specified is inserted into the beginning of the module search path in
+      the order which they are specified here.  Note that the processing of
+      this directive may happen too late under some circumstances; it is
+      recommended that you use the PYTHONPATH environment variable if
+      using this directive doesn't work for you.
+    </description>
+  </multikey>
+
   <multikey name="listen" datatype="inet-address">
     <description>
       Network interface and port number the HTTP server should listen on.

@@ -25,6 +25,7 @@ $Id$
 import unittest
 import re
 import os
+import sys
 from StringIO import StringIO
 from schooltool.tests.utils import RegistriesSetupMixin
 
@@ -509,6 +510,14 @@ class TestRequest(unittest.TestCase):
 
 class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
+    def setUp(self):
+        self.setUpRegistries()
+        self.original_path = sys.path[:]
+
+    def tearDown(self):
+        sys.path[:] = self.original_path
+        self.tearDownRegistries()
+
     def getConfigFileName(self):
         dirname = os.path.dirname(__file__)
         return os.path.join(dirname, 'sample.conf')
@@ -522,6 +531,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(config.thread_pool_size, 42)
         self.assertEquals(config.listen, [('', 123), ('10.20.30.40', 9999)])
         self.assert_(config.database is not None)
+        self.assertEquals(config.path, ['/xxxxx', '/yyyyy/zzzzz'])
 
     def test_findDefaultConfigFile(self):
         from schooltool.main import Server
@@ -543,6 +553,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(server.appname, 'schooltool')
         self.assertEquals(server.viewFactory, getView)
         self.assertEquals(server.appFactory, server.createApplication)
+        self.assertEquals(sys.path,
+                          ['/xxxxx', '/yyyyy/zzzzz'] + self.original_path)
 
     def test_configure_with_args(self):
         from schooltool.main import Server
@@ -558,6 +570,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(server.appname, 'mockup')
         self.assertEquals(server.viewFactory, RootView)
         self.assertEquals(server.appFactory, FakeApplication)
+        self.assertEquals(sys.path,
+                          ['/xxxxx', '/yyyyy/zzzzz'] + self.original_path)
 
         server.help = lambda: None
         self.assertRaises(SystemExit, server.configure, ['-h'])
@@ -609,6 +623,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(reactor._tcp_listeners[0][2], '')
         self.assertEquals(reactor._tcp_listeners[1][0], 9999)
         self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
+        self.assertEquals(sys.path,
+                          ['/xxxxx', '/yyyyy/zzzzz'] + self.original_path)
         site = reactor._tcp_listeners[0][1]
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is getView)
