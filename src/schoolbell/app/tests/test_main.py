@@ -49,11 +49,17 @@ def doctest_main():
     Since we don't want to actually create disk files and start a web server in
     a test, we will set up some stubs.
 
+        >>> from schoolbell.app.main import Options
+        >>> options = Options()
+        >>> class ConfigStub:
+        ...     pid_file = ''
+        >>> options.config = ConfigStub()
+
         >>> def load_options_stub(argv):
-        ...     return ' '.join(argv)
-        >>> def setup_stub(options):
+        ...     return options
+        >>> def setup_stub(opts):
         ...     print "Performing setup..."
-        ...     print "Options: %s" % options
+        ...     assert opts is options
         >>> def run_stub():
         ...     print "Running..."
         >>> from schoolbell.app import main
@@ -68,7 +74,6 @@ def doctest_main():
 
         >>> main.main(['sb.py', '-d'])
         Performing setup...
-        Options: sb.py -d
         Startup time: ... sec real, ... sec CPU
         Running...
 
@@ -92,11 +97,24 @@ def doctest_load_options():
         >>> sample_config_file = os.path.join(test_dir, 'sample.conf')
         >>> empty_config_file = os.path.join(test_dir, 'empty.conf')
 
+    load_options will report errors to stderr.  We need to temporarily
+    redirect stderr to stdout, because otherwise doctests will not see the
+    output.
+
+        >>> import sys
+        >>> old_stderr = sys.stderr
+        >>> sys.stderr = sys.stdout
+
     Load options parses command line arguments and the configuration file.
+    Warnings about obsolete options are shown.
 
         >>> from schoolbell.app.main import load_options
         >>> o = load_options(['sb.py', '-c', sample_config_file, '-d'])
         Reading configuration from ...sample.conf
+        sb.py: warning: the `module` option is obsolete.
+        sb.py: warning: the `domain` option is obsolete.
+        sb.py: warning: the `lang` option is obsolete.
+        sb.py: warning: the `path` option is obsolete.
 
     Some options come from the command line
 
@@ -107,6 +125,8 @@ def doctest_load_options():
 
     Some come from the config file
 
+        >>> o.config.web
+        [('', 48080)]
         >>> o.config.listen
         [('...', 123), ('10.20.30.40', 9999)]
 
@@ -126,13 +146,6 @@ def doctest_load_options():
           -h, --help        show this help message
           -d, --daemon      go to background after starting
         [exited with status 0]
-
-    It will report errors to stderr.  We need to temporarily redirect stderr to
-    stdout, because otherwise doctests will not see it.
-
-        >>> import sys
-        >>> old_stderr = sys.stderr
-        >>> sys.stderr = sys.stdout
 
     Here's what happens, when you use an unknown command line option.
 
@@ -195,9 +208,11 @@ def doctest_setup():
         ...     def open(self):
         ...         return DB(MappingStorage())
         >>> class ConfigStub:
-        ...     listen = []
+        ...     web = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
+        ...     pid_file = ''
+        ...     path = []
         >>> options.config = ConfigStub()
 
         >>> setup(options)

@@ -92,7 +92,8 @@ def main(argv=sys.argv):
     t1, c1 = time.time(), time.clock()
     print "Startup time: %.3f sec real, %.3f sec CPU" % (t1-t0, c1-c0)
     run()
-    # TODO: clean up .pid file
+    if options.config.pid_file:
+        os.unlink(options.config.pid_file)
 
 
 def load_options(argv):
@@ -115,7 +116,12 @@ def load_options(argv):
         if k in ('-c', '--config'):
             options.config_file = v
         if k in ('-d', '--daemon'):
-            options.daemon = True
+            if not hasattr(os, 'fork'):
+                print >> sys.stderr, ("%s: daemon mode not supported on your"
+                                      " operating system.")
+                sys.exit(1)
+            else:
+                options.daemon = True
 
     # Read configuration file
     schema = ZConfig.loadSchema(ZCONFIG_SCHEMA)
@@ -130,10 +136,15 @@ def load_options(argv):
         print >> sys.stderr, "%s: %s" % (progname, no_storage_error_msg)
         sys.exit(1)
 
-    # XXX path, module, listen, ssl, event logging, test-mode, pid-file, log-files, domain, lang
-    # TODO: warn about unsupported options in config file
-    # TODO: complain about -d if we don't have os.fork
-    # TODO: raise an error if options.config.database.config.storage is None.
+    # Complain about obsolete options.  This section should be removed
+    # in later SchoolBell versions.
+    deprecated = ['module', 'test_mode', 'domain', 'lang', 'path']
+    for setting in deprecated:
+        if getattr(options.config, setting):
+            print >> sys.stderr, ("%s: warning: the `%s` option is"
+                                  " obsolete." % (progname, setting))
+    # TODO: log
+
     return options
 
 
@@ -150,8 +161,7 @@ def setup(options):
     try:
        db = db_configuration.open()
     except IOError, e:
-        print >> sys.stderr, ("%s: Could not initialize the database:\n%s"
-                              % (options.progname, e))
+        print >> sys.stderr, ("Could not initialize the database:\n%s" % (e, ))
         if e.errno == errno.EAGAIN: # Resource temporarily unavailable
             print >> sys.stderr, ("\nPerhaps another SchoolBell instance"
                                   " is using it?")
@@ -164,15 +174,42 @@ def setup(options):
     task_dispatcher = ThreadedTaskDispatcher()
     task_dispatcher.setThreadCount(options.config.thread_pool_size)
 
-    for ip, port in options.config.listen:
+    for ip, port in options.config.web:
         print "Started HTTP server for web UI on %s:%d" % (ip or "*", port)
         http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
 
     notify(ProcessStarting())
 
-    # TODO: daemonize, create .pid file
+    if options.daemon:
+        daemonize()
+
+    if options.config.pid_file:
+        pidfile = file(options.config.pid_file, "w")
+        print >> pidfile, os.getpid()
+        pidfile.close()
 
     return db
+
+
+def daemonize():
+    """Daemonize with a double fork and close the standard IO."""
+    pid = os.fork()
+    if pid:
+        sys.exit(0)
+    os.setsid()
+    os.umask(077)
+
+    pid = os.fork()
+    if pid:
+        print "Going to background, daemon pid %d" % pid
+        sys.exit(0)
+
+    os.close(0)
+    os.close(1)
+    os.close(2)
+    os.open('/dev/null', os.O_RDWR)
+    os.dup(0)
+    os.dup(0)
 
 
 def bootstrapSchoolBell(db):
