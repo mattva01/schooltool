@@ -1750,6 +1750,11 @@ class ITimetableSchemaService(ILocation):
     can return a new timetable of a certain schema on request.
     """
 
+    default_id = Attribute("""Schema id of the default schema""")
+
+    def getDefault():
+        """Return the default schema for the school"""
+
     def keys():
         """Return a sequence of all stored schema ids."""
 

@@ -1462,11 +1462,13 @@ class TestTimetableSchemaService(unittest.TestCase):
         self.assertEqual(service.keys(), ["super"])
         self.assertEqual(service["super"].__name__, "super")
         self.assert_(service["super"].__parent__ is service)
+        self.assertEqual(service.default_id, "super")
 
         copy1 = service["super"]
         copy2 = service["super"]
         self.assert_(copy2 is not copy1)
         self.assertEqual(copy2, copy1)
+        self.assertEqual(service.getDefault(), copy1)
         self.assertEqual(tt.cloneEmpty(), copy1)
 
         self.assertEqual(len(list(copy1["A"]["Green"])), 0)
@@ -1478,6 +1480,7 @@ class TestTimetableSchemaService(unittest.TestCase):
         del service["super"]
         self.assertRaises(KeyError, service.__getitem__, "super")
         self.assertEqual(service.keys(), [])
+        self.assertEqual(service.default_id, None)
 
 
 class TestTimePeriodService(unittest.TestCase):

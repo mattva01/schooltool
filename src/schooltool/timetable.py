@@ -848,6 +848,8 @@ class TimetableSchemaService(Persistent):
     __parent__ = None
     __name__ = None
 
+    default_id = None
+
     def __init__(self):
         self.timetables = PersistentDict()
 
@@ -863,9 +865,16 @@ class TimetableSchemaService(Persistent):
     def __setitem__(self, schema_id, timetable):
         prototype = timetable.cloneEmpty()
         self.timetables[schema_id] = prototype
+        if self.default_id is None:
+            self.default_id = schema_id
 
     def __delitem__(self, schema_id):
         del self.timetables[schema_id]
+        if schema_id == self.default_id:
+            self.default_id = None
+
+    def getDefault(self):
+        return self[self.default_id]
 
 
 class TimePeriodService(Persistent):
