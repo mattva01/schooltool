@@ -152,7 +152,7 @@ Content-Type: text/xml; charset=UTF-8
 SchoolTool> get /calendars.html
 200 OK
 Content-Type: text/html; charset=UTF-8
-%% XML
+%% XML recursively_sort=ul
 <html>
 <head>
   <title>Calendars</title>
@@ -161,29 +161,64 @@ Content-Type: text/html; charset=UTF-8
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li><a href="http://localhost:8080/groups/cleaners/calendar">
-        Cleaners</a></li>
     <li><a href="http://localhost:8080/groups/root/calendar">
-        Root Group</a></li>
+        Root Group (private calendar)</a>,
+        <a href="http://localhost:8080/groups/root/timetable-calendar">
+        Root Group (timetable)</a></li>
+    <li><a href="http://localhost:8080/groups/cleaners/calendar">
+        Cleaners (private calendar)</a>,
+        <a href="http://localhost:8080/groups/cleaners/timetable-calendar">
+        Cleaners (timetable)</a></li>
     <li><a href="http://localhost:8080/groups/students/calendar">
-        Students</a></li>
+        Students (private calendar)</a>,
+        <a href="http://localhost:8080/groups/students/timetable-calendar">
+        Students (timetable)</a></li>
     <li><a href="http://localhost:8080/groups/teachers/calendar">
-        Teachers</a></li>
+        Teachers (private calendar)</a>,
+        <a href="http://localhost:8080/groups/teachers/timetable-calendar">
+        Teachers (timetable)</a></li>
   </ul>
   <h2>Persons</h2>
   <ul>
-    <li><a href="http://localhost:8080/persons/Aiste/calendar">
-        Aiste</a></li>
-    <li><a href="http://localhost:8080/persons/Albert/calendar">
-        Albert</a></li>
     <li><a href="http://localhost:8080/persons/anonymous/calendar">
-        Anonymous</a></li>
+        Anonymous (private calendar)</a>,
+        <a href="http://localhost:8080/persons/anonymous/timetable-calendar">
+        Anonymous (timetable)</a></li>
+    <li><a href="http://localhost:8080/persons/Aiste/calendar">
+        Aiste (private calendar)</a>,
+        <a href="http://localhost:8080/persons/Aiste/timetable-calendar">
+        Aiste (timetable)</a></li>
+    <li><a href="http://localhost:8080/persons/Albert/calendar">
+        Albert (private calendar)</a>,
+        <a href="http://localhost:8080/persons/Albert/timetable-calendar">
+        Albert (timetable)</a></li>
     <li><a href="http://localhost:8080/persons/Marius/calendar">
-        Marius</a></li>
+        Marius (private calendar)</a>,
+        <a href="http://localhost:8080/persons/Marius/timetable-calendar">
+        Marius (timetable)</a></li>
     <li><a href="http://localhost:8080/persons/Mark/calendar">
-        Mark</a></li>
+        Mark (private calendar)</a>,
+        <a href="http://localhost:8080/persons/Mark/timetable-calendar">
+        Mark (timetable)</a></li>
     <li><a href="http://localhost:8080/persons/Steve/calendar">
-        Steve</a></li>
+        Steve (private calendar)</a>,
+        <a href="http://localhost:8080/persons/Steve/timetable-calendar">
+        Steve (timetable)</a></li>
+  </ul>
+  <h2>Resources</h2>
+  <ul>
+    <li><a href="http://localhost:8080/resources/hall/calendar">
+        Hall (private calendar)</a>,
+        <a href="http://localhost:8080/resources/hall/timetable-calendar">
+        Hall (timetable)</a></li>
+    <li><a href="http://localhost:8080/resources/room1/calendar">
+        Room 1 (private calendar)</a>,
+        <a href="http://localhost:8080/resources/room1/timetable-calendar">
+        Room 1 (timetable)</a></li>
+    <li><a href="http://localhost:8080/resources/room2/calendar">
+        Room 2 (private calendar)</a>,
+        <a href="http://localhost:8080/resources/room2/timetable-calendar">
+        Room 2 (timetable)</a></li>
   </ul>
 </body>
 </html>
@@ -516,7 +551,16 @@ Content-Type: text/xml; charset=UTF-8
 SchoolTool> get /persons/Marius/calendar
 200 OK
 Content-Type: text/calendar; charset=UTF-8
-
+BEGIN:VCALENDAR
+PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:placeholder-/persons/Marius/calendar@localhost
+SUMMARY:Empty calendar
+DTSTART;VALUE=DATE:*
+DTSTAMP:*
+END:VEVENT
+END:VCALENDAR
 
 SchoolTool> get /persons/Marius/timetables
 200 OK

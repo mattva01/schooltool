@@ -130,7 +130,16 @@ END:VCALENDAR
 SchoolTool> get /persons/Aiste/calendar
 200 OK
 Content-Type: text/calendar; charset=UTF-8
-
+BEGIN:VCALENDAR
+PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:placeholder-/persons/Aiste/calendar@localhost
+SUMMARY:Empty calendar
+DTSTART;VALUE=DATE:*
+DTSTAMP:*
+END:VEVENT
+END:VCALENDAR
 
 SchoolTool> put /persons/Aiste/calendar text/calendar
 PUT> BEGIN:VCALENDAR
