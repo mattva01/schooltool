@@ -28,6 +28,9 @@ import re
 import calendar
 from datetime import date, datetime, timedelta, time
 
+from pytz import timezone
+
+utc = timezone("UTC")
 
 def prev_month(date):
     """Calculate the first day of the previous month for a given date.
@@ -257,3 +260,33 @@ def parse_time(s):
     if len(parts) > 2:
         ss = int(parts[2])
     return time(hh, mm, ss)
+
+def parse_timetz(s, tz=utc):
+    """Timezone aware time parser.
+
+    If no timezone preference is given, default to UTC.
+
+        >>> parse_timetz('11:22:33')
+        datetime.time(11, 22, 33, tzinfo=<StaticTzInfo 'UTC'>)
+
+        >>> parse_timetz('11:22')
+        datetime.time(11, 22, tzinfo=<StaticTzInfo 'UTC'>)
+
+        >>> parse_timetz('11:66')
+        Traceback (most recent call last):
+          ...
+        ValueError: minute must be in 0..59
+
+        >>> d = parse_timetz('11:22', tz=utc)
+        >>> d.tzname()
+        'UTC'
+
+    """
+
+    parts = s.split(":")
+    hh, mm = map(int, parts[:2])
+    ss = 0
+    if len(parts) > 2:
+        ss = int(parts[2])
+    return time(hh, mm, ss, tzinfo=tz)
+
