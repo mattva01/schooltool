@@ -178,7 +178,7 @@ class MemberViewBase(BrowserView):
         return container.values()
 
     def update(self):
-        # XXX This method is rather similar to GroupListView.update().
+        # This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
         if 'UPDATE_SUBMIT' in self.request:
             context_members = removeSecurityProxy(self.context.members)

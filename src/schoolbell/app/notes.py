@@ -29,11 +29,12 @@ TODO: It might be a good idea to add some ACL to notes:
     from the Cafeteria group needs to note that the cream will go bad if it
     sits outside for more than 4 hours.  Nobody in Accounting should really see
     this, but everyone in the Cafeteria should.
-    
+
 TODO: Notes are basically stupid comments, do we need real discussion items?  A
       note on a note has a fairly visible use-case (say Jane from the Cafeteria
       group notes that a new supply of super-fresh cream is due the day before
       the picnic..)
+
 """
 
 from persistent import Persistent
@@ -111,7 +112,7 @@ class Note(Persistent):
 
     Your basic simple content ojbect:
 
-    >>> note = Note(title='Potluck Theme!', 
+    >>> note = Note(title='Potluck Theme!',
     ...             body="We're going Mexican! Bring tequila and tacos!")
     >>> note.title
     'Potluck Theme!'

@@ -237,7 +237,7 @@ def doctest_setup():
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
-    Let's clean up logging:
+    We better clean up logging before we leave:
 
         >>> del logger1.handlers[:]
         >>> logger1.propagate = True
@@ -250,6 +250,7 @@ def doctest_setup():
 
     TODO: perform checks!
     TODO: clean up everything!
+    TODO: what do you mean in the comments above? -- gintas
 
     Clean up
 

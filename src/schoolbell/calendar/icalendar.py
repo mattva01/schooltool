@@ -304,7 +304,7 @@ def read_icalendar(icalendar_text):
     `icalendar_text` can be a file object or a string.  It is assumed that
     the iCalendar file contains UTF-8 text.
 
-    Unsuppored features of the iCalendar file (e.g. VTODO components, complex
+    Unsupported features of the iCalendar file (e.g. VTODO components, complex
     recurrence rules, unknown properties) are silently ignored.
     """
     if not hasattr(icalendar_text, 'read'):

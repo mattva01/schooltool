@@ -1394,8 +1394,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
                 initial["range"] = "forever"
 
             if recurrence.exceptions:
-                initial["exceptions"] = "\n".join(map(str,
-                                                      recurrence.exceptions))
+                exceptions = map(str, recurrence.exceptions)
+                initial["exceptions"] = "\n".join(exceptions)
 
             if recurrence_type == "weekly":
                 if recurrence.weekdays:
@@ -1477,10 +1477,10 @@ def enableICalendarUpload(ical_view):
     """An adapter that enables HTTP PUT for calendars.
 
     When the user performs an HTTP PUT request on /path/to/calendar.ics,
-    Zope 3 traverses to a view named 'icalendar.ics' (which is most likely
+    Zope 3 traverses to a view named 'calendar.ics' (which is most likely
     a schoolbell.calendar.browser.CalendarICalendarView).  Then Zope 3 finds an
     IHTTPrequest view named 'PUT'.  There is a standard one, that adapts
-    its context (which happens to be the view named 'icalendar.ics' in this
+    its context (which happens to be the view named 'calendar.ics' in this
     case) to IWriteFile, and calls `write` on it.
 
     So, to hook up iCalendar uploads, the simplest way is to register an
