@@ -283,6 +283,21 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return _parseAbsenceComments(response.read())
 
+    def getSchoolTimetable(self, period, schema):
+        """Returns a SchoolTimetableInfo object.
+
+        Each activity is a tuple of (group_path, title).
+        The matrix of activities has teachers as rows and periods as
+        columns.
+        """
+        timetable_path = '/schooltt/%s/%s' % (period, schema)
+        response = self.get(timetable_path)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        result = SchoolTimetableInfo()
+        result.loadData(response.read())
+        return result
+
     def createFacet(self, object_path, factory_name):
         """Create a facet using a given factory an place it on an object.
 
@@ -938,6 +953,108 @@ class AbsenceComment:
                     self.absent_from_title, self.absent_from_path,
                     self.ended, self.resolved, self.expected_presence,
                     self.text)
+
+
+class SchoolTimetableInfo:
+    """An object with a timetable for the whole school.
+
+    The data is stored in these attributes:
+
+        * teachers -- a sequence of teacher paths
+        * periods -- a sequence of (day_id, period_id) tuples
+        * tt -- a matrix ([[]]) of lists of activities, which are
+                tuples of (group_path, title)
+    """
+
+    def __init__(self, teachers=None, periods=None, tt=None):
+        self.teachers = teachers
+        self.periods = periods
+        self.tt = tt
+
+    def loadData(self, data):
+        try:
+            doc = libxml2.parseDoc(data)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse school timetable")
+        ctx = doc.xpathNewContext()
+        try:
+            schooltt = "http://schooltool.org/ns/schooltt/0.1"
+            ctx.xpathRegisterNs("st", schooltt)
+            self.teachers = []
+            self.periods = []
+            self.tt = []
+            teacher_nodes = ctx.xpathEval("/st:schooltt/st:teacher")
+            if len(teacher_nodes) == 0:
+                raise SchoolToolError("There are no teachers")
+            ctx.setContextNode(teacher_nodes[0])
+            for day_node in ctx.xpathEval('st:day'):
+                day_id = day_node.nsProp('id', None)
+                ctx.setContextNode(day_node)
+                for period_node in ctx.xpathEval('st:period'):
+                    period_id = period_node.nsProp('id', None)
+                    self.periods.append((day_id, period_id))
+            for teacher_node in teacher_nodes:
+                teacher_path = teacher_node.nsProp('path', None)
+                self.teachers.append(teacher_path)
+                tt_row = []
+                ctx.setContextNode(teacher_node)
+                for day_node in ctx.xpathEval('st:day'):
+                    day_id = day_node.nsProp('id', None)
+                    ctx.setContextNode(day_node)
+                    for period_node in ctx.xpathEval('st:period'):
+                        period_id = period_node.nsProp('id', None)
+                        activities = []
+                        ctx.setContextNode(period_node)
+                        for activity_node in ctx.xpathEval('st:activity'):
+                            group_path = activity_node.nsProp('group', None)
+                            activity = activity_node.content.strip()
+                            activities.append((group_path, activity))
+                        tt_row.append(activities)
+                assert len(tt_row) == len(self.periods)
+                self.tt.append(tt_row)
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
+    def toXML(self):
+        result = []
+        result.append(
+            '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">')
+        for i, teacher in enumerate(self.teachers):
+            result.append('  <teacher path="%s">' % teacher)
+            last_day = None
+            for j, (day, period) in enumerate(self.periods):
+                if last_day != day:
+                    if last_day is not None:
+                        result.append('    </day>')
+                    last_day = day
+                    result.append('    <day id="%s">' % day)
+                result.append('      <period id="%s">' % period)
+                try:
+                    activities = self.tt[i][j]
+                    for group, title in activities:
+                        result.append('        <activity group="%s">'
+                                      '%s</activity>' % (group, title))
+                except (KeyError, TypeError):
+                    pass
+                result.append('      </period>')
+            if last_day is not None:
+                result.append('    </day>')
+            result.append('  </teacher>')
+        result.append('</schooltt>\n')
+        return "\n".join(result)
+
+    def __eq__(self, other):
+        return (self.teachers == other.teachers and
+                self.periods == other.periods and
+                self.tt == other.tt)
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __repr__(self):
+        return 'SchoolTimetableInfo(%r, %r, %r)' % (
+            self.teachers, self.periods, self.tt)
 
 
 #

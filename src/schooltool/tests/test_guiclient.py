@@ -482,6 +482,70 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.getAbsenceComments, '/p')
 
+    def test_getSchoolTimetable(self):
+        from schooltool.guiclient import SchoolToolClient, SchoolTimetableInfo
+        body = dedent("""
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/people/0013">
+                <day id="A">
+                  <period id="Green">
+                    <activity group="/groups/002">French</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/003">Math</activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Green">
+                    <activity group="/groups/004">English</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/005">Biology</activity>
+                  </period>
+                </day>
+              </teacher>
+              <teacher path="/people/0014">
+                <day id="A">
+                  <period id="Green">
+                    <activity group="/groups/006">Geography</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/007">History</activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Green">
+                    <activity group="/groups/008">Physics</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/009">Chemistry</activity>
+                  </period>
+                </day>
+              </teacher>
+            </schooltt>
+            """)
+
+        expected = SchoolTimetableInfo(
+            ['/people/0013', '/people/0014'],
+            [("A", "Green"),
+             ("A", "Blue"),
+             ("B", "Green"),
+             ("B", "Blue")],
+            [[[('/groups/002', 'French')],
+              [('/groups/003', 'Math')],
+              [('/groups/004', 'English')],
+              [('/groups/005', 'Biology')]],
+             [[('/groups/006', 'Geography')],
+              [('/groups/007', 'History')],
+              [('/groups/008', 'Physics')],
+              [('/groups/009', 'Chemistry')]]]
+            )
+
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getSchoolTimetable('2003-fall', 'weekly')
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
+
     def test_createFacet(self):
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
                                     location='http://localhost/p/facets/001'))
@@ -1228,12 +1292,192 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
                           'in %s', '%s ago'), '2h15m ago')
 
 
+class TestSchoolTimetableInfo(unittest.TestCase):
+
+    def test_loadData(self):
+        from schooltool.guiclient import SchoolTimetableInfo
+        st = SchoolTimetableInfo()
+        data = dedent("""
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/people/0013">
+                <day id="A">
+                  <period id="Green">
+                    <activity group="/groups/002">French</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/003">Math</activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Green">
+                    <activity group="/groups/004">English</activity>
+                    <activity group="/groups/005">English</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/005">Biology</activity>
+                  </period>
+                </day>
+              </teacher>
+              <teacher path="/people/0014">
+                <day id="A">
+                  <period id="Green">
+                    <activity group="/groups/006">Geography</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/007">History</activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Green">
+                    <activity group="/groups/008">Physics</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/009">
+                      Chemistry
+                    </activity>
+                  </period>
+                </day>
+              </teacher>
+            </schooltt>
+            """)
+        st.loadData(data)
+
+        self.assertEquals(st.teachers, ['/people/0013', '/people/0014'])
+        self.assertEquals(st.periods, [("A", "Green"),
+                                       ("A", "Blue"),
+                                       ("B", "Green"),
+                                       ("B", "Blue")])
+        self.assertEquals(st.tt, [[[('/groups/002', 'French')],
+                                   [('/groups/003', 'Math')],
+                                   [('/groups/004', 'English'),
+                                    ('/groups/005', 'English')],
+                                   [('/groups/005', 'Biology')]],
+                                  [[('/groups/006', 'Geography')],
+                                   [('/groups/007', 'History')],
+                                   [('/groups/008', 'Physics')],
+                                   [('/groups/009', 'Chemistry')]]])
+
+    def test_loadData_breakage(self):
+        from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
+        st = SchoolTimetableInfo()
+        self.assertRaises(SchoolToolError, st.loadData, "not xml")
+
+    def test_loadData_no_teachers(self):
+        from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
+        st = SchoolTimetableInfo()
+        data = dedent("""
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+            </schooltt>
+            """)
+
+        self.assertRaises(SchoolToolError, st.loadData, data)
+
+        # The following error cases are not tested:
+        #  - different days and/or periods for different teachers
+        #  - different order of days/periods for different teachers
+        # Our server does not generate such timetables.
+
+    def test_toXML_empty(self):
+        from schooltool.guiclient import SchoolTimetableInfo
+        st = SchoolTimetableInfo(['a', 'b'],
+                                 [("1", "A"), ("1", "B"),
+                                  ("2", "A"), ("2", "B")])
+        result = st.toXML()
+        expected = dedent("""
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="a">
+                <day id="1">
+                  <period id="A">
+                  </period>
+                  <period id="B">
+                  </period>
+                </day>
+                <day id="2">
+                  <period id="A">
+                  </period>
+                  <period id="B">
+                  </period>
+                </day>
+              </teacher>
+              <teacher path="b">
+                <day id="1">
+                  <period id="A">
+                  </period>
+                  <period id="B">
+                  </period>
+                </day>
+                <day id="2">
+                  <period id="A">
+                  </period>
+                  <period id="B">
+                  </period>
+                </day>
+              </teacher>
+            </schooltt>
+            """)
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+    def test_loadData_toXML_roundtrip(self):
+        from schooltool.guiclient import SchoolTimetableInfo
+        st = SchoolTimetableInfo()
+        data = dedent("""
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/people/0013">
+                <day id="A">
+                  <period id="Green">
+                    <activity group="/groups/002">French</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/003">Math</activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Green">
+                    <activity group="/groups/004">English</activity>
+                    <activity group="/groups/005">English</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/005">Biology</activity>
+                  </period>
+                </day>
+              </teacher>
+              <teacher path="/people/0014">
+                <day id="A">
+                  <period id="Green">
+                    <activity group="/groups/006">Geography</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/007">History</activity>
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Green">
+                    <activity group="/groups/008">Physics</activity>
+                  </period>
+                  <period id="Blue">
+                    <activity group="/groups/009">Chemistry</activity>
+                  </period>
+                </day>
+              </teacher>
+            </schooltt>
+            """)
+        st.loadData(data)
+        output = st.toXML()
+        self.assertEquals(data, output, "\n" + diff(data, output))
+
+    def assertEquals(self, results, expected, msg=None):
+        if msg is None:
+            msg = "\n" + diff(pformat(expected), pformat(results))
+        unittest.TestCase.assertEquals(self, results, expected, msg)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
     suite.addTest(unittest.makeSuite(TestParseFunctions))
     suite.addTest(unittest.makeSuite(TestInfoClasses))
     suite.addTest(unittest.makeSuite(TestAbsenceInfo))
+    suite.addTest(unittest.makeSuite(TestSchoolTimetableInfo))
     return suite
 
 if __name__ == '__main__':
