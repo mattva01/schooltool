@@ -48,12 +48,12 @@ def test_personContainerView():
         >>> person.__name__ = "Jonas"
         >>> person.title = "Jonas Petraitis"
 
-    Lets add him to the container
+    Let's add him to the container
 
         >>> person.__parent__ = schoolBellApplication
         >>> schoolBellApplication['persons'][person.__name__] = person
 
-    Lets add another person to the container
+    Let's add another person to the container
 
         >>> person = Person()
         >>> person.__name__ = "Petras"
@@ -61,13 +61,13 @@ def test_personContainerView():
         >>> person.__parent__ = schoolBellApplication
         >>> schoolBellApplication['persons'][person.__name__] = person
 
-    Lets create a view
+    Let's create a view
 
         >>> from schoolbell.app.browser.app import PersonContainerView
         >>> view = PersonContainerView(schoolBellApplication['persons'],
         ...                            TestRequest())
 
-    Lets get a sorted by title object list
+    Let's get a sorted by title object list
 
         >>> sortedObjects = view.sortedObjects()
 
@@ -108,12 +108,12 @@ def test_groupContainerView():
         >>> group.__name__ = "Group B"
         >>> group.title = "Group B"
 
-    Lets add it to the container
+    Let's add it to the container
 
         >>> group.__parent__ = schoolBellApplication
         >>> schoolBellApplication['groups'][group.__name__] = group
 
-    Lets add another group to the container
+    Let's add another group to the container
 
         >>> group = Group()
         >>> group.__name__ = "Group A"
@@ -121,13 +121,13 @@ def test_groupContainerView():
         >>> group.__parent__ = schoolBellApplication
         >>> schoolBellApplication['groups'][group.__name__] = group
 
-    Lets create a view
+    Let's create a view
 
         >>> from schoolbell.app.browser.app import GroupContainerView
         >>> view = GroupContainerView(schoolBellApplication['groups'],
         ...                            TestRequest())
 
-    Lets get a sorted by title object list
+    Let's get a sorted by title object list
 
         >>> sortedObjects = view.sortedObjects()
 
@@ -168,12 +168,12 @@ def test_resourceContainerView():
         >>> resource.__name__ = "Resource B"
         >>> resource.title = "Resource B"
 
-    Lets add it to the container
+    Let's add it to the container
 
         >>> resource.__parent__ = schoolBellApplication
         >>> schoolBellApplication['resources'][resource.__name__] = resource
 
-    Lets add another resource to the container
+    Let's add another resource to the container
 
         >>> resource = Resource()
         >>> resource.__name__ = "Resource A"
@@ -181,13 +181,13 @@ def test_resourceContainerView():
         >>> resource.__parent__ = schoolBellApplication
         >>> schoolBellApplication['resources'][resource.__name__] = resource
 
-    Lets create a view
+    Let's create a view
 
         >>> from schoolbell.app.browser.app import ResourceContainerView
         >>> view = ResourceContainerView(schoolBellApplication['resources'],
         ...                            TestRequest())
 
-    Lets get a sorted by title object list
+    Let's get a sorted by title object list
 
         >>> sortedObjects = view.sortedObjects()
 
@@ -241,37 +241,37 @@ def test_personView():
 def test_personPhotoView():
     r"""Test for PersonPhotoView
 
-    Let's create a new person:
+    We will need a person that has a photo:
 
         >>> from schoolbell.app.app import Person
         >>> person = Person()
-        >>> person.__name__ = "Jonas"
-        >>> person.title = "Jonas Petraitis"
         >>> person.photo = "I am a photo!"
 
-    Let's create a person photo view
-        >>> request = TestRequest()
+    We can now create a view:
+
         >>> from schoolbell.app.browser.app import PersonPhotoView
+        >>> request = TestRequest()
         >>> view = PersonPhotoView(person, request)
 
-    We should see the photo
-        >>> view.__call__()
-        'I am a photo!'
+    The view returns the photo and sets the appropriate Content-Type header:
 
-    The photo should be jpeg
+        >>> view()
+        'I am a photo!'
         >>> request.response.getHeader("Content-Type")
         'image/jpeg'
 
-    But if a person has no photo
-        >>> person.photo = None
+    However, if a person has no photo, the view raises a NotFound error.
 
-    We should get an exception
-        >>> view.__call__()  # doctest: +ELLIPSIS
+        >>> person.photo = None
+        >>> view()                                  # doctest: +ELLIPSIS
         Traceback (most recent call last):
-        ...
+          ...
         NotFound: Object: <...Person object at ...>, name: u'photo'
 
+    That's all, folks.
+
         >>> setup.placelessTearDown()
+
     """
 
 
