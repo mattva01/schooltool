@@ -90,7 +90,7 @@ class ACLCalendarAccess:
         """Return a set of ancestor groups of a person"""
         ancestors = Set()
         def getAncestors(obj):
-            for parent in  getRelatedObjects(obj, URIGroup):
+            for parent in getRelatedObjects(obj, URIGroup):
                 if parent not in ancestors:
                     ancestors.add(parent)
                     getAncestors(parent)

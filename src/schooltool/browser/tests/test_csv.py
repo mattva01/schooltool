@@ -178,7 +178,6 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(DataError, self.im.importGroup,
                           'gr1', 'A tiny group', 'group1 group2', 'b0rk')
 
-
     def test_importPerson(self):
         name = self.im.importPerson('Smith', 'group1', 'group2')
         person = self.persons[name]
