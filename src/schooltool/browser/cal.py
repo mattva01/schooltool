@@ -721,12 +721,23 @@ class EventViewHelpers:
         return View.do_GET(self, self.request)
 
     def _addTimetableException(self, event, replacement):
-        """Add a timetable exception that replaces or removes an event."""
-        exception = TimetableException(event.dtstart.date(),
-                                       event.period_id,
-                                       event.activity)
+        """Add or change a timetable exception for a timetable event.
+
+        If event is already an exceptional event, the corresponding
+        exception is adjusted.  Otherwise a new one is created.
+        """
+        print event # XXX
+        if IExceptionalTTCalendarEvent.providedBy(event):
+            exception = event.exception
+        else:
+            exception = TimetableException(event.dtstart.date(),
+                                           event.period_id,
+                                           event.activity)
+            tt = event.activity.timetable
+            tt.exceptions.append(exception)
+
         if replacement is not None:
-            exceptional_event = ExceptionalTTCalendarEvent(
+            replacement = ExceptionalTTCalendarEvent(
                     replacement.dtstart,
                     replacement.duration,
                     replacement.title,
@@ -735,9 +746,7 @@ class EventViewHelpers:
                     location=replacement.location,
                     unique_id=replacement.unique_id,
                     exception=exception)
-            exception.replacement = exceptional_event
-        tt = event.activity.timetable
-        tt.exceptions.append(exception)
+        exception.replacement = replacement
         # TODO: add the same exception to the timetables of
         #       all resources that are booked by this activity
 

@@ -950,7 +950,7 @@ class EventTimetableTestHelpers:
     def initTTCalendar(self, obj):
         """Add some dummies and a TT event to an application object's calendar.
 
-        The event is created by calling self.createTimetableEvent()
+        The event is created by calling self.createTimetableEvent().
 
         Adds events to the object's calendar and to its timetable.
         Returns the timetable calendar of the object.
@@ -1169,6 +1169,41 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         request = RequestStub(args={'event_id': "uniq", 'CANCEL': 'Cancel'})
         content = view.render(request)
         self.assertEquals(ev.activity.timetable.exceptions, [])
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/somebody/calendar/'
+                          'daily.html?date=2004-08-12')
+
+    def test_delete_exceptional_event(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
+        view = self.createView()
+        ttcal = self.initTTCalendar(view.context)
+        event = ttcal.find('uniq')
+
+        calendar = view.context.__parent__.makeCalendar()
+
+        exc = TimetableException(date=event.dtstart,
+                                 period_id=event.period_id,
+                                 activity=event.activity)
+        exc_ev = ExceptionalTTCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                            timedelta(minutes=1), "A",
+                                            unique_id="uniq",
+                                            exception=exc)
+        exc.replacement = exc_ev
+
+        calendar.addEvent(exc_ev)
+
+        request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm'})
+        content = view.render(request)
+
+        self.assertEquals(len(list(ttcal)), 4)
+
+        self.assertEquals(exc.date, datetime(2004, 8, 12, 12, 0))
+        self.assertEquals(exc.period_id, "P1")
+        self.assert_(exc.activity is event.activity)
+        self.assert_(exc.replacement is None)
+
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'

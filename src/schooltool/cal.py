@@ -1046,8 +1046,9 @@ class CalendarEvent(Persistent):
                      self.context, self.location, self.unique_id))
 
     def __repr__(self):
-        return ("CalendarEvent%r"
-                % ((self.dtstart, self.duration, self.title, self.owner,
+        return ("%s%r"
+                % (self.__class__.__name__,
+                   (self.dtstart, self.duration, self.title, self.owner,
                     self.context, self.location, self.unique_id), ))
 
 
