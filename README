@@ -5,14 +5,36 @@ SchoolTool - a common information systems platform for school administration.
 
 Website: http://www.schooltool.org/
 
+Mailing list: http://lists.schooltool.org/mailman/listinfo/schooltool
+
+Bug tracker: http://issues.schooltool.org/
+
 
 Overview
 --------
 
-SchoolTool is a distributed client/server system.  Clients communicate with
-the server by using an HTTP based protocol adhering to the REST architectural
-style (see http://rest.blueoxen.net/).  There is also a more traditional web
-application interface that people can use with an ordinary browser.
+SchoolTool is an open source school management information system.  It is
+a distributed client/server system.  The SchoolTool server presents two
+interfaces to clients:
+
+  - a traditional web application interface, usable with an ordinary browser.
+
+  - HTTP-based programming interface suitable for fat clients, adhering to
+    the Representational State Transfer (REST) architectural style (see
+    http://rest.blueoxen.net/).
+
+The web application interface is the primary one.  The RESTive interface is
+there for potential interoperability with other systems and fat clients to
+perform data entry that is inconvenient to do via the web application
+interface.
+
+There are several clients that demonstrate the usage of the REST interface
+(a command-line client that is used for functional tests, a wxWidgets GUI
+client, and a command-line client for data import).
+
+Any modern web browser is suitable for the web application interface.  The
+interface degrades gracefully, so a browser that does not support CSS or
+Javascript will be usable, although perhaps not very nice or convenient.
 
 
 System requirements
@@ -30,7 +52,7 @@ System requirements
   (needed for the server only)
 
 - wxPython 2.4 (http://www.wxpython.org/)
-  (needed for the wxWindows client only)
+  (needed for the wxWidgets client only)
 
 - pyOpenSSL (http://sourceforge.net/projects/pyopenssl/)
   (needed for the server only)
@@ -38,11 +60,13 @@ System requirements
 - Development environment and a C compiler
   (precompiled binaries are available for Windows users)
 
+
 Optional Extras
 ---------------
 
 - PyTCPWrap (http://ples.sourceforge.net/index.cgi?PyTCPWrap)
   (useful for the server only)
+
 
 Building SchoolTool
 -------------------
@@ -62,7 +86,7 @@ scripts:
   schooltool-server.py      starts the SchoolTool server
   schoolbell-server.py      starts the SchoolBell server
   schooltool-client.py      starts the command line client
-  wxschooltool.py           starts the wxWindows GUI client
+  wxschooltool.py           starts the wxWidgets GUI client
   generate-sampleschool.py  generates sample school data
   import-sampleschool.py    imports sample data into the server
 
@@ -91,7 +115,7 @@ backwards-compatibility:
                             automated functional tests)
 
   make runclient            starts the command line client
-  make runwxclient          starts the wxWindows GUI client
+  make runwxclient          starts the wxWidgets GUI client
 
 These commands are superseded by executable Python scripts in the top-level
 directory.
@@ -102,20 +126,36 @@ Project structure
 
   GPL                   the GNU General Public License, version 2
   README                this file
+  README.schoolbell     README for SchoolBell
+  RELEASE               release notes for the latest release
 
   Makefile              makefile for building extension modules
   setup.py              distutils setup script for building extension modules
   test.py               test runner
+  remove-stale-bytecode.py
+                        script to remove stale *.pyc files
+
+  schooltool-server.py  script to start the SchoolTool server
+  schoolbell-server.py  script to start the SchoolBell server
+  generate-sampleschool.py
+                        script to generate sample school data
+  import-sampleschool.py
+                        script to import sample school data
+  schooltool-client.py  script to start the command-line client
+  schooltool-grapher.py
+                        script to start the experimental wxGraph client
+  wxschooltool.py       script to start the deprecated wxWidgets client
+
   test.conf             configuration file used for functional tests
+  testserver.pem        sample SSL certificate used for functional tests
   schooltool.conf.in    sample configuration file
-  runimport.py          script for importing sample data
-  ttconfig.data         sample timetable configuration used by runimport.py
+  schoolbell.conf.in    sample configuration file for SchoolBell
+  ttconfig.data         sample timetable configuration
 
   build/                temporary files are placed here during build process
-  coverage/             unit test coverage reports
+  coverage/             unit test coverage reports are placed here
   debian/               Debian packaging support
   doc/                  documentation
-    userguide.txt       documentation for users
   src/                  source code
     schooltool/         Python package 'schooltool'
       main.py           the SchoolTool server
@@ -132,7 +172,6 @@ Project structure
       clients/          SchoolTool clients
         client.py       executable command line client
         wxclient.py     executable wxWindows client
-    other subdirs       packages taken from other sources (Zope 3 source tree)
 
 
 Testing
@@ -275,7 +314,7 @@ the only differing thing would be the local port number.
 Copyright information
 ---------------------
 
-SchoolTool is copyright (c) 2003, 2004 Shuttleworth Foundation
+SchoolTool is copyright (c) 2003--2005 Shuttleworth Foundation
 
 All files in the src/schooltool directory (with some exceptions in
 src/schooltool/translation) are part of SchoolTool, and are (c) Shuttleworth
@@ -289,12 +328,7 @@ any later version.
 Files in the following directories are (c) their respective owners. See
 the individual files and directories for details of the licences.
 
-  src/BTrees
-  src/ZConfig
-  src/ZODB
-  src/persistent
-  src/transaction
-  src/zope
+  Zope3
   src/schooltool/translation
 
 Files in the same directory as this README file are (c) Shuttleworth
