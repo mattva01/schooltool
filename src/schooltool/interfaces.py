@@ -822,6 +822,9 @@ class ICalendarWrite(Interface):
     def addEvent(event):
         """Add an event to the calendar."""
 
+    def removeEvent(event):
+        """Remove event from the calendar."""
+
     def update(calendar):
         """Add all events from another calendar."""
 

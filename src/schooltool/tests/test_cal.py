@@ -835,6 +835,20 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         cal.clear()
         self.assertEquals(list(cal), [])
 
+    def test_removeEvent(self):
+        from schooltool.cal import CalendarEvent
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+        ev2 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "Latin")
+        cal = self.makeCal([ev1, ev2])
+        cal.removeEvent(CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                                      timedelta(minutes=10),
+                                      "English"))
+        self.assertEquals(list(cal), [ev2])
+
     def test_update(self):
         from schooltool.cal import CalendarEvent
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),

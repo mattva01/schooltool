@@ -557,6 +557,82 @@ class TestCalendarView(TestCalendarReadView):
                      errmsg="Repeating events/exceptions not yet supported")
 
 
+class TestCalendarViewBookingEvents(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.model import Group, Person, Resource
+        from schooltool.cal import CalendarEvent
+        from schooltool.views.cal import CalendarView
+
+        app = Application()
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
+        self.person = app['persons'].new("john", title="John")
+        self.resource = app['resources'].new("hall", title="Hall")
+        self.view = CalendarView(self.person.calendar)
+
+        e = CalendarEvent(datetime.datetime(2004, 1, 1, 10, 0, 0),
+                          datetime.timedelta(minutes=60),
+                          "Hall booked by John",
+                          self.person, self.resource)
+        self.event = e
+        self.resource.calendar.addEvent(e)
+        self.person.calendar.addEvent(e)
+
+    def test_put_empty(self):
+        request = RequestStub("/persons/john/calendar", method="PUT", body="",
+                              headers={'Content-Type': 'text/calendar'})
+        self.view.render(request)
+
+        self.assertEquals(list(self.person.calendar), [])
+        self.assertEquals(list(self.resource.calendar), [])
+
+    def test_put_unmodified(self):
+        cal = dedent("""
+            BEGIN:VCALENDAR\r
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN\r
+            VERSION:2.0\r
+            BEGIN:VEVENT\r
+            UID:602343351-/persons/john/calendar@localhost\r
+            SUMMARY:Hall booked by John\r
+            DTSTART:20040101T100000\r
+            DURATION:PT1H\r
+            DTSTAMP:20040114T122211Z\r
+            END:VEVENT\r
+            END:VCALENDAR\r
+            """)
+
+        request = RequestStub("/persons/john/calendar", method="PUT",
+                              headers={'Content-Type': 'text/calendar'},
+                              body=cal)
+        result = self.view.render(request)
+        self.assertEquals(list(self.person.calendar), [self.event])
+        self.assertEquals(list(self.resource.calendar), [self.event])
+
+    def test_put_modified(self):
+        cal = dedent("""
+            BEGIN:VCALENDAR\r
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN\r
+            VERSION:2.0\r
+            BEGIN:VEVENT\r
+            UID:602343351-/persons/john/calendar@localhost\r
+            SUMMARY:Hall booked by John\r
+            DTSTART:20040101T100100\r
+            DURATION:PT1H\r
+            DTSTAMP:20040114T122211Z\r
+            END:VEVENT\r
+            END:VCALENDAR\r
+            """)
+
+        request = RequestStub("/persons/john/calendar", method="PUT",
+                              headers={'Content-Type': 'text/calendar'},
+                              body=cal)
+        result = self.view.render(request)
+        self.assertEquals(len(list(self.person.calendar)), 1)
+        self.assertEquals(len(list(self.resource.calendar)), 0)
+
+
 class TestBookingView(unittest.TestCase):
 
     def setUp(self):
@@ -584,8 +660,13 @@ class TestBookingView(unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(len(list(self.person.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 1)
-        self.assertEquals(iter(self.person.calendar).next(),
-                          iter(self.resource.calendar).next())
+        ev1 = iter(self.person.calendar).next()
+        ev2 = iter(self.resource.calendar).next()
+        self.assertEquals(ev1, ev2)
+        self.assert_(ev1.context is self.resource,
+                     "%r is not %r" % (ev1.context, self.resource))
+        self.assert_(ev1.owner is self.person,
+                     "%r is not %r" % (ev1.owner, self.person))
 
     def test_conflict(self):
         from schooltool.cal import CalendarEvent
@@ -768,6 +849,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarReadView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestCalendarViewBookingEvents))
     suite.addTest(unittest.makeSuite(TestBookingView))
     suite.addTest(unittest.makeSuite(TestAllCalendarsView))
     suite.addTest(unittest.makeSuite(TestModuleSetup))

@@ -262,8 +262,32 @@ class CalendarView(CalendarReadView):
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:
-            self.context.clear()
+            for event in list(self.context):
+                if event in events:
+                    # old events
+                    events.remove(event)
+                elif event.owner or event.context:
+                    # XXX: this business logic shoud be in an event
+                    # handler, not, in a view.
+
+                    # owner and context are not represented in the
+                    # iCalendar representation
+                    e = CalendarEvent(event.dtstart, event.duration,
+                                      event.title)
+                    if e in events:
+                        # old event
+                        events.remove(e)
+                    else:
+                        if event.owner is not None:
+                            event.owner.calendar.removeEvent(event)
+                        if event.context is not None:
+                            event.context.calendar.removeEvent(event)
+                else:
+                    # deleted event
+                    self.context.removeEvent(event)
+
             for event in events:
+                # newly added  events
                 self.context.addEvent(event)
             request.setHeader('Content-Type', 'text/plain')
             return "Calendar imported"
@@ -320,7 +344,7 @@ class BookingView(View):
                         return textErrorPage(request, "The resource is "
                                              "busy at specified time")
             title = '%s booked by %s' % (self.context.title, owner.title)
-            ev = CalendarEvent(start, duration, title)
+            ev = CalendarEvent(start, duration, title, owner, self.context)
             self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
             request.setHeader('Content-Type', 'text/plain')
