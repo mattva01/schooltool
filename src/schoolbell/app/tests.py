@@ -274,6 +274,7 @@ def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schoolbell.app.app'),
+                doctest.DocTestSuite('schoolbell.app.membership'),
            ])
 
 if __name__ == '__main__':

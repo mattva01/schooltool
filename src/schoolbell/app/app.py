@@ -30,6 +30,7 @@ from zope.interface import implements
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
 from zope.app.container.contained import Contained
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
@@ -77,7 +78,7 @@ class ResourceContainer(BTreeContainer):
 class Person(Persistent, Contained):
     """Person."""
 
-    implements(IPersonContained)
+    implements(IPersonContained, IAttributeAnnotatable)
 
     title = None
     first_name = None
@@ -133,7 +134,7 @@ def hash_password(password):
 class Group(Persistent, Contained):
     """Group."""
 
-    implements(IGroupContained)
+    implements(IGroupContained, IAttributeAnnotatable)
 
     title = None
 
@@ -141,6 +142,6 @@ class Group(Persistent, Contained):
 class Resource(Persistent, Contained):
     """Resource."""
 
-    implements(IResourceContained)
+    implements(IResourceContained, IAttributeAnnotatable)
 
     title = None
