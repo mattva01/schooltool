@@ -344,6 +344,14 @@ class IConnection(Interface):
     def cacheGC():
         pass
 
+    def add(obj):
+        """Add a persistent object to this connection.
+
+        Essentially, set _p_jar and assign _p_oid on the object.
+
+        Raises a TypeError if obj is not persistent.
+        """
+
 class ITransaction(_ITransaction):
     """Extends base ITransaction with with metadata.
 

@@ -161,6 +161,21 @@ class ConnectionTests(IDataManagerTests):
         self.assertEqual(getattr(self.obj, "child", None), None)
         self.assertEqual(x._p_oid, None)
 
+    def test_add(self):
+        from zodb.interfaces import InvalidObjectReference
+        self.datamgr.add(self.obj)
+        self.assert_(getattr(self.obj, '_p_oid', None))
+        self.assert_(self.obj._p_jar is self.datamgr)
+        self.assertRaises(TypeError, self.datamgr.add, object())
+
+        # Adding to the same connection does not fail
+        self.datamgr.add(self.obj)
+
+        # Cannot add an object from a diffrerent connection
+        self.obj._p_jar = object()
+        self.assertRaises(InvalidObjectReference, self.datamgr.add, self.obj)
+
+
     def tearDown(self):
         self.datamgr.close()
         self.db.close()

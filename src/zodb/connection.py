@@ -251,8 +251,8 @@ class Connection(ExportImport, object):
         return None
 
     ######################################################################
-    # IConnection requires the next five methods:
-    # getVersion(), reset(), cacheGC(), invalidate(), close()
+    # IConnection requires the next six methods:
+    # getVersion(), reset(), cacheGC(), invalidate(), close(), add()
 
     def getVersion(self):
         return self._version
@@ -293,6 +293,17 @@ class Connection(ExportImport, object):
         self._cache.shrink()
         # Return the connection to the pool.
         self._db._closeConnection(self)
+
+    def add(self, obj):
+        marker = object()
+        oid = getattr(obj, "_p_oid", marker)
+        if oid is marker:
+            raise TypeError("cannot add a non-persistent object %r "
+                            "to a connection" % (obj, ))
+        if obj._p_jar is not None and obj._p_jar is not self:
+            raise InvalidObjectReference(obj, obj._p_jar)
+        obj._p_jar = self
+        obj._p_oid = self.newObjectId()
 
     ######################################################################
     # transaction.interfaces.IDataManager requires the next four methods
