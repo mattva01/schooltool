@@ -96,7 +96,7 @@ class IPerson(IApplicationObject):
     """
 
     title = TextLine(
-        title=u"Person's full name""")
+        title=u"Person's full name")
 
     username = TextLine(
         title=u"The username of this person")
@@ -410,11 +410,12 @@ class IPersonInfoFacet(IFacet):
     date_of_birth = Date(
         title=u"Date of birth")
 
-    comment = Bytes(
+    comment = Text(
         title=u"A free form text comment")
 
     photo = Bytes(
-        title=u"Photo (JPEG)")
+        title=u"Photo (JPEG)",
+        required=False)
 
 
 class INote(ILocation, IRelatable):
