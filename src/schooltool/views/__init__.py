@@ -81,6 +81,11 @@ class Template(PageTemplateFile):
         self.content_type = content_type
         self.charset = charset
 
+    def pt_getEngineContext(self, *args, **kwargs):
+        engine = PageTemplateFile.pt_getEngineContext(*args, **kwargs)
+        engine.translate = self.translate
+        return engine
+
     def __call__(self, request, **kw):
         """Renders the page template.
 
@@ -94,7 +99,17 @@ class Template(PageTemplateFile):
         context.update(kw)
         body = self.pt_render(context)
         return body.encode(self.charset, 'xmlcharrefreplace')
+    
+    domain = "schooltool"
+    # XXX should we state that we implement ITranslationDomain?
+    def translate(self, msgid, mapping=None, context=None,
+                        target_language=None, default=None):
+        """Return the translation for the message referred to by msgid.
 
+        For now this simply translates msgid according to the current locale
+        of the server without regard to other arguments.
+        """
+        return _(msgid)
 
 #
 # HTTP view infrastructure
@@ -231,6 +246,7 @@ def setUp():
     import schooltool.views.timetable
     import schooltool.views.cal
     import schooltool.views.infofacets
+    import schooltool.translation
     schooltool.views.app.setUp()
     schooltool.views.model.setUp()
     schooltool.views.facet.setUp()
@@ -240,4 +256,5 @@ def setUp():
     schooltool.views.timetable.setUp()
     schooltool.views.cal.setUp()
     schooltool.views.infofacets.setUp()
+    schooltool.translation.setUp()
 
