@@ -62,7 +62,7 @@ class IURIAPI(Interface):
         """
 
     def strURI(uri):
-        """Return the URI of ISpecificURI as a string"""
+        """Return the URI of ISpecificURI as a string."""
 
     def isURI(uri):
         """Check if the argument looks like a URI.
@@ -72,8 +72,7 @@ class IURIAPI(Interface):
         """
 
     def registerURI(uri):
-        """Add a URI to the registry so it can be queried by the URI
-        string."""
+        """Add a URI to the registry so it can be queried by the URI string."""
 
     def getURI(str):
         """Return an ISpecificURI for a given URI string."""
