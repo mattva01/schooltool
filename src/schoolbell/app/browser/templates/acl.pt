@@ -21,7 +21,7 @@
          <th class="permission" tal:repeat="perm view/permissions"
              tal:content="python: perm[1]" />
       </tr>
-      <tr tal:repeat="prin view/getGroups"
+      <tr tal:repeat="prin view/groups/sortby:title"
           tal:attributes="class repeat/prin/parity">
          <th class="principal" tal:content="prin/title">Group foo</th>
          <td class="permission" tal:repeat="perm view/permissions">
@@ -41,7 +41,7 @@
          <th class="permission" tal:repeat="perm view/permissions"
              tal:content="python: perm[1]" />
       </tr>
-      <tr tal:repeat="prin view/getPersons"
+      <tr tal:repeat="prin view/persons/sortby:title"
           tal:attributes="class repeat/prin/parity">
          <th class="principal" tal:content="prin/title">User foo</th>
          <td class="permission" tal:repeat="perm view/permissions">

@@ -953,10 +953,10 @@ def doctest_ACLView():
 
     The view has methods to list persons and groups:
 
-        >>> pprint(view.getPersons())
+        >>> pprint(view.persons)
         [{'perms': [], 'id': u'sb.person.albert', 'title': 'Albert'},
          {'perms': [], 'id': u'sb.person.marius', 'title': 'Marius'}]
-        >>> pprint(view.getGroups())
+        >>> pprint(view.groups)
         [{'perms': [], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
@@ -997,7 +997,8 @@ def doctest_ACLView():
                  <th class="permission">Modify/delete events</th>
                  <th class="permission">Control access</th>
               </tr>
-              <tr class="odd">
+        ...
+              <tr class="even">
                  <th class="principal">office</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
@@ -1024,7 +1025,7 @@ def doctest_ACLView():
                            value="schoolbell.controlAccess" />
                  </td>
               </tr>
-              ...
+        ...
               <tr class="odd">
                  <th class="principal">Albert</th>
                  <td class="permission">
@@ -1076,14 +1077,14 @@ def doctest_ACLView():
         >>> grants.getPermissionsForPrincipal('sb.group.3')
         [('schoolbell.create', PermissionSetting: Allow)]
 
-        >>> pprint(view.getPersons())
+        >>> pprint(view.persons)
         [{'id': u'sb.person.albert',
           'perms': ['schoolbell.edit', 'schoolbell.view'],
           'title': 'Albert'},
          {'id': u'sb.person.marius',
           'perms': ['schoolbell.create'],
           'title': 'Marius'}]
-        >>> pprint(view.getGroups())
+        >>> pprint(view.groups)
         [{'perms': ['schoolbell.create'], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
@@ -1104,7 +1105,7 @@ def doctest_ACLView():
                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html>
         ...
-              <tr class="odd">
+              <tr class="even">
                  <th class="principal">office</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
@@ -1309,6 +1310,12 @@ def setUp(test):
     from schoolbell.app.browser import SchoolBellAPI
     ztapi.provideAdapter(None, IPathAdapter, SchoolBellAPI, 'schoolbell')
 
+    # sortby: namespace in tal
+    from zope.app.traversing.interfaces import IPathAdapter
+    from schoolbell.app.browser import SchoolBellAPI, SortBy
+    ztapi.provideAdapter(None, IPathAdapter, SchoolBellAPI, 'schoolbell')
+    ztapi.provideAdapter(None, IPathAdapter, SortBy, 'sortby')
+
     # standard_macros and schoolbell_navigation
     from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
     from schoolbell.app.browser import NavigationView
@@ -1347,7 +1354,8 @@ def tearDown(test):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS))
+                                       optionflags=doctest.ELLIPSIS|
+                                                   doctest.REPORT_NDIFF))
     return suite
 
 

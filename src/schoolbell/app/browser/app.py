@@ -465,7 +465,7 @@ class ACLView(BrowserView):
         ('schoolbell.controlAccess', _('Control access')),
         ]
 
-    def getPersons(self):
+    def persons(self):
         app = getSchoolBellApplication()
         map = IPrincipalPermissionManager(self.context)
         auth = zapi.getUtility(IAuthentication)
@@ -479,8 +479,9 @@ class ACLView(BrowserView):
                                      in map.getPermissionsForPrincipal(pid)
                                      if setting == Allow]})
         return result
+    persons = property(persons)
 
-    def getGroups(self):
+    def groups(self):
         app = getSchoolBellApplication()
         auth = zapi.getUtility(IAuthentication)
         map = IPrincipalPermissionManager(self.context)
@@ -494,6 +495,7 @@ class ACLView(BrowserView):
                                      in map.getPermissionsForPrincipal(pid)
                                      if setting == Allow]})
         return result
+    groups = property(groups)
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request or 'CANCEL' in self.request:
@@ -505,7 +507,7 @@ class ACLView(BrowserView):
             # this view is protected by schooltool.controlAccess
             map = removeSecurityProxy(map)
             auth = zapi.getUtility(IAuthentication)
-            for info in self.getPersons() + self.getGroups():
+            for info in self.persons + self.groups:
                 principalid = info['id']
                 for perm, permtitle in self.permissions:
                     if (principalid in self.request and
