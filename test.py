@@ -237,8 +237,12 @@ def get_test_cases(test_files, cfg):
             classes_in_suite = get_test_classes_from_testsuite(test_suite)
             difference = all_classes - classes_in_suite
             for test_class in difference:
-                print >> sys.stderr, ("%s: WARNING: %s is not test suite"
+                # surround the warning with blank lines, otherwise it tends
+                # to get lost in the noise
+                print >> sys.stderr
+                print >> sys.stderr, ("%s: WARNING: %s not in test suite"
                                       % (file, test_class.__name__))
+                print >> sys.stderr
         if (cfg.level is not None and
             getattr(test_suite, 'level', 0) > cfg.level):
             continue
