@@ -807,7 +807,7 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(view.render(request),
                           '<div class="calevent">\n'
                           '  <h3>Main event</h3>\n'
-                          '  12:01&amp;ndash;13:01\n'
+                          '  12:01-13:01\n'
                           '</div>\n')
 
         self.assertEquals(view.cssClass(), 'event')
