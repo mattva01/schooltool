@@ -107,7 +107,7 @@ _Description: Should the database be automatically upgraded?
 Template: schoolbell/no_compat_libs
 Type: select
 __Choices: ignore and continue, abort installation, delete current database
-Default: abort installation
+Default: ignore and continue
 _Description: Unable to automatically upgrade database:
  A database from a previous version of SchoolBell has been found.
  Unfortunately, because the previously installed version of SchoolBell has
