@@ -31,7 +31,7 @@ try:
     rest = 0.2
     while True:
         try:
-            urllib.urlopen("http://localhost:8080/")
+            urllib.urlopen("http://localhost:7001/")
         except IOError:
             time.sleep(rest)
             if rest > 4:

@@ -47,11 +47,11 @@ class TestHelpers(unittest.TestCase):
 
     def test_absoluteURL(self):
         from schooltool.views import absoluteURL
-        request = RequestStub("http://locahost:8080/foo/bar")
+        request = RequestStub("http://locahost:7001/foo/bar")
         self.assertEquals(absoluteURL(request, '/moo/spoo'),
-                          "http://localhost:8080/moo/spoo")
+                          "http://localhost:7001/moo/spoo")
         self.assertEquals(absoluteURL(request, '/moo/spoo', scheme='ftp'),
-                          "ftp://localhost:8080/moo/spoo")
+                          "ftp://localhost:7001/moo/spoo")
         self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
 
 

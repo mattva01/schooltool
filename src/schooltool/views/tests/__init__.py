@@ -55,7 +55,7 @@ class RequestStub:
             self.path = uri[start:]
         self._hostname = 'localhost'
         self._host = '127.0.0.1'
-        self._port = 8080
+        self._port = 7001
         self.accept = []
 
     def getRequestHostname(self):

@@ -28,7 +28,7 @@
 #   There can be one or more 'listen' directives
 #
 # Default:
-#   listen 8080
+#   listen 7001
 #
 # Examples:
 #   listen 8080

@@ -188,7 +188,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
         basepath = "/person/absences/"
-        baseurl = "http://localhost:8080%s" % basepath
+        baseurl = "http://localhost:7001%s" % basepath
         view = AbsenceManagementView(context)
         xml = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
                      text="Foo" reporter="." />'''
@@ -219,7 +219,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         setPath(context, '/person', root=self.serviceManager)
         absence = context.reportAbsence(AbsenceComment())
         basepath = "/person/absences/"
-        baseurl = "http://localhost:8080%s" % basepath
+        baseurl = "http://localhost:7001%s" % basepath
         view = AbsenceManagementView(context)
 
         xml = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"

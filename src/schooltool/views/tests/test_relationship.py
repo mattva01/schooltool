@@ -122,7 +122,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                      [l.traverse() for l in self.sub.listLinks()])
         self.assertEquals(request.headers['Content-Type'],
                           "text/plain")
-        location = "http://localhost:8080/groups/sub/relationships/0003"
+        location = "http://localhost:7001/groups/sub/relationships/0003"
         self.assertEquals(request.headers['Location'], location)
         self.assert_(location in result)
 

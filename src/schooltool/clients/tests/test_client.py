@@ -34,7 +34,7 @@ __metaclass__ = type
 
 class HTTPStub:
 
-    def __init__(self, host, port=8080):
+    def __init__(self, host, port=7001):
         self.host = host
         self.port = port
         self.sent_headers = {}
@@ -42,7 +42,7 @@ class HTTPStub:
 
         if host == 'badhost':
             raise socket.error(-2, 'Name or service not known')
-        if port != 8080:
+        if port != 7001:
             raise socket.error(111, 'Connection refused')
 
     def putrequest(self, method, resource, *args, **kw):
@@ -318,7 +318,7 @@ class TestClient(unittest.TestCase):
     def test_get_error(self):
         self.client.server = 'badhost'
         self.client.do_get("/")
-        self.assertEmitted("Error: could not connect to badhost:8080")
+        self.assertEmitted("Error: could not connect to badhost:7001")
         self.assert_(self.client.last_data is None)
 
     def test_save_no_get(self):

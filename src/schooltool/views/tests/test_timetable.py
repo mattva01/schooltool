@@ -188,7 +188,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             <body>
               <h1>Timetables for Foo</h1>
               <ul>
-                <li><a href="http://localhost:8080/..object/timetables/\\
+                <li><a href="http://localhost:7001/..object/timetables/\\
             2003 fall/weekly"
                     >2003 fall, weekly</a></li>
               </ul>
@@ -224,7 +224,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             <body>
               <h1>Timetables for Foo</h1>
               <ul>
-                <li><a href="http://localhost:8080/..object/timetables/\\
+                <li><a href="http://localhost:7001/..object/timetables/\\
             2003 fall/weekly"
                     >2003 fall, weekly</a></li>
               </ul>
@@ -259,10 +259,10 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             <body>
               <h1>Composite timetables for Foo</h1>
               <ul>
-                <li><a href="http://localhost:8080/..object/\\
+                <li><a href="http://localhost:7001/..object/\\
             composite-timetables/2003 fall/weekly"
                     >2003 fall, weekly</a></li>
-                <li><a href="http://localhost:8080/..object/\\
+                <li><a href="http://localhost:7001/..object/\\
             composite-timetables/2003 spring/weekly"
                     >2003 spring, weekly</a></li>
               </ul>
@@ -295,7 +295,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                   <h1>School timetables</h1>
                   <ul>
                     <li><a
-                         href="http://localhost:8080/schooltt/2003 fall/weekly"
+                         href="http://localhost:7001/schooltt/2003 fall/weekly"
                         >2003 fall, weekly</a></li>
                   </ul>
                 </body>

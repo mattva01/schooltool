@@ -51,7 +51,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
     ruler = ""
 
     server = 'localhost'
-    port = 8080
+    port = 7001
     user = None
     password = ""
     accept = 'text/xml'

@@ -184,14 +184,14 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
                   body="<object xmlns='http://schooltool.org/ns/model/0.1'/>"):
         if view is None:
             view = self.view
-        request = RequestStub("http://localhost:8080/groups" + suffix,
+        request = RequestStub("http://localhost:7001/groups" + suffix,
                               method=method, body=body)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         location = request.headers['Location']
-        base = "http://localhost:8080/groups/"
+        base = "http://localhost:7001/groups/"
         self.assert_(location.startswith(base),
                      "%r.startswith(%r) failed" % (location, base))
         name = location[len(base):]
@@ -207,7 +207,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assert_(self.app['groups'][name].title == 'New Group')
 
     def test_post_error(self):
-        request = RequestStub("http://localhost:8080/groups", method="POST",
+        request = RequestStub("http://localhost:7001/groups", method="POST",
                               body='<element title="New Group">')
         self.view.authorization = lambda ctx, rq: True
         result = self.view.render(request)

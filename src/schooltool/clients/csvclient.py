@@ -73,7 +73,7 @@ class HTTPClient:
 
     http = httplib.HTTPConnection
 
-    def __init__(self, host='localhost', port=8080):
+    def __init__(self, host='localhost', port=7001):
         self.host = host
         self.port = port
 
@@ -98,7 +98,7 @@ class CSVImporter:
     user = 'manager'
     password = 'schooltool'
 
-    def  __init__(self,  host='localhost', port=8080):
+    def  __init__(self,  host='localhost', port=7001):
         self.server = HTTPClient(host, port)
 
     def membership(self, group, member_path):
@@ -313,7 +313,7 @@ class CSVImporter:
 
 
 def main():
-    importer = CSVImporter(port=8080)
+    importer = CSVImporter()
     try:
         importer.run()
     except DataError, e:

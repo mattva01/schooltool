@@ -247,7 +247,7 @@ class ServerSettingsDlg(wxDialog):
         self.serverLabel = wxStaticText(self, -1, "Server")
         self.serverTextCtrl = wxTextCtrl(self, -1, "localhost")
         self.portLabel = wxStaticText(self, -1, "Port")
-        self.portTextCtrl = wxTextCtrl(self, -1, "8080")
+        self.portTextCtrl = wxTextCtrl(self, -1, "7001")
         self.userLabel = wxStaticText(self, -1, "Username")
         self.userTextCtrl = wxTextCtrl(self, -1, "")
         self.passwordLabel = wxStaticText(self, -1, "Password")

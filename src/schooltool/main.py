@@ -592,6 +592,7 @@ class Server:
 
     def findDefaultConfigFile(self):
         """Returns the default config file pathname."""
+        # XXX this is not suitable for release
         dirname = os.path.dirname(__file__)
         dirname = os.path.normpath(os.path.join(dirname, '..', '..'))
         config_file = os.path.join(dirname, 'schooltool.conf')

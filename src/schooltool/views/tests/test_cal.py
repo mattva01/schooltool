@@ -821,35 +821,35 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
               <h1>Calendars</h1>
               <h2>Groups</h2>
               <ul>
-                <li><a href="http://localhost:8080/groups/students/calendar">
+                <li><a href="http://localhost:7001/groups/students/calendar">
                     Students (private calendar)</a>, <a
-            href="http://localhost:8080/groups/students/timetable-calendar">
+            href="http://localhost:7001/groups/students/timetable-calendar">
                     Students (timetable)</a></li>
-                <li><a href="http://localhost:8080/groups/teachers/calendar">
+                <li><a href="http://localhost:7001/groups/teachers/calendar">
                     Teachers (private calendar)</a>, <a
-            href="http://localhost:8080/groups/teachers/timetable-calendar">
+            href="http://localhost:7001/groups/teachers/timetable-calendar">
                     Teachers (timetable)</a></li>
               </ul>
               <h2>Persons</h2>
               <ul>
-                <li><a href="http://localhost:8080/persons/john/calendar">
+                <li><a href="http://localhost:7001/persons/john/calendar">
                     John (private calendar)</a>, <a
-            href="http://localhost:8080/persons/john/timetable-calendar">
+            href="http://localhost:7001/persons/john/timetable-calendar">
                     John (timetable)</a></li>
-                <li><a href="http://localhost:8080/persons/smith/calendar">
+                <li><a href="http://localhost:7001/persons/smith/calendar">
                     Smith (private calendar)</a>, <a
-            href="http://localhost:8080/persons/smith/timetable-calendar">
+            href="http://localhost:7001/persons/smith/timetable-calendar">
                     Smith (timetable)</a></li>
               </ul>
               <h2>Resources</h2>
               <ul>
-                <li><a href="http://localhost:8080/resources/room101/calendar">
+                <li><a href="http://localhost:7001/resources/room101/calendar">
                     101 (private calendar)</a>, <a
-            href="http://localhost:8080/resources/room101/timetable-calendar">
+            href="http://localhost:7001/resources/room101/timetable-calendar">
                     101 (timetable)</a></li>
-                <li><a href="http://localhost:8080/resources/hall/calendar">
+                <li><a href="http://localhost:7001/resources/hall/calendar">
                     Hall (private calendar)</a>, <a
-            href="http://localhost:8080/resources/hall/timetable-calendar">
+            href="http://localhost:7001/resources/hall/timetable-calendar">
                     Hall (timetable)</a></li>
               </ul>
             </body>

@@ -73,7 +73,7 @@ class SchoolToolClient:
     connectionFactory = httplib.HTTPConnection
 
     server = 'localhost'
-    port = 8080
+    port = 7001
     user = None
     password = ''
     status = ''

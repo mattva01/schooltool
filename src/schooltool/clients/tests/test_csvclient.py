@@ -33,7 +33,7 @@ __metaclass__ = type
 
 class HTTPStub:
 
-    def __init__(self, host, port=8080):
+    def __init__(self, host, port=7001):
         self.host = host
         self.port = port
         self.sent_headers = {}
@@ -41,7 +41,7 @@ class HTTPStub:
 
         if host == 'badhost':
             raise socket.error(-2, 'Name or service not known')
-        if port != 8080:
+        if port != 7001:
             raise socket.error(111, 'Connection refused')
 
     def putrequest(self, method, resource, *args, **kw):
@@ -93,9 +93,9 @@ class TestHTTPClient(unittest.TestCase):
 
     def test(self):
         from schooltool.clients.csvclient import HTTPClient
-        h = HTTPClient('localhost', 8080)
+        h = HTTPClient('localhost', 7001)
         self.assertEqual(h.host, 'localhost')
-        self.assertEqual(h.port, 8080)
+        self.assertEqual(h.port, 7001)
 
         h.http = HTTPStub
         result = h.request('GET', '/')
