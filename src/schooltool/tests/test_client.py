@@ -327,6 +327,9 @@ class TestClient(unittest.TestCase):
                          ['/student1', '/student2'])
 
     def test_follow(self):
+        self.client.do_follow('1')
+        self.assertEqual(self.emitted, "Wrong link number")
+        self.emitted = ""
         self.client.resources = ['/doc.xml']
         self.client.do_follow('1')
         self.assertEqual(self.emitted, dedent("""

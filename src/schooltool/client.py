@@ -19,6 +19,8 @@
 #
 """
 Schooltool command line client.
+
+$Id$
 """
 
 import socket
@@ -34,7 +36,7 @@ __metaclass__ = type
 class Client(Cmd):
 
     intro = """\
-SchoolTool client 0.0alpha-pre0
+SchoolTool client $Id$
 This is free software, covered by the GNU General Public License, and you are
 welcome to change it and/or distribute copies of it under certain conditions."""
 
@@ -56,6 +58,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         Cmd.__init__(self, *args)
         self._setupPrompt()
         self.last_data = None
+        self.resources = []
 
     def _setupPrompt(self):
         """Sets up the prompt suitable to operating environment.
