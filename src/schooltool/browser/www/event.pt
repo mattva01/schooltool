@@ -113,7 +113,7 @@
     <div class="row" tal:replace="structure view/duration_widget" />
     <div class="row" tal:replace="structure view/privacy_widget" />
 
-<tal:block condition="not: view/tt_event">
+<tal:block condition="not:view/tt_event">
     <div class="row" tal:replace="structure view/recurrence_widget" />
   <div id="recurrence_box">
     <div class="buttons" id="update_box">
@@ -138,10 +138,11 @@
     </div>
     <!-- weekly box -->
     <fieldset id="weekly_row">
-      <legend>Weekly</legend>
-      <p id="weekly_par">This section only applies when the weekly
-      recurrence is selected.</p>
-      <span tal:repeat="weekday view/weekdays" >
+      <legend i18n:translate="">Weekly</legend>
+      <p id="weekly_par" i18n:translate="">
+        This section only applies when weekly recurrence is selected.
+      </p>
+      <span tal:repeat="weekday view/weekdays">
         <input type="checkbox" name="weekdays"
                tal:define="day view/date_widget/value"
                tal:attributes="
@@ -149,7 +150,7 @@
                    value weekday/nr;
                    disabled python:day and day.weekday() == weekday['nr'];
                    checked python:
-                      (day and day.weekday() ==  weekday['nr']
+                      (day and day.weekday() == weekday['nr']
                        or (view.weekdays_widget.value and
                            weekday['nr'] in view.weekdays_widget.value))"/>
         <label tal:attributes="for string:weekday_${weekday/nr}"
@@ -159,28 +160,32 @@
     <!-- monthly box -->
     <fieldset id="monthly_box" class="">
       <legend>Monthly</legend>
-      <p id="monthly_par">This section only applies when the monthly
-      recurrence is selected.</p>
+      <p id="monthly_par" i18n:translate="">
+        This section only applies when the monthly recurrence is selected.
+      </p>
       <div class="row">
         <input type="radio" name="monthly" value="monthday" id="monthly_m"
                tal:attributes="checked
                        python:view.monthly_widget.value == 'monthday'"/>
-        <label for="monthly_m" class="plain">
-          Day <span tal:replace="view/getMonthDay"/> of every month</label>
+        <label for="monthly_m" class="plain" i18n:translate="">
+          Day <span tal:replace="view/getMonthDay" i18n:name="monthday"/> of
+            every month</label>
       </div>
       <div class="row">
         <input type="radio" name="monthly" value="weekday" id="monthly_w"
                tal:attributes="checked
                        python:view.monthly_widget.value == 'weekday'"/>
-        <label for="monthly_w" class="plain">
-          <span tal:replace="view/getWeekDay"/> of every month</label>
+        <label for="monthly_w" class="plain" i18n:translate="">
+          <span tal:replace="view/getWeekDay" i18n:name="weekday" /> of
+            every month</label>
       </div>
       <div class="row" tal:condition="view/getLastWeekDay">
         <input type="radio" name="monthly" value="lastweekday" id="monthly_l"
                tal:attributes="checked
                        python:view.monthly_widget.value == 'lastweekday'"/>
-        <label for="monthly_l" class="plain">
-           <span tal:replace="view/getLastWeekDay"/> of every month</label>
+        <label for="monthly_l" class="plain" i18n:translate="">
+           <span tal:replace="view/getLastWeekDay" i18n:name="" /> of
+             every month</label>
       </div>
     </fieldset>
     <!-- Range selection -->
@@ -188,9 +193,10 @@
       <input type="radio" name="range" value="count" id="range_c"
              tal:attributes="checked
                              python:view.range_widget.value == 'count'"/>
-      <label for="range_c" class="plain">Repeat</label>
+      <label for="range_c" class="plain" i18n:translate="">Repeat</label>
       <input type="text" name="count" id="count" size="3"
-             tal:attributes="value view/count_widget/raw_value" /> times.
+             tal:attributes="value view/count_widget/raw_value" />
+      <tal:block i18n:translate="">times</tal:block>
      <tal:block tal:define="widget nocall:view/count_widget">
       <div metal:use-macro="widget/template/macros/error" />
      </tal:block>
@@ -200,7 +206,7 @@
       <input type="radio" name="range" value="until" id="range_u"
              tal:attributes="checked
                              python:view.range_widget.value == 'until'"/>
-      <label for="range_u" class="plain">Repeat until</label>
+      <label for="range_u" class="plain" i18n:translate="">Repeat until</label>
       <input type="text" name="until" id="until"
              tal:attributes="value view/until_widget/raw_value"/>
      <tal:block tal:define="widget nocall:view/until_widget">
@@ -212,15 +218,12 @@
       <input type="radio" name="range" value="forever" id="range_f"
              tal:attributes="checked
                              python:view.range_widget.value == 'forever'"/>
-      <label for="range_f" class="plain">Repeat forever</label>
+      <label for="range_f" class="plain" i18n:translate="">
+        Repeat forever</label>
     </div>
 
     <div class="row" tal:replace="structure view/exceptions_widget" />
 
-    <!--
-    <div class="row" tal:replace="structure view/weekdays_widget" />
-    <div class="row" tal:replace="structure view/monthly_widget" />
-    -->
   </div>
 </tal:block>
 

@@ -1036,12 +1036,12 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
         # Widgets for the recurrence editing
         self.recurrence_widget = CheckboxWidget('recurrence',
-                                                'Recurring')
+                                                _('Recurring'))
 
         self.recurrence_type_widget = SelectionWidget(
-            'recurrence_type', 'Recurs',
-            (('daily', 'Day'), ('weekly',  'Week'),
-             ('monthly', 'Month'), ('yearly', 'Year')))
+            'recurrence_type', _('Recurs'),
+            (('daily', _('Day')), ('weekly', _('Week')),
+             ('monthly', _('Month')), ('yearly', _('Year'))))
 
 
         self.interval_widget = TextWidget('interval', _('Repeat every'),
@@ -1049,31 +1049,31 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                           validator=positiveIntValidator,
                                           value=1)
 
-        self.range_widget = SelectionWidget('range', 'Range',
-                                            (('count', 'Count'),
-                                             ('until', 'Until'),
-                                             ('forever', 'forever')),
+        self.range_widget = SelectionWidget('range', _('Range'),
+                                            (('count', _('Count')),
+                                             ('until', _('Until')),
+                                             ('forever', _('forever'))),
                                             value='forever')
 
-        self.count_widget = TextWidget('count', 'Number of events',
+        self.count_widget = TextWidget('count', _('Number of events'),
                                        validator=positiveIntValidator,
                                        parser=intParser)
-        self.until_widget = TextWidget('until', 'Repeat until',
+        self.until_widget = TextWidget('until', _('Repeat until'),
                                        parser=dateParser)
 
         # The display is done manually, so no formatter needed
-        self.weekdays_widget = SequenceWidget('weekdays', 'Weekdays',
+        self.weekdays_widget = SequenceWidget('weekdays', _('Weekdays'),
                                               parser=intsParser,
                                               validator=weekdaysValidator)
 
-        self.monthly_widget = SelectionWidget('monthly', 'Monthly',
+        self.monthly_widget = SelectionWidget('monthly', _('Monthly'),
                                               (('monthday', 'md'),
                                                ('weekday', 'wd'),
                                                ('lastweekday', 'lwd')),
                                               value='monthday')
 
         self.exceptions_widget = TextAreaWidget('exceptions',
-                                                'Exception dates',
+                                                _('Exception dates'),
                                                 parser=datesParser,
                                                 formatter=datesFormatter)
 
