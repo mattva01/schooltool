@@ -1688,6 +1688,42 @@ class PersonInfoDlg(wxDialog):
 previous_photo_dir = ""
 
 
+class AppLogFrame(wxDialog):
+    """Window showing the application log."""
+
+    def __init__(self, title, log_data, parent=None, id=-1):
+        wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
+                          style=RESIZABLE_WIN_STYLE)
+
+        main_sizer = wxBoxSizer(wxVERTICAL)
+        self.text_ctrl = wxTextCtrl(self, -1,
+                                    style=wxTE_MULTILINE | wxTE_READONLY)
+        self.text_ctrl.SetValue(to_wx(log_data))
+        main_sizer.Add(self.text_ctrl, 1, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        main_sizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        close_btn = wxButton(self, wxID_CLOSE, _("Close"))
+        EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
+        close_btn.SetDefault()
+        button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
+        button_bar.Add(close_btn, 0, wxLEFT, 16)
+        main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
+
+        self.SetSizer(main_sizer)
+        min_size = main_sizer.GetMinSize()
+        self.SetSizeHints(minW=max(200, min_size.width),
+                          minH=max(200, min_size.height))
+        self.Layout()
+        self.CenterOnScreen(wxBOTH)
+
+    def OnClose(self, event=None):
+        """Close the window."""
+        self.Close(True)
+
+
 #
 # Main application window
 #
@@ -1768,7 +1804,7 @@ class MainFrame(wxFrame):
                  item(_("&School Timetable"),
                       _("Edit a timetable for the whole school"),
                       self.DoViewSchoolTimetable),
-                 item(_("A&pplication log"),
+                 item(_("Application &Log"),
                       _("View the application audit trail"),
                       self.DoViewApplicationLog),
                  item(_("Search &for Available Resources"),
@@ -2542,11 +2578,7 @@ class MainFrame(wxFrame):
         except SchoolToolError, e:
             self.SetStatusText(to_wx(unicode(e)))
         else:
-            dlg = wxDialog(self, -1, _("Application log"),
-                           style=(DEFAULT_DLG_STYLE | wxRESIZE_BORDER))
-            dlg.text_ctrl = wxTextCtrl(dlg, -1,
-                                       style=wxTE_MULTILINE | wxTE_READONLY)
-            dlg.text_ctrl.SetValue(to_wx(log))
+            dlg = AppLogFrame(_("Application log"), log, parent=self)
             dlg.Show()
 
 
