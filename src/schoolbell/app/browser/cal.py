@@ -23,6 +23,7 @@ $Id$
 """
 
 from datetime import date, datetime, timedelta
+import urllib
 
 from zope.interface import implements
 from zope.component import queryView, adapts
@@ -30,11 +31,13 @@ from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.browser.absoluteurl import absoluteURL
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.calendar.interfaces import ICalendar
+from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.simple import SimpleCalendarEvent
-from schoolbell.calendar.utils import week_start, parse_date
+from schoolbell.calendar.utils import week_start, prev_month, next_month
+from schoolbell.calendar.utils import parse_date
 from schoolbell.app.interfaces import ICalendarOwner
 
 
@@ -167,6 +170,38 @@ class CalendarViewBase(BrowserView):
         end = start + timedelta(7)
         return self.getDays(start, end)
 
+    def getMonth(self, dt):
+        """Return a nested list of days in the month that contains dt.
+
+        Returns a list of lists of date objects.  Days in neighbouring
+        months are included if they fall into a week that contains days in
+        the current month.
+        """
+        weeks = []
+        start_of_next_month = next_month(dt)
+        start_of_week = week_start(dt.replace(day=1), self.first_day_of_week)
+        while start_of_week < start_of_next_month:
+            start_of_next_week = start_of_week + timedelta(7)
+            weeks.append(self.getDays(start_of_week, start_of_next_week))
+            start_of_week = start_of_next_week
+        return weeks
+
+    def _eventView(self, event):
+        # XXX Not tested
+        return CalendarEventView(event, self.request, calendar=self.context)
+
+    def eventClass(self, event):
+        # XXX Not tested
+        return self._eventView(event).cssClass()
+
+    def renderEvent(self, event, date):
+        # XXX Not tested
+        return self._eventView(event).full(self.request, date)
+
+    def eventShort(self, event):
+        # XXX Not tested
+        return self._eventView(event).short(self.request)
+
     def eventHidden(self, event):
         return False # XXX TODO
 
@@ -230,6 +265,20 @@ class CalendarViewBase(BrowserView):
     def iterEvents(self, first, last):
         return self.context.expand(first, last)
 
+    def prevMonth(self):
+        """Return the first day of the previous month."""
+        return prev_month(self.cursor)
+
+    def nextMonth(self):
+        """Return the first day of the next month."""
+        return next_month(self.cursor)
+
+    def prevDay(self):
+        return self.cursor - timedelta(1)
+
+    def nextDay(self):
+        return self.cursor + timedelta(1)
+
 
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""
@@ -254,3 +303,131 @@ class WeeklyCalendarView(CalendarViewBase):
     def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
         return self.getWeek(self.cursor)
+
+
+class MonthlyCalendarView(CalendarViewBase):
+    """Monthly calendar view."""
+
+    def title(self):
+        month_name = unicode(self.month_names[self.cursor.month])
+        args = {'month': month_name, 'year': self.cursor.year}
+        return _('%(month)s, %(year)s') % args
+
+    def dayOfWeek(self, date):
+        return unicode(self.day_of_week_names[date.weekday()])
+
+    def weekTitle(self, date):
+        return _('Week %d') % date.isocalendar()[1]
+
+    def getCurrentMonth(self):
+        """Return the current month as a nested list of CalendarDays."""
+        return self.getMonth(self.cursor)
+
+
+class CalendarEventView(object):
+    """Renders the inside of the event box in various calendar views."""
+
+    __used_for__ = ICalendarEvent
+
+    template = ViewPageTemplateFile('templates/cal_event.pt')
+
+    def __init__(self, event, request, calendar=None):
+        """Create a view for event.
+
+        Since ordinary calendar events do not know which calendar they come
+        from, we have to explicitly provide the access control list (acl)
+        that governs access to this calendar.
+        """
+        self.context = event
+        self.request = request
+        self.calendar = calendar
+        self.date = None
+
+    def canEdit(self):
+        """Can the current user edit this calendar event?"""
+        return True # TODO: implement this when we have security.
+
+    def canView(self):
+        """Can the current user view this calendar event?"""
+        return True # TODO: implement this when we have security.
+
+    def isHidden(self):
+        """Should the event be hidden from the current user?"""
+        return False # TODO
+
+    def cssClass(self):
+        """Choose a CSS class for the event."""
+        return 'event' # TODO: for now we do not have any other CSS classes.
+
+    def getPeriod(self):
+        """Returns the title of the timetable period this event coincides with.
+
+        Returns None if there is no such period.
+        """
+        return None # XXX Does not apply to SchoolBell.
+
+    def duration(self):
+        """Format the time span of the event."""
+        dtstart = self.context.dtstart
+        dtend = dtstart + self.context.duration
+        if dtstart.date() == dtend.date():
+            span =  "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
+                                     dtend.strftime('%H:%M'))
+        else:
+            span = "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
+                                    dtend.strftime('%Y-%m-%d %H:%M'))
+
+        period = self.getPeriod()
+        if period:
+            return "Period %s (%s)" % (period, span)
+        else:
+            return span
+
+    def full(self, request, date):
+        """Full representation of the event for daily/weekly views."""
+        try:
+            self.request = request
+            self.date = date
+            return self.template(request)
+        finally:
+            self.request = None
+            self.date = None
+
+    def short(self, request):
+        """Short representation of the event for the monthly view."""
+        self.request = request
+        ev = self.context
+        end = ev.dtstart + ev.duration
+        if self.canView():
+            title = ev.title
+        else:
+            title = _("Busy")
+        if ev.dtstart.date() == end.date():
+            period = self.getPeriod()
+            if period:
+                duration = _("Period %s") % period
+            else:
+                duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
+                                             end.strftime('%H:%M'))
+        else:
+            duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%b&nbsp;%d'),
+                                         end.strftime('%b&nbsp;%d'))
+        return "%s (%s)" % (title, duration)
+
+    def editLink(self):
+        """Return the link for editing this event."""
+        return 'edit_event.html?' + self._params()
+
+    def deleteLink(self):
+        """Return the link for deleting this event."""
+        return 'delete_event.html?' + self._params()
+
+    def _params(self):
+        """Prepare query arguments for editLink and deleteLink."""
+        event_id = self.context.unique_id
+        date = self.date.strftime('%Y-%m-%d')
+        return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
+
+    def privacy(self):
+        return _("Public") # TODO used to also have busy-block and hidden.
+

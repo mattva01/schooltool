@@ -916,6 +916,7 @@ class YearlyCalendarView(CalendarViewBase):
     __url = None
 
     def calURL(self, cal_type, cursor=None):
+        # XXX Is there a reason why the CalendarViewBase.calURL doesn't work?
         if cursor is None:
             cursor = self.cursor
         if self.__url is None:

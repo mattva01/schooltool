@@ -50,7 +50,7 @@ We can generate some fictitious events:
     >>> 'duration:' in response.getBody()
     True
 
-Now let's render the weekly calendar view:
+Let's render the weekly calendar view:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/weekly.html HTTP/1.1
@@ -59,7 +59,16 @@ Now let's render the weekly calendar view:
     HTTP/1.1 200 Ok
     ...
 
-The default calendar view should be the weekly one:
+Now let's render the monthly calendar view:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/monthly.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+The weekly view should be the default (until we get the daily view running):
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/ HTTP/1.1

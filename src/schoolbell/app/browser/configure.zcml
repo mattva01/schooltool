@@ -308,6 +308,16 @@
       title="Calendar (weekly)"
       />
 
+  <page
+      name="monthly.html"
+      for="schoolbell.calendar.interfaces.ICalendar"
+      class=".cal.MonthlyCalendarView"
+      template="templates/cal_monthly.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Calendar (monthly)"
+      />
+
 <!-- Skin and resources -->
 
   <zope:subscriber
