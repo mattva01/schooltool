@@ -53,7 +53,7 @@ class ServerSettingsDlg(wxDialog):
         if len(args) < 3: kwds.setdefault('title', 'Server Settings')
 
         # begin wxGlade: ServerSettingsDlg.__init__
-        kwds["style"] = wxDIALOG_MODAL|wxCAPTION
+        kwds["style"] = wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU
         wxDialog.__init__(self, *args, **kwds)
         self.serverLabel = wxStaticText(self, -1, "Server")
         self.serverTextCtrl = wxTextCtrl(self, -1, "localhost")
@@ -128,7 +128,7 @@ class RollCallInfoDlg(wxDialog):
 
     def __init__(self, parent, title, show_resolved):
         wxDialog.__init__(self, parent, -1, title,
-                          style=wxDIALOG_MODAL|wxCAPTION)
+                          style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
         self.show_resolved = show_resolved
 
         vsizer = wxBoxSizer(wxVERTICAL)
@@ -214,7 +214,8 @@ class RollCallDlg(wxDialog):
     def __init__(self, parent, group_title, group_path, rollcall, client):
         title = "Roll Call for %s" % group_title
         wxDialog.__init__(self, parent, -1, title,
-              style=wxDIALOG_MODAL|wxCAPTION|wxRESIZE_BORDER|wxTHICK_FRAME)
+            style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|
+                  wxTHICK_FRAME)
         self.title = title
         self.group_title = group_title
         self.group_path = group_path
@@ -334,7 +335,7 @@ class RollCallDlg(wxDialog):
             self.EndModal(wxID_OK)
 
 
-class AbsenceFrame(wxFrame):
+class AbsenceFrame(wxDialog):
     """Window showing the list of person's absences."""
 
     def __init__(self, client, path, title, parent=None, id=-1,
@@ -350,7 +351,8 @@ class AbsenceFrame(wxFrame):
           a column in detailed mode (it makes sense to disable it when
           viewing absences for a single person)
         """
-        wxFrame.__init__(self, parent, id, title, size=wxSize(600, 400))
+        wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
+              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
         self.client = client
         self.title = title
         self.path = path
@@ -609,6 +611,15 @@ class MainFrame(wxFrame):
                 ),
             ))
 
+        def setupPopupMenu(control, menu):
+            def handler(event):
+                mouse_pos = wxGetMousePosition()
+                control.PopupMenu(menu, control.ScreenToClient(mouse_pos))
+            EVT_RIGHT_UP(control, handler)
+            EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), handler)
+            if isinstance(control, wxTreeCtrl):
+                EVT_TREE_ITEM_RIGHT_CLICK(control, control.GetId(), handler)
+
         # client area: vertical splitter
         splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
 
@@ -626,10 +637,7 @@ class MainFrame(wxFrame):
                 item("&Refresh", "Refresh", self.DoRefresh)
             )
         EVT_RIGHT_DOWN(self.groupTreeCtrl, self.DoTreeRightDown)
-        # looks like I need both for this to work on Gtk and MSW
-        EVT_RIGHT_UP(self.groupTreeCtrl, self.DoTreePopup)
-        EVT_COMMAND_RIGHT_CLICK(self.groupTreeCtrl, ID_GROUP_TREE,
-                                self.DoTreePopup)
+        setupPopupMenu(self.groupTreeCtrl, self.treePopupMenu)
 
         # right pane of the splitter: horizontal splitter
         splitter2 = wxSplitterWindow(splitter, -1, style=wxSP_NOBORDER)
@@ -639,7 +647,7 @@ class MainFrame(wxFrame):
         label2a = wxStaticText(panel2a, -1, "Members")
         ID_PERSON_LIST = wxNewId()
         self.personListCtrl = wxListCtrl(panel2a, ID_PERSON_LIST,
-                                         style=wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
+                style=wxSUNKEN_BORDER|wxLC_LIST|wxLC_SINGLE_SEL)
         self.personPopupMenu = popupmenu(
                 item("View &Absences", "View a list of person's absences",
                      self.DoViewPersonAbsences),
@@ -650,10 +658,7 @@ class MainFrame(wxFrame):
                      self.DoRemoveMember),
             )
         EVT_RIGHT_DOWN(self.personListCtrl, self.DoPersonRightDown)
-        # looks like I need both for this to work on Gtk and MSW
-        EVT_RIGHT_UP(self.personListCtrl, self.DoPersonPopup)
-        EVT_COMMAND_RIGHT_CLICK(self.personListCtrl, ID_PERSON_LIST,
-                                self.DoPersonPopup)
+        setupPopupMenu(self.personListCtrl, self.personPopupMenu)
         sizer2a = wxBoxSizer(wxVERTICAL)
         sizer2a.Add(label2a)
         sizer2a.Add(self.personListCtrl, 1, wxEXPAND)
@@ -679,10 +684,7 @@ class MainFrame(wxFrame):
                      self.DoRemoveRelationship),
             )
         EVT_RIGHT_DOWN(self.relationshipListCtrl, self.DoRelationshipRightDown)
-        # looks like I need both for this to work on Gtk and MSW
-        EVT_RIGHT_UP(self.relationshipListCtrl, self.DoRelationshipPopup)
-        EVT_COMMAND_RIGHT_CLICK(self.relationshipListCtrl,
-                                ID_RELATIONSHIP_LIST, self.DoRelationshipPopup)
+        setupPopupMenu(self.relationshipListCtrl, self.relationshipPopupMenu)
         sizer2b = wxBoxSizer(wxVERTICAL)
         sizer2b.Add(label2b)
         sizer2b.Add(self.relationshipListCtrl, 1, wxEXPAND)
@@ -1022,14 +1024,6 @@ class MainFrame(wxFrame):
             self.groupTreeCtrl.SelectItem(item)
         event.Skip()
 
-    def DoTreePopup(self, event):
-        """Show the popup menu for the group tree control.
-
-        Called when the right mouse buton released on the group tree
-        control.
-        """
-        self.groupTreeCtrl.PopupMenu(self.treePopupMenu, event.GetPosition())
-
     def DoPersonRightDown(self, event):
         """Select the person under mouse cursor.
 
@@ -1041,15 +1035,6 @@ class MainFrame(wxFrame):
             self.personListCtrl.Select(item)
         event.Skip()
 
-    def DoPersonPopup(self, event):
-        """Show the popup menu for the person list control.
-
-        Called when the right mouse buton released on the person list
-        control.
-        """
-        self.personListCtrl.PopupMenu(self.personPopupMenu,
-                                      event.GetPosition())
-
     def DoRelationshipRightDown(self, event):
         """Select the relationship under mouse cursor.
 
@@ -1060,15 +1045,6 @@ class MainFrame(wxFrame):
         if flags & wxLIST_HITTEST_ONITEM:
             self.relationshipListCtrl.Select(item)
         event.Skip()
-
-    def DoRelationshipPopup(self, event):
-        """Show the popup menu for the relationship list control.
-
-        Called when the right mouse buton released on the relationship list
-        control.
-        """
-        self.relationshipListCtrl.PopupMenu(self.relationshipPopupMenu,
-                                            event.GetPosition())
 
     def DoRefresh(self, event=None):
         """Refresh data from the server.
@@ -1119,7 +1095,6 @@ class MainFrame(wxFrame):
         self.groupTreeCtrl.Freeze()
         self.groupTreeCtrl.DeleteAllItems()
         root = self.groupTreeCtrl.AddRoot("Roots")
-        self.groupTreeCtrl.SetPyData(root, (None, None))
 
         stack = [(root, None)]  # (item, id)
         item_to_select = None
@@ -1241,7 +1216,10 @@ class SchoolToolApp(wxApp):
 
     def __init__(self, client):
         self.client = client
-        wxApp.__init__(self)
+        wxApp.__init__(self, 0)
+        # Passing 0 as the second argument to wxApp disables the capturing of
+        # stderr and helps debugging on Win32 (especially when an exception
+        # occurs before the main loop is entered)
 
     def OnInit(self):
         """Initialize the application (create the main window)."""
