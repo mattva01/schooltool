@@ -1,6 +1,6 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Person info</title>
+  <title metal:fill-slot="title" i18n:translate="">Person info</title>
 </head>
 <body>
   <h1 metal:fill-slot="h1">
