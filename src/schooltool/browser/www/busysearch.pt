@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" i18n:translate="">Search for resources</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">
+  <h1 metal:fill-slot="h1" i18n:translate="">
     Search for available resources
   </h1>
   <metal:block metal:fill-slot="content"
@@ -19,7 +19,7 @@
       <table class="busysearch">
         <tr>
          <td>
-      <h3>Resource</h3>
+      <h3 i18n:translate="">Resource</h3>
       <select multiple="yes" name="resources">
         <tal:block repeat="resource view/allResources">
         <option tal:define="path resource/@@path"
@@ -32,7 +32,7 @@
          </td>
          <td>
 
-      <h3>Hours</h3>
+      <h3 i18n:translate="">Hours</h3>
       <select multiple="yes" name="hours">
         <option tal:repeat="hr python:range(24)"
                 tal:attributes="value hr;
@@ -44,23 +44,23 @@
          </td>
          <td>
 
-      <h3>Dates</h3>
+      <h3 i18n:translate="">Dates</h3>
       <div class="row">
-        <label>First </label>
-        <input type="text" name="first"
+        <label for="first" i18n:translate="">First</label>
+        <input type="text" name="first" id="first"
                tal:attributes="value request/args/first/pop|view/today"/>
       </div>
       <div class="row">
-        <label>Last </label>
-        <input type="text" name="last"
+        <label for="last" i18n:translate="">Last</label>
+        <input type="text" name="last" id="last"
                tal:attributes="value request/args/last/pop|view/today"/><br/>
       </div>
 
-      <h3>Duration</h3>
+      <h3 i18n:translate="">Duration</h3>
       <div class="row">
         <input type="text" name="duration"
           tal:attributes="value duration"/>
-       min.
+       <span tal:omit-tag="" i18:translate="">min.</span>
       <div class="row">
 
       <input type="submit" name="SUBMIT" value="Search" class="button"
@@ -72,12 +72,12 @@
 
     <div tal:condition="python:getattr(view, 'resources', None)"
          class="available">
-    <h3>Available time slots</h3>
+    <h3 i18n:translate="">Available time slots</h3>
     <table class="available">
       <tr>
-        <th>Resource</th>
-        <th>Start</th>
-        <th>End</th>
+        <th i18n:translate="">Resource</th>
+        <th i18n:translate="">Start</th>
+        <th i18n:translate="">End</th>
         <th></th>
       </tr>
       <tal:block repeat="resource view/listResources">
@@ -93,7 +93,7 @@
              <input type="hidden" name="mins"
                     tal:attributes="value duration"/>
              <input type="submit" name="BOOK" value="Book" class="button"
-                    i18n:attributes="values"/>
+                    i18n:attributes="value"/>
           </form>
         </td>
       </tr>
