@@ -469,6 +469,7 @@ class TimePeriodViewBase(View):
         index = 0
         while start_of_month < limit:
             month_title = _('%(month)s %(year)s') % {
+                                # XXX: i18n
                                 'month': start_of_month.strftime('%B'),
                                 'year': start_of_month.year
                             }

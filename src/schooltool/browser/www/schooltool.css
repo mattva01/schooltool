@@ -380,6 +380,7 @@ table.cal_yearly {
 td.cal_yearly_month {
   border: 1px solid gray;
   text-align: center;
+  vertical-align: top;
 }
 
 table.cal_yearly_month {
@@ -414,6 +415,8 @@ table.cal_monthly {
 
 td.cal_monthly_weekno {
   border: 1px solid gray;
+  vertical-align: top;
+  text-align: center;
 }
 
 a.cal_monthly_weekno {
@@ -422,9 +425,20 @@ a.cal_monthly_weekno {
   color: navy;
 }
 
-td.cal_monthly_day {
+td.cal_monthly_day,
+td.cal_monthly_day_other {
   border: 1px solid gray;
   vertical-align: top;
+  text-align: right;
+}
+
+td.cal_monthly_day_other {
+  background: #eee;
+}
+
+td.cal_monthly_day div,
+td.cal_monthly_day_other div {
+  text-align: left;
 }
 
 th.cal_monthly_weekday {
@@ -432,8 +446,16 @@ th.cal_monthly_weekday {
 }
 
 a.cal_weekly_dayno {
-  font-size: smaller;
+  display: block;
+  color: black;
+  text-decoration: none;
+  padding: 1px 3px;
+}
+td.cal_monthly_day_other a.cal_weekly_dayno {
   color: #777;
+}
+a.cal_weekly_dayno:hover, a.cal_weekly_dayno:active {
+  font-weight: bold;
 }
 
 div.event_weekly {

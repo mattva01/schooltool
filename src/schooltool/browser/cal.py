@@ -468,6 +468,14 @@ class WeeklyCalendarView(CalendarViewBase):
 
     template = Template("www/cal_weekly.pt")
 
+    def title(self):
+        # XXX: i18n
+        return self.cursor.strftime('%B, %Y (week %V)')
+
+    def dayTitle(self, day):
+        # XXX: i18n
+        return day.strftime('%A, %Y-%m-%d')
+
     def prevWeek(self):
         """Return the day a week before."""
         return self.cursor - timedelta(7)
@@ -486,6 +494,17 @@ class MonthlyCalendarView(CalendarViewBase):
 
     template = Template("www/cal_monthly.pt")
 
+    def title(self):
+        # XXX: i18n
+        return self.cursor.strftime('%B, %Y')
+
+    def dayOfWeek(self, date):
+        # XXX: i18n
+        return date.strftime('%A')
+
+    def weekTitle(self, date):
+        return _('Week %d') % date.isocalendar()[1]
+
     def prevMonth(self):
         """Return the first day of the previous month."""
         return prev_month(self.cursor)
@@ -503,6 +522,14 @@ class YearlyCalendarView(CalendarViewBase):
     """Yearly calendar view."""
 
     template = Template('www/cal_yearly.pt')
+
+    def monthTitle(self, date):
+        # XXX: i18n
+        return date.strftime('%B')
+
+    def dayOfWeek(self, date):
+        # XXX: i18n
+        return date.strftime('%a')
 
     def prevYear(self):
         """Return the first day of the next year."""
@@ -551,7 +578,7 @@ class YearlyCalendarView(CalendarViewBase):
                 result.append('<a href="%s" class="%s">%s</a>' %
                               (self.calURL('daily', day.date), cssClass,
                                day.date.day))
-                result.append('</td>')
+            result.append('</td>')
         return "\n".join(result)
 
 

@@ -1,5 +1,6 @@
 <div class="calevent" i18n:domain="schooltool"
-     tal:define="editable python:getattr(context, 'source', None) != 'timetable-calendar'">
+     tal:define="source python:getattr(context, 'source', None);
+                 editable python:source != 'timetable-calendar'">
   <tal:block condition="editable">
     <div class="dellink">
       <a tal:attributes="href string:delete_event.html?event_id=${view/uniqueId}"

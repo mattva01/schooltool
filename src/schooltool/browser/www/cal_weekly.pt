@@ -7,7 +7,7 @@
     Calendar for <span tal:replace="context/__parent__/title" i18n:name="title" />
   </h1>
   <metal:block metal:fill-slot="content">
-    <h2 tal:content="python:view.cursor.strftime('%B, %Y (week %V)')" />
+    <h2 tal:content="view/title" />
     <div class="calnav">
     <a tal:attributes="href python:view.calURL('weekly', view.prevWeek())"
        i18n:translate="">Previous week</a>
@@ -20,7 +20,7 @@
       <div class="day"
            tal:repeat="day view/getCurrentWeek">
         <h2>
-          <a tal:content="python:day.date.strftime('%A, %Y-%m-%d')"
+          <a tal:content="python:view.dayTitle(day.date)"
              tal:attributes="href python:view.calURL('daily', day.date)" />
         </h2>
         <div tal:repeat="event day/events"

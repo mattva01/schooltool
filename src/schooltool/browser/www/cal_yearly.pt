@@ -23,7 +23,7 @@
       <td class="cal_yearly_month"
           tal:repeat="month quarter">
         <h2>
-          <a tal:content="python:month[1][0].date.strftime('%B')"
+          <a tal:content="python:view.monthTitle(month[1][0].date)"
              tal:attributes="href python:view.calURL('monthly',
                                                      month[1][0].date)"
              />
@@ -32,7 +32,7 @@
           <tr>
             <th class="cal_monthly_weekday"
                   tal:repeat="weekday python:month[0]"
-                  tal:content="python:weekday.date.strftime('%a')" />
+                  tal:content="python:view.dayOfWeek(weekday.date)" />
           </tr>
           <tr tal:repeat="week month">
             <td tal:replace="structure
