@@ -105,8 +105,8 @@
              </li>
       <li i18n:translate=""><strong>groups</strong> -- A space-separated list
              of groups this pupil is a member in.</li>
-      <li i18n:translate=""><strong>birthday</strong> -- Date of birth in
-             ISO 8601 format (YYYY-MM-DD).</li>
+      <li i18n:translate=""><strong>birthday</strong> -- Date of birth
+             (YYYY-MM-DD).</li>
       <li i18n:translate=""><strong>comment</strong>  -- A comment
              (a free form string).</li>
     </ul>

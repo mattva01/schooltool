@@ -5,6 +5,7 @@
 <body>
 
 <metal:block metal:fill-slot="content">
+  <!-- XXX Looks ugly and confusing -->
   <form method="POST" tal:attributes="action request/path">
     <div class="row" tal:replace="structure view/new_event_privacy_widget" />
     <div class="row" tal:replace="structure view/timetable_privacy_widget" />
