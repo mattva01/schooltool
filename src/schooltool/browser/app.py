@@ -114,6 +114,12 @@ class RootView(View):
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logo.png':
             return StaticFile('www/logo.png', 'image/png')
+        elif name == 'person.png':
+            return StaticFile('www/user2.png', 'image/png')
+        elif name == 'group.png':
+            return StaticFile('www/group2.png', 'image/png')
+        elif name == 'resource.png':
+            return StaticFile('www/resource2.png', 'image/png')
         elif name == 'logout':
             return LogoutView(self.context)
         elif name == 'reset_db.html':

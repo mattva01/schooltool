@@ -349,6 +349,14 @@ class GroupEditView(View, RelationshipViewMixin):
 
     back = True
 
+    def iconURL(self, obj):
+        if IGroup.providedBy(obj):
+            return '/group.png'
+        elif IPerson.providedBy(obj):
+            return '/person.png'
+        else:
+            return '/resource.png'
+
     def addList(self):
         """Return a list of objects available for addition"""
         result = []
@@ -360,8 +368,7 @@ class GroupEditView(View, RelationshipViewMixin):
             for obj in traverse(self.context, path).itervalues():
                 if (searchstr in obj.title.lower() and
                     obj not in members):
-                    # XXX using __class__.__name__ here is bogus!
-                    result.append((obj.__class__.__name__, obj.title, obj))
+                    result.append((self.iconURL(obj), obj.title, obj))
         result.sort()
         return [obj for cls, title, obj in result]
 

@@ -205,8 +205,9 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assert_(view2.service is app.timePeriodService)
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
-        logo = self.assertTraverses(view, 'logo.png', StaticFile)
-        self.assertEquals(logo.content_type, 'image/png')
+        for picture in ('logo.png', 'group.png', 'person.png', 'resource.png'):
+            image = self.assertTraverses(view, picture, StaticFile)
+            self.assertEquals(image.content_type, 'image/png')
         user = object()
         request = RequestStub(authenticated_user=user)
         self.assertTraverses(view, 'start', StartView, user, request=request)

@@ -28,16 +28,15 @@
   </p>
   <table tal:condition="list">
     <tr>
-      <th i18n:translate="">Icon</th>
+      <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th i18n:translate="">Name</th>
     </tr>
 
     <tr tal:repeat="item view/list">
-      <td tal:content="item/__class__/__name__">[Icon]</td> <!-- XXX mg: an absolute veto on using __class__.__name__ here!  Fix this! -->
-      <td><input
-              type="checkbox" name="CHECK"
-              tal:attributes="value item/@@path">
+      <td><img tal:attributes="src python:view.iconURL(item)" alt=""/></td>
+      <td type="checkbox" name="CHECK"
+          tal:attributes="value item/@@path">
       </td>
       <td><a tal:attributes="href item/@@absolute_url"
              tal:content="item/title"/></td>
