@@ -3,10 +3,10 @@
           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
           i18n:domain="schooltool">
   <title><span tal:replace="context/title"/> Notes</title>
-  <tal:loop repeat="note python:view.getNotes(request)">
+  <tal:loop repeat="note view/getNotes">
       <item xlink:type="simple"
           xlink:title="" xlink:href=""
-          i18n:attributes="xlink:title note/title"
-          tal:attributes="xlink:href string:/notes/${note/__name__}" />
+          tal:attributes="xlink:title note/title;
+          xlink:href note/@@path" />
   </tal:loop>
 </notes>
