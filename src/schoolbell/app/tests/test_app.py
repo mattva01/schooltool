@@ -263,6 +263,10 @@ def doctest_PersonPreferences():
         >>> prefs.weekstart
         'Monday'
 
+    Need to have prefs.__parent__ refer to the person its attached to
+        >>> prefs.__parent__ == person
+        True
+
     """
 
 def doctest_Group():

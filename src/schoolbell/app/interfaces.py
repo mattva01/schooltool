@@ -201,6 +201,8 @@ class IPersonContained(IPerson, IContained, IAdaptableToSchoolBellApplication):
 class IPersonPreferences(Interface):
     """Preferences stored in an annotation on a person."""
 
+    __parent__ = Attribute("""Person who owns these preferences""")
+
     timezone = Attribute("""Timezone to display""")
 
     timeformat = Attribute("""Time Format preference""")
