@@ -199,6 +199,10 @@ div.buttons {
   margin: 2ex 0ex 0ex 0ex;
 }
 
+li div.buttons {
+  margin: 1ex;
+}
+
 input.button,
 form a.action:link,
 form a.action:visited,

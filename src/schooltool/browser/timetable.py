@@ -115,6 +115,14 @@ class TimetableView(View, AppObjectBreadcrumbsMixin):
     def rows(self):
         return format_timetable_for_presentation(self.context)
 
+    def canEdit(self):
+        # XXX this is slightly bogus
+        #     who can add timetable exceptions?
+        #     that is a deep question!
+        #     a timetable is shared through composition!
+        user = request.authenticated_user
+        return isManager(user)
+
 
 class TimetableSchemaView(TimetableView):
     """View for a timetable schema
