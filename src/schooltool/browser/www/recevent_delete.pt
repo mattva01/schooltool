@@ -1,29 +1,21 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">
-    Add exception for <span tal:replace="event/title" />
+    Deleting a repeating event (<span tal:replace="event/title" />)
   </title>
 </head>
 <body>
   <h1 metal:fill-slot="h1" i18n:translate="">
-    Add exception for <span tal:replace="event/title" />
+    Deleting a repeating event (<span tal:replace="event/title" />)
   </h1>
   <metal:block metal:fill-slot="content">
 
   <form method="POST" tal:attributes="action request/path">
 
     <p i18n:translate="">
-    You are trying to delete an event that has been generated from a timetable.
-    An exception for this day will be marked in the corresponding timetable.
-    Are you sure you want to add an exception for this activity?
+    You are trying to delete a repeating event.  Do you want to delete the
+    current occurrence, this and all future occurrences, or all ocurrences?
     </p>
-
-    <!-- TODO: prettying up (format, etc.) -->
-    <table border="1">
-      <tr><td>Start time</td><td tal:content="event/dtstart"></td></tr>
-      <tr><td>Duration</td><td tal:content="event/duration"></td></tr>
-      <tr><td>Title</td><td tal:content="event/title"></td></tr>
-    </table>
 
     <input type="hidden" name="event_id"
            tal:attributes="value python:request.args['event_id'][0]" />
@@ -31,7 +23,11 @@
            tal:attributes="value python:request.args['date'][0]" />
 
     <div class="buttons">
-      <input class="button" type="submit" name="CONFIRM" value="Confirm"
+      <input class="button" type="submit" name="CURRENT" value="Current"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="FUTURE" value="Future"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="ALL" value="All"
              i18n:attributes="value" />
       <input class="button" type="submit" name="CANCEL" value="Cancel"
              i18n:attributes="value" />

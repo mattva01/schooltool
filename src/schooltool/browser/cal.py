@@ -667,6 +667,8 @@ class CalendarView(View):
     Switches daily, weekly, monthly, yearly calendar presentations.
     """
 
+    __used_for__ = ICalendar
+
     authorization = ACLViewAccess
 
     def _traverse(self, name, request):
@@ -716,11 +718,6 @@ class EventViewHelpers:
             return appobject.makeCalendar().find(event_id)
         except KeyError:
             return None
-
-    def _showConfirmationForm(self, event):
-        """Render the notification/confirmation form for a timetable event."""
-        self.event = event
-        return View.do_GET(self, self.request)
 
     def _addTimetableException(self, event, replacement):
         """Add or change a timetable exception for a timetable event.
@@ -962,11 +959,16 @@ class EventDeleteView(View, EventViewHelpers):
 
     __used_for__ = ICalendar
 
-    template = Template('www/ttevent_delete.pt')
-
+    # Access to ordinary events is protected by the calendar's ACL.
+    # Access to timetable exceptions is additionally restricted to managers.
     authorization = ACLModifyAccess
 
-    event = None # The event to be removed.  Set before rendering the template.
+    # Page template shown when you are trying to remove a recurring event.
+    recurrence_template = Template('www/recevent_delete.pt')
+
+    # Page template shown when you are trying to remove a timetable event.
+    # Extra namespace bindings: `event`
+    tt_confirm_template = Template('www/ttevent_delete.pt')
 
     def do_GET(self, request):
         # It would be nice to show a meaningful error message if the arguments
@@ -996,6 +998,11 @@ class EventDeleteView(View, EventViewHelpers):
 
         # Dangling event ID
         return self._redirectToDailyView(date)
+
+    def _showConfirmationForm(self, event):
+        """Render the notification/confirmation form for a timetable event."""
+        return self.tt_confirm_template(self.request, view=self,
+                                        context=self.context, event=event)
 
 
 class CalendarComboMixin(View):
