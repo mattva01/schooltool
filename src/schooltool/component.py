@@ -159,9 +159,11 @@ class FacetManager:
 
 facet_factory_registry = {}
 
+
 def resetFacetFactoryRegistry():
-    """Clears the facet factory registry."""
-    facet_factory_registry.clear()
+    """Replace the facet factory registry with an empty one."""
+    global facet_factory_registry
+    facet_factory_registry = {}
 
 
 def registerFacetFactory(factory):
@@ -275,12 +277,18 @@ def strURI(uri):
     """Returns the URI of ISpecificURI as a string"""
     return inspectSpecificURI(uri)[0]
 
+
 _uri_registry = {}
+
+
+def resetURIRegistry():
+    """Replace the URI registry with an empty one."""
+    global _uri_registry
+    _uri_registry = {}
 
 def registerURI(uri):
     """Adds an ISpecificURI to the registry so it can be queried by
     the URI string."""
-    global _uri_registry
     str_uri = strURI(uri)
     if str_uri in _uri_registry:
         if _uri_registry[str_uri] is not uri:
@@ -305,8 +313,9 @@ def getURI(str):
 
 relationship_registry = TypeRegistry()
 
+
 def resetRelationshipRegistry():
-    """Clears the relationship registry"""
+    """Replace the relationship registry with an empty one."""
     global relationship_registry
     relationship_registry = TypeRegistry()
 
@@ -349,7 +358,7 @@ view_registry = TypeRegistry()
 
 
 def resetViewRegistry():
-    """Clears the view registry"""
+    """Replace the view registry with an empty one."""
     global view_registry
     view_registry = TypeRegistry()
 

@@ -891,7 +891,8 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views import FacetManagementView
         from schooltool.component import FacetManager
         from schooltool.model import Person
-        from schooltool.debug import EventLogFacet
+        from schooltool.debug import EventLogFacet, setUp
+        setUp() # register a facet factory
 
         request = RequestStub("http://localhost/group/facets")
         facetable = Person()

@@ -325,7 +325,7 @@ class TestServiceAPI(unittest.TestCase):
         self.doTestService(getUtilityService, self.root.utilityService)
 
 
-class TestSpecificURI(unittest.TestCase):
+class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
@@ -415,6 +415,7 @@ class TestSpecificURI(unittest.TestCase):
         getURI("http://schooltool.org/ns/membership")
         getURI("http://schooltool.org/ns/membership/member")
         getURI("http://schooltool.org/ns/membership/group")
+
 
 class Relatable(LocatableEventTargetMixin):
     implements(IRelatable, IQueryLinks)
