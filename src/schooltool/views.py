@@ -840,11 +840,6 @@ class RollcallView(View):
             except KeyError:
                 raise ValueError("Reporter not found: %s" % path)
 
-            res = ctx.xpathEval("/rollcall/comment")
-            if not res:
-                raise ValueError("Comment not specified")
-            text = res[0].content
-
             items = []
             presence = {'present': True, 'absent': False}
             resolvedness = {None: Unchanged, 'resolved': True,
@@ -874,13 +869,14 @@ class RollcallView(View):
                 if resolved is True and not present:
                     raise ValueError("Cannot resolve an absence for absent"
                                      " person %s" % path)
-                items.append((person, present, resolved))
+                text = node.nsProp('comment', None)
+                items.append((person, present, resolved, text))
             if seen != members:
                 missing = list(members - seen)
                 missing.sort()
                 raise ValueError("Persons not mentioned: %s"
                                  % ', '.join(missing))
-            return dt, reporter, text, items
+            return dt, reporter, items
         finally:
             doc.freeDoc()
             ctx.xpathFreeContext()
@@ -889,11 +885,11 @@ class RollcallView(View):
         request.setHeader('Content-Type', 'text/plain')
         nabsences = npresences = 0
         try:
-            dt, reporter, text, items = self.parseRollcall(request)
+            dt, reporter, items = self.parseRollcall(request)
         except ValueError, e:
             request.setResponseCode(400, 'Bad request')
             return str(e)
-        for person, present, resolved in items:
+        for person, present, resolved, text in items:
             if not present:
                 person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
                                                     absent_from=self.context))

@@ -1569,11 +1569,11 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>%s</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/b"
-                      xlink:title="b" presence="absent"/>
+                      xlink:title="b" presence="absent"
+                      comment="%s"/>
               <person xlink:type="simple" xlink:href="/persons/c"
                       xlink:title="c" presence="present" resolved="resolved"/>
               <person xlink:type="simple" xlink:href="/persons/d"
@@ -1604,7 +1604,7 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
         comment = personc_absence.comments[-1]
         self.assert_(comment.absent_from is self.group)
         self.assert_(comment.reporter is self.persona)
-        self.assertEquals(comment.text, text)
+        self.assertEquals(comment.text, None)
         self.assertEquals(comment.ended, True)
         self.assertEquals(comment.resolved, True)
         self.assertEquals(comment.datetime,
@@ -1616,7 +1616,7 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
         comment = absence.comments[-1]
         self.assert_(comment.absent_from is self.group)
         self.assert_(comment.reporter is self.persona)
-        self.assertEquals(comment.text, text)
+        self.assertEquals(comment.text, None)
         self.assertEquals(comment.datetime,
                           datetime.datetime(2001, 2, 3, 4, 5, 6))
 
@@ -1654,38 +1654,6 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:title="d" presence="absent"/>
             </rollcall>""",
             "Reporter not specified")
-        self.post_errors("""
-            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
-                      xlink:type="simple" xlink:title="group"
-                      xlink:href="/groups/root"
-                      datetime="2001-02-03 04:05:06">
-              <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <person xlink:type="simple" xlink:href="/persons/a"
-                      xlink:title="a" presence="present"/>
-              <person xlink:type="simple" xlink:href="/persons/b"
-                      xlink:title="b" presence="absent"/>
-              <person xlink:type="simple" xlink:href="/persons/c"
-                      xlink:title="c" presence="present"/>
-              <person xlink:type="simple" xlink:href="/persons/d"
-                      xlink:title="d" presence="absent"/>
-            </rollcall>""",
-            "Comment not specified")
-        self.post_errors("""
-            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
-                      xlink:type="simple" xlink:title="group"
-                      xlink:href="/groups/root"
-                      datetime="2001-02-03 04:05:06">
-              <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <person xlink:type="simple" xlink:href="/persons/a"
-                      xlink:title="a" presence="present"/>
-              <person xlink:type="simple" xlink:href="/persons/b"
-                      xlink:title="b" presence="absent"/>
-              <person xlink:type="simple" xlink:href="/persons/c"
-                      xlink:title="c" presence="present"/>
-              <person xlink:type="simple" xlink:href="/persons/d"
-                      xlink:title="d" presence="absent"/>
-            </rollcall>""",
-            "Comment not specified")
         self.post_errors("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
                       xlink:type="simple" xlink:title="group"
