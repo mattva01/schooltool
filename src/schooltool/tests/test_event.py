@@ -346,6 +346,10 @@ class TestEvents(unittest.TestCase):
                  LinkStub(object(), URIMember))
         self.assertRaises(TypeError, MemberAddedEvent, links)
 
+        links = (LinkStub(member, URIGroup), LinkStub(group, URIMember),
+                 LinkStub(object(), URIGroup))
+        self.assertRaises(TypeError, MemberAddedEvent, links)
+
 
 def test_suite():
     suite = unittest.TestSuite()

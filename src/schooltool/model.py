@@ -30,7 +30,7 @@ from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.interfaces import ISpecificURI, IRemovableLink
 from schooltool.interfaces import URIMembership, URIGroup, URIMember
 from schooltool.component import queryFacet, setFacet, getFacetItems
-from schooltool.db import PersistentKeysSet, PersistentKeysDict
+from schooltool.db import PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 
 __metaclass__ = type
@@ -65,6 +65,12 @@ class GroupLink:
     def unlink(self):
         """See IRemovableLink"""
         del self._group[self.name]
+        from schooltool.event import MemberRemovedEvent
+        otherlink = MemberLink(self._group, self.__parent__, self.name)
+        event = MemberRemovedEvent((self, otherlink))
+        event.dispatch(self.traverse())
+        event.dispatch(otherlink.traverse())
+
 
 class MemberLink:
     """An object that represents containment of a group member as a link."""
@@ -92,6 +98,12 @@ class MemberLink:
     def unlink(self):
         """See IRemovableLink"""
         del self.__parent__[self.name]
+        from schooltool.event import MemberRemovedEvent
+        otherlink = GroupLink(self._member, self.__parent__, self.name)
+        event = MemberRemovedEvent((self, otherlink))
+        event.dispatch(self.traverse())
+        event.dispatch(otherlink.traverse())
+
 
 class GroupMember(Persistent):
     """A mixin providing the IGroupMember interface.

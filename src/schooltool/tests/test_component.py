@@ -27,6 +27,8 @@ from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import ISpecificURI, IRelatable, IQueryLinks
+from schooltool.tests.utils import LocatableEventTargetMixin
+from schooltool.tests.utils import EventServiceTestMixin
 
 __metaclass__ = type
 
@@ -246,94 +248,38 @@ class TestSpecificURI(unittest.TestCase):
             self.assert_(not isURI(string), string)
 
 
-class Relatable:
+class Relatable(LocatableEventTargetMixin):
     implements(IRelatable, IQueryLinks)
 
-    def __init__(self):
+    def __init__(self, parent, name='does not matter'):
+        LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = Set()
 
     def listLinks(self, role):
         return [link for link in self.__links__
                      if link.role.extends(role, False)]
 
-class URISuperior(ISpecificURI): """http://army.gov/ns/superior"""
-class URIReport(ISpecificURI): """http://army.gov/ns/report"""
-class URICommand(ISpecificURI): """http://army.gov/ns/command"""
+class URISuperior(ISpecificURI):
+    """http://army.gov/ns/superior"""
 
-class TestRelationships(unittest.TestCase):
+class URICommand(ISpecificURI):
+    """http://army.gov/ns/command"""
+
+class URIReport(ISpecificURI):
+    """http://army.gov/ns/report"""
+
+class TestRelationships(EventServiceTestMixin, unittest.TestCase):
 
     def test_getRelatedObjects(self):
         from schooltool.component import getRelatedObjects, relate
-        officer = Relatable()
-        soldier = Relatable()
+        officer = Relatable(self.serviceManager)
+        soldier = Relatable(self.serviceManager)
         self.assertEqual(list(getRelatedObjects(officer, URIReport)), [])
 
         relate(URICommand, (officer, URISuperior), (soldier, URIReport))
         self.assertEqual(list(getRelatedObjects(officer, URIReport)),
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
-
-class TestRelate(unittest.TestCase):
-    def setUp(self):
-        from schooltool import component
-        self.real_relate3 = component.relate3
-        component.relate3 = self.stub = Stub_relate3()
-
-    def tearDown(self):
-        from schooltool import component
-        component.relate3 = self.real_relate3
-
-    def test_relate(self):
-        from schooltool.component import relate
-        title = 'a title'
-        a = object()
-        role_a = URISuperior
-        b = object()
-        role_b = URIReport
-        links = relate(URICommand, (a, role_a), (b, role_b), title='a title')
-        self.assertEqual(len(links), 2)
-        self.assertEqual(self.stub.reltype, URICommand)
-        self.assertEqual(self.stub.title, title)
-        self.assert_(self.stub.a is a)
-        self.assert_(self.stub.role_a is role_a)
-        self.assert_(self.stub.b is b)
-        self.assert_(self.stub.role_b is role_b)
-
-    def test_relate_membership(self):
-        from schooltool.component import relate
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.model import GroupLink, MemberLink
-
-        m = MemberStub()
-        g = GroupStub()
-
-        links = relate(URIMembership, (g, URIGroup), (m, URIMember))
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), MemberLink)
-        self.assertEqual(type(links[1]), GroupLink)
-
-        links = relate(URIMembership, (g, URIGroup), (m, URIMember),
-                       title="Membership")
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), MemberLink)
-        self.assertEqual(type(links[1]), GroupLink)
-
-        links = relate(URIMembership,  (m, URIMember), (g, URIGroup))
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), GroupLink)
-        self.assertEqual(type(links[1]), MemberLink)
-
-        links = relate(URIMember,  (m, URIMember), (g, URIGroup))
-        self.assertEqual(len(links), 2)
-        self.assertNotEqual(type(links[0]), GroupLink)
-        self.assertNotEqual(type(links[1]), MemberLink)
-
-        self.assertRaises(TypeError, relate,
-                          URIMembership,  (m, URIMember), (g, URISuperior))
-
-        self.assertRaises(TypeError, relate,
-                          URIMembership,  (m, URIMember), (g, URISuperior),
-                          title="foo")
 
 
 class Stub_relate3:
@@ -343,6 +289,7 @@ class Stub_relate3:
     role_a = None
     b = None
     role_b = None
+
     def __call__(self, reltype, (a, role_a), (b, role_b), title=None):
         self.reltype = reltype
         self.title = title
@@ -352,13 +299,143 @@ class Stub_relate3:
         self.role_b = role_b
         return object(), object()
 
-
-class MemberStub:
+class MemberStub(LocatableEventTargetMixin):
     pass
 
-class GroupStub:
+class GroupStub(LocatableEventTargetMixin):
+
     def add(self, value):
         return "name"
+
+class TestRelate(EventServiceTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool import component
+        self.real_relate3 = component.relate3
+        component.relate3 = self.stub = Stub_relate3()
+        self.setUpEventService()
+
+    def tearDown(self):
+        from schooltool import component
+        component.relate3 = self.real_relate3
+
+    def check_one_event_received(self, receivers):
+        self.assertEquals(len(self.eventService.events), 1)
+        e = self.eventService.events[0]
+        for target in receivers:
+            self.assertEquals(len(target.events), 1)
+            self.assert_(target.events[0] is e)
+        return e
+
+    def test_relate(self):
+        from schooltool.component import relate
+        from schooltool.interfaces import IRelationshipAddedEvent
+        title = 'a title'
+        a = Relatable(self.serviceManager)
+        role_a = URISuperior
+        b = Relatable(self.serviceManager)
+        role_b = URIReport
+
+        links = relate(URICommand, (a, role_a), (b, role_b), title='a title')
+
+        self.assertEqual(len(links), 2)
+        self.assertEqual(self.stub.reltype, URICommand)
+        self.assertEqual(self.stub.title, title)
+        self.assert_(self.stub.a is a)
+        self.assert_(self.stub.role_a is role_a)
+        self.assert_(self.stub.b is b)
+        self.assert_(self.stub.role_b is role_b)
+        e = self.check_one_event_received([a, b])
+        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
+        self.assert_(e.links is links)
+
+    def test_relate_membership(self):
+        from schooltool.component import relate
+        from schooltool.interfaces import URIGroup, URIMember, URIMembership
+        from schooltool.interfaces import IMemberAddedEvent
+        from schooltool.model import GroupLink, MemberLink
+
+        m = MemberStub(self.serviceManager)
+        g = GroupStub(self.serviceManager)
+
+        links = relate(URIMembership, (g, URIGroup), (m, URIMember))
+
+        self.assertEqual(len(links), 2)
+        self.assertEqual(type(links[0]), MemberLink)
+        self.assertEqual(type(links[1]), GroupLink)
+        e = self.check_one_event_received([m, g])
+        self.assert_(IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(e.links is links)
+        self.assert_(e.member is m)
+        self.assert_(e.group is g)
+
+    def test_relate_membership_with_title(self):
+        from schooltool.component import relate
+        from schooltool.interfaces import URIGroup, URIMember, URIMembership
+        from schooltool.interfaces import IMemberAddedEvent
+        from schooltool.model import GroupLink, MemberLink
+
+        m = MemberStub(self.serviceManager)
+        g = GroupStub(self.serviceManager)
+
+        links = relate(URIMembership, (g, URIGroup), (m, URIMember),
+                       title="Membership")
+
+        self.assertEqual(len(links), 2)
+        self.assertEqual(type(links[0]), MemberLink)
+        self.assertEqual(type(links[1]), GroupLink)
+        e = self.check_one_event_received([m, g])
+        self.assert_(IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(e.links is links)
+        self.assert_(e.member is m)
+        self.assert_(e.group is g)
+
+    def test_relate_membership_reverse_order(self):
+        from schooltool.component import relate
+        from schooltool.interfaces import URIGroup, URIMember, URIMembership
+        from schooltool.interfaces import IMemberAddedEvent
+        from schooltool.model import GroupLink, MemberLink
+
+        m = MemberStub(self.serviceManager)
+        g = GroupStub(self.serviceManager)
+
+        links = relate(URIMembership,  (m, URIMember), (g, URIGroup))
+
+        self.assertEqual(len(links), 2)
+        self.assertEqual(type(links[0]), GroupLink)
+        self.assertEqual(type(links[1]), MemberLink)
+        e = self.check_one_event_received([m, g])
+        self.assert_(IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(e.links is links)
+        self.assert_(e.member is m)
+        self.assert_(e.group is g)
+
+    def test_relate_membership_not(self):
+        from schooltool.component import relate
+        from schooltool.interfaces import URIGroup, URIMember, URIMembership
+        from schooltool.interfaces import IRelationshipAddedEvent
+        from schooltool.interfaces import IMemberAddedEvent
+        from schooltool.model import GroupLink, MemberLink
+
+        m = MemberStub(self.serviceManager)
+        g = GroupStub(self.serviceManager)
+
+        links = relate(URIMember,  (m, URIMember), (g, URIGroup))
+
+        self.assertEqual(len(links), 2)
+        self.assertNotEqual(type(links[0]), GroupLink)
+        self.assertNotEqual(type(links[1]), MemberLink)
+        e = self.check_one_event_received([m, g])
+        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
+        self.assert_(not IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(e.links is links)
+
+        self.assertRaises(TypeError, relate,
+                          URIMembership,  (m, URIMember), (g, URISuperior))
+
+        self.assertRaises(TypeError, relate,
+                          URIMembership,  (m, URIMember), (g, URISuperior),
+                          title="foo")
 
 
 def test_suite():

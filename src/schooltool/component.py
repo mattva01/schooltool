@@ -109,6 +109,7 @@ def getFacetItems(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
     return ob.__facets__.items()
 
+
 #
 # IServiceAPI
 #
@@ -189,6 +190,7 @@ def relate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipAPI"""
     # XXX This is to avoid a circular import
     from schooltool.model import MemberLink, GroupLink
+    from schooltool.event import RelationshipAddedEvent, MemberAddedEvent
 
     if relationship_type is URIMembership:
         if title is not None and title != "Membership":
@@ -206,27 +208,33 @@ def relate(relationship_type, (a, role_a), (b, role_b), title=None):
                 "A relationship of type URIMembership must have roles"
                 " URIMember and URIGroup, and the title (if any) must be"
                 " 'Membership'.")
+
+        if r:
+            raise TypeError(
+                "A relationship of type URIMembership must have roles"
+                " URIMember and URIGroup, and the title (if any) must be"
+                " 'Membership'.")
+
+        if role_a is URIGroup:
+            group, member = a, b
+            name = group.add(member)
+            links = (MemberLink(group, member, name),
+                     GroupLink(member, group, name))
         else:
-            if not r:
-                group, member = None, None
-                if role_a is URIGroup:
-                    group = a
-                    member = b
-                    name = group.add(member)
-                    return (MemberLink(group, member, name),
-                            GroupLink(member, group, name))
-                else:
-                    group = b
-                    member = a
-                    name = group.add(member)
-                    return (GroupLink(member, group, name),
-                            MemberLink(group, member, name))
-            else:
-                raise TypeError(
-                    "A relationship of type URIMembership must have roles"
-                    " URIMember and URIGroup, and the title (if any) must be"
-                    " 'Membership'.")
-    return relate3(relationship_type, (a, role_a), (b, role_b), title=title)
+            group, member = b, a
+            name = group.add(member)
+            links = (GroupLink(member, group, name),
+                     MemberLink(group, member, name))
+        event = MemberAddedEvent(links)
+    else:
+        links = relate3(relationship_type, (a, role_a), (b, role_b),
+                        title=title)
+        event = RelationshipAddedEvent(links)
+
+    event.dispatch(a)
+    event.dispatch(b)
+    return links
+
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""

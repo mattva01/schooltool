@@ -22,7 +22,6 @@ The schooltool relationships.
 $Id$
 """
 from persistence import Persistent
-from persistence.dict import PersistentDict
 from zope.interface import implements, classProvides
 from schooltool.interfaces import IRemovableLink, IRelatable
 from schooltool.interfaces import IRelationshipSchemaFactory
@@ -70,6 +69,10 @@ class Link(Persistent):
         self.__parent__.__links__.remove(self)
         otherlink = self.relationship.traverse(self)
         self.traverse().__links__.remove(otherlink)
+        from schooltool.event import RelationshipRemovedEvent
+        event = RelationshipRemovedEvent((self, otherlink))
+        event.dispatch(self.traverse())
+        event.dispatch(otherlink.traverse())
 
 
 class _LinkRelationship(Persistent):

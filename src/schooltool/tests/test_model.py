@@ -23,28 +23,39 @@ $Id$
 """
 
 import unittest
-from sets import Set
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember, IFacet, IFaceted
 from schooltool.interfaces import IEventConfigurable
+from schooltool.tests.utils import LocatableEventTargetMixin
+from schooltool.tests.utils import EventServiceTestMixin
 
 __metaclass__ = type
 
 class P(Persistent):
     pass
 
-class MemberStub:
-    added = None
-    removed = None
+class MemberStub(LocatableEventTargetMixin):
     implements(IGroupMember, IFaceted)
-    def __init__(self):
+
+    def __init__(self, parent=None, name='does not matter'):
+        LocatableEventTargetMixin.__init__(self, parent, name)
         self.__facets__ = {}
+        self.added = None
+        self.removed = None
+
     def notifyAdd(self, group, name):
         self.added = group
+
     def notifyRemove(self, group):
         self.removed = group
+
+class GroupStub(LocatableEventTargetMixin):
+    deleted = None
+
+    def __delitem__(self, key):
+        self.deleted = key
 
 class FacetStub:
     implements(IFacet)
@@ -75,6 +86,7 @@ class TestPerson(unittest.TestCase):
 
 
 class TestURIs(unittest.TestCase):
+
     def testURIGroup(self):
         from schooltool.interfaces import URIGroup
         from schooltool.component import inspectSpecificURI
@@ -137,7 +149,8 @@ class TestGroupMember(unittest.TestCase):
             self.assertEqual(links[0].name, 1)
             self.assert_(links[0].traverse() is group)
 
-        class URIFoo(URIGroup): "http://example.com/ns/foo"
+        class URIFoo(URIGroup):
+            "http://example.com/ns/foo"
 
         for role in (URIMember, URIFoo):
             links = member.listLinks(role)
@@ -230,7 +243,8 @@ class TestGroup(unittest.TestCase):
             self.assertEqual(links[0].title, "Membership")
             self.assert_(links[0].traverse() is member)
 
-        class URIFoo(URIMember): "http://example.com/ns/foo"
+        class URIFoo(URIMember):
+            "http://example.com/ns/foo"
 
         for role in (URIGroup, URIFoo):
             links = group.listLinks(role)
@@ -244,8 +258,6 @@ class TestGroup(unittest.TestCase):
 
         links = group.listLinks(URIMember)
         self.assertEqual(len(links), 1)
-
-        class URIFoo(URIMember): "http://example.com/ns/foo"
 
         links = group.listLinks(URIFoo)
         self.assertEqual(links, [])
@@ -297,7 +309,9 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         setFacet(et, 4, FacetWithEventsStub(active=True, eventTable=[2]))
         self.assertEquals(et.getEventTable(), [0, 2])
 
-class TestMemberLink(unittest.TestCase):
+
+class TestMemberLink(EventServiceTestMixin, unittest.TestCase):
+
     def test(self):
         from schooltool.model import MemberLink
         from schooltool.interfaces import URIMember, IRemovableLink
@@ -314,18 +328,23 @@ class TestMemberLink(unittest.TestCase):
 
     def test_unlink(self):
         from schooltool.model import MemberLink
-        member = object()
-        group = GroupStub()
+        from schooltool.interfaces import IMemberRemovedEvent
+        member = MemberStub(self.serviceManager)
+        group = GroupStub(self.serviceManager)
         link = MemberLink(group, member, 'foo')
         link.unlink()
         self.assertEqual(group.deleted, 'foo')
+        self.assertEquals(len(self.eventService.events), 1)
+        e = self.eventService.events[0]
+        self.assert_(group.events, [e])
+        self.assert_(member.events, [e])
+        self.assert_(IMemberRemovedEvent.isImplementedBy(e))
+        self.assert_(e.member is member)
+        self.assert_(e.group is group)
 
-class GroupStub:
-    deleted = None
-    def __delitem__(self, key):
-        self.deleted = key
 
-class TestGroupLink(unittest.TestCase):
+class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
+
     def test(self):
         from schooltool.model import GroupLink
         from schooltool.interfaces import URIGroup, IRemovableLink
@@ -342,11 +361,20 @@ class TestGroupLink(unittest.TestCase):
 
     def test_unlink(self):
         from schooltool.model import GroupLink
-        member = object()
-        group = GroupStub()
+        from schooltool.interfaces import IMemberRemovedEvent
+        member = MemberStub(self.serviceManager)
+        group = GroupStub(self.serviceManager)
         link = GroupLink(member, group, 'foo')
         link.unlink()
         self.assertEqual(group.deleted, 'foo')
+        self.assertEquals(len(self.eventService.events), 1)
+        e = self.eventService.events[0]
+        self.assert_(group.events, [e])
+        self.assert_(member.events, [e])
+        self.assert_(IMemberRemovedEvent.isImplementedBy(e))
+        self.assert_(e.member is member)
+        self.assert_(e.group is group)
+
 
 def test_suite():
     suite = unittest.TestSuite()

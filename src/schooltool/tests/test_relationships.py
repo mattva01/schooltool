@@ -27,6 +27,8 @@ from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import ISpecificURI, IRelatable, ILink
 from schooltool.component import inspectSpecificURI
+from schooltool.tests.utils import LocatableEventTargetMixin
+from schooltool.tests.utils import EventServiceTestMixin
 
 class URITutor(ISpecificURI):
     """http://schooltool.org/ns/tutor"""
@@ -46,21 +48,25 @@ class URISuperior(ISpecificURI):
 class URIReport(ISpecificURI):
     """http://army.gov/ns/report"""
 
-class Relatable:
+class Relatable(LocatableEventTargetMixin):
     implements(IRelatable)
-    def __init__(self):
+
+    def __init__(self, parent=None, name='does not matter'):
+        LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = Set()
 
-class TestRelationship(unittest.TestCase):
+class TestRelationship(EventServiceTestMixin, unittest.TestCase):
     """Conceptual relationships are really represented by three
     closely bound objects -- two links and a median relationship
     object.  This test tests the whole construct.
     """
+
     def setUp(self):
         from schooltool.relationships import _LinkRelationship
         from schooltool.relationships import Link
-        self.klass = Relatable()
-        self.tutor = Relatable()
+        self.setUpEventService()
+        self.klass = Relatable(self.serviceManager)
+        self.tutor = Relatable(self.serviceManager)
         self.lklass = Link(self.klass, URITutor)
         self.ltutor = Link(self.tutor, URIRegClass)
         self.rel = _LinkRelationship(URIClassTutor, "Tutor of a class",
@@ -81,6 +87,7 @@ class TestRelationship(unittest.TestCase):
 
     def test(self):
         from schooltool.relationships import Link
+        from schooltool.interfaces import IRelationshipRemovedEvent
         self.assertEquals(self.rel.title, "Tutor of a class")
         self.assertEquals(self.lklass.title, "Tutor of a class")
         self.assertEquals(self.ltutor.title, "Tutor of a class")
@@ -97,6 +104,13 @@ class TestRelationship(unittest.TestCase):
         self.assert_(self.lklass.traverse() is self.tutor)
         self.assert_(self.ltutor.__parent__ is self.tutor)
         self.assert_(self.lklass.__parent__ is self.klass)
+        self.assertEquals(len(self.eventService.events), 1)
+        e = self.eventService.events[0]
+        self.assert_(IRelationshipRemovedEvent.isImplementedBy(e))
+        self.assert_(self.ltutor in e.links)
+        self.assert_(self.lklass in e.links)
+        self.assertEquals(self.klass.events, [e])
+        self.assertEquals(self.tutor.events, [e])
 
     def test_relate(self):
         from schooltool.relationships import relate
@@ -126,7 +140,7 @@ class TestRelationshipSchema(unittest.TestCase):
         from schooltool.interfaces import IRelationshipSchema
         verifyClass(IRelationshipSchema, RelationshipSchema)
         # verifyObject is buggy. It treats a class's __call__ as its __call__
-        # iyswim
+        # IYSWIM
         ##verifyObject(IRelationshipSchemaFactory, RelationshipSchema)
 
     def testBadConstructor(self):

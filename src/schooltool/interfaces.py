@@ -230,6 +230,9 @@ class IRemovableLink(ILink):
 
         Also removes the opposite direction of the relationship if the
         relationship is bidirectional.
+
+        Sends a IRelationshipRemovedEvent to both previous participants
+        of the relationship after the relationship has been broken.
         """
 
 
@@ -286,6 +289,9 @@ class IRelationshipAPI(Interface):
         """Relate a and b via the roles and the relationship_type.
 
         Returns a tuple of links attached to a and b respectively.
+
+        Sends a IRelationshipAddedEvent to both participants of the
+        relationship after the relationship has been established.
 
         Example::
                         my report
