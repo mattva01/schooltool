@@ -75,7 +75,6 @@ class TestAppView(unittest.TestCase):
                                     'password': 'schooltool'})
         request.site = SiteStub()
         result = view.render(request)
-        self.assertEquals(result, 'OK')
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/manager')

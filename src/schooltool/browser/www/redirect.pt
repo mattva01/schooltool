@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>Redirecting to <tal:x replace="destination" /></title>
+<link rel="stylesheet" href="/schooltool.css" />
+</head>
+<body>
+<h1>Redirecting</h1>
+
+<p>Your browser is now being redirected to <a tal:attributes="href destination"
+tal:content="destination" />.  If the redirect does not work, please click on
+the link manually.</p>
+
+</body>
+</html>

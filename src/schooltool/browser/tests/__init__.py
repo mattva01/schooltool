@@ -20,4 +20,4 @@
 Unit tests for the schooltool.browser package.
 """
 
-from schooltool.views.tests import RequestStub, setPath
+from schooltool.views.tests import RequestStub, setPath     # reexport

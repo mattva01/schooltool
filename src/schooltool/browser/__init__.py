@@ -22,7 +22,8 @@ The schooltool.browser package.
 
 import os
 
-from schooltool.views import View as _View, Template, absoluteURL, read_file
+from schooltool.views import View as _View
+from schooltool.views import Template, read_file, absoluteURL   # reexport
 
 __metaclass__ = type
 
@@ -45,6 +46,8 @@ class View(_View):
 
     """
 
+    redirect_template = Template('www/redirect.pt')
+
     def authorization(self, context, request):
         """Check for HTTP-level authorization.
 
@@ -62,13 +65,20 @@ class View(_View):
         return self.do_GET(request)
 
     def getChild(self, name, request):
+        """Traverse to a child view."""
         if name == '': # trailing slash in the URL
             return self
         else:
             return _View.getChild(self, name, request)
 
+    def redirect(self, url, request):
+        """Redirect to a URL and return a html page explaining the redirect."""
+        request.redirect(url)
+        return self.redirect_template(request, destination=url)
+
 
 class StaticFile(View):
+    """View that returns static content from a file."""
 
     def __init__(self, filename, content_type):
         View.__init__(self, None)

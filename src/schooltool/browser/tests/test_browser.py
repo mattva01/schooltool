@@ -29,28 +29,36 @@ from schooltool.browser.tests import RequestStub
 
 class TestView(unittest.TestCase):
 
-    def test_POST(self):
+    def createView(self):
         from schooltool.browser import View
-        context = None
-        view = View(context)
+        view = View(None)
+        return view
+
+    def test_POST(self):
+        view = self.createView()
         view.do_GET = lambda request: 'Something'
         request = RequestStub(method='POST')
         result = view.do_POST(request)
         self.assertEquals(result, 'Something')
 
     def test_authorization(self):
-        from schooltool.browser import View
-        context = None
-        view = View(context)
+        view = self.createView()
         request = RequestStub(method='POST')
-        self.assert_(view.authorization(context, request))
+        self.assert_(view.authorization(view.context, request))
 
     def test_getChild(self):
-        from schooltool.browser import View
-        context = None
-        view = View(context)
+        view = self.createView()
         request = RequestStub('/path//with/multiple/slashes/')
         self.assert_(view.getChild('', request) is view)
+
+    def test_redirect(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.redirect('http://example.com/', request)
+        self.assertEquals(request.headers['location'], 'http://example.com/')
+        self.assertEquals(request.headers['content-type'],
+                          'text/html; charset=UTF-8')
+        self.assert_('http://example.com/' in result)
 
 
 class TestStaticFile(unittest.TestCase):

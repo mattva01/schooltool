@@ -25,7 +25,7 @@ $Id$
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
 from schooltool.browser.model import PersonInfoPage
-from schooltool.interfaces import IApplication, IPerson
+from schooltool.interfaces import IApplication
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import AuthenticationError
 
@@ -56,10 +56,7 @@ class RootView(View):
             self.username = username
             return self.do_GET(request)
         else:
-            url = absoluteURL(request, user)
-            request.redirect(url)
-            request.setHeader('Content-Type', 'text/plain')
-            return 'OK'
+            return self.redirect(absoluteURL(request, user), request)
 
     def _traverse(self, name, request):
         if name == 'persons':
