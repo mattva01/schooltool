@@ -74,6 +74,10 @@ class SchooldayModelCalendarView(View):
         if ctype != 'text/calendar':
             return textErrorPage(request,
                                  "Unsupported content type: %s" % ctype)
+        # XXX this is not very reliable:
+        #  - broken calendar data may cause exceptions
+        #  - unsupported calendar features (e.g. repeating events) are
+        #    silently ignored
         self.context.clear()
         reader = ICalReader(request.content)
         for event in reader.read():
