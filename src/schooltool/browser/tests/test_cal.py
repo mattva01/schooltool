@@ -155,6 +155,27 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
 
 class TestWeeklyCalendarView(unittest.TestCase):
 
+    def test_render(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+        cal.__parent__ = person
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
+                                   timedelta(hours=1),
+                                   "Stuff happens"))
+
+        view = WeeklyCalendarView(cal)
+        view.authorization = lambda x, y: True
+        view.cursor = date(2004, 8, 12)
+        request = RequestStub()
+        content = view.render(request)
+        self.assert_("Da Boss" in content)
+        self.assert_("Stuff happens" in content)
+
     def test_update(self):
         from schooltool.browser.cal import WeeklyCalendarView
 
