@@ -1,0 +1,36 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+    <head>
+        <title metal:fill-slot="title" i18n:translate="">
+            Address View: <span tal:replace="context/title"/>
+        </title>
+    </head>
+
+    <body>
+        <h1 metal:fill-slot="h1" i18n:translate="">
+        Address View: <span tal:content="context/title"/>
+        </h1>
+        
+        <metal:block metal:fill-slot="content" tal:define="info context/info">
+        <address>
+        <span tal:content="info/streetNr"/> <span tal:content="info/thoroughfareName"/><br/>
+        <span tal:content="info/town"/> <span tal:content="info/district"/>, <span tal:content="info/postcode"/>
+        </address>
+                
+        <div class="actions">
+           <a class="action" 
+                tal:condition="view/canEdit" 
+                tal:attributes="href view/editURL" 
+                i18n:translate="">Edit</a>
+       </div>
+       
+       <h2>Associated People</h2>
+       <ul>
+           <tal:loop repeat="person context/getPeople">
+               <li><a href="" 
+                   tal:attributes="href person/@@absolute_url" 
+                   tal:content="person/title"></a></li>
+           </tal:loop>
+       </ul>
+        </metal:block>
+    </body>
+</html>
