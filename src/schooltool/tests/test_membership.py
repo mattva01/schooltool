@@ -26,10 +26,13 @@ import unittest
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IGroupMember, IFaceted
+from schooltool.interfaces import IGroupMember, IFaceted, IQueryLinks
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RelationshipTestMixin
+from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.test_relationship import Relatable
+from schooltool.relationship import RelatableMixin
 
 __metaclass__ = type
 
@@ -55,6 +58,7 @@ class MemberStub(LocatableEventTargetMixin):
         if self in group.values():
             raise AssertionError("notifyRemoved called too early")
 
+
 class GroupStub(LocatableEventTargetMixin):
     deleted = None
 
@@ -63,6 +67,10 @@ class GroupStub(LocatableEventTargetMixin):
 
     def add(self, value):
         return "name"
+
+
+class RelatableWithQueryableLinks(Relatable, RelatableMixin):
+    pass
 
 
 class TestURIs(unittest.TestCase):
@@ -201,7 +209,8 @@ class TestGroupMixin(unittest.TestCase):
             self.assertEqual(links, [], str(role))
 
 
-class TestMembershipRelationship(RelationshipTestMixin, unittest.TestCase):
+class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
+                                 unittest.TestCase):
 
     def test(self):
         from schooltool.component import registerRelationship
@@ -221,6 +230,36 @@ class TestMembershipRelationship(RelationshipTestMixin, unittest.TestCase):
         g, m = GroupStub(), MemberStub()
         result = Membership(group=g, member=m)
         self.assert_(result['group'] is cookie, "our handler wasn't called")
+
+    def testInterfaces(self):
+        from schooltool.component import registerRelationship
+        from schooltool.membership import Membership
+        from schooltool.interfaces import URIMembership, URIGroup, URIMember
+        from schooltool.interfaces import IRelationshipSchema
+        verifyObject(IRelationshipSchema, Membership)
+
+    def testCyclicMembership(self):
+        self.setUpEventService()
+        # Not bothering to register a relationship especially for membership.
+        # Standard relationships will do.
+        from schooltool.membership import Membership
+        from schooltool.component import registerRelationship
+        from schooltool.interfaces import ISpecificURI
+        from schooltool.relationship import RelatableMixin, defaultRelate
+        registerRelationship(ISpecificURI, defaultRelate)
+        Relatable = lambda: RelatableWithQueryableLinks(self.serviceManager)
+        g = Relatable()
+
+        # Test a cycle of a group with itself.
+        self.assertRaises(ValueError, Membership, group=g, member=g)
+
+        # Test a two-group cycle.
+        g1 = Relatable()
+        g2 = Relatable()
+        links = Membership(group=g1, member=g2)
+        self.assertEquals(links['member'].traverse(), g2)
+        self.assertEquals(links['group'].traverse(), g1)
+        self.assertRaises(ValueError, Membership, group=g2, member=g1)
 
 
 class TestMemberLink(EventServiceTestMixin, unittest.TestCase):

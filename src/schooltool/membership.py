@@ -218,8 +218,32 @@ class GroupMixin(Persistent):
         pass
 
 
-Membership = RelationshipSchema(URIMembership,
-                                group=URIGroup, member=URIMember)
+class _MembershipSchema(RelationshipSchema):
+    def __call__(self, **parties):
+        # Check that adding this relationship would not create a cycle.
+        # To do this, check that 'group' is not a member (transitively) of
+        # 'member'.
+        member = parties['member']
+        group = parties['group']
+        seen = Set()
+        last = Set()
+        last.add(group)
+        while last:
+            if member in last:
+                raise ValueError('Cannot create cyclic group membership')
+            seen |= last
+            new_last = Set()
+            for obj in last:
+                if IQueryLinks.isImplementedBy(obj):
+                    links = obj.listLinks(URIGroup)
+                    new_last |= Set([link.traverse() for link in links])
+            new_last.difference_update(seen)
+            last = new_last
+
+        return RelationshipSchema.__call__(self, **parties)
+
+
+Membership= _MembershipSchema(URIMembership, group=URIGroup, member=URIMember)
 
 
 class MembershipEvent(RelationshipEvent):
