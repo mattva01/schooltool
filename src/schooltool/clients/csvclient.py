@@ -153,7 +153,7 @@ class HTTPClient:
 
 class CSVImporter:
 
-    file = file
+    fopen = open
     verbose = True
     user = 'manager'
     password = 'schooltool'
@@ -293,28 +293,26 @@ class CSVImporter:
             self.process(method, resource, body=body)
 
         try:
-            for lineno, row in enumerate(csv.reader(self.file(filename))):
+            for lineno, row in enumerate(csv.reader(self.fopen(filename))):
                 if len(row) != 4:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
-                                    (file, lineno + 1, len(row)))
+                                    (filename, lineno + 1, len(row)))
                 row = map(from_locale, row)
                 for resource, method, body in self.importGroup(*row):
                     self.process(method, resource, body=body)
-        except DataError:
-            raise
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
-                            % (file, lineno + 1, e))
+                            % (filename, lineno + 1, e))
 
     def importTeachersCsv(self, filename):
         lineno = 0
         try:
-            for lineno, row in enumerate(csv.reader(self.file(filename))):
+            for lineno, row in enumerate(csv.reader(self.fopen(filename))):
                 if len(row) != 4:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
-                                    (file, lineno + 1, len(row)))
+                                    (filename, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
@@ -326,20 +324,18 @@ class CSVImporter:
                 for path, meth, body in self.importPersonInfo(name, title,
                                                               dob, comment):
                     response = self.process(meth, path, body=body)
-        except DataError:
-            raise
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
-                            % (file, lineno + 1, e))
+                            % (filename, lineno + 1, e))
 
     def importPupilsCsv(self, filename):
         lineno = 0
         try:
-            for lineno, row in enumerate(csv.reader(self.file(filename))):
+            for lineno, row in enumerate(csv.reader(self.fopen(filename))):
                 if len(row) != 4:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
-                                    (file, lineno + 1, len(row)))
+                                    (filename, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
@@ -351,20 +347,18 @@ class CSVImporter:
                 for path, meth, body in self.importPersonInfo(name, title,
                                                               dob, comment):
                     response = self.process(meth, path, body=body)
-        except DataError:
-            raise
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
-                            % (file, lineno + 1, e))
+                            % (filename, lineno + 1, e))
 
     def importResourcesCsv(self, filename):
         lineno = 0
         try:
-            for lineno, row in enumerate(csv.reader(self.file(filename))):
+            for lineno, row in enumerate(csv.reader(self.fopen(filename))):
                 if len(row) != 2:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 2 columns, got %d") %
-                                    (file, lineno + 1, len(row)))
+                                    (filename, lineno + 1, len(row)))
                 title, groups = map(from_locale, row)
                 for resource, method, body in self.importResource(title):
                     response = self.process(method, resource, body=body)
@@ -373,18 +367,18 @@ class CSVImporter:
                 for resource, method, body in \
                         self.addResourceToGroups(name, groups):
                     self.process(method, resource, body=body)
-        except DataError:
-            raise
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s")
-                            % (file, lineno + 1, e))
+                            % (filename, lineno + 1, e))
 
     def blather(self, message):
+        """Print message if self.verbose is True."""
         if self.verbose:
             print
             print message
 
     def run(self):
+        """Run batch import."""
         try:
             self.blather(_("Creating groups... "))
             self.importGroupsCsv('groups.csv')

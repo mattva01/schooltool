@@ -279,9 +279,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
         im = CSVImporter()
         im.verbose = False
 
-        def file(name):
+        def fopen(name):
             return StringIO()
-        im.file = file
+        im.fopen = fopen
 
         results = []
         def process(method, resource, body):
@@ -315,7 +315,7 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
         im = CSVImporter()
         im.verbose = False
 
-        def file(name):
+        def fopen(name):
             if name == 'groups.csv':
                 return StringIO('"year1","Year 1","root",')
             if name == 'pupils.csv':
@@ -324,7 +324,7 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                 return StringIO('"Doc Doc","group1","1968-01-01",""')
             if name == 'resources.csv':
                 return StringIO('"Hall","locations"')
-        im.file = file
+        im.fopen = fopen
 
         results = []
         def process(method, resource, body):
@@ -405,18 +405,17 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
 
         im.process = lambda x, y, body=None: ResponseStub()
 
-        im.file = lambda fn: StringIO('"year1","Year 1","root"')
-        self.assertRaises(DataError, im.importGroupsCsv, "fn")
+        def raisesDataError(method, row):
+            im.fopen = lambda fn: StringIO(row)
+            self.assertRaises(DataError, method, "fn")
+            im.fopen = lambda fn: StringIO('"invalid","csv')
+            self.assertRaises(DataError, method, "fn")
 
-        im.file = lambda fn: StringIO('1,"2')
-        self.assertRaises(DataError, im.importTeachersCsv, "fn")
-
-        im.file = lambda fn: StringIO('"Jay Hacker","group1 group2",'
-                                      '"1998-12-01","')
-        self.assertRaises(DataError, im.importPupilsCsv, "fn")
-
-        im.file = lambda fn: StringIO('"Hall"')
-        self.assertRaises(DataError, im.importResourcesCsv, "fn")
+        raisesDataError(im.importGroupsCsv, '"year1","Year 1","root"')
+        raisesDataError(im.importTeachersCsv, '"Foo","bar","baz"')
+        raisesDataError(im.importPupilsCsv,
+                        '"Jay Hacker","group1 group2","1998-12-01"')
+        raisesDataError(im.importResourcesCsv, '"Hall"')
 
     def test_process(self):
         from schooltool.clients.csvclient import CSVImporter
