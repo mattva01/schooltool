@@ -288,7 +288,7 @@ class AllCalendarsView(View):
     """List of all calendars.
 
     This is a  view on the top-level application object that generates an HTML
-    page with links to the private calendars of all groups and persons.
+    page with links to the calendars of all groups, persons and resources.
     """
 
     template = Template("www/all_calendars.pt")
@@ -299,13 +299,18 @@ class AllCalendarsView(View):
     def persons(self):
         return self._list('persons')
 
+    def resources(self):
+        return self._list('resources')
+
     def _list(self, name):
-        items = [(item.title, getPath(item.calendar))
+        items = [(item.title, getPath(item.calendar),
+                  '%s/timetable-calendar' % getPath(item))
                  for item in self.context[name].itervalues()]
         items.sort()
         return [{'title': title,
                  'href': absoluteURL(self.request, path),
-                } for title, path in items]
+                 'tthref': absoluteURL(self.request, ttpath),
+                } for title, path, ttpath in items]
 
 
 def setUp():

@@ -6,13 +6,27 @@
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li tal:repeat="group view/groups">
-      <a tal:attributes="href group/href" tal:content="group/title" /></li>
+    <li tal:repeat="item view/groups">
+      <a tal:attributes="href item/href"
+         tal:content="string:${item/title} (private calendar)" />,
+      <a tal:attributes="href item/tthref"
+         tal:content="string:${item/title} (timetable)" /></li>
   </ul>
   <h2>Persons</h2>
   <ul>
-    <li tal:repeat="person view/persons">
-      <a tal:attributes="href person/href" tal:content="person/title" /></li>
+    <li tal:repeat="item view/persons">
+      <a tal:attributes="href item/href"
+         tal:content="string:${item/title} (private calendar)" />,
+      <a tal:attributes="href item/tthref"
+         tal:content="string:${item/title} (timetable)" /></li>
+  </ul>
+  <h2>Resources</h2>
+  <ul>
+    <li tal:repeat="item view/resources">
+      <a tal:attributes="href item/href"
+         tal:content="string:${item/title} (private calendar)" />,
+      <a tal:attributes="href item/tthref"
+         tal:content="string:${item/title} (timetable)" /></li>
   </ul>
 </body>
 </html>

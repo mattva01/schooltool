@@ -535,14 +535,17 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
 
     def createApp(self):
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.model import Group, Person
+        from schooltool.model import Group, Person, Resource
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
         app['groups'].new("students", title="Students")
         app['groups'].new("teachers", title="Teachers")
         app['persons'].new("john", title="John")
         app['persons'].new("smith", title="Smith")
+        app['resources'].new("room101", title="101")
+        app['resources'].new("hall", title="Hall")
         return app
 
     def test(self):
@@ -561,16 +564,35 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
               <h2>Groups</h2>
               <ul>
                 <li><a href="http://localhost:8080/groups/students/calendar">
-                    Students</a></li>
+                    Students (private calendar)</a>, <a
+            href="http://localhost:8080/groups/students/timetable-calendar">
+                    Students (timetable)</a></li>
                 <li><a href="http://localhost:8080/groups/teachers/calendar">
-                    Teachers</a></li>
+                    Teachers (private calendar)</a>, <a
+            href="http://localhost:8080/groups/teachers/timetable-calendar">
+                    Teachers (timetable)</a></li>
               </ul>
               <h2>Persons</h2>
               <ul>
                 <li><a href="http://localhost:8080/persons/john/calendar">
-                    John</a></li>
+                    John (private calendar)</a>, <a
+            href="http://localhost:8080/persons/john/timetable-calendar">
+                    John (timetable)</a></li>
                 <li><a href="http://localhost:8080/persons/smith/calendar">
-                    Smith</a></li>
+                    Smith (private calendar)</a>, <a
+            href="http://localhost:8080/persons/smith/timetable-calendar">
+                    Smith (timetable)</a></li>
+              </ul>
+              <h2>Resources</h2>
+              <ul>
+                <li><a href="http://localhost:8080/resources/room101/calendar">
+                    101 (private calendar)</a>, <a
+            href="http://localhost:8080/resources/room101/timetable-calendar">
+                    101 (timetable)</a></li>
+                <li><a href="http://localhost:8080/resources/hall/calendar">
+                    Hall (private calendar)</a>, <a
+            href="http://localhost:8080/resources/hall/timetable-calendar">
+                    Hall (timetable)</a></li>
               </ul>
             </body>
             </html>

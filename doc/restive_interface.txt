@@ -11,6 +11,15 @@ SchoolTool server RESTive interface
   PUT /persons/new_person_id
     creates a new person in the system
 
+  GET /resources
+    lists all resources in the system
+  POST /resources
+    creates a new resource in the system
+  PUT /resources/new_resource_id
+    creates a new resource in the system
+  GET /resources/resource_id
+    shows the information for a resource
+
   GET /groups
     lists all groups in the system
   POST /groups
@@ -127,10 +136,10 @@ SchoolTool server RESTive interface
     deletes the timetable schema
 
 In the above '...object' stands for a full path to an application object (i.e.
-a group or a person), for example '/persons/some_person_id'.
+a group, a person or a resource), for example '/persons/some_person_id'.
 
 This list should be up-to-date (I think) with respect to SchoolTool revision
-480.  It has not been verified, so it might contain errors or omissions.
+534.  It has not been verified, so it might contain errors or omissions.
 
 Ideally all this should be automatically extracted from source code (e.g.
 docstrings for views).
