@@ -300,32 +300,53 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
 class TestMemberLink(unittest.TestCase):
     def test(self):
         from schooltool.model import MemberLink
-        from schooltool.interfaces import URIMember, ILink
+        from schooltool.interfaces import URIMember, IRemovableLink
 
-        group = object()
+        member = object()
         parent = object()
-        link = MemberLink(parent, group, 'name')
+        link = MemberLink(parent, member, 'name')
         self.assertEqual(link.title, 'Membership')
         self.assertEqual(link.name, 'name')
-        self.assert_(link.traverse() is group)
+        self.assert_(link.traverse() is member)
         self.assert_(link.role is URIMember)
         self.assert_(link.__parent__ is parent)
-        verifyObject(ILink, link)
+        verifyObject(IRemovableLink, link)
+
+    def test_unlink(self):
+        from schooltool.model import MemberLink
+        member = object()
+        group = GroupStub()
+        link = MemberLink(group, member, 'foo')
+        link.unlink()
+        self.assertEqual(group.deleted, 'foo')
+
+class GroupStub:
+    deleted = None
+    def __delitem__(self, key):
+        self.deleted = key
 
 class TestGroupLink(unittest.TestCase):
     def test(self):
         from schooltool.model import GroupLink
-        from schooltool.interfaces import URIGroup, ILink
+        from schooltool.interfaces import URIGroup, IRemovableLink
 
-        member = object()
+        group = object()
         parent = object()
-        link = GroupLink(parent, member, 'name')
+        link = GroupLink(parent, group, 'name')
         self.assertEqual(link.title, 'Membership')
         self.assertEqual(link.name, 'name')
-        self.assert_(link.traverse() is member)
+        self.assert_(link.traverse() is group)
         self.assert_(link.role is URIGroup)
         self.assert_(link.__parent__ is parent)
-        verifyObject(ILink, link)
+        verifyObject(IRemovableLink, link)
+
+    def test_unlink(self):
+        from schooltool.model import GroupLink
+        member = object()
+        group = GroupStub()
+        link = GroupLink(member, group, 'foo')
+        link.unlink()
+        self.assertEqual(group.deleted, 'foo')
 
 def test_suite():
     suite = unittest.TestSuite()

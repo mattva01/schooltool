@@ -214,7 +214,7 @@ class ILink(Interface):
 
 class IRemovableLink(ILink):
 
-    def unlink(self):
+    def unlink():
         """Removes a link.
 
         Also removes the opposite direction of the relationship if the

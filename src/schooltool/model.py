@@ -27,7 +27,8 @@ from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
 from schooltool.interfaces import IFaceted, IEventConfigurable, IQueryLinks
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
-from schooltool.interfaces import ISpecificURI, URIGroup, URIMember, ILink
+from schooltool.interfaces import ISpecificURI, URIGroup, URIMember
+from schooltool.interfaces import IRemovableLink
 from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentKeysSet, PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
@@ -36,10 +37,15 @@ __metaclass__ = type
 
 
 class GroupLink:
-    """An object that represents membership in a group as a link."""
+    """An object that represents membership in a group as a link.
 
+    IOW, this is a link from a member to a group.
+    """
+
+    implements(IRemovableLink)
     __slots__ = '_group', 'name', '__parent__'
-    implements(ILink)
+    role = URIGroup
+    title = "Membership"
 
     def __init__(self, parent, group, name):
         """The arguments are the following:
@@ -52,17 +58,20 @@ class GroupLink:
         self.__parent__ = parent
 
     def traverse(self):
+        """See ILink"""
         return self._group
 
-    role = URIGroup
-    title = "Membership"
-
+    def unlink(self):
+        """See IRemovableLink"""
+        del self._group[self.name]
 
 class MemberLink:
     """An object that represents containment of a group member as a link."""
 
+    implements(IRemovableLink)
     __slots__ = '_member', 'name', '__parent__'
-    implements(ILink)
+    role = URIMember
+    title = "Membership"
 
     def __init__(self, parent, member, name):
         """The arguments are the following:
@@ -75,11 +84,12 @@ class MemberLink:
         self.__parent__ = parent
 
     def traverse(self):
+        """See ILink"""
         return self._member
 
-    role = URIMember
-    title = "Membership"
-
+    def unlink(self):
+        """See IRemovableLink"""
+        del self.__parent__[self.name]
 
 class GroupMember(Persistent):
     """A mixin providing the IGroupMember interface.
