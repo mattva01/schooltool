@@ -205,6 +205,71 @@ def test_resourceContainerView():
 
         >>> view.add_url
         'addSchoolBellResource.html'
+    """
+
+
+def test_personView():
+    r"""Test for PersonView
+
+    Let's create a new person:
+
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> person.__name__ = "Jonas"
+        >>> person.title = "Jonas Petraitis"
+
+    Let's create a person view
+        >>> request = TestRequest()
+        >>> request.setPrincipal(person)
+        >>> from schoolbell.app.browser.app import PersonView
+        >>> view = PersonView(person, request)
+
+    User can change his password
+        >>> view.canChangePassword()
+        True
+
+    View his callendars
+        >>> view.canViewCalendar()
+        True
+
+    Choose his callendars
+        >>> view.canViewCalendar()
+        True
+    """
+
+
+def test_personPhotoView():
+    r"""Test for PersonPhotoView
+
+    Let's create a new person:
+
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> person.__name__ = "Jonas"
+        >>> person.title = "Jonas Petraitis"
+        >>> person.photo = "I am a photo!"
+
+    Let's create a person photo view
+        >>> request = TestRequest()
+        >>> from schoolbell.app.browser.app import PersonPhotoView
+        >>> view = PersonPhotoView(person, request)
+
+    We should see the photo
+        >>> view.__call__()
+        'I am a photo!'
+
+    The photo should be jpeg
+        >>> request.response.getHeader("Content-Type")
+        'image/jpeg'
+
+    But if a person has no photo
+        >>> person.photo = None
+
+    We should get an exception
+        >>> view.__call__()  # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        NotFound: Object: <...Person object at ...>, name: u'photo'
 
         >>> setup.placelessTearDown()
     """

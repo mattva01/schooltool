@@ -52,6 +52,18 @@
       view="addSchoolBellPerson.html"
       />
 
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.IPerson"
+      class="schoolbell.app.browser.app.PersonView"
+      template="person.pt"
+      permission="zope.View" />
+
+  <page name="photo"
+        for="schoolbell.app.interfaces.IPerson"
+        class="schoolbell.app.browser.app.PersonPhotoView"
+        permission="zope.View" />
+
 <!-- GroupContainer, Group configuration -->
 
   <containerViews

@@ -1,0 +1,140 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Person info</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Person info for <span tal:replace="context/title" i18n:name="title"/>
+  </h1>
+  <metal:block metal:fill-slot="body" tal:define="info context">
+    <div class="actions">
+      <a class="action" tal:condition="view/canEdit"
+         tal:attributes="href string:${context/@@absolute_url}/edit.html"
+         i18n:translate="">Edit (XXX NOT IMPLEMENTED)</a>
+      <a class="action" tal:condition="view/canChangePassword"
+         tal:attributes="href string:${context/@@absolute_url}/password.html"
+         i18n:translate="">Change password (XXX NOT IMPLEMENTED)</a>
+      <a class="action" tal:condition="view/canViewCalendar"
+         tal:attributes="href string:${context/@@absolute_url}/calendar"
+         i18n:translate="">View calendar (XXX NOT IMPLEMENTED)</a>
+    </div>
+
+    <div tal:condition="not:view/canChooseCalendars" class="groups">
+      <h3 i18n:translate="">Groups (XXX NOT IMPLEMENTED)</h3>
+      <tal tal:condition="nothing">
+        <p tal:repeat="group view/getParentGroups">
+          <a tal:attributes="href group/@@absolute_url"
+             tal:content="group/title"></a>
+        </p>
+      </tal>
+    </div>
+
+    <!-- XXX timetables python:view.timetables(view.isManager()) -->
+    <div class="timetables"
+         tal:define="timetables python:view.timetables(True)"
+         tal:condition="timetables">
+      <h3 i18n:translate="">Timetables (XXX NOT IMPLEMENTED)</h3>
+      <tal tal:condition="nothing">
+        <p tal:repeat="tt timetables">
+          <a tal:omit-tag="tt/empty"
+             tal:attributes="href tt/url" tal:content="tt/title"/>
+          <tal:if tal:condition="view/isManager">
+            (<a tal:attributes="href string:${tt/url}/setup.html"
+                i18n:translate="">setup</a>)
+          </tal:if>
+        </p>
+      </tal>
+    </div>
+    <div class="row"><b i18n:translate="">Username:</b>
+      <span tal:replace="python:context.__name__">not_doe</span>
+    </div>
+    <div class="row"><b i18n:translate="">Title:</b>
+      <span tal:replace="info/title">John, but not Doe</span>
+    </div>
+    <div class="row"><b i18n:translate="">First name:</b>
+      <span tal:replace="info/first_name"></span>
+    </div>
+    <div class="row"><b i18n:translate="">Last name:</b>
+      <span tal:replace="info/last_name"></span>
+    </div>
+    <div class="row"><b i18n:translate="">Date of birth:</b>
+      <span tal:replace="info/date_of_birth"></span>
+    </div>
+    <div class="row"><b i18n:translate="">Comment:</b>
+      <span tal:replace="info/comment"></span>
+    </div>
+    <div class="row">
+      <b i18n:translate="">Photo:</b>
+      <tal:block condition="not:info/photo"
+                 i18n:translate="">N/A</tal:block>
+      <p tal:condition="info/photo">
+        <img src="photo" tal:attributes="src string:${context/@@absolute_url}/photo" />
+      </p>
+    </div>
+
+    <div class="groups">
+      <h3 i18n:translate="">Groups (XXX NOT IMPLEMENTED)</h3>
+      <p tal:condition="nothing" tal:repeat="group view/getParentGroups">
+       <a tal:attributes="href group/@@absolute_url"
+          tal:content="group/title"></a>
+      </p>
+    </div>
+
+    <tal:block condition="view/canChooseCalendars">
+      <a id="calendar-form"></a>
+      <form method="POST">
+        <fieldset>
+          <legend i18n:translate="">
+            Choose calendars for portlet
+          </legend>
+          <table tal:condition="nothing">
+            <tr>
+
+              <td>
+                <label for="groups" i18n:translate="">Groups</label>
+                <select multiple="multiple" id="groups" size="5"
+                        name="groups">
+                  <tal:loop repeat="group view/allGroups">
+                    <option tal:content="group/title"
+                        tal:attributes="value group/__name__;
+                          selected python:view.listedResource(group);
+                          disabled python:view.disabledResource(group)"/>
+                  </tal:loop>
+                </select>
+              </td>
+
+              <td>
+                <label for="people" i18n:translate="">People</label>
+                <select multiple="multiple" id="people" size="5"
+                    name="people">
+                  <tal:loop repeat="person view/allPersons">
+                    <option tal:content="person/title"
+                        tal:attributes="value person/__name__;
+                          selected python:view.listedResource(person);
+                          disabled python:view.disabledResource(person)"/>
+                  </tal:loop>
+                </select>
+              </td>
+
+              <td>
+                <label for="resources" i18n:translate="">Resources</label>
+                <select multiple="multiple" id="resources" size="5"
+                    name="resources">
+                  <tal:loop repeat="resource view/allResources">
+                    <option tal:content="resource/title"
+                        tal:attributes="value resource/__name__;
+                          selected python:view.listedResource(resource)"/>
+                  </tal:loop>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" value="Update" name="CHOOSE_CALENDARS"
+                 i18n:attributes="value" />
+        </fieldset>
+      </form>
+    </tal:block>
+
+</metal:block>
+</body>
+</html>
