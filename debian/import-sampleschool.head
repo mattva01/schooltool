@@ -1,0 +1,11 @@
+#!/usr/bin/python2.3
+"""
+A script to import sample school data into SchoolTool on Debian systems.
+"""
+
+import os
+import sys
+
+datadir = '/usr/share/schooltool/sampleschool'
+sys.path.insert(0, '/usr/lib/schooltool')
+

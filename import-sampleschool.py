@@ -1,10 +1,21 @@
-#!/usr/bin/python2.3
+#!/usr/bin/env python
 """
-A script to import sample school data.
+A script to import sample school data into SchoolTool.
 """
 
 import os
 import sys
+if sys.version_info < (2, 3):
+    print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
+    print >> sys.stderr, 'Your python is %s' % sys.version
+    sys.exit(1)
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+datadir = basedir
+sys.path.insert(0, os.path.join(basedir, 'src'))
+
+# -- Do not remove this line --
+
 import urllib
 
 
@@ -19,7 +30,7 @@ class SampleSchoolImporter:
 
     expected_version = 'SchoolTool/0.4'
 
-    datadir = '/usr/share/schooltool/sampleschool'
+    datadir = datadir
     ttconfig_filename = datadir + '/ttconfig.data'
 
     def main(self, argv):
@@ -84,5 +95,4 @@ class SampleSchoolImporter:
 
 
 if __name__ == '__main__':
-    sys.path.insert(0, '/usr/lib/schooltool')
     sys.exit(SampleSchoolImporter().main(sys.argv))

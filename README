@@ -46,22 +46,23 @@ Running SchoolTool
 The top-level project directory contains the following executable Python
 scripts:
 
-  schooltool-server.py  starts the SchoolTool server
-  schooltool-client.py  starts the command line client
-  wxschooltool.py       starts the wxWindows GUI client
+  schooltool-server.py      starts the SchoolTool server
+  schooltool-client.py      starts the command line client
+  wxschooltool.py           starts the wxWindows GUI client
+  import-sampleschool.py    imports sample data into the server
 
 The Makefile also contains several shortcuts, which are kept mainly for
 backwards-compatibility:
 
-  make sampleschool     generates and imports sample data into the server
+  make sampleschool         generates and imports sample data into the server
 
-  make run              starts the SchoolTool server
-  make runtestserver    starts the SchoolTool server using test.conf as the
-                        configuration file (this is used for running automated
-                        functional tests)
+  make run                  starts the SchoolTool server
+  make runtestserver        starts the SchoolTool server using test.conf as the
+                            configuration file (this is used for running
+                            automated functional tests)
 
-  make runclient        starts the command line client
-  make runwxclient      starts the wxWindows GUI client
+  make runclient            starts the command line client
+  make runwxclient          starts the wxWindows GUI client
 
 
 Project structure
