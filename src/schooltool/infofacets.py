@@ -140,13 +140,13 @@ class AddressFacet(Persistent):
 
     def __eq__(self, other):
         try:
-            if self.postcode == other.postcode and \
-                    self.district == other.district and \
-                    self.town == other.town and \
-                    self.streetNr == other.streetNr and \
-                    self.thoroughfareName == other.thoroughfareName:
+            if (self.postcode == other.postcode and
+                    self.district == other.district and
+                    self.town == other.town and
+                    self.streetNr == other.streetNr and
+                    self.thoroughfareName == other.thoroughfareName):
                         return True
-        except:
+        except: # XXX mg: why is this bare except needed here?
             pass
 
         return False

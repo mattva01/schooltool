@@ -287,10 +287,10 @@ class Residence(RelationshipValenciesMixin, FacetedEventTargetMixin):
 
     def __eq__(self, other):
         try:
-            if self.title == other.title and self.country == other.country \
-                    and self.info() == other.info():
+            if (self.title == other.title and self.country == other.country
+                    and self.info() == other.info()):
                 return True
-        except:
+        except: # XXX mg: why is this bare except needed here?
             pass
 
         return False

@@ -125,11 +125,11 @@ class RootView(View):
         forbidden = 'forbidden' in request.args
         community = traverse(self.context, '/groups/community')
         if logged_in and not forbidden:
-            return self.redirect('/persons/'                            \
-                                 + request.authenticated_user.__name__  \
+            return self.redirect('/persons/'
+                                 + request.authenticated_user.__name__
                                  + '/calendar', request)
-        elif community.calendar.acl.allows(Everybody, ViewPermission) \
-                and not forbidden:
+        elif (community.calendar.acl.allows(Everybody, ViewPermission)
+                and not forbidden):
             return self.redirect('/groups/community/calendar/daily.html',
                                  request)
         else:
@@ -242,8 +242,8 @@ class LoginView(View):
         logged_in = request.authenticated_user is not None
         forbidden = 'forbidden' in request.args
         if logged_in and not forbidden:
-            return self.redirect('/persons/'                            \
-                                 + request.authenticated_user.__name__  \
+            return self.redirect('/persons/'
+                                 + request.authenticated_user.__name__
                                  + '/calendar', request)
         else:
             return View.do_GET(self, request)
@@ -269,9 +269,9 @@ class LoginView(View):
             if 'url' in request.args:
                 url = request.args['url'][0]
             else:
-                url = '/persons/'                             \
-                        + request.authenticated_user.__name__ \
-                        + '/calendar'
+                url = ('/persons/'
+                        + request.authenticated_user.__name__
+                        + '/calendar')
             return self.redirect(url, request)
 
 

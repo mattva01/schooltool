@@ -208,8 +208,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
 
 
     def do_POST(self, request):
-        if 'CHOOSE_CALENDARS' in request.args and \
-                self.canChooseCalendars():
+        if 'CHOOSE_CALENDARS' in request.args and self.canChooseCalendars():
             # Unlink old calendar subscriptions.
             for link in self.context.listLinks(URICalendarListed):
                 link.unlink()

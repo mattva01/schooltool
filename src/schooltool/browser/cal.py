@@ -477,7 +477,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         """List objects who's calendars the user subscribes to."""
 
         if self.request.authenticated_user:
-            return [ group for group in \
+            return [group for group in
                     getRelatedObjects(self.request.authenticated_user,
                             URICalendarProvider)]
 
@@ -798,12 +798,12 @@ class DailyCalendarView(CalendarViewBase):
         Each hour is made up of 4 units ('em' currently). If an event starts at
         10:15, and the day starts at 8:00 we get a top value of:
 
-          (2 * 4 ) + (15 / 15) = 9
+          (2 * 4) + (15 / 15) = 9
 
         """
 
-        top = ((event.dtstart.hour - self.starthour) * 4) \
-                + (event.dtstart.minute / 15)
+        top = ((event.dtstart.hour - self.starthour) * 4
+                + event.dtstart.minute / 15)
 
         return top
 

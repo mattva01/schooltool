@@ -193,7 +193,7 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
                         _("Granted permission %s on %s to %s.") %
                         (permission, getPath(self.context),
                          self.printUser(user)))
-                    result.append( _("Granted permission %s to %s.") % \
+                    result.append(_("Granted permission %s to %s.") %
                                    (_(permission), self.printUser(user)))
                 return "\n".join(result)
 
