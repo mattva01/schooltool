@@ -4,6 +4,7 @@
 #
 
 PYTHON=python2.3
+PYTHONDIR=/usr/lib/python2.3
 TESTFLAGS=-pv
 
 all: build
@@ -33,6 +34,12 @@ ftest: build
 
 run: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py
+
+coverage: build
+	rm -rf coverage
+	$(PYTHON) $(PYTHONDIR)/trace.py -c -C coverage -m \
+		--ignore-dir $(PYTHONDIR) \
+		test.py -pv schooltool
 
 
 .PHONY: all build clean test ftest run
