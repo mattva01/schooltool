@@ -1301,9 +1301,9 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         if exceptions:
             try:
                 kwargs["exceptions"] = datesParser(exceptions)
-            except:
+            except ValueError:
                 self._setError("exceptions", ConversionError(_(
-                    "Invalid date.  Please specify YYYY-MM-DD, one per line.")))
+                  "Invalid date.  Please specify YYYY-MM-DD, one per line.")))
                 errors.append(self.exceptions_widget._error)
 
         if errors:
