@@ -30,6 +30,7 @@ from schoolbell.calendar.interfaces import IEditCalendar
 
 
 class Calendar(Persistent):
+    """A persistent calendar."""
 
     implements(IEditCalendar, ILocation)
 
