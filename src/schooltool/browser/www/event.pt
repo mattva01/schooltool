@@ -1,6 +1,57 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" tal:content="view/page_title">title</title>
+
+  <script type="text/javascript" metal:fill-slot="extrahead">
+    function location_changed() {
+        var location = document.getElementById('location');
+        var location_other = document.getElementById('location_other');
+        location_other.disabled = (location.value != '');
+    }
+    function recurrence_changed() {
+        var recurrence = document.getElementById('recurrence');
+        var recurrence_box = document.getElementById('recurrence_box');
+        if (recurrence.checked) {
+            recurrence_box.style.display = 'block';
+        } else {
+            recurrence_box.style.display = 'none';
+        }
+    }
+    function range_changed() {
+        var range_c = document.getElementById('range_c');
+        var range_u = document.getElementById('range_u');
+        var count = document.getElementById('count');
+        var until = document.getElementById('until');
+        count.disabled = !range_c.checked;
+        until.disabled = !range_u.checked;
+    }
+    function onloadhook() {
+        location_changed();
+        var location = document.getElementById('location');
+        addEvent(location, "change", location_changed);
+        addEvent(location, "keyup", location_changed);
+
+        recurrence_changed();
+        var recurrence = document.getElementById('recurrence');
+        addEvent(recurrence, "change", recurrence_changed);
+
+        range_changed();
+        var range_c = document.getElementById('range_c');
+        var range_u = document.getElementById('range_u');
+        var range_f = document.getElementById('range_f');
+        addEvent(range_c, "change", range_changed);
+        addEvent(range_u, "change", range_changed);
+        addEvent(range_f, "change", range_changed);
+    }
+    function addEvent(obj, event, handler) {
+      if (obj.addEventListener) {
+          obj.addEventListener(event, handler, false);
+      } else if (obj.attachEvent) {
+          obj.attachEvent("on" + event, handler);
+      }
+    }
+    addEvent(window, "load", onloadhook);
+  </script>
 </head>
 <body>
 
@@ -30,7 +81,7 @@
     <div class="row" tal:replace="structure view/duration_widget" />
 
     <div class="row" tal:replace="structure view/recurrence_widget" />
-  <div style="border: 1px solid blue">
+  <div id="recurrence_box">
     <div class="row" tal:replace="structure view/interval_widget" />
     <div class="row" tal:replace="structure view/recurrence_type_widget" />
 
@@ -40,7 +91,7 @@
              tal:attributes="checked
                              python:view.range_widget.value == 'count'"/>
       <label for="range_c" class="plain">Repeat</label>
-      <input type="text" name="count" size="3"
+      <input type="text" name="count" id="count" size="3"
              tal:attributes="value view/count_widget/value" /> times.
     </div>
 
@@ -48,8 +99,8 @@
       <input type="radio" name="range" value="until" id="range_u"
              tal:attributes="checked
                              python:view.range_widget.value == 'until'"/>
-      <label for="range_y" class="plain">Repeat until</label>
-      <input type="text" name="until"
+      <label for="range_u" class="plain">Repeat until</label>
+      <input type="text" name="until" id="until"
              tal:attributes="value view/until_widget/value"/>
     </div>
 
