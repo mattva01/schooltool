@@ -13,7 +13,7 @@
 ##############################################################################
 """Python implementation of persistent list.
 
-$Id: list.py,v 1.2 2002/12/25 14:12:13 jim Exp $
+$Id: list.py,v 1.3 2003/10/09 19:02:10 mgedmin Exp $
 """
 
 import persistence
@@ -51,12 +51,14 @@ class PersistentList(UserList, persistence.Persistent):
         self._p_changed = True
 
     def __iadd__(self, other):
-        self.__super_iadd(other)
+        rtn = self.__super_iadd(other)
         self._p_changed = True
+        return rtn
 
     def __imul__(self, n):
-        self.__super_imul(n)
+        rtn = self.__super_imul(n)
         self._p_changed = True
+        return rtn
 
     def append(self, item):
         self.__super_append(item)

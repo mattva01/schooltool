@@ -210,6 +210,16 @@ class TestPList(unittest.TestCase):
         u.extend(u2)
         eq(u, u1 + u2, "u == u1 + u2")
 
+        # Test iadd
+        u = u1[:]
+        u += u2
+        eq(u, u1 + u2, "u == u1 + u2")
+
+        # Test imul
+        u = u1[:]
+        u *= 3
+        eq(u, u1 + u1 + u1, "u == u1 + u1 + u1")
+
 
 def test_suite():
     return unittest.makeSuite(TestPList)
