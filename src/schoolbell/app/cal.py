@@ -30,8 +30,7 @@ from zope.app.container.contained import Contained
 
 from schoolbell.calendar.interfaces import ICalendar, IEditCalendar
 from schoolbell.calendar.interfaces import IExpandedCalendarEvent
-from schoolbell.calendar.recurrent import ExpandedCalendarEvent
-from schoolbell.calendar.mixins import CalendarMixin
+from schoolbell.calendar.mixins import CalendarMixin, ExpandedCalendarEvent
 from schoolbell.calendar.simple import SimpleCalendarEvent, ImmutableCalendar
 from schoolbell.app.interfaces import IContainedCalendarEvent
 
