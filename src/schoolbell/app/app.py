@@ -254,13 +254,12 @@ class Resource(Persistent, Contained):
 
 
 def getSchoolBellApplication(obj):
-    """Return the nearest ISchoolBellApplication from ancestors of obj"""
+    """Return the nearest ISchoolBellApplication from ancestors of obj."""
     cur = obj
     while True:
         if ISchoolBellApplication.providedBy(cur):
             return cur
-
-        if ILocation.providedBy(cur):
+        elif ILocation.providedBy(cur):
             cur = cur.__parent__
         else:
             cur = None
