@@ -36,7 +36,7 @@ from schooltool.uris import URIMembership, URIGroup, URIMember
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool import relationship
 from schooltool.component import registerRelationship
-from schooltool.component import getRelatedObjects, getOptions
+from schooltool.component import getRelatedObjects, getOptions, getPath
 from schooltool.event import EventMixin
 from schooltool.translation import ugettext as _
 
@@ -110,6 +110,13 @@ class BeforeMembershipEvent(EventMixin):
         self.group = group
         self.member = member
         self.links = ()
+
+    def __unicode__(self):
+        event = self.__class__.__name__
+        s = [u"%s" % event]
+        s.append("group='%s'" % getPath(self.group))
+        s.append("member='%s'" % getPath(self.member))
+        return u"\n    ".join(s) + u'\n'
 
 
 def membershipRelate(relationship_type, (a, role_a), (b, role_b)):

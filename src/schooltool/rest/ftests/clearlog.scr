@@ -32,6 +32,10 @@ SchoolTool> get /utils/eventlog
 200 OK
 Content-Type: text/xml; charset=UTF-8
 <eventLog>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/pupils'
+    member='/persons/Marius'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='Pupils'
@@ -45,6 +49,6 @@ SchoolTool> put /utils/eventlog
 SchoolTool> .
 200 OK
 Content-Type: text/plain; charset=UTF-8
-1 event cleared in /utils/eventlog
+2 events cleared in /utils/eventlog
 
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

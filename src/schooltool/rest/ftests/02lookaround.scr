@@ -63,11 +63,19 @@ SchoolTool> get /utils/eventlog
 200 OK
 Content-Type: text/xml; charset=UTF-8
 <eventLog>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/managers'
+    member='/persons/manager'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='System Managers'
     link='http://schooltool.org/ns/membership/group', '/groups/managers'
     link='http://schooltool.org/ns/membership/member', '/persons/manager'
+</event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/root'
+    member='/groups/managers'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
@@ -75,11 +83,19 @@ Content-Type: text/xml; charset=UTF-8
     link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/managers'
 </event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/root'
+    member='/groups/teachers'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='Root Group'
     link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/teachers'
+</event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/root'
+    member='/groups/pupils'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
@@ -87,11 +103,19 @@ Content-Type: text/xml; charset=UTF-8
     link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/pupils'
 </event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/root'
+    member='/groups/students'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='Root Group'
     link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/students'
+</event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/root'
+    member='/groups/cleaners'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
@@ -99,11 +123,19 @@ Content-Type: text/xml; charset=UTF-8
     link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/cleaners'
 </event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/teachers'
+    member='/persons/Mark'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='Teachers'
     link='http://schooltool.org/ns/membership/group', '/groups/teachers'
     link='http://schooltool.org/ns/membership/member', '/persons/Mark'
+</event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/teachers'
+    member='/persons/Steve'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
@@ -111,17 +143,29 @@ Content-Type: text/xml; charset=UTF-8
     link='http://schooltool.org/ns/membership/group', '/groups/teachers'
     link='http://schooltool.org/ns/membership/member', '/persons/Steve'
 </event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/students'
+    member='/persons/Aiste'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='Students'
     link='http://schooltool.org/ns/membership/group', '/groups/students'
     link='http://schooltool.org/ns/membership/member', '/persons/Aiste'
 </event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/cleaners'
+    member='/persons/Albert'
+</event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
     title='Cleaners'
     link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
     link='http://schooltool.org/ns/membership/member', '/persons/Albert'
+</event>
+  <event ts="*">BeforeMembershipEvent
+    group='/groups/cleaners'
+    member='/persons/Marius'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
