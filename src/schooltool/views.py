@@ -685,7 +685,10 @@ class AbsenceCommentParser(XMLPseudoParser):
         except KeyError:
             expected_presence = Unchanged
         else:
-            expected_presence = parse_datetime(expected_presence)
+            if expected_presence == '':
+                expected_presence = None
+            else:
+                expected_presence = parse_datetime(expected_presence)
 
         comment = AbsenceComment(reporter, text, absent_from=absent_from,
                                  dt=dt, ended=ended, resolved=resolved,
@@ -763,29 +766,35 @@ class AbsenceView(View, AbsenceCommentParser):
         else:
             return None
 
-    def getPathOfPerson(self):
+    def person_href(self):
         return getPath(self.context.person)
+
+    def person_title(self):
+        return self.context.person.title
 
     def listComments(self):
         endedness = {Unchanged: None, False: 'unended', True: 'ended'}
         resolvedness = {Unchanged: None, False: 'unresolved', True: 'resolved'}
-
-        def format_presence(pr):
-            if pr is not Unchanged:
-                return comment.expected_presence.isoformat(' ')
+        for comment in self.context.comments:
+            absent_from_title = absent_from_href = None
+            if comment.absent_from is not None:
+                absent_from_href = getPath(comment.absent_from)
+                absent_from_title = comment.absent_from.title
+            if comment.expected_presence is Unchanged:
+                expected_presence = None
+            elif comment.expected_presence is None:
+                expected_presence = ''
             else:
-                return None
-
-        return [
-            {'datetime': comment.datetime.isoformat(' '),
-             'text': comment.text,
-             'absent_from': (comment.absent_from is not None
-                             and getPath(comment.absent_from) or None),
-             'ended': endedness[comment.ended],
-             'resolved': resolvedness[comment.resolved],
-             'expected_presence': format_presence(comment.expected_presence),
-             'reporter_href': getPath(comment.reporter)}
-            for comment in self.context.comments]
+                expected_presence = comment.expected_presence.isoformat(' ')
+            yield {'datetime': comment.datetime.isoformat(' '),
+                   'text': comment.text,
+                   'reporter_title': comment.reporter.title,
+                   'reporter_href': getPath(comment.reporter),
+                   'absent_from_title': absent_from_title,
+                   'absent_from_href': absent_from_href,
+                   'ended': endedness[comment.ended],
+                   'resolved': resolvedness[comment.resolved],
+                   'expected_presence': expected_presence}
 
     def do_POST(self, request):
         try:

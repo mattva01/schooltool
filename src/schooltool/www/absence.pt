@@ -1,20 +1,23 @@
 <absence xmlns:tal="http://xml.zope.org/namespaces/tal"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xlink:type="simple"
-         xlink:title="person"
-         tal:attributes="xlink:href view/getPathOfPerson;
-                         ended view/ended;
+         tal:attributes="ended view/ended;
                          resolved view/resolved;
                          expected_presence view/expected_presence">
+  <person xlink:type="simple"
+          tal:attributes="xlink:href view/person_href;
+                          xlink:title view/person_title"/>
   <comment tal:repeat="comment view/listComments"
-           xlink:type="simple"
-           xlink:title="reporter"
            tal:attributes="datetime comment/datetime;
-                           absentfrom comment/absent_from;
                            ended comment/ended;
                            resolved comment/resolved;
-                           expected_presence comment/expected_presence;
-                           xlink:href comment/reporter_href"
-           tal:content="comment/text">
+                           expected_presence comment/expected_presence">
+    <reporter xlink:type="simple"
+              tal:attributes="xlink:href comment/reporter_href;
+                              xlink:title comment/reporter_title"/>
+    <absentfrom xlink:type="simple"
+                tal:condition="comment/absent_from_href"
+                tal:attributes="xlink:href comment/absent_from_href;
+                                xlink:title comment/absent_from_title"/>
+    <text tal:content="comment/text"/>
   </comment>
 </absence>

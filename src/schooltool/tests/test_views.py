@@ -1352,6 +1352,15 @@ class TestAbsenceCommentParser(unittest.TestCase):
         self.assertEquals(comment.expected_presence,
                           datetime.datetime(2005, 5, 5, 5, 5, 5))
 
+        # Clearing Expected presence
+        request = RequestStub(body="""
+                        text="Foo"
+                        reporter="/persons/john"
+                        expected_presence=""
+                    """)
+        comment = parser.parseComment(request)
+        self.assert_(comment.expected_presence is None)
+
     def test_parseComment_errors(self):
         from schooltool.views import AbsenceCommentParser
         parser = AbsenceCommentParser()
@@ -1498,13 +1507,13 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
 
     def createAbsence(self):
         from schooltool.model import Person, Group, AbsenceComment
-        reporter1 = Person()
+        reporter1 = Person(title="Reporter 1")
         setPath(reporter1, '/reporter1')
-        reporter2 = Person()
+        reporter2 = Person(title="Reporter 2")
         setPath(reporter2, '/reporter2')
-        group1 = Group()
+        group1 = Group(title="Group 1")
         setPath(group1, '/group1')
-        person = Person()
+        person = Person(title="A Person")
         setPath(person, '/person', root=self.serviceManager)
         absence = person.reportAbsence(AbsenceComment(reporter1, 'Some text',
                 dt=datetime.datetime(2001, 1, 1)))
@@ -1524,18 +1533,23 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <absence xmlns:xlink="http://www.w3.org/1999/xlink"
-                     xlink:type="simple" xlink:title="person"
                      resolved="unresolved" ended="ended"
-                     xlink:href="/person"
                      expected_presence="2003-03-03 00:00:00">
-              <comment xlink:type="simple" xlink:title="reporter"
-                       xlink:href="/reporter1"
-                       datetime="2001-01-01 00:00:00">Some text</comment>
-              <comment xlink:type="simple" xlink:title="reporter"
+              <person xlink:type="simple" xlink:title="A Person"
+                      xlink:href="/person"/>
+              <comment datetime="2001-01-01 00:00:00">
+                <reporter xlink:type="simple" xlink:title="Reporter 1"
+                          xlink:href="/reporter1"/>
+                <text>Some text</text>
+              </comment>
+              <comment datetime="2002-02-02 00:00:00" ended="ended"
                        resolved="unresolved"
-                       expected_presence="2003-03-03 00:00:00"
-                       xlink:href="/reporter2" absentfrom="/group1"
-                       datetime="2002-02-02 00:00:00" ended="ended">More text
+                       expected_presence="2003-03-03 00:00:00">
+                <reporter xlink:type="simple" xlink:title="Reporter 2"
+                          xlink:href="/reporter2"/>
+                <absentfrom xlink:type="simple" xlink:title="Group 1"
+                            xlink:href="/group1"/>
+                <text>More text</text>
               </comment>
             </absence>
             """, recursively_sort=['absence'])
