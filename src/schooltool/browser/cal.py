@@ -1208,13 +1208,13 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         return locations
 
     def weekdays(self):
-        return ({'nr':0, 'name': _("Mon")},
-                {'nr':1, 'name': _("Tue")},
-                {'nr':2, 'name': _("Wed")},
-                {'nr':3, 'name': _("Thu")},
-                {'nr':4, 'name': _("Fri")},
-                {'nr':5, 'name': _("Sat")},
-                {'nr':6, 'name': _("Sun")})
+        return ({'nr': 0, 'name': _("Mon")},
+                {'nr': 1, 'name': _("Tue")},
+                {'nr': 2, 'name': _("Wed")},
+                {'nr': 3, 'name': _("Thu")},
+                {'nr': 4, 'name': _("Fri")},
+                {'nr': 5, 'name': _("Sat")},
+                {'nr': 6, 'name': _("Sun")})
 
     def getMonthDay(self):
         """Return the day number in a month."""
@@ -1239,32 +1239,16 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         return "%s %s" % (indexes[index], day_of_week)
 
     def weekdayChecked(self, weekday):
-        """Return 'checked' if the given weekday should be checked.
-
-        Returns None otherwise.
-        """
-        # TODO: unit tests.
+        """Return True if the given weekday should be checked."""
         day = self.date_widget.value
-        checked = (day and day.weekday() == weekday['nr']
-                   or (self.weekdays_widget.value and
-                       weekday['nr'] in self.weekdays_widget.value))
-        if checked:
-            return 'checked'
-        else:
-            return None
+        return bool(day and day.weekday() == weekday['nr']
+                    or (self.weekdays_widget.value and
+                        weekday['nr'] in self.weekdays_widget.value))
 
     def weekdayDisabled(self, weekday):
-        """Return 'disabled' if the given weekday should be disabled.
-
-        Returns None otherwise.
-        """
-        # TODO: unit tests.
+        """Return True if the given weekday should be disabled."""
         day = self.date_widget.value
-        disabled = day and day.weekday() == weekday['nr']
-        if disabled:
-            return 'disabled'
-        else:
-            return None
+        return bool(day and day.weekday() == weekday['nr'])
 
     def getLastWeekDay(self):
         """Return a description like 'Last Friday' or None."""

@@ -1234,6 +1234,47 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
         test_date(date(2004, 10, 29), "5th Friday")
         test_date(date(2004, 10, 31), "5th Sunday")
 
+    def test_weekdayChecked(self):
+        view = self.createView()
+
+        def check(nr, expected):
+            self.assertEquals(view.weekdayChecked({'nr': nr}), expected)
+
+        for d in range(7):
+            check(d, False)
+
+        view.date_widget.value = date(2004, 10, 24) # Sunday
+        for d in range(6):
+            check(d, False)
+        check(6, True)
+
+        view.date_widget.value = date(2004, 10, 25) # Monday
+        view.weekdays_widget.value = [1, 2]
+        for d in range(3):
+            check(d, True)
+        for d in range(3, 7):
+            check(d, False)
+
+    def test_weekdayDisabled(self):
+        view = self.createView()
+
+        def check(nr, expected):
+            self.assertEquals(view.weekdayDisabled({'nr': nr}), expected)
+
+        for d in range(7):
+            check(d, False)
+
+        view.date_widget.value = date(2004, 10, 24) # Sunday
+        for d in range(6):
+            check(d, False)
+        check(6, True)
+
+        view.date_widget.value = date(2004, 10, 25) # Monday
+        view.weekdays_widget.value = [1, 2]
+        check(0, True)
+        for d in range(1, 7):
+            check(d, False)
+
     def test_getLastWeekDay(self):
         view = self.createView()
         self.assertEquals(view.getLastWeekDay(), "last weekday")
