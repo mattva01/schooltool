@@ -7,32 +7,48 @@
 <metal:block metal:fill-slot="body">
 
 <form tal:attributes="action request/URL" method="POST" class="standalone">
-  <h3 i18n:translate="" tal:condition="not:context/title|nothing">
-      Resource Booking
+  <h3 i18n:translate="">
+    Resource Booking for <span i18n:name="title"
+                               tal:replace="context/title">something</span>
   </h3>
-  <h3 i18n:translate="" tal:condition="context/title|nothing">
-      Resource Booking for <span i18n:name="title"
-                                 tal:replace="context/title">something</span>
-  </h3>
+
+  <fieldset>
+    <div>
+      <strong i18n:translate="">Title:</strong>
+      <span tal:replace="context/title">not_doe</span>
+    </div>
+    <div>
+      <strong i18n:translate="">Starts:</strong>
+      <span tal:replace="python: context.dtstart.strftime('%Y-%m-%d %H:%M')">some date and time</span>
+    </div>
+    <div>
+      <strong i18n:translate="">Ends:</strong>
+      <span tal:replace="python: (context.dtstart + context.duration).strftime('%Y-%m-%d %H:%M')">some time</span>
+    </div>
+    <div tal:condition="context/recurrence">
+      <strong i18n:translate="">This is a recurring event!</strong>
+    </div>
+  </fieldset>
+
   <input type="hidden" tal:condition="request/date|nothing"
          name="date" tal:attributes="value request/date" />
   <fieldset>
     <legend i18n:translate="">Available Resources</legend>
-    <table class="acl">
+    <table class="event_booking">
       <tr tal:repeat="resource view/availableResources/sortby:title"
           tal:attributes="class repeat/resource/parity">
-         <th class="principal">
-            <span tal:replace="resource/title">Resource foo</span>
+         <td class="booked">
+            <input type="checkbox"
+                   value="booked"
+                   tal:attributes="name resource/zope:name;
+                                   id resource/zope:name;
+                                   checked python: view.hasBooked(resource)" />
+         </td>
+         <th class="resource">
+            <label tal:attributes="for resource/zope:name" tal:content="resource/title">Resource foo</label>
             <input type="hidden" tal:attributes="name string:marker-${resource/zope:name}"
                    value="1" />
          </th>
-         <td class="permission">
-            <input
-                type="checkbox"
-                value="booked"
-                tal:attributes="name resource/zope:name;
-                                checked python: view.hasBooked(resource)" />
-         </td>
       </tr>
     </table>
   </fieldset>

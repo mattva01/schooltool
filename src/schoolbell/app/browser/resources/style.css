@@ -859,3 +859,35 @@ table.acl th.permission {
     width: 7em;
     text-align: center;
 }
+
+table.event_booking {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.event_booking tr.header th {
+    border-bottom: 1px solid #bab5ab;
+}
+
+table.event_booking tr.even {
+    background: #d6d6d6;
+}
+
+table.event_booking td {
+    text-align: center;
+}
+
+table.event_booking th {
+    text-align: left;
+}
+
+table.event_booking th.permission {
+    width: 7em;
+    text-align: center;
+}
+
+table.event_booking td.booked {
+    width: 2em;
+    text-align: center;
+}
