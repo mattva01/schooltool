@@ -43,7 +43,7 @@
     function onloadhook() {
         location_changed();
         var location = document.getElementById('location');
-        addEvent(location, "click", location_changed);
+        addEvent(location, "change", location_changed);
         addEvent(location, "keyup", location_changed);
 
         recurrence_changed();
@@ -58,9 +58,10 @@
         addEvent(range_u, "click", range_changed);
         addEvent(range_f, "click", range_changed);
 
-	recurrence_type_changed();
-	var recurrence_type = document.getElementById('recurrence_type');
-        addEvent(recurrence_type, "click", recurrence_type_changed);
+        recurrence_type_changed();
+        var recurrence_type = document.getElementById('recurrence_type');
+        addEvent(recurrence_type, "change", recurrence_type_changed);
+        addEvent(recurrence_type, "keyup", recurrence_type_changed);
     }
     function addEvent(obj, event, handler) {
       if (obj.addEventListener) {
@@ -115,42 +116,42 @@
     <!-- weekly box -->
     <div class="row" id="weekly_row">
       <span tal:repeat="weekday view/weekdays" >
-	<input type="checkbox" name="weekdays"
+        <input type="checkbox" name="weekdays"
                tal:define="day view/date_widget/value"
-	       tal:attributes="
-		   id string:weekday_${weekday/nr};
-		   value weekday/nr;
-		   disabled python:day and day.weekday() == weekday['nr'];
-		   checked python:
+               tal:attributes="
+                   id string:weekday_${weekday/nr};
+                   value weekday/nr;
+                   disabled python:day and day.weekday() == weekday['nr'];
+                   checked python:
                       (day and day.weekday() ==  weekday['nr']
                        or (view.weekdays_widget.value and
                            weekday['nr'] in view.weekdays_widget.value))"/>
-	<label tal:attributes="for string:weekday_${weekday/nr}"
+        <label tal:attributes="for string:weekday_${weekday/nr}"
                tal:content="weekday/name" class="plain" />
       </span>
     </div>
     <!-- monthly box -->
     <div id="monthly_box" class="">
       <div class="row">
-	<input type="radio" name="monthly" value="monthday" id="monthly_m"
-	       tal:attributes="checked
-		       python:view.monthly_widget.value == 'monthday'"/>
-	<label for="monthly_m" class="plain">
-	  Day <span tal:replace="view/getMonthDay"/> of every month</label>
+        <input type="radio" name="monthly" value="monthday" id="monthly_m"
+               tal:attributes="checked
+                       python:view.monthly_widget.value == 'monthday'"/>
+        <label for="monthly_m" class="plain">
+          Day <span tal:replace="view/getMonthDay"/> of every month</label>
       </div>
       <div class="row">
-	<input type="radio" name="monthly" value="weekday" id="monthly_w"
-	       tal:attributes="checked
-		       python:view.monthly_widget.value == 'weekday'"/>
-	<label for="monthly_w" class="plain">
-	  <span tal:replace="view/getWeekDay"/> of every month</label>
+        <input type="radio" name="monthly" value="weekday" id="monthly_w"
+               tal:attributes="checked
+                       python:view.monthly_widget.value == 'weekday'"/>
+        <label for="monthly_w" class="plain">
+          <span tal:replace="view/getWeekDay"/> of every month</label>
       </div>
       <div class="row" tal:condition="view/getLastWeekDay">
-	<input type="radio" name="monthly" value="lastweekday" id="monthly_l"
-	       tal:attributes="checked
-		       python:view.monthly_widget.value == 'lastweekday'"/>
-	<label for="monthly_l" class="plain">
-	   <span tal:replace="view/getLastWeekDay"/> of every month</label>
+        <input type="radio" name="monthly" value="lastweekday" id="monthly_l"
+               tal:attributes="checked
+                       python:view.monthly_widget.value == 'lastweekday'"/>
+        <label for="monthly_l" class="plain">
+           <span tal:replace="view/getLastWeekDay"/> of every month</label>
       </div>
       <hr/>
     </div>
