@@ -89,6 +89,78 @@
       menu="schoolbell_actions"
       />
 
+  <page
+      name="notes"
+      for="schoolbell.app.interfaces.IHaveNotes"
+      layer=".skin.ISchoolBellLayer"
+      class="schoolbell.app.browser.notes.NotesView"
+      template="templates/notes.pt"
+      permission="zope.Public"
+      />
+
+    <!--
+  <addform
+      label="Add a Note"
+      name="addSchoolBellNote.html"
+      schema="schoolbell.app.interfaces.INote"
+      fields="title body"
+      set_before_add="title"
+      content_factory="schoolbell.app.notes.Note"
+      permission="schoolbell.create"
+      template="templates/simple_add.pt"
+      class=".notes.NoteAddView"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="New note"
+      for="schoolbell.app.interfaces.IHaveNotes"
+      action="+/addSchoolBellNote.html"
+      />
+
+  <editform
+      for="schoolbell.app.interfaces.INote"
+      name="edit.html"
+      label="Edit Note"
+      schema="schoolbell.app.interfaces.INote"
+      fields="title body"
+      permission="schoolbell.edit"
+      template="templates/simple_edit.pt"
+      class=".app.NoteEditView"
+      menu="schoolbell_actions"
+      title="Edit note"
+      />
+
+  <addMenuItem
+      title="SchoolBell Note"
+      description="A Note"
+      class="schoolbell.app.notes.Note"
+      permission="schoolbell.create"
+      view="addSchoolBellNote.html"
+      />
+    -->
+
+    <!--
+  <page
+      name="addNote.html"
+      for="schoolbell.app.interfaces.IHaveNotes"
+      class="schoolbell.app.browser.notes.NoteEditView"
+      template="templates/note_edit.pt"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Edit note"
+      />
+    -->
+
+  <page
+      name="addNote.html"
+      for="schoolbell.app.interfaces.IHaveNotes"
+      class="schoolbell.app.browser.notes.NoteAddView"
+      template="templates/note_add.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="New note" />
+
 <!-- PersonContainer, Person configuration -->
 
   <page

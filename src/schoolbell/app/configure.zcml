@@ -82,6 +82,13 @@
       factory=".cal.WriteCalendar"
       />
 
+  <adapter
+      for=".interfaces.IHaveNotes"
+      provides=".interfaces.INotes"
+      factory=".notes.getNotes"
+      trusted="true"
+      />
+
   <class class=".cal.WriteCalendar">
     <allow interface="zope.app.filerepresentation.interfaces.IWriteFile" />
   </class>
@@ -139,6 +146,20 @@
     <require permission="schoolbell.modifyEvent"
              set_schema="schoolbell.calendar.interfaces.ICalendarEvent"
              attributes="bookResource unbookResource" />
+  </content>
+
+  <content class=".notes.Notes">
+    <require permission="zope.Public"
+             attributes="__iter__" />
+    <require permission="schoolbell.create"
+             attributes="add remove clear" />
+  </content>
+
+  <content class=".notes.Note">
+    <require permission="zope.Public"
+             interface=".interfaces.INote" />
+    <require permission="schoolbell.create"
+             set_schema=".interfaces.INote" />
   </content>
 
 <!-- Security declarations for calendaring -->

@@ -1,0 +1,38 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Add note</title>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+
+<metal:block metal:fill-slot="body">
+
+  <form class="standalone" method="POST" enctype="multipart/form-data"
+        tal:attributes="action request/URL">
+    <h3 i18n:translate="">Note</h3>
+
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+
+    <fieldset>
+      <div class="row" tal:define="widget nocall:view/title_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/body_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+    </fieldset>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
+             title="Shortcut: Alt-A" accesskey="A"
+             i18n:attributes="value add-button; accesskey" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+</metal:block>
+</body>
+</html>

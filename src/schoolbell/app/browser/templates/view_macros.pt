@@ -111,6 +111,9 @@
         <div id="content-body">
           <metal:block define-slot="body"/>
         </div>
+        <tal:block define="notes context/@@notes|nothing">
+          <tal:block replace="structure notes"/>
+        </tal:block>
       </div>
       <div class="clearer">&nbsp;</div>
     </div>

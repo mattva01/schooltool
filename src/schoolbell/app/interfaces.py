@@ -74,6 +74,13 @@ class ISchoolBellCalendarEvent(ICalendarEvent, IContained):
         """Book a resource."""
 
 
+class IHaveNotes(IAnnotatable):
+    """An object that can have Notes.
+
+    See also INote and INotes.
+    """
+
+
 class INote(Interface):
     """A note."""
 

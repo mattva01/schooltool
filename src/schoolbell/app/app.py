@@ -43,7 +43,7 @@ from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
-from schoolbell.app.interfaces import IHavePreferences
+from schoolbell.app.interfaces import IHavePreferences, IHaveNotes
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -167,7 +167,8 @@ class SimpleNameChooser(NameChooser):
 class Person(Persistent, Contained):
     """Person."""
 
-    implements(IPersonContained, IHavePreferences, IAttributeAnnotatable)
+    implements(IPersonContained, IHaveNotes, IHavePreferences,
+               IAttributeAnnotatable)
 
     photo = None
     username = None
@@ -253,7 +254,7 @@ def hash_password(password):
 class Group(Persistent, Contained):
     """Group."""
 
-    implements(IGroupContained, IAttributeAnnotatable)
+    implements(IGroupContained, IHaveNotes, IAttributeAnnotatable)
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
@@ -272,7 +273,7 @@ class Group(Persistent, Contained):
 class Resource(Persistent, Contained):
     """Resource."""
 
-    implements(IResourceContained, IAttributeAnnotatable)
+    implements(IResourceContained, IHaveNotes, IAttributeAnnotatable)
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
