@@ -1462,6 +1462,19 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assert_('12:00' in content)
         self.assert_('Math' in content)
 
+    def test_tt_getRecurrenceRule(self):
+
+        view = self.createView()
+        ttcal = self.initTTCalendar(view.context)
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'recurrence': 'on',
+                                    'recurrence_shown': 'yes',
+                                    'recurrence_type': 'daily'})
+        view.request = request
+        view.update()
+        self.assertEqual(view.getRecurrenceRule(), None)
+
     def test_change_tt_event(self):
         view = self.createView()
         ttcal = self.initTTCalendar(view.context)

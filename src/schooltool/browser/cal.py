@@ -1019,6 +1019,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
         Must be called after update()
         """
+        if self.tt_event:
+            return None
+
         if self.recurrence_widget.value:
             interval = self.interval_widget.value
             until = self.until_widget.value

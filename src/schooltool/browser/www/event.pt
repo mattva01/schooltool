@@ -49,6 +49,9 @@
         addEvent(location, "change", location_changed);
         addEvent(location, "keyup", location_changed);
 
+        if (!document.getElementById('recurrence_box'))
+            return;
+
         recurrence_changed();
         var recurrence = document.getElementById('recurrence');
         addEvent(recurrence, "click", recurrence_changed);
@@ -109,6 +112,7 @@
     <div class="row" tal:replace="structure view/other_location_widget" />
     <div class="row" tal:replace="structure view/duration_widget" />
 
+<tal:block condition="not: view/tt_event">
     <div class="row" tal:replace="structure view/recurrence_widget" />
   <div id="recurrence_box">
     <div class="buttons" id="update_box">
@@ -208,6 +212,7 @@
     <div class="row" tal:replace="structure view/monthly_widget" />
     -->
   </div>
+</tal:block>
 
     <div class="buttons">
       <input class="button" name="SUBMIT" type="submit" value="Save"
