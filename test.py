@@ -59,7 +59,8 @@ Options:
   --list-hooks          list all loaded test hooks
   --coverage            create code coverage reports
   --search-in dir       limit directory tree walk to dir (optimisation)
-  --immediate-errors    show errors as soon as they happen
+  --immediate-errors    show errors as soon as they happen (default)
+  --delayed-errors      show errors after all unit tests were run
 """
 #
 # This script borrows ideas from Zope 3's test runner heavily.  It is smaller
@@ -116,7 +117,8 @@ class Options:
     progress = False            # show running progress (-p)
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
-    immediate_errors = False    # show tracebacks twice (currently hardcoded)
+    immediate_errors = True     # show tracebacks twice (--immediate-errors,
+                                # --delayed-errors)
     screen_width = 80           # screen width (autodetected)
 
 
@@ -500,7 +502,8 @@ def main(argv):
     opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufwd',
                                    ['list-files', 'list-tests', 'list-hooks',
                                     'level=', 'all-levels', 'coverage',
-                                    'search-in=', 'immediate-errors', 'help'])
+                                    'search-in=', 'immediate-errors',
+                                    'delayed-errors', 'help'])
     for k, v in opts:
         if k in ['-h', '--help']:
             print __doc__
@@ -553,6 +556,8 @@ def main(argv):
             cfg.search_in += (dir, )
         elif k == '--immediate-errors':
             cfg.immediate_errors = True
+        elif k == '--delayed-errors':
+            cfg.immediate_errors = False
         else:
             print >> sys.stderr, '%s: invalid option: %s' % (argv[0], k)
             print >> sys.stderr, 'run %s -h for help'
