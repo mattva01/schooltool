@@ -20,6 +20,8 @@ Usage example:
     for group in getRelatedObjects(frog, URIGroup):
         print group
 
+    Membership.unlink(member=frog, group=frogpond)
+
 You can also define relationship properties in your component classes, and
 rewrite the example above as
 
@@ -29,6 +31,9 @@ rewrite the example above as
     # Find all related objects for a given role (URIGroup in this case)
     for group in frogpond.members:
         print group
+
+    # Remove a relationship
+    frogpond.members.remove(frog)   # or frog.groups.remove(frogpond)
 
 
 Dependencies
@@ -147,6 +152,24 @@ in a URIMembership relationship.
     []
 
 In general, avoid reusing the same role for different relationship types.
+
+You can remove relationships by calling the `unrelate` function
+
+    >>> from schoolbell.relationship import unrelate
+    >>> unrelate(URIMembership, (frogs, URIGroup), (frogger, URIMember))
+
+    >>> getRelatedObjects(frogger, URIGroup)
+    []
+    >>> getRelatedObjects(frogs, URIMember)
+    [lilfroggy]
+
+If you try to remove a relationship that does not exist, you will get an
+exception
+
+    >>> unrelate(URIMembership, (frogs, URIMember), (frogger, URIGroup))
+    Traceback (most recent call last):
+      ...
+    NoSuchRelationship
 
 
 Relationship properties

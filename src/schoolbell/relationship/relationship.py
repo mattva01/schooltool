@@ -36,6 +36,7 @@ from schoolbell.relationship.interfaces import IRelationshipProperty
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipAddedEvent
 from schoolbell.relationship.interfaces import DuplicateRelationship
+from schoolbell.relationship.interfaces import NoSuchRelationship
 
 
 def relate(rel_type, (a, role_of_a), (b, role_of_b)):
@@ -47,11 +48,24 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b)):
     zope.event.notify(BeforeRelationshipEvent(rel_type,
                                               (a, role_of_a),
                                               (b, role_of_b)))
-    IRelationshipLinks(a).add(Link(b, role_of_b, rel_type))
-    IRelationshipLinks(b).add(Link(a, role_of_a, rel_type))
+    IRelationshipLinks(a).add(Link(role_of_a, b, role_of_b, rel_type))
+    IRelationshipLinks(b).add(Link(role_of_b, a, role_of_a, rel_type))
     zope.event.notify(RelationshipAddedEvent(rel_type,
                                              (a, role_of_a),
                                              (b, role_of_b)))
+
+
+def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
+    """Break a relationship between objects `a` and `b`."""
+    links_of_a = IRelationshipLinks(a)
+    links_of_b = IRelationshipLinks(b)
+    try:
+        link_a_to_b = links_of_a.find(role_of_a, b, role_of_b, rel_type)
+        link_b_to_a = links_of_b.find(role_of_b, a, role_of_a, rel_type)
+    except ValueError:
+        raise NoSuchRelationship
+    links_of_a.remove(link_a_to_b)
+    links_of_b.remove(link_b_to_a)
 
 
 class RelationshipEvent(object):
@@ -252,11 +266,14 @@ class Link(Persistent):
     relationship:
 
         >>> target = object()
+        >>> my_role = 'example:Group'
         >>> role = 'example:Member'
         >>> rel_type = 'example:Membership'
-        >>> link = Link(target, role, rel_type)
+        >>> link = Link(my_role, target, role, rel_type)
         >>> link.target is target
         True
+        >>> link.my_role
+        'example:Group'
         >>> link.role
         'example:Member'
         >>> link.rel_type
@@ -272,7 +289,8 @@ class Link(Persistent):
 
     implements(IRelationshipLink)
 
-    def __init__(self, target, role, rel_type):
+    def __init__(self, my_role, target, role, rel_type):
+        self.my_role = my_role
         self.target = target
         self.role = role
         self.rel_type = rel_type
@@ -290,13 +308,43 @@ class LinkSet(Persistent):
 
     You can add new links to it
 
-        >>> link1 = Link(object(), 'example:Member', 'example:Membership')
-        >>> link2 = Link(object(), 'example:Friend', 'example:Friendship')
+        >>> link1 = Link('example:Group', object(), 'example:Member',
+        ...              'example:Membership')
+        >>> link2 = Link('example:Friend', object(), 'example:Friend',
+        ...              'example:Friendship')
         >>> linkset.add(link1)
         >>> linkset.add(link2)
         >>> from sets import Set
         >>> Set(linkset) == Set([link1, link2]) # order is not preserved
         True
+
+    You can look for links for a specific relationship
+
+        >>> linkset.find('example:Group', link1.target, 'example:Member',
+        ...              'example:Membership') is link1
+        True
+
+    If find fails, it raises ValueError, just like list.index.
+
+        >>> linkset.find('example:Member', link1.target, 'example:Group',
+        ...              'example:Membership')      # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        ValueError: ...
+
+    You can remove links
+
+        >>> linkset.remove(link2)
+        >>> Set(linkset) == Set([link1])
+        True
+
+    If you try to remove a link that is not in the set, you will get a
+    ValueError.
+
+        >>> linkset.remove(link2)                   # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        ValueError: ...
 
     It is documented in IRelationshipLinks
 
@@ -314,5 +362,15 @@ class LinkSet(Persistent):
     def add(self, link):
         self._links.append(link)
 
+    def remove(self, link):
+        self._links.remove(link)
+
     def __iter__(self):
         return iter(self._links)
+
+    def find(self, my_role, target, role, rel_type):
+        for link in self:
+            if (link.rel_type == rel_type and link.target is target
+                and link.my_role == my_role and link.role == role):
+                return link
+        raise ValueError(my_role, target, role, rel_type)

@@ -40,6 +40,19 @@ class IRelationshipProperty(Interface):
         """Establish a relationship with `other`."""
 
 
+class IRelationshipLink(Interface):
+    """One half of a relationship.
+
+    When a relationship between `a` and `b` is established, two links are
+    created and placed into link sets of `a` and `b` respectively.
+    """
+
+    rel_type = Attribute("""Relationship type.""")
+    target = Attribute("""The other member of the relationship.""")
+    role = Attribute("""Role of `target`.""")
+    my_role = Attribute("""Role of the object that has this link.""")
+
+
 class IRelationshipLinks(Interface):
     """A set of relationship links.
 
@@ -55,17 +68,17 @@ class IRelationshipLinks(Interface):
     def add(link):
         """Add a new link."""
 
+    def remove(link):
+        """Remove a link.
 
-class IRelationshipLink(Interface):
-    """One half of a relationship.
+        Raises ValueError if link is not in the set.
+        """
 
-    When a relationship between `a` and `b` is established, two links are
-    created and placed into link sets of `a` and `b` respectively.
-    """
+    def find(my_role, target, role, rel_type):
+        """Find a link with matching attributes.
 
-    rel_type = Attribute("""Relationship type.""")
-    target = Attribute("""The other member of the relationship.""")
-    role = Attribute("""Role of `target`.""")
+        Raises ValueError if a matching link is not found.
+        """
 
 
 class IRelationshipEvent(Interface):
@@ -104,4 +117,8 @@ class InvalidRelationship(Exception):
 
 class DuplicateRelationship(InvalidRelationship):
     """Relationship already exists"""
+
+
+class NoSuchRelationship(Exception):
+    """Relationship does not exist"""
 

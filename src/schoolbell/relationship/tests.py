@@ -259,8 +259,9 @@ def doctest_getRelatedObjects():
         >>> class Relatable:
         ...     implements(IRelationshipLinks)
         ...     def __iter__(self):
-        ...         return iter([Link('a', 'role_of_a', 'rel_type_a'),
-        ...                      Link('b', 'role_of_b', 'rel_type_b')])
+        ...         return iter([
+        ...             Link('role_of_b', 'a', 'role_of_a', 'rel_type_a'),
+        ...             Link('role_of_a', 'b', 'role_of_b', 'rel_type_b')])
 
         >>> obj = Relatable()
 
