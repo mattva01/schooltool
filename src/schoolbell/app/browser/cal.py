@@ -119,15 +119,20 @@ class CalendarViewBase(BrowserView):
     __used_for__ = ICalendar
 
     # XXX I'd rather these constants would go somewhere in schoolbell.calendar.
-    day_of_week_names = {
-        0: _("Monday"), 1: _("Tuesday"), 2: _("Wednesday"), 3: _("Thursday"),
-        4: _("Friday"), 5: _("Saturday"), 6: _("Sunday")}
-
     month_names = {
         1: _("January"), 2: _("February"), 3: _("March"),
         4: _("April"), 5: _("May"), 6: _("June"),
         7: _("July"), 8: _("August"), 9: _("September"),
         10: _("October"), 11: _("November"), 12: _("December")}
+
+    day_of_week_names = {
+        0: _("Monday"), 1: _("Tuesday"), 2: _("Wednesday"), 3: _("Thursday"),
+        4: _("Friday"), 5: _("Saturday"), 6: _("Sunday")}
+
+    short_day_of_week_names = {
+        0: _("Mon"), 1: _("Tue"), 2: _("Wed"), 3: _("Thu"),
+        4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
+    }
 
     # Which day is considered to be the first day of the week (0 = Monday,
     # 6 = Sunday).  Currently hardcoded.
@@ -185,6 +190,20 @@ class CalendarViewBase(BrowserView):
             weeks.append(self.getDays(start_of_week, start_of_next_week))
             start_of_week = start_of_next_week
         return weeks
+
+    def getYear(self, dt):
+        """Return the current year.
+
+        This returns a list of quarters, each quarter is a list of months,
+        each month is a list of weeks, and each week is a list of CalendarDays.
+        """
+        # XXX Not tested.
+        quarters = []
+        for q in range(4):
+            quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
+                       for month in range(1, 4)]
+            quarters.append(quarter)
+        return quarters
 
     def _eventView(self, event):
         # XXX Not tested
@@ -322,6 +341,68 @@ class MonthlyCalendarView(CalendarViewBase):
     def getCurrentMonth(self):
         """Return the current month as a nested list of CalendarDays."""
         return self.getMonth(self.cursor)
+
+
+class YearlyCalendarView(CalendarViewBase):
+    """Yearly calendar view."""
+
+    def monthTitle(self, date):
+        return unicode(self.month_names[date.month])
+
+    def shortDayOfWeek(self, date):
+        return unicode(self.short_day_of_week_names[date.weekday()])
+
+    def prevYear(self):
+        """Return the first day of the next year."""
+        return date(self.cursor.year - 1, 1, 1)
+
+    def nextYear(self):
+        """Return the first day of the previous year."""
+        return date(self.cursor.year + 1, 1, 1)
+
+    def renderRow(self, week, month):
+        """Do some HTML rendering in Python for performance.
+
+        This gains us 0.4 seconds out of 0.6 on my machine.
+        Here is the original piece of ZPT:
+
+         <td class="cal_yearly_day" tal:repeat="day week">
+          <a tal:condition="python:day.date.month == month[1][0].date.month"
+             tal:content="day/date/day"
+             tal:attributes="href python:view.calURL('daily', day.date);
+                             class python:(len(day.events) > 0
+                                           and 'cal_yearly_day_busy'
+                                           or  'cal_yearly_day')"/>
+         </td>
+        """
+        # XXX Not tested.
+        result = []
+
+        for day in week:
+            result.append('<td class="cal_yearly_day">')
+            if day.date.month == month:
+                if len(day.events):
+                    cssClass = 'cal_yearly_day_busy'
+                else:
+                    cssClass = 'cal_yearly_day'
+                # Let us hope that URLs will not contain < > & or "
+                # This is somewhat related to
+                #   http://issues.schooltool.org/issue96
+                result.append('<a href="%s" class="%s">%s</a>' %
+                              (self.calURL('daily', day.date), cssClass,
+                               day.date.day))
+            result.append('</td>')
+        return "\n".join(result)
+
+#    __url = None
+#
+#    def calURL(self, cal_type, cursor=None):
+#        # XXX Is there a reason why CalendarViewBase.calURL doesn't work here?
+#        if cursor is None:
+#            cursor = self.cursor
+#        if self.__url is None:
+#            self.__url = absolutePath(self.request, self.context)
+#        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
 
 class CalendarEventView(object):

@@ -795,6 +795,41 @@ def doctest_MonthlyCalendarView():
     """
 
 
+def doctest_YearlyCalendarView():
+    """Tests for YearlyCalendarView.
+
+        >>> from schoolbell.app.browser.cal import YearlyCalendarView
+
+        >>> from schoolbell.app.app import Calendar
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = YearlyCalendarView(calendar, TestRequest())
+
+    monthTitle() returns names of months:
+
+        >>> view.monthTitle(date(2005, 2, 3))
+        u'February'
+        >>> view.monthTitle(date(2005, 8, 3))
+        u'August'
+
+    dayOfWeek() returns short names of weekdays:
+
+        >>> view.shortDayOfWeek(date(2005, 2, 3))
+        u'Thu'
+        >>> view.shortDayOfWeek(date(2005, 8, 3))
+        u'Wed'
+
+    prev() and next() provide dates forward/back a year:
+
+        >>> view.cursor = date(2004, 8, 18)
+        >>> view.prevYear()
+        datetime.date(2003, 1, 1)
+        >>> view.nextYear()
+        datetime.date(2005, 1, 1)
+
+    """
+
+
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpTraversal()

@@ -318,6 +318,16 @@
       title="Calendar (monthly)"
       />
 
+  <page
+      name="yearly.html"
+      for="schoolbell.calendar.interfaces.ICalendar"
+      class=".cal.YearlyCalendarView"
+      template="templates/cal_yearly.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Calendar (yearly)"
+      />
+
 <!-- Skin and resources -->
 
   <zope:subscriber
