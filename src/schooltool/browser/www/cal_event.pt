@@ -1,8 +1,10 @@
 <div class="calevent" tal:define="editable
              python:getattr(context, 'source', None) != 'timetable-calendar'">
-  <h3 tal:condition="editable">
+  <div class="dellink">
     <a tal:attributes="href
-            string:delete_event.html?event_id=${context/unique_id}">[X]</a>
+            string:delete_event.html?event_id=${context/unique_id}">[delete]</a>
+  </div>
+  <h3 tal:condition="editable">
     <a tal:attributes="href
             string:edit_event.html?event_id=${context/unique_id}"
        tal:content="context/title" >

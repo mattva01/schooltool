@@ -516,3 +516,8 @@ table.timetable td.time input.text {
 table.timetable td.buttons {
   text-align: right;
 }
+
+div.dellink {
+  float: right;
+  font-size: smaller;
+}

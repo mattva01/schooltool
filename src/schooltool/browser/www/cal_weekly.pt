@@ -15,7 +15,7 @@
        i18n:translate="">Current week</a>
     <a tal:attributes="href python:view.calURL('weekly', view.nextWeek())"
        i18n:translate="">Next week</a>
-    <div>
+    </div>
     <div class="calweekly">
       <div class="day"
            tal:repeat="day view/getCurrentWeek">
