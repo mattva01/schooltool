@@ -3,21 +3,27 @@
   <title metal:fill-slot="title" i18n:translate="">Access control</title>
 </head>
 <body>
-<h1 metal:fill-slot="content-header">Access control</h1>
 <metal:block metal:fill-slot="body">
 
 <form tal:attributes="action request/URL" method="POST" class="standalone">
+  <h3 i18n:translate="" tal:condition="not:context/title|nothing">
+      Access control
+  </h3>
+  <h3 i18n:translate="" tal:condition="context/title|nothing">
+      Access control for <span i18n:name="title"
+      tal:replace="context/title">something</span>
+  </h3>
   <fieldset>
     <legend i18n:translate="">Permissions</legend>
     <table class="acl">
       <tr>
-         <th i18n:translate="">User/Group</th>
-         <th tal:repeat="perm view/permissions"
+         <th class="principal" i18n:translate="">User/Group</th>
+         <th class="permission" tal:repeat="perm view/permissions"
              tal:content="python: perm[1]" />
       </tr>
       <tr tal:repeat="prin view/getGroups">
-         <th tal:content="prin/title">Group foo</th>
-         <td tal:repeat="perm view/permissions">
+         <th class="principal" tal:content="prin/title">Group foo</th>
+         <td class="permission" tal:repeat="perm view/permissions">
             <input
                 type="checkbox"
                 tal:attributes="name prin/id;
@@ -26,8 +32,8 @@
          </td>
       </tr>
       <tr tal:repeat="prin view/getPersons">
-         <th tal:content="prin/title">User foo</th>
-         <td tal:repeat="perm view/permissions">
+         <th class="principal" tal:content="prin/title">User foo</th>
+         <td class="permission" tal:repeat="perm view/permissions">
             <input
                 type="checkbox"
                 tal:attributes="name prin/id;

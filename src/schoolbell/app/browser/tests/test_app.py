@@ -972,42 +972,46 @@ def doctest_ACLView():
         ...
         <form method="POST" class="standalone"
               action="http://127.0.0.1">
+          <h3>
+              Access control
+          </h3>
+        ...
           <fieldset>
             <legend>Permissions</legend>
             <table class="acl">
               <tr>
-                 <th>User/Group</th>
-                 <th>View</th>
-                 <th>Manage</th>
-                 <th>Manage Site</th>
+                 <th class="principal">User/Group</th>
+                 <th class="permission">View</th>
+                 <th class="permission">Manage</th>
+                 <th class="permission">Manage Site</th>
               </tr>
               <tr>
-                 <th>office</th>
-                 <td>
+                 <th class="principal">office</th>
+                 <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="zope.View" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="zope.ManageContent" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="zope.ManageSite" />
                  </td>
               </tr>
               ...
               <tr>
-                 <th>Albert</th>
-                 <td>
+                 <th class="principal">Albert</th>
+                 <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="zope.View" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="zope.ManageContent" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="zope.ManageSite" />
                  </td>
@@ -1065,33 +1069,33 @@ def doctest_ACLView():
         <html>
         ...
               <tr>
-                 <th>office</th>
-                 <td>
+                 <th class="principal">office</th>
+                 <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="zope.View" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="zope.ManageContent" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" checked="checked"
                            name="sb.group.3" value="zope.ManageSite" />
                  </td>
               </tr>
         ...
               <tr>
-                 <th>Albert</th>
-                 <td>
+                 <th class="principal">Albert</th>
+                 <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="zope.View" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" checked="checked"
                            name="sb.person.albert"
                            value="zope.ManageContent" />
                  </td>
-                 <td>
+                 <td class="permission">
                     <input type="checkbox" checked="checked"
                            name="sb.person.albert"
                            value="zope.ManageSite" />
@@ -1154,6 +1158,7 @@ def doctest_ACLView():
         True
 
     """
+
 
 def setUpSession():
     """Set up the session machinery."""
