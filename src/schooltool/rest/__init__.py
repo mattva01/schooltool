@@ -94,7 +94,7 @@ def absoluteURL(request, obj, suffix=''):
     will be URL-quoted:
 
       >>> absoluteURL(request, obj, 'daily.html?wide=1')
-      'https://example.com:443/obj/dailt.html%3Fwide%3D1"
+      'https://example.com:443/obj/daily.html%3Fwide%3D1'
 
     Unicode paths in URLs are converted to UTF-8 and escaped properly.
 
@@ -119,7 +119,7 @@ def absoluteURL(request, obj, suffix=''):
 
 
 def absolutePath(request, obj, suffix=''):
-    u"""Return the absolute path of an object in context of request.
+    r"""Return the absolute path of an object in context of request.
 
     The difference between schooltool.component.getPath and absolutePath
     is that the former works with "physical", application-space paths while
