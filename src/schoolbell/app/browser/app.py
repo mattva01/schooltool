@@ -490,6 +490,10 @@ class ACLView(BrowserView):
         return result
 
     def update(self):
+        if 'UPDATE_SUBMIT' in self.request or 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
         if 'UPDATE_SUBMIT' in self.request:
             map = IPrincipalPermissionManager(self.context)
             auth = zapi.getUtility(IAuthentication)

@@ -1043,6 +1043,14 @@ def doctest_ACLView():
         [{'perms': ['zope.ManageSite'], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
+    The view redirects to the context's default view:
+
+        >>> request.response.getStatus()
+        302
+        >>> url = zapi.absoluteURL(app, request)
+        >>> request.response.getHeader('Location') == url
+        True
+
     If we render the form, we see the appropriate checkboxes checked:
 
         >>> request.setPrincipal(StubPrincipal())
@@ -1099,13 +1107,20 @@ def doctest_ACLView():
         >>> grants.getPermissionsForPrincipal('sb.person.marius')
         [('zope.ManageContent', PermissionSetting: Allow)]
 
+    The user does not get redirected:
+
+        >>> request.response.getStatus()
+        599
+        >>> url = zapi.absoluteURL(app, request)
+        >>> request.response.getHeader('Location')
+
+
     However, if submit was clicked, unchecked permissions are revoked,
     and new ones granted:
 
         >>> request = TestRequest(form={
         ...     'sb.group.4': 'zope.ManageSite',
         ...     'UPDATE_SUBMIT': 'Set'})
-        >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
         >>> result = view.update()
 
@@ -1113,6 +1128,26 @@ def doctest_ACLView():
         []
         >>> grants.getPermissionsForPrincipal('sb.group.4')
         [('zope.ManageSite', PermissionSetting: Allow)]
+
+    If the cancel button is hit, the changes are not applied, but the
+    browser is redirected to the default view for context:
+
+        >>> request = TestRequest(form={
+        ...     'sb.group.4': 'zope.ManageContent',
+        ...     'CANCEL': 'Cancel'})
+        >>> view = View(app, request)
+        >>> result = view.update()
+
+        >>> grants.getPermissionsForPrincipal('sb.person.marius')
+        []
+        >>> grants.getPermissionsForPrincipal('sb.group.4')
+        [('zope.ManageSite', PermissionSetting: Allow)]
+
+        >>> request.response.getStatus()
+        302
+        >>> url = zapi.absoluteURL(app, request)
+        >>> request.response.getHeader('Location') == url
+        True
 
     """
 
