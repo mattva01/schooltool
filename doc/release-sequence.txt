@@ -6,8 +6,12 @@ release.  The two things you need to decide on are the name of the
 branch and the name of the directory in the tarball.  In this case,
 the branch is called milestone4 and the directory is schooltool-m4.
 
-If there are any problems on any step, you can delete the branch and
-start again. XXX explain how to delete the branch.
+If there are any problems on any step, you can delete the branch by
+executing the following commabnd:
+
+    svn rm svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
+
+and start again.
 
 1. Make sure the SERVER_VERSION in schooltool.main is updated.
 
