@@ -658,7 +658,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
             Curtin
             """)
         imp = self.createImporter()
-        imp.importRoster(roster)
+        ok = imp.importRoster(roster)
+        self.assert_(ok)
 
         for name, group, expected in [('lorch', g1, False),
                                       ('guzman', g1, True),
@@ -667,6 +668,25 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                                       ('guzman', g2, False),
                                       ('curtin', g2, True)]:
             self.assertIsRelated(self.app['persons'][name], group, expected)
+
+    def test_importRoster_errors(self):
+        g2 = self.app['groups'].new(title="Math2 - Guzman")
+        self.assertIsRelated(self.app['persons']['curtin'], g2, False)
+        roster = dedent("""
+            Nonexistent group
+            Guzman
+            Curtin
+
+            Math2 - Guzman
+            Bogus person
+            Curtin
+            Lorch
+            """)
+        imp = self.createImporter()
+        self.failIf(imp.importRoster(roster))
+        self.assertIsRelated(self.app['persons']['curtin'], g2, False)
+        self.assertEquals(imp.errors.groups, ['Nonexistent group'])
+        self.assertEquals(imp.errors.persons, ['Bogus person'])
 
 
 def test_suite():

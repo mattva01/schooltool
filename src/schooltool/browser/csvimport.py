@@ -31,7 +31,7 @@ from schooltool.csvimport import CSVImporterBase, DataError
 from schooltool.common import parse_date
 from schooltool.component import FacetManager, getFacetFactory, relate
 from schooltool.interfaces import IApplication
-from schooltool.membership import Membership
+from schooltool.membership import Membership, memberOf
 from schooltool.teaching import Teaching
 from schooltool.timetable import TimetableActivity
 from schooltool.translation import ugettext as _
@@ -545,17 +545,31 @@ class TimetableCSVImporter:
             tt[day_id].add(period, act)
 
     def importRoster(self, roster_txt):
-        """Import timetables from provided unicode data."""
-        # TODO XXX: error handling
-        group = None
-        for line in roster_txt.splitlines():
-            line = line.strip()
-            if group is None:
-                group = self.findByTitle(self.groups, line)
-                continue
-            elif not line:
-                group = None
-                continue
-            else:
-                person = self.findByTitle(self.persons, line)
-                Membership(group=group, member=person)
+        """Import timetables from provided unicode data.
+
+        Returns True on success, False (and filled self.error) on failure.
+        """
+        for dry_run in [True, False]:
+            group = None
+            for line in roster_txt.splitlines():
+                line = line.strip()
+                if group is None:
+                    group = self.findByTitle(self.groups, line,
+                                             self.errors.groups)
+                    if group is None:
+                        group = 'Invalid'
+                    continue
+                elif not line:
+                    group = None
+                    continue
+                else:
+                    person = self.findByTitle(self.persons, line,
+                                              self.errors.persons)
+                    if not dry_run and not memberOf(person, group):
+                        Membership(group=group, member=person)
+
+            if self.errors.anyErrors():
+                assert dry_run, ("Something bad happened,"
+                                 " aborting transaction.")
+                return False
+        return True
