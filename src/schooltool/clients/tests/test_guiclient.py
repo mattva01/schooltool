@@ -1947,7 +1947,7 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
         uriobj = URIObject('http://foo', "name", "desc")
         self.assertEquals(uriobj.uri, 'http://foo')
         self.assertEquals(uriobj.name, 'name')
-        self.assertEquals(uriobj.description, 'description')
+        self.assertEquals(uriobj.description, 'desc')
 
 
 class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
