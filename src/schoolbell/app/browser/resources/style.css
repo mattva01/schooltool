@@ -172,6 +172,9 @@ div.error {
     border: 1px #663822 solid;
 }
 
+.controls {
+    margin-top: 1ex;
+}
 
 input.button-ok {
     background: #83A67F !important;
@@ -850,7 +853,6 @@ body#path-login form.standalone {
 }
 
 table.acl {
-    background: #eae8e3;
     border: none;
     border-collapse: collapse;
     width: 100%;
@@ -860,10 +862,7 @@ table.acl tr.header th {
     border-bottom: 1px solid #bab5ab;
 }
 table.acl tr.even {
-    background: #bab5ab;
-}
-
-table.acl td, table.acl th {
+    background: #d6d6d6;
 }
 
 table.acl td {
