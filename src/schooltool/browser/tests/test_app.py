@@ -111,7 +111,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
                           "text/html; charset=UTF-8")
 
     def test_post(self):
-        from schooltool.browser.auth import globalTicketService
+        from schooltool.component import getTicketService
         view = self.createView()
         request = self.createRequestWithAuthentication(method='POST',
                               args={'username': 'manager',
@@ -121,12 +121,13 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/start')
         ticket = request._outgoing_cookies['auth']
-        username, password = globalTicketService.verifyTicket(ticket)
+        username, password = \
+                  getTicketService(view.context).verifyTicket(ticket)
         self.assertEquals(username, 'manager')
         self.assertEquals(password, 'schooltool')
 
     def test_post_with_url(self):
-        from schooltool.browser.auth import globalTicketService
+        from schooltool.component import getTicketService
         view = self.createView()
         request = self.createRequestWithAuthentication(method='POST',
                               args={'username': 'manager',
@@ -137,7 +138,8 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/some/path')
         ticket = request._outgoing_cookies['auth']
-        username, password = globalTicketService.verifyTicket(ticket)
+        username, password = \
+                  getTicketService(view.context).verifyTicket(ticket)
         self.assertEquals(username, 'manager')
         self.assertEquals(password, 'schooltool')
 
@@ -184,7 +186,8 @@ class TestLogoutView(unittest.TestCase):
 
     def createView(self):
         from schooltool.browser.app import LogoutView
-        view = LogoutView(None)
+        from schooltool.app import Application
+        view = LogoutView(Application())
         return view
 
     def test_render(self):
@@ -196,10 +199,10 @@ class TestLogoutView(unittest.TestCase):
                           'http://localhost:7001/')
 
     def test_render_with_auth(self):
+        from schooltool.component import getTicketService
         from schooltool.interfaces import AuthenticationError
-        from schooltool.browser.auth import globalTicketService
         view = self.createView()
-        ticket = globalTicketService.newTicket(('usr', 'pwd'))
+        ticket = getTicketService(view.context).newTicket(('usr', 'pwd'))
         request = RequestStub(cookies={'auth': ticket})
         request.authenticate = lambda username, password: None
         result = view.render(request)
@@ -207,7 +210,7 @@ class TestLogoutView(unittest.TestCase):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/')
         self.assertRaises(AuthenticationError,
-                          globalTicketService.verifyTicket, ticket)
+                          getTicketService(view.context).verifyTicket, ticket)
 
 
 class TestStartView(unittest.TestCase):

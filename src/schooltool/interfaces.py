@@ -135,6 +135,9 @@ class IServiceAPI(Interface):
     def getTimePeriodService(context):
         """Return the global time period service."""
 
+    def getTicketService(context):
+        """Return the ticket service for authentication."""
+
 
 class IServiceManager(Interface):
     """Container of services"""
@@ -146,6 +149,8 @@ class IServiceManager(Interface):
     timetableSchemaService = Attribute("""Timetable schema service""")
 
     timePeriodService = Attribute("""Time period service""")
+
+    ticketService = Attribute("""Ticket service""")
 
 
 #

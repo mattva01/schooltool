@@ -36,9 +36,11 @@ class TestBrowserRequest(unittest.TestCase):
         from schooltool.browser import BrowserRequest
         return BrowserRequest(None, True)
 
-    def createRequestWithStubbedAuth(self, auth_cookie, user):
+    def createRequestWithStubbedAuth(self, auth_cookie, user, ts):
         from schooltool.interfaces import AuthenticationError
         request = self.createRequest()
+        request._ts = ts
+        request._getTicketService = lambda: request._ts
         def authenticate(username, password):
             if username == 'username' and password == 'password':
                 request.authenticated_user = user
@@ -55,24 +57,28 @@ class TestBrowserRequest(unittest.TestCase):
         self.assert_(request.authenticated_user is None)
 
     def test_maybeAuthenticate_auth(self):
-        from schooltool.browser.auth import globalTicketService
-        ticket = globalTicketService.newTicket(('username', 'password'))
+        from schooltool.auth import TicketService
+        ts = TicketService()
+        ticket = ts.newTicket(('username', 'password'))
         user = object()
-        request = self.createRequestWithStubbedAuth(ticket, user)
+        request = self.createRequestWithStubbedAuth(ticket, user, ts)
         request.maybeAuthenticate()
         self.assert_(request.authenticated_user is user)
 
     def test_maybeAuthenticate_password_changed(self):
-        from schooltool.browser.auth import globalTicketService
-        ticket = globalTicketService.newTicket(('username', 'oldpassword'))
+        from schooltool.auth import TicketService
+        ts = TicketService()
+        ticket = ts.newTicket(('username', 'oldpassword'))
         user = object()
-        request = self.createRequestWithStubbedAuth(ticket, user)
+        request = self.createRequestWithStubbedAuth(ticket, user, ts)
         request.maybeAuthenticate()
         self.assert_(request.authenticated_user is None)
 
     def test_maybeAuthenticate_bad_auth(self):
+        from schooltool.auth import TicketService
+        ts = TicketService()
         user = object()
-        request = self.createRequestWithStubbedAuth('faketicket', user)
+        request = self.createRequestWithStubbedAuth('faketicket', user, ts)
         request.maybeAuthenticate()
         self.assert_(request.authenticated_user is None)
 

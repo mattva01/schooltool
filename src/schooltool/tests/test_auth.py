@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.browser.auth
+Unit tests for schooltool.auth
 
 $Id$
 """
@@ -32,7 +32,7 @@ __metaclass__ = type
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite('schooltool.browser.auth'))
+    suite.addTest(DocTestSuite('schooltool.auth'))
     return suite
 
 

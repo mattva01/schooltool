@@ -28,14 +28,14 @@ from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
-from schooltool.browser.auth import ManagerAccess, globalTicketService
+from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.model import PersonView, GroupView, ResourceView
 from schooltool.browser.applog import ApplicationLogView
 from schooltool.component import getPath
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.translation import ugettext as _
-
+from schooltool.component import getTicketService
 __metaclass__ = type
 
 
@@ -83,8 +83,9 @@ class RootView(View):
             self.username = username
             return self.do_GET(request)
         else:
-            ticket = globalTicketService.newTicket((username, password),
-                                                   session_time_limit)
+            ticketService = getTicketService(self.context)
+            ticket = ticketService.newTicket((username, password),
+                                             session_time_limit)
             request.addCookie('auth', ticket)
             if 'url' in request.args:
                 url = request.args['url'][0]
@@ -125,7 +126,7 @@ class LogoutView(View):
 
     def do_GET(self, request):
         auth_cookie = request.getCookie('auth')
-        globalTicketService.expire(auth_cookie)
+        getTicketService(self.context).expire(auth_cookie)
         return self.redirect('/', request)
 
 

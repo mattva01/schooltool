@@ -243,6 +243,11 @@ def getTimePeriodService(context):
     return _getServiceManager(context).timePeriodService
 
 
+def getTicketService(context):
+    """See IServiceAPI"""
+    return _getServiceManager(context).ticketService
+
+
 #
 # Relationships
 #

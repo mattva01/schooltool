@@ -29,7 +29,7 @@ from schooltool.event import EventService
 from schooltool.component import UtilityService
 from schooltool.db import PersistentKeysSet
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
-
+from schooltool.auth import TicketService
 __metaclass__ = type
 
 
@@ -56,6 +56,9 @@ class Application(Persistent):
         self.timePeriodService = TimePeriodService()
         self.timePeriodService.__parent__ = self
         self.timePeriodService.__name__ = 'time-periods'
+        self.ticketService = TicketService()
+        self.ticketService.__parent__ = self
+        self.ticketService.__name__ = 'tickets'
         self._roots = PersistentKeysSet()
         self._appObjects = PersistentDict()
 

@@ -23,12 +23,12 @@ The schooltool.browser package.
 import os
 
 from schooltool.interfaces import AuthenticationError
+from schooltool.component import getTicketService
 from schooltool.rest import View as _View
 from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
-from schooltool.browser.auth import globalTicketService
 from schooltool.browser.auth import isManager
 
 
@@ -44,12 +44,19 @@ class BrowserRequest(Request):
 
     error_template = Template('www/error.pt')
 
+    def _getTicketService(self):
+        """Return the ticket service."""
+        root = self.zodb_conn.root()
+        app = root[self.site.rootName]
+        return getTicketService(app)
+
     def maybeAuthenticate(self):
         """Try to authenticate if the authentication cookie is there."""
         auth_cookie = self.getCookie('auth')
         if auth_cookie:
             try:
-                credentials = globalTicketService.verifyTicket(auth_cookie)
+                ticketService = self._getTicketService()
+                credentials = ticketService.verifyTicket(auth_cookie)
                 self.authenticate(*credentials)
             except AuthenticationError:
                 # Do nothing if the cookie has expired -- if the user is not
