@@ -430,6 +430,10 @@ class TimetableReplacedEvent(EventMixin):
         self.old_timetable = old_timetable
         self.new_timetable = new_timetable
 
+    def __unicode__(self):
+        return ("TimetableReplacedEvent object=%s (%s) key=%s"
+                % (getPath(self.object), self.object.title, self.key))
+
 
 class TimetableExceptionEvent(EventMixin):
 

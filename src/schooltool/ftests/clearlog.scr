@@ -1,86 +1,39 @@
 Sample functional test scenario.
 
+SchoolTool> put /utils/eventlog
+SchoolTool> .
+200 OK
+Content-Type: text/plain; charset=UTF-8
+* events cleared in /utils/eventlog
+
+SchoolTool> get /utils/eventlog
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<eventLog>
+</eventLog>
+
+
+SchoolTool> post /groups/pupils/relationships text/xml
+POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+POST>               xmlns="http://schooltool.org/ns/model/0.1"
+POST>               xlink:type="simple"
+POST>               xlink:arcrole="http://schooltool.org/ns/membership"
+POST>               xlink:role="http://schooltool.org/ns/membership/group"
+POST>               xlink:href="/persons/Marius"/>
+POST> .
+201 Created
+Content-Type: text/plain; charset=UTF-8
+Relationship created: http://localhost:8813/groups/pupils/relationships/0003
+
 SchoolTool> get /utils/eventlog
 200 OK
 Content-Type: text/xml; charset=UTF-8
 <eventLog>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
-    title='System Managers'
-    link='http://schooltool.org/ns/membership/group', '/groups/managers'
-    link='http://schooltool.org/ns/membership/member', '/persons/manager'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
-    link='http://schooltool.org/ns/membership/member', '/groups/managers'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
-    link='http://schooltool.org/ns/membership/member', '/groups/teachers'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
-    link='http://schooltool.org/ns/membership/member', '/groups/pupils'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
-    link='http://schooltool.org/ns/membership/member', '/groups/students'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
-    link='http://schooltool.org/ns/membership/member', '/groups/cleaners'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Teachers'
-    link='http://schooltool.org/ns/membership/group', '/groups/teachers'
-    link='http://schooltool.org/ns/membership/member', '/persons/Mark'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Teachers'
-    link='http://schooltool.org/ns/membership/group', '/groups/teachers'
-    link='http://schooltool.org/ns/membership/member', '/persons/Steve'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Students'
-    link='http://schooltool.org/ns/membership/group', '/groups/students'
-    link='http://schooltool.org/ns/membership/member', '/persons/Aiste'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Cleaners'
-    link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
-    link='http://schooltool.org/ns/membership/member', '/persons/Albert'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
-    title='Cleaners'
-    link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
-    link='http://schooltool.org/ns/membership/member', '/persons/Marius'
-</event>
-  <event ts="*">RelationshipAddedEvent
-    reltype='http://schooltool.org/ns/teaching'
-    title='Steve'
-    link='http://schooltool.org/ns/teaching/teacher', '/persons/Steve'
-    link='http://schooltool.org/ns/teaching/taught', '/groups/students'
-</event>
-  <event ts="*">MemberAddedEvent
-    reltype='http://schooltool.org/ns/membership'
     title='Pupils'
     link='http://schooltool.org/ns/membership/group', '/groups/pupils'
-    link='http://schooltool.org/ns/membership/member', '/persons/Mark'
+    link='http://schooltool.org/ns/membership/member', '/persons/Marius'
 </event>
 </eventLog>
 
@@ -89,12 +42,6 @@ SchoolTool> put /utils/eventlog
 SchoolTool> .
 200 OK
 Content-Type: text/plain; charset=UTF-8
-13 events cleared in /utils/eventlog
+1 event cleared in /utils/eventlog
 
-SchoolTool> get /utils/eventlog
-200 OK
-Content-Type: text/xml; charset=UTF-8
-<eventLog>
-</eventLog>
-
-
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:
