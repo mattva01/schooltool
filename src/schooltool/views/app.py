@@ -34,6 +34,7 @@ from schooltool.views import TraversableView
 from schooltool.views import absoluteURL, notFoundPage, textErrorPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
+from schooltool.views.csvexport import CSVExporter
 from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date
 from schooltool.schema.rng import validate_against_schema
@@ -57,6 +58,8 @@ class ApplicationView(TraversableView):
             return AllCalendarsView(self.context)
         elif name == 'busysearch':
             return AvailabilityQueryView(self.context)
+        elif name == 'csvexport.zip':
+            return CSVExporter(self.context)
         else:
             return TraversableView._traverse(self, name, request)
 

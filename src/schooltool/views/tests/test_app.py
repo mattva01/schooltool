@@ -119,6 +119,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.utility import UtilityServiceView
         from schooltool.views.timetable import SchoolTimetableTraverseView
         from schooltool.views.cal import AllCalendarsView
+        from schooltool.views.csvexport import CSVExporter
         request = RequestStub("http://localhost/groups")
         view = self.view._traverse('groups', request)
         self.assert_(view.__class__ is ApplicationObjectContainerView)
@@ -137,6 +138,10 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         view = self.view._traverse('busysearch', request)
         self.assert_(view.__class__ is AvailabilityQueryView)
+        self.assert_(view.context is self.view.context)
+
+        view = self.view._traverse('csvexport.zip', request)
+        self.assert_(view.__class__ is CSVExporter)
         self.assert_(view.context is self.view.context)
 
 

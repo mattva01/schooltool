@@ -164,6 +164,9 @@ SchoolTool server RESTive interface
     books a resource. An event is added to the calendars of a resource
     and of a person booking.
 
+  GET /csvexport.zip
+    returns a zip with four csv files, suitable for importing with csvclient.
+
 In the above '...object' stands for a full path to an application object (i.e.
 a group, a person or a resource), for example '/persons/some_person_id'.
 

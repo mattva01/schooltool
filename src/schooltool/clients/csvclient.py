@@ -215,7 +215,7 @@ class CSVImporter:
         return result
 
     def importTeacher(self, name, taught):
-        """Adds a pupil to the groups.  Need a name (generated path
+        """Adds a teacher to the groups.  Need a name (generated path
         element), so it is separate from importPerson()
         """
         result = []
