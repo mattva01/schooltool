@@ -1076,6 +1076,78 @@ class TestSetUpModules(unittest.TestCase):
         self.assert_(was_set_up)
 
 
+class TestTimeFormatting(unittest.TestCase):
+
+    def setUp(self):
+        self.have_tzset = hasattr(time, 'tzset')
+        self.touched_tz = False
+        self.old_tz = os.getenv('TZ')
+
+    def tearDown(self):
+        if self.touched_tz:
+            self.setTZ(self.old_tz)
+
+    def setTZ(self, tz):
+        self.touched_tz = True
+        if tz is None:
+            os.unsetenv('TZ')
+        else:
+            os.putenv('TZ', tz)
+        time.tzset()
+
+    def test_with_regex(self):
+        from schooltool.main import formatHitTime
+
+        rx = re.compile(r'^\d{2}/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov'
+                        r'|Dec)/\d{4}:\d{2}:\d{2}:\d{2} [-+]\d{4}$')
+        s = formatHitTime()
+        m = rx.match(s)
+        self.assert_(m is not None,
+                     "%r does not match the regex for timestamps" % s)
+
+    def test_default_arg(self):
+        from schooltool.main import formatHitTime
+
+        # The 'seconds' argument is the traditional time_t value that defaults
+        # to time.time() if not specified explicitly.
+
+        def date_part(s):
+            return s.split(':')[0]
+
+        self.assertEquals(date_part('01/Apr/2003:14:44:34 +0100'),
+                          '01/Apr/2003')
+
+        # There is a small race in the following test, expect if to fail
+        # occasionally if you run it at midnight.
+
+        self.assertEquals(date_part(formatHitTime()),
+                          date_part(formatHitTime(time.time())))
+
+    def test_in_unix_timezones(self):
+        from schooltool.main import formatHitTime
+
+        if not self.have_tzset:
+            return # skipping this test on Windows
+
+        self.setTZ('UTC')
+        self.assertEquals(formatHitTime(0),
+                          '01/Jan/1970:00:00:00 +0000')
+        self.assertEquals(formatHitTime(1083251124),
+                          '29/Apr/2004:15:05:24 +0000')
+
+        self.setTZ('EET-2EEST')
+        self.assertEquals(formatHitTime(1083251124),
+                          '29/Apr/2004:18:05:24 +0300')
+        self.assertEquals(formatHitTime(1075475124),
+                          '30/Jan/2004:17:05:24 +0200')
+
+        self.setTZ('EST+5EDT')
+        self.assertEquals(formatHitTime(1083251124),
+                          '29/Apr/2004:11:05:24 -0400')
+        self.assertEquals(formatHitTime(1075475124),
+                          '30/Jan/2004:10:05:24 -0500')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.main'))
@@ -1084,6 +1156,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRequest))
     suite.addTest(unittest.makeSuite(TestServer))
     suite.addTest(unittest.makeSuite(TestSetUpModules))
+    suite.addTest(unittest.makeSuite(TestTimeFormatting))
     return suite
 
 if __name__ == '__main__':
