@@ -30,8 +30,7 @@ from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.uris import URIMembership, URIGroup
-from schooltool.uris import URITeaching, URITaught, URITeacher
+from schooltool.uris import URIMembership, URIGroup # TODO: remove dependency
 
 __metaclass__ = type
 
@@ -567,7 +566,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.method, "DELETE")
 
     def test_getObjectRelationships(self):
-        from schooltool.clients.guiclient import RelationshipInfo, URIObject
+        from schooltool.clients.guiclient import RelationshipInfo
+        from schooltool.uris import URIObject
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -595,10 +595,10 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         role1 = URIObject('test://role1')
         client.uriobjects = {arcrole1.uri: arcrole1, role1: role1}
         results = list(client.getObjectRelationships(group_id))
-        expected = [RelationshipInfo(*args) for args in [
-                (arcrole1, role1, 'title1', 'href1', 'mhref1'),
-                (URIMembership, URIGroup, 'title2', 'href2', 'mhref2')]
-                    ]
+        expected = [RelationshipInfo(arcrole1, role1,
+                                     'title1', 'href1', 'mhref1'),
+                    RelationshipInfo(URIMembership, URIGroup,
+                                     'title2', 'href2', 'mhref2')]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '%s/relationships' % group_id)
 
@@ -1940,6 +1940,15 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
         self._test_cmp(ResourceTimeSlot, 4,
                        ('resource_title', 'resource_path', 'available_from'))
 
+    def test_URIObject(self):
+        from schooltool.clients.guiclient import URIObject
+        uriobj = URIObject('http://foo')
+        self.assertEquals(uriobj.uri, 'http://foo')
+        uriobj = URIObject('http://foo', "name", "desc")
+        self.assertEquals(uriobj.uri, 'http://foo')
+        self.assertEquals(uriobj.name, 'name')
+        self.assertEquals(uriobj.description, 'description')
+
 
 class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
 
@@ -2169,6 +2178,8 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
     def test_setTeacherRelationships(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
         from schooltool.clients.guiclient import RelationshipInfo
+        from schooltool.clients.guiclient import URITeaching, URITaught
+        from schooltool.uris import URITeacher
         st = SchoolTimetableInfo([('/path1', None, None),
                                   ('/path2', None, None)])
         st.setTeacherRelationships(0, [

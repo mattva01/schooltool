@@ -34,7 +34,7 @@ import cgi
 
 from schooltool.interfaces import ComponentLookupError
 # TODO: Remove dependency on schooltool.uris.
-from schooltool.uris import URIObject, URITeaching, URITaught, isURI
+from schooltool.uris import URITeaching, URITaught, isURI
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
@@ -752,22 +752,20 @@ def _parseRelationships(body, uriobjects):
         relationships = []
         for node in res:
             href = to_unicode(node.nsProp('href', xlink))
-            role = to_unicode(node.nsProp('role', xlink))
-            arcrole = to_unicode(node.nsProp('arcrole', xlink))
-            if not href or not isURI(role) or not isURI(arcrole):
+            role_uri = to_unicode(node.nsProp('role', xlink))
+            arcrole_uri = to_unicode(node.nsProp('arcrole', xlink))
+            if not href or not isURI(role_uri) or not isURI(arcrole_uri):
                 continue
             title = to_unicode(node.nsProp('title', xlink))
             if title is None:
                 title = href.split('/')[-1]
             try:
-                role = uriobjects[role]
+                role = uriobjects[role_uri]
             except KeyError:
-                role_uri = role
                 role = uriobjects[role_uri] = URIObject(role_uri)
             try:
-                arcrole = uriobjects[arcrole]
+                arcrole = uriobjects[arcrole_uri]
             except KeyError:
-                arcrole_uri = arcrole
                 arcrole = uriobjects[arcrole_uri] = URIObject(arcrole_uri)
             ctx.setContextNode(node)
             manage_nodes = ctx.xpathEval("manage/@xlink:href")
@@ -1108,7 +1106,15 @@ def _parseURIList(body):
 Unchanged = "Unchanged"
 
 
-# TODO: URIObject
+class URIObject:
+    """An object that represents an URI."""
+
+    def __init__(self, uri, name=None, description=''):
+        self.uri = uri
+        self.name = name
+        self.description = description
+        # TODO: validation?
+
 
 class PersonInfo:
     """An object containing the data for a person"""
