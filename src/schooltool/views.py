@@ -800,7 +800,8 @@ class RollcallView(View):
             _already_added = sets.Set()
         results = []
         for member in getRelatedObjects(group, URIMember):
-            if IPerson.isImplementedBy(member) and member not in _already_added:
+            if (IPerson.isImplementedBy(member)
+                and member not in _already_added):
                 absence = member.getCurrentAbsence()
                 if absence is None:
                     presence = "present"

@@ -199,7 +199,8 @@ class SchoolToolClient:
             raise SchoolToolError("%d %s" % (response.status, response.reason))
         return self._parseRollCall(response.read())
 
-    def submitRollCall(self, group_id, rollcall, reporter_id='/persons/anonymous'):
+    def submitRollCall(self, group_id, rollcall,
+                       reporter_id='/persons/anonymous'):
         """Post a roll call for a group."""
         body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n'
                 '<reporter xlink:type="simple" xlink:href="%s"/>\n'

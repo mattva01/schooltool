@@ -25,6 +25,7 @@ import httplib
 import csv
 import sys
 
+
 class HTTPClient:
 
     http = httplib.HTTPConnection
@@ -129,7 +130,7 @@ class CSVImporter:
             print response.read()
             sys.exit(1)
         return response
-    
+
     def run(self):
         print
         print "Creating groups... "

@@ -76,7 +76,6 @@ def createGroups():
     f.close()
 
 
-
 def createPupils(nr=nr_pupils):
 
     f = open("pupils.csv", "w")

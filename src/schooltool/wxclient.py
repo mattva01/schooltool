@@ -159,7 +159,8 @@ class RollCallDlg(wxDialog):
             radio_sizer.Add(rbutton1)
             radio_sizer.Add(rbutton2)
             grid.Add(radio_sizer)
-            self.items.append((href, abutton1, abutton2, text_ctrl, rbutton1, rbutton2))
+            self.items.append((href, abutton1, abutton2, text_ctrl, rbutton1,
+                               rbutton2))
         scrolled_panel.SetSizer(grid)
         scrolled_panel.SetupScrolling(scroll_x=False)
         grid.AddGrowableCol(3)
@@ -183,12 +184,12 @@ class RollCallDlg(wxDialog):
 
     def getRollCall(self):
         rollcall = []
-        for href, absent, present, comment, resolve, dont_resolve in self.items:
+        for href, absent, present, comment, resolve, dontresolve in self.items:
             if absent.GetValue() == present.GetValue():
                 presence = None   # XXX both unchecked, raise havoc
             else:
                 presence = present.GetValue()
-            if resolve.GetValue() == dont_resolve.GetValue():
+            if resolve.GetValue() == dontresolve.GetValue():
                 resolved = None   # XXX both unchecked, raise havoc
             else:
                 resolved = resolve.GetValue()

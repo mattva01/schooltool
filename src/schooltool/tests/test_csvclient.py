@@ -24,8 +24,6 @@ $Id$
 
 import unittest
 import socket
-import sys
-from StringIO import StringIO
 from helpers import diff
 from pprint import pformat
 

@@ -103,6 +103,7 @@ class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
     def __repr__(self):
         return "<Group object %s at 0x%x>" % (self.title, id(self))
 
+
 class Absence(Persistent):
 
     implements(IAbsence)
