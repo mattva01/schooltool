@@ -37,8 +37,13 @@
               <tal:block condition="not: repeat/view/end">|</tal:block>
             </span>
           </td>
-          <td align="right">
-            <a href="@@login.html">Log in</a>
+          <td align="right"
+              tal:define="loggedin nothing;
+                          url context/schoolbell:app/@@absolute_url">
+            <a tal:condition="not:loggedin"
+               tal:attributes="href string:${url}/@@login.html">Log in</a>
+            <a tal:condition="loggedin"
+               tal:attributes="href string:${url}/@@logout.html">Log out</a>
           </td>
         </tr>
         </table>
