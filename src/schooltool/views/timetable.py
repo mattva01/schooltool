@@ -35,6 +35,7 @@ from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.views.auth import PublicAccess
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.common import to_unicode
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, getPath, traverse
@@ -186,24 +187,24 @@ class TimetableReadWriteView(TimetableReadView):
                 return textErrorPage(request,
                              _("Timetable schema not defined: %s") % schema_id)
             for day in xpathctx.xpathEval('/tt:timetable/tt:day'):
-                day_id = day.nsProp('id', None)
+                day_id = to_unicode(day.nsProp('id', None))
                 if day_id not in tt.keys():
                     return textErrorPage(request,
                                          _("Unknown day id: %r") % day_id)
                 ttday = tt[day_id]
                 xpathctx.setContextNode(day)
                 for period in xpathctx.xpathEval('tt:period'):
-                    period_id = period.nsProp('id', None)
+                    period_id = to_unicode(period.nsProp('id', None))
                     if period_id not in ttday.periods:
                         return textErrorPage(request,
                                      _("Unknown period id: %r") % period_id)
                     xpathctx.setContextNode(period)
                     for activity in xpathctx.xpathEval('tt:activity'):
-                        title = activity.nsProp('title', None)
+                        title = to_unicode(activity.nsProp('title', None))
                         resources = []
                         xpathctx.setContextNode(activity)
                         for resource in xpathctx.xpathEval('tt:resource'):
-                            path = resource.nsProp('href', xlink)
+                            path = to_unicode(resource.nsProp('href', xlink))
                             try:
                                 res = traverse(self.timetabled, path)
                             except KeyError:
@@ -326,26 +327,26 @@ class TimetableSchemaView(TimetableReadView):
             ns = 'http://schooltool.org/ns/timetable/0.1'
             xpathctx.xpathRegisterNs('tt', ns)
             days = xpathctx.xpathEval('/tt:timetable/tt:day')
-            day_ids = [day.nsProp('id', None) for day in days]
+            day_ids = [to_unicode(day.nsProp('id', None)) for day in days]
 
             templates = xpathctx.xpathEval(
                 '/tt:timetable/tt:model/tt:daytemplate')
             template_dict = {}
             model_node = xpathctx.xpathEval('/tt:timetable/tt:model')[0]
-            factory_id = model_node.nsProp('factory', None)
+            factory_id = to_unicode(model_node.nsProp('factory', None))
             try:
                 factory = getTimetableModel(factory_id)
             except KeyError:
                 return textErrorPage(request,
                                      _("Incorrect timetable model factory"))
             for template in templates:
-                dayid = template.nsProp('id', None)
+                dayid = to_unicode(template.nsProp('id', None))
                 xpathctx.setContextNode(template)
                 day = SchooldayTemplate()
                 for period in xpathctx.xpathEval('tt:period'):
-                    pid = period.nsProp('id', None)
-                    tstart_str = period.nsProp('tstart', None)
-                    dur_str = period.nsProp('duration', None)
+                    pid = to_unicode(period.nsProp('id', None))
+                    tstart_str = to_unicode(period.nsProp('tstart', None))
+                    dur_str = to_unicode(period.nsProp('duration', None))
                     try:
                         h, m = [int(s) for s in tstart_str.split(":")]
                         dur = int(dur_str)
@@ -354,7 +355,8 @@ class TimetableSchemaView(TimetableReadView):
                             datetime.timedelta(minutes=dur)))
                     except ValueError:
                         return textErrorPage(request, _("Bad period"))
-                used = xpathctx.xpathEval('tt:used')[0].nsProp('when', None)
+                used = to_unicode(
+                        xpathctx.xpathEval('tt:used')[0].nsProp('when', None))
                 if used == 'default':
                     template_dict[None] = day
                 else:
@@ -371,9 +373,9 @@ class TimetableSchemaView(TimetableReadView):
             timetable = Timetable(day_ids)
             timetable.model = model
             for day in days:
-                day_id = day.nsProp('id', None)
+                day_id = to_unicode(day.nsProp('id', None))
                 xpathctx.setContextNode(day)
-                period_ids = [period.nsProp('id', None)
+                period_ids = [to_unicode(period.nsProp('id', None))
                               for period in xpathctx.xpathEval('tt:period')]
                 if len(sets.Set(period_ids)) != len(period_ids):
                     return textErrorPage(request,
@@ -569,7 +571,7 @@ class SchoolTimetableView(View):
             schema = service[self.key[1]]
             groups = {}
             for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-                path = teacher_node.nsProp('path', None)
+                path = to_unicode(teacher_node.nsProp('path', None))
                 try:
                     teacher = traverse(self.context, path)
                 except KeyError:
@@ -612,21 +614,21 @@ class SchoolTimetableView(View):
     def _walkXml(self, xpathctx, schema, timetables, groups):
         xlink = "http://www.w3.org/1999/xlink"
         for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-            teacher_path = teacher_node.nsProp('path', None)
+            teacher_path = to_unicode(teacher_node.nsProp('path', None))
             xpathctx.setContextNode(teacher_node)
             for day in xpathctx.xpathEval('st:day'):
-                day_id = day.nsProp('id', None)
+                day_id = to_unicode(day.nsProp('id', None))
                 if day_id not in schema.keys():
                     raise ViewError(_("Unknown day id: %r") % day_id)
                 xpathctx.setContextNode(day)
                 for period in xpathctx.xpathEval('st:period'):
-                    period_id = period.nsProp('id', None)
+                    period_id = to_unicode(period.nsProp('id', None))
                     if period_id not in schema[day_id].periods:
                         raise ViewError(_("Unknown period id: %r") % period_id)
                     xpathctx.setContextNode(period)
                     for activity in xpathctx.xpathEval('st:activity'):
-                        path = activity.nsProp('group', None)
-                        title = activity.nsProp('title', None)
+                        path = to_unicode(activity.nsProp('group', None))
+                        title = to_unicode(activity.nsProp('title', None))
                         if path not in timetables:
                             raise ViewError(_("Invalid group: %s") % path)
                         group = traverse(self.context, path)
@@ -637,7 +639,7 @@ class SchoolTimetableView(View):
                         resources = []
                         xpathctx.setContextNode(activity)
                         for resource in xpathctx.xpathEval('st:resource'):
-                            rpath = resource.nsProp('href', xlink)
+                            rpath = to_unicode(resource.nsProp('href', xlink))
                             try:
                                 res = traverse(self.context, rpath)
                             except KeyError:

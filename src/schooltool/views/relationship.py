@@ -32,6 +32,7 @@ from schooltool.views import absoluteURL
 from schooltool.views.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
+from schooltool.common import to_unicode
 
 __metaclass__ = type
 
@@ -83,9 +84,9 @@ class RelationshipsView(View):
             xlink = 'http://www.w3.org/1999/xlink'
             xpathctx.xpathRegisterNs('xlink', xlink)
             node = xpathctx.xpathEval('/m:relationship')[0]
-            type = node.nsProp('arcrole', xlink)
-            role = node.nsProp('role', xlink)
-            path = node.nsProp('href', xlink)
+            type = to_unicode(node.nsProp('arcrole', xlink))
+            role = to_unicode(node.nsProp('role', xlink))
+            path = to_unicode(node.nsProp('href', xlink))
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()

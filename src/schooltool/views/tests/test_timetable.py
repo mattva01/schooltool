@@ -675,9 +675,9 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.do_test_error(xml=self.invalid_xml,
                            message="Timetable not valid according to schema")
         self.do_test_error(xml=self.unknown_day_xml,
-                           message="Unknown day id: 'Day 3'")
+                           message="Unknown day id: u'Day 3'")
         self.do_test_error(xml=self.unknown_period_xml,
-                           message="Unknown period id: 'X'")
+                           message="Unknown period id: u'X'")
         self.do_test_error(xml=self.nonexistent_resource_xml,
                            message="Invalid path: /resources/moon")
 

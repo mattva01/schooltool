@@ -40,7 +40,7 @@ from schooltool.views import read_file
 from schooltool.views import absoluteURL, textErrorPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import TeacherAccess, isManager
-from schooltool.common import parse_datetime
+from schooltool.common import parse_datetime, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 
@@ -102,7 +102,7 @@ class RollCallView(View):
 
             res = ctx.xpathEval("/rollcall/@datetime")
             if res:
-                dt = parse_datetime(res[0].content)
+                dt = parse_datetime(to_unicode(res[0].content))
             else:
                 dt = None
 
@@ -110,7 +110,7 @@ class RollCallView(View):
             if not res:
                 reporter = request.authenticated_user
             else:
-                path = res[0].content
+                path = to_unicode(res[0].content)
                 try:
                     reporter = traverse(self.context, path)
                 except KeyError:
@@ -127,7 +127,7 @@ class RollCallView(View):
             seen = sets.Set()
             members = sets.Set([item['href'] for item in self.listPersons()])
             for node in ctx.xpathEval("/rollcall/person"):
-                path = node.nsProp('href', xlink)
+                path = to_unicode(node.nsProp('href', xlink))
                 if path is None:
                     raise ValueError("Person does not specify xlink:href")
                 if path in seen:
@@ -139,17 +139,17 @@ class RollCallView(View):
                                      % (path, getPath(self.context)))
                 person = traverse(self.context, path)
                 try:
-                    present = presence[node.nsProp('presence', None)]
+                    present = presence[to_unicode(node.nsProp('presence', None))]
                 except KeyError:
                     raise ValueError("Bad presence value for %s" % path)
                 try:
-                    resolved = resolvedness[node.nsProp('resolved', None)]
+                    resolved = resolvedness[to_unicode(node.nsProp('resolved', None))]
                 except KeyError:
                     raise ValueError("Bad resolved value for %s" % path)
                 if resolved is True and not present:
                     raise ValueError("Cannot resolve an absence for absent"
                                      " person %s" % path)
-                text = node.nsProp('comment', None)
+                text = to_unicode(node.nsProp('comment', None))
                 items.append((person, present, resolved, text))
             if seen != members:
                 missing = list(members - seen)
@@ -204,11 +204,11 @@ class AbsenceCommentParser:
             xpathctx.xpathRegisterNs('m', ns)
             node = xpathctx.xpathEval('/m:absencecomment')[0]
 
-            text = node.nsProp('text', None)
+            text = to_unicode(node.nsProp('text', None))
             if text is None:
                 raise ValueError("Text attribute missing")
 
-            reporter_path = node.nsProp('reporter', None)
+            reporter_path = to_unicode(node.nsProp('reporter', None))
             if reporter_path is None:
                 raise ValueError("Reporter attribute missing")
 
@@ -217,11 +217,11 @@ class AbsenceCommentParser:
             except KeyError:
                 raise ValueError("Reporter not found: %s" % reporter_path)
 
-            dt = node.nsProp('datetime', None)
+            dt = to_unicode(node.nsProp('datetime', None))
             if dt is not None:
                 dt = parse_datetime(dt)
 
-            absent_from_path = node.nsProp('absent_from', None)
+            absent_from_path = to_unicode(node.nsProp('absent_from', None))
             if absent_from_path is not None:
                 try:
                     absent_from = traverse(self.context, absent_from_path)
@@ -230,7 +230,7 @@ class AbsenceCommentParser:
             else:
                 absent_from = None
 
-            ended = node.nsProp('ended', None)
+            ended = to_unicode(node.nsProp('ended', None))
             if ended is None:
                 ended = Unchanged
             else:
@@ -239,7 +239,7 @@ class AbsenceCommentParser:
                     raise ValueError("Bad value for ended", ended)
                 ended = d[ended]
 
-            resolved = node.nsProp('resolved', None)
+            resolved = to_unicode(node.nsProp('resolved', None))
             if resolved is None:
                 resolved = Unchanged
             else:
@@ -248,7 +248,7 @@ class AbsenceCommentParser:
                     raise ValueError("Bad value for resolved", resolved)
                 resolved = d[resolved]
 
-            expected_presence = node.nsProp('expected_presence', None)
+            expected_presence = to_unicode(node.nsProp('expected_presence', None))
             if expected_presence is None:
                 expected_presence = Unchanged
             else:

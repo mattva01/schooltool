@@ -773,7 +773,7 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
         cases = [
             (nonxml, "Not valid XML"),
             (bad_xml, "Input not valid according to schema"),
-            (bad_path_xml, "Invalid path: '/persons/000001'"),
+            (bad_path_xml, "Invalid path: u'/persons/000001'"),
             (bad_date_xml, "'start' argument incorrect"),
             (bad_dur_xml, "'duration' argument incorrect"),
             (bad_owner_xml, "'owner' in not an ApplicationObject."),

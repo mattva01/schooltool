@@ -30,6 +30,7 @@ from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.tests.helpers import diff, dedent
 from schooltool.views.tests import RequestStub
 from schooltool.views.tests import TraversableStub, TraversableRoot, setPath
+from schooltool.common import to_unicode
 
 __metaclass__ = type
 
@@ -62,14 +63,14 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
         # The very minimum
         request = RequestStub(body="""
             <absencecomment xmlns="http://schooltool.org/ns/model/0.1"
-                        text="Foo"
+                        text="Foo \xe2\x9c\xb0"
                         reporter="/persons/john"
                         />
                     """)
         lower_limit = datetime.datetime.utcnow()
         comment = parser.parseComment(request)
         upper_limit = datetime.datetime.utcnow()
-        self.assertEquals(comment.text, "Foo")
+        self.assertEquals(comment.text, u"Foo \u2730")
         self.assertEquals(comment.reporter, john)
         self.assert_(lower_limit <= comment.datetime <= upper_limit)
         self.assert_(comment.absent_from is None)
@@ -80,7 +81,7 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
         # Everything
         request = RequestStub(body="""
             <absencecomment xmlns="http://schooltool.org/ns/model/0.1"
-                        text="Foo"
+                        text="Foo \xe2\x9c\xb0"
                         reporter="/persons/john"
                         absent_from="/groups/aa"
                         ended="ended"
@@ -89,7 +90,7 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
                         expected_presence="2005-05-05 05:05:05" />
                     """)
         comment = parser.parseComment(request)
-        self.assertEquals(comment.text, "Foo")
+        self.assertEquals(comment.text, u"Foo \u2730")
         self.assertEquals(comment.reporter, john)
         self.assertEquals(comment.absent_from, group)
         self.assertEquals(comment.ended, True)
@@ -340,7 +341,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         basepath = "/person/absences/001/"
         baseurl = "http://localhost" + basepath
         body = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
-                     text="Foo" reporter="." />'''
+                     text="Foo \xe2\x9c\xb0" reporter="." />'''
         request = RequestStub(baseurl[:-1], method="POST", body=body)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
@@ -350,7 +351,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
-        self.assertEquals(comment.text, "Foo")
+        self.assertEquals(comment.text, u"Foo \u2730")
 
     def test_post_errors(self):
         from schooltool.views.absence import AbsenceView

@@ -36,7 +36,7 @@ from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
 from schooltool.views.auth import isManager
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period
-from schooltool.common import parse_date, parse_datetime
+from schooltool.common import parse_date, parse_datetime, to_unicode
 from schooltool.component import getPath, traverse
 from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
@@ -170,16 +170,17 @@ class SchooldayModelCalendarView(View):
             xpathctx.xpathRegisterNs('tt', ns)
             schooldays = xpathctx.xpathEval('/tt:schooldays')[0]
             try:
-                first = parse_date(schooldays.nsProp('first', None))
-                last = parse_date(schooldays.nsProp('last', None))
-                holidays = [parse_date(node.content)
+                first = parse_date(to_unicode(schooldays.nsProp('first', None)))
+                last = parse_date(to_unicode(schooldays.nsProp('last', None)))
+                holidays = [parse_date(to_unicode(node.content))
                             for node in xpathctx.xpathEval(
                                             '/tt:schooldays/tt:holiday/@date')]
             except ValueError, e:
                 return textErrorPage(request, str(e))
             try:
                 node = xpathctx.xpathEval('/tt:schooldays/tt:daysofweek')[0]
-                dows = [self._dow_map[d] for d in node.content.split()]
+                dows = [self._dow_map[d]
+                        for d in to_unicode(node.content).split()]
             except KeyError, e:
                 return textErrorPage(request, str(e))
         finally:
@@ -328,7 +329,7 @@ class BookingView(View):
             xpathctx.xpathRegisterNs('cal', ns)
 
             owner_node = xpathctx.xpathEval('/cal:booking/cal:owner')[0]
-            owner_path = owner_node.nsProp('path', None)
+            owner_path = to_unicode(owner_node.nsProp('path', None))
             try:
                 owner = traverse(self.context, owner_path)
             except KeyError:
@@ -343,8 +344,8 @@ class BookingView(View):
                                                 "for yourself"))
 
             resource_node = xpathctx.xpathEval('/cal:booking/cal:slot')[0]
-            start_str = resource_node.nsProp('start', None)
-            dur_str = resource_node.nsProp('duration', None)
+            start_str = to_unicode(resource_node.nsProp('start', None))
+            dur_str = to_unicode(resource_node.nsProp('duration', None))
             try:
                 arg = 'start'
                 start = parse_datetime(start_str)
@@ -354,7 +355,7 @@ class BookingView(View):
                 return textErrorPage(request, _("%r argument incorrect") % arg)
             force = False
             booking_node = xpathctx.xpathEval('/cal:booking')[0]
-            if booking_node.nsProp('conflicts', None) == 'ignore':
+            if to_unicode(booking_node.nsProp('conflicts', None)) == 'ignore':
                 force = True
             if not force:
                 p = Period(start, duration)
