@@ -4,6 +4,8 @@ SchoolTool server RESTive interface
 This is a brief list of all actions accessible through the RESTive interface
 to the SchoolTool server.
 
+XXX Mention guardians, residences
+
   GET /
     lists all application object containers, roots, utilities
 

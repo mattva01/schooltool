@@ -4,26 +4,30 @@ Relationships
 Overview
 --------
 
-* relationships making arbitrary links between objects
+XXX This "overview" is a mess!
 
-* constraints that relationships shall / should exist
+* relationships create arbitrary links between objects
+
+* valencies are constraints that relationships may exist
 
 * never see a relationship as such, only links
+XXX Fragment.
 
 * links are traversable, semantics given by a role
 
 * roles described by URIs. In python, interfaces that extend SpecificURI.
+XXX Fragment.
 
-* URIs don't have a strong concept of implication / extension like interfaces
-  do, so we'll agree not to use that for now.
+* URIs don't have a strong concept of implication / extension like
+  interfaces do, so we'll agree not to use that for now.
 
 * Relationships may imply a facet. For example, a person who is the Tutor
-  of a registration class will receive a RegistratonClassTutor facet.
+  of a registration class will receive a RegistrationClassTutor facet.
 
-* Events are issued on making and breaking a relationship. These events are
-  used for the management of facets, but can be used for other things.
+* Events are issued on creating and breaking a relationship. These
+  events are used for the management of facets, but can be used for
+  other things as well.
 
-(Idea: make event interfaces be SpecificURIs also perhaps.)
 
 Glossary
 --------

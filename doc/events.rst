@@ -4,7 +4,7 @@ Events
 Overview
 --------
 
-The events system is an important part of schooltool. Configuring the route
+The event system is an important part of schooltool. Configuring the route
 events take around the system, and what objects take action based on events,
 is how we represent the way that information and the need for action is
 communicated in real life.
@@ -16,6 +16,8 @@ of objects. (For example, all teachers who are class tutors need to note
 when pupils are absent for several consecutive registrations.)
 
 XXX: talk about facets, relationships and events.
+
+XXX: Mention Zope3 events, adapter-based subscriptions.
 
 See code
 --------

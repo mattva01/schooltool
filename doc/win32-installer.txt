@@ -1,6 +1,8 @@
 Creating a user-friendly Windows installer of SchoolTool clients
 ================================================================
 
+XXX As wxclient is deprecated, this document is no longer useful.
+
 First, make sure that py2exe[1] and Nullsoft Scriptable Install System[2] are
 installed.
 

@@ -67,7 +67,7 @@ Dangling references
 
 There is a danger of dangling references. This is unimportant in the case of
 capabilities stored on objects. This is handled when capabilities are stored
-on the principal because in schooltool capabilities are installed in a
+on the principal because in schooltool capabilities are installed on a
 principal as a consequence of relationships, and are removed when the
 relationship is broken.
 
@@ -77,6 +77,8 @@ Attribute access
 
 Let's say we have an object O that is wrapped in a capability CO.
 I want to get an attribute named 'foo' from CO.
+
+XXX Hard to grasp -- real-life objects should be used as examples.
 
 1. Client code says: myfoo = CO.foo
 2. CO either allows or forbids access to 'foo'.
@@ -93,7 +95,7 @@ I want to get an attribute named 'foo' from CO.
    Perhaps raise some kind of error.
 
 
-The search
+Searching
 ----------
 
 A capability can be looked for
@@ -111,7 +113,7 @@ is chosen, through a table on the mediating capability:
 
 :predicate: capability tag
 
-(Note, the table is on the mediating capability, not on the mediating
+(Note that the table is on the mediating capability, not on the mediating
 capability's object.)
 
 Thus, we can get a different capability by getting the same returned value
@@ -134,7 +136,7 @@ O may have a capabilities table. This is a table of
 
 :capability tag: capability
 
-A capability tag is a string. It is a bit like a permission, in permissions
+A capability tag is a string. It is a bit like a permission, in permission
 based systems. However, it serves a different purpose here.
 Typical capability tags in a RESTful system are based on the actions Create,
 Retrieve, Update and Delete.
@@ -214,11 +216,11 @@ For example, consider this class:
 
 Now, let's say we have an object f and a capability cf.
 
->>> f = Foo()
->>> cf = Capability(Foo)
+  f = Foo()
+  cf = Capability(Foo)
 
-When I call cf.bar(), I need to have cf provide a special kind of proxy for
-the bound method that f.bar returns. This special proxy needs to remember
-that it came from cf so that cf's nextobject tags table can still be used.
-To avoid holding onto too many references, the special proxy should just take
-cf's tags table.
+When I call cf.bar(), I need to have cf provide a special kind of proxy
+for the bound method that f.bar returns. This special proxy needs to
+remember that it came from cf so that cf's nextobject tags table can
+still be used.  To avoid holding onto too many references, the special
+proxy should just take cf's tags table.

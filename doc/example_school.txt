@@ -2,7 +2,7 @@
 Example school
 ==============
 
-This is a description of how to customize schooltool to work in an example
+This is a description of how to customize SchoolTool to work in an example
 school in an example country.
 
 School structure
@@ -29,12 +29,12 @@ At a registration, each pupil is registered as either
 * absent without reason
 * absent with reason
 
-A pupil who arrives after registration can see their tutor later and be marked
-as "arrived late" instead of "absent without reason".
+A pupil who arrives after registration can see their tutor later and be
+marked as "arrived late" instead of "absent without reason".
 
 About two hours after registration, an administrator must be given a list
 of all pupils who are absent without reason, so that their legal guardians
-can be called.
+can be contacted.
 
 ===================================
 Representing the school in software
@@ -63,4 +63,7 @@ It keeps a list of the pupils from each registration class who were marked
 as 'absent without reason', and updates this list if pupils are late.
 
 An administrator can check this list at any time.
+
+XXX Why is the absence tracker covered here?  It was mentioned
+    elsewhere already.
 

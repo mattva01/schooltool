@@ -1,6 +1,9 @@
 SchoolTool GUI Guide
 ====================
 
+XXX The GUI client is deprecated, so this piece of documentation should
+    probably be removed.
+
 To start the SchoolTool GUI client, first install or unpack the software.
 Then,
 

@@ -24,3 +24,4 @@ Containment / locations
 Using __parent__ and __name__ to express a location.
 Using __getitem__ and keys() and iterkeys() to express containment.
 
+XXX Mention Zope3 integration?
