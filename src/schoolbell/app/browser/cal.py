@@ -185,7 +185,7 @@ class PlainCalendarView(BrowserView):
                 # Events won't always have descriptions
                 description = None
                 if i % 2:
-                    description = 'Description for %d' % title
+                    description = 'Description for %s' % title
 
                 event = CalendarEvent(dtstart, length, title,
                         description=description)
