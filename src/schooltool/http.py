@@ -26,7 +26,7 @@ import time
 import urllib
 import logging
 
-from transaction import get_transaction
+import transaction
 from ZODB.POSException import ConflictError
 from twisted.web import resource
 from twisted.internet import reactor
@@ -40,15 +40,16 @@ from schooltool.translation import ugettext as _
 try:
     from pytcpwrap.tcpwrap import TCPWrap
 except ImportError:
-    #if TCPWrap is not available
+    # if TCPWrap is not available
     class TCPWrap:
         """Stub for TCP wrappers allowing all connections."""
-        
+
         def __init__(self, *args):
             pass
-            
+
         def Deny(self):
             return False
+
 
 __metaclass__ = type
 
@@ -298,10 +299,11 @@ class Request(http.Request):
         authentication information (None for anonymous access).
     """
 
+    # hooks for unit tests
     reactor_hook = reactor
+    transaction_hook = transaction
 
     def __init__(self, *args, **kwargs):
-        self.get_transaction_hook = get_transaction
         self.hitlogger = logging.getLogger('schooltool.rest_access')
         self.applogger = logging.getLogger('schooltool.app')
         self.hit_time = formatHitTime()
@@ -404,7 +406,7 @@ class Request(http.Request):
                     try:
                         self.zodb_conn = self.site.db.open()
                         body = self._generate_response()
-                        txn = self.get_transaction_hook()
+                        txn = self.transaction_hook.get()
                         if self.code >= 400:
                             txn.abort()
                         else:
@@ -415,14 +417,14 @@ class Request(http.Request):
                         if retries <= 0:
                             raise
                         retries -= 1
-                        self.get_transaction_hook().abort()
+                        self.transaction_hook.abort()
                         self.zodb_conn.close()
                         self.zodb_conn = None
                         self.reset()
                     else:
                         break
             except:
-                self.get_transaction_hook().abort()
+                self.transaction_hook.abort()
                 body = self._handle_exception(failure.Failure())
             self.reactor_hook.callFromThread(self.write, body)
             self.reactor_hook.callFromThread(self.finish)

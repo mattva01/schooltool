@@ -153,6 +153,9 @@ class TransactionStub:
     def commit(self):
         self.history += 'C'
 
+    def get(self):
+        return self
+
 
 class LoggerStub:
 
@@ -546,8 +549,7 @@ class TestRequest(unittest.TestCase):
     def do_test__process(self, path, render_stub=None, traverse_stub=None,
                          user=None, password=None):
         rq = self.newRequest(path, render_stub, traverse_stub, user, password)
-        transaction = TransactionStub()
-        rq.get_transaction_hook = lambda: transaction
+        transaction = rq.transaction_hook = TransactionStub()
         rq.reactor_hook = ReactorStub()
         rq._process()
 

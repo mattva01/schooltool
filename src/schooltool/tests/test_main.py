@@ -133,13 +133,16 @@ class TransactionStub:
     def commit(self):
         self.history += 'C'
 
+    def get(self):
+        return self
+
 
 class ConfigStub:
     event_logging = False
 
 
 class OpenSSLContextFactoryStub:
-    
+
     def setup(self, key, cert):
         self.key = key
         self.cert = cert
@@ -400,8 +403,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_prepareDatabase(self):
         from schooltool.main import Server
         server = Server()
-        transaction = TransactionStub()
-        server.get_transaction_hook = lambda: transaction
+        transaction = server.transaction_hook = TransactionStub()
         server.db = DbStub()
         server.appname = 'app'
         server.config = ConfigStub()
@@ -415,8 +417,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_prepareDatabase_creates(self):
         from schooltool.main import Server
         server = Server()
-        transaction = TransactionStub()
-        server.get_transaction_hook = lambda: transaction
+        transaction = server.transaction_hook = TransactionStub()
         cookie = AppStub()
         server.appFactory = lambda: cookie
         server.db = DbStub()
@@ -433,8 +434,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_prepareDatabase_eventlog(self):
         from schooltool.main import Server
         server = Server()
-        transaction = TransactionStub()
-        server.get_transaction_hook = lambda: transaction
+        server.transaction_hook = TransactionStub()
         server.db = DbStub()
         server.appname = 'app'
         server.config = ConfigStub()
@@ -449,8 +449,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_prepareDatabase_oldversion(self):
         from schooltool.main import Server, SchoolToolError
         server = Server()
-        transaction = TransactionStub()
-        server.get_transaction_hook = lambda: transaction
+        transaction = server.transaction_hook = TransactionStub()
         server.db = DbStub(True)
         server.appname = 'app'
         server.config = ConfigStub()

@@ -30,8 +30,8 @@ import libxml2
 import logging
 
 import ZConfig
+import transaction
 from zope.interface import moduleProvides
-from transaction import get_transaction
 from twisted.internet import reactor
 from twisted.internet.ssl import DefaultOpenSSLContextFactory
 from twisted.python import threadable
@@ -119,15 +119,16 @@ class SchoolToolError(UnicodeAwareException):
 class Server:
     """SchoolTool HTTP server."""
 
+    # hooks for unit tests
     threadable_hook = threadable
     reactor_hook = reactor
+    transaction_hook = transaction
     setCatalog_hook = staticmethod(setCatalog)
     OpenSSLContextFactory_hook = DefaultOpenSSLContextFactory
 
     def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
         self.stdout = StreamWrapper(stdout)
         self.stderr = StreamWrapper(stderr)
-        self.get_transaction_hook = get_transaction
         self.logger = logging.getLogger('schooltool.server')
 
     def main(self, args):
@@ -426,19 +427,19 @@ class Server:
         # Create the application if it does not yet exist
         if root.get(self.appname) is None:
             root[self.appname] = self.appFactory()
-            self.get_transaction_hook().commit()
+            self.transaction_hook.commit()
         app = root[self.appname]
 
         # Database schema change from 0.6 to 0.7
         if not hasattr(app, 'ticketService'):
-            self.get_transaction_hook().abort()
+            self.transaction_hook.abort()
             conn.close()
             raise SchoolToolError(incompatible_version_msg)
 
         # Enable or disable global event logging
         eventlog = app.utilityService['eventlog']
         eventlog.enabled = self.config.event_logging
-        self.get_transaction_hook().commit()
+        self.transaction_hook.commit()
 
         conn.close()
 
