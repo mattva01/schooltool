@@ -37,7 +37,7 @@ class RequestStub:
     reason = 'OK'
 
     def __init__(self, uri='', method='GET', body='', headers=None,
-                 authenticated_user=None, accept=()):
+                 authenticated_user=None, accept=(), args=None):
         self.uri = uri
         self.method = method
         self.path = ''
@@ -45,6 +45,11 @@ class RequestStub:
         self.authenticated_user = authenticated_user
         self.headers = {}
         self.args = {}
+        if args:
+            for k, v in args.items():
+                if not isinstance(v, list):
+                    v = [v]
+                self.args[k] = v
         if body:
             self.request_headers = {'content-length': len(body)}
         else:
