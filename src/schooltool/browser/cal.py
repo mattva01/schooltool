@@ -24,6 +24,7 @@ $Id$
 
 import itertools
 import urllib
+import calendar
 from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
@@ -938,7 +939,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                               parser=intsParser,
                                               validator=weekdaysValidator)
 
-##         self.monthly_widget = TextWidget('monthly', 'Monthly')
+        self.monthly_widget = SelectionWidget('monthly', 'Monthly',
+                                              (('monthday', 'md'),
+                                               ('weekday', 'wd'),
+                                               ('lastweekday', 'lwd')),
+                                              value='monthday')
 
         self.exceptions_widget = TextAreaWidget('exceptions',
                                                 'Exception dates',
@@ -964,15 +969,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.until_widget.update(request)
         self.exceptions_widget.update(request)
         self.weekdays_widget.update(request)
-
-    def weekdays(self):
-        return ({'nr':0, 'name': _("Mon")},
-                {'nr':1, 'name': _("Tue")},
-                {'nr':2, 'name': _("Wed")},
-                {'nr':3, 'name': _("Thu")},
-                {'nr':4, 'name': _("Fri")},
-                {'nr':5, 'name': _("Sat")},
-                {'nr':6, 'name': _("Sun")})
+        self.monthly_widget.update(request)
 
     def do_GET(self, request):
         self.update()
@@ -1053,9 +1050,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                             exceptions=exceptions,
                                             weekdays=tuple(weekdays))
             elif self.recurrence_type_widget.value == 'monthly':
+                monthly = self.monthly_widget.value
                 return MonthlyRecurrenceRule(interval=interval,
                                              count=count, until=until,
-                                             exceptions=exceptions)
+                                             exceptions=exceptions,
+                                             monthly=monthly)
             elif self.recurrence_type_widget.value == 'yearly':
                 return YearlyRecurrenceRule(interval=interval,
                                             count=count, until=until,
@@ -1072,6 +1071,50 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
             locations.append(location.title)
         locations.sort()
         return locations
+
+    def weekdays(self):
+        return ({'nr':0, 'name': _("Mon")},
+                {'nr':1, 'name': _("Tue")},
+                {'nr':2, 'name': _("Wed")},
+                {'nr':3, 'name': _("Thu")},
+                {'nr':4, 'name': _("Fri")},
+                {'nr':5, 'name': _("Sat")},
+                {'nr':6, 'name': _("Sun")})
+
+    def getMonthDay(self):
+        """Returns the day number in a month"""
+        evdate = self.date_widget.value
+        if evdate is None:
+            return '??'
+        else:
+            return str(evdate.day)
+
+    def getWeekDay(self):
+        """Returns a description like '4th Tuesday'"""
+        evdate = self.date_widget.value
+        if evdate is None:
+            return "same weekday"
+        weekday = evdate.weekday()
+        index = evdate.day / 7 + 1
+
+        weekdays = CalendarViewBase.day_of_week_names
+        indexes = {1: _('1st'), 2: _('2nd'), 3: _('3rd'),
+                   4: _('4th'), 5: _('5th')}
+
+        return "%s %s" % (indexes[index], weekdays[weekday])
+
+    def getLastWeekDay(self):
+        """Returns a description like 'Last Friday' or None"""
+        evdate = self.date_widget.value
+        weekdays = CalendarViewBase.day_of_week_names
+        if evdate is None:
+            return "last weekday"
+        lastday = calendar.monthrange(evdate.year, evdate.month)[1]
+        if lastday - evdate.day >= 7:
+            return None
+        else:
+            return _("Last %(weekday)s") % {'weekday':
+                                            weekdays[evdate.weekday()]}
 
 
 class EventAddView(EventViewBase):
@@ -1132,6 +1175,7 @@ class EventEditView(EventViewBase):
                 self.weekdays_widget.setValue(event.recurrence.weekdays)
             elif IMonthlyRecurrenceRule.providedBy(event.recurrence):
                 self.recurrence_type_widget.setValue('monthly')
+                self.monthly_widget.setValue(event.recurrence.monthly)
             elif IYearlyRecurrenceRule.providedBy(event.recurrence):
                 self.recurrence_type_widget.setValue('yearly')
 

@@ -933,6 +933,56 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
         self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
                                                      weekdays=(1, 2)))
 
+        rule = makeRule(recurrence='checked', recurrence_type='monthly',
+                        interval="1", recurrence_shown="yes",
+                        monthly="monthday")
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
+                                                      monthly="monthday"))
+
+        rule = makeRule(recurrence='checked', recurrence_type='monthly',
+                        interval="1", recurrence_shown="yes",
+                        monthly="weekday")
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
+                                                      monthly="weekday"))
+
+        rule = makeRule(recurrence='checked', recurrence_type='monthly',
+                        interval="1", recurrence_shown="yes",
+                        monthly="lastweekday")
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
+                                                      monthly="lastweekday"))
+
+    def test_getMonthDay(self):
+        view = self.createView()
+        self.assertEquals(view.getMonthDay(), "??")
+        view.date_widget.value = date(2004, 1, 1)
+        self.assertEquals(view.getMonthDay(), "1")
+        view.date_widget.value = date(2004, 2, 28)
+        self.assertEquals(view.getMonthDay(), "28")
+
+    def test_getWeekDay(self):
+        view = self.createView()
+        self.assertEquals(view.getWeekDay(), "same weekday")
+        view.date_widget.value = date(2004, 10, 1)
+        self.assertEquals(view.getWeekDay(), "1st Friday")
+        view.date_widget.value = date(2004, 10, 13)
+        self.assertEquals(view.getWeekDay(), "2nd Wednesday")
+        view.date_widget.value = date(2004, 10, 16)
+        self.assertEquals(view.getWeekDay(), "3rd Saturday")
+        view.date_widget.value = date(2004, 10, 26)
+        self.assertEquals(view.getWeekDay(), "4th Tuesday")
+        view.date_widget.value = date(2004, 10, 31)
+        self.assertEquals(view.getWeekDay(), "5th Sunday")
+
+    def test_getWeekDay(self):
+        view = self.createView()
+        self.assertEquals(view.getLastWeekDay(), "last weekday")
+        view.date_widget.value = date(2004, 10, 24)
+        self.assertEquals(view.getLastWeekDay(), None)
+        view.date_widget.value = date(2004, 10, 25)
+        self.assertEquals(view.getLastWeekDay(), "Last Monday")
+        view.date_widget.value = date(2004, 10, 31)
+        self.assertEquals(view.getLastWeekDay(), "Last Sunday")
+
 
 class TestEventAddView(AppSetupMixin, unittest.TestCase):
 
@@ -1250,6 +1300,21 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         assertField(doc, 'weekdays', '3', 'and @checked="checked"')
         assertField(doc, 'weekdays', '1', 'and @checked="checked"')
         assertField(doc, 'weekdays', '2', 'and @checked="checked"')
+
+    def test_render_monthly(self):
+        from schooltool.cal import MonthlyRecurrenceRule
+        event = createEvent(
+            '2004-10-28 21:00', '2h', "ev3", unique_id="123",
+            recurrence=MonthlyRecurrenceRule(monthly="lastweekday"))
+        self.person.calendar.addEvent(event)
+
+        view = self.createView()
+        request = RequestStub(args={'event_id': "123"})
+        content = view.render(request)
+
+        doc = HTMLDocument(content)
+
+        assertField(doc, 'monthly', 'lastweekday', 'and @checked="checked"')
 
     def test_render_norecur(self):
         view = self.createView()
