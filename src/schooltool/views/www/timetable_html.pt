@@ -9,12 +9,10 @@
       <th tal:repeat="day context/day_ids" tal:content="day"
           colspan="2">Day N</th>
     </tr>
-    <tr tal:repeat="row view/rows">
-     <tal:block tal:repeat="col row">
+    <tr tal:repeat="row view/rows"><tal:block tal:repeat="col row">
       <th tal:content="col/period">1</th>
       <td tal:content="col/activity">Act1</td>
-     </tal:block>
-    </tr>
+    </tal:block></tr>
   </table>
 </body>
 </html>
