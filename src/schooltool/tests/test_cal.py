@@ -1297,6 +1297,41 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         rule = self.createRule()
         verifyObject(IDailyRecurrenceRule, rule)
 
+    def test_apply(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule()
+        ev = CalendarEvent(datetime(2004, 10, 13, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(2003, 10, 1)))
+        self.assertEqual(result, [])
+
+        # Simplest case
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21)])
+
+        # With an end date
+        rule = self.createRule(until=date(2004, 10, 20))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21)])
+
+        # With a count
+        rule = self.createRule(count=8)
+        result = list(rule.apply(ev))
+        self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21)])
+
+        # With an interval
+        rule = self.createRule(interval=2)
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21, 2)])
+
+        # With exceptions
+        rule = self.createRule(exceptions=[date(2004, 10, d)
+                                           for d in range(16, 21)])
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result, [date(2004, 10, d) for d in range(13, 16)])
 
 class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
@@ -1308,6 +1343,45 @@ class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         from schooltool.interfaces import IYearlyRecurrenceRule
         rule = self.createRule()
         verifyObject(IYearlyRecurrenceRule, rule)
+
+    def test_apply(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule()
+        ev = CalendarEvent(datetime(1978, 5, 17, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(1970, 1, 1)))
+        self.assertEqual(result, [])
+
+        # Simplest case
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result, [date(y, 5, 17) for y in range(1978, 2005)])
+
+        # With an end date
+        rule = self.createRule(until=date(2004, 10, 20))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, [date(y, 5, 17) for y in range(1978, 2005)])
+
+        # With a count
+        rule = self.createRule(count=8)
+        result = list(rule.apply(ev))
+        self.assertEqual(result, [date(y, 5, 17) for y in range(1978, 1986)])
+
+        # With an interval
+        rule = self.createRule(interval=4)
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result,
+                         [date(y, 5, 17)
+                          for y in [1978, 1982, 1986, 1990, 1994, 1998, 2002]])
+
+        # With exceptions
+        rule = self.createRule(exceptions=[date(1980, 5, 17)])
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result,
+                         [date(y, 5, 17)
+                          for y in [1978, 1979] + range(1981, 2005)])
 
 
 class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
@@ -1329,6 +1403,52 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         rule = self.createRule(weekdays=(1, 3))
         assert rule == rule.replace()
         assert rule != rule.replace(weekdays=(1,))
+
+    def xtest_apply(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule()
+        ev = CalendarEvent(datetime(1978, 5, 17, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(1970, 1, 1)))
+        self.assertEqual(result, [])
+
+        # Simplest case
+        result = list(rule.apply(ev, date(1978, 7, 17))) # Wednesday
+        expected = [date(1978, 5, 17) + timedelta(w * 7) for w in range(9)]
+        self.assertEqual(result, expected)
+
+        # With an end date
+        rule = self.createRule(until=date(1978, 7, 12))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With a count
+        rule = self.createRule(count=9)
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With an interval
+        rule = self.createRule(interval=2, weekdays=(3,))
+        result = list(rule.apply(ev, date(1978, 7, 12)))
+        expected = [date(1978, 5, 17), date(1978, 5, 18),
+                    date(1978, 5, 31), date(1978, 6, 1),
+                    date(1978, 6, 14), date(1978, 6, 15),
+                    date(1978, 6, 28), date(1978, 6, 29),
+                    date(1978, 7, 12)]
+        self.assertEqual(result, expected)
+
+        # With exceptions
+        rule = self.createRule(interval=2, weekdays=(3,),
+                               exceptions=[date(1978, 6, 29)])
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        expected = [date(1978, 5, 17), date(1978, 5, 18),
+                    date(1978, 5, 31), date(1978, 6, 1),
+                    date(1978, 6, 14), date(1978, 6, 15),
+                    date(1978, 6, 28), date(1978, 7, 12)]
+        self.assertEqual(result, expected)
 
 
 class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):

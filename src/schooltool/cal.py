@@ -1079,7 +1079,7 @@ class CalendarOwnerMixin(Persistent):
 
 class RecurrenceRule:
 
-    def __init__(self, interval=None, count=None, until=None, exceptions=()):
+    def __init__(self, interval=1, count=None, until=None, exceptions=()):
         self.interval = interval
         self.count = count
         self.until = until
@@ -1131,6 +1131,24 @@ class RecurrenceRule:
         """
         return hash(self._tupleForComparison())
 
+    def apply(self, ev, enddate=None):
+        """Generator that generates dates of recurrences"""
+        cur = ev.dtstart.date()
+        count = 0
+        while True:
+            if ((enddate and cur > enddate) or
+                (self.count is not None and count >= self.count) or
+                (self.until and cur > self.until)):
+                break
+            if cur not in self.exceptions:
+                yield cur
+                count += 1
+            cur = self._nextRecurrence(cur)
+
+    def _nextRecurrence(self, date):
+        """Adds the basic step of recurrence to the date"""
+        return date + self.interval * date.resolution
+
 
 class DailyRecurrenceRule(RecurrenceRule):
     """Daily recurrence rule.
@@ -1140,7 +1158,6 @@ class DailyRecurrenceRule(RecurrenceRule):
     implements(IDailyRecurrenceRule)
 
 
-
 class YearlyRecurrenceRule(RecurrenceRule):
     """Yearly recurrence rule.
 
@@ -1148,12 +1165,17 @@ class YearlyRecurrenceRule(RecurrenceRule):
     """
     implements(IYearlyRecurrenceRule)
 
+    def _nextRecurrence(self, date):
+        """Adds the basic step of recurrence to the date"""
+        nextyear = date.year + self.interval
+        return date.replace(year=nextyear)
+
 
 class WeeklyRecurrenceRule(RecurrenceRule):
     """Weekly recurrence rule."""
     implements(IWeeklyRecurrenceRule)
 
-    def __init__(self, interval=None, count=None, until=None, exceptions=(),
+    def __init__(self, interval=1, count=None, until=None, exceptions=(),
                  weekdays=()):
         self.interval = interval
         self.count = count
@@ -1195,7 +1217,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     """
     implements(IMonthlyRecurrenceRule)
 
-    def __init__(self, interval=None, count=None, until=None, exceptions=(),
+    def __init__(self, interval=1, count=None, until=None, exceptions=(),
                  monthly=None):
         self.interval = interval
         self.count = count
