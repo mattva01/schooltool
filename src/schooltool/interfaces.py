@@ -1072,13 +1072,60 @@ class ITimetableDay(Interface):
 
     def __delitem__(key):
         """Remove the activity planned for a given period"""
-        
+
 
 
 class ITimetableActivity(Interface):
     """An event in a timetable"""
 
     title = Attribute("""The title of the event""")
+
+
+class ISchooldayTemplate(Interface):
+    """A school-day template represents the times that periods are
+    scheduled during a prototypical school day.
+
+    Some schools need only one school-day template. For example, they
+    have seven periods in a day, and the periods are always in the
+    sequence 1 to 7, and start and end at the same time on each school
+    day.
+
+    Other schools will need more than one school-day template. For
+    example, a school that has shorter school days on Wednesdays will
+    have one template for Wednesdays, and one other template for
+    Monday, Tuesday, Thursday and Friday.
+
+    Other schools will want to re-order the periods on different days,
+    so they will have one template with periods ABCDEF in that order,
+    and another template with periods DEFABC.
+    """
+
+    def __iter__():
+        """Returns an iterator over the ISchooldayPeriodEvents of this
+        template.
+        """
+
+    def add(obj):
+        """Add an ISchooldayPeriodEvent to the template.
+
+        Raises a TypeError if obj is not an ISchooldayPeriodEvent."""
+
+    def remove(obj):
+        """Remove an object from the template."""
+
+
+class ISchooldayPeriodEvent(Interface):
+    """An object binding a timetable period to a concrete time
+    interval within a schoolday template.
+    """
+
+    title = Attribute("Period id of this event")
+    tstart = Attribute("datetime.time of the start of the event")
+    duration = Attribute("datetime.timedelta of the duration of the event")
+
+    def __eq__(other):
+        """SchooldayPeriodEvents are equal if all three of their
+        attributes are equal."""
 
 
 # Exceptions

@@ -26,7 +26,7 @@ import calendar
 from zope.interface.verify import verifyObject
 from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
-from datetime import date
+from datetime import date, time, timedelta
 from StringIO import StringIO
 
 class TestSchooldayModel(unittest.TestCase):
@@ -328,6 +328,76 @@ class TestTimetabling(unittest.TestCase):
         tt["B"]["Blue"] = TimetableActivity("Geography")
 
 
+class TestSchooldayPeriodEvent(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import SchooldayPeriodEvent
+        from schooltool.interfaces import ISchooldayPeriodEvent
+
+        ev = SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45))
+        verifyObject(ISchooldayPeriodEvent, ev)
+        self.assertEqual(ev.title, "1")
+        self.assertEqual(ev.tstart, time(9,0))
+        self.assertEqual(ev.duration, timedelta(seconds=2700))
+
+    def test_eq(self):
+        from schooltool.cal import SchooldayPeriodEvent
+        self.assertEqual(
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)))
+        self.assertEqual(
+            hash(SchooldayPeriodEvent("1", time(9, 0), timedelta(minutes=45))),
+            hash(SchooldayPeriodEvent("1", time(9, 0), timedelta(minutes=45))))
+        self.assertNotEqual(
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriodEvent("2", time(9, 00), timedelta(minutes=45)))
+        self.assertNotEqual(
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriodEvent("1", time(9, 01), timedelta(minutes=45)))
+        self.assertNotEqual(
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=90)))
+        self.assertNotEqual(
+            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
+            object())
+
+
+class TestSchooldayTemplate(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.cal import SchooldayTemplate
+        from schooltool.interfaces import ISchooldayTemplate
+
+        tmpl = SchooldayTemplate()
+        verifyObject(ISchooldayTemplate, tmpl)
+
+    def test_add_remove_iter(self):
+        from schooltool.cal import SchooldayTemplate, SchooldayPeriodEvent
+        from schooltool.interfaces import ISchooldayPeriodEvent
+
+        class SPEStub:
+            implements(ISchooldayPeriodEvent)
+
+        tmpl = SchooldayTemplate()
+        self.assertEqual(list(iter(tmpl)), [])
+        self.assertRaises(TypeError, tmpl.add, object())
+
+        lesson1 = SchooldayPeriodEvent("1", time(9, 0), timedelta(minutes=45))
+        lesson2 = SchooldayPeriodEvent("2", time(10, 0), timedelta(minutes=45))
+
+        tmpl.add(lesson1)
+        self.assertEqual(list(iter(tmpl)), [lesson1])
+
+        # Adding the same thing again.
+        tmpl.add(lesson1)
+        self.assertEqual(list(iter(tmpl)), [lesson1])
+
+        tmpl.add(lesson2)
+        self.assertEqual(len(list(iter(tmpl))), 2)
+        tmpl.remove(lesson1)
+        self.assertEqual(list(iter(tmpl)), [lesson2])
+
+
 def test_suite():
     import schooltool.cal
     suite = unittest.TestSuite()
@@ -337,5 +407,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
     suite.addTest(unittest.makeSuite(TestTimetabling))
+    suite.addTest(unittest.makeSuite(TestSchooldayPeriodEvent))
+    suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(DocTestSuite(schooltool.cal))
     return suite
