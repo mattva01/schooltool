@@ -171,21 +171,24 @@ class TestView(AppSetupMixin, unittest.TestCase):
     def test_unauthorized_expired(self):
         from schooltool.browser import View
         view = View(None)
-        request = RequestStub('/path')
+        request = RequestStub('/some/path?arg=val&arg2=val2')
         result = view.unauthorized(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/?expired=1&url=/path')
+                          'http://localhost:7001/?expired=1'
+                          '&url=/some/path%3Farg%3Dval%26arg2%3Dval2')
         self.assert_('www-authenticate' not in request.headers)
 
     def test_unauthorized_forbidden(self):
         from schooltool.browser import View
         view = View(None)
-        request = RequestStub('/path', authenticated_user='not None')
+        request = RequestStub('/some/path?arg=val&arg2=val2',
+                              authenticated_user='not None')
         result = view.unauthorized(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/?forbidden=1&url=/path')
+                          'http://localhost:7001/?forbidden=1'
+                          '&url=/some/path%3Farg%3Dval%26arg2%3Dval2')
         self.assert_('www-authenticate' not in request.headers)
 
     def test_getChild(self):

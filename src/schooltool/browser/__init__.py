@@ -24,6 +24,7 @@ import re
 import os
 import datetime
 import logging
+import urllib
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.interfaces import IApplicationObjectContainer
@@ -132,10 +133,11 @@ class View(_View):
 
     def unauthorized(self, request):
         """Render an unauthorized page."""
+        uri = urllib.quote(request.uri)
         if request.authenticated_user is None:
-            return self.redirect('/?expired=1&url=%s' % request.uri, request)
+            return self.redirect('/?expired=1&url=%s' % uri, request)
         else:
-            return self.redirect('/?forbidden=1&url=%s' % request.uri, request)
+            return self.redirect('/?forbidden=1&url=%s' % uri, request)
 
     def do_POST(self, request):
         """Process an HTTP POST.
