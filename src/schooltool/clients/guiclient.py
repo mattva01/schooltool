@@ -582,13 +582,6 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
 
     def getAppLogPage(self, page, pagesize, filter_str=None):
-        """Get a single page from the application log.
-
-        Only lines containing filter_str (optional) as a substring are taken
-        into account.
-
-        Returns an ApplicationLogPage.
-        """
         """Return a page from the application log.
 
         Pages are numbered starting from 1.  Negative numbers indicate counting
