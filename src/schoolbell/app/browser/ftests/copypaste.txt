@@ -18,7 +18,7 @@ We create a SchoolBell instance
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
     ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
-    ... 
+    ...
     ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond
     ... """)
     HTTP/1.1 303 See Other
@@ -74,23 +74,23 @@ We look at the members of the group
 Test
 ----
 
-We copy the person
+We copy the group
 
     >>> print http(r"""
-    ... POST /frogpond/persons/@@contents.html HTTP/1.1
+    ... POST /frogpond/groups/@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
-    ... Content-Length: 46
+    ... Content-Length: 45
     ...
-    ... ids:list=person&container_copy_button=Copy
+    ... ids:list=Group&container_copy_button=Copy
     ... """)
     HTTP/1.1 303 See Other
     ...
 
-We paste the person
+We paste the group
 
     >>> print http(r"""
-    ... POST /frogpond/persons/@@contents.html HTTP/1.1
+    ... POST /frogpond/groups/@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ... Content-Length: 28
@@ -100,51 +100,52 @@ We paste the person
     HTTP/1.1 303 See Other
     ...
 
-We now have a second person
+We now have a second group
 
     >>> r = http(r"""
-    ... GET /frogpond/persons HTTP/1.1
+    ... GET /frogpond/groups HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     >>> print r
     HTTP/1.1 200 Ok
     ...
-    >>> 'person1' in str(r)
+    >>> 'Group' in str(r)
     True
-    >>> 'person-2' in str(r)
+    >>> 'Group-2' in str(r)
     True
 
-The group has only one member, though
+The person belongs to the original group only:
 
     >>> r = http(r"""
-    ... GET /frogpond/groups/Group HTTP/1.1
+    ... GET /frogpond/persons/person HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     >>> print r
     HTTP/1.1 200 Ok
     ...
-    ...person1...
+    ...Group...
     ...
 
-'person-2' is not there
+'Group-2' is not there
 
-    >>> 'person-2' not in str(r)
+    >>> 'Group-2' not in str(r)
     True
 
-The new person has no groups
+The new group has no persons
 
     >>> r = http(r"""
-    ... GET /frogpond/persons/person-2 HTTP/1.1
+    ... GET /frogpond/groups/Group-2 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     >>> print r
     HTTP/1.1 200 Ok
     ...
 
-'group1' is not there
+'person1' is not there
 
-    >>> 'group1' not in str(r)
+    >>> 'person1' not in str(r)
     True
+
 
 Copying the whole SchoolBell instance
 -------------------------------------
