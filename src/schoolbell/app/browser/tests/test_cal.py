@@ -1546,10 +1546,33 @@ def doctest_CalendarViewBase():
         >>> view = CalendarViewBase(calendar, request)
         >>> view.cursor = date(2005, 2, 3)
 
+        >>> view.calURL("daily")
+        'http://127.0.0.1/calendar/2005-02-03'
+        >>> view.calURL("monthly")
+        'http://127.0.0.1/calendar/2005-02'
+        >>> view.calURL("yearly")
+        'http://127.0.0.1/calendar/2005'
+
+        >>> view.calURL("daily", date(2005, 12, 13))
+        'http://127.0.0.1/calendar/2005-12-13'
+        >>> view.calURL("monthly", date(2005, 12, 13))
+        'http://127.0.0.1/calendar/2005-12'
+        >>> view.calURL("yearly", date(2007, 11, 13))
+        'http://127.0.0.1/calendar/2007'
+
+    The weekly links need some special attention:
+
+        >>> view.calURL("weekly")
+        'http://127.0.0.1/calendar/2005-w05'
+        >>> view.calURL("weekly", date(2003, 12, 31))
+        'http://127.0.0.1/calendar/2004-w01'
+        >>> view.calURL("weekly", date(2005, 1, 1))
+        'http://127.0.0.1/calendar/2004-w53'
+
         >>> view.calURL("quarterly")
-        'http://127.0.0.1/calendar/quarterly.html?date=2005-02-03'
-        >>> view.calURL("quarterly", date(2005, 12, 13))
-        'http://127.0.0.1/calendar/quarterly.html?date=2005-12-13'
+        Traceback (most recent call last):
+        ...
+        ValueError: quarterly
 
     update() sets the cursor for the view.  If it does not find a date in
     request, it defaults to the current day:
@@ -1594,13 +1617,15 @@ def doctest_DailyCalendarView():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = DailyCalendarView(calendar, TestRequest())
 
-    prev() and next() return links for adjacent weeks:
+    prev(), current() and next() return links for adjacent days:
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/daily.html?date=2004-08-17'
+        'http://127.0.0.1/calendar/2004-08-17'
         >>> view.next()
-        'http://127.0.0.1/calendar/daily.html?date=2004-08-19'
+        'http://127.0.0.1/calendar/2004-08-19'
+        >>> view.current() == 'http://127.0.0.1/calendar/%s' % date.today()
+        True
 
     """
 
@@ -1621,13 +1646,16 @@ def doctest_WeeklyCalendarView():
         >>> view.title()
         u'February, 2005 (week 5)'
 
-    prev() and next() return links for adjacent weeks:
+    prev(), current() and next() return links for adjacent weeks:
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/weekly.html?date=2004-08-11'
+        'http://127.0.0.1/calendar/2004-w33'
         >>> view.next()
-        'http://127.0.0.1/calendar/weekly.html?date=2004-08-25'
+        'http://127.0.0.1/calendar/2004-w35'
+        >>> fmt = 'http://127.0.0.1/calendar/%G-w%V'
+        >>> view.current() == date.today().strftime(fmt)
+        True
 
     getCurrentWeek is a shortcut for view.getWeek(view.cursor)
 
@@ -1663,13 +1691,16 @@ def doctest_MonthlyCalendarView():
         >>> view.weekTitle(date(2005, 5, 17))
         u'Week 20'
 
-    prev() and next() return links for adjacent months:
+    prev(), current and next() return links for adjacent months:
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/monthly.html?date=2004-07-01'
+        'http://127.0.0.1/calendar/2004-07'
         >>> view.next()
-        'http://127.0.0.1/calendar/monthly.html?date=2004-09-01'
+        'http://127.0.0.1/calendar/2004-09'
+        >>> dt = date.today().strftime("%Y-%m")
+        >>> view.current() == 'http://127.0.0.1/calendar/%s' % dt
+        True
 
     getCurrentWeek is a shortcut for view.getMonth(view.cursor)
 
@@ -1711,13 +1742,16 @@ def doctest_YearlyCalendarView():
         >>> view.shortDayOfWeek(date(2005, 8, 3))
         u'Wed'
 
-    prev() and next() return links for adjacent years:
+    prev(), current() and next() return links for adjacent years:
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/yearly.html?date=2003-01-01'
+        'http://127.0.0.1/calendar/2003'
         >>> view.next()
-        'http://127.0.0.1/calendar/yearly.html?date=2005-01-01'
+        'http://127.0.0.1/calendar/2005'
+        >>> expected = 'http://127.0.0.1/calendar/%d' % date.today().year
+        >>> view.current() == expected
+        True
 
     renderRow() renders HTML for one week of events.  It is implemented
     in python for performance reasons.
@@ -1725,10 +1759,10 @@ def doctest_YearlyCalendarView():
         >>> week = view.getWeek(date(2004, 2, 4))[2:4]
         >>> print view.renderRow(week, 2)
         <td class="cal_yearly_day">
-        <a href="http://127.0.0.1/calendar/daily.html?date=2004-02-04" class="cal_yearly_day">4</a>
+        <a href="http://127.0.0.1/calendar/2004-02-04" class="cal_yearly_day">4</a>
         </td>
         <td class="cal_yearly_day">
-        <a href="http://127.0.0.1/calendar/daily.html?date=2004-02-05" class="cal_yearly_day">5</a>
+        <a href="http://127.0.0.1/calendar/2004-02-05" class="cal_yearly_day">5</a>
         </td>
 
     """

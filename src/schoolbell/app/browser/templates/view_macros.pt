@@ -100,7 +100,7 @@
         </td>
         <td align="center">
           <a id="calendar-navigation-context-current"
-             tal:attributes="href request/URL"
+             tal:attributes="href view/current"
              ><img border="0" src="current.png" alt=""
                    tal:attributes="src context/++resource++current.png" />
               <span tal:replace="view/current_title">Current</span></a>

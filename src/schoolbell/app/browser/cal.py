@@ -250,11 +250,24 @@ class CalendarViewBase(BrowserView):
     __url = None
 
     def calURL(self, cal_type, cursor=None):
+        """Construct a URL to a calendar at cursor."""
         if cursor is None:
             cursor = self.cursor
         if self.__url is None:
             self.__url = absoluteURL(self.context, self.request)
-        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
+
+        if cal_type == 'daily':
+            dt = cursor.isoformat()
+        elif cal_type == 'weekly':
+            dt = cursor.strftime('%G-w%V')
+        elif cal_type == 'monthly':
+            dt = cursor.strftime('%Y-%m')
+        elif cal_type == 'yearly':
+            dt = str(cursor.year)
+        else:
+            raise ValueError(cal_type)
+
+        return  '%s/%s' % (self.__url, dt)
 
     def ellipsizeTitle(self, title):
         """For labels with limited space replace the tail with '...'."""
@@ -435,6 +448,10 @@ class WeeklyCalendarView(CalendarViewBase):
         """Return the link for the previous week."""
         return self.calURL('weekly', self.cursor - timedelta(weeks=1))
 
+    def current(self):
+        """Return the link for the current week."""
+        return self.calURL('weekly', date.today())
+
     def next(self):
         """Return the link for the next week."""
         return self.calURL('weekly', self.cursor + timedelta(weeks=1))
@@ -459,6 +476,10 @@ class MonthlyCalendarView(CalendarViewBase):
     def prev(self):
         """Return the link for the previous month."""
         return self.calURL('monthly', self.prevMonth())
+
+    def current(self):
+        """Return the link for the current month."""
+        return self.calURL('monthly', date.today())
 
     def next(self):
         """Return the link for the next month."""
@@ -488,6 +509,10 @@ class YearlyCalendarView(CalendarViewBase):
     def prev(self):
         """Return the link for the previous year."""
         return self.calURL('yearly', date(self.cursor.year - 1, 1, 1))
+
+    def current(self):
+        """Return the link for the current year."""
+        return self.calURL('yearly', date.today())
 
     def next(self):
         """Return the link for the next year."""
@@ -670,6 +695,10 @@ class DailyCalendarView(CalendarViewBase):
     def prev(self):
         """Return the link for the next day."""
         return self.calURL('daily', self.cursor - timedelta(1))
+
+    def current(self):
+        """Return the link for today."""
+        return self.calURL('daily', date.today())
 
     def next(self):
         """Return the link for the previous day."""
