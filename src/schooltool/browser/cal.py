@@ -37,6 +37,8 @@ from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IContainmentRoot
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
+from schooltool.browser.widgets import TextWidget, SelectionWidget
+from schooltool.browser.widgets import dateParser, timeParser, intParser
 
 __metaclass__ = type
 
@@ -664,57 +666,99 @@ class EventViewBase(View):
     template = Template('www/event.pt')
     page_title = None # overridden by subclasses
 
-    error = u""
-    title = u""
-    start_date = u""
-    start_time = u""
-    location = u""
-    duration = u"30" # default
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.title_widget = TextWidget('title', _('Title'))
+        self.date_widget = TextWidget('start_date', _('Date'),
+                                      parser=dateParser)
+        self.time_widget = TextWidget('start_time', _('Time'),
+                                      parser=timeParser,
+                                      formatter=self.time_formatter)
+        self.duration_widget = TextWidget('duration', _('Duration'),
+                                          unit=_('min.'),
+                                          parser=intParser,
+                                          validator=self.duration_validator,
+                                          value=30)
+        self.locations = self.getLocations()
+        choices = [(l, l) for l in self.locations] + [('', _('Other'))]
+        self.location_widget = SelectionWidget('location', _('Location'),
+                                               choices, value='')
+        self.other_location_widget = TextWidget('location_other',
+                                                _('Specify other'))
+
+    def time_formatter(value):
+        """Format time without seconds.
+
+          >>> time_formatter = EventViewBase.time_formatter
+          >>> time_formatter(None)
+          >>> time_formatter(time(9, 45))
+          '9:45'
+
+        """
+        if value is None:
+            return None
+        else:
+            return '%d:%02d' % (value.hour, value.minute)
+    time_formatter = staticmethod(time_formatter)
+
+    def duration_validator(value):
+        """Check if duration is acceptable.
+
+          >>> duration_validator = EventViewBase.duration_validator
+          >>> duration_validator(None)
+          >>> duration_validator(42)
+          >>> duration_validator(0)
+          >>> duration_validator(-1)
+          Traceback (most recent call last):
+            ...
+          ValueError: Duration cannot be negative.
+
+        """
+        if value is None:
+            return
+        if value < 0:
+            raise ValueError(_("Duration cannot be negative."))
+    duration_validator = staticmethod(duration_validator)
 
     def update(self):
         """Parse arguments in request and put them into view attributes."""
         request = self.request
+        self.title_widget.update(request)
+        self.date_widget.update(request)
+        self.time_widget.update(request)
+        self.duration_widget.update(request)
+        self.location_widget.update(request)
+        self.other_location_widget.update(request)
 
-        if 'title' in request.args:
-            self.title = to_unicode(request.args['title'][0])
-        if 'start_date' in request.args and 'start_time' in request.args:
-            self.start_date = to_unicode(request.args['start_date'][0])
-            self.start_time = to_unicode(request.args['start_time'][0])
-        if 'duration' in request.args:
-            self.duration = to_unicode(request.args['duration'][0])
-        if 'location' in request.args:
-            self.location = to_unicode(request.args['location'][0])
-        if 'location_other' in request.args:
-            self.location_other = to_unicode(request.args['location_other'][0])
+    def do_GET(self, request):
+        self.update()
+        return View.do_GET(self, request)
 
     def do_POST(self, request):
         self.update()
+        if self.title_widget.value == "":
+            # Force a "field is required" error if value is ""
+            self.title_widget.setRawValue(None)
+        self.title_widget.require()
+        self.date_widget.require()
+        self.time_widget.require()
+        self.duration_widget.require()
 
-        if not self.title:
-            self.error = _("Missing title")
-            return self.do_GET(request)
+        errors = (self.title_widget.error or self.date_widget.error or
+                  self.time_widget.error or self.duration_widget.error or
+                  self.location_widget.error or
+                  self.other_location_widget.error)
+        if errors:
+            return View.do_GET(self, request)
 
-        try:
-            start = parse_datetime('%s %s:00' % (self.start_date,
-                                                 self.start_time))
-        except ValueError:
-            self.error = _("Invalid date/time")
-            return self.do_GET(request)
+        start = datetime.combine(self.date_widget.value,
+                                 self.time_widget.value)
+        duration = timedelta(minutes=self.duration_widget.value)
 
-        try:
-            duration = int(self.duration)
-        except ValueError:
-            self.error = _("Invalid duration")
-            return self.do_GET(request)
+        location = (self.location_widget.value or
+                    self.other_location_widget.value or None)
 
-        duration = timedelta(minutes=duration)
-
-        if self.location != 'custom_location':
-            location = self.location
-        else:
-            location = self.location_other
-
-        self.process(start, duration, self.title, location)
+        self.process(start, duration, self.title_widget.value, location)
 
         suffix = 'daily.html?date=%s' % start.date()
         url = absoluteURL(request, self.context, suffix)
@@ -758,6 +802,7 @@ class EventEditView(EventViewBase):
 
     def update(self):
         self.event_id = to_unicode(self.request.args['event_id'][0])
+        # XXX bogosity!
         for event in self.context:
             if event.unique_id == self.event_id:
                 self.event = event
@@ -767,15 +812,21 @@ class EventEditView(EventViewBase):
             # TODO: Create a traversal view for events
             # and refactor the event edit view to take the event as context
 
-        self.title = self.event.title
-        self.start_date = str(self.event.dtstart.date())
-        self.start_time = str(self.event.dtstart.strftime("%H:%M"))
-        self.duration = str(self.event.duration.seconds / 60)
-        self.location = self.event.location
+        self.title_widget.setValue(self.event.title)
+        self.date_widget.setValue(self.event.dtstart.date())
+        self.time_widget.setValue(self.event.dtstart.time())
+        self.duration_widget.setValue(self.event.duration.seconds // 60)
+        if self.event.location in self.locations:
+            self.location_widget.setValue(self.event.location)
+            self.other_location_widget.setValue('')
+        else:
+            self.location_widget.setValue('')
+            self.other_location_widget.setValue(self.event.location)
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
         uid = self.event.unique_id
+        # XXX this may break the invariant!
         self.context.removeEvent(self.event)
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,

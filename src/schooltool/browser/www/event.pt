@@ -4,53 +4,30 @@
 </head>
 <body>
 
-  <h1 metal:fill-slot="h1" tal:content="view/page_title" />
+<h1 metal:fill-slot="h1" tal:content="view/page_title" />
 
-  <metal:block metal:fill-slot="content" tal:define="update view/update">
-  <form method="POST" tal:attributes="action request/path">
-    <div class="error" tal:condition="view/error" tal:content="view/error" />
+<metal:block metal:fill-slot="content">
 
-    <input tal:condition="request/args/event_id|nothing"
-           type="hidden" name="event_id"
-           tal:attributes="value view/event_id" />
+<form method="POST" tal:attributes="action request/path">
 
-    <div class="row">
-      <label for="title" i18n:translate="">Title</label>
-      <input id="title" name="title" type="text"
-             tal:attributes="value view/title" />
-    </div>
-    <div class="row">
-      <label for="start_date" i18n:translate="">Date</label>
-      <input id="start_date" name="start_date" type="text"
-             tal:attributes="value view/start_date" />
-    </div>
-    <div class="row">
-      <label for="start_time" i18n:translate="">Time</label>
-      <input id="start_time" name="start_time" type="text"
-             tal:attributes="value view/start_time" />
-    </div>
-    <div class="row">
-      <label for="location" i18n:translate="">Location</label>
-      <select name="location">
-        <option tal:repeat="location view/getLocations"
-                tal:content="location" />
-        <option value="custom_location" i18n:translate="">other</option>
-      </select>
-      <br />
-      <label for="location_other" i18n:translate="">Specify other:</label>
-      <input id="location_other" name="location_other" type="text"
-             tal:attributes="value view/location" />
-    </div>
-    <div class="row">
-      <label for="duration" i18n:translate="">Duration</label>
-      <input id="duration" name="duration" type="text"
-             tal:attributes="value view/duration" />
-    </div>
-    <input name="CONFIRM_ADD" type="submit" value="Submit"
-           i18n:attributes="value Submit" />
+  <input tal:condition="request/args/event_id|nothing"
+         type="hidden" name="event_id"
+         tal:attributes="value view/event_id" />
 
-  </form>
-  </metal:block>
+  <div class="row" tal:replace="structure view/title_widget" />
+  <div class="row" tal:replace="structure view/date_widget" />
+  <div class="row" tal:replace="structure view/time_widget" />
+  <div class="row" tal:replace="structure view/location_widget" />
+  <div class="row" tal:replace="structure view/other_location_widget" />
+  <div class="row" tal:replace="structure view/duration_widget" />
 
+  <div class="buttons">
+    <input class="button" name="CONFIRM_ADD" type="submit" value="Submit"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
 </body>
 </html>

@@ -37,7 +37,7 @@ from schooltool.common import dedent
 __metaclass__ = type
 
 
-def createEvent(dtstart, duration, title):
+def createEvent(dtstart, duration, title, **kw):
     """Create a CalendarEvent.
 
       >>> e = createEvent('2004-01-02 14:45:50', '5min', 'title')
@@ -77,7 +77,7 @@ def createEvent(dtstart, duration, title):
             dur += timedelta(seconds=int(part.rstrip('sec')))
         else:
             dur += timedelta(minutes=int(part.rstrip('min')))
-    return CalendarEvent(dtstart, dur, title)
+    return CalendarEvent(dtstart, dur, title, **kw)
 
 
 def createCalendar(events=()):
@@ -810,67 +810,55 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
 class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
-    def setUp(self):
-        self.setUpSampleApp()
+    def createView(self):
+        from schooltool.browser.cal import EventViewBase
+        view = EventViewBase(self.person.calendar)
+        return view
 
     def test_getLocations(self):
-        from schooltool.browser.cal import EventViewBase
-
-        cal = self.person.cal = createCalendar()
-        cal.__parent__ = self.person
-
-        view = EventViewBase(cal)
+        view = self.createView()
         locations = list(view.getLocations())
         self.assertEquals(locations, ['Inside', 'Outside'])
 
     def test_customized_location(self):
-        from schooltool.browser.cal import EventViewBase
-
-        cal = createCalendar()
-        setPath(cal, '/persons/foo/calendar')
-        view = EventViewBase(cal)
-
+        view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
-                                    'location': 'custom_location',
+                                    'location': '',
                                     'location_other': 'Moon',
-                                    'duration': '50'})
-        view.request = request
+                                    'duration': '50'},
+                              method='POST')
 
         def processStub(dtstart, duration, title, location):
             self.assertEquals(location, 'Moon')
         view.process = processStub
 
-        content = view.do_POST(request)
+        content = view.render(request)
 
 
-class TestEventAddView(unittest.TestCase):
+class TestEventAddView(AppSetupMixin, unittest.TestCase):
 
-    # XXX This class should be split into TestEventViewBase
-    #     and TestEventAddView, as was done with the original code.
-
-    def setUp(self):
+    def createView(self):
         from schooltool.browser.cal import EventAddView
-
-        self.cal = createCalendar()
-        setPath(self.cal, '/persons/somebody/calendar')
-        self.view = EventAddView(self.cal)
-        self.view.authorization = lambda x, y: True
-        self.view.getLocations = lambda: ["Bus stop"]
+        view = EventAddView(self.person.calendar)
+        view.authorization = lambda x, y: True
+        return view
 
     def test_render(self):
+        view = self.createView()
         request = RequestStub()
-        content = self.view.render(request)
+        content = view.render(request)
         self.assert_('Add event' in content)
 
     def test_render_args(self):
+        view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
-                                    'location': 'Kitchen',
+                                    'location_other': 'Kitchen',
                                     'duration': '50'})
-        content = self.view.render(request)
+        content = view.render(request)
         self.assert_('Add event' in content)
         self.assert_('Hacking' in content)
         self.assert_('Kitchen' in content)
@@ -879,20 +867,21 @@ class TestEventAddView(unittest.TestCase):
         self.assert_('50' in content)
 
     def test_post(self):
+        view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
                                     'location': 'Kitchen',
-                                    'duration': '50'})
-        self.view.request = request
-        content = self.view.do_POST(request)
+                                    'duration': '50'},
+                              method='POST')
+        content = view.render(request)
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/persons/somebody/calendar/'
+                          'http://localhost:7001/persons/johndoe/calendar/'
                           'daily.html?date=2004-08-13')
 
-        events = list(self.cal)
+        events = list(self.person.calendar)
         self.assertEquals(len(events), 1)
         self.assertEquals(events[0].title, 'Hacking')
         self.assertEquals(events[0].location, 'Kitchen')
@@ -900,57 +889,55 @@ class TestEventAddView(unittest.TestCase):
         self.assertEquals(events[0].duration, timedelta(minutes=50))
 
     def test_post_errors(self):
+        view = self.createView()
         request = RequestStub(args={'title': '',
                                     'start_date': '2004-12-13',
                                     'start_time': '15:30',
-                                    'duration': '50'})
-        self.view.request = request
-        content = self.view.do_POST(request)
-        self.assert_('Missing title' in content)
+                                    'duration': '50'},
+                              method='POST')
+        content = view.render(request)
+        self.assert_('This field is required' in content)
 
+        view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-31-13',
                                     'start_time': '15:30',
-                                    'duration': '50'})
-        self.view.request = request
-        content = self.view.do_POST(request)
-        self.assert_('Invalid date/time' in content)
+                                    'duration': '50'},
+                              method='POST')
+        content = view.render(request)
+        self.assert_('Invalid date' in content)
 
+        view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
-                                    'duration': '100h'})
-        self.view.request = request
-        content = self.view.do_POST(request)
-        self.assert_('Invalid duration' in content)
+                                    'duration': '100h'},
+                              method='POST')
+        content = view.render(request)
+        self.assert_('Invalid value' in content)
 
 
-class TestEventEditView(unittest.TestCase):
+class TestEventEditView(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
+        self.setUpSampleApp()
+        self.ev1 = createEvent('2004-08-15 12:00', '1h', "ev1",
+                               location="Hell")
+        self.ev2 = createEvent('2004-08-12 13:00', '2h', "ev2",
+                               unique_id="pick me", location="Heaven")
+        self.person.calendar.addEvent(self.ev1)
+        self.person.calendar.addEvent(self.ev2)
+
+    def createView(self):
         from schooltool.browser.cal import EventEditView
-        from schooltool.cal import CalendarEvent
-
-        self.cal = createCalendar()
-        setPath(self.cal, '/persons/somebody/calendar')
-
-        self.ev1 = CalendarEvent(datetime(2004, 8, 15, 12, 0),
-                                 timedelta(hours=1), "ev1",
-                                 location="Hell")
-        self.ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
-                                 timedelta(hours=2), "ev2",
-                                 unique_id="pick me",
-                                 location="Heaven")
-        self.cal.addEvent(self.ev1)
-        self.cal.addEvent(self.ev2)
-
-        self.view = EventEditView(self.cal)
-        self.view.authorization = lambda x, y: True
-        self.view.getLocations = lambda: ["Bus stop"]
+        view = EventEditView(self.person.calendar)
+        view.authorization = lambda x, y: True
+        return view
 
     def test_render(self):
+        view = self.createView()
         request = RequestStub(args={'event_id': "pick me"})
-        content = self.view.render(request)
+        content = view.render(request)
 
         self.assert_('"2004-08-15"' not in content)
         self.assert_('"ev1"' not in content)
@@ -962,23 +949,23 @@ class TestEventEditView(unittest.TestCase):
         self.assert_('"120"' in content)
 
     def test(self):
+        view = self.createView()
         request = RequestStub(args={'event_id': "pick me",
                                     'title': 'Changed',
                                     'location': 'Inbetween',
                                     'start_date': '2004-08-16',
                                     'start_time': '13:30',
-                                    'duration': '70'})
-        self.view.request = request
+                                    'duration': '70'},
+                              method='POST')
+        content = view.render(request)
 
-        content = self.view.do_POST(request)
-
-        events = list(self.cal)
+        events = list(self.person.calendar)
         self.assertEquals(len(events), 2)
         self.assert_(self.ev1 in events)
         self.assert_(self.ev2 not in events)
 
-        self.cal.removeEvent(self.ev1)
-        new_ev = list(self.cal)[0]
+        self.person.calendar.removeEvent(self.ev1)
+        new_ev = list(self.person.calendar)[0]
         self.assertEquals(new_ev.title, 'Changed')
         self.assertEquals(new_ev.location, 'Inbetween')
         self.assertEquals(new_ev.dtstart, datetime(2004, 8, 16, 13, 30))
@@ -987,7 +974,7 @@ class TestEventEditView(unittest.TestCase):
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/persons/somebody/calendar/'
+                          'http://localhost:7001/persons/johndoe/calendar/'
                           'daily.html?date=2004-08-16')
 
 
