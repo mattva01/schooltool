@@ -57,6 +57,14 @@
                       tal:attributes="href string:/persons/${request/authenticated_user/__name__}"
                       i18n:translate="">My Information</a>
                 </li>
+                <tal:if tal:condition="view/isManager">
+                  <li>
+                    <a href="/start" id="portlet-navigation-manage"
+                      i18n:translate="">
+                      Manage Site
+                    </a>
+                  </li>
+                </tal:if>
               </ul>
             </div>
 
@@ -153,13 +161,6 @@
   <metal:block define-macro="calendar-navigation">
 
     <div id="calendar-navigation" style="text-align:center;">
-      <tal:if tal:condition="view/isManager">
-        <div>
-          <a href="/start" i18n:translate="">
-            Manage Site
-          </a>
-        </div>
-      </tal:if>
       <a tal:attributes="href string:${context/@@absolute_url}.ics"
           title="Open this calendar in an iCal client."
           i18n:attributes="title"

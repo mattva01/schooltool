@@ -2860,6 +2860,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
                               args={'event_id': str(event_id),
                                     'date': "2004-08-14",
                                     'CONFIRM': 'Yes'})
+        view.request = request
         result = view.render(request)
         return result, request
 

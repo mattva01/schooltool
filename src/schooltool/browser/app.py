@@ -170,6 +170,8 @@ class RootView(View):
             return StaticFile('www/calendar.png', 'image/png')
         elif name == 'information.png':
             return StaticFile('www/information.png', 'image/png')
+        elif name == 'manage.png':
+            return StaticFile('www/manage.png', 'image/png')
         elif name == 'delete.png':
             return StaticFile('www/delete.png', 'image/png')
         elif name == 'day.png':

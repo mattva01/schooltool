@@ -132,6 +132,7 @@ class TestAppView(SchoolToolSetup, TraversalTestMixin):
 
     def test_render_forbidden(self):
         view = self.createView()
+        view.isManager = lambda: False
         request = RequestStub('/login?forbidden=1', args={'forbidden': '1'},
                               authenticated_user=PersonStub())
         result = view.render(request)
@@ -143,6 +144,7 @@ class TestAppView(SchoolToolSetup, TraversalTestMixin):
         # If manager is already logged in the proper (or at least intentional)
         # behavior is to redirect to the managers calendar.
         view = self.createView()
+        view.isManager = lambda: True
         request = RequestStub(authenticated_user=PersonStub())
         result = view.render(request)
         self.assertEquals(request.code, 302)
@@ -204,7 +206,7 @@ class TestAppView(SchoolToolSetup, TraversalTestMixin):
         for picture in ('logo.png', 'group.png', 'person.png', 'resource.png',
                 'meeting.png', 'booking.png', 'calendar.png', 'information.png',
                 'delete.png', 'day.png', 'week.png', 'month.png', 'year.png',
-                'previous.png', 'current.png', 'next.png'):
+                'previous.png', 'current.png', 'next.png', 'manage.png'):
             image = self.assertTraverses(view, picture, StaticFile)
             self.assertEquals(image.content_type, 'image/png')
         js = self.assertTraverses(view, 'schoolbell.js', StaticFile)
@@ -302,6 +304,7 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
 
     def test_render_already_logged_in(self):
         view = self.createView()
+        view.isManager = lambda: True
         request = RequestStub(authenticated_user=PersonStub())
         result = view.render(request)
         self.assertEquals(request.code, 302)

@@ -762,6 +762,16 @@ body#path-login form.standalone {
   background: #748fad url("/information.png") left no-repeat !important;
 }
 
+#portlet-navigation-manage {
+  padding-left: 3em !important;
+  background: url("/manage.png") left no-repeat;
+}
+
+#portlet-navigation-manage:hover {
+  padding-left: 3em !important;
+  background: #748fad url("/manage.png") left no-repeat !important;
+}
+
 #portlet-calendar-view-month {
     text-align: center;
 }

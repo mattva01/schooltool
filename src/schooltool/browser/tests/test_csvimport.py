@@ -330,6 +330,7 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
 
     def test_access(self):
         view = self.createView()
+        view.isManager = lambda: False
         request = RequestStub(authenticated_user=self.person)
         result = view.render(request)
         self.assertEquals(request.code, 302, result)

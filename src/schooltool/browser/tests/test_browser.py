@@ -202,6 +202,7 @@ class TestView(AppSetupMixin, unittest.TestCase):
     def test_unauthorized_forbidden(self):
         from schooltool.browser import View
         view = View(None)
+        view.isManager = lambda: False
         request = RequestStub('/some/path?arg=val&arg2=val2',
                               authenticated_user=self.person)
         result = view.unauthorized(request)
