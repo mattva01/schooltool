@@ -1,30 +1,50 @@
 Template: schooltool/listen
 Type: string
 Default: 7001
-_Description: Interfaces for the RESTive interface over HTTP
+_Description: Interfaces for SchoolTool XML web services
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
+ .
+ This interface is used by SchoolTool for communicating with non-HTML clients
+ such as the SchoolTool and 3rd party clients (e.g. Mozilla Calender). XML and
+ iCalendar messages can be PUT or GET to this interface via HTTP allowing
+ access to all SchoolTool functionality.
 
 Template: schooltool/web
 Type: string
 Default: 7080
-_Description: Interfaces for the web interface over HTTP
+_Description: Interfaces for the HTML browser interface
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
+ .
+ The HTML interface provides access to SchoolTool via any standard web browser.
 
 Template: schooltool/listen_ssl
 Type: string
 Default:
-_Description: Interfaces for the RESTive interface over HTTPS
+_Description: Interfaces for SchoolTool XML web services
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
+ .
+ This interface is used by SchoolTool for communicating with non-HTML clients
+ such as the SchoolTool and 3rd party clients (e.g. Mozilla Calender). XML and
+ iCalendar messages can be PUT or GET to this interface via HTTP allowing
+ access to all SchoolTool functionality.
+ .
+ This is an SSL version of this interface and will only accept SSL
+ connections.
 
 Template: schooltool/web_ssl
 Type: string
 Default:
-_Description: Interfaces for the web interface over HTTPS
+_Description: Interfaces for the HTML browser interface
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
+ .
+ The web interface provides access to SchoolTool via any standard web browser.
+ .
+ This is an SSL version of this interface and will only accept SSL
+ connections.
 
 Template: schooltool/cert-type
 Type: select

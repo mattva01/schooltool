@@ -7,6 +7,8 @@ schooltool (0.8+svn) unstable; urgency=low
   * Change password in debian readme back to schooltool. (Closes: Bug#283430)
   * Stop postinst scripts from adding blank lines to config files.
   * Remove un-needed build dependency on python2.3.
+  * Make debconf questions for interface setup more clear.
+    (Closes: Bug#280698)
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
