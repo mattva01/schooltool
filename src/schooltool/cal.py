@@ -28,6 +28,7 @@ import email.Utils
 from sets import Set
 from zope.interface import implements
 from persistent import Persistent
+from persistent.dict import PersistentDict
 from schooltool.auth import ACL
 from schooltool.component import getRelatedObjects
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
@@ -140,14 +141,21 @@ class SchooldayModel(DateRange, Persistent):
 # Calendaring
 #
 
-class Calendar(Persistent):
+class ImmutableCalendar:
+    """An immutable calendar.
 
-    implements(ICalendar, ICalendarWrite, ILocation)
+    This calendar gets given a sequence of events upon its creation
+    and cannot change it.
 
-    def __init__(self):
-        self.events = Set()
-        self.__name__ = None
-        self.__parent__ = None
+    It is used for functionally defined calendars and other
+    non-persistent calendars, such as returned by `expand` and
+    `byDate` methods of ICalendar.
+    """
+
+    implements(ICalendar)
+
+    def __init__(self, events):
+        self.events = events
 
     def __iter__(self):
         return iter(self.events)
@@ -160,16 +168,16 @@ class Calendar(Persistent):
         raise KeyError(unique_id)
 
     def byDate(self, date):
-        cal = Calendar()
+        events = []
         for event in self:
             event_start = event.dtstart.date()
             event_end = (event.dtstart + event.duration).date()
             if event_start <= date <= event_end:
-                cal.addEvent(event)
-        return cal
+                events.append(event)
+        return ImmutableCalendar(events)
 
     def expand(self, first, last):
-        cal = Calendar()
+        events = []
         for event in self:
             if event.recurrence is not None:
                 starttime = event.dtstart.time()
@@ -177,22 +185,36 @@ class Calendar(Persistent):
                     if first <= recdate <= last:
                         start = datetime.datetime.combine(recdate, starttime)
                         new = event.replace(dtstart=start)
-                        cal.addEvent(ExpandedCalendarEvent.duplicate(new))
+                        events.append(ExpandedCalendarEvent.duplicate(new))
             else:
                 event_start = event.dtstart.date()
                 event_end = (event.dtstart + event.duration).date()
                 if (first <= event_start <= last or
                     event_start <= first <= event_end):
-                    cal.addEvent(ExpandedCalendarEvent.duplicate(event))
-        return cal
+                    events.append(ExpandedCalendarEvent.duplicate(event))
+        return ImmutableCalendar(events)
+
+
+class Calendar(Persistent, ImmutableCalendar):
+
+    implements(ICalendar, ICalendarWrite, ILocation)
+
+    def __init__(self):
+        self.events = PersistentDict()
+        self.__name__ = None
+        self.__parent__ = None
+
+    def __iter__(self):
+        return self.events.itervalues()
+
+    def find(self, unique_id):
+        return self.events[unique_id]
 
     def addEvent(self, event):
-        self.events.add(event)
-        self.events = self.events  # make persistence work
+        self.events[event.unique_id] = event
 
     def _removeEvent(self, event):
-        self.events.remove(event)
-        self.events = self.events  # make persistence work
+        del self.events[event.unique_id]
 
     def removeEvent(self, event):
         self._removeEvent(event)
@@ -217,12 +239,10 @@ class Calendar(Persistent):
 
     def update(self, calendar):
         for event in calendar:
-            self.events.add(event)
-        self.events = self.events  # make persistence work
+            self.events[event.unique_id] = event
 
     def clear(self):
         self.events.clear()
-        self.events = self.events  # make persistence work
 
 
 class CalendarEvent(Persistent):

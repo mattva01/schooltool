@@ -32,7 +32,7 @@ from persistent import Persistent
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
 from schooltool.tests.helpers import diff, sorted
-from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -1253,7 +1253,8 @@ class TestTimetableDict(EventServiceTestMixin, unittest.TestCase):
 
 
 class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
-                          NiceDiffsMixin, unittest.TestCase):
+                          NiceDiffsMixin, unittest.TestCase,
+                          EqualsSortedMixin):
 
     def setUp(self):
         self.setUpRegistries()
@@ -1455,7 +1456,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         tt1.model = TimetableModelStub()
         tt2.model = TimetableModelStub()
         cal = tm.makeTimetableCalendar()
-        self.assertEquals(cal.events, cal1.events | cal2.events)
+        self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
         self.assert_(cal.__parent__ is tm)
         self.assertEquals(cal.__name__, 'timetable-calendar')
 

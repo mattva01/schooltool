@@ -150,49 +150,31 @@ class TestDateRange(unittest.TestCase):
                           date(2003, 1, 2), date(2003, 1, 1))
 
 
-class TestCalendar(unittest.TestCase, EqualsSortedMixin):
+class TestImmutableCalendar(unittest.TestCase, EqualsSortedMixin):
+
+    def makeCal(self, events):
+        from schooltool.cal import ImmutableCalendar
+        return ImmutableCalendar(events)
 
     def test(self):
-        from schooltool.cal import Calendar
-        from schooltool.interfaces import ICalendar, ICalendarWrite, ILocation
-        cal = Calendar()
+        from schooltool.cal import ImmutableCalendar
+        from schooltool.interfaces import ICalendar
+
+        cal = ImmutableCalendar(())
         verifyObject(ICalendar, cal)
-        verifyObject(ICalendarWrite, cal)
-        verifyObject(ILocation, cal)
-
-    def test_iter(self):
-        from schooltool.cal import Calendar
-        from schooltool.cal import CalendarEvent
-
-        cal = Calendar()
-        self.assertEqual(list(cal), [])
-
-        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
-                            timedelta(minutes=10),
-                            "English")
-
-        cal.addEvent(ev1)
-        self.assertEqual(list(cal), [ev1])
 
     def test_find(self):
-        from schooltool.cal import Calendar
+        from schooltool.cal import ImmutableCalendar
         from schooltool.cal import CalendarEvent
 
-        cal = Calendar()
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
                             timedelta(minutes=10),
                             "English")
-        cal.addEvent(ev1)
+
+        cal = self.makeCal([ev1])
 
         self.assert_(cal.find(ev1.unique_id) is ev1)
         self.assertRaises(KeyError, cal.find, ev1.unique_id + '-not')
-
-    def makeCal(self, events):
-        from schooltool.cal import Calendar
-        cal = Calendar()
-        for event in events:
-            cal.addEvent(event)
-        return cal
 
     def test_byDate(self):
         from schooltool.cal import CalendarEvent
@@ -265,10 +247,44 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         # ev1 expands to [ev1_1, ev1_2]
         ev1_1 = ev1.replace(dtstart=datetime(2004, 10, 11, 10, 0))
         ev1_2 = ev1.replace(dtstart=datetime(2004, 10, 12, 10, 0))
-        self.assertEqual(result, [ev1_1, ev2, ev1_2])
+        expected = [ev1_1, ev2, ev1_2]
+        expected.sort()
+        self.assertEqual(result, expected)
 
         for event in result:
             assert IExpandedCalendarEvent.providedBy(event)
+
+
+class TestCalendar(TestImmutableCalendar):
+
+    def test(self):
+        from schooltool.cal import Calendar
+        from schooltool.interfaces import ICalendar, ICalendarWrite, ILocation
+        cal = Calendar()
+        verifyObject(ICalendar, cal)
+        verifyObject(ICalendarWrite, cal)
+        verifyObject(ILocation, cal)
+
+    def test_iter(self):
+        from schooltool.cal import Calendar
+        from schooltool.cal import CalendarEvent
+
+        cal = Calendar()
+        self.assertEqual(list(cal), [])
+
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+
+        cal.addEvent(ev1)
+        self.assertEqual(list(cal), [ev1])
+
+    def makeCal(self, events):
+        from schooltool.cal import Calendar
+        cal = Calendar()
+        for event in events:
+            cal.addEvent(event)
+        return cal
 
     def test_clear(self):
         from schooltool.cal import CalendarEvent
@@ -765,11 +781,12 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
         rec2 = CalendarEvent(datetime(2003, 11, 28, 13, 00),
                              timedelta(minutes=30), "AB", recurrence=rr,
                              unique_id=ev2.unique_id)
-        expected = sets.Set([ev1, ev2, rec1, rec2])
+        expected = {ev1.unique_id: ev1, ev2.unique_id: ev2,
+                    rec1.unique_id: rec1, rec2.unique_id: rec2}
 
         self.assertEquals(result.events, expected)
 
-        for event in result.events:
+        for event in result:
             verifyObject(IInheritedCalendarEvent, event)
             group = event.recurrence is None and gr1 or gr2
             self.assert_(event.calendar is group.calendar)
@@ -1303,6 +1320,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestSchooldayModel))
     suite.addTest(unittest.makeSuite(TestCalendar))
+    suite.addTest(unittest.makeSuite(TestImmutableCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarPersistence))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
     suite.addTest(unittest.makeSuite(TestExpandedCalendarEvent))
