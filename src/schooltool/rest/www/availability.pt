@@ -2,7 +2,7 @@
               xmlns:xlink="http://www.w3.org/1999/xlink">
    <resource tal:repeat="res view/listResources" xlink:type="simple"
              tal:attributes="xlink:href res/href; xlink:title res/title">
-     <slot  tal:repeat="slot res/slots"
-            tal:attributes="start slot/start; duration slot/duration"/>
+     <slot tal:repeat="slot res/slots"
+           tal:attributes="start slot/start; duration slot/duration"/>
    </resource>
 </availability>
