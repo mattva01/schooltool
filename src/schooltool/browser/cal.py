@@ -1556,7 +1556,7 @@ class EventDeleteView(View, EventViewHelpers):
 
     CalendarEventView.deleteLink generates a link for calling this view.
 
-    There are five usage scenarios:
+    There are six usage scenarios:
 
         1. You are trying to delete an ordinary, nonrepeating calendar event.
            The event is removed from the calendar.
