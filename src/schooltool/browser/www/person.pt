@@ -17,8 +17,9 @@
     </div>
     <div class="groups">
       <h3 i18n:translate="">Groups</h3>
-      <p tal:repeat="sub view/getParentGroups">
-       <a tal:attributes="href sub/url" tal:content="sub/title"/>
+      <p tal:repeat="group view/getParentGroups">
+       <a tal:attributes="href group/@@absolute_url"
+          tal:content="group/title"/>
       </p>
     </div>
     <div class="timetables" tal:condition="view/timetables">

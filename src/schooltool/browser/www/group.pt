@@ -17,7 +17,8 @@
   <div class="parentgroups">
     <h3 i18n:translate="">Parent groups</h3>
     <p tal:repeat="parent view/getParentGroups">
-     <a tal:attributes="href parent/url" tal:content="parent/title"/>
+     <a tal:attributes="href parent/@@absolute_url"
+        tal:content="parent/title"/>
     </p>
   </div>
 
@@ -25,17 +26,18 @@
     <div tal:define="subgroups view/getSubGroups" tal:condition="subgroups">
       <h3 i18n:translate="">Subgroups</h3>
       <p tal:repeat="sub subgroups">
-       <a tal:attributes="href sub/url" tal:content="sub/title"/>
+       <a tal:attributes="href sub/@@absolute_url" tal:content="sub/title"/>
       </p>
     </div>
     <div tal:define="members view/getOtherMembers" tal:condition="members">
       <h3 i18n:translate="">Members</h3>
       <p tal:repeat="obj members">
-       <a tal:attributes="href obj/url" tal:content="obj/title"/>
+       <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title"/>
       </p>
     </div>
     <div class="actions" tal:condition="view/canEdit">
-      <a class="action" tal:attributes="href view/editURL"
+      <a class="action"
+         tal:attributes="href string:${context/@@absolute_url}/edit.html"
          i18n:translate="">Edit</a>
     </div>
   </div>
@@ -45,11 +47,12 @@
        tal:condition="teachers">
     <h3 i18n:translate="">Teachers</h3>
     <p tal:repeat="teacher teachers">
-      <a tal:attributes="href python:teacher[2]"
-         tal:content="python:teacher[0]"/>
+      <a tal:attributes="href teacher/@@absolute_url"
+         tal:content="teacher/title"/>
     </p>
     <div class="actions" tal:condition="view/canEdit">
-      <a class="action" tal:attributes="href view/teachersURL"
+      <a class="action"
+         tal:attributes="href string:${context/@@absolute_url}/teachers.html"
          i18n:translate="">Edit</a>
     </div>
   </div>

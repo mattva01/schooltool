@@ -14,17 +14,13 @@
        tal:condition="status" tal:content="status" class="status"/>
 
 <tal:comment condition="nothing">
-<strong style="color:red">
-
   XXX Fix this mess with trying to cram three different forms into a single
       template and display them conditionally.  Just use three different
       templates already!
-
-</strong>
 </tal:comment>
 
 <tal:block condition="not:request/args/ADD|nothing">
- <tal:block condition="not:request/args/ADD2|nothing">
+ <tal:block condition="not:request/args/SEARCH|nothing">
   <form method="POST" tal:attributes="action request/uri">
   <table>
     <tr>
@@ -34,13 +30,13 @@
     </tr>
 
     <tr tal:repeat="item view/list">
-      <td tal:content="python:item[0]">[Icon]</td>
+      <td tal:content="item/__class__/__name__">[Icon]</td>
       <td><input
               type="checkbox" name="CHECK"
-              tal:attributes="value python:item[2]">
+              tal:attributes="value item/@@path">
       </td>
-      <td><a tal:attributes="href python:item[3]"
-             tal:content="python:item[1]"/></td>
+      <td><a tal:attributes="href item/@@absolute_url"
+             tal:content="item/title"/></td>
     </tr>
   </table>
   <input type="submit" class="button" name="DELETE"
@@ -77,14 +73,14 @@
     </tr>
 
     <tr tal:repeat="item view/addList">
-      <td tal:content="python:item[0]">[Icon]</td>
+      <td tal:content="item/__class__/__name__">[Icon]</td>
       <td><input
               type="checkbox" name="CHECK"
-              tal:attributes="value python:item[2];
+              tal:attributes="value item/@@path;
                               id string:check_${repeat/item/number}">
       </td>
       <td><label tal:attributes="for string:check_${repeat/item/number}"
-                 tal:content="python:item[1]"/></td>
+                 tal:content="item/title"/></td>
     </tr>
   </table>
 

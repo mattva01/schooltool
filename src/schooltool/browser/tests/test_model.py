@@ -100,9 +100,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         from schooltool.browser.model import PersonView
         view = PersonView(self.person)
         view.request = RequestStub()
-        self.assertEquals(view.getParentGroups(),
-                          [{'url': 'http://localhost:7001/groups/root',
-                            'title': 'root'}])
+        self.assertEquals(view.getParentGroups(), [self.root])
 
     def test_editURL(self):
         from schooltool.browser.model import PersonView
@@ -418,25 +416,19 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.getOtherMembers(),
-                          [{'url': 'http://localhost:7001/persons/p',
-                            'title': 'Pete'}])
+        self.assertEquals(view.getOtherMembers(), [self.per])
 
     def test_getSubGroups(self):
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.getSubGroups(),
-                          [{'url': 'http://localhost:7001/groups/sub',
-                            'title': 'subgroup'}])
+        self.assertEquals(view.getSubGroups(), [self.sub])
 
     def test_getParentGroups(self):
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.getParentGroups(),
-                          [{'url': 'http://localhost:7001/groups/root',
-                            'title': 'root'}])
+        self.assertEquals(view.getParentGroups(), [self.root])
 
     def test_teachersList(self):
         from schooltool.browser.model import GroupView
@@ -446,9 +438,7 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
         Teaching(teacher=self.per, taught=self.group)
         view = GroupView(self.group)
         view.request = RequestStub(authenticated_user=UserStub())
-        self.assertEquals(view.teachersList(),
-                          [('Pete', '/persons/p',
-                            'http://localhost:7001/persons/p')])
+        self.assertEquals(view.teachersList(), [self.per])
 
     def test_traverse(self):
         from schooltool.browser.model import GroupView, GroupEditView
@@ -531,35 +521,18 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         view.request = RequestStub()
         self.assertEquals(view.list(),
-                          [('Group', 'subgroup', '/groups/sub',
-                            'http://localhost:7001/groups/sub'),
-                           ('Person', 'John', '/persons/j',
-                            'http://localhost:7001/persons/j'),
-                           ('Person', 'Pete', '/persons/p',
-                            'http://localhost:7001/persons/p'),
-                          ])
+                          [self.per2, self.per, self.sub])
 
     def test_addList(self):
         from schooltool.browser.model import GroupEditView
         view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         self.assertEquals(view.addList(),
-                          [('Group', 'Random group', '/groups/group2',
-                            'http://localhost:7001/groups/group2'),
-                           ('Group', 'Teachers', '/groups/new',
-                            'http://localhost:7001/groups/new'),
-                           ('Group', 'root', '/groups/root',
-                            'http://localhost:7001/groups/root'),
-                           ('Person', 'Longjohn', '/persons/lj',
-                            'http://localhost:7001/persons/lj'),
-                           ('Resource', 'Hall', '/resources/hall',
-                            'http://localhost:7001/resources/hall')
-                          ])
+                          [self.group2, self.group, self.root,
+                           self.per3, self.res])
 
         view.request = RequestStub(args={'SEARCH': 'john'})
-        self.assertEquals(view.addList(),
-                          [('Person', 'Longjohn', '/persons/lj',
-                            'http://localhost:7001/persons/lj')])
+        self.assertEquals(view.addList(), [self.per3])
 
     def test_update_DELETE(self):
         from schooltool.browser.model import GroupEditView
@@ -647,18 +620,14 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.browser.model import GroupTeachersView
         view = GroupTeachersView(self.group)
         view.request = RequestStub(authenticated_user=UserStub())
-        self.assertEquals(view.teachersList(),
-                          [('Longjohn', '/persons/lj',
-                            'http://localhost:7001/persons/lj')])
+        self.assertEquals(view.list(), [self.per3])
 
-    def test_allTeachers(self):
+    def test_addList(self):
         from schooltool.browser.model import GroupTeachersView
         from schooltool.membership import Membership
         view = GroupTeachersView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.allTeachers(),
-                          [('Josh', '/persons/josh',
-                            'http://localhost:7001/persons/josh')])
+        self.assertEquals(view.addList(), [self.teacher])
 
     def test_update_DELETE(self):
         from schooltool.browser.model import GroupTeachersView

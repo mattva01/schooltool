@@ -50,8 +50,7 @@ class GetParentsMixin:
 
     def getParentGroups(self):
         """Return groups that context is a member of."""
-        return [{'url': absoluteURL(self.request, g), 'title': g.title}
-                for g in getRelatedObjects(self.context, URIGroup)]
+        return getRelatedObjects(self.context, URIGroup)
 
 
 class PersonInfoMixin:
@@ -153,9 +152,6 @@ class PersonPasswordView(View):
                                    (self.context.title, getPath(self.context)))
         return self.do_GET(request)
 
-    def contextURL(self):
-        return absoluteURL(self.request, self.context)
-
 
 class PersonEditView(View, PersonInfoMixin):
     """Page for changing information about a person (/persons/id/edit.html)."""
@@ -244,31 +240,23 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin):
 
     def getOtherMembers(self):
         """Return members that are not groups."""
-        return [{'url': absoluteURL(self.request, g), 'title': g.title}
-                for g in getRelatedObjects(self.context, URIMember)
+        return [g for g in getRelatedObjects(self.context, URIMember)
                 if not IGroup.providedBy(g)]
 
     def getSubGroups(self):
         """Return members that are groups."""
-        return [{'url': absoluteURL(self.request, g), 'title': g.title}
-                for g in getRelatedObjects(self.context, URIMember)
+        return [g for g in getRelatedObjects(self.context, URIMember)
                 if IGroup.providedBy(g)]
 
     def teachersList(self):
         """Lists teachers of this group"""
-        result = [(obj.title, getPath(obj), absoluteURL(self.request, obj))
+        result = [(obj.title, obj)
                   for obj in getRelatedObjects(self.context, URITeacher)]
         result.sort()
-        return result
+        return [obj for title, obj in result]
 
     def canEdit(self):
         return isManager(self.request.authenticated_user)
-
-    def editURL(self):
-        return absoluteURL(self.request, self.context) + '/edit.html'
-
-    def teachersURL(self):
-        return absoluteURL(self.request, self.context) + '/teachers.html'
 
 
 class GroupEditView(View):
@@ -281,18 +269,15 @@ class GroupEditView(View):
     template = Template('www/group_edit.pt')
 
     def list(self):
-        """Return a list of member data as tuples
-
-        (type, title, path, URL)
+        """Return a list of members
         """
-        result = [(obj.__class__.__name__, obj.title, getPath(obj),
-                   absoluteURL(self.request, obj))
+        result = [(obj.title, obj)
                   for obj in getRelatedObjects(self.context, URIMember)]
         result.sort()
-        return result
+        return [obj for title, obj in result]
 
     def addList(self):
-        """Return a list of member data as tuples
+        """Return a list of objects available for addition
 
         (type, title, path, URL)
         """
@@ -305,11 +290,9 @@ class GroupEditView(View):
             for obj in traverse(self.context, path).itervalues():
                 if (searchstr in obj.title.lower() and
                     obj not in members):
-                    result.append((obj.__class__.__name__, obj.title,
-                                   getPath(obj),
-                                   absoluteURL(self.request, obj)))
+                    result.append((obj.__class__.__name__, obj.title, obj))
         result.sort()
-        return result
+        return [obj for cls, title, obj in result]
 
     def update(self):
         request = self.request
@@ -344,14 +327,14 @@ class GroupTeachersView(View):
 
     template = Template('www/group_teachers.pt')
 
-    def teachersList(self):
+    def list(self):
         """List teachers of this group."""
-        result = [(obj.title, getPath(obj), absoluteURL(self.request, obj))
+        result = [(obj.title, obj)
                   for obj in getRelatedObjects(self.context, URITeacher)]
         result.sort()
-        return result
+        return [obj for title, obj in result]
 
-    def allTeachers(self):
+    def addList(self):
         """List all members of the Teachers group except current teachers."""
         result = []
         request = self.request
@@ -359,10 +342,9 @@ class GroupTeachersView(View):
         teachers = traverse(self.context, '/groups/teachers')
         for obj in getRelatedObjects(teachers, URIMember):
             if obj not in current_teachers:
-                result.append((obj.title, getPath(obj),
-                               absoluteURL(request, obj)))
+                result.append((obj.title, obj))
         result.sort()
-        return result
+        return [obj for title, obj in result]
 
     def update(self):
         request = self.request
