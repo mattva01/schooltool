@@ -26,10 +26,11 @@ $Id$
 import datetime
 
 from schooltool.browser import View, Template
+from schooltool.clients.csvclient import CSVImporterBase  # XXX Foreign import
 from schooltool.component import traverse, FacetManager
 from schooltool.interfaces import IApplication
-from schooltool.clients.csvclient import CSVImporterBase  # XXX Foreign import
 from schooltool.membership import Membership
+from schooltool.translation import ugettext as _
 
 
 class CSVImportView(View):
@@ -39,9 +40,24 @@ class CSVImportView(View):
     template = Template('www/csvimport.pt')
 
     error = u""
+    success = False
 
     def do_POST(self, request):
-        pass
+        groups_csv = resources_csv = None
+        if 'groups.csv' in request.args:
+            groups_csv = request.args['groups.csv'][0]
+
+        if groups_csv is None and resources_csv is None:
+            self.error = _('No files provided')
+            return self.do_GET(request)
+
+        importer = CSVImporterZODB(self.context)
+        if groups_csv is not None:
+            importer.importGroupsCsv(groups_csv.splitlines())
+
+        request.appLog(_("CSV data imported"))
+        self.success = True
+        return self.do_GET(request)
 
 
 class CSVImporterZODB(CSVImporterBase):

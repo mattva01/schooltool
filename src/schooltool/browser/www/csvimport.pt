@@ -19,6 +19,9 @@
     <input class="button" type="submit" value="Submit" />
   </div>
 
+  <div tal:condition="view/success"
+       i18n:translate="">Data imported successfully</div>
+
   </form>
   </metal:block>
 </body>

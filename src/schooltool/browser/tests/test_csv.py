@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+from logging import INFO
 from schooltool.browser.tests import RequestStub, AppSetupMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 
@@ -33,17 +34,50 @@ __metaclass__ = type
 class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
+        from schooltool.browser.csv import CSVImportView
         self.setUpSampleApp()
 
-    def test_render(self):
-        from schooltool.browser.csv import CSVImportView
-        view = CSVImportView(self.app)
-        view.authorization = lambda x, y: True
+        # XXX CSV import tries to create basic groups and will b0rk
+        #     if the groups already exist.
+        del self.app['groups']['teachers']
 
+        self.view = CSVImportView(self.app)
+        self.view.authorization = lambda x, y: True
+
+    def test_render(self):
         request = RequestStub()
-        content = view.render(request)
+        content = self.view.render(request)
 
         self.assert_('Upload CSV' in content)
+
+    def test_POST_empty(self):
+        request = RequestStub(args={})
+        content = self.view.do_POST(request)
+        self.assert_('No files provided' in content)
+        self.assert_('Data imported successfully' not in content)
+
+        self.assert_('teachers' not in self.app['groups'].keys())
+        # TODO: applog
+
+    def test_POST_empty_groups(self):
+        request = RequestStub(args={'groups.csv': ''})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' in content)
+
+        # The empty import should have created basic groups.
+        self.assert_('teachers' in self.app['groups'].keys())
+        self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
+
+    def test_POST_groups(self):
+        request = RequestStub(args={'groups.csv': '"year1","Year 1","root",'})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' in content)
+
+        # The empty import should have created basic groups.
+        self.assert_('teachers' in self.app['groups'].keys())
+
+        self.assert_('year1' in self.app['groups'].keys())
+        self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
 
 
 class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):

@@ -24,7 +24,6 @@ $Id$
 
 import unittest
 import socket
-import datetime
 from StringIO import StringIO
 from pprint import pformat
 from schooltool.tests.helpers import diff
