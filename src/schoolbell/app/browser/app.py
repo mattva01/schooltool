@@ -26,9 +26,10 @@ from zope.interface import Interface, implements
 from zope.schema import Password, TextLine, Bytes, Bool, getFieldNamesInOrder
 from zope.schema.interfaces import ValidationError
 from zope.app import zapi
-from zope.app.form.utility import getWidgetsData, setUpEditWidgets
+from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
+from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
@@ -248,7 +249,9 @@ class PersonEditView(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
-        setUpEditWidgets(self, IPersonEditForm, self.context)
+        setUpWidgets(self, IPersonEditForm, IInputWidget,
+                     initial={'title': self.context.title,
+                              'photo': self.context.photo})
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request:
