@@ -6,6 +6,9 @@ $Id$
 
 import libxml2
 
+from zope.interface import implements
+from zope.interface.common.interfaces import IException
+
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.rest.rng import validate_against_schema
 
@@ -139,7 +142,7 @@ class XMLDocument(object):
             ...   </grammar>
             ... '''
 
-            >>> XMLDocument("<bad_example>I'm invalid!</bad_example>", schema)
+            >>> XMLDocument("<bad_example>I am invalid!</bad_example>", schema)
             Traceback (most recent call last):
               ...
             XMLValidationError: Document not valid according to schema.
@@ -477,30 +480,46 @@ class XMLNode(object):
                                 % xpath_query)
 
 
+class IXMLError(IException): pass
+class IXMLParseError(IXMLError): pass
+class IXMLSchemaError(IXMLError): pass
+class IXMLValidationError(IXMLError): pass
+class IXMLXPathError(IXMLError): pass
+class IXMLNamespaceError(IXMLError): pass
+class IXMLAttributeError(IXMLError): pass
+
+
 class XMLError(UnicodeAwareException):
     """Base class for XML errors."""
+    implements(IXMLError)
 
 
 class XMLParseError(XMLError):
     """Ill-formed XML document."""
+    implements(IXMLParseError)
 
 
 class XMLSchemaError(XMLError):
     """Invalid RelaxNG schema."""
+    implements(IXMLSchemaError)
 
 
 class XMLValidationError(XMLError):
     """Invalid XML document."""
+    implements(IXMLValidationError)
 
 
 class XMLXPathError(XMLError):
     """Ill-formed XPath query."""
+    implements(IXMLXPathError)
 
 
 class XMLNamespaceError(XMLError):
     """Unregistered XML namespace."""
+    implements(IXMLNamespaceError)
 
 
 class XMLAttributeError(XMLError):
     """Ill-formed XML attribute name."""
+    implements(IXMLAttributeError)
 

@@ -119,4 +119,36 @@
       permission="zope.Public"
       />
 
+   <!-- Error views -->
+
+  <defaultView
+      for="zope.interface.common.interfaces.IException"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      name="GET"
+      />
+
+  <view
+      for="schoolbell.app.rest.xmlparsing.IXMLValidationError"
+      name="GET"
+      factory=".errors.XMLValidationErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.xmlparsing.IXMLParseError"
+      name="GET"
+      factory=".errors.XMLParseErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="zope.interface.common.interfaces.IException"
+      name="GET"
+      factory=".errors.SystemErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
 </configure>
