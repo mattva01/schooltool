@@ -459,23 +459,22 @@ class CalendarOwnerMixin(Persistent):
             ('#b39169', '#826647'), # Face Skin Dark, Face Skin Shadow
             ('#83a67f', '#5d7555'), # Green Medium, Green Dark
             )
-    cal_colors = PersistentDict()
-
 
     def __init__(self):
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
+        self.cal_colors = PersistentDict()
 
     def makeCompositeCalendar(self, start, end):
         events = []
+        used_colors = Set(self.cal_colors.values())
+        available_colors = [c for c in self.colors if c not in used_colors]
         for obj in getRelatedObjects(self, URICalendarProvider):
             # XXX Assign a color
-            if getPath(obj) not in self.cal_colors.keys():
-                for color in self.colors:
-                    if color not in self.cal_colors.values():
-                        self.cal_colors[getPath(obj)] = color
-                        break
+            if getPath(obj) not in self.cal_colors:
+                if available_colors:
+                    self.cal_colors[getPath(obj)] = available_colors.pop(0)
 
             for event in obj.calendar.expand(start, end):
                 events.append(InheritedCalendarEvent(event, obj.calendar))
