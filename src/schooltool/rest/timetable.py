@@ -23,7 +23,6 @@ $Id$
 """
 
 import sets
-import libxml2
 import datetime
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
@@ -33,9 +32,12 @@ from schooltool.rest import View, Template, textErrorPage, notFoundPage
 from schooltool.rest import absoluteURL, absolutePath, read_file
 from schooltool.rest.cal import SchooldayModelCalendarView
 from schooltool.rest.auth import PublicAccess
+from schooltool.rest.xmlparsing import XMLDocument
+from schooltool.rest.xmlparsing import XMLParseError, XMLValidationError
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.common import UnicodeAwareException, to_unicode
+from schooltool.common import parse_time
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, traverse, getPath
@@ -214,18 +216,15 @@ class TimetableReadWriteView(TimetableReadView):
                                  _("Unsupported content type: %s") % ctype)
         xml = request.content.read()
         try:
-            if not validate_against_schema(self.schema, xml):
-                return textErrorPage( request,
-                            _("Timetable not valid according to schema"))
-        except libxml2.parserError:
+            doc = XMLDocument(xml, self.schema)
+        except XMLParseError:
             return textErrorPage(request, _("Timetable not valid XML"))
-        doc = libxml2.parseDoc(xml)
-        xpathctx = doc.xpathNewContext()
+        except XMLValidationError:
+            return textErrorPage(request,
+                                 _("Timetable not valid according to schema"))
         try:
-            ns = 'http://schooltool.org/ns/timetable/0.1'
-            xpathctx.xpathRegisterNs('tt', ns)
-            xlink = "http://www.w3.org/1999/xlink"
-            xpathctx.xpathRegisterNs('xlink', xlink)
+            doc.registerNs('tt', 'http://schooltool.org/ns/timetable/0.1')
+            doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
 
             time_period_id, schema_id = self.key
             if time_period_id not in getTimePeriodService(self.timetabled):
@@ -236,25 +235,22 @@ class TimetableReadWriteView(TimetableReadView):
             except KeyError:
                 return textErrorPage(request,
                              _("Timetable schema not defined: %s") % schema_id)
-            for day in xpathctx.xpathEval('/tt:timetable/tt:day'):
-                day_id = to_unicode(day.nsProp('id', None))
+            for day in doc.query('/tt:timetable/tt:day'):
+                day_id = day['id']
                 if day_id not in tt.keys():
                     return textErrorPage(request,
                                          _("Unknown day id: %r") % day_id)
                 ttday = tt[day_id]
-                xpathctx.setContextNode(day)
-                for period in xpathctx.xpathEval('tt:period'):
-                    period_id = to_unicode(period.nsProp('id', None))
+                for period in day.query('tt:period'):
+                    period_id = period['id']
                     if period_id not in ttday.periods:
                         return textErrorPage(request,
                                      _("Unknown period id: %r") % period_id)
-                    xpathctx.setContextNode(period)
-                    for activity in xpathctx.xpathEval('tt:activity'):
-                        title = to_unicode(activity.nsProp('title', None))
+                    for activity in period.query('tt:activity'):
+                        title = activity['title']
                         resources = []
-                        xpathctx.setContextNode(activity)
-                        for resource in xpathctx.xpathEval('tt:resource'):
-                            path = to_unicode(resource.nsProp('href', xlink))
+                        for resource in activity.query('tt:resource'):
+                            path = resource['xlink:href']
                             try:
                                 res = traverse(self.timetabled, path)
                             except KeyError:
@@ -265,8 +261,7 @@ class TimetableReadWriteView(TimetableReadView):
                                   TimetableActivity(title, self.timetabled,
                                                     resources))
         finally:
-            doc.freeDoc()
-            xpathctx.xpathFreeContext()
+            doc.free()
 
         if self.context is None:
             self.timetabled.timetables[self.key] = tt
@@ -374,47 +369,40 @@ class TimetableSchemaView(TimetableReadView):
                                  _("Unsupported content type: %s") % ctype)
         xml = request.content.read()
         try:
-            if not validate_against_schema(self.schema, xml):
-                return textErrorPage(request,
-                             _("Timetable not valid according to schema"))
-        except libxml2.parserError:
+            doc = XMLDocument(xml, self.schema)
+        except XMLValidationError:
+            return textErrorPage(request,
+                                 _("Timetable not valid according to schema"))
+        except XMLParseError:
             return textErrorPage(request, _("Not valid XML"))
-        doc = libxml2.parseDoc(xml)
-        xpathctx = doc.xpathNewContext()
         try:
-            ns = 'http://schooltool.org/ns/timetable/0.1'
-            xpathctx.xpathRegisterNs('tt', ns)
-            days = xpathctx.xpathEval('/tt:timetable/tt:day')
-            day_ids = [to_unicode(day.nsProp('id', None)) for day in days]
+            doc.registerNs('tt', 'http://schooltool.org/ns/timetable/0.1')
+            days = doc.query('/tt:timetable/tt:day')
+            day_ids = [day['id'] for day in days]
 
-            templates = xpathctx.xpathEval(
-                '/tt:timetable/tt:model/tt:daytemplate')
+            templates = doc.query('/tt:timetable/tt:model/tt:daytemplate')
             template_dict = {}
-            model_node = xpathctx.xpathEval('/tt:timetable/tt:model')[0]
-            factory_id = to_unicode(model_node.nsProp('factory', None))
+            model_node = doc.query('/tt:timetable/tt:model')[0]
+            factory_id = model_node['factory']
             try:
                 factory = getTimetableModel(factory_id)
             except KeyError:
                 return textErrorPage(request,
                                      _("Incorrect timetable model factory"))
             for template in templates:
-                dayid = to_unicode(template.nsProp('id', None))
-                xpathctx.setContextNode(template)
                 day = SchooldayTemplate()
-                for period in xpathctx.xpathEval('tt:period'):
-                    pid = to_unicode(period.nsProp('id', None))
-                    tstart_str = to_unicode(period.nsProp('tstart', None))
-                    dur_str = to_unicode(period.nsProp('duration', None))
+                for period in template.query('tt:period'):
+                    pid = period['id']
+                    tstart_str = period['tstart']
+                    dur_str = period['duration']
                     try:
-                        h, m = [int(s) for s in tstart_str.split(":")]
-                        dur = int(dur_str)
-                        day.add(SchooldayPeriod(
-                            pid, datetime.time(h, m),
-                            datetime.timedelta(minutes=dur)))
+                        tstart = parse_time(tstart_str)
+                        duration = datetime.timedelta(minutes=int(dur_str))
                     except ValueError:
                         return textErrorPage(request, _("Bad period"))
-                used = to_unicode(
-                        xpathctx.xpathEval('tt:used')[0].nsProp('when', None))
+                    else:
+                        day.add(SchooldayPeriod(pid, tstart, duration))
+                used = template.query('tt:used')[0]['when']
                 if used == 'default':
                     template_dict[None] = day
                 else:
@@ -431,10 +419,9 @@ class TimetableSchemaView(TimetableReadView):
             timetable = Timetable(day_ids)
             timetable.model = model
             for day in days:
-                day_id = to_unicode(day.nsProp('id', None))
-                xpathctx.setContextNode(day)
-                period_ids = [to_unicode(period.nsProp('id', None))
-                              for period in xpathctx.xpathEval('tt:period')]
+                day_id = day['id']
+                period_ids = [period['id']
+                              for period in day.query('tt:period')]
                 if len(sets.Set(period_ids)) != len(period_ids):
                     return textErrorPage(request,
                                          _("Duplicate periods in schema"))
@@ -445,8 +432,7 @@ class TimetableSchemaView(TimetableReadView):
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:
-            doc.freeDoc()
-            xpathctx.xpathFreeContext()
+            doc.free()
 
 
 class BaseTimetableTraverseView(View, TimetableContentNegotiation):
@@ -620,26 +606,23 @@ class SchoolTimetableView(View):
     def do_PUT(self, request):
         xml = request.content.read()
         try:
-            if not validate_against_schema(self.schema, xml):
-                return textErrorPage(request,
-                                _("Timetable not valid according to schema"))
-        except libxml2.parserError:
+            doc = XMLDocument(xml, self.schema)
+        except XMLValidationError:
+            return textErrorPage(request,
+                                 _("Timetable not valid according to schema"))
+        except XMLParseError:
             return textErrorPage(request, _("Timetable not valid XML"))
 
         try:
-            doc = libxml2.parseDoc(xml)
-            ns = 'http://schooltool.org/ns/schooltt/0.2'
-            xpathctx = doc.xpathNewContext()
-            xpathctx.xpathRegisterNs('st', ns)
-            xlink = "http://www.w3.org/1999/xlink"
-            xpathctx.xpathRegisterNs('xlink', xlink)
+            doc.registerNs('st', 'http://schooltool.org/ns/schooltt/0.2')
+            doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
 
             timetables = {}
             service = getTimetableSchemaService(self.context)
             schema = service[self.key[1]]
             groups = {}
-            for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-                teacher_path = to_unicode(teacher_node.nsProp('href', xlink))
+            for teacher_node in doc.query('/st:schooltt/st:teacher'):
+                teacher_path = teacher_node['xlink:href']
                 try:
                     teacher = traverse(self.context, teacher_path)
                 except KeyError:
@@ -664,7 +647,7 @@ class SchoolTimetableView(View):
                     timetables[group_path] = tt
 
             try:
-                iterator = self._walkXml(xpathctx, schema, timetables, groups)
+                iterator = self._walkXml(doc, schema, timetables, groups)
                 for tt, day_id, period_id, activity in iterator:
                     tt[day_id].add(period_id, activity)
                     for res in activity.resources:
@@ -679,27 +662,22 @@ class SchoolTimetableView(View):
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:
-            doc.freeDoc()
-            xpathctx.xpathFreeContext()
+            doc.free()
 
-    def _walkXml(self, xpathctx, schema, timetables, groups):
-        xlink = "http://www.w3.org/1999/xlink"
-        for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
-            teacher_path = to_unicode(teacher_node.nsProp('href', xlink))
-            xpathctx.setContextNode(teacher_node)
-            for day in xpathctx.xpathEval('st:day'):
-                day_id = to_unicode(day.nsProp('id', None))
+    def _walkXml(self, doc, schema, timetables, groups):
+        for teacher_node in doc.query('/st:schooltt/st:teacher'):
+            teacher_path = teacher_node['xlink:href']
+            for day in teacher_node.query('st:day'):
+                day_id = day['id']
                 if day_id not in schema.keys():
                     raise ViewError(_("Unknown day id: %r") % day_id)
-                xpathctx.setContextNode(day)
-                for period in xpathctx.xpathEval('st:period'):
-                    period_id = to_unicode(period.nsProp('id', None))
+                for period in day.query('st:period'):
+                    period_id = period['id']
                     if period_id not in schema[day_id].periods:
                         raise ViewError(_("Unknown period id: %r") % period_id)
-                    xpathctx.setContextNode(period)
-                    for activity in xpathctx.xpathEval('st:activity'):
-                        path = to_unicode(activity.nsProp('group', None))
-                        title = to_unicode(activity.nsProp('title', None))
+                    for activity in period.query('st:activity'):
+                        path = activity['group']
+                        title = activity['title']
                         if path not in timetables:
                             raise ViewError(_("Invalid group: %s") % path)
                         group = traverse(self.context, path)
@@ -708,9 +686,8 @@ class SchoolTimetableView(View):
                                               " for teacher %s")
                                             % (path, teacher_path))
                         resources = []
-                        xpathctx.setContextNode(activity)
-                        for resource in xpathctx.xpathEval('st:resource'):
-                            rpath = to_unicode(resource.nsProp('href', xlink))
+                        for resource in activity.query('st:resource'):
+                            rpath = resource['xlink:href']
                             try:
                                 res = traverse(self.context, rpath)
                             except KeyError:
