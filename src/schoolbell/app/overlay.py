@@ -19,7 +19,7 @@
 """
 Calendar overlays.
 
-This module defines relationships used to remember calendar subscriptions.
+This module defines relationships used to store calendar subscriptions.
 
     >>> from schoolbell.relationship.tests import setUp, tearDown
     >>> setUp()
@@ -54,7 +54,7 @@ Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
     [+] Developers (#eed680, #d1940c)
     [ ] Admins     (#c5d2c8, #83a67f)
 
-However 'in' checks for the presence of a calendar
+However, 'in' checks for the presence of a calendar
 
     >>> smith.calendar in john.overlaid_calendars
     True
