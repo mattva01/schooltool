@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+import operator
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.views import View, textErrorPage
@@ -83,36 +84,44 @@ class SchooldayModelCalendarView(View):
         days = []
         reader = ICalReader(request.content)
         try:
+            complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
             for event in reader.iterEvents():
-                if event.get('summary', '').lower() == 'school period':
-                    new_first = event.dtstart
-                    new_last = getattr(event, 'dtend', first)
-                    if first is None:
-                        first, last = new_first, new_last
-                    elif (first, last) != (new_first, new_last):
+                summary = event.get('SUMMARY', '').lower()
+                if summary not in ('school period', 'schoolday'):
+                    continue # ignore boring events
+
+                if not event.all_day_event:
+                    return textErrorPage(request,
+                             "All-day event should be used")
+
+                has_complex_props = reduce(operator.or_,
+                                      map(event.hasProp, complex_prop_names))
+
+                if has_complex_props:
+                    return textErrorPage(request,
+                             "Repeating events/exceptions not yet supported")
+
+                if summary == 'school period':
+                    if (first is not None and
+                        (first, last) != (event.dtstart, event.dtend)):
                         return textErrorPage(request,
                                     "Multiple definitions of school period")
-                elif event.get('summary', '').lower() == 'schoolday':
-                    dtend = getattr(event, 'dtend', event.dtstart)
-                    if dtend != event.dtstart:
+                    else:
+                        first, last = event.dtstart, event.dtend
+                elif summary == 'schoolday':
+                    if event.dtend != event.dtstart:
                         return textErrorPage(request,
                                     "Schoolday longer than one day")
                     days.append(event.dtstart)
-                else:
-                    continue
-                for prop in ('rrule', 'rdate', 'exrule', 'exdate'):
-                    if prop in event:
-                        return textErrorPage(request,
-                            "Repeating events/exceptions not yet supported")
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:
-            if not first or not last:
+            if first is None:
                 return textErrorPage(request, "School period not defined")
             for day in days:
                 if not first <= day <= last:
                     return textErrorPage(request,
-                                         "School day outside school period")
+                                         "Schoolday outside school period")
             self.context.reset(first, last)
             for day in days:
                 self.context.add(day)

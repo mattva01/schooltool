@@ -22,6 +22,7 @@ SchoolTool calendaring stuff.
 $Id$
 """
 
+import re
 import datetime
 from sets import Set
 from zope.interface import implements
@@ -119,12 +120,169 @@ class SchooldayModel(DateRange):
 # iCalendar parsing
 #
 
-class VEvent(dict):
-    pass
-
 
 class ICalParseError(Exception):
     """Invalid syntax in an iCalendar file."""
+
+
+class VEvent:
+    """iCalendar event.
+
+    Life cycle: when a VEvent is created, a number of properties should be
+    added to it using the add method.  Then validate should be called.
+    After that you can start using query methods (get, hasProp, iterDates).
+    """
+
+    default_type = {
+        # Default value types for some properties
+        'DTSTAMP': 'DATE-TIME',
+        'DTSTART': 'DATE-TIME',
+        'CREATED': 'DATE-TIME',
+        'DTEND': 'DATE-TIME',
+        'DURATION': 'DURATION',
+        'LAST-MODIFIED': 'DATE-TIME',
+        'PRIORITY': 'INTEGER',
+        'RECURRENCE-ID': 'DATE-TIME',
+        'SEQUENCE': 'INTEGER',
+        'URL': 'URI',
+        'ATTACH': 'URI',
+        'EXDATE': 'DATE-TIME',
+        'EXRULE': 'RECUR',
+        'RDATE': 'DATE-TIME',
+        'RRULE': 'RECUR',
+    }
+
+    def __init__(self):
+        self._props = {}
+
+    def add(self, property, value, params=None):
+        """Add a property.
+
+        Property name is case insensitive.  Params should be a dict from
+        uppercased parameter names to their values.
+
+        Multiple calls to add with the same property name override the
+        value.  This is sufficient for now, but will have to be changed
+        soon.
+        """
+        if params is None:
+            params = {}
+        self._props[property.upper()] = (value, params)
+
+    def validate(self):
+        """Check that this VEvent has all the necessary properties.
+
+        Also sets the following attributes:
+          all_day_event     True if this is an all-day event
+          dtstart           start of the event (inclusive)
+          dtend             end of the event (inclusive for all-day events,
+                            not inclusive for other events)
+          duration          length of the event
+        """
+        if not self.hasProp('DTSTART'):
+            raise ICalParseError("VEVENT must have a DTSTART property")
+        if self.getType('DTSTART') not in ('DATE', 'DATE-TIME'):
+            raise ICalParseError("DTSTART property should have a DATE or"
+                                 " DATE-TIME value")
+        if self.hasProp('DTEND'):
+            if self.getType('DTEND') != self.getType('DTSTART'):
+                raise ICalParseError("DTEND property should have the same type"
+                                     " as DTSTART")
+            if self.hasProp('DURATION'):
+                raise ICalParseError("VEVENT cannot have both a DTEND"
+                                     " and a DURATION property")
+        if self.hasProp('DURATION'):
+            if self.getType('DURATION') != 'DURATION':
+                raise ICalParseError("DURATION property should have type"
+                                     " DURATION")
+
+        self.all_day_event = self.getType('DTSTART') == 'DATE'
+        self.dtstart = self.getValue('DTSTART')
+        if self.hasProp('DURATION'):
+            self.duration = self.getValue('DURATION')
+            self.dtend = self.dtstart + self.duration
+            if self.all_day_event:
+                self.dtend -= datetime.date.resolution
+        else:
+            self.dtend = self.getValue('DTEND', self.dtstart)
+            self.duration = self.dtend - self.dtstart
+            if self.all_day_event:
+                self.duration += datetime.date.resolution
+
+        if self.dtstart > self.dtend:
+            raise ICalParseError("Event start time should precede end time")
+
+    def get(self, property, default=None):
+        """Return the (raw) value of a property.
+
+        Returns the default value if the property is not present.
+        """
+        return self._props.get(property.upper(), (default, None))[0]
+
+    def getType(self, property):
+        """Return the type of the property value."""
+        key = property.upper()
+        value, params = self._props[key]
+        default_type = self.default_type.get(key, 'TEXT')
+        return params.get('VALUE', default_type)
+
+    def getValue(self, property, default=None):
+        """Return the (typed) value of a property."""
+        try:
+            value, params = self._props[property.upper()]
+        except KeyError:
+            return default
+        else:
+            value_type = self.getType(property)
+            if value_type == 'INTEGER':
+                value = int(value)
+            elif value_type == 'DURATION':
+                date_part = r'(\d+)D'
+                time_part = r'T(\d+)H(?:(\d+)M(?:(\d+)S)?)?'
+                datetime_part = '(?:%s)?(?:%s)?' % (date_part, time_part)
+                weeks_part = r'(\d+)W'
+                duration_rx = re.compile(r'([-+]?)P(?:%s|%s)$'
+                                         % (weeks_part, datetime_part))
+                match = duration_rx.match(value)
+                if match is None:
+                    raise ValueError('Invalid iCalendar duration: %r' % value)
+                sign, weeks, days, hours, minutes, seconds = match.groups()
+                if weeks:
+                    value = datetime.timedelta(weeks=int(weeks))
+                else:
+                    if days is None and hours is None:
+                        raise ValueError('Invalid iCalendar duration: %r'
+                                         % value)
+                    value = datetime.timedelta(days=int(days or 0),
+                                               hours=int(hours or 0),
+                                               minutes=int(minutes or 0),
+                                               seconds=int(seconds or 0))
+                if sign == '-':
+                    value = -value
+            elif value_type == 'DATE':
+                if len(value) != 8:
+                    raise ValueError('Invalid iCalendar date: %r' % value)
+                y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
+                value = datetime.date(y, m, d)
+            elif value_type == 'DATE-TIME':
+                datetime_rx = re.compile(r'(\d{4})(\d{2})(\d{2})'
+                                         r'T(\d{2})(\d{2})(\d{2})(Z?)$')
+                match = datetime_rx.match(value)
+                if match is None:
+                    raise ValueError('Invalid iCalendar date-time: %r' % value)
+                y, m, d, hh, mm, ss, utc = match.groups()
+                value = datetime.datetime(int(y), int(m), int(d),
+                                          int(hh), int(mm), int(ss))
+            return value
+
+    def hasProp(self, property):
+        """Return True if this VEvent has a named property."""
+        return property.upper() in self._props
+
+    def iterDates(self):
+        """Iterate over all dates within this event."""
+        assert self.all_day_event
+        return DateRange(self.dtstart, self.dtend)
 
 
 class ICalReader:
@@ -165,24 +323,6 @@ class ICalReader:
       SPACE              = %x20
       HTAB               = %x09
     """
-
-    default_type = {
-        # Default value types for some properties
-        'DTSTAMP': 'DATE-TIME',
-        'DTSTART': 'DATE-TIME',
-        'CREATED': 'DATE-TIME',
-        'DTEND': 'DATE-TIME',
-        'LAST-MODIFIED': 'DATE-TIME',
-        'PRIORITY': 'INTEGER',
-        'RECURRENCE-ID': 'DATE-TIME',
-        'SEQUENCE': 'INTEGER',
-        'URL': 'URI',
-        'ATTACH': 'URI',
-        'EXDATE': 'DATE-TIME',
-        'EXRULE': 'RECUR',
-        'RDATE': 'DATE-TIME',
-        'RRULE': 'RECUR',
-    }
 
     def __init__(self, file):
         self.file = file
@@ -323,6 +463,7 @@ class ICalReader:
                     # not interested in alarms and RFC 2445 specifies, that all
                     # properties inside a VEVENT component ought to precede any
                     # VALARM subcomponents.
+                    obj.validate()
                     yield obj
                     obj = None
                 if not component_stack and value != "VCALENDAR":
@@ -332,22 +473,14 @@ class ICalReader:
                 component_stack.append(value)
             elif key == "END":
                 if obj is not None and value == "VEVENT":
+                    obj.validate()
                     yield obj
                     obj = None
                 if not component_stack or component_stack[-1] != value:
                     raise ICalParseError("Mismatched BEGIN/END")
                 component_stack.pop()
             elif obj is not None:
-                # Some properties may occur more than once, and this trick will
-                # not work when we become interested in them.
-                obj[key.lower()] = value
-                default_type =  self.default_type.get(key, None)
-                value_type = params.get('VALUE', default_type)
-                if value_type == 'DATE':
-                    y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
-                    name = key.lower().replace('-', '_')
-                    value = datetime.date(y, m, d)
-                    setattr(obj, name, value)
+                obj.add(key, value, params)
             elif not component_stack:
                 raise ICalParseError("Text outside VCALENDAR component")
         if component_stack:
@@ -359,18 +492,13 @@ def markNonSchooldays(ical_reader, schoolday_model):
     SchooldayModel.
     """
     for event in ical_reader.iterEvents():
-        if hasattr(event, 'dtstart'):
-            # We rely on the fact that ICalReader only sets dtstart/dtend
-            # attributes on VEvent instances when the value type is DATE,
-            # and does not do so when the value type is DATE-TIME.
-            dtend = getattr(event, 'dtend', event.dtstart)
-            for day in DateRange(event.dtstart, dtend):
-                try:
-                    schoolday_model.remove(day)
-                except (KeyError, ValueError):
-                    # They day was already marked as non-schoolday or is
-                    # outside the school period.  This is not an error.
-                    pass
+        for day in event.iterDates():
+            try:
+                schoolday_model.remove(day)
+            except (KeyError, ValueError):
+                # They day was already marked as non-schoolday or is
+                # outside the school period.  This is not an error.
+                pass
 
 
 #

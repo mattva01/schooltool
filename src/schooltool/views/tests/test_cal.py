@@ -272,7 +272,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         """)
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
         self._test_put_error(calendar,
-                     errmsg="School day outside school period")
+                     errmsg="Schoolday outside school period")
 
 
 def test_suite():
