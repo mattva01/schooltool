@@ -174,6 +174,7 @@ class TestTimetable(unittest.TestCase):
 
     def test_cloneEmpty(self):
         from schooltool.timetable import TimetableActivity
+        from schooltool.timetable import TimetableException
 
         tt = self.createTimetable()
         english = TimetableActivity("English")
@@ -183,11 +184,14 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
         tt.model = object()
+        tt.exceptions.append(TimetableException(date(2005, 1, 4),
+                                                'Green', bio, None))
 
         tt2 = tt.cloneEmpty()
         self.assert_(tt2 is not tt)
         self.assertEquals(tt.day_ids, tt2.day_ids)
         self.assert_(tt.model is tt2.model)
+        self.assertEquals(tt2.exceptions, [])
         for day_id in tt2.day_ids:
             day = tt[day_id]
             day2 = tt2[day_id]
@@ -625,8 +629,8 @@ class SchooldayModelStub:
     #                     1
     #   2  3  4  5  6  7  8
     #   9 10 11 12 13 14 15
-    #  16 17 18 19 20 21 22
-    #  23 24 25 26 27 28 29
+    #  16 17 18 19<20-21>22
+    #  23<24-25-26>27 28 29
     #  30
 
     first = date(2003, 11, 20)
@@ -689,13 +693,17 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         self.assertNotEqual(model2, model4)
         self.assert_(not model2 != model)
 
-    def test_createCalendar(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+    def createTimetable(self):
+        """Create a simple timetable.
+
+              Period | Day A    Day B
+              ------ : -------  ---------
+              Green  : English  Biology
+              Blue   : Math     Geography
+
+        """
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
-        from schooltool.interfaces import ICalendar
-
         tt = Timetable(('A', 'B'))
         setPath(tt, '/path/to/tt')
         periods = ('Green', 'Blue')
@@ -705,6 +713,19 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         tt["A"].add("Blue", TimetableActivity("Math"))
         tt["B"].add("Green", TimetableActivity("Biology"))
         tt["B"].add("Blue", TimetableActivity("Geography"))
+        return tt
+
+    def createModel(self):
+        """Create a simple sequential timetable model.
+
+        Days A and B are alternated.
+
+        Green period occurs at 9:00-10:30 on all days.
+        Blue period occurs at 11:00-12:30 on all days except Fridays, when it
+        occurs at 10:30-12:00.
+        """
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SequentialDaysTimetableModel
 
         t, td = time, timedelta
         template1 = SchooldayTemplate()
@@ -717,6 +738,13 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         model = SequentialDaysTimetableModel(("A", "B"),
                                              {None: template1,
                                               calendar.FRIDAY: template2})
+        return model
+
+    def test_createCalendar(self):
+        from schooltool.interfaces import ICalendar
+
+        tt = self.createTimetable()
+        model = self.createModel()
         schooldays = SchooldayModelStub()
 
         cal = model.createCalendar(schooldays, tt)
@@ -740,6 +768,50 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
                     {datetime(2003, 11, 25, 9, 0): "Biology",
                      datetime(2003, 11, 25, 11, 0): "Geography"},
                     {datetime(2003, 11, 26, 9, 0): "English",
+                     datetime(2003, 11, 26, 11, 0): "Math"}]
+
+        self.assertEqual(expected, result,
+                         diff(pformat(expected), pformat(result)))
+
+    def test_createCalendar_with_exceptions(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.timetable import TimetableActivity
+        from schooltool.cal import CalendarEvent
+        tt = self.createTimetable()
+        tt.exceptions.append(
+                TimetableException(date=date(2003, 11, 24),
+                                   period_id='Blue',
+                                   activity=TimetableActivity("Math"),
+                                   replacement=None))
+        tt.exceptions.append(
+                TimetableException(date=date(2003, 11, 26),
+                                   period_id='Green',
+                                   activity=TimetableActivity("English"),
+                                   replacement=CalendarEvent(
+                                        datetime(2003, 11, 26, 9, 30),
+                                        timedelta(minutes=60),
+                                        "English (short)")))
+        model = self.createModel()
+        schooldays = SchooldayModelStub()
+        cal = model.createCalendar(schooldays, tt)
+        result = self.extractCalendarEvents(cal, schooldays)
+
+        expected = [{datetime(2003, 11, 20, 9, 0): "English",
+                     datetime(2003, 11, 20, 11, 0): "Math"},
+                    {datetime(2003, 11, 21, 9, 0): "Biology",
+                     datetime(2003, 11, 21, 10, 30): "Geography"},
+                    {}, {},
+                    {datetime(2003, 11, 24, 9, 0): "English",
+                     # Exception:
+                     #   datetime(2003, 11, 24, 11, 0): "Math"
+                     # disappears
+                    },
+                    {datetime(2003, 11, 25, 9, 0): "Biology",
+                     datetime(2003, 11, 25, 11, 0): "Geography"},
+                    {# Exception:
+                     #  datetime(2003, 11, 26, 9, 0): "English",
+                     # becomes
+                     datetime(2003, 11, 26, 9, 30): "English (short)",
                      datetime(2003, 11, 26, 11, 0): "Math"}]
 
         self.assertEqual(expected, result,

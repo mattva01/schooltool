@@ -24,6 +24,7 @@ $Id$
 
 import socket
 import datetime
+import itertools
 from sets import Set, ImmutableSet
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -216,7 +217,7 @@ class TimetableActivity:
         return hash((self.title, self.owner, self.resources))
 
 
-class TimetableException:
+class TimetableException(Persistent):
 
     implements(ITimetableException)
 
@@ -308,6 +309,9 @@ class BaseTimetableModel(Persistent):
     dayTemplates = {}
 
     def createCalendar(self, schoolday_model, timetable):
+        exceptions = {}
+        for e in timetable.exceptions:
+            exceptions[(e.date, e.period_id, e.activity)] = e
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
         cal = Calendar()
         day_id_gen = self._dayGenerator()
@@ -321,13 +325,18 @@ class BaseTimetableModel(Persistent):
                 if period.title not in timetable[day_id].keys():
                     continue
                 for activity in timetable[day_id][period.title]:
-                    # IDs for functionally derived calendars should be
-                    # functionally derived, and not random
-                    uid = '%d-%s' % (hash((activity.title, dt,
-                                           period.duration)), uid_suffix)
-                    event = CalendarEvent(dt, period.duration, activity.title,
-                                          unique_id=uid)
-                    cal.addEvent(event)
+                    key = (dt.date(), period.title, activity)
+                    exception = exceptions.get(key)
+                    if exception is None:
+                        # IDs for functionally derived calendars should be
+                        # functionally derived, and not random
+                        uid = '%d-%s' % (hash((activity.title, dt,
+                                               period.duration)), uid_suffix)
+                        event = CalendarEvent(dt, period.duration,
+                                              activity.title, unique_id=uid)
+                        cal.addEvent(event)
+                    elif exception.replacement is not None:
+                        cal.addEvent(exception.replacement)
         return cal
 
     def _getTemplateForDay(self, date):
@@ -379,9 +388,7 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
         self.dayTemplates = day_templates
 
     def _dayGenerator(self):
-        while True:
-            for day_id in self.timetableDayIds:
-                yield day_id
+        return itertools.cycle(self.timetableDayIds)
 
     def schooldayStrategy(self, date, generator):
         return generator.next()
