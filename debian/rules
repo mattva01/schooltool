@@ -148,12 +148,6 @@ install-indep-stamp: $(scripts)
 	    debian/$(bellpackage)/etc/$(bellpackage)/ssl-cert.cnf
 	install -m 644 -D -p debian/$(bellpackage).conf.default \
 	    debian/$(bellpackage)/usr/share/$(bellpackage)/$(bellpackage).conf.default
-	# Set the database version.
-	# This is depended on and depends on code in preinst
-	# TODO - delete this when schooltool can upgrade it's own database
-	install -m 644 -D -p README \
-		debian/$(bellpackage)/var/lib/$(bellpackage)/database_ver
-	echo $(db_version) > debian/$(bellpackage)/var/lib/$(bellpackage)/database_ver
 
 	# Make client package
 	# arch-indep files into /usr/lib becuse .py files are byte-compiled

@@ -28,13 +28,15 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
     Martin Quinson and Christian Perrier. (Closes: Bug#288805)
   * Added chezh translation, patch thanks to Miroslav Kure.
   * Reduced the changes necessary to update packages to a new python version
-    to one line. Thanks to a suggestion from Matthias Klose.
+    to one line in debian/rules and dependencies.Thanks to a suggestion from
+    Matthias Klose.
   * Temporarily patch rules to install zope modules from the zope tree because
     no zope3 package exists yet. Sigh! more lintian warnings, but it's
     temporary and way too much effort to fix these.
   * General cleanup:
     - Removed debdirclean makefile target called from top level directory.
     - Removed dependency references to old schooltool-server package.
+  * Fix the database versioning and update to 0.9.1.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
