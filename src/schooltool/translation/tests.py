@@ -26,7 +26,61 @@ import unittest
 from zope.testing.doctestunit import DocTestSuite
 
 
+class TestTranslatableString(unittest.TestCase):
+
+    def test(self):
+        from schooltool.translation import TranslatableString
+        TS = TranslatableString
+
+        self.assertEquals(repr(TS("foo")), "_('foo')")
+        self.assertEquals(int(TS("42")), 42)
+        self.assertEquals(long(TS("42")), 42L)
+        self.assertEquals(float(TS("4.2")), 4.2)
+        # __complex__: YAGNI
+        self.assertEquals(hash(TS("xyzzy")), hash("xyzzy"))
+
+        self.assertEquals(len(TS("abc")), 3)
+        self.assertEquals(TS("abc")[1], 'b')
+        self.assertEquals(TS("abc")[0:2], 'ab')
+        self.assertEquals(TS("a") + TS("B"), "aB")
+        s = TS("x")
+        s += TS("y")
+        self.assertEquals(s, "xy")
+        self.assertEquals(TS("a") * 3, "aaa")
+        s *= 3
+        self.assertEquals(s, "xyxyxy")
+        self.assertEquals(TS("%s: %s") % ("a", "b"), "a: b")
+
+    def test_translation_performed(self):
+        from schooltool.translation import TranslatableString
+
+        class TS(TranslatableString):
+            def __unicode__(self):
+                return self.msgid.replace('*', '')
+
+        self.assertEquals(unicode(TS("*foo")), "foo")
+        self.assertEquals(repr(TS("*foo")), "_('*foo')")
+        self.assertEquals(int(TS("4*2")), 42)
+        self.assertEquals(long(TS("42*")), 42L)
+        self.assertEquals(float(TS("4.*2")), 4.2)
+        # __complex__: YAGNI
+        self.assertEquals(hash(TS("xyzz*y")), hash("xyzzy"))
+
+        self.assertEquals(len(TS("a*bc")), 3)
+        self.assertEquals(TS("a*bc")[1], 'b')
+        self.assertEquals(TS("a*bc")[0:2], 'ab')
+        self.assertEquals(TS("a*") + TS("*B"), "aB")
+        s = TS("*x")
+        s += TS("y*")
+        self.assertEquals(s, "xy")
+        self.assertEquals(TS("a*") * 3, "aaa")
+        s *= 3
+        self.assertEquals(s, "xyxyxy")
+        self.assertEquals(TS("%s*: %s") % ("a", "b"), "a: b")
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.translation.extract'))
+    suite.addTest(unittest.makeSuite(TestTranslatableString))
     return suite

@@ -21,10 +21,13 @@ SchoolTool translations.
 
 The following names are available in this module:
 
-  localedir     location of message catalogs
-  catalog       catalog of translations for domain 'schooltool'
-  ugettext      alias for catalog.ugettext
+  ugettext      translate a message
   gettext       wrapper around ugettext that performs charset conversion
+  setCatalog    choose a translation domain and translation language
+
+  TranslatableString
+                a class that pretends (imperfectly) to be a unicode string
+                and performs translations on the fly.
 
 Example usage:
 
@@ -38,6 +41,8 @@ You should prefer ugettext to gettext unless you're really sure you will need
 the string in locale encoding.  Output to the console does not use locale
 encoding on Windows.  wxPython does not use locale encoding on Windows, nor on
 Gtk2.  Output to a text file uses locale encoding everywhere.
+
+
 
 
 The following files were taken from Zope 3 CVS (src/zope/app/translation_files)
@@ -63,6 +68,12 @@ def ugettext(str):
     """Translate a message.
 
     Returns a Unicode string.
+
+    Warning: if you call ugettext in global scope or inside class definition,
+    the string will be translated immediatelly.  Any further calls to
+    setCatalog will *not* change that translation.  If you want setCatalog to
+    take effect on strings defined in these scopes, use TranslatableString
+    instead.
     """
     global catalog
     # Uncomment the following line to decorate all translatable strings -- then
@@ -85,9 +96,74 @@ def setCatalog(domain, languages=None):
     Languages, if specified, override the default gettext language selection
     (e.g., the environment variables LANGUAGES, LC_ALL, LC_MESSAGES, LANG on
     POSIX systems).
+
+    Warning: if you call ugettext in global scope or inside class definition,
+    the string will be translated immediatelly.  Any further calls to
+    setCatalog will *not* change that translation.  If you want setCatalog to
+    take effect on strings defined in these scopes, use TranslatableString
+    instead.
     """
     global catalog
-    global ugettext
     catalog = _gettext.translation(domain, localedir, languages,
                                    fallback=True)
-    ugettext = catalog.ugettext
+
+
+class TranslatableString(object):
+    """Delayed translation.
+
+    TranslatableString tries to pretent do be a unicode string and performs
+    translation when you use it.  Due to limitations in Python, the following
+    opetations will not work on translatable strings:
+
+        "".join([TranslatableString(...)])
+        TranslatableString(...) in "a string"
+        "a string: %s" % TranslatableString(...)
+        print TranslatableString(...)
+
+    You must explicitly convert TranslatableStrings to unicode:
+
+        "".join(map(unicode, [TranslatableString(...)]))
+        unicode(TranslatableString(...)) in "a string"
+        "a string: %s" % unicode(TranslatableString(...))
+        print unicode(TranslatableString(...))
+
+    """
+
+    def __init__(self, msgid):
+        self.msgid = msgid
+
+    def __repr__(self):
+        return "_(%r)" % self.msgid
+
+    def __unicode__(self):
+        return ugettext(self.msgid)
+
+    def __str__(self):
+        return unicode(self)
+
+    # Simple wrappers
+
+    def __int__(self): return int(unicode(self))
+    def __long__(self): return long(unicode(self))
+    def __float__(self): return float(unicode(self))
+    def __getitem__(self, idx): return unicode(self)[idx]
+    def __eq__(self, other): return unicode(self) == other
+    def __ne__(self, other): return unicode(self) != other
+    def __lt__(self, other): return unicode(self) < other
+    def __gt__(self, other): return unicode(self) > other
+    def __le__(self, other): return unicode(self) <= other
+    def __ge__(self, other): return unicode(self) >= other
+    def __hash__(self): return hash(unicode(self))
+    def __len__(self): return len(unicode(self))
+    def __contains__(self, substring): return substring in unicode(self)
+    def __add__(self, other): return unicode(self) + other
+    def __radd__(self, other): return other + unicode(self)
+    def __mul__(self, other): return unicode(self) * other
+    def __mod__(self, args): return unicode(self) % args
+
+    def __getattr__(self, attr):
+        if attr == 'msgid':
+            return object.__getattr__(self, attr)
+        else:
+            return getattr(unicode(self), attr)
+
