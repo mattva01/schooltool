@@ -85,13 +85,6 @@
       />
 
   <page
-      name="disable.html"
-      for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonDisableView"
-      template="templates/person_disable.pt"
-      permission="zope.View" />
-
-  <page
       name="add.html"
       for="schoolbell.app.interfaces.IPersonContainer"
       class="schoolbell.app.browser.app.PersonAddView"

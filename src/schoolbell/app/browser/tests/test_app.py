@@ -84,56 +84,6 @@ def doctest_PersonView():
     """
 
 
-def doctest_PersonDisableView():
-    r"""Test for PersonDisableView
-
-    PersonDisableView is a view on IPerson.
-
-        >>> from schoolbell.app.browser.app import PersonDisableView
-        >>> from schoolbell.app.app import Person, PersonContainer
-        >>> pc = PersonContainer()
-        >>> directlyProvides(pc, IContainmentRoot)
-        >>> person = Person()
-        >>> person.title = u"title"
-        >>> person.setPassword("foo")
-        >>> pc['person'] = person
-
-    Let's try creating one
-
-        >>> request = TestRequest()
-        >>> view = PersonDisableView(person, request)
-
-    Canceling the form should leave the password intact:
-
-        >>> request = TestRequest()
-        >>> request.form = {'CANCEL': 'Cancel'}
-        >>> view = PersonDisableView(person, request)
-        >>> view.update()
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1'
-
-        >>> person.checkPassword("foo")
-        True
-
-    Pressing ok should clear the password effectively disabling the user:
-
-        >>> request = TestRequest()
-        >>> request.form = {'UPDATE_DISABLE': 'Ok'}
-        >>> view = PersonDisableView(person, request)
-        >>> view.update()
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1'
-
-        >>> person.hasPassword()
-        False
-
-    """
-
-
 def doctest_PersonPhotoView():
     r"""Test for PersonPhotoView
 
