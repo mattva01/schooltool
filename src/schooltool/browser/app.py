@@ -46,6 +46,7 @@ from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import NewTimePeriodView
+from schooltool.browser.widgets import TextWidget, dateParser, intParser
 
 __metaclass__ = type
 
@@ -343,6 +344,10 @@ class ResourceContainerView(ObjectContainerView):
 class BusySearchView(View, AvailabilityQueryView):
     """View for resource search (/busysearch)."""
 
+    # Two methods from AvailabilityQueryView are used:
+    #   update
+    #   listResources
+
     __used_for__ = IApplication
 
     authorization = AuthenticatedAccess
@@ -350,6 +355,56 @@ class BusySearchView(View, AvailabilityQueryView):
     template = Template("www/busysearch.pt")
 
     defaultDur = 30
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.first_widget = TextWidget('first', _('First'), parser=dateParser)
+        self.last_widget = TextWidget('last', _('Last'), parser=dateParser)
+        self.duration_widget = TextWidget('duration', _('Duration'),
+                                          unit=_('min.'), parser=intParser,
+                                          validator=self.duration_validator,
+                                          value=self.defaultDur)
+
+    def duration_validator(value):
+        """Check if duration is acceptable.
+
+          >>> duration_validator = BusySearchView.duration_validator
+          >>> duration_validator(None)
+          >>> duration_validator(42)
+          >>> duration_validator(0)
+          Traceback (most recent call last):
+            ...
+          ValueError: Duration cannot be zero.
+          >>> duration_validator(-1)
+          Traceback (most recent call last):
+            ...
+          ValueError: Duration cannot be negative.
+
+        """
+        if value is None:
+            return
+        if value < 0:
+            raise ValueError(_("Duration cannot be negative."))
+        if value == 0:
+            raise ValueError(_("Duration cannot be zero."))
+    duration_validator = staticmethod(duration_validator)
+
+    def do_GET(self, request):
+        self.status = None
+        self.can_search = False
+        if 'SUBMIT' in request.args:
+            self.first_widget.update(request)
+            self.last_widget.update(request)
+            self.duration_widget.update(request)
+            self.first_widget.require()
+            self.last_widget.require()
+            self.duration_widget.require()
+            error = (self.first_widget.error or self.last_widget.error or
+                     self.duration_widget.error)
+            if not error:
+                self.status = self.update()
+                self.can_search = self.status is None
+        return View.do_GET(self, request)
 
     def today(self):
         return str(datetime.date.today())
@@ -360,6 +415,13 @@ class BusySearchView(View, AvailabilityQueryView):
         result = [(obj.title, obj) for obj in resources.itervalues()]
         result.sort()
         return [obj for title, obj in result]
+
+    def listResources(self):
+        """Return sorted results of the availability query."""
+        results = AvailabilityQueryView.listResources(self)
+        results = [(item['title'], item['path'], item) for item in results]
+        results.sort()
+        return [item for title, path, item in results]
 
 
 class DatabaseResetView(View):

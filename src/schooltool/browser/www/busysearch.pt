@@ -3,103 +3,92 @@
   <title metal:fill-slot="title" i18n:translate="">Search for resources</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="">
-    Search for available resources
-  </h1>
-  <metal:block metal:fill-slot="content"
-               tal:define="duration python:('duration' in request.args)
-                                           and request.args['duration'][0]
-                                           or view.defaultDur">
+<h1 metal:fill-slot="h1" i18n:translate="">
+  Search for available resources
+</h1>
+<metal:block metal:fill-slot="content">
 
-    <form tal:attributes="action request/uri"
-          method="POST" class="busysearch">
-      <div class="error" tal:define="status view/update"
-           tal:content="status"
-           tal:condition="python:status and 'SUBMIT' in request.args" />
-      <table class="busysearch">
-        <tr>
-         <td>
-      <h3 i18n:translate="">Resource</h3>
-      <select multiple="yes" name="resources">
-        <tal:block repeat="resource view/allResources">
-        <option tal:define="path resource/@@path"
-                tal:content="resource/title"
-                tal:attributes="value path;
-                  selected python:('resources' in request.args and
-                                   path in request.args['resources'])" />
-        </tal:block>
-      </select>
-         </td>
-         <td>
+<form tal:attributes="action request/uri" method="POST" class="busysearch">
 
-      <h3 i18n:translate="">Hours</h3>
-      <select multiple="yes" name="hours">
-        <option tal:repeat="hr python:range(24)"
-                tal:attributes="value hr;
-                  selected python:('hours' in request.args and
-                                   str(hr) in request.args['hours'])"
-                tal:content="python:'%02d:00' % hr" />
-      </select>
+<div class="error" tal:content="view/status" tal:condition="view/status" />
 
-         </td>
-         <td>
+<table class="busysearch">
+<tr>
+<td>
+  <h3 i18n:translate="">Resource</h3>
+  <select multiple="yes" name="resources"
+          tal:define="selected python:request.args.get('resources', [])">
+    <tal:block repeat="resource view/allResources">
+    <option tal:define="path resource/@@path"
+            tal:content="resource/title"
+            tal:attributes="value path;
+                            selected python:path in selected" />
+    </tal:block>
+  </select>
+</td>
 
-      <h3 i18n:translate="">Dates</h3>
-      <div class="row">
-        <label for="first" i18n:translate="">First</label>
-        <input type="text" name="first" id="first"
-               tal:attributes="value request/args/first/pop|view/today"/>
-      </div>
-      <div class="row">
-        <label for="last" i18n:translate="">Last</label>
-        <input type="text" name="last" id="last"
-               tal:attributes="value request/args/last/pop|view/today"/><br/>
-      </div>
+<td>
+  <h3 i18n:translate="">Hours</h3>
+  <select multiple="yes" name="hours"
+          tal:define="selected python:request.args.get('hours', [])">
+    <option tal:repeat="hr python:range(24)"
+            tal:attributes="value hr; selected python:str(hr) in selected"
+            tal:content="python:'%02d:00' % hr" />
+  </select>
+</td>
 
-      <h3 i18n:translate="">Duration</h3>
-      <div class="row">
-        <input type="text" name="duration"
-          tal:attributes="value duration"/>
-       <span tal:omit-tag="" i18:translate="">min.</span>
-      <div class="row">
+<td>
+  <h3 i18n:translate="">Dates</h3>
+  <div class="row" tal:replace="structure view/first_widget" />
+  <div class="row" tal:replace="structure view/last_widget" />
 
-      <input type="submit" name="SUBMIT" value="Search" class="button"
-             i18n:attributes="value" />
-          </td>
-         </tr>
-       </table>
-    </form>
+  <h3 i18n:translate="">Duration</h3>
+  <div class="row" tal:replace="structure view/duration_widget" />
 
-    <div tal:condition="python:getattr(view, 'resources', None)"
-         class="available">
-    <h3 i18n:translate="">Available time slots</h3>
-    <table class="available">
-      <tr>
-        <th i18n:translate="">Resource</th>
-        <th i18n:translate="">Start</th>
-        <th i18n:translate="">End</th>
-        <th></th>
-      </tr>
-      <tal:block repeat="resource view/listResources">
-      <tr tal:repeat="slot resource/slots">
-        <td tal:content="resource/title">Resource</td>
-        <td tal:content="slot/start">Start</td>
-        <td tal:content="slot/end">Duration</td>
-        <td>
-          <form method="POST" class="invisible"
+  <div class="buttons">
+    <input type="submit" name="SUBMIT" value="Search" class="button"
+           i18n:attributes="value" />
+  </div>
+</td>
+</tr>
+</table>
+</form>
+
+<div tal:condition="view/can_search" class="available">
+<tal:block define="results view/listResources">
+<h3 i18n:translate="">Available time slots</h3>
+<p tal:condition="not:results" i18n:translate="">
+  No available time slots found.
+</p>
+<table class="available" tal:condition="results">
+  <tr>
+    <th i18n:translate="">Resource</th>
+    <th i18n:translate="">Start</th>
+    <th i18n:translate="">End</th>
+    <th></th>
+  </tr>
+  <tal:block repeat="resource results">
+  <tr tal:repeat="slot resource/slots">
+    <td tal:content="resource/title">Resource</td>
+    <td tal:content="slot/start">Start</td>
+    <td tal:content="slot/end">Duration</td>
+    <td>
+      <form method="POST" class="invisible"
             tal:attributes="action string:${resource/href}/book">
-             <input type="hidden" name="start"
-                    tal:attributes="value slot/start"/>
-             <input type="hidden" name="mins"
-                    tal:attributes="value duration"/>
-             <input type="submit" name="BOOK" value="Book" class="button"
-                    i18n:attributes="value"/>
-          </form>
-        </td>
-      </tr>
-      </tal:block>
-    </table>
-    </div>
-  </metal:block>
+         <input type="hidden" name="start"
+                tal:attributes="value slot/start"/>
+         <input type="hidden" name="mins"
+                tal:attributes="value view/duration"/>
+         <input type="submit" name="BOOK" value="Book" class="button"
+                i18n:attributes="value"/>
+      </form>
+    </td>
+  </tr>
+  </tal:block>
+</table>
+</tal:block>
+</div>
+
+</metal:block>
 </body>
 </html>

@@ -189,6 +189,29 @@ def dateParser(raw_date):
         raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
 
 
+def intParser(raw_value):
+    """Parser for intefers.
+
+      >>> intParser(None)
+      >>> intParser(' ')
+      >>> intParser('1234')
+      1234
+      >>> intParser('-123')
+      -123
+      >>> intParser('abc')
+      Traceback (most recent call last):
+        ...
+      ValueError: Invalid value.
+
+    """
+    if raw_value is None or not raw_value.strip():
+        return None
+    try:
+        return int(raw_value)
+    except ValueError:
+        raise ValueError(_("Invalid value."))
+
+
 class Widget:
     """Base class for widgets."""
 

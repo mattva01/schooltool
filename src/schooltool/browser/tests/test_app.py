@@ -24,12 +24,12 @@ $Id$
 
 import unittest
 from logging import INFO
+from datetime import date, time, timedelta
 
-from schooltool.interfaces import AuthenticationError
+from zope.testing.doctest import DocTestSuite
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.tests.utils import AppSetupMixin
-from datetime import date, time, timedelta
 
 __metaclass__ = type
 
@@ -54,6 +54,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         return view
 
     def createRequestWithAuthentication(self, *args, **kw):
+        from schooltool.interfaces import AuthenticationError
         person = PersonStub()
         setPath(person, '/persons/manager')
         request = RequestStub(*args, **kw)
@@ -583,6 +584,30 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.assertEquals(self.view.hours, [(time(13, 0), timedelta(hours=2))])
         self.assertEqualsSorted(self.view.resources, [self.r1, self.r2])
 
+    def test_listResources(self):
+        self.view.request = RequestStub(args={'first': '2004-08-11',
+                                              'last': '2004-08-11',
+                                              'duration': '30',
+                                              'hours': [13, 14]})
+        result = self.view.update()
+        assert result is None, result
+
+        results = self.view.listResources()
+
+        self.assertEquals(results,
+                          [{'path': '/resources/r1',
+                            'href': '/resources/r1',
+                            'title': 'Resource 1',
+                            'slots': [{'duration': 120,
+                                       'start': '2004-08-11 13:00:00',
+                                       'end': '2004-08-11 15:00:00'}]},
+                           {'path': '/resources/r2',
+                            'href': '/resources/r2',
+                            'title': 'Resource 2',
+                            'slots': [{'duration': 120,
+                                       'start': '2004-08-11 13:00:00',
+                                       'end': '2004-08-11 15:00:00'}]}])
+
     def test_render(self):
         request = RequestStub(args={}, authenticated_user=self.r1)
         result = self.view.render(request)
@@ -592,7 +617,8 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         request = RequestStub(args={'first': '2004-08-11',
                                     'last': '2004-08-11',
                                     'duration': '30',
-                                    'hours': [13, 14]},
+                                    'hours': [13, 14],
+                                    'SUBMIT': 'Submit'},
                               authenticated_user=self.r1)
         result = self.view.render(request)
         assert 'Resource 1' in result, result
@@ -683,6 +709,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestResourceAddView))
     suite.addTest(unittest.makeSuite(TestBusySearchView))
     suite.addTest(unittest.makeSuite(TestDatabaseResetView))
+    suite.addTest(DocTestSuite('schooltool.browser.app'))
     return suite
 
 

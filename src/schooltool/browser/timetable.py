@@ -32,7 +32,7 @@ from schooltool.browser import valid_name
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
-from schooltool.browser.widgets import TextWidget, dateParser
+from schooltool.browser.widgets import TextWidget, dateParser, intParser
 from schooltool.browser.cal import next_month, week_start
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
@@ -211,7 +211,7 @@ class TimetableSchemaWizard(View, TabindexMixin):
                                                  ' specify the ending time'
                                                  ' explicitly)'),
                                           css_class='narrow',
-                                          parser=self.duration_parser,
+                                          parser=intParser,
                                           validator=self.duration_validator)
 
     def name_parser(name):
@@ -243,32 +243,6 @@ class TimetableSchemaWizard(View, TabindexMixin):
         elif name in self.context.keys():
             raise ValueError(_("Timetable schema with this name already"
                                " exists."))
-
-    def duration_parser(raw_value):
-        """Parse the default duration.
-
-          >>> duration_parser = TimetableSchemaWizard.duration_parser
-          >>> duration_parser(None)
-          >>> duration_parser('  ')
-          >>> duration_parser('0')
-          0
-          >>> duration_parser('-1')
-          -1
-          >>> duration_parser('1441')
-          1441
-          >>> duration_parser('a')
-          Traceback (most recent call last):
-            ...
-          ValueError: Invalid duration.
-
-        """
-        if raw_value is None or not raw_value.strip():
-            return None
-        try:
-            return int(raw_value)
-        except ValueError:
-            raise ValueError(_("Invalid duration."))
-    duration_parser = staticmethod(duration_parser)
 
     def duration_validator(value):
         """Check if duration is acceptable.
