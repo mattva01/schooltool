@@ -10,7 +10,7 @@ System requirements
 -------------------
 
 - Python 2.3
-- Twisted (www.twistedmatrix.com)
+- Twisted 1.1.0 (www.twistedmatrix.com)
 - wxPython 2.4
 
 

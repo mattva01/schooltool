@@ -21,14 +21,50 @@
 SchoolTool setup script.
 """
 
+#
+# Check requisite version numbers
+#
+
 import sys
 if sys.version_info < (2, 3):
-    print >> sys.stderr, '%s: need Python 2.3 or later' % sys.argv[0]
-    print >> sys.stderr, 'your python is %s' % sys.version
+    print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
+    print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
-from distutils.core import setup, Extension
+try:
+    import twisted.copyright
+except ImportError:
+    print >> sys.stderr, ("%s: apparently you do not have Twisted installed."
+                          % sys.argv[0])
+    print >> sys.stderr, "You will not be able to run the SchoolTool server."
+    print >> sys.stderr
+else:
+    import re
+    m = re.match(r"(\d+)[.](\d+)[.](\d+)$", twisted.copyright.version)
+    if not m:
+        print >> sys.stderr, ("%s: you have Twisted version %s."
+                              % (sys.argv[0], twisted.copyright.version))
+        print >> sys.stderr, ("I was unable to parse the version number."
+                              "  You will not be able to run")
+        print >> sys.stderr, ("the SchoolTool server if this version is"
+                              " older than 1.1.0.")
+        print >> sys.stderr
+    else:
+        ver = tuple(map(int, m.groups()))
+        if ver < (1, 1, 0):
+            print >> sys.stderr, ("%s: you have Twisted version %s."
+                                  % (sys.argv[0], twisted.copyright.version))
+            print >> sys.stderr, ("You need at least version 1.1.0 in order to"
+                                  " be able to run the SchoolTool")
+            print >> sys.stderr, "server."
+            print >> sys.stderr
 
+
+#
+# Do the setup
+#
+
+from distutils.core import setup, Extension
 
 base_btrees_depends = [
     "src/persistence/persistence.h",
