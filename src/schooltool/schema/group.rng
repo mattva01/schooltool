@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for a schooltool group.
+
+A group has 
+  -->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://schooltool.org/ns/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <!-- parts of a simple xlink -->
+
+  <define name="simplelinktype">
+    <attribute name="xlink:type">
+      <value>simple</value>
+    </attribute>
+  </define>
+
+  <define name="href">
+    <attribute name="xlink:href">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="role">
+    <attribute name="xlink:role">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="arcrole">
+    <attribute name="xlink:arcrole">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="title">
+    <attribute name="xlink:title">
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="show">
+    <attribute name="xlink:show">
+      <choice>
+        <value>new</value>
+        <value>replace</value>
+        <value>embed</value>
+        <value>other</value>
+        <value>none</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="actuate">
+    <attribute name="xlink:actuate">
+      <choice>
+        <value>onLoad</value>
+        <value>onRequest</value>
+        <value>other</value>
+        <value>none</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <!-- The attributes that make an element into a simple xlink -->
+
+  <define name="simplexlinkattrs">
+    <ref name="simplelinktype"/>
+    <!--  Not bothering to declare this just now.
+
+    <zeroOrMore>
+      <attribute>
+        <anyName/>
+      </attribute>
+    </zeroOrMore>
+     -->
+    <optional>
+      <ref name="href"/>
+    </optional>
+    <optional>
+      <ref name="role"/>
+    </optional>
+    <optional>
+      <ref name="arcrole"/>
+    </optional>
+    <optional>
+      <ref name="title"/>
+    </optional>
+    <optional>
+      <ref name="show"/>
+    </optional>
+    <optional>
+      <ref name="actuate"/>
+    </optional>
+  </define>
+
+  <!-- A group is made up of a group element containing a title element,
+       either a parent element or a noparent element to explicitly say
+       that it has no parent, and a number of member elements to describe
+       members of the group.
+    -->
+
+  <start>
+    <ref name="group"/>
+  </start>
+
+  <define name="group">
+    <element name="group">
+      <element name="title">
+        <text/>
+      </element>
+      <choice>
+        <element name="parent">
+          <ref name="simplexlinkattrs"/>
+        </element>
+        <element name="noparent">
+          <empty/>
+        </element>
+      </choice>
+      <zeroOrMore>
+        <element name="member">
+          <ref name="simplexlinkattrs"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+</grammar>
