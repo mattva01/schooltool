@@ -29,6 +29,7 @@ from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.browser.tests.test_model import AppSetupMixin
+from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type
 
@@ -405,17 +406,8 @@ def createDayTemplate(periods):
 
 class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
                                      TraversalTestMixin):
-
     def setUp(self):
         self.setUpSampleApp()
-
-    def test_render(self):
-        view = self.createView()
-        request = RequestStub(authenticated_user=self.manager)
-        result = view.render(request)
-        self.assertEquals(request.code, 200)
-        assert 'weekly' in result
-        assert 'bimonthly' in result
 
     def createView(self):
         from schooltool.timetable import TimetableSchemaService, Timetable
@@ -424,6 +416,14 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
         context['weekly'] = Timetable([])
         context['bimonthly'] = Timetable([])
         return TimetableSchemaServiceView(context)
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        assert 'weekly' in result
+        assert 'bimonthly' in result
 
     def test__traverse(self):
         from schooltool.browser.timetable import TimetableSchemaView
@@ -450,6 +450,54 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
         self.assertEquals(view.request.headers['location'],
                           'http://localhost:7001/newttschema')
 
+class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
+                                TraversalTestMixin, EqualsSortedMixin):
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def createView(self):
+        from schooltool.cal import SchooldayModel
+        from schooltool.browser.timetable import TimePeriodServiceView
+        context = self.app.timePeriodService
+        d = datetime.date
+        context['semester1'] = SchooldayModel(d(2004, 2, 1), d(2004, 5, 31))
+        context['semester2'] = SchooldayModel(d(2004, 9, 1), d(2004, 12, 24))
+        return TimePeriodServiceView(context)
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        assert 'semester1' in result
+        assert 'semester2' in result
+
+    def test__traverse(self):
+        from schooltool.browser.timetable import TimePeriodView
+        view = self.createView()
+        self.assertTraverses(view, 'semester1', TimePeriodView)
+
+    def test_list(self):
+        view = self.createView()
+        self.assertEqualsSorted(list(view.list()),
+                                [view.context['semester1'],
+                                 view.context['semester2']])
+
+    def test_update_delete(self):
+        view = self.createView()
+        view.request = RequestStub(args={'DELETE': 'Why not',
+                                         'CHECK': 'semester2'})
+        view.update()
+        self.assertEquals(view.context.keys(), ['semester1'])
+
+    def test_update_add(self):
+        view = self.createView()
+        view.request = RequestStub(args={'ADD': 'Why not'})
+        view.update()
+        self.assertEquals(view.request.code, 302)
+        self.assertEquals(view.request.headers['location'],
+                          'http://localhost:7001/newtimeperiod')
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -459,6 +507,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
+    suite.addTest(unittest.makeSuite(TestTimePeriodServiceView))
     return suite
 
 

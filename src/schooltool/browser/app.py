@@ -41,6 +41,7 @@ from schooltool.rest.app import AvailabilityQueryView
 from schooltool.component import getTimetableSchemaService
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.timetable import TimetableSchemaServiceView
+from schooltool.browser.timetable import TimePeriodServiceView
 
 __metaclass__ = type
 
@@ -125,6 +126,8 @@ class RootView(View):
                 self.context.timetableSchemaService)
         elif name == 'newttschema':
             return TimetableSchemaWizard(self.context.timetableSchemaService)
+        elif name == 'time-periods':
+            return TimePeriodServiceView(self.context.timePeriodService)
         raise KeyError(name)
 
 

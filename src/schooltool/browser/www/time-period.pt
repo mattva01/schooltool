@@ -1,0 +1,13 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title">Time period</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" tal:content="view/title">Time period</h1>
+<metal:block metal:fill-slot="content">
+
+This is a stub.
+
+</metal:block>
+</body>
+</html>

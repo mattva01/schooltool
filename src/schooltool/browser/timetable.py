@@ -242,9 +242,27 @@ class TimetableSchemaWizard(View):
         return result
 
 
-class TimetableSchemaServiceView(View):
+class TimePeriodView(View):
+    """This is a stub ofa time period (schoolday model) view for use
+    until the real one gets implemented.
+    """
 
-    template = Template("www/ttschemas.pt")
+    authorization = ManagerAccess
+    template = Template("www/time-period.pt")
+
+    def title(self):
+        return _("Time period %s") % self.context.__name__
+
+
+class ContainerServiceViewBase(View):
+    """A base view for timetable schema and time period services
+
+    Subclasses must define:
+
+    template  the page template for this view
+    newpath   the path of the view for creating a new item.
+    subview   the view for editing an item.
+    """
 
     authorization = ManagerAccess
 
@@ -253,7 +271,7 @@ class TimetableSchemaServiceView(View):
             yield self.context[key]
 
     def _traverse(self, name, request):
-        return TimetableSchemaView(self.context[name])
+        return self.subview(self.context[name])
 
     def update(self):
         result = None
@@ -264,8 +282,24 @@ class TimetableSchemaServiceView(View):
         if 'ADD' in self.request.args:
             self.request.redirect(absoluteURL(self.request,
                                               self.context.__parent__,
-                                              '/newttschema'))
+                                              self.newpath))
         return result
+
+
+class TimetableSchemaServiceView(ContainerServiceViewBase):
+
+    template = Template("www/ttschemas.pt")
+
+    newpath = '/newttschema'
+    subview = TimetableSchemaView
+
+
+class TimePeriodServiceView(ContainerServiceViewBase):
+
+    template = Template("www/time-periods.pt")
+
+    newpath = '/newtimeperiod'
+    subview = TimePeriodView
 
 
 def fix_duplicates(names):
