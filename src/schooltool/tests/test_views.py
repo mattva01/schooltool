@@ -1945,6 +1945,7 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
               <absence xlink:type="simple"
                        xlink:href="/persons/a/absences/001"
+                       person_title="a"
                        datetime="2001-02-03 04:05:06"
                        ended="unended" xlink:title="001"
                        resolved="unresolved"/>

@@ -226,9 +226,13 @@ class SchoolToolClient:
         if response.status != 200:
             raise SchoolToolError("%d %s" % (response.status, response.reason))
 
-    def getAbsences(self, person_id):
-        """Return a list of absences for a person."""
-        response = self.get('%s/absences' % person_id)
+    def getAbsences(self, uri):
+        """Return a list of absences for an object.
+
+        uri can point to /persons/person_name/absences, to /utils/absences,
+        or to /some/object/facets/absence_tracker_facet_id.
+        """
+        response = self.get(uri)
         if response.status != 200:
             raise SchoolToolError("%d %s" % (response.status, response.reason))
         return self._parseAbsences(response.read())
@@ -410,6 +414,10 @@ class SchoolToolClient:
                 href = node.nsProp('href', xlink)
                 if not href:
                     continue
+                person_href = '/'.join(href.split('/')[:-2])
+                person_title = node.nsProp('person_title', None)
+                if not person_title:
+                    person_title = person_href.split('/')[-1]
                 dt = node.nsProp('datetime', None)
                 if dt is None:
                     raise SchoolToolError("Datetime not given")
@@ -432,7 +440,9 @@ class SchoolToolClient:
                         expected_presence = parse_datetime(expected_presence)
                     except ValueError, e:
                         raise SchoolToolError(str(e))
-                absences.append(AbsenceInfo(href, dt, ended == "ended",
+                absences.append(AbsenceInfo(href, dt, person_title,
+                                            person_href,
+                                            ended == "ended",
                                             resolved == "resolved",
                                             expected_presence))
             return absences
@@ -568,13 +578,18 @@ class AbsenceInfo:
 
     uri = None                  # URI of this absence
     datetime = None             # Date and time of first report
+    person_title = None         # Person (title)
+    person_href = None          # Person (href)
     ended = None                # Is the absence ended? (bool)
     resolved = None             # Is the absence resolved? (bool)
     expected_presence = None    # Expected presence or None
 
-    def __init__(self, uri, datetime, ended, resolved, expected_presence):
+    def __init__(self, uri, datetime, person_title, person_href, ended,
+                 resolved, expected_presence):
         self.uri = uri
         self.datetime = datetime
+        self.person_title = person_title
+        self.person_href = person_href
         self.ended = ended
         self.resolved = resolved
         self.expected_presence = expected_presence
@@ -583,14 +598,17 @@ class AbsenceInfo:
         if not isinstance(other, AbsenceInfo):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
-        return cmp((self.datetime, self.uri, self.ended, self.resolved,
+        return cmp((self.datetime, self.uri, self.person_title,
+                    self.person_href, self.ended, self.resolved,
                     self.expected_presence),
-                   (other.datetime, other.uri, other.ended, other.resolved,
+                   (other.datetime, other.uri, other.person_title,
+                    other.person_href, other.ended, other.resolved,
                     other.expected_presence))
 
     def __repr__(self):
-        return "%s(%r, %r, %r, %r, %r)" % (self.__class__.__name__,
-                    self.uri, self.datetime, self.ended, self.resolved,
+        return "%s(%r, %r, %r, %r, %r, %r, %r)" % (self.__class__.__name__,
+                    self.uri, self.datetime, self.person_title,
+                    self.person_href, self.ended, self.resolved,
                     self.expected_presence)
 
 

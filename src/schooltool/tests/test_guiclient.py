@@ -280,8 +280,9 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                     (2, 'group1b',    '/groups/group1b'),
                    ]
         client = self.newClient(ResponseStub(200, 'OK', body))
-        result = client.getGroupTree()
-        self.assertEquals(list(result), expected)
+        results = list(client.getGroupTree())
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
         self.checkConnPath(client, '/groups/root/tree')
 
     def test_getGroupTree_with_errors(self):
@@ -339,8 +340,9 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                     ('Membership', 'Group', 'title2', 'href2')]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
-        result = client.getObjectRelationships(group_id)
-        self.assertEquals(list(result), expected)
+        results = list(client.getObjectRelationships(group_id))
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
         self.checkConnPath(client, '%s/relationships' % group_id)
 
     def test_getObjectRelationships_with_errors(self):
@@ -418,11 +420,13 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
             </absences>
         """)
         expected = [AbsenceInfo('/p/absences/003',
-                                datetime.datetime(2001, 2, 28, 1, 1, 1), True,
-                                False, datetime.datetime(2001, 2, 3, 4, 5, 6))]
+                                datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                'p', '/p', True, False,
+                                datetime.datetime(2001, 2, 3, 4, 5, 6))]
         client = self.newClient(ResponseStub(200, 'OK', body))
-        results = client.getAbsences('/p')
-        self.assertEquals(results, expected)
+        results = client.getAbsences('/p/absences')
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
         self.checkConnPath(client, '/p/absences')
 
     def test_getAbsences_with_errors(self):
@@ -450,7 +454,8 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                                    "foo")]
         client = self.newClient(ResponseStub(200, 'OK', body))
         results = client.getAbsenceComments('/persons/john/absences/002')
-        self.assertEquals(results, expected)
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
         self.checkConnPath(client, '/persons/john/absences/002')
 
     def test_getAbsences_with_errors(self):
@@ -668,7 +673,8 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               <absence xlink:type="simple" href="/p/absences/000"
                        datetime="2001-02-28 01:01:01"
                        ended="ended" resolved="resolved" />
-              <absence xlink:type="simple" xlink:href="/p/absences/001"
+              <absence xlink:type="simple" xlink:href="/persons/p/absences/001"
+                       person_title="Person Foo"
                        datetime="2001-02-28 01:01:01"
                        ended="ended" resolved="resolved" />
               <absence xlink:type="simple" xlink:href="/p/absences/002"
@@ -680,18 +686,22 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                        expected_presence="2001-02-03 04:05:06" />
             </absences>
         """)
-        expected = [AbsenceInfo('/p/absences/001',
+        expected = [AbsenceInfo('/persons/p/absences/001',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                'Person Foo', '/persons/p',
                                 True, True, None),
                     AbsenceInfo('/p/absences/002',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                'p', '/p',
                                 False, False, None),
                     AbsenceInfo('/p/absences/003',
-                                datetime.datetime(2001, 2, 28, 1, 1, 1), True,
-                                False, datetime.datetime(2001, 2, 3, 4, 5, 6))]
+                                datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                'p', '/p', True, False,
+                                datetime.datetime(2001, 2, 3, 4, 5, 6))]
         client = SchoolToolClient()
-        result = client._parseAbsences(body)
-        self.assertEquals(result, expected)
+        results = client._parseAbsences(body)
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
 
     def test__parseAbsences_errors(self):
         from schooltool.guiclient import SchoolToolClient, SchoolToolError
@@ -767,7 +777,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                                    "Comment\n      Three")]
         client = SchoolToolClient()
         results = client._parseAbsenceComments(body)
-        self.assertEquals(results, expected, "\n" + 
+        self.assertEquals(results, expected, "\n" +
                           diff(pformat(expected), pformat(results)))
 
     def test__parseAbsenceComments_errors(self):

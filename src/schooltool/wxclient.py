@@ -200,7 +200,8 @@ class RollCallDlg(wxDialog):
                  dontresolve.Enable(enabled)
 
     def OnOk(self, event):
-        """Verify that all required data is entered before closing the dialog."""
+        """Verify that all required data is entered before closing the dialog.
+        """
         for (href, was_absent, absent, present, comment,
              resolve, dontresolve) in self.items:
             if absent.GetValue() == present.GetValue():
@@ -235,13 +236,15 @@ class RollCallDlg(wxDialog):
 class AbsenceFrame(wxFrame):
     """Window showing the list of person's absences."""
 
-    def __init__(self, client, person_id, title, parent=None, id=-1):
+    def __init__(self, client, person_id, title, parent=None, id=-1,
+                 persons=True):
         """Create an absence list window."""
         wxFrame.__init__(self, parent, id, title, size=wxSize(400, 300))
         self.client = client
         self.title = title
         self.person_id = person_id
         self.absence_data = []
+        self.persons = persons
 
         main_sizer = wxBoxSizer(wxVERTICAL)
         splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
@@ -252,6 +255,8 @@ class AbsenceFrame(wxFrame):
         self.absence_list.InsertColumn(1, "Ended?", width=110)
         self.absence_list.InsertColumn(2, "Resolved?", width=110)
         self.absence_list.InsertColumn(3, "Expected Presence", width=150)
+        if self.persons:
+            self.absence_list.InsertColumn(1, "Person", width=110)
         EVT_LIST_ITEM_SELECTED(self, ID_ABSENCE_LIST, self.DoSelectAbsence)
         self.comment_list = wxListCtrl(splitter, -1,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
@@ -302,12 +307,17 @@ class AbsenceFrame(wxFrame):
             self.absence_list.InsertStringItem(idx,
                     absence.datetime.isoformat(' '))
             self.absence_list.SetItemData(idx, idx)
-            self.absence_list.SetStringItem(idx, 1,
+            if self.persons:
+                self.absence_list.SetStringItem(idx, 1, absence.person_title)
+                n = 1
+            else:
+                n = 0
+            self.absence_list.SetStringItem(idx, n+1,
                     absence.ended and "Yes" or "No")
-            self.absence_list.SetStringItem(idx, 2,
+            self.absence_list.SetStringItem(idx, n+2,
                     absence.resolved and "Yes" or "No")
             if absence.expected_presence is not None:
-                self.absence_list.SetStringItem(idx, 1,
+                self.absence_list.SetStringItem(idx, n+3,
                         absence.expected_presence.isoformat(' '))
             if not absence.ended:
                 item = self.absence_list.GetItem(idx)
@@ -402,6 +412,9 @@ class MainFrame(wxFrame):
                 item("E&xit\tAlt+X", "Terminate the program", self.DoExit),
                 ),
             menu("&View",
+                item("All &Absences", "List all absences in the system",
+                     self.DoViewAllAbsences),
+                separator(),
                 item("&Refresh\tAlt+R", "Refresh data from the server",
                      self.DoRefresh),
                 ),
@@ -710,8 +723,18 @@ class MainFrame(wxFrame):
             return
         key = self.personListCtrl.GetItemData(item)
         title, person_id = self.personListData[key]
-        window = AbsenceFrame(self.client, person_id, parent=self,
-                              title="%s's absences" % title)
+        window = AbsenceFrame(self.client, "%s/absences" % person_id,
+                              parent=self, title="%s's absences" % title,
+                              persons=False)
+        window.Show()
+
+    def DoViewAllAbsences(self, event=None):
+        """Open the absences window for the whole system person.
+
+        Accessible via View|All Absences.
+        """
+        window = AbsenceFrame(self.client, "/utils/absences", parent=self,
+                              title="All absences", persons=True)
         window.Show()
 
 

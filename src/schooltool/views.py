@@ -699,15 +699,19 @@ class AbsenceCommentParser(XMLPseudoParser):
 
 class AbsenceListViewMixin:
 
-    def _listAbsences(self, absences):
+    def _listAbsences(self, absences, titles):
         endedness = {False: 'unended', True: 'ended'}
         resolvedness = {False: 'unresolved', True: 'resolved'}
+        person_title = None
         for absence in absences:
             expected_presence = None
             if absence.expected_presence is not None:
                 expected_presence = absence.expected_presence.isoformat(' ')
+            if titles:
+                person_title = absence.person.title
             yield {'title': absence.__name__,
                    'path': getPath(absence),
+                   'person_title': person_title,
                    'datetime': absence.comments[0].datetime.isoformat(' '),
                    'expected_presence': expected_presence,
                    'ended': endedness[absence.ended],
@@ -723,7 +727,7 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
         return AbsenceView(absence)
 
     def listAbsences(self):
-        return self._listAbsences(self.context.iterAbsences())
+        return self._listAbsences(self.context.iterAbsences(), False)
 
     def do_POST(self, request):
         try:
@@ -946,7 +950,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
     template = Template('www/absences.pt', content_type='text/xml')
 
     def listAbsences(self):
-        return self._listAbsences(self.context.absences)
+        return self._listAbsences(self.context.absences, True)
 
 
 class AbsenceTrackerFacetView(AbsenceTrackerView, FacetView):
