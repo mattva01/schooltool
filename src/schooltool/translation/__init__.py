@@ -48,7 +48,7 @@ import gettext
 
 
 localedir = os.path.dirname(__file__)
-catalog = gettext.translation('schooltool', 'localedir', fallback=True)
+catalog = gettext.translation('schooltool', localedir, fallback=True)
 gettext = catalog.gettext
 ugettext = catalog.ugettext
 _ = gettext
