@@ -178,7 +178,8 @@ def load_options(argv):
 
 def setup(options):
     """Configure SchoolBell."""
-    setUpLogger(None, options.config.error_log_file)
+    setUpLogger(None, options.config.error_log_file,
+                "%(asctime)s %(message)s")
     setUpLogger('accesslog', options.config.web_access_log_file)
 
     # Shut up ZODB lock_file, because it logs tracebacks when unable
@@ -336,13 +337,14 @@ class UnicodeFileHandler(logging.StreamHandler):
         self.stream.close()
 
 
-def setUpLogger(name, filenames):
+def setUpLogger(name, filenames, format=None):
     """Set up a named logger.
 
     Sets up a named logger to log into filenames with the given format.
     Two filenames are special: 'STDOUT' means sys.stdout and 'STDERR'
     means sys.stderr.
     """
+    formatter = logging.Formatter(format)
     logger = logging.getLogger(name)
     logger.propagate = False
     logger.setLevel(logging.INFO)
@@ -353,6 +355,7 @@ def setUpLogger(name, filenames):
             handler = logging.StreamHandler(sys.stderr)
         else:
             handler = UnicodeFileHandler(filename)
+        handler.setFormatter(formatter)
         logger.addHandler(handler)
 
 

@@ -385,7 +385,8 @@ def test_setUpLogger():
         >>> import logging
         >>> from schoolbell.app.main import setUpLogger
         >>> setUpLogger('schoolbell.just_testing',
-        ...             ['STDERR', '_just_testing.log'])
+        ...             ['STDERR', '_just_testing.log'],
+        ...             '%(asctime)s %(message)s')
 
         >>> logger = logging.getLogger('schoolbell.just_testing')
         >>> logger.propagate
@@ -394,6 +395,10 @@ def test_setUpLogger():
         [<logging.StreamHandler instance ...>, <...UnicodeFileHandler ...>]
         >>> logger.handlers[0].stream
         <open file '<stderr>', mode 'w' at 0x...>
+        >>> logger.handlers[0].formatter
+        <logging.Formatter instance at ...>
+        >>> logger.handlers[0].formatter._fmt
+        '%(asctime)s %(message)s'
 
     Let's clean up after ourselves (logging is messy):
 
