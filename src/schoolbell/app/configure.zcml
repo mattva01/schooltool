@@ -30,11 +30,13 @@
   <content class=".app.Person">
     <require permission="zope.View"
              interface="schoolbell.app.interfaces.IReadPerson" />
-    <!-- This is not etirely corerect, but we want to let users
-         to modify their account info -->
+    <!-- This is not entirely correct, but we want to let users
+         modify their account info. -->
     <require permission="zope.View"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schoolbell.app.interfaces.IPerson" />
+    <require permission="zope.View"
+             interface="schoolbell.app.interfaces.ICalendarOwner" />
   </content>
 
   <content class=".app.Group">
@@ -49,6 +51,18 @@
              interface="schoolbell.app.interfaces.IResource" />
     <require permission="zope.ManageContent"
              set_schema="schoolbell.app.interfaces.IResource" />
+  </content>
+
+  <!-- XXX This should probably live in schoolbell.calendar's
+           configure.zcml, and the permissions are too lax. -->
+  <content class="schoolbell.calendar.simple.SimpleCalendarEvent">
+    <require permission="zope.View"
+             interface="schoolbell.calendar.interfaces.ICalendarEvent" />
+  </content>
+
+  <content class=".app.Calendar">
+    <require permission="zope.View"
+             interface="schoolbell.calendar.interfaces.IEditCalendar" />
   </content>
 
   <subscriber

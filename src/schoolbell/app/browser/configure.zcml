@@ -264,6 +264,19 @@
       title="View"
       />
 
+<!-- Calendar views -->
+
+  <page
+      name="calendar_plain.html"
+      for="schoolbell.app.interfaces.ICalendarOwner"
+      class="schoolbell.app.browser.cal.PlainCalendarView"
+      template="templates/calendar_plain.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Calendar (plain)"
+      />
+
+
 <!-- Skin and resources -->
 
   <zope:subscriber

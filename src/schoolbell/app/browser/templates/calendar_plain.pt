@@ -1,0 +1,22 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Calendar (plain)</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Calendar for <span tal:replace="context/title" i18n:name="title"/>
+  </h1>
+<metal:block metal:fill-slot="body">
+  <div tal:repeat="event view/iterEvents">
+    Title: <span tal:replace="event/title" />,
+    start: <span tal:replace="event/dtstart" />,
+    duration: <span tal:replace="event/duration" />,
+    unique_id: <span tal:replace="event/unique_id" />
+  </div>
+
+  <br />
+  <a href="calendar_plain.html?GENERATE=more">Generate more events</a>
+</metal:block>
+</body>
+</html>

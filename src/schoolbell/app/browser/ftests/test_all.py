@@ -54,13 +54,11 @@ def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
-    return unittest.TestSuite([
-                FunctionalDocFileSuite('app.txt', optionflags=optionflags),
-                FunctionalDocFileSuite('deletion.txt',
-                                       optionflags=optionflags),
-                FunctionalDocFileSuite('copypaste.txt',
-                                       optionflags=optionflags),
-           ])
+    filenames = ['app.txt', 'deletion.txt', 'copypaste.txt', 'cal.txt']
+    suites = [FunctionalDocFileSuite(filename, optionflags=optionflags)
+              for filename in filenames]
+    return unittest.TestSuite(suites)
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

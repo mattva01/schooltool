@@ -1,0 +1,77 @@
+Functional doctest for schoolbell.app.cal
+=========================================
+
+We will obviously need a SchoolBell instance.
+
+    >>> response = http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond""")
+    >>> response.getStatus()
+    303
+
+Let's create a person so can fool around with his calendar:
+
+    >>> reponse = http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 1318
+    ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
+    ... Referer: http://localhost/frogpond/persons/add.html
+    ...
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.title"
+    ...
+    ... Frog
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.username"
+    ...
+    ... frog
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.password"
+    ...
+    ... pwd
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.verify_password"
+    ...
+    ... pwd
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.photo"; filename=""
+    ... Content-Type: application/octet-stream
+    ...
+    ...
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ...
+    ... Add
+    ... -----------------------------705046721187019535891597004--
+    ... """)
+    >>> response.getStatus()
+    303
+
+If we peek into our plain calendar view, we will see that the person's
+calendar is empty:
+
+    >>> response = http(r"""
+    ... GET /frogpond/persons/frog/calendar_plain.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    >>> response.getStatus()
+    200
+    >>> 'duration:' not in response.getBody()
+    True
+
+We can generate some fictitious events:
+
+    >>> response = http(r"""
+    ... GET /frogpond/persons/frog/calendar_plain.html?GENERATE=more HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    >>> response.getStatus()
+    200
+    >>> 'duration:' in response.getBody()
+    True

@@ -23,9 +23,31 @@ $Id$
 """
 
 from zope.app.publisher.browser import BrowserView
+from schoolbell.calendar.interfaces import ICalendar
+from schoolbell.calendar.simple import SimpleCalendarEvent
 
 
 class PlainCalendarView(BrowserView):
+    """A calendar view purely for testing purposes."""
 
-    pass # TODO
+    __used_for__ = ICalendar
 
+    num_events = 5
+    evt_range = 60*24*14 # two weeks
+
+    def iterEvents(self):
+        events = list(self.context.calendar)
+        events.sort()
+        return events
+
+    def update(self):
+        if 'GENERATE' in self.request:
+            from datetime import datetime, timedelta
+            import random
+            for i in range(self.num_events):
+                delta = random.randint(-self.evt_range, self.evt_range)
+                dtstart = datetime.now() + timedelta(minutes=delta)
+                length = timedelta(minutes=random.randint(1, 60*12))
+                title = 'Event %d' % random.randint(1, 999)
+                event = SimpleCalendarEvent(dtstart, length, title)
+                self.context.calendar.addEvent(event)
