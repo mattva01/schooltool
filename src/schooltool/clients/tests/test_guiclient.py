@@ -1061,13 +1061,23 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         """)
 
     def test_getApplicationLog(self):
-        client = self.newClient(ResponseStub(200, 'OK', 'pwn3d'))
-        self.assertEquals(client.getApplicationLog(), 'pwn3d')
+        response = ResponseStub(200, 'OK', 'pwn3d')
+        client = self.newClient(response)
+        result = client.getApplicationLog(page=-1, pagesize=5)
+        self.assertEquals(result, 'pwn3d')
+        self.assertEquals(client._connections[0].path,
+                          '/applog?page=-1&pagesize=5')
+
+        response = ResponseStub(200, 'OK', '...')
+        client = self.newClient(response)
+        result = client.getApplicationLog(page=3, pagesize=15, filter='foo!')
+        self.assertEquals(client._connections[0].path,
+                          '/applog?page=3&pagesize=15&filter=foo%21')
 
     def test_getApplicationLog_errors(self):
         from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(500, 'not OK', 'abc'))
-        self.assertRaises(SchoolToolError, client.getApplicationLog)
+        self.assertRaises(SchoolToolError, client.getApplicationLog, 3, 4)
 
 
 class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,

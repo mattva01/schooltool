@@ -581,8 +581,12 @@ class SchoolToolClient:
         if response.status != 200:
             raise ResponseStatusError(response)
 
-    def getApplicationLog(self):
-        response = self.get('/applog')
+    def getApplicationLog(self, page, pagesize, filter=None):
+        args = [('page', page), ('pagesize', pagesize)]
+        if filter:
+            args.append(('filter', filter))
+        qs = urllib.urlencode(args)
+        response = self.get('/applog?' + qs)
         if response.status != 200:
             raise ResponseStatusError(response)
         return response.read()
