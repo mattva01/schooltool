@@ -30,13 +30,10 @@ from sets import Set
 from schoolbell.calendar.icalendar import ical_weekdays
 from schoolbell.calendar.icalendar import ical_date, ical_datetime
 from schoolbell.calendar.simple import SimpleCalendarEvent
-from schoolbell.calendar.interfaces import IExpandedCalendarEvent
-from schoolbell.calendar.interfaces import IRecurrenceRule, \
+from schoolbell.calendar.interfaces import Unchanged
+from schoolbell.calendar.interfaces import IExpandedCalendarEvent, \
     IDailyRecurrenceRule, IWeeklyRecurrenceRule, IMonthlyRecurrenceRule, \
-    IYearlyRecurrenceRule
-
-
-Unchanged = object() # marker
+    IYearlyRecurrenceRule, IRecurrenceRule
 
 
 class ExpandedCalendarEvent(SimpleCalendarEvent):

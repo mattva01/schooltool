@@ -42,6 +42,9 @@ from zope.schema import TextLine, Int, Datetime, Date, List, Set, Choice
 from zope.schema import Field, Object
 
 
+Unchanged = object() # marker
+
+
 class ICalendar(Interface):
     """Calendar.
 
@@ -171,9 +174,9 @@ class IRecurrenceRule(Interface):
         Values in this list must be instances of datetime.date.
         """)
 
-##  XXX
-##  def replace(**kw):
-##      """Return a copy of this recurrence rule with new specified fields."""
+    def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged):
+        """Return a copy of this recurrence rule with new specified fields."""
 
     def __eq__(other):
         """See if self == other."""
@@ -195,7 +198,9 @@ class IRecurrenceRule(Interface):
     def iCalRepresentation(dtstart):
        """Return the rule in iCalendar format.
 
-       Returns a list of strings.  XXX more details, please
+       Returns a list of strings, each corresponding to a line of iCalendar.
+       The first line is for the recurrence rule itself, the following ones
+       (if any) describe exception dates.
 
        dtstart is a datetime representing the date that the recurring
        event starts on.
@@ -226,6 +231,10 @@ class IWeeklyRecurrenceRule(IRecurrenceRule):
         if that weekday is not in this set.
         """)
 
+    def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, weekdays=Unchanged):
+        """Return a copy of this recurrence rule with new specified fields."""
+
 
 class IMonthlyRecurrenceRule(IRecurrenceRule):
     """Monthly recurrence."""
@@ -249,6 +258,10 @@ class IMonthlyRecurrenceRule(IRecurrenceRule):
                       within a month on the same weekday, indexed from the
                       end of month (e.g. 2nd last Friday of a month).
         """)
+
+    def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, monthly=Unchanged):
+        """Return a copy of this recurrence rule with new specified fields."""
 
 
 class ICalendarEvent(Interface):
