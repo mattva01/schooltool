@@ -86,7 +86,7 @@ class SchooldayModelCalendarView(View):
         try:
             complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
             for event in reader.iterEvents():
-                summary = event.get('SUMMARY', '').lower()
+                summary = event.getOne('SUMMARY', '').lower()
                 if summary not in ('school period', 'schoolday'):
                     continue # ignore boring events
 

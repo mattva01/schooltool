@@ -110,27 +110,54 @@ class TestSchooldayModel(unittest.TestCase):
         self.assertRaises(TypeError, cal.__contains__, 'some string')
 
 
+class TestPeriod(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import Period
+        dt1 = datetime(2001, 2, 3, 14, 30, 5)
+        dt2 = datetime(2001, 2, 3, 16, 35, 20)
+        td = dt2 - dt1
+        p1 = Period(dt1, dt2)
+        self.assertEquals(p1.start, dt1)
+        self.assertEquals(p1.end, dt2)
+        self.assertEquals(p1.duration, td)
+
+        p2 = Period(dt1, td)
+        self.assertEquals(p2.start, dt1)
+        self.assertEquals(p2.end, dt2)
+        self.assertEquals(p2.duration, td)
+
+        self.assertEquals(p1, p2)
+
+        p = Period(dt1, timedelta(0))
+        self.assertEquals(p.start, dt1)
+        self.assertEquals(p.end, dt1)
+        self.assertEquals(p.duration, timedelta(0))
+
+        self.assertRaises(ValueError, Period, dt2, dt1)
+        self.assertRaises(ValueError, Period, dt1, -td)
+
+
 class TestVEvent(unittest.TestCase):
 
     def test_add(self):
-        from schooltool.cal import VEvent
+        from schooltool.cal import VEvent, ICalParseError
         vevent = VEvent()
         value, params = 'bar', {'VALUE': 'TEXT'}
         vevent.add('foo', value, params)
-        self.assertEquals(vevent._props, {'FOO': (value, params)})
+        self.assertEquals(vevent._props, {'FOO': [(value, params)]})
         value2 = 'guug'
         vevent.add('fie', value2)
-        self.assertEquals(vevent._props, {'FOO': (value, params),
-                                          'FIE': (value2, {})})
+        self.assertEquals(vevent._props, {'FOO': [(value, params)],
+                                          'FIE': [(value2, {})]})
+        vevent.add('fie', value, params)
+        self.assertEquals(vevent._props, {'FOO': [(value, params)],
+                                          'FIE': [(value2, {}),
+                                                  (value, params)]})
 
-    def test_get(self):
-        from schooltool.cal import VEvent
-        vevent = VEvent()
-        vevent.add('foo', 'bar', {})
-        self.assertEquals(vevent.get('foo'), 'bar')
-        self.assertEquals(vevent.get('Foo'), 'bar')
-        self.assertEquals(vevent.get('baz'), None)
-        self.assertEquals(vevent.get('baz', 'quux'), 'quux')
+        # adding a singleton property twice
+        vevent.add('uid', '1')
+        self.assertRaises(ICalParseError, vevent.add, 'uid', '2')
 
     def test_hasProp(self):
         from schooltool.cal import VEvent
@@ -140,69 +167,69 @@ class TestVEvent(unittest.TestCase):
         self.assert_(vevent.hasProp('Foo'))
         self.assert_(not vevent.hasProp('baz'))
 
-    def test_getType(self):
+    def test__getType(self):
         from schooltool.cal import VEvent
         vevent = VEvent()
         vevent.add('x-explicit', '', {'VALUE': 'INTEGER'})
         vevent.add('dtstart', 'implicit type', {})
         vevent.add('x-default', '', {})
-        self.assertEquals(vevent.getType('x-explicit'), 'INTEGER')
-        self.assertEquals(vevent.getType('dtstart'), 'DATE-TIME')
-        self.assertEquals(vevent.getType('x-default'), 'TEXT')
-        self.assertEquals(vevent.getType('X-Explicit'), 'INTEGER')
-        self.assertEquals(vevent.getType('DtStart'), 'DATE-TIME')
-        self.assertEquals(vevent.getType('X-Default'), 'TEXT')
-        self.assertRaises(KeyError, vevent.getType, 'nonexistent')
+        self.assertEquals(vevent._getType('x-explicit'), 'INTEGER')
+        self.assertEquals(vevent._getType('dtstart'), 'DATE-TIME')
+        self.assertEquals(vevent._getType('x-default'), 'TEXT')
+        self.assertEquals(vevent._getType('X-Explicit'), 'INTEGER')
+        self.assertEquals(vevent._getType('DtStart'), 'DATE-TIME')
+        self.assertEquals(vevent._getType('X-Default'), 'TEXT')
+        self.assertRaises(KeyError, vevent._getType, 'nonexistent')
 
-    def test_getValue(self):
+    def test_getOne(self):
         from schooltool.cal import VEvent
         vevent = VEvent()
 
         vevent.add('foo', 'bar', {})
-        self.assertEquals(vevent.getValue('foo'), 'bar')
-        self.assertEquals(vevent.getValue('Foo'), 'bar')
-        self.assertEquals(vevent.getValue('baz'), None)
-        self.assertEquals(vevent.getValue('baz', 'quux'), 'quux')
-        self.assertEquals(vevent.getValue('dtstart', 'quux'), 'quux')
+        self.assertEquals(vevent.getOne('foo'), 'bar')
+        self.assertEquals(vevent.getOne('Foo'), 'bar')
+        self.assertEquals(vevent.getOne('baz'), None)
+        self.assertEquals(vevent.getOne('baz', 'quux'), 'quux')
+        self.assertEquals(vevent.getOne('dtstart', 'quux'), 'quux')
 
         vevent.add('int-foo', '42', {'VALUE': 'INTEGER'})
         vevent.add('int-bad', 'xyzzy', {'VALUE': 'INTEGER'})
-        self.assertEquals(vevent.getValue('int-foo'), 42)
-        self.assertEquals(vevent.getValue('Int-Foo'), 42)
-        self.assertRaises(ValueError, vevent.getValue, 'int-bad')
+        self.assertEquals(vevent.getOne('int-foo'), 42)
+        self.assertEquals(vevent.getOne('Int-Foo'), 42)
+        self.assertRaises(ValueError, vevent.getOne, 'int-bad')
 
         vevent.add('date-foo', '20030405', {'VALUE': 'DATE'})
         vevent.add('date-bad1', '20030405T1234', {'VALUE': 'DATE'})
         vevent.add('date-bad2', '2003', {'VALUE': 'DATE'})
         vevent.add('date-bad3', '200301XX', {'VALUE': 'DATE'})
-        self.assertEquals(vevent.getValue('date-Foo'), date(2003, 4, 5))
-        self.assertRaises(ValueError, vevent.getValue, 'date-bad1')
-        self.assertRaises(ValueError, vevent.getValue, 'date-bad2')
-        self.assertRaises(ValueError, vevent.getValue, 'date-bad3')
+        self.assertEquals(vevent.getOne('date-Foo'), date(2003, 4, 5))
+        self.assertRaises(ValueError, vevent.getOne, 'date-bad1')
+        self.assertRaises(ValueError, vevent.getOne, 'date-bad2')
+        self.assertRaises(ValueError, vevent.getOne, 'date-bad3')
 
         vevent.add('datetime-foo1', '20030405T060708', {'VALUE': 'DATE-TIME'})
         vevent.add('datetime-foo2', '20030405T060708Z', {'VALUE': 'DATE-TIME'})
         vevent.add('datetime-bad1', '20030405T010203444444',
                                                         {'VALUE': 'DATE-TIME'})
         vevent.add('datetime-bad2', '2003', {'VALUE': 'DATE-TIME'})
-        self.assertEquals(vevent.getValue('datetime-foo1'),
+        self.assertEquals(vevent.getOne('datetime-foo1'),
                           datetime(2003, 4, 5, 6, 7, 8))
-        self.assertEquals(vevent.getValue('Datetime-Foo2'),
+        self.assertEquals(vevent.getOne('Datetime-Foo2'),
                           datetime(2003, 4, 5, 6, 7, 8))
-        self.assertRaises(ValueError, vevent.getValue, 'datetime-bad1')
-        self.assertRaises(ValueError, vevent.getValue, 'datetime-bad2')
+        self.assertRaises(ValueError, vevent.getOne, 'datetime-bad1')
+        self.assertRaises(ValueError, vevent.getOne, 'datetime-bad2')
 
         vevent.add('dur-foo1', '+P11D', {'VALUE': 'DURATION'})
         vevent.add('dur-foo2', '-P2W', {'VALUE': 'DURATION'})
         vevent.add('dur-foo3', 'P1DT2H3M4S', {'VALUE': 'DURATION'})
         vevent.add('dur-foo4', 'PT2H', {'VALUE': 'DURATION'})
         vevent.add('dur-bad1', 'xyzzy', {'VALUE': 'DURATION'})
-        self.assertEquals(vevent.getValue('dur-foo1'), timedelta(days=11))
-        self.assertEquals(vevent.getValue('Dur-Foo2'), -timedelta(weeks=2))
-        self.assertEquals(vevent.getValue('Dur-Foo3'),
+        self.assertEquals(vevent.getOne('dur-foo1'), timedelta(days=11))
+        self.assertEquals(vevent.getOne('Dur-Foo2'), -timedelta(weeks=2))
+        self.assertEquals(vevent.getOne('Dur-Foo3'),
                           timedelta(days=1, hours=2, minutes=3, seconds=4))
-        self.assertEquals(vevent.getValue('DUR-FOO4'), timedelta(hours=2))
-        self.assertRaises(ValueError, vevent.getValue, 'dur-bad1')
+        self.assertEquals(vevent.getOne('DUR-FOO4'), timedelta(hours=2))
+        self.assertRaises(ValueError, vevent.getOne, 'dur-bad1')
 
     def test_iterDates(self):
         from schooltool.cal import VEvent
@@ -210,13 +237,49 @@ class TestVEvent(unittest.TestCase):
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 2)
         vevent.dtend = date(2003, 1, 4)
+        vevent.duration = timedelta(days=3)
+        vevent.rdates = []
+        vevent.exdates = []
         self.assertEquals(list(vevent.iterDates()),
                     [date(2003, 1, 2), date(2003, 1, 3), date(2003, 1, 4)])
 
-    def test_validate(self):
+        vevent.all_day_event = False;
+        self.assertRaises(ValueError, list, vevent.iterDates())
+
+    def test_iterDates_with_rdate_exdate(self):
+        from schooltool.cal import VEvent
+        vevent = VEvent()
+        vevent.all_day_event = True
+        vevent.dtstart = date(2003, 1, 5)
+        vevent.dtend = date(2003, 1, 5)
+        vevent.duration = timedelta(days=1)
+        vevent.rdates = [date(2003, 1, 2), date(2003, 1, 8), date(2003, 1, 8)]
+        vevent.exdates = []
+        expected = [date(2003, 1, 2), date(2003, 1, 5), date(2003, 1, 8)]
+        self.assertEquals(list(vevent.iterDates()), expected)
+
+        vevent.exdates = [date(2003, 1, 6)]
+        expected = [date(2003, 1, 2), date(2003, 1, 5), date(2003, 1, 8)]
+        self.assertEquals(list(vevent.iterDates()), expected)
+
+        vevent.exdates = [date(2003, 1, 2), date(2003, 1, 2)]
+        expected = [date(2003, 1, 5), date(2003, 1, 8)]
+        self.assertEquals(list(vevent.iterDates()), expected)
+
+        vevent.exdates = [date(2003, 1, 5)]
+        expected = [date(2003, 1, 2), date(2003, 1, 8)]
+        self.assertEquals(list(vevent.iterDates()), expected)
+
+        vevent.dtend = date(2003, 1, 6)
+        vevent.duration = timedelta(days=2)
+        vevent.exdates = [date(2003, 1, 5), date(2003, 1, 3)]
+        expected = [date(2003, 1, 2), date(2003, 1, 3),
+                    date(2003, 1, 8), date(2003, 1, 9)]
+        self.assertEquals(list(vevent.iterDates()), expected)
+
+    def test_validate_error_cases(self):
         from schooltool.cal import VEvent, ICalParseError
 
-        # error cases
         vevent = VEvent()
         self.assertRaises(ICalParseError, vevent.validate)
 
@@ -240,7 +303,9 @@ class TestVEvent(unittest.TestCase):
         vevent.add('duration', 'two years', {'VALUE': 'TEXT'})
         self.assertRaises(ICalParseError, vevent.validate)
 
-        # all-day events
+    def test_validate_all_day_events(self):
+        from schooltool.cal import VEvent, ICalParseError
+
         vevent = VEvent()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.validate()
@@ -272,7 +337,9 @@ class TestVEvent(unittest.TestCase):
         vevent.add('dtend', '20010201', {'VALUE': 'DATE'})
         self.assertRaises(ICalParseError, vevent.validate)
 
-        # non-all-day events
+    def test_validate_not_all_day_events(self):
+        from schooltool.cal import VEvent, ICalParseError
+
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
         vevent.validate()
@@ -280,6 +347,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 5, 6))
         self.assertEquals(vevent.dtend, datetime(2001, 2, 3, 4, 5, 6))
         self.assertEquals(vevent.duration, timedelta(days=0))
+        self.assertEquals(vevent.rdates, [])
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040000')
@@ -305,6 +373,61 @@ class TestVEvent(unittest.TestCase):
         vevent.add('dtstart', '20010203T010203')
         vevent.add('dtend', '20010203T010202')
         self.assertRaises(ICalParseError, vevent.validate)
+
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T010203')
+        vevent.add('rdate', '20010205T040506')
+        vevent.add('exdate', '20010206T040506')
+        vevent.validate()
+        self.assertEquals(vevent.rdates, [datetime(2001, 2, 5, 4, 5, 6)])
+        self.assertEquals(vevent.exdates, [datetime(2001, 2, 6, 4, 5, 6)])
+
+    def test_extractListOfDates(self):
+        from schooltool.cal import VEvent, Period, ICalParseError
+
+        vevent = VEvent()
+        vevent.add('rdate', '20010205T040506')
+        vevent.add('rdate', '20010206T040506,20010207T000000Z')
+        vevent.add('rdate', '20010208', {'VALUE': 'DATE'})
+        vevent.add('rdate', '20010209T000000/20010210T000000',
+                   {'VALUE': 'PERIOD'})
+        rdates = vevent._extractListOfDates('RDATE', vevent.rdate_types, False)
+        expected = [datetime(2001, 2, 5, 4, 5, 6),
+                    datetime(2001, 2, 6, 4, 5, 6),
+                    datetime(2001, 2, 7, 0, 0, 0),
+                    date(2001, 2, 8),
+                    Period(datetime(2001, 2, 9), datetime(2001, 2, 10)),
+                   ]
+        self.assertEqual(expected, rdates,
+                         diff(pformat(expected), pformat(rdates)))
+
+        vevent = VEvent()
+        vevent.add('rdate', '20010205T040506', {'VALUE': 'TEXT'})
+        self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
+                                          vevent.rdate_types, False)
+
+        vevent = VEvent()
+        vevent.add('exdate', '20010205T040506/P1D', {'VALUE': 'PERIOD'})
+        self.assertRaises(ICalParseError, vevent._extractListOfDates, 'EXDATE',
+                                          vevent.exdate_types, False)
+
+        vevent = VEvent()
+        vevent.add('rdate', '20010208', {'VALUE': 'DATE'})
+        rdates = vevent._extractListOfDates('RDATE', vevent.rdate_types, True)
+        expected = [date(2001, 2, 8)]
+        self.assertEqual(expected, rdates,
+                         diff(pformat(expected), pformat(rdates)))
+
+        vevent = VEvent()
+        vevent.add('rdate', '20010205T040506', {'VALUE': 'DATE-TIME'})
+        self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
+                                          vevent.rdate_types, True)
+
+        vevent = VEvent()
+        vevent.add('rdate', '20010209T000000/20010210T000000',
+                   {'VALUE': 'PERIOD'})
+        self.assertRaises(ICalParseError, vevent._extractListOfDates, 'RDATE',
+                                          vevent.rdate_types, True)
 
 
 class TestICalReader(unittest.TestCase):
@@ -411,16 +534,17 @@ class TestICalReader(unittest.TestCase):
         result = list(reader.iterEvents())
         self.assertEqual(len(result), 3)
         vevent = result[0]
-        self.assertEqual(vevent.get('x-mozilla-recur-default-units'), 'weeks')
-        self.assertEqual(vevent.get('dtstart'), '20031225')
+        self.assertEqual(vevent.getOne('x-mozilla-recur-default-units'),
+                         'weeks')
+        self.assertEqual(vevent.getOne('dtstart'), date(2003, 12, 25))
         self.assertEqual(vevent.dtstart, date(2003, 12, 25))
-        self.assertEqual(vevent.get('dtend'), '20031226')
+        self.assertEqual(vevent.getOne('dtend'), date(2003, 12, 26))
         self.assertEqual(vevent.dtend, date(2003, 12, 26))
         vevent = result[1]
-        self.assertEqual(vevent.get('dtstart'), '20030501')
+        self.assertEqual(vevent.getOne('dtstart'), date(2003, 05, 01))
         self.assertEqual(vevent.dtstart, date(2003, 05, 01))
         vevent = result[2]
-        self.assertEqual(vevent.get('dtstart'), '20031225')
+        self.assertEqual(vevent.getOne('dtstart'), date(2003, 12, 25))
         self.assertEqual(vevent.dtstart, date(2003, 12, 25))
 
         reader = ICalReader(StringIO(dedent("""
@@ -1184,6 +1308,7 @@ def test_suite():
     suite.addTest(DocTestSuite(schooltool.cal))
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestSchooldayModel))
+    suite.addTest(unittest.makeSuite(TestPeriod))
     suite.addTest(unittest.makeSuite(TestVEvent))
     suite.addTest(unittest.makeSuite(TestICalReader))
     suite.addTest(unittest.makeSuite(TestTimetable))

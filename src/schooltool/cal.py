@@ -241,12 +241,77 @@ def parse_date_time(value):
                              int(hh), int(mm), int(ss))
 
 
+def parse_period(value):
+    """Parse iCalendar PERIOD value.  Returns a Period instance.
+
+    >>> parse_period('20030405T060708/20030405T060709')
+    Period(datetime.datetime(2003, 4, 5, 6, 7, 8), datetime.datetime(2003, 4, 5, 6, 7, 9))
+    >>> parse_period('20030405T060708/PT1H1M1S')
+    Period(datetime.datetime(2003, 4, 5, 6, 7, 8), datetime.timedelta(0, 3661))
+    >>> parse_period('xyzzy')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar period: 'xyzzy'
+    """
+    parts = value.split('/')
+    if len(parts) != 2:
+        raise ValueError('Invalid iCalendar period: %r' % value)
+    try:
+        start = parse_date_time(parts[0])
+        try:
+            end_or_duration = parse_date_time(parts[1])
+        except ValueError:
+            end_or_duration = parse_duration(parts[1])
+    except ValueError:
+        raise ValueError('Invalid iCalendar period: %r' % value)
+    else:
+        return Period(start, end_or_duration)
+
+
+class Period:
+    """A period of time"""
+
+    def __init__(self, start, end_or_duration):
+        self.start = start
+        self.end_or_duration = end_or_duration
+        if isinstance(end_or_duration, datetime.timedelta):
+            self.duration = end_or_duration
+            self.end = self.start + self.duration
+        else:
+            self.end = end_or_duration
+            self.duration = self.end - self.start
+        if self.start > self.end:
+            raise ValueError("Start time is greater than end time")
+
+    def __repr__(self):
+        return "Period(%r, %r)" % (self.start, self.end_or_duration)
+
+    def __cmp__(self, other):
+        if not isinstance(other, Period):
+            raise NotImplementedError('Cannot compare Period with %r' % other)
+        return cmp((self.start, self.end), (other.start, other.end))
+
+
 class VEvent:
     """iCalendar event.
 
     Life cycle: when a VEvent is created, a number of properties should be
     added to it using the add method.  Then validate should be called.
-    After that you can start using query methods (get, hasProp, iterDates).
+    After that you can start using query methods (getOne, hasProp, iterDates).
+
+    Events are classified into two kinds:
+     - normal events
+     - all-day events
+
+    All-day events are identified by their DTSTART property having a DATE value
+    instead of the default DATE-TIME.  All-day events should satisfy the
+    following requirements (otherwise an exception will be raised):
+     - DURATION property (if defined) should be an integral number of days
+     - DTEND property (if defined) should have a DATE value
+     - any RDATE and EXDATE properties should only contain DATE values
+
+    The first two requirements are stated in RFC 2445; I'm not so sure about
+    the third one.
     """
 
     default_type = {
@@ -273,7 +338,33 @@ class VEvent:
         'DATE': parse_date,
         'DATE-TIME': parse_date_time,
         'DURATION': parse_duration,
+        'PERIOD': parse_period,
     }
+
+    singleton_properties = Set([
+        'DTSTAMP',
+        'DTSTART',
+        'UID',
+        'CLASS',
+        'CREATED',
+        'DESCRIPTION',
+        'DTEND',
+        'DURATION',
+        'GEO',
+        'LAST-MODIFIED',
+        'LOCATION',
+        'ORGANIZER',
+        'PRIORITY',
+        'RECURRENCE-ID',
+        'SEQUENCE',
+        'STATUS',
+        'SUMMARY',
+        'TRANSP',
+        'URL',
+    ])
+
+    rdate_types = Set(['DATE', 'DATE-TIME', 'PERIOD'])
+    exdate_types = Set(['DATE', 'DATE-TIME'])
 
     def __init__(self):
         self._props = {}
@@ -290,7 +381,14 @@ class VEvent:
         """
         if params is None:
             params = {}
-        self._props[property.upper()] = (value, params)
+        key = property.upper()
+        if key in self._props:
+            if key in self.singleton_properties:
+                raise ICalParseError("Property %s cannot occur more than once"
+                                     % key)
+            self._props[key].append((value, params))
+        else:
+            self._props[key] = [(value, params)]
 
     def validate(self):
         """Check that this VEvent has all the necessary properties.
@@ -301,33 +399,35 @@ class VEvent:
           dtend             end of the event (inclusive for all-day events,
                             not inclusive for other events)
           duration          length of the event
+          rdates            a list of recurrence dates or periods
+          exdates           a list of exception dates
         """
         if not self.hasProp('DTSTART'):
             raise ICalParseError("VEVENT must have a DTSTART property")
-        if self.getType('DTSTART') not in ('DATE', 'DATE-TIME'):
+        if self._getType('DTSTART') not in ('DATE', 'DATE-TIME'):
             raise ICalParseError("DTSTART property should have a DATE or"
                                  " DATE-TIME value")
         if self.hasProp('DTEND'):
-            if self.getType('DTEND') != self.getType('DTSTART'):
+            if self._getType('DTEND') != self._getType('DTSTART'):
                 raise ICalParseError("DTEND property should have the same type"
                                      " as DTSTART")
             if self.hasProp('DURATION'):
                 raise ICalParseError("VEVENT cannot have both a DTEND"
                                      " and a DURATION property")
         if self.hasProp('DURATION'):
-            if self.getType('DURATION') != 'DURATION':
+            if self._getType('DURATION') != 'DURATION':
                 raise ICalParseError("DURATION property should have type"
                                      " DURATION")
 
-        self.all_day_event = self.getType('DTSTART') == 'DATE'
-        self.dtstart = self.getValue('DTSTART')
+        self.all_day_event = self._getType('DTSTART') == 'DATE'
+        self.dtstart = self.getOne('DTSTART')
         if self.hasProp('DURATION'):
-            self.duration = self.getValue('DURATION')
+            self.duration = self.getOne('DURATION')
             self.dtend = self.dtstart + self.duration
             if self.all_day_event:
                 self.dtend -= datetime.date.resolution
         else:
-            self.dtend = self.getValue('DTEND', self.dtstart)
+            self.dtend = self.getOne('DTEND', self.dtstart)
             self.duration = self.dtend - self.dtstart
             if self.all_day_event:
                 self.duration += datetime.date.resolution
@@ -335,28 +435,54 @@ class VEvent:
         if self.dtstart > self.dtend:
             raise ICalParseError("Event start time should precede end time")
 
-    def get(self, property, default=None):
-        """Return the (raw) value of a property.
+        self.rdates = self._extractListOfDates('RDATE', self.rdate_types,
+                                               self.all_day_event)
+        self.exdates = self._extractListOfDates('EXDATE', self.exdate_types,
+                                                self.all_day_event)
 
-        Returns the default value if the property is not present.
+    def _extractListOfDates(self, key, accepted_types, all_day_event):
+        """Parse a comma separated list of values.
+
+        If all_day_event is True, only accepts DATE values.  Otherwise accepts
+        all value types listed in 'accepted_types'.
         """
-        return self._props.get(property.upper(), (default, None))[0]
+        dates = []
+        default_type = self.default_type[key]
+        for value, params in self._props.get(key, []):
+            value_type = params.get('VALUE', default_type)
+            if value_type not in accepted_types:
+                raise ICalParseError('Invalid value type for %s: %s'
+                                     % (key, value_type))
+            if all_day_event and value_type != 'DATE':
+                raise ICalParseError('I do not understand how to interpret '
+                                     '%s values in %s for all-day events.'
+                                     % (value_type, key))
+            converter = self.converters.get(value_type)
+            dates.extend(map(converter, value.split(',')))
+        return dates
 
-    def getType(self, property):
+    def _getType(self, property):
         """Return the type of the property value."""
         key = property.upper()
-        value, params = self._props[key]
+        values = self._props[key]
+        assert len(values) == 1
+        value, params = values[0]
         default_type = self.default_type.get(key, 'TEXT')
         return params.get('VALUE', default_type)
 
-    def getValue(self, property, default=None):
-        """Return the (typed) value of a property."""
+    def getOne(self, property, default=None):
+        """Return the value of a property as an appropriate Python object.
+
+        Only call getOne for properties that do not occur more than once.
+        """
         try:
-            value, params = self._props[property.upper()]
+            values = self._props[property.upper()]
+            assert len(values) == 1
+            value, params = values[0]
         except KeyError:
             return default
         else:
-            converter = self.converters.get(self.getType(property))
+            converter = self.converters.get(self._getType(property))
             if converter is None:
                 return value
             else:
@@ -367,9 +493,34 @@ class VEvent:
         return property.upper() in self._props
 
     def iterDates(self):
-        """Iterate over all dates within this event."""
-        assert self.all_day_event
-        return DateRange(self.dtstart, self.dtend)
+        """Iterate over all dates within this event.
+
+        This is only valid for all-day events at the moment.
+        """
+        if not self.all_day_event:
+            raise ValueError('iterDates is only defined for all-day events')
+
+        # Find out the set of start dates
+        start_set = {self.dtstart: None}
+        for rdate in self.rdates:
+            start_set[rdate] = rdate
+        for exdate in self.exdates:
+            if exdate in start_set:
+                del start_set[exdate]
+
+        # Find out the set of all dates
+        date_set = Set(start_set)
+        duration = self.duration.days
+        for d in start_set:
+            for n in range(1, duration):
+                d += datetime.date.resolution
+                date_set.add(d)
+
+        # Yield all dates in chronological order
+        dates = list(date_set)
+        dates.sort()
+        for d in dates:
+            yield d
 
 
 class ICalReader:
