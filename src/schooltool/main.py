@@ -206,10 +206,13 @@ def main():
         config_file = os.path.join(dirname, 'schooltool.conf.in')
 
     # Check if a different config file is specified on the command line
-    opts, args = getopt.getopt(sys.argv[1:], 'c:', ['config='])
+    appname = 'schooltool'
+    opts, args = getopt.getopt(sys.argv[1:], 'c:m', ['config=', 'mockup'])
     for k, v in opts:
         if k in ('-c', '--config'):
             config_file = v
+        if k in ('-m', '--mockup'):
+            appname = 'mockup'
 
     # Read configuration file
     dirname = os.path.dirname(__file__)
@@ -224,18 +227,24 @@ def main():
     db = config.database.open()
     conn = db.open()
     root = conn.root()
-    if root.get('schooltool') is None:
-        root['schooltool'] = FakeApplication()
+    if root.get(appname) is None:
+        if appname == 'mockup':
+            root[appname] = FakeApplication()
+        else:
+            root[appname] = createApplication(appname)
         get_transaction().commit()
     conn.close()
 
     # Start web servers
-    site = Site(db, 'schooltool', RootView)
+    site = Site(db, appname, RootView)
     for interface, port in config.listen:
         reactor.listenTCP(port, site, interface=interface)
         print "Started HTTP server on %s:%s" % (interface or "*", port)
     reactor.run()
 
+def createApplication(name):
+    """Instantiate a new application"""
+    return FakeApplication()
 
 if __name__ == '__main__':
     main()
