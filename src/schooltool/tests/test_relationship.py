@@ -217,7 +217,7 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
         from schooltool import relationship
         relationship.setUp()
 
-        title, doc = inspectSpecificURI(URICommand)
+        uri, title, doc = inspectSpecificURI(URICommand)
         schema = RelationshipSchema(URICommand,
                                     superior=URISuperior, report=URIReport)
 

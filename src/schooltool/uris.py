@@ -35,14 +35,24 @@ __metaclass__ = type
 #
 
 class ISpecificURI(Interface):
-    """All interfaces derived from this must have the URI they map on
-    to as the first line of their docstring. Examples::
+    """Base interface for URIs.
 
-        class URITutor(ISpecificURI):
-            '''http://schooltool.org/ns/tutor'''
+    All interfaces derived from this must have the URI they map on
+    to as the first line of their docstring.  The second paragraph
+    should contain just a short user-visible name.
+
+    Examples::
 
         class URITutor(ISpecificURI):
             '''http://schooltool.org/ns/tutor
+
+            Tutor
+            '''
+
+        class URITutor(ISpecificURI):
+            '''http://schooltool.org/ns/tutor
+
+            Tutor
 
             A person who is responsible for a registration class.
             '''
@@ -55,7 +65,7 @@ class ISpecificURI(Interface):
 class IURIAPI(Interface):
 
     def inspectSpecificURI(uri):
-        """Return a tuple of a URI and the documentation of the ISpecificURI.
+        """Return a tuple of a URI, title and the docstring of a ISpecificURI.
 
         Raises a TypeError if the argument is not ISpecificURI.
         Raises a ValueError if the URI's docstring does not conform.
@@ -63,6 +73,12 @@ class IURIAPI(Interface):
 
     def strURI(uri):
         """Return the URI of ISpecificURI as a string."""
+
+    def nameURI(uri):
+        """Return the user-visible title of ISpecificURI as a string.
+
+        Returns None if the URI does not have a title.
+        """
 
     def isURI(uri):
         """Check if the argument looks like a URI.
@@ -83,11 +99,7 @@ class IURIAPI(Interface):
 #
 
 def inspectSpecificURI(uri):
-    """Returns a tuple of a URI and the documentation of the ISpecificURI.
-
-    Raises a TypeError if the argument is not ISpecificURI.
-    Raises a ValueError if the URI's docstring does not conform.
-    """
+    """See IURIAPI."""
     if not IInterface.isImplementedBy(uri):
         raise TypeError("URI must be an interface (got %r)" % (uri,))
 
@@ -95,17 +107,22 @@ def inspectSpecificURI(uri):
         raise TypeError("URI must strictly extend ISpecificURI (got %r)" %
                         (uri,))
 
-    segments = uri.__doc__.split("\n", 1)
+    segments = uri.__doc__.split("\n\n", 2)
     uri = segments[0].strip()
     if not isURI(uri):
         raise ValueError("This does not look like a URI: %r" % uri)
 
     if len(segments) > 1:
-        doc = segments[1].lstrip()
+        title = segments[1].strip()
+    else:
+        title = None
+
+    if len(segments) > 2:
+        doc = segments[2].lstrip()
     else:
         doc = ""
 
-    return uri, doc
+    return uri, title, doc
 
 
 def isURI(uri):
@@ -119,8 +136,13 @@ def isURI(uri):
 
 
 def strURI(uri):
-    """Returns the URI of ISpecificURI as a string"""
+    """See IURIAPI."""
     return inspectSpecificURI(uri)[0]
+
+
+def nameURI(uri):
+    """See IURIAPI."""
+    return inspectSpecificURI(uri)[1]
 
 
 _uri_registry = {}
@@ -161,12 +183,16 @@ def getURI(str):
 class URIGroup(ISpecificURI):
     """http://schooltool.org/ns/membership/group
 
+    Group
+
     A role of a containing group.
     """
 
 
 class URIMember(ISpecificURI):
     """http://schooltool.org/ns/membership/member
+
+    Member
 
     A group member role.
     """
@@ -175,20 +201,31 @@ class URIMember(ISpecificURI):
 class URIMembership(ISpecificURI):
     """http://schooltool.org/ns/membership
 
+    Membership
+
     The membership relationship.
     """
 
 
 class URITeaching(ISpecificURI):
-    """http://schooltool.org/ns/teaching"""
+    """http://schooltool.org/ns/teaching
+
+    Teaching
+    """
 
 
 class URITeacher(ISpecificURI):
-    """http://schooltool.org/ns/teaching/teacher"""
+    """http://schooltool.org/ns/teaching/teacher
+
+    Teacher
+    """
 
 
 class URITaught(ISpecificURI):
-    """http://schooltool.org/ns/teaching/taught"""
+    """http://schooltool.org/ns/teaching/taught
+
+    Taught
+    """
 
 
 #

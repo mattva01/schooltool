@@ -36,7 +36,8 @@ import socket
 import libxml2
 import datetime
 import cgi
-from schooltool.uris import strURI
+from schooltool.interfaces import ComponentLookupError
+from schooltool.uris import strURI, getURI, nameURI
 from schooltool.common import parse_datetime
 
 __metaclass__ = type
@@ -62,14 +63,6 @@ class SchoolToolClient:
     port = 8080
     status = ''
     version = ''
-
-    role_names = {'http://schooltool.org/ns/membership/member': 'Member',
-                  'http://schooltool.org/ns/membership/group': 'Group',
-                  'http://schooltool.org/ns/membership': 'Membership',
-                  'http://schooltool.org/ns/teaching': 'Teaching',
-                  'http://schooltool.org/ns/teaching/teacher': 'Teacher',
-                  'http://schooltool.org/ns/teaching/taught': 'Taught',
-                 }
 
     # Generic HTTP methods
 
@@ -229,7 +222,7 @@ class SchoolToolClient:
         response = self.get('%s/relationships' % object_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return _parseRelationships(response.read(), self.role_names)
+        return _parseRelationships(response.read())
 
     def getRollCall(self, group_path):
         """Return a roll call template for a group.
@@ -518,7 +511,7 @@ def _parseMemberList(body):
         ctx.xpathFreeContext()
 
 
-def _parseRelationships(body, role_names):
+def _parseRelationships(body):
     """Parse the list of relationships."""
     try:
         doc = libxml2.parseDoc(body)
@@ -539,8 +532,14 @@ def _parseRelationships(body, role_names):
             title = node.nsProp('title', xlink)
             if title is None:
                 title = href.split('/')[-1]
-            role = role_names.get(role, role)
-            arcrole = role_names.get(arcrole, arcrole)
+            try:
+                role = nameURI(getURI(role))
+            except ComponentLookupError:
+                pass
+            try:
+                arcrole = nameURI(getURI(arcrole))
+            except ComponentLookupError:
+                pass
             ctx.setContextNode(node)
             manage_nodes = ctx.xpathEval("manage/@xlink:href")
             if len(manage_nodes) != 1:

@@ -38,7 +38,8 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
 
     def test_inspectSpecificURI(self):
         from zope.interface import Interface
-        from schooltool.uris import inspectSpecificURI, strURI, ISpecificURI
+        from schooltool.uris import ISpecificURI
+        from schooltool.uris import inspectSpecificURI, strURI, nameURI
 
         class I1(Interface):
             pass
@@ -50,19 +51,25 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
         class IURI(ISpecificURI):
             """http://example.com/foo
 
+            Title
+
             Doc text
             """
 
-        uri, doc = inspectSpecificURI(IURI)
+        uri, title, doc = inspectSpecificURI(IURI)
         self.assertEqual(uri, "http://example.com/foo")
         self.assertEqual(uri, strURI(IURI))
+        self.assertEqual(title, "Title")
+        self.assertEqual(title, nameURI(IURI))
         self.assertEqual(doc, """Doc text
             """)
 
         class IURI2(ISpecificURI): """http://example.com/foo"""
-        uri, doc = inspectSpecificURI(IURI2)
+        uri, title, doc = inspectSpecificURI(IURI2)
         self.assertEqual(uri, "http://example.com/foo")
         self.assertEqual(uri, strURI(IURI2))
+        self.assertEqual(title, None)
+        self.assertEqual(title, nameURI(IURI2))
         self.assertEqual(doc, "")
 
         class IURI3(ISpecificURI): """foo"""
@@ -72,13 +79,16 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
             """\
             mailto:foo
             """
-        uri, doc = inspectSpecificURI(IURI4)
+        uri, title, doc = inspectSpecificURI(IURI4)
         self.assertEqual(uri, "mailto:foo")
         self.assertEqual(uri, strURI(IURI4))
+        self.assertEqual(title, None)
+        self.assertEqual(title, nameURI(IURI2))
         self.assertEqual(doc, "")
 
         class IURI5(ISpecificURI):
             """
+
             mailto:foo
             """
         self.assertRaises(ValueError, inspectSpecificURI, IURI5)

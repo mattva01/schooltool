@@ -26,7 +26,7 @@ import datetime
 from pprint import pformat
 import libxml2
 from schooltool.tests.helpers import dedent, diff
-from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 
 __metaclass__ = type
 
@@ -117,10 +117,14 @@ class NiceDiffsMixin:
         unittest.TestCase.assertEquals(self, results, expected, msg)
 
 
-class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin, unittest.TestCase):
+class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
+                           RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpRegistries()
+        import schooltool.uris
+        schooltool.uris.setUp()
 
     def newClient(self, response=None, error=None):
         from schooltool.guiclient import SchoolToolClient
@@ -782,10 +786,14 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin, unittest.TestCase):
         #     without a trailing slash?
 
 
-class TestParseFunctions(unittest.TestCase):
+class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
+                         unittest.TestCase):
 
     def setUp(self):
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpRegistries()
+        import schooltool.uris
+        schooltool.uris.setUp()
 
     def test__parseContainer(self):
         from schooltool.guiclient import _parseContainer
@@ -930,15 +938,13 @@ class TestParseFunctions(unittest.TestCase):
                 ('Membership', 'Group', 'title2', 'href2', 'mhref2'),
                 ('arcrole3', 'role3', 'href3', '/objects/href3', 'mhref3')
             ]]
-        rels = {'http://schooltool.org/ns/membership/group': 'Group',
-                'http://schooltool.org/ns/membership': 'Membership'}
-        result = _parseRelationships(body, rels)
+        result = _parseRelationships(body)
         self.assertEquals(list(result), expected)
 
     def test__parseRelationships_errors(self):
         from schooltool.guiclient import _parseRelationships, SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
+        self.assertRaises(SchoolToolError, _parseRelationships, body)
 
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -951,7 +957,7 @@ class TestParseFunctions(unittest.TestCase):
               </existing>
             </relationships>
         """)
-        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
+        self.assertRaises(SchoolToolError, _parseRelationships, body)
 
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -961,7 +967,7 @@ class TestParseFunctions(unittest.TestCase):
               </existing>
             </relationships>
         """)
-        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
+        self.assertRaises(SchoolToolError, _parseRelationships, body)
 
     def test__parseRollCall(self):
         from schooltool.guiclient import _parseRollCall, RollCallInfo
