@@ -203,28 +203,6 @@ class PersonAddView(View):
         return self.redirect(url, request)
 
 
-class GroupContainerView(View):
-    """View for /groups.
-
-    Accessing this location returns a 404 Not Found response.
-
-    Traversing /groups with a group's id returns the group information page
-    for that group.
-    """
-
-    __used_for__ = IApplicationObjectContainer
-
-    authorization = PublicAccess
-
-    do_GET = staticmethod(notFoundPage)
-
-    def _traverse(self, name, request):
-        if name == 'add.html':
-            return GroupAddView(self.context)
-        else:
-            return GroupView(self.context[name])
-
-
 class ObjectAddView(View):
     """A view for adding a new object (usually a group or a resource).
 
@@ -258,3 +236,43 @@ class ObjectAddView(View):
 class GroupAddView(ObjectAddView):
 
     title = _("Add group")
+
+
+class ResourceAddView(ObjectAddView):
+
+    title = _("Add resource")
+
+
+class ObjectContainerView(View):
+    """View for an ApplicationObjectContainer.
+
+    Accessing this location returns a 404 Not Found response.
+
+    Traversing 'add.html' returns an instance of add_view on the container,
+    traversing with an object's id returns an instance of obj_view on
+    the object.
+    """
+
+    __used_for__ = IApplicationObjectContainer
+
+    authorization = PublicAccess
+
+    do_GET = staticmethod(notFoundPage)
+
+    # Must be overridden by actual subclasses.
+    add_view = None     # The add view class
+    obj_view = None     # The object view class
+
+    def _traverse(self, name, request):
+        if name == 'add.html':
+            return self.add_view(self.context)
+        else:
+            return self.obj_view(self.context[name])
+
+
+class GroupContainerView(ObjectContainerView):
+
+    add_view = GroupAddView
+    obj_view = GroupView
+
+

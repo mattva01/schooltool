@@ -310,12 +310,35 @@ class TestPersonAddView(unittest.TestCase):
         self.assertEquals(view.prev_username, 'badpass')
 
 
-class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
+
+
+class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
+
+    def setUp(self):
+        # these can be overriden by subclasses
+        from schooltool.browser.app import ObjectContainerView
+
+        class ViewStub:
+
+            def __init__(self, context):
+                self.context = context
+
+        class AddViewStub:
+
+            def __init__(self, context):
+                self.context = context
+
+        self.view = ObjectContainerView
+        self.add_view = ViewStub
+        self.obj_view = AddViewStub
 
     def createView(self):
-        from schooltool.model import Group
-        from schooltool.browser.app import GroupContainerView
-        return GroupContainerView({'group': Group()})
+        self.obj = object()
+        self.context = {'obj': self.obj}
+        view = self.view(self.context)
+        view.add_view = self.add_view
+        view.obj_view = self.obj_view
+        return view
 
     def test_render(self):
         view = self.createView()
@@ -324,13 +347,21 @@ class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.code, 404)
 
     def test_traverse(self):
-        from schooltool.browser.model import GroupView
-        from schooltool.browser.app import GroupAddView
         view = self.createView()
-        group = view.context['group']
-        self.assertTraverses(view, 'group', GroupView, group)
-        self.assertTraverses(view, 'add.html', GroupAddView, view.context)
+        self.assertTraverses(view, 'obj', self.obj_view, self.obj)
+        self.assertTraverses(view, 'add.html', self.add_view, self.context)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+
+class TestGroupContainerView(TestObjectContainerView):
+
+    def setUp(self):
+        from schooltool.browser.app import GroupContainerView, GroupAddView
+        from schooltool.browser.model import GroupView
+        TestObjectContainerView.setUp(self)
+        self.view = GroupContainerView
+        self.add_view = GroupAddView
+        self.obj_view = GroupView
 
 
 class TestObjectAddView(unittest.TestCase):
@@ -390,9 +421,16 @@ class TestGroupAddView(unittest.TestCase):
 
     def test(self):
         from schooltool.browser.app import GroupAddView
-
         view = GroupAddView({})
         self.assertEquals(view.title, "Add group")
+
+
+class TestResourceAddView(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.app import ResourceAddView
+        view = ResourceAddView({})
+        self.assertEquals(view.title, "Add resource")
 
 
 def test_suite():
@@ -402,9 +440,12 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestStartView))
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestPersonAddView))
+    suite.addTest(unittest.makeSuite(TestObjectContainerView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
+    #suite.addTest(unittest.makeSuite(TestResourceContainerView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
+    suite.addTest(unittest.makeSuite(TestResourceAddView))
     return suite
 
 
