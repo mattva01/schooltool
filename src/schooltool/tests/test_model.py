@@ -164,6 +164,8 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
                           (first + day*2 + half_day, day + half_day),
                           (first + day*4 + half_day, day)])
 
+    # _availabilityMap was factored out of getFreeIntervals and is therefore
+    # tested (albeit indirectly)
 
     def createServiceManager(self):
         """Return a service manager stub for getPeriodsForDay.
