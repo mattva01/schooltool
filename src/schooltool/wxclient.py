@@ -657,7 +657,9 @@ class SchoolTimetableFrame(wxDialog):
         main_sizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
 
         self.SetSizer(main_sizer)
-        self.SetSizeHints(minW=200, minH=200)
+        min_size = main_sizer.GetMinSize()
+        self.SetSizeHints(minW=max(200, min_size.width),
+                          minH=max(200, min_size.height))
         self.Layout()
 
     def OnClose(self, event=None):
