@@ -67,5 +67,50 @@ class TransactionChecks:
             warn("%s left an unclean transaction" % test)
 
 
+class StdoutWrapper:
+
+    def __init__(self, stm):
+        self._stm = stm
+        self.written = False
+
+    def __getattr__(self, attr):
+        return getattr(self._stm, attr)
+
+    def write(self, *args):
+        self.written = True
+        self._stm.write(*args)
+
+
+class StdoutChecks:
+
+    def __init__(self):
+        self.stdout_wrapper = StdoutWrapper(sys.stdout)
+        self.stderr_wrapper = StdoutWrapper(sys.stderr)
+
+    def startTest(self, test):
+        import sys
+        self.old_stdout = sys.stdout
+        self.old_stderr = sys.stderr
+        sys.stdout = self.stdout_wrapper
+        sys.stderr = self.stderr_wrapper
+        self.stdout_wrapper.written = False
+        self.stderr_wrapper.written = False
+
+    def stopTest(self, test):
+        import sys
+        warn_stdout_replaced = sys.stdout is not self.stdout_wrapper
+        warn_stderr_replaced = sys.stderr is not self.stderr_wrapper
+        sys.stdout = self.old_stdout
+        sys.stderr = self.old_stderr
+        if warn_stdout_replaced:
+            warn("%s replaced sys.stdout" % test)
+        if warn_stderr_replaced:
+            warn("%s replaced sys.stderr" % test)
+        if self.stdout_wrapper.written:
+            warn("%s wrote to sys.stdout" % test)
+        if self.stderr_wrapper.written:
+            warn("%s wrote to sys.stderr" % test)
+
+
 def test_hooks():
-    return [ComponentChecks(), TransactionChecks()]
+    return [ComponentChecks(), TransactionChecks(), StdoutChecks()]
