@@ -34,9 +34,9 @@ set_simple () {
     # already present.
     # $1 is the variable; $2 is a space separated list of the the values
     header="# marker for $1 settings - Please don't change or delete this line."
-    stanza="$header\n"
+    stanza="$header"
     for i in $2;do
-        stanza="$stanza$1 $i\n"
+        stanza="$stanza\n$1 $i"
     done
     cp -a $config $config.tmp
 
@@ -46,7 +46,7 @@ set_simple () {
 
     cat $config                 \
     | grep -v "^ *${1} .*"      \
-    | sed "s|$header\n|$stanza|"  \
+    | sed "s|$header|$stanza|"  \
     > $config.tmp
 
     mv -f $config.tmp $config
