@@ -287,11 +287,32 @@
 
 </metal:block>
 
+<metal:block define-macro="portlet-tomorrow-events" 
+    i18n:domain="schoolbell">
+
+  <tal:block define="next view/nextDay; nevents python:view.dayEvents(next)">
+    <div id="portlet-next-day-events" class="portlet" tal:condition="nevents">
+      <h4 i18n:translate="">Tomorrow's Events</h4>
+      <ul>
+        <li tal:repeat="nevent nevents">
+          <a href=""
+              tal:define="evdate python:nevent.dtstart.strftime('%Y-%m-%d');"
+              tal:attributes="href string:${context/@@absolute_url}"
+              tal:content="nevent/title"/>
+        </li>
+      </ul>
+    </div>
+  </tal:block>
+
+</metal:block>
+
 
 
 <!-- END CALENDAR MACROS -->
 
 <metal:block define-macro="calendar-portlets">
+
+  <metal:block use-macro="view/@@standard_macros/portlet-tomorrow-events"/>
 
   <metal:block use-macro="view/@@standard_macros/portlet-calendar-jumpto"/>
 
