@@ -36,6 +36,13 @@ class DecoyIndependent(Persistent):
     def _p_independent(self):
         return False
 
+class ModifyOnGetStateObject(Persistent):
+
+    def __getstate__(self):
+        self._p_changed = True
+        return Persistent.__getstate__(self)
+
+
 class ConnectionTests(IDataManagerTests):
 
     def setUp(self):
@@ -197,10 +204,54 @@ class ConnectionTests(IDataManagerTests):
         self.assert_(self.obj._p_jar is None)
         self.assertRaises(KeyError, self.datamgr.get, oid)
 
+    def testModificationOnCommit(self):
+        o = ModifyOnGetStateObject()
+        self.datamgr.root()['o'] = o
+        get_transaction().commit()
+
+    def testModificationOnSavepoint(self):
+        o = ModifyOnGetStateObject()
+        self.datamgr.root()['o'] = o
+        get_transaction().savepoint()
+
     def tearDown(self):
         get_transaction().abort()
         self.datamgr.close()
         self.db.close()
 
+
+class TestRegisteredMapping(unittest.TestCase):
+
+    def test(self):
+        from zodb.connection import RegisteredMapping
+        d = RegisteredMapping()
+        self.assertEquals(dict(d), {})
+        d[1] = 'a'
+        d[2] = 'b'
+        d[1] = 'A'
+        self.assertEquals(list(d.iterAddedKeys()), [1, 2])
+        d.clearAddedKeys()
+        self.assertEquals(list(d.iterAddedKeys()), [])
+
+    def test_update(self):
+        from zodb.connection import RegisteredMapping
+        d = RegisteredMapping()
+        d[1] = 'a'
+        d.update({1: 'a', 2: 'b'})
+        self.assertEquals(list(d.iterAddedKeys()), [1, 2])
+
+    def test_setdefault(self):
+        from zodb.connection import RegisteredMapping
+        d = RegisteredMapping()
+        d[1] = 'a'
+        d.setdefault(1, 'a')
+        d.setdefault(2, 'b')
+        self.assertEquals(list(d.iterAddedKeys()), [1, 2])
+
+
 def test_suite():
-    return unittest.makeSuite(ConnectionTests)
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(ConnectionTests))
+    suite.addTest(unittest.makeSuite(TestRegisteredMapping))
+    return suite
+

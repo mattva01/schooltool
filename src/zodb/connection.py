@@ -34,7 +34,7 @@ application has more than one thread that uses the connection or the
 transaction the connection is registered with, the application should
 provide locking.
 
-$Id: connection.py,v 1.38 2003/10/09 18:04:58 alga Exp $
+$Id: connection.py,v 1.39 2003/10/15 12:00:19 mgedmin Exp $
 """
 
 import logging
@@ -58,6 +58,39 @@ from transaction import get_transaction
 from transaction.interfaces import IDataManager, IRollback, TransactionError
 from persistence.cache import Cache
 from persistence.interfaces import IPersistentDataManager
+
+
+class RegisteredMapping(dict):
+    """Mapping used for Connection._registered.
+
+    This mapping must support additions and clears during iteration over
+    values.
+    """
+
+    def __init__(self, *args, **kw):
+        dict.__init__(self, *args, **kw)
+        self._added_keys = []
+
+    def __setitem__(self, key, value):
+        if key not in self:
+             self._added_keys.append(key)
+        dict.__setitem__(self, key, value)
+
+    def setdefault(self, key, value=None):
+        if key not in self:
+             self._added_keys.append(key)
+        dict.setdefault(self, key, value)
+
+    def update(self, other):
+        self._added_keys.extend([key for key in other if key not in self])
+        dict.update(self, other)
+
+    def iterAddedKeys(self):
+        return iter(self._added_keys)
+
+    def clearAddedKeys(self):
+        del self._added_keys[:]
+
 
 class Connection(ExportImport, object):
     """Object managers for individual object space.
@@ -107,7 +140,7 @@ class Connection(ExportImport, object):
         # These sets are clear()ed at transaction boundaries.
 
         # XXX Is a Set safe?  What if the objects are not hashable?
-        self._registered = {}
+        self._registered = RegisteredMapping()
         self._modified = Set() # XXX is this the same as registered?
         self._created = Set()
         # _conflicts: set of objects that failed to load because
@@ -305,8 +338,8 @@ class Connection(ExportImport, object):
         if obj._p_jar is None:
             # Setting _p_changed has a side-effect of adding obj to
             # _p_jar._registered, so it must be set after _p_jar.
-            obj._p_jar = self
             obj._p_oid = self.newObjectId()
+            obj._p_jar = self
             obj._p_changed = True
             self._created.add(obj._p_oid)
 
@@ -337,7 +370,13 @@ class Connection(ExportImport, object):
         else:
             self._storage.tpcBegin(txn)
 
-        for obj in self._registered.itervalues():
+        self._registered.clearAddedKeys()
+        for obj in self._registered.values():
+            self._objcommit(obj, txn)
+        for oid in self._registered.iterAddedKeys():
+            # _registered can have new items added to it during _objcommit,
+            # but it cannot have any existing ones removed
+            obj = self._registered[oid]
             self._objcommit(obj, txn)
 
         s = self._storage.tpcVote(txn)
@@ -387,7 +426,13 @@ class Connection(ExportImport, object):
         self._created = Set()
         self._storage.tpcBegin(txn)
 
-        for obj in self._registered.itervalues():
+        self._registered.clearAddedKeys()
+        for obj in self._registered.values():
+            self._objcommit(obj, txn)
+        for oid in self._registered.iterAddedKeys():
+            # _registered can have new items added to it during _objcommit,
+            # but it cannot have any existing ones removed
+            obj = self._registered[oid]
             self._objcommit(obj, txn)
         self.importHook(txn) # hook for ExportImport
 
