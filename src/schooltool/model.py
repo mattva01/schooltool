@@ -26,8 +26,9 @@ from datetime import datetime
 from zope.interface import implements
 from persistence import Persistent
 from schooltool.interfaces import IPerson, IGroup, Unchanged
-from schooltool.interfaces import IAbsence, IAbsenceComment, IAbsenceEvent
-from schooltool.interfaces import INewAbsenceEvent, IResolvedAbsenceEvent
+from schooltool.interfaces import IAbsence, IAbsenceComment
+from schooltool.interfaces import IAttendanceEvent, IEventTarget
+from schooltool.interfaces import IAbsenceEvent, IResolvedAbsenceEvent
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
@@ -111,12 +112,9 @@ class Absence(Persistent):
         self.__parent__ = None
 
     def addComment(self, comment):
-        event = None
         if not IAbsenceComment.isImplementedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
-        if not self.comments:
-            # This is the first comment
-            event = NewAbsenceEvent(self, comment)
+        event = AbsenceEvent(self, comment)
         if comment.resolution is not Unchanged:
             if self.resolved and not comment.resolution:
                 if self.person.getCurrentAbsence() is not None:
@@ -133,7 +131,12 @@ class Absence(Persistent):
         self.comments = self.comments
         if event is not None:
             event.dispatch(self.person)
-
+            if IEventTarget.isImplementedBy(comment.absent_from):
+                event.dispatch(comment.absent_from)
+            if IResolvedAbsenceEvent.isImplementedBy(event):
+                for comment in self.comments:
+                    if IEventTarget.isImplementedBy(comment.absent_from):
+                        event.dispatch(comment.absent_from)
 
 class AbsenceComment:
 
@@ -151,7 +154,7 @@ class AbsenceComment:
         self.resolution = resolution
 
 
-class AbsenceEvent(EventMixin):
+class AttendanceEvent(EventMixin):
 
     implements(IAbsenceEvent)
 
@@ -161,13 +164,13 @@ class AbsenceEvent(EventMixin):
         self.comment = comment
 
     def __str__(self):
-        return "AbsenceEvent for %s" % self.absence
+        return "<%s for %s>" % (self.__class__.__name__, self.absence)
 
 
-class NewAbsenceEvent(AbsenceEvent):
-    implements(INewAbsenceEvent)
+class AbsenceEvent(AttendanceEvent):
+    implements(IAbsenceEvent)
 
 
-class ResolvedAbsenceEvent(AbsenceEvent):
+class ResolvedAbsenceEvent(AttendanceEvent):
     implements(IResolvedAbsenceEvent)
 

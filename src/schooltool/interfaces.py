@@ -850,18 +850,17 @@ class IAbsenceComment(Interface):
         """New value of expected_presence (datetime, None, or Unchanged)""")
 
 
-class IAbsenceEvent(IEvent):
+class IAttendanceEvent(IEvent):
     """Event that gets sent out when an absence is recorded or updated."""
 
     absence = Attribute("""IAbsence""")
     comment = Attribute("""IAbsenceComment that describes the change""")
 
 
-class INewAbsenceEvent(IAbsenceEvent):
-    """An event that gets sent when a new absence is created."""
+class IAbsenceEvent(IAttendanceEvent):
+    """An event that gets sent when a person is found absent."""
 
-
-class IResolvedAbsenceEvent(IAbsenceEvent):
+class IResolvedAbsenceEvent(IAttendanceEvent):
     """An event that gets sent when an absence is resolved."""
 
 

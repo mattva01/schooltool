@@ -294,51 +294,63 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
 
     def test_addComment(self):
         from schooltool.model import AbsenceComment
-        from schooltool.interfaces import INewAbsenceEvent
+        from schooltool.interfaces import IAbsenceEvent
         from schooltool.interfaces import IResolvedAbsenceEvent
-        comment1 = AbsenceComment(object(), "text",
+        group1 = LocatableEventTargetMixin(self.eventService)
+        comment1 = AbsenceComment(object(), "text", absent_from=group1,
                                   resolution=False)
         self.absence.addComment(comment1)
         self.assertEquals(self.absence.comments, [comment1])
-        e = self.checkOneEventReceived([self.person])
-        self.assert_(INewAbsenceEvent.isImplementedBy(e))
+        e = self.checkOneEventReceived([self.person, group1])
+        self.assert_(IAbsenceEvent.isImplementedBy(e))
         self.assert_(e.absence, self.absence)
         self.assert_(e.comment, comment1)
 
         self.eventService.clearEvents()
         self.person.clearEvents()
-        comment2 = AbsenceComment(object(), "still absent")
-        self.absence.addComment(comment2)
-        self.assertEquals(len(self.eventService.events), 0)
-        self.assertEquals(len(self.person.events), 0)
+        group1.clearEvents()
 
+        group2 = LocatableEventTargetMixin(self.eventService)
+        comment2 = AbsenceComment(object(), "still absent", absent_from=group2)
+        self.absence.addComment(comment2)
+        e = self.checkOneEventReceived([self.person, group2])
+        self.assertEquals(len(group1.events), 0)
+        self.assert_(IAbsenceEvent.isImplementedBy(e))
+
+        self.eventService.clearEvents()
+        self.person.clearEvents()
+        group1.clearEvents()
+        group2.clearEvents()
+
+        group3 = LocatableEventTargetMixin(self.eventService)
+        # I'm not sure what absent_from might mean in a resolution comment,
+        # but I will still test it does what one might expect.
         comment3 = AbsenceComment(object(), "I'll be back",
-                                  resolution=True)
+                                  resolution=True, absent_from=group3)
         self.absence.addComment(comment3)
-        e = self.checkOneEventReceived([self.person])
+        e = self.checkOneEventReceived([self.person, group1, group2, group3])
         self.assert_(IResolvedAbsenceEvent.isImplementedBy(e))
 
 
     def testAbsenceEvents(self):
-        from schooltool.model import AbsenceEvent
-        from schooltool.model import NewAbsenceEvent
+        from schooltool.model import AbsenceEvent, AttendanceEvent
         from schooltool.model import ResolvedAbsenceEvent
+        from schooltool.interfaces import IAttendanceEvent
         from schooltool.interfaces import IAbsenceEvent
-        from schooltool.interfaces import INewAbsenceEvent
         from schooltool.interfaces import IResolvedAbsenceEvent
         comment = object()
-        event = AbsenceEvent(self.absence, comment)
-        verifyObject(IAbsenceEvent, event)
+        event = AttendanceEvent(self.absence, comment)
+        verifyObject(IAttendanceEvent, event)
         self.assert_(event.absence is self.absence)
         self.assert_(event.comment is comment)
 
-        event = NewAbsenceEvent(self.absence, comment)
-        verifyObject(INewAbsenceEvent, event)
+        event = AbsenceEvent(self.absence, comment)
         verifyObject(IAbsenceEvent, event)
+        verifyObject(IAttendanceEvent, event)
 
         event = ResolvedAbsenceEvent(self.absence, comment)
         verifyObject(IResolvedAbsenceEvent, event)
-        verifyObject(IAbsenceEvent, event)
+        verifyObject(IAttendanceEvent, event)
 
 
     def testAbsenceComment(self):
