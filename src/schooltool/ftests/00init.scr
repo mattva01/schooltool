@@ -8,6 +8,13 @@ PUT> .
 Content-Type: text/plain
 Object created: http://localhost/groups/teachers
 
+SchoolTool> post /groups/teachers/facets
+POST> factory="teacher_group"
+POST> .
+201 Created
+Content-Type: text/plain
+Facet created: http://localhost/groups/teachers/facets/001
+
 SchoolTool> put /groups/students
 PUT> title="Students"
 PUT> .

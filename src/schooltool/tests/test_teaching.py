@@ -57,7 +57,7 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         self.tearDownRegistries()
 
     def testURIs(self):
-        from schooltool.teaching import URITeaching, URITeacher, URITaught
+        from schooltool.uris import URITeaching, URITeacher, URITaught
         from schooltool.uris import inspectSpecificURI
 
         inspectSpecificURI(URITeaching)
@@ -66,7 +66,7 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testRelationshipSchema(self):
         from schooltool.teaching import Teaching
-        from schooltool.teaching import URITeaching, URITeacher, URITaught
+        from schooltool.uris import URITeaching, URITeacher, URITaught
 
         teacher = Relatable(self.serviceManager)
         student = Relatable(self.serviceManager)
@@ -83,17 +83,51 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         verifyObject(IModuleSetup, teaching)
         teaching.setUp()
         getFacetFactory('subject_group')
+        getFacetFactory('teacher_group')
+
+    def testTeacherFacet(self):
+        from schooltool.teaching import TeacherFacet
+        from schooltool.uris import URITeaching, URITeacher, URITaught
+        from schooltool.interfaces import IFacet, IRelationshipValencies
+        from schooltool.interfaces import ICompositeTimetableProvider
+
+        facet = TeacherFacet()
+
+        verifyObject(IFacet, facet)
+        verifyObject(IRelationshipValencies, facet)
+        self.assertEquals(facet.getValencies().keys(),
+                          [(URITeaching, URITeacher)])
+        verifyObject(ICompositeTimetableProvider, facet)
+        self.assert_((URITaught, False) in facet.timetableSource)
 
     def testSubjectGroupFacet(self):
         from schooltool.teaching import SubjectGroupFacet
-        from schooltool.teaching import URITeaching, URITaught
-        from schooltool.interfaces import IRelationshipValencies
+        from schooltool.uris import URITeaching, URITaught
+        from schooltool.interfaces import IFacet, IRelationshipValencies
 
         facet = SubjectGroupFacet()
 
+        verifyObject(IFacet, facet)
         verifyObject(IRelationshipValencies, facet)
         self.assertEquals(facet.getValencies().keys(),
                           [(URITeaching, URITaught)])
+
+    def testTeacherGroupFacet(self):
+        from schooltool.interfaces import IFacet
+        from schooltool.teaching import TeacherGroupFacet, TeacherFacet
+        facet = TeacherGroupFacet()
+        verifyObject(IFacet, facet)
+        self.assertMembersGetFacet(facet, TeacherFacet, facet_name='teacher')
+
+    def assertMembersGetFacet(self, valencies, facet_class, facet_name):
+        from schooltool.uris import URIMembership, URIGroup
+        from schooltool.facet import FacetedRelationshipSchema, FacetFactory
+        valency = valencies.getValencies()[URIMembership, URIGroup]
+        self.assert_(isinstance(valency.schema, FacetedRelationshipSchema))
+        factory = valency.schema._factories['member']
+        self.assert_(isinstance(factory, FacetFactory))
+        self.assert_(factory.factory is facet_class)
+        self.assertEquals(factory.facet_name, facet_name)
 
 
 def test_suite():

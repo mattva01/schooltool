@@ -22,13 +22,16 @@ Teaching relationship.
 $Id$
 """
 from zope.interface import moduleProvides, implements
-from schooltool.interfaces import IModuleSetup, IFacet
+from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import ICompositeTimetableProvider
 from schooltool.relationship import RelationshipSchema
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency
 from schooltool.uris import URITeaching, URITeacher, URITaught
-from schooltool.facet import FacetFactory
+from schooltool.facet import FacetMixin, FacetFactory, membersGetFacet
 from schooltool.component import registerFacetFactory
+
+__metaclass__ = type
 
 moduleProvides(IModuleSetup)
 
@@ -37,19 +40,31 @@ Teaching = RelationshipSchema(URITeaching,
                               teacher=URITeacher, taught=URITaught)
 
 
-class SubjectGroupFacet(RelationshipValenciesMixin):
+class TeacherFacet(FacetMixin, RelationshipValenciesMixin):
+    """Facet for a teacher."""
+
+    implements(ICompositeTimetableProvider)
+
+    valencies = Valency(Teaching, 'teacher')
+    timetableSource = ((URITaught, False), )
+
+
+class SubjectGroupFacet(FacetMixin, RelationshipValenciesMixin):
     """Facet for a group that is taught by a teacher."""
 
-    implements(IFacet)
-
-    __parent__ = None
-    __name__ = None
-    active = False
-    owner = None
     valencies = Valency(Teaching, 'taught')
+
+
+class TeacherGroupFacet(FacetMixin, RelationshipValenciesMixin):
+    """Facet for a group of teachers."""
+
+    membersGetFacet(TeacherFacet, facet_name='teacher')
 
 
 def setUp():
     """See IModuleSetup"""
-    registerFacetFactory(FacetFactory(SubjectGroupFacet, 'subject_group',
-                                      'Subject Group'))
+    registerFacetFactory(FacetFactory(SubjectGroupFacet,
+        name='subject_group', title='Subject Group'))
+    registerFacetFactory(FacetFactory(TeacherGroupFacet,
+        name='teacher_group', title='Teacher Group'))
+

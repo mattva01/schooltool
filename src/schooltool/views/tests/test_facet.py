@@ -168,7 +168,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
               <facet xlink:type="simple" active="active"
                      xlink:title="002"
                      owned="owned" xlink:href="/person/facets/002"/>
-              <facetFactory name="eventlog" title="Event Log Factory"/>
+              <facetFactory name="eventlog" title="Event Log"/>
             </facets>
             """, recursively_sort=["facets"])
 

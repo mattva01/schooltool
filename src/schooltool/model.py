@@ -33,7 +33,7 @@ from schooltool.interfaces import IAbsenceEvent, IAbsenceEndedEvent
 from schooltool.interfaces import IAbsenceTracker, IAbsenceTrackerUtility
 from schooltool.interfaces import IAbsenceTrackerFacet
 from schooltool.relationship import RelationshipValenciesMixin, Valency
-from schooltool.facet import FacetedEventTargetMixin, FacetFactory
+from schooltool.facet import FacetMixin, FacetedEventTargetMixin, FacetFactory
 from schooltool.membership import Membership
 from schooltool.db import PersistentKeysSetWithNames, PersistentKeysSet
 from schooltool.event import EventMixin, CallAction
@@ -237,23 +237,19 @@ class AbsenceTrackerUtility(AbsenceTrackerMixin):
         self.title = "Absence Tracker"
 
 
-class AbsenceTrackerFacet(AbsenceTrackerMixin):
+class AbsenceTrackerFacet(AbsenceTrackerMixin, FacetMixin):
 
     implements(IAbsenceTrackerFacet)
 
     def __init__(self):
         AbsenceTrackerMixin.__init__(self)
-        self.__parent__ = None
-        self.__name__ = None
-        self.active = False
-        self.owner = None
         self.eventTable = (CallAction(self.notify), )
 
 
 def setUp():
     """Register the AbsenceTrackerFacet factory."""
-    registerFacetFactory(FacetFactory(AbsenceTrackerFacet, 'absence_tracker',
-                                      'Absence Tracker',
-                                      facet_name='absences'))
+    registerFacetFactory(FacetFactory(AbsenceTrackerFacet,
+        name='absence_tracker', title='Absence Tracker',
+        facet_name='absences'))
 
 

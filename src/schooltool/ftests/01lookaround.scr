@@ -122,9 +122,10 @@ Content-Type: text/xml; charset=UTF-8
   <facet xlink:type="simple" active="active"
          xlink:title="eventlog" owned="unowned"
          xlink:href="/persons/Marius/facets/eventlog"/>
+  <facetFactory name="eventlog" title="Event Log"/>
   <facetFactory name="absence_tracker" title="Absence Tracker"/>
   <facetFactory name="subject_group" title="Subject Group"/>
-  <facetFactory name="eventlog" title="Event Log Factory"/>
+  <facetFactory name="teacher_group" title="Teacher Group"/>
 </facets>
 %% END XML
 
@@ -421,6 +422,33 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="Albert/facets"/>
 </person>
+%% END XML
+
+
+SchoolTool> get /persons/Mark/facets
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=facets
+<facets xmlns:xlink="http://www.w3.org/1999/xlink">
+  <facet xlink:type="simple" active="active"
+         xlink:title="teacher" owned="owned"
+         xlink:href="/persons/Mark/facets/teacher"/>
+  <facetFactory name="eventlog" title="Event Log"/>
+  <facetFactory name="absence_tracker" title="Absence Tracker"/>
+  <facetFactory name="subject_group" title="Subject Group"/>
+  <facetFactory name="teacher_group" title="Teacher Group"/>
+</facets>
+%% END XML
+
+
+SchoolTool> get /persons/Mark/facets/teacher
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=facets
+<facet active="active" owned="owned">
+  <class>TeacherFacet</class>
+  <name>teacher</name>
+</facet>
 %% END XML
 
 

@@ -28,8 +28,9 @@ from zodb.btrees.OOBTree import OOBTree
 from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IEventTarget, ILocation, IUtility
 from schooltool.interfaces import IEventConfigurable, IFacet
-from schooltool.interfaces import IModuleSetup, IFacetFactory
+from schooltool.interfaces import IModuleSetup
 from schooltool.event import CallAction
+from schooltool.facet import FacetMixin, FacetFactory
 from schooltool.component import registerFacetFactory
 
 moduleProvides(IModuleSetup)
@@ -95,29 +96,14 @@ class EventLogUtility(EventLog):
         self.title = "Event Log"
 
 
-class EventLogFacet(EventLog):
+class EventLogFacet(EventLog, FacetMixin):
     """Event log that can be attached to an object as a facet."""
 
     implements(IEventLogFacet)
 
     def __init__(self):
         EventLog.__init__(self)
-        self.__parent__ = None
-        self.__name__ = None
-        self.active = False
-        self.owner = None
         self.eventTable = (CallAction(self.notify), )
-
-
-class EventLogFacetFactory:
-    """Free-floating facet factory for event log facets."""
-
-    implements(IFacetFactory)
-
-    name = "eventlog"
-    title = "Event Log Factory"
-    facet_name = "eventlog"
-    __call__ = EventLogFacet
 
 
 class EventLogger(Persistent):
@@ -134,6 +120,7 @@ class EventLogger(Persistent):
 
 
 def setUp():
-    """Register the EventLogFacetFactory."""
-    registerFacetFactory(EventLogFacetFactory())
+    """Register the EventLogFacet factory."""
+    registerFacetFactory(FacetFactory(EventLogFacet,
+        name='eventlog', title='Event Log', facet_name='eventlog'))
 

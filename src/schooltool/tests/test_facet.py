@@ -55,6 +55,14 @@ class FacetWithEventsStub(FacetStub):
         self.eventTable = eventTable
 
 
+class TestFacetMixin(unittest.TestCase):
+
+    def test(self):
+        from schooltool.facet import FacetMixin
+        facet = FacetMixin()
+        verifyObject(IFacet, facet)
+
+
 class TestFacetFactory(unittest.TestCase):
 
     def test(self):
@@ -151,7 +159,7 @@ class LinkStub:
 class TestFacetedRelationshipSchema(unittest.TestCase):
 
     def test(self):
-        from schooltool.facet import FacetedRelationshipSchema
+        from schooltool.facet import FacetedRelationshipSchema, FacetFactory
 
         # verifyObject is buggy. It treats a class's __call__ as its __call__
         # IYSWIM
@@ -160,7 +168,12 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
 
         verifyClass(IFacetedRelationshipSchema, FacetedRelationshipSchema)
         schema = DummyRelationshipSchema(URIDummy)
-        f = FacetedRelationshipSchema(schema, child=FacetStub)
+
+        self.assertRaises(TypeError,
+                          FacetedRelationshipSchema, schema, child=FacetStub)
+        f = FacetedRelationshipSchema(schema,
+                child=FacetFactory(FacetStub, 'FacetStub',
+                                   facet_name='wonderfacet'))
         verifyObject(IFacetedRelationshipSchema, f)
 
         self.assertEqual(f.type, schema.type)
@@ -195,6 +208,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assert_(facet.active, 'facet.active')
         self.assertEqual(facet.__parent__, child)
         self.assertEqual(facet.owner, links['child'])
+        self.assertEqual(facet.__name__, 'wonderfacet')
 
         # Check that the facet will get deactivated when the link is unlinked.
         self.assert_(links['child'].callbacks,
@@ -207,7 +221,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assert_(not facet.active, 'not facet.active')
 
     def testOwnedFacetsAlreadyPresent(self):
-        from schooltool.facet import FacetedRelationshipSchema
+        from schooltool.facet import FacetedRelationshipSchema, FacetFactory
 
 
         from schooltool.facet import FacetedMixin
@@ -231,7 +245,8 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         # link for the 'child' rolename that is the owner of a facet in
         # child. The facet should remain, desipte making a faceted
         # relationship between parent and child.
-        f = FacetedRelationshipSchema(schema, child=FacetStub)
+        f = FacetedRelationshipSchema(schema,
+                child=FacetFactory(FacetStub, 'FacetStub'))
 
         links = f(parent=parent, child=child)
         self.assertEqual(len(links), 2)
@@ -305,6 +320,7 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestFacetMixin))
     suite.addTest(unittest.makeSuite(TestFacetFactory))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))

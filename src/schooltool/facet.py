@@ -27,17 +27,32 @@ Facets depend on events.
 $Id$
 """
 
-from zope.interface import implements, classProvides
 from persistence import Persistent
-from schooltool.interfaces import IFaceted, IEventConfigurable
+from zope.interface import implements, classProvides
+from zope.interface.advice import addClassAdvisor
+from schooltool.interfaces import IFacet, IFaceted, IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
 from schooltool.interfaces import IFacetedRelationshipSchema, IFacetFactory
 from schooltool.interfaces import IPlaceholder
+from schooltool.interfaces import IRelationshipValencies
 from schooltool.event import EventTargetMixin
 from schooltool.component import FacetManager
 from schooltool.db import PersistentKeysSetWithNames
+from schooltool.relationship import Valency
+from schooltool.membership import Membership
 
 __metaclass__ = type
+
+
+class FacetMixin:
+    """Mixin for writing facets."""
+
+    implements(IFacet)
+
+    __parent__ = None
+    __name__ = None
+    active = False
+    owner = None
 
 
 class FacetFactory:
@@ -91,6 +106,10 @@ class FacetedRelationshipSchema:
         self._factories = facet_factories
         self.type = relationship_schema.type
         self.roles = relationship_schema.roles
+        for factory in self._factories.itervalues():
+            if not IFacetFactory.isImplementedBy(factory):
+                raise TypeError(
+                        "Facet factory does not implement IFacetFactory")
 
     def __call__(self, **parties):
         """See IRelationshipSchema"""
@@ -117,7 +136,8 @@ class FacetedRelationshipSchema:
                             if not facet.active:
                                 facet.active = True
                     else:
-                        fm.setFacet(factory(), owner=link)
+                        fm.setFacet(factory(), owner=link,
+                                    name=factory.facet_name)
                     link.registerUnlinkCallback(facetDeactivator)
                 else:
                     raise TypeError('Target of link "%s" must be IFaceted: %r'
@@ -157,3 +177,39 @@ def facetDeactivator(link):
     if facets:
         placeholder.facets = facets
         target.__links__.addPlaceholder(link, placeholder)
+
+
+def membersGetFacet(facet_class, facet_name=None, factory_name=None):
+    """Provide a Membership valency that sets facets on members.
+
+    This function is called in a class definition.
+
+    facet_class is the class of the facets that will be placed on members.
+
+    facet_name is the name those facets will get (see IFacetFactory attribute
+    facet_name).
+
+    factory_name is the name of the internally generated facet factory.  If
+    None, facet_class.__name__ will be used.
+
+    Sample usage:
+
+        class FooGroupFacet(FacetMixin, RelationshipValenciesMixin):
+            membersGetFacet(FooFacet)
+    """
+    if factory_name is None:
+        factory_name = facet_class.__name__
+
+    def setValencies(cls):
+        if not IFacet.isImplementedByInstancesOf(cls):
+            raise TypeError("membersGetFacet should only be used for facets")
+        if not IRelationshipValencies.isImplementedByInstancesOf(cls):
+            raise TypeError("membersGetFacet should only be used for facets"
+                            " that implement IRelationshipValencies")
+        factory = FacetFactory(facet_class, factory_name,
+                               facet_name=facet_name)
+        schema = FacetedRelationshipSchema(Membership, member=factory)
+        cls.valencies = Valency(schema, 'group')
+        return cls
+
+    addClassAdvisor(setValencies)

@@ -488,12 +488,12 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         class URIC(ISpecificURI): "uri:c"
         class URID(ISpecificURI): "uri:d"
 
-        class Facet(RelationshipValenciesMixin):
+        class FacetStub(RelationshipValenciesMixin):
             implements(IFacet)
             __parent__ = None
             __name__ = None
 
-        class SimpleFacet(Persistent):
+        class SimpleFacetStub(Persistent):
             implements(IFacet)
             __parent__ = None
             __name__ = None
@@ -505,7 +505,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
         # A facet with valencies
         rvm = MyValent()
-        facet = Facet()
+        facet = FacetStub()
         schema = SchemaStub(URIA, c=URIB, d=URIC)
         facet.valencies = Valency(schema, 'c')
         FacetManager(rvm).setFacet(facet, self)
@@ -517,7 +517,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
                                 [(URIMembership, URIMember), (URIA, URIB)])
 
         # A facet without valencies
-        facet2 = SimpleFacet()
+        facet2 = SimpleFacetStub()
         FacetManager(rvm).setFacet(facet2, self)
 
         self.assertEqualsSorted(list(rvm.getValencies()),
