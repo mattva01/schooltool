@@ -23,67 +23,66 @@ $Id$
 """
 
 import unittest
-import datetime
-from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.utils import NiceDiffsMixin
+
 
 __metaclass__ = type
 
 
 class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
 
-    def test_importGroupsCsv(self):
+    def createImporter(self):
         from schooltool.csvimport import CSVImporterBase
-        im = CSVImporterBase()
 
-        groups = []
-        def importGroupStub(name, title, parents, facets):
-            groups.append((name, title, parents, facets))
-        im.importGroup = importGroupStub
+        class Importer(CSVImporterBase):
 
-        im.importGroupsCsv(['"year1","Year 1","root",'])
-        self.assertEquals(groups,
-                          [(u'year1', u'Year 1', u'root', u'')])
+            def __init__(self):
+                self.groups = []
+                self.resources = []
+                self.persons = []
+                self.personinfo = []
+
+            def recode(self, value):
+                return value.lower()
+
+            def importGroup(self, name, title, parents, facets):
+                self.groups.append((name, title, parents, facets))
+
+            def importResource(self, title, groups):
+                self.resources.append((title, groups))
+
+            def importPerson(self, title, parent, groups, teaching=False):
+                self.persons.append((title, parent, groups, teaching))
+                return title
+
+            def importPersonInfo(self, name, title, dob, comment):
+                self.personinfo.append((name, title, dob, comment))
+
+        return Importer()
+
+    def test_importGroupsCsv(self):
+        im = self.createImporter()
+        im.importGroupsCsv(['"yeaR1","Year 1","rOot",'])
+        self.assertEquals(im.groups, [(u'year1', u'year 1', u'root', u'')])
 
     def test_importResourcesCsv(self):
-        from schooltool.csvimport import CSVImporterBase
-        im = CSVImporterBase()
-
-        resources = []
-        def importResourceStub(title, groups):
-            resources.append((title, groups))
-        im.importResource = importResourceStub
-
-        im.importResourcesCsv(['"Hall","locations"'])
-        self.assertEquals(resources, [(u'Hall', u'locations')])
+        im = self.createImporter()
+        im.importResourcesCsv(['"Hall","locaTions"'])
+        self.assertEquals(im.resources, [(u'hall', u'locations')])
 
     def test_importPersonsCsv(self):
-        from schooltool.csvimport import CSVImporterBase
-        im = CSVImporterBase()
-
-        persons = []
-        def importPersonStub(title, parent, groups, teaching=False):
-            persons.append((title, parent, groups, teaching))
-            return title
-        im.importPerson = importPersonStub
-
-        personinfo = []
-        def importPersonInfoStub(name, title, dob, comment):
-            personinfo.append((name, title, dob, comment))
-        im.importPersonInfo = importPersonInfoStub
-
+        im = self.createImporter()
         im.importPersonsCsv(['"Jay Hacker","group1 group2","1998-01-01",'
-                             '"yay"'],
-                           'teachers', True)
-        self.assertEquals(persons, [(u'Jay Hacker', 'teachers',
-                                     u'group1 group2', True)])
-        self.assertEquals(personinfo, [(u'Jay Hacker', u'Jay Hacker',
-                                        u'1998-01-01', u'yay')])
+                             '"yay"'], 'teachers', True)
+        self.assertEquals(im.persons, [(u'jay hacker', 'teachers',
+                                        u'group1 group2', True)])
+        self.assertEquals(im.personinfo, [(u'jay hacker', u'jay hacker',
+                                           u'1998-01-01', u'yay')])
 
     def test_import_badData(self):
-        from schooltool.csvimport import CSVImporterBase
         from schooltool.csvimport import DataError
-        im = CSVImporterBase()
+
+        im = self.createImporter()
         im.verbose = False
 
         class ResponseStub:
@@ -91,10 +90,6 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
                 return 'foo://bar/baz/quux'
 
         im.process = lambda x, y, body=None: ResponseStub()
-
-        im.importGroup = lambda name, title, parents, facets: None
-        im.importPerson = lambda title, parent, groups, teaching: None
-        im.importResource = lambda title, groups: None
 
         def raisesDataError(method, *args):
             im.fopen = lambda fn: StringIO('"invalid","csv')

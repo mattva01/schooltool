@@ -116,6 +116,7 @@ import base64
 import httplib
 from schooltool.translation import ugettext as _
 from schooltool.csvimport import CSVImporterBase, DataError
+from schooltool.common import from_locale
 
 
 class HTTPClient:
@@ -156,6 +157,9 @@ class CSVImporterHTTP(CSVImporterBase):
 
     def  __init__(self,  host='localhost', port=7001, ssl=False):
         self.server = HTTPClient(host, port, ssl)
+
+    def recode(self, value):
+        return from_locale(value)
 
     def run(self):
         """Run the batch import.

@@ -21,13 +21,10 @@ A base class for CSV importers.
 """
 
 import csv
-from schooltool.common import UnicodeAwareException, from_locale
+from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
-
-
-# XXX We use from_locale, which probably won't cut it.
 
 
 class DataError(UnicodeAwareException):
@@ -37,6 +34,13 @@ class DataError(UnicodeAwareException):
 class CSVImporterBase:
     """A base class for CSV importers."""
 
+    def recode(self, value):
+        """Convert value to Unicode from the encoding used for the CSV file.
+
+        Should be overridden in subclasses.
+        """
+        return unicode(value)
+
     def importGroupsCsv(self, csvdata):
         lineno = 0
         try:
@@ -45,7 +49,7 @@ class CSVImporterBase:
                     raise DataError(_("Error in group data, line %d:"
                                       " expected 4 columns, got %d") %
                                     (lineno + 1, len(row)))
-                name, title, parents, facets = map(from_locale, row)
+                name, title, parents, facets = map(self.recode, row)
                 self.importGroup(name, title, parents, facets)
         except csv.Error, e:
             raise DataError(_("Error in group data line %d: %s")
@@ -59,7 +63,7 @@ class CSVImporterBase:
                     raise DataError(_("Error in %s data line %d:"
                                       " expected 4 columns, got %d") %
                                     (parent_group, lineno + 1, len(row)))
-                title, groups, dob, comment = map(from_locale, row)
+                title, groups, dob, comment = map(self.recode, row)
                 name = self.importPerson(title, parent_group, groups,
                                          teaching=teaching)
                 self.importPersonInfo(name, title, dob, comment)
@@ -75,7 +79,7 @@ class CSVImporterBase:
                     raise DataError(_("Error in resource data line %d:"
                                       " expected 2 columns, got %d") %
                                     (lineno + 1, len(row)))
-                title, groups = map(from_locale, row)
+                title, groups = map(self.recode, row)
                 self.importResource(title, groups)
         except csv.Error, e:
             raise DataError(_("Error in resource data line %d: %s")
