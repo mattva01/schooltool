@@ -1444,6 +1444,16 @@ class IApplicationObjectContainer(ILocation, ITraversable):
         """Iterate over all contained objects."""
 
 
+class IAuthenticator(Interface):
+
+    def __call__(context, username, password):
+        """Authenticate a user given a username and password.
+
+        Returns an authentication token (IPerson object) if successful.
+        Raises AuthenticationError if not.
+        """
+
+
 #
 # Modules
 #
@@ -1482,3 +1492,8 @@ class IViewAPI(Interface):
 
 class ComponentLookupError(Exception):
     """An exception for component architecture."""
+
+
+class AuthenticationError(Exception):
+    """Bad username or password."""
+

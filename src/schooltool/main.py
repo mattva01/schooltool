@@ -33,13 +33,12 @@ import os
 import sys
 import ZConfig
 import urllib
-import copy
 import getopt
 import libxml2
 from zope.interface import moduleProvides
 from transaction import get_transaction
 from zodb.interfaces import ConflictError
-from twisted.web import server, resource
+from twisted.web import resource
 from twisted.internet import reactor
 from twisted.protocols import http
 from twisted.python import threadable
@@ -48,9 +47,10 @@ from twisted.python import failure
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model, absence
 from schooltool.views import errorPage
-from schooltool.component import getView
+from schooltool.component import getView, traverse
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
+from schooltool.interfaces import AuthenticationError
 
 __metaclass__ = type
 
@@ -254,26 +254,58 @@ def chooseMediaType(supported_types, accept_list):
     return best
 
 
-class Request(server.Request):
+class Request(http.Request):
     """Threaded request processor, integrated with ZODB.
 
-    Another enhancement over Twisted's Request is that an attribute
-    called 'accept' is available that lists all acceptable content types
-    according to the provided HTTP Accept header.  See the docstring of
-    parseAccept for more information about its structure.
+    The bulk of the processing is done in a separate thread -- it seems to
+    be the only way to integrate Twisted no-blocking requirement with blocking
+    operation of ZODB.
 
-    Note that HTTP/1.1 allows the server to return responses which are
-    not acceptable according to the accept headers.  See RFC 2616 section
-    10.4.7 for more information.
+    A number of attributes not provided by Twisted's Request are available
+    when render is called:
+
+      - 'accept' lists all acceptable content types according to the provided
+        HTTP Accept header.  See the docstring of parseAccept for more
+        information about its structure.  It is simpler to use chooseMediaType
+        instead.
+
+        Note that HTTP/1.1 allows the server to return responses which are
+        not acceptable according to the accept headers.  See RFC 2616 section
+        10.4.7 for more information.
+
+      - 'authenticated_user' is the user object derived from basic HTTP
+        authentication information (None for anonymous access).
     """
 
     reactor_hook = reactor
     get_transaction_hook = get_transaction
 
+    def reset(self):
+        """Resets the state of the request.
+
+        Clears all cookies, headers.  In other words, undoes any changes
+        caused by calling setHeader, addCookie, setResponseCode, redirect,
+        setLastModified, setETag.
+
+        Limitation: this method does not undo changes made by calling setHost.
+
+        You may not call reset if the response is already partially written
+        to the transport.
+        """
+
+        # should not happen
+        assert not self.startedWriting, 'cannot reset at this state'
+
+        self.cookies = []
+        self.headers = {}
+        self.lastModified = None
+        self.etag = None
+        self.setResponseCode(http.OK)
+
     def process(self):
         """Process the request"""
 
-        # Do all the things server.Request.process would do
+        # Do all the things twisted.web.server.Request.process would do
         self.site = self.channel.site
         self.setHeader('Server', SERVER_VERSION)
         self.setHeader('Date', http.datetimeToString())
@@ -308,8 +340,7 @@ class Request(server.Request):
                 while True:
                     try:
                         self.zodb_conn = self.site.db.open()
-                        resrc = self.traverse()
-                        body = self.render(resrc)
+                        body = self._generate_response()
                         txn = self.get_transaction_hook()
                         txn.note("%s %s" % (self.method, self.uri))
                         txn.setUser(self.getUser()) # anonymous is ""
@@ -325,51 +356,63 @@ class Request(server.Request):
                         break
             except:
                 self.get_transaction_hook().abort()
-                self.reactor_hook.callFromThread(self.processingFailed,
-                                                 failure.Failure())
-            else:
-                self.reactor_hook.callFromThread(self.write, body)
-                self.reactor_hook.callFromThread(self.finish)
+                body = self._handle_exception(failure.Failure())
+            self.reactor_hook.callFromThread(self.write, body)
+            self.reactor_hook.callFromThread(self.finish)
         finally:
             if self.zodb_conn:
                 self.zodb_conn.close()
                 self.zodb_conn = None
 
-    def reset(self):
-        """Resets the state of the request.
+    def _generate_response(self):
+        """Generate the response.
 
-        Clears all cookies, headers.  In other words, undoes any changes
-        caused by calling setHeader, addCookie, setResponseCode, redirect,
-        setLastModified, setETag.
-
-        Limitation: this method does not undo changes made by calling setHost.
-
-        You may not call reset if the response is already partially written
-        to the transport.
+        This is called in a separate thread.
         """
+        # Get a persistent application object from ZODB
+        root = self.zodb_conn.root()
+        app = root[self.site.rootName]
 
-        # should not happen
-        assert not self.startedWriting, 'cannot reset at this state'
+        # Find out the authenticated user
+        self.authenticated_user = None
+        if self.getUser():
+            try:
+                self.authenticated_user = self.site.authenticate(app,
+                        self.getUser(), self.getPassword())
+            except AuthenticationError:
+                body = "Bad username or password"
+                self.setResponseCode(401)
+                self.setHeader('Content-Type', 'text/plain')
+                self.setHeader('Content-Length', len(body))
+                return body
 
-        self.cookies = []
-        self.headers = {}
-        self.lastModified = None
-        self.etag = None
-        self.setResponseCode(http.OK)
+        # Traverse and render the resource
+        resrc = self.traverse(app)
+        body = self.render(resrc)
+        return body
 
-    def traverse(self):
+    def _handle_exception(self, reason):
+        """Generate an internal error page.
+
+        'reason' is a twisted.python.failure.Failure object.
+
+        twisted.web.server.Request.processFailure is very similair in purpose.
+
+        This is called in a separate thread.
+        """
+        self.reactor_hook.callFromThread(reason.printTraceback)
+        body = reason.getErrorMessage()
+        self.reset()
+        self.setResponseCode(500)
+        self.setHeader('Content-Type', 'text/plain')
+        self.setHeader('Content-Length', len(body))
+        return body
+
+    def traverse(self, app):
         """Locate the resource for this request.
 
         This is called in a separate thread.
         """
-
-        # Do things usually done by Site.getResourceFor
-        self.sitepath = copy.copy(self.prepath)
-        self.acqpath = copy.copy(self.prepath)
-
-        # Get a persistent application object from ZODB
-        root = self.zodb_conn.root()
-        app = root[self.site.rootName]
         rsc = self.site.viewFactory(app)
         return resource.getChildForRequest(rsc, self)
 
@@ -393,6 +436,41 @@ class Request(server.Request):
         """Choose a media type for presentation according to Accept: header."""
         return chooseMediaType(supported_types, self.accept)
 
+
+class Site(http.HTTPFactory):
+    """Site for serving requests based on ZODB"""
+
+    __super = http.HTTPFactory
+    __super___init__ = __super.__init__
+    __super_buildProtocol = __super.buildProtocol
+
+    conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
+
+    def __init__(self, db, rootName, viewFactory, authenticate):
+        """Creates a site.
+
+        Arguments:
+          db            ZODB database
+          rootName      name of the application object in the database
+          viewFactory   factory for the application object views
+          authenticate  authentication function (see IAuthenticator)
+        """
+        self.__super___init__(None)
+        self.db = db
+        self.viewFactory = viewFactory
+        self.rootName = rootName
+        self.authenticate = authenticate
+
+    def buildProtocol(self, addr):
+        channel = self.__super_buildProtocol(addr)
+        channel.requestFactory = Request
+        channel.site = self
+        return channel
+
+
+#
+# Misc
+#
 
 def profile(fn, extension='prof'):
     """Profiling hook.
@@ -418,34 +496,6 @@ def profile(fn, extension='prof'):
     prof.runcall(doit)
     prof.close()
     return result[0]
-
-
-class Site(server.Site):
-    """Site for serving requests based on ZODB"""
-
-    __super = server.Site
-    __super___init__ = __super.__init__
-    __super_buildProtocol = __super.buildProtocol
-
-    conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
-
-    def __init__(self, db, rootName, viewFactory):
-        """Creates a site.
-
-        Arguments:
-          db            ZODB database
-          rootName      name of the application object in the database
-          viewFactory   factory for the application object views
-        """
-        self.__super___init__(None)
-        self.db = db
-        self.viewFactory = viewFactory
-        self.rootName = rootName
-
-    def buildProtocol(self, addr):
-        channel = self.__super_buildProtocol(addr)
-        channel.requestFactory = Request
-        return channel
 
 
 #
@@ -575,7 +625,7 @@ class Server:
 
         self.threadable_hook.init()
 
-        site = Site(self.db, self.appname, self.viewFactory)
+        site = Site(self.db, self.appname, self.viewFactory, self.authenticate)
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
@@ -611,7 +661,7 @@ class Server:
 
         conn.close()
 
-    def createApplication(self):
+    def createApplication():
         """Instantiate a new application"""
         app = Application()
 
@@ -635,6 +685,27 @@ class Server:
         anonymous = Person("anonymous", title="Anonymous")
 
         return app
+
+    createApplication = staticmethod(createApplication)
+
+    def authenticate(context, username, password):
+        """See IAuthenticator."""
+        try:
+            persons = traverse(context, '/persons')
+        except (TypeError, KeyError):
+            # Perhaps log somewhere that authentication is not possible in
+            # this context, otherwise it might be hard to debug
+            raise AuthenticationError("Invalid login")
+        try:
+            person = persons[username]
+        except KeyError:
+            pass
+        else:
+            if person.checkPassword(password):
+                return person
+        raise AuthenticationError("Invalid login")
+
+    authenticate = staticmethod(authenticate)
 
     def notifyConfigFile(self, config_file):
         print >> self.stdout, "Reading configuration from %s" % config_file

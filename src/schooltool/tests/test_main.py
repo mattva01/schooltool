@@ -31,7 +31,7 @@ from zope.interface import moduleProvides
 from zope.interface import directlyProvides, directlyProvidedBy
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import IModuleSetup, AuthenticationError
 
 __metaclass__ = type
 
@@ -110,9 +110,18 @@ class DbStub:
 
 class SiteStub:
 
+    fred = object()
+
     def __init__(self):
         self.conflictRetries = 5
+        self.rootName = 'app'
         self.db = DbStub()
+
+    def authenticate(self, context, user, password):
+        if user == 'fred' and password == 'wilma':
+            return self.fred
+        else:
+            raise AuthenticationError('bad login (%r, %r)' % (user, password))
 
 
 class ChannelStub:
@@ -150,10 +159,12 @@ class TestSite(unittest.TestCase):
         db = object()
         rootName = 'foo'
         viewFactory = object()
-        site = Site(db, rootName, viewFactory)
+        authenticator = lambda c, u, p: None
+        site = Site(db, rootName, viewFactory, authenticator)
         self.assert_(site.db is db)
         self.assert_(site.viewFactory is viewFactory)
         self.assert_(site.rootName is rootName)
+        self.assert_(site.authenticate is authenticator)
         self.assertEqual(site.conflictRetries, 5)
 
     def test_buildProtocol(self):
@@ -161,10 +172,12 @@ class TestSite(unittest.TestCase):
         db = object()
         rootName = 'foo'
         viewFactory = object()
-        site = Site(db, rootName, viewFactory)
+        authenticator = lambda c, u, p: None
+        site = Site(db, rootName, viewFactory, authenticator)
         addr = None
         channel = site.buildProtocol(addr)
         self.assert_(channel.requestFactory is Request)
+        self.assert_(channel.site is site)
 
 
 class TestAcceptParsing(unittest.TestCase):
@@ -336,6 +349,22 @@ class TestAcceptParsing(unittest.TestCase):
 
 class TestRequest(unittest.TestCase):
 
+    def test_reset(self):
+        from schooltool.main import Request
+        rq = Request(None, True)
+        rq.setHeader('x-bar', 'fee fie foe foo')
+        rq.addCookie('foo', 'xyzzy')
+        rq.setResponseCode(505, 'this is an error')
+        rq.setLastModified(123)
+        rq.setETag('spam')
+        rq.reset()
+        self.assertEquals(rq.headers, {})
+        self.assertEquals(rq.cookies, [])
+        self.assertEquals(rq.code, 200)
+        self.assertEquals(rq.code_message, 'OK')
+        self.assertEquals(rq.lastModified, None)
+        self.assertEquals(rq.etag, None)
+
     def test_process(self):
         from schooltool.main import Request, SERVER_VERSION
         channel = ChannelStub()
@@ -361,23 +390,27 @@ class TestRequest(unittest.TestCase):
         rq.process()
         self.assertEqual(rq.code, 400)
 
-    def do_test__process(self, path, render_stub, user=None):
+    def newRequest(self, path, render_stub, user=None, password=None):
         from schooltool.main import Request
-
-        transaction = TransactionStub()
-
         channel = None
         rq = Request(channel, True)
         rq.path = path
         rq.uri = path
         rq.method = "GET"
         rq.site = SiteStub()
-        rq.reactor_hook = ReactorStub()
-        rq.get_transaction_hook = lambda: transaction
-        rq.traverse = lambda: path
+        rq.traverse = lambda app: path
         rq.render = render_stub
         if user is not None:
             rq.user = user
+        if password is not None:
+            rq.password = password
+        return rq
+
+    def do_test__process(self, path, render_stub, user=None, password=None):
+        rq = self.newRequest(path, render_stub, user, password)
+        transaction = TransactionStub()
+        rq.get_transaction_hook = lambda: transaction
+        rq.reactor_hook = ReactorStub()
         rq._process()
 
         self.assert_(rq.zodb_conn is None)
@@ -388,31 +421,29 @@ class TestRequest(unittest.TestCase):
         return rq, transaction
 
     def test__process(self):
-        from twisted.python import failure
-
         path = '/foo'
         body = 'spam and eggs'
-        user = 'john'
+        user = 'fred'
+        password = 'wilma'
 
         def render_stub(resource):
             assert resource is path
             return body
 
-        rq, transaction = self.do_test__process(path, render_stub, user=user)
-
-        self.assertEquals(transaction.history, 'C')
-
-        self.assertEquals(transaction._note, "GET %s" % path)
-        self.assertEquals(transaction._user, user)
+        rq, transaction = self.do_test__process(path, render_stub,
+                                user=user, password=password)
 
         called = rq.reactor_hook._called_from_thread
         self.assertEquals(len(called), 2)
         self.assertEquals(called[0], (rq.write, body))
         self.assertEquals(called[1], (rq.finish, ))
 
-    def test__process_on_exception(self):
-        from twisted.python import failure
+        self.assertEquals(transaction.history, 'C')
 
+        self.assertEquals(transaction._note, "GET %s" % path)
+        self.assertEquals(transaction._user, user)
+
+    def test__process_on_exception(self):
         path = '/foo'
         error_type = RuntimeError
         error_msg = 'Testing exception handling'
@@ -426,15 +457,11 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(transaction.history, 'A')
 
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 1)
-        self.assertEquals(len(called[0]), 2)
-        self.assertEquals(called[0][0], rq.processingFailed)
-        self.assert_(isinstance(called[0][1], failure.Failure))
-        self.assert_(called[0][1].type is error_type)
-        self.assertEquals(called[0][1].value.args, (error_msg, ))
+        self.assertEquals(len(called), 3)
+        self.assertEquals(called[1], (rq.write, error_msg))
+        self.assertEquals(called[2], (rq.finish, ))
 
     def test__process_many_conflict_errors(self):
-        from twisted.python import failure
         from zodb.interfaces import ConflictError
 
         path = '/foo'
@@ -447,15 +474,13 @@ class TestRequest(unittest.TestCase):
 
         rq, transaction = self.do_test__process(path, render_stub)
 
+        called = rq.reactor_hook._called_from_thread
+        self.assertEquals(len(called), 3)
+        self.assertEquals(called[1], (rq.write, error_msg))
+        self.assertEquals(called[2], (rq.finish, ))
+
         retries = rq.site.conflictRetries + 1
         self.assertEquals(transaction.history, 'A' * retries)
-
-        called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 1)
-        self.assertEquals(len(called[0]), 2)
-        self.assertEquals(called[0][0], rq.processingFailed)
-        self.assert_(isinstance(called[0][1], failure.Failure))
-        self.assert_(called[0][1].type is error_type)
 
         self.assertEquals(len(rq.site.db._connections),
                           1 + rq.site.conflictRetries)
@@ -465,7 +490,8 @@ class TestRequest(unittest.TestCase):
 
         path = '/foo'
         body = 'spam and eggs'
-        user = 'john'
+        user = 'fred'
+        password = 'wilma'
         retries = 3
         counter = [retries]
 
@@ -476,7 +502,13 @@ class TestRequest(unittest.TestCase):
                 raise ConflictError
             return body
 
-        rq, transaction = self.do_test__process(path, render_stub, user=user)
+        rq, transaction = self.do_test__process(path, render_stub,
+                                    user=user, password=password)
+
+        called = rq.reactor_hook._called_from_thread
+        self.assertEquals(len(called), 2)
+        self.assertEquals(called[0], (rq.write, body))
+        self.assertEquals(called[1], (rq.finish, ))
 
         # these checks are a bit coarse...
         self.assertEquals(transaction.history, 'A' * retries + 'C')
@@ -484,29 +516,41 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(transaction._note, "GET %s" % path)
         self.assertEquals(transaction._user, user)
 
-        called = rq.reactor_hook._called_from_thread
-        self.assertEquals(len(called), 2)
-        self.assertEquals(called[0], (rq.write, body))
-        self.assertEquals(called[1], (rq.finish, ))
-
         self.assertEquals(len(rq.site.db._connections),
                           1 + retries)
 
-    def test_reset(self):
-        from schooltool.main import Request
-        rq = Request(None, True)
-        rq.setHeader('x-bar', 'fee fie foe foo')
-        rq.addCookie('foo', 'xyzzy')
-        rq.setResponseCode(505, 'this is an error')
-        rq.setLastModified(123)
-        rq.setETag('spam')
-        rq.reset()
-        self.assertEquals(rq.headers, {})
-        self.assertEquals(rq.cookies, [])
-        self.assertEquals(rq.code, 200)
-        self.assertEquals(rq.code_message, 'OK')
-        self.assertEquals(rq.lastModified, None)
-        self.assertEquals(rq.etag, None)
+    def test__generate_response(self):
+        path = '/foo'
+        body = 'Hoo!'
+        def render_stub(resource):
+            assert resource is path
+            return body
+        rq = self.newRequest(path, render_stub)
+        rq.zodb_conn = ConnectionStub()
+        result = rq._generate_response()
+        self.assertEquals(result, body)
+        self.assert_(rq.authenticated_user is None)
+
+        rq.user = 'fred'
+        rq.password = 'wilma'
+        result = rq._generate_response()
+        self.assertEquals(result, body)
+        self.assert_(rq.authenticated_user is SiteStub.fred)
+
+        rq.user = 'fred'
+        rq.password = 'wilbur'
+        result = rq._generate_response()
+        self.assertEquals(result, "Bad username or password")
+        self.assertEquals(rq.code, 401)
+
+        rq.user = 'freq'
+        rq.password = 'wilma'
+        result = rq._generate_response()
+        self.assertEquals(result, "Bad username or password")
+        self.assertEquals(rq.code, 401)
+
+    # _handle_exception is tested indirectly, in test__process_on_exception
+    # and test__process_many_conflict_errors
 
     def test_traverse(self):
         from schooltool.main import Request
@@ -525,13 +569,8 @@ class TestRequest(unittest.TestCase):
         rq = Request(None, True)
         rq.zodb_conn = ConnectionStub()
         rq.site = SiteStub()
-        rq.prepath = ['some', 'thing']
         rq.postpath = []
-        self.assertEquals(rq.traverse(), SiteStub.resource)
-        self.assertEquals(rq.sitepath, rq.prepath)
-        self.assert_(rq.sitepath is not rq.prepath)
-        self.assertEquals(rq.acqpath, rq.prepath)
-        self.assert_(rq.acqpath is not rq.prepath)
+        self.assertEquals(rq.traverse(ConnectionStub.app), SiteStub.resource)
 
     def test_render(self):
         from schooltool.main import Request
@@ -834,6 +873,18 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         absence_tracker = app.utilityService['absences']
         self.assert_((absence_tracker, IAttendanceEvent)
                      in event_service.listSubscriptions())
+
+    def test_authenticate(self):
+        from schooltool.main import Server
+        app = Server.createApplication()
+        john = app['persons'].new("john", title="John Smith")
+        john.setPassword('secret')
+        auth = Server.authenticate
+        self.assertRaises(AuthenticationError, auth, app, 'foo', 'bar')
+        self.assertRaises(AuthenticationError, auth, app, '', '')
+        self.assertRaises(AuthenticationError, auth, app, 'john', 'wrong')
+        self.assertEquals(auth(app, 'john', 'secret'), john)
+        self.assertEquals(auth(john, 'john', 'secret'), john)
 
 
 class TestSetUpModules(unittest.TestCase):

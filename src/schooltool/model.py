@@ -222,7 +222,6 @@ class Person(ApplicationObjectMixin):
             return 'facets/%s' % obj.__name__
         return RelationshipValenciesMixin.getRelativePath(self, obj)
 
-
     def setPassword(self, password):
         if password is None:
             self._pwhash = None
@@ -234,7 +233,6 @@ class Person(ApplicationObjectMixin):
             return False
         else:
             return sha.sha(password).digest() == self._pwhash
-
 
 
 class Group(ApplicationObjectMixin):
