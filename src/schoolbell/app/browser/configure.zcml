@@ -347,16 +347,6 @@
       />
 
   <page
-      name="plain.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      class=".cal.PlainCalendarView"
-      template="templates/cal_plain.pt"
-      permission="schoolbell.viewCalendar"
-      menu="zmi_views"
-      title="Calendar (plain)"
-      />
-
-  <page
       name="daily.html"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.DailyCalendarView"

@@ -91,30 +91,6 @@ XXX mg: shouldn't we just pick one and settle on that?
     Content-Type: text/calendar; charset=UTF-8
     ...
 
-If we peek into our plain calendar view, we will see that the person's
-calendar is empty:
-
-    >>> response = http(r"""
-    ... GET /frogpond/persons/frog/calendar/plain.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    >>> response.getStatus()
-    200
-    >>> 'duration:' not in response.getBody()
-    True
-
-We can generate some fictitious events:
-XXX this ability *will* go away before the release -- mg
-
-    >>> response = http(r"""
-    ... GET /frogpond/persons/frog/calendar/plain.html?GENERATE=more HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    >>> response.getStatus()
-    200
-    >>> 'duration:' in response.getBody()
-    True
-
 Let's render the weekly calendar view:
 
     >>> print http(r"""

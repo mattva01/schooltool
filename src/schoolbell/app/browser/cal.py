@@ -275,51 +275,6 @@ class CalendarDay(object):
 
 
 #
-# Temporary debug stuff, will go away soon
-#
-
-class PlainCalendarView(BrowserView):
-    """A calendar view purely for testing purposes."""
-
-    # XXX remove this view before the release -- mg
-
-    __used_for__ = ISchoolBellCalendar
-
-    num_events = 5
-    evt_range = 60*24*14 # two weeks
-
-    def iterEvents(self):
-        events = list(self.context)
-        events.sort()
-        return events
-
-    def update(self):
-        if 'GENERATE' in self.request:
-            import random
-            for i in range(self.num_events):
-                delta = random.randint(-self.evt_range, self.evt_range)
-                dtstart = datetime.now() + timedelta(minutes=delta)
-                length = timedelta(minutes=random.randint(1, 60*12))
-                title = 'Event %d' % random.randint(1, 999)
-
-                # Events won't always have descriptions
-                description = None
-                if i % 2:
-                    description = 'Description for %s' % title
-
-                recurrence = None
-                if i > 3:
-                    interval = random.randint(1, 5)
-                    count = random.randint(1, 10)
-                    recurrence = DailyRecurrenceRule(interval=interval,
-                                                     count=count)
-
-                event = CalendarEvent(dtstart, length, title,
-                        description=description, recurrence=recurrence)
-                self.context.addEvent(event)
-
-
-#
 # Calendar display views
 #
 

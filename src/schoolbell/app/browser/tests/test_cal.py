@@ -211,28 +211,6 @@ def doctest_CalendarTraverser():
     """
 
 
-def doctest_PlainCalendarView():
-    """Tests for PlainCalendarView.
-
-        >>> from schoolbell.app.browser.cal import PlainCalendarView
-        >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
-        >>> request = TestRequest()
-        >>> view = PlainCalendarView(calendar, request)
-        >>> view.update()
-        >>> len(calendar)
-        0
-
-        >>> request = TestRequest()
-        >>> request.form = {'GENERATE': ''}
-        >>> view = PlainCalendarView(calendar, request)
-        >>> view.update()
-        >>> len(calendar) > 0
-        True
-
-    """
-
-
 def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
