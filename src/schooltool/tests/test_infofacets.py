@@ -56,9 +56,20 @@ class TestPersonInfoFacet(unittest.TestCase):
         self.assertEqual(person.title, "Smith")
 
 
+class TestAddressInfoFacet(unittest.TestCase):
+
+    def test(self):
+        from schooltool.infofacets import AddressInfoFacet
+        from schooltool.interfaces import IAddressInfoFacet
+
+        aif = AddressInfoFacet()
+        verifyObject(IAddressInfoFacet, aif)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersonInfoFacet))
+    suite.addTest(unittest.makeSuite(TestAddressInfoFacet))
     return suite
 
 if __name__ == '__main__':

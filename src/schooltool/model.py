@@ -38,7 +38,7 @@ from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.absence import Absence
 from schooltool.component import getPath, FacetManager
-from schooltool.infofacets import PersonInfoFacet
+from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
 from schooltool.auth import ACL
 
 __metaclass__ = type
@@ -208,7 +208,6 @@ class Note:
         self.__name__ = None
         self.__parent__ = None
 
-
 class Address(FacetedEventTargetMixin,
               RelationshipValenciesMixin):
 
@@ -222,6 +221,8 @@ class Address(FacetedEventTargetMixin,
         RelationshipValenciesMixin.__init__(self)
         self._title = title
         self._country = None
+        facet = AddressInfoFacet()
+        FacetManager(self).setFacet(facet, self, "address_info")
 
 
 class IntervalSet:

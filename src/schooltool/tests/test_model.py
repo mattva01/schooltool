@@ -391,10 +391,12 @@ class TestAddress(unittest.TestCase):
         return Address("Home Address")
 
     def test(self):
-        from schooltool.interfaces import IAddress, IFaceted
+        from schooltool.interfaces import IAddress, IAddressInfoFacet
+        from schooltool.component import FacetManager
         address = self.newObject()
         verifyObject(IAddress, address)
-        verifyObject(IFaceted, address)
+        facet = FacetManager(address).facetByName("address_info")
+        verifyObject(IAddressInfoFacet, facet)
 
 
 def test_suite():

@@ -24,7 +24,7 @@ $Id$
 
 from persistent import Persistent
 from zope.interface import implements
-from schooltool.interfaces import IPersonInfoFacet
+from schooltool.interfaces import IPersonInfoFacet, IAddressInfoFacet 
 
 
 __metaclass__ = type
@@ -68,3 +68,20 @@ class PersonInfoFacet(Persistent):
             title = "%s %s" % (self._first_name or '', self._last_name or '')
             self.__parent__.title = title.strip()
 
+
+class AddressInfoFacet(Persistent):
+
+    implements(IAddressInfoFacet)
+
+    __parent__ = None
+    __name__ = None
+    owner = None
+    active = True
+
+    def __init__(self):
+        self.country = None
+        self.postcode = None
+        self.district = None
+        self.town = None
+        self.streetNr = None
+        self.thoroughfareName = None
