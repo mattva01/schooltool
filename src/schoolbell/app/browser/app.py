@@ -285,10 +285,6 @@ class PersonEditView(BrowserView):
 
 class IPersonPreferencesForm(Interface):
 
-    timezone = Choice(title=u"Time Zone",
-                    description=u"Time Zone used to display your calendar",
-                    values=pytz.common_timezones)
-
     timeformat = Choice(title=u"Time Format",
                     description=u"Time Format",
                     values=("HH:MM", "H:MM am/pm"))
@@ -315,8 +311,7 @@ class PersonPreferencesView(BrowserView):
         BrowserView.__init__(self, context, request)
 
         prefs = IPersonPreferences(self.context)
-        initial = {'timezone': prefs.timezone,
-                   'timeformat': prefs.timeformat,
+        initial = {'timeformat': prefs.timeformat,
                    'dateformat': prefs.dateformat,
                    'weekstart': prefs.weekstart}
 
@@ -324,7 +319,6 @@ class PersonPreferencesView(BrowserView):
                      initial=initial)
 
     def update(self):
-
         if 'CANCEL' in self.request:
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
