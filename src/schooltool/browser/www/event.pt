@@ -144,15 +144,12 @@
       </p>
       <span tal:repeat="weekday view/weekdays">
         <input type="checkbox" name="weekdays"
-               tal:define="day view/date_widget/value"
                tal:attributes="
                    id string:weekday_${weekday/nr};
                    value weekday/nr;
-                   disabled python:day and day.weekday() == weekday['nr'];
-                   checked python:
-                      (day and day.weekday() == weekday['nr']
-                       or (view.weekdays_widget.value and
-                           weekday['nr'] in view.weekdays_widget.value))"/>
+                   disabled python:view.weekdayChecked(weekday);
+                   checked python:view.weekdayDisabled(weekday)"
+               />
         <label tal:attributes="for string:weekday_${weekday/nr}"
                tal:content="weekday/name" class="plain" />
       </span>

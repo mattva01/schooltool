@@ -1145,12 +1145,12 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         return self._redirectToDailyView(date=dt)
 
     def process(self, dtstart, duration, title, location, privacy):
-        raise NotImplementedError("override this method in subclasses")
+        raise NotImplementedError("Override this method in subclasses.")
 
     def getRecurrenceRule(self):
-        """Returns a recurrence rule according to the widgets in request
+        """Return a recurrence rule according to the widgets in request.
 
-        Must be called after update()
+        Must be called after update().
         """
         if self.tt_event:
             return None
@@ -1218,7 +1218,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                 {'nr':6, 'name': _("Sun")})
 
     def getMonthDay(self):
-        """Returns the day number in a month"""
+        """Return the day number in a month."""
         evdate = self.date_widget.value
         if evdate is None:
             return '??'
@@ -1226,7 +1226,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
             return str(evdate.day)
 
     def getWeekDay(self):
-        """Returns a description like '4th Tuesday'"""
+        """Return a description like '4th Tuesday'."""
         evdate = self.date_widget.value
         if evdate is None:
             return "same weekday"
@@ -1239,8 +1239,37 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
         return "%s %s" % (indexes[index], weekdays[weekday])
 
+    def weekdayChecked(self, weekday):
+        """Return 'checked' if the given weekday should be checked.
+
+        Returns None otherwise.
+        """
+        # TODO: unit tests.
+        day = self.date_widget.value
+        checked = day and day.weekday() == weekday['nr']
+        if checked:
+            return 'checked'
+        else:
+            return None
+
+    def weekdayDisabled(self, weekday):
+        """Return 'disabled' if the given weekday should be disabled.
+
+        Returns None otherwise.
+        """
+        # TODO: unit tests.
+        day = self.date_widget.value
+        disabled = (day and day.weekday() == weekday['nr']
+                    or (self.weekdays_widget.value and
+                        weekday['nr'] in self.weekdays_widget.value))
+        if disabled:
+            return 'disabled'
+        else:
+            return None
+
+
     def getLastWeekDay(self):
-        """Returns a description like 'Last Friday' or None"""
+        """Return a description like 'Last Friday' or None."""
         evdate = self.date_widget.value
         weekdays = CalendarViewBase.day_of_week_names
         if evdate is None:
