@@ -18,20 +18,21 @@ System requirements
 -------------------
 
 - Python 2.3 (http://www.python.org/)
-  Note for Debian users: you need both python2.3 and python2.3-xml packages
+  (Note for Debian users: you need both python2.3 and python2.3-xml packages)
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
 - Twisted 1.1.0 or newer (http://www.twistedmatrix.com/)
-  It is needed for the server only
+  (Needed for the server only)
 
 - Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
-  It is needed for the server only
+  (Needed for the server only)
 
 - wxPython 2.4 (http://www.wxpython.org/)
-  It is needed for the wxWindows client only
+  (Needed for the wxWindows client only)
 
 - Development environment and a C compiler
+  (Precompiled binaries  are available for Windows users)
 
 
 Building SchoolTool
@@ -39,7 +40,7 @@ Building SchoolTool
 
 Run 'make' to build the necessary extension modules.
 
-It is a good idea to run 'make test' and 'make ftest' to check if all the 
+It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
 
 
@@ -84,7 +85,8 @@ Project structure
   ttconfig.data         sample timetable configuration used by runimport.py
 
   build/                temporary files are placed here during build process
-  coverage/             unit test coverage reports are placed here
+  coverage/             unit test coverage reports
+  debian/               Debian packaging support
   src/                  source code
     schooltool/         Python package 'schooltool'
       main.py           the SchoolTool server
@@ -138,7 +140,7 @@ Translation files live in src/schooltool/translations.  There is a directory
 for each language that contains a subdirectory called LC_MESSAGES that
 contains two files: schooltool.po and schooltool.mo.
 
-To start a new translation create a language directory and LC_MESSAGES, and
+To start a new translation, create a language directory and LC_MESSAGES and
 use src/schooltool/translations/schooltool.pot as a template.  Generate
 schooltool.mo with msgfmt (or by calling make update-translations).
 
