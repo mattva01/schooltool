@@ -20,6 +20,8 @@ schooltool (0.8+svn) unstable; urgency=low
   * Fix package description style to conform to some new lintian warnings and
     fixed spelling errors in templates.
   * Disabled the wxschooltool client and removed it from the packages.
+  * Fix bug in setting the default language if /etc/environment does not
+    contain LANG=.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
