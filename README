@@ -156,12 +156,12 @@ The test runner has more options and features.  To find out about them, do
 Translation
 -----------
 
-Translation files live in src/schooltool/translations.  There is a directory
+Translation files live in src/schooltool/translation.  There is a directory
 for each language that contains a subdirectory called LC_MESSAGES that
 contains two files: schooltool.po and schooltool.mo.
 
 To start a new translation, create a language directory and LC_MESSAGES and
-use src/schooltool/translations/schooltool.pot as a template.  Generate
+use src/schooltool/translation/schooltool.pot as a template.  Generate
 schooltool.mo with msgfmt (or by calling make update-translations).
 
 When you change the translatable strings in the source code or page templates,
@@ -222,8 +222,9 @@ Copyright information
 
 SchoolTool is copyright (c) 2003, 2004 Shuttleworth Foundation
 
-All files in the src/schooltool directory are part of SchoolTool, and
-are (c) Shuttleworth Foundation.
+All files in the src/schooltool directory (with some exceptions in
+src/schooltool/translation) are part of SchoolTool, and are (c) Shuttleworth
+Foundation.
 
 Unless otherwise stated, files in src/schooltool are released under the
 terms of the GNU General Public License as published by the Free
@@ -240,6 +241,7 @@ the individual files and directories for details of the licences.
   src/persistent
   src/transaction
   src/zope
+  src/schooltool/translation
 
 Files in the same directory as this README file are (c) Shuttleworth
 Foundation, with the exception of GPL, which is a copy of the Free Software
