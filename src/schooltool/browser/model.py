@@ -51,7 +51,6 @@ from schooltool.component import getTimetableSchemaService
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import getOptions
 from schooltool.interfaces import IPerson, IGroup, IResource, INote, IResidence
-from schooltool.membership import Membership
 from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
@@ -61,9 +60,7 @@ from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.uris import URIGuardian, URICustodian, URIWard
 from schooltool.uris import URICurrentResidence, URICalendarListing
 from schooltool.uris import URICalendarListor, URICalendarListed
-from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
 from schooltool.uris import URICalendarProvider, URINotation
-from schooltool.teaching import Teaching
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
 from schooltool.browser.infofacet import PersonEditFacetView
@@ -588,12 +585,6 @@ class GuardianEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
             return traverse(self.context, '/persons').itervalues()
 
     def createRelationship(self, other):
-        # XXX This relationship should probably be created like the
-        # member relationship (GroupEditView.createRelationship),
-        # by calling SchemaInvocation.
-        # bs: looked at this tonight, unless I was doing something wrong
-        # there's a deeper issue with schooltool.guardian, this works but
-        # should be fixed after 0.9
         Guardian(custodian=self.context, ward=other)
 
 
@@ -637,6 +628,9 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         # exists.  We do not use Membership() directly because sometimes
         # the corresponding SchemaInvocation object does some extra work
         # (such as adding a facet to the new member).
+        # XXX this is ugly and error-prone, we should refactor relationships
+        # so that all extra facet-setting magic is done in event subscribers
+        # rather than valencies/SchemaInvocation objects.
         val = self.context.getValencies()[URIMembership, URIGroup]
         val.schema(group=self.context, member=other)
 

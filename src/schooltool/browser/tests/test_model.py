@@ -31,7 +31,6 @@ from zope.app.traversing.api import getPath
 from zope.testing import doctest
 
 from schooltool.interfaces import IPerson, IGroup, IResource
-from schooltool.browser.tests import HTMLDocument
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.tests.utils import NiceDiffsMixin
@@ -1322,7 +1321,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
     def test_traverse(self):
         from schooltool.model import Resource
         from schooltool.browser.model import ResourceView, ResourceEditView
-        from schooltool.browser.cal import BookingView, BookingViewPopUp
+        from schooltool.browser.cal import BookingView
         from schooltool.browser.timetable import TimetableTraverseView
         from schooltool.browser.cal import CalendarView
         from schooltool.browser.acl import ACLView

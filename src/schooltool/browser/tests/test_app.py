@@ -1205,7 +1205,7 @@ class TestResidenceAddView(AppSetupMixin, unittest.TestCase):
 class TestBusySearchView(SchoolToolSetup, EqualsSortedMixin):
 
     def setUp(self):
-        from schooltool.model import Resource, Group
+        from schooltool.model import Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.browser.app import BusySearchView
         self.setUpRegistries()

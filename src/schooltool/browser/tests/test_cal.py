@@ -711,7 +711,6 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
     def test_checkedOverlay(self):
         from schooltool.browser.cal import CalendarViewBase
         from schooltool.component import getRelatedObjects, relate
-        from zope.app.traversing.api import traverse
         from schooltool.uris import URICalendarSubscription
         from schooltool.uris import URICalendarProvider
         from schooltool.uris import URICalendarSubscriber
