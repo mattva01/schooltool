@@ -170,6 +170,10 @@ def setUpLocalAuth(site, auth=None):
 
 
 def authSetUpSubscriber(event):
+    """Set up local authentication for newly added SchoolBell apps.
+
+    This is a handler for IObjectAddedEvent.
+    """
     if IObjectAddedEvent.providedBy(event):
         if ISchoolBellApplication.providedBy(event.object):
             setUpLocalAuth(event.object)
