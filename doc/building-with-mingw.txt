@@ -1,0 +1,17 @@
+Building SchoolTool extension modules on Windows with MinGW
+===========================================================
+
+Download and install MinGW from http://www.mingw.org/ (MinGW-*.exe will do)
+
+Follow the instructions in the Distutils manual, section 6.2.2 (Using
+non-Microsoft compilers on Windows: GNU C / Cygwin / MinGW):
+
+  http://www.python.org/doc/current/inst/
+  http://www.python.org/doc/current/inst/tweak-flags.html#SECTION000622000000000000000
+
+except replace final step (python setup.py build --compiler=mingw32) with
+the following:
+
+  python setup.py build_ext -i --compiler=mingw32
+
+You should now have a bunch of .pyd files in the source tree.
