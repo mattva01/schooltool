@@ -430,14 +430,6 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         from schooltool.browser.csvimport import TimetableCSVImporter
         return TimetableCSVImporter(self.app)
 
-    def test_timetable_headers(self):
-        imp = self.createImporter()
-        csv = '"period_id","ttschema name"'
-
-        imp.importTimetable(csv)
-        self.assertEquals(imp.period_id, 'period_id')
-        self.assertEquals(imp.ttschema, 'ttschema name')
-
     def test_timetable_vacancies(self):
         from schooltool.timetable import Timetable, TimetableDay
         imp = self.createImporter()
@@ -485,14 +477,26 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.assert_(not list(tt['Wednesday']['B']))
         self.assert_(list(tt['Wednesday']['C']))
 
-    def test_timetable_empty(self):
-        imp = self.createImporter()
-        imp.importTimetable('')
-
     def test_timetable_invalid(self):
         imp = self.createImporter()
-        self.assertRaises(ValueError, imp.importTimetable,
-                          '"Some"\n"invalid"\n"csv"\n"follows')
+        imp.importTimetable('"Some"\n"invalid"\n"csv"\n"follows')
+        self.assertEquals(imp.error, "Error in timetable CSV data, line 4")
+
+        imp.importTimetable('"too","many","fields"')
+        self.assert_(imp.error.startswith("The first row of"), imp.error)
+
+        imp.importTimetable('"summer","four-day"')
+        self.assert_(imp.error.startswith("The timetable schema 'four-day'"),
+                     imp.error)
+
+        csv = dedent("""
+                "summer","three-day"
+                ""
+                "Monday","Tuesday"
+                "","No","such","period","No","No","No"
+                """)
+        imp.importTimetable(csv)
+        self.assertEquals(imp.wrong_periods, ["No", "such", "period"])
 
     def test_clearTimetables(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -533,6 +537,12 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.app.timetableSchemaService['two_day'] = ttschema
 
         imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
+                          day_ids=['day1', 'day2'], location='Inside',
+                          dry_run=True)
+        self.assertRaises(KeyError, imp.findByTitle,
+                          self.app['groups'], 'Math 101 - Prof. Bar')
+
+        imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
                           day_ids=['day1', 'day2'], location='Inside')
 
         group = imp.findByTitle(self.app['groups'], 'Math 101 - Prof. Bar')
@@ -547,6 +557,25 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
             self.assert_(activity.owner is group)
             self.assertEquals(list(activity.resources), [self.location])
             self.assert_(activity.timetable is tt)
+
+    def test_scheduleClass_errors(self):
+        from schooltool.timetable import Timetable, TimetableDay
+
+        math101 = self.app['groups'].new('math101', title='Math 101')
+
+        imp = self.createImporter()
+        imp.ttname = 'tt'
+        imp.ttschema = 'two_day'
+        imp.period_id = 'period1'
+        imp.ttschema = Timetable(("day1", "day2"))
+        imp.ttschema["day1"] = TimetableDay(("A", "B"))
+        imp.ttschema["day2"] = TimetableDay(("A", "B"))
+
+        imp.scheduleClass('A', 'Invalid subject', 'Dumb professor',
+                          day_ids=['day1', 'day2'], location='Nowhere')
+        self.assertEquals(list(imp.wrong_persons), ['Dumb professor'])
+        self.assertEquals(list(imp.wrong_groups), ['Invalid subject'])
+        self.assertEquals(list(imp.wrong_locations), ['Nowhere'])
 
     def test_parseRecordRow(self):
         imp = self.createImporter()

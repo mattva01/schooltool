@@ -325,10 +325,7 @@ class TimetableDay(Persistent):
             if td is self:
                 day_id = k
                 break
-        for k, tt in self.timetable.__parent__.items():
-            if tt is self.timetable:
-                key = k
-                break
+        key = self.timetable.__name__
         return key, day_id
 
     def remove(self, period, value):

@@ -296,14 +296,14 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             return self.do_GET(request)
 
         importer = TimetableCSVImporter(self.context)
-        try:
-            if timetable_csv:
-                importer.importTimetable(timetable_csv)
-            if roster_txt:
-                importer.importRoster(roster_txt)
-        except DataError, e:
-            self.error = _("Import failed: %s") % e
-            return self.do_GET(request)
+        if timetable_csv:
+            importer.importTimetable(timetable_csv)
+        if roster_txt:
+            importer.importRoster(roster_txt)
+
+        # TODO: show errors if there were any
+        #self.error = _("Import failed: %s") % e
+        #return self.do_GET(request)
 
         # TODO: log import
         self.success = _("School timetable imported successfully.")
@@ -321,44 +321,84 @@ class TimetableCSVImporter:
         self.app = app
         self.groups = self.app['groups']
         self.persons = self.app['persons']
+        self.wrong_periods = []
+        self.wrong_persons = []
+        self.wrong_groups = []
+        self.wrong_locations = []
+        self.error = None
+
+    def convertRowsToCSV(self, rows, error_format):
+        """Convert rows (a list of strings) in CSV format to a list of lists.
+
+        If the data is invalid, self.error will be set to error_format % line,
+        and None will be returned.
+        """
+        result = []
+        reader = csv.reader(rows)
+        line = 0
+        try:
+            while True:
+                line += 1
+                result.append(reader.next())
+        except StopIteration:
+            return result
+        except csv.Error:
+            self.error = error_format % line
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data.
 
-        May throw various exceptions (to be improved).
+        Should not throw exceptions, but will set self.*error attributes.
+        If any of these attributes have been set, it means that no changes
+        were applied in the database.
         """
-        if not timetable_csv:
-            return # XXX Should we complain?
-        reader = csv.reader(timetable_csv.splitlines())
-        try:
-            rows = list(reader)
-        except csv.Error, e:
-            raise ValueError("Invalid CSV")
+        rows = self.convertRowsToCSV(timetable_csv.splitlines(),
+                                     _("Error in timetable CSV data, line %d"))
+        if rows is None:
+            return
+
+        if len(rows[0]) != 2:
+            self.error = _("The first row of the CSV file should contain"
+                           " the period id and the schema of the timetable.")
+            return
 
         self.period_id, self.ttschema = rows[0]
-        state = 'day_ids'
-        for row in rows[2:]:
-            if len(row) == 1 and row[0] == '':
-                state = 'day_ids'
-                continue
-            elif state == 'day_ids':
-                day_ids = row
-                state = 'periods'
-                continue
-            elif state == 'periods':
-                periods = row[1:]
-                for period in periods:
-                    pass # TODO: check existence of periods
-                state = 'content'
-                continue
+        if self.ttschema not in self.app.timetableSchemaService.keys():
+            self.error = _("The timetable schema %r does not exist."
+                           % self.ttschema)
+            return
 
-            location, records = row[0], self.parseRecordRow(row[1:])
+        for dry_run in [False, True]:
+            state = 'day_ids'
+            for row in rows[2:]:
+                if len(row) == 1 and row[0] == '':
+                    state = 'day_ids'
+                    continue
+                elif state == 'day_ids':
+                    day_ids = row
+                    state = 'periods'
+                    continue
+                elif state == 'periods':
+                    periods = row[1:]
+                    self.validatePeriods(periods)
+                    state = 'content'
+                    continue
 
-            for period, record in zip(periods, records):
-                if record is not None:
-                    subject, teacher = record
-                    self.scheduleClass(period, subject, teacher,
-                                       day_ids, location)
+                location, records = row[0], self.parseRecordRow(row[1:])
+
+                for period, record in zip(periods, records):
+                    if record is not None:
+                        subject, teacher = record
+                        self.scheduleClass(period, subject, teacher,
+                                           day_ids, location, dry_run=dry_run)
+            if self.anyErrors():
+                assert not dry_run, ("Something bad happened,"
+                                     "aborting transaction.")
+                return
+
+    def anyErrors(self):
+        return bool(self.error or self.wrong_periods or self.wrong_persons
+                    or self.wrong_groups or self.wrong_locations)
 
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).
@@ -380,17 +420,30 @@ class TimetableCSVImporter:
                 result.append(None)
         return result
 
-    def findByTitle(self, container, title):
+    def validatePeriods(self, periods):
+        """Check if all periods are defined in the timetable schema."""
+        tt = self.app.timetableSchemaService[self.ttschema]
+        for period in periods:
+            if period not in tt.keys() and period not in self.wrong_periods:
+                self.wrong_periods.append(period)
+
+    def findByTitle(self, container, title, error_list=None):
         """Find an object with provided title in a container.
 
-        Raises KeyError if no object is found.
+        Raises KeyError if no object is found and error_list is not provided.
+        Otherwise, adds the missing string to error_list (but does not create
+        duplicates) and returns None.
         """
         # TODO Speed this up by constructing a dict once
         for obj in container.itervalues():
             if obj.title == title:
                 return obj
         else:
-            raise KeyError("Object %r not found" % title)
+            if error_list is None:
+                raise KeyError("Object %r not found" % title)
+            else:
+                if title not in error_list:
+                    error_list.append(title)
 
     def clearTimetables(self):
         """Delete timetables of the period and schema we are dealing with."""
@@ -398,19 +451,19 @@ class TimetableCSVImporter:
             if (self.period_id, self.ttschema) in group.timetables.keys():
                 del group.timetables[self.period_id, self.ttschema]
 
-    def scheduleClass(self, period, subject, teacher, day_ids, location):
-        """Schedule a class of subject during a given period."""
-        try: # TODO: nicer error handling
-            subject = self.findByTitle(self.groups, subject)
-        except KeyError:
-            raise ValueError('Group %r not found' % subject)
-        try:
-            teacher = self.findByTitle(self.persons, teacher)
-        except KeyError:
-            raise ValueError('Person %r not found' % teacher)
-        # TODO: should we check that teacher has role URITeacher for group?
+    def scheduleClass(self, period, subject, teacher,
+                      day_ids, location, dry_run=False):
+        """Schedule a class of subject during a given period.
 
-        location = self.findByTitle(self.app['resources'], location)
+        If dry_run is set, no objects are changed.
+        """
+        errors = False
+        subject = self.findByTitle(self.groups, subject, self.wrong_groups)
+        teacher = self.findByTitle(self.persons, teacher, self.wrong_persons)
+        location = self.findByTitle(self.app['resources'], location,
+                                    self.wrong_locations)
+        if dry_run or not (subject and teacher and location):
+            return # some objects were not found; do not process
 
         group_name = '%s - %s' % (subject.title, teacher.title)
         try:
@@ -418,6 +471,8 @@ class TimetableCSVImporter:
         except KeyError:
             group = self.groups.new(title=group_name)
             Membership(group=subject, member=group)
+
+            # TODO: Do this conditionally even if the group was found
             relate(uris.URITeaching,
                    (teacher, uris.URITeacher), (group, uris.URITaught))
 
@@ -438,6 +493,7 @@ class TimetableCSVImporter:
         """Import timetables from provided unicode data."""
         group = None
         for line in roster_txt.splitlines():
+            line = line.strip()
             if group is None:
                 group = self.findByTitle(self.groups, line)
                 continue
