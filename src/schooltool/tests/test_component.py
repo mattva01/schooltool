@@ -27,7 +27,7 @@ from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IURIAPI, ISpecificURI
-from schooltool.interfaces import IFacet, IFaceted, IFacetAPI
+from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
@@ -56,6 +56,7 @@ class C1:
 
     def foo(self):
         return "foo"
+
 
 class TestGetAdapter(unittest.TestCase):
 
@@ -105,7 +106,7 @@ class TestCanonicalPath(unittest.TestCase):
         self.assertEqual(getPath(c), '/foo/bar')
 
 
-class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
+class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
         class Stub:
@@ -122,9 +123,11 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
         self.facet = FacetStub()
         self.facetclass = FacetStub
 
-    def test_api(self):
-        from schooltool import component
-        verifyObject(IFacetAPI, component)
+    def test(self):
+        from schooltool.component import FacetManager
+        fm = FacetManager(self.ob)
+        verifyObject(IFacetManager, fm)
+        self.assertRaises(TypeError, FacetManager, object())
 
     def test_setFacet_removeFacet(self):
         from schooltool.component import FacetManager
@@ -138,7 +141,6 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
         self.assert_(self.facet.__parent__ is self.ob)
         self.assert_(self.facet.active)
         self.assert_(self.facet in self.ob.__facets__)
-        #self.assertRaises(TypeError, setFacet, object(), self.facet)
         fm.removeFacet(self.facet)
         self.assert_(self.facet not in self.ob.__facets__)
 
@@ -167,6 +169,13 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
         self.ob.__facets__.add(facet3)
         self.assertEqualSorted(list(fm.facetsByOwner(owner_marker)),
                                [facet1, facet3])
+
+
+class TestFacetFunctions(unittest.TestCase):
+
+    def test_api(self):
+        from schooltool import component
+        verifyObject(IFacetAPI, component)
 
     def test_facetFactories(self):
         from schooltool.component import facetFactories, registerFacetFactory
@@ -474,6 +483,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGetAdapter))
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
+    suite.addTest(unittest.makeSuite(TestFacetManager))
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
