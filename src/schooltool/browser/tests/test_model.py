@@ -559,7 +559,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.uris import URIMember
         view = GroupEditView(self.group)
         request = RequestStub(args={"FINISH_ADD":"Add selected",
-                                    "CHECK": ['/groups/group2',
+                                    "toadd": ['/groups/group2',
                                               '/persons/lj']})
         view.request = request
         view.update()
@@ -650,7 +650,7 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.uris import URITeacher
         view = GroupTeachersView(self.group)
         view.request = RequestStub(args={"FINISH_ADD":"Add selected",
-                                         "teacher": '/persons/josh'})
+                                         "toadd": '/persons/josh'})
         view.update()
         teachers = getRelatedObjects(self.group, URITeacher)
         assert self.teacher in teachers, teachers

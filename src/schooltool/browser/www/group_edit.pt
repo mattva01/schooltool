@@ -75,7 +75,7 @@
     <tr tal:repeat="item view/addList">
       <td tal:content="item/__class__/__name__">[Icon]</td>
       <td><input
-              type="checkbox" name="CHECK"
+              type="checkbox" name="toadd"
               tal:attributes="value item/@@path;
                               id string:check_${repeat/item/number}">
       </td>

@@ -41,7 +41,7 @@
   <tal:block condition="request/args/ADD|nothing">
   <form method="POST"
         tal:attributes="action request/uri">
-  <select name="teacher">
+  <select name="toadd">
     <option>Select...</option>
     <option tal:repeat="teacher view/addList"
             tal:attributes="value teacher/@@path"

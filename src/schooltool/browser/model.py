@@ -259,7 +259,53 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin):
         return isManager(self.request.authenticated_user)
 
 
-class GroupEditView(View):
+class RelationshipViewMixin:
+    """A mixin for views that manage relationships on groups.
+
+    Subclasses must define:
+
+      linkrole = Attribute('URI of the role of the related object.')
+
+      relname = Attribute('Relationship name')
+
+      def createRelationship(self, other):
+          'Create the relationship between self.context and other'
+    """
+
+    def list(self):
+        """Return a list of related objects"""
+        result = [(obj.title, obj)
+                  for obj in getRelatedObjects(self.context,
+                                               self.linkrole)]
+        result.sort()
+        return [obj for title, obj in result]
+
+    def update(self):
+        request = self.request
+        if "DELETE" in request.args:
+            paths = []
+            if "CHECK" in request.args:
+                paths += request.args["CHECK"]
+            for link in self.context.listLinks(self.linkrole):
+                if getPath(link.traverse()) in paths:
+                    link.unlink()
+                    request.appLog(_("Relationship '%s' between %s and %s"
+                                     " removed")
+                                   % (self.relname, getPath(link.traverse()),
+                                      getPath(self.context)))
+        if "FINISH_ADD" in request.args:
+            paths = []
+            if "toadd" in request.args:
+                paths += request.args["toadd"]
+            for path in paths:
+                obj = traverse(self.context, path)
+                self.createRelationship(obj)
+                request.appLog(_("Relationship '%s' between %s and %s created")
+                               % (self.relname, getPath(obj),
+                                  getPath(self.context)))
+
+
+class GroupEditView(View, RelationshipViewMixin):
     """Page for "editing" a Group (/group/id/edit.html)."""
 
     __used_for__ = IGroup
@@ -268,13 +314,9 @@ class GroupEditView(View):
 
     template = Template('www/group_edit.pt')
 
-    def list(self):
-        """Return a list of members
-        """
-        result = [(obj.title, obj)
-                  for obj in getRelatedObjects(self.context, URIMember)]
-        result.sort()
-        return [obj for title, obj in result]
+    linkrole = URIMember
+
+    relname = _('Membership')
 
     def addList(self):
         """Return a list of objects available for addition
@@ -294,32 +336,11 @@ class GroupEditView(View):
         result.sort()
         return [obj for cls, title, obj in result]
 
-    def update(self):
-        request = self.request
-        if "DELETE" in request.args:
-            paths = []
-            if "CHECK" in request.args:
-                paths += request.args["CHECK"]
-            for link in self.context.listLinks(URIMember):
-                if getPath(link.traverse()) in paths:
-                    link.unlink()
-                    request.appLog(_("Relationship '%s' between %s and %s"
-                                     " removed")
-                                   % ('Membership', getPath(link.traverse()),
-                                      getPath(self.context)))
-        if "FINISH_ADD" in request.args:
-            paths = []
-            if "CHECK" in request.args:
-                paths += request.args["CHECK"]
-            for path in paths:
-                obj = traverse(self.context, path)
-                Membership(group=self.context, member=obj)
-                request.appLog(_("Relationship '%s' between %s and %s created")
-                               % ('Membership', getPath(obj),
-                                  getPath(self.context)))
+    def createRelationship(self, other):
+        Membership(group=self.context, member=other)
 
 
-class GroupTeachersView(View):
+class GroupTeachersView(View, RelationshipViewMixin):
 
     __used_for__ = IGroup
 
@@ -327,12 +348,9 @@ class GroupTeachersView(View):
 
     template = Template('www/group_teachers.pt')
 
-    def list(self):
-        """List teachers of this group."""
-        result = [(obj.title, obj)
-                  for obj in getRelatedObjects(self.context, URITeacher)]
-        result.sort()
-        return [obj for title, obj in result]
+    linkrole = URITeacher
+
+    relname = _('Teaching')
 
     def addList(self):
         """List all members of the Teachers group except current teachers."""
@@ -346,29 +364,8 @@ class GroupTeachersView(View):
         result.sort()
         return [obj for title, obj in result]
 
-    def update(self):
-        request = self.request
-        if "DELETE" in request.args:
-            paths = []
-            if "CHECK" in request.args:
-                paths += request.args["CHECK"]
-            for link in self.context.listLinks(URITeacher):
-                if getPath(link.traverse()) in paths:
-                    link.unlink()
-                    request.appLog(_("Relationship '%s' between %s and %s"
-                                     " removed")
-                                   % ('Teaching', getPath(link.traverse()),
-                                      getPath(self.context)))
-        if "FINISH_ADD" in request.args:
-            paths = []
-            if "teacher" in request.args:
-                paths += request.args["teacher"]
-            for path in paths:
-                obj = traverse(self.context, path)
-                Teaching(taught=self.context, teacher=obj)
-                request.appLog(_("Relationship '%s' between %s and %s created")
-                               % ('Teaching', getPath(obj),
-                                  getPath(self.context)))
+    def createRelationship(self, other):
+        Teaching(taught=self.context, teacher=other)
 
 
 class ResourceView(View):
