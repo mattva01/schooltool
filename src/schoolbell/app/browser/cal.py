@@ -1297,6 +1297,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     schema = ICalendarEventAddForm
 
     title = _("Add event")
+    submit_button_title = _("Add")
 
     error = None
 
@@ -1351,6 +1352,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
     _redirectToDate = None
 
     title = _("Edit event")
+    submit_button_title = _("Update")
 
     def keyword_arguments(self):
         """Wraps fieldNames under another name.
@@ -1442,15 +1444,20 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         status = ''
 
+        self._redirectToDate = self.request.get(
+            'date',
+            self.context.dtstart.strftime("%Y-%m-%d"))
+
         if "UPDATE" in self.request:
             return self.updateForm()
+        elif 'CANCEL' in self.request:
+            self.update_status = ''
+            self.request.response.redirect(self.nextURL())
+            return self.update_status
         elif "UPDATE_SUBMIT" in self.request:
             # Replicating EditView functionality
             changed = False
             try:
-                self._redirectToDate = self.request.get(
-                    'date',
-                    self.context.dtstart.strftime("%Y-%m-%d"))
                 changed = self.applyChanges()
                 if changed:
                     notify(ObjectModifiedEvent(self.context))

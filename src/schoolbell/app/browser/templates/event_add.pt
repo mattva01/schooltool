@@ -241,9 +241,10 @@
       </div>
     </fieldset>
     <div class="controls">
-      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
+             tal:attributes="value view/submit_button_title"
              title="Shortcut: Alt-A" accesskey="A"
-             i18n:attributes="value add-button; accesskey" />
+             i18n:attributes="accesskey" />
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
     </div>

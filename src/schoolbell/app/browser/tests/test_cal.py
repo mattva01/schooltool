@@ -885,7 +885,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.error is None
         True
 
-        >>> request = TestRequest(form={'field.title': 'Hacking',
+        >>> request = TestRequest(form={'field.title': '',
         ...                             'field.start_date': '2004-08-13',
         ...                             'field.start_time': '1530',
         ...                             'field.location': 'Kitchen',
@@ -896,6 +896,23 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
+        WidgetInputError: ('title', 'Title', )
+        ConversionError: (u'Invalid time', None)
+        >>> view.error is None
+        True
+
+        >>> request = TestRequest(form={'field.title': '',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '1530',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '60',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE': 'update'})
+        >>> view = CalendarEventAddTestView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.errors
+        WidgetInputError: ('title', 'Title', )
         ConversionError: (u'Invalid time', None)
         >>> view.error is None
         True
@@ -1492,6 +1509,26 @@ def doctest_CalendarEventEditView_nextURL():
         302
         >>> request.response.getHeader('location')
         'http://127.0.0.1/calendar/2004-09-13'
+
+    Let's try to cancel the editing event:
+
+        >>> request = TestRequest(form={'date': '2004-08-13',
+        ...                             'field.title': 'NonHacking',
+        ...                             'field.start_date': '2004-09-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'CANCEL': 'Cancel'})
+
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        ''
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/calendar/2004-08-13'
 
     If the date stays unchanged - we should be redirected to the date
     that was set in the request:
