@@ -10,6 +10,8 @@
 <metal:block metal:fill-slot="body">
   <div tal:repeat="event view/iterEvents">
     Title: <span tal:replace="event/title" />,
+    <span tal:replace="string:Description: ${event/description},"
+        tal:condition="event/description"/>
     start: <span tal:replace="event/dtstart" />,
     duration: <span tal:replace="event/duration" />,
     unique_id: <span tal:replace="event/unique_id" />

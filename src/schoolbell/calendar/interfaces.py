@@ -38,7 +38,7 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.schema import TextLine, Int, Datetime, Date, List, Set, Choice
+from zope.schema import Text, TextLine, Int, Datetime, Date, List, Set, Choice
 from zope.schema import Field, Object
 
 
@@ -315,6 +315,11 @@ class ICalendarEvent(Interface):
     title = TextLine(
         title=u"Title",
         description=u"""The title of the event.""")
+
+    description = Text(
+        title=u"Description",
+        required=False,
+        description=u"""A description of the event.""")
 
     location = TextLine(
         title=u"Location",

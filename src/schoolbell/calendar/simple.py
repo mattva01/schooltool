@@ -49,15 +49,31 @@ class SimpleCalendarEvent(CalendarEventMixin):
         >>> e.unique_id is not None
         True
 
+    Additional iCal information is also supported
+
+        >>> e2 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
+        ...                         timedelta(minutes=15),
+        ...                         'Work on schoolbell.calendar.simple',
+        ...                         description="Python for fun and profit",
+        ...                         location="Mt. Vernon Stable",
+        ...                         recurrence='FakeRecurrance')
+        >>> e2.description
+        'Python for fun and profit'
+        >>> e2.location
+        'Mt. Vernon Stable'
+        >>> e2.recurrence
+        'FakeRecurrance'
+
     """
 
     implements(ICalendarEvent)
 
-    def __init__(self, dtstart, duration, title, location=None, unique_id=None,
-                 recurrence=None):
+    def __init__(self, dtstart, duration, title, description=None, 
+                 location=None, unique_id=None, recurrence=None):
         self.dtstart = dtstart
         self.duration = duration
         self.title = title
+        self.description = description
         self.location = location
         self.recurrence = recurrence
         self.unique_id = unique_id

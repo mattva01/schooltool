@@ -257,9 +257,9 @@ class CalendarEventMixin:
     def __eq__(self, other):
         """Check whether two calendar events are equal."""
         return (self.unique_id, self.dtstart, self.duration, self.title,
-                self.location, self.recurrence) \
+                self.description, self.location, self.recurrence) \
                == (other.unique_id, other.dtstart, other.duration, other.title,
-                   other.location, other.recurrence)
+                   other.description, other.location, other.recurrence)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -317,7 +317,7 @@ class CalendarEventMixin:
         """
         # The import is here to avoid cyclic dependencies
         from schoolbell.calendar.simple import SimpleCalendarEvent
-        for attr in ['dtstart', 'duration', 'title', 'location', 'unique_id',
-                     'recurrence']:
+        for attr in ['dtstart', 'duration', 'title', 'description', 'location',
+                     'unique_id', 'recurrence']:
             kw.setdefault(attr, getattr(self, attr))
         return SimpleCalendarEvent(**kw)

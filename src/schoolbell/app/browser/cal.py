@@ -181,7 +181,14 @@ class PlainCalendarView(BrowserView):
                 dtstart = datetime.now() + timedelta(minutes=delta)
                 length = timedelta(minutes=random.randint(1, 60*12))
                 title = 'Event %d' % random.randint(1, 999)
-                event = CalendarEvent(dtstart, length, title)
+
+                # Events won't always have descriptions
+                description = None
+                if i % 2:
+                    description = 'Description for %d' % title
+
+                event = CalendarEvent(dtstart, length, title,
+                        description=description)
                 self.context.addEvent(event)
 
 
