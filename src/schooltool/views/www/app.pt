@@ -14,4 +14,10 @@
     <utility xlink:type="simple" tal:repeat="utility view/getUtilities"
          tal:attributes="xlink:title utility/title; xlink:href utility/path"/>
   </utilities>
+  <schooltt xlink:type="simple" xlink:title="Whole school timetables"
+            xlink:href="/schooltt"/>
+  <ttschemas xlink:type="simple" xlink:title="Timetable schemas"
+             xlink:href="/ttschemas"/>
+  <time-periods xlink:type="simple" xlink:title="Time periods"
+                xlink:href="/time-periods"/>
 </schooltool>
