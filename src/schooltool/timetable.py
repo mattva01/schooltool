@@ -641,6 +641,9 @@ class BaseTimetableModel(Persistent):
            '''Return a day_id for a certain date.
 
            Will be called sequentially for all school days.
+
+           May return None if the schoolday model thinks that there should
+           be no classes on this date.
            '''
 
        def _dayGenerator(self):
@@ -701,19 +704,18 @@ class BaseTimetableModel(Persistent):
         if day_id_gen is None:
             # Scroll to the required day
             day_id_gen = self._dayGenerator()
-            privacy = getOptions(timetable).timetable_privacy
-            for date in schoolday_model:
-                if not schoolday_model.isSchoolday(date):
-                    continue
-                day_id = self.schooldayStrategy(date, day_id_gen)
-                if date == day:
-                    break
-            else:
-                return None, []
-        else:
-            if not schoolday_model.isSchoolday(day):
-                return None, []
-            day_id = self.schooldayStrategy(day, day_id_gen)
+            if day_id_gen is not None:
+                for date in schoolday_model:
+                    if date == day:
+                        break
+                    if schoolday_model.isSchoolday(date):
+                        self.schooldayStrategy(date, day_id_gen)
+
+        if not schoolday_model.isSchoolday(day):
+            return None, []
+        day_id = self.schooldayStrategy(day, day_id_gen)
+        if day_id is None:
+            return None, []
 
         # Now choose the periods that are in this day
         result = []
@@ -798,7 +800,10 @@ class WeeklyTimetableModel(BaseTimetableModel):
         self._validateDayTemplates()
 
     def schooldayStrategy(self, date, generator):
-        return self.timetableDayIds[date.weekday()]
+        try:
+            return self.timetableDayIds[date.weekday()]
+        except IndexError:
+            return None
 
     def _dayGenerator(self):
         return None

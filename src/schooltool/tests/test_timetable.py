@@ -1150,6 +1150,29 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
 
+    def test_not_enough_days(self):
+        from schooltool.timetable import WeeklyTimetableModel
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.component import getOptions
+        template = SchooldayTemplate()
+        template.add(SchooldayPeriod('1', time(8), timedelta(minutes=30)))
+        days = ["Mon", "Tue"]
+        model = WeeklyTimetableModel(days, {None: template})
+        day = date(2003, 11, 20)    # 2003-11-20 is a Thursday
+        self.assert_(model.schooldayStrategy(day, None) is None)
+
+        tt = Timetable(days)
+        for day_id in days:
+            tt[day_id] = TimetableDay()
+        schooldays = SchooldayModelStub()
+        self.assertEquals(model.periodsInDay(schooldays, tt, day), [])
+
+        # Just make sure there are no exceptions.
+        setPath(tt, '/path/to/tt')
+        getOptions(tt).timetable_privacy = 'private'
+        model.createCalendar(schooldays, tt)
+
 
 class TimetabledStub(TimetabledMixin, RelatableMixin,
                      LocatableEventTargetMixin, FacetedMixin):
