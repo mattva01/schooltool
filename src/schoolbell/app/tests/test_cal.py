@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from textwrap import dedent
 from datetime import date, datetime, timedelta
 
 from zope.testing import doctest
@@ -179,6 +180,70 @@ def doctest_Calendar():
 
     We will trust that `expand` inherited from CalendarMixin has been unit
     tested.
+    """
+
+
+def doctest_WriteCalendar():
+    r"""Tests for WriteCalendar.
+
+    WriteCalendar is an adapter for calendars into IWriteFile
+
+        >>> from schoolbell.app.cal import Calendar, WriteCalendar
+        >>> cal = Calendar()
+        >>> writer = WriteCalendar(cal)
+
+        >>> from zope.app.filerepresentation.interfaces import IWriteFile
+        >>> verifyObject(IWriteFile, writer)
+        True
+
+    Let's check that WriteCalendar is hooked up to the iCalendar parser:
+
+        >>> writer.write(dedent('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... METHOD:PUBLISH
+        ... BEGIN:VEVENT
+        ... UID:956630271
+        ... SUMMARY:Christmas Day
+        ... CLASS:PUBLIC
+        ... DTSTART;VALUE=DATE:20030501
+        ... DTEND;VALUE=DATE:20031226
+        ... DTSTAMP:20020430T114937Z
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... '''))
+
+        >>> len(list(cal))
+        1
+        >>> event = cal.find('956630271')
+        >>> event.title
+        u'Christmas Day'
+
+    As iCalendar is a bit unwieldy for testing, we will plant a hook:
+
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> def event(unique_id, title, day=22, duration=3, **kwargs):
+        ...     return SimpleCalendarEvent(title=title,
+        ...                                dtstart=datetime(2005, 2, day),
+        ...                                duration=duration,
+        ...                                unique_id=unique_id)
+        >>> evts = []
+        >>> writer.read_icalendar = lambda ignored: evts
+
+    OK, now we can do a trivial test with two events:
+
+        >>> evts = [event('e1', 'Event I'), event('e2', 'Event II')]
+        >>> writer.write(None)
+
+        >>> len(list(cal))
+        2
+        >>> cal.find('e1').title
+        'Event I'
+        >>> cal.find('e2').title
+        'Event II'
+
+    TODO: modify old events instead of clearing them and overwriting.
+
     """
 
 

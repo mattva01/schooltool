@@ -21,20 +21,23 @@ SchoolBell calendaring objects.
 
 $Id$
 """
-import datetime
-from persistent import Persistent
-from persistent.dict import PersistentDict
-from zope.interface import implements
-from zope.app.location.interfaces import ILocation
-from zope.app.container.contained import Contained
-from zope.app.annotation.interfaces import IAttributeAnnotatable
 
+import datetime
+from persistent.dict import PersistentDict
+from persistent import Persistent
+from zope.interface import implements
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.container.contained import Contained
+from zope.app.filerepresentation.interfaces import IWriteFile
+from zope.app.location.interfaces import ILocation
+
+from schoolbell.calendar.icalendar import read_icalendar
 from schoolbell.calendar.interfaces import ICalendar
 from schoolbell.calendar.interfaces import IExpandedCalendarEvent
 from schoolbell.calendar.mixins import CalendarMixin, ExpandedCalendarEvent
 from schoolbell.calendar.simple import SimpleCalendarEvent, ImmutableCalendar
-from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import IContainedCalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendar
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
@@ -88,3 +91,26 @@ class Calendar(Persistent, CalendarMixin):
 
     def find(self, unique_id):
         return self.events[unique_id]
+
+
+class WriteCalendar(object):
+    """An adapter that allows to modify the calendar."""
+
+    implements(IWriteFile)
+
+    # XXX I'd like this to be moved elsewhere.
+    _event_attrs = ['dtstart', 'duration', 'title', 'description',
+                    'location', 'unique_id', 'recurrence']
+
+    read_icalendar = staticmethod(read_icalendar)
+
+    def __init__(self, context):
+        self.calendar = context
+
+    def write(self, data):
+        self.calendar.clear() # TODO: modify existing events
+        for event in self.read_icalendar(data):
+            kwargs = dict([(attr, getattr(event, attr))
+                           for attr in self._event_attrs])
+            orig = CalendarEvent(**kwargs)
+            self.calendar.addEvent(orig)

@@ -134,6 +134,11 @@
              interface="schoolbell.calendar.interfaces.ICalendar" />
   </content>
 
+  <adapter
+      for="schoolbell.calendar.interfaces.IEditCalendar"
+      factory=".cal.WriteCalendar"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile" />
+
 <!-- Events -->
 
   <subscriber
