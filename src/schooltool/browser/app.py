@@ -291,7 +291,7 @@ class ObjectContainerView(View):
     traversing with an object's id returns an instance of obj_view on
     the object.
 
-    XXX this implies that an object the id 'add.html' is inaccessible.
+    XXX this implies that an object with the id 'add.html' is inaccessible.
     """
 
     __used_for__ = IApplicationObjectContainer
