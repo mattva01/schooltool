@@ -43,79 +43,6 @@ moduleProvides(IModuleSetup)
 __metaclass__ = type
 
 
-class GroupLink:
-    """An object that represents membership in a group as a link.
-
-    IOW, this is a link from a member to a group.
-    """
-
-    implements(IRemovableLink)
-    __slots__ = '_group', 'name', '__parent__'
-    role = URIGroup
-    title = "Membership"
-    reltype = URIMembership
-
-    def __init__(self, parent, group, name):
-        """The arguments are the following:
-             parent is the owner of this link (a group member)
-             group is the group at the opposite end of the relationship
-             name is the key of parent in the group
-        """
-        self._group = group
-        self.name = name
-        self.__parent__ = parent
-
-    def traverse(self):
-        """See ILink"""
-        return self._group
-
-    def unlink(self):
-        """See IRemovableLink"""
-        del self._group[self.name]
-        otherlink = MemberLink(self._group, self.__parent__, self.name)
-        event = MemberRemovedEvent((self, otherlink))
-        event.dispatch(self.traverse())
-        event.dispatch(otherlink.traverse())
-
-    def registerUnlinkCallback(self, callback):
-        raise NotImplementedError
-
-
-class MemberLink:
-    """An object that represents containment of a group member as a link."""
-
-    implements(IRemovableLink)
-    __slots__ = '_member', 'name', '__parent__'
-    role = URIMember
-    title = "Membership"
-    reltype = URIMembership
-
-    def __init__(self, parent, member, name):
-        """The arguments are the following:
-             parent is the owner of this link (a group)
-             member is the object at the opposite end of the relationship
-             name is the key of member in parent
-        """
-        self._member = member
-        self.name = name
-        self.__parent__ = parent
-
-    def traverse(self):
-        """See ILink"""
-        return self._member
-
-    def unlink(self):
-        """See IRemovableLink"""
-        del self.__parent__[self.name]
-        otherlink = GroupLink(self._member, self.__parent__, self.name)
-        event = MemberRemovedEvent((self, otherlink))
-        event.dispatch(self.traverse())
-        event.dispatch(otherlink.traverse())
-
-    def registerUnlinkCallback(self, callback):
-        raise NotImplementedError
-
-
 class MemberMixin(Persistent):
     """A mixin providing the IGroupMember interface.
 
@@ -124,7 +51,7 @@ class MemberMixin(Persistent):
     removed from it.
     """
 
-    implements(IGroupMember, IQueryLinks)
+    implements(IGroupMember)
 
     def __init__(self):
         self._groups = PersistentKeysDict()
@@ -149,18 +76,9 @@ class MemberMixin(Persistent):
             self.__parent__ = None
             self.__name__ = None
 
-    def listLinks(self, role=ISpecificURI):
-        if URIGroup.extends(role, False):
-            return [GroupLink(self, group, name)
-                    for group, name in self._groups.iteritems()]
-        else:
-            return []
-
 
 class GroupMixin(Persistent):
     """This class is a mixin which makes things a group"""
-
-    implements(IQueryLinks)
 
     def __init__(self):
         self._next_key = 0
@@ -201,14 +119,6 @@ class GroupMixin(Persistent):
         del self._members[key]
         member.notifyRemoved(self)
         # XXX this should send event and call unlink notifications as well
-
-    def listLinks(self, role=ISpecificURI):
-        """See IQueryLinks"""
-        if URIMember.extends(role, False):
-            return [MemberLink(self, member, name)
-                    for name, member in self.items()]
-        else:
-            return []
 
     # Hooks for use by mixers-in
 

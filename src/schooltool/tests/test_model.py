@@ -77,50 +77,6 @@ class TestPerson(unittest.TestCase):
         verifyObject(IEventConfigurable, person)
         verifyObject(IRelatable, person)
 
-    def testQueryLinks(self):
-        from schooltool.model import Person
-        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
-        from schooltool.interfaces import ISpecificURI
-        person = Person("Test Monkey")
-        verifyObject(IQueryLinks, person)
-        self.assertEqual(person.listLinks(), [])
-        group = GroupStub()
-        key = group.add(person)
-
-        for role in (URIGroup, ISpecificURI):
-            links = person.listLinks(role)
-            self.assertEqual(len(links), 1, str(role))
-            self.assertEqual(links[0].role, URIGroup)
-            self.assertEqual(links[0].title, "Membership")
-            self.assert_(links[0].traverse() is group)
-
-        class URIFoo(URIMember):
-            "http://example.com/ns/foo"
-
-        for role in (URIMember, URIFoo):
-            links = person.listLinks(role)
-            self.assertEqual(links, [], str(role))
-
-        class URISomeRole(ISpecificURI): "foo:bar"
-
-        class LinkStub:
-            def __init__(self, role):
-                self.role = role
-
-        person.__links__ = [LinkStub(URISomeRole)]
-
-        links = person.listLinks()
-        self.assertEqual(len(links), 2)
-
-        links = person.listLinks(URIGroup)
-        self.assertEqual(len(links), 1)
-
-        links = person.listLinks(URISomeRole)
-        self.assertEqual(len(links), 1)
-
-        links = person.listLinks(URIFoo)
-        self.assertEqual(links, [])
-
 
 class TestGroup(unittest.TestCase):
 
@@ -142,58 +98,6 @@ class TestGroup(unittest.TestCase):
         key = group.add(member)
         self.assertEqual(member, group[key])
         self.assertEqual(list(member.groups()), [group])
-
-    def testQueryLinks(self):
-        from schooltool.model import Group
-        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
-        from schooltool.interfaces import ISpecificURI
-        group = Group("group")
-        verifyObject(IQueryLinks, group)
-        self.assertEqual(group.listLinks(), [])
-        member = MemberStub()
-        key = group.add(member)
-
-        for role in (URIMember, ISpecificURI):
-            links = group.listLinks(role)
-            self.assertEqual(len(links), 1, str(role))
-            self.assertEqual(links[0].role, URIMember)
-            self.assertEqual(links[0].title, "Membership")
-            self.assert_(links[0].traverse() is member)
-
-        class URIFoo(URIMember):
-            "http://example.com/ns/foo"
-
-        for role in (URIGroup, URIFoo):
-            links = group.listLinks(role)
-            self.assertEqual(links, [], str(role))
-
-        root = Group("root")
-        root.add(group)
-
-        class URISomeRole(ISpecificURI): "foo:bar"
-
-        class LinkStub:
-            def __init__(self, role):
-                self.role = role
-
-        group.__links__ = [LinkStub(URISomeRole)]
-
-        links = group.listLinks()
-        self.assertEqual(len(links), 3)
-
-        links = group.listLinks(URIMember)
-        self.assertEqual(len(links), 1)
-
-        links = group.listLinks(URISomeRole)
-        self.assertEqual(len(links), 1)
-
-        links = group.listLinks(URIFoo)
-        self.assertEqual(links, [])
-
-        links = group.listLinks(URIGroup)
-        self.assertEqual([link.traverse() for link in links], [root])
-        self.assertEqual([link.role for link in links], [URIGroup])
-        self.assertEqual([link.title for link in links], ["Membership"])
 
 
 class TestRootGroup(unittest.TestCase):

@@ -24,7 +24,7 @@ $Id$
 
 from zope.interface import implements
 from schooltool.interfaces import IEventConfigurable
-from schooltool.interfaces import IPerson, IGroup, IRootGroup
+from schooltool.interfaces import IPerson, IGroup, IRootGroup, IQueryLinks
 from schooltool.interfaces import ISpecificURI
 from schooltool.component import setFacet, iterFacets
 from schooltool.db import PersistentKeysDict
@@ -38,7 +38,7 @@ __metaclass__ = type
 
 class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
-    implements(IPerson)
+    implements(IPerson, IQueryLinks)
 
     def __init__(self, name):
         MemberMixin.__init__(self)
@@ -46,15 +46,10 @@ class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
         RelatableMixin.__init__(self)
         self.name = name
 
-    def listLinks(self, role=ISpecificURI):
-        links = MemberMixin.listLinks(self, role)
-        links += RelatableMixin.listLinks(self, role)
-        return links
-
 
 class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
-    implements(IGroup)
+    implements(IGroup, IQueryLinks)
 
     def __init__(self, name, facetFactory=None):
         GroupMixin.__init__(self)
@@ -64,11 +59,6 @@ class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
         self.name = name
         self.facetFactory = facetFactory
 
-    def listLinks(self, role=ISpecificURI):
-        links = MemberMixin.listLinks(self, role)
-        links += GroupMixin.listLinks(self, role)
-        links += RelatableMixin.listLinks(self, role)
-        return links
 
 
 class RootGroup(Group):

@@ -119,39 +119,8 @@ class TestMemberMixin(unittest.TestCase):
                 self.assertEqual(member.__parent__, other)
                 self.assertEqual(member.__name__, 'spam')
 
-    def testQueryLinks(self):
-        from schooltool.membership import MemberMixin
-        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
-        from schooltool.interfaces import ISpecificURI
-        member = MemberMixin()
-        verifyObject(IQueryLinks, member)
-        self.assertEqual(member.listLinks(), [])
-        group = P()
-        member.notifyAdded(group, 1)
-
-        for role in (URIGroup, ISpecificURI):
-            links = member.listLinks(role)
-            self.assertEqual(len(links), 1, str(role))
-            self.assertEqual(links[0].role, URIGroup)
-            self.assertEqual(links[0].title, "Membership")
-            self.assertEqual(links[0].name, 1)
-            self.assert_(links[0].traverse() is group)
-
-        class URIFoo(URIGroup):
-            "http://example.com/ns/foo"
-
-        for role in (URIMember, URIFoo):
-            links = member.listLinks(role)
-            self.assertEqual(links, [], str(role))
-
 
 class TestGroupMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.interfaces import IQueryLinks
-        from schooltool.membership import GroupMixin
-        group = GroupMixin()
-        verifyObject(IQueryLinks, group)
 
     def test_add(self):
         from schooltool.membership import GroupMixin
@@ -183,30 +152,6 @@ class TestGroupMixin(unittest.TestCase):
         self.assertEquals(list(group.keys()), [key])
         self.assertEquals(list(group.values()), [member])
         self.assertEquals(list(group.items()), [(key, member)])
-
-    def testQueryLinks(self):
-        from schooltool.membership import GroupMixin
-        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
-        from schooltool.interfaces import ISpecificURI
-        group = GroupMixin()
-        verifyObject(IQueryLinks, group)
-        self.assertEqual(group.listLinks(), [])
-        member = MemberStub()
-        key = group.add(member)
-
-        for role in (URIMember, ISpecificURI):
-            links = group.listLinks(role)
-            self.assertEqual(len(links), 1, str(role))
-            self.assertEqual(links[0].role, URIMember)
-            self.assertEqual(links[0].title, "Membership")
-            self.assert_(links[0].traverse() is member)
-
-        class URIFoo(URIMember):
-            "http://example.com/ns/foo"
-
-        for role in (URIGroup, URIFoo):
-            links = group.listLinks(role)
-            self.assertEqual(links, [], str(role))
 
 
 class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
