@@ -37,6 +37,7 @@ class ComponentChecks:
         self.uri_registry = dict(component._uri_registry)
         self.relationship_registry = dict(component.relationship_registry._reg)
         self.view_registry = dict(component.view_registry._reg)
+        self.class_view_registry = dict(component.class_view_registry)
 
     def stopTest(self, test):
         from schooltool import component
@@ -48,6 +49,8 @@ class ComponentChecks:
             warn("%s changed relationship registry" % test)
         if self.view_registry != component.view_registry._reg:
             warn("%s changed view registry" % test)
+        if self.class_view_registry != component.class_view_registry:
+            warn("%s changed class view registry" % test)
 
 
 class TransactionChecks:
@@ -113,4 +116,6 @@ class StdoutChecks:
 
 
 def test_hooks():
-    return [ComponentChecks(), TransactionChecks(), StdoutChecks()]
+    return [StdoutChecks(),     # should be the first one
+            ComponentChecks(),
+            TransactionChecks()]

@@ -81,6 +81,7 @@ class RegistriesSetupMixin:
         from schooltool import component, views, interfaces
         self.old_relationship_registry = component.relationship_registry
         self.old_view_registry = component.view_registry
+        self.old_class_view_registry = component.class_view_registry
         self.old_facet_factory_registry = component.facet_factory_registry
         self.old_uri_registry = component._uri_registry
         component.resetRelationshipRegistry()
@@ -94,6 +95,7 @@ class RegistriesSetupMixin:
         from schooltool import component
         component.relationship_registry = self.old_relationship_registry
         component.view_registry = self.old_view_registry
+        component.class_view_registry = self.old_class_view_registry
         component.facet_factory_registry = self.old_facet_factory_registry
         component._uri_registry = self.old_uri_registry
 
