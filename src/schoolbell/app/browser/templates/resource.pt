@@ -6,6 +6,8 @@
 <h1 metal:fill-slot="content-header" i18n:translate="">Resource info</h1>
 <metal:block metal:fill-slot="body">
 
+  <p class="description" tal:content="context/description|nothing"/>
+
   <div class="row">
     <strong i18n:translate="">Identifier:</strong>
     <span tal:replace="context/zope:name">res123</span>

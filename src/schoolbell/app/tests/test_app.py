@@ -245,6 +245,13 @@ def doctest_Group():
         >>> verifyObject(IGroupContained, group)
         True
 
+    Groups can have descriptions
+
+        >>> illuminati = Group()
+        >>> illuminati.description = 'Secret group.'
+        >>> illuminati.description
+        'Secret group.'
+
     Groups can be adapted to ISchoolBellApplication
 
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
@@ -265,6 +272,13 @@ def doctest_Resource():
         >>> resource = Resource()
         >>> verifyObject(IResourceContained, resource)
         True
+
+    Resources can have descriptions
+
+        >>> hottub = Resource()
+        >>> hottub.description = 'Whirlpool 5000.'
+        >>> hottub.description
+        'Whirlpool 5000.'
 
     Resources can be adapted to ISchoolBellApplication
 

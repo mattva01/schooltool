@@ -230,8 +230,9 @@ class Group(Persistent, Contained):
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, description=None):
         self.title = title
+        self.description = description
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
@@ -245,8 +246,9 @@ class Resource(Persistent, Contained):
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, description=None):
         self.title = title
+        self.description = description
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:

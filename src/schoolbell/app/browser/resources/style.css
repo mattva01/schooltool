@@ -48,11 +48,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: x-large;
+    font-size: large;
 }
 
 h2, h3, h4, h5, h6 {
-    font-size: large;
+    font-size: medium;
 }
 
 .center {
@@ -257,9 +257,14 @@ input.button-cancel {
     padding: 1em 2em;
 }
 
-#column-center h1 {
+#content-header,
+#content-header h1 {
+  margin: 0;
 }
 
+#content-header {
+  border-bottom: 1px #d6d6d6 solid;
+}
 #breadcrumbs {
     list-style: none;
     padding: 0;

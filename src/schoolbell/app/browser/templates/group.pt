@@ -17,6 +17,8 @@
 
 <metal:block metal:fill-slot="body">
 
+  <p class="description" tal:content="context/description|nothing"/>
+
   <div>
     <h3 i18n:translate="">Calendar</h3>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"

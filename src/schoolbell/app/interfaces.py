@@ -39,7 +39,7 @@ $Id$
 """
 
 from zope.interface import Interface, Attribute
-from zope.schema import TextLine, Bytes, Object
+from zope.schema import Text, TextLine, Bytes, Object
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
@@ -145,6 +145,10 @@ class IGroup(Interface):
     title = TextLine(title=u"Title",
         description=u"Title of the group.")
 
+    description = Text(title=u"Description",
+        required=False,
+        description=u"Description of the group.")
+
     members = Attribute("""Members of the group (see IRelationshipProperty)""")
 
 
@@ -165,6 +169,10 @@ class IResource(IGroupMember):
 
     title = TextLine(title=u"Title",
         description=u"Title of the resource.")
+
+    description = Text(title=u"Description",
+        required=False,
+        description=u"Description of the resource.")
 
 
 class IResourceContainer(IContainer, IAdaptableToSchoolBellApplication):
