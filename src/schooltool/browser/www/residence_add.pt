@@ -59,7 +59,7 @@
       <form method="POST" enctype="multipart/form-data"
         tal:attributes="action request/path"
         class="standalone">
-        <h3>Add a new address</h3>
+        <h3 i18n:translate="">Add a new address</h3>
         <fieldset>
           <legend i18n:translate="">Address</legend>
           <input type="hidden" name="toadd" value=""
