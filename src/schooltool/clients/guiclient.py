@@ -132,11 +132,10 @@ class SchoolToolClient:
         If connection is successful, try to update the URI list."""
         try:
             self.get('/')
+            self.uriobjects = self.getListOfURIs()
         except SchoolToolError, e:
             # self.status has been set and will be shown on the status bar
             pass
-        else:
-            self.uriobjects = self.getListOfURIs()
 
     def get(self, path, headers=None):
         """Perform an HTTP GET request for a given path.
