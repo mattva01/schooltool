@@ -138,7 +138,7 @@ def read_file(fn, basedir=None):
     """
     if basedir is None:
         basedir = os.path.dirname(__file__)
-    f = file(os.path.join(basedir, fn))
+    f = file(os.path.join(basedir, fn), 'rb')
     try:
         return f.read()
     finally:
