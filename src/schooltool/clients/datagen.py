@@ -164,6 +164,7 @@ def createResources():
 def main(argv):
     if len(argv) > 1:
         random.seed(argv[1])
+    createGroups()
     createPersons()
     createResources()
 
