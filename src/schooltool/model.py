@@ -23,8 +23,10 @@ $Id$
 """
 
 from sets import Set
-from zope.interface import implements
+import logging
+from zope.interface import implements, directlyProvidedBy, directlyProvides
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
+from schooltool.interfaces import IMarkingGroup
 from persistence import Persistent
 from persistence.list import PersistentList
 from zodb.btrees.OOBTree import OOSet
@@ -118,9 +120,30 @@ class Group(Persistent, GroupMember):
 
 
 class RootGroup(Group):
-
+    """A persistent application root object"""
     implements(IRootGroup)
 
+class MarkingGroup(Group):
+    """A group which sets a marker interface on its members."""
+
+    implements(IMarkingGroup)
+
+    def __init__(self, name, marker):
+        self.marker = marker
+        super(MarkingGroup, self).__init__(name)
+
+    def add(self, member):
+        if self.marker.isImplementedBy(member):
+            logging.warning("%s already implements %s" % (member, self.marker))
+        directlyProvides(member, directlyProvidedBy(member), self.marker)
+        return super(MarkingGroup, self).add(member)
+
+    def __delitem__(self, key):
+        member = self[key]
+        directlyProvides(member, directlyProvidedBy(member) - self.marker)
+        if self.marker.isImplementedBy(member):
+            logging.warning("%s still implements %s" % (member, self.marker))
+        super(MarkingGroup, self).__delitem__(key)
 
 class PersistentListSet(Persistent):
     """A set implemented with a PersistentList as a backend storage.

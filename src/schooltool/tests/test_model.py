@@ -24,7 +24,8 @@ $Id$
 
 import unittest
 from sets import Set
-from zope.interface import implements
+from zope.interface import Interface, implements
+from zope.interface import directlyProvidedBy, directlyProvides
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember
 
@@ -156,12 +157,56 @@ class TestPersistentListSet(unittest.TestCase):
         p.add(a)
         self.assertEquals(list(p), [b, a])
 
+class TestMarkingGroup(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.model import MarkingGroup
+        from schooltool.interfaces import IMarkingGroup
+        class ITeacher(Interface): pass
+        g = MarkingGroup("teachers", ITeacher)
+        verifyObject(IMarkingGroup, g)
+
+    def test_add(self):
+        from schooltool.model import MarkingGroup
+        class ITeacher(Interface): pass
+        a = MemberStub()
+        g = MarkingGroup("teachers", ITeacher)
+        k = g.add(a)
+        self.assert_(ITeacher.isImplementedBy(a))
+        self.assert_(a in g.values())
+        self.assertEqual(g[k], a)
+
+        b = MemberStub()
+        directlyProvides(b, ITeacher)
+        g.add(b)
+        # XXX how do I test that a log message has been fired away?
+
+    def test_remove(self):
+        from schooltool.model import MarkingGroup
+        class ITeacher(Interface): pass
+        class HardcoreTeacher(MemberStub):
+            implements(ITeacher)
+        a = MemberStub()
+        b = HardcoreTeacher()
+        g = MarkingGroup("teachers", ITeacher)
+        ak = g.add(a) # AK-47
+        bk = g.add(b) # BK-001
+        self.assert_(ITeacher.isImplementedBy(a))
+        self.assert_(ITeacher.isImplementedBy(b))
+        self.assert_(ITeacher in directlyProvidedBy(b))
+        del g[ak]
+        del g[bk]
+        self.failIf(ITeacher.isImplementedBy(a))
+        self.assert_(ITeacher.isImplementedBy(b))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestRootGroup))
     suite.addTest(unittest.makeSuite(TestGroupMember))
+    suite.addTest(unittest.makeSuite(TestMarkingGroup))
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
     return suite
 

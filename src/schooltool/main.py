@@ -39,7 +39,8 @@ from twisted.python import threadable
 from twisted.python import failure
 
 from schooltool import mockup
-from schooltool.model import RootGroup, Group, Person
+from schooltool.model import RootGroup, Group, MarkingGroup, Person
+from schooltool.interfaces import ITeacher, IStudent
 from schooltool.views import GroupView
 
 __metaclass__ = type
@@ -304,8 +305,8 @@ class Server:
     def createApplication(self):
         """Instantiate a new application"""
         root = RootGroup("root")
-        teachers = Group("teachers")
-        students = Group("students")
+        teachers = MarkingGroup("teachers", ITeacher)
+        students = MarkingGroup("students", IStudent)
         cleaners = Group("cleaners")
         root.add(teachers)
         root.add(students)

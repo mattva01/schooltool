@@ -94,6 +94,13 @@ class IContainmentRoot(Interface):
 class IRootGroup(IGroup, IContainmentRoot):
     """An interface for the application root group."""
 
+class IMarkingGroup(IGroup):
+    """A group which marks its members with a marker interface."""
+
+    marker = Attribute(
+        """A marker interface directly provided by all
+        the members of this group.""")
+
 class IGroupMember(ILocation):
 
     name = Attribute("A human readable name of this member.")
@@ -112,3 +119,8 @@ class IPerson(IGroupMember):
 
     name = Attribute("Person's name")
 
+class ITeacher(Interface):
+    """A marker interface for teachers."""
+
+class IStudent(Interface):
+    """A marker interface for students."""
