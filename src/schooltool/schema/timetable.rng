@@ -85,6 +85,9 @@ RelaxNG grammar for a timetable.
           <ref name="activity"/>
           <optional>
             <element name="replacement">
+              <attribute name="uid">
+                <text/>
+              </attribute>
               <optional>
                 <attribute name="date">
                   <ref name="datetext"/>

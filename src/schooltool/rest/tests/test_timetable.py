@@ -436,7 +436,8 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </exception>
         <exception date="2004-11-25" period="B">
           <activity title="English" />
-          <replacement date="2004-11-25" time="12:45" duration="30">
+          <replacement date="2004-11-25" time="12:45" duration="30"
+                       uid="rpl-ev-uid">
             English (short)
           </replacement>
         </exception>
@@ -523,6 +524,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
                                        datetime.datetime(2004, 11, 25, 12, 45),
                                        datetime.timedelta(minutes=30),
                                        "English (short)",
+                                       unique_id="rpl-ev-uid",
                                        exception=exc)
         tt.exceptions.append(exc)
         return tt
@@ -659,6 +661,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         ttd.timetables[key] = self.createEmpty()
         expected = self.createFull(ttd)
         self.do_test_put(ttd, key, self.full_xml, expected)
+        # Also check that resource timetables were updated
         self.assertEquals([(d, p, a.title) for d, p, a in
                                 room1.timetables[key].itercontent()],
                           [('Day 1', 'A', 'Maths')])
@@ -669,9 +672,10 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                                 lab2.timetables[key].itercontent()],
                           [('Day 2', 'C', 'CompSci')])
 
-        ttd.timetables[key] = self.createFull(ttd)
+        # Now clear the same timetable
         expected = self.createEmpty()
         self.do_test_put(ttd, key, self.empty_xml, expected)
+        # Also check that resource timetables were updated
         self.assertEquals(list(room1.timetables[key].itercontent()), [])
         self.assertEquals(list(lab1.timetables[key].itercontent()), [])
         self.assertEquals(list(lab2.timetables[key].itercontent()), [])
@@ -690,7 +694,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                   "Timetable of John Smith (/john) for"
                   " 2003 fall, weekly, updated",
                   INFO)])
-        self.assertEquals(timetabled.timetables[key], expected)
+        tt = timetabled.timetables[key]
+        self.assertEquals(tt, expected)
 
     def test_put_nonexistent(self):
         key = ('2003 fall', 'weekly')

@@ -27,7 +27,8 @@
     <replacement tal:define="event exc/replacement" tal:condition="event"
                  tal:attributes="date python:event.dtstart.strftime('%Y-%m-%d');
                                  time python:event.dtstart.strftime('%H:%M');
-                                 duration python:event.duration.seconds / 60"
+                                 duration python:event.duration.seconds / 60;
+                                 uid python:event.unique_id"
                  tal:content="exc/replacement/title"/>
   </exception>
 </timetable>
