@@ -424,6 +424,46 @@ class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEqualsXML(widget(), expected)
 
 
+class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
+
+    def createWidget(self):
+        from schooltool.browser.widgets import CheckboxWidget
+        widget = CheckboxWidget('field', 'Label')
+        return widget
+
+    def test(self):
+        from schooltool.browser.widgets import IWidget
+        verifyObject(IWidget, self.createWidget())
+
+    def test_call(self):
+        widget = self.createWidget()
+        widget.setValue(u'a')
+        expected = """
+            <div class="row">
+              <label for="field">Label</label>
+              <input type="checkbox" name="field" id="field"/>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+    def test_call_with_everything(self):
+        widget = self.createWidget()
+        widget.error = u"An error!"
+        widget.unit = u"(blah blah blah)"
+        widget.css_class = u"extra"
+        widget.tabindex = 11
+        expected = """
+            <div class="row row_error">
+              <label for="field">Label</label>
+              <input type="checkbox" class="extra"
+                     id="field" name="field" tabindex="11" />
+              <span class="unit">(blah blah blah)</span>
+              <div class="error">An error!</div>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.browser.widgets'))
@@ -433,6 +473,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPasswordWidget))
     suite.addTest(unittest.makeSuite(TestTextAreaWidget))
     suite.addTest(unittest.makeSuite(TestSelectionWidget))
+    suite.addTest(unittest.makeSuite(TestCheckboxWidget))
     return suite
 
 

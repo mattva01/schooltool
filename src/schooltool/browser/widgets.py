@@ -268,7 +268,7 @@ def passwordValidator(password):
       >>> passwordValidator(None)
       >>> passwordValidator(u'')
       >>> passwordValidator(u'abc def')
-      >>> passwordValidator(u'!@#$%^&*()_+[]{},./<>?;:"|')
+      >>> passwordValidator(u'!@#$%^&*()_+[]{},./<>?;:\"|')
 
       >>> passwordValidator(u'\u00ff')
       Traceback (most recent call last):
@@ -511,3 +511,23 @@ class SelectionWidget(Widget):
                             'unit': self._unit_html(),
                             'error': self._error_html()})
 
+
+class CheckboxWidget(Widget):
+    """A checkbox"""
+
+    implements(IWidget)
+
+    def __call__(self, tabindex=None):
+        return ('<div%(row_class)s>\n'
+                '  <label for="%(name)s">%(label)s</label>\n'
+                '  <input %(css_class)s type="checkbox" name="%(name)s"'
+                ' id="%(name)s" %(tabindex)s/>\n'
+                '%(unit)s'
+                '%(error)s'
+                '</div>' % {'name': cgi.escape(self.name, True),
+                            'label': cgi.escape(self.label, True),
+                            'tabindex': self._tabindex_html(tabindex),
+                            'css_class': self._css_class(),
+                            'row_class': self._row_class(),
+                            'unit': self._unit_html(),
+                            'error': self._error_html()})
