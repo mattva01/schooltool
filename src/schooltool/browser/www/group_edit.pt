@@ -56,7 +56,7 @@
 
   <p style="clear:both" tal:condition="not:view/edit_subgroups"
      i18n:translate="">The "Add..." button above lets you add already existing
-  persons as members of this group.</p>
+  persons and resources as members of this group.</p>
 
   <p style="clear:both" tal:condition="view/edit_subgroups" i18n:translate="">
   The "Add..." button above lets you add already existing groups as sub-groups

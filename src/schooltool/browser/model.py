@@ -466,13 +466,17 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
             siblings = itertools.chain(*[getRelatedObjects(parent, URIMember)
                                          for parent in parents])
             return [member for member in siblings
-                           if IPerson.providedBy(member)]
+                           if IPerson.providedBy(member)
+                              or IResource.providedBy(member)]
         else:
-            return traverse(self.context, '/persons').itervalues()
+            return itertools.chain(
+                        traverse(self.context, '/persons').itervalues(),
+                        traverse(self.context, '/resources').itervalues())
 
     def _list(self, objects):
-        persons = [obj for obj in objects if IPerson.providedBy(obj)]
-        return RelationshipViewMixin._list(self, persons)
+        objs = [obj for obj in objects
+                if IPerson.providedBy(obj) or IResource.providedBy(obj)]
+        return RelationshipViewMixin._list(self, objs)
 
 
 class GroupSubgroupView(GroupEditView):

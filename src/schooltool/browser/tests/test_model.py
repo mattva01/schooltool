@@ -763,7 +763,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         view.request = RequestStub()
         list = view.list()
-        expected = [self.per2, self.per]
+        expected = [self.per2, self.per, self.res2]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -772,9 +772,9 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                           [absoluteURL(view.request, item)
                            for item in expected])
         self.assertEquals([item['icon_url'] for item in list],
-                          ['/person.png', '/person.png'])
+                          ['/person.png', '/person.png', '/resource.png'])
         self.assertEquals([item['icon_text'] for item in list],
-                          ['Person', 'Person'])
+                          ['Person', 'Person', 'Resource'])
 
     def test_addList(self):
         from schooltool.browser.model import GroupEditView
@@ -783,7 +783,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
-        expected = [self.per3]
+        expected = [self.per3, self.res]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -792,9 +792,9 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                           [absoluteURL(view.request, item)
                            for item in expected])
         self.assertEquals([item['icon_url'] for item in list],
-                          ['/person.png'])
+                          ['/person.png', '/resource.png'])
         self.assertEquals([item['icon_text'] for item in list],
-                          ['Person'])
+                          ['Person', 'Resource'])
 
         view.request = RequestStub(args={'SEARCH': 'john'})
         self.assertEquals(view.addList(),
@@ -949,13 +949,13 @@ class TestGroupSubgroupView(RegistriesSetupMixin, unittest.TestCase):
                           ['Group', 'Group', 'Group'])
 
     def test_list(self):
-        from schooltool.browser.model import GroupEditView
+        from schooltool.browser.model import GroupSubgroupView
         from schooltool.component import getPath
         from schooltool.rest import absoluteURL
-        view = GroupEditView(self.group)
+        view = GroupSubgroupView(self.group)
         view.request = RequestStub()
         list = view.list()
-        expected = [self.per2, self.per]
+        expected = [self.sub]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -964,9 +964,9 @@ class TestGroupSubgroupView(RegistriesSetupMixin, unittest.TestCase):
                           [absoluteURL(view.request, item)
                            for item in expected])
         self.assertEquals([item['icon_url'] for item in list],
-                          ['/person.png', '/person.png'])
+                          ['/group.png'])
         self.assertEquals([item['icon_text'] for item in list],
-                          ['Person', 'Person'])
+                          ['Group'])
 
 
 class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
