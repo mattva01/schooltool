@@ -391,6 +391,7 @@ class CalendarOwnerMixin(Persistent):
         result.__name__ = 'composite-calendar'
         for group in self.composite_cal_groups:
             result.update(group.calendar)
+        # TODO: Mark the resulting events as coming from a composite calendar.
         return result
 
     def addSelfToCalACL(self):
