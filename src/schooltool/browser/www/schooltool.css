@@ -1,7 +1,11 @@
 /* Stylesheet for SchoolTool */
 
-h1 {
+h1, h2, h3, h4 {
   color: #44d344;
+}
+
+h2 {
+  margin: 1ex 0 0.5ex 0;
 }
 
 div.login {
@@ -88,6 +92,14 @@ div.parentgroups {
   float: left;
 }
 
+div.groups {
+  background: #ffffd3;
+  border: 1px solid #adab54;
+  padding: 1ex;
+  margin: 1ex 1em;
+  float: right;
+}
+
 h3 {
   margin: 0px;
   margin-bottom: 0.5ex;
@@ -95,6 +107,34 @@ h3 {
 
 div.members p,
 div.subgroups p,
+div.groups p,
 div.parentgroups p {
   margin: 0 0 0.5ex 0;
+}
+
+pre.traceback {
+/*
+  padding: 1ex;
+  background: #eeeeee;
+  border: 1px solid #bbbbbb;
+ */
+  color: #444444;
+  font-size: small;
+}
+
+pre.traceback span.filename {
+  color: blue;
+}
+pre.traceback span.lineno,
+pre.traceback span.column {
+  color: red;
+}
+pre.traceback span.method {
+  color: green;
+}
+pre.traceback span.expr {
+  color: green;
+}
+pre.traceback span.source {
+  color: black;
 }

@@ -152,6 +152,51 @@ class InternalErrorView(View):
         request.setResponseCode(500)
         return View.do_GET(self, request)
 
+    def traceback(self):
+        import cgi
+        import linecache
+        lines = []
+        w = lines.append
+        q = lambda s: cgi.escape(str(s), True)
+        for method, filename, lineno, locals, globals in self.context.frames:
+            w('File "<span class="filename">%s</span>",'
+                    ' line <span class="lineno">%s</span>,'
+                    ' in <span class="method">%s</span>\n'
+              % (q(filename), q(lineno), q(method)))
+            w('  <span class="source">%s</span>\n'
+              % q(linecache.getline(filename, lineno).strip()))
+            self._extra_info(w, dict(locals))
+        return "".join(lines)
+
+    def _extra_info(self, w, locals):
+        import cgi
+        q = lambda s: cgi.escape(str(s), True)
+        if '__traceback_info__' in locals:
+            tb_info = locals['__traceback_info__']
+            w('Extra information: %s\n' % q(repr(tb_info)))
+        if '__traceback_supplement__' in locals:
+            tb_supplement = locals['__traceback_supplement__']
+            tb_supplement = tb_supplement[0](*tb_supplement[1:])
+            from zope.pagetemplate.pagetemplate import \
+                    PageTemplateTracebackSupplement
+            from zope.tales.tales import TALESTracebackSupplement
+            if isinstance(tb_supplement, PageTemplateTracebackSupplement):
+                source_file = tb_supplement.manageable_object.pt_source_file()
+                if source_file:
+                    w('Template "<span class="filename">%s</span>"\n'
+                      % q(source_file))
+            elif isinstance(tb_supplement, TALESTracebackSupplement):
+                w('Template "<span class="filename">%s</span>",'
+                  ' line <span class="lineno">%s</span>,'
+                  ' column <span class="column">%s</span>\n'
+                  % (q(tb_supplement.source_url), q(tb_supplement.line),
+                     q(tb_supplement.column)))
+                w('  Expression: <span class="expr">%s</span>\n'
+                  % q(tb_supplement.expression))
+            else:
+                w('__traceback_supplement__ = %s\n'
+                  % q(repr(tb_supplement)))
+
 
 class NotFoundView(View):
     """View that always returns a 404 error page."""
