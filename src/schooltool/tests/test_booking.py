@@ -55,6 +55,7 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
     def test_exception_added_then_removed(self):
         from schooltool.booking import TimetableExceptionSynchronizer
         from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
         from schooltool.interfaces import IEvent
 
         # Prepare test fixture
@@ -73,6 +74,14 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         # exception to the timetables of all resources and persons.  It
         # takes care not to add the exception to a list if it is already
         # in the list.
+        self.assertEquals(tt.exceptions, [exc])
+        self.assertEquals(rtt.exceptions, [exc])
+        self.assertEquals(ltt.exceptions, [exc])
+
+        # Make sure that the object is shared, as it may be edited in place
+        exc.replacement = ExceptionalTTCalendarEvent(
+                datetime.date(2004, 11, 02), datetime.timedelta(45), "Math",
+                exception=exc)
         self.assertEquals(tt.exceptions, [exc])
         self.assertEquals(rtt.exceptions, [exc])
         self.assertEquals(ltt.exceptions, [exc])
