@@ -23,6 +23,8 @@ Functional tests for SchoolTool web application
 import unittest
 import urllib
 
+from schooltool.ftests import setup
+
 
 #
 # Helper classes and functions
@@ -114,30 +116,28 @@ class Browser(object):
 # Tests
 #
 
-class TestLogin(unittest.TestCase):
-
-    site = 'http://localhost:8814'
+class TestLogin(setup.TestCase):
 
     def test(self):
+        self.do_test(self.web_server)
+
+    def test_ssl(self):
+        self.do_test(self.web_server_ssl)
+
+    def do_test(self, site):
         browser = Browser()
-        browser.go(self.site + '/')
+        browser.go(site)
         self.assert_('Welcome' in browser.content)
         self.assert_('Username' in browser.content)
 
-        browser.post(self.site + '/',
-                     {'username': 'manager', 'password': 'schooltool'})
-        self.assertEquals(browser.url, self.site + '/start')
+        browser.post(site, {'username': 'manager', 'password': 'schooltool'})
+        self.assertEquals(browser.url, site + '/start')
         self.assert_('Start' in browser.content)
-        link_to_password_form = self.site + '/persons/manager/password.html'
+        link_to_password_form = site + '/persons/manager/password.html'
         self.assert_(link_to_password_form in browser.content)
 
 
-class TestLoginSSL(TestLogin):
-
-    site = 'https://localhost:8816'
-
-
-class TestPersonEdit(unittest.TestCase):
+class TestPersonEdit(setup.TestCase):
 
     def test(self):
         browser = Browser()
@@ -167,22 +167,32 @@ class TestPersonEdit(unittest.TestCase):
         self.assert_('field is required'in browser.content)
 
 
-class TestResetDB(unittest.TestCase):
+class TestResetDB(setup.TestCase):
 
     def test(self):
+        # Log in
         browser = Browser()
         browser.post('http://localhost:8814/',
                      {'username': 'manager', 'password': 'schooltool'})
 
+        # Change something in the database
+        browser.post('http://localhost:8814/persons/manager/edit.html',
+                     {'first_name': 'Test', 'last_name': 'Test'})
+        browser.go('http://localhost:8814/persons/manager/edit.html')
+        self.assert_('Manager' not in browser.content)
+
+        # Reset the database
         browser.go('http://localhost:8814/reset_db.html')
         self.assert_('Warning' in browser.content)
         browser.post('http://localhost:8814/reset_db.html',
                      {'confirm': 'Confirm'})
 
+        # Log in
         browser.post('http://localhost:8814/',
                      {'username': 'manager', 'password': 'schooltool'})
+
+        # Our changes should have been discarded
         browser.go('http://localhost:8814/persons/manager/edit.html')
-        self.assert_('Edit person info' in browser.content)
         self.assert_('Manager' in browser.content)
 
 
@@ -190,7 +200,6 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLogin))
     suite.addTest(unittest.makeSuite(TestPersonEdit))
-    suite.addTest(unittest.makeSuite(TestLoginSSL))
     suite.addTest(unittest.makeSuite(TestResetDB))
     return suite
 
