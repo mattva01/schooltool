@@ -1,6 +1,8 @@
+D/BTrees////
 D/ZConfig////
 D/zope////
 D/persistence////
+D/persistent////
 D/transaction////
-D/zdaemon////
-D/zodb////
+D/ZODB////
+D/zLOG////

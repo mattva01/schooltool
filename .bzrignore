@@ -84,10 +84,6 @@ src/schooltool/ftests/*~
 src/schooltool/ftests/*.so
 src/schooltool/tests/Data.fs*
 src/schooltool/tests/*.so
-src/zdaemon/*.pyc
-src/zdaemon/Data.fs*
-src/zdaemon/*~
-src/zdaemon/*.so
 src/zdaemon/CVS/*.pyc
 src/zdaemon/CVS/Data.fs*
 src/zdaemon/CVS/*~
