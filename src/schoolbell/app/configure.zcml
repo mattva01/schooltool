@@ -74,25 +74,27 @@
   <content class=".app.Person">
     <require permission="schoolbell.view"
              interface="schoolbell.app.interfaces.IReadPerson" />
-    <!-- This is not entirely correct, but we want to let users
-         modify their account info. -->
     <require permission="schoolbell.edit"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schoolbell.app.interfaces.IPerson" />
-    <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <!-- Calendar access protection is performed on the calendar object.
+         If we want local grants set on the calendar itself to work, then
+         the 'calendar' attribute must be publically available. -->
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
   </content>
 
   <content class=".app.Group">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.IGroup" />
+             attributes="title description groups members" />
     <require permission="schoolbell.edit"
              set_schema="schoolbell.app.interfaces.IGroup" />
   </content>
 
   <content class=".app.Resource">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.IResource" />
+             attributes="title description groups" />
     <require permission="schoolbell.edit"
              set_schema="schoolbell.app.interfaces.IResource" />
   </content>

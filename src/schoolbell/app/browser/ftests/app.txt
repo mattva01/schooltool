@@ -598,7 +598,7 @@ We should have a view for that resource as well:
     >>> print http(r"""
     ... GET /frogpond/resources/lily HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
