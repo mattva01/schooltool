@@ -626,7 +626,6 @@ class SchoolTimetableView(View):
             except ViewError, e:
                 return textErrorPage(request, e)
 
-            # XXX Could we specify some path here?
             request.site.logAppEvent(request.authenticated_user, "",
                                      "School timetable updated")
             request.setHeader('Content-Type', 'text/plain')
