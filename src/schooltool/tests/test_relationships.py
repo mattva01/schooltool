@@ -23,6 +23,13 @@ $Id$
 """
 import unittest
 from zope.interface.verify import verifyObject
+from schooltool.interfaces import ISpecificURI
+
+class IMyTutor(ISpecificURI):
+    """http://schooltool.org/ns/tutor"""
+
+class IMyRegClass(ISpecificURI):
+    """http://schooltool.org/ns/regclass"""
 
 class TestRelationship(unittest.TestCase):
     """Conceptual relationships are really represented by three
@@ -34,8 +41,8 @@ class TestRelationship(unittest.TestCase):
         from schooltool.relationships import Link
         self.klass = object()
         self.tutor = object()
-        self.lklass = Link(self.klass, "my tutor")
-        self.ltutor = Link(self.tutor, "my class")
+        self.lklass = Link(self.klass, IMyTutor)
+        self.ltutor = Link(self.tutor, IMyRegClass)
         self.rel = Relationship("Tutor of a class", self.ltutor, self.lklass)
 
     def test_interface(self):
@@ -43,16 +50,21 @@ class TestRelationship(unittest.TestCase):
         verifyObject(ILink, self.lklass)
         verifyObject(ILink, self.ltutor)
 
+    def testLinkChecksURIs(self):
+        from schooltool.relationships import Link
+        self.assertRaises(TypeError, Link, object(), "my tutor")
+
     def test(self):
         from schooltool.relationships import Relationship
         from schooltool.relationships import Link
         self.assertEquals(self.rel.title, "Tutor of a class")
         self.assertEquals(self.lklass.title, "Tutor of a class")
         self.assertEquals(self.ltutor.title, "Tutor of a class")
-        self.assertEquals(self.lklass.role, "my tutor")
-        self.assertEquals(self.ltutor.role, "my class")
+        self.assertEquals(self.lklass.role, IMyTutor)
+        self.assertEquals(self.ltutor.role, IMyRegClass)
         self.assert_(self.ltutor.traverse() is self.klass)
         self.assert_(self.lklass.traverse() is self.tutor)
+
 
 def test_suite():
     suite = unittest.TestSuite()

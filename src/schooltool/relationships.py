@@ -25,6 +25,7 @@ from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements
 from schooltool.interfaces import ILink
+from schooltool.component import inspectSpecificURI
 
 __metaclass__ = type
 
@@ -38,21 +39,22 @@ class Link(Persistent):
 
     implements(ILink)
 
+    def __init__(self, parent, role):
+        inspectSpecificURI(role)
+        self.__parent__ = parent
+        self.role = role
+
     # These attributes are set when being added to a relationship
     rel = None
     other = None
 
-    def getTitle(self):
+    def _getTitle(self):
         return self.rel.title
 
-    def setTitle(self, name):
-        self.rel.title = title
+    def _setTitle(self, name):
+        self.rel.title = unicode(title)
 
-    title = property(getTitle, setTitle)
-
-    def __init__(self, parent, role=""):
-        self.__parent__ = parent
-        self.role = role
+    title = property(_getTitle, _setTitle)
 
     def traverse(self):
         return getattr(self.rel, self.other).__parent__
@@ -64,7 +66,7 @@ class Relationship(Persistent):
     """
 
     def __init__(self, title, a, b):
-        self.title = title
+        self.title = unicode(title)
         self.a = a
         self.b = b
         a.rel = self
