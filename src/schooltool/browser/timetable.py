@@ -133,23 +133,38 @@ class TimetableSchemaWizard(View):
 
     template = Template("www/ttwizard.pt")
 
-    def do_GET(self, request):
-        self.name_error = None
-        if 'name' not in self.request.args:
-            self.name = 'default'
-        else:
-            self.name = to_unicode(self.request.args.get('name')[0]).strip()
-            if not self.name:
-                self.name_error = _("Timetable schema name must not be empty")
-            elif not valid_name(self.name):
-                self.name_error = _("Timetable schema name can only contain"
-                                    " English letters, numbers, and the"
-                                    " following punctuation characters:"
-                                    " - . , ' ( )")
-            elif self.name in self.context.keys():
-                self.name_error = _("Timetable schema with this name"
-                                    " already exists.")
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.name_widget = TextWidget('name', _('Name'), self.name_parser,
+                                      self.name_validator)
 
+    def name_parser(self, name):
+        if name is None:
+            return None
+        return name.strip()
+
+    def name_validator(self, name):
+        if name is None:
+            return
+        if not name:
+            raise ValueError(_("Timetable schema name must not be empty"))
+        elif not valid_name(name):
+            raise ValueError(_("Timetable schema name can only contain"
+                               " English letters, numbers, and the"
+                               " following punctuation characters:"
+                               " - . , ' ( )"))
+        elif name in self.context.keys():
+            raise ValueError(_("Timetable schema with this name already"
+                               " exists."))
+
+    def do_GET(self, request):
+        self.name_widget.update(request)
+        if self.name_widget.value is None and self.name_widget.error is None:
+            self.name_widget.raw_value = 'default'
+            self.name_widget.value = 'default'
+
+        # We could build a custom widget for the model radio buttons, but I do
+        # not think it is worth the trouble.
         self.model_error = None
         self.model_name = to_unicode(self.request.args.get('model', [None])[0])
 
@@ -161,10 +176,10 @@ class TimetableSchemaWizard(View):
                 factory = getTimetableModel(self.model_name)
             except KeyError:
                 self.model_error = _("Please select a value")
-            if not self.name_error and not self.model_error:
+            if not self.name_widget.error and not self.model_error:
                 model = factory(self.ttschema.day_ids, self.day_templates)
                 self.ttschema.model = model
-                self.context[self.name] = self.ttschema
+                self.context[self.name_widget.value] = self.ttschema
                 return self.redirect("/ttschemas", request)
         return View.do_GET(self, request)
 
@@ -273,7 +288,6 @@ class TimetableSchemaWizard(View):
                     range = format_time_range(event.tstart, event.duration)
                     times_for[event.title][day] = range
         return result
-
 
 
 class TimePeriodViewBase(View):

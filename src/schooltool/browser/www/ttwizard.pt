@@ -15,13 +15,7 @@
                   nperiods python:len(period_times)">
 
 <div class="form">
-  <div class="error" tal:condition="view/name_error"
-       tal:content="view/name_error">
-    Error.
-  </div>
-  <label for="name" i18n:translate="">Name</label>
-  <input class="text" type="text" name="name" id="name"
-         tal:attributes="value view/name" />
+  <div class="row" tal:replace="structure view/name_widget">[Name]</div>
 </div>
 
 <p i18n:translate="">

@@ -199,8 +199,9 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         request = view.request
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(view.name, 'default')
-        self.assertEquals(view.name_error, None)
+        self.assertEquals(view.name_widget.value, 'default')
+        self.assertEquals(view.name_widget.raw_value, 'default')
+        self.assertEquals(view.name_widget.error, None)
 
     def test_with_data(self):
         view = self.createView()
@@ -214,8 +215,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(view.ttschema,
                           createSchema(['Monday'], ['Period 1']))
-        self.assertEquals(view.name, 'something')
-        self.assertEquals(view.name_error, None)
+        self.assertEquals(view.name_widget.value, 'something')
+        self.assertEquals(view.name_widget.error, None)
         self.assertEquals(view.model_name, 'SequentialDaysTimetableModel')
         self.assertEquals(view.model_error, None)
         self.assertEquals(view.day_templates,
@@ -244,21 +245,21 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         view.request.args['name'] = ['']
         view.render(view.request)
-        self.assertEquals(view.name_error,
+        self.assertEquals(view.name_widget.error,
                           "Timetable schema name must not be empty")
 
     def test_name_error(self):
         view = self.createView()
         view.request.args['name'] = ['not valid']
         view.render(view.request)
-        self.assert_(view.name_error.startswith(
+        self.assert_(view.name_widget.error.startswith(
                             "Timetable schema name can only contain "))
 
     def test_name_duplicate(self):
         view = self.createView()
         view.request.args['name'] = ['default']
         view.render(view.request)
-        self.assertEquals(view.name_error,
+        self.assertEquals(view.name_widget.error,
                           "Timetable schema with this name already exists.")
 
     def test_model_error(self):
