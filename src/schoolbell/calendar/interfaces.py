@@ -76,7 +76,9 @@ class ICalendar(Interface):
         interval, every such occurrence is represented as a new calendar event
         with the `dtstart` attribute replaced with the date and time of that
         occurrence.  These events provide IExpandedCalendarEvent and have an
-        additional attribute which points to the original event.
+        additional attribute which points to the original event.  Note that
+        only recurring events are replaced by proxies, nonrecurring events
+        are returned as-is.
 
         `first` and `last` are datetime.datetimes and define a half-open
         time interval.

@@ -30,88 +30,12 @@ from zope.interface import implements
 from schoolbell.calendar.icalendar import ical_weekdays
 from schoolbell.calendar.icalendar import ical_date, ical_datetime
 from schoolbell.calendar.mixins import CalendarEventMixin
+from schoolbell.calendar.mixins import ExpandedCalendarEvent
 from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.calendar.interfaces import Unchanged
-from schoolbell.calendar.interfaces import IExpandedCalendarEvent, \
+from schoolbell.calendar.interfaces import \
     IDailyRecurrenceRule, IWeeklyRecurrenceRule, IMonthlyRecurrenceRule, \
     IYearlyRecurrenceRule, IRecurrenceRule
-
-
-class ExpandedCalendarEvent(CalendarEventMixin):
-    """A single occurrence of a recurring calendar event.
-
-    When creating an expanded event, you must specify the original recurrent
-    event.
-
-        >>> dtstart = datetime.datetime(2005, 2, 10, 1, 2)
-        >>> duration = datetime.timedelta(hours=3)
-        >>> recurrence = DailyRecurrenceRule()
-        >>> original = SimpleCalendarEvent(dtstart, duration, "An event",
-        ...                                description="Some description",
-        ...                                unique_id="some unique id",
-        ...                                location="Out in the open",
-        ...                                recurrence=recurrence)
-
-        >>> dtstart2 = datetime.datetime(2005, 2, 11, 1, 2)
-        >>> evt = ExpandedCalendarEvent(original, dtstart2)
-
-        >>> from zope.interface.verify import verifyObject
-        >>> verifyObject(IExpandedCalendarEvent, evt)
-        True
-
-    The start date of the event will be the specified one:
-
-        >>> evt.dtstart
-        datetime.datetime(2005, 2, 11, 1, 2)
-
-    Other attributes will be the same as in the original event:
-
-        >>> evt.duration
-        datetime.timedelta(0, 10800)
-
-        >>> evt.title
-        'An event'
-
-        >>> evt.description
-        'Some description'
-
-        >>> evt.location
-        'Out in the open'
-
-        >>> evt.recurrence
-        DailyRecurrenceRule(1, None, None, ())
-
-    Attribute values may not be modified:
-
-        >>> evt.dtstart = 'b0rk'
-        Traceback (most recent call last):
-        ...
-        AttributeError: can't set attribute
-
-        >>> evt.location = 'b0rk'
-        Traceback (most recent call last):
-        ...
-        AttributeError: can't set attribute
-
-    """
-
-    implements(IExpandedCalendarEvent)
-
-    dtstart = property(lambda self: self._dtstart)
-
-    # Syntactic sugar.
-    _getter = lambda attr: property(lambda self: getattr(self.original, attr))
-
-    unique_id = _getter('unique_id')
-    duration = _getter('duration')
-    title = _getter('title')
-    description = _getter('description')
-    location = _getter('location')
-    recurrence = _getter('recurrence')
-
-    def __init__(self, event, dtstart):
-        self.original = event
-        self._dtstart = dtstart
 
 
 class RecurrenceRule(object):

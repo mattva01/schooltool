@@ -22,10 +22,12 @@ Mixins for implementing calendars.
 $Id$
 """
 
-__metaclass__ = type
+import datetime
+from zope.interface import implements
+from schoolbell.calendar.interfaces import IExpandedCalendarEvent
 
 
-class CalendarMixin:
+class CalendarMixin(object):
     """Mixin for implementing ICalendar methods.
 
     You do not have to use this mixin, however it might make implementation
@@ -71,7 +73,7 @@ class CalendarMixin:
             >>> from schoolbell.calendar.interfaces import ICalendar
             >>> from zope.interface import implements
 
-            >>> class Event:
+            >>> class Event(object):
             ...     def __init__(self, uid):
             ...         self.unique_id = uid
 
@@ -100,76 +102,28 @@ class CalendarMixin:
         """Return an iterator over all expanded events in a given time period.
 
         See ICalendar for more details.
-
-            >>> from datetime import datetime, timedelta
-            >>> from schoolbell.calendar.interfaces import ICalendar
-            >>> from zope.interface import implements
-
-            >>> class Event:
-            ...     def __init__(self, dtstart, duration, title):
-            ...         self.dtstart = dtstart
-            ...         self.duration = duration
-            ...         self.title = title
-
-            >>> class MyCalendar(CalendarMixin):
-            ...     implements(ICalendar)
-            ...     def __iter__(self):
-            ...         return iter([Event(datetime(2004, 12, 14, 12, 30),
-            ...                            timedelta(hours=1), 'a'),
-            ...                      Event(datetime(2004, 12, 15, 16, 30),
-            ...                            timedelta(hours=1), 'b'),
-            ...                      Event(datetime(2004, 12, 15, 14, 30),
-            ...                            timedelta(hours=1), 'c'),
-            ...                      Event(datetime(2004, 12, 16, 17, 30),
-            ...                            timedelta(hours=1), 'd'),
-            ...                     ])
-            >>> cal = MyCalendar()
-
-        We will define a convenience function for showing all events returned
-        by expand:
-
-            >>> def show(first, last):
-            ...     events = cal.expand(first, last)
-            ...     print '[%s]' % ', '.join([e.title for e in events])
-
-        Events that fall inside the interval
-
-            >>> show(datetime(2004, 12, 1), datetime(2004, 12, 31))
-            [a, b, c, d]
-
-            >>> show(datetime(2004, 12, 15), datetime(2004, 12, 16))
-            [b, c]
-
-        Events that fall partially in the interval
-
-            >>> show(datetime(2004, 12, 15, 17, 0),
-            ...      datetime(2004, 12, 16, 18, 0))
-            [b, d]
-
-        Corner cases: if event.dtstart + event.duration == last, or
-        event.dtstart == first, the event is not included.
-
-            >>> show(datetime(2004, 12, 15, 15, 30),
-            ...      datetime(2004, 12, 15, 16, 30))
-            []
-
-        TODO: recurring events
-
         """
         for event in self:
-            # TODO: recurring events
-            dtstart = event.dtstart
-            dtend = dtstart + event.duration
-            if dtend > first and dtstart < last:
-                yield event
+            if event.recurrence is not None:
+                starttime = event.dtstart.time()
+                for recdate in event.recurrence.apply(event, last):
+                    dtstart = datetime.datetime.combine(recdate, starttime)
+                    dtend = dtstart + event.duration
+                    if dtend > first and dtstart < last:
+                        yield ExpandedCalendarEvent(event, dtstart=dtstart)
+            else:
+                dtstart = event.dtstart
+                dtend = dtstart + event.duration
+                if dtend > first and dtstart < last:
+                    yield event
 
 
-class EditableCalendarMixin:
+class EditableCalendarMixin(object):
     """Mixin for implementing some IEditCalendar methods.
 
     This mixin implements `clear` by using `removeEvent`.
 
-        >>> class Event:
+        >>> class Event(object):
         ...     def __init__(self, uid):
         ...         self.unique_id = uid
 
@@ -202,7 +156,7 @@ class EditableCalendarMixin:
             self.removeEvent(event)
 
 
-class CalendarEventMixin:
+class CalendarEventMixin(object):
     """Mixin for implementing ICalendarEvent comparison methods.
 
     Calendar events are equal iff all their attributes are equal.  We can get a
@@ -333,11 +287,95 @@ class CalendarEventMixin:
 
         """
         # The import is here to avoid cyclic dependencies
-        # XXX Why does this mixin refer to SimpleCalendarEvent?  That kind of
-        #     defeats the whole purpose.  Maybe this method should be moved
-        #     into SimpleCalendarEvent itself.
         from schoolbell.calendar.simple import SimpleCalendarEvent
         for attr in ['dtstart', 'duration', 'title', 'description', 'location',
                      'unique_id', 'recurrence']:
             kw.setdefault(attr, getattr(self, attr))
+        # We explicitly return SimpleCalendarEvent instead of using
+        # self.__class__ here because self.class might be unsuitable.  E.g.
+        # if we have a calendar event class that inherits from SQLObject,
+        # instantiating new instances will implicitly create new rows in
+        # a relational database table.
         return SimpleCalendarEvent(**kw)
+
+
+class ExpandedCalendarEvent(CalendarEventMixin):
+    """A single occurrence of a recurring calendar event.
+
+    When creating an expanded event, you must specify the original recurrent
+    event.
+
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> dtstart = datetime.datetime(2005, 2, 10, 1, 2)
+        >>> duration = datetime.timedelta(hours=3)
+        >>> recurrence = DailyRecurrenceRule()
+        >>> original = SimpleCalendarEvent(dtstart, duration, "An event",
+        ...                                description="Some description",
+        ...                                unique_id="some unique id",
+        ...                                location="Out in the open",
+        ...                                recurrence=recurrence)
+
+        >>> dtstart2 = datetime.datetime(2005, 2, 11, 1, 2)
+        >>> evt = ExpandedCalendarEvent(original, dtstart2)
+
+        >>> from zope.interface.verify import verifyObject
+        >>> verifyObject(IExpandedCalendarEvent, evt)
+        True
+
+    The start date of the event will be the specified one:
+
+        >>> evt.dtstart
+        datetime.datetime(2005, 2, 11, 1, 2)
+
+    Other attributes will be the same as in the original event:
+
+        >>> evt.duration
+        datetime.timedelta(0, 10800)
+
+        >>> evt.title
+        'An event'
+
+        >>> evt.description
+        'Some description'
+
+        >>> evt.location
+        'Out in the open'
+
+        >>> evt.recurrence
+        DailyRecurrenceRule(1, None, None, ())
+
+    Attribute values may not be modified:
+
+        >>> evt.dtstart = 'b0rk'
+        Traceback (most recent call last):
+        ...
+        AttributeError: can't set attribute
+
+        >>> evt.location = 'b0rk'
+        Traceback (most recent call last):
+        ...
+        AttributeError: can't set attribute
+
+    """
+
+    implements(IExpandedCalendarEvent)
+
+    dtstart = property(lambda self: self._dtstart)
+
+    # Syntactic sugar.
+    _getter = lambda attr: property(lambda self: getattr(self.original, attr))
+
+    unique_id = _getter('unique_id')
+    duration = _getter('duration')
+    title = _getter('title')
+    description = _getter('description')
+    location = _getter('location')
+    recurrence = _getter('recurrence')
+
+    del _getter # unclutter local scope
+
+    def __init__(self, event, dtstart):
+        self.original = event
+        self._dtstart = dtstart
+

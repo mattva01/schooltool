@@ -38,6 +38,101 @@ def doctest_interfaces():
     """
 
 
+def doctest_CalendarMixin_expand():
+    """Tests for CalendarMixin.expand.
+
+    Let's define a calendar that uses CalendarMixin and contains a fixed
+    set of events
+
+        >>> from datetime import datetime, timedelta
+        >>> from schoolbell.calendar.mixins import CalendarMixin
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> Event = SimpleCalendarEvent # shorter
+
+        >>> class MyCalendar(CalendarMixin):
+        ...     def __iter__(self):
+        ...         return iter([Event(datetime(2004, 12, 14, 12, 30),
+        ...                            timedelta(hours=1), 'a'),
+        ...                      Event(datetime(2004, 12, 15, 16, 30),
+        ...                            timedelta(hours=1), 'c'),
+        ...                      Event(datetime(2004, 12, 15, 14, 30),
+        ...                            timedelta(hours=1), 'b'),
+        ...                      Event(datetime(2004, 12, 16, 17, 30),
+        ...                            timedelta(hours=1), 'd'),
+        ...                      Event(datetime(2005,  2,  3,  4,  5),
+        ...                            timedelta(hours=4), 'simple'),
+        ...                      Event(datetime(2005,  2,  4,  4,  5),
+        ...                            timedelta(hours=4), 'recurring',
+        ...                            recurrence=DailyRecurrenceRule()),
+        ...                     ])
+
+        >>> cal = MyCalendar()
+
+    We will define a convenience function for showing all events returned
+    by expand:
+
+        >>> def show(first, last):
+        ...     events = list(cal.expand(first, last))
+        ...     events.sort()
+        ...     print '[%s]' % ', '.join([e.title for e in events])
+
+        >>> def show_long(first, last):
+        ...     events = list(cal.expand(first, last))
+        ...     events.sort()
+        ...     for e in events:
+        ...         print e.dtstart.strftime('%Y-%m-%d'), e.title
+
+    Events that fall inside the interval
+
+        >>> show(datetime(2004, 12, 1), datetime(2004, 12, 31))
+        [a, b, c, d]
+
+        >>> show(datetime(2004, 12, 15), datetime(2004, 12, 16))
+        [b, c]
+
+    Events that fall partially in the interval
+
+        >>> show(datetime(2004, 12, 15, 17, 0),
+        ...      datetime(2004, 12, 16, 18, 0))
+        [c, d]
+
+    Corner cases: if event.dtstart + event.duration == last, or
+    event.dtstart == first, the event is not included.
+
+        >>> show(datetime(2004, 12, 15, 15, 30),
+        ...      datetime(2004, 12, 15, 16, 30))
+        []
+
+    Recurring events:
+
+        >>> show_long(datetime(2005, 2, 2), datetime(2005, 2, 5))
+        2005-02-03 simple
+        2005-02-04 recurring
+
+        >>> show_long(datetime(2005, 2, 2), datetime(2005, 2, 6))
+        2005-02-03 simple
+        2005-02-04 recurring
+        2005-02-05 recurring
+
+        >>> show_long(datetime(2005, 2, 10), datetime(2005, 2, 13))
+        2005-02-10 recurring
+        2005-02-11 recurring
+        2005-02-12 recurring
+
+    Recurring events are replaced by proxy objects
+
+        >>> from schoolbell.calendar.interfaces import IExpandedCalendarEvent
+        >>> events = list(cal.expand(datetime(2005, 2, 2),
+        ...                          datetime(2005, 2, 6)))
+        >>> events.sort()
+        >>> [IExpandedCalendarEvent.providedBy(e) for e in events]
+        [False, True, True]
+        >>> events[1].original is events[2].original
+        True
+
+    """
+
 def doctest_simple_CalendarEventMixin_replace():
     """Make sure CalendarEventMixin.replace does not forget any attributes.
 

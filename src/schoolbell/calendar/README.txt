@@ -26,6 +26,33 @@ Quick overview
 At the moment schoolbell.calendar contains building blocks for calendaring
 in your own application.
 
+schoolbell.calendar.interfaces defines interfaces for calendars and calendar
+events.
+
+schoolbell.calendar.simple defines simple calendar and calendar event classes.
+They are not tied into any particular storage system, so if you want to
+store your calendars in the ZODB or in a relational database, you will
+want to write your own.
+
+  TODO: there should be a standard Persistent calendar class in this package.
+
+schoolbell.calendar.mixins defines mixins that make implementation of
+your own calendar and event classes easier.
+
+schoolbell.calendar.icalendar lets you parse and generate iCalendar (RFC 2445)
+files.
+
+schoolbell.calendar.browser defines some browser views for calendars.  It is
+very lean at the moment.
+
+  TODO: flesh out browser views.
+
+schoolbell.calendar.recurrent defines some recurrence rules that let you
+describe events recurring daily, weekly, monthly or yearly.
+
+schoolbell.calendar.utils contains a number of small standalone utility
+functions for manipulating dates and times.
+
 
 Calendars
 ---------
@@ -46,8 +73,48 @@ Calendar events are described by the ICalendarEvent interface.
     >>> ICalendarEvent.providedBy(appointment)
     True
 
-SimpleCalendarEvent is but one of classes that implement ICalendarEvent,
-see the section on calendar storage below.
+Here's another calendar event.  It repeats every week:
+
+    >>> from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+    >>> meeting = SimpleCalendarEvent(datetime(2005, 2, 7, 18, 0),
+    ...                               timedelta(hours=1),
+    ...                               'IRC meeting',
+    ...                               location='#schooltool',
+    ...                               recurrence=WeeklyRecurrenceRule())
+
+A calendar is a set of events.  Some calendars are read-only, while others
+are editable.  Here's a simple read-only calendar that contains two events:
+
+    >>> from schoolbell.calendar.simple import ImmutableCalendar
+    >>> calendar = ImmutableCalendar([meeting, appointment])
+    >>> len(calendar)
+    2
+
+You can iterate over calendars to get all events in unspecified order.  You
+can then sort the events by date.  Let us define a simple function for
+listing calendar events sorted by date
+
+    >>> def print_cal(calendar):
+    ...     events = list(calendar)
+    ...     events.sort()
+    ...     for event in events:
+    ...         print event.dtstart.strftime('%Y-%m-%d'), event.title
+
+    >>> print_cal(calendar)
+    2004-12-28 Dentist
+    2005-02-07 IRC meeting
+
+Note that, although IRC meeting repeats weekly, it was printed only once.
+If you want to see all occurrences of repeating calendar events, you can
+call calendar.expand.  Since some events may repeat indefinitely, expand
+takes a two datetime arguments and limits returned event to the specified
+datetime range.
+
+    >>> print_cal(calendar.expand(datetime(2005, 2, 1), datetime(2005, 3, 1)))
+    2005-02-07 IRC meeting
+    2005-02-14 IRC meeting
+    2005-02-21 IRC meeting
+    2005-02-28 IRC meeting
 
 
 Storage of calendars
