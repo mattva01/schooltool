@@ -144,8 +144,10 @@ class SchooldayModelCalendarView(View):
                         return textErrorPage(request,
                                     _("Schoolday longer than one day"))
                     days.append(event.dtstart)
+        except UnicodeError, e:
+            return textErrorPage(request, _("Invalid UTF-8 data"))
         except ICalParseError, e:
-            return textErrorPage(request, str(e))
+            return textErrorPage(request, e)
         else:
             if first is None:
                 return textErrorPage(request, _("School period not defined"))
@@ -332,6 +334,8 @@ class CalendarView(CalendarReadView):
                                             unique_id=event.uid,
                                             recurrence=event.rrule,
                                             privacy=self._getPrivacy(event)))
+        except UnicodeError, e:
+            return textErrorPage(request, _("Invalid UTF-8 data"))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
 

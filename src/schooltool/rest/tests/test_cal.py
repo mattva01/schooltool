@@ -322,6 +322,21 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         self._test_put_error(calendar,
                      errmsg="Schoolday outside school period")
 
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:uid1
+            SUMMARY:Not UTF-8: \xFF
+            DURATION:PT20M
+            DTSTART:20040102T030405Z
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        self._test_put_error(calendar, errmsg="Invalid UTF-8 data")
+
     def test_put_xml(self):
         body = dedent("""
             <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
@@ -712,6 +727,20 @@ class TestCalendarView(TestCalendarReadView):
         self._test_put_error("Hi, Mom!", content_type="text/plain",
                              errmsg="Unsupported content type: text/plain")
         self._test_put_error("This is not iCalendar")
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:uid1
+            SUMMARY:Not UTF-8: \xFF
+            DURATION:PT20M
+            DTSTART:20040102T030405Z
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        self._test_put_error(calendar, errmsg="Invalid UTF-8 data")
 
     def test_traverse(self):
         from schooltool.rest.acl import ACLView
