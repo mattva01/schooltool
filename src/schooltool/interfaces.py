@@ -1969,7 +1969,7 @@ class IOptions(Interface):
         """The value of the privacy attribute for the timetable events""")
 
 
-class IApplication(IContainmentRoot, IServiceManager, ITraversable):
+class IApplication(IContainmentRoot, IServiceManager, ITraversable, IOptions):
     """The application object.
 
     Services (as given by IServiceManager) are found by attribute.

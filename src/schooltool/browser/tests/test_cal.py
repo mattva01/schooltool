@@ -1021,6 +1021,17 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
         content = view.render(request)
         self.assert_('Add event' in content)
 
+    def test_render_default_privacy(self):
+        self.app.new_event_privacy = 'private'
+        view = self.createView()
+        request = RequestStub(args={})
+        content = view.render(request)
+
+        doc = HTMLDocument(content)
+        op = doc.query('//select[@name="privacy"]'
+                       '//option[@value="private" and @selected="selected"]')
+        assert len(op) == 1, 'private not selected'
+
     def test_render_args(self):
         view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
