@@ -1,6 +1,6 @@
 schooltool (0.9.99+1.0rc1) unstable; urgency=low
 
-  * Split the schoolbell and schooltool packages.
+  * Split the schoolbell and schooltool source packages. (Closes: Bug#301277)
   * Hack upstreams build process until it does everything debian/rules used to
     do, then reduce the rules file to less than 75 lines. Also the application
     startup scripts are moved to the upstream scripts directory as they will
