@@ -1239,7 +1239,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
         []
 
         >>> request.form['field.start_date'] = u''
-        >>> [day for day in range(7) if view.weekdayChecked(str(str(day)))]
+        >>> [day for day in range(7) if view.weekdayChecked(str(day))]
         []
 
     February 21, 2005 is a Monday.
