@@ -91,7 +91,7 @@
                tal:on-error="nothing"/>
           <div class="portlet"
                tal:condition="context/@@view_get_menu/schoolbell_actions">
-            <h4>Actions</h4>
+            <h4 i18n:translate="">Actions</h4>
             <ul>
               <li tal:repeat="view context/@@view_get_menu/schoolbell_actions">
                 <a tal:attributes="href view/action"
@@ -305,12 +305,13 @@
     <div id="portlet-next-day-events" class="portlet" tal:condition="nevents">
       <h4 i18n:translate="">Tomorrow's Events</h4>
       <ul>
-        <li tal:repeat="nevent nevents">
-          <a href=""
-              tal:define="evdate python:nevent.dtstart.strftime('%Y-%m-%d');"
-              tal:attributes="href string:${context/@@absolute_url}"
-              tal:content="nevent/title"/>
+      <tal:loop tal:repeat="nevent nevents">
+        <li tal:condition="python: nevent.dtstart.date() == next"
+            tal:attributes="style string:color: ${nevent/color2}">
+          <b tal:content="python:nevent.dtstart.strftime('%H:%M')" />
+          <span tal:replace="nevent/shortTitle">Event</span>
         </li>
+      </tal:loop>
       </ul>
     </div>
   </tal:block>
@@ -319,9 +320,9 @@
 
 <metal:block define-macro="calendar-portlets">
 
-  <metal:macro use-macro="view/@@standard_macros/portlet-calendar-overlay"/>
-
   <metal:block use-macro="view/@@standard_macros/portlet-tomorrow-events"/>
+
+  <metal:macro use-macro="view/@@standard_macros/portlet-calendar-overlay"/>
 
   <metal:block use-macro="view/@@standard_macros/portlet-calendar-jumpto"/>
 

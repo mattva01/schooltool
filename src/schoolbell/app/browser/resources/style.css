@@ -245,6 +245,11 @@ input.button-cancel {
     padding: 0;
 }
 
+#portlet-next-day-events.portlet ul {
+    margin: 0.5em;
+    padding: 0;
+}
+
 #column-left .portlet li {
     list-style: none;
     padding: 0;
