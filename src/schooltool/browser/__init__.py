@@ -134,7 +134,8 @@ class View(_View):
             port = request.getHost().port
             url = '%s://%s:%s%s' % (scheme, hostname, port, url)
         request.redirect(url)
-        return self.redirect_template(request, destination=url, view=self)
+        return self.redirect_template(request, destination=url, view=self,
+                                      context=self.context)
 
     def isManager(self):
         """Check if the authenticated user is a manager.
