@@ -303,7 +303,7 @@ class TestDynamicSchemaField(unittest.TestCase):
     def test(self):
         from schooltool.component import DynamicSchemaField
         from schooltool.interfaces import IDynamicSchemaField
-        field = DynamicSchemaField('telephone','Phone')
+        field = DynamicSchemaField('telephone', 'Phone')
         verifyObject(IDynamicSchemaField, field)
 
 
