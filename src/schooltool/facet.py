@@ -28,9 +28,11 @@ $Id$
 """
 
 from zope.interface import implements, classProvides
+from persistence import Persistent
 from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
+from schooltool.interfaces import IPlaceholder
 from schooltool.event import EventTargetMixin
 from schooltool.component import setFacet, iterFacets
 from schooltool.db import PersistentKeysSet
@@ -92,10 +94,34 @@ class FacetedRelationshipSchema:
         return links
 
 
+class FacetReactivator(Persistent):
+    """Linkset Placeholder that knows what facets are associated with links
+    like this. When replaced by a link, reactivates the facets."""
+
+    implements(IPlaceholder)
+
+    facets = ()
+
+    def replacedBy(self, link):
+        for facet in self.facets:
+            facet.owner = link
+            facet.active = True
+
+
 def facetDeactivator(link):
     """Deactivate any facets registered in the link target that are owned by
-    the link.
+    the link. Add a placeholder for the link that reactivates and reowns the
+    facets to a new equivalent link. Set the ownership of such facets to the
+    placeholder.
     """
-    for facet in iterFacets(link.traverse()):
+    placeholder = FacetReactivator()
+    facets = []
+    target = link.traverse()
+    for facet in iterFacets(target):
         if facet.owner is link:
+            facets.append(facet)
             facet.active = False
+            facet.owner = placeholder
+    if facets:
+        placeholder.facets = facets
+        target.__links__.addPlaceholder(link, placeholder)

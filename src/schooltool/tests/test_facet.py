@@ -27,7 +27,7 @@ from sets import Set
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
-from schooltool.interfaces import IFacet, IFaceted
+from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink
 from schooltool.interfaces import IEventConfigurable, ISpecificURI
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
@@ -101,10 +101,16 @@ class DummyRelationshipSchema:
             d[rolename] = LinkStub(party)
         return d
 
-class LinkStub:
+class URIDummy(ISpecificURI): """http://example.com/ns/dummy"""
+class URIDummy2(ISpecificURI): """http://example.com/ns/dummy2"""
 
-    def __init__(self, target):
+class LinkStub:
+    implements(ILink)
+
+    def __init__(self, target, reltype=URIDummy, role=URIDummy):
         self.target = target
+        self.reltype = reltype
+        self.role = role
         self.callbacks = Set()
 
     def traverse(self):
@@ -113,7 +119,6 @@ class LinkStub:
     def registerUnlinkCallback(self, callback):
         self.callbacks.add(callback)
 
-class URIDummy(ISpecificURI): """http://example.com/ns/dummy"""
 
 class TestFacetedRelationshipSchema(unittest.TestCase):
 
@@ -142,7 +147,14 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
 
         from schooltool.facet import FacetedMixin
         from schooltool.component import iterFacets
-        child = FacetedMixin()
+        from schooltool.facet import FacetedMixin
+        from schooltool.relationship import RelatableMixin
+        class FacetedRelatable(FacetedMixin, RelatableMixin):
+            def __init__(self):
+                FacetedMixin.__init__(self)
+                RelatableMixin.__init__(self)
+
+        child = FacetedRelatable()
         self.assertEqual(list(iterFacets(child)), [])
         links = f(parent=parent, child=child)
         self.assertEqual(len(links), 2)
@@ -170,23 +182,58 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
 
 class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
 
+    def test_FacetReactivator(self):
+        from schooltool.facet import FacetReactivator
+        f = FacetReactivator()
+        verifyObject(IPlaceholder, f)
+
     def test(self):
-        from schooltool.facet import facetDeactivator
-        from schooltool.facet import FacetedMixin
         from schooltool.component import iterFacets, setFacet
-        faceted = FacetedMixin()
+        from schooltool.facet import facetDeactivator
+
+        from schooltool.facet import FacetedMixin
+        from schooltool.relationship import RelatableMixin
+        class FacetedRelatable(FacetedMixin, RelatableMixin):
+            def __init__(self):
+                FacetedMixin.__init__(self)
+                RelatableMixin.__init__(self)
+
+        target = FacetedRelatable()
         facet = FacetStub()
         another_facet = FacetStub()
-        link = LinkStub(faceted)
-        setFacet(faceted, facet, owner=link)
-        setFacet(faceted, another_facet, owner=object())
-        self.assertEqualSorted(list(iterFacets(faceted)),
+        link = LinkStub(target)
+        setFacet(target, facet, owner=link)
+        setFacet(target, another_facet, owner=object())
+        self.assertEqualSorted(list(iterFacets(target)),
                                [facet, another_facet])
         self.assert_(another_facet.active)
         self.assert_(facet.active)
         facetDeactivator(link)
         self.assert_(another_facet.active)
         self.assert_(not facet.active, 'not facet.active')
+        self.assert_(facet.owner is not link)
+        self.assert_(facet.owner is not None)
+
+        # This bit is white-box flavoured.
+        linkset = target.__links__
+        placeholders = list(linkset.iterPlaceholders())
+        self.assertEqual(len(placeholders), 1)
+        self.assert_(facet.owner is placeholders[0])
+
+        # Back to our usual black-box style.
+        link2 = LinkStub(target)
+        linkset.add(link2)
+        self.assert_(facet.owner is link2, 'facet.owner is link2')
+        self.assert_(facet.active, 'facet.active')
+
+        # Now, check that a link that has no facets will not be replaced
+        # by a placeholder. After all, there's just no need for it.
+        target = FacetedRelatable()
+        link3 = LinkStub(target, URIDummy2)
+        facetDeactivator(link3)
+        linkset = target.__links__
+        self.assertEqual(list(linkset.iterPlaceholders()), [])
+
 
 def test_suite():
     suite = unittest.TestSuite()
