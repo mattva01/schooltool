@@ -25,7 +25,6 @@ $Id$
 import calendar
 import datetime
 import re
-import time
 from sets import Set
 
 __metaclass__ = type

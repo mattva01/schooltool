@@ -22,8 +22,6 @@ Unit tests for the schooltool.calendar module.
 $Id$
 """
 
-import os
-import time
 import unittest
 
 from pprint import pformat

@@ -21,7 +21,6 @@ Occupies relationship.
 
 $Id$
 """
-from zope.interface import implements
 from schooltool.relationship import RelationshipSchema
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency

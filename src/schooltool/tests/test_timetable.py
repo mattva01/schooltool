@@ -55,7 +55,7 @@ class TraversableRoot(object):
 def setPath(obj, path):
     """Trick getPath(obj) into returning path.
 
-    Also, the fictious root will be returned by getOptions
+    Also, the fictional root will be returned by getOptions
     """
     assert path.startswith('/')
     obj.__name__ = path[1:]

@@ -28,7 +28,6 @@ import email.Utils
 from sets import Set
 from zope.interface import implements
 from persistent import Persistent
-from persistent.list import PersistentList
 from schooltool.auth import ACL
 from schooltool.component import getRelatedObjects
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite

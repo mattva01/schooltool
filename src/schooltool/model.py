@@ -37,7 +37,7 @@ from schooltool.db import PersistentKeysSetWithNames
 from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.absence import Absence
-from schooltool.component import getPath, FacetManager
+from schooltool.component import FacetManager
 from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
 from schooltool.auth import ACL
 

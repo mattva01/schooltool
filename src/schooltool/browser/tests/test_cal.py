@@ -23,7 +23,6 @@ $Id$
 """
 
 import urllib
-import re
 import unittest
 from logging import INFO
 from datetime import datetime, date, timedelta
@@ -40,7 +39,6 @@ from schooltool.browser.tests import assertHasSubmitButton
 from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.helpers import diff
-from schooltool.common import dedent
 
 __metaclass__ = type
 

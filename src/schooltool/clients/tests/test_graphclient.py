@@ -29,6 +29,7 @@ class TestGraphClient(unittest.TestCase):
 
     def test(self):
         import schooltool.clients.graphclient # at least check that it imports
+        self.assert_(schooltool.clients.graphclient)
 
 
 def test_suite():

@@ -26,7 +26,6 @@ import sets
 import unittest
 import calendar
 from datetime import date, timedelta, datetime
-from persistent import Persistent
 from zope.interface.verify import verifyObject
 from schooltool.tests.utils import EqualsSortedMixin, LinkStub
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
