@@ -76,7 +76,7 @@ case "$1" in
     #Make the config file
     #Put the default template there if none exists
     if [ ! -e $config ]; then
-        cp -a /usr/share/$package/$package.default $config
+        cp -a /usr/share/$package/$package.conf.default $config
     fi
 
     # Setup Interfaces
