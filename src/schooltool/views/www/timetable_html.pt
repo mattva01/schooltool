@@ -1,0 +1,20 @@
+<html>
+<head>
+  <title>Timetable <em tal:replace="request/uri">path</em></title>
+</head>
+<body>
+  <h1>Timetable <em tal:replace="request/uri">path</em></h1>
+  <table>
+    <tr>
+      <th tal:repeat="day context/day_ids" tal:content="day"
+          colspan="2">Day N</th>
+    </tr>
+    <tr tal:repeat="row view/rows">
+     <tal:block tal:repeat="col row">
+      <th tal:content="col/period">1</th>
+      <td tal:content="col/activity">Act1</td>
+     </tal:block>
+    </tr>
+  </table>
+</body>
+</html>

@@ -125,6 +125,35 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </timetable>
         """
 
+    empty_html = """
+        <html>
+        <head>
+          <title>Timetable ...object/timetables/x/y</title>
+        </head>
+        <body>
+          <h1>Timetable ...object/timetables/x/y</h1>
+          <table>
+            <tr>
+              <th colspan="2">Day 1</th>
+              <th colspan="2">Day 2</th>
+            </tr>
+            <tr>
+              <th>A</th>
+              <td></td>
+              <th>C</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>B</th>
+              <td></td>
+              <th>D</th>
+              <td></td>
+            </tr>
+          </table>
+        </body>
+        </html>
+        """
+
     full_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <day id="Day 1">
@@ -144,6 +173,35 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
             </period>
           </day>
         </timetable>
+        """
+
+    full_html = """
+        <html>
+        <head>
+          <title>Timetable ...object/timetables/x/y</title>
+        </head>
+        <body>
+          <h1>Timetable ...object/timetables/x/y</h1>
+          <table>
+            <tr>
+              <th colspan="2">Day 1</th>
+              <th colspan="2">Day 2</th>
+            </tr>
+            <tr>
+              <th>A</th>
+              <td>Maths</td>
+              <th>C</th>
+              <td>CompSci</td>
+            </tr>
+            <tr>
+              <th>B</th>
+              <td>English / French</td>
+              <th>D</th>
+              <td></td>
+            </tr>
+          </table>
+        </body>
+        </html>
         """
 
     def createEmpty(self):
@@ -166,13 +224,25 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.timetable import TimetableReadView
         return TimetableReadView(context)
 
-    def do_test_get(self, context, xml):
-        result = self.createView(context).render(RequestStub())
-        self.assertEqualsXML(result, xml, recursively_sort=['timetable'])
+    def do_test_get(self, context, expected, ctype="text/xml", accept=()):
+        request = RequestStub('...object/timetables/x/y')
+        request.accept = accept
+        result = self.createView(context).render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "%s; charset=UTF-8" % ctype)
+        self.assertEqualsXML(result, expected, recursively_sort=['timetable'])
 
     def test_get(self):
         self.do_test_get(self.createEmpty(), self.empty_xml)
         self.do_test_get(self.createFull(), self.full_xml)
+
+    def test_get_html(self):
+        self.do_test_get(self.createEmpty(), self.empty_html,
+                         accept=[('1', 'text/html', {}, {})],
+                         ctype='text/html')
+        self.do_test_get(self.createFull(), self.full_html,
+                         accept=[('1', 'text/html', {}, {})],
+                         ctype='text/html')
 
 
 class TestTimetableReadWriteView(TestTimetableReadView):
@@ -362,6 +432,12 @@ class TestTimetableSchemaView(TestTimetableReadView):
     def test_get(self):
         """overrides TestTimetableReadView.test_get"""
         self.do_test_get(self.createEmpty(), self.empty_xml)
+
+    def test_get_html(self):
+        """overrides TestTimetableReadView.test_get"""
+        self.do_test_get(self.createEmpty(), self.empty_html,
+                         accept=[('1', 'text/html', {}, {})],
+                         ctype='text/html')
 
     def test_get_nonexistent(self):
         view = self.createView(None)

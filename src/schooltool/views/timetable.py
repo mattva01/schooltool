@@ -57,6 +57,26 @@ class TimetableReadView(View):
     """Read-only view for ITimetable."""
 
     template = Template("www/timetable.pt", content_type="text/xml")
+    html_template = Template("www/timetable_html.pt", content_type="text/html")
+
+    def do_GET(self, request):
+        mtype = request.chooseMediaType(['text/xml', 'text/html'])
+        if mtype == 'text/html':
+            return self.html_template(request, view=self, context=self.context)
+        else:
+            return self.template(request, view=self, context=self.context)
+
+    def rows(self):
+        rows = []
+        for ncol, (id, day) in enumerate(self.context.items()):
+            for nrow, (period, actiter) in enumerate(day.items()):
+                activities = [a.title for a in actiter]
+                activities.sort()
+                if nrow >= len(rows):
+                    rows.append([{'period': '', 'activity': ''}] * ncol)
+                rows[nrow].append({'period': period,
+                                   'activity': " / ".join(activities)})
+        return rows
 
 
 class TimetableReadWriteView(TimetableReadView):
