@@ -278,10 +278,7 @@ def resetViewRegistry():
 
 
 def getView(obj):
-    """Selects a view for an object.
-
-    Returns a View object for obj.
-    """
+    """See IViewAPI"""
     try:
         return view_registry.getAllForObject(obj)[0](obj)
     except IndexError:
@@ -289,8 +286,7 @@ def getView(obj):
 
 
 def registerView(interface, factory):
-    if not IInterface.isImplementedBy(interface):
-        raise TypeError("Expected an interface, got %r", (interface,))
+    """See IViewAPI"""
     view_registry.register(interface, factory)
 
 

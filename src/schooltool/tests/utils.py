@@ -74,20 +74,24 @@ class EventServiceTestMixin:
     setUp = setUpEventService
 
 
-class RelationshipTestMixin:
-    """Mixin for substituting a temporary relationship registry."""
+class RegistriesSetupMixin:
+    """Mixin for substituting a temporary relationship and view registry."""
 
-    def setUpRelationshipRegistry(self):
-        from schooltool import component
-        self.old_registry = component.relationship_registry
+    def setUpRegistries(self):
+        from schooltool import component, views
+        self.old_relationship_registry = component.relationship_registry
+        self.old_view_registry = component.view_registry
         component.resetRelationshipRegistry()
+        component.resetViewRegistry()
+        views.setUp()
 
-    def tearDownRelationshipRegistry(self):
-        from schooltool import component
-        component.relationship_registry = self.old_registry
+    def tearDownRegistries(self):
+        from schooltool import component, views
+        component.relationship_registry = self.old_relationship_registry
+        component.view_registry = self.old_view_registry
 
-    setUp = setUpRelationshipRegistry
-    tearDown = tearDownRelationshipRegistry
+    setUp = setUpRegistries
+    tearDown = tearDownRegistries
 
 
 class EqualsSortedMixin:

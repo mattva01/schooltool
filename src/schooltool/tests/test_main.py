@@ -26,7 +26,7 @@ import unittest
 import re
 import os
 from StringIO import StringIO
-from schooltool.tests.utils import RelationshipTestMixin
+from schooltool.tests.utils import RegistriesSetupMixin
 
 __metaclass__ = type
 
@@ -508,7 +508,7 @@ class TestRequest(unittest.TestCase):
         self.assertRaises(AssertionError, rq.render, resource)
 
 
-class TestServer(RelationshipTestMixin, unittest.TestCase):
+class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def getConfigFileName(self):
         dirname = os.path.dirname(__file__)
@@ -532,7 +532,7 @@ class TestServer(RelationshipTestMixin, unittest.TestCase):
 
     def test_configure(self):
         from schooltool.main import Server
-        from schooltool.views import ApplicationView
+        from schooltool.component import getView
         server = Server()
         server.notifyConfigFile = lambda x: None
         server.findDefaultConfigFile = lambda: self.getConfigFileName()
@@ -542,7 +542,7 @@ class TestServer(RelationshipTestMixin, unittest.TestCase):
                           [('', 123), ('10.20.30.40', 9999)])
         self.assert_(server.config.database is not None)
         self.assertEquals(server.appname, 'schooltool')
-        self.assertEquals(server.viewFactory, ApplicationView)
+        self.assertEquals(server.viewFactory, getView)
         self.assertEquals(server.appFactory, server.createApplication)
 
     def test_configure_with_args(self):
@@ -587,7 +587,7 @@ class TestServer(RelationshipTestMixin, unittest.TestCase):
         get_transaction().abort()
 
         from schooltool.main import Server
-        from schooltool.views import ApplicationView
+        from schooltool.component import getView
 
         class ThreadableStub:
             def init(self):
@@ -613,7 +613,7 @@ class TestServer(RelationshipTestMixin, unittest.TestCase):
         self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
         site = reactor._tcp_listeners[0][1]
         self.assertEquals(site.rootName, 'schooltool')
-        self.assert_(site.viewFactory is ApplicationView)
+        self.assert_(site.viewFactory is getView)
 
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.interfaces import ISpecificURI, URIMembership

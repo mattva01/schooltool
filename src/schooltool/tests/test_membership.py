@@ -29,7 +29,7 @@ from zope.interface.verify import verifyObject
 from schooltool.interfaces import IFaceted, IQueryLinks
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
-from schooltool.tests.utils import RelationshipTestMixin
+from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.test_relationship import Relatable
 from schooltool.relationship import RelatableMixin
@@ -57,7 +57,7 @@ class TestURIs(unittest.TestCase):
         inspectSpecificURI(URIMember)
 
 
-class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
+class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,
                                  unittest.TestCase):
 
     def test(self):
@@ -86,7 +86,7 @@ class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
         from schooltool.interfaces import IRelationshipSchema
         verifyObject(IRelationshipSchema, Membership)
 
-class TestCyclicConstraint(RelationshipTestMixin, EventServiceTestMixin,
+class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
                            unittest.TestCase):
 
     def testCyclicMembership(self):
@@ -167,7 +167,7 @@ class TestEvents(unittest.TestCase):
         self.assertRaises(TypeError, MemberAddedEvent, links)
 
 
-class TestMembershipRelate(RelationshipTestMixin, EventServiceTestMixin,
+class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
                            unittest.TestCase):
 
     def test_membershipRelate(self):

@@ -47,8 +47,9 @@ from twisted.python import failure
 from schooltool import mockup
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model
-from schooltool.views import ApplicationView, errorPage
+from schooltool.views import errorPage
 from schooltool.membership import Membership
+from schooltool.component import getView
 
 __metaclass__ = type
 
@@ -384,7 +385,7 @@ class Server:
         # Defaults
         config_file = self.findDefaultConfigFile()
         self.appname = 'schooltool'
-        self.viewFactory = ApplicationView # XXX getView
+        self.viewFactory = getView
         self.appFactory = self.createApplication
 
         # Process command line arguments
@@ -441,9 +442,11 @@ class Server:
         """
         import schooltool.relationship
         import schooltool.membership
+        import schooltool.views
 
         schooltool.relationship.setUp()
         schooltool.membership.setUp()
+        schooltool.views.setUp()
 
         db_configuration = self.config.database
         self.db = db_configuration.open()

@@ -30,7 +30,7 @@ from schooltool.interfaces import ISpecificURI, IRelatable, IQueryLinks
 from schooltool.interfaces import IFacet
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
-from schooltool.tests.utils import RelationshipTestMixin
+from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type
@@ -305,12 +305,12 @@ class URICommand(ISpecificURI):
 class URIReport(ISpecificURI):
     """http://army.gov/ns/report"""
 
-class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
+class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
                         unittest.TestCase):
 
     def setUp(self):
         from schooltool.relationship import setUp as setUpRelationships
-        self.setUpRelationshipRegistry()
+        self.setUpRegistries()
         setUpRelationships()
         self.setUpEventService()
 
@@ -320,7 +320,7 @@ class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
         verifyObject(IRelationshipAPI, component)
 
     def tearDown(self):
-        self.tearDownRelationshipRegistry()
+        self.tearDownRegistries()
 
     def test_getRelatedObjects(self):
         from schooltool.component import getRelatedObjects, relate
@@ -377,21 +377,13 @@ class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
                           ('stub', args, {'title': title}))
 
 
-class TestViewRegistry(unittest.TestCase):
+class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
 
     def testApi(self):
         from schooltool import component
         from schooltool.interfaces import IViewAPI
 
         verifyObject(IViewAPI, component)
-
-    def setUp(self):
-        import schooltool.views
-        schooltool.views.setUp()
-
-    def tearDown(self):
-        from schooltool.component import resetViewRegistry
-        resetViewRegistry()
 
     def test(self):
         from schooltool.component import getView, ComponentLookupError
