@@ -942,9 +942,9 @@ class IViewAPI(Interface):
 # Calendaring
 #
 
-class ISchooldayCalendar(Interface):
-    """A normal calendar which can tell whether a day is a
-    school day or not for a certain period of time.
+class ISchooldayModel(Interface):
+    """A calendar which can tell whether a day is a school day or not
+    for a certain period of time.
     """
 
     start = Attribute("The date of the start of the period")
@@ -952,7 +952,10 @@ class ISchooldayCalendar(Interface):
     end = Attribute("The date of the end of the period""")
 
     def __contains__(date):
-        """Returns True if the date passed is a schoolday.
+        """Returns whether the date is within the period covered."""
+
+    def isSchoolday(date):
+        """Returns whether the date is a schoolday.
 
         Raises a ValueError if the date is outside of the period covered.
         """

@@ -23,16 +23,16 @@ $Id$
 """
 from sets import Set
 from zope.interface import implements
-from schooltool.interfaces import ISchooldayCalendar
+from schooltool.interfaces import ISchooldayModel
 import datetime
 
 
 __metaclass__ = type
 
 
-class SchooldayCalendar:
+class SchooldayModel:
 
-    implements(ISchooldayCalendar)
+    implements(ISchooldayModel)
 
     def __init__(self, start, end):
         self.start = start
@@ -40,11 +40,14 @@ class SchooldayCalendar:
         self._schooldays = Set()
 
     def _validate(self, date):
-        if not (self.start <= date < self.end):
+        if not date in self:
             raise ValueError("Date %r not in period [%r, %r)" %
                              (date, self.start, self.end))
 
     def __contains__(self, date):
+        return self.start <= date < self.end
+
+    def isSchoolday(self, date):
         self._validate(date)
         if date in self._schooldays:
             return True
@@ -65,7 +68,7 @@ class SchooldayCalendar:
 
     def removeWeekdays(self, *weekdays):
         for date in daterange(self.start, self.end):
-            if date.weekday() in weekdays and date in self:
+            if date.weekday() in weekdays and self.isSchoolday(date):
                 self.remove(date)
 
 
@@ -156,3 +159,4 @@ class ICalReader:
                 key = key.lower()
                 obj[key] = value
         return result
+

@@ -28,53 +28,61 @@ from zope.testing.doctestunit import DocTestSuite
 from datetime import date
 from StringIO import StringIO
 
-class TestSchooldayCalendar(unittest.TestCase):
+class TestSchooldayModel(unittest.TestCase):
 
     def test_interface(self):
-        from schooltool.cal import SchooldayCalendar
-        from schooltool.interfaces import ISchooldayCalendar
+        from schooltool.cal import SchooldayModel
+        from schooltool.interfaces import ISchooldayModel
 
-        cal = SchooldayCalendar(date(2003, 9, 1), date(2003, 12, 24))
-        verifyObject(ISchooldayCalendar, cal)
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 12, 24))
+        verifyObject(ISchooldayModel, cal)
 
-    def testAddRemoveContains(self):
-        from schooltool.cal import SchooldayCalendar
-        from schooltool.interfaces import ISchooldayCalendar
+    def testAddRemoveSchoolday(self):
+        from schooltool.cal import SchooldayModel
+        from schooltool.interfaces import ISchooldayModel
 
-        cal = SchooldayCalendar(date(2003, 9, 1), date(2003, 9, 15))
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
 
-        self.assert_(date(2003, 9, 1) not in cal)
-        self.assert_(date(2003, 9, 2) not in cal)
-        self.assertRaises(ValueError, cal.__contains__, date(2003, 9, 15))
+        self.assert_(not cal.isSchoolday(date(2003, 9, 1)))
+        self.assert_(not cal.isSchoolday(date(2003, 9, 2)))
+        self.assertRaises(ValueError, cal.isSchoolday, date(2003, 9, 15))
 
         cal.add(date(2003, 9, 2))
-        self.assert_(date(2003, 9, 2) in cal)
+        self.assert_(cal.isSchoolday(date(2003, 9, 2)))
         cal.remove(date(2003, 9, 2))
-        self.assert_(date(2003, 9, 2) not in cal)
+        self.assert_(not cal.isSchoolday(date(2003, 9, 2)))
         self.assertRaises(ValueError, cal.add, date(2003, 9, 15))
         self.assertRaises(ValueError, cal.remove, date(2003, 9, 15))
 
     def testMarkWeekday(self):
-        from schooltool.cal import SchooldayCalendar
-        from schooltool.interfaces import ISchooldayCalendar
-        cal = SchooldayCalendar(date(2003, 9, 1), date(2003, 9, 17))
+        from schooltool.cal import SchooldayModel
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 17))
         for day in 1, 8, 15:
-            self.assert_(date(2003, 9, day) not in cal)
+            self.assert_(not cal.isSchoolday(date(2003, 9, day)))
 
         cal.addWeekdays(calendar.MONDAY)
         for day in 1, 8, 15:
-            self.assert_(date(2003, 9, day) in cal)
-            self.assert_(date(2003, 9, day+1) not in cal)
+            self.assert_(cal.isSchoolday(date(2003, 9, day)))
+            self.assert_(not cal.isSchoolday(date(2003, 9, day+1)))
 
         cal.removeWeekdays(calendar.MONDAY, calendar.TUESDAY)
         for day in 1, 8, 15:
-            self.assert_(date(2003, 9, day) not in cal)
-            self.assert_(date(2003, 9, day+1) not in cal)
+            self.assert_(not cal.isSchoolday(date(2003, 9, day)))
+            self.assert_(not cal.isSchoolday(date(2003, 9, day+1)))
 
         cal.addWeekdays(calendar.MONDAY, calendar.TUESDAY)
         for day in 1, 8, 15:
+            self.assert_(cal.isSchoolday(date(2003, 9, day)))
+            self.assert_(cal.isSchoolday(date(2003, 9, day+1)))
+
+    def test_contains(self):
+        from schooltool.cal import SchooldayModel
+        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 17))
+        self.assert_(date(2003, 8, 31) not in cal)
+        self.assert_(date(2003, 9, 17) not in cal)
+        for day in range(1, 17):
             self.assert_(date(2003, 9, day) in cal)
-            self.assert_(date(2003, 9, day+1) in cal)
+        self.assertRaises(TypeError, cal.__contains__, 'some string')
 
 
 example_ical = """\
@@ -142,22 +150,22 @@ END:VCALENDAR
 class TestICalReader(unittest.TestCase):
 
     def test_markNonSchooldays(self):
-        from schooltool.cal import ICalReader, SchooldayCalendar
-        cal = SchooldayCalendar(date(2003, 9, 01), date(2004, 01, 01))
+        from schooltool.cal import ICalReader, SchooldayModel
+        cal = SchooldayModel(date(2003, 9, 01), date(2004, 01, 01))
         file = StringIO(example_ical)
         reader = ICalReader(file)
         cal.addWeekdays(0, 1, 2, 3, 4)
-        self.assert_(date(2003, 12, 24) in cal)
-        self.assert_(date(2003, 12, 25) in cal)
-        self.assert_(date(2003, 12, 26) in cal)
+        self.assert_(cal.isSchoolday(date(2003, 12, 24)))
+        self.assert_(cal.isSchoolday(date(2003, 12, 25)))
+        self.assert_(cal.isSchoolday(date(2003, 12, 26)))
         reader.markNonSchooldays(cal)
-        self.assert_(date(2003, 12, 24) in cal)
-        self.assert_(date(2003, 12, 25) not in cal)
-        self.assert_(date(2003, 12, 26) not in cal)
+        self.assert_(cal.isSchoolday(date(2003, 12, 24)))
+        self.assert_(not cal.isSchoolday(date(2003, 12, 25)))
+        self.assert_(not cal.isSchoolday(date(2003, 12, 26)))
 
     def test_read(self):
-        from schooltool.cal import ICalReader, SchooldayCalendar
-        cal = SchooldayCalendar(date(2003, 9, 01), date(2004, 01, 01))
+        from schooltool.cal import ICalReader, SchooldayModel
+        cal = SchooldayModel(date(2003, 9, 01), date(2004, 01, 01))
         file = StringIO(example_ical)
         reader = ICalReader(file)
         result = reader.read()
@@ -171,7 +179,7 @@ class TestICalReader(unittest.TestCase):
         self.assertEqual(vevent.dtstart, date(2003, 12, 26))
 
     def test_readRecord(self):
-        from schooltool.cal import ICalReader, SchooldayCalendar
+        from schooltool.cal import ICalReader, SchooldayModel
         file = StringIO("key1\n"
                         " :value1\n"
                         "key2\n"
@@ -197,7 +205,7 @@ class TestICalReader(unittest.TestCase):
 def test_suite():
     import schooltool.cal
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSchooldayCalendar))
+    suite.addTest(unittest.makeSuite(TestSchooldayModel))
     suite.addTest(unittest.makeSuite(TestICalReader))
     suite.addTest(DocTestSuite(schooltool.cal))
     return suite
