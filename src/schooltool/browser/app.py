@@ -195,7 +195,8 @@ class RootView(View):
             return DynamicFacetSchemaServiceView(
                 self.context.dynamicFacetSchemaService)
         elif name == 'newdfschema':
-            return DynamicFacetSchemaWizard(self.context.dynamicFacetSchemaService)
+            return DynamicFacetSchemaWizard(
+                        self.context.dynamicFacetSchemaService)
         raise KeyError(name)
 
 
@@ -706,7 +707,6 @@ class ResidenceAddView(ObjectAddView):
                 results.append(self.context[residence])
 
         return results
-
 
 
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):

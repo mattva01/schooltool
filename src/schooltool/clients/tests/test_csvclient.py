@@ -229,7 +229,6 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
                           ('POST', '/groups/pupils/relationships',
                            membership_pattern % "/persons/quux")])
 
-
     def test_importResource(self):
         from schooltool.clients.csvclient import CSVImporterHTTP
 

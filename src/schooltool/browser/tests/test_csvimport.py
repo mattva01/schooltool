@@ -164,7 +164,8 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                        (None, u'CSV data import finished successfully', INFO)])
 
     def test_POST_persons(self):
-        request = RequestStub(args={'persons.csv':'"ab","B","A","","1929-1-1",""',
+        request = RequestStub(args={'persons.csv':
+                                        '"ab","B","A","","1929-1-1",""',
                                     'groups.csv': '',
                                     'resources.csv': '',
                                     'charset': 'UTF-8'})
@@ -180,6 +181,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
             (None, u'Imported person: A B', INFO),
             (None, u'Imported person info for ab (A B, 1929-01-01)', INFO),
             (None, u'CSV data import finished successfully', INFO)])
+
 
 class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 

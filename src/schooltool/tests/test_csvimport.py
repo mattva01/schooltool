@@ -56,8 +56,10 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
                 self.persons.append((name, title, groups))
                 return title
 
-            def importPersonInfo(self, title, surname, given_name, dob, comment):
-                self.personinfo.append((title, surname, given_name, dob,comment))
+            def importPersonInfo(self, title, surname, given_name, dob,
+                                 comment):
+                self.personinfo.append((title, surname, given_name, dob,
+                                        comment))
 
         return Importer()
 
@@ -75,16 +77,20 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
         im = self.createImporter()
         csv = '"jhacker","Hacker","Jay","group1 group2","1998-01-01","yay"'
         im.importPersonsCsv([csv])
-        self.assertEquals(im.persons, [(u'jhacker', u'jay hacker', 
-                                        u'group1 group2')])
-        self.assertEquals(im.personinfo, [(u'jay hacker',u'hacker',u'jay',u'1998-01-01', u'yay')])
-        
+        self.assertEquals(im.persons,
+                          [(u'jhacker', u'jay hacker', u'group1 group2')])
+        self.assertEquals(im.personinfo,
+                          [(u'jay hacker', u'hacker', u'jay', u'1998-01-01',
+                            u'yay')])
+
     def test_importPersonsCsv_noID(self):
         im = self.createImporter()
         csv = '"","Hacker","Jay","group1 group2",1998-01-01,"yay"'
         im.importPersonsCsv([csv])
-        self.assertEquals(im.persons, [(u'', u'jay hacker',u'group1 group2')])
-        self.assertEquals(im.personinfo, [(u'jay hacker',u'hacker',u'jay',u'1998-01-01', u'yay')])
+        self.assertEquals(im.persons, [(u'', u'jay hacker', u'group1 group2')])
+        self.assertEquals(im.personinfo,
+                          [(u'jay hacker', u'hacker', u'jay', u'1998-01-01',
+                            u'yay')])
 
     def test_import_badData(self):
         from schooltool.csvimport import DataError

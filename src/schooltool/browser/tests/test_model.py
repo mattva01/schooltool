@@ -1236,6 +1236,7 @@ class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assert_("Note 1 Title" in content)
         self.assert_("Note 1 Body" in content)
 
+
 class TestResidenceMoveView(SchoolToolSetup):
 
     def setUp(self):
@@ -1252,7 +1253,7 @@ class TestResidenceMoveView(SchoolToolSetup):
         app['persons'] = ApplicationObjectContainer(Person)
         app['residences'] = ApplicationObjectContainer(Residence)
         self.per = app['persons'].new("p", title="Pete")
-        self.per2 = app['persons'].new("j", title="John") 
+        self.per2 = app['persons'].new("j", title="John")
 
         self.res = app['residences'].new(None, title="Home")
         self.res2 = app['residences'].new(None, title="Home2")

@@ -161,6 +161,7 @@ class EventServiceTestMixin:
             self.assert_(receiver.events[0] is e)
         return e
 
+
 class RegistriesCleanupMixin:
     """Saves the values of registries in setUp and restores them in tearDown.
 
@@ -182,6 +183,7 @@ class RegistriesCleanupMixin:
 
     setUp = saveRegistries
     tearDown = restoreRegistries
+
 
 class RegistriesSetupMixin(RegistriesCleanupMixin):
     """Mixin for substituting temporary global registries."""

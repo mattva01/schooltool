@@ -912,7 +912,6 @@ class BaseTestTimetableModel:
 class TestSequentialDaysTimetableModel(NiceDiffsMixin, RegistriesSetupMixin,
                                        unittest.TestCase,
                                        BaseTestTimetableModel):
-                                       
 
     def test_interface(self):
         from schooltool.timetable import SequentialDaysTimetableModel

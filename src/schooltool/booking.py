@@ -105,9 +105,11 @@ def notifyActivityAdded(event):
     _activityAdded(event.activity, event.activity.timetable.__name__,
                    event.day_id, event.period_id, event.activity.timetable)
 
+
 def notifyActivityRemoved(event):
     _activityRemoved(event.activity, event.activity.timetable.__name__,
                      event.day_id, event.period_id, event.activity.timetable)
+
 
 def notifyTimetableReplaced(event):
     if event.old_timetable is not None:
@@ -125,8 +127,10 @@ def notifyTimetableReplaced(event):
         for exception in event.new_timetable.exceptions:
             _exceptionAdded(exception, event.key)
 
+
 def notifyTimetableExceptionAdded(event):
     _exceptionAdded(event.exception, event.timetable.__name__)
+
 
 def notifyTimetableExceptionRemoved(event):
     _exceptionRemoved(event.exception, event.timetable.__name__)
@@ -142,6 +146,7 @@ def _activityAdded(activity, key, day_id, period_id, timetable):
         if tt is not timetable:
             tt[day_id].add(period_id, activity, False)
 
+
 def _activityRemoved(activity, key, day_id, period_id, timetable):
     if activity.owner is None:
         return # Make life easier for unit tests.
@@ -149,6 +154,7 @@ def _activityRemoved(activity, key, day_id, period_id, timetable):
         tt = obj.timetables.get(key)
         if tt is not timetable:
             tt[day_id].remove(period_id, activity, False)
+
 
 def _exceptionAdded(exception, key):
     activity = exception.activity
@@ -159,6 +165,7 @@ def _exceptionAdded(exception, key):
         if exception not in tt.exceptions:
             # Call extend instead of append to reduce the number of events
             tt.exceptions.extend([exception])
+
 
 def _exceptionRemoved(exception, key):
     activity = exception.activity

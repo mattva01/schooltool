@@ -240,6 +240,7 @@ class TestDynamicSchema(unittest.TestCase):
         schema = DynamicSchema()
         verifyObject(IDynamicSchema, schema)
 
+
 class TestServiceAPI(unittest.TestCase):
 
     def test_api(self):
@@ -363,6 +364,7 @@ class TestRelationships(EventServiceTestMixin, RegistriesCleanupMixin,
         self.assertEqual(list(getRelatedObjects(officer, URIReport)),
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
+
 
 class TestRelationshipsNoSetup(EventServiceTestMixin, RegistriesCleanupMixin,
                                unittest.TestCase):

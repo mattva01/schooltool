@@ -173,9 +173,10 @@ def enforceMembershipPolicy(event):
 
 
 def setUp():
-    # Register the URIMembership relationship handler.
+    # Register the URIMembership relationship handler
     registerRelationship(URIMembership, membershipRelate)
 
-    # Register enforceMembershipPolicy as an event handler 
+    # Register enforceMembershipPolicy as an event handler
     adapters = getService('Adapters')
     adapters.subscribe([IBeforeMembershipEvent], None, enforceMembershipPolicy)
+

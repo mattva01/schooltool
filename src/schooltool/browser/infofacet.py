@@ -23,7 +23,8 @@ $Id$
 """
 
 from schooltool.common import to_unicode
-from schooltool.component import getPath, traverse, getDynamicFacetSchemaService
+from schooltool.component import getPath, traverse
+from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import FacetManager
 from schooltool.interfaces import IDynamicFacet, IDynamicFacetSchemaService
 from schooltool.infofacets import DynamicFacet
@@ -161,7 +162,7 @@ class DynamicFacetSchemaWizard(View):
     name_parser = staticmethod(name_parser)
 
     def name_validator(self, name):
-        """Validate the name given to the schema. 
+        """Validate the name given to the schema.
 
         This was taken from browser.timetable.TimeTableSchemaWizard and should
         probably be refactored.
@@ -229,7 +230,8 @@ class DynamicFacetSchemaWizard(View):
                 if ftypes[i] in ('selection', 'multiselection'):
                     vocab_field = '%s_vocabulary' % name
                     if vocab_field in self.request.args:
-                        vocabulary = to_unicode(self.request.args[vocab_field][0]).split('\n')
+                        raw_value = self.request.args[vocab_field][0]
+                        vocabulary = to_unicode(raw_value).split('\n')
 
                 schema.addField(name, labels[i], ftypes[i], value, vocabulary)
 

@@ -513,10 +513,13 @@ class GuardianEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
     def _source(self, restrict_membership):
         if restrict_membership:
             parents = getRelatedObjects(self.context, URIGuardian)
-            siblings = itertools.chain(*[getRelatedObjects(parent, URICustodian)
+            siblings = itertools.chain(*[getRelatedObjects(parent,
+                                                           URICustodian)
                                          for parent in parents])
-            return [member for member in siblings if IPerson.providedBy(member)]
+            return [member for member in siblings
+                    if IPerson.providedBy(member)]
         else:
+            # XXX this looks obfuscated for no reason
             return itertools.chain(traverse(self.context, '/persons').itervalues())
 
     def createRelationship(self, other):
@@ -798,7 +801,8 @@ class ResidenceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
         return absoluteURL(self.request, self.context, 'move.html')
 
 
-class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+class ResidenceEditView(View, RelationshipViewMixin,
+                        AppObjectBreadcrumbsMixin):
     """Page for "editing" a Residence (/residences/id/edit.html)."""
 
     __used_for__ = IResidence
@@ -813,7 +817,8 @@ class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     back = True
 
-    errormessage = property(lambda self: _("Cannot add %(person)s to %(this)s"))
+    errormessage = property(lambda self:
+                                _("Cannot add %(person)s to %(this)s"))
 
     def info(self):
         return FacetManager(self.context).facetByName('address_info')
@@ -833,52 +838,56 @@ class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
                                           value=info.district)
         self.town_widget = TextWidget('town', _('Town'),
                                       value=info.town)
-        self.streetNr_widget = TextWidget('streetNr', _('Street Number'), value=info.streetNr)
-        self.thoroughfareName_widget = TextWidget('thoroughfareName', _('Thoroughfare Name'), value=info.thoroughfareName)
+        self.streetNr_widget = TextWidget('streetNr', _('Street Number'),
+                                          value=info.streetNr)
+        self.thoroughfareName_widget = TextWidget('thoroughfareName',
+                                                  _('Thoroughfare Name'),
+                                                  value=info.thoroughfareName)
 
     def do_POST(self, request):
         if 'CANCEL' in request.args:
             return self.do_GET(request)
         widgets = [self.country_widget, self.postcode_widget,
-                   self.district_widget, self.town_widget, 
+                   self.district_widget, self.town_widget,
                    self.streetNr_widget, self.thoroughfareName_widget]
-        
+
         for widget in widgets:
             widget.update(request)
-            
+
         # This is how to require a field.  Do we want any required here?
         #self.country_widget.require()
-        
+
         infofacet = self.info()
-        
+
         allow_duplicates = 'CONFIRM' in request.args
-        
+
         for widget in widgets:
             if widget.error:
                 return self.do_GET(request)
-            
+
         country = self.country_widget.value
         postcode = self.postcode_widget.value
         district = self.district_widget.value
         town = self.town_widget.value
         streetNr = self.streetNr_widget.value
         thoroughfareName = self.thoroughfareName_widget.value
-        
+
         infofacet.country = country
         infofacet.postcode = postcode
         infofacet.district = district
         infofacet.town = town
         infofacet.streetNr = streetNr
         infofacet.thoroughfareName = thoroughfareName
-                
+
         request.appLog(_("Residence info updated on %s (%s)") %
                        (self.context.title, getPath(self.context)))
-        
+
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
 
 
-class ResidenceMoveView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+class ResidenceMoveView(View, RelationshipViewMixin,
+                        AppObjectBreadcrumbsMixin):
     """Page for "moving" a Residence (/residences/id/move.html)."""
 
     __used_for__ = IResidence
@@ -893,7 +902,8 @@ class ResidenceMoveView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     back = True
 
-    errormessage = property(lambda self: _("Cannot add %(person)s to %(this)s"))
+    errormessage = property(lambda self:
+                                _("Cannot add %(person)s to %(this)s"))
 
     def info(self):
         return FacetManager(self.context).facetByName('address_info')

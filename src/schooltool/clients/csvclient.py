@@ -59,7 +59,8 @@ Sample groups.cvs::
   "math1","Mathematics 1","math year1","subject_group"
 
 
-persons.csv contains lines of comma-separated values with the following columns:
+persons.csv contains lines of comma-separated values with the following
+columns:
 
   id          -- unique id of person (optional)
   surname     -- person's surname
@@ -206,8 +207,8 @@ class CSVImporterHTTP(CSVImporterBase):
             self.process(method, resource, body=body)
 
     def importPerson(self, name, surname, given_name, groups):
-        
         """Import a person.
+
         Returns the name of the created person object.
         """
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'

@@ -43,6 +43,7 @@ Occupies = RelationshipSchema(URIOccupies,
                               resides=URICurrentlyResides,
                               residence=URICurrentResidence)
 
+
 class ResidenceFacet(FacetMixin, RelationshipValenciesMixin):
     """Facet for an Address."""
 

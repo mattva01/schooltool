@@ -107,7 +107,6 @@ class FacetManager:
         return ob.__facets__.valueForName(name)
 
 
-
 def registerFacetFactory(factory):
     """Register the given facet factory by the given name.
 
@@ -248,7 +247,6 @@ class DynamicSchemaService(Persistent):
 
     def getDefault(self):
         return self[self.default_id]
-
 
 
 #

@@ -200,9 +200,9 @@ class CSVImporterZODB(CSVImporterBase):
                 person = self.persons.new(__name__=name, title=title)
             except KeyError, e:
                 raise DataError(_("Person already exists: %r") % name)
-            
+
         Membership(group=self.groups['root'], member=person)
-        
+
         for group in groups.split():
             try:
                 Membership(group=self.groups[group], member=person)
@@ -237,7 +237,7 @@ class CSVImporterZODB(CSVImporterBase):
             infofacet.last_name = surname
         except ValueError:
             infofacet.first_name = ''
-            infofacet.last_name = name        
+            infofacet.last_name = name
         if dob:
             infofacet.date_of_birth = parse_date(dob)
         else:

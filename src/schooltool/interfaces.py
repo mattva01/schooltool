@@ -720,6 +720,7 @@ class IFacet(ILocation):
         not be removable by the user.
         """)
 
+
 class IFacetedRelationshipSchemaFactory(Interface):
 
     def __call__(relationship_schema, **facet_factories):
@@ -807,6 +808,7 @@ class IFacetAPI(Interface):
 
         factory must implement IFacetFactory
         """
+
 
 #
 # Access control
@@ -2217,7 +2219,7 @@ class IDynamicSchema(Interface):
 class IDynamicSchemaService(ILocation):
     """Service for creating dynamic schema definitions
 
-    This should be subclassed with DynamicFacetService and 
+    This should be subclassed with DynamicFacetService and
     DynamicRelationshipService
     """
 
