@@ -32,7 +32,8 @@ from zope.interface import implements, moduleProvides
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
-from schooltool.interfaces import ITimetableActivity, ISchooldayPeriod
+from schooltool.interfaces import ITimetableActivity, ITimetableException
+from schooltool.interfaces import ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IModuleSetup
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
@@ -213,6 +214,18 @@ class TimetableActivity:
 
     def __hash__(self):
         return hash((self.title, self.owner, self.resources))
+
+
+class TimetableException:
+
+    implements(ITimetableException)
+
+    def __init__(self, date, period_id, activity, replacement):
+        assert isinstance(date, datetime.date)
+        self.date = date
+        self.period_id = period_id
+        self.activity = activity
+        self.replacement = replacement
 
 
 #

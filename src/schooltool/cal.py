@@ -34,7 +34,6 @@ from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
 from schooltool.interfaces import ICalendarOwner
 from schooltool.interfaces import IACLCalendar
-from schooltool.interfaces import ITimetableException
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
 from schooltool.interfaces import Unchanged
@@ -1103,14 +1102,3 @@ class DailyRecurrenceRule:
         """
         pass
 
-
-class TimetableException:
-
-    implements(ITimetableException)
-
-    def __init__(self, date, period_id, activity, replacement):
-        assert isinstance(date, datetime.date)
-        self.date = date
-        self.period_id = period_id
-        self.activity = activity
-        self.replacement = replacement

@@ -411,6 +411,21 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertEquals(ta.title, "Dancing")
 
 
+class TestTimetableException(unittest.TestCase):
+
+    def test(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.interfaces import ITimetableException
+        activity = object()
+        replacement = None
+        e = TimetableException(date(2004, 10, 12), 123, activity, replacement)
+        verifyObject(ITimetableException, e)
+        self.assertEquals(e.date, date(2004, 10, 12))
+        self.assertEquals(e.period_id, 123)
+        assert e.activity is activity
+        assert e.replacement is replacement
+
+
 class TestTimetablingPersistence(unittest.TestCase):
     """A functional test for timetables persistence."""
 
@@ -1172,6 +1187,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
+    suite.addTest(unittest.makeSuite(TestTimetableException))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
