@@ -29,7 +29,7 @@ from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
-from schooltool.browser.auth import isManager
+from schooltool.browser.auth import isManager, isTeacher
 
 
 __metaclass__ = type
@@ -143,6 +143,13 @@ class View(_View):
         To be used from page templates (e.g. tal:condition="view/isManager").
         """
         return isManager(self.request.authenticated_user)
+
+    def isTeacher(self):
+        """Check if the authenticated user is a manager or a teacher.
+
+        To be used from page templates (e.g. tal:condition="view/isTeacher").
+        """
+        return isTeacher(self.request.authenticated_user)
 
 
 class StaticFile(View):

@@ -200,6 +200,17 @@ class TestView(AppSetupMixin, unittest.TestCase):
         view.request = RequestStub(authenticated_user=self.manager)
         self.assert_(view.isManager())
 
+    def test_isManager(self):
+        view = self.createView()
+        view.request = RequestStub()
+        self.assert_(not view.isTeacher())
+        view.request = RequestStub(authenticated_user=self.person)
+        self.assert_(not view.isTeacher())
+        view.request = RequestStub(authenticated_user=self.teacher)
+        self.assert_(view.isTeacher())
+        view.request = RequestStub(authenticated_user=self.manager)
+        self.assert_(view.isTeacher())
+
 
 class TestStaticFile(unittest.TestCase):
 
