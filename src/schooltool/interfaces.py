@@ -852,7 +852,7 @@ class IFacet(ILocation):
         title=u"Unique name within the parent's facets")
 
     __parent__ = Field(
-        title=u"The object this facet is augmenting"
+        title=u"The object this facet is augmenting",
         description=u"""
         The object will provide IFaceted, but we cannot declare that without
         creating a dependency cycle.
