@@ -47,6 +47,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
+from zope.app.container.contained import ObjectAddedEvent
 
 from schoolbell.app.app import SchoolBellApplication, Person
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -389,7 +390,7 @@ def bootstrapSchoolBell(db):
         app = SchoolBellApplication()
         directlyProvides(app, IContainmentRoot)
         root[ZopePublication.root_name] = app
-        setUpLocalAuth(app)
+        notify(ObjectAddedEvent(app))
         manager = Person('manager', 'SchoolBell Manager')
         manager.setPassword('schoolbell')
         app['persons']['manager'] = manager

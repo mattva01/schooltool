@@ -258,7 +258,7 @@ def doctest_setup():
 
 
 def doctest_bootstrapSchoolBell():
-    """Tests for bootstrapSchoolBell()
+    r"""Tests for bootstrapSchoolBell()
 
     Normally, bootstrapSchoolBell is called when Zope 3 is fully configured
 
@@ -312,10 +312,19 @@ def doctest_bootstrapSchoolBell():
 
     This user has a grant for zope.Manager role
 
-        >>> from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...     IPrincipalRoleManager
         >>> grants = IPrincipalRoleManager(app)
         >>> grants.getRolesForPrincipal('sb.person.manager')
         [('zope.Manager', PermissionSetting: Allow)]
+
+    All users have a 'schoolbell.view' permission:
+
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...     IPrincipalPermissionMap
+        >>> grants = IPrincipalPermissionMap(app)
+        >>> grants.getPermissionsForPrincipal('zope.Authenticated')
+        [('schoolbell.view', PermissionSetting: Allow)]
 
     bootstrapSchoolBell doesn't do anything if it finds the root object already
     present in the database.
