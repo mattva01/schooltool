@@ -2,13 +2,13 @@ SchoolTool for Debian
 ---------------------
 
 This is an early testing version of SchoolTool.  The configuration file is
-/etc/schooltool.conf.
+/etc/schooltool/schooltool.conf.
 
-If you don't want schooltool to start automatically on system boot, edit
+If you don't want SchoolTool to start automatically on system boot, edit
 /etc/default/schooltool.
 
-Look at /usr/share/doc/schooltool-server/examples/schooltool.conf.example
-for a full list of SchoolTool server configuration options.
+Look at /usr/share/doc/schooltool/examples/schooltool.conf.in for a full
+list of SchoolTool server configuration options.
 
 The simplest way to start playing with SchoolTool is as follows:
 
@@ -21,4 +21,10 @@ The simplest way to start playing with SchoolTool is as follows:
 By default a user 'manager' with password 'schooltool' is created with full
 access and modification privileges.
 
- -- Marius Gedminas <marius@pov.lt>  Wed, 25 Aug 2004 15:15:41 +0300
+Present and Past Maintainers
+----------------------------
+
+Past Maintainer:
+        Marius Gedminas <marius@pov.lt>
+Current maintainer:
+        Brian Sutherland <jinty@web.de>
