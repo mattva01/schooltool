@@ -155,7 +155,7 @@ class ImmutableCalendar:
     implements(ICalendar)
 
     def __init__(self, events):
-        self.events = events
+        self.events = list(events)
 
     def __iter__(self):
         return iter(self.events)
