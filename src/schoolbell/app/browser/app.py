@@ -36,8 +36,10 @@ from zope.security.proxy import removeSecurityProxy
 from zope.component import adapts
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import IGroupMember, IGroupContained
-from schoolbell.app.interfaces import IPerson, IResource, IPersonContainer
+from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
+from schoolbell.app.interfaces import IPersonContainer, IPersonContained
+from schoolbell.app.interfaces import IGroupContainer, IGroupContained
+from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.app import Person
 
 
@@ -57,6 +59,8 @@ class ContainerView(BrowserView):
 class PersonContainerView(ContainerView):
     """A Person Container view."""
 
+    __used_for__ = IPersonContainer
+
     index_title = _("Person index")
     add_title = _("Add a new person")
     add_url = "add.html"
@@ -64,6 +68,8 @@ class PersonContainerView(ContainerView):
 
 class GroupContainerView(ContainerView):
     """A Group Container view."""
+
+    __used_for__ = IGroupContainer
 
     index_title = _("Group index")
     add_title = _("Add a new group")
@@ -73,6 +79,8 @@ class GroupContainerView(ContainerView):
 class ResourceContainerView(ContainerView):
     """A Resource Container view."""
 
+    __used_for__ = IResourceContainer
+
     index_title = _("Resource index")
     add_title = _("Add a new resource")
     add_url = "+/addSchoolBellResource.html"
@@ -80,6 +88,8 @@ class ResourceContainerView(ContainerView):
 
 class PersonView(BrowserView):
     """A Person info view."""
+
+    __used_for__ = IPersonContained
 
     def canEdit(self):
         return True # TODO: implement permission checking
@@ -91,6 +101,8 @@ class PersonView(BrowserView):
 
 class PersonPhotoView(BrowserView):
     """View that returns photo of a Person."""
+
+    __used_for__ = IPerson
 
     def __call__(self):
         photo = self.context.photo
@@ -199,6 +211,8 @@ class MemberViewResources(MemberViewBase):
 class ResourceView(BrowserView):
     """A Resource info view."""
 
+    __used_for__ = IResourceContained
+
     def canEdit(self):
         return True # TODO: implement permission checking
 
@@ -226,6 +240,8 @@ class IPersonEditForm(Interface):
 
 class PersonEditView(BrowserView):
     """A view for editing a person."""
+
+    __used_for__ = IPersonContained
 
     error = None
     message = None
@@ -420,7 +436,10 @@ class BaseEditView(EditView):
 class GroupEditView(BaseEditView):
     """A view for editing group info."""
 
+    __used_for__ = IGroupContained
+
 
 class ResourceEditView(BaseEditView):
     """A view for editing resource info."""
 
+    __used_for__ = IResourceContained
