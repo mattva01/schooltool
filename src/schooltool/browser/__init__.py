@@ -21,6 +21,7 @@ The schooltool.browser package.
 """
 
 import os
+import datetime
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.component import getTicketService
@@ -33,6 +34,10 @@ from schooltool.browser.auth import isManager, isTeacher
 
 
 __metaclass__ = type
+
+
+# Time limit for session expiration
+session_time_limit = datetime.timedelta(hours=5)
 
 
 class BrowserRequest(Request):
@@ -56,7 +61,8 @@ class BrowserRequest(Request):
         if auth_cookie:
             try:
                 ticketService = self._getTicketService()
-                credentials = ticketService.verifyTicket(auth_cookie)
+                credentials = ticketService.verifyTicket(auth_cookie,
+                                                         session_time_limit)
                 self.authenticate(*credentials)
             except AuthenticationError:
                 # Do nothing if the cookie has expired -- if the user is not

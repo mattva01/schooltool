@@ -88,6 +88,26 @@ class TicketService(Persistent):
       AuthenticationError
 
     It is a very good idea to expire a user's ticket when the user logs out.
+
+    It is also possible to change the expiration time for a ticket if it is
+    being used, by passing a duration argument to verifyTicket:
+
+      >>> ticket = service.newTicket(('user', 'password'),
+      ...                            datetime.timedelta(minutes=1))
+      >>> service.verifyTicket(ticket, datetime.timedelta(minutes=2))
+      ('user', 'password')
+
+    We could now do time.sleep(61) and call verifyTicket to make sure the
+    expiration time is updated, but that would slow down unit tests
+    considerably.  Instead, we'll shorten the expiration time to 0 seconds:
+
+      >>> service.verifyTicket(ticket, datetime.timedelta(minutes=0))
+      ('user', 'password')
+      >>> service.verifyTicket(ticket)
+      Traceback (most recent call last):
+        ...
+      AuthenticationError
+
     """
 
     def __init__(self):
@@ -114,10 +134,13 @@ class TicketService(Persistent):
         self._tickets[ticket] = (credentials, expires)
         return ticket
 
-    def verifyTicket(self, ticket):
+    def verifyTicket(self, ticket, duration=None):
         """Verify a ticket and return the credentials associated with it.
 
         Raises AuthenticationError if the ticket is not valid or has expired.
+
+        If the 'duration' argument is not None, and the ticket is valid, its
+        expiration time is updated to be a specified duration from now.
         """
         try:
             credentials, expires = self._tickets[ticket]
@@ -133,6 +156,14 @@ class TicketService(Persistent):
                     pass
                 raise AuthenticationError
             else:
+                if duration is not None:
+                    expires = datetime.datetime.now() + duration
+                    self._tickets[ticket] = (credentials, expires)
+                    # There is a very small race condition.  It is possible,
+                    # that after we verify a ticket just before its expiration,
+                    # but before we update the new expiration time in the
+                    # store, another thread might try to verify the same ticket
+                    # and decide that it is expired.
                 return credentials
 
     def expire(self, ticket):

@@ -27,6 +27,7 @@ import re
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
+from schooltool.browser import session_time_limit
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.model import PersonView, GroupView, ResourceView
@@ -41,9 +42,6 @@ from schooltool.component import getTimetableSchemaService
 from schooltool.browser.timetable import TimetableSchemaWizard
 
 __metaclass__ = type
-
-# Time limit for session expiration
-session_time_limit = datetime.timedelta(hours=5)
 
 
 # Person username / group __name__ validation
