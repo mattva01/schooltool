@@ -23,6 +23,7 @@ See the README.txt file in this package for a detailed overview with working
 code examples.
 """
 
-from schoolbell.relationship.uri import URIObject, IURIObject      # reexport
-from schoolbell.relationship.relationship import relate            # reexport
-from schoolbell.relationship.relationship import getRelatedObjects # reexport
+from schoolbell.relationship.uri import URIObject, IURIObject       # reexport
+from schoolbell.relationship.relationship import relate             # reexport
+from schoolbell.relationship.relationship import getRelatedObjects  # reexport
+from schoolbell.relationship.relationship import RelationshipSchema # reexport

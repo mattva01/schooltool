@@ -25,6 +25,36 @@ $Id$
 import unittest
 
 from zope.testing import doctest
+from zope.app.tests import setup
+from zope.interface import implements
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+
+
+class SomeObject(object):
+    """A simple annotatable object for tests."""
+
+    implements(IAttributeAnnotatable)
+
+    def __init__(self, name):
+        self._name = name
+
+    def __repr__(self):
+        return self._name
+
+
+def setUp():
+    """Set up for schoolbell.relationship doctests.
+
+    Calls Zope's placelessSetUp, sets up annotations and relationships.
+    """
+    setup.placelessSetUp()
+    setup.setUpAnnotations()
+    setUpRelationships()
+
+
+def tearDown():
+    """Tear down for schoolbell.relationshp doctests."""
+    setup.placelessTearDown()
 
 
 def setUpRelationships():
@@ -224,6 +254,70 @@ def doctest_getRelatedObjects():
         ['b']
         >>> getRelatedObjects(obj, 'role_of_c')
         []
+
+    """
+
+
+def doctest_RelationshipSchema():
+    """Tests for RelationshipSchema
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+    The constructor takes exactly two keyword arguments
+
+        >>> from schoolbell.relationship import RelationshipSchema
+        >>> RelationshipSchema('example:Mgmt', manager='example:Mgr',
+        ...                    report='example:Rpt', supervisor='example:Spv')
+        Traceback (most recent call last):
+          ...
+        TypeError: A relationship must have exactly two ends.
+        >>> RelationshipSchema('example:Mgmt', manager='example:Mgr')
+        Traceback (most recent call last):
+          ...
+        TypeError: A relationship must have exactly two ends.
+
+    This works:
+
+        >>> Management = RelationshipSchema('example:Mgmt',
+        ...                                 manager='example:Mgr',
+        ...                                 report='example:Rpt')
+
+    You can call relationship schemas
+
+        >>> a, b = map(SomeObject, ['a', 'b'])
+        >>> Management(manager=a, report=b)
+
+    You will see that a is b's manager, and b is a's report:
+
+        >>> from schoolbell.relationship import getRelatedObjects
+        >>> getRelatedObjects(b, 'example:Mgr')
+        [a]
+        >>> getRelatedObjects(a, 'example:Rpt')
+        [b]
+
+    Order of arguments does not matter
+
+        >>> c, d = map(SomeObject, ['c', 'd'])
+        >>> Management(report=c, manager=d)
+        >>> getRelatedObjects(c, 'example:Mgr')
+        [d]
+        >>> getRelatedObjects(d, 'example:Rpt')
+        [c]
+
+    You must give correct arguments, though
+
+        >>> Management(report=c, friend=d)
+        Traceback (most recent call last):
+          ...
+        TypeError: Missing a 'manager' keyword argument.
+
+    You should not give extra arguments either
+
+        >>> Management(report=c, manager=b, friend=d)
+        Traceback (most recent call last):
+          ...
+        TypeError: Too many keyword arguments.
 
     """
 

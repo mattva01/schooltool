@@ -47,6 +47,61 @@ def getRelatedObjects(obj, role):
             if link.role == role]
 
 
+class RelationshipSchema(object):
+    """Relationship schema.
+
+    Boring doctest setup:
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schoolbell.relationship.tests import SomeObject
+        >>> setUp()
+        >>> a = SomeObject('a')
+        >>> b = SomeObject('b')
+
+    Relationship schemas are syntactic sugar.  If you define a relationship
+    schema like this:
+
+        >>> URIMembership = 'example:Membership'
+        >>> URIMember = 'example:Member'
+        >>> URIGroup = 'example:Group'
+        >>> Membership = RelationshipSchema(URIMembership,
+        ...                     member=URIMember, group=URIGroup)
+
+    Then you can create relationships by writing
+
+        >>> Membership(member=a, group=b)
+
+    instead of having to explicitly say
+
+        >>> relate(URIMembership, (a, URIMember), (b, URIGroup))
+
+    That's it.
+
+        >>> tearDown()
+
+    """
+
+    def __init__(self, rel_type, **roles):
+        if len(roles) != 2:
+            raise TypeError("A relationship must have exactly two ends.")
+        self.rel_type = rel_type
+        self.roles = roles
+
+    def __call__(self, **parties):
+        (name_of_a, role_of_a), (name_of_b, role_of_b) = self.roles.items()
+        try:
+            a = parties.pop(name_of_a)
+        except KeyError:
+            raise TypeError('Missing a %r keyword argument.' % name_of_a)
+        try:
+            b = parties.pop(name_of_b)
+        except KeyError:
+            raise TypeError('Missing a %r keyword argument.' % name_of_b)
+        if parties:
+            raise TypeError("Too many keyword arguments.")
+        relate(self.rel_type, (a, role_of_a), (b, role_of_b))
+
+
 class Link(Persistent):
     """One half of a relationship.
 

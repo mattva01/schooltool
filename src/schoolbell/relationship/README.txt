@@ -36,7 +36,7 @@ IAttributeAnnotatable.
     ...     def __repr__(self):
     ...         return self._name
 
-We need some set up to make Zope 3 annotations work.
+We need some setup to make Zope 3 annotations work.
 
     >>> from zope.app.tests import setup
     >>> setup.placelessSetUp()
@@ -51,13 +51,23 @@ You can create relationships by calling the `relate` function
     >>> frogger = SomeObject('frogger')
     >>> relate(URIMembership, (frogs, URIGroup), (frogger, URIMember))
 
+Since you will always want to use a particular set of roles for a given
+relationship type, you can define a relationship schema and use it as a
+shortcut:
+
+    >>> from schoolbell.relationship import RelationshipSchema
+    >>> Membership = RelationshipSchema(URIMembership, group=URIGroup,
+    ...                                 member=URIMember)
+    >>> lilfroggy = SomeObject('lilfroggy')
+    >>> Membership(member=lilfroggy, group=frogs)
+
 You can query relationships by calling the `getRelatedObjects` function.
 For example, you can get a list of all members of the `frogs` group like
 this:
 
     >>> from schoolbell.relationship import getRelatedObjects
     >>> getRelatedObjects(frogs, URIMember)
-    [frogger]
+    [frogger, lilfroggy]
 
 The relationship is bidirectional, so you can ask an object what groups it
 belongs to
@@ -65,7 +75,13 @@ belongs to
     >>> getRelatedObjects(frogger, URIGroup)
     [frogs]
 
+
+
 TODO: API to remove relationships
 TODO: API to list all relationships?
 TODO: events
+
+Cleaning up:
+
+    >>> setup.placelessTearDown()
 
