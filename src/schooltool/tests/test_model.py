@@ -182,35 +182,6 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
         self.assert_(person.getCurrentAbsence() is None)
 
 
-class TestUnchanged(unittest.TestCase):
-
-    def test(self):
-        from StringIO import StringIO
-        from cPickle import Pickler, Unpickler
-        from schooltool.interfaces import UnchangedClass, Unchanged
-        unchanged1 = UnchangedClass()
-        self.assert_(unchanged1 is Unchanged)
-        self.assert_(Unchanged is not UnchangedClass)
-
-        self.assertRaises(TypeError, lambda: Unchanged < Unchanged)
-        self.assertRaises(TypeError, lambda: Unchanged <= Unchanged)
-        self.assertRaises(TypeError, lambda: Unchanged > Unchanged)
-        self.assertRaises(TypeError, lambda: Unchanged >= Unchanged)
-        self.assert_(Unchanged == Unchanged)
-        self.assert_(not (Unchanged != Unchanged))
-        self.assert_(Unchanged != object())
-        self.assert_(not (Unchanged == object()))
-
-        s = StringIO()
-        p = Pickler(s)
-        p.dump(unchanged1)
-        s.seek(0)
-        u = Unpickler(s)
-        unchanged2 = u.load()
-
-        self.assert_(unchanged2 is Unchanged)
-
-
 class TestGroup(unittest.TestCase):
 
     def test(self):
@@ -513,7 +484,6 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
-    suite.addTest(unittest.makeSuite(TestUnchanged))
     suite.addTest(unittest.makeSuite(TestAbsencePersistence))
     suite.addTest(unittest.makeSuite(TestAbsence))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerMixin))
