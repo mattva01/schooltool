@@ -49,18 +49,18 @@ if len(sys.argv) < 4:
 
 
 def setupOnePointZero(dbpath):
-        storage = FileStorage(dbpath)
-        db = DB(storage)
+    storage = FileStorage(dbpath)
+    db = DB(storage)
 
-        configure()
-        bootstrapSchoolBell(db)
+    configure()
+    bootstrapSchoolBell(db)
 
-        conn = db.open()
-        root = conn.root()
+    conn = db.open()
+    root = conn.root()
 
-        app = root.get(ZopePublication.root_name)
+    app = root.get(ZopePublication.root_name)
 
-        return app
+    return app
 
 def importCalendar(obj, icalfile):
     events = read_icalendar(file(icalfile))
