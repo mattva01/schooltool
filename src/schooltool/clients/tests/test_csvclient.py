@@ -292,6 +292,17 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
                           ('POST', '/groups/bar/relationships',
                            membership_pattern % "/persons/quux")])
 
+        im.process = processStub()
+        im.importPerson('Prof. Whiz', 'teachers', 'group1', im.teaching)
+        self.assertEqual(im.process.requests,
+                         [('POST', '/persons',
+                           '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                           ' title="Prof. Whiz"/>'),
+                          ('POST', '/groups/teachers/relationships',
+                           membership_pattern % "/persons/quux"),
+                          ('POST', '/groups/group1/relationships',
+                           teaching_pattern % "/persons/quux")])
+
     def test_importResource(self):
         from schooltool.clients.csvclient import CSVImporterHTTP
 
@@ -386,12 +397,22 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
         self.assert_(im.server.ssl)
 
 
+class TestCSVImporterInternal(unittest.TestCase):
+
+    def test_init(self):
+        from schooltool.clients.csvclient import CSVImporterInternal
+        root = object()
+        im = CSVImporterInternal(root)
+        self.assert_(im.root is root)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.clients.csvclient'))
     suite.addTest(unittest.makeSuite(TestHTTPClient))
     suite.addTest(unittest.makeSuite(TestCSVImporterBase))
     suite.addTest(unittest.makeSuite(TestCSVImporterHTTP))
+    suite.addTest(unittest.makeSuite(TestCSVImporterInternal))
     return suite
 
 if __name__ == '__main__':

@@ -216,6 +216,7 @@ class CSVImporterBase:
 
 
 class CSVImporterHTTP(CSVImporterBase):
+    """A CSV importer that works over HTTP."""
 
     fopen = open
     verbose = True
@@ -261,7 +262,7 @@ class CSVImporterHTTP(CSVImporterBase):
                 ' xlink:role="http://schooltool.org/ns/membership/group"'
                 ' xlink:href="%s"/>' % to_xml(member_path))
 
-    def teaching(self, teacher, taught):
+    def teaching(self, taught, teacher):
         """A tuple (method, path, body) to add a teacher to a group"""
         return ('POST', '/groups/%s/relationships' % taught,
                 '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
@@ -269,7 +270,7 @@ class CSVImporterHTTP(CSVImporterBase):
                 ' xlink:type="simple"'
                 ' xlink:arcrole="http://schooltool.org/ns/teaching"'
                 ' xlink:role="http://schooltool.org/ns/teaching/taught"'
-                ' xlink:href="/persons/%s"/>' % to_xml(teacher))
+                ' xlink:href="%s"/>' % to_xml(teacher))
 
     def importGroup(self, name, title, parents, facets):
         """Import a group."""
@@ -371,6 +372,25 @@ class CSVImporterHTTP(CSVImporterBase):
             print response.read()
             sys.exit(1)
         return response
+
+
+class CSVImporterInternal(CSVImporterBase):
+    """A CSV importer that works directly with the database."""
+
+    def __init__(self, root):
+        self.root = root
+
+    def importGroup(self, name, title, parents, facets):
+        raise NotImplementedError()
+
+    def importPerson(self, title, parent, groups, relation):
+        raise NotImplementedError()
+
+    def importResource(self, title, groups):
+        raise NotImplementedError()
+
+    def importPersonInfo(self, name, title, dob, comment):
+        raise NotImplementedError()
 
 
 def to_xml(s):
