@@ -51,12 +51,11 @@ from schooltool.component import getTimetableSchemaService
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import getOptions
 from schooltool.interfaces import IPerson, IGroup, IResource, INote, IResidence
-from schooltool.membership import Membership
 from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.translation import ugettext as _
-from schooltool.uris import URIMember, URIGroup, URITeacher
+from schooltool.uris import URIMembership, URIMember, URIGroup, URITeacher
 from schooltool.uris import URIGuardian, URICustodian, URIWard
 from schooltool.uris import URICurrentResidence
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
@@ -529,10 +528,12 @@ class GuardianEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
             return [member for member in siblings
                     if IPerson.providedBy(member)]
         else:
-            # XXX this looks obfuscated for no reason
-            return itertools.chain(traverse(self.context, '/persons').itervalues())
+            return traverse(self.context, '/persons').itervalues()
 
     def createRelationship(self, other):
+        # XXX This relationship should probably be created like the
+        # member relationship (GroupEditView.createRelationship),
+        # by calling SchemaInvocation.
         Guardian(custodian=self.context, ward=other)
 
 
@@ -572,7 +573,12 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         return self._list(addable)
 
     def createRelationship(self, other):
-        Membership(group=self.context, member=other)
+        # As self.context is always a Group, the membership valency always
+        # exists.  We do not use Membership() directly because sometimes
+        # the corresponding SchemaInvocation object does some extra work
+        # (such as adding a facet to the new member).
+        val = self.context.getValencies()[URIMembership, URIGroup]
+        val.schema(group=self.context, member=other)
 
     def _source(self, restrict_membership):
         if restrict_membership:

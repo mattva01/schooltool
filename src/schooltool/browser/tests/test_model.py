@@ -881,9 +881,11 @@ class TestGroupEditView(SchoolToolSetup):
         from schooltool.membership import Membership
         from schooltool import membership
         from schooltool import relationship
+        from schooltool import teaching
         self.setUpRegistries()
         membership.setUp()
         relationship.setUp()
+        teaching.setUp()
         app = Application()
         self.app = app
         app['groups'] = ApplicationObjectContainer(Group)
@@ -905,9 +907,12 @@ class TestGroupEditView(SchoolToolSetup):
         Membership(group=self.group, member=self.per2)
         Membership(group=self.group, member=self.res2)
 
-    def test(self):
+    def createView(self):
         from schooltool.browser.model import GroupEditView
-        view = GroupEditView(self.group)
+        return GroupEditView(self.group)
+
+    def test(self):
+        view = self.createView()
         view.authorization = lambda x, y: True
         request = RequestStub()
         result = view.render(request)
@@ -916,9 +921,8 @@ class TestGroupEditView(SchoolToolSetup):
         self.assert_('Pete' in result, result)
 
     def test_list(self):
-        from schooltool.browser.model import GroupEditView
         from schooltool.rest import absoluteURL
-        view = GroupEditView(self.group)
+        view = self.createView()
         view.request = RequestStub()
         list = view.list()
         expected = [self.per2, self.per, self.res2]
@@ -935,9 +939,8 @@ class TestGroupEditView(SchoolToolSetup):
                           ['Person', 'Person', 'Resource'])
 
     def test_addList(self):
-        from schooltool.browser.model import GroupEditView
         from schooltool.rest import absoluteURL
-        view = GroupEditView(self.group)
+        view = self.createView()
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
         expected = [self.per3, self.res]
@@ -962,7 +965,6 @@ class TestGroupEditView(SchoolToolSetup):
                             'url': 'http://localhost:7001/persons/lj'}])
 
     def test_addList_restricted(self):
-        from schooltool.browser.model import GroupEditView
         from schooltool.rest import absoluteURL
         from schooltool.membership import Membership
 
@@ -975,7 +977,7 @@ class TestGroupEditView(SchoolToolSetup):
 
         self.app.restrict_membership = True
 
-        view = GroupEditView(self.group)
+        view = self.createView()
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
         expected = [john, pete]
@@ -1000,10 +1002,9 @@ class TestGroupEditView(SchoolToolSetup):
                             'url': 'http://localhost:7001/persons/pete'}])
 
     def test_update_DELETE(self):
-        from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
         from schooltool.uris import URIMember
-        view = GroupEditView(self.group)
+        view = self.createView()
         request = RequestStub(args={"DELETE":"Remove them",
                                     "CHECK": ['/groups/sub', '/persons/p']})
         view.request = request
@@ -1019,10 +1020,9 @@ class TestGroupEditView(SchoolToolSetup):
                   "/persons/p and /groups/new removed", INFO)])
 
     def test_update_ADD(self):
-        from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
         from schooltool.uris import URIMember
-        view = GroupEditView(self.group)
+        view = self.createView()
         request = RequestStub(args={"FINISH_ADD":"Add selected",
                                     "toadd": ['/groups/group2',
                                               '/persons/lj']})
@@ -1040,15 +1040,30 @@ class TestGroupEditView(SchoolToolSetup):
                   "/persons/lj and /groups/new created", INFO)])
 
     def test_update_ADD_loop(self):
-        from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
-        view = GroupEditView(self.group)
+        view = self.createView()
         request = RequestStub(args={"FINISH_ADD":"Add selected",
                                     "toadd": ['/groups/new']})
         view.request = request
         result = view.update()
         self.assertEquals(sorted(request.applog), [])
         self.assertEquals(result, 'Cannot add Teachers to Teachers')
+
+    def test_update_facets(self):
+        from zope.component import getUtility
+        from schooltool.interfaces import IFacetFactory
+        from schooltool.facet import FacetManager
+
+        facet_factory = getUtility(IFacetFactory, 'teacher_group')
+        facet = facet_factory()
+        FacetManager(self.group).setFacet(facet, name=facet_factory.facet_name)
+
+        view = self.createView()
+        view.request = RequestStub(args={"FINISH_ADD": "Add selected",
+                                         "toadd": '/persons/lj'})
+        result = view.update()
+        fm = FacetManager(self.per3)
+        self.assert_(fm.facetByName('teacher'))
 
 
 class TestGroupSubgroupView(SchoolToolSetup):
