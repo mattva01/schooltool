@@ -29,13 +29,14 @@ from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 from zope.security.interfaces import IGroupAwarePrincipal
-from zope.app.component.localservice import getNextService
+from zope.app.component import getNextUtility
 from zope.app.session.interfaces import ISession
-from zope.app.site.interfaces import ISite
-from zope.app.site.service import ServiceManager, ServiceRegistration
+from zope.app.component.interfaces import ISite
+from zope.app.component.site import LocalSiteManager
 from zope.app.utility.utility import LocalUtilityService, UtilityRegistration
 from zope.component.servicenames import Utilities
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.app.component.interfaces.registration import ActiveStatus
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -125,8 +126,8 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
                 # filling in principal.groups.
                 return Principal(id, group.title)
 
-        next = getNextService(self, 'Utilities')
-        return next.getUtility(IAuthentication).getPrincipal(id)
+        next = getNextUtility(self, IAuthentication)
+        return next.getPrincipal(id)
 
     def setCredentials(self, request, username, password):
         if not self._checkPassword(username, password):
@@ -155,27 +156,19 @@ def setUpLocalAuth(site, auth=None):
         auth = SchoolBellAuthenticationUtility()
 
     if not ISite.providedBy(site):
-        site.setSiteManager(ServiceManager(site))
-        provided = directlyProvidedBy(site)
-        directlyProvides(site, provided + ISite)
+        site.setSiteManager(LocalSiteManager(site))
+        #provided = directlyProvidedBy(site)
+        #directlyProvides(site, provided + ISite)
 
     default = zapi.traverse(site, '++etc++site/default')
     reg_manager = default.getRegistrationManager()
-
-    if 'Utilities' not in default:
-        # Set up the utility service
-        utils = LocalUtilityService()
-        default['Utilities'] = utils
-        registration = ServiceRegistration(Utilities, utils)
-        reg_manager.addRegistration(registration)
-        registration.status = 'Active'
 
     if 'SchoolBellAuth' not in default:
         # Add and register the auth utility
         default['SchoolBellAuth'] = auth
         registration = UtilityRegistration('', IAuthentication, auth)
         reg_manager.addRegistration(registration)
-        registration.status = 'Active'
+        registration.status = ActiveStatus
 
 
 def authSetUpSubscriber(event):
