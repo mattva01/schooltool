@@ -972,16 +972,16 @@ class TestCalendarPersistence(unittest.TestCase):
 
     def test_SchooldayModel(self):
         from schooltool.cal import SchooldayModel
-        from transaction import get_transaction
+        import transaction
         sm = SchooldayModel(date(2003, 9, 1), date(2003, 9, 30))
         self.datamgr.root()['sm'] = sm
-        get_transaction().commit()
+        transaction.commit()
 
         d1 = date(2003, 9, 15)
         d2 = date(2003, 9, 16)
         sm.add(d1)
         sm.add(d2)
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
@@ -989,11 +989,11 @@ class TestCalendarPersistence(unittest.TestCase):
             self.assert_(sm2.isSchoolday(d1))
             self.assert_(sm2.isSchoolday(d2))
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
         sm.remove(d1)
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
@@ -1001,11 +1001,11 @@ class TestCalendarPersistence(unittest.TestCase):
             self.assert_(not sm2.isSchoolday(d1))
             self.assert_(sm2.isSchoolday(d2))
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
         sm.reset(date(2003, 9, 1), date(2003, 9, 30))
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
@@ -1013,50 +1013,50 @@ class TestCalendarPersistence(unittest.TestCase):
             self.assert_(not sm2.isSchoolday(d1))
             self.assert_(not sm2.isSchoolday(d2))
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
     def test_Calendar(self):
         from schooltool.cal import Calendar, CalendarEvent
-        from transaction import get_transaction
+        import transaction
         cal = Calendar()
         self.datamgr.root()['cal'] = cal
-        get_transaction().commit()
+        transaction.commit()
 
         e = CalendarEvent(datetime(2001, 2, 3, 4, 5, 6), timedelta(1), "xyzzy")
         cal.addEvent(e)
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
             cal2 = datamgr.root()['cal']
             self.assertEquals(list(cal2), [e])
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
         cal.clear()
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
             cal2 = datamgr.root()['cal']
             self.assertEquals(list(cal2), [])
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
         cal3 = Calendar()
         cal3.addEvent(e)
         cal.update(cal3)
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
             cal2 = datamgr.root()['cal']
             self.assertEquals(list(cal2), [e])
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
 

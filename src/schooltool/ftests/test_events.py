@@ -27,7 +27,7 @@ from zope.interface import implements, Attribute
 from schooltool.interfaces import IEvent, IEventTarget, IRelatable, ILocation
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.event import EventMixin
-from transaction import get_transaction
+import transaction
 
 __metaclass__ = type
 
@@ -76,7 +76,7 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         self.setUpRegistries()
 
     def tearDown(self):
-        get_transaction().abort()
+        transaction.abort()
         self.tearDownRegistries()
 
     def test(self):
@@ -84,7 +84,7 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         from ZODB.MappingStorage import MappingStorage
         db = DB(MappingStorage())
         datamgr = db.open()
-        get_transaction().begin()
+        transaction.begin()
 
         # Create some groups and persons and set up event routing tables:
         #
@@ -144,7 +144,7 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         event_log = EventCatcherFactory()
         getEventService(app).subscribe(event_log, IEvent)
 
-        get_transaction().commit()
+        transaction.commit()
 
         # Dispatch two events on student1 and watch their progress
         event1 = StudentEvent(student1)

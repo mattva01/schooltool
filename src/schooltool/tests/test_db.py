@@ -44,8 +44,8 @@ class FalseP(Persistent):
 class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
 
     def tearDown(self):
-        from transaction import get_transaction
-        get_transaction().abort()
+        import transaction
+        transaction.abort()
 
     def maybeAdd(self, obj):
         if self.datamgr is not None:
@@ -67,8 +67,8 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         d, p1, p2 = self.doSet()
         self.assertRaises(TypeError, d.__setitem__, object(), 1)
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def test_getitem(self):
         d, p1, p2 = self.doSet()
@@ -77,8 +77,8 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(TypeError, d.__getitem__, object())
         self.assertRaises(KeyError, d.__getitem__, P())
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def test_delitem(self):
         d, p1, p2 = self.doSet()
@@ -91,8 +91,8 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(KeyError, d.__delitem__, P())
         self.assertRaises(TypeError, d.__delitem__, object())
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def test_keys_iter_len(self):
         d, p1, p2 = self.doSet()
@@ -100,8 +100,8 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertEqualsSorted(list(d), [p1, p2])
         self.assertEqual(len(d), 2)
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def test_contains(self):
         d, p1, p2 = self.doSet()
@@ -110,8 +110,8 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(TypeError, d.__contains__, object())
         self.assert_(P() not in d)
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
 
 class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
@@ -123,15 +123,15 @@ class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
         self.datamgr = self.db.open()
 
     def testDifferentConnection(self):
-        from transaction import get_transaction
+        import transaction
         d, p1, p2 = self.doSet()
         self.datamgr.root()['p'] = d
-        get_transaction().commit()
+        transaction.commit()
         p3 = P()
         d[p3] = 3
         self.datamgr.root()['p3'] = p3
         self.assertEqual(d[p3], 3)
-        get_transaction().commit()
+        transaction.commit()
         try:
             datamgr = self.db.open()
             p = datamgr.root()['p']
@@ -139,7 +139,7 @@ class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
             self.assert_(p3 in d, 'p3 not in d')
             self.assertEqual(d[p3], 3)
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
 
@@ -162,8 +162,8 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
         self.datamgr = self.db.open()
 
     def tearDown(self):
-        from transaction import get_transaction
-        get_transaction().abort()
+        import transaction
+        transaction.abort()
         self.datamgr.close()
 
     def testPersistentKeys(self):
@@ -187,8 +187,8 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
         self.assertEqualsSorted(list(p), [a, b])
         self.assertEqual(len(p), 2)
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def testValueNotPersistent(self):
         p = self.newInstance()
@@ -239,8 +239,8 @@ class TestMaybePersistentKeysSet(TestPersistentKeysSet):
         self.assertEqualsSorted(list(p), [a, b])
         self.assertEqual(len(p), 2)
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def test_clear(self):
         p = self.newInstance()
@@ -279,7 +279,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         from schooltool.db import PersistentPairKeysDict
         from ZODB.DB import DB
         from ZODB.MappingStorage import MappingStorage
-        from transaction import get_transaction
+        import transaction
         db = DB(MappingStorage())
 
         datamgr = db.open()
@@ -289,7 +289,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         d[(p, 1)] = value
         datamgr.root()['D'] = d
         datamgr.root()['P'] = p
-        get_transaction().commit()
+        transaction.commit()
         datamgr.close()
 
         datamgr = db.open()
@@ -297,7 +297,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         p = datamgr.root()['P']
         self.assertEqual(d[(p, 1)], value)
         d[(p, 2)] = value
-        get_transaction().commit()
+        transaction.commit()
 
         # Opening a second datamanager while this one is still open to
         # ensure that the second datamanager is not the first one
@@ -309,7 +309,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         # The next assert will fail if the item with key (p, 2) is not
         # persisted properly on __setitem__.
         self.assertEqual(d2_d[(d2_p, 2)], value)
-        get_transaction().commit()
+        transaction.commit()
         datamgr2.close()
         datamgr.close()
 
@@ -317,7 +317,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         from schooltool.db import PersistentPairKeysDict
         from ZODB.DB import DB
         from ZODB.MappingStorage import MappingStorage
-        from transaction import get_transaction
+        import transaction
         db = DB(MappingStorage())
 
         datamgr = db.open()
@@ -328,14 +328,14 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         d[(p, 2)] = value
         datamgr.root()['D'] = d
         datamgr.root()['P'] = p
-        get_transaction().commit()
+        transaction.commit()
         datamgr.close()
 
         datamgr = db.open()
         d = datamgr.root()['D']
         p = datamgr.root()['P']
         del d[(p, 2)]
-        get_transaction().commit()
+        transaction.commit()
 
         # Opening a second datamanager while this one is still open to
         # ensure that the second datamanager is not the first one
@@ -347,7 +347,7 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         # The next assert will fail if the item with key (p, 2) is not
         # persisted properly on __delitem__.
         self.assertRaises(KeyError, d2_d.__getitem__, (d2_p, 2))
-        get_transaction().commit()
+        transaction.commit()
         datamgr2.close()
         datamgr.close()
 
@@ -460,8 +460,8 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         self.datamgr = self.db.open()
 
     def tearDown(self):
-        from transaction import get_transaction
-        get_transaction().abort()
+        import transaction
+        transaction.abort()
         self.datamgr.close()
 
     def testPersistentKeys(self):
@@ -501,8 +501,8 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         self.assertEquals(a.__name__, '003')  # a.__name__ not cleared
         self.assertEqualSorted(list(p.getNames()), ['002', '003'])
 
-        from transaction import get_transaction
-        get_transaction().commit()
+        import transaction
+        transaction.commit()
 
     def testValueNotPersistent(self):
         p = self.newInstance()
@@ -527,13 +527,13 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         self.assertEquals(list(p.getNames()), ['003'])
 
     def testDifferentConnection(self):
-        from transaction import get_transaction
+        import transaction
 
         p = self.newInstance()
         self.datamgr.root()['p'] = p
         a, b = N(), N()
         self.assertEqual(len(p), 0)
-        get_transaction().commit()
+        transaction.commit()
         #import pdb; pdb.set_trace()
         p.add(a)
         self.assertEquals(list(p), [a])
@@ -541,7 +541,7 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         self.assertEquals(a.__name__, '001')
         self.assertEquals(list(p.getNames()), ['001'])
         self.assertEquals(p.valueForName('001'), a)
-        get_transaction().commit()
+        transaction.commit()
         try:
             datamgr = self.db.open()
             p = datamgr.root()['p']
@@ -552,7 +552,7 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
             self.assertEquals(list(p.getNames()), ['001'])
             self.assertEquals(p.valueForName('001').__name__, a.__name__)
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
     def test_add_with_name(self):

@@ -36,30 +36,30 @@ class TestAbsencePersistence(EventServiceTestMixin, unittest.TestCase):
     def setUp(self):
         from ZODB.DB import DB
         from ZODB.MappingStorage import MappingStorage
-        from transaction import get_transaction
+        import transaction
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
-        get_transaction().begin()
+        transaction.begin()
         self.setUpEventService()
 
     def tearDown(self):
-        from transaction import get_transaction
-        get_transaction().abort()
+        import transaction
+        transaction.abort()
         self.datamgr.close()
         self.db.close()
 
     def test(self):
         from schooltool.absence import AbsenceComment, Absence
-        from transaction import get_transaction
+        import transaction
 
         person = LocatableEventTargetMixin(self.eventService)
         absence = Absence(person)
         self.datamgr.root()['a'] = absence
-        get_transaction().commit()
+        transaction.commit()
 
         comment = AbsenceComment(object(), "text")
         absence.addComment(comment)
-        get_transaction().commit()
+        transaction.commit()
 
         datamgr2 = self.db.open()
         absence2 = datamgr2.root()['a']

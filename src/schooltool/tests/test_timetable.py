@@ -423,15 +423,15 @@ class TestTimetablingPersistence(unittest.TestCase):
     def test(self):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
-        from transaction import get_transaction
+        import transaction
         tt = Timetable(('A', 'B'))
         self.datamgr.root()['tt'] = tt
-        get_transaction().commit()
+        transaction.commit()
 
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
@@ -439,19 +439,19 @@ class TestTimetablingPersistence(unittest.TestCase):
             self.assert_(tt2["A"].periods, periods)
             self.assert_(tt2["B"].periods, periods)
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
         tt["A"].add("Green", TimetableActivity("English"))
         tt["A"].add("Blue", TimetableActivity("Math"))
         tt["B"].add("Green", TimetableActivity("Biology"))
         tt["B"].add("Blue", TimetableActivity("Geography"))
-        get_transaction().commit()
+        transaction.commit()
 
         ## TimetableActivities are not persistent
         #geo = tt["B"]["Blue"].next()
         #geo.title = "Advanced geography"
-        #get_transaction().commit()
+        #transaction.commit()
 
         self.assertEqual(len(list(tt["A"]["Green"])), 1)
         self.assertEqual(len(list(tt["A"]["Blue"])), 1)
@@ -469,13 +469,13 @@ class TestTimetablingPersistence(unittest.TestCase):
             # self.assertEqual(last.title, "Advanced geography")
             self.assertEqual(last.title, "Geography")
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
     def testTimetableActivity(self):
         from schooltool.timetable import TimetableActivity
         from schooltool.interfaces import IContainmentRoot
-        from transaction import get_transaction
+        import transaction
         from schooltool.model import Person, Resource
 
         parent = PersistentLocatableStub()
@@ -497,7 +497,7 @@ class TestTimetablingPersistence(unittest.TestCase):
         self.datamgr.root()['tb'] = tb
         self.datamgr.root()['tseta'] = tseta
         self.datamgr.root()['tsetb'] = tsetb
-        get_transaction().commit()
+        transaction.commit()
 
         try:
             datamgr = self.db.open()
@@ -514,7 +514,7 @@ class TestTimetablingPersistence(unittest.TestCase):
             self.assertEqual(hash(ta), hash(ta2))
             #self.assertEqual(tset, tset2)
         finally:
-            get_transaction().abort()
+            transaction.abort()
             datamgr.close()
 
 

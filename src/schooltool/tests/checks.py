@@ -75,15 +75,15 @@ class ComponentChecks:
 class TransactionChecks:
 
     def startTest(self, test):
-        from transaction import get_transaction
-        txn = get_transaction()
+        import transaction
+        txn = transaction.get()
         self.had_resources = bool(txn._resources)
 
     def stopTest(self, test):
         if self.had_resources:
             return
-        from transaction import get_transaction
-        txn = get_transaction()
+        import transaction
+        txn = transaction.get()
         if txn._resources:
             warn("%s left an unclean transaction" % test)
             txn.abort()

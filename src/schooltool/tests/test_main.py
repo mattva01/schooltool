@@ -317,8 +317,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def test_run(self):
         # make sure we have a clean fresh transaction
-        from transaction import get_transaction
-        get_transaction().abort()
+        import transaction
+        transaction.abort()
 
         from schooltool.main import Server
         from schooltool.http import Request
