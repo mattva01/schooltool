@@ -1406,7 +1406,7 @@ class TestCalendarComboMixin(unittest.TestCase):
     def test(self):
         from schooltool.browser.cal import CalendarComboMixin
         from schooltool.model import Person
-        from schooltool.cal import CalendarEvent, DailyRecurrenceRule
+        from schooltool.cal import DailyRecurrenceRule
 
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')

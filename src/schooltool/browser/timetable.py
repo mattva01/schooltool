@@ -30,7 +30,6 @@ from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import valid_name
 from schooltool.browser import AppObjectBreadcrumbsMixin
-from schooltool.browser import isManager
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess

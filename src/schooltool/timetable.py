@@ -323,6 +323,7 @@ class ExceptionalTTCalendarEvent(CalendarEvent):
 
     replace_kw = CalendarEvent.replace_kw + ('exception', )
 
+
 class SchooldayPeriod:
 
     implements(ISchooldayPeriod)
