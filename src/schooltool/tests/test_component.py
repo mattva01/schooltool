@@ -289,6 +289,33 @@ class TestSpecificURI(unittest.TestCase):
             self.assert_(not isURI(string), string)
 
 
+    def testURIRegistry(self):
+        from schooltool.component import getURI, registerURI
+        class IURI1(ISpecificURI): """http://example.com/foobar"""
+        class IURI2(ISpecificURI): """http://example.com/foo"""
+        class IURI2Dupe(ISpecificURI): """http://example.com/foo"""
+
+        self.assertRaises(ComponentLookupError, getURI,
+                          """http://example.com/foobar""")
+        registerURI(IURI1)
+        self.assert_(getURI("http://example.com/foobar") is IURI1)
+
+        registerURI(IURI2)
+        registerURI(IURI2)
+        self.assert_(getURI("http://example.com/foo") is IURI2)
+        self.assertRaises(ValueError, registerURI, IURI2Dupe)
+        self.assert_(getURI("http://example.com/foo") is IURI2)
+
+    def testURISetup(self):
+        import schooltool.interfaces
+        from schooltool.component import getURI
+        verifyObject(schooltool.interfaces.IModuleSetup,
+                     schooltool.interfaces)
+        schooltool.interfaces.setUp()
+        getURI("http://schooltool.org/ns/membership")
+        getURI("http://schooltool.org/ns/membership/member")
+        getURI("http://schooltool.org/ns/membership/group")
+
 class Relatable(LocatableEventTargetMixin):
     implements(IRelatable, IQueryLinks)
 

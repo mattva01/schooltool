@@ -224,6 +224,30 @@ def strURI(uri):
     """Returns the URI of ISpecificURI as a string"""
     return inspectSpecificURI(uri)[0]
 
+_uri_registry = {}
+
+def registerURI(uri):
+    """Adds an ISpecificURI to the registry so it can be queried by
+    the URI string."""
+    global _uri_registry
+    str_uri = strURI(uri)
+    if str_uri in _uri_registry:
+        if _uri_registry[str_uri] is not uri:
+            raise ValueError("Two interfaces with one URI:  "
+                             "%r, %r" % (_uri_registry[str_uri], uri))
+        else:
+            return
+    else:
+        _uri_registry[str_uri] = uri
+
+def getURI(str):
+    """Returns and ISpecificURI with a given URI string."""
+    try:
+        return _uri_registry[str]
+    except KeyError:
+        raise ComponentLookupError(str)
+
+
 #
 # Relationships
 #

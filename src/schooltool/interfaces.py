@@ -22,7 +22,7 @@ SchoolTool package interfaces
 $Id$
 """
 
-from zope.interface import Interface, Attribute
+from zope.interface import Interface, Attribute, moduleProvides
 
 #
 # Containment
@@ -129,6 +129,13 @@ class IURIAPI(Interface):
         Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
         We're only approximating to the spec.
         """
+
+    def registerURI(uri):
+        """Adds a URI to the registry so it can be queried by the URI
+        string."""
+
+    def getURI(str):
+        """Returns and ISpecificURI with a given URI string."""
 
 
 class URIGroup(ISpecificURI):
@@ -759,3 +766,17 @@ class IUtilityService(ILocation):
 
 class ComponentLookupError(Exception):
     """An exception for component architecture."""
+
+#
+#  Configuration
+#
+
+
+def setUp():
+    """See IModuleSetup"""
+    from schooltool.component import registerURI
+    registerURI(URIMembership)
+    registerURI(URIMember)
+    registerURI(URIGroup)
+
+moduleProvides(IModuleSetup)
