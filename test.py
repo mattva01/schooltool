@@ -51,6 +51,7 @@ Options:
   --all-levels  select all tests
   --list-files  list all selected test files
   --list-tests  list all selected test cases
+  --coverage    create code coverage reports
 """
 #
 # This script borrows ideas from Zope 3's test runner heavily.  It is smaller
@@ -98,6 +99,8 @@ class Options:
     warn_omitted = True         # produce warnings when a test case is
                                 # not included in a test suite (hardcoded)
     progress = False            # show running progress (-v)
+    coverage = False            # produce coverage reports (--coverage)
+    coverdir = 'coverage'       # where to put them (currently hardcoded)
     immediate_errors = True     # show tracebacks twice (currently hardcoded)
     screen_width = 80           # screen width (currently hardcoded)
 
@@ -382,7 +385,7 @@ def main(argv):
     # Option processing
     opts, args = getopt.getopt(argv[1:], 'hvpuf',
                                ['list-files', 'list-tests', 'level=',
-                                'all-levels'])
+                                'all-levels', 'coverage'])
     for k, v in opts:
         if k == '-h':
             print __doc__
@@ -401,6 +404,8 @@ def main(argv):
         elif k == '--list-tests':
             cfg.list_tests = True
             cfg.run_tests = False
+        elif k == '--coverage':
+            cfg.coverage = True
         elif k == '--level':
             try:
                 cfg.level = int(v)
@@ -446,7 +451,22 @@ def main(argv):
         runner = CustomTestRunner(cfg)
         suite = unittest.TestSuite()
         suite.addTests(test_cases)
-        runner.run(suite)
+        if cfg.coverage:
+            import trace
+            ignoremods = ['test']
+            ignoredirs = [sys.prefix, sys.exec_prefix]
+            tracer = trace.Trace(count=True, trace=False,
+                        ignoremods=ignoremods, ignoredirs=ignoredirs)
+            tracer.runfunc(runner.run, suite)
+            results = tracer.results()
+            results.write_results(show_missing=True, coverdir=cfg.coverdir)
+            # XXX trace.py in Python 2.3.1 is buggy:
+            # 1) despite sys.prefix being in ignoredirs, a lot of system-wide
+            #    modules are included in the coverage reports
+            # 2) some module file names do not have the first two characters,
+            #    and in general the prefix used seems to be arbitrary
+        else:
+            runner.run(suite)
 
     # That's all
     return 0

@@ -37,9 +37,7 @@ run: build
 
 coverage: build
 	rm -rf coverage
-	$(PYTHON) $(PYTHONDIR)/trace.py -c -C coverage -m \
-		--ignore-dir $(PYTHONDIR) \
-		test.py -pv schooltool
+	$(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
 
 
-.PHONY: all build clean test ftest run
+.PHONY: all build clean test ftest run coverage
