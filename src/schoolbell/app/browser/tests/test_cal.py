@@ -30,11 +30,21 @@ def doctest_PlainCalendarView():
     """Tests for PlainCalendarView.
 
         >>> from schoolbell.app.browser.cal import PlainCalendarView
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.app import Person
         >>> from zope.publisher.browser import TestRequest
-        >>> cal = Calendar()
+        >>> person = Person()
         >>> request = TestRequest()
-        >>> view = PlainCalendarView(cal, request)
+        >>> view = PlainCalendarView(person, request)
+        >>> view.update()
+        >>> len(person.calendar)
+        0
+
+        >>> request = TestRequest()
+        >>> request.form = {'GENERATE': ''}
+        >>> view = PlainCalendarView(person, request)
+        >>> view.update()
+        >>> len(person.calendar)
+        5
 
     """
 
