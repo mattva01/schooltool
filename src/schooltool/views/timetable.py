@@ -23,13 +23,21 @@ $Id$
 """
 
 import os
+import sets
 import libxml2
+from zope.interface import moduleProvides
+from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import ITimetableSchemaService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
-from schooltool.timetable import TimetableActivity
+from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
+from schooltool.component import getTimetableSchemaService, getPath
+from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
-from schooltool.component import getTimetableSchemaService
 
 __metaclass__ = type
+
+
+moduleProvides(IModuleSetup)
 
 
 def read_file(fn):
@@ -56,15 +64,12 @@ class TimetableReadWriteView(TimetableReadView):
 
     schema = read_file("../schema/timetable.rng")
 
-    def __init__(self, context, timetabled, key):
-        """Create a view.
-
-        The following preconditions should hold:
-            ITimetable.isImplementedBy(context)
-            ITimetabled.isImplementedBy(timetabled)
-            context is timetabled.timetables[key]
-        """
-        TimetableReadView.__init__(self, context)
+    def __init__(self, timetabled, key):
+        try:
+            timetable = timetabled.timetables[key]
+        except KeyError:
+            timetable = None
+        TimetableReadView.__init__(self, timetable)
         self.timetabled = timetabled
         self.key = key
 
@@ -127,6 +132,70 @@ class TimetableReadWriteView(TimetableReadView):
             return "Deleted timetable"
 
 
+class TimetableSchemaView(TimetableReadView):
+    """Read/write view for a timetable schema."""
+
+    schema = read_file("../schema/tt_schema.rng")
+
+    def __init__(self, service, key):
+        try:
+            timetable = service[key]
+        except KeyError:
+            timetable = None
+        TimetableReadView.__init__(self, timetable)
+        self.service = service
+        self.key = key
+
+    def do_GET(self, request):
+        if self.context is None:
+            return notFoundPage(request)
+        else:
+            return TimetableReadView.do_GET(self, request)
+
+    def do_DELETE(self, request):
+        if self.context is None:
+            return notFoundPage(request)
+        else:
+            del self.service[self.key]
+            request.setHeader('Content-Type', 'text/plain')
+            return "Deleted timetable schema"
+
+    def do_PUT(self, request):
+        ctype = request.getHeader('Content-Type')
+        if ';' in ctype:
+            ctype = ctype[:ctype.index(';')]
+        if ctype != 'text/xml':
+            return textErrorPage(request,
+                                 "Unsupported content type: %s" % ctype)
+        xml = request.content.read()
+        try:
+            if not validate_against_schema(self.schema, xml):
+                return textErrorPage(request,
+                                     "Timetable not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Timetable not valid XML")
+        doc = libxml2.parseDoc(xml)
+        ns = 'http://schooltool.org/ns/timetable/0.1'
+        xpathctx = doc.xpathNewContext()
+        xpathctx.xpathRegisterNs('tt', ns)
+        days = xpathctx.xpathEval('/tt:timetable/tt:day')
+        day_ids = [day.nsProp('id', None) for day in days]
+        if len(sets.Set(day_ids)) != len(day_ids):
+            return textErrorPage(request, "Duplicate days in schema")
+        timetable = Timetable(day_ids)
+        for day in days:
+            day_id = day.nsProp('id', None)
+            xpathctx.setContextNode(day)
+            period_ids = [period.nsProp('id', None)
+                          for period in xpathctx.xpathEval('tt:period')]
+            if len(sets.Set(period_ids)) != len(period_ids):
+                return textErrorPage(request, "Duplicate periods in schema")
+            timetable[day_id] = TimetableDay(period_ids)
+        self.service[self.key] = timetable
+        request.setHeader('Content-Type', 'text/plain')
+        return "OK"
+
+
 class BaseTimetableTraverseView(View):
     """View for obj/timetable and obj/composite-timetable.
 
@@ -148,11 +217,7 @@ class TimetableTraverseView(BaseTimetableTraverseView):
             return TimetableTraverseView(self.context, name)
         else:
             key = (name, self.time_period)
-            try:
-                timetable = self.context.timetables[key]
-            except KeyError:
-                timetable = None
-            return TimetableReadWriteView(timetable, self.context, key)
+            return TimetableReadWriteView(self.context, key)
 
 
 class CompositeTimetableTraverseView(BaseTimetableTraverseView):
@@ -167,4 +232,27 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
             if timetable is None:
                 raise KeyError(name)
             return TimetableReadView(timetable)
+
+
+class TimetableSchemaServiceView(View):
+    """View for the timetable schema service"""
+
+    template = Template("www/tt_service.pt", content_type="text/xml")
+
+    def schemas(self):
+        base = getPath(self.context)
+        return [{'name': key, 'path': '%s/%s' % (base, key)}
+                for key in self.context.keys()]
+
+    def _traverse(self, key, request):
+        return TimetableSchemaView(self.context, key)
+
+
+#
+# Setup
+#
+
+def setUp():
+    """See IModuleSetup."""
+    registerView(ITimetableSchemaService, TimetableSchemaServiceView)
 

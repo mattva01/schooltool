@@ -1320,21 +1320,24 @@ class ITimetableModel(Interface):
         """
 
 
-class ITimetableSchemaService(Interface):
+class ITimetableSchemaService(ILocation):
     """A service for creating timetables of a certain schema.
 
     This service stores timetable prototypes (empty timetables) and
     can return a new timetable of a certain schema on request.
     """
 
+    def keys():
+        """Return a sequence of all stored schema ids."""
+
     def __getitem__(schema_id):
-        """Returns a new empty timetable of a given schema."""
+        """Return a new empty timetable of a given schema."""
 
     def __setitem__(schema_id, timetable):
-        """Stores a given timetable as a schema with a given id."""
+        """Store a given timetable as a schema with a given id."""
 
     def __delitem__(schema_id):
-        """Removes a stored schema with a given id."""
+        """Remove a stored schema with a given id."""
 
 
 #

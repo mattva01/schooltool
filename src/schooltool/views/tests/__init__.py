@@ -21,9 +21,10 @@ Unit tests for the schooltool.views package.
 """
 
 from StringIO import StringIO
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from twisted.protocols import http
 from schooltool.interfaces import ITraversable, IContainmentRoot, IUtility
+from schooltool.interfaces import ILocation
 
 __metaclass__ = type
 
@@ -94,6 +95,7 @@ def setPath(obj, path, root=None):
     assert path.startswith('/')
     obj.__name__ = path[1:]
     if root is None:
+        directlyProvides(obj, ILocation)
         obj.__parent__ = TraversableRoot()
     else:
         assert IContainmentRoot.isImplementedBy(root)

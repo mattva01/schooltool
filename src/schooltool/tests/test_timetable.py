@@ -333,6 +333,11 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertEqual(hash(ta), hash(tb))
         self.assertNotEqual(hash(ta), hash(tc))
 
+        def try_to_assign():
+            ta.title = "xyzzy"
+        self.assertRaises(AttributeError, try_to_assign)
+        self.assertEquals(ta.title, "Dancing")
+
 
 class TestTimetablingPersistence(unittest.TestCase):
     """A functional test for timetables persistence."""
@@ -811,18 +816,21 @@ class TestTimetableSchemaService(unittest.TestCase):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
 
+        service = TimetableSchemaService()
+        self.assertEqual(service.keys(), [])
+
         tt = Timetable(("A", "B"))
         tt["A"] = TimetableDay(("Green", "Blue"))
         tt["B"] = TimetableDay(("Red", "Yellow"))
-
         tt["A"].add("Green", TimetableActivity("Slacking"))
         self.assertEqual(len(list(tt["A"]["Green"])), 1)
 
-        service = TimetableSchemaService()
         service["super"] = tt
+        self.assertEqual(service.keys(), ["super"])
+
         copy1 = service["super"]
         copy2 = service["super"]
-
+        self.assert_(copy2 is not copy1)
         self.assertEqual(copy2, copy1)
         self.assertEqual(tt.cloneEmpty(), copy1)
 
@@ -834,6 +842,7 @@ class TestTimetableSchemaService(unittest.TestCase):
 
         del service["super"]
         self.assertRaises(KeyError, service.__getitem__, "super")
+        self.assertEqual(service.keys(), [])
 
 
 def test_suite():

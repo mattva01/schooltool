@@ -23,9 +23,10 @@ $Id$
 """
 
 import unittest
+import libxml2
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation
-from schooltool.views.tests import RequestStub
+from schooltool.views.tests import RequestStub, setPath
 from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
@@ -165,11 +166,13 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.timetable import TimetableReadView
         return TimetableReadView(context)
 
+    def do_test_get(self, context, xml):
+        result = self.createView(context).render(RequestStub())
+        self.assertEqualsXML(result, xml, recursively_sort=['timetable'])
+
     def test_get(self):
-        for context, xml in [(self.createEmpty(), self.empty_xml),
-                             (self.createFull(), self.full_xml)]:
-            result = self.createView(context).render(RequestStub())
-            self.assertEqualsXML(result, xml, recursively_sort=['timetable'])
+        self.do_test_get(self.createEmpty(), self.empty_xml)
+        self.do_test_get(self.createFull(), self.full_xml)
 
 
 class TestTimetableReadWriteView(TestTimetableReadView):
@@ -214,6 +217,10 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         </timetable>
         """
 
+    def setUp(self):
+        TestTimetableReadView.setUp(self)
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
     def createTimetabled(self):
         from schooltool.timetable import TimetableSchemaService
 
@@ -234,7 +241,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
             timetabled = self.createTimetabled()
             if context is not None:
                 timetabled.timetables[key] = context
-        return TimetableReadWriteView(context, timetabled, key)
+        return TimetableReadWriteView(timetabled, key)
 
     def test_get_nonexistent(self):
         view = self.createView(None)
@@ -303,12 +310,181 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         self.assertEquals(request.code, 404)
 
 
+class TestTimetableSchemaView(TestTimetableReadView):
+
+    illformed_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <day id="Day 1"
+        </timetable>
+        """
+
+    invalid_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <week>
+            <day id="Day 1" />
+          </week>
+        </timetable>
+        """
+
+    duplicate_day_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+          <day id="Day 1">
+          </day>
+        </timetable>
+        """
+
+    duplicate_period_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="A">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    def createView(self, context, service=None, key='weekly'):
+        from schooltool.timetable import TimetableSchemaService
+        from schooltool.views.timetable import TimetableSchemaView
+        if service is None:
+            service = TimetableSchemaService()
+            if context is not None:
+                service[key] = context
+        return TimetableSchemaView(service, key)
+
+    def test_get(self):
+        """overrides TestTimetableReadView.test_get"""
+        self.do_test_get(self.createEmpty(), self.empty_xml)
+
+    def test_get_nonexistent(self):
+        view = self.createView(None)
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+
+    def test_delete(self):
+        from schooltool.timetable import TimetableSchemaService
+        key = 'weekly'
+        service = TimetableSchemaService()
+        context = service[key] = self.createEmpty()
+        view = self.createView(context, service, key)
+        request = RequestStub(method="DELETE")
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertRaises(KeyError, lambda: service[key])
+
+    def test_delete_nonexistent(self):
+        view = self.createView(None)
+        request = RequestStub(method="DELETE")
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+
+    def test_put(self):
+        from schooltool.timetable import TimetableSchemaService
+        key = 'weekly'
+        service = TimetableSchemaService()
+        view = self.createView(None, service, key)
+        request = RequestStub(method="PUT", body=self.empty_xml,
+                              headers={'Content-Type': 'text/xml'})
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(service[key], self.createEmpty())
+
+    def do_test_error(self, xml=None, ctype='text/xml'):
+        from schooltool.timetable import TimetableSchemaService
+        if xml is None:
+            xml = self.empty_xml
+        key = 'weekly'
+        service = TimetableSchemaService()
+        view = self.createView(None, service, key)
+        request = RequestStub(method="PUT", body=xml,
+                              headers={'Content-Type': ctype})
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertRaises(KeyError, lambda: service[key])
+
+    def test_put_error_handling(self):
+        self.do_test_error(ctype='text/plain')
+        self.do_test_error(xml=self.illformed_xml)
+        self.do_test_error(xml=self.invalid_xml)
+        self.do_test_error(xml=self.full_xml)
+        self.do_test_error(xml=self.duplicate_day_xml)
+        self.do_test_error(xml=self.duplicate_period_xml)
+
+
+class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
+
+    def test_get(self):
+        from schooltool.timetable import TimetableSchemaService, Timetable
+        from schooltool.views.timetable import TimetableSchemaServiceView
+        context = TimetableSchemaService()
+        setPath(context, '/ttservice')
+        view = TimetableSchemaServiceView(context)
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+            </timetableSchemas>
+            """)
+
+        context['weekly'] = Timetable()
+        context['4day'] = Timetable()
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+              <schema xlink:title="4day" xlink:type="simple"
+                      xlink:href="/ttservice/4day" />
+              <schema xlink:title="weekly" xlink:type="simple"
+                      xlink:href="/ttservice/weekly" />
+            </timetableSchemas>
+            """, recursively_sort=['timetableSchemas'])
+
+    def test_traverse(self):
+        from schooltool.timetable import TimetableSchemaService, Timetable
+        from schooltool.views.timetable import TimetableSchemaServiceView
+        from schooltool.views.timetable import TimetableSchemaView
+        context = TimetableSchemaService()
+        tt = context['weekly'] = Timetable()
+        view = TimetableSchemaServiceView(context)
+        request = RequestStub()
+
+        result = view._traverse('weekly', request)
+        self.assert_(result.__class__ is TimetableSchemaView)
+        self.assertEquals(result.context, tt)
+        self.assert_(result.service is context)
+        self.assertEquals(result.key, 'weekly')
+
+        result = view._traverse('newone', request)
+        self.assert_(result.__class__ is TimetableSchemaView)
+        self.assert_(result.context is None)
+        self.assert_(result.service is context)
+        self.assertEquals(result.key, 'newone')
+
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetableTraverseViews))
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
     suite.addTest(unittest.makeSuite(TestTimetableReadWriteView))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
     return suite
 
 if __name__ == '__main__':

@@ -29,9 +29,7 @@ import libxml2
 class TestRelaxNGValidation(unittest.TestCase):
 
     def setUp(self):
-        def silent(ctx, str):
-            pass
-        libxml2.registerErrorHandler(silent, "-->")
+        libxml2.registerErrorHandler(lambda ctx, msg: None, None)
 
     def test_validate_against_schema(self):
         from schooltool.schema.rng import validate_against_schema

@@ -45,15 +45,14 @@ class Application(Persistent):
 
     implements(IApplication)
 
-    eventService = None
-    utilityService = None
-
     def __init__(self):
         self.eventService = EventService()
         self.utilityService = UtilityService()
         self.utilityService.__parent__ = self
         self.utilityService.__name__ = 'utils'
         self.timetableSchemaService = TimetableSchemaService()
+        self.timetableSchemaService.__parent__ = self
+        self.timetableSchemaService.__name__ = 'ttschemas'
         self._roots = PersistentKeysSet()
         self._appObjects = PersistentDict()
 
@@ -81,6 +80,8 @@ class Application(Persistent):
         """See ITraversable"""
         if name == 'utils':
             return self.utilityService
+        elif name == 'ttschemas':
+            return self.timetableSchemaService
         return self[name]
 
     def keys(self):

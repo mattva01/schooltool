@@ -23,8 +23,12 @@ Relax NG validation facilities.
 """
 import libxml2
 
+
 def validate_against_schema(schema, xml):
-    """Returns whether the xml document conforms to the given RelaxNG schema."""
+    """Return True iff the xml document conforms to the given RelaxNG schema.
+
+    Raises libxml2.parserError if the document is not well-formed.
+    """
 
     rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
     try:

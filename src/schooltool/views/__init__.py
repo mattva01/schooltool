@@ -271,9 +271,11 @@ def setUp():
     import schooltool.views.facet
     import schooltool.views.utility
     import schooltool.views.eventlog
+    import schooltool.views.timetable
     schooltool.views.app.setUp()
     schooltool.views.model.setUp()
     schooltool.views.facet.setUp()
     schooltool.views.utility.setUp()
     schooltool.views.eventlog.setUp()
+    schooltool.views.timetable.setUp()
 

@@ -38,6 +38,8 @@ from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.uris import URIGroup
 
+__metaclass__ = type
+
 
 #
 # Timetabling
@@ -158,12 +160,17 @@ class TimetableDay(Persistent):
 
 
 class TimetableActivity:
-    # This is immutable!   Otherwise, need to make it persistent.
+    """Timetable activity.
+
+    Instances are immutable.
+    """
 
     implements(ITimetableActivity)
 
     def __init__(self, title=None):
-        self.title = title
+        self._title = title
+
+    title = property(lambda self: self._title)
 
     def __repr__(self):
         return "TimetableActivity(%r)" % self.title
@@ -378,8 +385,14 @@ class TimetabledMixin:
 class TimetableSchemaService(Persistent):
     implements(ITimetableSchemaService)
 
+    __parent__ = None
+    __name__ = None
+
     def __init__(self):
         self.timetables = PersistentDict()
+
+    def keys(self):
+        return self.timetables.keys()
 
     def __getitem__(self, schema_id):
         return self.timetables[schema_id].cloneEmpty()

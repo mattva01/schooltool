@@ -30,6 +30,31 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /utils
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=container
+<container xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>utils</name>
+  <items>
+    <item xlink:type="simple" xlink:href="/utils/absences"
+          xlink:title="Absence Tracker"/>
+    <item xlink:type="simple" xlink:href="/utils/eventlog"
+          xlink:title="Event Log"/>
+  </items>
+</container>
+%% END XML
+
+
+SchoolTool> get /ttschemas
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=timetableSchemas
+<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+</timetableSchemas>
+%% END XML
+
+
 SchoolTool> get /groups/root
 200 OK
 Content-Type: text/xml; charset=UTF-8

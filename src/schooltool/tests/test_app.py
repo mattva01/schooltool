@@ -58,6 +58,8 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         self.assert_(a.utilityService.__parent__ is a,
                      "__parent__ of utility service should be the application")
         self.assertEqual(a.utilityService.__name__, 'utils')
+        self.assert_(a.timetableSchemaService.__parent__ is a)
+        self.assertEqual(a.timetableSchemaService.__name__, 'ttschemas')
 
     def testTraversal(self):
         from schooltool.app import Application
@@ -68,6 +70,8 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         self.assertEqual(a.traverse('foo'), marker)
         a['utils'] = marker
         self.assertEqual(a.traverse('utils'), a.utilityService)
+        a['ttschemas'] = marker
+        self.assertEqual(a.traverse('ttschemas'), a.timetableSchemaService)
 
     def testRoots(self):
         from schooltool.app import Application

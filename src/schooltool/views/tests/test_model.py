@@ -986,7 +986,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
 
             None
             """)
-        self.assertEquals(result, expected, diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
         dt = datetime.datetime(2003, 11, 3, 10, 0, 0)
         albert.reportAbsence(AbsenceComment(dt=dt))
@@ -1010,7 +1010,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         vika.reportAbsence(AbsenceComment(dt=dt, expected_presence=exp,
                                           text='vacation'))
         result = self.view.render(request)
-        expected = dedent("""
+        expected = dedent(r"""
             Absences at 12:35pm 2003-11-03 UTC
             ==================================
 
@@ -1024,10 +1024,12 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
             Expected absences
             -----------------
 
-            Aiste Kesminaite expected in 1h5m, at 01:40pm today (chiropodist appointment)
-            Viktorija Zaksiene expected in 20h25m, at 09:00am 2003-11-04 (vacation)
-            """)
-        self.assertEquals(result, expected, diff(result, expected))
+            Aiste Kesminaite expected in 1h5m, at 01:40pm today \
+            (chiropodist appointment)
+            Viktorija Zaksiene expected in 20h25m, at 09:00am 2003-11-04 \
+            (vacation)
+            """).replace("\\\n", "")
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
 
 
 class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):

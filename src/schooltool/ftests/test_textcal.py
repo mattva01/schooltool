@@ -54,7 +54,7 @@ class TestTextCal(unittest.TestCase):
         result = out.read()
         out.close()
 
-        self.assertEqual(result, expected, unidiff(result, expected))
+        self.assertEquals(result, expected, "\n" + unidiff(expected, result))
 
 
 def test_suite():
