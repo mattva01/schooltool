@@ -245,6 +245,7 @@ def doctest_relate():
 
     """
 
+
 def doctest_getRelatedObjects():
     """Tests for getRelatedObjects
 

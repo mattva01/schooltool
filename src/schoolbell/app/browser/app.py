@@ -29,10 +29,9 @@ from zope.app import zapi
 from zope.app.form.utility import getWidgetsData, setUpEditWidgets
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
-from zope.app.form.interfaces import IInputWidget, WidgetsError
+from zope.app.form.interfaces import WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
-from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 from zope.component import adapts
 

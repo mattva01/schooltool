@@ -25,7 +25,7 @@ $Id$
 import unittest
 from zope.testing import doctest
 from zope.app.tests import setup, ztapi
-from zope.interface import implements, directlyProvides
+from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 

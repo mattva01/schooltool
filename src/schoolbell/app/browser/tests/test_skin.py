@@ -22,8 +22,6 @@ Tests for schoolbell.skin.
 $Id$
 """
 import unittest
-from zope.app.tests import setup
-from zope.interface import directlyProvides, Interface
 from zope.publisher.browser import TestRequest
 
 

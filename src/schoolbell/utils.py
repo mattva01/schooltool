@@ -25,7 +25,7 @@ $Id$
 """
 
 import calendar
-from datetime import datetime, date, timedelta, tzinfo
+from datetime import date, timedelta
 
 
 def prev_month(date):

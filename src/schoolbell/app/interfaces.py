@@ -32,7 +32,7 @@ $Id$
 """
 
 from zope.interface import Interface, Attribute
-from zope.schema import Object, TextLine, Text, Date, Bytes
+from zope.schema import TextLine, Bytes
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
