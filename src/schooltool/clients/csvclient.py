@@ -145,7 +145,9 @@ class HTTPClient:
         conn.endheaders()
         if body is not None:
             conn.send(body)
-        return conn.getresponse()
+        response = conn.getresponse()
+        conn.close()
+        return response
 
 
 class CSVImporterHTTP(CSVImporterBase):

@@ -33,6 +33,8 @@ __metaclass__ = type
 
 class HTTPStub:
 
+    open_connections = []
+
     def __init__(self, host, port=7001):
         self.host = host
         self.port = port
@@ -43,6 +45,8 @@ class HTTPStub:
             raise socket.error(-2, 'Name or service not known')
         if port != 7001:
             raise socket.error(111, 'Connection refused')
+
+        self.open_connections.append(self)
 
     def putrequest(self, method, resource, *args, **kw):
         self.method = method
@@ -58,7 +62,11 @@ class HTTPStub:
         return ResponseStub(self)
 
     def send(self, s):
+        assert s != "", "sending empty strings breaks when SSL is used"
         self.sent_data += s
+
+    def close(self):
+        self.open_connections.remove(self)
 
 
 class ResponseStub:
@@ -103,6 +111,8 @@ class TestHTTPClient(unittest.TestCase):
         result = h.request('GET', '/')
         self.assertEqual(result.read(), "Welcome")
 
+        self.assertEqual(HTTPStub.open_connections, [])
+
     def test_ssl(self):
         from schooltool.clients.csvclient import HTTPClient
         h = HTTPClient('localhost', 7001, ssl=True)
@@ -114,6 +124,8 @@ class TestHTTPClient(unittest.TestCase):
         h.secureConnectionFactory = HTTPStub
         result = h.request('GET', '/')
         self.assertEqual(result.read(), "Welcome")
+
+        self.assertEqual(HTTPStub.open_connections, [])
 
 
 membership_pattern = (
