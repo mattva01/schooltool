@@ -29,6 +29,11 @@ import urllib
 #
 
 class URLOpener(urllib.URLopener):
+    """Customization of urllib.URLopener.
+
+    Adds two attributes (`status` and `message`) to file objects returned
+    when you open HTTP or HTTPS URLs.
+    """
 
     def http_error(self, url, fp, errcode, errmsg, headers, data=None):
         """Default error handling -- don't raise an exception."""
