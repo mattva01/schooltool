@@ -184,17 +184,17 @@ class MonthlyCalendarView(View):
         the current month.
         """
         # XXX Monday-based weeks.
-        prev_lastday = (date(self.cursor.year, self.cursor.month, 1)
-                        - timedelta(days=1))
+        cursor = self.cursor
+        prev_lastday = (date(cursor.year, cursor.month, 1) - timedelta(days=1))
         weekday = prev_lastday.weekday()
         if weekday != 6:
             start = prev_lastday - timedelta(days=weekday)
         else:
-            start = date(self.cursor.year, self.cursor.month, 1)
+            start = date(cursor.year, cursor.month, 1)
         weeks = []
 
         last = start
-        while last.month in [start.month, self.cursor.month]:
+        while last.month in [start.month, cursor.month]:
             week = [last + timedelta(days=i) for i in range(7)]
             weeks.append(week)
             last = last + timedelta(days=7)
