@@ -530,16 +530,16 @@ class CalendarViewBase(BrowserView):
                     continue
                 yield EventForDisplay(event, color1, color2, calendar)
 
-    def getAllDayEvents(self):
+    def getAllDayEvents(self, date=None):
         """Get a list of EventForDisplay objects for the all-day events at the
         cursors current position.
 
-        XXX This feels hackneyd, especialy the manual setting of the time span
-        to be passed to calendar.expand.  Suggestions welcome.
+        'day' can be None, or the day the allday events should be taken from
         """
-        d = self.cursor
-        start = datetime(d.year, d.month, d.day)
-        end = datetime(d.year, d.month, d.day, 23, 59)
+        if not date:
+            date = self.cursor
+        start = datetime(date.year, date.month, date.day)
+        end = datetime(date.year, date.month, date.day, 23, 59)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start, end):
                 if event.__parent__ is self.context and calendar is not \

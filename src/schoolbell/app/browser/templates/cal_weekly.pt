@@ -18,8 +18,21 @@
     <tr>
       <tal:loop repeat="day days">
         <td valign="top" height="100"
-            tal:define="start repeat/day/start"
+          tal:define="start repeat/day/start;
+                      alldays python:view.getAllDayEvents(date=day.date)"
             tal:attributes="class python:start and 'first' or ''">
+          <div tal:repeat="event alldays">
+            <a tal:define="start repeat/event/start;
+                           evdate python:event.dtstart.strftime('%Y-%m-%d')"
+               tal:attributes="class python:start and 'first' or '';
+                               href string:${event/@@absolute_url}/edit.html?date=${evdate};
+                               style string:background: ${event/color1};;
+                                            border-color: ${event/color2};
+                               title event/title">
+              <span tal:content="event/shortTitle"/>
+              (<span i18n:translate="">All day</span>)
+            </a>
+          </div>
           <div tal:repeat="event day/events">
             <a tal:define="start repeat/event/start;
                            evdate python:event.dtstart.strftime('%Y-%m-%d')"
