@@ -240,6 +240,8 @@ def get_test_cases(test_files, cfg):
     for file in test_files:
         module = import_module(file, cfg)
         test_suite = module.test_suite()
+        if test_suite is None:
+            continue
         if cfg.warn_omitted:
             all_classes = Set(get_all_test_cases(module))
             classes_in_suite = get_test_classes_from_testsuite(test_suite)
