@@ -23,7 +23,8 @@
  <tal:block condition="not:request/args/SEARCH|nothing">
   <form method="POST" tal:attributes="action request/uri"
         tal:define="list view/list">
-  <h3 i18n:translate="">Members and Sub-groups</h3>
+  <h3 i18n:translate="" tal:condition="view/edit_subgroups">Sub-groups</h3>
+  <h3 i18n:translate="" tal:condition="not:view/edit_subgroups">Members</h3>
   <p tal:condition="not:list" i18n:translate="">
     There are none.
   </p>
@@ -53,14 +54,20 @@
   </div>
   </form>
 
-  <p style="clear:both" i18n:translate="">The "Add..." button above lets you
-  add already existing groups and persons as sub-groups and members of this
-  group.  You can also add a completely new group to the system and make it a
-  sub-group of this group by using the button below:</p>
+  <p style="clear:both" tal:condition="not:view/edit_subgroups"
+     i18n:translate="">The "Add..." button above lets you add already existing
+  persons as members of this group.</p>
 
-  <div class="actions">
+  <p style="clear:both" tal:condition="view/edit_subgroups" i18n:translate="">
+  The "Add..." button above lets you add already existing groups as sub-groups
+  of this group.  You can also add a completely new group to the system and
+  make it a sub-group of this group by using the button below:
+  </p>
+
+  <div class="actions" tal:condition="view/edit_subgroups">
     <a class="action"
-       tal:attributes="href string:/groups/add.html?parentgroup=${context/__name__}"
+       tal:attributes="href
+                    string:/groups/add.html?parentgroup=${context/__name__}"
        i18n:translate="">Create a new group</a>
   </div>
 

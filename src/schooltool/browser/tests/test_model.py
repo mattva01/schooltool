@@ -667,6 +667,7 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
 
     def test_traverse(self):
         from schooltool.browser.model import GroupView, GroupEditView
+        from schooltool.browser.model import GroupSubgroupView
         from schooltool.browser.model import GroupTeachersView
         from schooltool.browser.timetable import TimetableTraverseView
         from schooltool.browser.cal import CalendarView
@@ -674,6 +675,8 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
         request = RequestStub()
         view = GroupView(self.group)
         self.assertTraverses(view, 'edit.html', GroupEditView, self.group)
+        self.assertTraverses(view, 'edit_subgroups.html',
+                             GroupSubgroupView, self.group)
         self.assertTraverses(view, 'teachers.html',
                              GroupTeachersView, self.group)
         self.assertTraverses(view, 'acl.html',
@@ -760,7 +763,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         view.request = RequestStub()
         list = view.list()
-        expected = [self.sub, self.per2, self.per, self.res2]
+        expected = [self.per2, self.per]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -769,10 +772,9 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                           [absoluteURL(view.request, item)
                            for item in expected])
         self.assertEquals([item['icon_url'] for item in list],
-                          ['/group.png', '/person.png', '/person.png',
-                           '/resource.png'])
+                          ['/person.png', '/person.png'])
         self.assertEquals([item['icon_text'] for item in list],
-                          ['Group', 'Person', 'Person', 'Resource'])
+                          ['Person', 'Person'])
 
     def test_addList(self):
         from schooltool.browser.model import GroupEditView
@@ -781,7 +783,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
-        expected = [self.group2, self.group, self.root, self.per3, self.res]
+        expected = [self.per3]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -790,10 +792,9 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                           [absoluteURL(view.request, item)
                            for item in expected])
         self.assertEquals([item['icon_url'] for item in list],
-                          ['/group.png', '/group.png', '/group.png',
-                           '/person.png', '/resource.png'])
+                          ['/person.png'])
         self.assertEquals([item['icon_text'] for item in list],
-                          ['Group', 'Group', 'Group', 'Person', 'Resource'])
+                          ['Person'])
 
         view.request = RequestStub(args={'SEARCH': 'john'})
         self.assertEquals(view.addList(),
@@ -821,7 +822,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
         list = view.addList()
-        expected = [self.group2, self.group, self.root, john, pete]
+        expected = [john, pete]
         self.assertEquals([item['title'] for item in list],
                           [item.title for item in expected])
         self.assertEquals([item['path'] for item in list],
@@ -830,10 +831,9 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                           [absoluteURL(view.request, item)
                            for item in expected])
         self.assertEquals([item['icon_url'] for item in list],
-                          ['/group.png', '/group.png', '/group.png',
-                           '/person.png', '/person.png'])
+                          ['/person.png', '/person.png'])
         self.assertEquals([item['icon_text'] for item in list],
-                          ['Group', 'Group', 'Group', 'Person', 'Person'])
+                          ['Person', 'Person'])
 
         view.request = RequestStub(args={'SEARCH': 'et'})
         self.assertEquals(view.addList(),
@@ -893,6 +893,80 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         result = view.update()
         self.assertEquals(sorted(request.applog), [])
         self.assertEquals(result, 'Cannot add Teachers to Teachers')
+
+
+class TestGroupSubgroupView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        # XXX Clone of TestGroupEditView.setUp().
+        from schooltool.model import Group, Person, Resource
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        from schooltool import relationship
+        self.setUpRegistries()
+        membership.setUp()
+        relationship.setUp()
+        app = Application()
+        self.app = app
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
+        self.root = app['groups'].new("root", title="root")
+        self.group = app['groups'].new("new", title="Teachers")
+        self.sub = app['groups'].new("sub", title="subgroup")
+        self.group2 = app['groups'].new("group2", title="Random group")
+        self.per = app['persons'].new("p", title="Pete")
+        self.per2 = app['persons'].new("j", title="John")
+        self.per3 = app['persons'].new("lj", title="Longjohn")
+        self.res = app['resources'].new("hall", title="Hall")
+        self.res2 = app['resources'].new("book", title="Book")
+
+        Membership(group=self.root, member=self.group)
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
+        Membership(group=self.group, member=self.per2)
+        Membership(group=self.group, member=self.res2)
+
+    def test_addList(self):
+        from schooltool.browser.model import GroupSubgroupView
+        from schooltool.component import getPath
+        from schooltool.rest import absoluteURL
+        view = GroupSubgroupView(self.group)
+        view.request = RequestStub(args={'SEARCH': ''})
+        list = view.addList()
+        expected = [self.group2, self.group, self.root]
+        self.assertEquals([item['title'] for item in list],
+                          [item.title for item in expected])
+        self.assertEquals([item['path'] for item in list],
+                          [getPath(item) for item in expected])
+        self.assertEquals([item['url'] for item in list],
+                          [absoluteURL(view.request, item)
+                           for item in expected])
+        self.assertEquals([item['icon_url'] for item in list],
+                          ['/group.png', '/group.png', '/group.png'])
+        self.assertEquals([item['icon_text'] for item in list],
+                          ['Group', 'Group', 'Group'])
+
+    def test_list(self):
+        from schooltool.browser.model import GroupEditView
+        from schooltool.component import getPath
+        from schooltool.rest import absoluteURL
+        view = GroupEditView(self.group)
+        view.request = RequestStub()
+        list = view.list()
+        expected = [self.per2, self.per]
+        self.assertEquals([item['title'] for item in list],
+                          [item.title for item in expected])
+        self.assertEquals([item['path'] for item in list],
+                          [getPath(item) for item in expected])
+        self.assertEquals([item['url'] for item in list],
+                          [absoluteURL(view.request, item)
+                           for item in expected])
+        self.assertEquals([item['icon_url'] for item in list],
+                          ['/person.png', '/person.png'])
+        self.assertEquals([item['icon_text'] for item in list],
+                          ['Person', 'Person'])
 
 
 class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
@@ -1199,6 +1273,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonPasswordView))
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestGroupEditView))
+    suite.addTest(unittest.makeSuite(TestGroupSubgroupView))
     suite.addTest(unittest.makeSuite(TestGroupTeachersView))
     suite.addTest(unittest.makeSuite(TestResourceView))
     suite.addTest(unittest.makeSuite(TestResourceEditView))

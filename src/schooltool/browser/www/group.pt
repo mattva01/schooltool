@@ -53,7 +53,7 @@
     </div>
     <div class="actions" tal:condition="view/canEdit">
       <a class="action"
-         tal:attributes="href string:${context/@@absolute_url}/edit.html"
+     tal:attributes="href string:${context/@@absolute_url}/edit_subgroups.html"
          i18n:translate="">Edit</a>
     </div>
     <div tal:define="members view/getOtherMembers">

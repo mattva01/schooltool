@@ -322,6 +322,8 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin,
     def _traverse(self, name, request):
         if name == "edit.html":
             return GroupEditView(self.context)
+        if name == "edit_subgroups.html":
+            return GroupSubgroupView(self.context)
         elif name == "teachers.html":
             return GroupTeachersView(self.context)
         elif name == 'acl.html':
@@ -379,11 +381,11 @@ class RelationshipViewMixin:
                                            " %(other)s and %(this)s"))
 
     def list(self):
-        """Return a list of related objects"""
+        """Return a list of related objects."""
         return self._list(getRelatedObjects(self.context, self.linkrole))
 
     def _list(self, objects):
-        """Return a list of related objects"""
+        """Return a list of related objects."""
         # TODO: Get rid of this method and instead rewrite page templates to
         #       use whatever/obj/@@absolute_url instead of whatever/obj/url
         #       and replace self._list(...) with app_object_list(...)
@@ -437,28 +439,18 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     errormessage = property(lambda self: _("Cannot add %(other)s to %(this)s"))
 
+    edit_subgroups = False
+
     def addList(self):
-        """Return a list of objects available for addition"""
+        """Return a list of objects available for adding."""
         try:
             searchstr = to_unicode(self.request.args['SEARCH'][0]).lower()
         except UnicodeError:
             return []
         members = sets.Set(getRelatedObjects(self.context, URIMember))
         addable = []
-        if getOptions(self.context).restrict_membership:
-            parents = getRelatedObjects(self.context, URIGroup)
-            siblings = itertools.chain(*[getRelatedObjects(parent, URIMember)
-                                         for parent in parents])
-            source = itertools.chain(
-                traverse(self.context, '/groups').itervalues(),
-                [member for member in siblings if IPerson.providedBy(member)]
-                 )
-        else:
-            source = itertools.chain(
-                traverse(self.context, '/groups').itervalues(),
-                traverse(self.context, '/persons').itervalues(),
-                traverse(self.context, '/resources').itervalues())
-        for obj in source:
+        restrict_membership = getOptions(self.context).restrict_membership
+        for obj in self._source(restrict_membership):
             if (searchstr in obj.title.lower() and obj not in members):
                 addable.append(obj)
         # 'obj not in members' is not strong enough; we should check for
@@ -467,6 +459,33 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     def createRelationship(self, other):
         Membership(group=self.context, member=other)
+
+    def _source(self, restrict_membership):
+        if restrict_membership:
+            parents = getRelatedObjects(self.context, URIGroup)
+            siblings = itertools.chain(*[getRelatedObjects(parent, URIMember)
+                                         for parent in parents])
+            return [member for member in siblings
+                           if IPerson.providedBy(member)]
+        else:
+            return traverse(self.context, '/persons').itervalues()
+
+    def _list(self, objects):
+        persons = [obj for obj in objects if IPerson.providedBy(obj)]
+        return RelationshipViewMixin._list(self, persons)
+
+
+class GroupSubgroupView(GroupEditView):
+    """A view to add subgroups to a group."""
+
+    edit_subgroups = True
+
+    def _source(self, restrict_membership):
+        return traverse(self.context, '/groups').itervalues()
+
+    def _list(self, objects):
+        groups = [obj for obj in objects if IGroup.providedBy(obj)]
+        return RelationshipViewMixin._list(self, groups)
 
 
 class GroupTeachersView(View, RelationshipViewMixin,
