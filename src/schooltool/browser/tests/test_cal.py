@@ -921,6 +921,18 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
         self.assertEquals(rule, DailyRecurrenceRule(interval=1,
                                                     exceptions=dates))
 
+        rule = makeRule(recurrence='checked', recurrence_type='weekly',
+                        interval="1", recurrence_shown="yes",
+                        weekdays="2")
+        self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
+                                                     weekdays=(2, )))
+
+        rule = makeRule(recurrence='checked', recurrence_type='weekly',
+                        interval="1", recurrence_shown="yes",
+                        weekdays=["1", "2"])
+        self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
+                                                     weekdays=(1, 2)))
+
 
 class TestEventAddView(AppSetupMixin, unittest.TestCase):
 
@@ -1221,6 +1233,23 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
 
         assertField(doc, 'range', 'until', 'and @checked="checked"')
         assertField(doc, 'until', '2004-10-22')
+
+    def test_render_weekly(self):
+        from schooltool.cal import WeeklyRecurrenceRule
+        event = createEvent(
+            '2004-10-21 21:00', '2h', "ev3", unique_id="123",
+            recurrence=WeeklyRecurrenceRule(weekdays=(1, 2)))
+        self.person.calendar.addEvent(event)
+
+        view = self.createView()
+        request = RequestStub(args={'event_id': "123"})
+        content = view.render(request)
+
+        doc = HTMLDocument(content)
+
+        assertField(doc, 'weekdays', '3', 'and @checked="checked"')
+        assertField(doc, 'weekdays', '1', 'and @checked="checked"')
+        assertField(doc, 'weekdays', '2', 'and @checked="checked"')
 
     def test_render_norecur(self):
         view = self.createView()

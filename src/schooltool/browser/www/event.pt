@@ -17,6 +17,15 @@
             recurrence_box.style.display = 'none';
         }
     }
+    function recurrence_type_changed() {
+        var recurrence = document.getElementById('recurrence_type');
+        var weekly_row = document.getElementById('weekly_row');
+        if (recurrence.value == 'weekly') {
+            weekly_row.style.display = 'block';
+        } else {
+            weekly_row.style.display = 'none';
+        }
+    }
     function range_changed() {
         var range_c = document.getElementById('range_c');
         var range_u = document.getElementById('range_u');
@@ -42,6 +51,10 @@
         addEvent(range_c, "click", range_changed);
         addEvent(range_u, "click", range_changed);
         addEvent(range_f, "click", range_changed);
+
+	recurrence_type_changed();
+	var recurrence_type = document.getElementById('recurrence_type');
+        addEvent(recurrence_type, "click", recurrence_type_changed);
     }
     function addEvent(obj, event, handler) {
       if (obj.addEventListener) {
@@ -82,6 +95,7 @@
 
     <div class="row" tal:replace="structure view/recurrence_widget" />
   <div id="recurrence_box">
+    <!-- Repeat every [count] [freq [v]] -->
     <div class="row">
       <label for="interval">Repeat every</label>
       <input type="text" name="interval" id="interval" size="3"
@@ -92,7 +106,23 @@
       </select>
       <div tal:replace="structure view/interval_widget/_error_html"/>
     </div>
-
+    <!-- weekly box -->
+    <div class="row" id="weekly_row">
+      <span tal:repeat="weekday view/weekdays" >
+	<input type="checkbox" name="weekdays"
+               tal:define="day view/date_widget/value"
+	       tal:attributes="
+		   id string:weekday_${weekday/nr};
+		   value weekday/nr;
+		   disabled python:day and day.weekday() == weekday['nr'];
+		   checked python:
+                      (day and day.weekday() ==  weekday['nr']
+                       or (view.weekdays_widget.value and
+                           weekday['nr'] in view.weekdays_widget.value))"/>
+	<label tal:attributes="for string:weekday_${weekday/nr}"
+               tal:content="weekday/name" class="plain" />
+      </span>
+    </div>
     <!-- Range selection -->
     <div class="row">
       <input type="radio" name="range" value="count" id="range_c"
@@ -124,10 +154,8 @@
     <div class="row" tal:replace="structure view/exceptions_widget" />
 
     <!--
-
     <div class="row" tal:replace="structure view/weekdays_widget" />
     <div class="row" tal:replace="structure view/monthly_widget" />
-
     -->
   </div>
 

@@ -51,6 +51,7 @@ from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
+from schooltool.browser.widgets import SequenceWidget
 from schooltool.browser.widgets import TextAreaWidget, CheckboxWidget
 from schooltool.browser.widgets import dateParser, timeParser, intParser
 from schooltool.browser.widgets import timeFormatter
@@ -822,6 +823,57 @@ def positiveIntValidator(value):
         raise ValueError("Invalid value (must be not less than 1).")
 
 
+def intsParser(raw):
+    """
+    >>> intsParser(None)
+    >>> intsParser("")
+    >>> intsParser("1")
+    (1,)
+    >>> intsParser(["1", "3"])
+    (1, 3)
+    """
+    result = []
+    try:
+        if isinstance(raw, list):
+            for s in raw:
+                result.append(intParser(s))
+        else:
+            if intParser(raw) is None:
+                return None
+            result.append(intParser(raw))
+    except ValueError:
+        raise ValueError('weekdays must be a tuple of ints between 0 and 6.')
+    return tuple(result)
+
+
+def weekdaysValidator(value):
+    """
+    >>> weekdaysValidator(None)
+    >>> weekdaysValidator((0, 1, 2, 3, 4, 5, 6))
+    >>> weekdaysValidator(1)
+    Traceback (most recent call last):
+    ...
+    ValueError: weekdays must be a tuple of ints between 0 and 6.
+    >>> weekdaysValidator("hello")
+    Traceback (most recent call last):
+    ...
+    ValueError: weekdays must be ints between 0 and 6.
+    >>> weekdaysValidator((1, 7))
+    Traceback (most recent call last):
+    ...
+    ValueError: weekdays must be ints between 0 and 6.
+
+    """
+    if value is None:
+        return
+    try:
+        for i in value:
+            if i < 0 or i > 6:
+                raise ValueError('weekdays must be ints between 0 and 6.')
+    except TypeError:
+        raise ValueError('weekdays must be a tuple of ints between 0 and 6.')
+
+
 class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     """A base class for event adding and editing views."""
 
@@ -881,7 +933,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.until_widget = TextWidget('until', 'Repeat until',
                                        parser=dateParser)
 
-##         self.weekdays_widget = TextWidget('weekdays', 'Weekdays')
+        # The display is done manually, so no formatter needed
+        self.weekdays_widget = SequenceWidget('weekdays', 'Weekdays',
+                                              parser=intsParser,
+                                              validator=weekdaysValidator)
+
 ##         self.monthly_widget = TextWidget('monthly', 'Monthly')
 
         self.exceptions_widget = TextAreaWidget('exceptions',
@@ -907,6 +963,16 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.count_widget.update(request)
         self.until_widget.update(request)
         self.exceptions_widget.update(request)
+        self.weekdays_widget.update(request)
+
+    def weekdays(self):
+        return ({'nr':0, 'name': _("Mon")},
+                {'nr':1, 'name': _("Tue")},
+                {'nr':2, 'name': _("Wed")},
+                {'nr':3, 'name': _("Thu")},
+                {'nr':4, 'name': _("Fri")},
+                {'nr':5, 'name': _("Sat")},
+                {'nr':6, 'name': _("Sun")})
 
     def do_GET(self, request):
         self.update()
@@ -979,9 +1045,13 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                            count=count, until=until,
                                            exceptions=exceptions)
             elif self.recurrence_type_widget.value == 'weekly':
+                weekdays = self.weekdays_widget.value
+                if weekdays is None:
+                    weekdays = ()
                 return WeeklyRecurrenceRule(interval=interval,
                                             count=count, until=until,
-                                            exceptions=exceptions)
+                                            exceptions=exceptions,
+                                            weekdays=tuple(weekdays))
             elif self.recurrence_type_widget.value == 'monthly':
                 return MonthlyRecurrenceRule(interval=interval,
                                              count=count, until=until,
@@ -1059,6 +1129,7 @@ class EventEditView(EventViewBase):
                 self.recurrence_type_widget.setValue('daily')
             elif IWeeklyRecurrenceRule.providedBy(event.recurrence):
                 self.recurrence_type_widget.setValue('weekly')
+                self.weekdays_widget.setValue(event.recurrence.weekdays)
             elif IMonthlyRecurrenceRule.providedBy(event.recurrence):
                 self.recurrence_type_widget.setValue('monthly')
             elif IYearlyRecurrenceRule.providedBy(event.recurrence):
