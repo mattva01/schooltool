@@ -1530,6 +1530,45 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEqual(result, tt)
 
 
+class TestTimetableSchemaService(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.cal import TimetableSchemaService
+        from schooltool.interfaces import ITimetableSchemaService
+
+        service = TimetableSchemaService()
+        verifyObject(ITimetableSchemaService, service)
+
+    def test(self):
+        from schooltool.cal import TimetableSchemaService
+        from schooltool.cal import Timetable, TimetableDay
+        from schooltool.cal import TimetableActivity
+
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(("Green", "Blue"))
+        tt["B"] = TimetableDay(("Red", "Yellow"))
+
+        tt["A"].add("Green", TimetableActivity("Slacking"))
+        self.assertEqual(len(list(tt["A"]["Green"])), 1)
+
+        service = TimetableSchemaService()
+        service["super"] = tt
+        copy1 = service["super"]
+        copy2 = service["super"]
+
+        self.assertEqual(copy2, copy1)
+        self.assertEqual(tt.cloneEmpty(), copy1)
+
+        self.assertEqual(len(list(copy1["A"]["Green"])), 0)
+
+        copy1["A"].add("Green", TimetableActivity("Slacking"))
+        self.assertEqual(len(list(copy1["A"]["Green"])), 1)
+        self.assertEqual(len(list(copy2["A"]["Green"])), 0)
+
+        del service["super"]
+        self.assertRaises(KeyError, service.__getitem__, "super")
+
+
 def test_suite():
     import schooltool.cal
     suite = unittest.TestSuite()
@@ -1550,4 +1589,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
     suite.addTest(unittest.makeSuite(TestTimetabledFacet))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
     return suite

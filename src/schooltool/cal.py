@@ -38,6 +38,7 @@ from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
+from schooltool.interfaces import ITimetableSchemaService
 from schooltool.uris import URIGroup
 from schooltool.component import getRelatedObjects, FacetManager
 
@@ -1103,3 +1104,20 @@ class TimetabledMixin:
             result.update(tt)
 
         return result
+
+
+class TimetableSchemaService(Persistent):
+    implements(ITimetableSchemaService)
+
+    def __init__(self):
+        self.timetables = PersistentDict()
+
+    def __getitem__(self, schema_id):
+        return self.timetables[schema_id].cloneEmpty()
+
+    def __setitem__(self, schema_id, timetable):
+        prototype = timetable.cloneEmpty()
+        self.timetables[schema_id] = prototype
+
+    def __delitem__(self, schema_id):
+        del self.timetables[schema_id]

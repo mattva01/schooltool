@@ -136,6 +136,8 @@ class IServiceManager(Interface):
 
     utilityService = Attribute("""Utility service for this application""")
 
+    timetableSchemaService = Attribute("""A timetable schema service""")
+
 
 #
 # Utilities
@@ -1310,6 +1312,23 @@ class ITimetableModel(Interface):
         weekends and holidays map affect the mapping of the timetable
         onto the real-world calendar.
         """
+
+
+class ITimetableSchemaService(Interface):
+    """A service for creating timetables of a certain schema.
+
+    This service stores timetable prototypes (empty timetables) and
+    can return a new timetable of a certain schema on request.
+    """
+
+    def __getitem__(schema_id):
+        """Returns an empty timetable of a given schema."""
+
+    def __setitem__(schema_id, timetable):
+        """Stores a given timetable as a schema with a given id."""
+
+    def __delitem__(schema_id):
+        """Removes a stored schema with a given id."""
 
 
 #
