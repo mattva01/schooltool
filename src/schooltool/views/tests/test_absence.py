@@ -146,6 +146,9 @@ class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
 class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
                                 unittest.TestCase):
 
+    def setUp(self):
+        self.setUpEventService()
+
     def test_traverse(self):
         from schooltool.views.absence import AbsenceManagementView, AbsenceView
         from schooltool.model import Person
@@ -272,6 +275,9 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
 
 class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
                       unittest.TestCase):
+
+    def setUp(self):
+        self.setUpEventService()
 
     def createAbsence(self):
         from schooltool.model import Person, Group

@@ -175,6 +175,9 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         from schooltool.model import Person
         return Person('John Smith')
 
+    def setUp(self):
+        self.setUpEventService()
+
     def test(self):
         from schooltool.interfaces import IPerson, IPersonInfoFacet
         from schooltool.component import FacetManager

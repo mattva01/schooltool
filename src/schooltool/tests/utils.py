@@ -82,8 +82,6 @@ class EventServiceTestMixin:
         self.serviceManager = ServiceManager()
         self.eventService = self.serviceManager.eventService
 
-    setUp = setUpEventService
-
     def checkOneEventReceived(self, receivers=()):
         """Check that exactly one event was received by the event service.
 

@@ -266,6 +266,9 @@ class TestEvents(unittest.TestCase):
 
 class TestRelate(EventServiceTestMixin, unittest.TestCase):
 
+    def setUp(self):
+        self.setUpEventService()
+
     def test_relate(self):
         from schooltool.relationship import relate
         self.doChecks(relate)
