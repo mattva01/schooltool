@@ -127,3 +127,38 @@ DTSTAMP:*
 END:VEVENT
 END:VCALENDAR
 
+SchoolTool> get /persons/Aiste/calendar
+200 OK
+Content-Type: text/calendar; charset=UTF-8
+
+
+SchoolTool> put /persons/Aiste/calendar text/calendar
+PUT> BEGIN:VCALENDAR
+PUT> VERSION:2.0
+PUT> PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
+PUT> BEGIN:VEVENT
+PUT> UID:902705443
+PUT> SUMMARY:Veliavos diena
+PUT> DTSTART;VALUE=DATE:20020101
+PUT> END:VEVENT
+PUT> END:VCALENDAR
+PUT> .
+200 OK
+Content-Type: text/plain
+Calendar imported
+
+SchoolTool> get /persons/Aiste/calendar
+200 OK
+Content-Type: text/calendar; charset=UTF-8
+BEGIN:VCALENDAR
+PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:-1548266625-/persons/Aiste/calendar@localhost
+SUMMARY:Veliavos diena
+DTSTART:20020101T000000
+DURATION:P1D
+DTSTAMP:*
+END:VEVENT
+END:VCALENDAR
+
