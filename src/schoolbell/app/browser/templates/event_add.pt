@@ -87,7 +87,6 @@
     <h3 i18n:translate="">Event information</h3>
 
     <div class="error" tal:condition="view/error" tal:content="view/error" />
-    <div class="error" tal:condition="view/errors" tal:content="view/errors" />
     <input type="hidden" tal:condition="request/date|nothing"
            name="date" tal:attributes="value request/date" />
 
