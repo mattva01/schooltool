@@ -16,7 +16,7 @@ build:
 extract-translations:
 	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
 			-d schooltool -o src/schooltool/translation/ \
-			src/schooltool *.py
+			src/schooltool *.py -u schooltool.uris
 	$(MAKE) update-translations
 
 update-translations:

@@ -43,6 +43,10 @@ Options:
             Specify the base directory that should be stripped from file name
             in comments.  If omitted, the longest common prefix will be
             stripped.
+  -u, --uris <module>
+            Specify a dotted name of a Python module to look for URIs.  This is
+            very SchoolTool-specific.  Specify all modules that contain
+            subinterfaces of ISpecificURI with this option.
   <path>
             Specify a file or a directory to scan.  There can be more than one.
             (This is another difference from Zope's i18nextract.py: there's no
@@ -60,8 +64,10 @@ import time
 import getopt
 import fnmatch
 import tokenize
+import traceback
 from schooltool.translation.extract import POTMaker, TokenEater
 from schooltool.translation.pygettext import make_escapes
+from zope.interface.interface import InterfaceClass
 from zope.tal.talgettext import POEngine, POTALInterpreter
 from zope.tal.htmltalparser import HTMLTALParser
 
@@ -153,7 +159,6 @@ def find_files(dir, pattern, exclude=()):
 def py_strings(filenames, domain=None):
     """Return extracted strings from Python modules."""
     eater = TokenEater()
-    make_escapes(0)  # mg: yuck
     for filename in filenames:
         fp = open(filename)
         try:
@@ -200,6 +205,44 @@ def tal_strings(filenames, domain="zope", include_default_domain=False):
         catalog.update(engine.catalog['default'])
     for msgid, locations in catalog.items():
         catalog[msgid] = [(l[0], l[1][0]) for l in locations]
+    return catalog
+
+
+def uri_strings(module):
+    """Retrieve all translatable strings from URI definitions."""
+    from schooltool.uris import inspectSpecificURI
+    try:
+        m = __import__(module)
+        for name in module.split('.')[1:]:
+            m = getattr(m, name)
+    except ImportError:
+        print >> sys.stderr, "could not import %s"
+        traceback.print_exc()
+        return {}
+
+    catalog = {}
+
+    filename = os.path.splitext(m.__file__)[0] + '.py'
+    lineno = 0
+    for name in dir(m):
+        obj = getattr(m, name)
+        if not isinstance(obj, InterfaceClass):
+            continue
+        if obj.__module__ != module:
+            continue # ignore things that were imported from other modules
+        try:
+            uri, title, doc = inspectSpecificURI(obj)
+        except TypeError:
+            pass # not a URI
+        except:
+            print >> sys.stderr, "could not process %s.%s" % (module, name)
+            traceback.print_exc()
+        else:
+            if title:
+                catalog[title] = [(filename, lineno)]
+            if doc:
+                catalog[doc] = [(filename, lineno)]
+
     return catalog
 
 
@@ -250,8 +293,8 @@ def usage(code, msg=""):
 def main(argv=sys.argv):
     """Main."""
     try:
-        opts, args = getopt.gnu_getopt(argv[1:], 'hd:o:b:',
-                                       ['help', 'domain=', 'output=',
+        opts, args = getopt.gnu_getopt(argv[1:], 'hd:o:b:u:',
+                                       ['help', 'domain=', 'output=', 'uris=',
                                         'basedir=', 'include-default-domain'])
     except getopt.error, msg:
         usage(1, msg)
@@ -283,6 +326,7 @@ def main(argv=sys.argv):
         base_dir = os.path.abspath(base_dir) + os.path.sep
 
     maker = SchoolToolPotMaker(output_path)
+    make_escapes(0)  # mg: yuck
     for arg in args:
         path = os.path.abspath(arg)
         if os.path.isdir(path):
@@ -299,6 +343,9 @@ def main(argv=sys.argv):
                       base_dir)
         else:
             usage(1, "%s is not a Python module or a Page Template" % path)
+    for opt, arg in opts:
+        if opt in ('-u', '--uris'):
+            maker.add(uri_strings(arg), base_dir)
     maker.write()
 
 

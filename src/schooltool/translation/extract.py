@@ -87,7 +87,7 @@ class POTEntry:
         file.write('\n')
 
     def __cmp__(self, other):
-        return cmp(self.comments, other.comments)
+        return cmp((self.comments, self.msgid), (other.comments, other.msgid))
 
 class POTMaker:
     """This class inserts sets of strings into a POT file.
