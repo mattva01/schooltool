@@ -23,7 +23,6 @@ $Id$
 """
 
 import re
-from sets import Set
 from zope.interface import moduleProvides, InterfaceSpecification
 from zope.interface.interfaces import IInterface
 from zope.interface.type import TypeRegistry
@@ -117,6 +116,9 @@ def iterFacets(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
     return iter(ob.__facets__)
 
+def facetsByOwner(ob, owner):
+    """Returns a sequence of all facets of ob that are owned by owner."""
+    return [facet for facet in iterFacets(ob) if facet.owner is owner]
 
 #
 # IServiceAPI

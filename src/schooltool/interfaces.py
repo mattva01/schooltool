@@ -586,6 +586,8 @@ class IFacetAPI(Interface):
     def iterFacets(ob):
         """Returns an iterator over facets of an object."""
 
+    def facetsByOwner(ob, owner):
+        """Returns a sequence of all facets of ob that are owned by owner."""
 
 #
 # Application objects

@@ -29,11 +29,11 @@ from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink
 from schooltool.interfaces import IEventConfigurable, ISpecificURI
-from schooltool.interfaces import IFacetedRelationshipSchemaFactory
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
 from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type
+
 
 class FacetStub(Persistent):
     implements(IFacet)
@@ -41,6 +41,7 @@ class FacetStub(Persistent):
     __parent__ = None
     owner = None
     active = False
+
 
 class FacetWithEventsStub(FacetStub):
     implements(IEventConfigurable)
@@ -90,19 +91,25 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
 
 class DummyRelationshipSchema:
 
-    def __init__(self, title, type):
+    def __init__(self, title, type, **links_to_return):
         self.title = title
         self.type = type
+        self.links_to_return = links_to_return
 
     def __call__(self, **parties):
         self.parties = parties
         d = {}
         for rolename, party in parties.iteritems():
-            d[rolename] = LinkStub(party)
+            if rolename in self.links_to_return:
+                d[rolename] = self.links_to_return[rolename]
+            else:
+                d[rolename] = LinkStub(party)
         return d
+
 
 class URIDummy(ISpecificURI): """http://example.com/ns/dummy"""
 class URIDummy2(ISpecificURI): """http://example.com/ns/dummy2"""
+
 
 class LinkStub:
     implements(ILink)
@@ -131,7 +138,6 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         ##verifyObject(IFacetedRelationshipSchemaFactory, f)
 
         verifyClass(IFacetedRelationshipSchema, FacetedRelationshipSchema)
-        childlink = LinkStub(object())
         schema = DummyRelationshipSchema('foo', URIDummy)
         f = FacetedRelationshipSchema(schema, child=FacetStub)
         verifyObject(IFacetedRelationshipSchema, f)
@@ -179,12 +185,51 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
                 callback(links['child'])
         self.assert_(not facet.active, 'not facet.active')
 
+    def testOwnedFacetsAlreadyPresent(self):
+        from schooltool.facet import FacetedRelationshipSchema
+
+
+        from schooltool.facet import FacetedMixin
+        from schooltool.component import iterFacets, setFacet
+        from schooltool.facet import FacetedMixin
+        from schooltool.relationship import RelatableMixin
+        class FacetedRelatable(FacetedMixin, RelatableMixin):
+            def __init__(self):
+                FacetedMixin.__init__(self)
+                RelatableMixin.__init__(self)
+
+        child = FacetedRelatable()
+        facet = FacetStub()
+        parent = Persistent()
+        link = LinkStub(child)
+        setFacet(child, facet, owner=link)
+        facet.active = False
+        schema = DummyRelationshipSchema('foo', URIDummy, child=link)
+        # We now have contrived a relationship schema that will return a
+        # link for the 'child' rolename that is the owner of a facet in
+        # child. The facet should remain, desipte making a faceted
+        # relationship between parent and child.
+        f = FacetedRelationshipSchema(schema, child=FacetStub)
+
+        links = f(parent=parent, child=child)
+        self.assertEqual(len(links), 2)
+        self.assertEqual(links['parent'].traverse(), parent)
+        self.assertEqual(links['child'].traverse(), child)
+        # Next, need to check the existing facet on child was reused
+        facet_list = list(iterFacets(child))
+        self.assertEqual(len(facet_list), 1)
+        self.assert_(facet is facet_list[0])
+
+        self.assert_(facet.active, 'facet.active')
+        self.assertEqual(facet.__parent__, child)
+        self.assertEqual(facet.owner, links['child'])
+
 
 class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
 
-    def test_FacetReactivator(self):
-        from schooltool.facet import FacetReactivator
-        f = FacetReactivator()
+    def test_FacetOwnershipSetter(self):
+        from schooltool.facet import FacetOwnershipSetter
+        f = FacetOwnershipSetter()
         verifyObject(IPlaceholder, f)
 
     def test(self):
@@ -224,7 +269,7 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
         link2 = LinkStub(target)
         linkset.add(link2)
         self.assert_(facet.owner is link2, 'facet.owner is link2')
-        self.assert_(facet.active, 'facet.active')
+        self.assert_(not facet.active, 'not facet.active')
 
         # Now, check that a link that has no facets will not be replaced
         # by a placeholder. After all, there's just no need for it.

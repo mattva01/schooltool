@@ -31,10 +31,10 @@ from zope.interface import implements, classProvides
 from persistence import Persistent
 from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
-from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
+from schooltool.interfaces import IFacetedRelationshipSchema
 from schooltool.interfaces import IPlaceholder
 from schooltool.event import EventTargetMixin
-from schooltool.component import setFacet, iterFacets
+from schooltool.component import setFacet, iterFacets, facetsByOwner
 from schooltool.db import PersistentKeysSet
 
 __metaclass__ = type
@@ -86,7 +86,19 @@ class FacetedRelationshipSchema:
                 link = links[role_name]
                 target = link.traverse()
                 if IFaceted.isImplementedBy(target):
-                    setFacet(target, factory(), owner=link)
+                    my_facets = facetsByOwner(target, link)
+                    if my_facets:
+                        # Check my facets are active.
+                        # These facets would have come from a previous
+                        # equivalent relationship.
+                        # Reactivating existing facets is a policy decision
+                        # by this class. This is the point at which the
+                        # decision is made.
+                        for facet in my_facets:
+                            if not facet.active:
+                                facet.active = True
+                    else:
+                        setFacet(target, factory(), owner=link)
                     link.registerUnlinkCallback(facetDeactivator)
                 else:
                     raise TypeError('Target of link "%s" must be IFaceted: %r'
@@ -94,9 +106,10 @@ class FacetedRelationshipSchema:
         return links
 
 
-class FacetReactivator(Persistent):
+class FacetOwnershipSetter(Persistent):
     """Linkset Placeholder that knows what facets are associated with links
-    like this. When replaced by a link, reactivates the facets."""
+    like this. When replaced by a link, makes the facets owned by the new
+    link."""
 
     implements(IPlaceholder)
 
@@ -105,7 +118,6 @@ class FacetReactivator(Persistent):
     def replacedBy(self, link):
         for facet in self.facets:
             facet.owner = link
-            facet.active = True
 
 
 def facetDeactivator(link):
@@ -114,14 +126,13 @@ def facetDeactivator(link):
     facets to a new equivalent link. Set the ownership of such facets to the
     placeholder.
     """
-    placeholder = FacetReactivator()
+    placeholder = FacetOwnershipSetter()
     facets = []
     target = link.traverse()
-    for facet in iterFacets(target):
-        if facet.owner is link:
-            facets.append(facet)
-            facet.active = False
-            facet.owner = placeholder
+    for facet in facetsByOwner(target, link):
+        facets.append(facet)
+        facet.active = False
+        facet.owner = placeholder
     if facets:
         placeholder.facets = facets
         target.__links__.addPlaceholder(link, placeholder)

@@ -31,6 +31,7 @@ from schooltool.interfaces import IFacet
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RelationshipTestMixin
+from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type
 
@@ -101,7 +102,7 @@ class TestCanonicalPath(unittest.TestCase):
         self.assertEqual(getPath(c), '/foo/bar')
 
 
-class TestFacetFunctions(unittest.TestCase):
+class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
         from schooltool.interfaces import IFaceted
@@ -117,6 +118,7 @@ class TestFacetFunctions(unittest.TestCase):
 
         self.ob = Stub()
         self.facet = FacetStub()
+        self.facetclass = FacetStub
 
     def test_api(self):
         from schooltool import component
@@ -147,6 +149,20 @@ class TestFacetFunctions(unittest.TestCase):
         self.assertEqual(list(iterFacets(self.ob)), [self.facet])
         self.assertRaises(TypeError, iterFacets, object())
 
+    def test_facetsByOwner(self):
+        from schooltool.component import facetsByOwner
+        owner_marker = object()
+        self.assertEqual(list(facetsByOwner(self.ob, owner_marker)), [])
+        facet1 = self.facetclass()
+        facet1.owner = owner_marker
+        facet2 = self.facetclass()
+        facet3 = self.facetclass()
+        facet3.owner = owner_marker
+        self.ob.__facets__.add(facet1)
+        self.ob.__facets__.add(facet2)
+        self.ob.__facets__.add(facet3)
+        self.assertEqualSorted(list(facetsByOwner(self.ob, owner_marker)),
+                               [facet1, facet3])
 
 class TestServiceAPI(unittest.TestCase):
 
