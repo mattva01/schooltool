@@ -90,7 +90,7 @@
       class="schoolbell.app.browser.app.PersonAddView"
       template="templates/person_add.pt"
       permission="zope.View"
-      menu="schoolbell_actions" title="Add a person" />
+      menu="schoolbell_actions" title="New person" />
 
   <zope:adapter
       for="schoolbell.app.interfaces.IPerson"
@@ -133,7 +133,7 @@
 
   <menuItem
       menu="schoolbell_actions"
-      title="Add a group"
+      title="New group"
       for="schoolbell.app.interfaces.IGroupContainer"
       action="+/addSchoolBellGroup.html"
       />
@@ -216,7 +216,7 @@
 
   <menuItem
       menu="schoolbell_actions"
-      title="Add a resource"
+      title="New resource"
       for="schoolbell.app.interfaces.IResourceContainer"
       action="+/addSchoolBellResource.html"
       />
