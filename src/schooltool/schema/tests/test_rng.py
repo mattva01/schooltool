@@ -61,7 +61,6 @@ class TestRelaxNGValidation(unittest.TestCase):
 
 
 def test_suite():
-    import schooltool.cal
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestRelaxNGValidation))
     return suite

@@ -40,9 +40,12 @@ __metaclass__ = type
 def daterange(date1, date2):
     """Returns a generator of the range of dates from date1 to date2.
 
+    >>> from pprint import pprint
     >>> from datetime import date
-    >>> list(daterange(date(2003, 9, 1), date(2003, 9, 3)))
-    [datetime.date(2003, 9, 1), datetime.date(2003, 9, 2), datetime.date(2003, 9, 3)]
+    >>> pprint(list(daterange(date(2003, 9, 1), date(2003, 9, 3))))
+    [datetime.date(2003, 9, 1),
+     datetime.date(2003, 9, 2),
+     datetime.date(2003, 9, 3)]
     >>> list(daterange(date(2003, 9, 2), date(2003, 9, 1)))
     []
 

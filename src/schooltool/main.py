@@ -410,12 +410,14 @@ def profile(fn, extension='prof'):
     filename = '%s_%03d' % (time.strftime('%DT%T'), random.randint(0, 1000))
     filename = filename.replace('/', '-').replace(':', '-')
     prof = hotshot.Profile('%s.%s' % (filename, extension))
-    B = []
+    result = []
+
     def doit():
-        B.append(fn())
+        result.append(fn())
+
     prof.runcall(doit)
     prof.close()
-    return B[0]
+    return result[0]
 
 
 class Site(server.Site):

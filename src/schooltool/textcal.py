@@ -27,7 +27,6 @@ Usage:
   textcal.py <config.xml>
 """
 import datetime
-import calendar
 import libxml2
 import sys
 import os.path
@@ -35,7 +34,6 @@ from sets import Set
 import schooltool.cal
 from schooltool.cal import Timetable, TimetableDay, TimetableActivity
 from schooltool.cal import SchooldayModel, SchooldayPeriod, SchooldayTemplate
-from schooltool.cal import SequentialDaysTimetableModel, WeeklyTimetableModel
 from schooltool.schema.rng import validate_against_schema
 
 
@@ -249,7 +247,6 @@ class XMLConfig:
             tt.append((day_id, tuple(periods)))
         return tuple(tt)
 
-
     def extractDayTemplates(self):
         result = {}
         for template in self.context.xpathEval('/tt:ttconfig/tt:daytemplate'):
@@ -262,7 +259,8 @@ class XMLConfig:
                 dur_str = period.nsProp('duration', None)
                 h, m = [int(s) for s in tstart_str.split(":")]
                 dur = int(dur_str)
-                day[pid] = (datetime.time(h,m), datetime.timedelta(minutes=dur))
+                day[pid] = (datetime.time(h, m),
+                            datetime.timedelta(minutes=dur))
             used = self.context.xpathEval('tt:used')[0].nsProp('when', None)
             if used == 'default':
                 result[None] = day
@@ -276,7 +274,7 @@ class XMLConfig:
 
     def extractSchooldays(self):
         result = {}  # first, last, weekdays, holidays
-        schooldays = self.context.xpathEval('/tt:ttconfig/tt:schooldays')[0] 
+        schooldays = self.context.xpathEval('/tt:ttconfig/tt:schooldays')[0]
         self.context.setContextNode(schooldays)
         first = schooldays.nsProp('first', None)
         last = schooldays.nsProp('last', None)

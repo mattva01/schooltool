@@ -610,7 +610,7 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
         verifyObject(ITimetableModel, model)
 
     def test_createCalendar(self):
-        from schooltool.cal import SequentialDaysTimetableModel, daterange
+        from schooltool.cal import SequentialDaysTimetableModel
         from schooltool.cal import SchooldayTemplate, SchooldayPeriod
         from schooltool.cal import Timetable, TimetableDay, TimetableActivity
         from schooltool.interfaces import ICalendar
@@ -787,7 +787,6 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
     def test_iter(self):
         from schooltool.cal import Calendar
         from schooltool.cal import CalendarEvent
-        from schooltool.interfaces import ICalendar
 
         cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
         self.assertEqual(list(cal), [])
