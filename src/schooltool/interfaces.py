@@ -1245,13 +1245,13 @@ class ICalendarOwner(Interface):
     composite_cal_groups = Attribute(
         """A list of groups whose calendars will be included in the composite
            calendar.
-        """)
+        """) # XXX Relationships should be used here.
 
     def makeCompositeCalendar():
         """Return the composite calendar for this person.
 
         Returns a calendar that contains all events from every group in
-        composite_cal_groups.
+        composite_cal_groups. (XXX relationships)
         """
 
 
