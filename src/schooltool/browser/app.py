@@ -191,10 +191,7 @@ class PersonAddView(View):
 
 
 class ObjectAddView(View):
-    """A view for adding a new object (usually a group or a resource).
-
-    The object should have a view named 'edit.html'.
-    """
+    """A view for adding a new object (usually a group or a resource)."""
 
     __used_for__ = IApplicationObjectContainer
 
@@ -203,6 +200,8 @@ class ObjectAddView(View):
     template = Template('www/object_add.pt')
 
     error = u""
+    prev_name = u""
+    prev_title = u""
 
     title = _("Add object") # should be overridden by subclasses
     redirect_to_edit = True
@@ -215,6 +214,9 @@ class ObjectAddView(View):
             return self.do_GET(request)
 
         title = unicode(request.args['title'][0], 'utf-8')
+
+        self.prev_name = name
+        self.prev_title = title
 
         try:
             obj = self.context.new(name, title=title)

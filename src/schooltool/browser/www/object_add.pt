@@ -12,11 +12,13 @@
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row">
       <label class="wide" for="name" i18n:translate="">Name</label>
-      <input id="name" name="name" type="text">
+      <input id="name" name="name" type="text"
+             tal:attributes="value view/prev_name">
     </div>
     <div class="row">
       <label class="wide" for="title" i18n:translate="">Title</label>
-      <input id="title" name="title" type="text">
+      <input id="title" name="title" type="text"
+             tal:attributes="value view/prev_title">
     </div>
     <div class="buttons">
       <input class="button" type="submit" value="Add"

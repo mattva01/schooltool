@@ -450,12 +450,14 @@ class TestObjectAddView(unittest.TestCase):
 
     def test_POST_conflict(self):
         view = self.createView()
-        request = RequestStub(args={'name': 'conflict', 'title': 'foo'})
+        request = RequestStub(args={'name': 'conflict', 'title': 'foofoobar'})
         content = view.do_POST(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])
         self.assert_('Add object' in content)
         self.assert_('Name already taken' in content)
+        self.assert_('conflict' in content)
+        self.assert_('foofoobar' in content)
 
 
 class TestGroupAddView(unittest.TestCase):
