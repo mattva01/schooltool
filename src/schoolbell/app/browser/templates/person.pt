@@ -42,15 +42,17 @@
 
     <div class="groups">
       <h3 i18n:translate="">Groups</h3>
-      <p tal:repeat="group context/groups">
+      <div tal:repeat="group context/groups">
         <a tal:attributes="href group/@@absolute_url"
            tal:content="group/title"></a>
-      </p>
-      <p tal:condition="python:not list(context.groups)">
+      </div>
+      <div tal:condition="python:not list(context.groups)">
         This person does not belong to any groups.
+      </div>
+      <p>
+        <a tal:attributes="href string:${context/@@absolute_url}/groups.html"
+          >Add this person to a group</a>
       </p>
-      <a tal:attributes="href string:${context/@@absolute_url}/groups.html"
-        >Add this person to a group</a>
     </div>
 
     <!--
