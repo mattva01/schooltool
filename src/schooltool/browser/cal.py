@@ -1698,7 +1698,7 @@ class CalendarEventView(View):
         if ev.dtstart.date() == end.date():
             period = self.getPeriod()
             if period:
-                duration = "Period %s" % period
+                duration = "Period %s" % period # XXX Don't we need _() here?
             else:
                 duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
                                              end.strftime('%H:%M'))

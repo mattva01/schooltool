@@ -427,6 +427,27 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             END:VCALENDAR
         """))
 
+    def test_get_utf8(self):
+        from schooltool.cal import CalendarEvent
+        cal = self._create()
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                                   datetime.timedelta(minutes=20),
+                                   u"Hi \u263B", unique_id="-474248539"))
+        self.do_test_get(dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:-474248539
+            SUMMARY:Hi \xe2\x98\xbb
+            DTSTART:20030902T154000
+            DURATION:PT20M
+            DTSTAMP:20040102T030405Z
+            CLASS:PUBLIC
+            END:VEVENT
+            END:VCALENDAR
+        """))
+
     def test_get_owner(self):
         from schooltool.cal import CalendarEvent
         cal = self._create()

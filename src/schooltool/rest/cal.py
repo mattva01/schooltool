@@ -217,7 +217,7 @@ class SchooldayModelCalendarView(View):
 
 
 class CalendarReadView(View):
-    """iCalendar read only view for ICalendar."""
+    """iCalendar read-only view for ICalendar."""
 
     authorization = PublicAccess
 
