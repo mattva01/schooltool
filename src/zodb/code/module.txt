@@ -1,0 +1,316 @@
+Persistent Modules
+
+  Document Overview
+
+    This document seeks to capture technical information about
+    persistent modules to guide and document their design.
+
+  Goals
+
+    These goals largely come from Zope 3.  It would be worth while
+    considering other applications.
+
+    - Persistent modules are used to support management of software
+      using the ZODB.  
+
+    - Software can be updated using network
+      clients, such as web browsers and file-synchonozation tools.
+
+    - Application-server clusters can be updated
+      transactionally without requiring server restarts.
+
+    - Persistent modules leverage a familiar model, modules, for
+      managing Python software. 
+
+    - Persistent modules can be synchronized to a file-system using
+      the Zope file-system synchronization framework.  Persistent
+      modules are synchronized for purposes including:
+
+      o Use of traditional tools such as editors and code-analysis
+        tools
+
+      o Revision control
+
+      Ideally, the file-system representation would consist of a
+      Python source file.
+
+  Use cases
+
+    - Create classes and functions that implement Zope 3 components.
+     
+      o Utility, Adapter, View, and service classes and factories.
+
+      o Content components, which are typically persistent and/or 
+        pickleable.
+
+    - Define interfaces, including schema
+
+    - Import classes, functions, and interfaces from other modules.
+
+    - Import classes, functions, and interfaces from other persistent 
+      objects. For example, an adapter registration object might have
+      a direct reference to a persistent-module-defined class.
+
+    - Change module source
+
+      - Changes are reflected in module state
+
+      - Changes are reflected in objects imported into other modules.
+
+    - Synchronize modules with a file-system representation.
+
+  Edge cases
+
+    ???
+
+  Fundamental dilema
+
+    Python modules were not designed to change at run time.  The
+    source of a Python module normally doesn't change while a Python
+    program is running.  There is a crude reload tool that allows
+    modules to be manually reloaded to handle source changes.
+
+    Python modules contain mutable state.  A module has a dictionary
+    that may be mutated by application code. It may contain mutable
+    data that is modified at run time.  This is typeically used to
+    implement global registries.  
+
+    When a module is reloaded, it is reexecuted with a dictionary that
+    includes the results of the previous execution.
+
+    Programs using the ZODB may be said to have logical lifetimes that
+    exceed the lifetimes of individual processes. In addition, the
+    program might exist as multiple individual processes with
+    overlapping run-times.
+
+    The lifetime of a persistent program is long enough that it is
+    likely that module source code will change during the life time
+    of the program.
+
+  Issues
+
+    - Should the state of a module be represented soley by the module
+      source?
+
+      Consider the possibilities:
+
+      A. Module state is represented soley by it's source.
+
+         - This would be a departure from the behavior of standard
+           Python modules.  Standard Python modules retain a module
+           dictionary that is not overwritten by reloads.  Python
+           modules may be mutated from outside and may contain mutable
+           data structures that are modified at run time.
+
+           OTOH, a regular module's state is not persistent or shared
+           accross processes.  
+
+           For standard Python modules, one could view the module
+           source as an expression of the initial state of the
+           module. (This isn't quite right either, since some modules
+           are written in such a way that they anticipate module
+           reloads.)
+
+         - Deleting variables from a module's source that have been
+           imported by other modules or objects will cause the imported
+           values to become disconnected from the module's source.
+           Even if the variables are added back later, the
+           previously-imported values will be disconnected.
+
+           It is tempting to introduce a data structure to record
+           imports make from a module.  For example, suppose module M1
+           imports X from M2.  It's tempting to record that fact in M2,
+           so that we disallow M2 to be removed or to be changed in
+           such a way that M2 no-longer defines X.  Unfortunately, that
+           would introduce state that isn't captured by my M2's source.
+
+         - Persistent modules could only be used for software. You
+           wouldn't be able to use them to store mutable data, such as
+           registries or counters, that are updated outside of the
+           execution of the module source.
+        
+      B. Module state isn't represented soley by it's source.
+
+         - It would become possible to allow mutable data, such as
+           registries in persistent modules.
+
+         - It could be very difficult to see what a module's state is.
+           If a module contained mutable data, you'd need some way to 
+           get to that data so you could inspect and manipulate it.
+
+         - When a module is synchronized to the file system, you'd need
+           to syncronize it's source and you'd also need to synchronize it's
+           contents in some way. Synchronization of the contents could
+           be done using an XML pickle, but management of the data
+           using file-system-based tools would be cumbersome. 
+
+           You'd end up with data duplicated between the two
+           representations.  It would be cumbersome to manage the
+           duplicated data in a consistent way.
+
+      C. Module state is represented soley by it's source, but allow
+         additional meta data.
+
+         This is the same as option A, except we support meta-data
+         management.  The meta data could include dependency
+         information. We'd keep track of external usage (import) of
+         module variables to influence whether deletion of the module
+         or defined variables is allowed, or whether to issue warnings
+         when variables are deleted.
+
+         Note that the management of the meta data need not be the
+         responsibility of the module. This could be done via some
+         application-defined facility, in which case, the module
+         facility would need to provide an api for implimenting hooks
+         for managing this information.
+
+  Special cases
+
+    This section contains examples that may introduce challenges for
+    persistent modules or that might motivate or highlight issues
+    described above,
+
+    - Persistent classes
+
+      Persistent classes include data that are not represented by the
+      class sources.  A class caches slot definitions inherited from
+      base classes.  This is information that is only indirectly
+      represented by it's source.  Similarly, a class manages a
+      collection of it's subclasses.  This allows a class to
+      invalidate cached slots in subclasses when a new slot definition
+      is assigned (via a setattr).  The cached slots and collection of
+      subclasses is not part of a persistent class' state.  It isn't
+      saved in the database, but is recomputed when the class is
+      loaded into memory or when it's subclasses are loaded into memory.
+
+      Consider two persistent modules, M1, which defines class C1,
+      and M2, which defines class C2.  C2 subclasses C1.  C1 defines a
+      __getitem__ slot, which is inherited and cached by C2.  
+
+      Suppose we have a process, P1, which has M1 and M2 in memory.
+      C2 in P1 has a (cached) __getitem__ slot filled with the
+      definition inherited from C1 in P1.  C1 in P1 has C2 in it's
+      collection of subclasses. In P1, we modify M1, by editing and
+      recompiling its source.  When we recompile M1's source, we'll
+      update the state of C1 by calling it's __setstate__ method,
+      passing the new class dictionary.  The __setstate__ method will,
+      in turn, use setattr to assign the values from the new
+      dictionary.  If we set a slot attribute, the __setattribute__
+      method in C1 will notify each of it's subclasses that the slot
+      has changed.  Now, suppose that we've added a __len__ slot
+      definition when we modified the source.  When we set the __len__
+      attribute in C1, C2 will be notified that there is a new slot
+      definition for __len__.
+
+      Suppose we have a process P2, which also has M1 and M2 loaded
+      into memory.  As in P1, C2 in P2 caches the __getitem__ slot and
+      C1 in P2 has C2 in P2 in it's collection of subclasses.  Now,
+      when M1 in P1 is modified and the corresponding transaction is
+      committed, an invalidation for M1 and all of the persistent
+      objects it defines, including C1, is sent to all other
+      processes. When P2 gets the invalidation for C1, it invalidates
+      C1. It happens that persistent classes are not allowed to be
+      ghosts.  When a persistent class is invalidated, it immediately
+      reloads it's state, rather than converting itself into a
+      ghost. When C2's state is reloaded in P2, we assign it's
+      attributes from the new class dictionary. When we assign slots,
+      we notify it's subclasses, including C2 in P2.  
+
+      Suppose we have a process P3, that only has M1 in memory.  In
+      P3, M2 is not in memory, nor are any of it's subobjects.  In P3,
+      C2 is not in the collection of subclasses of C1, because C2 is
+      not in memory and the collection of subclasses is volatile data
+      for C1.  When we modify C1 in P1 and commit the transaction, the
+      state of C1 in P3 will be updated, but the state of C2 is not
+      affected in P3, because it's not in memory.
+
+      Finally, consider a process, P4 that has M2, but not M1 in
+      memory.  M2 is not a ghost, so C2 is in memory. Now, since C2 is
+      in memory, C1 must be in memory, even though M1 is not in
+      memory, because C2 has a reference to C1.  Further, C1 cannot
+      be a ghost, because persistent classes are not allowed to be
+      ghosts. When we commit the transation in P1 that updates M1, an
+      invalidation for C1 is sent to P4 and C1 is updated.  When C1 is
+      updated, it's subclasses (in P4), including C2 are notified, so
+      that their cached slot definitions are updated.
+
+      When we modify M1, all copies in memory of C1 and C2 are updated
+      properly, even though the data they cache is not cached
+      persistently. This works, and only works, because persistent
+      classes are never ghosts.  If a class could be a ghost, then
+      invalidating it would have not effect and non-ghost dependent
+      classes would not be updated.
+
+    - Persistent interfaces
+
+      Like classes, Zope interfaces cache certain information.  An
+      interface maintains a set of all of the interfaces that it
+      extends.   In addition, interfaces maintain a collection of all
+      of their sub-interfaces.  The collection of subinterfaces is
+      used to notify sub=interfaces when an interface changes.
+
+      (Interfaces are a special case of a more general class of
+       objects, called "specifications", that include both interfaces
+       and interface declareations.  Similar caching is performed for
+       other specifications and related data structures. To simplify
+       the discussion, however, we'll limit ourselves to interfaces.)
+
+      When designing persistent interfaces, we have alternative
+      approaches to consider:
+
+      A. We could take the same approach as that taken with persistent
+         classes.  We would not save cached data persistently.  We
+         would compute it as objects are moved into memory.  
+
+         To take this approach, we'd need to also make persistent
+         interfaces non-ghostifiable.  This is necessary to properly
+         propigate object changes.
+
+         One could argue that non-ghostifiability if classes is a
+         necessary wart forced on us by details of Python classes that
+         are beyond our control, and that we should avoid creating new
+         kinds of objects that require non-ghostifiability.
+
+      B. We could store the cached data persistently.  For example, we
+         could store the set of extended interfaces and the set of
+         subinterfaces in persistent dictionaries.
+
+         A significant disadvantage of this approach is that
+         persistent interfaces would accumulate state is that not
+         refelcted in their source code, however, it's worth noting
+         that, while the dependency and cache data cannot be derived
+         from a single module source, it *can* be derived from the
+         sources of all of the modules in the system.  We can
+         implement persistent interface in such a way that execution
+         of module code causes all dependcies among module-defined
+         interfaces to be recomputed correctly.
+
+         (This is, to me, Jim, an interesting case: state that can be
+          computed during deserialization from other serialized
+          state. This should not be surprising, as we are essentially
+          talking about cached data used for optimization purposes.)
+
+  Proposals
+
+    - A module's state must be reprersented, directly or indirectly,
+      by it's source.  The state may also include information, such as
+      caching data, that is derivable from it's source-represented
+      state. 
+
+      It is unclear if or how we will enforce this.  Perhaps it will
+      be just a guideline.  The module-synchronization adapters used
+      in Zope will only synchronize the module source.  If a module
+      defines state that is not represented by or derivable from it's
+      source, then that data will be lost in synchronization.  Of
+      course, applications that don't use the synchronization
+      framework would be unaffected by this limitation. Alternatively,
+      one could develop custom module-synchronization adapters that
+      handled extra module data, however, development of such adapters
+      will be outside the scope of the Zope project.
+
+  Notes
+
+    - When we invalidate a persistent class, we need to delete all of
+      the attributes defined by it's old dictionary that are not
+      defined by the new class dictionary.
+      
