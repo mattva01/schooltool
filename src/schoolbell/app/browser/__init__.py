@@ -32,6 +32,7 @@ from zope.app.traversing.interfaces import IPathAdapter, ITraversable
 from zope.app.security.interfaces import IPrincipal
 from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.tales.interfaces import ITALESFunctionNamespace
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication, IPerson
@@ -157,7 +158,10 @@ class SortBy(object):
         except StopIteration:
             return [] # We got an empty list
         iterable = itertools.chain([first], iterable)
-        if hasattr(first, name):
+        # removeSecurityProxy is safe here because subsequent getattr() will
+        # raise Unauthorized or ForbiddenAttribute as appropriate.  It is
+        # necessary here to fix http://issues.schooltool.org/issue174
+        if hasattr(removeSecurityProxy(first), name):
             items = [(getattr(item, name), item) for item in iterable]
         else:
             items = [(item[name], item) for item in iterable]

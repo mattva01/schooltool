@@ -157,6 +157,44 @@ def doctest_SortBy():
     """
 
 
+def doctest_SortBy_security():
+    """Regression test for http://issues.schooltool.org/issue174
+
+        >>> from zope.security.management import newInteraction
+        >>> from zope.security.management import endInteraction
+        >>> from zope.publisher.browser import TestRequest
+        >>> endInteraction()
+        >>> newInteraction(TestRequest())
+
+    Fairly standard condition: a security wrapped object.
+
+        >>> class SacredObj:
+        ...     title = 'Ribbit!'
+        >>> obj = SacredObj()
+
+        >>> from zope.security.checker import NamesChecker
+        >>> from zope.security.checker import ProxyFactory
+        >>> checker = NamesChecker(['title'], 'schoolbell.View')
+        >>> protected_obj = ProxyFactory(obj, checker)
+        >>> a_list = [protected_obj]
+
+    When we sort it, we should get Unauthorized for the 'title' attribute (as
+    opposed to ForbiddenAttribute for '__getitem__', which will happen if
+    hasattr hides the first error).
+
+        >>> from schoolbell.app.browser import SortBy
+        >>> list(SortBy(a_list).traverse('title'))  # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        Unauthorized: (<...SacredObj instance...>, 'title', 'schoolbell.View')
+
+    Tear down:
+
+        >>> endInteraction()
+
+    """
+
+
 def doctest_NavigationView():
     """Unit tests for NavigationView.
 
