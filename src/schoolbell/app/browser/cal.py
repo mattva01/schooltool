@@ -458,12 +458,12 @@ class CalendarViewBase(BrowserView):
         my_events = []
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
-                if event.__parent__ == self.context:
-                    if not event.unique_id in my_events:
-                        my_events.append(event.unique_id)
-                        yield EventForDisplay(event, color1, color2, calendar)
-                else:
-                    yield EventForDisplay(event, color1, color2, calendar)
+                if event.__parent__ is self.context and calendar is not self.context:
+                    # Skip resource booking events (coming from
+                    # overlayed calendars) if they were booked by The
+                    # person whose calendar we are viewing.
+                    continue
+                yield EventForDisplay(event, color1, color2, calendar)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
