@@ -33,7 +33,7 @@ from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
-from zope.app.security.interfaces import IAuthenticatedGroup
+from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.component.servicenames import Utilities
@@ -129,6 +129,12 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
                 for group in person.groups:
                     group_principal_id = self.group_prefix + group.__name__
                     principal.groups.append(group_principal_id)
+                authenticated = zapi.queryUtility(IAuthenticatedGroup)
+                if authenticated:
+                    principal.groups.append(authenticated.id)
+                everyone = zapi.queryUtility(IEveryoneGroup)
+                if everyone:
+                    principal.groups.append(everyone.id)
                 return principal
 
         if id.startswith(self.group_prefix):

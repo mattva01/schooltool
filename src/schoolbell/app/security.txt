@@ -156,6 +156,23 @@ to.  This list is used by the Zope Security Policy:
     >>> p.groups
     [u'sb.group.management']
 
+If the global principals like IEveryoneGroup, IAuthenticatedGroup are
+defined, they are added to the list of groups of a principal, too:
+
+    >>> from zope.app.security.interfaces import IAuthenticatedGroup
+    >>> from zope.app.security.interfaces import IEveryoneGroup
+    >>> from zope.app.security.principalregistry import AuthenticatedGroup
+    >>> from zope.app.security.principalregistry import EverybodyGroup
+
+    >>> authenticated = AuthenticatedGroup('zope.authenticated', '', '')
+    >>> ztapi.provideUtility(IAuthenticatedGroup, authenticated)
+    >>> everyone = EverybodyGroup('zope.everybody', 'All users', '')
+    >>> ztapi.provideUtility(IEveryoneGroup, everyone)
+
+    >>> p = auth.getPrincipal('sb.person.frog')
+    >>> p.groups
+    [u'sb.group.management', 'zope.authenticated', 'zope.everybody']
+
 
 authenticate
 ------------
