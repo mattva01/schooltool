@@ -16,24 +16,7 @@
         checkbox.checked = !checkbox.checked;
         update(idx);
     }
-    function hide_checkboxes() {
-        var inputs = document.getElementsByTagName('input');
-        for (i = 0; i < inputs.length; i++) {
-            if (inputs[i].name == "holiday") {
-                inputs[i].style.display = 'none';
-            }
-        }
-    }
-    function onloadhook() {
-        hide_checkboxes();
-    }
-
-    if (window.addEventListener) {
-        window.addEventListener("load", onloadhook, false);
-    } else if (window.attachEvent) {
-        window.attachEvent("onload", onloadhook);
-    }
-
+    document.write('\074style\076 input.chk { display: none } \074/style\076');
   </script>
 </head>
 <body>
@@ -141,7 +124,7 @@ Please specify which days are school days, and which days are holidays.
                           onclick day/onclick">
         <label tal:condition="day/number">
           <span tal:replace="day/number">N</span>
-          <input type="checkbox" name="holiday"
+          <input type="checkbox" name="holiday" class="chk"
                  tal:attributes="value day/date; checked day/checked;
                            onchange string:javascript:update(${day/index});
                            id string:c${day/index};" />
