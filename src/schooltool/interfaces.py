@@ -1279,6 +1279,8 @@ class IPerson(IApplicationObject):
 
     title = Attribute("""Person's name""")
 
+    username = Attribute("""The username of this person""")
+
     def iterAbsences():
         """Iterate over all absences."""
 
@@ -1298,6 +1300,14 @@ class IPerson(IApplicationObject):
 
         Returns the IAbsence which may be a new absence or this
         person's current absence extended by the comment.
+        """
+
+    def setPassword(password):
+        """Sets the password in a hashed form, so it can be verified later"""
+
+    def checkPassword(password):
+        """Retuns True if the password is the same as the one set
+        earlier using setPassword.
         """
 
 

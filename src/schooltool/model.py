@@ -181,6 +181,11 @@ class Person(ApplicationObjectMixin):
 
     implements(IPerson)
 
+    def _getName(self):
+        return self.__name__
+
+    username = property(_getName)
+
     def __init__(self, title=None):
         ApplicationObjectMixin.__init__(self, title)
         self.valencies = Valency(Membership, 'member')
@@ -214,6 +219,13 @@ class Person(ApplicationObjectMixin):
         if obj in self.__facets__:
             return 'facets/%s' % obj.__name__
         return RelationshipValenciesMixin.getRelativePath(self, obj)
+
+
+    def setPassword(self, password):
+        pass
+
+    def checkPassword(self, password):
+        pass
 
 
 class Group(ApplicationObjectMixin):
