@@ -829,5 +829,18 @@ Ftest log line 19
 Ftest log line 20
 
 
+SchoolTool> get /options
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML
+<options>
+  <defaultTimetableSchema />
+  <newEventPrivacy>public</newEventPrivacy>
+  <timetablePrivacy>public</timetablePrivacy>
+  <restrictMembership>False</restrictMembership>
+</options>
+%% END XML
+
+
 SchoolTool> quit
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:
