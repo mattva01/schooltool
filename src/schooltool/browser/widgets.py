@@ -171,6 +171,23 @@ def defaultFormatter(value):
     return unicode(value)
 
 
+def sequenceFormatter(value):
+    """Default formatter for sequence widgets.
+
+    Converts all values to unicode.
+
+      >>> sequenceFormatter(None)
+      >>> sequenceFormatter([u'foo', 'bar'])
+      [u'foo', u'bar']
+      >>> sequenceFormatter([123])
+      [u'123']
+
+    """
+    if value is None:
+        return None
+    return [unicode(v) for v in value]
+
+
 def dateParser(raw_date):
     """Parser for dates.
 
@@ -397,6 +414,37 @@ class Widget:
             return ' tabindex="%d"' % tabindex
         else:
             return ''
+
+
+class SequenceWidget(Widget):
+    """A widget that is interested in multiple values of args"""
+
+    def __init__(self, *args, **kw):
+        Widget.__init__(self, *args, **kw)
+        if 'formatter' not in kw:
+            self.formatter = sequenceFormatter
+
+    def getRawValue(self, request):
+        if self.name in request.args:
+            return [to_unicode(arg) for arg in request.args.get(self.name)]
+        else:
+            return None
+
+    def setRawValue(self, raw_value):
+        try:
+            value = self.parser(raw_value)
+            if value is not None:
+                self.value = list(value)
+            else:
+                self.value = value
+            self.validator(self.value)
+        except ValueError, e:
+            self.value = None
+            self.error = unicode(': '.join(e.args))
+            self.raw_value = list(raw_value)
+        else:
+            self.error = None
+            self.raw_value = self.formatter(self.value)
 
 
 class TextWidget(Widget):

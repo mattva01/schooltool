@@ -178,6 +178,32 @@ class TestWidget(unittest.TestCase):
         self.assertEquals(widget._tabindex_html(0), '')
 
 
+class TestSequenceWidget(unittest.TestCase):
+
+    def test_getRawValue(self):
+        from schooltool.browser.widgets import SequenceWidget
+        widget = SequenceWidget('field', 'Field Label')
+        request = RequestStub()
+        self.assertEquals(widget.getRawValue(request), None)
+        request = RequestStub(args={'field': ["foo", "bar",
+                                              u'\u263B'.encode('UTF-8')]})
+        self.assertEquals(widget.getRawValue(request),
+                          ["foo", "bar", u'\u263B'])
+
+    def test_setRawValue(self):
+        from schooltool.browser.widgets import SequenceWidget
+        widget = SequenceWidget('field', 'Field Label')
+        widget.setRawValue(None)
+        self.assertEquals(widget.raw_value, None)
+        self.assertEquals(widget.value, None)
+        self.assertEquals(widget.error, None)
+
+        widget.setRawValue(('foo', u'\u263B'))
+        self.assertEquals(widget.raw_value, ['foo', u'\u263B'])
+        self.assertEquals(widget.value, ['foo', u'\u263B'])
+        self.assertEquals(widget.error, None)
+
+
 class TestWidgetWithConverters(unittest.TestCase):
 
     def parser(self, value):
@@ -490,6 +516,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.browser.widgets'))
     suite.addTest(unittest.makeSuite(TestWidget))
+    suite.addTest(unittest.makeSuite(TestSequenceWidget))
     suite.addTest(unittest.makeSuite(TestWidgetWithConverters))
     suite.addTest(unittest.makeSuite(TestTextWidget))
     suite.addTest(unittest.makeSuite(TestPasswordWidget))
