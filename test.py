@@ -173,10 +173,13 @@ def get_test_files(cfg):
         test_names.append('ftests')
     baselen = len(cfg.basedir) + 1
     def visit(ignored, dir, files):
-        # Do not not descend into subdirs starting with a dot
+        # Ignore files starting with a dot.
+        # Do not not descend into subdirs containing with a dot.
         remove = []
         for idx, file in enumerate(files):
             if file.startswith('.'):
+                remove.append(idx)
+            elif '.' in file and os.path.isdir(os.path.join(dir, file)):
                 remove.append(idx)
         remove.reverse()
         for idx in remove:
