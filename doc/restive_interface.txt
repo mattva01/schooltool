@@ -135,6 +135,30 @@ SchoolTool server RESTive interface
   DELETE /schooltt/timetables/time_period/schema
     deletes the timetable schema
 
+  GET /busysearch?query
+    Searches when given resources are free within a specified range of
+    dates at given hours of a day for a certain period of time.
+
+    The following query parameters are accepted:
+
+       resources  a list of paths of resources searched. Empty list
+                  means all resources.
+
+       first      The first day the searched period of time
+                  in the YYYY-MM-DD format.
+
+       last       The last day of the searched period of time
+                  in the YYYY-MM-DD format.
+
+       hours      multiple values expected.  A list of hours 0..23
+                  specifying the time of day.
+
+       duration   The minimal duration of a free period of time in minutes.
+
+  POST ...resource/booking
+    books a resource. An event is added to the calendars of a resource
+    and of a person booking.
+
 In the above '...object' stands for a full path to an application object (i.e.
 a group, a person or a resource), for example '/persons/some_person_id'.
 
