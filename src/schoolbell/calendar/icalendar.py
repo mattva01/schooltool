@@ -322,7 +322,8 @@ def read_icalendar(icalendar_text):
             dtstart = datetime.datetime.combine(dtstart,
                                                 datetime.time(0))
 
-        yield SimpleCalendarEvent(dtstart, vevent.duration, vevent.summary,
+        yield SimpleCalendarEvent(dtstart, vevent.duration,
+                                  vevent.summary or '',
                                   location=vevent.location,
                                   description=vevent.description,
                                   unique_id=vevent.uid,

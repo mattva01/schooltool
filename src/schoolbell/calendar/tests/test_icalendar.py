@@ -770,8 +770,34 @@ class TestICalReader(unittest.TestCase):
                          ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
 
 
+def doctest_ical_reader_empty_summary():
+    r"""Regression test for read_icalendar
+
+    Mozilla Calendar allows events with an empty summary.  This used to be
+    read as a CalendarEvent with title = None in schoolbell, which broke
+    things.
+
+        >>> from schoolbell.calendar.icalendar import read_icalendar
+        >>> events = list(read_icalendar('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... '''))
+        >>> [e.title for e in events]
+        ['']
+
+    """
+
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite())
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.icalendar',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF))
     suite.addTest(unittest.makeSuite(TestParseDateTime))

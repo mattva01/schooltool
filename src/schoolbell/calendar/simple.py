@@ -70,6 +70,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
 
     def __init__(self, dtstart, duration, title, description=None,
                  location=None, unique_id=None, recurrence=None):
+        assert title is not None, 'title is required'
         self.dtstart = dtstart
         self.duration = duration
         self.title = title
