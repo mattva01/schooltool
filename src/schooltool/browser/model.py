@@ -306,11 +306,26 @@ class RelationshipViewMixin:
 
     def list(self):
         """Return a list of related objects"""
-        result = [(obj.title, obj)
-                  for obj in getRelatedObjects(self.context,
-                                               self.linkrole)]
+        return self._list(getRelatedObjects(self.context, self.linkrole))
+
+    def _list(self, objects):
+        """Return a list of related objects"""
+        result = [self._icon(obj) + (obj.title, obj) for obj in objects]
         result.sort()
-        return [obj for title, obj in result]
+        return [{'title': title,
+                 'path': getPath(obj),
+                 'url': absoluteURL(self.request, obj),
+                 'icon_url': icon_url,
+                 'icon_text': icon_text}
+                for icon_url, icon_text, title, obj in result]
+
+    def _icon(self, obj):
+        if IGroup.providedBy(obj):
+            return '/group.png', _('Group')
+        elif IPerson.providedBy(obj):
+            return '/person.png', _('Person')
+        else:
+            return '/resource.png', _('Resource')
 
     def update(self):
         request = self.request
@@ -348,28 +363,18 @@ class GroupEditView(View, RelationshipViewMixin):
 
     back = True
 
-    def iconURL(self, obj):
-        if IGroup.providedBy(obj):
-            return '/group.png'
-        elif IPerson.providedBy(obj):
-            return '/person.png'
-        else:
-            return '/resource.png'
-
     def addList(self):
         """Return a list of objects available for addition"""
-        result = []
-
         searchstr = to_unicode(self.request.args['SEARCH'][0]).lower()
-        members = getRelatedObjects(self.context, URIMember)
-
+        members = sets.Set(getRelatedObjects(self.context, URIMember))
+        addable = []
         for path in ('/groups', '/persons', '/resources'):
             for obj in traverse(self.context, path).itervalues():
-                if (searchstr in obj.title.lower() and
-                    obj not in members):
-                    result.append((self.iconURL(obj), obj.title, obj))
-        result.sort()
-        return [obj for cls, title, obj in result]
+                if (searchstr in obj.title.lower() and obj not in members):
+                    addable.append(obj)
+        # XXX 'obj not in members' is not strong enough; we should check for
+        # transitive membership as well
+        return self._list(addable)
 
     def createRelationship(self, other):
         Membership(group=self.context, member=other)
@@ -391,15 +396,11 @@ class GroupTeachersView(View, RelationshipViewMixin):
 
     def addList(self):
         """List all members of the Teachers group except current teachers."""
-        result = []
-        request = self.request
         current_teachers = getRelatedObjects(self.context, URITeacher)
         teachers = traverse(self.context, '/groups/teachers')
-        for obj in getRelatedObjects(teachers, URIMember):
-            if obj not in current_teachers:
-                result.append((obj.title, obj))
-        result.sort()
-        return [obj for title, obj in result]
+        addable = [obj for obj in getRelatedObjects(teachers, URIMember)
+                           if obj not in current_teachers]
+        return self._list(addable)
 
     def createRelationship(self, other):
         Teaching(taught=self.context, teacher=other)

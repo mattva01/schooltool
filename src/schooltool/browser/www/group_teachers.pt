@@ -8,58 +8,67 @@
   <h1 metal:fill-slot="h1" i18n:translate="">
     Teachers for <span tal:replace="context/title"/>
   </h1>
-  <metal:block metal:fill-slot="content">
+<metal:block metal:fill-slot="content">
 
   <div tal:define="status view/update"
        tal:condition="status" tal:content="status" class="status"/>
 
-  <tal:block condition="not:request/args/ADD|nothing">
+<tal:block condition="not:request/args/ADD|nothing">
   <form method="POST"
         tal:attributes="action request/uri"
         tal:define="list view/list">
+  <h3 i18n:translate="">Teachers</h3>
   <p tal:condition="not:list" i18n:translate="">
     There are no teachers.
   </p>
   <table tal:condition="list">
-    <tr>
-      <th>&nbsp;</th>
-      <th i18n:translate="">Name</th>
-    </tr>
-
-    <tr tal:repeat="teacher list">
-      <td><input
-              type="checkbox" name="CHECK"
-              tal:attributes="value teacher/@@path">
+    <tr tal:repeat="item list">
+      <td><input type="checkbox" name="CHECK"
+                 tal:attributes="value item/path;
+                                 id string:check.${repeat/item/number}" /></td>
+      <td><label class="invisible"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <img tal:attributes="src item/icon_url; alt item/icon_text" />
+          </label>
       </td>
-      <td><a tal:attributes="href teacher/@@absolute_url"
-             tal:content="teacher/title"/></td>
+      <td><label class="invisible" 
+                 tal:attributes="for string:check.${repeat/item/number}"
+                 tal:content="item/title" /></td>
     </tr>
   </table>
-  <input type="submit" class="button" name="DELETE"
-         value="Remove selected teachers"
-         tal:condition="list"
-         i18n:attributes="value" />
-  <input type="submit" class="button" name="ADD"
-         value="Add teachers"
-         i18n:attributes="value" />
+  <div class="buttons">
+    <input type="submit" class="button" name="DELETE"
+           value="Remove"
+           tal:condition="list"
+           i18n:attributes="value" />
+    <input type="submit" class="button" name="ADD"
+           value="Add"
+           i18n:attributes="value" />
+  </div>
   </form>
-  </tal:block>
+</tal:block>
 
-  <tal:block condition="request/args/ADD|nothing">
+<tal:block condition="request/args/ADD|nothing">
   <form method="POST"
-        tal:attributes="action request/uri">
+        tal:attributes="action request/uri"
+        tal:define="list view/addList">
+  <p tal:condition="not:list" i18n:translate="">
+  Sorry, there are no teachers that could be added.
+  </p>
+ <tal:if condition="list">
   <select name="toadd">
     <option i18n:translate="" value="">Select...</option>
-    <option tal:repeat="teacher view/addList"
-            tal:attributes="value teacher/@@path"
+    <option tal:repeat="teacher list"
+            tal:attributes="value teacher/path"
             tal:content="teacher/title"/>
   </select>
   <input type="submit" class="button" name="FINISH_ADD"
          value="Add teacher"
          i18n:attributes="value" />
+ </tal:if>
   </form>
-  </tal:block>
+</tal:block>
 
-  </metal:block>
+</metal:block>
 </body>
 </html>

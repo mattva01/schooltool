@@ -415,7 +415,7 @@ class TestPersonInfoMixin(unittest.TestCase):
         self.assertEquals(mixin.photoURL(), '')
 
 
-class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
+class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
                     unittest.TestCase):
 
     def setUp(self):
@@ -540,11 +540,13 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         self.per2 = app['persons'].new("j", title="John")
         self.per3 = app['persons'].new("lj", title="Longjohn")
         self.res = app['resources'].new("hall", title="Hall")
+        self.res2 = app['resources'].new("book", title="Book")
 
         Membership(group=self.root, member=self.group)
         Membership(group=self.group, member=self.sub)
         Membership(group=self.group, member=self.per)
         Membership(group=self.group, member=self.per2)
+        Membership(group=self.group, member=self.res2)
 
     def test(self):
         from schooltool.browser.model import GroupEditView
@@ -558,21 +560,53 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_list(self):
         from schooltool.browser.model import GroupEditView
+        from schooltool.component import getPath
+        from schooltool.rest import absoluteURL
         view = GroupEditView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.list(),
-                          [self.per2, self.per, self.sub])
+        list = view.list()
+        expected = [self.sub, self.per2, self.per, self.res2]
+        self.assertEquals([item['title'] for item in list],
+                          [item.title for item in expected])
+        self.assertEquals([item['path'] for item in list],
+                          [getPath(item) for item in expected])
+        self.assertEquals([item['url'] for item in list],
+                          [absoluteURL(view.request, item)
+                           for item in expected])
+        self.assertEquals([item['icon_url'] for item in list],
+                          ['/group.png', '/person.png', '/person.png',
+                           '/resource.png'])
+        self.assertEquals([item['icon_text'] for item in list],
+                          ['Group', 'Person', 'Person', 'Resource'])
 
     def test_addList(self):
         from schooltool.browser.model import GroupEditView
+        from schooltool.component import getPath
+        from schooltool.rest import absoluteURL
         view = GroupEditView(self.group)
         view.request = RequestStub(args={'SEARCH': ''})
-        self.assertEquals(view.addList(),
-                          [self.group2, self.group, self.root,
-                           self.per3, self.res])
+        list = view.addList()
+        expected = [self.group2, self.group, self.root, self.per3, self.res]
+        self.assertEquals([item['title'] for item in list],
+                          [item.title for item in expected])
+        self.assertEquals([item['path'] for item in list],
+                          [getPath(item) for item in expected])
+        self.assertEquals([item['url'] for item in list],
+                          [absoluteURL(view.request, item)
+                           for item in expected])
+        self.assertEquals([item['icon_url'] for item in list],
+                          ['/group.png', '/group.png', '/group.png',
+                           '/person.png', '/resource.png'])
+        self.assertEquals([item['icon_text'] for item in list],
+                          ['Group', 'Group', 'Group', 'Person', 'Resource'])
 
         view.request = RequestStub(args={'SEARCH': 'john'})
-        self.assertEquals(view.addList(), [self.per3])
+        self.assertEquals(view.addList(),
+                          [{'title': self.per3.title,
+                            'icon_text': 'Person',
+                            'icon_url': '/person.png',
+                            'path': '/persons/lj',
+                            'url': 'http://localhost:7001/persons/lj'}])
 
     def test_update_DELETE(self):
         from schooltool.browser.model import GroupEditView
@@ -583,8 +617,8 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                                     "CHECK": ['/groups/sub', '/persons/p']})
         view.request = request
         view.update()
-        self.assertEquals(getRelatedObjects(self.group, URIMember),
-                          [self.per2])
+        self.assertEquals(sorted(getRelatedObjects(self.group, URIMember)),
+                          sorted([self.per2, self.res2]))
         self.assertEquals(sorted(request.applog),
                 [(None,
                   "Relationship 'Membership' between "
@@ -615,7 +649,8 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                   "/persons/lj and /groups/new created", INFO)])
 
 
-class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
+class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
+                            unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person, Resource
@@ -660,13 +695,23 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.browser.model import GroupTeachersView
         view = GroupTeachersView(self.group)
         view.request = RequestStub(authenticated_user=UserStub())
-        self.assertEquals(view.list(), [self.per3])
+        self.assertEquals(view.list(),
+                          [{'title': self.per3.title,
+                            'icon_text': 'Person',
+                            'icon_url': '/person.png',
+                            'path': '/persons/lj',
+                            'url': 'http://localhost:7001/persons/lj'}])
 
     def test_addList(self):
         from schooltool.browser.model import GroupTeachersView
         view = GroupTeachersView(self.group)
         view.request = RequestStub()
-        self.assertEquals(view.addList(), [self.teacher])
+        self.assertEquals(view.addList(),
+                          [{'title': self.teacher.title,
+                            'icon_text': 'Person',
+                            'icon_url': '/person.png',
+                            'path': '/persons/josh',
+                            'url': 'http://localhost:7001/persons/josh'}])
 
     def test_update_DELETE(self):
         from schooltool.browser.model import GroupTeachersView

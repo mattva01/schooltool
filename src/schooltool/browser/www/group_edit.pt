@@ -23,32 +23,34 @@
  <tal:block condition="not:request/args/SEARCH|nothing">
   <form method="POST" tal:attributes="action request/uri"
         tal:define="list view/list">
+  <h3>Members and Sub-groups</h3>
   <p tal:condition="not:list" i18n:translate="">
-    There are no members.
+    There are none.
   </p>
   <table tal:condition="list">
-    <tr>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-      <th i18n:translate="">Name</th>
-    </tr>
-
     <tr tal:repeat="item view/list">
-      <td><img tal:attributes="src python:view.iconURL(item)" alt=""/></td>
-      <td type="checkbox" name="CHECK"
-          tal:attributes="value item/@@path">
+      <td><input type="checkbox" name="CHECK"
+                 tal:attributes="value item/path;
+                                 id string:check.${repeat/item/number}" /></td>
+      <td><label class="invisible"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <img tal:attributes="src item/icon_url; alt item/icon_text" />
+          </label>
       </td>
-      <td><a tal:attributes="href item/@@absolute_url"
-             tal:content="item/title"/></td>
+      <td><label class="invisible" 
+                 tal:attributes="for string:check.${repeat/item/number}"
+                 tal:content="item/title" /></td>
     </tr>
   </table>
-  <input type="submit" class="button" name="DELETE"
-         value="Remove selected members"
-         tal:condition="list"
-         i18n:attributes="value" />
-  <input type="submit" class="button" name="ADD"
-         value="Add members"
-         i18n:attributes="value" />
+  <div class="buttons">
+    <input type="submit" class="button" name="DELETE"
+           value="Remove"
+           tal:condition="list"
+           i18n:attributes="value" />
+    <input type="submit" class="button" name="ADD"
+           value="Add"
+           i18n:attributes="value" />
+  </div>
   </form>
  </tal:block>
 </tal:block>
@@ -65,33 +67,36 @@
 </tal:block>
 
 <tal:block condition="request/args/SEARCH|nothing">
-  <form method="POST" tal:attributes="action request/uri">
+  <form method="POST" tal:attributes="action request/uri"
+        tal:define="list view/addList">
 
+  <p tal:condition="not:list" i18n:translate="">
+  Sorry, there are no objects that could be added to this group.
+  </p>
+
+ <tal:if condition="list">
   <p i18n:translate="">Select a member you want to add:</p>
 
   <table>
-    <tr>
-      <th i18n:translate="">Icon</th>
-      <th>&nbsp;</th>
-      <th i18n:translate="">Name</th>
-    </tr>
-
-    <!-- XXX addList can return an empty list! -->
-
-    <tr tal:repeat="item view/addList">
-      <td tal:content="item/__class__/__name__">[Icon]</td>
+    <tr tal:repeat="item list">
       <td><input
               type="checkbox" name="toadd"
-              tal:attributes="value item/@@path;
-                              id string:check_${repeat/item/number}">
+              tal:attributes="value item/path;
+                              id string:check.${repeat/item/number}">
       </td>
-      <td><label tal:attributes="for string:check_${repeat/item/number}"
+      <td><label class="invisible"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <img tal:attributes="src item/icon_url; alt item/icon_text" />
+          </label>
+      <td><label class="invisible"
+                 tal:attributes="for string:check.${repeat/item/number}"
                  tal:content="item/title"/></td>
     </tr>
   </table>
 
   <input type="submit" class="button" name="FINISH_ADD" value="Add"
          i18n:attributes="value" />
+ </tal:if>
   </form>
 </tal:block>
 

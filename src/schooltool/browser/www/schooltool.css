@@ -124,6 +124,16 @@ label.block {
   margin: 1ex;
 }
 
+label.invisible {
+  display: inline;
+  width: auto;
+  float: none;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
 div.info {
   padding: 1ex;
   background: #e2e2e2;
@@ -240,6 +250,8 @@ div.timetables {
   float: right;
 }
 
+form h3,
+div.form h3,
 div.members h3,
 div.parentgroups h3,
 div.groups h3,
