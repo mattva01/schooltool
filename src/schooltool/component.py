@@ -247,6 +247,11 @@ def getTicketService(context):
     return _getServiceManager(context).ticketService
 
 
+def getDynamicFacetSchemaService(context):
+    """See IServiceAPI"""
+    return _getServiceManager(context).dynamicFacetSchemaService
+
+
 def getOptions(obj):
     """See IServiceAPI."""
     cur = obj
@@ -402,4 +407,3 @@ def listTimetableModels():
     """Returns a sequence of keys of the timetable models in the
     registry."""
     return timetable_model_registry.keys()
-

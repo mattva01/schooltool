@@ -229,6 +229,9 @@ class IServiceAPI(Interface):
     def getTicketService(context):
         """Return the ticket service for authentication."""
 
+    def getDynamicFacetSchemaService(context):
+        """Return the global DynamicFacet schema service"""
+
     def getOptions(context):
         """Return an IOptions object found from the context."""
 
@@ -245,6 +248,8 @@ class IServiceManager(Interface):
     timePeriodService = Attribute("""Time period service""")
 
     ticketService = Attribute("""Ticket service""")
+
+    dynamicFacetSchemaService = Attribute("""Info Facet schema service""")
 
 
 #
@@ -754,6 +759,27 @@ class IRouteToGroupsAction(IEventAction):
     """
 
 
+class IOccupiesEvent(IRelationshipEvent):
+    """Base interface for membership events.
+
+    This is a special case of IRelationshipEvent where one side has
+    the role of URIGroup, and the other side has the role of URIMember.
+    """
+
+    resides = Attribute("""The person""")
+    residence = Attribute("""The address""")
+
+
+class IOccupiesAddedEvent(IRelationshipAddedEvent, IOccupiesEvent):
+    """Event that gets sent out after a person is associated with an address.
+    """
+
+
+class IOccupiesRemovedEvent(IRelationshipRemovedEvent, IOccupiesEvent):
+    """Event that gets sent out after a person has been removed from an address
+    """
+
+
 class INotedEvent(IRelationshipEvent):
     """Base interface for noted events.
 
@@ -876,6 +902,31 @@ class IFacetAPI(Interface):
 
     def iterFacetFactories():
         """Iterate over all registered facet factories."""
+
+
+class IDynamicFacetSchemaService(ILocation):
+    """Service for creating info facets of a certain schema.
+
+    This service stores schema templates for info facets and can return new
+    DynamicFacets of a certain schema on request.
+    """
+
+    default_id = Attribute("""Schema id of the default schema""")
+
+    def getDefault():
+        """Return the default schema for the school"""
+
+    def keys():
+        """Return a sequence of all stored schema ids."""
+
+    def __getitem__(schema_id):
+        """Return a new empty DynamicFacet of a given schema."""
+
+    def __setitem__(schema_id, dynamicfacet):
+        """Store a given DynamicFacet as a schema with a given id."""
+
+    def __delitem__(schema_id):
+        """Remove a stored schema with a given id."""
 
 
 #
@@ -2139,6 +2190,33 @@ class IAuthenticator(Interface):
         Returns an authentication token (IPerson object) if successful.
         Raises AuthenticationError if not.
         """
+
+
+class IDynamicFacet(IFacet):
+    """General informational attributes for person and address objects"""
+
+    fields = Attribute("Dict of field data")
+
+    def hasField(name):
+        """Test for the existance of a field."""
+
+    def getField(name):
+        """Return field value"""
+
+    def setField(name, value):
+        """Set field value"""
+
+    def delField(name):
+        """Remove a field"""
+
+    def addField(name, label, type, value=None, vocabulary=[]):
+        """Add a field to the fields dict"""
+
+    def cloneEmpty():
+        """Create a copy of this facet and it's fields."""
+
+    def __getitem__(key):
+        """Return a field from the fields list based on it's name."""
 
 
 class IPersonInfoFacet(IFacet):

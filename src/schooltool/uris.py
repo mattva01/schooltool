@@ -181,21 +181,21 @@ URICalendarSubscriber = URIObject(
                 _("Calendar subscriber"),
                 _("A role of an object that subscribes to a calendar."))
 
+
 URINoted = URIObject(
-        "http://schooltool.org/ns/noted",
-        _("Noted"),
-        _("The notation relationship"))
+                "http://schooltool.org/ns/noted",
+                _("Noted"),
+                _("The notation relationship"))
 
 URINotation = URIObject(
-        "http://schooltool.org/ns/noted/notation",
-        _("Notation"),
-        _("The role of a note in Noted"))
+                "http://schooltool.org/ns/noted/notation",
+                _("Notation"),
+                _("The role of a note in Noted"))
 
 URINotandum = URIObject(
-        "http://schooltool.org/ns/noted/notandum",
-        _("Notandum"),
-        _("The role of a object in Noted"))
-
+                "http://schooltool.org/ns/noted/notandum",
+                _("Notandum"),
+                _("The role of a object in Noted"))
 
 #
 #  Configuration

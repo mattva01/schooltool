@@ -17,6 +17,16 @@
       <a class="action" tal:condition="view/canViewCalendar"
          tal:attributes="href string:${context/@@absolute_url}/calendar"
          i18n:translate="">View calendar</a>
+      <a class="action"
+          tal:attributes="href string:/addresses/add.html?pid=${context/__name__}"
+         i18n:translate="">Add address</a>
+    </div>
+    <div class="actions">
+        <tal:loop repeat="facet view/getAvailableDynamicFacets">
+            <a class="action" tal:condition="view/canEdit"
+                tal:attributes="href string:${view/editDynamicFacetURL}?facet=${facet}"
+                tal:content="facet"></a>
+        </tal:loop>
     </div>
 
     <div tal:condition="view/canChooseCalendars" class="groups">
@@ -85,6 +95,29 @@
         <img src="photo.jpg" tal:attributes="src view/photoURL" />
       </p>
     </div>
-  </metal:block>
+    <div class="addresses"
+        tal:define="addresses context/getAddresses"
+        tal:condition="addresses">
+      <h3>Addresses</h3>
+      <ul>
+        <tal:loop repeat="address addresses">
+          <li>
+            <a href="address/@@absolute_url"
+              tal:content="address/title"></a>
+              <address tal:define="addressinfo address/info">
+              <span tal:content="addressinfo/streetNr"/> <span tal:content="addressinfo/thoroughfareName"/><br/>
+              <span tal:content="addressinfo/town"/> <span tal:content="addressinfo/district"/>, <span tal:content="addressinfo/postcode"/>
+              </address>
+              
+          </li>
+        </tal:loop>
+      </ul>
+    </div>
+
+    <tal:loop repeat="facet view/getDynamicFacets">
+      <metal:macro use-macro="view/macros/dynamic-facet"/>
+    </tal:loop>
+
+</metal:block>
 </body>
 </html>

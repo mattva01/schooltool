@@ -25,6 +25,27 @@ import unittest
 from zope.interface.verify import verifyObject
 
 
+class TestDynamicFacetField(unittest.TestCase):
+    def test(self):
+        from schooltool.infofacets import PersonInfoFacet
+        pass
+
+
+class TestDynamicFacet(unittest.TestCase):
+
+    def test(self):
+        from schooltool.infofacets import DynamicFacet
+        from schooltool.interfaces import IDynamicFacet
+
+        dif = DynamicFacet()
+        verifyObject(IDynamicFacet, dif)
+
+    def test_fields(self):
+        from schooltool.infofacets import DynamicFacet
+        dif = DynamicFacet()
+        dif.addField('jid','Jabber ID','string')
+
+
 class TestPersonInfoFacet(unittest.TestCase):
 
     def test(self):
@@ -68,6 +89,8 @@ class TestAddressInfoFacet(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestDynamicFacetField))
+    suite.addTest(unittest.makeSuite(TestDynamicFacet))
     suite.addTest(unittest.makeSuite(TestPersonInfoFacet))
     suite.addTest(unittest.makeSuite(TestAddressInfoFacet))
     return suite

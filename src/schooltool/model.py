@@ -42,8 +42,11 @@ from schooltool.timetable import TimetabledMixin
 from schooltool.timetable import getPeriodsForDay
 from schooltool.absence import Absence
 from schooltool.component import FacetManager, getRelatedObjects
+from schooltool.component import getDynamicFacetSchemaService
 from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
+from schooltool.infofacets import DynamicFacet
 from schooltool.auth import ACL
+from schooltool.uris import URICurrentlyResides, URICurrentResidence
 from schooltool.uris import URINotandum
 
 __metaclass__ = type
@@ -215,6 +218,15 @@ class Person(ApplicationObjectMixin):
 
     def hasPassword(self):
         return self._pwhash is not None
+    
+    def getAddresses(self):
+        return getRelatedObjects(self, URICurrentResidence)
+
+    def getDynamicFacets(self):
+        service = getDynamicFacetSchemaService(self)
+        facets = FacetManager(self).iterFacets()
+        return [facet for facet in facets if facet in service.keys()]
+
 
 
 class Group(ApplicationObjectMixin):
@@ -255,21 +267,28 @@ class Note(RelationshipValenciesMixin, EventTargetMixin):
         return getRelatedObjects(self, URINotandum)
 
 
-class Address(FacetedEventTargetMixin,
-              RelationshipValenciesMixin):
+class Address(FacetedEventTargetMixin, RelationshipValenciesMixin):
 
     implements(IAddress)
 
-    title = property(lambda self: self._title)
-    country = property(lambda self: self._country)
+    title = None
+    country = None
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, country=None):
         FacetedEventTargetMixin.__init__(self)
         RelationshipValenciesMixin.__init__(self)
-        self._title = title
-        self._country = None
+        self.title = title
+        self.country = country
         facet = AddressInfoFacet()
         FacetManager(self).setFacet(facet, self, "address_info")
+        self.__name__ = None
+        self.__parent__ = None
+        
+    def getPeople(self):
+        return getRelatedObjects(self, URICurrentlyResides)
+    
+    def info(self):
+        return FacetManager(self).facetByName('address_info')
 
 
 class IntervalSet:

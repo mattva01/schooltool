@@ -1,0 +1,72 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title"
+        i18n:translate="">Dynamic Facet Schema Wizard</title>
+  </head>
+  <body>
+    <h1 metal:fill-slot="h1" i18n:translate="">Dynamic Facet Schema Wizard</h1>
+
+    <metal:block metal:fill-slot="content">
+
+      <form method="POST" enctype="multipart/form-data"
+          tal:attributes="action request/path">
+
+        <fieldset>
+          <legend>Schema Name</legend>
+
+          <tal:block define="schema view/schema|nothing">
+            <tal:if condition="schema">
+              <div tal:repeat="field schema/fields" class="formrow">
+                <input type="hidden" name="newlabel" value=""
+                  tal:attributes="value field/label"/>
+                <input type="hidden" name="newfield" value=""
+                  tal:attributes="value field/ftype"/>
+              </div>
+            </tal:if>
+          </tal:block>
+
+          <div class="error" tal:condition="view/error"
+              tal:content="view/error" />
+          <div class="row" tal:replace="structure view/name_widget"/>
+      </fieldset>
+      <fieldset>
+          <legend>Add Fields</legend>
+
+
+          <div class="row" tal:replace="structure view/newlabel_widget"/>
+          <div class="row" tal:replace="structure view/newfield_widget"/>
+
+          <div class="row">
+            <input class="button" type="submit" name="ADDFIELD"
+                value="Add Field" i18n:attributes="value" />
+          </div>
+
+        </fieldset>
+
+
+        <fieldset
+            tal:define="newfield request/args/newfield | nothing"
+            tal:condition="newfield">
+          <legend>Custom Schema</legend>
+
+          <tal:block define="schema view/schema|nothing">
+            <tal:if condition="schema">
+                <div tal:repeat="field schema/fields" class="row"
+                    tal:define="isSchema string:1">
+                <metal:macro use-macro="view/macros/render-infowidget"/>
+              </div>
+            </tal:if>
+          </tal:block>
+
+
+        </fieldset>
+        <div class="row">
+            <input class="button" type="submit" name="CREATE"
+                value="Save Schema" i18n:attributes="value" />
+        </div>
+      </form>
+
+    </metal:block>
+
+  </body>
+</html>

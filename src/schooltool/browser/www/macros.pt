@@ -117,3 +117,60 @@
     </tal:if>
   </tal:block>
 </metal:block>
+
+<metal:block define-macro="render-infowidget">
+    <!-- Render dynamicfacet fields:
+    
+    Parameters:
+        field: a DynamicFacetField
+        isSchema: boolean, true if we are creating a schemata.
+    -->
+    <label tal:content="field/label"></label>
+    <tal:if condition="python:field['ftype'] == 'textarea'">
+        <textarea name="" value=""
+            tal:attributes="name field/name"
+            tal:content="field/value">
+        </textarea>
+    </tal:if>
+    <tal:if condition="python:field['ftype'] == 'selection'">
+        <select name="" tal:attributes="name field/name">
+            <tal:loop repeat="option field/vocabulary">
+                <option tal:content="option"></option>
+            </tal:loop>
+        </select>
+        <textarea name=""
+            tal:condition="isSchema|nothing"
+            tal:attributes="name string:${field/name}_vocabulary"
+            tal:content="python:'\n'.join(field.vocabulary)"></textarea>
+    </tal:if>
+    <tal:if condition="python:field['ftype'] == 'multiselection'">
+        <select multiple="multiple" name="" tal:attributes="name field/name">
+            <tal:loop repeat="option field/vocabulary">
+                <option tal:content="option"></option>
+            </tal:loop>
+        </select>
+        <textarea name=""
+            tal:condition="isSchema|nothing"
+            tal:attributes="name string:${field/name}_vocabulary"
+            tal:content="python:'\n'.join(field.vocabulary)"></textarea>
+    </tal:if>
+    <tal:if condition="python:field['ftype'] == 'checkbox'">
+        <input type="checkbox" name=""
+          tal:attributes="name field/name"/>
+    </tal:if>
+    <tal:if condition="python:field['ftype'] == 'text'">
+      <input type="text" name=""
+        tal:attributes="name field/name;
+                        value field/value"/>
+    </tal:if>
+</metal:block>
+<metal:block define-macro="dynamic-facet">
+    <!-- Requres a DynamicFacet defined as 'facet' prior to calling -->
+    <div class="dynamic-facet">
+        <h3 tal:content="facet/__name__"></h3>
+        <div class="row" tal:repeat="field facet/fields">
+            <label tal:content="field/name"></label>
+            <span tal:content="field/value"></span>
+        </div>
+    </div>
+</metal:block>

@@ -35,6 +35,7 @@ from schooltool.interfaces import IBeforeMembershipEvent
 from schooltool.membership import Membership
 from schooltool.membership import RestrictedMembershipPolicy
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
+from schooltool.infofacets import DynamicFacetSchemaService, DynamicFacet
 from schooltool.translation import ugettext as _
 from schooltool.booking import TimetableResourceSynchronizer
 from schooltool.interfaces import ITimetableReplacedEvent
@@ -76,6 +77,9 @@ class Application(Persistent):
         self.ticketService = TicketService()
         self.ticketService.__parent__ = self
         self.ticketService.__name__ = 'tickets'
+        self.dynamicFacetSchemaService = DynamicFacetSchemaService()
+        self.dynamicFacetSchemaService.__parent__ = self
+        self.dynamicFacetSchemaService.__name__ = 'dfschemas'
         self._roots = PersistentKeysSet()
         self._appObjects = PersistentDict()
 
@@ -107,6 +111,8 @@ class Application(Persistent):
             return self.timetableSchemaService
         elif name == 'time-periods':
             return self.timePeriodService
+        elif name == 'dfschemas':
+            return self.dynamicFacetSchemaService
         return self[name]
 
     def keys(self):
@@ -192,6 +198,7 @@ def create_application():
     app['persons'] = ApplicationObjectContainer(model.Person)
     app['resources'] = ApplicationObjectContainer(model.Resource)
     app['notes'] = ApplicationObjectContainer(model.Note)
+    app['addresses'] = ApplicationObjectContainer(model.Address)
     Person = app['persons'].new
     Group = app['groups'].new
 

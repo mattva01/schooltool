@@ -1,0 +1,27 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">
+      Edit <span tal:replace="view/title"/> facet
+    </title>
+  </head>
+  <body>
+    <h1 metal:fill-slot="h1" i18n:translate="">
+      Edit <span tal:content="view/title"/> for 
+      <span tal:replace="context/title" i18n:name="title" />
+    </h1>
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+    <metal:block fill-slot="content"
+        tal:define="schema view/facet|nothing">
+      <form method="POST" enctype="multipart/form-data"
+          tal:attributes="action request/path">
+        <input type="hidden" name="facet" value=""
+          tal:attributes="value python:request.args.get('facet')[0]"/>
+        <div class="row" tal:repeat="field schema/fields">
+          <metal:macro use-macro="view/macros/render-infowidget"/>
+        </div>
+        <input class="button" type="submit" name="SAVE" value="Save"
+            i18n:attributes="value"/>
+      </form>
+    </metal:block>
+  </body>
+</html>

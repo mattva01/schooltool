@@ -44,6 +44,8 @@ from schooltool.browser.timetable import NewTimePeriodView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimetableSchemaWizard
+from schooltool.browser.infofacet import DynamicFacetSchemaServiceView
+from schooltool.browser.infofacet import DynamicFacetSchemaWizard
 from schooltool.browser.widgets import TextWidget, PasswordWidget
 from schooltool.browser.widgets import TextAreaWidget, SelectionWidget
 from schooltool.browser.widgets import CheckboxWidget, MultiselectionWidget
@@ -184,6 +186,11 @@ class RootView(View):
             return TimePeriodServiceView(self.context.timePeriodService)
         elif name == 'newtimeperiod':
             return NewTimePeriodView(self.context.timePeriodService)
+        elif name == 'dfschemas':
+            return DynamicFacetSchemaServiceView(
+                self.context.dynamicFacetSchemaService)
+        elif name == 'newdfschema':
+            return DynamicFacetSchemaWizard(self.context.dynamicFacetSchemaService)
         raise KeyError(name)
 
 

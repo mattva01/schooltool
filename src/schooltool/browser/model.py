@@ -45,17 +45,21 @@ from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, relate, getPath, traverse
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
+from schooltool.component import getDynamicFacetSchemaService
 from schooltool.component import getOptions
-from schooltool.interfaces import IPerson, IGroup, IResource, INote
+from schooltool.interfaces import IPerson, IGroup, IResource, INote, IAddress
 from schooltool.membership import Membership
+from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
+from schooltool.uris import URICurrentResidence
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
 from schooltool.uris import URICalendarProvider, URINotation
 from schooltool.teaching import Teaching
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
+from schooltool.browser.infofacet import PersonEditFacetView
 
 __metaclass__ = type
 
@@ -123,6 +127,10 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
             return PhotoView(self.context)
         elif name == 'edit.html':
             return PersonEditView(self.context)
+        elif name == 'edit-facet.html':
+            return PersonEditFacetView(self.context)
+        elif name == 'infoedit.html':
+            return PersonInfoEditView(self.context)
         elif name == 'password.html':
             return PersonPasswordView(self.context)
         elif name == 'timetables':
@@ -140,6 +148,9 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
 
     def editURL(self):
         return absoluteURL(self.request, self.context, 'edit.html')
+
+    def editDynamicFacetURL(self):
+        return absoluteURL(self.request, self.context, 'edit-facet.html')
 
     def canChangePassword(self):
         user = self.request.authenticated_user
@@ -172,6 +183,16 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
                 return "checked"
         else:
             return None
+
+    def getDynamicFacets(self):
+        service = getDynamicFacetSchemaService(self.context)
+        facets = FacetManager(self.context).iterFacets()
+
+        return [facet for facet in facets if facet.__name__ in service.keys()]
+
+    def getAvailableDynamicFacets(self):
+        service = getDynamicFacetSchemaService(self.context)
+        return service.keys()
 
 
 class PersonPasswordView(View, AppObjectBreadcrumbsMixin):
@@ -307,6 +328,39 @@ class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
+
+
+class PersonInfoEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
+    """Page for changing information about a person.
+
+    Can be accessed at /persons/$id/edit.html.
+    """
+
+    __used_for__ = IPerson
+
+    authorization = ManagerAccess
+
+    template = Template('www/person_infoedit.pt')
+
+    error = None
+    duplicate_warning = False
+
+    back = True
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        info = self.info()
+        self.first_name_widget = TextWidget('first_name', _('First name'),
+                                            value=info.first_name)
+        self.last_name_widget = TextWidget('last_name', _('Last name'),
+                                           value=info.last_name)
+        self.dob_widget = TextWidget('date_of_birth', _('Birth date'),
+                                     unit=_('(YYYY-MM-DD)'), parser=dateParser,
+                                     value=info.date_of_birth)
+        self.comment_widget = TextAreaWidget('comment', _('Comment'),
+                                             value=info.comment)
+    def facets(self):
+        return FacetManager(self.context).iterFacets()
 
 
 class GroupView(View, GetParentsMixin, TimetabledViewMixin,
@@ -669,6 +723,109 @@ class NoteEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
 
+
+class AddressView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
+    """View for displaying an address."""
+
+    __used_for__ = IAddress
+
+    authorization = AuthenticatedAccess
+
+    template = Template("www/address.pt")
+
+    def canEdit(self):
+        return self.isManager()
+
+    def editURL(self):
+        return absoluteURL(self.request, self.context, 'edit.html')
+
+    def _traverse(self, name, request):
+        if name == "edit.html":
+            return AddressEditView(self.context)
+        else:
+            raise KeyError(name)
+
+
+class AddressEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+    """Page for "editing" an Address (/addresses/id/edit.html)."""
+
+    __used_for__ = IAddress
+
+    authorization = ACLModifyAccess
+
+    template = Template('www/address_edit.pt')
+
+    linkrole = URICurrentResidence
+
+    relname = _('Occupies')
+
+    back = True
+
+    errormessage = _("Cannot add %(person)s to %(this)s")
+
+    def info(self):
+        return FacetManager(self.context).facetByName('address_info')
+
+    def createRelationship(self, person):
+        Occupies(residence=self.context, resides=person)
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        info = self.info()
+
+        self.country_widget = TextWidget('country', _('Country'),
+                                         value=context.country)
+        self.postcode_widget = TextWidget('postcode', _('Postal Code'),
+                                          value=info.postcode)
+        self.district_widget = TextWidget('district', _('District'),
+                                          value=info.district)
+        self.town_widget = TextWidget('town', _('Town'),
+                                      value=info.town)
+        self.streetNr_widget = TextWidget('streetNr', _('Street Number'), value=info.streetNr)
+        self.thoroughfareName_widget = TextWidget('thoroughfareName', _('Thoroughfare Name'), value=info.thoroughfareName)
+
+
+    def do_POST(self, request):
+        if 'CANCEL' in request.args:
+            return self.do_GET(request)
+        widgets = [self.country_widget, self.postcode_widget,
+                   self.district_widget, self.town_widget, 
+                   self.streetNr_widget, self.thoroughfareName_widget]
+        
+        for widget in widgets:
+            widget.update(request)
+            
+        # This is how to require a field.  Do we want any required here?
+        #self.country_widget.require()
+        
+        infofacet = self.info()
+        
+        allow_duplicates = 'CONFIRM' in request.args
+        
+        for widget in widgets:
+            if widget.error:
+                return self.do_GET(request)
+            
+        country = self.country_widget.value
+        postcode = self.postcode_widget.value
+        district = self.district_widget.value
+        town = self.town_widget.value
+        streetNr = self.streetNr_widget.value
+        thoroughfareName = self.thoroughfareName_widget.value
+        
+        infofacet.country = country
+        infofacet.postcode = postcode
+        infofacet.district = district
+        infofacet.town = town
+        infofacet.streetNr = streetNr
+        infofacet.thoroughfareName = thoroughfareName
+                
+        request.appLog(_("Address info updated on %s (%s)") %
+                       (self.context.title, getPath(self.context)))
+        
+        url = absoluteURL(request, self.context)
+        return self.redirect(url, request)
+    
 
 class PhotoView(View):
     """View for displaying a person's photo (/persons/id/photo.jpg)."""
