@@ -59,7 +59,6 @@
             ><img alt="[X]"
               tal:attributes="src context/++resource++delete.png"/></a>
           <div class="body"
-              tal:condition="python: ev.title != ev.shortTitle or ev.description"
               tal:attributes="style string:background: ${ev/color1};">
             <div class="title" tal:content="ev/title"
               tal:condition="python: ev.title != ev.shortTitle" />
