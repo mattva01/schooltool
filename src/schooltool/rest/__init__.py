@@ -40,6 +40,7 @@ from schooltool.component import getView, getRelatedObjects
 from schooltool.uris import URINotation
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
+from schooltool.pathconfig import DATADIR
 
 __metaclass__ = type
 
@@ -187,10 +188,10 @@ def read_file(fn, basedir=None):
     """Return the contents of the specified file.
 
     Filename is relative to basedir.  If basedir is none, then filename is
-    relative to the directory this module is placed in.
+    relative to DATADIR/rest.
     """
     if basedir is None:
-        basedir = os.path.dirname(__file__)
+        basedir = os.path.join(DATADIR, 'rest')
     f = file(os.path.join(basedir, fn), 'rb')
     try:
         return f.read()
@@ -271,7 +272,7 @@ class Template(PageTemplateFile):
     ugettext_hook = staticmethod(_)
 
     def __init__(self, filename, content_type='text/html', charset='UTF-8',
-                       _prefix=None):
+                       _prefix=os.path.join(DATADIR, 'rest')):
         _prefix = self.get_path_from_prefix(_prefix)
         PageTemplateFile.__init__(self, filename, _prefix)
         self.content_type = content_type
