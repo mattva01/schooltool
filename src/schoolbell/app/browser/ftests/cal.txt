@@ -311,13 +311,13 @@ Let's enter some invalid values:
     ... """)
     HTTP/1.1 200 Ok
     ...
-    <input type="hidden" name="date" value="2005-02-04" />
+    ...<input type="hidden" name="date" value="2005-02-04" />
     ...
-    ...<input class="textType" id="field.start_date" name="field.start_date" size="20" type="text" value="20050203"  />...
-    <div class="error"><span class="error">Invalid datetime data</span></div>
+    ...<input class="textType" id="field.start_date" name="field.start_date" size="20" type="text" value="20050203"  />
+    ...<div class="error"><span class="error">Invalid datetime data</span></div>
     ...
-    <input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500h"  />
-    </div>
+    ...<input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500h"  />
+    ...</div>
       <div class="error"><span class="error">Invalid integer data</span></div>
     ...
 

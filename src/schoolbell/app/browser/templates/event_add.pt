@@ -101,11 +101,33 @@
       <div class="row" tal:define="widget nocall:view/start_time_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
-      <div class="row" tal:define="widget nocall:view/duration_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
-      </div>
-      <div class="row" tal:define="widget nocall:view/duration_type_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
+
+      <div class="row">
+        <tal:def define="widget nocall:view/duration_widget">
+          <div metal:use-macro="context/@@form_macros/widget_row" >
+            <metal:block fill-slot="extra">
+              <tal:comment condition="nothing">
+                Very similar to Repeat Every field
+              </tal:comment>
+              <select name="field.duration_type" size="1"
+                  id="field.duration_type"
+                  tal:define="duration_type string:minutes">
+                <option i18n:translate="" value="minutes"
+                    tal:attributes="selected python: duration_type == 'minutes'">
+                  Minutes</option>
+                <option i18n:translate="" value="hours"
+                    tal:attributes="selected python: duration_type == 'hours'">
+                  Hours
+                </option>
+                <option i18n:translate="" value="days"
+                    tal:attributes="selected python: duration_type == 'days'">
+                  Days
+                </option>
+              </select>
+            </metal:block>
+          </div>
+        </tal:def>
+
       </div>
       <div class="row" tal:define="widget nocall:view/location_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
