@@ -958,6 +958,7 @@ def _parseAvailabilityResults(body):
         doc.freeDoc()
         ctx.xpathFreeContext()
 
+
 def _parsePersonInfo(body):
     """Parse the data provided by the person info facet"""
     try:
@@ -1001,6 +1002,7 @@ def _parsePersonInfo(body):
 
 Unchanged = "Unchanged"
 
+
 class PersonInfo:
     """An object containing the data for a person"""
 
@@ -1010,6 +1012,7 @@ class PersonInfo:
         self.last_name = last_name
         self.date_of_birth = dob
         self.comment = comment
+
 
 class GroupInfo:
     """Information about a group."""
