@@ -374,6 +374,36 @@ class IEvent(Interface):
         """
 
 
+class IRelationshipEvent(IEvent):
+    """Base interface for relationship events"""
+
+    links = Attribute("""Tuple containing the links of the relationship""")
+
+class IRelationshipAddedEvent(IRelationshipEvent):
+    """Event that gets sent out after a relationship has been established."""
+
+class IRelationshipRemovedEvent(IRelationshipEvent):
+    """Event that gets sent out after a relationship has been broken."""
+
+
+class IMembershipEvent(IRelationshipEvent):
+    """Base interface for membership events.
+
+    This is a special case of IRelationshipEvent where one side has
+    the role of URIGroup, and the other side has the role of URIMember.
+    """
+
+    group = Attribute("""The group""")
+    member = Attribute("""The member""")
+
+class IMemberAddedEvent(IRelationshipAddedEvent, IMembershipEvent):
+    """Event that gets sent out after a member has been added to a group."""
+
+class IMemberRemovedEvent(IRelationshipRemovedEvent, IMembershipEvent):
+    """Event that gets sent out after a member has been removed from a group.
+    """
+
+
 class IEventTarget(Interface):
     """An object that can receive events."""
 

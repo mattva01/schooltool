@@ -286,12 +286,74 @@ class TestEventService(unittest.TestCase):
         self.assertEquals(event.dispatched_to, [target2, target2])
 
 
+class TestEvents(unittest.TestCase):
+
+    def test_relationship_events(self):
+        from schooltool.event import RelationshipAddedEvent
+        from schooltool.event import RelationshipRemovedEvent
+        from schooltool.interfaces import IRelationshipAddedEvent
+        from schooltool.interfaces import IRelationshipRemovedEvent
+        links = (object(), object())
+        e = RelationshipAddedEvent(links)
+        verifyObject(IRelationshipAddedEvent, e)
+        self.assert_(e.links is links)
+
+        e = RelationshipRemovedEvent(links)
+        verifyObject(IRelationshipRemovedEvent, e)
+        self.assert_(e.links is links)
+
+    def test_membership_events(self):
+        from schooltool.event import MemberAddedEvent
+        from schooltool.event import MemberRemovedEvent
+        from schooltool.interfaces import IMemberAddedEvent
+        from schooltool.interfaces import IMemberRemovedEvent
+        from schooltool.interfaces import URIGroup, URIMember
+        from schooltool.interfaces import ISpecificURI
+
+        class URIUnrelated(ISpecificURI):
+            """http://ns.example.org/role/unrelated"""
+
+        class LinkStub:
+            def __init__(self, friend, role):
+                self._friend = friend
+                self.role = role
+            def traverse(self):
+                return self._friend
+
+        group, member = object(), object()
+        links = (LinkStub(group, URIGroup), LinkStub(member, URIMember))
+
+        e = MemberAddedEvent(links)
+        verifyObject(IMemberAddedEvent, e)
+        self.assert_(e.links is links)
+        self.assert_(e.member is member)
+        self.assert_(e.group is group)
+
+        links = (LinkStub(member, URIMember), LinkStub(group, URIGroup))
+        e = MemberRemovedEvent(links)
+        verifyObject(IMemberRemovedEvent, e)
+        self.assert_(e.links is links)
+        self.assert_(e.member is member)
+        self.assert_(e.group is group)
+
+        links = (LinkStub(member, URIMember), LinkStub(group, URIUnrelated))
+        self.assertRaises(TypeError, MemberAddedEvent, links)
+
+        links = (LinkStub(member, URIGroup), LinkStub(group, URIUnrelated))
+        self.assertRaises(TypeError, MemberAddedEvent, links)
+
+        links = (LinkStub(member, URIGroup), LinkStub(group, URIMember),
+                 LinkStub(object(), URIMember))
+        self.assertRaises(TypeError, MemberAddedEvent, links)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestEventMixin))
     suite.addTest(unittest.makeSuite(TestEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestEventActionMixins))
     suite.addTest(unittest.makeSuite(TestEventService))
+    suite.addTest(unittest.makeSuite(TestEvents))
     return suite
 
 if __name__ == '__main__':
