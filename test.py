@@ -48,6 +48,7 @@ Options:
   -vv                   very verbose (print test names)
   -q                    quiet (do not print anything on success)
   -w                    enable warnings about omitted test cases
+  -d                    invoke pdb when an exception occurs
   -p                    show progress bar (can be combined with -v or -vv)
   -u                    select unit tests (default)
   -f                    select functional tests
@@ -73,6 +74,7 @@ import types
 import getopt
 import unittest
 import traceback
+import pdb
 from sets import Set
 
 __metaclass__ = type
@@ -104,6 +106,7 @@ class Options:
     list_tests = False          # --list-tests
     list_hooks = False          # --list-hooks
     run_tests = True            # run tests (disabled by --list-foo)
+    postmortem = False          # invoke pdb when an exception occurs
 
     # output verbosity
     verbosity = 0               # verbosity level (-v)
@@ -393,11 +396,15 @@ class CustomTestResult(unittest._TextTestResult):
     def addFailure(self, test, err):
         if self.cfg.immediate_errors:
             self.printTraceback("FAIL", test, err)
+        if self.cfg.postmortem:
+            pdb.post_mortem(sys.exc_info()[2])
         self.failures.append((test, self.formatError(err)))
 
     def addError(self, test, err):
         if self.cfg.immediate_errors:
             self.printTraceback("ERROR", test, err)
+        if self.cfg.postmortem:
+            pdb.post_mortem(sys.exc_info()[2])
         self.errors.append((test, self.formatError(err)))
 
     def printErrorList(self, flavour, errors):
@@ -490,7 +497,7 @@ def main(argv):
             pass
 
     # Option processing
-    opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufw',
+    opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufwd',
                                    ['list-files', 'list-tests', 'list-hooks',
                                     'level=', 'all-levels', 'coverage',
                                     'search-in=', 'immediate-errors', 'help'])
@@ -512,6 +519,8 @@ def main(argv):
             cfg.unit_tests = True
         elif k == '-f':
             cfg.functional_tests = True
+        elif k == '-d':
+            cfg.postmortem = True
         elif k == '-w':
             cfg.warn_omitted = True
         elif k == '--list-files':

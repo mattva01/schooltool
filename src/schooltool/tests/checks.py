@@ -112,7 +112,8 @@ class StdoutChecks:
         self.stderr_wrapper.written = False
 
         # readline is disabled in PDB when our stdout hook is found instead of
-        # the real stdout.  We fix this with a monkey patch on pdb.set_trace().
+        # the real stdout.  This problem is fixed through a monkey patch on
+        # pdb.set_trace() and pdb.post_mortem().
 
         import pdb
 
@@ -121,8 +122,15 @@ class StdoutChecks:
             self.old_pdb_set_trace()
             sys.stdout = self.stdout_wrapper
 
+        def post_mortem_hook(tb):
+            sys.stdout = self.old_stdout
+            self.old_pdb_post_mortem(tb)
+            sys.stdout = self.stdout_wrapper
+
         self.old_pdb_set_trace = pdb.set_trace
+        self.old_pdb_post_mortem = pdb.post_mortem
         pdb.set_trace = set_trace_hook
+        pdb.post_mortem = post_mortem_hook
 
     def stopTest(self, test):
         import sys
@@ -141,6 +149,7 @@ class StdoutChecks:
 
         import pdb
         pdb.set_trace = self.old_pdb_set_trace
+        pdb.post_mortem = self.old_pdb_post_mortem
 
 
 class LibxmlChecks:
