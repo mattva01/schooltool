@@ -1730,7 +1730,7 @@ class MainFrame(wxFrame):
 
         if wxPlatform == '__WXMSW__':
             filename = 'schooltool.ico'
-            bitmap_type = wxBITMAP_TYPE_ICON
+            bitmap_type = wxBITMAP_TYPE_ICO
         else:
             filename = 'schooltool.xpm'
             bitmap_type = wxBITMAP_TYPE_XPM
