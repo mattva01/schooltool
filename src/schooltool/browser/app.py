@@ -115,7 +115,7 @@ class RootView(View):
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logo.png':
-            return StaticFile('www/logo.png', 'image/png')
+            return StaticFile(_('www/logo.png'), 'image/png')
         elif name == 'person.png':
             return StaticFile('www/user2.png', 'image/png')
         elif name == 'group.png':

@@ -57,13 +57,16 @@ from schooltool.common import to_locale
 
 localedir = os.path.dirname(__file__)
 catalog = _gettext.translation('schooltool', localedir, fallback=True)
-ugettext = catalog.ugettext
 
 # Uncomment this function to debug i18n
 
 # def ugettext(msgid):
 #     """Debugging version of ugettext that decorates all translated strings."""
 #     return u'\u00AB%s\u00BB' % catalog.ugettext(msgid)
+
+def ugettext(str):
+    global catalog
+    return catalog.ugettext(str)
 
 def gettext(msgid):
     return to_locale(ugettext(msgid))
@@ -72,6 +75,6 @@ def setCatalog(domain, languages=None):
     """Sets the domain and languages used for message lookup"""
     global catalog
     global ugettext
-    catalog = _gettext.translation('schooltool', localedir, languages,
+    catalog = _gettext.translation(domain, localedir, languages,
                                    fallback=True)
     ugettext = catalog.ugettext

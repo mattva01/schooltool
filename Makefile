@@ -17,11 +17,11 @@ build:
 extract-translations:
 	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
 			-d schooltool -o src/schooltool/translation/ \
-			src/schooltool *.py -u schooltool.uris
+			src/schooltool *.py
 	$(MAKE) update-translations
 
 update-translations:
-	for f in `find src/schooltool/translation/ -name 'schooltool.po'`; \
+	for f in `find src/schooltool/translation/ -name '*.po'`; \
 	do								   \
 	     msgmerge -U $$f src/schooltool/translation/schooltool.pot;	   \
 	     msgfmt -o $${f%.po}.mo $$f;				   \
