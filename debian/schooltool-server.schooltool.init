@@ -19,13 +19,14 @@ DEFAULTFILE=/etc/default/schooltool
 test -x $DAEMON || exit 0
 test -f $CONFIGFILE || exit 0
 
+if [ -r $DEFAULTFILE ]; then
+    . $DEFAULTFILE
+fi
+
 case "$1" in
   start)
 	# Exit if the server has been disabled in /etc/default/schooltool
-	if [ -r $DEFAULTFILE ]; then
-	    . $DEFAULTFILE
-	    [ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
-	fi
+	[ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
 
 	echo -n "Starting $DESC: $NAME"
 	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
@@ -39,16 +40,12 @@ case "$1" in
 	echo "."
 	;;
   restart|force-reload)
+	# Exit if the server has been disabled in /etc/default/schooltool
+	[ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
+
 	echo -n "Restarting $DESC: $NAME"
 	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
 		--name $PNAME
-
-	# Exit if the server has been disabled in /etc/default/schooltool
-	if [ -r $DEFAULTFILE ]; then
-	    . $DEFAULTFILE
-	    [ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
-	fi
-
 	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
 		--chuid schooltool --startas $DAEMON -- -d >/dev/null
 	echo "."
