@@ -398,6 +398,12 @@ class ResourceView(View):
 
     template = Template("www/resource.pt")
 
+    def canEdit(self):
+        return isManager(self.request.authenticated_user)
+
+    def editURL(self):
+        return absoluteURL(self.request, self.context) + '/edit.html'
+
 
 class ResourceEditView(View):
     """View for displaying a resource."""

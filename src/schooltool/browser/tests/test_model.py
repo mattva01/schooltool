@@ -707,6 +707,16 @@ class TestResourceView(unittest.TestCase):
         self.assert_("I'm a resource" in content)
         self.assert_("re123" in content)
 
+    def test_editURL(self):
+        from schooltool.model import Resource
+        from schooltool.browser.model import ResourceView
+        resource = Resource("I'm a resource")
+        setPath(resource, '/resources/foo')
+        view = ResourceView(resource)
+        view.request = RequestStub()
+        self.assertEquals(view.editURL(),
+                          'http://localhost:7001/resources/foo/edit.html')
+
 
 class TestResourceEditView(unittest.TestCase):
 
@@ -719,7 +729,7 @@ class TestResourceEditView(unittest.TestCase):
         view.authorization = lambda x, y: True
         return view
 
-    def test_render(self):
+    def test_get(self):
         view = self.createView()
         request = RequestStub()
         content = view.render(request)
