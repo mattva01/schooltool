@@ -303,11 +303,11 @@ def _parse_recurrence_weekly(args):
     args is a mapping from attribute names in RRULE to their string values.
 
     >>> _parse_recurrence_weekly({})
-    WeeklyRecurrenceRule(1, None, None, (), [])
+    WeeklyRecurrenceRule(1, None, None, (), ())
     >>> _parse_recurrence_weekly({'BYDAY': 'WE'})
-    WeeklyRecurrenceRule(1, None, None, (), [2])
+    WeeklyRecurrenceRule(1, None, None, (), (2,))
     >>> _parse_recurrence_weekly({'BYDAY': 'MO,WE,SU'})
-    WeeklyRecurrenceRule(1, None, None, (), [0, 2, 6])
+    WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
 
     """
     # XXX Circular import!
@@ -369,9 +369,9 @@ def parse_recurrence_rule(args, exdate=None):
     Of course, other recurrence frequencies may be used:
 
     >>> parse_recurrence_rule({'FREQ': 'WEEKLY', 'BYDAY': 'MO,WE,SU'})
-    WeeklyRecurrenceRule(1, None, None, [], [0, 2, 6])
+    WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
     >>> parse_recurrence_rule({'FREQ': 'MONTHLY'})
-    MonthlyRecurrenceRule(1, None, None, [], 'monthday')
+    MonthlyRecurrenceRule(1, None, None, (), 'monthday')
     >>> parse_recurrence_rule({'FREQ': 'YEARLY'})
     YearlyRecurrenceRule(1, None, None, ())
 

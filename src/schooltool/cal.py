@@ -417,7 +417,7 @@ class RecurrenceRule:
         if until is Unchanged:
             until = self.until
         if exceptions is Unchanged:
-            exceptions = tuple(self.exceptions)
+            exceptions = self.exceptions
         return self.__class__(interval, count, until, exceptions)
 
     def __repr__(self):
@@ -535,8 +535,8 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         self.interval = interval
         self.count = count
         self.until = until
-        self.exceptions = exceptions
-        self.weekdays = weekdays
+        self.exceptions = tuple(exceptions)
+        self.weekdays = tuple(weekdays)
         self._validate()
 
     def __repr__(self):
@@ -560,7 +560,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         if until is Unchanged:
             until = self.until
         if exceptions is Unchanged:
-            exceptions = tuple(self.exceptions)
+            exceptions = self.exceptions
         if weekdays is Unchanged:
             weekdays = self.weekdays
         return self.__class__(interval, count, until, exceptions, weekdays)
@@ -614,7 +614,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
         self.interval = interval
         self.count = count
         self.until = until
-        self.exceptions = exceptions
+        self.exceptions = tuple(exceptions)
         self.monthly = monthly
         self._validate()
 
