@@ -21,38 +21,46 @@ Tests for schoolbell.skin.
 
 $Id$
 """
+
 import unittest
-from zope.publisher.browser import TestRequest
+from zope.testing import doctest
 
 
-class TestSchoolBellSubscriber(unittest.TestCase):
+def doctest_schoolBellTraverseSubscriber():
+    """Tests for schoolBellTraverseSubscriber.
 
-    def test(self):
-        from schoolbell.app.browser.skin import schoolBellTraverseSubscriber
-        from schoolbell.app.browser.skin import ISchoolBellSkin
-        from zope.app.publication.zopepublication import BeforeTraverseEvent
-        from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.interfaces import ISchoolBellApplication
+    We subscribe to Zope's BeforeTraverseEvent and apply the SchoolBell skin
+    whenever an ISchoolBellApplication is traversed during URL traversal.
 
-        # A non SchoolBellApplication is traversed
-        ob = object()
-        request = TestRequest()
-        ev = BeforeTraverseEvent(ob, request)
-        schoolBellTraverseSubscriber(ev)
-        self.assert_(not ISchoolBellSkin.providedBy(request))
+        >>> from zope.publisher.browser import TestRequest
+        >>> from zope.app.publication.zopepublication import BeforeTraverseEvent
+        >>> from schoolbell.app.browser.skin import schoolBellTraverseSubscriber
+        >>> from schoolbell.app.browser.skin import ISchoolBellSkin
+        >>> from schoolbell.app.app import SchoolBellApplication
 
-        # A SchoolBellApplication is traversed
-        ob = SchoolBellApplication()
-        request = TestRequest()
-        ev = BeforeTraverseEvent(ob, request)
-        schoolBellTraverseSubscriber(ev)
-        self.assert_(ISchoolBellSkin.providedBy(request))
+        >>> ob = SchoolBellApplication()
+        >>> request = TestRequest()
+        >>> ev = BeforeTraverseEvent(ob, request)
+        >>> schoolBellTraverseSubscriber(ev)
+        >>> ISchoolBellSkin.providedBy(request)
+        True
+
+    The skin is, obviously, not applied if you traverse some other object
+
+        >>> ob = object()
+        >>> request = TestRequest()
+        >>> ev = BeforeTraverseEvent(ob, request)
+        >>> schoolBellTraverseSubscriber(ev)
+        >>> ISchoolBellSkin.providedBy(request)
+        False
+
+    """
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSchoolBellSubscriber))
-    return suite
+    return unittest.TestSuite([
+                doctest.DocTestSuite(),
+           ])
 
 
 if __name__ == "__main__":
