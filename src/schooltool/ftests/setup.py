@@ -44,17 +44,10 @@ class TestCase(unittest.TestCase):
     fixture_name = "empty"
 
     # Shared set of known test fixtures
-    known_fixtures = sets.Set()
+    known_fixtures = sets.Set(["empty"])
 
     def setUp(self):
         unittest.TestCase.setUp(self)
-
-        # Save a snapshot of the empty database before a test gets a chance to
-        # muck with it
-        if "empty" not in self.known_fixtures:
-            self._saveSnapshot("empty")
-
-        # Load a named test fixture for this test case
         self._loadSnapshot(self.fixture_name)
 
     def _saveSnapshot(self, name):

@@ -678,6 +678,7 @@ class SnapshottableDB:
         self._db = db
         self._snapshots = {}
         self._logger = logging.getLogger('schooltool.app')
+        self.makeSnapshot('empty')
 
     def __getattr__(self, name):
         return getattr(self._db, name)

@@ -1106,12 +1106,16 @@ class TestSnapshottableDB(unittest.TestCase):
         db = ZODB.DB(ZODB.MappingStorage.MappingStorage())
         snapshottable_db = SnapshottableDB(db)
 
+        # A snapshot called 'empty' is created by default.
+        self.assertEquals(buffer.getvalue(), "Saved snapshot 'empty'\n")
+
         # Sanity check: can we change the DB and see our changes?
         self.setObject(snapshottable_db, 'name', 'some_value')
         self.assertEquals(self.getObject(snapshottable_db, 'name'),
                           'some_value')
 
         # Make one snapshot, check that the DB is still accessible
+        buffer.truncate(0)
         snapshottable_db.makeSnapshot('snapshot1')
         self.assertEquals(self.getObject(snapshottable_db, 'name'),
                           'some_value')
@@ -1138,6 +1142,11 @@ class TestSnapshottableDB(unittest.TestCase):
         snapshottable_db.restoreSnapshot('snapshot2')
         self.assertEquals(self.getObject(snapshottable_db, 'name'),
                           'other_value')
+
+        # SnapshottableDB creates an "empty" snapshot that contains the
+        # initial state of the original storage.
+        snapshottable_db.restoreSnapshot('empty')
+        self.assertRaises(KeyError, self.getObject, snapshottable_db, 'name')
 
     def setObject(self, db, name, value):
         conn = db.open()

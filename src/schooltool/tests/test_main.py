@@ -419,6 +419,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.notifyShutdown = lambda: None
         server.configure(['-c', self.getConfigFileName()])
         server.config.test_mode = True
+        applogger = logging.getLogger('schooltool.app')
+        applogger.disabled = True
         server.run()
         site = reactor._tcp_listeners[0][1]
         self.assert_(isinstance(site.db, SnapshottableDB))
