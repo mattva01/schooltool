@@ -10,7 +10,7 @@
   </h1>
   <metal:block metal:fill-slot="content">
 
-  <div tal:define="status python:view.update(request)" 
+  <div tal:define="status python:view.update(request)"
        tal:condition="status" tal:content="status" class="status"/>
 
   <tal:block condition="not:request/args/ADD|nothing">
