@@ -333,17 +333,21 @@ elif package == 'schoolbell':
             The calendars are:
             * Shareable
             * Overlayable
-            * Time Zone Aware
             * Access controllable
             * Importable and exportable to iCal clients
                 (e.g. Apple's iCal or Mozilla Sunbird)
 
-            All of this is accessable through a web interface which is simple,
-            powerfull and beautiful.
+            And will:
+            * Time zone aware
+            * Provide resource rooking
+            * Do anything else that makes sense
+
+            All of this is accessible through a web interface which is simple,
+            powerful and beautiful.
 
             For developers SchoolBell offers:
             * Re-usable calendaring Zope 3 components.
-            * iCal parser which depends only on the standard library.
+            * iCal parser.
             * Rigourous functional and unit testing.
 
             Enjoy!""",
