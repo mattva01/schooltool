@@ -73,7 +73,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="Groups"
-      />
+      /> <!-- TODO: same view for resources -->
 
   <page
       name="password.html"
@@ -130,6 +130,26 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
+      />
+
+  <page
+      name="members_persons.html"
+      for="schoolbell.app.interfaces.IGroup"
+      class="schoolbell.app.browser.app.MemberViewPersons"
+      template="templates/members.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Members (persons)"
+      />
+
+  <page
+      name="members_resources.html"
+      for="schoolbell.app.interfaces.IGroup"
+      class="schoolbell.app.browser.app.MemberViewResources"
+      template="templates/members.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Members (resources)"
       />
 
 <!-- ResourceContainer, Resource configuration -->

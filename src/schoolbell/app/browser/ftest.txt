@@ -549,6 +549,21 @@ And the groups page shows the checkbox checked.
     group
     ...
 
+The group members view reflects the change that we have done:
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/Group/members_persons.html HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    <input type="checkbox" checked="checked"
+           name="member.frog" />
+    Frog
+    ...
+
 
 There is a menu item for resources in resource list
 
@@ -689,6 +704,8 @@ We should have a view for that resource as well:
     ...Title:...
     ...resource...
     ...
+
+
 
 Navigation view
 ---------------

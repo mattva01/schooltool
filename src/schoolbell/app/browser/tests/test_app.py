@@ -217,6 +217,101 @@ def doctest_GroupListView():
     """
 
 
+def doctest_MemberListView():
+    r"""Test for GroupListView
+
+    We will be (ab)using a group and three test subjects:
+
+        >>> from schoolbell.app.app import Group
+        >>> pov = Group('PoV')
+
+        >>> from schoolbell.app.app import Person
+        >>> gintas = Person('Gintas')
+        >>> ignas = Person('Ignas')
+        >>> alga = Person('Albertas')
+
+    We need these objects to live in an application:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app['groups']['pov'] = pov
+        >>> app['persons']['gintas'] = gintas
+        >>> app['persons']['ignas'] = ignas
+        >>> app['persons']['alga'] = alga
+
+    Let's create a view for our group:
+
+        >>> from schoolbell.app.browser.app import MemberViewPersons
+        >>> request = TestRequest()
+        >>> view = MemberViewPersons(pov, request)
+
+    Rendering the view does no harm:
+
+        >>> view.update()
+
+    First, all persons should be listed in alphabetical order:
+
+        >>> [g.title for g in view.getMemberList()]
+        ['Albertas', 'Gintas', 'Ignas']
+
+    Let's make Ignas a member of PoV:
+
+        >>> request = TestRequest()
+        >>> request.form = {'member.ignas': 'on', 'APPLY': 'Apply'}
+        >>> view = MemberViewPersons(pov, request)
+        >>> view.update()
+
+    He should have joined:
+
+        >>> [person.title for person in pov.members]
+        ['Ignas']
+
+    And we should be directed to the group info page:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/pov'
+
+    We can cancel an action if we want to:
+
+        >>> request = TestRequest()
+        >>> request.form = {'member.gintas': 'on', 'CANCEL': 'Cancel'}
+        >>> view = MemberViewPersons(pov, request)
+        >>> view.update()
+        >>> [person.title for person in pov.members]
+        ['Ignas']
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/pov'
+
+    Finally, let's remove Ignas from PoV (he went home early today)
+    and add Albert, who came in late and has to work after-hours:
+
+        >>> request = TestRequest()
+        >>> request.form = {'member.alga': 'on', 'APPLY': 'Apply'}
+        >>> view = MemberViewPersons(pov, request)
+        >>> view.update()
+
+    Mission successful:
+
+        >>> [person.title for person in pov.members]
+        ['Albertas']
+
+    Yadda yadda, redirection works:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/pov'
+
+    TODO: check resource view
+
+    """
+
+
 def doctest_GroupView():
     r"""Test for GroupView
 
@@ -270,7 +365,8 @@ def doctest_PersonChangePasswordView():
 
         >>> from schoolbell.app.browser.app import PersonChangePasswordView
         >>> class TestPersonChangePasswordView(PersonChangePasswordView):
-        ...    def __init__(self, context, request, pretend_to_be_manager=False):
+        ...    def __init__(self, context, request,
+        ...                 pretend_to_be_manager=False):
         ...         self._pretend_to_be_manager = pretend_to_be_manager
         ...         PersonChangePasswordView.__init__(self, context, request)
         ...    def isZopeManager(self):

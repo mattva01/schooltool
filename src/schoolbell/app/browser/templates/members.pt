@@ -1,0 +1,35 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="h1">
+  Members of <span tal:replace="context/title" />
+</h1>
+<metal:block metal:fill-slot="body">
+<tal:defs define="update view/update" />
+
+<form method="POST" tal:attributes="action request/URL">
+<div class="member_list"> <!-- TODO: nice CSS -->
+  <div tal:repeat="member view/getMemberList">
+    <label>
+      <input tal:attributes="name string:member.${member/__name__};
+                             checked python:member in context.members"
+             type="checkbox" />
+      <span tal:replace="member/title" />
+    </label>
+  </div>
+</div>
+
+<div class="controls">
+  <input class="button-ok" type="submit" name="APPLY"
+         value="Apply" title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value; title; accesskey" />
+  <input class="button-cancel" type="submit" name="CANCEL"
+         value="Cancel" i18n:attributes="value" />
+</div>
+</form>
+
+</metal:block>
+</body>
+</html>

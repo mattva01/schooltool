@@ -33,7 +33,7 @@ from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import IGroupMember
+from schoolbell.app.interfaces import IGroupMember, IGroupContained
 
 
 class ContainerView(BrowserView):
@@ -137,8 +137,62 @@ class GroupListView(BrowserView):
 class GroupView(BrowserView):
     """A Group info view."""
 
+    __used_for__ = IGroupContained
+
     def canEdit(self):
         return True # TODO: implement permission checking
+
+
+class MemberViewBase(BrowserView):
+    """A base view class for adding / removing members from a group.
+
+    Subclasses must override container_name.
+    """
+
+    __used_for__ = IGroupContained
+
+    container_name = None
+
+    def getMemberList(self):
+        """Return a sorted list of all possible members."""
+        # XXX Ugly.  Maybe we could use adaptation here.
+        member = self.context.__parent__.__parent__[self.container_name]
+        items = [(member.title, member) for member in member.values()]
+        items.sort()
+        return [row[-1] for row in items]
+
+    def update(self):
+        # XXX This method is rather similar to GroupListView.update().
+        context_url = zapi.absoluteURL(self.context, self.request)
+        if 'APPLY' in self.request:
+            context_members = removeSecurityProxy(self.context.members)
+            for member in self.getMemberList():
+                want = bool('member.' + member.__name__ in self.request)
+                have = bool(member in context_members)
+                # add() and remove() could throw an exception, but at the
+                # moment the constraints are never violated, so we ignore
+                # the problem.
+                if want != have:
+                    member = removeSecurityProxy(member)
+                    if want:
+                        context_members.add(member)
+                    else:
+                        context_members.remove(member)
+            self.request.response.redirect(context_url)
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(context_url)
+
+
+class MemberViewPersons(MemberViewBase):
+    """A view for adding / removing group members that are persons."""
+
+    container_name = 'persons'
+
+
+class MemberViewResources(MemberViewBase):
+    """A view for adding / removing group members that are resources."""
+
+    container_name = 'resources'
 
 
 class ResourceView(BrowserView):

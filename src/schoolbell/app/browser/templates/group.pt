@@ -33,16 +33,19 @@
     </div>
     <div tal:define="members context/members">
       <h3 i18n:translate="">Members</h3>
-      <p tal:repeat="obj members">
-       <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title"/>
+      <p tal:repeat="obj members"> <!-- XXX sort order? -->
+        <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
       </p>
       <p tal:condition="not:members" i18n:translate="">
-      This group has no members.</p>
+        This group has no members.</p>
     </div>
     <div class="actions" tal:condition="view/canEdit">
-      <a class="action"
-         tal:attributes="href string:${context/@@absolute_url}/edit.html"
-         i18n:translate="">Edit</a>
+      <div><a class="action"
+         tal:attributes="href string:${context/@@absolute_url}/members_persons.html"
+         i18n:translate="">Add / remove a person</a></div>
+      <div><a class="action"
+         tal:attributes="href string:${context/@@absolute_url}/members_resources.html"
+         i18n:translate="">Add / remove a resource</a></div>
     </div>
   </div>
 
