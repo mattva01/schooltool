@@ -913,47 +913,47 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         raise NotImplementedError("override this method in subclasses")
 
     def getRecurrenceRule(self):
-       """Returns a recurrence rule according to the widgets in request
+        """Returns a recurrence rule according to the widgets in request
 
-       Must be called after update()
-       """
-       if self.recurrence_widget.value:
-          interval = self.interval_widget.value
-          until = self.until_widget.value
-          count = self.count_widget.value
-          range = self.range_widget.value
-          exceptions = self.exceptions_widget.value
+        Must be called after update()
+        """
+        if self.recurrence_widget.value:
+            interval = self.interval_widget.value
+            until = self.until_widget.value
+            count = self.count_widget.value
+            range = self.range_widget.value
+            exceptions = self.exceptions_widget.value
 
-          if interval is None:
-             interval = 1
+            if interval is None:
+                interval = 1
 
-          if range != 'until':
-              until = None
-          if range != 'count':
-              count = None
+            if range != 'until':
+                until = None
+            if range != 'count':
+                count = None
 
-          if exceptions is None:
-             exceptions = ()
+            if exceptions is None:
+                exceptions = ()
 
-          if self.recurrence_type_widget.value == 'daily':
-             return DailyRecurrenceRule(interval=interval,
-                                        count=count, until=until,
-                                        exceptions=exceptions)
-          elif self.recurrence_type_widget.value == 'weekly':
-             return WeeklyRecurrenceRule(interval=interval,
-                                         count=count, until=until,
-                                         exceptions=exceptions)
-          elif self.recurrence_type_widget.value == 'monthly':
-             return MonthlyRecurrenceRule(interval=interval,
-                                          count=count, until=until,
-                                          exceptions=exceptions)
-          elif self.recurrence_type_widget.value == 'yearly':
-             return YearlyRecurrenceRule(interval=interval,
-                                         count=count, until=until,
-                                         exceptions=exceptions)
+            if self.recurrence_type_widget.value == 'daily':
+                return DailyRecurrenceRule(interval=interval,
+                                           count=count, until=until,
+                                           exceptions=exceptions)
+            elif self.recurrence_type_widget.value == 'weekly':
+                return WeeklyRecurrenceRule(interval=interval,
+                                            count=count, until=until,
+                                            exceptions=exceptions)
+            elif self.recurrence_type_widget.value == 'monthly':
+                return MonthlyRecurrenceRule(interval=interval,
+                                             count=count, until=until,
+                                             exceptions=exceptions)
+            elif self.recurrence_type_widget.value == 'yearly':
+                return YearlyRecurrenceRule(interval=interval,
+                                            count=count, until=until,
+                                            exceptions=exceptions)
 
-       else:
-          return None
+        else:
+            return None
 
     def getLocations(self):
         """Get a list of titles for possible locations."""
@@ -1014,33 +1014,33 @@ class EventEditView(EventViewBase):
             self.other_location_widget.setValue(event.location)
 
         if event.recurrence is not None:
-           self.recurrence_widget.setValue(True)
+            self.recurrence_widget.setValue(True)
 
-           if IDailyRecurrenceRule.providedBy(event.recurrence):
-              self.recurrence_type_widget.setValue('daily')
-           elif IWeeklyRecurrenceRule.providedBy(event.recurrence):
-              self.recurrence_type_widget.setValue('weekly')
-           elif IMonthlyRecurrenceRule.providedBy(event.recurrence):
-              self.recurrence_type_widget.setValue('monthly')
-           elif IYearlyRecurrenceRule.providedBy(event.recurrence):
-              self.recurrence_type_widget.setValue('yearly')
+            if IDailyRecurrenceRule.providedBy(event.recurrence):
+                self.recurrence_type_widget.setValue('daily')
+            elif IWeeklyRecurrenceRule.providedBy(event.recurrence):
+                self.recurrence_type_widget.setValue('weekly')
+            elif IMonthlyRecurrenceRule.providedBy(event.recurrence):
+                self.recurrence_type_widget.setValue('monthly')
+            elif IYearlyRecurrenceRule.providedBy(event.recurrence):
+                self.recurrence_type_widget.setValue('yearly')
 
-           self.interval_widget.setValue(event.recurrence.interval)
+            self.interval_widget.setValue(event.recurrence.interval)
 
-           if event.recurrence.count:
-              self.range_widget.setValue('count')
-              self.count_widget.setValue(event.recurrence.count)
-           elif event.recurrence.until:
-              self.range_widget.setValue('until')
-              self.until_widget.setValue(event.recurrence.until)
-           else:
-              self.range_widget.setValue('forever')
+            if event.recurrence.count:
+                self.range_widget.setValue('count')
+                self.count_widget.setValue(event.recurrence.count)
+            elif event.recurrence.until:
+                self.range_widget.setValue('until')
+                self.until_widget.setValue(event.recurrence.until)
+            else:
+                self.range_widget.setValue('forever')
 
-           if event.recurrence.exceptions:
-               self.exceptions_widget.setValue(event.recurrence.exceptions)
+            if event.recurrence.exceptions:
+                self.exceptions_widget.setValue(event.recurrence.exceptions)
 
         else:
-           self.recurrence_widget.setValue(False)
+            self.recurrence_widget.setValue(False)
 
         self.event = event
         EventViewBase.update(self)
@@ -1360,13 +1360,13 @@ class CalendarEventView(View):
 def durationValidator(value):
     """Check if duration is acceptable.
 
-      >>> durationValidator(None)
-      >>> durationValidator(42)
-      >>> durationValidator(0)
-      >>> durationValidator(-1)
-      Traceback (most recent call last):
-        ...
-      ValueError: Duration cannot be negative.
+        >>> durationValidator(None)
+        >>> durationValidator(42)
+        >>> durationValidator(0)
+        >>> durationValidator(-1)
+        Traceback (most recent call last):
+            ...
+        ValueError: Duration cannot be negative.
 
     """
     if value is None:
@@ -1383,14 +1383,14 @@ def durationValidator(value):
 def prev_month(date):
     """Calculate the first day of the previous month for a given date.
 
-       >>> prev_month(date(2004, 8, 1))
-       datetime.date(2004, 7, 1)
-       >>> prev_month(date(2004, 8, 31))
-       datetime.date(2004, 7, 1)
-       >>> prev_month(date(2004, 12, 15))
-       datetime.date(2004, 11, 1)
-       >>> prev_month(date(2005, 1, 28))
-       datetime.date(2004, 12, 1)
+        >>> prev_month(date(2004, 8, 1))
+        datetime.date(2004, 7, 1)
+        >>> prev_month(date(2004, 8, 31))
+        datetime.date(2004, 7, 1)
+        >>> prev_month(date(2004, 12, 15))
+        datetime.date(2004, 11, 1)
+        >>> prev_month(date(2005, 1, 28))
+        datetime.date(2004, 12, 1)
 
     """
     return (date.replace(day=1) - timedelta(1)).replace(day=1)
@@ -1399,18 +1399,18 @@ def prev_month(date):
 def next_month(date):
     """Calculate the first day of the next month for a given date.
 
-       >>> next_month(date(2004, 8, 1))
-       datetime.date(2004, 9, 1)
-       >>> next_month(date(2004, 8, 31))
-       datetime.date(2004, 9, 1)
-       >>> next_month(date(2004, 12, 15))
-       datetime.date(2005, 1, 1)
-       >>> next_month(date(2004, 2, 28))
-       datetime.date(2004, 3, 1)
-       >>> next_month(date(2004, 2, 29))
-       datetime.date(2004, 3, 1)
-       >>> next_month(date(2005, 2, 28))
-       datetime.date(2005, 3, 1)
+        >>> next_month(date(2004, 8, 1))
+        datetime.date(2004, 9, 1)
+        >>> next_month(date(2004, 8, 31))
+        datetime.date(2004, 9, 1)
+        >>> next_month(date(2004, 12, 15))
+        datetime.date(2005, 1, 1)
+        >>> next_month(date(2004, 2, 28))
+        datetime.date(2004, 3, 1)
+        >>> next_month(date(2004, 2, 29))
+        datetime.date(2004, 3, 1)
+        >>> next_month(date(2005, 2, 28))
+        datetime.date(2005, 3, 1)
 
     """
     return (date.replace(day=28) + timedelta(7)).replace(day=1)
@@ -1421,34 +1421,34 @@ def week_start(date, first_day_of_week=0):
 
     Assuming that week starts on Mondays:
 
-       >>> week_start(date(2004, 8, 19))
-       datetime.date(2004, 8, 16)
-       >>> week_start(date(2004, 8, 15))
-       datetime.date(2004, 8, 9)
-       >>> week_start(date(2004, 8, 14))
-       datetime.date(2004, 8, 9)
-       >>> week_start(date(2004, 8, 21))
-       datetime.date(2004, 8, 16)
-       >>> week_start(date(2004, 8, 22))
-       datetime.date(2004, 8, 16)
-       >>> week_start(date(2004, 8, 23))
-       datetime.date(2004, 8, 23)
+        >>> week_start(date(2004, 8, 19))
+        datetime.date(2004, 8, 16)
+        >>> week_start(date(2004, 8, 15))
+        datetime.date(2004, 8, 9)
+        >>> week_start(date(2004, 8, 14))
+        datetime.date(2004, 8, 9)
+        >>> week_start(date(2004, 8, 21))
+        datetime.date(2004, 8, 16)
+        >>> week_start(date(2004, 8, 22))
+        datetime.date(2004, 8, 16)
+        >>> week_start(date(2004, 8, 23))
+        datetime.date(2004, 8, 23)
 
     Assuming that week starts on Sundays:
 
-       >>> import calendar
-       >>> week_start(date(2004, 8, 19), calendar.SUNDAY)
-       datetime.date(2004, 8, 15)
-       >>> week_start(date(2004, 8, 15), calendar.SUNDAY)
-       datetime.date(2004, 8, 15)
-       >>> week_start(date(2004, 8, 14), calendar.SUNDAY)
-       datetime.date(2004, 8, 8)
-       >>> week_start(date(2004, 8, 21), calendar.SUNDAY)
-       datetime.date(2004, 8, 15)
-       >>> week_start(date(2004, 8, 22), calendar.SUNDAY)
-       datetime.date(2004, 8, 22)
-       >>> week_start(date(2004, 8, 23), calendar.SUNDAY)
-       datetime.date(2004, 8, 22)
+        >>> import calendar
+        >>> week_start(date(2004, 8, 19), calendar.SUNDAY)
+        datetime.date(2004, 8, 15)
+        >>> week_start(date(2004, 8, 15), calendar.SUNDAY)
+        datetime.date(2004, 8, 15)
+        >>> week_start(date(2004, 8, 14), calendar.SUNDAY)
+        datetime.date(2004, 8, 8)
+        >>> week_start(date(2004, 8, 21), calendar.SUNDAY)
+        datetime.date(2004, 8, 15)
+        >>> week_start(date(2004, 8, 22), calendar.SUNDAY)
+        datetime.date(2004, 8, 22)
+        >>> week_start(date(2004, 8, 23), calendar.SUNDAY)
+        datetime.date(2004, 8, 22)
 
     """
     assert 0 <= first_day_of_week < 7
