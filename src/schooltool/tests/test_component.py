@@ -328,16 +328,12 @@ class TestRelate(unittest.TestCase):
         self.assertNotEqual(type(links[0]), GroupLink)
         self.assertNotEqual(type(links[1]), MemberLink)
 
-        links = relate(URIMembership,  (m, URIMember), (g, URISuperior))
-        self.assertEqual(len(links), 2)
-        self.assertNotEqual(type(links[0]), GroupLink)
-        self.assertNotEqual(type(links[1]), MemberLink)
+        self.assertRaises(TypeError, relate,
+                          URIMembership,  (m, URIMember), (g, URISuperior))
 
-        links = relate(URIMembership,  (m, URIMember), (g, URISuperior),
-                       title="foo")
-        self.assertEqual(len(links), 2)
-        self.assertNotEqual(type(links[0]), GroupLink)
-        self.assertNotEqual(type(links[1]), MemberLink)
+        self.assertRaises(TypeError, relate,
+                          URIMembership,  (m, URIMember), (g, URISuperior),
+                          title="foo")
 
 
 class Stub_relate3:

@@ -190,14 +190,22 @@ def relate(relationship_type, (a, role_a), (b, role_b), title=None):
     # XXX This is to avoid a circular import
     from schooltool.model import MemberLink, GroupLink
 
-    if (relationship_type is URIMembership and
-        title is None or title == "Membership"):
+    if relationship_type is URIMembership:
+        if title is not None and title != "Membership":
+            raise TypeError(
+                "A relationship of type URIMembership must have roles"
+                " URIMember and URIGroup, and the title (if any) must be"
+                " 'Membership'.")
+
         r = Set((role_a, role_b))
         try:
             r.remove(URIMember)
             r.remove(URIGroup)
         except KeyError:
-            pass
+            raise TypeError(
+                "A relationship of type URIMembership must have roles"
+                " URIMember and URIGroup, and the title (if any) must be"
+                " 'Membership'.")
         else:
             if not r:
                 group, member = None, None
@@ -213,6 +221,11 @@ def relate(relationship_type, (a, role_a), (b, role_b), title=None):
                     name = group.add(member)
                     return (GroupLink(member, group, name),
                             MemberLink(group, member, name))
+            else:
+                raise TypeError(
+                    "A relationship of type URIMembership must have roles"
+                    " URIMember and URIGroup, and the title (if any) must be"
+                    " 'Membership'.")
     return relate3(relationship_type, (a, role_a), (b, role_b), title=title)
 
 def getRelatedObjects(obj, role):
