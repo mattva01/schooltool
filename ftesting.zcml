@@ -1,4 +1,7 @@
 <configure xmlns="http://namespaces.zope.org/zope">
   <include file="Zope3/ftesting.zcml" />
   <include package="schoolbell.app" />
+  <!-- Because zope.app.securitypolicy was included before schoolbell.app,
+       zope.Manager role did not receive grants for schoolbell permissions. -->
+  <grantAll role="zope.Manager" />
 </configure>
