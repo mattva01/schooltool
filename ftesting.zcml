@@ -23,7 +23,7 @@
 
   <include package="schoolbell.app" />
 
-  <include package="zope.app.securitypolicy" />
+  <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
 
   <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
