@@ -33,9 +33,11 @@
     </div>
     <div tal:define="members view/getPersons">
       <h3 i18n:translate="">Members</h3>
-      <div tal:repeat="obj members"> <!-- XXX sort order? -->
-        <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-      </div>
+      <ul>
+        <li tal:repeat="obj members/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
       <p tal:condition="not:members" i18n:translate="">
         This group has no members.</p>
     </div>

@@ -38,10 +38,12 @@
 
     <div class="groups" tal:define="groups context/groups/sortby:title">
       <h3 i18n:translate="">Groups</h3>
-      <div tal:repeat="group groups">
-        <a tal:attributes="href group/@@absolute_url"
-           tal:content="group/title"></a>
-      </div>
+      <ul>
+        <li tal:repeat="group groups">
+          <a tal:attributes="href group/@@absolute_url"
+             tal:content="group/title"></a>
+        </li>
+      </ul>
       <div tal:condition="not:groups">
         This person does not belong to any groups.
       </div>
