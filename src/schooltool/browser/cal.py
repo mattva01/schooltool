@@ -837,6 +837,8 @@ class EventDeleteView(View):
 
     authorization = ACLModifyAccess
 
+    event = None  # The event to be removed.  Set before rendering the template.
+
     def do_GET(self, request):
         event = None
         event_id = to_unicode(request.args['event_id'][0])
@@ -856,6 +858,7 @@ class EventDeleteView(View):
                 if 'CONFIRM' in request.args:
                     self._removeTTEvent(event)
                 else:
+                    self.event = event
                     return View.do_GET(self, request)
         else:
             # found an ordinary event; remove it from the calendar

@@ -1059,7 +1059,8 @@ class TestEventDeleteView(unittest.TestCase):
 
         self.assertEquals(len(list(ttcal)), 3)
         self.assertNotEquals(request.code, 302)
-        self.assert_("Are you sure" in content)
+        self.assert_("add an exception" in content)
+        self.assert_("CONFIRM" in content)
         self.assert_("uniq" in content)
 
     def test_tt_event_confirm(self):
