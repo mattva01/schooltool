@@ -588,6 +588,12 @@
             layer=".skin.ISchoolBellLayer" />
   <resource name="favicon.ico" file="resources/favicon.ico"
             layer=".skin.ISchoolBellLayer" />
+  <resource name="toolbar-background.png"
+            file="resources/toolbar-background.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="toolbar-background-hover.png"
+            file="resources/toolbar-background-hover.png"
+            layer=".skin.ISchoolBellLayer" />
 
   <resource name="previous.png" file="resources/previous.png"
             layer=".skin.ISchoolBellLayer" />
