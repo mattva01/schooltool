@@ -228,6 +228,14 @@ class EventForDisplay(object):
     def __init__(self, event, color1, color2, source_calendar):
         self.source_calendar = source_calendar
         if canAccess(source_calendar, '__iter__'):
+            # Due to limitations in the default Zope 3 security policy, a
+            # calendar event inherits permissions from the calendar of its
+            # __parent__.  However if there's an event that books a resource,
+            # and the authenticated user has schoolbell.viewCalendar access
+            # for the resource's calendar, she should be able to view this
+            # event when it comes from the resource's calendar.  For this
+            # reason we have to remove the security proxy and check the
+            # permission manually.
             event = removeSecurityProxy(event)
         self.context = event
         self.dtend = event.dtstart + event.duration
@@ -258,7 +266,8 @@ class EventForDisplay(object):
     def getBookedResources(self):
         """Return the list of booked resources.
 
-        Only if the source calendar does not belong to a resource booked.
+        Only if the source calendar is not a parent calendar of the
+        event.
         """
         if self.source_calendar == self.context.__parent__:
             return self.context.resources
@@ -1400,6 +1409,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
 
         Passes the date supplied as a redirect date to the booking view.
         """
+
         url = absoluteURL(self.context, self.request)
         return '%s/%s/booking.html?date=%s' % (url, self._event_uid, date)
 
