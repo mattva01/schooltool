@@ -195,3 +195,15 @@ def to_locale(us):
     """
     return us.encode(locale_charset, 'replace')
 
+
+def from_locale(s):
+    r"""Convert an 8-bit string in locale encoding to Unicode.
+
+    Example:
+
+        >>> from_locale('xyzzy')
+        u'xyzzy'
+
+    """
+    return unicode(s, locale_charset)
+

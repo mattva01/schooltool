@@ -18,17 +18,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool GUI client.
+Backend for the SchoolTool GUI client.  This module abstracts all communication
+with the SchoolTool server.
 
-SchoolTool is a common information systems platform for school administration
-Visit http://www.schooltool.org/
-
-Copyright (c) 2003 Shuttleworth Foundation
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+Note that all strings used in data objects are Unicode strings.
 """
 
 import httplib
@@ -41,8 +34,8 @@ import cgi
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, isURI, registerURI
 from schooltool.uris import ISpecificURI, URITeaching, URITaught
-from schooltool.common import parse_datetime, parse_date
-from schooltool.translation import gettext as _
+from schooltool.common import parse_datetime, parse_date, to_unicode
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -71,13 +64,36 @@ def stubURI(uri):
 
 
 def make_basic_auth(username, password):
-    """Generate HTTP basic authentication credentials.
+    r"""Generate HTTP basic authentication credentials.
 
-    >>> make_basic_auth('myusername', 'secret')
-    'Basic bXl1c2VybmFtZTpzZWNyZXQ='
+    Example:
+
+        >>> make_basic_auth('myusername', 'secret')
+        'Basic bXl1c2VybmFtZTpzZWNyZXQ='
+
+    Usernames and passwords that contain non-ASCII characters are converted to
+    UTF-8 before encoding.
+
+        >>> make_basic_auth('myusername', '\u263B')
+        'Basic bXl1c2VybmFtZTpcdTI2M0I='
+
     """
     creds = "%s:%s" % (username, password)
-    return "Basic " + base64.encodestring(creds).strip()
+    return "Basic " + base64.encodestring(creds.encode('UTF-8')).strip()
+
+
+def to_xml(s):
+    r"""Prepare s for inclusion into XML (convert to UTF-8 and escape).
+
+        >>> to_xml('foo')
+        'foo'
+        >>> to_xml(u'\u263B')
+        '\xe2\x98\xbb'
+        >>> to_xml('<brackets> & "quotes"')
+        '&lt;brackets&gt; &amp; &quot;quotes&quot;'
+
+    """
+    return cgi.escape(unicode(s).encode('UTF-8'), True)
 
 
 class SchoolToolClient:
@@ -295,8 +311,8 @@ class SchoolToolClient:
               <date_of_birth>%s</date_of_birth>
               <comment>%s</comment>
             </person_info>
-        """ % (person_info.first_name, person_info.last_name,
-               person_info.date_of_birth, person_info.comment))
+        """ % (to_xml(person_info.first_name), to_xml(person_info.last_name),
+               to_xml(person_info.date_of_birth), to_xml(person_info.comment)))
 
         response = self.put(path, body)
         if response.status / 100 != 2:
@@ -363,14 +379,14 @@ class SchoolToolClient:
         body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n']
         if reporter_path is not None:
             body.append('<reporter xlink:type="simple" xlink:href="%s"/>\n'
-                        % cgi.escape(reporter_path, True))
+                        % to_xml(reporter_path))
         for entry in roll_call:
-            href = cgi.escape(entry.person_path, True)
+            href = to_xml(entry.person_path)
             if entry.presence is Unchanged: presence = ''
             elif entry.presence: presence = ' presence="present"'
             else: presence = ' presence="absent"'
             if not entry.comment: comment = ''
-            else: comment = ' comment="%s"' % cgi.escape(entry.comment, True)
+            else: comment = ' comment="%s"' % to_xml(entry.comment)
             if entry.resolved is Unchanged: resolved = ''
             elif entry.resolved: resolved = ' resolved="resolved"'
             else: resolved = ' resolved="unresolved"'
@@ -456,7 +472,7 @@ class SchoolToolClient:
         Returns the URI of the new facet.
         """
         body = ('<facet xmlns="http://schooltool.org/ns/model/0.1" '
-                'factory="%s"/>' % cgi.escape(factory_name, True))
+                'factory="%s"/>' % to_xml(factory_name))
         response = self.post('%s/facets' % object_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)
@@ -464,7 +480,7 @@ class SchoolToolClient:
 
     def createPerson(self, person_title, name=None, password=None):
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
-                ' title="%s"/>' % cgi.escape(person_title, True))
+                ' title="%s"/>' % to_xml(person_title))
         if name:
             path = '/persons/' + name
             response = self.put(path, body)
@@ -488,7 +504,7 @@ class SchoolToolClient:
 
     def createGroup(self, group_title):
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
-                ' title="%s"/>' % cgi.escape(group_title, True))
+                ' title="%s"/>' % to_xml(group_title))
         response = self.post('/groups', body)
         if response.status != 201:
             raise ResponseStatusError(response)
@@ -506,8 +522,8 @@ class SchoolToolClient:
                 ' xmlns:xlink="http://www.w3.org/1999/xlink"'
                 ' xlink:type="simple"'
                 ' xlink:href="%s" xlink:arcrole="%s" xlink:role="%s"/>'
-                % tuple(map(cgi.escape, [obj2_path, strURI(reltype),
-                                         strURI(obj1_role)])))
+                % tuple(map(to_xml, [obj2_path, strURI(reltype),
+                                     strURI(obj1_role)])))
         response = self.post('%s/relationships' % obj1_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)
@@ -535,7 +551,8 @@ class SchoolToolClient:
                                ('last', last.strftime('%Y-%m-%d')),
                                ('duration', str(duration)),
                                ('hours', hours),
-                               ('resources', resources)], True)
+                               ('resources', [r.encode('UTF-8')
+                                              for r in resources])], True)
         response = self.get('/busysearch?' + qs)
         if response.status != 200:
             raise ResponseStatusError(response)
@@ -552,7 +569,7 @@ class SchoolToolClient:
                 '  <owner path="%s"/>\n'
                 '  <slot start="%s" duration="%d" />\n'
                 '</booking>\n'
-                % (conflicts, owner_path,
+                % (conflicts, to_xml(owner_path),
                    date_and_time.strftime('%Y-%m-%d %H:%M:%S'), duration))
         response = self.post('%s/booking' % resource_path, body)
         if response.status != 200:
@@ -600,8 +617,8 @@ def _parseContainer(body):
         res = ctx.xpathEval("/container/items/item[@xlink:href]")
         items = []
         for node in res:
-            href = node.nsProp('href', xlink)
-            title = node.nsProp('title', xlink)
+            href = to_unicode(node.nsProp('href', xlink))
+            title = to_unicode(node.nsProp('title', xlink))
             if title is None:
                 title = href.split('/')[-1]
             items.append((title, href))
@@ -629,12 +646,12 @@ def _parseGroupTree(body):
             if self.exception:
                 return
             if tag == 'group':
-                href = attrs and attrs.get('xlink:href', None)
+                href = attrs and to_unicode(attrs.get('xlink:href', None))
                 if not href:
                     self.exception = SchoolToolError(_("Group tag does not"
                                                        " have xlink:href"))
                     return
-                title = attrs.get('xlink:title', None)
+                title = to_unicode(attrs.get('xlink:title', None))
                 if title is None:
                     title = href.split('/')[-1]
                 self.result.append((self.level, title, href))
@@ -672,11 +689,11 @@ def _parseMemberList(body):
         res = ctx.xpathEval("/group/item[@xlink:href]")
         people = []
         for node in res:
-            anchor = node.nsProp('href', xlink)
+            anchor = to_unicode(node.nsProp('href', xlink))
             if anchor.startswith('/persons/'):
-                name =  anchor[len('/persons/'):]
+                name = anchor[len('/persons/'):]
                 if '/' not in name:
-                    title = node.nsProp('title', xlink)
+                    title = to_unicode(node.nsProp('title', xlink))
                     if title is None:
                         title = name
                     people.append(MemberInfo(title, anchor))
@@ -699,12 +716,12 @@ def _parseRelationships(body):
         res = ctx.xpathEval("/relationships/existing/relationship")
         relationships = []
         for node in res:
-            href = node.nsProp('href', xlink)
-            role = node.nsProp('role', xlink)
-            arcrole = node.nsProp('arcrole', xlink)
+            href = to_unicode(node.nsProp('href', xlink))
+            role = to_unicode(node.nsProp('role', xlink))
+            arcrole = to_unicode(node.nsProp('arcrole', xlink))
             if not href or not isURI(role) or not isURI(arcrole):
                 continue
-            title = node.nsProp('title', xlink)
+            title = to_unicode(node.nsProp('title', xlink))
             if title is None:
                 title = href.split('/')[-1]
             try:
@@ -719,7 +736,7 @@ def _parseRelationships(body):
             manage_nodes = ctx.xpathEval("manage/@xlink:href")
             if len(manage_nodes) != 1:
                 raise SchoolToolError(_("Could not parse relationship list"))
-            link_href = manage_nodes[0].content
+            link_href = to_unicode(manage_nodes[0].content)
             relationships.append(RelationshipInfo(arcrole, role, title,
                                                   href, link_href))
         return relationships
@@ -741,17 +758,17 @@ def _parseRollCall(body):
         res = ctx.xpathEval("/rollcall/person")
         persons = []
         for node in res:
-            href = node.nsProp('href', xlink)
+            href = to_unicode(node.nsProp('href', xlink))
             if not href:
                 continue
-            title = node.nsProp('title', xlink)
+            title = to_unicode(node.nsProp('title', xlink))
             if not title:
                 title = href.split('/')[-1]
-            presence = node.nsProp('presence', None)
-            if presence not in ('present', 'absent'):
+            presence = to_unicode(node.nsProp('presence', None))
+            if presence not in (u'present', u'absent'):
                 raise SchoolToolError(_("Unrecognized presence value: %s")
                                       % presence)
-            presence = (presence == 'present')
+            presence = (presence == u'present')
             persons.append(RollCallInfo(title, href, presence))
         return persons
     finally:
@@ -772,14 +789,14 @@ def _parseAbsences(body):
         res = ctx.xpathEval("/absences/absence")
         absences = []
         for node in res:
-            href = node.nsProp('href', xlink)
+            href = to_unicode(node.nsProp('href', xlink))
             if not href:
                 continue
             person_path = '/'.join(href.split('/')[:-2])
-            person_title = node.nsProp('person_title', None)
+            person_title = to_unicode(node.nsProp('person_title', None))
             if not person_title:
                 person_title = person_path.split('/')[-1]
-            dt = node.nsProp('datetime', None)
+            dt = to_unicode(node.nsProp('datetime', None))
             if dt is None:
                 raise SchoolToolError(_("Datetime not given"))
             else:
@@ -787,21 +804,22 @@ def _parseAbsences(body):
                     dt = parse_datetime(dt)
                 except ValueError, e:
                     raise SchoolToolError(str(e))
-            ended = node.nsProp('ended', None)
+            ended = to_unicode(node.nsProp('ended', None))
             if ended not in ('ended', 'unended'):
                 raise SchoolToolError(_("Unrecognized ended value: %s")
                                       % ended)
-            resolved = node.nsProp('resolved', None)
+            resolved = to_unicode(node.nsProp('resolved', None))
             if resolved not in ('resolved', 'unresolved'):
                 raise SchoolToolError(_("Unrecognized resolved value: %s")
                                       % resolved)
-            expected_presence = node.nsProp('expected_presence', None)
+            expected_presence = to_unicode(node.nsProp('expected_presence',
+                                                       None))
             if expected_presence is not None:
                 try:
                     expected_presence = parse_datetime(expected_presence)
                 except ValueError, e:
                     raise SchoolToolError(str(e))
-            last_comment = node.content.strip()
+            last_comment = to_unicode(node.content.strip())
             absences.append(AbsenceInfo(href, dt, person_title,
                                         person_path,
                                         ended == "ended",
@@ -833,10 +851,10 @@ def _parseAbsenceComments(body):
             elif len(res) > 1:
                 raise SchoolToolError(_("More than one reporter given"))
             reporter = res[0]
-            reporter_href = reporter.nsProp('href', xlink)
+            reporter_href = to_unicode(reporter.nsProp('href', xlink))
             if not reporter_href:
                 raise SchoolToolError(_("Reporter does not have xlink:href"))
-            reporter_title = reporter.nsProp('title', xlink)
+            reporter_title = to_unicode(reporter.nsProp('title', xlink))
             if not reporter_title:
                 reporter_title = reporter_href.split('/')[-1]
 
@@ -845,15 +863,15 @@ def _parseAbsenceComments(body):
                 raise SchoolToolError(_("More than one absentfrom given"))
             absent_from_href = absent_from_title = ""
             if res:
-                absent_from_href = res[0].nsProp('href', xlink)
+                absent_from_href = to_unicode(res[0].nsProp('href', xlink))
                 if not absent_from_href:
                     raise SchoolToolError(_("absentfrom does not have"
                                             " xlink:href"))
-                absent_from_title = res[0].nsProp('title', xlink)
+                absent_from_title = to_unicode(res[0].nsProp('title', xlink))
                 if not absent_from_title:
                     absent_from_title = absent_from_href.split('/')[-1]
 
-            dt = node.nsProp('datetime', None)
+            dt = to_unicode(node.nsProp('datetime', None))
             if dt is None:
                 raise SchoolToolError(_("Datetime not given"))
             else:
@@ -862,7 +880,7 @@ def _parseAbsenceComments(body):
                 except ValueError, e:
                     raise SchoolToolError(str(e))
 
-            ended = node.nsProp('ended', None)
+            ended = to_unicode(node.nsProp('ended', None))
             if ended is None:
                 ended = Unchanged
             elif ended in ('ended', 'unended'):
@@ -871,7 +889,7 @@ def _parseAbsenceComments(body):
                 raise SchoolToolError(_("Unrecognized ended value: %s")
                                       % ended)
 
-            resolved = node.nsProp('resolved', None)
+            resolved = to_unicode(node.nsProp('resolved', None))
             if resolved is None:
                 resolved = Unchanged
             elif resolved in ('resolved', 'unresolved'):
@@ -880,7 +898,8 @@ def _parseAbsenceComments(body):
                 raise SchoolToolError(_("Unrecognized resolved value: %s")
                                       % resolved)
 
-            expected_presence = node.nsProp('expected_presence', None)
+            expected_presence = to_unicode(node.nsProp('expected_presence',
+                                                       None))
             if expected_presence is None:
                 expected_presence = Unchanged
             elif expected_presence == "":
@@ -896,7 +915,7 @@ def _parseAbsenceComments(body):
             if len(res) > 1:
                 raise SchoolToolError(_("More than one text node"))
             if res:
-                text = res[0].content.strip()
+                text = to_unicode(res[0].content.strip())
 
             comments.append(AbsenceComment(dt, reporter_title,
                                 reporter_href, absent_from_title,
@@ -920,7 +939,7 @@ def _parseTimePeriods(body):
         ctx.xpathRegisterNs("xlink", xlink)
         periods = []
         for period_node in ctx.xpathEval("/timePeriods/period"):
-            title = period_node.nsProp('title', xlink)
+            title = to_unicode(period_node.nsProp('title', xlink))
             periods.append(title)
         return periods
     finally:
@@ -940,7 +959,7 @@ def _parseTimetableSchemas(body):
         ctx.xpathRegisterNs("xlink", xlink)
         schemas = []
         for schema_node in ctx.xpathEval("/timetableSchemas/schema"):
-            title = schema_node.nsProp('title', xlink)
+            title = to_unicode(schema_node.nsProp('title', xlink))
             schemas.append(title)
         return schemas
     finally:
@@ -960,12 +979,12 @@ def _parseAvailabilityResults(body):
         ctx.xpathRegisterNs("xlink", xlink)
         slots = []
         for resource_node in ctx.xpathEval("/availability/resource"):
-            path = resource_node.nsProp('href', xlink)
-            title = resource_node.nsProp('title', xlink)
+            path = to_unicode(resource_node.nsProp('href', xlink))
+            title = to_unicode(resource_node.nsProp('title', xlink))
             ctx.setContextNode(resource_node)
             for slot_node in ctx.xpathEval('slot'):
-                start = slot_node.nsProp('start', None)
-                duration = slot_node.nsProp('duration', None)
+                start = to_unicode(slot_node.nsProp('start', None))
+                duration = to_unicode(slot_node.nsProp('duration', None))
                 try:
                     start_dt = parse_datetime(start)
                 except ValueError, e:
@@ -996,12 +1015,13 @@ def _parsePersonInfo(body):
         ctx.xpathRegisterNs("m", xmlns)
         try:
             node = ctx.xpathEval("/m:person_info/m:first_name")[0]
-            first_name = node.content
+            first_name = to_unicode(node.content)
             node = ctx.xpathEval("/m:person_info/m:last_name")[0]
-            last_name = node.content
+            last_name = to_unicode(node.content)
             node = ctx.xpathEval("/m:person_info/m:date_of_birth")[0]
-            datestr = node.content
-            comment = ctx.xpathEval("/m:person_info/m:comment")[0].content
+            datestr = to_unicode(node.content)
+            comment = to_unicode(
+                    ctx.xpathEval("/m:person_info/m:comment")[0].content)
         except IndexError:
             raise SchoolToolError(_("Insufficient data in the person info"))
 
@@ -1185,12 +1205,12 @@ class AbsenceInfo:
                     other.person_path, other.ended, other.resolved,
                     other.expected_presence, other.last_comment))
 
-    def __str__(self):
+    def __unicode__(self):
         if self.expected_presence:
             return (_("%s expected %s, at %s %s")
                     % (self.person_title,
                        self.format_age(self.now() - self.expected_presence,
-                                       '%s ago', 'in %s'),
+                                       _('%s ago'), _('in %s')),
                        self.expected_presence.strftime("%I:%M%P"),
                        self.format_date(self.expected_presence)))
         else:
@@ -1310,31 +1330,35 @@ class SchoolTimetableInfo:
                 raise SchoolToolError("There are no teachers")
             ctx.setContextNode(teacher_nodes[0])
             for day_node in ctx.xpathEval('st:day'):
-                day_id = day_node.nsProp('id', None)
+                day_id = to_unicode(day_node.nsProp('id', None))
                 ctx.setContextNode(day_node)
                 for period_node in ctx.xpathEval('st:period'):
-                    period_id = period_node.nsProp('id', None)
+                    period_id = to_unicode(period_node.nsProp('id', None))
                     self.periods.append((day_id, period_id))
             for teacher_node in teacher_nodes:
-                teacher_path = teacher_node.nsProp('path', None)
+                teacher_path = to_unicode(teacher_node.nsProp('path', None))
                 self.teachers.append((teacher_path, None, None))
                 tt_row = []
                 ctx.setContextNode(teacher_node)
                 for day_node in ctx.xpathEval('st:day'):
-                    day_id = day_node.nsProp('id', None)
+                    day_id = to_unicode(day_node.nsProp('id', None))
                     ctx.setContextNode(day_node)
                     for period_node in ctx.xpathEval('st:period'):
-                        period_id = period_node.nsProp('id', None)
+                        period_id = to_unicode(period_node.nsProp('id', None))
                         activities = []
                         ctx.setContextNode(period_node)
                         for activity_node in ctx.xpathEval('st:activity'):
-                            group_path = activity_node.nsProp('group', None)
-                            activity = activity_node.nsProp('title', None)
+                            group_path = to_unicode(
+                                    activity_node.nsProp('group', None))
+                            activity = to_unicode(
+                                    activity_node.nsProp('title', None))
                             res = []
                             ctx.setContextNode(activity_node)
                             for res_node in ctx.xpathEval('st:resource'):
-                                rpath = res_node.nsProp('href', xlink)
-                                rtitle = res_node.nsProp('title', xlink)
+                                rpath = to_unicode(res_node.nsProp('href',
+                                                                   xlink))
+                                rtitle = to_unicode(res_node.nsProp('title',
+                                                                    xlink))
                                 res.append((rtitle, rpath))
                             activities.append((activity, group_path, res))
                         tt_row.append(activities)
@@ -1372,15 +1396,15 @@ class SchoolTimetableInfo:
             '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"\n'
             '          xmlns:xlink="http://www.w3.org/1999/xlink">')
         for i, teacher in enumerate(self.teachers):
-            result.append('  <teacher path="%s">' % teacher[0])
+            result.append('  <teacher path="%s">' % to_xml(teacher[0]))
             last_day = None
             for j, (day, period) in enumerate(self.periods):
                 if last_day != day:
                     if last_day is not None:
                         result.append(' '*4 + '</day>')
                     last_day = day
-                    result.append(' '*4 + '<day id="%s">' % day)
-                result.append(' '*6 + '<period id="%s">' % period)
+                    result.append(' '*4 + '<day id="%s">' % to_xml(day))
+                result.append(' '*6 + '<period id="%s">' % to_xml(period))
                 try:
                     activities = self.tt[i][j]
                     for title, group, resources in activities:
@@ -1390,13 +1414,13 @@ class SchoolTimetableInfo:
                             c = "/"
                         result.append(' '*8 +
                                       '<activity group="%s" title="%s"%s>'
-                                      % (group, title, c))
+                                      % (to_xml(group), to_xml(title), c))
                         for rtitle, rpath in resources:
                             result.append(' '*10 +
                                           '<resource xlink:type="simple"'
                                                    ' xlink:href="%s"'
                                                    ' xlink:title="%s"/>'
-                                      % (rpath, rtitle))
+                                      % (to_xml(rpath), to_xml(rtitle)))
                         if resources:
                             result.append(' '*8 + '</activity>')
                 except (KeyError, TypeError):

@@ -50,7 +50,7 @@ from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
 from schooltool.uris import nameURI
-from schooltool.common import parse_date, parse_time, to_locale
+from schooltool.common import parse_date, parse_time, to_locale, from_locale
 from schooltool.translation import gettext as _
 
 __metaclass__ = type
@@ -322,10 +322,10 @@ class ServerSettingsDlg(wxDialog):
         # end wxGlade
 
     def getServer(self):
-        return self.serverTextCtrl.GetValue()
+        return from_locale(self.serverTextCtrl.GetValue())
 
     def setServer(self, value):
-        self.serverTextCtrl.SetValue(value)
+        self.serverTextCtrl.SetValue(to_locale(value))
 
     def getPort(self):
         return int(self.portTextCtrl.GetValue())
@@ -334,16 +334,16 @@ class ServerSettingsDlg(wxDialog):
         self.portTextCtrl.SetValue(str(value))
 
     def getUser(self):
-        return self.userTextCtrl.GetValue()
+        return from_locale(self.userTextCtrl.GetValue())
 
     def setUser(self, value):
-        self.userTextCtrl.SetValue(value)
+        self.userTextCtrl.SetValue(to_locale(value))
 
     def getPassword(self):
-        return self.passwordTextCtrl.GetValue()
+        return from_locale(self.passwordTextCtrl.GetValue())
 
     def setPassword(self, value):
-        self.passwordTextCtrl.SetValue(value)
+        self.passwordTextCtrl.SetValue(to_locale(value))
 
     def OnOk(self, event):
         if not self.getServer().strip():
@@ -365,6 +365,7 @@ class RollCallInfoDlg(wxDialog):
     """More info popup of the roll call dialog"""
 
     def __init__(self, parent, title, show_resolved):
+        title = to_locale(title)
         wxDialog.__init__(self, parent, -1, title, style=DEFAULT_DLG_STYLE)
         self.show_resolved = show_resolved
 
@@ -425,10 +426,10 @@ class RollCallInfoDlg(wxDialog):
         if comment is None:
             self.text_ctrl.SetValue("")
         else:
-            self.text_ctrl.SetValue(comment)
+            self.text_ctrl.SetValue(to_locale(comment))
 
     def getComment(self):
-        return self.text_ctrl.GetValue()
+        return from_locale(self.text_ctrl.GetValue())
 
     def setResolved(self, resolved):
         if resolved is Unchanged:
@@ -451,7 +452,7 @@ class RollCallDlg(wxDialog):
     """Roll call dialog."""
 
     def __init__(self, parent, group_title, group_path, rollcall, client):
-        title = _("Roll Call for %s") % group_title
+        title = _("Roll Call for %s") % to_locale(group_title)
         wxDialog.__init__(self, parent, -1, title, style=RESIZABLE_DLG_STYLE)
         self.title = title
         self.group_title = group_title
@@ -467,7 +468,8 @@ class RollCallDlg(wxDialog):
         for item in rollcall:
             entry = RollCallEntry(item.person_path)
             entry.item = item
-            grid.Add(wxStaticText(scrolled_panel, -1, item.person_title),
+            grid.Add(wxStaticText(scrolled_panel, -1,
+                                  to_locale(item.person_title)),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
 
             if item.present:
@@ -589,6 +591,7 @@ class AbsenceFrame(wxDialog):
           a column in detailed mode (it makes sense to disable it when
           viewing absences for a single person)
         """
+        title = to_locale(title)
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
                           style=RESIZABLE_WIN_STYLE)
         self.client = client
@@ -686,7 +689,7 @@ class AbsenceFrame(wxDialog):
                 self.absence_list.SetItemData(idx, idx)
                 if self.persons:
                     self.absence_list.SetStringItem(idx, 1,
-                                                    absence.person_title)
+                            to_locale(absence.person_title))
                     n = 1
                 else:
                     n = 0
@@ -697,7 +700,8 @@ class AbsenceFrame(wxDialog):
                 if absence.expected_presence is not None:
                     self.absence_list.SetStringItem(idx, n+3,
                         absence.expected_presence.strftime('%Y-%m-%d %H:%M'))
-                self.absence_list.SetStringItem(idx, n+4, absence.last_comment)
+                self.absence_list.SetStringItem(idx, n+4,
+                        to_locale(absence.last_comment))
                 if not absence.ended:
                     item = self.absence_list.GetItem(idx)
                     item.SetTextColour(wxRED)
@@ -714,7 +718,8 @@ class AbsenceFrame(wxDialog):
             absences.sort()
             self.absence_data = [row[-1] for row in absences]
             for idx, absence in enumerate(self.absence_data):
-                self.absence_list.InsertStringItem(idx, str(absence))
+                self.absence_list.InsertStringItem(idx,
+                        to_locale(unicode(absence)))
                 self.absence_list.SetItemData(idx, idx)
                 if not absence.expected():
                     item = self.absence_list.GetItem(idx)
@@ -740,8 +745,10 @@ class AbsenceFrame(wxDialog):
             self.comment_list.InsertStringItem(idx,
                     comment.datetime.strftime('%Y-%m-%d %H:%M'))
             self.comment_list.SetItemData(idx, idx)
-            self.comment_list.SetStringItem(idx, 1, comment.reporter_title)
-            self.comment_list.SetStringItem(idx, 2, comment.absent_from_title)
+            self.comment_list.SetStringItem(idx, 1,
+                    to_locale(comment.reporter_title))
+            self.comment_list.SetStringItem(idx, 2,
+                    to_locale(comment.absent_from_title))
             if comment.ended is not Unchanged:
                 self.comment_list.SetStringItem(idx, 3,
                         comment.ended and _("Yes") or _("No"))
@@ -754,7 +761,7 @@ class AbsenceFrame(wxDialog):
                         comment.expected_presence.strftime('%Y-%m-%d %H:%M'))
                 else:
                     self.comment_list.SetStringItem(idx, 5, "-")
-            self.comment_list.SetStringItem(idx, 6, comment.text)
+            self.comment_list.SetStringItem(idx, 6, to_locale(comment.text))
 
 
 class SchoolTimetableGridTable(wxPyGridTableBase):
@@ -768,13 +775,13 @@ class SchoolTimetableGridTable(wxPyGridTableBase):
         return len(self.tt.periods)
 
     def GetColLabelValue(self, col):
-        return "%s, %s" % self.tt.periods[col]
+        return "%s, %s" % tuple(map(to_locale, self.tt.periods[col]))
 
     def GetNumberRows(self):
         return len(self.tt.teachers)
 
     def GetRowLabelValue(self, row):
-        return self.tt.teachers[row][1]
+        return to_locale(self.tt.teachers[row][1])
 
     def IsEmptyCell(self, row, col):
         return len(self.tt.tt[row][col]) == 0
@@ -789,7 +796,7 @@ class SchoolTimetableGridTable(wxPyGridTableBase):
             else:
                 rows.append(title)
         rows.sort()
-        return ",\n".join(rows)
+        return to_locale(",\n".join(rows))
 
     def SetValue(self, row, col, value):
         pass
@@ -809,8 +816,10 @@ class ResourceSelectionDlg(wxDialog):
         vsizer = wxBoxSizer(wxVERTICAL)
         static_text = wxStaticText(self, -1,
                             _("%s, %s\nTeacher: %s\nActivity: %s") %
-                            (period_key[0], period_key[1], teacher_title,
-                             activity_title))
+                            (to_locale(period_key[0]),
+                             to_locale(period_key[1]),
+                             to_locale(teacher_title),
+                             to_locale(activity_title)))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
         static_text = wxStaticText(self, -1, _("Resources"))
@@ -819,7 +828,8 @@ class ResourceSelectionDlg(wxDialog):
         # wxLB_EXTENDED would be nicer, but then SetSelection stops working
         # for completely obscure reasons
         self.listbox = wxListBox(self, -1, style=wxLB_MULTIPLE,
-                            choices=[title for title, value in self.choices])
+                            choices=[to_locale(title)
+                                        for title, value in self.choices])
         vsizer.Add(self.listbox, 1, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8)
 
         static_line = wxStaticLine(self, -1)
@@ -867,14 +877,16 @@ class ActivitySelectionDlg(wxDialog):
 
         vsizer = wxBoxSizer(wxVERTICAL)
         static_text = wxStaticText(self, -1, _("%s, %s\nTeacher: %s") %
-                            (period_key[0], period_key[1], teacher_title))
+                                             (to_locale(period_key[0]),
+                                              to_locale(period_key[1]),
+                                              to_locale(teacher_title)))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
         static_text = wxStaticText(self, -1, _("Activities"))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
-        self.listbox = wxCheckListBox(self, -1,
-                                      choices=[c[0] for c in self.choices])
+        self.listbox = wxCheckListBox(self, -1, choices=[to_locale(c[0])
+                                                    for c in self.choices])
         vsizer.Add(self.listbox, 1, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8)
         EVT_LISTBOX_DCLICK(self, self.listbox.GetId(), self.OnListDClick)
 
@@ -918,7 +930,7 @@ class ActivitySelectionDlg(wxDialog):
             resource_titles = ', '.join([r[0] for r in resources])
             if resource_titles:
                 title += ' (%s)' % resource_titles
-            self.listbox.SetString(idx, title)
+            self.listbox.SetString(idx, to_locale(title))
             self.listbox.Check(idx)
         dlg.Destroy()
 
@@ -935,7 +947,7 @@ class ActivitySelectionDlg(wxDialog):
             resource_titles = ', '.join([r[0] for r in resources])
             if resource_titles:
                 title += ' (%s)' % resource_titles
-            self.listbox.SetString(idx, title)
+            self.listbox.SetString(idx, to_locale(title))
             self.listbox.Check(idx, is_selected)
 
     def getSelection(self):
@@ -1005,9 +1017,9 @@ class NewPersonDlg(wxDialog):
             wxMessageBox(_("Passwords do not match"), self.title,
                          wxICON_ERROR|wxOK)
             return
-        name = self.nameTextCtrl.GetValue()
-        username = self.userTextCtrl.GetValue()
-        password = self.passwdTextCtrl.GetValue()
+        name = from_locale(self.nameTextCtrl.GetValue())
+        username = from_locale(self.userTextCtrl.GetValue())
+        password = from_locale(self.passwdTextCtrl.GetValue())
 
         try:
             self.client.createPerson(name, username, password)
@@ -1057,7 +1069,7 @@ class SchoolTimetableFrame(wxDialog):
     """Window showing a timetable for the whole school."""
 
     def __init__(self, client, key, tt, resources, parent=None, id=-1):
-        title = _("School Timetable (%s, %s)") % key
+        title = _("School Timetable (%s, %s)") % tuple(map(to_locale, key))
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
                           style=RESIZABLE_WIN_STYLE)
         self.title = title
@@ -1198,7 +1210,8 @@ class AvailabilitySearchFrame(wxDialog):
         sizer1a = wxBoxSizer(wxVERTICAL)
         label1 = wxStaticText(panel1, -1, _("Resources"))
         self.resource_list = wxListBox(panel1, -1, style=wxLB_MULTIPLE,
-                                       choices=[r[0] for r in self.resources])
+                                       choices=[to_locale(r[0])
+                                                for r in self.resources])
         sizer1a.Add(label1)
         sizer1a.Add(self.resource_list, 1, wxEXPAND)
 
@@ -1320,7 +1333,8 @@ class AvailabilitySearchFrame(wxDialog):
             self.results.sort()
 
         for idx, slot in enumerate(self.results):
-            self.result_list.InsertStringItem(idx, slot.resource_title)
+            self.result_list.InsertStringItem(idx,
+                    to_locale(slot.resource_title))
             self.result_list.SetItemData(idx, idx)
             available_until = slot.available_from + slot.available_for
             start = slot.available_from.strftime('%Y-%m-%d %H:%M')
@@ -1366,12 +1380,14 @@ class ResourceBookingDlg(wxDialog):
         grid_sizer.Add(wxStaticText(self, -1, _("Resource")))
         self.resource_ctrl = wxComboBox(self, -1, "",
                                         style=wxCB_READONLY|wxCB_DROPDOWN,
-                                        choices=[r[0] for r in resources])
+                                        choices=[to_locale(r[0])
+                                                 for r in resources])
         grid_sizer.Add(self.resource_ctrl, 1, wxEXPAND)
         grid_sizer.Add(wxStaticText(self, -1, _("Person")))
         self.person_ctrl = wxComboBox(self, -1, "",
                                       style=wxCB_READONLY|wxCB_DROPDOWN,
-                                      choices=[p[0] for p in self.persons])
+                                      choices=[to_locale(p[0])
+                                               for p in self.persons])
         grid_sizer.Add(self.person_ctrl, 1, wxEXPAND)
         grid_sizer.Add(wxStaticText(self, -1, _("Date")))
         self.date_ctrl = DateCtrl(self, -1)
@@ -1450,8 +1466,8 @@ class ResourceBookingDlg(wxDialog):
             self.client.bookResource(resource_path, person_path, when,
                                      duration, ignore_conflicts)
         except SchoolToolError, e:
-            wxMessageBox(_("Could not book the resource: %s")
-                         % e, self.title, wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not book the resource: %s") % e,
+                         self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
 
@@ -1460,16 +1476,18 @@ class PasswordDlg(wxDialog):
     """Dialog for changing passwords booking"""
 
     def __init__(self, parent, client, person):
-        self.title = _("Change Password for %s") % person.person_title
+        self.title = (_("Change Password for %s")
+                      % to_locale(person.person_title))
         self.username = person.person_path.split('/')[-1]
         self.client = client
         wxDialog.__init__(self, parent, -1, self.title,
                           style=NONMODAL_DLG_STYLE)
 
         vsizer = wxBoxSizer(wxVERTICAL)
-        vsizer.Add(wxStaticText(self, -1, person.person_title),
+        vsizer.Add(wxStaticText(self, -1, to_locale(person.person_title)),
                    0, wxLEFT|wxTOP|wxRIGHT, 8)
-        vsizer.Add(wxStaticText(self, -1, _("Username: %s") % self.username),
+        vsizer.Add(wxStaticText(self, -1, _("Username: %s")
+                                          % to_locale(self.username)),
                    0, wxLEFT|wxTOP|wxRIGHT, 8)
 
         grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
@@ -1505,7 +1523,7 @@ class PasswordDlg(wxDialog):
             return
         try:
             self.client.changePassword(self.username,
-                                       self.new_pw_ctrl.GetValue())
+                                from_locale(self.new_pw_ctrl.GetValue()))
         except SchoolToolError, e:
             wxMessageBox(_("Could not change password: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
@@ -1517,7 +1535,7 @@ class PersonInfoDlg(wxDialog):
     """Person info dialog."""
 
     def __init__(self, parent, client, person):
-        self.title = person.person_title
+        self.title = to_locale(person.person_title)
         self.person_path = person.person_path
         self.client = client
         self.mainframe = parent
@@ -1547,12 +1565,14 @@ class PersonInfoDlg(wxDialog):
         grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
         grid_sizer.AddGrowableCol(1)
 
-        self.first_name_ctrl = wxTextCtrl(self, -1, person_info.first_name)
+        self.first_name_ctrl = wxTextCtrl(self, -1,
+                                          to_locale(person_info.first_name))
         grid_sizer.Add(wxStaticText(self, -1, _("First Name")), 0,
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.first_name_ctrl, 1, wxEXPAND)
 
-        self.last_name_ctrl = wxTextCtrl(self, -1, person_info.last_name)
+        self.last_name_ctrl = wxTextCtrl(self, -1,
+                                         to_locale(person_info.last_name))
         grid_sizer.Add(wxStaticText(self, -1, _("Last Name")), 0,
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.last_name_ctrl, 1, wxEXPAND)
@@ -1566,7 +1586,8 @@ class PersonInfoDlg(wxDialog):
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.date_of_birth_ctrl, 1, wxEXPAND)
 
-        self.comments_ctrl = wxTextCtrl(self, -1, person_info.comment,
+        self.comments_ctrl = wxTextCtrl(self, -1,
+                                        to_locale(person_info.comment),
                                         style=wxTE_MULTILINE,
                                         size=wxSize(200, 100))
         grid_sizer.Add(wxStaticText(self, -1, _("Comments")), 0,
@@ -1606,10 +1627,10 @@ class PersonInfoDlg(wxDialog):
         self.ok = True
 
     def OnOk(self, event=None):
-        person_info = PersonInfo(self.first_name_ctrl.GetValue(),
-                                 self.last_name_ctrl.GetValue(),
-                                 self.date_of_birth_ctrl.GetValue(),
-                                 self.comments_ctrl.GetValue())
+        person_info = PersonInfo(from_locale(self.first_name_ctrl.GetValue()),
+                            from_locale(self.last_name_ctrl.GetValue()),
+                            from_locale(self.date_of_birth_ctrl.GetValue()),
+                            from_locale(self.comments_ctrl.GetValue()))
         try:
             self.client.savePersonInfo(self.person_path, person_info)
         except SchoolToolError, e:
@@ -1848,6 +1869,7 @@ class MainFrame(wxFrame):
         title = wxGetTextFromUser(_("Title"), _("New Group"))
         if title == "":
             return
+        title = from_locale(title)
         try:
             self.client.createGroup(title)
         except SchoolToolError, e:
@@ -1856,7 +1878,7 @@ class MainFrame(wxFrame):
             return
 
     def DoAddMember(self, event):
-        """Add a person from the current group.
+        """Add a person to the current group.
 
         Accessible from person list popup menu.
         """
@@ -1880,7 +1902,7 @@ class MainFrame(wxFrame):
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
             _("Select a person to add to %s") % group_title,
-            _("Add Member"), [p[0] for p in persons])
+            _("Add Member"), [to_locale(p[0]) for p in persons])
         if choice == -1:
             return
 
@@ -1896,7 +1918,7 @@ class MainFrame(wxFrame):
             self.DoRefresh()
 
     def DoAddTeacher(self, event):
-        """Add a teacher from the current group.
+        """Add a teacher to the current group.
 
         Accessible from relationships list popup menu.
         """
@@ -1921,7 +1943,8 @@ class MainFrame(wxFrame):
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
                         _("Select a teacher to add to %s") % group_title,
-                        _("Add Teacher"), [p.person_title for p in persons])
+                        _("Add Teacher"),
+                        [to_locale(p.person_title) for p in persons])
         if choice == -1:
             return
 
@@ -1937,7 +1960,7 @@ class MainFrame(wxFrame):
             self.DoRefresh()
 
     def DoAddSubgroup(self, event):
-        """Add a subgroup from the current group.
+        """Add a subgroup to the current group.
 
         Accessible from person list popup menu.
         """
@@ -1961,7 +1984,7 @@ class MainFrame(wxFrame):
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
             _("Select a group to add to %s") % group_title,
-            _("Add Subgroup"), [g[0] for g in groups])
+            _("Add Subgroup"), [to_locale(g[0]) for g in groups])
         if choice == -1:
             return
 
@@ -2006,7 +2029,7 @@ class MainFrame(wxFrame):
         group_title = self.groupTreeCtrl.GetItemText(item)
 
         if wxMessageBox(_("Really remove %s from %s?")
-                        % (member.person_title, group_title),
+                        % (to_locale(member.person_title), group_title),
                         _("Remove Person"), wxYES_NO) != wxYES:
             return
 
@@ -2040,7 +2063,8 @@ class MainFrame(wxFrame):
         group_title = self.groupTreeCtrl.GetItemText(item)
 
         if wxMessageBox(_("Really remove %s (%s) from %s?")
-                        % (relationship.target_title, relationship.role,
+                        % (to_locale(relationship.target_title),
+                           to_locale(nameURI(relationship.role)),
                            group_title),
                         _("Remove Relationship"), wxYES_NO) != wxYES:
             return
@@ -2109,15 +2133,16 @@ class MainFrame(wxFrame):
         try:
             info = self.client.getGroupInfo(group_path)
         except SchoolToolError, e:
-            self.SetStatusText(str(e))
+            self.SetStatusText(to_locale(unicode(e)))
             self.personListCtrl.Thaw()
             self.relationshipListCtrl.Thaw()
             return
-        self.SetStatusText(self.client.status)
+        self.SetStatusText(to_locale(self.client.status))
         self.personListData = info.members
         self.personListData.sort()
         for idx, item in enumerate(self.personListData):
-            self.personListCtrl.InsertStringItem(idx, item.person_title)
+            self.personListCtrl.InsertStringItem(idx,
+                    to_locale(item.person_title))
             self.personListCtrl.SetItemData(idx, idx)
         self.personListCtrl.Thaw()
 
@@ -2126,13 +2151,14 @@ class MainFrame(wxFrame):
             self.relationshipListData = self.client.getObjectRelationships(
                                                                     group_path)
         except SchoolToolError, e:
-            self.SetStatusText(str(e))
+            self.SetStatusText(to_locale(unicode(e)))
             self.relationshipListCtrl.Thaw()
             return
-        self.SetStatusText(self.client.status)
+        self.SetStatusText(to_locale(self.client.status))
         self.relationshipListData.sort()
         for idx, item in enumerate(self.relationshipListData):
-            self.relationshipListCtrl.InsertStringItem(idx, item.target_title)
+            self.relationshipListCtrl.InsertStringItem(idx,
+                        to_locale(item.target_title))
             self.relationshipListCtrl.SetItemData(idx, idx)
             self.relationshipListCtrl.SetStringItem(idx, 1,
                         to_locale(nameURI(item.role)))
@@ -2161,10 +2187,10 @@ class MainFrame(wxFrame):
         try:
             group_tree = self.client.getGroupTree()
         except SchoolToolError, e:
-            self.SetStatusText(str(e))
+            self.SetStatusText(to_locale(unicode(e)))
             group_tree = []
         else:
-            self.SetStatusText(self.client.status)
+            self.SetStatusText(to_locale(self.client.status))
 
         # Remember current selection
         old_selection = None
@@ -2190,7 +2216,7 @@ class MainFrame(wxFrame):
         # Reload tree
         self.groupTreeCtrl.Freeze()
         self.groupTreeCtrl.DeleteAllItems()
-        root = self.groupTreeCtrl.AddRoot(_("Roots"))
+        root = self.groupTreeCtrl.AddRoot(_("Roots")) # This item is invisible
 
         stack = [(root, None)]  # (item, id)
         item_to_select = None
@@ -2199,7 +2225,8 @@ class MainFrame(wxFrame):
                 last = stack.pop()[0]
                 self.groupTreeCtrl.SortChildren(last)
             assert len(stack) == level+1
-            item = self.groupTreeCtrl.AppendItem(stack[-1][0], title)
+            item = self.groupTreeCtrl.AppendItem(stack[-1][0],
+                                                 to_locale(title))
             if level == 1 or stack[-1][1] in expanded:
                 self.groupTreeCtrl.Expand(stack[-1][0])
             id = tuple([parent[1] for parent in stack[1:]] + [path])
@@ -2233,12 +2260,12 @@ class MainFrame(wxFrame):
         try:
             rollcall = self.client.getRollCall(group_path)
         except SchoolToolError, e:
-            self.SetStatusText(str(e))
+            self.SetStatusText(to_locale(unicode(e)))
             return
         rollcall.sort()
         dlg = RollCallDlg(self, group_title, group_path, rollcall, self.client)
         if dlg.ShowModal() == wxID_OK:
-            self.SetStatusText(self.client.status)
+            self.SetStatusText(to_locale(self.client.status))
         dlg.Destroy()
 
     def DoViewPersonInfo(self, event=None):
@@ -2269,7 +2296,8 @@ class MainFrame(wxFrame):
         member = self.personListData[key]
         window = AbsenceFrame(self.client, "%s/absences" % member.person_path,
                               parent=self, persons=False,
-                              title=_("%s's absences") % member.person_title)
+                              title=_("%s's absences")
+                                    % to_locale(member.person_title))
         window.Show()
 
     def DoViewPersonTimetables(self, event=None):
@@ -2283,7 +2311,8 @@ class MainFrame(wxFrame):
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
-        window = BrowserFrame("%s's timetables" % member.person_title,
+        window = BrowserFrame(_("%s's timetables")
+                                  % to_locale(member.person_title),
                               "http://%s:%s%s/timetables"
                                   % (self.client.server, self.client.port,
                                      member.person_path),
@@ -2303,7 +2332,7 @@ class MainFrame(wxFrame):
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
         window = BrowserFrame(_("%s's composite timetables")
-                                  % member.person_title,
+                                  % to_locale(member.person_title),
                               "http://%s:%s%s/composite-timetables"
                                   % (self.client.server, self.client.port,
                                      member.person_path),
@@ -2436,7 +2465,8 @@ class MainFrame(wxFrame):
         choices = [(p, s) for p in periods for s in schemas]
         choice = wxGetSingleChoiceIndex(
                         _("Select a timetable to edit"),
-                        _("School Timetable"), ["%s, %s" % c for c in choices])
+                        _("School Timetable"),
+                        [to_locale("%s, %s" % c) for c in choices])
         if choice == -1:
             return
         key = choices[choice]

@@ -1050,14 +1050,14 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
-                <item xlink:href="/persons/fred" xlink:title="Fred" />
+                <item xlink:href="/persons/fred" xlink:title="Fred \xc5\xbe."/>
                 <item xlink:href="/persons/barney"/>
               </items>
             </container>
         """)
         results = _parseContainer(body)
-        expected = [('Fred', '/persons/fred'),
-                    ('barney', '/persons/barney')]
+        expected = [(u'Fred \u017e.', '/persons/fred'),
+                    (u'barney', '/persons/barney')]
         self.assertEquals(results, expected)
 
     def test__parseGroupTree(self):
@@ -1072,7 +1072,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                 <group xlink:type="simple" xlink:href="/groups/group1"
                        xlink:title="group1">
                   <group xlink:type="simple" xlink:href="/groups/group1a"
-                         xlink:title="group1a">
+                         xlink:title="group1a \xe2\x98\xbb">
                   </group>
                   <group xlink:type="simple" xlink:href="/groups/group1b">
                   </group>
@@ -1081,11 +1081,11 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
             </tree>
         """)
         result = _parseGroupTree(body)
-        expected = [(0, 'root group', '/groups/root'),
-                    (1, 'group2',     '/groups/group2'),
-                    (1, 'group1',     '/groups/group1'),
-                    (2, 'group1a',    '/groups/group1a'),
-                    (2, 'group1b',    '/groups/group1b'),
+        expected = [(0, 'root group',      '/groups/root'),
+                    (1, 'group2',          '/groups/group2'),
+                    (1, 'group1',          '/groups/group1'),
+                    (2, u'group1a \u263B', '/groups/group1a'),
+                    (2, 'group1b',         '/groups/group1b'),
                    ]
         self.assertEquals(list(result), expected)
 
@@ -1111,18 +1111,18 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               <item xlink:type="simple" xlink:href="/groups/group2"
                      xlink:title="group2 title" />
               <item xlink:type="simple" xlink:href="/persons/person1"
-                     xlink:title="person1 title" />
+                     xlink:title="person1 \xe2\x9c\xb0 title" />
               <item xlink:type="simple" xlink:href="/persons/person2"
-                     xlink:title="person2 title" />
+                     xlink:title="person2 \xe2\x9c\xb0 title" />
               <item xlink:type="simple" xlink:href="/persons/person1/facets"
                      xlink:title="person1 facets" />
               <item xlink:type="simple" xlink:title="person3 title" />
               <item xlink:type="simple" xlink:href="/persons/person4" />
             </group>
         """)
-        expected = [MemberInfo('person1 title', '/persons/person1'),
-                    MemberInfo('person2 title', '/persons/person2'),
-                    MemberInfo('person4', '/persons/person4')]
+        expected = [MemberInfo(u'person1 \u2730 title', '/persons/person1'),
+                    MemberInfo(u'person2 \u2730 title', '/persons/person2'),
+                    MemberInfo(u'person4', '/persons/person4')]
         result = _parseMemberList(body)
         self.assertEquals(list(result), expected)
 
@@ -1141,17 +1141,19 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
-                <relationship xlink:title="title1" xlink:href="href1"
+                <relationship xlink:title="title1 \xe2\x9c\xb0"
+                              xlink:href="href1"
                               xlink:role="test://role1"
                               xlink:arcrole="test://arcrole1">
                     <manage xlink:href="mhref1"/>
                 </relationship>
-                <relationship xlink:title="title2" xlink:href="href2"
+                <relationship xlink:title="title2 \xe2\x9c\xb0"
+                    xlink:href="href2"
                     xlink:role="http://schooltool.org/ns/membership/group"
                     xlink:arcrole="http://schooltool.org/ns/membership">
                     <manage xlink:href="mhref2"/>
                 </relationship>
-                <relationship                       xlink:href="/objects/href3"
+                <relationship xlink:href="/objects/href3"
                               xlink:role="test://role3"
                               xlink:arcrole="test://arcrole3">
                     <manage xlink:href="mhref3"/>
@@ -1163,7 +1165,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                               xlink:arcrole="test://arcrole4">
                     <manage xlink:href="mhref3"/>
                 </relationship>
-                <relationship                       xlink:href=""
+                <relationship xlink:href=""
                               xlink:role="test://role4b"
                               xlink:arcrole="test://arcrole4b">
                     <manage xlink:href="mhref3"/>
@@ -1207,9 +1209,9 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         role3 = getURI('test://role3')
         arcrole3 = getURI('test://arcrole3')
         expected = [RelationshipInfo(*args) for args in [
-                (arcrole1, role1, 'title1', 'href1', 'mhref1'),
-                (URIMembership, URIGroup, 'title2', 'href2', 'mhref2'),
-                (arcrole3, role3, 'href3', '/objects/href3', 'mhref3'),
+                (arcrole1, role1, u'title1 \u2730', 'href1', 'mhref1'),
+                (URIMembership, URIGroup, u'title2 \u2730', 'href2', 'mhref2'),
+                (arcrole3, role3, u'href3', '/objects/href3', 'mhref3'),
             ]]
         self.assertEquals(list(result), expected)
 
@@ -1250,7 +1252,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         from schooltool.clients.guiclient import _parseRollCall, RollCallInfo
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
-              <person xlink:href="/persons/p1" xlink:title="person 1"
+              <person xlink:href="/persons/p1"
+                      xlink:title="person 1 \xe2\x9c\xb0"
                       presence="present" />
               <person xlink:href="/persons/p2" xlink:title=""
                       presence="absent" />
@@ -1260,9 +1263,9 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                       presence="absent" />
             </rollcall>
         """)
-        expected = [RollCallInfo('person 1', '/persons/p1', True),
-                    RollCallInfo('p2',       '/persons/p2', False),
-                    RollCallInfo('p4',       '/persons/p4', False)]
+        expected = [RollCallInfo(u'person 1 \u2730', '/persons/p1', True),
+                    RollCallInfo(u'p2', '/persons/p2', False),
+                    RollCallInfo(u'p4', '/persons/p4', False)]
         results = _parseRollCall(body)
         self.assertEquals(results, expected)
 
@@ -1288,7 +1291,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                        datetime="2001-02-28 01:01:01"
                        ended="ended" resolved="resolved" />
               <absence xlink:type="simple" xlink:href="/persons/p/absences/001"
-                       person_title="Person Foo"
+                       person_title="Person Foo \xe2\x9c\xb0"
                        datetime="2001-02-28 01:01:01"
                        ended="ended" resolved="resolved">
                 Some text
@@ -1307,7 +1310,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         """)
         expected = [AbsenceInfo('/persons/p/absences/001',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
-                                'Person Foo', '/persons/p',
+                                u'Person Foo \u2730', '/persons/p',
                                 True, True, None, 'Some text'),
                     AbsenceInfo('/p/absences/002',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
@@ -1356,7 +1359,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               <comment datetime="2001-02-28 01:01:01"
                        ended="ended" resolved="unresolved"
                        expected_presence="2001-02-03 04:05:06">
-                <reporter xlink:type="simple" xlink:title="Reporter"
+                <reporter xlink:type="simple"
+                          xlink:title="Reporter \xe2\x9c\xb0"
                           xlink:href="/persons/supervisor001" />
                 <absentfrom xlink:type="simple" xlink:href="/groups/001" />
                 <text>Comment One</text>
@@ -1364,34 +1368,37 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               <comment datetime="2001-02-28 01:01:01"
                        ended="unended" resolved="resolved"
                        expected_presence="">
-                <reporter xlink:type="simple" xlink:title="Supervisor 2"
+                <reporter xlink:type="simple"
+                          xlink:title="Supervisor 2 \xe2\x9c\xb0"
                           xlink:href="/persons/supervisor002" />
               </comment>
               <comment datetime="2001-02-28 01:01:01">
                 <reporter xlink:type="simple"
                           xlink:href="/persons/supervisor003" />
                 <absentfrom xlink:type="simple" xlink:href="/groups/003"
-                            xlink:title="Group"/>
+                            xlink:title="Group \xe2\x9c\xb0"/>
                 <text>
-                  Comment
+                  Comment \xe2\x9c\xb0
                   Three
                 </text>
               </comment>
             </absence>
         """)
         expected = [AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
-                                   "Reporter", "/persons/supervisor001",
-                                   "001", "/groups/001", True, False,
+                                   u"Reporter \u2730",
+                                   u"/persons/supervisor001",
+                                   u"001", u"/groups/001", True, False,
                                    datetime.datetime(2001, 2, 3, 4, 5, 6),
-                                   "Comment One"),
+                                   u"Comment One"),
                     AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
-                                   "Supervisor 2", "/persons/supervisor002",
-                                   "", "", False, True, None, ""),
+                                   u"Supervisor 2 \u2730",
+                                   u"/persons/supervisor002",
+                                   u"", u"", False, True, None, u""),
                     AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
-                                   "supervisor003", "/persons/supervisor003",
-                                   "Group", "/groups/003", Unchanged,
+                                   u"supervisor003", u"/persons/supervisor003",
+                                   u"Group \u2730", u"/groups/003", Unchanged,
                                    Unchanged, Unchanged,
-                                   "Comment\n      Three")]
+                                   u"Comment \u2730\n      Three")]
         results = _parseAbsenceComments(body)
         self.assertEquals(results, expected)
 
@@ -1573,13 +1580,13 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
             <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
               <period xlink:type="simple"
                       xlink:href="/time-periods/2003-fall"
-                      xlink:title="2003-fall"/>
+                      xlink:title="2003-fall \xe2\x9c\xb0"/>
               <period xlink:type="simple"
                       xlink:href="/time-periods/2004-spring"
                       xlink:title="2004-spring"/>
             </timePeriods>
         """
-        expected = ["2003-fall", "2004-spring"]
+        expected = [u"2003-fall \u2730", u"2004-spring"]
         results = _parseTimePeriods(body)
         self.assertEquals(results, expected)
 
@@ -1595,12 +1602,12 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
             <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
               <schema xlink:type="simple"
                       xlink:href="/ttschemas/six-day"
-                      xlink:title="six-day"/>
+                      xlink:title="six-day \xe2\x9c\xb0"/>
               <schema xlink:type="simple" xlink:href="/ttschemas/weekly"
                       xlink:title="weekly"/>
             </timetableSchemas>
         """
-        expected = ["six-day", "weekly"]
+        expected = [u"six-day \u2730", u"weekly"]
         results = _parseTimetableSchemas(body)
         self.assertEquals(results, expected)
 
@@ -1616,23 +1623,25 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         body = """
             <availability xmlns:xlink="http://www.w3.org/1999/xlink">
                <resource xlink:type="simple"
-                         xlink:href="/resources/room101" xlink:title="101">
+                         xlink:href="/resources/room101"
+                         xlink:title="101 \xe2\x9c\xb0">
                  <slot duration="1440" start="2004-01-01 00:00:00"/>
                </resource>
                <resource xlink:type="simple"
-                         xlink:href="/resources/hall" xlink:title="Hall">
+                         xlink:href="/resources/hall"
+                         xlink:title="Hall \xe2\x9c\xb0">
                  <slot duration="1440" start="2004-01-01 00:00:00"/>
                  <slot duration="30" start="2004-01-02 12:30:00"/>
                </resource>
             </availability>
         """
-        expected = [ResourceTimeSlot('101', '/resources/room101',
+        expected = [ResourceTimeSlot(u'101 \u2730', '/resources/room101',
                                      datetime.datetime(2004, 1, 1),
                                      datetime.timedelta(minutes=1440)),
-                    ResourceTimeSlot('Hall', '/resources/hall',
+                    ResourceTimeSlot(u'Hall \u2730', '/resources/hall',
                                      datetime.datetime(2004, 1, 1),
                                      datetime.timedelta(minutes=1440)),
-                    ResourceTimeSlot('Hall', '/resources/hall',
+                    ResourceTimeSlot(u'Hall \u2730', '/resources/hall',
                                      datetime.datetime(2004, 1, 2, 12, 30),
                                      datetime.timedelta(minutes=30))]
         results = _parseAvailabilityResults(body)
@@ -1668,19 +1677,19 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         body = """
             <person_info xmlns="http://schooltool.org/ns/model/0.1"
                          xmlns:xlink="http://www.w3.org/1999/xlink">
-              <first_name>John</first_name>
-              <last_name>Doe</last_name>
+              <first_name>John \xe2\x9c\xb0</first_name>
+              <last_name>Doe \xe2\x9c\xb0</last_name>
               <date_of_birth>2001-01-01</date_of_birth>
-              <comment>Foo bar baz</comment>
-              <photo xlink:type="simple" xlink:title="Photo"
+              <comment>Foo bar baz \xe2\x9c\xb0</comment>
+              <photo xlink:type="simple" xlink:title="Photo \xe2\x9c\xb0"
                      xlink:href="/persons/000033/facets/person_info/photo"/>
             </person_info>
         """
         result = _parsePersonInfo(body)
-        self.assertEquals(result.first_name, 'John')
-        self.assertEquals(result.last_name, 'Doe')
+        self.assertEquals(result.first_name, u'John \u2730')
+        self.assertEquals(result.last_name, u'Doe \u2730')
         self.assertEquals(result.date_of_birth, datetime.date(2001, 1, 1))
-        self.assertEquals(result.comment, 'Foo bar baz')
+        self.assertEquals(result.comment, u'Foo bar baz \u2730')
 
         body = """
             <person_info xmlns="http://schooltool.org/ns/model/0.1"
@@ -1689,7 +1698,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
               <last_name/>
               <date_of_birth/>
               <comment/>
-              <photo xlink:type="simple" xlink:title="Photo"
+              <photo xlink:type="simple" xlink:title="Photo \xe2\x9c\xb0"
                      xlink:href="/persons/000033/facets/person_info/photo"/>
             </person_info>
         """
@@ -1830,25 +1839,25 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
         ai.now = lambda: datetime.datetime(2002, 3, 4, 5, 6, 8)
         self.assert_(not ai.expected())
 
-    def test_str(self):
+    def test_unicode(self):
         from schooltool.clients.guiclient import AbsenceInfo
         dt = datetime.datetime(2001, 2, 3, 15, 44, 57)
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, None, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
-        self.assertEquals(str(ai), "John Smith absent for 2h15m,"
-                                   " since 03:44pm today")
+        self.assertEquals(unicode(ai), u"John Smith absent for 2h15m,"
+                                        " since 03:44pm today")
 
         et = datetime.datetime(2001, 2, 3, 18, 30, 00)
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
-        self.assertEquals(str(ai), "John Smith expected in 0h30m,"
-                                   " at 06:30pm today")
+        self.assertEquals(unicode(ai), "John Smith expected in 0h30m,"
+                                       " at 06:30pm today")
 
         et = datetime.datetime(2001, 2, 3, 18, 30, 00)
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2001, 2, 4, 12, 14, 17)
-        self.assertEquals(str(ai), "John Smith expected 17h44m ago,"
-                                   " at 06:30pm 2001-02-03")
+        self.assertEquals(unicode(ai), "John Smith expected 17h44m ago,"
+                                       " at 06:30pm 2001-02-03")
 
     def test_format_date(self):
         from schooltool.clients.guiclient import AbsenceInfo
@@ -1895,21 +1904,24 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher path="/persons/0013">
-                <day id="A">
-                  <period id="Green">
-                    <activity group="/groups/002" title="French">
-                      <resource xlink:type="simple" xlink:title="101"
+                <day id="A \xe2\x9c\xb0">
+                  <period id="Green \xe2\x9c\xb0">
+                    <activity group="/groups/002" title="French \xe2\x9c\xb0">
+                      <resource xlink:type="simple"
+                                xlink:title="101 \xe2\x9c\xb0"
                                 xlink:href="/resources/room101" />
                     </activity>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/003" title="Math"/>
+                    <activity group="/groups/003" title="Math \xe2\x9c\xb0"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/004" title="English"/>
-                    <activity group="/groups/005" title="English"/>
+                    <activity group="/groups/004"
+                              title="English"/>
+                    <activity group="/groups/005"
+                              title="English"/>
                   </period>
                   <period id="Blue">
                     <activity group="/groups/005" title="Biology"/>
@@ -1917,7 +1929,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
                 </day>
               </teacher>
               <teacher path="/persons/0014">
-                <day id="A">
+                <day id="A \xe2\x9c\xb0">
                   <period id="Green">
                     <activity group="/groups/006" title="Geography"/>
                   </period>
@@ -1940,20 +1952,21 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
 
         self.assertEquals(st.teachers, [('/persons/0013', None, None),
                                         ('/persons/0014', None, None)])
-        self.assertEquals(st.periods, [("A", "Green"),
-                                       ("A", "Blue"),
-                                       ("B", "Green"),
-                                       ("B", "Blue")])
-        self.assertEquals(st.tt, [[[('French', '/groups/002',
-                                     [('101', '/resources/room101')])],
-                                   [('Math', '/groups/003', [])],
-                                   [('English', '/groups/004', []),
-                                    ('English', '/groups/005', [])],
-                                   [('Biology', '/groups/005', [])]],
-                                  [[('Geography', '/groups/006', [])],
-                                   [('History', '/groups/007', [])],
-                                   [('Physics', '/groups/008', [])],
-                                   [('Chemistry', '/groups/009', [])]]])
+        self.assertEquals(st.periods, [(u"A \u2730", u"Green \u2730"),
+                                       (u"A \u2730", u"Blue"),
+                                       (u"B", u"Green"),
+                                       (u"B", u"Blue")])
+        self.assertEquals(st.tt, [[[(u'French \u2730', u'/groups/002',
+                                     [(u'101 \u2730',
+                                       u'/resources/room101')])],
+                                   [(u'Math \u2730', u'/groups/003', [])],
+                                   [(u'English', u'/groups/004', []),
+                                    (u'English', u'/groups/005', [])],
+                                   [(u'Biology', u'/groups/005', [])]],
+                                  [[(u'Geography', u'/groups/006', [])],
+                                   [(u'History', u'/groups/007', [])],
+                                   [(u'Physics', u'/groups/008', [])],
+                                   [(u'Chemistry', u'/groups/009', [])]]])
 
     def test_loadData_breakage(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
