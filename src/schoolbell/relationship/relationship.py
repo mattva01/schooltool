@@ -269,6 +269,11 @@ class BoundRelationshipProperty(object):
         relate(self.rel_type, (self.this, self.my_role),
                               (other, self.other_role))
 
+    def remove(self, other):
+        """Unlink a relationship between `self.this` and `other`."""
+        unrelate(self.rel_type, (self.this, self.my_role),
+                                (other, self.other_role))
+
 
 class Link(Persistent):
     """One half of a relationship.

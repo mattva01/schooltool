@@ -39,6 +39,9 @@ class IRelationshipProperty(Interface):
     def add(other):
         """Establish a relationship with `other`."""
 
+    def remove(other):
+        """Unlink a relationship with `other`."""
+
 
 class IRelationshipLink(Interface):
     """One half of a relationship.

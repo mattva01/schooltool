@@ -210,6 +210,13 @@ Usage example:
     >>> list(dogs.members)
     [fido]
 
+    >>> fido.groups.remove(dogs)
+
+    >>> list(fido.groups)
+    []
+    >>> list(dogs.members)
+    []
+
 
 Events
 ------
