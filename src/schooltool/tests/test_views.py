@@ -424,6 +424,12 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
                 <root xlink:type="simple" xlink:href="/groups/root"
                       xlink:title="Root group"/>
               </roots>
+              <containers>
+                <container xlink:type="simple" xlink:href="/persons"
+                           xlink:title="persons"/>
+                <container xlink:type="simple" xlink:href="/groups"
+                           xlink:title="groups"/>
+              </containers>
               <utilities>
                 <utility xlink:type="simple" xlink:href="/utils/foo"
                          xlink:title="Foo utility"/>

@@ -5,6 +5,11 @@
     <root xlink:type="simple" tal:repeat="root view/getRoots"
           tal:attributes="xlink:title root/title; xlink:href root/path"/>
   </roots>
+  <containers>
+    <container xlink:type="simple" tal:repeat="container view/getContainers"
+               tal:attributes="xlink:title container/title;
+                               xlink:href container/path"/>
+  </containers>
   <utilities>
     <utility xlink:type="simple" tal:repeat="utility view/getUtilities"
          tal:attributes="xlink:title utility/title; xlink:href utility/path"/>

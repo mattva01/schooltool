@@ -242,6 +242,13 @@ class ApplicationView(TraversableView):
         return [{'path': getPath(root), 'title': root.title}
                 for root in self.context.getRoots()]
 
+    def getContainers(self):
+        base = getPath(self.context)
+        if not base.endswith('/'):
+            base += '/'
+        return [{'path': '%s%s' % (base, key), 'title': key}
+                for key in self.context.keys()]
+
     def getUtilities(self):
         return [{'path': getPath(utility), 'title': utility.title}
                 for utility in self.context.utilityService.values()]
