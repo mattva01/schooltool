@@ -26,17 +26,24 @@ import unittest
 from schooltool.interfaces import AuthenticationError
 
 # XXX should schooltool.browser depend on schooltool.views?
-from schooltool.views.tests import RequestStub
+from schooltool.views.tests import RequestStub, setPath
 
 
 __metaclass__ = type
+
+
+class PersonStub:
+    __name__ = 'manager'
+    title = 'The Mgmt'
 
 
 class SiteStub:
 
     def authenticate(self, app, username, password):
         if username == 'manager' and password == 'schooltool':
-            return "I'm a user object"
+            person = PersonStub()
+            setPath(person, '/persons/manager')
+            return person
         else:
             raise AuthenticationError()
 
@@ -66,6 +73,9 @@ class TestAppView(unittest.TestCase):
         request.site = SiteStub()
         result = view.render(request)
         self.assertEquals(result, 'OK')
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/manager')
 
     def test_post_failed(self):
         view = self.createView()
@@ -77,9 +87,34 @@ class TestAppView(unittest.TestCase):
         self.assertEquals(result, 'Wrong')
 
 
+class TestPersonInfo(unittest.TestCase):
+
+    def test(self):
+        from schooltool.model import Person
+        from schooltool.browser.app import PersonInfoPage
+        person = Person(title="John Doe")
+        person.__name__ = 'johndoe'
+        view = PersonInfoPage(person)
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_('johndoe' in result)
+        self.assert_('John Doe' in result)
+
+    def test_container(self):
+        from schooltool.model import Person
+        from schooltool.browser.app import PersonContainerView
+        container = {'person': Person()}
+        view = PersonContainerView(container)
+        personview = view._traverse('person', RequestStub())
+        self.assertEquals(personview.__class__.__name__, 'PersonInfoPage')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
+    suite.addTest(unittest.makeSuite(TestPersonInfo))
     return suite
 
 if __name__ == '__main__':

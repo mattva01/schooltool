@@ -35,8 +35,10 @@ class TestWeb(unittest.TestCase):
         data = urllib.urlencode({'username': 'manager',
                                  'password': 'schooltool'})
         f = urllib.urlopen('http://localhost:8814/', data=data)
+        # urllib handles redirections transparently
+        self.assertEquals(f.geturl(), 'http://localhost:8814/persons/manager')
         content = f.read()
-        self.assertEquals('OK', content)
+        self.assert_('Person info' in content)
 
 
 def test_suite():

@@ -23,10 +23,14 @@ $Id$
 """
 
 # XXX should schooltool.browser depend on schooltool.views?
-from schooltool.views import View, Template
-from schooltool.interfaces import IApplication, AuthenticationError
+from schooltool.views import View, Template, absoluteURL
+from schooltool.interfaces import IApplication, IPerson, AuthenticationError
 
 __metaclass__ = type
+
+
+def Anybody(self, context, request):
+    return True
 
 
 class LoginPage(View):
@@ -34,7 +38,7 @@ class LoginPage(View):
     __used_for__ = IApplication
 
     template = Template("www/login.pt")
-    authorization = lambda self, ctx, rq: True # XXX
+    authorization = Anybody
 
     def do_POST(self, request):
         request.setHeader('Content-Type', 'text/html')
@@ -43,7 +47,30 @@ class LoginPage(View):
                                              request.args['username'][0],
                                              request.args['password'][0])
 
+            url = absoluteURL(request, user)
+            request.redirect(url)
             return 'OK'
         except AuthenticationError:
             return 'Wrong'
+
+    def _traverse(self, name, request):
+        if name == 'persons':
+            return PersonContainerView(self.context['persons'])
+
+
+# XXX Will be moved to a separate module.
+class PersonInfoPage(View):
+
+    __used_for__ = IPerson
+
+    authorization = Anybody
+    template = Template("www/person.pt")
+
+
+class PersonContainerView(View):
+
+    authorization = Anybody
+
+    def _traverse(self, name, request):
+        return PersonInfoPage(self.context[name])
 

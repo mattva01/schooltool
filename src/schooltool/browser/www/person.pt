@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Person info</title>
+</head>
+<body>
+<p>
+  <b>Username:</b>
+  <span tal:replace="python:context.__name__">not_doe</span>
+</p>
+<p>
+  <b>Title:</b>
+  <span tal:replace="context/title">John, but not Doe</span>
+</p>
+</body>
+</html>
