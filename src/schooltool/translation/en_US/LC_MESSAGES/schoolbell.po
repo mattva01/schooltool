@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool (unknown version)\n"
 "POT-Creation-Date: Tue Oct  5 16:37:53 2004\n"
-"PO-Revision-Date: 2004-10-05 16:38+0300\n"
+"PO-Revision-Date: 2004-10-05 19:56+0300\n"
 "Last-Translator: Albertas Agejevas <alga@pov.lt>\n"
 "Language-Team: SchoolTool Developers <schooltool@schooltool.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #: import-sampleschool.py:114
 msgid "Use SSL? (y/n)"
-msgstr "c"
+msgstr ""
 
 #: import-sampleschool.py:116
 msgid "y"
@@ -3329,7 +3329,7 @@ msgstr ""
 
 #: src/schooltool/uris.py:131
 msgid "The teaching relationship."
-msgstr ""
+msgstr "The supervision relationship."
 
 #: src/schooltool/uris.py:135
 msgid "Teacher"
@@ -3338,13 +3338,12 @@ msgstr "Supervisor"
 #: src/schooltool/uris.py:136
 #, fuzzy
 msgid "A role of a teacher."
-msgstr "There are no supervisors."
+msgstr "A role of a supervisor."
 
 #: src/schooltool/uris.py:140
 msgid "Taught"
 msgstr "Supervised"
 
 #: src/schooltool/uris.py:141
-#, fuzzy
 msgid "A role of a group that has a teacher."
-msgstr "This group has no supervisors."
+msgstr "A role of a group that has a supervisor."
