@@ -20,6 +20,7 @@
     </div>
     <div class="groups">
       <!-- XXX The double frame looks ugly -->
+      <!-- TODO Do not show checkboxes for unauthorized users -->
       <form method="POST" tal:attributes="action request/path">
         <h3 i18n:translate="">Groups</h3>
 
