@@ -1,0 +1,59 @@
+==============================
+Resource booking in SchoolBell
+==============================
+
+Overview
+--------
+
+Every calendar event may indicate that one or more resources (e.g., projectors,
+rooms) are needed for this event.  We call this "resource booking" in
+SchoolBell.  When a resource is booked, the calendar event is automatically
+added to the resource's calendar, and is kept in sync.
+
+Set up
+------
+
+We will need some test fixture for relationships.
+
+    >>> from schoolbell.relationship.tests import setUp, tearDown
+    >>> setUp()
+
+You have a person and a resource
+
+    >>> from schoolbell.app.app import Person, Resource
+    >>> person = Person('froggy')
+    >>> resource = Resource('lily')
+    >>> resource2 = Resource('mud')
+
+You want to create a calendar event and book a resource.  You can specify the
+resource when you're creating an event.
+
+    >>> from datetime import datetime, timedelta
+    >>> from schoolbell.app.cal import CalendarEvent
+    >>> e = CalendarEvent(title="Presentation",
+    ...                   dtstart=datetime(2005, 3, 2, 12, 45),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource])
+    >>> person.calendar.addEvent(e)
+
+The event magically appears in the resource's calendar
+
+    >>> resource.calendar.find(e.unique_id) is e
+    True
+
+You can change the event to remove the booking
+
+    >>> e.unbookResource(resource)
+    >>> resource.calendar.find(e.unique_id)
+    Traceback (most recent call last):
+      ...
+    KeyError: ...
+
+or you may book a different resource
+
+    >>> e.bookResource(resource2)
+    >>> resource2.calendar.find(e.unique_id) is e
+    True
+
+XXX What happens when I remove the event from the resource's calendar directly?
+XXX What happens when I remove the event from the original calendar?

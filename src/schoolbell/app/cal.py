@@ -49,13 +49,32 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
 
     __parent__ = None
 
+    resources = property(lambda self: self._resources)
+
     def __init__(self, *args, **kwargs):
+        resources = kwargs.pop('resources', ())
         SimpleCalendarEvent.__init__(self, *args, **kwargs)
         self.__name__ = self.unique_id
+        self._resources = ()
+        for resource in resources:
+            self.bookResource(resource)
 
     def __conform__(self, interface):
         if interface is ICalendar:
             return self.__parent__
+
+    def bookResource(self, resource):
+        if resource in self.resources:
+            raise ValueError('resource already booked')
+        self._resources += (resource, )
+        resource.calendar.addEvent(self)
+
+    def unbookResource(self, resource):
+        if resource not in self.resources:
+            raise ValueError('resource not booked')
+        self._resources = tuple([r for r in self.resources
+                                 if r is not resource])
+        resource.calendar.removeEvent(self)
 
 
 class Calendar(Persistent, CalendarMixin):
@@ -81,11 +100,15 @@ class Calendar(Persistent, CalendarMixin):
 
     def addEvent(self, event):
         assert ISchoolBellCalendarEvent.providedBy(event)
-        assert event.__parent__ is None, "Event already belongs to a calendar"
         if event.unique_id in self.events:
             raise ValueError('an event with this unique_id already exists')
+        if self.__parent__ in event.resources:
+            pass # Do not fiddle with event.__parent__
+        elif event.__parent__ is None:
+            event.__parent__ = self
+        else:
+            raise ValueError("Event already belongs to a calendar")
         self.events[event.unique_id] = event
-        event.__parent__ = self
 
     def removeEvent(self, event):
         del self.events[event.unique_id]

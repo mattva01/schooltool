@@ -65,6 +65,14 @@ class ISchoolBellCalendar(IEditCalendar, ILocation):
 class ISchoolBellCalendarEvent(ICalendarEvent, IContained):
     """An event that is contained in a SchoolBell calendar."""
 
+    resources = Attribute("""Resources that are booked by this event""")
+
+    def bookResource(resource):
+        """Book a resource."""
+
+    def unbookResource(resource):
+        """Book a resource."""
+
 
 class INote(Interface):
     """A note."""

@@ -30,6 +30,18 @@ from zope.testing import doctest
 from zope.interface.verify import verifyObject
 
 
+class ResourceStub(object):
+    """Stub resource.
+
+    For the purposes of resource booking, a resource is anything that
+    has a 'calendar' attribute.
+    """
+
+    def __init__(self):
+        from schoolbell.app.cal import Calendar
+        self.calendar = Calendar(self)
+
+
 def doctest_CalendarEvent():
     r"""Tests for CalendarEvent.
 
@@ -75,6 +87,73 @@ def doctest_CalendarEvent():
 
     It is very unwise to touch the __name__ or unique_id of events.
     TODO: enforce this restriction.
+
+    """
+
+
+def doctest_CalendarEvent_resource_booking():
+    """Resource booking tests for CalendarEvent.
+
+    All calendar events have a `resources` argument, but initially it is empty.
+
+        >>> from schoolbell.app.cal import CalendarEvent
+        >>> e = CalendarEvent(None, None, '')
+        >>> e.resources
+        ()
+
+    It is also read-only.
+
+        >>> e.resources = []
+        Traceback (most recent call last):
+          ...
+        AttributeError: can't set attribute
+
+    CalendarEvent.bookResource adds the resource to its resources list and
+    adds the event into the resource's calendar.
+
+        >>> r = ResourceStub()
+        >>> e.bookResource(r)
+        >>> e.resources
+        (<...ResourceStub object at...>,)
+        >>> e in r.calendar
+        True
+
+    CalendarEvent.unbookResource undoes this
+
+        >>> e.unbookResource(r)
+        >>> e.resources
+        ()
+        >>> e in r.calendar
+        False
+
+    When you create a CalendarEvent, you can pass a list of resources
+    to the constructor.  This is equivalent to creating a CalendarEvent
+    without the resources argument, and then subsequently calling bookResource
+    for each resource.
+
+        >>> a = ResourceStub()
+        >>> b = ResourceStub()
+        >>> e = CalendarEvent(None, None, 'title', resources=[a, b])
+        >>> a in e.resources and b in e.resources
+        True
+        >>> e in a.calendar and e in b.calendar
+        True
+        >>> e.__parent__ is None
+        True
+
+    You cannot book the same resource twice:
+
+        >>> e.bookResource(a)
+        Traceback (most recent call last):
+          ...
+        ValueError: resource already booked
+
+    You cannot unbook a resource that is not booked
+
+        >>> e.unbookResource(r)
+        Traceback (most recent call last):
+          ...
+        ValueError: resource not booked
 
     """
 
@@ -130,7 +209,10 @@ def doctest_Calendar():
         >>> cal2.addEvent(event)
         Traceback (most recent call last):
         ...
-        AssertionError: Event already belongs to a calendar
+        ValueError: Event already belongs to a calendar
+
+    There are exceptions to the previous rule: resource booking adds the same
+    event to several calendars simultaneously.
 
     Let's add a few more events:
 
@@ -189,6 +271,50 @@ def doctest_Calendar():
 
     We will trust that `expand` inherited from CalendarMixin has been unit
     tested.
+    """
+
+
+def doctest_Calendar_addEvent_resource_booking():
+    """Tests for Calendar.addEvent.
+
+    For the purposes of resource booking, a resource is anything that
+    has a 'calendar' attribute.
+
+        >>> resource = ResourceStub()
+
+    When you add an event to a calendar, the calendar's addEvent sets the
+    event's __parent__ to itself, or complains loudly if __parent__ already
+    set.  Thus normally you cannot add the same calendar event into two
+    different calendars.
+
+        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> cal = Calendar()
+        >>> e = CalendarEvent(None, None, '')
+        >>> cal.addEvent(e)
+        >>> e.__parent__ is cal
+        True
+
+        >>> resource.calendar.addEvent(e)
+        Traceback (most recent call last):
+          ...
+        ValueError: Event already belongs to a calendar
+
+    However, there is an exception to the previous rule: you can add an event
+    to a resource's calendar, if the resource is listed in event.resources.
+
+        >>> e._resources = (resource, )
+        >>> resource in e.resources
+        True
+
+        >>> resource.calendar.addEvent(e)
+        >>> e in resource.calendar
+        True
+
+    Event's __parent__ is not changed in this case.
+
+        >>> e.__parent__ is cal
+        True
+
     """
 
 
