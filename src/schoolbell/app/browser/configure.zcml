@@ -39,22 +39,6 @@
       add="zope.View"
       />
 
-  <addform
-      label="Add a Person"
-      name="addSchoolBellPerson.html"
-      schema="schoolbell.app.interfaces.IPerson"
-      content_factory="schoolbell.app.app.Person"
-      permission="zope.ManageContent"
-      />
-
-  <addMenuItem
-      title="SchoolBell Person"
-      description="A Person"
-      class="schoolbell.app.app.Person"
-      permission="zope.ManageContent"
-      view="addSchoolBellPerson.html"
-      />
-
   <page
       name="index.html"
       for="schoolbell.app.interfaces.IPerson"
@@ -81,6 +65,18 @@
       class="schoolbell.app.browser.app.PersonChangePasswordView"
       template="templates/change_person_password.pt"
       permission="zope.View" />
+
+  <page
+      name="add.html"
+      for="schoolbell.app.interfaces.IPersonContainer"
+      class="schoolbell.app.browser.app.PersonAddView"
+      template="templates/person_add.pt"
+      permission="zope.View" />
+
+  <zope:adapter
+      for="schoolbell.app.interfaces.IPerson"
+      provides=".app.IPersonAddForm"
+      factory=".app.PersonAddAdapter"/>
 
   <page
       name="photo"

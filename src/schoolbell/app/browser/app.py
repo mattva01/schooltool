@@ -22,13 +22,18 @@ SchoolBell application views.
 $Id$
 """
 
-from zope.interface import Interface
-from zope.schema import Password, getFieldNamesInOrder
+from zope.interface import Interface, implements
+from zope.schema import Password, TextLine, Bytes, getFieldNamesInOrder
+from zope.schema.interfaces import ValidationError
+from zope.app import zapi
 from zope.app import zapi
 from zope.app.form.utility import setUpWidgets, getWidgetsData
+from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
+from schoolbell.app.app import Person
+from schoolbell import SchoolBellMessageID as _
 from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
 
@@ -69,7 +74,7 @@ class PersonContainerView(ContainerView):
 
     index_title = _("Person index")
     add_title = _("Add a new person")
-    add_url = "addSchoolBellPerson.html"
+    add_url = "add.html"
 
 
 class GroupContainerView(ContainerView):
@@ -77,7 +82,7 @@ class GroupContainerView(ContainerView):
 
     index_title = _("Group index")
     add_title = _("Add a new group")
-    add_url = "addSchoolBellGroup.html"
+    add_url = "+/addSchoolBellGroup.html"
 
 
 class ResourceContainerView(ContainerView):
@@ -85,7 +90,7 @@ class ResourceContainerView(ContainerView):
 
     index_title = _("Resource index")
     add_title = _("Add a new resource")
-    add_url = "addSchoolBellResource.html"
+    add_url = "+/addSchoolBellResource.html"
 
 
 class PersonView(BrowserView):
@@ -276,3 +281,86 @@ class PersonChangePasswordView(BrowserView):
                 return
 
             self.context.setPassword(None)
+
+class IPersonAddForm(Interface):
+
+    title = TextLine(title=u"Full name",
+        description=u"Name that should be displayed")
+
+    password = Password(title=u"Password")
+    verify_password = Password(title=u"Verify password")
+
+    username = TextLine(title=u"Username",
+        description=u"Username")
+
+    photo = Bytes(title=u"Photo",
+        required=False,
+        description=u"""Photo (in JPEG format)""")
+
+
+marker = object()
+class PersonAddAdapter(object):
+    implements(IPersonAddForm)
+    _password = marker
+
+    def __init__(self, context):
+        self.context = context
+
+    def setPassword(self, password):
+        if self._password is marker:
+            self._password = password
+        elif self._password == password:
+            self.context.setPassword(password)
+        else:
+            raise ValueError("passwords do not match")
+
+    password = property(None, setPassword)
+    verify_password = property(None, setPassword)
+
+    def setTitle(self, title):
+        self.context.title = title
+
+    title = property(None, setTitle)
+
+    def setUsername(self, username):
+        self.context.username = username
+
+    username = property(None, setUsername)
+
+    def setPhoto(self, photo):
+        self.context.photo = photo
+
+    photo = property(None, setPhoto)
+
+
+class PersonAddView(AddView):
+    """A view for adding a person."""
+
+    duplicate_warning = None
+    fieldNames = None
+    error = None
+    schema = IPersonAddForm
+    _arguments = ()
+    _keyword_arguments = ()
+    _factory = Person
+    _set_before_add = 'username',
+    _set_after_add = ()
+
+    def __init__(self, context, request):
+        AddView.__init__(self, context, request)
+        self._set_before_add = getFieldNamesInOrder(IPersonAddForm)
+
+    def createAndAdd(self, data):
+        if (data['password'] == data['verify_password']):
+            return AddView.createAndAdd(self, data)
+        else:
+            self.error = u'Passwords do not match!'
+            raise WidgetsError([ValidationError('Passwords do not match!')])
+
+    def add(self, thing):
+        name = thing.username
+        self.context[name] = thing
+        return thing
+
+    def nextURL(self):
+        return zapi.absoluteURL(self.context, self.request)

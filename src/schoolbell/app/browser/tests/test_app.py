@@ -500,6 +500,126 @@ def doctest_PersonChangePasswordView():
     """
 
 
+def doctest_PersonAddAdapter():
+    r"""Doctest for the PersonAddAdapter.
+
+        >>> setup.placelessSetUp()
+
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> from schoolbell.app.browser.app import IPersonAddForm
+        >>> from schoolbell.app.browser.app import PersonAddAdapter
+        >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
+
+        >>> person = Person()
+        >>> adapter = IPersonAddForm(person)
+        >>> adapter.password = 'foo'
+        >>> adapter.verify_password = 'foo'
+        >>> person.checkPassword('foo')
+        True
+
+        >>> adapter = IPersonAddForm(person)
+        >>> adapter.password = 'baz'
+        >>> adapter.verify_password = 'bar'
+        Traceback (most recent call last):
+          ...
+        ValueError: passwords do not match
+
+        >>> person.checkPassword('foo')
+        True
+
+        >>> adapter = IPersonAddForm(person)
+        >>> adapter.password = None
+        >>> adapter.verify_password = None
+        >>> person.hasPassword()
+        False
+
+        >>> adapter = IPersonAddForm(person)
+        >>> adapter.title = u'Ignas M.'
+        >>> adapter.username = u'ignas'
+        >>> adapter.photo = 'JFIFmugshot'
+        >>> person.title
+        u'Ignas M.'
+        >>> person.username
+        u'ignas'
+        >>> person.photo
+        'JFIFmugshot'
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_PersonAddView():
+    r"""Test for PersonAddView
+
+    We need some setup to make widgets work in a unit test.
+
+        >>> class FakeURL:
+        ...     def __init__(self, context, request): pass
+        ...     def __call__(self): return "http://localhost/frogpond/persons"
+        ...
+        >>> from schoolbell.app.interfaces import IPersonContainer
+        >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
+        >>> ztapi.browserViewProviding(IPersonContainer, FakeURL, \
+        ...                            providing=IAbsoluteURL)
+
+    Let's define an adapter for our view:
+
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> from schoolbell.app.browser.app import IPersonAddForm
+        >>> from schoolbell.app.browser.app import PersonAddAdapter
+        >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
+
+
+    Let's create a PersonConatiner
+
+        >>> from schoolbell.app.app import PersonContainer
+        >>> pc = PersonContainer()
+
+    Now let's create a PersonAddView for the container
+
+        >>> from schoolbell.app.browser.app import PersonAddView
+        >>> view = PersonAddView(pc, TestRequest())
+        >>> view.update()
+
+    Let's try to add a user:
+
+        >>> from schoolbell.app.browser.app import PersonAddView
+        >>> request = TestRequest(form={'field.title': u'John Doe',
+        ...                             'field.username': u'jdoe',
+        ...                             'field.password': u'secret',
+        ...                             'field.verify_password': u'secret',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        ''
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> 'jdoe' in pc
+        True
+
+    Let's try to add user with not matchin password and verify_password:
+
+        >>> from schoolbell.app.browser.app import PersonAddView
+        >>> request = TestRequest(form={'field.title': u'Coo Guy',
+        ...                             'field.username': u'coo',
+        ...                             'field.password': u'secret',
+        ...                             'field.verify_password': u'plain',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.error
+        u'Passwords do not match!'
+        >>> 'coo' in pc
+        False
+
+    """
+
+
 def setUp(test):
     """Set up the test fixture for doctests in this module.
 
@@ -507,9 +627,9 @@ def setUp(test):
     sets up annotations, relationships, and registers widgets as views for some
     schema fields.
     """
-    from zope.app.form.browser import PasswordWidget
+    from zope.app.form.browser import PasswordWidget, TextWidget, BytesWidget
     from zope.app.form.interfaces import IInputWidget
-    from zope.schema.interfaces import IPassword
+    from zope.schema.interfaces import IPassword, ITextLine, IBytes
     setup.placelessSetUp()
     setup.setUpAnnotations()
     setup.setUpTraversal()
@@ -518,6 +638,8 @@ def setUp(test):
     setUpRelationships()
     # widgets
     ztapi.browserViewProviding(IPassword, PasswordWidget, IInputWidget)
+    ztapi.browserViewProviding(ITextLine, TextWidget, IInputWidget)
+    ztapi.browserViewProviding(IBytes, BytesWidget, IInputWidget)
 
 
 def tearDown(test):

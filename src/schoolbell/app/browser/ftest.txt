@@ -131,7 +131,7 @@ We can traverse to the resource index too
 There is a menu item for persons in person list
 
     >>> print http(r"""
-    ... GET /frogpond/persons/@@contents.html HTTP/1.1
+    ... GET /frogpond/persons/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -140,30 +140,15 @@ There is a menu item for persons in person list
     <BLANKLINE>
     <!DOCTYPE html ...
     ...
-    <h4>Add:</h4>
-    ...
-    <a href="http://localhost/frogpond/persons/@@+/action.html?type_name=addSchoolBellPerson.html"
-       class="">SchoolBell Person</a>
+    <a class="action"
+       href="http://localhost/frogpond/persons/add.html">Add a new person</a>
     ...
 
 We can click on it and get a form:
 
     >>> print http(r"""
-    ... GET /frogpond/persons/@@+/action.html?type_name=addSchoolBellPerson.html HTTP/1.1
+    ... GET /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/persons/@@contents.html
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: 4
-    Content-Type: text/plain;charset=utf-8
-    Location: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
-    <BLANKLINE>
-    None
-
-    >>> print http(r"""
-    ... GET /frogpond/persons/+/addSchoolBellPerson.html= HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/persons/@@contents.html
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -171,81 +156,69 @@ We can click on it and get a form:
     <BLANKLINE>
     <!DOCTYPE html ...
     ...
-      <form action="http://localhost/frogpond/persons/+/addSchoolBellPerson.html%3D"
-            method="post" enctype="multipart/form-data">
+         <form class="standalone" method="POST"
+               enctype="multipart/form-data"
+               action="http://localhost/frogpond/persons/add.html">
     ...
-        <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  /></div>
+              <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  /></div>
     ...
-        <div class="field"><input class="fileType" id="field.photo" name="field.photo" size="20" type="file"  /></div>
+              <div class="field"><input class="textType" id="field.username" name="field.username" size="20" type="text" value=""  /></div>
     ...
-        <div class="field"><input class="textType" id="field.username" name="field.username" size="20" type="text" value=""  /></div>
+              <div class="field"><input class="passwordType" id="field.password" name="field.password" size="20" type="password" value=""  /></div>
+    ...
+              <div class="field"><input class="passwordType" id="field.verify_password" name="field.verify_password" size="20" type="password" value=""  /></div>
+    ...
+              <div class="field"><input class="fileType" id="field.photo" name="field.photo" size="20" type="file"  /></div>
     ...
       </form>
     ...
 
-After submiting the form
+After submiting the form:
 
     >>> print http(r"""
-    ... POST /frogpond/persons/+/addSchoolBellPerson.html%3D HTTP/1.1
+    ... POST /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 1244
-    ... Content-Type: multipart/form-data; boundary=---------------------------13349368961835220053680304979
-    ... Referer: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
+    ... Content-Length: 1318
+    ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
+    ... Referer: http://localhost/frogpond/persons/add.html
     ... 
-    ... -----------------------------13349368961835220053680304979
+    ... -----------------------------705046721187019535891597004
     ... Content-Disposition: form-data; name="field.title"
     ... 
     ... Frog
-    ... -----------------------------13349368961835220053680304979
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.username"
+    ... 
+    ... frog
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.password"
+    ... 
+    ... pwd
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.verify_password"
+    ... 
+    ... pwd
+    ... -----------------------------705046721187019535891597004
     ... Content-Disposition: form-data; name="field.photo"; filename=""
     ... Content-Type: application/octet-stream
     ... 
     ... 
-    ... -----------------------------13349368961835220053680304979
-    ... Content-Disposition: form-data; name="field.username"
-    ... 
-    ... frog
-    ... -----------------------------13349368961835220053680304979
+    ... -----------------------------705046721187019535891597004
     ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
     ... 
     ... Add
-    ... -----------------------------13349368961835220053680304979
-    ... Content-Disposition: form-data; name="add_input_name"
-    ... 
-    ... frog
-    ... -----------------------------13349368961835220053680304979--
+    ... -----------------------------705046721187019535891597004--
     ... """)
     HTTP/1.1 303 See Other
+    Content-Length: ...
+    Location: http://localhost/frogpond/persons
     ...
 
 We should see a new user in the user table:
 
     >>> print http(r"""
-    ... GET /frogpond/persons/@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    <!DOCTYPE html ...
-    ...
-                <input type="checkbox" class="noborder"
-                       name="ids:list" id="frog" value="frog" />
-    ...
-              <td><a href="frog/@@SelectedManagementView.html"></a><span>
-                    <a href="frog/@@SelectedManagementView.html">frog</a><a
-      href="http://localhost/frogpond/persons/@@contents.html?rename_ids:list=frog">&nbsp;&nbsp;</a></span></td>
-              <td>
-    ...
-
-The person should appear in the person list too:
-
-    >>> print http(r"""
     ... GET /frogpond/persons/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -254,7 +227,7 @@ The person should appear in the person list too:
     <!DOCTYPE html ...
     ...
                 <a ...
-                   href="http://localhost/frogpond/persons/+/addSchoolBellPerson.html">Add a new person</a>
+                   href="http://localhost/frogpond/persons/add.html">Add a new person</a>
     ...
                   <a href="http://localhost/frogpond/persons/frog">Frog</a>
     ...
@@ -300,7 +273,7 @@ We should have a view for changing his password as well:
     ...
     ...The account for...
     ...Frog is...
-    ...disabled...
+    ...enabled...
     ...<form action="http://localhost/frogpond/persons/frog/password.html"...
     ...
     ...Change password for Frog...
@@ -335,7 +308,7 @@ Non manager user should see another form:
     ...
     ...The account for...
     ...Frog is...
-    ...disabled...
+    ...enabled...
     ...<form action="http://localhost/frogpond/persons/frog/password.html"...
     ...
     ...Change password for Frog...
