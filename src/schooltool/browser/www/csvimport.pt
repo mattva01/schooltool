@@ -32,6 +32,13 @@
       <input id="resources.csv" type="file" name="resources.csv" />
     </div>
 
+    <div class="row" tal:replace="structure view/charset_widget">
+      [Charset]
+    </div>
+    <div class="row" tal:replace="structure view/other_charset_widget">
+      [Charset if Other was selected]
+    </div>
+
   <div class="buttons">
     <input class="button" type="submit" value="Submit"
            i18n:attributes="value" />

@@ -52,9 +52,48 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'groups.csv': '',
                                     'resources.csv': '',
                                     'teachers.csv': '',
-                                    'pupils.csv': ''})
+                                    'pupils.csv': '',
+                                    'charset': 'UTF-8'})
         content = self.view.do_POST(request)
         self.assert_('No data provided' in content)
+        self.assert_('Data imported successfully' not in content)
+
+        self.assertEquals(request.applog, [])
+
+    def test_POST_bad_charset(self):
+        request = RequestStub(args={'groups.csv': '',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': '',
+                                    'charset': 'no-such-charset'})
+        content = self.view.do_POST(request)
+        self.assert_('Unknown charset' in content)
+        self.assert_('No data provided' not in content)
+        self.assert_('Data imported successfully' not in content)
+
+        request = RequestStub(args={'groups.csv': '',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': '',
+                                    'charset': '',
+                                    'other_charset': 'no-such-charset'})
+        content = self.view.do_POST(request)
+        self.assert_('Unknown charset' in content)
+        self.assert_('No data provided' not in content)
+        self.assert_('Data imported successfully' not in content)
+
+        self.assertEquals(request.applog, [])
+
+    def test_POST_no_charset(self):
+        request = RequestStub(args={'groups.csv': '',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': '',
+                                    'charset': '',
+                                    'other_charset': ''})
+        content = self.view.do_POST(request)
+        self.assert_('This field is required' in content)
+        self.assert_('No data provided' not in content)
         self.assert_('Data imported successfully' not in content)
 
         self.assertEquals(request.applog, [])
@@ -65,7 +104,8 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'groups.csv':'"year1","Year 1","root",""',
                                     'resources.csv': '',
                                     'teachers.csv': '',
-                                    'pupils.csv': ''})
+                                    'pupils.csv': '',
+                                    'charset': 'UTF-8'})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -79,17 +119,51 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'groups.csv': '"year1","b0rk',
                                     'resources.csv': '',
                                     'teachers.csv': '',
-                                    'pupils.csv': ''})
+                                    'pupils.csv': '',
+                                    'charset': 'UTF-8'})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' not in content)
         self.assert_('Error in group data' in content)
+        self.assertEquals(request.applog, [])
+
+    def test_POST_groups_nonascii(self):
+        from schooltool.component import FacetManager
+        from schooltool.teaching import TeacherGroupFacet
+        request = RequestStub(args={'groups.csv':
+                                        '"year1","\xe2\x98\xbb","root",""',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': '',
+                                    'charset': 'UTF-8'})
+        content = self.view.do_POST(request)
+        self.assert_('Data imported successfully' in content)
+
+        self.assert_('year1' in self.app['groups'].keys())
+        self.assertEquals(self.app['groups']['year1'].title, u'\u263B')
+        self.assertEquals(request.applog,
+                      [(None, u'CSV data import started', INFO),
+                       (None, u'Imported group: year1', INFO),
+                       (None, u'CSV data import finished successfully', INFO)])
+
+    def test_POST_groups_wrong_charset(self):
+        from schooltool.component import FacetManager
+        from schooltool.teaching import TeacherGroupFacet
+        request = RequestStub(args={'groups.csv':'"year1","\xff","root",""',
+                                    'resources.csv': '',
+                                    'teachers.csv': '',
+                                    'pupils.csv': '',
+                                    'charset': 'UTF-8'})
+        content = self.view.do_POST(request)
+        self.assert_('incorrect charset' in content)
+        self.assert_('Data imported successfully' not in content)
         self.assertEquals(request.applog, [])
 
     def test_POST_resources(self):
         request = RequestStub(args={'resources.csv':'"Stool",""',
                                     'groups.csv': '',
                                     'teachers.csv': '',
-                                    'pupils.csv': ''})
+                                    'pupils.csv': '',
+                                    'charset': 'UTF-8'})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -107,7 +181,8 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'pupils.csv':'"A B","","1922-11-22",""',
                                     'groups.csv': '',
                                     'teachers.csv': '',
-                                    'resources.csv': ''})
+                                    'resources.csv': '',
+                                    'charset': 'UTF-8'})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -124,7 +199,8 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'teachers.csv':'"C D","","1922-11-22",""',
                                     'groups.csv': '',
                                     'pupils.csv': '',
-                                    'resources.csv': ''})
+                                    'resources.csv': '',
+                                    'charset': 'UTF-8'})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -164,7 +240,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.app['persons'] = self.persons
         self.app['resources'] = self.resources
 
-        self.im = CSVImporterZODB(self.app)
+        self.im = CSVImporterZODB(self.app, 'us-ascii')
 
     def test_init(self):
         self.assert_(self.im.groups is self.groups)

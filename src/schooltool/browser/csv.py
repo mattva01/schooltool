@@ -32,6 +32,7 @@ from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
 from schooltool.teaching import Teaching
 from schooltool.translation import ugettext as _
+from schooltool.browser.widgets import SelectionWidget, TextWidget
 
 
 class CSVImportView(View):
@@ -45,17 +46,66 @@ class CSVImportView(View):
     error = u""
     success = False
 
-    def do_POST(self, request):
-        groups_csv = to_unicode(request.args['groups.csv'][0])
-        resources_csv = to_unicode(request.args['resources.csv'][0])
-        teachers_csv = to_unicode(request.args['teachers.csv'][0])
-        pupils_csv = to_unicode(request.args['pupils.csv'][0])
+    charsets = [('UTF-8', _('Unicode (UTF-8)')),
+                ('ISO-8859-1', _('Western (ISO-8859-1)')),
+                ('ISO-8859-15', _('Western (ISO-8859-15)')),
+                ('Windows-1252', _('Western (Windows-1252)')),
+                ('', _('Other (please specify)'))]
 
-        if not (groups_csv or resources_csv or pupils_csv or teachers_csv):
-            self.error = _('No data provided')
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.charset_widget = SelectionWidget('charset', _('Charset'),
+                                              self.charsets,
+                                              validator=self.validate_charset)
+        self.other_charset_widget = TextWidget('other_charset',
+                                               _('Specify other'),
+                                               validator=self.validate_charset)
+
+    def validate_charset(self, charset):
+        if not charset:
+            return
+        try:
+            unicode(' ', charset)
+        except LookupError:
+            raise ValueError(_('Unknown charset'))
+
+    def do_POST(self, request):
+        self.charset_widget.update(request)
+        self.charset_widget.require()
+        if self.charset_widget.error:
             return self.do_GET(request)
 
-        importer = CSVImporterZODB(self.context)
+        self.other_charset_widget.update(request)
+        if not self.charset_widget.value:
+            if self.other_charset_widget.value == "":
+                # Force a "field is required" error if value is ""
+                self.other_charset_widget.setRawValue(None)
+            self.other_charset_widget.require()
+        if self.other_charset_widget.error:
+            return self.do_GET(request)
+
+        charset = self.charset_widget.value or self.other_charset_widget.value
+
+        groups_csv = request.args['groups.csv'][0]
+        resources_csv = request.args['resources.csv'][0]
+        teachers_csv = request.args['teachers.csv'][0]
+        pupils_csv = request.args['pupils.csv'][0]
+
+        if not (groups_csv or resources_csv or pupils_csv or teachers_csv):
+            self.error = _('No data provided.')
+            return self.do_GET(request)
+
+        try:
+            unicode(groups_csv, charset)
+            unicode(resources_csv, charset)
+            unicode(teachers_csv, charset)
+            unicode(pupils_csv, charset)
+        except UnicodeError:
+            self.error = _('Could not convert data to Unicode'
+                           ' (incorrect charset?).')
+            return self.do_GET(request)
+
+        importer = CSVImporterZODB(self.context, charset)
 
         try:
             if groups_csv:
@@ -84,11 +134,15 @@ class CSVImportView(View):
 class CSVImporterZODB(CSVImporterBase):
     """A CSV importer that works directly with the database."""
 
-    def __init__(self, app):
+    def __init__(self, app, charset):
         self.groups = app['groups']
         self.persons = app['persons']
         self.resources = app['resources']
         self.logs = []
+        self.charset = charset
+
+    def recode(self, value):
+        return unicode(value, self.charset)
 
     def importGroup(self, name, title, parents, facets):
         group = self.groups.new(__name__=name, title=title)
