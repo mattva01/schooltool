@@ -711,9 +711,10 @@ class Server:
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
 
+        logformat = "%(asctime)s [%(name)s] %(message)s"
         # ZODB should have a way to complain in case of trouble
-        self.setUpLogger('ZODB', self.config.error_log_file,
-                         "%(asctime)s [%(name)s] %(message)s")
+        self.setUpLogger('ZODB', self.config.error_log_file, logformat)
+        self.setUpLogger('txn', self.config.error_log_file, logformat)
 
         # Process any command line arguments that may override config file
         # settings here.
