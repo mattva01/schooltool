@@ -30,6 +30,7 @@ from zope.interface import implements
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
 from zope.app.container.contained import Contained
+from zope.app.container.interfaces import INameChooser
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.site.servicecontainer import ServiceManagerContainer
 from zope.app.location.interfaces import ILocation
@@ -99,6 +100,21 @@ class ResourceContainer(BTreeContainer):
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
             return self.__parent__
+
+class SimpleNameChooser(object):
+    """An adapter to set the name of an object same as objects title attribute.
+    """
+
+    implements(INameChooser)
+
+    def __init__(self, context):
+        self.context = context
+
+    def chooseName(self, name, object):
+        return object.title
+
+    def checkName(self, name, container):
+        return name not in container
 
 
 class Person(Persistent, Contained):

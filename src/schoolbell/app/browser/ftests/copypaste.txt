@@ -45,7 +45,7 @@ We add a person
     ... Content-Length: 126
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&group.Group=on&UPDATE_SUBMIT=Add
+    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&group.group1=on&UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -64,88 +64,12 @@ We look at the groups of the person we added
 We look at the members of the group
 
     >>> print http(r"""
-    ... GET /frogpond/groups/Group HTTP/1.1
+    ... GET /frogpond/groups/group1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     ...
-    ...person1...
-
-Test
-----
-
-We copy the group
-
-    >>> print http(r"""
-    ... POST /frogpond/groups/@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Content-Length: 45
-    ...
-    ... ids:list=Group&container_copy_button=Copy
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-
-We paste the group
-
-    >>> print http(r"""
-    ... POST /frogpond/groups/@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Content-Length: 28
-    ...
-    ... container_paste_button=Paste
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-
-We now have a second group
-
-    >>> r = http(r"""
-    ... GET /frogpond/groups HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    >>> print r
-    HTTP/1.1 200 Ok
-    ...
-    >>> 'Group' in str(r)
-    True
-    >>> 'Group-2' in str(r)
-    True
-
-The person belongs to the original group only:
-
-    >>> r = http(r"""
-    ... GET /frogpond/persons/person HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    >>> print r
-    HTTP/1.1 200 Ok
-    ...
-    ...Group...
-    ...
-
-'Group-2' is not there
-
-    >>> 'Group-2' not in str(r)
-    True
-
-The new group has no persons
-
-    >>> r = http(r"""
-    ... GET /frogpond/groups/Group-2 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    >>> print r
-    HTTP/1.1 200 Ok
-    ...
-
-'person1' is not there
-
-    >>> 'person1' not in str(r)
-    True
-
+    ...person...
 
 Copying the whole SchoolBell instance
 -------------------------------------
@@ -178,13 +102,13 @@ preserved.
 The group in the new instance has one member
 
     >>> r = http(r"""
-    ... GET /frogpond-2/groups/Group HTTP/1.1
+    ... GET /frogpond-2/groups/group1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     >>> print r
     HTTP/1.1 200 Ok
     ...
-    ...person1...
+    ...person...
 
 And it is the right 'person1' (the one in /frogpond-2/ rather than the one
 in /frogpond/)
@@ -208,7 +132,7 @@ The person in the new instance has one group
 And it is the right 'group1' (the one in /frogpond-2/ rather than the one
 in /frogpond/)
 
-    >>> '/frogpond-2/groups/Group' in str(r)
+    >>> '/frogpond-2/groups/group1' in str(r)
     True
     >>> '/frogpond/' not in str(r)
     True

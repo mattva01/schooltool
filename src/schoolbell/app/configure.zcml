@@ -27,6 +27,16 @@
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
+  <adapter
+      for=".interfaces.IResourceContainer"
+      factory=".app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter
+      for=".interfaces.IGroupContainer"
+      factory=".app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
   <content class=".app.Person">
     <require permission="zope.View"
              interface="schoolbell.app.interfaces.IReadPerson" />

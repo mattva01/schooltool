@@ -45,7 +45,7 @@ We add a person
     ... Content-Length: 126
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&group.Group=on&UPDATE_SUBMIT=Add
+    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&group.group1=on&UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -64,7 +64,7 @@ We look at the groups of the person we added
 We look at the members of the group
 
     >>> print http(r"""
-    ... GET /frogpond/groups/Group HTTP/1.1
+    ... GET /frogpond/groups/group1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -100,7 +100,7 @@ We look at the members of the group (this used to cause internal errors in an
 earlier version of SchoolBell)
 
     >>> r = http(r"""
-    ... GET /frogpond/groups/Group HTTP/1.1
+    ... GET /frogpond/groups/group1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     >>> print r
