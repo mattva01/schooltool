@@ -237,38 +237,84 @@ class IntervalSet:
 
     a and b can be numbers or something more exotic like datetime objects.
 
-    >>> i = IntervalSet(0, 10)
-    >>> list(i)
-    [(0, 10)]
-    >>> i.remove(5, 6)
-    >>> list(i)
-    [(0, 5), (6, 10)]
-    >>> i.remove(7, 4)
-    >>> list(i)
-    [(0, 5), (6, 10)]
-    >>> i.remove(-1, 1)
-    >>> list(i)
-    [(1, 5), (6, 10)]
-    >>> i.remove(9, 11)
-    >>> list(i)
-    [(1, 5), (6, 9)]
-    >>> i.remove(4, 7)
-    >>> list(i)
-    [(1, 4), (7, 9)]
-    >>> i.remove(11, 12)
-    >>> list(i)
-    [(1, 4), (7, 9)]
-    >>> i.remove(1, 4)
-    >>> list(i)
-    [(7, 9)]
-    >>> list(IntervalSet(0, 0))
-    []
-    >>> list(IntervalSet(1, 0))
-    []
+    First let us create a function to nicely print interval sets
+
+        >>> def p(intset):
+        ...     print ' '.join(['[%s, %s)' % pair for pair in intset])
+        ...
+
+    Initially the set contains exactly one interval.
+
+        >>> i = IntervalSet(0, 10)
+        >>> p(i)
+        [0, 10)
+
+    You can remove an interval from the set.
+
+        >>> i.remove(5, 6)
+        >>> p(i)
+        [0, 5) [6, 10)
+
+    Intervals [a, b) where a >= b, are empty, thus trying to remove them
+    is a NOP.
+
+        >>> i.remove(7, 4)
+        >>> p(i)
+        [0, 5) [6, 10)
+
+    You can check whether a given interval is a subset of the union of all
+    intervals in the set:
+
+        >>> i.contains(1, 2)
+        True
+        >>> i.contains(5, 6)
+        False
+        >>> i.contains(4, 6)
+        False
+        >>> i.contains(5, 7)
+        False
+
+    Empty intervals are always a subset.
+
+        >>> i.contains(20, 20)
+        True
+
+    The interval you want to remove does not necessarily have to be within the
+    set.
+
+        >>> i.remove(-1, 1)
+        >>> p(i)
+        [1, 5) [6, 10)
+
+        >>> i.remove(9, 11)
+        >>> p(i)
+        [1, 5) [6, 9)
+
+        >>> i.remove(4, 7)
+        >>> p(i)
+        [1, 4) [7, 9)
+
+        >>> i.remove(11, 12)
+        >>> p(i)
+        [1, 4) [7, 9)
+
+        >>> i.remove(1, 4)
+        >>> p(i)
+        [7, 9)
+
     """
 
     def __init__(self, start, end):
-        """Create an interval set containing one interval [start, end)."""
+        """Create an interval set containing one interval [start, end).
+
+        If start >= end, the set is empty.
+
+            >>> list(IntervalSet(0, 0))
+            []
+            >>> list(IntervalSet(1, 0))
+            []
+
+        """
         self._intervals = []
         if start < end:
             self._intervals.append((start, end))
@@ -276,7 +322,7 @@ class IntervalSet:
     def remove(self, start, end):
         """Remove interval [start, end) from the set.
 
-        Does nothing if start >= end
+        Does nothing if start >= end.
         """
         if start >= end:
             return
@@ -304,3 +350,15 @@ class IntervalSet:
         is true: b < c
         """
         return iter(self._intervals)
+
+    def contains(self, a, b):
+        """Is [a, b) within the union of all intervals in this set?"""
+        if a >= b:
+            return True # empty set is always a subset
+        for c, d in self:
+            if c <= a <= b <= d:
+                return True
+            if c > a:
+                return False # optimization: c will never become <= a
+        return False
+
