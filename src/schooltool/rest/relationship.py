@@ -24,12 +24,15 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 
 import libxml2
 from schooltool.interfaces import ComponentLookupError
+from schooltool.interfaces import ViewPermission
+from schooltool.interfaces import AddPermission
+from schooltool.interfaces import ModifyPermission
 from schooltool.uris import strURI, getURI, nameURI
 from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest import absoluteURL, absolutePath
-from schooltool.rest.auth import PublicAccess, PrivateACLAccess
+from schooltool.rest.auth import PublicAccess, ACLAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 from schooltool.common import to_unicode
@@ -47,7 +50,7 @@ class RelationshipsView(View):
 
     template = Template("www/relationships.pt", content_type="text/xml")
     schema = read_file("../schema/relationship.rng")
-    authorization = PrivateACLAccess
+    authorization = ACLAccess(get=ViewPermission, post=ModifyPermission)
 
     def listLinks(self):
         return [{'traverse': absolutePath(self.request, link.traverse()),
@@ -129,7 +132,7 @@ class LinkView(View):
     """A view on relationship links."""
 
     template = Template("www/link.pt", content_type="text/xml")
-    authorization = PrivateACLAccess
+    authorization = ACLAccess(get=ViewPermission, delete=ModifyPermission)
 
     def info(self):
         return {'role': strURI(self.context.role),

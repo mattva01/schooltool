@@ -147,13 +147,6 @@ class ACLAccess:
         return False
 
 
-# XXX badly named?
-PrivateACLAccess = ACLAccess(get=ViewPermission,
-                             put=AddPermission,
-                             post=ModifyPermission,
-                             delete=ModifyPermission)
-
-
 class CalendarACLAccessClass(ACLAccess):
 
     def __init__(self):

@@ -176,10 +176,16 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         """
         self.do_test_access(PrivateAccess, access, self.simpleuser.calendar)
 
-    def test_PrivateACLAccess(self):
-        from schooltool.rest.auth import PrivateACLAccess
+    def test_ACLAccess(self):
+        from schooltool.rest.auth import ACLAccess
         from schooltool.interfaces import ViewPermission, AddPermission
         from schooltool.interfaces import ModifyPermission
+
+        PrivateACLAccess = ACLAccess(get=ViewPermission,
+                                     put=AddPermission,
+                                     post=ModifyPermission,
+                                     delete=ModifyPermission)
+
         access = """
                     GET     HEAD    PUT     POST    DELETE  OTHER
         anonymous    -       -       -       -        -       -
