@@ -1,0 +1,36 @@
+#
+# Schooltool SSL config file.
+# This config file will be used when generating or re-generating the 
+# SSL certs.
+#
+
+# This definition stops the following lines choking if HOME isn't
+# defined.
+HOME			= .
+
+[ req ]
+default_bits		= 1024
+default_keyfile 	= privkey.pem
+distinguished_name	= req_distinguished_name
+x509_extensions	        = v3_ca	# The extentions to add to the self signed cert
+prompt                  = no
+
+[ req_distinguished_name ]
+# Setup variables which are replaced by maintainer scripts.
+countryName                     = @countryname@
+stateOrProvinceName             = @statename@
+localityName                    = @localityname@
+organizationName                = @organisationname@
+organizationalUnitName          = @ouname@
+commonName                      = @hostname@
+emailAddress                    = @email@
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+[ v3_ca ]
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer:always
+basicConstraints = CA:true
