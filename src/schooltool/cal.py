@@ -232,7 +232,7 @@ class TimetableDay:
         self.activities = {}
 
     def keys(self):
-        return list(self.periods)
+        return self.activities.keys()
 
     def items(self):
         return [(period, self.activities.get(period, None))
@@ -331,10 +331,11 @@ class BaseTimetableModel:
                 day_template = self._getTemplateForDay(date)
                 for period in day_template:
                     dt = datetime.datetime.combine(date, period.tstart)
-                    activity = timetable[day_id][period.title]
-                    event = CalendarEvent(dt, period.duration,
-                                          activity.title)
-                    cal.addEvent(event)
+                    if period.title in timetable[day_id].keys():
+                        activity = timetable[day_id][period.title]
+                        event = CalendarEvent(dt, period.duration,
+                                              activity.title)
+                        cal.addEvent(event)
         return cal
 
     def _getTemplateForDay(self, date):
@@ -389,12 +390,13 @@ class WeeklyTimetableModel(BaseTimetableModel):
 
     timetableDayIds = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
 
-    def __init__(self, day_templates):
+    def __init__(self, day_ids=None, day_templates={}):
         self.dayTemplates = day_templates
+        if day_ids is not None:
+            self.timetableDayIds = day_ids
 
     def schooldayStrategy(self, date, generator):
-        return {0: "Monday", 1: "Tuesday", 2: "Wednesday",
-                3: "Thursday", 4: "Friday"}[date.weekday()]
+        return self.timetableDayIds[date.weekday()]
 
     def _dayGenerator(self):
         return None

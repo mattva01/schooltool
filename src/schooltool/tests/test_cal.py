@@ -567,7 +567,7 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
 
         tt["Friday"]["1"] = TimetableActivity("Geography")
         tt["Friday"]["2"] = TimetableActivity("Drawing")
-        tt["Friday"]["3"] = TimetableActivity("History")
+        # skip! tt["Friday"]["3"] = TimetableActivity("History")
         tt["Friday"]["4"] = TimetableActivity("Math")
 
         t, td = time, timedelta
@@ -577,7 +577,7 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         template.add(SchooldayPeriod('3', t(10, 50), td(minutes=45)))
         template.add(SchooldayPeriod('4', t(12, 0), td(minutes=45)))
 
-        model = WeeklyTimetableModel({None: template})
+        model = WeeklyTimetableModel(day_templates={None: template})
         verifyObject(ITimetableModel, model)
 
         cal = model.createCalendar(SchooldayModelStub(), tt)
@@ -591,7 +591,7 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
              datetime(2003, 11, 20, 12, 00): "Math"},
             {datetime(2003, 11, 21, 9, 0): "Geography",
              datetime(2003, 11, 21, 9, 50): "Drawing",
-             datetime(2003, 11, 21, 10, 50): "History",
+             # skip! datetime(2003, 11, 21, 10, 50): "History",
              datetime(2003, 11, 21, 12, 00): "Math"},
             {}, {},
             {datetime(2003, 11, 24, 9, 0): "English",

@@ -24,14 +24,15 @@ $Id$
 """
 import datetime
 import calendar
+import sys
 from sets import Set
 from cal import Timetable, TimetableDay, TimetableActivity
 from cal import SchooldayModel, SchooldayPeriod, SchooldayTemplate
-from cal import SequentialDaysTimetableModel
+from cal import SequentialDaysTimetableModel, WeeklyTimetableModel
 
 
-class Config:
-    """Hard-coded timetable configuration."""
+class TomHoffmanConfig:
+    """Hard-coded timetable configuration for a model Tom Hoffman told of."""
 
     days = ("1A", "2E", "3A", "4E")
 
@@ -79,6 +80,66 @@ class Config:
                                datetime.date(2003, 11, 11), # Veteran's day
                                )
                   }
+    timetable_model_factory = SequentialDaysTimetableModel
+
+
+class LithuanianConfig:
+    """Hard-coded timetable configuration for a model used in
+    Lithuanian schools.
+    """
+
+    # Names of the timetable weekdays, starting from Monday.
+    days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+    timetable = { "Monday" : { "1": "Science",
+                               "2": "Mathematics",
+                               "3": "Beginning Spanish",
+                               "4": "English",
+                               "5": "Physics"},
+                  "Tuesday" : { "1": "English",
+                                "2": "History",
+                                "3": "Chemistry",
+                                "4": "Music",
+                                "5": "History"},
+                  "Wednesday" : { "1": "Science",
+                                  "2": "Mathematics",
+                                  "3": "Russian",
+                                  "4": "History"},
+                  "Thursday" : { "0": "Ethics",
+                                 "1": "English",
+                                 "2": "Biology",
+                                 "3": "Mathematics",
+                                 "4": "Music"},
+                  "Friday" : { "1": "English",
+                               "2": "Social studies",
+                               "3": "Mathematics",
+                               "4": "Lithuanian",
+                               "5": "Lithuanian",}}
+
+    normal_day = {"title": "Normal day",
+                  "0": (datetime.time(8, 10), datetime.timedelta(minutes=45)),
+                  "1": (datetime.time(9, 0), datetime.timedelta(minutes=45)),
+                  "2": (datetime.time(9, 50), datetime.timedelta(minutes=45)),
+                  "3": (datetime.time(10, 45), datetime.timedelta(minutes=45)),
+                  "4": (datetime.time(11, 50), datetime.timedelta(minutes=45)),
+                  "5": (datetime.time(12, 50), datetime.timedelta(minutes=45)),
+                  "6": (datetime.time(13, 45), datetime.timedelta(minutes=45)),
+                  "7": (datetime.time(14, 35), datetime.timedelta(minutes=45)),
+                  }
+
+    day_templates = {"default": normal_day}
+
+    schooldays = {'first': datetime.date(2003, 9, 1),
+                  'last': datetime.date(2003, 11, 30),
+                  # Weekdays that are schooldays
+                  'weekdays': (calendar.MONDAY, calendar.TUESDAY,
+                               calendar.WEDNESDAY, calendar.THURSDAY,
+                               calendar.FRIDAY),
+                  # Exceptions -- holidays
+                  'holidays': (datetime.date(2003, 11, 1), # All saints
+                               )
+                  }
+    timetable_model_factory = WeeklyTimetableModel
 
 
 def createSchooldayModel(config):
@@ -116,7 +177,7 @@ def createTimetableModel(config):
         if weekday == "default":
             weekday = None
         dtemplates[weekday] = dt
-    return SequentialDaysTimetableModel(config.days, dtemplates)
+    return config.timetable_model_factory(config.days, dtemplates)
 
 
 class PrintPacker:
@@ -170,7 +231,7 @@ def printCalendar(cal, model):
         events = list(daycal)
         if events:
             day = model.schooldayStrategy(date, gen)
-            s = "%s %s" % (day, date.strftime('%A %Y-%m-%d'))
+            s = "%s %s" % (day[:3], date.strftime('%A %Y-%m-%d'))
             pp.printLine(s)
             pp.printLine("=" * len(s))
             L = [(e.dtstart, e) for e in events]
@@ -205,7 +266,7 @@ def printCalendarSummary(cal, model):
         daycal = cal.byDate(date)
         events = list(daycal)
         if events:
-            day = model.schooldayStrategy(date, gen).title()
+            day = model.schooldayStrategy(date, gen).title()[:2]
             length = model._getTemplateForDay(date).title[0]
         else:
             day = "--"
@@ -244,7 +305,8 @@ def printCalendarSummary(cal, model):
             week_type = ['']
             week_nr = ['']
     if week_nr:
-        if date.weekday():
+        weekday = (date.weekday() + 1) % 7
+        if weekday:
             week_type += [' ' * 4] * (6 - date.weekday()) + ['']
             week_nr += [' ' * 4] * (6 - date.weekday()) + ['']
             pp.printLine("|".join(week_nr))
@@ -254,9 +316,19 @@ def printCalendarSummary(cal, model):
 
 
 def main():
-    scoolday_model = createSchooldayModel(Config)
-    timetable_model = createTimetableModel(Config)
-    timetable = createTimetable(Config)
+    config = TomHoffmanConfig
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "-lt":
+            config = LithuanianConfig
+        elif sys.argv[1] == "-hof":
+            config = TomHoffmanConfig
+        else:
+            print "Only -lt and -hof switches are allowed."
+            sys.exit(1)
+
+    scoolday_model = createSchooldayModel(config)
+    timetable_model = createTimetableModel(config)
+    timetable = createTimetable(config)
 
     cal = timetable_model.createCalendar(scoolday_model, timetable)
 
@@ -274,7 +346,6 @@ def main():
     print
 
     printCalendar(cal, timetable_model)
-
 
 
 if __name__ == '__main__':
