@@ -337,8 +337,9 @@
                 <input type="checkbox" name="overlay"
                        tal:attributes="value python:view.getValue(cal);
                               checked python:view.checkedOverlay(cal)" />
-                <span tal:replace="cal/title"/>
               </label>
+              <a href="" tal:content="cal/title"
+                  tal:attributes="href string:${cal/@@absolute_url}/calendar" />
             </div>
           </tal:loop>
           <input name="OVERLAY" type="submit" value="Overlay"
