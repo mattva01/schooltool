@@ -43,8 +43,13 @@ class ConnectionFactory:
         self.error = error
         self.connections = []
 
-    def __call__(self, server, port):
-        c = ConnectionStub(server, port, self.response, self.error)
+    def create(self, server, port):
+        c = ConnectionStub(server, port, self.response, self.error, False)
+        self.connections.append(c)
+        return c
+
+    def createSSL(self, server, port):
+        c = ConnectionStub(server, port, self.response, self.error, True)
         self.connections.append(c)
         return c
 
@@ -55,22 +60,29 @@ class MultiConnectionFactory:
         self.responses = responses
         self.connections = []
 
-    def __call__(self, server, port):
+    def create(self, server, port):
         n = len(self.connections)
-        c = ConnectionStub(server, port, self.responses[n], None)
+        c = ConnectionStub(server, port, self.responses[n], None, False)
+        self.connections.append(c)
+        return c
+
+    def createSSL(self, server, port):
+        n = len(self.connections)
+        c = ConnectionStub(server, port, self.responses[n], None, True)
         self.connections.append(c)
         return c
 
 
 class ConnectionStub:
 
-    def __init__(self, server, port, response, error):
+    def __init__(self, server, port, response, error, ssl):
         self.server = server
         self.port = port
         self.response = response
         self.error = error
         self.closed = False
         self.request_called = False
+        self.ssl = ssl
 
     def request(self, method, path, body=None, headers=None):
         if self.request_called:
@@ -130,27 +142,33 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
     def newClient(self, response=None, error=None):
         from schooltool.clients.guiclient import SchoolToolClient
         client = SchoolToolClient()
-        client.connectionFactory = ConnectionFactory(response, error)
+        factory = ConnectionFactory(response, error)
+        client._connections = factory.connections
+        client.connectionFactory = factory.create
+        client.secureConnectionFactory = factory.createSSL
         return client
 
     def newClientMulti(self, responses):
         from schooltool.clients.guiclient import SchoolToolClient
         client = SchoolToolClient()
-        client.connectionFactory = MultiConnectionFactory(responses)
+        factory = MultiConnectionFactory(responses)
+        client._connections = factory.connections
+        client.connectionFactory = factory.create
+        client.secureConnectionFactory = factory.createSSL
         return client
 
     def oneConnection(self, client):
-        self.assertEquals(len(client.connectionFactory.connections), 1)
-        return client.connectionFactory.connections[0]
+        self.assertEquals(len(client._connections), 1)
+        return client._connections[0]
 
     def checkConnPath(self, client, path):
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, path)
 
     def checkConnPaths(self, client, paths):
-        self.assertEquals(len(client.connectionFactory.connections),
+        self.assertEquals(len(client._connections),
                           len(paths))
-        for conn, path in zip(client.connectionFactory.connections, paths):
+        for conn, path in zip(client._connections, paths):
             self.assertEquals(conn.path, path)
 
     def test_setServer(self):
@@ -166,8 +184,28 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         conn = self.oneConnection(client)
         self.assertEquals(conn.server, server)
         self.assertEquals(conn.port, port)
+        self.assertEquals(conn.ssl, False)
         self.assertEquals(client.server, server)
         self.assertEquals(client.port, port)
+        self.assertEquals(client.ssl, False)
+
+    def test_setServer_SSL(self):
+        from schooltool.clients.guiclient import SchoolToolClient
+        server = 'example.com'
+        port = 8443
+        version = 'UnitTest/0.0'
+        response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
+        client = self.newClient(response)
+        client.setServer(server, port, ssl=True)
+        self.assertEquals(client.status, '200 OK')
+        self.assertEquals(client.version, version)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.server, server)
+        self.assertEquals(conn.port, port)
+        self.assertEquals(conn.ssl, True)
+        self.assertEquals(client.server, server)
+        self.assertEquals(client.port, port)
+        self.assertEquals(client.ssl, True)
 
     def test_setUser(self):
         from schooltool.clients.guiclient import SchoolToolClient
@@ -855,15 +893,15 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             ResponseStub(200, 'OK', 'Password set')])
         result = client.createPerson('John "mad cat" Doe', "root", "foo")
         self.assertEquals(result, '/persons/root')
-        self.assertEquals(len(client.connectionFactory.connections), 2)
-        conn = client.connectionFactory.connections[0]
+        self.assertEquals(len(client._connections), 2)
+        conn = client._connections[0]
         self.assertEquals(conn.path, '/persons/root')
         self.assertEquals(conn.method, 'PUT')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
                        ' title="John &quot;mad cat&quot; Doe"/>')
-        conn = client.connectionFactory.connections[1]
+        conn = client._connections[1]
         self.assertEquals(conn.path, '/persons/root/password')
         self.assertEquals(conn.method, 'PUT')
         self.assertEqualsXML(conn.body, 'foo')

@@ -272,6 +272,8 @@ class ServerSettingsDlg(wxDialog):
         self.serverTextCtrl = wxTextCtrl(self, -1, "localhost")
         self.portLabel = wxStaticText(self, -1, _("Port"))
         self.portTextCtrl = wxTextCtrl(self, -1, "7001")
+        self.secureConnectionLabel = wxStaticText(self, -1, _("Use SSL"))
+        self.secureConnectionCtrl = wxCheckBox(self, -1, "")
         self.userLabel = wxStaticText(self, -1, _("Username"))
         self.userTextCtrl = wxTextCtrl(self, -1, "")
         self.passwordLabel = wxStaticText(self, -1, _("Password"))
@@ -304,6 +306,10 @@ class ServerSettingsDlg(wxDialog):
         mainSizer.Add(self.portLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
         mainSizer.Add(self.portTextCtrl, 0,
                       wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+        mainSizer.Add(self.secureConnectionLabel, 2,
+                      wxALIGN_CENTER_VERTICAL, 0)
+        mainSizer.Add(self.secureConnectionCtrl, 0,
+                      wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
         mainSizer.Add(self.userLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
         mainSizer.Add(self.userTextCtrl, 0,
                       wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
@@ -333,6 +339,12 @@ class ServerSettingsDlg(wxDialog):
 
     def setPort(self, value):
         self.portTextCtrl.SetValue(str(value))
+
+    def getSecureConnection(self):
+        return self.secureConnectionCtrl.IsChecked()
+
+    def setSecureConnection(self, value):
+        self.secureConnectionCtrl.SetValue(value)
 
     def getUser(self):
         return from_wx(self.userTextCtrl.GetValue())
@@ -2111,8 +2123,10 @@ class MainFrame(wxFrame):
         dlg = ServerSettingsDlg(self)
         dlg.setServer(self.client.server)
         dlg.setPort(self.client.port)
+        dlg.setSecureConnection(self.client.ssl)
         if dlg.ShowModal() == wxID_OK:
-            self.client.setServer(dlg.getServer(), dlg.getPort())
+            self.client.setServer(dlg.getServer(), dlg.getPort(),
+                                  dlg.getSecureConnection())
             self.client.setUser(dlg.getUser(), dlg.getPassword())
             self.DoRefresh()
         dlg.Destroy()

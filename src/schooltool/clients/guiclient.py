@@ -107,24 +107,28 @@ class SchoolToolClient:
     path within the server.
     """
 
-    connectionFactory = httplib.HTTPConnection
-
     server = 'localhost'
     port = 7001
     user = None
+    ssl = False
     password = ''
     status = ''
     version = ''
 
+    # Hooks for unit tests.
+    connectionFactory = httplib.HTTPConnection
+    secureConnectionFactory = httplib.HTTPSConnection
+
     # Generic HTTP methods
 
-    def setServer(self, server, port):
+    def setServer(self, server, port, ssl=False):
         """Set the server name and port number.
 
         Tries to connect to the server and sets the status message.
         """
         self.server = server
         self.port = port
+        self.ssl = ssl
         self.tryToConnect()
 
     def setUser(self, user, password):
@@ -194,7 +198,10 @@ class SchoolToolClient:
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        conn = self.connectionFactory(self.server, self.port)
+        if self.ssl:
+            conn = self.secureConnectionFactory(self.server, self.port)
+        else:
+            conn = self.connectionFactory(self.server, self.port)
         try:
             hdrs = {}
             if body:
