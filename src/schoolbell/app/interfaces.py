@@ -39,10 +39,19 @@ $Id$
 """
 
 from zope.interface import Interface, Attribute
-from zope.schema import TextLine, Bytes
+from zope.schema import TextLine, Bytes, Object
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
+from schoolbell.calendar.interfaces import ICalendar
+
+
+class ICalendarOwner(Interface):
+    """An object that has a calendar."""
+
+    calendar = Object(
+        title=u"The object's calendar.",
+        schema=ICalendar)
 
 
 class IAdaptableToSchoolBellApplication(Interface):
@@ -97,7 +106,7 @@ class IWritePerson(Interface):
         """
 
 
-class IPerson(IReadPerson, IWritePerson):
+class IPerson(IReadPerson, IWritePerson, ICalendarOwner):
     """Person.
 
     A person has a number of informative fields such as name, an optional

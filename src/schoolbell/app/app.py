@@ -36,6 +36,7 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
+from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.relationship import RelationshipProperty
 
@@ -102,6 +103,7 @@ class Person(Persistent, Contained):
 
     def __init__(self, title=None):
         self.title = title
+        self.calendar = Calendar()
 
     def setPassword(self, password):
         self._hashed_password = hash_password(password)
