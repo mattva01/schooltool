@@ -177,6 +177,14 @@ def setup(options):
     setUpLogger(None, options.config.error_log_file)
     setUpLogger('accesslog', options.config.web_access_log_file)
 
+    # Shut up ZODB lock_file, because it logs tracebacks when unable
+    # to lock the database file, and we don't want that.
+    logging.getLogger('ZODB.lock_file').disabled = True
+
+    # ZODB should have a channel to complain in case of trouble
+    setUpLogger('ZODB', options.config.error_log_file)
+    setUpLogger('txn', options.config.error_log_file)
+
     # Process ZCML
     configure()
 
