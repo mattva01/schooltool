@@ -3,12 +3,12 @@
   <tal:block condition="editable">
     <div class="dellink">
       <a tal:attributes="href
-              string:delete_event.html?event_id=${context/unique_id}"
+              string:delete_event.html?event_id=${view/uniqueId}"
          >[delete]</a>
     </div>
     <h3>
       <a tal:attributes="href
-              string:edit_event.html?event_id=${context/unique_id}"
+              string:edit_event.html?event_id=${view/uniqueId}"
          tal:content="context/title" >
       </a>
     </h3>

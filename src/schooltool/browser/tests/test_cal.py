@@ -1035,24 +1035,25 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import CalendarEventView
         ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
                            timedelta(hours=1), "Main event",
-                           unique_id="id")
+                           unique_id="id!")
         view = CalendarEventView(ev)
         request = RequestStub()
 
         content = view.render(request)
-        expected = ('<div class="calevent">\n'
-                    '  \n'
-                    '    <div class="dellink">\n'
-                    '      <a href="delete_event.html?event_id=id">[delete]</a>\n'
-                    '    </div>\n'
-                    '    <h3>\n'
-                    '      <a href="edit_event.html?event_id=id">Main event</a>\n'
-                    '    </h3>\n'
-                    '  \n'
-                    '  \n'
-                    '  12:01&ndash;13:01\n'
-                    '  \n'
-                    '</div>\n')
+        expected = (
+                '<div class="calevent">\n'
+                '  \n'
+                '    <div class="dellink">\n'
+                '      <a href="delete_event.html?event_id=id%21">[delete]</a>\n'
+                '    </div>\n'
+                '    <h3>\n'
+                '      <a href="edit_event.html?event_id=id%21">Main event</a>\n'
+                '    </h3>\n'
+                '  \n'
+                '  \n'
+                '  12:01&ndash;13:01\n'
+                '  \n'
+                '</div>\n')
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
 
@@ -1121,6 +1122,16 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         view = CalendarEventView(ev)
         self.assertEquals(view.short(),
                           'Long event (Dec&nbsp;01&ndash;Dec&nbsp;02)')
+
+    def test_uniqueId(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.browser.cal import CalendarEventView
+
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(hours=1), "Main event",
+                           unique_id="Weird@stuff!")
+        view = CalendarEventView(ev)
+        self.assertEquals(view.uniqueId(), 'Weird%40stuff%21')
 
 
 def test_suite():

@@ -22,6 +22,7 @@ Browser views for calendaring.
 $Id$
 """
 
+import urllib
 from datetime import datetime, date, time, timedelta
 from sets import Set
 from zope.interface import implements
@@ -736,7 +737,7 @@ class CalendarEventView(View):
             return 'event'
 
     def short(self):
-        """Short representation of the event for the monthly view"""
+        """Short representation of the event for the monthly view."""
         ev = self.context
         end = ev.dtstart + ev.duration
         if ev.dtstart.date() == end.date():
@@ -747,3 +748,6 @@ class CalendarEventView(View):
             return "%s (%s&ndash;%s)" % (ev.title,
                                          ev.dtstart.strftime('%b&nbsp;%d'),
                                          end.strftime('%b&nbsp;%d'))
+
+    def uniqueId(self):
+        return urllib.quote(self.context.unique_id)
