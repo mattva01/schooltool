@@ -495,24 +495,33 @@
       file="resources/icon.png"
       />
 
-  <!-- XXX resources are global for all Zope 3, we should use more specific
-       names -->
+  <resource name="layout.css" file="resources/layout.css"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="style.css" file="resources/style.css"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="logo.png" file="resources/schoolbell.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="schoolbell.js" file="resources/schoolbell.js"
+            layer=".skin.ISchoolBellLayer" />
 
-  <resource name="layout.css" file="resources/layout.css" />
-  <resource name="style.css" file="resources/style.css" />
-  <resource name="logo.png" file="resources/schoolbell.png" />
-  <resource name="schoolbell.js" file="resources/schoolbell.js" />
+  <resource name="previous.png" file="resources/previous.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="current.png" file="resources/current.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="next.png" file="resources/next.png"
+            layer=".skin.ISchoolBellLayer" />
 
-  <resource name="previous.png" file="resources/previous.png" />
-  <resource name="current.png" file="resources/current.png" />
-  <resource name="next.png" file="resources/next.png" />
+  <resource name="day.png" file="resources/day.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="week.png" file="resources/week.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="month.png" file="resources/month.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="year.png" file="resources/year.png"
+            layer=".skin.ISchoolBellLayer" />
 
-  <resource name="day.png" file="resources/day.png" />
-  <resource name="week.png" file="resources/week.png" />
-  <resource name="month.png" file="resources/month.png" />
-  <resource name="year.png" file="resources/year.png" />
-
-  <resource name="delete.png" file="resources/delete.png" />
+  <resource name="delete.png" file="resources/delete.png"
+            layer=".skin.ISchoolBellLayer" />
 
 <!-- Navigation -->
 
