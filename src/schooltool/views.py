@@ -273,6 +273,11 @@ class GroupView(ApplicationObjectTraverserView):
 
     template = Template("www/group.pt", content_type="text/xml")
 
+    def _traverse(self, name, request):
+        if name == 'rollcall':
+            return RollcallView(self.context)
+        return ApplicationObjectTraverserView._traverse(self, name, request)
+
     def listItems(self):
         for item in getRelatedObjects(self.context, URIMember):
             yield {'title': item.title, 'path': getPath(item)}
@@ -746,6 +751,25 @@ class AbsenceView(View, AbsenceCommentParser):
             return "Cannot reopen an absence when another one is not resolved"
         request.setHeader('Content-Type', 'text/plain')
         return "Comment added"
+
+
+class RollcallView(View):
+
+    template = Template('www/rollcall.pt', content_type="text/xml")
+
+    def groupPath(self):
+        return getPath(self.context)
+
+    def listPersons(self, group=None):
+        if group is None:
+            group = self.context
+        results = []
+        for member in getRelatedObjects(group, URIMember):
+            if IPerson.isImplementedBy(member):
+                results.append({'title': member.title, 'href': getPath(member)})
+            if IGroup.isImplementedBy(member):
+                results.extend(self.listPersons(member))
+        return results
 
 
 def setUp():

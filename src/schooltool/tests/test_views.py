@@ -367,6 +367,26 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
 
+    def test_traverse(self):
+        from schooltool.views import RelationshipsView, FacetManagementView
+        from schooltool.views import RollcallView
+        from schooltool.interfaces import IFacetManager
+        request = RequestStub("http://localhost/group")
+
+        result = self.view._traverse('relationships', request)
+        self.assert_(isinstance(result, RelationshipsView))
+        self.assert_(result.context is self.group)
+
+        result = self.view._traverse('facets', request)
+        self.assert_(isinstance(result, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(result.context))
+
+        result = self.view._traverse("rollcall", request)
+        self.assert_(isinstance(result, RollcallView))
+        self.assert_(result.context is self.group)
+
+        self.assertRaises(KeyError, self.view._traverse, "otherthings", request)
+
 
 class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
 
@@ -1433,6 +1453,59 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(len(absence.comments), 2)
 
 
+class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.group = app['groups'].new("root", title="group")
+        self.sub = app['groups'].new("subgroup", title="subgroup")
+        self.subsub = app['groups'].new("subsubgroup", title="subsubgroup")
+        self.persona = app['persons'].new("a", title="a")
+        self.personb = app['persons'].new("b", title="b")
+        self.personc = app['persons'].new("c", title="c")
+
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.sub, member=self.subsub)
+        Membership(group=self.group, member=self.persona)
+        Membership(group=self.sub, member=self.personb)
+        Membership(group=self.subsub, member=self.personc)
+
+    def test_get(self):
+        from schooltool.views import RollcallView
+        from schooltool.model import Group
+        view = RollcallView(self.group)
+        request = RequestStub("http://localhost/group/rollcall")
+        result = view.render(request)
+        expected = dedent("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root">
+            ---8<---
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a"/>
+            ---8<---
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b"/>
+            ---8<---
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c"/>
+            ---8<---
+            </rollcall>
+            """)
+        for segment in expected.split("---8<---\n"):
+            self.assert_(segment in result, segment)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestHelpers))
@@ -1455,6 +1528,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAbsenceManagementView))
     suite.addTest(unittest.makeSuite(TestAbsenceView))
     suite.addTest(unittest.makeSuite(TestAbsenceCommentParser))
+    suite.addTest(unittest.makeSuite(TestRollcallView))
     return suite
 
 if __name__ == '__main__':

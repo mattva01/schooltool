@@ -1,0 +1,9 @@
+<rollcall xmlns:tal="http://xml.zope.org/namespaces/tal"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xlink:type="simple" xlink:title="group"
+          tal:attributes="xlink:href view/groupPath">
+  <person tal:repeat="person view/listPersons"
+          xlink:type="simple"
+          tal:attributes="xlink:title person/title;
+                          xlink:href person/href"/>
+</rollcall>
