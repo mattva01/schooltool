@@ -39,18 +39,18 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
     def createView(self):
         from schooltool.browser.cal import BookingView
         view = BookingView(self.resource)
-        view.authorization = lambda ctx, rq: True
         return view
 
     def test_render(self):
         view = self.createView()
-        request = RequestStub()
+        request = RequestStub(authenticated_user=self.teacher)
         content = view.render(request)
         self.assert_('Book' in content)
 
     def test_book(self):
         view = self.createView()
-        request = RequestStub(args={'conflicts': 'ignore',
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'conflicts': 'ignore',
                                     'start': '2004-08-10 19:01:00',
                                     'mins': '61',
                                     'BOOK': 'Book'})
@@ -64,22 +64,22 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
     def test_owner(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager,
-                              args={'owner': 'johndoe',
+                              args={'owner': 'teacher',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
                                     'duration': '61',
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
         self.assert_("Only managers can set the owner" not in content)
-        self.assert_("Invalid owner: johndoe" not in content)
+        self.assert_("Invalid owner: teacher" not in content)
 
-        ev1 = iter(self.person.calendar).next()
-        self.assert_(ev1.owner is self.person,
-                     "%r is not %r" % (ev1.owner, self.person))
+        ev1 = iter(self.teacher.calendar).next()
+        self.assert_(ev1.owner is self.teacher,
+                     "%r is not %r" % (ev1.owner, self.teacher))
 
     def test_owner_forbidden(self):
         view = self.createView()
-        request = RequestStub(authenticated_user=self.person,
+        request = RequestStub(authenticated_user=self.teacher,
                               args={'owner': 'whatever',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
@@ -107,7 +107,7 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
 
     def test_confirm_book(self):
         view = self.createView()
-        request = RequestStub(authenticated_user=self.person,
+        request = RequestStub(authenticated_user=self.teacher,
                               args={'conflicts': 'ignore',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
@@ -117,20 +117,20 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         self.assert_('Resource booked' in content)
         self.assertEquals(view.error, "")
         self.assertEquals(request.applog,
-                [(self.person,
+                [(self.teacher,
                   u'/resources/resource (Kitchen sink) booked by'
-                  u' /persons/johndoe (John Doe) at 2004-08-10 19:01:00'
+                  u' /persons/teacher (Prof. Bar) at 2004-08-10 19:01:00'
                   u' for 1:01:00', INFO)])
 
-        self.assertEquals(len(list(self.person.calendar)), 1)
+        self.assertEquals(len(list(self.teacher.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 1)
-        ev1 = iter(self.person.calendar).next()
+        ev1 = iter(self.teacher.calendar).next()
         ev2 = iter(self.resource.calendar).next()
         self.assertEquals(ev1, ev2)
         self.assert_(ev1.context is self.resource,
                      "%r is not %r" % (ev1.context, self.resource))
-        self.assert_(ev1.owner is self.person,
-                     "%r is not %r" % (ev1.owner, self.person))
+        self.assert_(ev1.owner is self.teacher,
+                     "%r is not %r" % (ev1.owner, self.teacher))
 
     def test_conflict(self):
         from schooltool.cal import CalendarEvent
@@ -138,11 +138,12 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         ev = CalendarEvent(parse_datetime('2004-08-10 19:00:00'),
                            datetime.timedelta(hours=1), "Some event")
         self.resource.calendar.addEvent(ev)
-        self.assertEquals(len(list(self.person.calendar)), 0)
+        self.assertEquals(len(list(self.teacher.calendar)), 0)
         self.assertEquals(len(list(self.resource.calendar)), 1)
 
         view = self.createView()
-        request = RequestStub(args={'start_date': '2004-08-10',
+        request = RequestStub(authenticated_user=self.teacher,
+                              args={'start_date': '2004-08-10',
                                     'start_time': '19:20',
                                     'duration': '61',
                                     'CONFIRM_BOOK': 'Book'})

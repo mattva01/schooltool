@@ -43,7 +43,7 @@ class BookingView(View):
 
     error = u""
 
-    owner = u""
+    owner_name = u""
     start_date = u""
     start_time = u""
     duration = u""
@@ -51,7 +51,6 @@ class BookingView(View):
     booked = False
 
     def update(self):
-        # XXX This method is too large and needs to be cleaned up.
         request = self.request
         if 'CONFIRM_BOOK' not in request.args:
             if 'start' in request.args:
@@ -78,15 +77,15 @@ class BookingView(View):
                 self.error = _("Only managers can set the owner")
                 return
             persons = traverse(self.context, '/persons')
-            owner_name = to_unicode(request.args['owner'][0])
+            self.owner_name = owner_name = to_unicode(request.args['owner'][0])
             try:
                 owner = persons[owner_name]
             except KeyError:
                 self.error = _("Invalid owner: %s") % owner_name
                 return
-            self.owner = owner
         else:
             owner = request.authenticated_user
+            self.owner_name = owner.__name__
 
         try:
             arg = 'start_date'
@@ -104,18 +103,21 @@ class BookingView(View):
             self.error = _("%r argument incorrect") % arg
             return
 
+        self.booked = self.book(owner, start, duration, force=force)
+
+    def book(self, owner, start, duration, force=False):
         if not force:
             p = Period(start, duration)
             for e in self.context.calendar:
                 if p.overlaps(Period(e.dtstart, e.duration)):
                     self.error = _("The resource is busy at specified time")
-                    return
+                    return False
 
         title = _('%s booked by %s') % (self.context.title, owner.title)
         ev = CalendarEvent(start, duration, title, owner, self.context)
         self.context.calendar.addEvent(ev)
         owner.calendar.addEvent(ev)
-        request.appLog(_("%s (%s) booked by %s (%s) at %s for %s") %
-                       (getPath(self.context), self.context.title,
-                        getPath(owner), owner.title, start, duration))
-        self.booked = True
+        self.request.appLog(_("%s (%s) booked by %s (%s) at %s for %s") %
+                            (getPath(self.context), self.context.title,
+                             getPath(owner), owner.title, start, duration))
+        return True

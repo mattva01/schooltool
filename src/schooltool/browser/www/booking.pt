@@ -20,7 +20,7 @@
     <div class="row" tal:condition="view/isManager">
       <label for="owner">Owner</label>
       <input id="owner" name="owner" type="text"
-             tal:attributes="value request/authenticated_user/__name__" />
+             tal:attributes="value view/owner_name" />
     </div>
     <div class="row">
       <label for="start_date">Date</label>
