@@ -29,6 +29,7 @@ import time
 import getopt
 import locale
 import logging
+import errno
 
 import ZConfig
 import transaction
