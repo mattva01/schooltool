@@ -28,8 +28,8 @@
                repeat="ev hour/cols">
       <tal:if condition="ev">
         <div class="event"
-             onmouseover="this.style.zIndex=9;"
-             onmouseout="this.style.zIndex=1;"
+             onmouseover="this.style.zIndex=9; this.style.overflow='visible';"
+             onmouseout="this.style.zIndex=1; this.style.overflow='hidden';"
              tal:define="num repeat/ev/index;
                          compress python:view.getColumns() > 2;
                          unit python:compress and '%' or 'em';
@@ -40,6 +40,7 @@
                          evdate python:ev.dtstart.strftime('%Y-%m-%d');
                          mine python:True or ev.owner==request.authenticated_user"
              tal:attributes="style string:background: ${ev/color1};;
+                             min-height: ${height}em;;
                              height: ${height}em;;
                              margin-left: $left$unit;;
                              top: ${top}em;

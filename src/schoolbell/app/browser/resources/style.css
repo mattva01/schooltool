@@ -672,7 +672,7 @@ h2.calendar-view-title {
 #calendar-view-day .event:hover {
     opacity: 1;
     z-index: 9;
-    overflow: visible;
+    height: auto !important;
 }
 
 #calendar-view-day .event h6 {
