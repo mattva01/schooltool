@@ -1211,13 +1211,13 @@ class AbsenceInfo:
                     % (self.person_title,
                        self.format_age(self.now() - self.expected_presence,
                                        _('%s ago'), _('in %s')),
-                       self.expected_presence.strftime("%I:%M%P"),
+                       self.expected_presence.strftime("%I:%M%p"),
                        self.format_date(self.expected_presence)))
         else:
             return (_("%s absent for %s, since %s %s")
                     % (self.person_title,
                        self.format_age(self.now() - self.datetime),
-                       self.datetime.strftime("%I:%M%P"),
+                       self.datetime.strftime("%I:%M%p"),
                        self.format_date(self.datetime)))
 
     def format_age(self, age, fmt_positive='%s', fmt_negative='-%s'):

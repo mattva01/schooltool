@@ -413,7 +413,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
         now = self.utcnow()
         format_reason = self.format_reason
         format_date = self.format_date
-        header = _("Absences at %s") % (now.strftime("%H:%M%P %Y-%m-%d UTC"))
+        header = _("Absences at %s") % (now.strftime("%H:%M%p %Y-%m-%d UTC"))
         result.append("%s\n%s\n" % (header, "=" * len(header)))
         unexp = _("Unexpected absences")
         result.append(unexp)
@@ -433,7 +433,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
                     result.append(_("%s expected %s ago, at %s %s%s") %
                                   (absence.person.title,
                                    agestring,
-                                   when_expected.strftime("%I:%M%P"),
+                                   when_expected.strftime("%I:%M%p"),
                                    format_date(when_expected, now),
                                    format_reason(reason)
                                    ))
@@ -447,7 +447,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
                     result.append(_("%s absent for %s, since %s %s%s") %
                                   (absence.person.title,
                                    agestring,
-                                   start.strftime("%I:%M%P"),
+                                   start.strftime("%I:%M%p"),
                                    format_date(start, now),
                                    format_reason(reason)
                                    ))
@@ -469,7 +469,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
                 result.append(_("%s expected in %s, at %s %s%s") %
                               (absence.person.title,
                                agestring,
-                               when_expected.strftime("%I:%M%P"),
+                               when_expected.strftime("%I:%M%p"),
                                format_date(when_expected, now),
                                format_reason(reason)
                                ))

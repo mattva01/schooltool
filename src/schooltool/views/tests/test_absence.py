@@ -845,7 +845,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         vika = self.persons.new('vika', title='Viktorija Zaksiene')
 
         expected = dedent("""
-            Absences at 12:35pm 2003-11-03 UTC
+            Absences at 12:35PM 2003-11-03 UTC
             ==================================
 
             Unexpected absences
@@ -883,22 +883,22 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
                                           text='vacation'))
         result = view.render(request)
         expected = dedent(r"""
-            Absences at 12:35pm 2003-11-03 UTC
+            Absences at 12:35PM 2003-11-03 UTC
             ==================================
 
             Unexpected absences
             -------------------
 
-            Steve Alexander expected 25h0m ago, at 11:35am 2003-11-02
-            Albertas Agejevas absent for 2h35m, since 10:00am today
-            Marius Gedminas expected 2h30m ago, at 10:05am today (dentist)
+            Steve Alexander expected 25h0m ago, at 11:35AM 2003-11-02
+            Albertas Agejevas absent for 2h35m, since 10:00AM today
+            Marius Gedminas expected 2h30m ago, at 10:05AM today (dentist)
 
             Expected absences
             -----------------
 
-            Aiste Kesminaite expected in 1h5m, at 01:40pm today \
+            Aiste Kesminaite expected in 1h5m, at 01:40PM today \
             (chiropodist appointment)
-            Viktorija Zaksiene expected in 20h25m, at 09:00am 2003-11-04 \
+            Viktorija Zaksiene expected in 20h25m, at 09:00AM 2003-11-04 \
             (vacation)
             """).replace("\\\n", "")
         self.assertEquals(result, expected, "\n" + diff(expected, result))

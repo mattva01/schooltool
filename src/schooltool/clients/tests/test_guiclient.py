@@ -1845,19 +1845,19 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, None, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
         self.assertEquals(unicode(ai), u"John Smith absent for 2h15m,"
-                                        " since 03:44pm today")
+                                        " since 03:44PM today")
 
         et = datetime.datetime(2001, 2, 3, 18, 30, 00)
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
         self.assertEquals(unicode(ai), "John Smith expected in 0h30m,"
-                                       " at 06:30pm today")
+                                       " at 06:30PM today")
 
         et = datetime.datetime(2001, 2, 3, 18, 30, 00)
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2001, 2, 4, 12, 14, 17)
         self.assertEquals(unicode(ai), "John Smith expected 17h44m ago,"
-                                       " at 06:30pm 2001-02-03")
+                                       " at 06:30PM 2001-02-03")
 
     def test_format_date(self):
         from schooltool.clients.guiclient import AbsenceInfo
