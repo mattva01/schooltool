@@ -668,7 +668,7 @@ class DailyCalendarView(CalendarViewBase):
                     self.endhour = 24
 
     def calendarRows(self):
-        """Iterates over (title, start, duration) of time slots that make up
+        """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
         """
         if self.request.getCookie('cal_periods') != 'no':

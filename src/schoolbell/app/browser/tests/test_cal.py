@@ -356,8 +356,7 @@ class TestCalendarViewBase(unittest.TestCase):
         for i, day in enumerate(days):
             self.assertEquals(day.date, date(2004, 8, 10 + i))
 
-#        self.assertEqualEventLists(days[0].events, [e5, e0])            # 10
-        self.assertEqualEventLists(days[0].events, [e5])                # 10
+        self.assertEqualEventLists(days[0].events, [e5, e0])            # 10
 #        self.assertEqualEventLists(days[1].events, [e5, e2, e1])        # 11
         self.assertEqualEventLists(days[1].events, [e5, e2])            # 11
         self.assertEqualEventLists(days[2].events, [e5, e7, e3])        # 12
@@ -371,7 +370,7 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(len(days), 1)
         self.assertEquals(days[0].date, start)
 #        self.assertEqualEventLists(days[0].events, [e5, e2, e1])
-        self.assertEqualEventLists(days[0].events, [e5])
+        self.assertEqualEventLists(days[0].events, [e5, e2])
 
         # TODO Disabled because we do not support hidden events yet.
         ## Check that the hidden event is excluded for another person
@@ -712,6 +711,375 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(view.editLink(), 'edit_event.html?' + params)
 
 
+class TestDailyCalendarView(unittest.TestCase):
+
+    def test_title(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        view = DailyCalendarView(Person().calendar, TestRequest())
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+        view.request = TestRequest(form={'date': '2005-01-06'})
+        view.update()
+        self.assertEquals(view.title(), "Thursday, 2005-01-06")
+        view.request = TestRequest(form={'date': '2005-01-07'})
+        view.update()
+        self.assertEquals(view.title(), "Friday, 2005-01-07")
+
+    def test_update(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        view = DailyCalendarView(Person().calendar, TestRequest())
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+        view.request = TestRequest(form={'date': '2004-08-18'})
+        view.update()
+        self.assertEquals(view.cursor, date(2004, 8, 18))
+
+    def test__setRange(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        person = Person("Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 16)
+
+        def do_test(events, expected):
+            view.starthour, view.endhour = 8, 19
+            view._setRange(events)
+            self.assertEquals((view.starthour, view.endhour), expected)
+
+        do_test([], (8, 19))
+
+        events = [createEvent('2004-08-16 7:00', '1min', 'workout')]
+        do_test(events, (7, 19))
+
+        events = [createEvent('2004-08-15 8:00', '1d', "long workout")]
+        do_test(events, (0, 19))
+
+        events = [createEvent('2004-08-16 20:00', '30min', "late workout")]
+        do_test(events, (8, 21))
+
+        events = [createEvent('2004-08-16 20:00', '5h', "long late workout")]
+        do_test(events, (8, 24))
+
+    def test_dayEvents(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        ev1 = createEvent('2004-08-12 12:00', '2h', "ev1")
+        ev2 = createEvent('2004-08-12 13:00', '2h', "ev2")
+        ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
+        ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
+        cal = Person().calendar
+        for e in [ev1, ev2, ev3, ev4]:
+            cal.addEvent(e)
+        view = DailyCalendarView(cal, TestRequest())
+        view.request = TestRequest()
+        result = view.dayEvents(date(2004, 8, 12))
+        expected = [ev4, ev1, ev2, ev3]
+        fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
+        self.assertEquals(result, expected,
+                          '%s != %s' % (fmt(result), fmt(expected)))
+
+    def test_getColumns(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person, Calendar
+
+        person = Person(title="Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.request = TestRequest()
+        view.cursor = date(2004, 8, 12)
+
+        self.assertEquals(view.getColumns(), 1)
+
+        cal.addEvent(createEvent('2004-08-12 12:00', '2h', "Meeting"))
+        self.assertEquals(view.getColumns(), 1)
+
+        #
+        #  Three events:
+        #
+        #  12 +--+
+        #  13 |Me|+--+    <--- overlap
+        #  14 +--+|Lu|+--+
+        #  15     +--+|An|
+        #  16         +--+
+        #
+        #  Expected result: 2
+
+        cal.addEvent(createEvent('2004-08-12 13:00', '2h', "Lunch"))
+        cal.addEvent(createEvent('2004-08-12 14:00', '2h', "Another meeting"))
+        self.assertEquals(view.getColumns(), 2)
+
+        #
+        #  Four events:
+        #
+        #  12 +--+
+        #  13 |Me|+--+    +--+ <--- overlap
+        #  14 +--+|Lu|+--+|Ca|
+        #  15     +--+|An|+--+
+        #  16         +--+
+        #
+        #  Expected result: 3
+
+        cal.addEvent(createEvent('2004-08-12 13:00', '2h',
+                                 "Call Mark during lunch"))
+        self.assertEquals(view.getColumns(), 3)
+
+        #
+        #  Events that do not overlap in real life, but overlap in our view
+        #
+        #    +-------------+-------------+-------------+
+        #    | 12:00-12:30 | 12:30-13:00 | 12:00-12:00 |
+        #    +-------------+-------------+-------------+
+        #
+        #  Expected result: 3
+
+        cal.clear()
+        cal.addEvent(createEvent('2004-08-12 12:00', '30min', "a"))
+        cal.addEvent(createEvent('2004-08-12 12:30', '30min', "b"))
+        cal.addEvent(createEvent('2004-08-12 12:00', '0min', "c"))
+        self.assertEquals(view.getColumns(), 3)
+
+    def test_getColumns_periods(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person, Calendar
+        from schoolbell.calendar.utils import parse_datetime
+
+        person = Person(title="Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
+        view.calendarRows = lambda: iter([
+            ("B", parse_datetime('2004-08-12 10:00:00'), timedelta(hours=3)),
+            ("C", parse_datetime('2004-08-12 13:00:00'), timedelta(hours=2)),
+             ])
+        cal.addEvent(createEvent('2004-08-12 09:00', '2h', "Whatever"))
+        cal.addEvent(createEvent('2004-08-12 11:00', '2m', "Phone call"))
+        cal.addEvent(createEvent('2004-08-12 11:10', '2m', "Phone call"))
+        cal.addEvent(createEvent('2004-08-12 12:00', '2m', "Phone call"))
+        cal.addEvent(createEvent('2004-08-12 12:30', '3h', "Nap"))
+        self.assertEquals(view.getColumns(), 5)
+
+    def test_getHours(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        person = Person(title="Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
+        view.starthour = 10
+        view.endhour = 16
+        result = list(view.getHours())
+        self.assertEquals(result,
+                          [{'duration': 60, 'time': '10:00',
+                            'title': '10:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '11:00',
+                            'title': '11:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '12:00',
+                            'title': '12:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '13:00',
+                            'title': '13:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '14:00',
+                            'title': '14:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '15:00',
+                            'title': '15:00', 'cols': (None,)},])
+
+        ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
+        cal.addEvent(ev1)
+        result = list(view.getHours())
+
+        def clearTimeAndDuration(l):
+            for d in l:
+                del d['time']
+                del d['duration']
+            return l
+
+        result = clearTimeAndDuration(result)
+        self.assertEquals(result,
+                          [{'title': '10:00', 'cols': (None,)},
+                           {'title': '11:00', 'cols': (None,)},
+                           {'title': '12:00', 'cols': (ev1,)},
+                           {'title': '13:00', 'cols': ('',)},
+                           {'title': '14:00', 'cols': (None,)},
+                           {'title': '15:00', 'cols': (None,)}])
+
+        #
+        #  12 +--+
+        #  13 |Me|+--+
+        #  14 +--+|Lu|
+        #  15 |An|+--+
+        #  16 +--+
+        #
+
+        ev2 = createEvent('2004-08-12 13:00', '2h', "Lunch")
+        ev3 = createEvent('2004-08-12 14:00', '2h', "Another meeting")
+        cal.addEvent(ev2)
+        cal.addEvent(ev3)
+
+        result = list(view.getHours())
+        self.assertEquals(clearTimeAndDuration(result),
+                          [{'title': '10:00', 'cols': (None, None)},
+                           {'title': '11:00', 'cols': (None, None)},
+                           {'title': '12:00', 'cols': (ev1, None)},
+                           {'title': '13:00', 'cols': ('', ev2)},
+                           {'title': '14:00', 'cols': (ev3, '')},
+                           {'title': '15:00', 'cols': ('', None)},])
+
+        ev4 = createEvent('2004-08-11 14:00', '3d', "Visit")
+        cal.addEvent(ev4)
+
+        result = list(view.getHours())
+        self.assertEquals(clearTimeAndDuration(result),
+                          [{'title': '0:00', 'cols': (ev4, None, None)},
+                           {'title': '1:00', 'cols': ('', None, None)},
+                           {'title': '2:00', 'cols': ('', None, None)},
+                           {'title': '3:00', 'cols': ('', None, None)},
+                           {'title': '4:00', 'cols': ('', None, None)},
+                           {'title': '5:00', 'cols': ('', None, None)},
+                           {'title': '6:00', 'cols': ('', None, None)},
+                           {'title': '7:00', 'cols': ('', None, None)},
+                           {'title': '8:00', 'cols': ('', None, None)},
+                           {'title': '9:00', 'cols': ('', None, None)},
+                           {'title': '10:00', 'cols': ('', None, None)},
+                           {'title': '11:00', 'cols': ('', None, None)},
+                           {'title': '12:00', 'cols': ('', ev1, None)},
+                           {'title': '13:00', 'cols': ('', '', ev2)},
+                           {'title': '14:00', 'cols': ('', ev3, '')},
+                           {'title': '15:00', 'cols': ('', '', None)},
+                           {'title': '16:00', 'cols': ('', None, None)},
+                           {'title': '17:00', 'cols': ('', None, None)},
+                           {'title': '18:00', 'cols': ('', None, None)},
+                           {'title': '19:00', 'cols': ('', None, None)},
+                           {'title': '20:00', 'cols': ('', None, None)},
+                           {'title': '21:00', 'cols': ('', None, None)},
+                           {'title': '22:00', 'cols': ('', None, None)},
+                           {'title': '23:00', 'cols': ('', None, None)}])
+
+    def test_rowspan(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+        view = DailyCalendarView(None, TestRequest())
+        view.starthour = 10
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+        view.request = TestRequest()
+
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1d', "Long")), 6)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-11 12:00', '3d', "Very")), 8)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '10min', "")), 1)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 09:00', '3h', "")), 2)
+
+    def test_rowspan_periods(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+        from schoolbell.calendar.utils import parse_datetime
+        view = DailyCalendarView(None, TestRequest())
+        view.calendarRows = lambda: iter([
+            ("8", parse_datetime('2004-08-12 08:00:00'), timedelta(hours=1)),
+            ("A", parse_datetime('2004-08-12 09:00:00'), timedelta(hours=1)),
+            ("B", parse_datetime('2004-08-12 10:00:00'), timedelta(hours=3)),
+            ("C", parse_datetime('2004-08-12 13:00:00'), timedelta(hours=2)),
+            ("D", parse_datetime('2004-08-12 15:00:00'), timedelta(hours=1)),
+            ("16", parse_datetime('2004-08-12 16:00:00'), timedelta(hours=1)),
+            ("17", parse_datetime('2004-08-12 17:00:00'), timedelta(hours=1)),
+             ])
+        view.cursor = date(2004, 8, 12)
+        view.starthour = 8
+        view.endhour = 18
+
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1d', "Long")), 5)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-11 12:00', '3d', "Very")), 7)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '10min', "")), 1)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 13:00', '2h', "")), 1)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 09:00', '3h', "")), 2)
+
+    def test_eventTop(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        view = DailyCalendarView(None, TestRequest())
+        view.starthour = 8
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+        view.request = TestRequest()
+
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 09:00', '1h', "")), 4)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:00', '1h', "")), 8)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:15', '1h', "")), 9)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:30', '1h', "")), 10)
+        self.assertEquals(view.eventTop(
+                            createEvent('2004-08-12 10:45', '1h', "")), 11)
+
+    def test_eventHeight(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        view = DailyCalendarView(None, TestRequest())
+        view.starthour = 8
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+        view.request = TestRequest()
+
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 09:00', '0', "")), 1)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 09:00', '14m', "")), 1)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 09:00', '1h', "")), 4)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h', "")), 8)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+15m', "")), 9)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+30m', "")), 10)
+        self.assertEquals(view.eventHeight(
+                            createEvent('2004-08-12 10:00', '2h+45m', "")), 11)
+
+    def test_do_POST(self):
+        return # XXX TODO
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schooltool.cal import ACLCalendar
+        from schooltool.model import Person, Group
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URICalendarProvider
+
+        from schooltool import relationship
+        relationship.setUp()
+
+        context = self.manager.calendar
+        view = DailyCalendarView(context)
+
+        view.request = RequestStub(authenticated_user=self.manager,
+                args={'overlay':['/groups/locations','/groups/managers'],
+                    'OVERLAY': ''})
+
+        view.do_POST(view.request)
+
+        related = getRelatedObjects(self.manager, URICalendarProvider)
+        self.assertEquals(related, [self.locations, self.managers])
+
+
 def doctest_CalendarViewBase():
     """Tests for CalendarViewBase.
 
@@ -902,6 +1270,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
+    suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.cal'))
     return suite

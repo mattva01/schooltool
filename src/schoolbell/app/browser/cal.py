@@ -22,7 +22,7 @@ SchoolBell calendar views.
 $Id$
 """
 
-from datetime import date, datetime, timedelta
+from datetime import datetime, date, time, timedelta
 import urllib
 
 from zope.interface import implements
@@ -204,6 +204,15 @@ class CalendarViewBase(BrowserView):
             quarters.append(quarter)
         return quarters
 
+    def dayEvents(self, date):
+        """Return events for a day sorted by start time.
+
+        Events spanning several days and overlapping with this day
+        are included.
+        """
+        day = self.getDays(date, date + timedelta(1))[0]
+        return day.events
+
     def _eventView(self, event):
         return CalendarEventView(event, self.request, calendar=self.context)
 
@@ -277,6 +286,13 @@ class CalendarViewBase(BrowserView):
         return days
 
     def iterEvents(self, first, last):
+        # XXX A an evil temporary hack follows.  Currently expand() as provided
+        #     in Calendar() (and CalendarMixin) compares dates with datetimes.
+        #     Because the comparison is not inclusive, in this case things
+        #     break horribly (date(2004, 1, 2) is not less than
+        #     datetime(2004, 1, 2, 3, 4).  We probably want to fix expand().
+        first = datetime(first.year, first.month, first.day)
+        last = datetime(last.year, last.month, last.day)
         return self.context.expand(first, last)
 
     def prevMonth(self):
@@ -515,4 +531,222 @@ class CalendarEventView(object):
 
     def privacy(self):
         return _("Public") # TODO used to also have busy-block and hidden.
+
+
+# DANGER! -- do not cross this line -- everything below is untested!
+
+class DailyCalendarView(CalendarViewBase):
+    """Daily calendar view.
+
+    The events are presented as boxes on a 'sheet' with rows
+    representing hours.
+
+    The challenge here is to present the events as a table, so that
+    the overlapping events are displayed side by side, and the size of
+    the boxes illustrate the duration of the events.
+    """
+
+    __used_for__ = ICalendar
+
+    starthour = 8
+    endhour = 19
+
+    def title(self):
+        return self.dayTitle(self.cursor)
+
+    def prev(self):
+        return self.cursor - timedelta(1)
+
+    def next(self):
+        return self.cursor + timedelta(1)
+
+    def getColumns(self):
+        """Return the maximum number of events that are overlapping.
+
+        Extends the event so that start and end times fall on hour
+        boundaries before calculating overlaps.
+        """
+        width = [0] * 24
+        daystart = datetime.combine(self.cursor, time())
+        for event in self.dayEvents(self.cursor):
+            t = daystart
+            dtend = daystart + timedelta(1)
+            for title, start, duration in self.calendarRows():
+                if start <= event.dtstart < start + duration:
+                    t = start
+                if start < event.dtstart + event.duration <= start + duration:
+                    dtend = start + duration
+            while True:
+                width[t.hour] += 1
+                t += timedelta(hours=1)
+                if t >= dtend:
+                    break
+        return max(width) or 1
+
+    def _setRange(self, events):
+        """Set the starthour and endhour attributes according to events.
+
+        The range of the hours to display is the union of the range
+        8:00-18:00 and time spans of all the events in the events
+        list.
+        """
+        for event in events:
+            start = datetime.combine(self.cursor, time(self.starthour))
+            end = (datetime.combine(self.cursor, time()) +
+                   timedelta(hours=self.endhour)) # endhour may be 24
+            if event.dtstart < start:
+                newstart = max(datetime.combine(self.cursor, time()),
+                               event.dtstart)
+                self.starthour = newstart.hour
+
+            if event.dtstart + event.duration > end:
+                newend = min(
+                    datetime.combine(self.cursor, time()) + timedelta(1),
+                    event.dtstart + event.duration + timedelta(0, 3599))
+                self.endhour = newend.hour
+                if self.endhour == 0:
+                    self.endhour = 24
+
+    def calendarRows(self):
+        """Iterate over (title, start, duration) of time slots that make up
+        the daily calendar.
+        """
+        # XXX not tested
+        today = datetime.combine(self.cursor, time())
+        row_ends = [today + timedelta(hours=hour + 1)
+                    for hour in range(self.starthour, self.endhour)]
+
+        start = today + timedelta(hours=self.starthour)
+        for end in row_ends:
+            duration = end - start
+            yield ('%d:%02d' % (start.hour, start.minute), start, duration)
+            start = end
+
+    def getHours(self):
+        """Return an iterator over the rows of the table.
+
+        Every row is a dict with the following keys:
+
+            'time' -- row label (e.g. 8:00)
+            'cols' -- sequence of cell values for this row
+
+        A cell value can be one of the following:
+            None  -- if there is no event in this cell
+            event -- if an event starts in this cell
+            ''    -- if an event started above this cell
+
+        """
+        nr_cols = self.getColumns()
+        events = self.dayEvents(self.cursor)
+        self._setRange(events)
+        slots = Slots()
+        for title, start, duration in self.calendarRows():
+            end = start + duration
+            hour = start.hour
+
+            # Remove the events that have already ended
+            for i in range(nr_cols):
+                ev = slots.get(i, None)
+                if ev is not None and ev.dtstart + ev.duration <= start:
+                    del slots[i]
+
+            # Add events that start during (or before) this hour
+            while (events and events[0].dtstart < end):
+                event = events.pop(0)
+                slots.add(event)
+
+            cols = []
+            # Format the row
+            for i in range(nr_cols):
+                ev = slots.get(i, None)
+                if (ev is not None
+                    and ev.dtstart < start
+                    and hour != self.starthour):
+                    # The event started before this hour (except first row)
+                    cols.append('')
+                else:
+                    # Either None, or new event
+                    cols.append(ev)
+
+            yield {'title': title, 'cols': tuple(cols),
+                   'time': start.strftime("%H:%M"),
+                   # We can trust no period will be longer than a day
+                   'duration': duration.seconds // 60}
+
+    def rowspan(self, event):
+        """Calculate how many calendar rows the event will take today."""
+        count = 0
+        for title, start, duration in self.calendarRows():
+            if (start < event.dtstart + event.duration and
+                event.dtstart < start + duration):
+                count += 1
+        return count
+
+    def eventTop(self, event):
+        """Calculate the position of the top of the event block in the display.
+
+        Each hour is made up of 4 units ('em' currently). If an event starts at
+        10:15, and the day starts at 8:00 we get a top value of:
+
+          (2 * 4) + (15 / 15) = 9
+
+        """
+
+        top = ((event.dtstart.hour - self.starthour) * 4
+                + event.dtstart.minute / 15)
+
+        return top
+
+    def eventHeight(self, event):
+        """Calculate the height of the event block in the display.
+
+        Each hour is made up of 4 units ('em' currently).  Need to round 1 -
+        14 minute intervals up to 1 display unit.
+        """
+        minutes = event.duration.seconds / 60
+        return max(1, (minutes + 14) / 15)
+
+    def update(self):
+        # Create self.cursor
+        CalendarViewBase.update(self)
+
+        # Initialize self.starthour and self.endhour
+        events = self.dayEvents(self.cursor)
+        self._setRange(events)
+
+        # The number of hours displayed in the day view
+        self.visiblehours = self.endhour - self.starthour
+
+
+class Slots(dict):
+    """A dict with automatic key selection.
+
+    The add method automatically selects the lowest unused numeric key
+    (starting from 0).
+
+    Example:
+
+      >>> s = Slots()
+      >>> s.add("first")
+      >>> s
+      {0: 'first'}
+
+      >>> s.add("second")
+      >>> s
+      {0: 'first', 1: 'second'}
+
+    The keys can be reused:
+
+      >>> del s[0]
+      >>> s.add("third")
+      >>> s
+      {0: 'third', 1: 'second'}
+
+    """
+
+    def add(self, obj):
+        i = 0
+        while i in self:
+            i += 1
+        self[i] = obj
 

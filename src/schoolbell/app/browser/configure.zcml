@@ -299,6 +299,16 @@
       />
 
   <page
+      name="daily.html"
+      for="schoolbell.calendar.interfaces.ICalendar"
+      class=".cal.DailyCalendarView"
+      template="templates/cal_daily.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Calendar (daily)"
+      />
+
+  <page
       name="weekly.html"
       for="schoolbell.calendar.interfaces.ICalendar"
       class=".cal.WeeklyCalendarView"

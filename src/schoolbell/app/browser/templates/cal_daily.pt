@@ -1,0 +1,121 @@
+<!-- <html metal:use-macro="view/macros/calendarpage" i18n:domain="schooltool"> -->
+<tal:defs define="status view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+
+  <metal:block fill-slot="title">
+    <title i18n:translate="">Calendar</title>
+  </metal:block>
+
+  <metal:block fill-slot="h1">
+    <h1 i18n:translate="">
+      Calendar for <span tal:replace="context/__parent__/title"
+        i18n:name="title" />
+    </h1>
+  </metal:block>
+
+  <!--
+  <metal:block fill-slot="column-left-extra">
+    <metal:macro use-macro="view/macros/common-calendar-portlets"/>
+  </metal:block>
+  -->
+
+  <metal:block fill-slot="body">
+
+    <h2 class="calendar-view-title" 
+        tal:content="view/title" />
+
+    <div id="calendar-navigation-context">
+      <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td align="left" width="33%">
+            <a id="calendar-navigation-context-previous"
+                tal:attributes="href string:${request/URL}?date=${view/prev}"
+                i18n:translate="">Previous day</a>
+          </td>
+          <td align="center">
+            <a id="calendar-navigation-context-current"
+                tal:attributes="href request/URL"
+                i18n:translate="">Today</a>
+          </td>
+          <td align="right" width="33%">
+            <a id="calendar-navigation-context-next"
+                tal:attributes="href string:${request/URL}?date=${view/next}" 
+                i18n:translate="">Next day</a>
+          </td>
+          <td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="calendar-view-day" 
+        tal:attributes="style python:'height: ' + str(view.visiblehours * 4 + 1) + 'em'">
+
+      <!-- Day grid -->
+      <tal:loop repeat="hour view/getHours"
+          tal:define="height python:4">
+        <metal:block
+            tal:define="num repeat/hour/index;
+                        top python:num * height">
+          <div class="hour"
+              tal:define="oddrow repeat/hour/odd"
+              tal:attributes="style python:'top: ' + str(top) + 'em';
+                           class python:oddrow and 'hour odd' or 'hour even'">
+
+            <span class="title" tal:content="hour/title"></span>
+
+            <a class="event-new" title="Create new event"
+                i18n:attributes="title"
+                tal:attributes="href string:${context/@@absolute_url}/add_event.html?start_date=${view/cursor}&amp;start_time=${hour/time}&amp;duration=${hour/duration}">New Event</a>
+
+          </div>
+        </metal:block>
+      </tal:loop>
+
+      <!-- Events -->
+      <div class="events">
+      <tal:loop define="height python:4"
+                repeat="hour view/getHours">
+          <tal:block define="num repeat/hour/index; top python:num * height"
+                     repeat="ev hour/cols">
+            <tal:if condition="ev">
+              <div class="event"
+                  onmouseover="this.style.zIndex=9;"
+                  onmouseout="this.style.zIndex=1;"
+                  tal:define="num repeat/ev/index;
+                              compress python:view.getColumns() > 2;
+                              unit python:compress and '%' or 'em';
+                              indent python:compress and 15 or 20.5;
+                              evdate python:ev.dtstart.strftime('%Y-%m-%d');
+                              colors python:view.eventColors(ev);
+                              mine python:True or ev.owner==request.authenticated_user"
+                  tal:attributes="style python:'background: %s;; height: %sem !important;; margin-left: %s%s;; top: %sem' % (colors[0], view.eventHeight(ev),  str(num * indent), unit, view.eventTop(ev));
+                              class python:mine and 'event' or 'event other';
+                              something compress">
+                  <h6 tal:define="dtend python:ev.dtstart + ev.duration"
+                                  tal:attributes="style python:'background: %s;;' % colors[1]">
+                  <a href="" title=""
+                      tal:attributes="href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${ev/unique_id};
+                                      title ev/title"
+                      tal:content="python:view.ellipsizeTitle(ev.title)"/>
+                  <span class="start-end">
+                    (<span tal:content="python:ev.dtstart.strftime('%H:%M')"/>
+                    -
+                    <span tal:content="python:dtend.strftime('%H:%M')"/>)
+                    <span>
+                </h6>
+                <a title="Delete this event"
+                    i18n:attributes="title"
+                    class="delete"
+                    tal:attributes="href string:${context/@@absolute_url}/delete_event.html?date=${evdate}&amp;event_id=${ev/unique_id}" >
+                  delete
+                </a>
+<!--            <span class="privacy" tal:content="ev/privacy"></span> -->
+              </div>
+            </tal:if>
+          </tal:block>
+      </tal:loop>
+    </div>
+  </div>
+
+</metal:block>
+</html>
