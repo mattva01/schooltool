@@ -1,8 +1,8 @@
 D/tests////
-/README.txt/1.3/Wed Apr  7 21:03:19 2004//
-/_manager.py/1.2/Thu Apr  1 03:56:56 2004//
-/_transaction.py/1.4/Tue Apr  6 01:06:41 2004//
-/notes.txt/1.2/Thu Apr  1 03:56:56 2004//
-/util.py/1.2/Wed Apr  7 21:03:19 2004//
-/__init__.py/1.5/Wed Apr  7 21:05:42 2004//
-/interfaces.py/1.7/Wed Apr  7 21:05:43 2004//
+/README.txt/1.3/Thu Apr  8 12:33:51 2004//
+/__init__.py/1.6/Tue Apr 20 15:06:02 2004//
+/_manager.py/1.4/Tue Apr 20 15:06:02 2004//
+/_transaction.py/1.6/Tue Apr 20 15:06:02 2004//
+/interfaces.py/1.8/Tue Apr 20 15:06:02 2004//
+/notes.txt/1.3/Tue Apr 20 15:06:02 2004//
+/util.py/1.3/Tue Apr 20 15:06:02 2004//

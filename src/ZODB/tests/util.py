@@ -13,11 +13,12 @@
 ##############################################################################
 """Conventience function for creating test databases
 
-$Id: util.py,v 1.3 2004/02/19 18:24:00 jeremy Exp $
+$Id: util.py,v 1.5 2004/04/19 21:19:07 tim_one Exp $
 """
 
 import time
 import persistent
+import transaction
 from ZODB.MappingStorage import MappingStorage
 from ZODB.DB import DB as _DB
 try:
@@ -29,13 +30,13 @@ def DB(name='Test'):
     return _DB(MappingStorage(name))
 
 def commit():
-    get_transaction().commit()
+    transaction.commit()
 
 def pack(db):
     db.pack(time.time()+1)
 
 class P(persistent.Persistent):
-    
+
     def __init__(self, name):
         self.name = name
 

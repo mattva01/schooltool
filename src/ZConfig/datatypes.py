@@ -16,23 +16,15 @@
 import os
 import re
 import sys
+import datetime
 
 # types.StringTypes was added in Python 2.2; basestring in 2.3
 try:
     unicode
 except NameError:
-    UnicodeType = None
-    StringTypes = type(''),
+    have_unicode = False
 else:
-    UnicodeType = type(unicode(''))
-    StringTypes = type(''), UnicodeType
-
-# True, False were added in Python 2.2.1
-try:
-    True
-except NameError:
-    True = 1
-    False = 0
+    have_unicode = True
 
 
 class MemoizedConversion:
@@ -113,7 +105,7 @@ class BasicKeyConversion(RegularExpressionConversion):
 class ASCIIConversion(RegularExpressionConversion):
     def __call__(self, value):
         value = RegularExpressionConversion.__call__(self, value)
-        if UnicodeType is not None and isinstance(value, UnicodeType):
+        if have_unicode and isinstance(value, unicode):
             value = value.encode("ascii")
         return value
 
@@ -214,7 +206,7 @@ class SocketAddress:
             self.address = inet_address(s)
 
 def float_conversion(v):
-    if type(v) in StringTypes:
+    if isinstance(v, basestring):
         if v.lower() in ["inf", "-inf", "nan"]:
             raise ValueError(`v` + " is not a portable float representation")
     return float(v)
@@ -286,6 +278,44 @@ class SuffixMultiplier:
                 return int(v[:-self._keysz]) * m
         return int(v) * self._default
 
+
+def timedelta(s):
+    # Unlike the standard time-interval data type, which returns a float
+    # number of seconds, this datatype takes a wider range of syntax and
+    # returns a datetime.timedelta
+    #
+    # Accepts suffixes:
+    #    w - weeks
+    #    d - days
+    #    h - hours
+    #    m - minutes
+    #    s - seconds
+    #
+    # and all arguments may be integers or floats, positive or negative.
+    # More than one time interval suffix value may appear on the line, but
+    # they should all be separated by spaces, e.g.:
+    #
+    # sleep_time 4w 2d 7h 12m 0.00001s
+    weeks = days = hours = minutes = seconds = 0
+    for part in s.split():
+        val = float(part[:-1])
+        suffix = part[-1]
+        if suffix == 'w':
+            weeks = val
+        elif suffix == 'd':
+            days = val
+        elif suffix == 'h':
+            hours = val
+        elif suffix == 'm':
+            minutes = val
+        elif suffix == 's':
+            seconds = val
+        else:
+            raise TypeError('bad part %s in %s' % (part, s))
+    return datetime.timedelta(weeks=weeks, days=days, hours=hours,
+                              minutes=minutes, seconds=seconds)
+
+
 stock_datatypes = {
     "boolean":           asBoolean,
     "dotted-name":       DottedNameConversion(),
@@ -315,10 +345,11 @@ stock_datatypes = {
                                            'h': 60*60,
                                            'd': 60*60*24,
                                            }),
+    "timedelta":         timedelta,
     }
 
-class Registry:
 
+class Registry:
     def __init__(self, stock=None):
         if stock is None:
             stock = stock_datatypes.copy()

@@ -16,12 +16,14 @@
 from cStringIO import StringIO
 from cPickle import Pickler, Unpickler
 from tempfile import TemporaryFile
+import logging
 
 from ZODB.POSException import ExportError
 from ZODB.utils import p64, u64
 from ZODB.serialize import referencesf
-import zLOG
 import sys
+
+logger = logging.getLogger('zodb.ExportImport')
 
 class ExportImport:
 
@@ -43,9 +45,8 @@ class ExportImport:
             try:
                 p, serial = load(oid, self._version)
             except:
-                zLOG.LOG("ZODB", zLOG.DEBUG,
-                         "broken reference for oid %s" % `oid`,
-                         err=sys.exc_info())
+                logger.debug("broken reference for oid %s", repr(oid),
+                             exc_info=True)
             else:
                 referencesf(p, oids)
                 f.writelines([oid, p64(len(p)), p])
@@ -57,7 +58,7 @@ class ExportImport:
 
         if isinstance(f, str):
             f = open(f,'rb')
-            
+
         magic = f.read(4)
         if magic != 'ZEXP':
             if customImporters and customImporters.has_key(magic):
@@ -65,13 +66,13 @@ class ExportImport:
                 return customImporters[magic](self, f, clue)
             raise ExportError("Invalid export header")
 
-        t = self.getTransaction()
+        t = self._txn_mgr.get()
         if clue:
             t.note(clue)
 
         return_oid_list = []
         self._import = f, return_oid_list
-        self.getTransaction().register(self)
+        self._register()
         t.commit(1)
         # Return the root imported object.
         if return_oid_list:

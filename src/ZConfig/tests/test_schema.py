@@ -821,6 +821,89 @@ class SchemaTestCase(TestBase):
         self.assertEqual(L, [("example.com", "foo")])
         self.assertEqual(get_section_attributes(conf), ["base", "derived"])
 
+    def test_keytype_applies_to_default_key(self):
+        schema = self.load_schema_text("""\
+            <schema>
+              <sectiontype name='sect'>
+                <key name='+' attribute='mapping'>
+                  <default key='foo'>42</default>
+                  <default key='BAR'>24</default>
+                </key>
+              </sectiontype>
+              <section type='sect' name='*' attribute='sect'/>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, "<sect/>")
+        items = conf.sect.mapping.items()
+        items.sort()
+        self.assertEqual(items, [("bar", "24"), ("foo", "42")])
+
+    def test_duplicate_default_key_checked_in_schema(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+            <schema>
+              <sectiontype name='sect'>
+                <key name='+' attribute='mapping'>
+                  <default key='foo'>42</default>
+                  <default key='Foo'>24</default>
+                </key>
+              </sectiontype>
+              <section type='sect' name='*' attribute='sect'/>
+            </schema>
+            """)
+
+    def test_default_keys_rechecked_clash_in_derived_sectiontype(self):
+        # If the default values associated with a <key name="+"> can't
+        # be supported by a new keytype for a derived sectiontype, an
+        # error should be indicated.
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+            <schema>
+              <sectiontype name='base' keytype='identifier'>
+                <key name='+' attribute='mapping'>
+                  <default key='foo'>42</default>
+                  <default key='Foo'>42</default>
+                </key>
+              </sectiontype>
+              <sectiontype name='sect' keytype='basic-key'
+                           extends='base'>
+                <!-- should cry foul here -->
+              </sectiontype>
+              <section type='sect' name='*' attribute='sect'/>
+            </schema>
+            """)
+
+    def test_default_keys_rechecked_dont_clash_in_derived_sectiontype(self):
+        # If the default values associated with a <key name="+"> can't
+        # be supported by a new keytype for a derived sectiontype, an
+        # error should be indicated.
+        schema = self.load_schema_text("""\
+            <schema>
+              <sectiontype name='base' keytype='identifier'>
+                <multikey name='+' attribute='mapping'>
+                  <default key='foo'>42</default>
+                  <default key='Foo'>42</default>
+                </multikey>
+              </sectiontype>
+              <sectiontype name='sect' keytype='basic-key'
+                           extends='base'>
+                <!-- should cry foul here -->
+              </sectiontype>
+              <section type='base' name='*' attribute='base'/>
+              <section type='sect' name='*' attribute='sect'/>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, """\
+            <base/>
+            <sect/>
+            """)
+        base = conf.base.mapping.items()
+        base.sort()
+        self.assertEqual(base, [("Foo", ["42"]), ("foo", ["42"])])
+        sect = conf.sect.mapping.items()
+        sect.sort()
+        self.assertEqual(sect, [("foo", ["42", "42"])])
+
     def test_sectiontype_inherited_datatype(self):
         schema = self.load_schema_text("""\
             <schema prefix='ZConfig.tests.test_schema'>

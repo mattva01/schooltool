@@ -146,7 +146,7 @@ class BaseMatcher:
                 if ci.minOccurs > len(v):
                     raise ZConfig.ConfigurationError(
                         "no keys defined for the %s key/value map; at least %d"
-                        " must be specified" % (ci.attribute, ci.minOccurs))
+                        " must be specified" % (attr, ci.minOccurs))
             if v is None and ci.minOccurs:
                 default = ci.getdefault()
                 if default is None:

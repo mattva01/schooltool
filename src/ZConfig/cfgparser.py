@@ -18,12 +18,6 @@ import ZConfig.url
 
 from ZConfig.substitution import isname, substitute
 
-try:
-    True
-except NameError:
-    True = 1
-    False = 0
-
 
 class ZConfigParser:
     __metaclass__ = type

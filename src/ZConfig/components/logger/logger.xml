@@ -3,14 +3,8 @@
   </description>
 
   <import package="ZConfig.components.logger" file="abstract.xml"/>
-
-  <sectiontype name="ZConfig.logger.base-logger">
-     <key name="level"
-          datatype="ZConfig.components.logger.datatypes.logging_level"
-          default="info"/>
-     <multisection type="ZConfig.logger.handler"
-                   attribute="handlers" name="*"/>
-  </sectiontype>
+  <import package="ZConfig.components.logger" file="base-logger.xml"/>
+  <import package="ZConfig.components.logger" file="eventlog.xml"/>
 
   <sectiontype name="logger"
                datatype=".LoggerFactory"
@@ -20,6 +14,12 @@
          datatype="boolean"
          default="true">
       <description>
+        Indicates whether events that reach this logger should be
+        propogated toward the root of the logger hierarchy.  If true
+        (the default), events will be passed to the logger's parent
+        after being handled.  If false, events will be handled and the
+        parent will not be informed.  There is not a way to control
+        propogation by the severity of the event.
       </description>
     </key>
 
@@ -27,18 +27,13 @@
          datatype="dotted-name"
          required="yes">
       <description>
+        The dotted name of the logger.  This give it a location in the
+        logging hierarchy.  Most applications provide a specific set
+        of subsystem names for which logging is meaning; consult the
+        application documentation for the set of names that are
+        actually interesting for the application.
       </description>
     </key>
-  </sectiontype>
-
-  <sectiontype name="eventlog"
-               datatype=".EventLogFactory"
-               extends="ZConfig.logger.base-logger"
-               implements="ZConfig.logger.log">
-    <description>
-      Logger bound to the name "event".  Propogation of events to the
-      root logger is disabled.
-    </description>
   </sectiontype>
 
 </component>

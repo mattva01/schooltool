@@ -20,8 +20,8 @@
 \title{ZConfig Package Reference}
 
 %\date{27 October 2003}
-\release{2.1}
-\setshortversion{2.1}
+\release{2.2}
+\setshortversion{2.2}
 
 \author{Zope Corporation}
 \authoraddress{
@@ -56,8 +56,8 @@ Corporation.  Any software written in Python is free to use the
 ensure compatibility.  This software is covered by the Zope Public
 License, version 2.0.
 
-The \module{ZConfig} package has been tested with Python 2.1, 2.2, and
-2.3.  Python 2.0 is not supported.
+The \module{ZConfig} package has been tested with Python 2.3.  Older
+versions of Python are not supported.
 \module{ZConfig} only relies on the Python standard library.
 
 Configurations which use \module{ZConfig} are described using
@@ -74,7 +74,7 @@ whether a value can be given only once or repeatedly.
 \section{Configuration Syntax \label{syntax}}
 
 Like the \ulink{\module{ConfigParser}}
-{http://www.python.org/doc/current/lib/module-ConfigParser.html}
+{http://docs.python.org/lib/module-ConfigParser.html}
 format, this format supports key-value pairs arranged in sections.
 Unlike the \module{ConfigParser} format, sections are typed and can be
 organized hierarchically.
@@ -231,7 +231,7 @@ application.  Here is an example logging configuration:
 </eventlog>
 \end{verbatim}
 
-A third-party extension may provide a log handler to send
+A third-party component may provide a log handler to send
 high-priority alerts the system administrator's text pager or
 SMS-capable phone.  All that's needed is to install the implementation
 so it can be imported by Python, and modify the configuration:
@@ -511,7 +511,7 @@ The following elements are used to describe a schema:
   \end{attributedesc}
 \end{elementdesc}
 
-\begin{elementdesc}{key}{description?, example?, metadefault?}
+\begin{elementdesc}{key}{description?, example?, metadefault?, default*}
   A \element{key} element is used to describe a key-value pair which
   may occur at most once in the section type or top-level schema in
   which it is listed.
@@ -622,11 +622,52 @@ The following elements are used to describe a schema:
   element will be passed to the datatype conversion for the
   \element{multikey}.
 
-  \begin{attributedesc}{key}{}
+  \begin{attributedesc}{key}{key type of the containing sectiontype}
     Key to associate with the default value.  This is only used for
     defaults of a \element{key} or \element{multikey} with a
     \attribute{name} of \code{+}; in that case this attribute is
-    required.
+    required.  It is an error to use the \attribute{key} attribute
+    with a \element{default} element for a \element{multikey} with a
+    name other than \code{+}.
+
+    \begin{notice}[warning]
+      The datatype of this attribute is that of the section type
+      \emph{containing} the actual keys, not necessarily that of the
+      section type which defines the key.  If a derived section
+      overrides the key type of the base section type, the actual
+      key type used is that of the derived section.
+
+      This can lead to confusing errors in schemas, though the
+      \refmodule{ZConfig} package checks for this when the schema is
+      loaded.  This situation is particularly likely when a derived
+      section type uses a key type which collapses multiple default
+      keys which were not collapsed by the base section type.
+
+      Consider this example schema:
+
+\begin{verbatim}
+<schema>
+  <sectiontype name="base" keytype="identifier">
+    <key name="+" attribute="mapping">
+      <default key="foo">some value</default>
+      <default key="FOO">some value</default>
+    </key>
+  </sectiontype>
+
+  <sectiontype name="derived" keytype="basic-key"
+               extends="base"/>
+
+  <section type="derived" name="*" attribute="section"/>
+</schema>
+\end{verbatim}
+
+      When this schema is loaded, a set of defaults for the
+      \datatype{derived} section type is computed.  Since
+      \datatype{basic-key} is case-insensitive (everything is
+      converted to lower case), \samp{foo} and \samp{Foo} are both
+      converted to \samp{foo}, which clashes since \element{key} only
+      allows one value for each key.
+    \end{notice}
   \end{attributedesc}
 \end{elementdesc}
 
@@ -833,9 +874,11 @@ The following data types are provided by the default type registry.
 
 \term{\datatype{inet-address}}
   An Internet address expressed as a \code{(\var{hostname},
-  \var{port})} pair.  If only the port is specified, an empty string
-  will be returned for \var{hostname}.  If the port is omitted,
-  \code{None} will be returned for \var{port}.
+  \var{port})} pair.  If only the port is specified, the default host
+  will be returned for \var{hostname}.  The default host is
+  \code{localhost} on Windows and the empty string on all other
+  platforms.  If the port is omitted, \code{None} will be returned for
+  \var{port}.
 
 \term{\datatype{integer}}
   Convert a value to an integer.  This will be a Python \class{int} if
@@ -886,6 +929,13 @@ The following data types are provided by the default type registry.
   suffixes (for example, \code{12h}).  Suffixes are case insensitive
   and may be \samp{s} (seconds), \samp{m} (minutes), \samp{h} (hours),
   or \samp{d} (days).
+
+\term{\datatype{timedelta}}
+  Similar to the \datatype{time-interval}, this data type returns a Python
+  datetime.timedelta object instead of a float.  The set of suffixes
+  recognized by \datatype{timedelta} are: \samp{w} (weeks), \samp{d} (days),
+  \samp{h} (hours), \samp{m} (minutes), \samp{s} (seconds).  Values may be
+  floats, for example: \code{4w 2.5d 7h 12m 0.001s}.
 
 \end{definitions}
 
@@ -1001,7 +1051,7 @@ then we can use this as the key type for a derived mapping type:
 
 The \module{ZConfig.components.logger} package provides configuration
 support for the \ulink{\module{logging} package}
-{http://www.python.org/doc/current/lib/module-logging.html} in
+{http://docs.python.org/lib/module-logging.html} in
 Python's standard library.  This component can be imported using
 
 \begin{verbatim}
@@ -1009,13 +1059,11 @@ Python's standard library.  This component can be imported using
 \end{verbatim}
 
 This component defines two abstract types and several concrete section
-types.  These can be imported as a unit, as above, or as three smaller
-components usable in creating alternate logging packages.  The
-configuration component for Zope's \module{zLOG} package, starting
-with Zope 2.8, is an example of using this component in this way.
+types.  These can be imported as a unit, as above, or as four smaller
+components usable in creating alternate logging packages.
 
-The first of the three type groups contains the abstract types, and
-can be imported using
+The first of the four smaller components contains the abstract types,
+and can be imported using
 
 \begin{verbatim}
 <import package="ZConfig.components.logger" file="abstract.xml"/>
@@ -1039,19 +1087,27 @@ The two abstract types imported by this are:
 \end{definitions}
 
 
-The second type group provides section types that act as factories for
-\class{logging.Logger} objects.  This can be imported using
+The second and third of the smaller components provides section types
+that act as factories for \class{logging.Logger} objects.  These can be
+imported using
 
 \begin{verbatim}
-<import package="ZConfig.components.logger" file="loggers.xml"/>
+<import package="ZConfig.components.logger" file="eventlog.xml"/>
+<import package="ZConfig.components.logger" file="logger.xml"/>
 \end{verbatim}
 
-The types defined in this component implement the
-\datatype{ZConfig.logger.log} abstract type.
+The types defined in these components implement the
+\datatype{ZConfig.logger.log} abstract type.  The \file{eventlog.xml}
+component defines an \datatype{eventlog} type which represents the
+root logger from the the \module{logging} package (the return value of
+\function{logging.getLogger()}), while the \file{logger.xml} component
+defines a \datatype{logger} section type which represents a named
+logger (as returned by \function{logging.getLogger(\var{name})}).
 
 
-The third type group provides section types that are factories for
-\class{logging.Handler} objects.  This can be imported using
+The third of the smaller components provides section types that are
+factories for \class{logging.Handler} objects.  This can be imported
+using
 
 \begin{verbatim}
 <import package="ZConfig.components.logger" file="handlers.xml"/>
@@ -1062,20 +1118,94 @@ The types defined in this component implement the
 
 
 
+The configuration objects provided by both the logger and handler
+types are factories for the finished loggers and handlers.  These
+factories should be called with no arguments to retrieve the logger or
+log handler objects.  Calling the factories repeatedly will cause the
+same objects to be returned each time, so it's safe to simply call
+them to retrieve the objects.
+
+The factories for the logger objects, whether the \datatype{eventlog}
+or \datatype{logger} section type is used, provide a \method{reopen()}
+method which may be called to close any log files and re-open them.
+This is useful when using a \UNIX{} signal to effect log file
+rotation: the signal handler can call this method, and not have to
+worry about what handlers have been registered for the logger.
+
+Building an application that uses the logging components is fairly
+straightforward.  The schema needs to import the relevant components
+and declare their use:
+
+\begin{verbatim}
+<schema>
+  <import package="ZConfig.components.logger" file="eventlog.xml"/>
+  <import package="ZConfig.components.logger" file="handlers.xml"/>
+
+  <section type="eventlog" name="*" attribute="eventlog"
+           required="yes"/>
+</schema>
+\end{verbatim}
+
+In the application, the schema and configuration file should be loaded
+normally.  Once the configuration object is available, the logger
+factory should be called to configure Python's \module{logging} package:
+
+\begin{verbatim}
+import os
+import ZConfig
+
+def run(configfile):
+    schemafile = os.path.join(os.path.dirname(__file__), "schema.xml")
+    schema = ZConfig.loadSchema(schemafile)
+    config, handlers = ZConfig.loadConfig(schema, configfile)
+
+    # configure the logging package:
+    config.eventlog()
+
+    # now do interesting things
+\end{verbatim}
+
+An example configuration file for this application may look like this:
+
+\begin{verbatim}
+<eventlog>
+  level  info
+
+  <logfile>
+    path        /var/log/myapp
+    format      %(asctime)s %(levelname)s %(name)s %(message)s
+    # locale-specific date/time representation
+    dateformat  %c
+  </logfile>
+
+  <syslog>
+    level    error
+    address  syslog.example.net:514
+    format   %(levelname)s %(name)s %(message)s
+  </syslog>
+</eventlog>
+\end{verbatim}
+
+Refer to the \module{logging} package documentation for the names
+available in the message format strings (the \code{format} key in the
+log handlers).  The date format strings (the \code{dateformat} key in
+the log handlers) are the same as those accepted by the
+\function{time.strftime()} function.
+
+
 \begin{seealso}
   \seepep{282}{A Logging System}
          {The proposal which described the logging feature for
           inclusion in the Python standard library.}
-  \seelink{http://www.python.org/doc/current/lib/module-logging.html}
-          {Python's \module{logging} package documentation}
-          {}
+  \seelink{http://docs.python.org/lib/module-logging.html}
+          {\module{logging} --- Logging facility for Python}
+          {Python's \module{logging} package documentation, from the
+           \citetitle[http://docs.python.org/lib/lib.html]
+           {Python Library Reference}.}
   \seelink{http://www.red-dove.com/python_logging.html}
           {Original Python \module{logging} package}
           {This is the original source for the \module{logging}
-           package.  The version of the package available from this
-           site is suitable for use with Python 2.1.x and 2.2.x, which
-           do not include the \module{logging} package in the standard
-           library.}
+           package.  This is mostly of historical interest.}
 \end{seealso}
 
 
@@ -1389,10 +1519,9 @@ import ZConfig
 try:
     myfile = __file__
 except NameError:
-    # really should follow symlinks here:
-    myfile = sys.argv[0]
+    myfile = os.path.realpath(sys.argv[0])
 
-mydir = os.path.dirname(os.path.abspath(myfile))
+mydir = os.path.dirname(myfile)
 
 schema = ZConfig.loadSchema(os.path.join(mydir, 'schema.xml'))
 conf, handler = ZConfig.loadConfig(schema, sys.argv[1])

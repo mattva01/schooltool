@@ -22,22 +22,6 @@ from ZConfig import info
 from ZConfig import url
 
 
-try:
-    True
-except NameError:
-    True = 1
-    False = 0
-
-try:
-    dict
-except NameError:
-    def dict(mapping):
-        d = {}
-        for k, v in mapping.items():
-            d[k] = v
-        return d
-
-
 def parseResource(resource, loader):
     parser = SchemaParser(loader, resource.url)
     xml.sax.parse(resource.file, parser)
@@ -66,13 +50,13 @@ class BaseParser(xml.sax.ContentHandler):
     _allowed_parents = {
         "description": ["key", "section", "multikey", "multisection",
                         "sectiontype", "abstracttype",
-                        "schema", "component", "extension"],
+                        "schema", "component"],
         "example": ["key", "section", "multikey", "multisection"],
         "metadefault": ["key", "section", "multikey", "multisection"],
         "default": ["key", "multikey"],
-        "import": ["schema", "component", "extension"],
-        "abstracttype": ["schema", "component", "extension"],
-        "sectiontype": ["schema", "component", "extension"],
+        "import": ["schema", "component"],
+        "abstracttype": ["schema", "component"],
+        "sectiontype": ["schema", "component"],
         "key": ["schema", "sectiontype"],
         "multikey": ["schema", "sectiontype"],
         "section": ["schema", "sectiontype"],
@@ -411,7 +395,7 @@ class BaseParser(xml.sax.ContentHandler):
     def start_key(self, attrs):
         name, datatype, handler, attribute = self.get_key_info(attrs, "key")
         min = self.get_required(attrs) and 1 or 0
-        key = info.KeyInfo(name, datatype, min, 1, handler, attribute)
+        key = info.KeyInfo(name, datatype, min, handler, attribute)
         if attrs.has_key("default"):
             if min:
                 self.error("required key cannot have a default value")
@@ -425,6 +409,7 @@ class BaseParser(xml.sax.ContentHandler):
     def end_key(self):
         key = self._stack.pop()
         if key.name == "+":
+            key.computedefault(self._stack[-1].keytype)
             key.finish()
 
     def start_multikey(self, attrs):
@@ -434,12 +419,15 @@ class BaseParser(xml.sax.ContentHandler):
         name, datatype, handler, attribute = self.get_key_info(attrs,
                                                                "multikey")
         min, max = self.get_ordinality(attrs)
-        key = info.KeyInfo(name, datatype, min, max, handler, attribute)
+        key = info.MultiKeyInfo(name, datatype, min, max, handler, attribute)
         self._stack[-1].addkey(key)
         self._stack.append(key)
 
     def end_multikey(self):
-        self._stack.pop().finish()
+        multikey = self._stack.pop()
+        if multikey.name == "+":
+            multikey.computedefault(self._stack[-1].keytype)
+        multikey.finish()
 
     # datatype conversion wrappers
 

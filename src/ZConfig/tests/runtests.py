@@ -32,16 +32,9 @@ TESTDIRS = {
     "ZConfig.tests": TESTDIR,
     "ZConfig.components.basic.tests": os.path.join(COMPONENTS,
                                                    "basic", "tests"),
+    "ZConfig.components.logger.tests": os.path.join(COMPONENTS,
+                                                    "logger", "tests"),
     }
-
-try:
-    import logging
-except ImportError:
-    print >>sys.stderr, \
-          "'logging' not available; skipping logger component tests"
-else:
-    TESTDIRS["ZConfig.components.logger.tests"] = os.path.join(
-        COMPONENTS, "logger", "tests")
 
 
 def load_tests(pkgname, name):

@@ -13,19 +13,21 @@
 ##############################################################################
 """Handy standard storage machinery
 
-$Id: BaseStorage.py,v 1.46 2004/03/21 16:38:53 sf Exp $
+$Id: BaseStorage.py,v 1.49 2004/04/19 21:19:05 tim_one Exp $
 """
 import cPickle
 import threading
 import time
+import logging
 
 import UndoLogCompatible
 import POSException
 from persistent.TimeStamp import TimeStamp
 
-import zLOG
 from ZODB import POSException, utils
 from ZODB.UndoLogCompatible import UndoLogCompatible
+
+log = logging.getLogger("zodb.BaseStorage")
 
 class BaseStorage(UndoLogCompatible):
     """Abstract base class that support storage implementations.
@@ -75,15 +77,14 @@ class BaseStorage(UndoLogCompatible):
     The other lock appears to protect _oid and _transaction and
     perhaps other things.  It is always held when load() is called, so
     presumably the load() implementation should also acquire the lock.
-    """    
+    """
     _transaction=None # Transaction that is being committed
     _tstatus=' '      # Transaction status, used for copying data
     _is_read_only = False
 
     def __init__(self, name, base=None):
         self.__name__= name
-        zLOG.LOG(self.__class__.__name__, zLOG.DEBUG,
-                 "create storage %s" % self.__name__)
+        log.debug("create storage %s", self.__name__)
 
         # Allocate locks:
         l = threading.RLock()
@@ -353,7 +354,7 @@ class BaseStorage(UndoLogCompatible):
         """Copy transactions from another storage.
 
         This is typically used for converting data from one storage to
-        another.  `other' must have an .iterator() method.
+        another.  `other` must have an .iterator() method.
         """
         _ts=None
         ok=1
@@ -399,7 +400,7 @@ class BaseStorage(UndoLogCompatible):
             self.tpc_begin(transaction, tid, transaction.status)
             for r in transaction:
                 oid=r.oid
-                if verbose: 
+                if verbose:
                     print utils.oid_repr(oid), r.version, len(r.data)
                 if restoring:
                     self.restore(oid, r.tid, r.data, r.version,

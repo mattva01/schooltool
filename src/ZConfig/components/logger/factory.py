@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-_marker = []
+_marker = object()
 
 class Factory:
     """Generic wrapper for instance construction.

@@ -16,6 +16,7 @@ import unittest
 import ZODB
 import ZODB.FileStorage
 from ZODB.POSException import ReadConflictError, ConflictError
+from ZODB.tests.warnhook import WarningsHook
 
 from persistent import Persistent
 from persistent.mapping import PersistentMapping
@@ -42,14 +43,14 @@ class ZODBTests(unittest.TestCase):
         self._db = ZODB.DB(self._storage)
 
     def populate(self):
-        get_transaction().begin()
+        transaction.begin()
         conn = self._db.open()
         root = conn.root()
         root['test'] = pm = PersistentMapping()
         for n in range(100):
             pm[n] = PersistentMapping({0: 100 - n})
-        get_transaction().note('created test data')
-        get_transaction().commit()
+        transaction.get().note('created test data')
+        transaction.commit()
         conn.close()
 
     def tearDown(self):
@@ -70,8 +71,8 @@ class ZODBTests(unittest.TestCase):
             conn.close()
 
     def duplicate(self, conn, abort_it):
-        get_transaction().begin()
-        get_transaction().note('duplication')
+        transaction.begin()
+        transaction.get().note('duplication')
         root = conn.root()
         ob = root['test']
         assert len(ob) > 10, 'Insufficient test data'
@@ -86,15 +87,15 @@ class ZODBTests(unittest.TestCase):
             root['dup'] = new_ob
             f.close()
             if abort_it:
-                get_transaction().abort()
+                transaction.abort()
             else:
-                get_transaction().commit()
+                transaction.commit()
         except:
-            get_transaction().abort()
+            transaction.abort()
             raise
 
     def verify(self, conn, abort_it):
-        get_transaction().begin()
+        transaction.begin()
         root = conn.root()
         ob = root['test']
         try:
@@ -122,7 +123,7 @@ class ZODBTests(unittest.TestCase):
         for v in ob2.values():
             assert not oids.has_key(v._p_oid), (
                 'Did not fully separate duplicate from original')
-        get_transaction().commit()
+        transaction.commit()
 
     def checkExportImportAborted(self):
         self.checkExportImport(abort_it=True)
@@ -135,11 +136,11 @@ class ZODBTests(unittest.TestCase):
         try:
             r = conn.root()
             r[1] = 1
-            get_transaction().commit()
+            transaction.commit()
         finally:
             conn.close()
         self._db.abortVersion("version")
-        get_transaction().commit()
+        transaction.commit()
 
     def checkResetCache(self):
         # The cache size after a reset should be 0.  Note that
@@ -209,6 +210,8 @@ class ZODBTests(unittest.TestCase):
         # not the thread.
         conn1 = self._db.open()
         conn2 = self._db.open()
+        hook = WarningsHook()
+        hook.install()
         try:
             conn1.setLocalTransaction()
             conn2.setLocalTransaction()
@@ -238,9 +241,14 @@ class ZODBTests(unittest.TestCase):
             conn2.sync()
             self.assertEqual(r1['item'], 2)
             self.assertEqual(r2['item'], 2)
+            for msg, obj, filename, lineno in hook.warnings:
+                self.assert_(
+                    msg.startswith("setLocalTransaction() is deprecated.") or
+                    msg.startswith("getTransaction() is deprecated."))
         finally:
             conn1.close()
             conn2.close()
+            hook.uninstall()
 
     def checkReadConflict(self):
         self.obj = P()
@@ -253,23 +261,23 @@ class ZODBTests(unittest.TestCase):
         # error because the object state read is not necessarily
         # consistent with the objects read earlier in the transaction.
 
-        conn = self._db.open(mvcc=False)
-        conn.setLocalTransaction()
+        tm1 = transaction.TransactionManager()
+        conn = self._db.open(mvcc=False, txn_mgr=tm1)
         r1 = conn.root()
         r1["p"] = self.obj
         self.obj.child1 = P()
-        conn.getTransaction().commit()
+        tm1.get().commit()
 
         # start a new transaction with a new connection
-        cn2 = self._db.open(mvcc=False)
+        tm2 = transaction.TransactionManager()
+        cn2 = self._db.open(mvcc=False, txn_mgr=tm2)
         # start a new transaction with the other connection
-        cn2.setLocalTransaction()
         r2 = cn2.root()
 
         self.assertEqual(r1._p_serial, r2._p_serial)
 
         self.obj.child2 = P()
-        conn.getTransaction().commit()
+        tm1.get().commit()
 
         # resume the transaction using cn2
         obj = r2["p"]
@@ -281,7 +289,7 @@ class ZODBTests(unittest.TestCase):
         else:
             # make sure that accessing the object succeeds
             obj.child1
-        cn2.getTransaction().abort()
+        tm2.get().abort()
 
     def checkReadConflictIgnored(self):
         # Test that an application that catches a read conflict and
@@ -294,11 +302,11 @@ class ZODBTests(unittest.TestCase):
         real_data["b"] = PersistentMapping({"indexed_value": 1})
         index[1] = PersistentMapping({"b": 1})
         index[0] = PersistentMapping({"a": 1})
-        get_transaction().commit()
+        transaction.commit()
 
         # load some objects from one connection
-        cn2 = self._db.open(mvcc=False)
-        cn2.setLocalTransaction()
+        tm = transaction.TransactionManager()
+        cn2 = self._db.open(mvcc=False, txn_mgr=tm)
         r2 = cn2.root()
         real_data2 = r2["real_data"]
         index2 = r2["index"]
@@ -306,7 +314,7 @@ class ZODBTests(unittest.TestCase):
         real_data["b"]["indexed_value"] = 0
         del index[1]["b"]
         index[0]["b"] = 1
-        get_transaction().commit()
+        transaction.commit()
 
         del real_data2["a"]
         try:
@@ -325,8 +333,8 @@ class ZODBTests(unittest.TestCase):
         self.assert_(not index2[0]._p_changed)
         self.assert_(not index2[1]._p_changed)
 
-        self.assertRaises(ConflictError, cn2.getTransaction().commit)
-        get_transaction().abort()
+        self.assertRaises(ConflictError, tm.get().commit)
+        transaction.abort()
 
     def checkIndependent(self):
         self.obj = Independent()

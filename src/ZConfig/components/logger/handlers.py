@@ -32,6 +32,7 @@ _log_format_variables = {
     'relativeCreated': 1,
     'thread': 1,
     'message': 'amessage',
+    'process': 1,
     }
 
 def log_format(value):
@@ -79,10 +80,12 @@ class FileHandlerFactory(HandlerFactory):
         from ZConfig.components.logger import loghandler
         path = self.section.path
         if path == "STDERR":
-            return loghandler.StreamHandler(sys.stderr)
-        if path == "STDOUT":
-            return loghandler.StreamHandler(sys.stdout)
-        return loghandler.FileHandler(path)
+            handler = loghandler.StreamHandler(sys.stderr)
+        elif path == "STDOUT":
+            handler = loghandler.StreamHandler(sys.stdout)
+        else:
+            handler = loghandler.FileHandler(path)
+        return handler
 
 _syslog_facilities = {
     "auth": 1,

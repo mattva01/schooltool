@@ -18,13 +18,6 @@ import copy
 import ZConfig
 
 
-try:
-    True
-except NameError:
-    True = 1
-    False = 0
-
-
 class UnboundedThing:
     __metaclass__ = type
     __slots__ = ()
@@ -106,14 +99,16 @@ class BaseInfo:
         return False
 
 
-class KeyInfo(BaseInfo):
+class BaseKeyInfo(BaseInfo):
+
+    _rawdefaults = None
+
     def __init__(self, name, datatype, minOccurs, maxOccurs, handler,
                  attribute):
         assert minOccurs is not None
         BaseInfo.__init__(self, name, datatype, minOccurs, maxOccurs,
                           handler, attribute)
         self._finished = False
-        self._default = None
 
     def finish(self):
         if self._finished:
@@ -132,51 +127,95 @@ class KeyInfo(BaseInfo):
         elif self.name != "+" and key is not None:
             raise ZConfig.SchemaError(
                 "unexpected key for default value")
+        self.add_valueinfo(ValueInfo(value, position), key)
 
-        value = ValueInfo(value, position)
-        if self.maxOccurs > 1:
-            if self.name == "+":
-                # This is a keyed value, not a simple value:
-                if self._default is None:
-                    self._default = {key: [value]}
-                else:
-                    if key in self._default:
-                        self._default[key].append(value)
-                    else:
-                        self._default[key] = [value]
-            elif self._default is None:
-                self._default = [value]
-            else:
-                self._default.append(value)
-        elif self.name == "+":
-            if self._default is None:
-                self._default = {key: value}
-            else:
-                if self._default.has_key(key):
-                    raise ZConfig.SchemaError(
-                        "duplicate default value for key %s" % `key`)
-                self._default[key] = value
+    def add_valueinfo(self, vi, key):
+        """Actually add a ValueInfo to this key-info object.
+
+        The appropriate value of None-ness of key has already been
+        checked with regard to the name of the key, and has been found
+        permissible to add.
+
+        This method is a requirement for subclasses, and should not be
+        called by client code.
+        """
+        raise NotImplementedError(
+            "add_valueinfo() must be implemented by subclasses of BaseKeyInfo")
+
+    def prepare_raw_defaults(self):
+        assert self.name == "+"
+        if self._rawdefaults is None:
+            self._rawdefaults = self._default
+        self._default = {}
+
+
+class KeyInfo(BaseKeyInfo):
+
+    _default = None
+
+    def __init__(self, name, datatype, minOccurs, handler, attribute):
+        BaseKeyInfo.__init__(self, name, datatype, minOccurs, 1,
+                             handler, attribute)
+        if self.name == "+":
+            self._default = {}
+
+    def add_valueinfo(self, vi, key):
+        if self.name == "+":
+            if self._default.has_key(key):
+                # not ideal: we're presenting the unconverted
+                # version of the key
+                raise ZConfig.SchemaError(
+                    "duplicate default value for key %s" % `key`)
+            self._default[key] = vi
         elif self._default is not None:
             raise ZConfig.SchemaError(
                 "cannot set more than one default to key with maxOccurs == 1")
         else:
-            self._default = value
+            self._default = vi
+
+    def computedefault(self, keytype):
+        self.prepare_raw_defaults()
+        for k, vi in self._rawdefaults.iteritems():
+            key = ValueInfo(k, vi.position).convert(keytype)
+            self.add_valueinfo(vi, key)
 
     def getdefault(self):
-        if not self._finished:
-            raise ZConfig.SchemaError(
-                "cannot get default value of key before KeyInfo"
-                " has been completely initialized")
-        if self._default is None:
-            if self.name == "+":
-                return {}
-            elif self.maxOccurs > 1:
-                return []
+        # Use copy.copy() to make sure we don't allow polution of
+        # our internal data without having to worry about both the
+        # list and dictionary cases:
+        return copy.copy(self._default)
+
+
+class MultiKeyInfo(BaseKeyInfo):
+
+    def __init__(self, name, datatype, minOccurs, maxOccurs, handler,
+                 attribute):
+        BaseKeyInfo.__init__(self, name, datatype, minOccurs, maxOccurs,
+                             handler, attribute)
+        if self.name == "+":
+            self._default = {}
         else:
-            # Use copy.copy() to make sure we don't allow polution of
-            # our internal data without having to worry about both the
-            # list and dictionary cases:
-            return copy.copy(self._default)
+            self._default = []
+
+    def add_valueinfo(self, vi, key):
+        if self.name == "+":
+            # This is a keyed value, not a simple value:
+            if key in self._default:
+                self._default[key].append(vi)
+            else:
+                self._default[key] = [vi]
+        else:
+            self._default.append(vi)
+
+    def computedefault(self, keytype):
+        self.prepare_raw_defaults()
+        for k, vlist in self._rawdefaults.iteritems():
+            key = ValueInfo(k, vlist[0].position).convert(keytype)
+            for vi in vlist:
+                self.add_valueinfo(vi, key)
+
+    def getdefault(self):
+        return copy.copy(self._default)
 
 
 class SectionInfo(BaseInfo):
@@ -444,6 +483,14 @@ class SchemaType(SectionType):
         t._attrmap.update(base._attrmap)
         t._keymap.update(base._keymap)
         t._children.extend(base._children)
+        for i in range(len(t._children)):
+            key, info = t._children[i]
+            if isinstance(info, BaseKeyInfo) and info.name == "+":
+                # need to create a new info object and recompute the
+                # default mapping based on the new keytype
+                info = copy.copy(info)
+                info.computedefault(t.keytype)
+                t._children[i] = (key, info)
         return t
 
     def addComponent(self, name):

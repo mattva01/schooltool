@@ -15,12 +15,6 @@
 
 import ZConfig
 
-try:
-    True
-except NameError:
-    True = 1
-    False = 0
-
 
 def substitute(s, mapping):
     """Interpolate variables from `mapping` into `s`."""

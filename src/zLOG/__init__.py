@@ -14,6 +14,12 @@
 
 """General logging facility
 
+Note:
+  This module exists only for backward compatibility.  Any new code
+  for Zope 2.8 and newer should use the logging module from Python's
+  standard library directly.  zLOG is only an API shim to map existing
+  use of zLOG onto the standard logging API.
+
 This module attempts to provide a simple programming API for logging
 with a pluggable API for defining where log messages should go.
 
@@ -47,11 +53,8 @@ The module defines several standard severities:
 
   PANIC=300    -- We're dead!
 
-Also, logging facilities will normally ignore negative severities.
-
 To plug in a log handler, simply replace the log_write function
 with a callable object that takes 5 arguments:
-
 
       subsystem -- The subsystem generating the message (e.g. ZODB)
 
@@ -69,24 +72,12 @@ with a callable object that takes 5 arguments:
                traceback.  If provided, then a summary of the error
                is added to the detail.
 
-There is a default event logging facility that:
-
-  - swallows logging information by default,
-
-  - outputs to sys.stderr if the environment variable
-    EVENT_LOG_FILE is set to an empty string, and
-
-  - outputs to file if the environment variable
-    EVENT_LOG_FILE is set to a file name.
-
-  - Ignores errors that have a severity < 0 by default. This
-    can be overridden with the environment variable EVENT_LOG_SEVERITY
+The default logging facility uses Python's logging module as a
+back-end; configuration of the logging module must be handled
+somewhere else.
 
 """
-__version__='$Revision: 1.17 $'[11:-2]
-
-from EventLogger import log_write, log_time, severity_string, \
-     initialize_from_environment
+from EventLogger import log_write, log_time, severity_string
 from traceback import format_exception
 
 # Standard severities
@@ -99,16 +90,9 @@ WARNING =  100
 ERROR   =  200
 PANIC   =  300
 
-# Flag indicating whether LOG() should call initialize()
-_call_initialize = 1
-
-# Function called to (re-)initialize the logger we're using
-_initializer = initialize_from_environment
 
 def initialize():
-    global _call_initialize
-    _call_initialize = 0
-    _initializer()
+    pass
 
 def set_initializer(func):
     """Set the function used to re-initialize the logs.
@@ -119,8 +103,7 @@ def set_initializer(func):
     This does not ensure that the new function gets called; the caller
     should do that separately.
     """
-    global _initializer
-    _initializer = func
+    pass
 
 
 def LOG(subsystem, severity, summary, detail='', error=None, reraise=None):
@@ -132,7 +115,7 @@ def LOG(subsystem, severity, summary, detail='', error=None, reraise=None):
 
       severity -- The "severity" of the event.  This may be an integer or
                   a floating point number.  Logging back ends may
-                  consider the int() of this valua to be significant.
+                  consider the int() of this value to be significant.
                   For example, a backend may consider any severity
                   whos integer value is WARNING to be a warning.
 
@@ -148,13 +131,11 @@ def LOG(subsystem, severity, summary, detail='', error=None, reraise=None):
                  error is reraised.
 
     """
-    if _call_initialize:
-        initialize()
     log_write(subsystem, severity, summary, detail, error)
     if reraise and error:
         raise error[0], error[1], error[2]
 
-_subsystems=[]
+_subsystems = []
 def register_subsystem(subsystem):
     """Register a subsystem name
 

@@ -26,12 +26,6 @@ import ZConfig.matcher
 import ZConfig.schema
 import ZConfig.url
 
-try:
-    True
-except NameError:
-    True = 1
-    False = 0
-
 
 def loadSchema(url):
     return SchemaLoader().loadURL(url)

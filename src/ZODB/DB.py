@@ -13,19 +13,21 @@
 ##############################################################################
 """Database objects
 
-$Id: DB.py,v 1.72 2004/04/01 03:56:58 jeremy Exp $"""
+$Id: DB.py,v 1.77 2004/04/19 21:19:05 tim_one Exp $"""
 
 import cPickle, cStringIO, sys
 from thread import allocate_lock
 from time import time, ctime
 import warnings
+import logging
 
 from ZODB.broken import find_global
 from ZODB.Connection import Connection
 from ZODB.serialize import referencesf
-from zLOG import LOG, ERROR
 
 import transaction
+
+logger = logging.getLogger('zodb.db')
 
 class DB(object):
     """The Object Database
@@ -72,7 +74,7 @@ class DB(object):
         setCacheDeactivateAfter,
         getVersionCacheDeactivateAfter, setVersionCacheDeactivateAfter
     """
-    
+
     klass = Connection  # Class to use for connections
     _activity_monitor = None
 
@@ -163,14 +165,21 @@ class DB(object):
         return m
 
     def _closeConnection(self, connection):
-        """Return a connection to the pool"""
+        """Return a connection to the pool.
+
+        connection._db must be self on entry.
+        """
+
         self._a()
         try:
+            assert connection._db is self
+            connection._db = None
+
             am = self._activity_monitor
             if am is not None:
                 am.closedConnection(connection)
-            version=connection._version
-            pools,pooll=self._pools
+            version = connection._version
+            pools, pooll = self._pools
             try:
                 pool, allocated, pool_lock = pools[version]
             except KeyError:
@@ -184,7 +193,7 @@ class DB(object):
                 return
 
             pool.append(connection)
-            if len(pool)==1:
+            if len(pool) == 1:
                 # Pool now usable again, unlock it.
                 pool_lock.release()
         finally:
@@ -391,7 +400,7 @@ class DB(object):
         return len(self._storage)
 
     def open(self, version='', transaction=None, temporary=0, force=None,
-             waitflag=1, mvcc=True, txn_mgr=None):
+             waitflag=1, mvcc=True, txn_mgr=None, synch=True):
         """Return a database Connection for use by application code.
 
         The optional version argument can be used to specify that a
@@ -405,6 +414,20 @@ class DB(object):
         Note that the connection pool is managed as a stack, to
         increate the likelihood that the connection's stack will
         include useful objects.
+
+        :Parameters:
+          - `version`: the "version" that all changes will be made
+             in, defaults to no version.
+          - `transaction`: XXX
+          - `temporary`: XXX
+          - `force`: XXX
+          - `waitflag`: XXX
+          - `mvcc`: boolean indicating whether MVCC is enabled
+          - `txn_mgr`: transaction manager to use.  None means
+             used the default transaction manager.
+          - `synch`: boolean indicating whether Connection should
+             register for afterCompletion() calls.
+
         """
         self._a()
         try:
@@ -424,7 +447,7 @@ class DB(object):
                 # a one-use connection.
                 c = self.klass(version=version,
                                cache_size=self._version_cache_size,
-                               mvcc=mvcc, txn_mgr=txn_mgr)
+                               mvcc=mvcc, txn_mgr=txn_mgr, synch=synch)
                 c._setDB(self)
                 self._temps.append(c)
                 if transaction is not None:
@@ -480,7 +503,7 @@ class DB(object):
                 elif self._pool_size > len(allocated) or force:
                     c = self.klass(version=version,
                                    cache_size=self._cache_size,
-                                   mvcc=mvcc, txn_mgr=txn_mgr)
+                                   mvcc=mvcc, txn_mgr=txn_mgr, synch=synch)
                     allocated.append(c)
                     pool.append(c)
 
@@ -511,7 +534,7 @@ class DB(object):
 
             c = pool[-1]
             del pool[-1]
-            c._setDB(self)
+            c._setDB(self, mvcc=mvcc, txn_mgr=txn_mgr, synch=synch)
             for pool, allocated in pooll:
                 for cc in pool:
                     cc.cacheGC()
@@ -580,7 +603,7 @@ class DB(object):
         try:
             self._storage.pack(t, referencesf)
         except:
-            LOG("ZODB", ERROR, "packing", error=sys.exc_info())
+            logger.error("packing", exc_info=True)
             raise
 
     def setCacheSize(self, v):
@@ -592,6 +615,7 @@ class DB(object):
                 c._cache.cache_size = v
 
     def classFactory(self, connection, modulename, globalname):
+        # Zope will rebind this method to arbitrary user code at runtime.
         return find_global(modulename, globalname)
 
     def setPoolSize(self, v):
@@ -708,7 +732,7 @@ class AbortVersion(ResourceManager):
     def __init__(self, db, version):
         super(AbortVersion, self).__init__(db)
         self._version = version
-        
+
     def commit(self, ob, t):
         tid, oids = self._db._storage.abortVersion(self._version, t)
         self._db.invalidate(tid, dict.fromkeys(oids, 1), version=self._version)

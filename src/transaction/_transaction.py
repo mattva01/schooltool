@@ -80,10 +80,10 @@ calls the following four methods on each resource manager; it calls
 tpc_begin() on each resource manager before calling commit() on any of
 them.
 
-    1. tpc_begin()
-    2. commit()
-    3. tpc_vote()
-    4. tpc_finish()
+    1. tpc_begin(txn, subtransaction=False)
+    2. commit(txn)
+    3. tpc_vote(txn)
+    4. tpc_finish(txn)
 
 Subtransaction commit
 ---------------------
@@ -91,11 +91,11 @@ Subtransaction commit
 When a subtransaction commits, the protocol is different.
 
 1. tpc_begin() is passed a second argument, which indicates that a
-   subtransaction is begin committed.
+   subtransaction is being committed.
 2. tpc_vote() is not called.
 
 Once a subtransaction has been committed, the top-level transaction
-commit will start with a commit_sub() called instead of a tpc_begin()
+commit will start with a commit_sub() call instead of a tpc_begin()
 call.
 
 Error handling
@@ -246,7 +246,7 @@ class Transaction(object):
 
         if not subtransaction:
             for s in self._synchronizers:
-                s.beforeCompletion()
+                s.beforeCompletion(self)
 
         if not subtransaction:
             self.status = Status.COMMITTING
@@ -260,7 +260,7 @@ class Transaction(object):
             if self._manager:
                 self._manager.free(self)
             for s in self._synchronizers:
-                s.afterCompletion()
+                s.afterCompletion(self)
             self.log.debug("commit")
 
     def _commitResources(self, subtransaction):
@@ -313,13 +313,19 @@ class Transaction(object):
                     self.status = Status.FAILED
                     if self._manager:
                         self._manager.free(self)
+                    for s in self._synchronizers:
+                        s.afterCompletion(self)
             raise t, v, tb
 
     def _cleanup(self, L):
         # Called when an exception occurs during tpc_vote or tpc_finish.
         for rm in L:
             if id(rm) not in self._voted:
-                rm.cleanup(self)
+                try:
+                    rm.abort(self)
+                except Exception:
+                    self.log.error("Error in abort() on manager %s",
+                                   rm, exc_info=sys.exc_info())
         for rm in L:
             if id(rm) in self._sub:
                 try:
@@ -463,15 +469,9 @@ class MultiObjectResourceAdapter(object):
     def tpc_vote(self, txn):
         self.manager.tpc_vote(txn)
 
-    def cleanup(self, txn):
-        self._abort(self.objects[self.ncommitted:], txn)
-
     def abort(self, txn):
-        self._abort(self.objects, txn)
-
-    def _abort(self, objects, txn):
         tb = None
-        for o in objects:
+        for o in self.objects:
             try:
                 self.manager.abort(o, txn)
             except:

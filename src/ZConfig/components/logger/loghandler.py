@@ -13,6 +13,7 @@
 
 """Handlers which can plug into a PEP 282 logger."""
 
+import os.path
 import sys
 
 from logging import Handler, StreamHandler
@@ -29,6 +30,7 @@ class FileHandler(StreamHandler):
     """
 
     def __init__(self, filename, mode="a"):
+        filename = os.path.abspath(filename)
         StreamHandler.__init__(self, open(filename, mode))
         self.baseFilename = filename
         self.mode = mode

@@ -16,20 +16,17 @@
 This module tests and documents, through example, overriding attribute
 access methods.
 
-$Id: test_overriding_attrs.py,v 1.5 2004/03/04 22:41:59 jim Exp $
+$Id: test_overriding_attrs.py,v 1.7 2004/04/19 21:19:10 tim_one Exp $
 """
 
 from persistent import Persistent
-try:
-    from transaction import get_transaction
-except ImportError:
-    pass # else assume ZODB will install it as a builtin
+import transaction
 from ZODB.tests.util import DB
 
 class SampleOverridingGetattr(Persistent):
     """Example of overriding __getattr__
     """
-    
+
     def __getattr__(self, name):
         """Get attributes that can't be gotten the usual way
 
@@ -58,11 +55,11 @@ class SampleOverridingGetattr(Persistent):
         >>> db = DB()
         >>> conn = db.open()
         >>> conn.root()['o'] = o
-        >>> get_transaction().commit()
+        >>> transaction.commit()
         >>> o._p_deactivate()
         >>> o._p_changed
 
-        And now, if we ask for an attribute it doesn't have, 
+        And now, if we ask for an attribute it doesn't have,
 
         >>> o.eggs
         ('EGGS', False)
@@ -90,7 +87,7 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
 
     The class will have the policy that variables with names starting
     with 'tmp_' will be volatile.
-    
+
     """
 
     def __init__(self, **kw):
@@ -110,7 +107,7 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         >>> o._p_changed
         0
         >>> o._p_oid
-        >>> o._p_jar        
+        >>> o._p_jar
         >>> o.x
         1
         >>> o.y
@@ -119,12 +116,12 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         AttributeError: y
 
         Next, we'll save the object in a database so that we can
-        deactivate it: 
+        deactivate it:
 
         >>> db = DB()
         >>> conn = db.open()
         >>> conn.root()['o'] = o
-        >>> get_transaction().commit()
+        >>> transaction.commit()
         >>> o._p_deactivate()
         >>> o._p_changed
 
@@ -139,10 +136,10 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         0
 
         It works for missing attribes too:
-        
+
         >>> o._p_deactivate()
         >>> o._p_changed
-        
+
         >>> o.y
         Traceback (most recent call last):
         ...
@@ -182,9 +179,9 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         meth = getattr(self.__class__, name, None)
         if meth is None:
             raise AttributeError, name
-        
+
         return meth.__get__(self, self.__class__)
-        
+
 
     def __setattr__(self, name, value):
         """Set an attribute value
@@ -222,14 +219,14 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
 
         >>> 'x' in o.__dict__
         False
-        
+
         Next, we'll save the object in a database so that we can
-        deactivate it: 
+        deactivate it:
 
         >>> db = DB()
         >>> conn = db.open()
         >>> conn.root()['o'] = o
-        >>> get_transaction().commit()
+        >>> transaction.commit()
         >>> o._p_deactivate()
         >>> o._p_changed
 
@@ -246,8 +243,8 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         1
 
         Now, if commit:
-        
-        >>> get_transaction().commit()
+
+        >>> transaction.commit()
         >>> o._p_changed
         0
 
@@ -266,7 +263,7 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         0
         >>> o.tmp_foo
         3
-        
+
         We always close databases after we use them:
 
         >>> db.close()
@@ -291,7 +288,7 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
 
         if not name.startswith('tmp_'):
             self._p_changed = 1
-        
+
     def __delattr__(self, name):
         """Delete an attribute value
 
@@ -324,12 +321,12 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         AttributeError: x
 
         Next, we'll save the object in a database so that we can
-        deactivate it: 
+        deactivate it:
 
         >>> db = DB()
         >>> conn = db.open()
         >>> conn.root()['o'] = o
-        >>> get_transaction().commit()
+        >>> transaction.commit()
         >>> o._p_deactivate()
         >>> o._p_changed
 
@@ -351,8 +348,8 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         3
 
         Now, if commit:
-        
-        >>> get_transaction().commit()
+
+        >>> transaction.commit()
         >>> o._p_changed
         0
 
@@ -373,7 +370,7 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
         Traceback (most recent call last):
         ...
         AttributeError: tmp_z
-        
+
         We always close databases after we use them:
 
         >>> db.close()
@@ -395,10 +392,10 @@ class SampleOverridingGetattributeSetattrAndDelattr(Persistent):
             return
 
         del self.__dict__['__secret__'][name]
-        
+
         if not name.startswith('tmp_'):
             self._p_changed = 1
-                    
+
 
 def test_suite():
     from doctest import DocTestSuite

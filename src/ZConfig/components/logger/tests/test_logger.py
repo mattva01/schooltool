@@ -27,16 +27,17 @@ from ZConfig.components.logger import handlers
 from ZConfig.components.logger import loghandler
 
 
-class TestConfig(unittest.TestCase):
+class LoggingTestBase(unittest.TestCase):
 
     # XXX This tries to save and restore the state of logging around
     # the test.  Somewhat surgical; there may be a better way.
 
     def setUp(self):
-        self._old_logger = logging.getLogger("event")
+        self._old_logger = logging.getLogger()
         self._old_level = self._old_logger.level
         self._old_handlers = self._old_logger.handlers[:]
         self._old_logger.handlers[:] = [loghandler.NullHandler()]
+        self._old_logger.setLevel(logging.WARN)
 
     def tearDown(self):
         for h in self._old_logger.handlers:
@@ -44,6 +45,9 @@ class TestConfig(unittest.TestCase):
         for h in self._old_handlers:
             self._old_logger.addHandler(h)
         self._old_logger.setLevel(self._old_level)
+
+
+class TestConfig(LoggingTestBase):
 
     _schema = None
     _schematext = """

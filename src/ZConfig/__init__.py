@@ -13,9 +13,9 @@
 ##############################################################################
 """Configuration data structures and loader for the ZRS.
 
-$Id: __init__.py,v 1.17 2004/03/25 21:28:22 fdrake Exp $
+$Id: __init__.py,v 1.18 2004/04/15 20:33:32 fdrake Exp $
 """
-version_info = (2, 1)
+version_info = (2, 2)
 __version__ = ".".join([str(n) for n in version_info])
 
 from ZConfig.loader import loadConfig, loadConfigFile
