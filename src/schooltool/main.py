@@ -20,13 +20,6 @@
 """
 Schooltool HTTP server.
 
-Usage: schooltool.py [options]
-Options:
-
-  -c, --config xxx  use this configuration file instead of the default
-  -h, --help        show this help message
-  -d, --daemon      go to background after starting
-
 $Id$
 """
 
@@ -56,6 +49,7 @@ from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.translation import ugettext as _
+from schooltool.common import to_locale
 
 __metaclass__ = type
 
@@ -524,12 +518,19 @@ def profile(fn, extension='prof'):
 # Main loop
 #
 
-no_storage_error_msg = """
+no_storage_error_msg = to_locale(_("""\
 No storage defined in the configuration file.  Unable to start the server.
 
 If you're using the default configuration file, please edit it now and
-uncomment one of the ZODB storage sections.
-"""
+uncomment one of the ZODB storage sections."""))
+
+usage_msg = to_locale(_("""\
+Usage: %s [options]
+Options:
+
+  -c, --config xxx  use this configuration file instead of the default
+  -h, --help        show this help message
+  -d, --daemon      go to background after starting"""))
 
 
 class Server:
@@ -553,9 +554,9 @@ class Server:
         """
         try:
             self.configure(args)
-        except getopt.GetoptError, e:
+        except getopt.error, e:
             print >> self.stderr, "schooltool: %s" % e
-            print >> self.stderr, _("run schooltool -h for help")
+            print >> self.stderr, to_locale(_("run schooltool -h for help"))
             return 1
         except SystemExit, e:
             return e.args[0]
@@ -601,7 +602,7 @@ class Server:
                 raise SystemExit(0)
 
         if args:
-            raise getopt.GetoptError(_("too many arguments"))
+            raise getopt.error(to_locale(_("too many arguments")))
 
         # Read configuration file
         for k, v in opts:
@@ -642,8 +643,8 @@ class Server:
 
     def help(self):
         """Prints a help message."""
-        message = __doc__.strip().splitlines()[:-1]
-        print >> sys.stdout, "\n".join(message)
+        progname = os.path.basename(sys.argv[0])
+        print >> sys.stdout, usage_msg % progname
 
     def noStorage(self):
         """Prints an informative message when the config file does not define a
@@ -821,18 +822,19 @@ class Server:
     authenticate = staticmethod(authenticate)
 
     def notifyConfigFile(self, config_file):
-        print >> self.stdout, _("Reading configuration from %s") % config_file
+        print >> self.stdout, (to_locale(_("Reading configuration from %s"))
+                               % config_file)
 
     def notifyServerStarted(self, network_interface, port):
-        print >> self.stdout, (_("Started HTTP server on %s:%s")
+        print >> self.stdout, (to_locale(_("Started HTTP server on %s:%s"))
                                % (network_interface or "*", port))
 
     def notifyDaemonized(self, pid):
-        print >> self.stdout, (_("Going background, daemon pid %d")
+        print >> self.stdout, (to_locale(_("Going background, daemon pid %d"))
                                % pid)
 
     def notifyShutdown(self):
-        print >> self.stdout, (_("Shutting down"))
+        print >> self.stdout, (to_locale(_("Shutting down")))
 
 
 def setUpModules(module_names):
