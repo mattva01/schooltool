@@ -33,8 +33,10 @@ from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.browser.auth import PrivateAccess
+from schooltool.browser.auth import ACLModifyAccess, ACLViewAccess
 from schooltool.browser.auth import isManager
 from schooltool.browser.cal import BookingView
+from schooltool.browser.acl import ACLView
 from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.browser.cal import ComboCalendarView
 from schooltool.component import FacetManager
@@ -252,7 +254,7 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin):
 
     __used_for__ = IGroup
 
-    authorization = AuthenticatedAccess
+    authorization = ACLViewAccess
 
     template = Template("www/group.pt")
 
@@ -261,6 +263,8 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin):
             return GroupEditView(self.context)
         elif name == "teachers.html":
             return GroupTeachersView(self.context)
+        elif name == 'acl.html':
+            return ACLView(self.context.acl)
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         raise KeyError(name)
@@ -333,7 +337,7 @@ class GroupEditView(View, RelationshipViewMixin):
 
     __used_for__ = IGroup
 
-    authorization = ManagerAccess
+    authorization = ACLModifyAccess
 
     template = Template('www/group_edit.pt')
 
@@ -367,7 +371,7 @@ class GroupTeachersView(View, RelationshipViewMixin):
 
     __used_for__ = IGroup
 
-    authorization = ManagerAccess
+    authorization = ACLModifyAccess
 
     template = Template('www/group_teachers.pt')
 

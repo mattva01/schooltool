@@ -111,12 +111,12 @@ def traverse(obj, path):
 #
 
 class FacetManager:
-    implements(IFacetManager)
+    implements(IFacetManager, ILocation)
 
     def __init__(self, context):
-        if IFaceted.providedBy(context):
-            self.__parent__ = context
-        else:
+        self.__name__ = 'facets'
+        self.__parent__ = context
+        if not IFaceted.providedBy(context):
             raise TypeError(
                 "FacetManager's context must be IFaceted", context)
 

@@ -27,16 +27,15 @@ from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
-from schooltool.browser.auth import CalendarViewAccess, CalendarModifyAccess
-from schooltool.browser.auth import CalendarAddAccess
+from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
+from schooltool.browser.auth import ACLAddAccess
+from schooltool.browser.acl import ACLView
 from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IContainmentRoot, IPerson, IGroup
 from schooltool.translation import ugettext as _
-from schooltool.interfaces import Everybody, ViewPermission
-from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import SelectionWidget
 
@@ -156,7 +155,7 @@ class CalendarViewBase(View):
 
     __used_for__ = ICalendar
 
-    authorization = CalendarViewAccess
+    authorization = ACLViewAccess
 
     # Which day is considered to be the first day of the week (0 = Monday,
     # 6 = Sunday).  Currently hardcoded.  A similair value is also hardcoded
@@ -302,7 +301,7 @@ class DailyCalendarView(CalendarViewBase):
 
     __used_for__ = ICalendar
 
-    authorization = CalendarViewAccess
+    authorization = ACLViewAccess
 
     template = Template("www/cal_daily.pt")
 
@@ -560,7 +559,7 @@ class CalendarView(View):
     Switches daily, weekly, monthly, yearly calendar presentations.
     """
 
-    authorization = CalendarViewAccess
+    authorization = ACLViewAccess
 
     def _traverse(self, name, request):
         if name == 'weekly.html':
@@ -591,7 +590,7 @@ class EventViewBase(View):
 
     __used_for__ = ICalendar
 
-    authorization = CalendarModifyAccess
+    authorization = ACLModifyAccess
 
     template = Template('www/event.pt')
     page_title = None # overridden by subclasses
@@ -674,7 +673,7 @@ class EventAddView(EventViewBase):
 
     page_title = _("Add event")
 
-    authorization = CalendarAddAccess
+    authorization = ACLAddAccess
 
     def process(self, dtstart, duration, title, location):
         ev = CalendarEvent(dtstart, duration, title,
@@ -720,7 +719,7 @@ class EventDeleteView(View):
 
     __used_for__ = ICalendar
 
-    authorization = CalendarModifyAccess
+    authorization = ACLModifyAccess
 
     def do_GET(self, request):
         event_id = to_unicode(request.args['event_id'][0])
@@ -848,137 +847,6 @@ class CalendarEventView(View):
     def uniqueId(self):
         """Format the event ID for inclusion in a URL."""
         return urllib.quote(self.context.unique_id)
-
-
-class ACLView(View):
-    """Calendar access list view."""
-
-    authorization = PrivateAccess
-
-    template = Template("www/acl.pt")
-
-    def __init__(self, context):
-        View.__init__(self, context)
-
-        self.principal_widget = SelectionWidget(
-            'principal', _('Principal'),
-            [(None, _('Select principal')), (Everybody, _('Everybody'))] +
-            [(obj, obj.title) for obj in self.allPrincipals()],
-            parser=self.principalParser,
-            formatter=self.formatPrincipal,
-            validator=self.principalValidator)
-
-        self.permission_widget = SelectionWidget(
-            'permission', _('Permission'),
-            [(None, _('Select permission'))] +
-            [(ViewPermission, _('View')),
-             (AddPermission, _('Add')),
-             (ModifyPermission, _('Modify'))],
-            validator=self.permissionValidator,
-            formatter=self.formatPermission
-            )
-
-    def principalParser(self, value):
-        if value in (None, ''):
-            return value
-        elif value == Everybody:
-            return Everybody
-        try:
-           return traverse(self.context, value)
-        except TypeError:
-           return None
-
-    def formatPrincipal(self, value):
-        if value in ('', None):
-            return ''
-        elif value == Everybody:
-            return Everybody
-        else:
-            return getPath(value)
-
-    def formatPermission(self,  value):
-        if not value:
-            return ''
-        return value
-
-    def principalValidator(self, value):
-        if (not IPerson.providedBy(value) and not IGroup.providedBy(value) and
-            value is not None and value != Everybody):
-            raise ValueError(_("Please select a principal"))
-
-    def permissionValidator(self, value):
-        if value not in (ViewPermission, AddPermission, ModifyPermission, None):
-            raise ValueError(_("Please select a permission"))
-
-    def checkbox(self, principal, permission):
-        """Format the checkbox id"""
-        if principal == Everybody:
-            return '%s:%s' % (permission, principal)
-        else:
-            return '%s:%s' % (permission, getPath(principal))
-
-    def allPrincipals(self):
-        """Return a list of objects available for addition"""
-        result = []
-
-        for path in ('/groups', '/persons'):
-            for obj in traverse(self.context, path).itervalues():
-                # XXX who uses __class__.__name__ in this way?! *thwap*
-                result.append((obj.__class__.__name__, obj.title, obj))
-        result.sort()
-        return [obj for cls, title, obj in result]
-
-    def update(self):
-        result = []
-        self.principal_widget.update(self.request)
-        self.permission_widget.update(self.request)
-        if 'DELETE' in self.request.args:
-            for checkbox in self.request.args.get('CHECK', []):
-                perm, path = checkbox.split(':', 1)
-                if path == Everybody:
-                    obj = Everybody
-                else:
-                    try:
-                        obj = traverse(self.context, path)
-                    except KeyError:
-                        continue
-                try:
-                    self.context.remove((obj, perm))
-                except KeyError:
-                    pass
-                else:
-                    self.request.appLog(
-                        _("Revoked permission %s on %s from %s") %
-                        (perm, getPath(self.context),
-                         self.printPrincipal(obj)))
-                    result.append(_("Revoked permission %s from %s") %
-                                  (perm, self.printPrincipal(obj)))
-            return "; ".join(result)
-
-        if 'ADD' in self.request.args:
-            self.permission_widget.require()
-            self.principal_widget.require()
-
-            if not (self.principal_widget.error or
-                    self.permission_widget.error):
-                principal = self.principal_widget.value
-                permission = self.permission_widget.value
-                if (principal, permission) in self.context:
-                    return _("%s already has permission %s") % \
-                           (principal.title, permission)
-                self.context.add((principal, permission))
-                self.request.appLog(
-                    _("Granted permission %s on %s to %s") %
-                    (permission, getPath(self.context),
-                     self.printPrincipal(principal)))
-                return _("Granted permission %s to %s") % \
-                       (permission, self.printPrincipal(principal))
-
-    def printPrincipal(self, principal):
-        if principal == Everybody:
-            return Everybody
-        else:
-            return "%s (%s)" % (getPath(principal), principal.title)
 
 
 #

@@ -40,7 +40,7 @@ from schooltool.rest.auth import PrivateAccess      # reexport
 from schooltool.component import getRelatedObjects
 from schooltool.uris import URIGroup
 from schooltool.interfaces import ViewPermission, ModifyPermission
-from schooltool.interfaces import AddPermission
+from schooltool.interfaces import AddPermission, IACLOwner, ILocation
 
 __metaclass__ = type
 
@@ -73,7 +73,7 @@ def TeacherAccess(context, request):
 TeacherAccess = staticmethod(TeacherAccess)
 
 
-class ACLCalendarAccess:
+class ACLAccess:
     """Allows access for persons listed in the ACL of context."""
 
     def __init__(self, permission):
@@ -82,11 +82,12 @@ class ACLCalendarAccess:
     def __call__(self, context, request):
         if isManager(request.authenticated_user):
             return True
+        acl = getACL(context)
         if request.authenticated_user is not None:
             for group in self.getAncestorGroups(request.authenticated_user):
-                if context.acl.allows(group, self.permission):
+                if acl.allows(group, self.permission):
                     return True
-        return context.acl.allows(request.authenticated_user, self.permission)
+        return acl.allows(request.authenticated_user, self.permission)
 
     def getAncestorGroups(self, person):
         """Return a set of ancestor groups of a person"""
@@ -99,6 +100,21 @@ class ACLCalendarAccess:
         getAncestors(person)
         return ancestors
 
-CalendarViewAccess = ACLCalendarAccess(ViewPermission)
-CalendarModifyAccess = ACLCalendarAccess(ModifyPermission)
-CalendarAddAccess = ACLCalendarAccess(AddPermission)
+ACLViewAccess = ACLAccess(ViewPermission)
+ACLModifyAccess = ACLAccess(ModifyPermission)
+ACLAddAccess = ACLAccess(AddPermission)
+
+
+def getACL(context):
+    """Returns the ACL used for the context.
+
+    Raises a ValueError if context does not have an ACL.
+    """
+    obj = context
+    while True:
+        if IACLOwner.providedBy(obj):
+            return obj.acl
+        if ILocation.providedBy(obj):
+            obj = obj.__parent__
+            continue
+        raise ValueError("Could not find ACL for %r" % (context, ))

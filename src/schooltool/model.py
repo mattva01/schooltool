@@ -28,6 +28,7 @@ from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.interfaces import IAbsenceComment
 from schooltool.interfaces import IApplicationObject
+from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
@@ -181,6 +182,7 @@ class Group(ApplicationObjectMixin):
     def __init__(self, title=None):
         ApplicationObjectMixin.__init__(self, title)
         self.valencies = Valency(Membership, 'group')
+        self.acl.add((Everybody, ViewPermission))
 
 
 class Resource(ApplicationObjectMixin):

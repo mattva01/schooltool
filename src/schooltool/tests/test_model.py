@@ -329,7 +329,10 @@ class TestGroup(ApplicationObjectsTestMixin):
 
     def test(self):
         from schooltool.interfaces import IGroup
-        verifyObject(IGroup, self.newObject())
+        from schooltool.interfaces import Everybody, ViewPermission
+        group = self.newObject()
+        verifyObject(IGroup, group)
+        self.assertEquals(list(group.acl), [(Everybody, ViewPermission)])
 
 
 class TestResource(ApplicationObjectsTestMixin):
