@@ -229,6 +229,9 @@ class IServiceAPI(Interface):
     def getTicketService(context):
         """Return the ticket service for authentication."""
 
+    def getOptions(context):
+        """Return an IOptions object found from the context"""
+
 
 class IServiceManager(Interface):
     """Container of services"""
@@ -2065,7 +2068,7 @@ class INote(ILocation):
 
 
 class IAddress(IRelatable, IFaceted):
-    """The base of a physical address 
+    """The base of a physical address
 
     Participates in URIOccupies as occupiedBy"""
 

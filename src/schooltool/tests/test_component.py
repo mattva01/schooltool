@@ -358,6 +358,23 @@ class TestServiceAPI(unittest.TestCase):
         self.setUpTree()
         self.doTestService(getTimePeriodService, self.root.timePeriodService)
 
+    def test_getOptions(self):
+        from schooltool.component import getOptions
+        from schooltool.interfaces import IOptions
+
+        x = LocationStub(None, 'root')
+        self.assertRaises(TypeError, getOptions, x)
+        self.assertRaises(TypeError, getOptions, object())
+
+        a = LocationStub(None, 'foo')
+        b = LocationStub(a, 'bar')
+        c = LocationStub(b, 'baz')
+        directlyProvides(a, IOptions)
+
+        self.assertEqual(getOptions(a), a)
+        self.assertEqual(getOptions(b), a)
+        self.assertEqual(getOptions(c), a)
+
 
 class Relatable(LocatableEventTargetMixin):
     implements(IRelatable, IQueryLinks)

@@ -35,6 +35,7 @@ from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import IUtilityService
 from schooltool.interfaces import ITimetableModelRegistry
+from schooltool.interfaces import IOptions
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
                IRelationshipAPI, IViewAPI, ITimetableModelRegistry)
@@ -244,6 +245,17 @@ def getTimePeriodService(context):
 def getTicketService(context):
     """See IServiceAPI"""
     return _getServiceManager(context).ticketService
+
+
+def getOptions(obj):
+    """See IServiceAPI."""
+    cur = obj
+    while not IOptions.providedBy(cur):
+        if ILocation.providedBy(cur):
+            cur = cur.__parent__
+        else:
+            raise TypeError("Cannot find options from %s" % obj)
+    return cur
 
 
 #

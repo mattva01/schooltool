@@ -172,7 +172,7 @@ from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerTimetableModel
-from schooltool.component import getPath, getRoot
+from schooltool.component import getPath, getOptions
 from schooltool.uris import URIGroup
 from schooltool.event import EventMixin
 
@@ -609,7 +609,7 @@ class BaseTimetableModel(Persistent):
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
         cal = Calendar()
         day_id_gen = self._dayGenerator()
-        privacy = getRoot(timetable).timetable_privacy
+        privacy = getOptions(timetable).timetable_privacy
         for date in schoolday_model:
             if not schoolday_model.isSchoolday(date):
                 continue

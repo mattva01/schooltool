@@ -41,7 +41,7 @@ from schooltool.cal import YearlyRecurrenceRule
 from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
-from schooltool.component import getRoot
+from schooltool.component import getOptions
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
@@ -910,7 +910,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.other_location_widget = TextWidget('location_other',
                                                 _('Specify other location'))
 
-        default_privacy = getRoot(self.context).new_event_privacy
+        default_privacy = getOptions(self.context).new_event_privacy
         self.privacy_widget = SelectionWidget('privacy',
                                               _('Visibility to other users'),
                                               (('public', _('Public')),

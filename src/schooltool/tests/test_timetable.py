@@ -38,7 +38,7 @@ from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.interfaces import ISchooldayModel
 from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ILocation
-from schooltool.interfaces import IContainmentRoot
+from schooltool.interfaces import IContainmentRoot, IOptions
 from schooltool.facet import FacetedMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
@@ -53,12 +53,16 @@ class TraversableRoot(object):
 
 
 def setPath(obj, path):
-    """Trick getPath(obj) into returning path."""
+    """Trick getPath(obj) into returning path.
+
+    Also, the fictious root will be returned by getOptions
+    """
     assert path.startswith('/')
     obj.__name__ = path[1:]
     directlyProvides(obj, ILocation)
     obj.__parent__ = TraversableRoot()
     directlyProvides(obj.__parent__, IContainmentRoot)
+    directlyProvides(obj.__parent__, IOptions)
 
 
 class ActivityStub:
@@ -881,10 +885,10 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         """
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
-        from schooltool.component import getRoot
+        from schooltool.component import getOptions
         tt = Timetable(('A', 'B'))
         setPath(tt, '/path/to/tt')
-        getRoot(tt).timetable_privacy = 'public'
+        getOptions(tt).timetable_privacy = 'public'
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
@@ -1007,12 +1011,12 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
         from schooltool.interfaces import ITimetableModel
-        from schooltool.component import getRoot
+        from schooltool.component import getOptions
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
         tt = Timetable(days)
         setPath(tt, '/path/to/tt')
-        getRoot(tt).timetable_privacy = 'private'
+        getOptions(tt).timetable_privacy = 'private'
 
         periods = ('1', '2', '3', '4')
         for day_id in days:
