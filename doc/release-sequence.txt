@@ -21,7 +21,7 @@ For bugfixes to a released version which are non-debian specific.
     c.  Write a new Changelog entry in debian/changelog.
 
     d.  Check that the database is compatible with the previous version, if not
-        update db_version in debian/school{bell,tool}.{pre,post}inst
+        update db_version in debian/school{bell,tool}.preinst, debian/rules
 
 3.  Check release notes in RELEASE.
 
@@ -80,8 +80,8 @@ This is the release procedure used for release 0.8.
 
     c.  Write a new Changelog entry in debian/changelog.
 
-    d.  Make sure that db_version in debian/school{bell,tool}.{pre,post}inst are
-        correct and the same.
+    d.  Make sure that db_version in debian/school{bell,tool}.preinst and
+        debian/rules are correct and the same.
 
 3.  Check release notes in RELEASE.
 
