@@ -110,7 +110,7 @@ class Options:
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
     immediate_errors = False    # show tracebacks twice (currently hardcoded)
-    screen_width = 80           # screen width (currently hardcoded)
+    screen_width = 80           # screen width (autodetected)
 
 
 def compile_matcher(regex):
