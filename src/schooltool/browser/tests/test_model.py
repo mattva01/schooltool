@@ -658,7 +658,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view.request = request
         result = view.update()
         self.assertEquals(sorted(request.applog), [])
-        self.assertEquals(result, 'Cannont add Teachers to Teachers')
+        self.assertEquals(result, 'Cannot add Teachers to Teachers')
 
 
 class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
@@ -773,7 +773,7 @@ class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
         del view.request.applog[:]
         result = view.update() # second update will fail
         self.assertEquals(sorted(view.request.applog), [])
-        self.assertEquals(result, 'Cannont add teacher Josh to Group')
+        self.assertEquals(result, 'Cannot add teacher Josh to Group')
 
 
 class TestResourceView(unittest.TestCase, TraversalTestMixin,):

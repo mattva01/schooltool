@@ -316,7 +316,7 @@ class RelationshipViewMixin:
                                'when the relationship creation fails'
     """
 
-    errormessage = _("Cannont create relationship between"
+    errormessage = _("Cannot create relationship between"
                      " %(other)s and %(this)s")
 
     def list(self):
@@ -382,7 +382,7 @@ class GroupEditView(View, RelationshipViewMixin):
 
     back = True
 
-    errormessage = _("Cannont add %(other)s to %(this)s")
+    errormessage = _("Cannot add %(other)s to %(this)s")
 
     def addList(self):
         """Return a list of objects available for addition"""
@@ -393,7 +393,7 @@ class GroupEditView(View, RelationshipViewMixin):
             for obj in traverse(self.context, path).itervalues():
                 if (searchstr in obj.title.lower() and obj not in members):
                     addable.append(obj)
-        # XXX 'obj not in members' is not strong enough; we should check for
+        # 'obj not in members' is not strong enough; we should check for
         # transitive membership as well
         return self._list(addable)
 
@@ -415,7 +415,7 @@ class GroupTeachersView(View, RelationshipViewMixin):
 
     back = True
 
-    errormessage = _("Cannont add teacher %(other)s to %(this)s")
+    errormessage = _("Cannot add teacher %(other)s to %(this)s")
 
     def addList(self):
         """List all members of the Teachers group except current teachers."""
