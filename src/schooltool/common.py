@@ -320,6 +320,18 @@ class StreamWrapper:
 class UnicodeAwareException(Exception):
     r"""Unicode-friendly exception.
 
+    Sadly, the standard Python exceptions deal badly with Unicode strings:
+
+        >>> e = ValueError(u"\u2639")
+        >>> unicode(e)
+        Traceback (most recent call last):
+            ...
+        UnicodeEncodeError: 'ascii' codec can't encode character u'\u2639' in position 0: ordinal not in range(128)
+
+    UnicodeAwareException fixes this problem, so please subclass it for custom
+    SchoolTool exceptions that might be shown to the user and therefore need
+    to be internationalized.
+
         >>> e1 = UnicodeAwareException(u"\u2639")
         >>> unicode(e1)
         u'\u2639'
@@ -328,6 +340,8 @@ class UnicodeAwareException(Exception):
         >>> unicode(e2)
         u'\u2639 \u2639'
 
+    See also
+    http://sf.net/tracker/?func=detail&aid=1012952&group_id=5470&atid=355470
     """
 
     def __unicode__(self):
