@@ -4,7 +4,7 @@
 #
 # A wrapper script for schoolbell-import.py (which should be in the same
 # directory).
-# 
+#
 # For this script to work you need a number of things:
 #
 # 1- You should have already run run-export.sh
@@ -12,7 +12,7 @@
 #    (If you already started the instance, just remove the Data.fs and wave
 #    goodbye to anything you added to it)
 # 3- The ability to edit this script.
-# 
+#
 #
 # Edit this script
 #
@@ -52,7 +52,7 @@ PYTHON=/usr/bin/python2.3
 #    directory by default) you need to move it to where SchoolBell-1.0 will
 #    expect to find it.
 #
-#    FIXME: Where is that?
+#    For Ubuntu/Debian installations, this is /var/lib/schoolbell/Data.fs
 #
 
 
