@@ -1032,7 +1032,7 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         request = RequestStub(uri='http://server/calendar?periods=no&date=123',
                               args={'cal_periods': 'no', 'date': '123'})
         view._traverse('daily.html', request)
-        self.assertEquals(request._outgoing_cookies['cal_periods'][0], 'yes')
+        self.assertEquals(request._outgoing_cookies['cal_periods'][0], '')
         # a date like 'Fri, 05-Nov-2004 19:35:06 UTC'
         self.assertEquals(len(request._outgoing_cookies['cal_periods'][1]), 29)
         self.assertEquals(request.code, 302)

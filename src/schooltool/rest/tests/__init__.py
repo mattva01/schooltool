@@ -120,6 +120,9 @@ class RequestStub:
         else:
             self._outgoing_cookies[key] = value
 
+    def clearCookie(self, key):
+        self.addCookie(key, '', expires='Www, DD-Mmm-YYYY HH:MM:SS UTC')
+
     def setResponseCode(self, code, reason=None):
         self.code = code
         if reason is None:

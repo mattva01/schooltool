@@ -750,9 +750,9 @@ class CalendarView(View):
         if 'cal_periods' in request.args:
             expires = None
             if request.args['cal_periods'][0] != 'yes':
-                now = datetime.utcnow()
-                expires = now.strftime("%a, %d-%h-%Y %H:%M:%S UTC")
-            request.addCookie('cal_periods', 'yes', expires=expires)
+                request.clearCookie('cal_periods')
+            else:
+                request.addCookie('cal_periods', 'yes')
             uri = request.uri
             if '?' in uri:
                 uri = uri[:uri.rindex('?')]
