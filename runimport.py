@@ -16,6 +16,14 @@ if os.path.exists('Data.fs'):
     print "Please remove Data.fs before creating a sample school"
     sys.exit(1)
 
+for file in ('groups.csv',  'teachers.csv', 'pupils.csv'):
+    if not os.path.exists(file):
+        print "%s not found." %  file
+        print ("Please create the sample data files by running "
+               "schooltool/datagen.py")
+        sys.exit(1)
+
+
 print "Starting server..."
 pid = os.spawnlp(os.P_NOWAIT, "python2.3",
                  "SchoolTool", os.path.abspath("src/schooltool/main.py"))

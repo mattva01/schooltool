@@ -49,10 +49,10 @@ runclient: build
 runwxclient: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/wxclient.py
 
-sampledata:
+sampledata teachers.csv groups.csv pupils.csv:
 	PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/datagen.py schooltool-m2
 
-sampleschool:
+sampleschool: teachers.csv groups.csv pupils.csv
 	PYTHONPATH=src $(PYTHON) $(PWD)/runimport.py
 
 coverage: build
