@@ -1,0 +1,112 @@
+Functional doctest for schoolbell.app
+=====================================
+
+This is a functional doctest for schoolbell.app.  To find out more about
+functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
+
+SchoolBell as a Zope 3 content object
+-------------------------------------
+
+First, we'll go to the Zope 3 management interface and verify that you can add
+SchoolBell instances from the add menu.
+
+  >>> print http(r"""
+  ... GET /@@contents.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  Content-Length: ...
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html ...
+  ...
+          <div class="box" id="commonTasks">
+  ...
+            <h4>Add:</h4>
+            <div class="body">
+  ...
+        <a href="http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication"
+           class="">SchoolBell</a>
+  ...
+
+Let's add one!
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
+    ... 
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/@@contents.html
+    ...
+
+Ok, it is there:
+
+    >>> print http(r"""
+    ... GET /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+              <tr class="...">
+                <td>
+                  <input type="checkbox" class="noborder"
+                         name="ids:list" id="frogpond"
+                         value="frogpond" />
+                </td>
+                <td><a href="frogpond/@@SelectedManagementView.html"></a><span>
+                      <a href="frogpond/@@SelectedManagementView.html">frogpond</a><a
+        href="http://localhost/@@contents.html?rename_ids:list=frogpond">&nbsp;&nbsp;</a></span></td>
+                <td>
+    ...
+
+How does it look inside?
+
+    >>> print http(r"""
+    ... GET /frogpond/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    <BLANKLINE>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+          lang="en">
+    <BLANKLINE>
+      <head>
+        <title>Z3: frogpond</title>
+    ...
+    <h2>Welcome to SchoolBell</h2>
+    ...
+
+Appendix: Tips and tricks for writing functional doctests
+---------------------------------------------------------
+
+- Replace "Authorization: Basic (whatever goes here)" with
+  "Authorization: Basic mgr:mgrpw"
+
+- Replace "Content-Length: (a number)" with "Content-Length: ..." in the output
+  (but not in the input!)
+  
+- Remove all port numbers after 'localhost' (e.g., if you used tcpwatch and
+  went to http://localhost:9080/, then in your .txt file replace all instances
+  of "localhost:9080" with just "localhost").
+
+- Replace a number of long boring lines with a single ellipsis (...).
+
+- When you get a huge diff, look for lines that start with a question mark (?),
+  they are most informative.
+
+TODO: move this section somewhere else
