@@ -47,7 +47,7 @@ except ImportError:
     class Popen4:
 
         def __init__(self, cmd):
-            self.tochild, self.fromchild = popen4(cmd)
+            self.fromchild, self.tochild = popen4(cmd)
 
         def wait(self):
             # Is there a way to get the real status code on Win32?
