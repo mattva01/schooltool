@@ -31,6 +31,8 @@ object and put it into the calendar:
     replacement_event = event.replace(title=u"New title", ...)
     calendar.addEvent(replacement_event)
 
+XXX mg: Why not make calendar events mutable?
+
 Calendar events have globally unique IDs.  If you are changing an event in the
 fashion demonstrated above, you should preserve its unique_id attribute.
 

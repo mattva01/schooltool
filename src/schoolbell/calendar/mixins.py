@@ -252,7 +252,23 @@ class CalendarEventMixin(object):
                >= (other.dtstart, other.title, other.unique_id)
 
     def hasOccurrences(self):
-        raise NotImplementedError # TODO
+        """Check whether the event has any occurrences."""
+        if self.recurrence is None:
+            # No recurrence rule implies one and only one occurrence.
+            return True
+        if self.recurrence.until is None and self.recurrence.count is None:
+            # Events that repeat forever always have occurrences.  There is a
+            # finite number of exceptions, so they cannon cover an infinite
+            # numer of recurrences.
+            return True
+        try:
+            self.recurrence.apply(self).next()
+        except StopIteration:
+            # No occurrences.
+            return False
+        else:
+            # At least one occurrence exists.
+            return True
 
     def replace(self, **kw):
         r"""Return a copy of this event with some attributes replaced.
@@ -364,6 +380,7 @@ class ExpandedCalendarEvent(CalendarEventMixin):
     dtstart = property(lambda self: self._dtstart)
 
     # Syntactic sugar.
+    # TODO: these should be descriptors
     _getter = lambda attr: property(lambda self: getattr(self.original, attr))
 
     unique_id = _getter('unique_id')

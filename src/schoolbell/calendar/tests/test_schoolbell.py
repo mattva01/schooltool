@@ -133,7 +133,58 @@ def doctest_CalendarMixin_expand():
 
     """
 
-def doctest_simple_CalendarEventMixin_replace():
+
+def doctest_CalendarEventMixin_hasOccurrences():
+    """Tests for CalendarEventMixin.hasOccurrences.
+
+    We will use SimpleCalendarEvent which is a trivial subclass of
+    CalendarEventMixin
+
+        >>> from datetime import date, datetime, timedelta
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+
+    A simple event always has occurrences.
+
+        >>> e1 = SimpleCalendarEvent(datetime(2004, 11, 25, 12, 0),
+        ...                          timedelta(minutes=10), 'whatever')
+        >>> e1.hasOccurrences()
+        True
+
+    A forever-repeating event always has occurrences.
+
+        >>> e2 = SimpleCalendarEvent(datetime(2004, 11, 25, 12, 0),
+        ...                          timedelta(minutes=10), 'whatever',
+        ...                          recurrence=DailyRecurrenceRule())
+        >>> e2.hasOccurrences()
+        True
+
+    Here's an event without occurrences:
+
+        >>> e3 = SimpleCalendarEvent(datetime(2004, 11, 25, 12, 0),
+        ...                          timedelta(minutes=10), 'whatever',
+        ...                          recurrence=DailyRecurrenceRule(
+        ...                              count=3,
+        ...                              exceptions=[date(2004, 11, 25),
+        ...                                          date(2004, 11, 26),
+        ...                                          date(2004, 11, 27)]))
+        >>> e3.hasOccurrences()
+        False
+
+    However remove one exception, and it becomes an occurrence:
+
+        >>> e4 = SimpleCalendarEvent(datetime(2004, 11, 25, 12, 0),
+        ...                          timedelta(minutes=10), 'whatever',
+        ...                          recurrence=DailyRecurrenceRule(
+        ...                              count=3,
+        ...                              exceptions=[date(2004, 11, 25),
+        ...                                          date(2004, 11, 27)]))
+        >>> e4.hasOccurrences()
+        True
+
+    """
+
+def doctest_CalendarEventMixin_replace():
     """Make sure CalendarEventMixin.replace does not forget any attributes.
 
         >>> from schoolbell.calendar.interfaces import ICalendarEvent

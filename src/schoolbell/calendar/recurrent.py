@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Recurrent calendar events.
+Recurrence rules.
 
 $Id$
 """
@@ -39,6 +39,7 @@ from schoolbell.calendar.interfaces import \
 
 
 class RecurrenceRule(object):
+    """An abstract base class that implements common behaviour."""
 
     implements(IRecurrenceRule)
 

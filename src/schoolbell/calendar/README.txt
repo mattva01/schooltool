@@ -256,6 +256,106 @@ TODO: when we display a combined calendar, we often want to know where each
 event came from.
 
 
+Recurring events
+----------------
+
+Recurring events are calendar events with a defined recurrence rule.  An
+example of a recurrence rule that says "this event repeats 5 times on every
+third day" is
+
+    >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+    >>> rule = DailyRecurrenceRule(count=5, interval=3)
+
+Currently there are four kinds of recurrence rules defined in
+schoolbell.calendar.recurrent:
+
+- daily recurrences (e.g. "every second day")
+- weekly recurrences (e.g. "every week on Monday through Friday")
+- monthly recurrences (e.g. "every second Tuesday of a month" or
+  "15th of every second month")
+- yearly (e.g. "January 29th every year")
+
+All recurrence rules share some common attributes:
+
+- 'interval': to express "every third week" you would create a
+  WeeklyRecurrenceRule with an interval of 3.  An interval of 1 means simply
+  "every".  Intervals lower than 1 are not allowed.
+
+- 'count' and 'until': you can limit the number of occurrences by specifying
+  an explicit count (e.g. "every second year during the next 10 years" would
+  be expressed as YearlyRecurrenceRule(interval=2, count=5)), or by
+  specifying the date of the last occurrence (e.g. "every third day until
+  August 15th" would be expressed as DailyRecurrenceRule(interval=3,
+  until=datetime.date(2005, 8, 15))).  If neither 'count' not 'until' are
+  specified, the rule repeats forever.
+
+- 'exceptions': you can say "repeat every Monday except on February 21" as
+  WeeklyRecurrenceRule(weekdays=calendar.MONDAY,
+  exceptions=[date(2005, 2, 21)]).
+
+Weekly recurrence rules let you specify a set of weekdays that the event
+occurs on.  E.g. "every second weekend" can be expressed as
+WeeklyRecurrenceRule(interval=2, weekdays=[calendar.SATURDAY,
+calendar.SUNDAY])).
+
+Monthly recurrence rules also let you choose one of three variants:
+
+- same day of month (e.g. an event that occurrs on January 29 and has
+  a MonthlyRecurrenceRule(monthly='monthday') will recur on the 29th of
+  every month (except Februrary on non-leap years).
+
+- same day of week (e.g. "2nd Tuesday of a month" can be expressed as
+  a MonthlyRecurrenceRule(monthly='weekday'), if the recurrence rule is
+  assigned to an event that happens on the 2nd Tuesday of some month.
+
+- same day of week, but counting from the end of the month (e.g. "2nd last
+  Wednesday of a month" -- MonthlyRecurrenceRule(monthly='lastweekday')).
+
+Here's how you create recurring events:
+
+    >>> from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+    >>> event = SimpleCalendarEvent(datetime(2005, 1, 29, 12),
+    ...                             timedelta(hours=1),
+    ...                             'My birthday',
+    ...                             recurrence=YearlyRecurrenceRule())
+
+Here's how you can get all recurrence dates of an event:
+
+    >>> iterator = event.recurrence.apply(event)
+    >>> iterator.next()
+    datetime.date(2005, 1, 29)
+    >>> iterator.next()
+    datetime.date(2006, 1, 29)
+    >>> iterator.next()
+    datetime.date(2007, 1, 29)
+
+Usually you will use ICalendar.expand.
+
+    >>> print_cal(ImmutableCalendar([event]).expand(datetime(2003, 1, 1),
+    ...                                             datetime(2009, 1, 1)))
+    2005-01-29 My birthday
+    2006-01-29 My birthday
+    2007-01-29 My birthday
+    2008-01-29 My birthday
+
+Sometimes a recurrence rule may exclude even the original occurrence:
+
+    >>> from datetime import date
+    >>> empty_event = SimpleCalendarEvent(datetime(2005, 2, 3, 12),
+    ...                     timedelta(hours=1), 'Copious free time',
+    ...                     recurrence=YearlyRecurrenceRule(
+    ...                                     until=date(2005, 1, 1)))
+    >>> list(empty_event.recurrence.apply(event))
+    []
+
+You can check if an even is "empty" by calling event.hasOccurrences():
+
+    >>> event.hasOccurrences()
+    True
+    >>> empty_event.hasOccurrences()
+    False
+
+
 Utilities
 ---------
 
