@@ -490,6 +490,49 @@ class TestPersonAddView(unittest.TestCase):
         assert 'User with this username already exists' in result
         self.assertEquals(view.request.applog, [])
 
+    def test_POST_realname_conflict(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        person = view.context.new('existing', 'doesnotmatter')
+        info = FacetManager(person).facetByName('person_info')
+        info.first_name = 'First'
+        info.last_name = 'Last'
+        view.request = RequestStub(args={'first_name': 'First',
+                                         'last_name': 'Last'})
+        result = view.do_POST(view.request)
+        self.assertEquals(view.error, 'User with this name already exists.')
+        self.assertEquals(view.request.applog, [])
+        assert 'CONFIRM' in result
+
+    def test_POST_realname_conflict_overriden_by_user(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        person = view.context.new('existing', 'doesnotmatter')
+        info = FacetManager(person).facetByName('person_info')
+        info.first_name = 'First'
+        info.last_name = 'Last'
+        view.request = RequestStub(args={'first_name': 'First',
+                                         'last_name': 'Last',
+                                         'CONFIRM': 'Add anyway'})
+        result = view.do_POST(view.request)
+        assert not view.error
+        assert view.request.applog
+
+    def test_POST_realname_conflict_canceled(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        person = view.context.new('existing', 'doesnotmatter')
+        info = FacetManager(person).facetByName('person_info')
+        info.first_name = 'George'
+        info.last_name = 'Last'
+        view.request = RequestStub(args={'first_name': 'George',
+                                         'last_name': 'Last',
+                                         'CANCEL': 'Cancel'})
+        result = view.do_POST(view.request)
+        assert not view.error
+        assert not view.request.applog
+        assert 'George' not in result
+
     def test_POST_bad_photo(self):
         view = self.createView()
         view.request = RequestStub(args={'first_name': 'First',

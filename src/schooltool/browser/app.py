@@ -197,6 +197,7 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
     template = Template('www/person_add.pt')
 
     error = None
+    duplicate_warning = False
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -236,11 +237,23 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         self.first_name_widget.require()
         self.last_name_widget.require()
 
+        if 'CONFIRM' not in request.args:
+            full_name = (self.first_name_widget.value,
+                         self.last_name_widget.value)
+            for otheruser in self.context.itervalues():
+                infofacet = FacetManager(otheruser).facetByName('person_info')
+                if (infofacet.first_name, infofacet.last_name) == full_name:
+                    self.error = _("User with this name already exists.")
+                    self.duplicate_warning = True
+                    break
+
         if (not self.password_widget.error and
             not self.confirm_password_widget.error and
             self.password_widget.value != self.confirm_password_widget.value):
             self.confirm_password_widget.error = _("Passwords do not match.")
 
+        if self.error:
+            return False
         for widget in widgets:
             if widget.error:
                 return False
@@ -262,6 +275,9 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
 
     def do_POST(self, request):
         """Process form submission."""
+        if 'CANCEL' in request.args:
+            return self.do_GET(request)
+
         if not self._processForm(request):
             return self.do_GET(request)
 
