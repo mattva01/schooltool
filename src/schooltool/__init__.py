@@ -19,3 +19,9 @@
 """
 The schooltool package.
 """
+
+# runtime patchable data file locations
+browser_prefix = None
+rest_prefix = None
+translation_prefix = None
+config_schema_prefix = None
