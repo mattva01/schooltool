@@ -317,6 +317,33 @@ div.day h3  {
   color: navy;
 }
 
+table.cal_yearly {
+  table-layout: fixed;
+  width: 90%;
+  border: 1px solid #888;
+  empty-cells: show;
+  border-collapse: collapse;
+  vertical-align: top;
+}
+
+td.cal_yearly_month {
+  border: 1px solid #ddf;
+  text-align: center;
+}
+
+table.cal_yearly_month {
+  width: 100%;
+}
+
+td.cal_yearly_day {
+  text-align: right;
+}
+
+a.cal_yearly_day_busy {
+  color: red;
+}
+
+
 table.cal_monthly {
   table-layout: fixed;
   width: 90%;

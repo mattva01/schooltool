@@ -220,6 +220,21 @@ class CalendarViewBase(View):
             day += timedelta(days=7)
         return weeks
 
+    def getYear(self, dt):
+        """Return the current year.
+
+        This returns a list of quarters, each quarter is a list of months,
+        each month is a list of weeks, and each week is a list of CalendarDays.
+        Ouch!
+        """
+        # XXX This is probably going to be *really* slow :((
+        quarters = []
+        for q in range(4):
+            quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
+                       for month in range(1, 4)]
+            quarters.append(quarter)
+        return quarters
+
 
 class DailyCalendarView(CalendarViewBase):
     """Daily calendar view.
@@ -396,6 +411,19 @@ class MonthlyCalendarView(CalendarViewBase):
         return self.getMonth(self.cursor)
 
 
+class YearlyCalendarView(CalendarViewBase):
+
+    template = Template('www/cal_yearly.pt')
+
+    def prevYear(self):
+        """Return the first day of the next year."""
+        return date(self.cursor.year - 1, 1, 1)
+
+    def nextYear(self):
+        """Return the first day of the previous year."""
+        return date(self.cursor.year + 1, 1, 1)
+
+
 class CalendarView(View):
     """The main calendar view.
 
@@ -411,6 +439,8 @@ class CalendarView(View):
             return DailyCalendarView(self.context)
         elif name == 'monthly.html':
             return MonthlyCalendarView(self.context)
+        elif name == 'yearly.html':
+            return YearlyCalendarView(self.context)
         raise KeyError(name)
 
     def render(self, request):

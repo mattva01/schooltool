@@ -300,6 +300,26 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(bounds[0],
                           (date(2004, 11, 1), date(2004, 11, 8)))
 
+    def test_getYear(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.cal import Calendar
+
+        cal = Calendar()
+        view = CalendarViewBase(cal)
+
+        def getMonthStub(dt):
+            return dt
+        view.getMonth = getMonthStub
+
+        year = view.getYear(date(2004, 03, 04))
+        self.assertEquals(len(year), 4)
+        months = []
+        for quarter in year:
+            self.assertEquals(len(quarter), 3)
+            months.extend(quarter)
+        for i, month in enumerate(months):
+            self.assertEquals(month, date(2004, i+1, 1))
+
 
 class TestWeeklyCalendarView(unittest.TestCase):
 
@@ -554,6 +574,38 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(view.getCurrentMonth(), "really works")
 
 
+class TestYearlyCalendarView(NiceDiffsMixin, unittest.TestCase):
+
+    def test_render(self):
+        from schooltool.browser.cal import YearlyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+        cal.__parent__ = person
+        cal.__name__ = 'calendar'
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
+                                   timedelta(hours=1),
+                                   "Stuff happens"))
+
+        view = YearlyCalendarView(cal)
+        view.authorization = lambda x, y: True
+        request = RequestStub(args={'date': '2004-08-12'})
+        content = view.render(request)
+        # TODO
+##        self.assert_("Da Boss" in content)
+##        self.assert_("Stuff happens" in content)
+
+    def test_prev_next(self):
+        from schooltool.browser.cal import YearlyCalendarView
+        view = YearlyCalendarView(None)
+        view.cursor = date(2004, 8, 18)
+        self.assertEquals(view.prevYear(), date(2003, 1, 1))
+        self.assertEquals(view.nextYear(), date(2005, 1, 1))
+
+
 class TestCalendarView(unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
@@ -562,12 +614,14 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.browser.cal import WeeklyCalendarView
         from schooltool.browser.cal import MonthlyCalendarView
+        from schooltool.browser.cal import YearlyCalendarView
         context = Calendar()
         view = CalendarView(context)
         self.assertTraverses(view, 'daily.html', DailyCalendarView, context)
         self.assertTraverses(view, 'weekly.html', WeeklyCalendarView, context)
         self.assertTraverses(view, 'monthly.html', MonthlyCalendarView,
                              context)
+        self.assertTraverses(view, 'yearly.html', YearlyCalendarView, context)
 
     def test_render(self):
         from schooltool.browser.cal import CalendarView
@@ -598,6 +652,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
+    suite.addTest(unittest.makeSuite(TestYearlyCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
