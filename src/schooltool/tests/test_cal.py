@@ -26,7 +26,7 @@ import calendar
 from zope.interface.verify import verifyObject
 from zope.testing.doctestunit import DocTestSuite
 from datetime import date
-import schooltool.cal
+from StringIO import StringIO
 
 class TestSchooldayCalendar(unittest.TestCase):
 
@@ -77,8 +77,127 @@ class TestSchooldayCalendar(unittest.TestCase):
             self.assert_(date(2003, 9, day+1) in cal)
 
 
+example_ical = """\
+BEGIN:VCALENDAR
+VERSION
+ :2.0
+PRODID
+ :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
+METHOD
+ :PUBLISH
+BEGIN:VEVENT
+UID
+ :956630271
+SUMMARY
+ :Christmas Day
+CLASS
+ :PUBLIC
+X-MOZILLA-ALARM-DEFAULT-UNITS
+ :minutes
+X-MOZILLA-ALARM-DEFAULT-LENGTH
+ :15
+X-MOZILLA-RECUR-DEFAULT-UNITS
+ :weeks
+X-MOZILLA-RECUR-DEFAULT-INTERVAL
+ :1
+DTSTART
+ ;VALUE=DATE
+ :20031225
+DTSTAMP
+ :20020430T114937Z
+END:VEVENT
+END:VCALENDAR
+BEGIN:VCALENDAR
+VERSION
+ :2.0
+PRODID
+ :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
+METHOD
+ :PUBLISH
+BEGIN:VEVENT
+UID
+ :911737808
+SUMMARY
+ :Boxing Day
+CLASS
+ :PUBLIC
+X-MOZILLA-ALARM-DEFAULT-UNITS
+ :minutes
+X-MOZILLA-ALARM-DEFAULT-LENGTH
+ :15
+X-MOZILLA-RECUR-DEFAULT-UNITS
+ :weeks
+X-MOZILLA-RECUR-DEFAULT-INTERVAL
+ :1
+DTSTART
+ ;VALUE=DATE
+ :20031226
+DTSTAMP
+ :20020430T114937Z
+END:VEVENT
+END:VCALENDAR
+"""
+
+
+class TestICalReader(unittest.TestCase):
+
+    def test_markNonSchooldays(self):
+        from schooltool.cal import ICalReader, SchooldayCalendar
+        cal = SchooldayCalendar(date(2003, 9, 01), date(2004, 01, 01))
+        file = StringIO(example_ical)
+        reader = ICalReader(file)
+        cal.addWeekdays(0, 1, 2, 3, 4)
+        self.assert_(date(2003, 12, 24) in cal)
+        self.assert_(date(2003, 12, 25) in cal)
+        self.assert_(date(2003, 12, 26) in cal)
+        reader.markNonSchooldays(cal)
+        self.assert_(date(2003, 12, 24) in cal)
+        self.assert_(date(2003, 12, 25) not in cal)
+        self.assert_(date(2003, 12, 26) not in cal)
+
+    def test_read(self):
+        from schooltool.cal import ICalReader, SchooldayCalendar
+        cal = SchooldayCalendar(date(2003, 9, 01), date(2004, 01, 01))
+        file = StringIO(example_ical)
+        reader = ICalReader(file)
+        result = reader.read()
+        self.assertEqual(len(result), 2)
+        vevent = result[0]
+        self.assertEqual(vevent['x-mozilla-recur-default-units'], 'weeks')
+        self.assertEqual(vevent['dtstart'], '20031225')
+        self.assertEqual(vevent.dtstart, date(2003, 12, 25))
+        vevent = result[1]
+        self.assertEqual(vevent['dtstart'], '20031226')
+        self.assertEqual(vevent.dtstart, date(2003, 12, 26))
+
+    def test_readRecord(self):
+        from schooltool.cal import ICalReader, SchooldayCalendar
+        file = StringIO("key1\n"
+                        " :value1\n"
+                        "key2\n"
+                        " ;VALUE=foo\n"
+                        " :value2\n"
+                        "key3;VALUE=bar:value3\n")
+        reader = ICalReader(file)
+        self.assertEqual(list(reader.readRecord()),
+                         [('key1', 'value1', None),
+                          ('key2', 'value2', 'foo'),
+                          ('key3', 'value3', 'bar')])
+
+        file = StringIO("key1:value1\n"
+                        "key2;VALUE=foo:value2\n"
+                        "key3;VALUE=bar:value3\n")
+        reader = ICalReader(file)
+        self.assertEqual(list(reader.readRecord()),
+                         [('key1', 'value1', None),
+                          ('key2', 'value2', 'foo'),
+                          ('key3', 'value3', 'bar')])
+
+
 def test_suite():
+    import schooltool.cal
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchooldayCalendar))
+    suite.addTest(unittest.makeSuite(TestICalReader))
     suite.addTest(DocTestSuite(schooltool.cal))
     return suite

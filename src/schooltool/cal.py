@@ -26,6 +26,10 @@ from zope.interface import implements
 from schooltool.interfaces import ISchooldayCalendar
 import datetime
 
+
+__metaclass__ = type
+
+
 class SchooldayCalendar:
 
     implements(ISchooldayCalendar)
@@ -64,6 +68,7 @@ class SchooldayCalendar:
             if date.weekday() in weekdays and date in self:
                 self.remove(date)
 
+
 def daterange(date1, date2):
     """Returns a generator of the range of dates from date1 to date2.
 
@@ -78,3 +83,76 @@ def daterange(date1, date2):
     while date < date2:
         yield date
         date += datetime.date.resolution
+
+
+class VEvent(dict):
+    pass
+
+
+class ICalReader:
+    """An object which reads in an iCal of public holidays and marks
+    them off the schoolday calendar.
+    """
+
+    def __init__(self, file):
+        self.file = file
+
+    def markNonSchooldays(self, cal):
+        """Mark all the events in the iCal file as non-schooldays in a given
+        SchooldayCalendar.
+        """
+        for event in self.read():
+            if hasattr(event, 'dtstart'):
+                cal.remove(event.dtstart)
+
+    def readRecord(self):
+        """A generator that returns one record at a time, as a tuple of
+        (key, value, type).
+
+        type can be None if not specified as ;VALUE=type kind of thing.
+        """
+        record = []
+
+        def splitRecord():
+            """Unfortunately, this doctest is not run by the suite.
+
+            >>> record = ['FOO', ';VALUE=BAR', ':BAZ', 'FOO']
+            >>> splitRecord()
+            ('FOO', 'BAZFOO', 'BAR')
+            """
+            record_str = "".join(record)
+            key_opts_str, value = record_str.split(":")
+            key_type = key_opts_str.split(";VALUE=")
+            key = key_type[0]
+            if len(key_type) > 1:
+                type = key_type[1]
+            else:
+                type = None
+            return key, value, type
+
+        for line in self.file.readlines():
+            if record and line[0] not in '\t ':
+                yield splitRecord()
+                record = [line.strip()]
+            else:
+                record.append(line.strip())
+        yield splitRecord()
+
+    def read(self):
+        result = []
+        obj = None
+        for key, value, type in self.readRecord():
+            if key == "BEGIN" and value == "VEVENT":
+                obj = VEvent()
+            elif key == "END" and value == "VEVENT":
+                result.append(obj)
+                obj = None
+            elif type == 'DATE' and obj is not None:
+                key = key.lower()
+                y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
+                setattr(obj, key, datetime.date(y, m, d))
+                obj[key] = value
+            elif obj is not None:
+                key = key.lower()
+                obj[key] = value
+        return result
