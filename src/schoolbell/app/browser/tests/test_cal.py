@@ -366,27 +366,6 @@ class TestCalendarViewBase(unittest.TestCase):
 
         self.assertEquals(view.dayTitle(dt), "Thursday, 01 July, 2004")
 
-
-    def test_ellipsizeTitle(self):
-        from schoolbell.app.browser.cal import CalendarViewBase
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
-
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
-
-        under17 = '1234567890123456'
-        over17 = '12345678901234567'
-
-        view = CalendarViewBase(None, request)
-        self.assertEquals(view.ellipsizeTitle(under17), under17)
-        self.assertEquals(view.ellipsizeTitle(over17), '123456789012345...')
-
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
         from schoolbell.app.app import getPersonPreferences
