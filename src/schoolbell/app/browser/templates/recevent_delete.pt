@@ -24,7 +24,7 @@
 
     <p>You can choose to delete:</p>
     <ul><li>only the <em>current</em> occurrence
-      (<strong tal:content="event/dtstart/date">2005-02-15</strong>).<br />
+      (<strong tal:content="request/date">2005-02-15</strong>).<br />
       An exception for the event will be created.</li>
       <li>this and all <em>future</em> occurrences.<br />
       The event recurrence's end date will be set.</li>
