@@ -38,8 +38,9 @@ from wxPython.wx import *
 from wxPython.grid import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
 from wxPython.html import wxHtmlWindow
-from schooltool.guiclient import SchoolToolClient, Unchanged, RollCallEntry
-from schooltool.guiclient import SchoolToolError, ResponseStatusError
+from schooltool.clients.guiclient import SchoolToolClient, Unchanged
+from schooltool.clients.guiclient import RollCallEntry
+from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
 

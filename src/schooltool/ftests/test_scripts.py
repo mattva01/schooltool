@@ -61,7 +61,8 @@ class ScriptTestCase(unittest.TestCase):
         self.script = script
         dirname = os.path.dirname(__file__)
         self.filename = os.path.join(dirname, script)
-        self.client = os.path.abspath(os.path.join(dirname, '..', 'client.py'))
+        self.client = os.path.abspath(
+                os.path.join(dirname, '..', 'clients', 'client.py'))
 
     def __str__(self):
         return 'script %s' % self.script

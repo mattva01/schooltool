@@ -41,13 +41,13 @@ runtestserver: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf
 
 runclient: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/client.py
+	PYTHONPATH=src $(PYTHON) src/schooltool/clients/client.py
 
 runwxclient: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/wxclient.py
+	PYTHONPATH=src $(PYTHON) src/schooltool/clients/wxclient.py
 
 sampledata teachers.csv groups.csv pupils.csv:
-	PYTHONPATH=src $(PYTHON) src/schooltool/datagen.py schooltool-m2
+	PYTHONPATH=src $(PYTHON) src/schooltool/clients/datagen.py schooltool-m2
 
 sampleschool: teachers.csv groups.csv pupils.csv
 	PYTHONPATH=src $(PYTHON) runimport.py

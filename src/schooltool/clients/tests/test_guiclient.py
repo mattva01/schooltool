@@ -119,13 +119,13 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         schooltool.uris.setUp()
 
     def newClient(self, response=None, error=None):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.clients.guiclient import SchoolToolClient
         client = SchoolToolClient()
         client.connectionFactory = ConnectionFactory(response, error)
         return client
 
     def newClientMulti(self, responses):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.clients.guiclient import SchoolToolClient
         client = SchoolToolClient()
         client.connectionFactory = MultiConnectionFactory(responses)
         return client
@@ -145,7 +145,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
             self.assertEquals(conn.path, path)
 
     def test_setServer(self):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.clients.guiclient import SchoolToolClient
         server = 'example.com'
         port = 8081
         version = 'UnitTest/0.0'
@@ -175,7 +175,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(client.version, '')
 
     def test_request(self):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.clients.guiclient import SchoolToolClient
         path = '/path'
         body = 'spam'
         version = 'UnitTest/0.0'
@@ -198,7 +198,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assert_(conn.closed)
 
     def test_request_with_body_and_headers(self):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.clients.guiclient import SchoolToolClient
         path = '/path'
         body = 'spam'
         version = 'UnitTest/0.0'
@@ -225,7 +225,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assert_(conn.closed)
 
     def test_request_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         path = '/path'
         e = socket.error(23, 'out of spam')
         client = self.newClient(error=e)
@@ -257,7 +257,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/persons')
 
     def test_getListOfPersons_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of persons'))
         self.assertRaises(SchoolToolError, client.getListOfPersons)
 
@@ -281,7 +281,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/groups')
 
     def test_getListOfGroups_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of groups'))
         self.assertRaises(SchoolToolError, client.getListOfGroups)
 
@@ -305,7 +305,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/resources')
 
     def test_getListOfResources_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of resources'))
         self.assertRaises(SchoolToolError, client.getListOfResources)
 
@@ -344,7 +344,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/groups/root/tree')
 
     def test_getGroupTree_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of trees'))
         self.assertRaises(SchoolToolError, client.getGroupTree)
 
@@ -352,7 +352,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertRaises(SchoolToolError, client.getGroupTree)
 
     def test_getGroupInfo(self):
-        from schooltool.guiclient import MemberInfo
+        from schooltool.clients.guiclient import MemberInfo
         body = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <item xlink:type="simple" xlink:href="/groups/group2"
@@ -371,7 +371,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, group_id)
 
     def test_getGroupInfo_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         group_id = '/groups/group1'
         client = self.newClient(error=socket.error(23, 'out of groups'))
         self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
@@ -380,7 +380,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
 
     def test_getObjectRelationships(self):
-        from schooltool.guiclient import RelationshipInfo
+        from schooltool.clients.guiclient import RelationshipInfo
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -411,7 +411,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '%s/relationships' % group_id)
 
     def test_getObjectRelationships_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         group_id = '/groups/group1'
         client = self.newClient(error=socket.error(23, 'out of groups'))
         self.assertRaises(SchoolToolError, client.getObjectRelationships,
@@ -422,7 +422,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                           group_id)
 
     def test_getRollCall(self):
-        from schooltool.guiclient import RollCallInfo
+        from schooltool.clients.guiclient import RollCallInfo
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
@@ -437,7 +437,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '%s/rollcall' % group_id)
 
     def test_getRollCall_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         group_id = '/groups/group1'
         client = self.newClient(error=socket.error(23, 'out of groups'))
         self.assertRaises(SchoolToolError, client.getRollCall, group_id)
@@ -446,7 +446,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertRaises(SchoolToolError, client.getRollCall, group_id)
 
     def test_submitRollCall(self):
-        from schooltool.guiclient import RollCallEntry, Unchanged
+        from schooltool.clients.guiclient import RollCallEntry, Unchanged
         client = self.newClient(ResponseStub(200, 'OK', 'Accepted'))
         group_id = '/groups/group1'
         rollcall = [RollCallEntry('/persons/p1', True, 'foo', True),
@@ -469,7 +469,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
             """))
 
     def test_submitRollCall_with_errors(self):
-        from schooltool.guiclient import SchoolToolError, RollCallEntry
+        from schooltool.clients.guiclient import SchoolToolError, RollCallEntry
         client = self.newClient(ResponseStub(400, 'Bad Request', 'No foo'))
         group_id = '/groups/group1'
         rollcall = [RollCallEntry('/persons/p3')]
@@ -477,7 +477,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                           client.submitRollCall, group_id, rollcall)
 
     def test_getAbsences(self):
-        from schooltool.guiclient import AbsenceInfo
+        from schooltool.clients.guiclient import AbsenceInfo
         body = dedent("""
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
               <absence xlink:type="simple" xlink:href="/p/absences/003"
@@ -496,12 +496,12 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/p/absences')
 
     def test_getAbsences_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.getAbsences, '/p')
 
     def test_getAbsenceComments(self):
-        from schooltool.guiclient import AbsenceComment
+        from schooltool.clients.guiclient import AbsenceComment
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
               <comment datetime="2001-02-28 01:01:01"
@@ -524,12 +524,12 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/persons/john/absences/002')
 
     def test_getAbsences_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.getAbsenceComments, '/p')
 
     def test_getSchoolTimetable(self):
-        from schooltool.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolTimetableInfo
         body1 = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -629,7 +629,8 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(results, expected)
 
     def test_putSchooltoolTimetable(self):
-        from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
+        from schooltool.clients.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolToolError
         tt = SchoolTimetableInfo(
             [('/persons/0013', 'Fred', [('Maths', '/groups/maths')]),
              ('/persons/0014', 'Barney', [])],
@@ -676,7 +677,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/time-periods')
 
     def test_getTimePeriods_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(500, 'BSOD', "<xml>Error!</xml>"))
         self.assertRaises(SchoolToolError, client.getTimePeriods)
 
@@ -697,7 +698,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.checkConnPath(client, '/ttschemas')
 
     def test_getTimetableSchemas_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(500, 'BSOD', "<xml>Error!</xml>"))
         self.assertRaises(SchoolToolError, client.getTimetableSchemas)
 
@@ -713,7 +714,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEqualsXML(conn.body, '<facet factory="foo&quot;factory"/>')
 
     def test_createFacet_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.createFacet, '/p', 'foo')
 
@@ -730,7 +731,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                              '<person title="John &quot;mad cat&quot; Doe"/>')
 
     def test_createPerson_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createPerson, 'John Doe')
 
@@ -747,7 +748,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                 '<group title="Title&lt;with&quot;strange&amp;chars"/>')
 
     def test_createGroup_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
 
@@ -768,7 +769,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                     ' role="http://schooltool.org/ns/membership/member" />')
 
     def test_createRelationship_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         from schooltool.uris import URIMembership, URIMember
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createRelationship,
@@ -783,7 +784,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.body, '')
 
     def test_deleteObject_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.deleteObject, '/path')
 
@@ -810,7 +811,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         schooltool.uris.setUp()
 
     def test__parseContainer(self):
-        from schooltool.guiclient import _parseContainer
+        from schooltool.clients.guiclient import _parseContainer
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
@@ -825,7 +826,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(results, expected)
 
     def test__parseGroupTree(self):
-        from schooltool.guiclient import _parseGroupTree
+        from schooltool.clients.guiclient import _parseGroupTree
         body = dedent("""
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
               <group xlink:type="simple" xlink:href="/groups/root"
@@ -854,7 +855,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(list(result), expected)
 
     def test__parseGroupTree_errors(self):
-        from schooltool.guiclient import _parseGroupTree, SchoolToolError
+        from schooltool.clients.guiclient import _parseGroupTree
+        from schooltool.clients.guiclient import SchoolToolError
         body = "This is not XML"
         self.assertRaises(SchoolToolError, _parseGroupTree, body)
 
@@ -868,7 +870,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertRaises(SchoolToolError, _parseGroupTree, body)
 
     def test__parseMemberList(self):
-        from schooltool.guiclient import _parseMemberList, MemberInfo
+        from schooltool.clients.guiclient import _parseMemberList, MemberInfo
         body = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <item xlink:type="simple" xlink:href="/groups/group2"
@@ -890,13 +892,14 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(list(result), expected)
 
     def test__parseMemberList_errors(self):
-        from schooltool.guiclient import _parseMemberList, SchoolToolError
+        from schooltool.clients.guiclient import _parseMemberList
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseMemberList, body)
 
     def test__parseRelationships(self):
-        from schooltool.guiclient import _parseRelationships
-        from schooltool.guiclient import RelationshipInfo
+        from schooltool.clients.guiclient import _parseRelationships
+        from schooltool.clients.guiclient import RelationshipInfo
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -955,7 +958,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(list(result), expected)
 
     def test__parseRelationships_errors(self):
-        from schooltool.guiclient import _parseRelationships, SchoolToolError
+        from schooltool.clients.guiclient import _parseRelationships
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseRelationships, body)
 
@@ -983,7 +987,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertRaises(SchoolToolError, _parseRelationships, body)
 
     def test__parseRollCall(self):
-        from schooltool.guiclient import _parseRollCall, RollCallInfo
+        from schooltool.clients.guiclient import _parseRollCall, RollCallInfo
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
@@ -1003,7 +1007,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(results, expected)
 
     def test__parseRollCall_errors(self):
-        from schooltool.guiclient import _parseRollCall, SchoolToolError
+        from schooltool.clients.guiclient import _parseRollCall
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseRollCall, body)
 
@@ -1016,7 +1021,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertRaises(SchoolToolError, _parseRollCall, body)
 
     def test__parseAbsences(self):
-        from schooltool.guiclient import _parseAbsences, AbsenceInfo
+        from schooltool.clients.guiclient import _parseAbsences, AbsenceInfo
         body = dedent("""
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
               <absence xlink:type="simple" href="/p/absences/000"
@@ -1056,7 +1061,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(results, expected)
 
     def test__parseAbsences_errors(self):
-        from schooltool.guiclient import _parseAbsences, SchoolToolError
+        from schooltool.clients.guiclient import _parseAbsences
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseAbsences, body)
 
@@ -1082,8 +1088,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                 self.fail("did not raise with <absence %s ..." % incorrectness)
 
     def test__parseAbsenceComments(self):
-        from schooltool.guiclient import _parseAbsenceComments, AbsenceComment
-        from schooltool.guiclient import Unchanged
+        from schooltool.clients.guiclient import _parseAbsenceComments
+        from schooltool.clients.guiclient import AbsenceComment, Unchanged
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:type="simple" xlink:href="/persons/a" />
@@ -1130,7 +1136,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(results, expected)
 
     def test__parseAbsenceComments_errors(self):
-        from schooltool.guiclient import _parseAbsenceComments, SchoolToolError
+        from schooltool.clients.guiclient import _parseAbsenceComments
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
@@ -1301,7 +1308,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
     def test__parseTimePeriods(self):
-        from schooltool.guiclient import _parseTimePeriods
+        from schooltool.clients.guiclient import _parseTimePeriods
         body = """
             <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
               <period xlink:type="simple"
@@ -1317,12 +1324,13 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(results, expected)
 
     def test__parseTimePeriods_errors(self):
-        from schooltool.guiclient import _parseTimePeriods, SchoolToolError
+        from schooltool.clients.guiclient import _parseTimePeriods
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseTimePeriods, body)
 
     def test__parseTimetableSchemas(self):
-        from schooltool.guiclient import _parseTimetableSchemas
+        from schooltool.clients.guiclient import _parseTimetableSchemas
         body = """
             <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
               <schema xlink:type="simple"
@@ -1337,8 +1345,8 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(results, expected)
 
     def test__parseTimetableSchemas_errors(self):
-        from schooltool.guiclient import _parseTimetableSchemas
-        from schooltool.guiclient import SchoolToolError
+        from schooltool.clients.guiclient import _parseTimetableSchemas
+        from schooltool.clients.guiclient import SchoolToolError
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseTimetableSchemas, body)
 
@@ -1392,27 +1400,27 @@ class InfoClassTestMixin:
 class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
 
     def test_MemberInfo(self):
-        from schooltool.guiclient import MemberInfo
+        from schooltool.clients.guiclient import MemberInfo
         self._test_repr(MemberInfo, 2)
         self._test_cmp(MemberInfo, 2, ('person_title', ))
 
     def test_RelationshipInfo(self):
-        from schooltool.guiclient import RelationshipInfo
+        from schooltool.clients.guiclient import RelationshipInfo
         self._test_repr(RelationshipInfo, 5)
         self._test_cmp(RelationshipInfo, 5,
                        ('arcrole', 'role', 'target_title'))
 
     def test_RollCallInfo(self):
-        from schooltool.guiclient import RollCallInfo
+        from schooltool.clients.guiclient import RollCallInfo
         self._test_repr(RollCallInfo, 3)
         self._test_cmp(RollCallInfo, 3, ('person_title', ))
 
     def test_RollCallEntry(self):
-        from schooltool.guiclient import RollCallEntry
+        from schooltool.clients.guiclient import RollCallEntry
         self._test_repr(RollCallEntry, 4)
 
     def test_AbsenceComment(self):
-        from schooltool.guiclient import AbsenceComment
+        from schooltool.clients.guiclient import AbsenceComment
         self._test_repr(AbsenceComment, 9)
         self._test_cmp(AbsenceComment, 9, ('datetime', ))
 
@@ -1420,11 +1428,11 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
 class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
 
     def test(self):
-        from schooltool.guiclient import AbsenceInfo
+        from schooltool.clients.guiclient import AbsenceInfo
         self._test_cmp(AbsenceInfo, 8, ('datetime', ))
 
     def test_expected(self):
-        from schooltool.guiclient import AbsenceInfo
+        from schooltool.clients.guiclient import AbsenceInfo
         dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
         ai = AbsenceInfo(None, dt, None, None, None, None, None, None)
         self.assert_(not ai.expected())
@@ -1439,7 +1447,7 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
         self.assert_(not ai.expected())
 
     def test_str(self):
-        from schooltool.guiclient import AbsenceInfo
+        from schooltool.clients.guiclient import AbsenceInfo
         dt = datetime.datetime(2001, 2, 3, 15, 44, 57)
         ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, None, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
@@ -1459,7 +1467,7 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
                                    " at 06:30pm 2001-02-03")
 
     def test_format_date(self):
-        from schooltool.guiclient import AbsenceInfo
+        from schooltool.clients.guiclient import AbsenceInfo
         ai = AbsenceInfo(None, None, None, None, None, None, None, None)
         dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 6, 5, 4)
@@ -1468,7 +1476,7 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
         self.assertEquals(ai.format_date(dt), '2001-02-03')
 
     def test_format_age(self):
-        from schooltool.guiclient import AbsenceInfo
+        from schooltool.clients.guiclient import AbsenceInfo
         ai = AbsenceInfo(None, None, None, None, None, None, None, None)
         format_age = ai.format_age
         self.assertEquals(format_age(datetime.timedelta(minutes=5)), '0h5m')
@@ -1490,7 +1498,7 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
 class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
 
     def test_loadData(self):
-        from schooltool.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
@@ -1557,12 +1565,14 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
                                    [('Chemistry', '/groups/009', [])]]])
 
     def test_loadData_breakage(self):
-        from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
+        from schooltool.clients.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolToolError
         st = SchoolTimetableInfo()
         self.assertRaises(SchoolToolError, st.loadData, "not xml")
 
     def test_loadData_no_teachers(self):
-        from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
+        from schooltool.clients.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolToolError
         st = SchoolTimetableInfo()
         data = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
@@ -1578,7 +1588,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
         # Our server does not generate such timetables.
 
     def test_toXML_empty(self):
-        from schooltool.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo([('a', None), ('b', None)],
                                  [("1", "A"), ("1", "B"),
                                   ("2", "A"), ("2", "B")])
@@ -1619,7 +1629,8 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     def test_setTeacherNames(self):
-        from schooltool.guiclient import SchoolTimetableInfo, RelationshipInfo
+        from schooltool.clients.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import RelationshipInfo
         st = SchoolTimetableInfo([('/path1', None, None),
                                   ('/path2', None, None)])
         st.setTeacherNames({'/path1': 'John', '/path3': 'Smith'})
@@ -1627,7 +1638,8 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
                                         ('/path2', None, None)])
 
     def test_setTeacherRelationships(self):
-        from schooltool.guiclient import SchoolTimetableInfo, RelationshipInfo
+        from schooltool.clients.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import RelationshipInfo
         st = SchoolTimetableInfo([('/path1', None, None),
                                   ('/path2', None, None)])
         st.setTeacherRelationships(0, [
@@ -1643,7 +1655,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
                                         ('/path2', None, None)])
 
     def test_loadData_toXML_roundtrip(self):
-        from schooltool.guiclient import SchoolTimetableInfo
+        from schooltool.clients.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"

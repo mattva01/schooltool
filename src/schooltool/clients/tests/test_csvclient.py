@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.client
+Unit tests for schooltool csvclient
 
 $Id$
 """
@@ -25,8 +25,8 @@ $Id$
 import unittest
 import socket
 from StringIO import StringIO
-from helpers import diff
 from pprint import pformat
+from schooltool.tests.helpers import diff
 
 __metaclass__ = type
 
@@ -92,7 +92,7 @@ class ResponseStub:
 class TestHTTPClient(unittest.TestCase):
 
     def test(self):
-        from schooltool.csvclient import HTTPClient
+        from schooltool.clients.csvclient import HTTPClient
         h = HTTPClient('localhost', 8080)
         self.assertEqual(h.host, 'localhost')
         self.assertEqual(h.port, 8080)
@@ -105,7 +105,7 @@ class TestHTTPClient(unittest.TestCase):
 class TestCSVImporter(unittest.TestCase):
 
     def test_importGroup(self):
-        from schooltool.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
 
@@ -130,7 +130,7 @@ class TestCSVImporter(unittest.TestCase):
                           ])
 
     def test_importPupil(self):
-        from schooltool.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
 
@@ -155,7 +155,7 @@ class TestCSVImporter(unittest.TestCase):
                           ])
 
     def test_importTeacher(self):
-        from schooltool.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
 
@@ -182,7 +182,7 @@ class TestCSVImporter(unittest.TestCase):
                          diff(pformat(expected), pformat(requests)))
 
     def test_getPersonName(self):
-        from schooltool.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporter
 
         im = CSVImporter()
 
@@ -195,7 +195,7 @@ class TestCSVImporter(unittest.TestCase):
         self.assertEqual(name, '123')
 
     def test_run_empty(self):
-        from schooltool.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporter
         im = CSVImporter()
         im.verbose = False
 
@@ -229,7 +229,7 @@ class TestCSVImporter(unittest.TestCase):
                                                  pformat(expected)))
 
     def test_run(self):
-        from schooltool.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporter
         im = CSVImporter()
         im.verbose = False
 
@@ -295,8 +295,8 @@ class TestCSVImporter(unittest.TestCase):
                          diff(pformat(results), pformat(expected)))
 
     def test_run_badData(self):
-        from schooltool.csvclient import CSVImporter
-        from schooltool.csvclient import DataError
+        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import DataError
         im = CSVImporter()
         im.verbose = False
 

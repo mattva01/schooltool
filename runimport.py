@@ -10,7 +10,7 @@ import os
 import sys
 import time
 import urllib
-from schooltool import csvclient
+from schooltool.clients import csvclient
 
 if os.path.exists('Data.fs'):
     print "Please remove Data.fs before creating a sample school"
@@ -20,7 +20,7 @@ for file in ('groups.csv',  'teachers.csv', 'pupils.csv'):
     if not os.path.exists(file):
         print "%s not found." %  file
         print ("Please create the sample data files by running "
-               "src/schooltool/datagen.py")
+               "src/schooltool/clients/datagen.py")
         sys.exit(1)
 
 

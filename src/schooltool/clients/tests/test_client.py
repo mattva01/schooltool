@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.client
+Unit tests for schooltool.clients.client
 """
 
 import unittest
@@ -114,7 +114,7 @@ class ResponseStub:
 class TestClient(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.client import Client
+        from schooltool.clients.client import Client
         class StdinStub:
             isatty = lambda self: True
         self.client = Client()
@@ -509,7 +509,7 @@ class TestClient(unittest.TestCase):
 class TestXLinkHandler(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.client import XLinkHandler
+        from schooltool.clients.client import XLinkHandler
         self.parser = make_parser()
         self.handler = XLinkHandler()
         self.parser.setContentHandler(self.handler)
@@ -541,7 +541,7 @@ class TestXLinkHandler(unittest.TestCase):
 class TestUtilities(unittest.TestCase):
 
     def test_http_join(self):
-        from schooltool.client import http_join
+        from schooltool.clients.client import http_join
         self.assertEqual(http_join('/', 'foo'), '/foo')
         self.assertEqual(http_join('/foo', 'bar'), '/bar')
         self.assertEqual(http_join('/foo/bar', '../baz'), '/baz')
