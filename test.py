@@ -429,6 +429,9 @@ def colorize_zope_doctest_output(lines):
     If some assumption made by this function is not met, the original sequence
     is returned without any modifications.
     """
+    # XXX bug: doctest may report several failures in one test, they are
+    #          separated by a horizontal dash line.  Only the first one of
+    #          them is now colorized properly.
     header = lines[0]
     if not header.startswith('File "'):
         return lines # not a doctest failure report?
@@ -454,19 +457,19 @@ def colorize_zope_doctest_output(lines):
         return lines
     result.append(colorize('doctest_title', lines[1]))
     remaining = lines[2:]
-    # XXX It can say 'Expected nothing' too.
-    while remaining and remaining[0] not in ('Expected:', 'Exception raised:'):
+    terminators = ['Expected:', 'Expected nothing', 'Exception raised:']
+    while remaining and remaining[0] not in terminators:
         line = remaining.pop(0)
         result.append(colorize('doctest_code', line))
     if not remaining:
         return lines
 
-    if remaining[0] == 'Expected:':
+    if remaining[0] in ('Expected:', 'Expected nothing'):
         result.append(colorize('doctest_title', remaining.pop(0))) # Expected:
-        while remaining and remaining[0] != 'Got:':
+        while remaining and remaining[0] not in ('Got:', 'Got nothing'):
             line = remaining.pop(0)
             result.append(colorize('doctest_expected', line))
-        if not remaining or remaining[0] != 'Got:':
+        if not remaining or remaining[0] not in ('Got:', 'Got nothing'):
             return lines
         result.append(colorize('doctest_title', remaining.pop(0))) # Got:
         while remaining:
