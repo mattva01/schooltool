@@ -142,7 +142,7 @@
       for="schoolbell.app.interfaces.IPersonContainer"
       class="schoolbell.app.browser.app.PersonAddView"
       template="templates/person_add.pt"
-      permission="zope.ManageContent"
+      permission="schoolbell.create"
       menu="schoolbell_actions" title="New person" />
 
   <page
@@ -194,7 +194,7 @@
       label="Edit Group Information"
       schema="schoolbell.app.interfaces.IGroup"
       fields="title description"
-      permission="schoolbell.create"
+      permission="schoolbell.edit"
       template="templates/simple_edit.pt"
       class=".app.GroupEditView"
       menu="schoolbell_actions"
@@ -205,7 +205,7 @@
       title="SchoolBell Group"
       description="A Group"
       class="schoolbell.app.app.Group"
-      permission="zope.ManageContent"
+      permission="schoolbell.create"
       view="addSchoolBellGroup.html"
       />
 
