@@ -421,11 +421,13 @@ class CustomTestResult(unittest._TextTestResult):
             self._maxWidth = cfg.screen_width - len("xxxx/xxxx (xxx.x%): ") - 1
 
     def startTest(self, test):
+        n = self.testsRun + test.countTestCases()
+        self.__super_startTest(test)  # increments testsRun by one
+        self.testsRun = n # override the testsRun calculation
         if self.cfg.progress:
             # verbosity == 0: 'xxxx/xxxx (xxx.x%)'
             # verbosity == 1: 'xxxx/xxxx (xxx.x%): test name'
             # verbosity >= 2: 'xxxx/xxxx (xxx.x%): test name ... ok'
-            n = self.testsRun + 1
             self.stream.write("\r%4d" % n)
             if self.count:
                 self.stream.write("/%d (%5.1f%%)"
@@ -440,7 +442,6 @@ class CustomTestResult(unittest._TextTestResult):
                 self.stream.write(": %s" % name)
                 self._lastWidth = width
             self.stream.flush()
-        self.__super_startTest(test)
         for hook in self.hooks:
             hook.startTest(test)
 
