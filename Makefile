@@ -20,6 +20,7 @@ all: build
 
 build: build-translations
 	$(PYTHON) setup.py build_ext -i
+	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
 extract-translations:

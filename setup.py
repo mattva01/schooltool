@@ -65,77 +65,10 @@ else:
 # Do the setup
 #
 
-from distutils.core import setup, Extension
+from distutils.core import setup
 
-# Set up dependencies for the BTrees package
-base_btrees_depends = [
-    "Zope3/src/persistent/cPersistence.h",
-    "Zope3/src/BTrees/BTreeItemsTemplate.c",
-    "Zope3/src/BTrees/BTreeModuleTemplate.c",
-    "Zope3/src/BTrees/BTreeTemplate.c",
-    "Zope3/src/BTrees/BucketTemplate.c",
-    "Zope3/src/BTrees/MergeTemplate.c",
-    "Zope3/src/BTrees/SetOpTemplate.c",
-    "Zope3/src/BTrees/SetTemplate.c",
-    "Zope3/src/BTrees/TreeSetTemplate.c",
-    "Zope3/src/BTrees/sorters.c",
-    ]
-
-_flavors = {"O": "object", "I": "int"}
-
-KEY_H = "Zope3/src/BTrees/%skeymacros.h"
-VALUE_H = "Zope3/src/BTrees/%svaluemacros.h"
-
-include_dirs = ['src']
-
-
-def BTreeExtension(flavor):
-    key = flavor[0]
-    value = flavor[1]
-    name = "BTrees._%sBTree" % flavor
-    sources = ["Zope3/src/BTrees/_%sBTree.c" % flavor]
-    kwargs = {"include_dirs": ['Zope3/src/persistent']}
-    if flavor != "fs":
-        kwargs["depends"] = (base_btrees_depends + [KEY_H % _flavors[key],
-                                                    VALUE_H % _flavors[value]])
-    return Extension(name, sources, **kwargs)
-
-
-ext_modules = [
-    BTreeExtension("OO"),
-    BTreeExtension("IO"),
-    BTreeExtension("OI"),
-    BTreeExtension("II"),
-    BTreeExtension("fs"),
-    Extension(name = 'persistent.cPersistence',
-              include_dirs = ['Zope3/src/persistent'],
-              sources= ['Zope3/src/persistent/cPersistence.c',
-                        'Zope3/src/persistent/ring.c'],
-              depends = ['Zope3/src/persistent/cPersistence.h',
-                         'Zope3/src/persistent/ring.h',
-                         'Zope3/src/persistent/ring.c']
-              ),
-    Extension(name = 'persistent.cPickleCache',
-              include_dirs = ['Zope3/src/persistent'],
-              sources= ['Zope3/src/persistent/cPickleCache.c',
-                        'Zope3/src/persistent/ring.c'],
-               depends = ['Zope3/src/persistent/cPersistence.h',
-                         'Zope3/src/persistent/ring.h',
-                         'Zope3/src/persistent/ring.c']
-              ),
-    Extension(name = 'persistent.TimeStamp',
-              include_dirs = ['Zope3/src/persistent'],
-              sources= ['Zope3/src/persistent/TimeStamp.c']
-              ),
-    Extension(name = 'ZODB.winlock',
-              include_dirs = ['Zope3/src/persistent'],
-              sources = ['Zope3/src/ZODB/winlock.c']
-              ),
-    Extension("zope.interface._zope_interface_coptimizations",
-              ["Zope3/src/zope/interface/_zope_interface_coptimizations.c"]),
-]
+# TODO: ask distutils to build Zope 3 extension modules somehow
 
 setup(name="schooltool",
       version="0.9",
-      package_dir={'': 'Zope3/src'},
-      ext_modules=ext_modules)
+      package_dir={'': 'src'})
