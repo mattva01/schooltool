@@ -55,6 +55,35 @@ def parse_date(value):
         raise ValueError("Invalid date: %r" % value)
 
 
+def parse_time(value):
+    """Parse a ISO 8601 HH:MM time value.
+
+    >>> parse_time('01:25')
+    datetime.time(1, 25)
+    >>> parse_time('9:15')
+    datetime.time(9, 15)
+    >>> parse_time('12:1')
+    datetime.time(12, 1)
+    >>> parse_time('00:00')
+    datetime.time(0, 0)
+    >>> parse_time('23:59')
+    datetime.time(23, 59)
+    >>> parse_time('24:00')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid time: '24:00'
+    >>> parse_time('06:30PM')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid time: '06:30PM'
+    """
+    try:
+        h, m = map(int, value.split(':'))
+        return datetime.time(h, m)
+    except ValueError:
+        raise ValueError("Invalid time: %r" % value)
+
+
 def parse_datetime(s):
     """Parse a ISO 8601 date/time value.
 

@@ -402,6 +402,7 @@ class Period:
             return True
         return False
 
+
 class VEvent:
     """iCalendar event.
 

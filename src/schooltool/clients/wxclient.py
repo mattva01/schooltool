@@ -46,7 +46,7 @@ from schooltool.clients.guiclient import RollCallEntry
 from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
-from schooltool.common import parse_date
+from schooltool.common import parse_date, parse_time
 
 __metaclass__ = type
 
@@ -56,6 +56,7 @@ __metaclass__ = type
 #
 
 DEFAULT_DLG_STYLE = wxCAPTION | wxSYSTEM_MENU | wxDIALOG_MODAL
+NONMODAL_DLG_STYLE = wxCAPTION | wxSYSTEM_MENU
 RESIZABLE_WIN_STYLE = (wxCAPTION | wxSYSTEM_MENU | wxMINIMIZE_BOX
                        | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxTHICK_FRAME)
 RESIZABLE_DLG_STYLE = (RESIZABLE_WIN_STYLE | wxDIALOG_MODAL) &~ wxMINIMIZE_BOX
@@ -957,8 +958,8 @@ class SchoolTimetableFrame(wxDialog):
         button_bar.Add(resize_btn, 0, 0, 0)
         button_bar.Add(edit_btn, 0, wxLEFT, 16)
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
-        button_bar.Add(ok_btn, 0, wxRIGHT|wxLEFT, 16)
-        button_bar.Add(cancel_btn, 0, 0, 0)
+        button_bar.Add(ok_btn, 0, wxLEFT, 16)
+        button_bar.Add(cancel_btn, 0, wxLEFT, 16)
         main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
 
         self.SetSizer(main_sizer)
@@ -1103,7 +1104,8 @@ class AvailabilitySearchFrame(wxDialog):
         grid_sizer.Add(self.duration_ctrl, 1)
         grid_sizer.Add(wxStaticText(panel1, -1, "min"))
         find_btn = wxButton(self, -1, "&Find")
-        EVT_BUTTON(self, find_btn.GetId(), self.DoFind)
+        find_btn.SetDefault()
+        EVT_BUTTON(self, find_btn.GetId(), self.OnFind)
         sizer1c.Add(grid_sizer)
         sizer1c.Add(wxPanel(panel1, -1), 1)
         sizer1c.Add(find_btn, 0, wxALIGN_RIGHT|wxTOP, 16)
@@ -1130,11 +1132,18 @@ class AvailabilitySearchFrame(wxDialog):
         main_sizer.Add(splitter, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
+
+        book_btn = wxButton(self, -1, "Book Resource")
+        EVT_BUTTON(self, book_btn.GetId(), self.OnBook)
+        button_bar.Add(book_btn, 0, 0, 0)
+
+        button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
+
         close_btn = wxButton(self, wxID_CLOSE, "Close")
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
-        close_btn.SetDefault()
-        button_bar.Add(close_btn)
-        main_sizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+        button_bar.Add(close_btn, 0, wxLEFT, 16)
+
+        main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
 
         self.SetSizer(main_sizer)
         self.SetSizeHints(minW=500, minH=300)
@@ -1145,7 +1154,7 @@ class AvailabilitySearchFrame(wxDialog):
         """Close the absence window."""
         self.Close(True)
 
-    def DoFind(self, event=None):
+    def OnFind(self, event=None):
         """Find available resources."""
         try:
             ctrl = self.first_date_ctrl
@@ -1162,18 +1171,20 @@ class AvailabilitySearchFrame(wxDialog):
         resources = [self.resources[idx][1]
                      for idx in self.resource_list.GetSelections()]
         self.result_list.DeleteAllItems()
+        self.results = []
 
         try:
-            results = self.client.availabilitySearch(first=first, last=last,
-                          duration=duration, hours=hours, resources=resources)
+            self.results = self.client.availabilitySearch(first=first,
+                                last=last, duration=duration, hours=hours,
+                                resources=resources)
         except SchoolToolError, e:
             wxMessageBox("Could not get the list of available resources: %s"
                          % e, self.title, wxICON_ERROR|wxOK)
             return
         else:
-            results.sort()
+            self.results.sort()
 
-        for idx, slot in enumerate(results):
+        for idx, slot in enumerate(self.results):
             self.result_list.InsertStringItem(idx, slot.resource_title)
             self.result_list.SetItemData(idx, idx)
             available_until = slot.available_from + slot.available_for
@@ -1181,6 +1192,133 @@ class AvailabilitySearchFrame(wxDialog):
             end = available_until.strftime('%Y-%m-%d %H:%M')
             self.result_list.SetStringItem(idx, 1, start)
             self.result_list.SetStringItem(idx, 2, end)
+
+    def OnBook(self, event=None):
+        """Book a resource."""
+        duration = self.duration_ctrl.GetValue()
+        dlg = ResourceBookingDlg(self, self.client, self.resources, duration)
+        if not dlg.ok:
+            dlg.Destroy()
+            return
+        idx = self.result_list.GetFirstSelected()
+        if idx != -1:
+            key = self.result_list.GetItemData(idx)
+            dlg.preselect(self.results[key])
+        dlg.Show()
+
+
+class ResourceBookingDlg(wxDialog):
+    """Dialog for resource booking"""
+
+    def __init__(self, parent, client, resources, duration="30"):
+        title = "Resource Booking"
+        wxDialog.__init__(self, parent, -1, title, style=NONMODAL_DLG_STYLE)
+        self.title = title
+        self.client = client
+        self.resources = resources
+        self.ok = False
+        try:
+            self.persons = self.client.getListOfPersons()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get a list of persons: %s" % e,
+                         title, wxICON_ERROR|wxOK)
+            return
+        else:
+            self.persons.sort()
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+        grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
+        grid_sizer.Add(wxStaticText(self, -1, "Resource"))
+        self.resource_ctrl = wxComboBox(self, -1, "",
+                                        style=wxCB_READONLY|wxCB_DROPDOWN,
+                                        choices=[r[0] for r in resources])
+        grid_sizer.Add(self.resource_ctrl, 1, wxEXPAND)
+        grid_sizer.Add(wxStaticText(self, -1, "Person"))
+        self.person_ctrl = wxComboBox(self, -1, "",
+                                      style=wxCB_READONLY|wxCB_DROPDOWN,
+                                      choices=[p[0] for p in self.persons])
+        grid_sizer.Add(self.person_ctrl, 1, wxEXPAND)
+        grid_sizer.Add(wxStaticText(self, -1, "Date"))
+        self.date_ctrl = DateCtrl(self, -1)
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        self.date_ctrl.SetValue(today)
+        self.date_ctrl.SetSizeHints(minW=110, minH=22) # XXX wrong
+        grid_sizer.Add(self.date_ctrl)
+        grid_sizer.Add(wxStaticText(self, -1, "Time"))
+        now = datetime.datetime.now().strftime('%H:%M')
+        self.time_ctrl = wxTextCtrl(self, -1, now)
+        grid_sizer.Add(self.time_ctrl)
+        grid_sizer.Add(wxStaticText(self, -1, "Duration"))
+        hsizer = wxBoxSizer(wxHORIZONTAL)
+        self.duration_ctrl = wxTextCtrl(self, -1, str(duration))
+        hsizer.Add(self.duration_ctrl)
+        hsizer.Add(wxStaticText(self, -1, "min"), 0, wxLEFT, 8)
+        grid_sizer.Add(hsizer)
+        vsizer.Add(grid_sizer, 0, wxEXPAND|wxALL, 8)
+        self.ignore_ctrl = wxCheckBox(self, -1, "Ignore conflicts")
+        vsizer.Add(self.ignore_ctrl, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8)
+
+        static_line = wxStaticLine(self, -1)
+        vsizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        ok_btn.SetDefault()
+        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxALIGN_CENTER|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
+        self.ok = True
+
+    def preselect(self, slot):
+        for idx, (title, path) in enumerate(self.resources):
+            if path == slot.resource_path:
+                self.resource_ctrl.SetSelection(idx)
+                break
+        self.date_ctrl.SetValue(slot.available_from.strftime('%Y-%m-%d'))
+        self.time_ctrl.SetValue(slot.available_from.strftime('%H:%M'))
+
+    def OnOk(self, event=None):
+        idx = self.resource_ctrl.GetSelection()
+        if idx == -1:
+            self.resource_ctrl.SetFocus()
+            wxBell()
+            return
+        resource_path = self.resources[idx][1]
+        idx = self.person_ctrl.GetSelection()
+        if idx == -1:
+            self.person_ctrl.SetFocus()
+            wxBell()
+            return
+        person_path = self.persons[idx][1]
+        try:
+            ctrl = self.date_ctrl
+            date = parse_date(ctrl.GetValue())
+            ctrl = self.time_ctrl
+            time = parse_time(ctrl.GetValue())
+            ctrl = self.duration_ctrl
+            duration = int(ctrl.GetValue())
+        except ValueError:
+            ctrl.SetFocus()
+            wxBell()
+            return
+        else:
+            when = datetime.datetime.combine(date, time)
+        ignore_conflicts = self.ignore_ctrl.IsChecked()
+        try:
+            self.client.bookResource(resource_path, person_path, when,
+                                     duration, ignore_conflicts)
+        except SchoolToolError, e:
+            wxMessageBox("Could not book the resource: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+        else:
+            self.Close(True)
 
 
 #

@@ -409,6 +409,11 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return _parseAvailabilityResults(response.read())
 
+    def bookResource(self, resource_path, owner_path, date_and_time, duration,
+                     ignore_conflicts):
+        """Book a resource."""
+        raise SchoolToolError("Not implemented yet") # XXX
+
 
 class Response:
     """HTTP response.
