@@ -1,4 +1,4 @@
 <div class="calevent">
   <h3 tal:content="context/title" />
-  <span tal:replace="view/duration" />
+  <span tal:replace="structure view/duration" />
 </div>

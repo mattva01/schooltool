@@ -566,6 +566,27 @@ class TestDailyCalendarView(unittest.TestCase):
             datetime(2004, 8, 12, 9, 0), timedelta(hours=3), "")), 2)
 
 
+    def test_render(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+        cal.__parent__ = person
+        cal.__name__ = 'calendar'
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                   timedelta(hours=1),
+                                   "Stuff happens"))
+
+        view = DailyCalendarView(cal)
+        view.authorization = lambda x, y: True
+        request = RequestStub(args={'date': '2004-08-12'})
+        content = view.render(request)
+        self.assert_("Da Boss" in content)
+        self.assert_("Stuff happens" in content)
+
 class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
 
     def test_render(self):
@@ -838,12 +859,28 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(view.render(request),
                           '<div class="calevent">\n'
                           '  <h3>Main event</h3>\n'
-                          '  12:01-13:01\n'
+                          '  12:01&ndash;13:01\n'
                           '</div>\n')
 
         self.assertEquals(view.cssClass(), 'event')
         view.context.source = 'timetable-calendar'
         self.assertEquals(view.cssClass(), 'ro_event')
+
+    def test_duration(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.browser.cal import CalendarEventView
+
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(hours=1), "Main event")
+        view = CalendarEventView(ev)
+        self.assertEquals(view.duration(), '12:01&ndash;13:01')
+
+        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+                           timedelta(days=1), "Long event")
+        view = CalendarEventView(ev)
+        self.assertEquals(view.duration(),
+                          '2004-12-01 12:01&ndash;2004-12-02 12:01')
+
 
 def test_suite():
     suite = unittest.TestSuite()

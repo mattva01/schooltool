@@ -271,7 +271,7 @@ class DailyCalendarView(CalendarViewBase):
     template = Template("www/cal_daily.pt")
 
     starthour = 0
-    endhour = 23
+    endhour = 24
 
     def prev(self):
         return self.cursor - timedelta(1)
@@ -349,7 +349,8 @@ class DailyCalendarView(CalendarViewBase):
     def rowspan(self, event):
         """Calculate how many hours the event will take today"""
         start = datetime.combine(self.cursor, time(self.starthour))
-        end = datetime.combine(self.cursor, time(self.endhour))
+        end = (datetime.combine(self.cursor, time()) +
+               timedelta(hours=self.endhour))
 
         eventstart = event.dtstart
         eventend = event.dtstart + event.duration
@@ -633,8 +634,13 @@ class CalendarEventView(View):
 
     def duration(self):
         ev = self.context
-        return "%s-%s" % (ev.dtstart.strftime('%H:%M'),
-                          (ev.dtstart + ev.duration).strftime('%H:%M'))
+        if ev.dtstart.date() == (ev.dtstart + ev.duration).date():
+            return "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
+                              (ev.dtstart + ev.duration).strftime('%H:%M'))
+        else:
+            return "%s&ndash;%s" % (
+                ev.dtstart.strftime('%Y-%m-%d %H:%M'),
+                (ev.dtstart + ev.duration).strftime('%Y-%m-%d %H:%M'))
 
     def cssClass(self):
         if getattr(self.context, 'source', None) == 'timetable-calendar':
