@@ -22,6 +22,7 @@ The schooltool relationships.
 $Id$
 """
 from persistence import Persistent
+from persistence.list import PersistentList
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
 from schooltool.db import PersistentKeysSet, PersistentPairKeysDict
@@ -32,10 +33,12 @@ from schooltool.interfaces import IRelationshipSchema
 from schooltool.interfaces import IRelationshipEvent
 from schooltool.interfaces import IRelationshipAddedEvent
 from schooltool.interfaces import IRelationshipRemovedEvent
-from schooltool.interfaces import ISpecificURI
+from schooltool.interfaces import IRelationshipValencies
+from schooltool.interfaces import ISpecificURI, IFaceted
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IUnlinkHook
 from schooltool.component import inspectSpecificURI, registerRelationship
+from schooltool.component import iterFacets
 from schooltool import component
 from schooltool.event import EventMixin
 
@@ -260,6 +263,24 @@ class RelatableMixin(Persistent):
         for link in self.__links__:
             if link.role.extends(role, False):
                 result.append(link)
+        return result
+
+
+class RelationshipValenciesMixin(Persistent):
+
+    implements(IRelationshipValencies)
+
+    def __init__(self):
+        self._valencies = PersistentList()
+
+    def getValencies(self):
+        result = []
+        result += self._valencies
+        if IFaceted.isImplementedBy(self):
+            for facet in iterFacets(self):
+                if (IRelationshipValencies.isImplementedBy(facet)
+                    and facet.active):
+                    result += facet.getValencies()
         return result
 
 

@@ -23,13 +23,14 @@ $Id$
 """
 from sets import Set
 import unittest
+from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import ISpecificURI, IRelatable, ILink, IUnlinkHook
 from schooltool.component import inspectSpecificURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
-from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
 
 class URITutor(ISpecificURI):
     """http://schooltool.org/ns/tutor"""
@@ -359,6 +360,71 @@ class TestLinkSet(unittest.TestCase):
         self.assertEquals(sorted([b]), sorted(s))
 
 
+class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
+    def test(self):
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.interfaces import IRelationshipValencies
+        rvm = RelationshipValenciesMixin()
+        verifyObject(IRelationshipValencies, rvm)
+
+    def test_getValencies(self):
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.interfaces import IRelationshipValencies
+        from schooltool.interfaces import URIMembership, URIMember
+        rvm = RelationshipValenciesMixin()
+        self.assertEquals(len(rvm.getValencies()), 0)
+
+        rvm._valencies.append((URIMembership, URIMember))
+
+        self.assertEquals(list(rvm.getValencies()),
+                          [(URIMembership, URIMember)])
+
+    def test_getValencies_faceted(self):
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.interfaces import IRelationshipValencies, ISpecificURI
+        from schooltool.interfaces import URIMembership, URIMember, IFacet
+        from schooltool.component import setFacet
+        from schooltool.facet import FacetedMixin
+        from zope.interface import directlyProvides
+
+        class MyValent(RelationshipValenciesMixin, FacetedMixin):
+            def __init__(self):
+                RelationshipValenciesMixin.__init__(self)
+                FacetedMixin.__init__(self)
+
+        class URIA(ISpecificURI): "uri:a"
+        class URIB(ISpecificURI): "uri:b"
+        class URIC(ISpecificURI): "uri:c"
+        class URID(ISpecificURI): "uri:d"
+
+        class Facet(RelationshipValenciesMixin):
+            implements(IFacet)
+
+        class SimpleFacet(Persistent):
+            implements(IFacet)
+
+        # A facet with valencies
+        rvm = MyValent()
+        facet = Facet()
+        facet._valencies.append((URIA, URIB))
+        setFacet(rvm, facet, self)
+
+        rvm._valencies.append((URIMembership, URIMember))
+
+        self.assertEqualsSorted(list(rvm.getValencies()),
+                                [(URIMembership, URIMember), (URIA, URIB)])
+
+        # A facet without valencies
+        facet2 = SimpleFacet()
+        setFacet(rvm, facet2, self)
+
+        self.assertEqualsSorted(list(rvm.getValencies()),
+                                [(URIMembership, URIMember), (URIA, URIB)])
+
+        facet.active = False
+        self.assertEqualsSorted(list(rvm.getValencies()),
+                                [(URIMembership, URIMember)])
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestRelationship))
@@ -367,4 +433,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRelate))
     suite.addTest(unittest.makeSuite(TestRelatableMixin))
     suite.addTest(unittest.makeSuite(TestLinkSet))
+    suite.addTest(unittest.makeSuite(TestRelationshipValenciesMixin))
     return suite

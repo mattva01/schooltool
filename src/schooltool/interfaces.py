@@ -261,6 +261,17 @@ class IQueryLinks(Interface):
         """
 
 
+class IRelationshipValencies(Interface):
+    """Gives information on what relationships are pertinent to this
+    object.
+    """
+
+    def getValencies():
+        """Returns a sequence of tuples of relationship type URI and role
+        URI of the role this object takes in that relationship.
+        """
+
+
 class IRelationshipSchemaFactory(Interface):
 
     def __call__(relationship_type, optional_title, **roles):
