@@ -24,10 +24,11 @@ $Id$
 
 import unittest
 import socket
+import datetime
 from StringIO import StringIO
 from pprint import pformat
 from schooltool.tests.helpers import diff
-from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.tests.utils import NiceDiffsMixin, RegistriesSetupMixin
 from zope.testing.doctestunit import DocTestSuite
 
 __metaclass__ = type
@@ -397,13 +398,66 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
         self.assert_(im.server.ssl)
 
 
-class TestCSVImporterInternal(unittest.TestCase):
+class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.clients.csvclient import CSVImporterZODB
+        from schooltool.model import Group, Person, Resource
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+
+        self.groups = ApplicationObjectContainer(Group)
+        self.group1 = self.groups.new(__name__='group1')
+        self.group2 = self.groups.new(__name__='group2')
+
+        self.persons = ApplicationObjectContainer(Person)
+        self.person1 = self.persons.new(__name__='person1')
+
+        self.resources = ApplicationObjectContainer(Resource)
+
+        self.app = Application()
+        self.app['groups'] = self.groups
+        self.app['persons'] = self.persons
+        self.app['resources'] = self.resources
+
+        self.im = CSVImporterZODB(self.app)
 
     def test_init(self):
-        from schooltool.clients.csvclient import CSVImporterInternal
-        root = object()
-        im = CSVImporterInternal(root)
-        self.assert_(im.root is root)
+        self.assert_(self.im.groups is self.groups)
+        self.assert_(self.im.persons is self.persons)
+        self.assert_(self.im.resources is self.resources)
+
+    def test_importGroup(self):
+        self.im.importGroup('gr0wl', 'A tiny group', 'group1 group2', '')
+        group = self.groups['gr0wl']
+        self.assertEquals(group.title, 'A tiny group')
+        self.assertEquals(len(group.listLinks()), 2) # TODO examine links
+        # TODO: facets
+
+    def test_importPerson(self):
+        name = self.im.importPerson('Smith', 'group1', 'group2', '')
+        person = self.persons[name]
+        self.assertEquals(person.title, 'Smith')
+        # TODO: other arguments
+
+    def test_importResource(self):
+        name = self.im.importResource('Stool', 'group1 group2')
+        resource = self.resources[name]
+        self.assertEquals(resource.title, 'Stool')
+        self.assertEquals(len(resource.listLinks()), 2) # TODO examine links
+
+    def test_importPersonInfo(self):
+        from schooltool.component import FacetManager
+        self.im.importPersonInfo('person1', 'Foo Bayer',
+                                 '1922-12-12', 'Wazzup?')
+        info = FacetManager(self.person1).facetByName('person_info')
+
+        self.assertEquals(info.first_name, 'Foo')
+        self.assertEquals(info.last_name, 'Bayer')
+        self.assertEquals(info.dob, datetime.date(1922, 12, 12))
+        self.assertEquals(info.comment, 'Wazzup?')
 
 
 def test_suite():
@@ -412,7 +466,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestHTTPClient))
     suite.addTest(unittest.makeSuite(TestCSVImporterBase))
     suite.addTest(unittest.makeSuite(TestCSVImporterHTTP))
-    suite.addTest(unittest.makeSuite(TestCSVImporterInternal))
+    suite.addTest(unittest.makeSuite(TestCSVImporterZODB))
     return suite
 
 if __name__ == '__main__':
