@@ -84,6 +84,25 @@ from distutils.command.install_scripts import \
         install_scripts as _install_scripts
 
 
+#### Begin Dirty hack
+from distutils.command.install_data import install_data as _install_data
+class install_data(_install_data):
+    """Specialized Python installer for schoolbell.
+
+    This install data command is for schoolbell only, it changes the default
+    schoolbell data install directory to be the same as the directory for
+    install_lib.
+
+    It also makes the --install-data option to the install command a no-op.
+    """
+
+    def finalize_options(self):
+        self.set_undefined_options('install',
+                ('install_lib', 'install_dir'))
+        return _install_data.finalize_options(self)
+#### End dirty hack
+
+
 class install(_install):
     """Specialized install command for schooltool and schoolbell.
 
@@ -94,12 +113,15 @@ class install(_install):
     user_options = _install.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
                 " be added to the python path on script startup"),
+            ('datafile-dir=', None, "override where the python libraries think"
+                    " their data files are"),
             ('default-config=', None, "location of the default server config"
                     " file")]
 
     def initialize_options(self):
         self.paths = None
         self.default_config = None
+        self.datafile_dir = None
         return _install.initialize_options(self)
 
 
@@ -123,8 +145,11 @@ class install_lib(_install_lib):
 
     def finalize_options(self):
         self.set_undefined_options('install',
-                ('build_lib', 'build_lib'),
-                ('install_data', 'datafile_dir'))
+                ('datafile_dir', 'datafile_dir'),
+                ('build_lib', 'build_lib'))
+        # datafile_dir not set in install, get it from install_data
+        self.set_undefined_options('install_data',
+                ('install_dir', 'datafile_dir'))
         return _install_lib.finalize_options(self)
 
     def update_pathconfig(self):
@@ -136,19 +161,28 @@ class install_lib(_install_lib):
         if self.package == 'schoolbell':
             if os.path.abspath(self.datafile_dir) \
                     != os.path.abspath(self.install_dir):
-                raise NotImplementedError("You are probably trying to install "
-                        "schoolbell data files and modules in different "
-                        "locations, this is not implemented.")
+                print >> sys.stderr, ("WARNING: You are probably trying to "
+                        "install schoolbell data files and modules in "
+                        "different locations, this is not implemented and "
+                        "probably won't work.")
         ##### End dirty hack
         try:
             path_file = open(pathconfig, 'r')
             pathconfig_str = path_file.read()
         finally:
             path_file.close()
+        # Update the pathconfig string file
+        path_to_data = os.path.abspath(
+                os.path.join(self.datafile_dir, self.package))
+        datafile_str = '\n'.join(['# pathconf begin', 'DATADIR = %s'
+                % repr(path_to_data),
+                '# pathconf end'])
+        datafile_regex = re.compile(r'# pathconf begin\n.*# pathconf end', re.S)
+        pathconfig_str = re.sub(datafile_regex, datafile_str, pathconfig_str)
+        print pathconfig_str
         try:
             path_file = open(pathconfig, 'w')
-            path_file.write(pathconfig_str.replace('os.path.dirname(__file__)',
-                repr(os.path.join(self.datafile_dir, self.package))))
+            path_file.write(pathconfig_str)
         finally:
             path_file.close()
 
@@ -285,6 +319,7 @@ elif package == 'schoolbell':
         version="1.0rc1",
         url='http://www.schooltool.org/schoolbell',
         cmdclass={'install': install,
+            'install_data': install_data,
             'install_scripts': install_scripts,
             'install_lib': install_lib},
         package_dir={'': 'src'},

@@ -77,6 +77,40 @@ It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
 
 
+Installing and Configuring with Distutils
+-----------------------------------------
+
+It is possible to install SchoolTool and SchoolBell using the python distutils.
+To do this, you have to use one of the distributed tarballs/zip files, which
+you unpack in a directory with the tools appropriate to your OS. First, it is
+necessary to install the version of Zope included with the tarballs, this can
+be done by running
+
+python setup.py install
+
+from the Zope3/ directory included with the SchoolBell distribution. From the
+top level directory, the commands
+
+python setup.py schoolbell install (inside the unpacked schoolbell tarball/zip)
+python setup.py schooltool install (inside the unpacked schooltool tarball/zip)
+
+will install SchoolBell and SchoolTool respectively. Note that SchoolTool
+depends on SchoolBell, so you will have to install both if you want to run
+SchoolTool.
+
+Finally, to setup a SchoolBell / SchoolTool instance, copy the installed script
+into a separate directory and create a config file with the name of the script
+and an extension .conf. A good template can be found in the top level of the
+tarball (.conf.in). Running this script will then run an instance in that
+directory.
+
+Those interested in installing into a non-standard location should investigate
+the --paths and --default-config option for the install distutils commands.
+
+NOTE: If you are using a Linux distribution for which packages exist, you
+should consider using those packages instead of this procedure.
+
+
 Running SchoolTool
 ------------------
 
