@@ -802,17 +802,14 @@ class ICalendar(Interface):
     """A calendar, containing days which in turn contain events.
     """
 
-    daterange = Attribute("""IDateRange covered by this calendar.""")
-
     def __iter__():
         """Returns an iterator over the events in this calendar."""
 
     def byDate(date):
         """Returns an ICalendar for the given date.
 
-        All events that overlap with the given date range are
-        included.  The timing of the events is not modified even if it
-        falls outside the given date.
+        All events that overlap with the given day are included.  The timing of
+        the events is not modified even if it falls outside the given date.
         """
 
 

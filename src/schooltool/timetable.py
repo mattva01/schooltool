@@ -261,7 +261,7 @@ class BaseTimetableModel:
     dayTemplates = {}
 
     def createCalendar(self, schoolday_model, timetable):
-        cal = Calendar(schoolday_model.first, schoolday_model.last)
+        cal = Calendar()
         day_id_gen = self._dayGenerator()
         for date in schoolday_model:
             if schoolday_model.isSchoolday(date):

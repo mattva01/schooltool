@@ -853,41 +853,24 @@ def markNonSchooldays(ical_reader, schoolday_model):
 class Calendar(Persistent):
     implements(ICalendar)
 
-    def __init__(self, first, last):
-        self.daterange = DateRange(first, last)
+    def __init__(self):
         self.events = Set()
 
     def __iter__(self):
         return iter(self.events)
 
     def byDate(self, date):
-        cal = Calendar(date, date)
+        cal = Calendar()
         for event in self:
-            if cal._overlaps(event):
+            event_start = event.dtstart.date()
+            event_end = (event.dtstart + event.duration).date()
+            if event_start <= date and event_end >= date:
                 cal.addEvent(event)
         return cal
 
     def addEvent(self, event):
         self.events.add(event)
         self.events = self.events  # make persistence work
-
-    def _overlaps(self, event):
-        """Returns whether the event's timespan overlaps with the timespan
-        of this calendar.
-        """
-        event_end = (event.dtstart + event.duration).date()
-        event_start = event.dtstart.date()
-        cal_start = self.daterange.first
-        cal_end = self.daterange.last
-
-        if event_start in self.daterange:
-            return True
-        elif event_end in self.daterange:
-            return True
-        elif event_start <= cal_start <= cal_end <= event_end:
-            return True
-        else:
-            return False
 
 
 class CalendarEvent(Persistent):
@@ -920,5 +903,6 @@ class CalendarEvent(Persistent):
 class CalendarOwnerMixin:
     implements(ICalendarOwner)
 
-    calendar = None
+    def __init__(self):
+        self.calendar = Calendar()
 

@@ -170,7 +170,6 @@ class CalendarView(View):
         if ctype != 'text/calendar':
             return textErrorPage(request,
                                  "Unsupported content type: %s" % ctype)
-        min_date = max_date = None
         reader = ICalReader(request.content)
         try:
             for event in reader.iterEvents():
@@ -182,19 +181,9 @@ class CalendarView(View):
                 self.context.addEvent(
                         CalendarEvent(event.dtstart, event.duration,
                                       event.summary))
-                if min_date is None or event.dtstart < min_date:
-                    min_date = event.dtstart
-                if max_date is None or event.dtstart > max_date:
-                    max_date = event.dtstart
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:
-            if min_date is not None:
-                if not isinstance(min_date, datetime.date):
-                    min_date = min_date.date()
-                if not isinstance(max_date, datetime.date):
-                    max_date = max_date.date()
-                self.context.daterange = DateRange(min_date, max_date)
             request.setHeader('Content-Type', 'text/plain')
             return "Calendar imported"
 

@@ -122,10 +122,10 @@ class PrintPacker:
         self.columns = []
 
 
-def printCalendar(cal, model):
+def printCalendar(cal, model, daterange):
     gen = model._dayGenerator()
     pp = PrintPacker(3, 79)
-    for date in cal.daterange:
+    for date in daterange:
         daycal = cal.byDate(date)
         events = list(daycal)
         if events:
@@ -155,13 +155,13 @@ def printSummaryLegend(model):
     print
 
 
-def printCalendarSummary(cal, model):
+def printCalendarSummary(cal, model, daterange):
     gen = model._dayGenerator()
     pp = PrintPacker(2)
     week_nr = ['']
     week_type = ['']
     month = None
-    for date in cal.daterange:
+    for date in daterange:
         daycal = cal.byDate(date)
         events = list(daycal)
         if events:
@@ -315,18 +315,18 @@ def main():
         print __doc__
         return 1
 
-    scoolday_model = createSchooldayModel(config)
+    schoolday_model = createSchooldayModel(config)
     timetable_model = createTimetableModel(config)
     timetable = createTimetable(config)
 
-    cal = timetable_model.createCalendar(scoolday_model, timetable)
+    cal = timetable_model.createCalendar(schoolday_model, timetable)
 
     print "================"
     print "MONTHLY CALENDAR"
     print "================"
 
     printSummaryLegend(timetable_model)
-    printCalendarSummary(cal, timetable_model)
+    printCalendarSummary(cal, timetable_model, schoolday_model)
 
     print
     print "==================="
@@ -334,7 +334,7 @@ def main():
     print "==================="
     print
 
-    printCalendar(cal, timetable_model)
+    printCalendar(cal, timetable_model, schoolday_model)
 
     return 0
 

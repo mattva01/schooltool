@@ -305,8 +305,7 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
     def _create(self):
         from schooltool.views.cal import CalendarView
         from schooltool.cal import Calendar
-        context = Calendar(datetime.date(2003, 9, 1),
-                           datetime.date(2003, 9, 30))
+        context = Calendar()
         setPath(context, '/calendar')
         self.view = CalendarView(context)
         self.view.datetime_hook = DatetimeStub()
@@ -388,8 +387,6 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assertEquals(cal.daterange.first, datetime.date(2003, 9, 2))
-        self.assertEquals(cal.daterange.last, datetime.date(2003, 9, 4))
         events = list(cal)
         expected = [
             CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),

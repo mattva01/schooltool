@@ -723,18 +723,14 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
     def test(self):
         from schooltool.cal import Calendar
         from schooltool.interfaces import ICalendar
-
-        cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+        cal = Calendar()
         verifyObject(ICalendar, cal)
-
-        self.assertRaises(ValueError, Calendar,
-                          date(2003, 11, 26), date(2003, 11, 25))
 
     def test_iter(self):
         from schooltool.cal import Calendar
         from schooltool.cal import CalendarEvent
 
-        cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+        cal = Calendar()
         self.assertEqual(list(cal), [])
 
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
@@ -746,7 +742,7 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
 
     def makeCal(self, events):
         from schooltool.cal import Calendar
-        cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+        cal = Calendar()
         for event in events:
             cal.addEvent(event)
         return cal
@@ -812,13 +808,11 @@ class TestCalendarPersistence(unittest.TestCase):
     def test(self):
         from schooltool.cal import Calendar, CalendarEvent
         from transaction import get_transaction
-        dt1 = date(2003, 9, 1)
-        dt2 = date(2003, 9, 30)
-        cal = Calendar(dt1, dt2)
+        cal = Calendar()
         self.datamgr.root()['cal'] = cal
         get_transaction().commit()
 
-        e = CalendarEvent(dt1, timedelta(1), "xyzzy")
+        e = CalendarEvent(datetime(2001, 2, 3, 4, 5, 6), timedelta(1), "xyzzy")
         cal.addEvent(e)
         get_transaction().commit()
 

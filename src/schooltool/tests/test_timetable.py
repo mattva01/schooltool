@@ -522,9 +522,9 @@ class SchooldayModelStub:
 
 class BaseTestTimetableModel:
 
-    def extractCalendarEvents(self, cal):
+    def extractCalendarEvents(self, cal, daterange):
         result = []
-        for d in cal.daterange:
+        for d in daterange:
             calday = cal.byDate(d)
             events = []
             for event in calday:
@@ -576,10 +576,7 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
         cal = model.createCalendar(schooldays, tt)
         verifyObject(ICalendar, cal)
 
-        self.assertEqual(cal.daterange.first, date(2003, 11, 20))
-        self.assertEqual(cal.daterange.last, date(2003, 11, 26))
-
-        result = self.extractCalendarEvents(cal)
+        result = self.extractCalendarEvents(cal, schooldays)
 
         expected = [{datetime(2003, 11, 20, 9, 0): "English",
                      datetime(2003, 11, 20, 11, 0): "Math"},
@@ -648,7 +645,7 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
 
         cal = model.createCalendar(SchooldayModelStub(), tt)
 
-        result = self.extractCalendarEvents(cal)
+        result = self.extractCalendarEvents(cal, SchooldayModelStub())
 
         expected = [
             {datetime(2003, 11, 20, 9, 0): "Chemistry",
