@@ -116,8 +116,9 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager,
                               args={'conflicts': 'ignore',
-                                    'start': '2004-08-10 19:01:00',
-                                    'mins': '61',
+                                    'start_date': '2004-08-10',
+                                    'start_time': '19:01',
+                                    'duration': '61',
                                     'BOOK': 'Book'})
         content = view.render(request)
         self.assert_('2004-08-10 19:01:00' not in content)
@@ -135,8 +136,7 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
                                     'duration': '61',
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
-        self.assert_("Only managers can set the owner" not in content)
-        self.assert_("Invalid owner: teacher" not in content)
+        self.assert_("This user does not exist" not in content)
 
         ev1 = iter(self.teacher.calendar).next()
         self.assert_(ev1.owner is self.teacher,
@@ -145,16 +145,15 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
     def test_owner_forbidden(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.teacher,
-                              args={'owner': 'whatever',
+                              args={'owner': 'manager',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
                                     'duration': '61',
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
-        self.assert_("Only managers can set the owner" in content)
-        self.assert_("2004-08-10" in content)
-        self.assert_("19:01" in content)
-        self.assert_("61" in content)
+        ev1 = iter(self.teacher.calendar).next()
+        self.assert_(ev1.owner is self.teacher,
+                     "%r is not %r" % (ev1.owner, self.teacher))
 
     def test_owner_wrong_name(self):
         view = self.createView()
@@ -165,7 +164,7 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
                                     'duration': '61',
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
-        self.assert_("Invalid owner: whatever" in content)
+        self.assert_("This user does not exist" in content)
         self.assert_("2004-08-10" in content)
         self.assert_("19:01" in content)
         self.assert_("61" in content)
@@ -211,7 +210,8 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
                                     'CONFIRM_BOOK': 'Book'})
         view.render(request)
         self.assertEquals(request.applog, [])
-        self.assertEquals(view.error, "The resource is busy at specified time")
+        self.assertEquals(view.error,
+                          "The resource is busy at the specified time.")
 
 
 class TestCalendarDay(unittest.TestCase):

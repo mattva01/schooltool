@@ -73,12 +73,14 @@
     <td tal:content="slot/start">Start</td>
     <td tal:content="slot/end">Duration</td>
     <td>
-      <form method="POST" class="invisible"
+      <form method="GET" class="invisible"
             tal:attributes="action string:${resource/href}/book">
-         <input type="hidden" name="start"
-                tal:attributes="value slot/start"/>
-         <input type="hidden" name="mins"
-                tal:attributes="value view/duration"/>
+         <input type="hidden" name="start_date"
+                tal:attributes="value slot/start_date"/>
+         <input type="hidden" name="start_time"
+                tal:attributes="value slot/start_time"/>
+         <input type="hidden" name="duration"
+                tal:attributes="value view/duration_widget/raw_value"/>
          <input type="submit" name="BOOK" value="Book" class="button"
                 i18n:attributes="value"/>
       </form>

@@ -345,9 +345,8 @@ class ResourceContainerView(ObjectContainerView):
 class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
     """View for resource search (/busysearch)."""
 
-    # Two methods from AvailabilityQueryView are used:
+    # Only one methods from AvailabilityQueryView is used:
     #   update
-    #   listResources
 
     __used_for__ = IApplication
 
@@ -421,10 +420,29 @@ class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
 
     def listResources(self):
         """Return sorted results of the availability query."""
-        results = AvailabilityQueryView.listResources(self)
-        results = [(item['title'], item['path'], item) for item in results]
-        results.sort()
-        return [item for title, path, item in results]
+        resources = [(r.title, r) for r in self.resources]
+        resources.sort()
+        results = []
+        for title, resource in resources:
+            slots = resource.getFreeIntervals(self.first, self.last,
+                                              self.hours, self.duration)
+            if not slots:
+                continue
+            res_slots = []
+            for start, duration in slots:
+                mins = duration.days * 60 * 24 + duration.seconds // 60
+                end = start + duration
+                res_slots.append(
+                    {'start': start.strftime("%Y-%m-%d %H:%M"),
+                     'end': end.strftime("%Y-%m-%d %H:%M"),
+                     'start_date': start.strftime("%Y-%m-%d"),
+                     'start_time': start.strftime("%H:%M"),
+                     'duration': mins,
+                     })
+            results.append({'title': title,
+                            'href': absoluteURL(self.request, resource),
+                            'slots': res_slots})
+        return results
 
 
 class DatabaseResetView(View, ToplevelBreadcrumbsMixin):

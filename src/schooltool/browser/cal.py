@@ -39,6 +39,7 @@ from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
 from schooltool.browser.widgets import dateParser, timeParser, intParser
+from schooltool.browser.widgets import timeFormatter
 
 __metaclass__ = type
 
@@ -53,67 +54,85 @@ class BookingView(View):
 
     error = u""
 
-    owner_name = u""
-    start_date = u""
-    start_time = u""
-    duration = u""
-
     booked = False
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        everyone = self.listAllPersons()
+        self.owner_widget = SelectionWidget('owner', _('Owner'), everyone,
+                                            parser=self.parse_owner,
+                                            formatter=self.format_owner)
+        self.date_widget = TextWidget('start_date', _('Date'),
+                                      parser=dateParser)
+        self.time_widget = TextWidget('start_time', _('Time'),
+                                      parser=timeParser,
+                                      formatter=timeFormatter)
+        self.duration_widget = TextWidget('duration', _('Duration'),
+                                          unit=_('min.'),
+                                          parser=intParser,
+                                          validator=durationValidator,
+                                          value=30)
+
+    def listAllPersons(self):
+        person_container = traverse(self.context, '/persons')
+        persons = [(person.title, person)
+                   for person in person_container.itervalues()]
+        persons.sort()
+        return [(person, title) for title, person in persons]
+
+    def parse_owner(self, raw_value):
+        if not raw_value:
+            return None
+        persons = traverse(self.context, '/persons')
+        try:
+            return persons[raw_value]
+        except KeyError:
+            raise ValueError(_("This user does not exist."))
+
+    def format_owner(self, value):
+        if value is None:
+            return None
+        return value.__name__
 
     def breadcrumbs(self):
         return [(_('Start'), self.request.uri)]
 
+    def do_GET(self, request):
+        self.update()
+        return View.do_GET(self, request)
+
     def update(self):
         request = self.request
+        self.owner_widget.update(request)
+        self.date_widget.update(request)
+        self.time_widget.update(request)
+        self.duration_widget.update(request)
+
         if 'CONFIRM_BOOK' not in request.args:
-            if 'start' in request.args:
-                start = to_unicode(request.args['start'][0])
-                parts = start.split(' ')
-                self.start_date = parts[0]
-                self.start_time = ":".join(parts[1].split(':')[:2])
-            if 'mins' in request.args:
-                self.duration = to_unicode(request.args['mins'][0])
-            self.owner_name = request.authenticated_user.__name__
+            # just set the initial values
+            self.owner_widget.setValue(request.authenticated_user)
             return
 
+        assert 'CONFIRM_BOOK' in request.args
+
+        if self.isManager():
+            self.owner_widget.require()
+        self.date_widget.require()
+        self.time_widget.require()
+        self.duration_widget.require()
+        errors = (self.owner_widget.error or self.date_widget.error or
+                  self.time_widget.error or self.duration_widget.error)
+        if errors:
+            return
+
+        start = datetime.combine(self.date_widget.value,
+                                 self.time_widget.value)
+        duration = timedelta(minutes=self.duration_widget.value)
         force = 'conflicts' in request.args
-
-        start_date_str = to_unicode(request.args['start_date'][0])
-        start_time_str = to_unicode(request.args['start_time'][0])
-        duration_str = to_unicode(request.args['duration'][0])
-
-        self.start_date = start_date_str
-        self.start_time = start_time_str
-        self.duration = duration_str
-
-        if 'owner' in request.args:
-            if not self.isManager():
-                self.error = _("Only managers can set the owner")
-                return
-            persons = traverse(self.context, '/persons')
-            self.owner_name = to_unicode(request.args['owner'][0])
-            try:
-                owner = persons[self.owner_name]
-            except KeyError:
-                self.error = _("Invalid owner: %s") % self.owner_name
-                return
+        if self.isManager():
+            owner = self.owner_widget.value
         else:
             owner = request.authenticated_user
-            self.owner_name = owner.__name__
-
-        try:
-            start = parse_datetime('%s %s:00' % (start_date_str,
-                                                 start_time_str))
-        except ValueError:
-            self.error = _("Invalid date/time")
-            return
-
-        try:
-            duration = timedelta(minutes=int(duration_str))
-        except ValueError:
-            self.error = _("Invalid duration")
-            return
-
         self.booked = self.book(owner, start, duration, force=force)
 
     def book(self, owner, start, duration, force=False):
@@ -121,7 +140,8 @@ class BookingView(View):
             p = Period(start, duration)
             for e in self.context.calendar:
                 if p.overlaps(Period(e.dtstart, e.duration)):
-                    self.error = _("The resource is busy at specified time")
+                    self.error = _("The resource is busy"
+                                   " at the specified time.")
                     return False
 
         title = _('%s booked by %s') % (self.context.title, owner.title)
@@ -687,11 +707,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
                                       parser=dateParser)
         self.time_widget = TextWidget('start_time', _('Time'),
                                       parser=timeParser,
-                                      formatter=self.time_formatter)
+                                      formatter=timeFormatter)
         self.duration_widget = TextWidget('duration', _('Duration'),
                                           unit=_('min.'),
                                           parser=intParser,
-                                          validator=self.duration_validator,
+                                          validator=durationValidator,
                                           value=30)
         self.locations = self.getLocations()
         choices = [(l, l) for l in self.locations] + [('', _('Other'))]
@@ -699,40 +719,6 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
                                                choices, value='')
         self.other_location_widget = TextWidget('location_other',
                                                 _('Specify other'))
-
-    def time_formatter(value):
-        """Format time without seconds.
-
-          >>> time_formatter = EventViewBase.time_formatter
-          >>> time_formatter(None)
-          >>> time_formatter(time(9, 45))
-          '9:45'
-
-        """
-        if value is None:
-            return None
-        else:
-            return '%d:%02d' % (value.hour, value.minute)
-    time_formatter = staticmethod(time_formatter)
-
-    def duration_validator(value):
-        """Check if duration is acceptable.
-
-          >>> duration_validator = EventViewBase.duration_validator
-          >>> duration_validator(None)
-          >>> duration_validator(42)
-          >>> duration_validator(0)
-          >>> duration_validator(-1)
-          Traceback (most recent call last):
-            ...
-          ValueError: Duration cannot be negative.
-
-        """
-        if value is None:
-            return
-        if value < 0:
-            raise ValueError(_("Duration cannot be negative."))
-    duration_validator = staticmethod(duration_validator)
 
     def update(self):
         """Parse arguments in request and put them into view attributes."""
@@ -783,11 +769,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
 
     def getLocations(self):
         """Get a list of titles for possible locations."""
-        obj = self.context
-        while not IContainmentRoot.providedBy(obj):
-            obj = obj.__parent__
-        location_group = obj['groups']['locations']
-
+        location_group = traverse(self.context, '/groups/locations')
         locations = []
         for location in getRelatedObjects(location_group, URIMember):
             locations.append(location.title)
@@ -981,6 +963,24 @@ class CalendarEventView(View):
     def uniqueId(self):
         """Format the event ID for inclusion in a URL."""
         return urllib.quote(self.context.unique_id)
+
+
+def durationValidator(value):
+    """Check if duration is acceptable.
+
+      >>> durationValidator(None)
+      >>> durationValidator(42)
+      >>> durationValidator(0)
+      >>> durationValidator(-1)
+      Traceback (most recent call last):
+        ...
+      ValueError: Duration cannot be negative.
+
+    """
+    if value is None:
+        return
+    if value < 0:
+        raise ValueError(_("Duration cannot be negative."))
 
 
 #

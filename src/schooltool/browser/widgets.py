@@ -223,6 +223,20 @@ def timeParser(raw_value):
         raise ValueError(_("Time must be between 00:00 and 24:00."))
 
 
+def timeFormatter(value):
+    """Format time without seconds.
+
+      >>> timeFormatter(None)
+      >>> timeFormatter(datetime.time(9, 45))
+      '9:45'
+
+    """
+    if value is None:
+        return None
+    else:
+        return '%d:%02d' % (value.hour, value.minute)
+
+
 def intParser(raw_value):
     """Parser for intefers.
 

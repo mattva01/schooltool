@@ -606,18 +606,20 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         results = self.view.listResources()
 
         self.assertEquals(results,
-                          [{'path': '/resources/r1',
-                            'href': '/resources/r1',
-                            'title': 'Resource 1',
+                          [{'title': 'Resource 1',
+                            'href': 'http://localhost:7001/resources/r1',
                             'slots': [{'duration': 120,
-                                       'start': '2004-08-11 13:00:00',
-                                       'end': '2004-08-11 15:00:00'}]},
-                           {'path': '/resources/r2',
-                            'href': '/resources/r2',
-                            'title': 'Resource 2',
+                                       'start_date': '2004-08-11',
+                                       'start_time': '13:00',
+                                       'start': '2004-08-11 13:00',
+                                       'end': '2004-08-11 15:00'}]},
+                           {'title': 'Resource 2',
+                            'href': 'http://localhost:7001/resources/r2',
                             'slots': [{'duration': 120,
-                                       'start': '2004-08-11 13:00:00',
-                                       'end': '2004-08-11 15:00:00'}]}])
+                                       'start_date': '2004-08-11',
+                                       'start_time': '13:00',
+                                       'start': '2004-08-11 13:00',
+                                       'end': '2004-08-11 15:00'}]}])
 
     def test_render(self):
         request = RequestStub(args={}, authenticated_user=self.r1)
