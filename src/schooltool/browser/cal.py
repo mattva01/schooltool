@@ -45,7 +45,7 @@ from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
-from schooltool.interfaces import ModifyPermission
+from schooltool.interfaces import ModifyPermission, ViewPermission
 from schooltool.interfaces import IDailyRecurrenceRule, IWeeklyRecurrenceRule
 from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
@@ -248,7 +248,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     __url = None
 
     def _eventView(self, event):
-        return CalendarEventView(event, getACL(self.context))
+        return CalendarEventView(event, self.context)
 
     def eventClass(self, event):
         return self._eventView(event).cssClass()
@@ -257,7 +257,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return self._eventView(event).full(self.request, date)
 
     def eventShort(self, event):
-        return self._eventView(event).short()
+        return self._eventView(event).short(self.request)
 
     def update(self):
         if 'date' not in self.request.args:
@@ -1445,7 +1445,7 @@ class CalendarEventView(View):
 
     template = Template("www/cal_event.pt", charset=None)
 
-    def __init__(self, event, acl):
+    def __init__(self, event, calendar):
         """Create a view for event.
 
         Since ordinary calendar events do not know which calendar they come
@@ -1453,7 +1453,8 @@ class CalendarEventView(View):
         that governs access to this calendar.
         """
         View.__init__(self, event)
-        self.acl = acl
+        self.acl = getACL(calendar)
+	self.calendar = calendar
         self.date = None
 
     def canEdit(self):
@@ -1466,6 +1467,14 @@ class CalendarEventView(View):
         """
         user = self.request.authenticated_user
         return self.isManager() or self.acl.allows(user, ModifyPermission)
+
+    def canView(self):
+        """Can the current user view this calendar event?"""
+        user = self.request.authenticated_user
+	if self.context.privacy == 'public':
+	    return True
+	else:
+	    return self.isManager() or user is self.calendar.__parent__
 
     def cssClass(self):
         """Choose a CSS class for the event."""
@@ -1497,16 +1506,21 @@ class CalendarEventView(View):
             self.request = None
             self.date = None
 
-    def short(self):
+    def short(self, request):
         """Short representation of the event for the monthly view."""
+	self.request = request
         ev = self.context
         end = ev.dtstart + ev.duration
+	if self.canView():
+	    title = ev.title
+	else:
+	    title = _("Busy")
         if ev.dtstart.date() == end.date():
-            return "%s (%s&ndash;%s)" % (ev.title,
+            return "%s (%s&ndash;%s)" % (title,
                                          ev.dtstart.strftime('%H:%M'),
                                          end.strftime('%H:%M'))
         else:
-            return "%s (%s&ndash;%s)" % (ev.title,
+            return "%s (%s&ndash;%s)" % (title,
                                          ev.dtstart.strftime('%b&nbsp;%d'),
                                          end.strftime('%b&nbsp;%d'))
 
@@ -1524,6 +1538,13 @@ class CalendarEventView(View):
         date = self.date.strftime('%Y-%m-%d')
         return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
 
+    def privacy(self):
+	if self.context.privacy == "public":
+	    return _("Public")
+	elif self.context.privacy == "private":
+	    return _("Busy block")
+	elif self.context.privacy == "hidden":
+	    return _("Hidden")
 
 def durationValidator(value):
     """Check if duration is acceptable.

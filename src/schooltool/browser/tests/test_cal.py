@@ -723,15 +723,13 @@ class TestMonthlyCalendarView(AppSetupMixin, unittest.TestCase):
     def test_render(self):
         from schooltool.browser.cal import MonthlyCalendarView
 
-        cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
-                                          "Stuff happens")])
         person = self.app['persons'].new('boss', title="Da Boss")
-        cal.__parent__ = person
-        cal.__name__ = 'calendar'
+	person.calendar.addEvent(createEvent('2004-08-11 12:00', '1h',
+					     "Stuff happens"))
 
-        view = MonthlyCalendarView(cal)
-        view.authorization = lambda x, y: True
-        request = RequestStub(args={'date': '2004-08-12'})
+        view = MonthlyCalendarView(person.calendar)
+        request = RequestStub(authenticated_user=person,
+			      args={'date': '2004-08-12'})
         content = view.render(request)
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
@@ -1004,7 +1002,7 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
                                     'location_other': 'Kitchen',
-				    'duration': '50', 'privacy': 'hidden'})
+                                    'duration': '50', 'privacy': 'hidden'})
         content = view.render(request)
         self.assert_('Add event' in content)
         self.assert_('Hacking' in content)
@@ -1013,7 +1011,7 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
         self.assert_('15:30' in content)
         self.assert_('50' in content)
 
-	doc = HTMLDocument(content)
+        doc = HTMLDocument(content)
         op = doc.query('//select[@name="privacy"]'
                        '//option[@value="hidden" and @selected="selected"]')
         assert len(op) == 1, 'hidden not selected'
@@ -1025,7 +1023,7 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'start_time': '15:30',
                                     'location': 'Kitchen',
                                     'duration': '50',
-				    'privacy': 'private',
+                                    'privacy': 'private',
                                     'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
@@ -2134,11 +2132,11 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
                             unittest.TestCase):
 
     def createView(self, ev=None):
-        from schooltool.auth import ACL
+	from schooltool.cal import ACLCalendar
         from schooltool.browser.cal import CalendarEventView
         if ev is None:
             ev = self.createOrdinaryEvent()
-        view = CalendarEventView(ev, ACL())
+        view = CalendarEventView(ev, ACLCalendar())
         return view
 
     def createOrdinaryEvent(self):
@@ -2203,6 +2201,9 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
                 <a href="delete_event.html?date=2004-12-02&amp;event_id=id%21">
                   [delete]
                 </a>
+                <div>
+                  Public
+                </div>
               </div>
               <h3>
                 <a href="edit_event.html?date=2004-12-02&amp;event_id=id%21">
@@ -2227,15 +2228,39 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
             </div>
             """)
 
+        ev = createEvent('2004-12-01 12:01', '1h', 'Main event',
+                         unique_id="id", location="Office",
+                         privacy="private")
+        view = self.createView(ev)
+        view.canView = lambda: False
+        content = view.full(request, date(2004, 12, 2))
+        self.assertEqualsXML(content.replace('&ndash;', '--'), """
+            <div class="calevent">
+              <h3>
+                Busy
+              </h3>
+              12:01--13:01
+            </div>
+            """)
+
     def test_short(self):
+	request = RequestStub()
         view = self.createView()
-        self.assertEquals(view.short(),
+	view.canView = lambda: True
+        self.assertEquals(view.short(request),
                           'Main event (12:01&ndash;13:01)')
 
         ev = createEvent('2004-12-01 12:01', '1d', 'Long event')
         view = self.createView(ev)
-        self.assertEquals(view.short(),
+	view.canView = lambda: True
+        self.assertEquals(view.short(request),
                           'Long event (Dec&nbsp;01&ndash;Dec&nbsp;02)')
+
+        view = self.createView()
+	view.canView = lambda: False
+        self.assertEquals(view.short(request),
+                          'Busy (12:01&ndash;13:01)')
+
 
     def test_editLink_and_deleteLink(self):
         ev = createEvent('2004-12-01 12:01', '1h', 'Repeating event',
@@ -2250,13 +2275,13 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
 class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
 
     def test_canEdit(self):
-        from schooltool.auth import ACL
         from schooltool.interfaces import ModifyPermission
         from schooltool.browser.cal import CalendarEventView
         ev = createEvent('2004-11-03 14:32', '1h', 'Nothing of importance')
-        acl = ACL()
-        acl.add((self.person, ModifyPermission))
-        view = CalendarEventView(ev, acl)
+	cal = self.person.calendar
+	cal.addEvent(ev)
+        cal.acl.add((self.person, ModifyPermission))
+        view = CalendarEventView(ev, cal)
 
         anonymous = None
         def canEdit(user):
@@ -2267,6 +2292,33 @@ class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
         assert canEdit(self.person)
         assert not canEdit(self.person2)
         assert canEdit(self.manager)
+
+    def test_canView(self):
+        from schooltool.interfaces import ViewPermission
+        from schooltool.browser.cal import CalendarEventView
+        ev = createEvent('2004-11-03 14:32', '1h', 'Nothing of importance',
+                         privacy="private")
+	self.person.calendar.addEvent(ev)
+        self.person.calendar.acl.add((self.person, ViewPermission))
+	self.person.calendar.acl.add((self.person2, ViewPermission))
+        view = CalendarEventView(ev, self.person.calendar)
+
+        anonymous = None
+        def canView(user):
+            view.request = RequestStub(authenticated_user=user)
+            return view.canView()
+
+        assert not canView(anonymous)
+        assert canView(self.person)
+        assert not canView(self.person2)
+        assert canView(self.manager)
+
+        view.context = view.context.replace(privacy="public")
+
+        assert canView(anonymous)
+        assert canView(self.person)
+        assert canView(self.person2)
+        assert canView(self.manager)
 
 
 def test_suite():
