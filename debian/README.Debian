@@ -13,10 +13,12 @@ list of SchoolTool server configuration options.
 The simplest way to start playing with SchoolTool is as follows:
 
   1. `apt-get install schooltool-server schooltool-clients`
-  2. run `import-sampledata` to populate the database
-  3. run `wxschooltool` or `schooltool-client` and play around
+  2. Run `import-sampledata` to populate the database
+  3. Run `wxschooltool` or `schooltool-client` and play around
+  4. Open http://localhost:7080/ in a web browser and play with the web
+     frontend.
 
 By default a user 'manager' with password 'schooltool' is created with full
 access and modification privileges.
 
- -- Marius Gedminas <marius@pov.lt>  Mon, 19 Apr 2004 20:13:21 +0300
+ -- Marius Gedminas <marius@pov.lt>  Wed, 25 Aug 2004 15:15:41 +0300

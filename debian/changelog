@@ -1,3 +1,11 @@
+schooltool (0.6+svn20040825-0.1) unstable; urgency=low
+
+  * Not released.
+  * debian/README.Debian: mention the new web frontend.
+  * debian/schooltool.conf: added web 7080 and app-log-path.
+
+ -- Marius Gedminas <marius@pov.lt>  Wed, 25 Aug 2004 15:16:16 +0300
+
 schooltool (0.6-0.1) unstable; urgency=low
 
   * Released SchoolTool Milestone 6.
