@@ -54,6 +54,7 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
             Title
 
             Doc text
+            with newlines in it
             """
 
         uri, title, doc = inspectSpecificURI(IURI)
@@ -61,8 +62,7 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
         self.assertEqual(uri, strURI(IURI))
         self.assertEqual(title, "Title")
         self.assertEqual(title, nameURI(IURI))
-        self.assertEqual(doc, """Doc text
-            """)
+        self.assertEqual(doc, "Doc text\nwith newlines in it")
 
         class IURI2(ISpecificURI): """http://example.com/foo"""
         uri, title, doc = inspectSpecificURI(IURI2)

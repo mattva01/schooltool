@@ -26,6 +26,7 @@ import re
 from zope.interface import Interface, moduleProvides
 from zope.interface.interfaces import IInterface
 from schooltool.interfaces import IModuleSetup, ComponentLookupError
+from schooltool.common import dedent
 
 __metaclass__ = type
 
@@ -118,7 +119,7 @@ def inspectSpecificURI(uri):
         title = None
 
     if len(segments) > 2:
-        doc = segments[2].lstrip()
+        doc = dedent(segments[2]).strip()
     else:
         doc = ""
 
