@@ -15,7 +15,7 @@ XXX Fragment.
 
 * links are traversable, semantics given by a role
 
-* roles described by URIs. In python, interfaces that extend SpecificURI.
+* roles are described by URIs. In python, interfaces that extend SpecificURI.
 XXX Fragment.
 
 * URIs don't have a strong concept of implication / extension like

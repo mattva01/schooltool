@@ -13,7 +13,7 @@ HTTP to communicate and follow the REST architectural style.  The
 Relax NG schemas of the XML documents the client and server use to
 communicate are in the src/schooltool/schema directory.
 
-There are several clients produced:
+There are several clients:
 
    * a GUI client using the wxPython library (deprecated)
    * a scriptable command line client for debugging and functional
@@ -338,6 +338,8 @@ The core calendaring code is located in the schooltool.cal module.  A
 Calendar has a set of CalendarEvents and can be either iterated over or
 queried for events that happened on a certain date.  A calendar may also
 be merged with another calendar.
+
+TODO: calendarevent subclasses
 
 If you need a functionally defined calendar for internal use, you should
 use ImmutableCalendar, so that you do not accidentally try to modify a
