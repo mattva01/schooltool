@@ -24,6 +24,10 @@ include Zope3/setup.py
 include Zope3/test.py
 include Zope3/Makefile
 include Zope3/ftesting.zcml
+include Zope3/securitypolicy.zcml
+include Zope3/securitypolicy-ftesting.zcml
+include Zope3/ZopePublicLicense.txt
+include Zope3/overrides_ftesting.zcml.in
 
 recursive-include Zope3/src/BTrees *
 recursive-include Zope3/src/persistent *
@@ -46,10 +50,12 @@ recursive-include Zope3/src/zope/i18n *
 recursive-include Zope3/src/zope/i18nmessageid *
 recursive-include Zope3/src/zope/interface *
 recursive-include Zope3/src/zope/hookable *
+recursive-include Zope3/src/zope/modulealias *
 recursive-include Zope3/src/zope/pagetemplate *
 recursive-include Zope3/src/zope/proxy *
 recursive-include Zope3/src/zope/publisher *
 recursive-include Zope3/src/zope/schema *
+include Zope3/package-includes/securitypolicy-meta.zcml
 recursive-include Zope3/src/zope/security *
 recursive-include Zope3/src/zope/server *
 recursive-include Zope3/src/zope/tales *
