@@ -23,7 +23,9 @@ $Id$
 """
 
 import datetime
+import sets
 import sha
+
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.interfaces import INote, IAddress
@@ -36,6 +38,7 @@ from schooltool.membership import Membership
 from schooltool.db import PersistentKeysSetWithNames
 from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
+from schooltool.timetable import getPeriodsForDay
 from schooltool.absence import Absence
 from schooltool.component import FacetManager
 from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
@@ -83,24 +86,52 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
             unavailable_hours.remove(start, start + duration)
 
         one_day = datetime.timedelta(days=1)
-        first = datetime.datetime.combine(first, datetime.time(0))
-        last = datetime.datetime.combine(last, datetime.time(0)) + one_day
-        intset = IntervalSet(first, last)
+        dtfirst = datetime.datetime.combine(first, datetime.time(0))
+        dtlast = datetime.datetime.combine(last, datetime.time(0)) + one_day
+        intset = self._availabilityMap(dtfirst, dtlast)
 
         for a, b in unavailable_hours:
-            date = first
-            while date < last:
+            date = dtfirst
+            while date < dtlast:
                 intset.remove(date + a, date + b)
                 date += one_day
 
-        for event in self.calendar.expand(first, last):
-            intset.remove(event.dtstart, event.dtstart + event.duration)
-
-        for event in self.makeTimetableCalendar():
-            intset.remove(event.dtstart, event.dtstart + event.duration)
-
         return [(start, end - start) for start, end in intset
                                      if end >= start + min_duration]
+
+    def _availabilityMap(self, dtfirst, dtlast):
+        """Return an IntervalSet for time intervals when the object is free."""
+        intset = IntervalSet(dtfirst, dtlast)
+        for event in self.calendar.expand(dtfirst, dtlast):
+            intset.remove(event.dtstart, event.dtstart + event.duration)
+        for event in self.makeTimetableCalendar():
+            intset.remove(event.dtstart, event.dtstart + event.duration)
+        return intset
+
+    def getFreePeriods(self, first, last, timetable_periods):
+        """See IAvailabilitySearch"""
+        return list(self._getFreePeriods(first, last, timetable_periods))
+
+    def _getFreePeriods(self, first, last, timetable_periods):
+        # XXX The following code is inefficient:
+        #  - SequentialDaysTimetableModel needs to iterate from the
+        #    beginning of the semester (or whatever) to day, thus leading
+        #    to quadratic behaviour.
+        #  - There are repeated lookups of the time-related services within
+        #    getPeriodsForDay.
+        one_day = datetime.timedelta(days=1)
+        dtfirst = datetime.datetime.combine(first, datetime.time(0))
+        dtlast = datetime.datetime.combine(last, datetime.time(0)) + one_day
+        available = self._availabilityMap(dtfirst, dtlast)
+        timetable_periods = sets.Set(timetable_periods)
+        day = first
+        while day <= last:
+            for period in getPeriodsForDay(day, self):
+                if period.title in timetable_periods:
+                    dtstart = datetime.datetime.combine(day, period.tstart)
+                    if available.contains(dtstart, dtstart + period.duration):
+                        yield (dtstart, period.duration, period.title)
+            day += one_day
 
     def getRelativePath(self, obj):
         if obj in self.__facets__:

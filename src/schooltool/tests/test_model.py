@@ -164,6 +164,87 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
                           (first + day*2 + half_day, day + half_day),
                           (first + day*4 + half_day, day)])
 
+
+    def createServiceManager(self):
+        """Return a service manager stub for getPeriodsForDay.
+
+        Our timetable stubs define these periods for the the following days:
+          2004-09-01
+            A:  9:00- 9:45
+            B: 10:00-10:45
+          2004-09-02
+            (holiday)
+          2004-09-03
+            C:  9:00- 9:45
+            D: 10:00-10:45
+        """
+        from schooltool.interfaces import IServiceManager
+
+        class SchooldayPeriodStub:
+            def __init__(self, hour, title):
+                self.title = title
+                self.tstart = time(hour)
+                self.duration = timedelta(minutes=45)
+
+        class TimetableModelStub:
+            def periodsInDay(self, schooldays, schema, day):
+                if day == date(2004, 9, 1):
+                    return [SchooldayPeriodStub(9, 'A'),
+                            SchooldayPeriodStub(10, 'B')]
+                if day == date(2004, 9, 3):
+                    return [SchooldayPeriodStub(9, 'C'),
+                            SchooldayPeriodStub(10, 'D')]
+                return []
+
+        class TimetableStub:
+            model = TimetableModelStub()
+
+        class TimetableSchemaServiceStub:
+            default_id = 'default'
+            _default_tt = TimetableStub()
+            def getDefault(self):
+                return self._default_tt
+
+        class TimePeriodServiceStub:
+            """"""
+            def keys(self):
+                return ('whenever', )
+            def __getitem__(self, key):
+                assert key == 'whenever'
+                return [date(2004, 9, 1), date(2004, 9, 2), date(2004, 9, 3)]
+
+        class ServiceManagerStub:
+            implements(IServiceManager)
+            timetableSchemaService = TimetableSchemaServiceStub()
+            timePeriodService = TimePeriodServiceStub()
+
+        return ServiceManagerStub()
+
+    def test_getFreePeriods_no_events(self):
+        obj = self.newObject()
+        obj.__parent__ = self.createServiceManager()
+        periods = obj.getFreePeriods(date(2004, 9, 1), date(2004, 9, 3),
+                                     ['A', 'B', 'C'])
+        self.assertEquals(periods, [(datetime(2004, 9, 1, 9, 0),
+                                     timedelta(minutes=45), 'A'),
+                                    (datetime(2004, 9, 1, 10, 0),
+                                     timedelta(minutes=45), 'B'),
+                                    (datetime(2004, 9, 3, 9, 0),
+                                     timedelta(minutes=45), 'C')])
+
+    def test_getFreePeriods_with_events(self):
+        from schooltool.cal import CalendarEvent
+        obj = self.newObject()
+        obj.__parent__ = self.createServiceManager()
+        obj.calendar.addEvent(CalendarEvent(datetime(2004, 9, 1, 9, 55),
+                                            timedelta(minutes=10), "Busy"))
+        periods = obj.getFreePeriods(date(2004, 9, 1), date(2004, 9, 3),
+                                     ['A', 'B', 'C'])
+        self.assertEquals(periods, [(datetime(2004, 9, 1, 9, 0),
+                                     timedelta(minutes=45), 'A'),
+                                    (datetime(2004, 9, 3, 9, 0),
+                                     timedelta(minutes=45), 'C')])
+
     def test_getRelativePath(self):
         from schooltool.component import FacetManager
         obj = self.newObject()

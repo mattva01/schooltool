@@ -1828,8 +1828,7 @@ class IAvailabilitySearch(Interface):
         when the object is free within a range of dates [first, last]
         during the times of day specified by time_periods.
 
-        first, last    datetime.datetime objects specifying a range of
-                       dates.
+        first, last    datetime.date objects specifying a range of dates.
 
         time_periods   a sequence of tuples (start_time, duration)
                        specifying the time of day.  These are
@@ -1840,6 +1839,19 @@ class IAvailabilitySearch(Interface):
                        interval of time we're searching for.
 
         The returned value is a sequence of tuples (start_datetime, duration).
+        """
+
+    def getFreePeriods(first, last, timetable_periods):
+        """Return all timetable periods when the object is free within a range
+        of dates [first, last].  Only those timetable periods that are listed
+        in timetable_periods are considered.
+
+        first, last    datetime.date objects specifying a range of dates.
+
+        timetable_periods
+                       a sequence of timetable period IDs.
+
+        Returns a sequence of tuples (start_datetime, duration, period_id).
         """
 
 
