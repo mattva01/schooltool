@@ -1,0 +1,371 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://www.owl-ontologies.com/unnamed.owl#"
+  xml:base="http://www.owl-ontologies.com/unnamed.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://protege.stanford.edu/plugins/owl/protege"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="person">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Person</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="teacher">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Teacher</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#person"/>
+  </owl:Class>
+  <owl:Class rdf:ID="student">
+    <rdfs:subClassOf rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Student</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="dependent">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="guardian"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Dependent</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="stepChild">
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Step child</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="stepParent"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="godParent">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="godChild"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >God parent</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="exWife">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ex-wife</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="exHusband"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="medicalCareProvider">
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="medicalPatient"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Medical care provider</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="dependentOfMinorDependent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Dependent of Minor Dependent</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:subPropertyOf rdf:resource="#dependent"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="husband">
+    <owl:inverseOf>
+      <owl:FunctionalProperty rdf:ID="wife"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Husband</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="spouse"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="halfSibling">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Half sibling</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#halfSibling"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="protegé">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Protegé</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf>
+      <owl:FunctionalProperty rdf:ID="mentor"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="handicappedDependent">
+    <rdfs:subPropertyOf rdf:resource="#dependent"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Handicapped dependent</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="cousin">
+    <owl:inverseOf rdf:resource="#cousin"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cousin</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="employer">
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Employer</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="grandparent">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="grandchild"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Grandparent</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="adoptiveParent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Adoptive parent</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="adoptedChild"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#grandchild">
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Grandchild</rdfs:comment>
+    <owl:inverseOf rdf:resource="#grandparent"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="fiancé">
+    <owl:inverseOf>
+      <owl:FunctionalProperty rdf:ID="fiancée"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Financé</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:ID="engaged"/>
+    </rdfs:subPropertyOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#exHusband">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ex-husband</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#exWife"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#adoptedChild">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Adopted child</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#adoptiveParent"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="sibling">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sibling</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#sibling"/>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="fosterParent">
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="fosterChild"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Foster parent</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#stepParent">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Step parent</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#stepChild"/>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="coach">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Coach</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="employee">
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Employee</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#employee"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="auntUncle">
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="nieceNephew"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Aunt or uncle</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#spouse">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Spouse</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:ID="significantOther"/>
+    </rdfs:subPropertyOf>
+    <owl:inverseOf rdf:resource="#spouse"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#fosterChild">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Foster child</rdfs:comment>
+    <owl:inverseOf rdf:resource="#fosterParent"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="advisor">
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Advisor</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ministerPriest">
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Minister or priest</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="#advisor"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#guardian">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Guardian</rdfs:comment>
+    <owl:inverseOf rdf:resource="#dependent"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#godChild">
+    <owl:inverseOf rdf:resource="#godParent"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >God child</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="other">
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Other relationship</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#medicalPatient">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Medical patient</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#medicalCareProvider"/>
+    <rdfs:domain rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="courtAppointedGuardian">
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Court appointed guardian</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:subPropertyOf rdf:resource="#guardian"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="friend">
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Friend</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#nieceNephew">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Niece or nephew</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#auntUncle"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="stepSibling">
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#stepSibling"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Step sibling</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:FunctionalProperty rdf:about="#engaged">
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="#significantOther"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Engaged</rdfs:comment>
+    <owl:inverseOf rdf:resource="#engaged"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="#fiancée">
+    <rdfs:subPropertyOf rdf:resource="#engaged"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Financée</rdfs:comment>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#fiancé"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="lifePartner">
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#lifePartner"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="#significantOther"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Life partner</rdfs:comment>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="#significantOther">
+    <rdfs:domain rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#significantOther"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Significant other</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="#mentor">
+    <rdfs:subPropertyOf rdf:resource="#advisor"/>
+    <rdfs:range rdf:resource="#person"/>
+    <owl:inverseOf rdf:resource="#protegé"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="#wife">
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:subPropertyOf rdf:resource="#spouse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Wife</rdfs:comment>
+    <owl:inverseOf rdf:resource="#husband"/>
+    <rdfs:range rdf:resource="#person"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="probationOfficer">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Probation officer</rdfs:comment>
+    <rdfs:domain rdf:resource="#person"/>
+    <rdfs:range rdf:resource="#person"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="#advisor"/>
+  </owl:FunctionalProperty>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 1.3, Build 188)  http://protege.stanford.edu -->

@@ -1,0 +1,280 @@
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Protege-2000 Class student Documentation</title>
+</head>
+<body>
+<!-- ======== START OF CLASS DATA ======== -->  
+<H2><font size="-1"> Project: schooltool-schema</font><BR>
+Class student</H2>  
+<dl>
+<dt><b>Concrete Class Extends&nbsp;</b></dt>
+<dt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<A HREF="person.html">person</A></dt><dd>&nbsp;</dd>
+<DT><B>Direct Instances:</B> <DD>
+None
+</dt><dd>&nbsp;</dd>
+<DT><B>Direct Subclasses:</B> <DD>
+None
+</dt><dd>&nbsp;</dd>
+<DT><B>Class Documentation:</B> <DD>
+Student
+<P>
+</dt></dl>
+<HR>
+<P>
+<TABLE BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%"> 
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=6 width="100%"><font size="+2"><b>Template Slots</b></font></TD>
+</TR> 
+<TR BGCOLOR="white" CLASS="TableRowColor"> 
+<TD ALIGN="right" WIDTH="10%"><b>Slot name</b></TD>
+<TD width="60%"><b>Documentation</b></TD>
+<TD width="10%"><b>Type</b></TD>   
+<TD width="10%"><b>Allowed Values/Classes</b></TD> 
+<TD width="5%"><b>Cardinality</b></TD> 
+<TD width="5%"><b>Default</b></TD>  
+</TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>adoptedChild</i></TD>
+<TD ALIGN="left" width="60%">Adopted&#32;child<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>adoptiveParent</i></TD>
+<TD ALIGN="left" width="60%">Adoptive&#32;parent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:2&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>advisor</i></TD>
+<TD ALIGN="left" width="60%">Advisor<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>auntUncle</i></TD>
+<TD ALIGN="left" width="60%">Aunt&#32;or&#32;uncle<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>halfSibling</i></TD>
+<TD ALIGN="left" width="60%">Half&#32;sibling<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>stepSibling</i></TD>
+<TD ALIGN="left" width="60%">Step&#32;sibling<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>sibling</i></TD>
+<TD ALIGN="left" width="60%">Sibling<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>courtAppointedGuardian</i></TD>
+<TD ALIGN="left" width="60%">Court&#32;appointed&#32;guardian<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:2&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>cousin</i></TD>
+<TD ALIGN="left" width="60%">Cousin<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>dependent</i></TD>
+<TD ALIGN="left" width="60%">Dependent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>employer</i></TD>
+<TD ALIGN="left" width="60%">Employer<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>employee</i></TD>
+<TD ALIGN="left" width="60%">Employee<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>fosterParent</i></TD>
+<TD ALIGN="left" width="60%">Foster&#32;parent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>fosterChild</i></TD>
+<TD ALIGN="left" width="60%">Foster&#32;child<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>fiancée</i></TD>
+<TD ALIGN="left" width="60%">Financée<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>fiancé</i></TD>
+<TD ALIGN="left" width="60%">Financé<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>significantOther</i></TD>
+<TD ALIGN="left" width="60%">Significant&#32;other<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>exHusband</i></TD>
+<TD ALIGN="left" width="60%">Ex-husband<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>exWife</i></TD>
+<TD ALIGN="left" width="60%">Ex-wife<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>friend</i></TD>
+<TD ALIGN="left" width="60%">Friend<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>grandchild</i></TD>
+<TD ALIGN="left" width="60%">Grandchild<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>nieceNephew</i></TD>
+<TD ALIGN="left" width="60%">Niece&#32;or&#32;nephew<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>husband</i></TD>
+<TD ALIGN="left" width="60%">Husband<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>wife</i></TD>
+<TD ALIGN="left" width="60%">Wife<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>lifePartner</i></TD>
+<TD ALIGN="left" width="60%">Life&#32;partner<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>ministerPriest</i></TD>
+<TD ALIGN="left" width="60%">Minister&#32;or&#32;priest<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>other</i></TD>
+<TD ALIGN="left" width="60%">Other&#32;relationship<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>probationOfficer</i></TD>
+<TD ALIGN="left" width="60%">Probation&#32;officer<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:1&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>protegé</i></TD>
+<TD ALIGN="left" width="60%">Protegé<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>stepChild</i></TD>
+<TD ALIGN="left" width="60%">Step&#32;child<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>stepParent</i></TD>
+<TD ALIGN="left" width="60%">Step&#32;parent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>handicappedDependent</i></TD>
+<TD ALIGN="left" width="60%">Handicapped&#32;dependent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>guardian</i></TD>
+<TD ALIGN="left" width="60%">Guardian<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:2&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>dependentOfMinorDependent</i></TD>
+<TD ALIGN="left" width="60%">Dependent&#32;of&#32;Minor&#32;Dependent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>godParent</i></TD>
+<TD ALIGN="left" width="60%">God&#32;parent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:2&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>godChild</i></TD>
+<TD ALIGN="left" width="60%">God&#32;child<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>coach</i></TD>
+<TD ALIGN="left" width="60%">Coach<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>medicalCareProvider</i></TD>
+<TD ALIGN="left" width="60%">Medical&#32;care&#32;provider<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>medicalPatient</i></TD>
+<TD ALIGN="left" width="60%">Medical&#32;patient<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+<TD ALIGN="right"  WIDTH="10%"><i>grandparent</i></TD>
+<TD ALIGN="left" width="60%">Grandparent<P></TD>
+<TD ALIGN="left" width="10%">Instance&nbsp;</TD>   
+<TD ALIGN="left" width="10%"><A HREF="person.html">person</A>&nbsp;</b></TD> 
+<TD width="5%">0:*&nbsp;</b></TD> 
+<TD ALIGN="left" width="5%">&nbsp;</TD></TR>  
+</table><P>
+<P><A HREF="index.html"> Return to class hierarchy </A>
+<hr>Generated on Thu Oct 28 02:37:13 EDT 2004</body></html>

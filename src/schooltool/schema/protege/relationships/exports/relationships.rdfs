@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE rdf:RDF [
+	 <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+	 <!ENTITY rdf_ 'http://protege.stanford.edu/rdf'>
+	 <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+]>
+<rdf:RDF xmlns:rdf="&rdf;"
+	 xmlns:rdf_="&rdf_;"
+	 xmlns:rdfs="&rdfs;">
+<rdf:Property rdf:about="&rdf_;adoptedChild"
+	 rdfs:comment="Adopted child"
+	 rdfs:label="adoptedChild">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;adoptiveParent"
+	 rdfs:comment="Adoptive parent"
+	 rdfs:label="adoptiveParent">
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;advisor"
+	 rdfs:comment="Advisor"
+	 rdfs:label="advisor">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;auntUncle"
+	 rdfs:comment="Aunt or uncle"
+	 rdfs:label="auntUncle">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;coach"
+	 rdfs:comment="Coach"
+	 rdfs:label="coach">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;courtAppointedGuardian"
+	 rdfs:comment="Court appointed guardian"
+	 rdfs:label="courtAppointedGuardian">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;guardian"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;cousin"
+	 rdfs:comment="Cousin"
+	 rdfs:label="cousin">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;dependent"
+	 rdfs:comment="Dependent"
+	 rdfs:label="dependent">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;dependentOfMinorDependent"
+	 rdfs:comment="Dependent of Minor Dependent"
+	 rdfs:label="dependentOfMinorDependent">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;dependent"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;employee"
+	 rdfs:comment="Employee"
+	 rdfs:label="employee">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;employer"
+	 rdfs:comment="Employer"
+	 rdfs:label="employer">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;engaged"
+	 rdfs:comment="Engaged"
+	 rdfs:label="engaged">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:subPropertyOf rdf:resource="&rdf_;significantOther"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;exHusband"
+	 rdfs:comment="Ex-husband"
+	 rdfs:label="exHusband">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;exWife"
+	 rdfs:comment="Ex-wife"
+	 rdfs:label="exWife">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;fiancé"
+	 rdfs:comment="Financé"
+	 rdfs:label="fiancé">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;engaged"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;fiancée"
+	 rdfs:comment="Financée"
+	 rdfs:label="fiancée">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;engaged"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;fosterChild"
+	 rdfs:comment="Foster child"
+	 rdfs:label="fosterChild">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;fosterParent"
+	 rdfs:comment="Foster parent"
+	 rdfs:label="fosterParent">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;friend"
+	 rdfs:comment="Friend"
+	 rdfs:label="friend">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;godChild"
+	 rdfs:comment="God child"
+	 rdfs:label="godChild">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;godParent"
+	 rdfs:comment="God parent"
+	 rdfs:label="godParent">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;grandchild"
+	 rdfs:comment="Grandchild"
+	 rdfs:label="grandchild">
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;grandparent"
+	 rdfs:comment="Grandparent"
+	 rdfs:label="grandparent">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;guardian"
+	 rdfs:comment="Guardian"
+	 rdfs:label="guardian">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;halfSibling"
+	 rdfs:comment="Half sibling"
+	 rdfs:label="halfSibling">
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;handicappedDependent"
+	 rdfs:comment="Handicapped dependent"
+	 rdfs:label="handicappedDependent">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;dependent"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;husband"
+	 rdfs:comment="Husband"
+	 rdfs:label="husband">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:subPropertyOf rdf:resource="&rdf_;spouse"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;lifePartner"
+	 rdfs:comment="Life partner"
+	 rdfs:label="lifePartner">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:subPropertyOf rdf:resource="&rdf_;significantOther"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;medicalCareProvider"
+	 rdfs:comment="Medical care provider"
+	 rdfs:label="medicalCareProvider">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;medicalPatient"
+	 rdfs:comment="Medical patient"
+	 rdfs:label="medicalPatient">
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;mentor"
+	 rdfs:label="mentor">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;advisor"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;ministerPriest"
+	 rdfs:comment="Minister or priest"
+	 rdfs:label="ministerPriest">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;advisor"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;nieceNephew"
+	 rdfs:comment="Niece or nephew"
+	 rdfs:label="nieceNephew">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;other"
+	 rdfs:comment="Other relationship"
+	 rdfs:label="other">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdfs:Class rdf:about="&rdf_;person"
+	 rdfs:comment="Person"
+	 rdfs:label="person">
+	<rdfs:subClassOf rdf:resource="&rdfs;Resource"/>
+</rdfs:Class>
+<rdf:Property rdf:about="&rdf_;probationOfficer"
+	 rdfs:comment="Probation officer"
+	 rdfs:label="probationOfficer">
+	<rdfs:subPropertyOf rdf:resource="&rdf_;advisor"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;protegé"
+	 rdfs:comment="Protegé"
+	 rdfs:label="protegé">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;sibling"
+	 rdfs:comment="Sibling"
+	 rdfs:label="sibling">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;significantOther"
+	 rdfs:comment="Significant other"
+	 rdfs:label="significantOther">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;spouse"
+	 rdfs:comment="Spouse"
+	 rdfs:label="spouse">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:subPropertyOf rdf:resource="&rdf_;significantOther"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;stepChild"
+	 rdfs:comment="Step child"
+	 rdfs:label="stepChild">
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:range rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;stepParent"
+	 rdfs:comment="Step parent"
+	 rdfs:label="stepParent">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdf:Property rdf:about="&rdf_;stepSibling"
+	 rdfs:comment="Step sibling"
+	 rdfs:label="stepSibling">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+</rdf:Property>
+<rdfs:Class rdf:about="&rdf_;student"
+	 rdfs:comment="Student"
+	 rdfs:label="student">
+	<rdfs:subClassOf rdf:resource="&rdf_;person"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="&rdf_;teacher"
+	 rdfs:comment="Teacher"
+	 rdfs:label="teacher">
+	<rdfs:subClassOf rdf:resource="&rdf_;person"/>
+</rdfs:Class>
+<rdf:Property rdf:about="&rdf_;wife"
+	 rdfs:comment="Wife"
+	 rdfs:label="wife">
+	<rdfs:range rdf:resource="&rdf_;person"/>
+	<rdfs:domain rdf:resource="&rdf_;person"/>
+	<rdfs:subPropertyOf rdf:resource="&rdf_;spouse"/>
+</rdf:Property>
+</rdf:RDF>
