@@ -85,6 +85,7 @@ scripts/import-sampleschool: scripts/import-sampleschool.head
 .PHONY: schoolbelldist
 schoolbelldist: realclean build extract-translations clean
 	rm -rf dist
+	find . -name '*.so' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
 	./setup.py schoolbell sdist --formats=gztar,zip
 
