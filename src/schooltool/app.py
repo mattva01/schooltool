@@ -161,8 +161,6 @@ class ApplicationObjectContainer(Persistent):
     def itervalues(self):
         return self._contents.itervalues()
 
-    __iter__ = itervalues
-
 
 def create_application():
     """Instantiate a new application."""
