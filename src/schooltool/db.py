@@ -17,7 +17,41 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-The persistent helper objects for SchoolTool.
+Dicts and sets with persistent objects as keys.
+
+Normally you cannot use arbitrary persistent objects as keys for dicts and
+sets.  This module defines a PersistentKeysDict that allows you to use
+arbitrary persistent object as keys for a dict without adding a requirements
+for those persistent objects to have a well-defined __hash__ method.
+
+Then there are a number of classes that build on top of PersistentKeysDict:
+
+  PersistentKeysSet implements a set of arbitrary persistent objects
+
+  MaybePersistentKeysSet implements a set of objects that can be either
+  persistent or hashable.
+
+  PersistentPairKeysDict implements a mapping with (persistent, hashable)
+  pairs as keys (this is used for access control lists, for example).
+
+Then we have a set and a dict that have a secondary index (names).  They are
+used for objects that are semantically sets and dicts, but also need to have
+unique paths to be represented in SchoolTool's RESTive interface.  The
+semantics and implementation of the name index are defined in UniqueNamesMixin.
+
+  PersistentKeysSetWithNames
+
+  PersistentPairKeysDictWithNames
+
+(There are no PersistentKeysDictWithNames and MaybePersistentKeysSetWithNames
+because they are not needed in SchoolTool.)
+
+Finally, we have a PersistentKeysSetContainer that makes sure its elements
+have __parent__ and enforces their interface.
+
+If this mish-mash of classes seems too complicated to you, you are probably
+right.  I (that is, mgedmin) think that we could replace all sets and dicts
+with names with standard Zope 3 containers.
 
 $Id$
 """
@@ -33,12 +67,14 @@ __metaclass__ = type
 
 
 class PersistentKeysDict(Persistent, UserDict.DictMixin):
-    """A PersistentDict which uses persistent objects as keys by
-    relying on their _p_oids.
+    """A persistent dictionary which uses persistent objects as keys.
 
-    If an object used as a key does not yet have a _p_oid, it is added
-    to self._p_jar and assigned a _p_oid.  Thus, PersistentKeysDict()
-    has to be added to the ZODB connection before being used.
+    The implementation of this class looks at the _p_oid attribute of objects
+    used as keys.
+
+    If an object doesn't have an OID yet, it is added to a secondary data
+    structure (_tmpdata) and added to self._p_jar when the PersistentKeysDict
+    object is pickled (see __getstate__).
     """
 
     def _getvdata(self):
@@ -119,8 +155,9 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
 
 
 class PersistentKeysSet(Persistent):
-    """A set for persistent objects that uses PersistentKeysDict as a
-    backend.
+    """A set of persistent objects.
+
+    PersistentKeysSet uses PersistentKeysDict as a backend.
     """
 
     def __init__(self):
@@ -144,9 +181,7 @@ class PersistentKeysSet(Persistent):
 
 
 class MaybePersistentKeysSet(Persistent):
-    """A set for persistent and non-persistent but picklable objects that
-    uses PersistentKeysDict as a backend.
-    """
+    """A set of persistent and non-persistent but picklable objects."""
 
     def __init__(self):
         self._pdata = PersistentKeysDict()
@@ -327,6 +362,11 @@ class PersistentKeysSetContainer(PersistentKeysSetWithNames):
     """
     # XXX I'm not entirely sure that this class belongs in schooltool.db:
     #     it deals with interfaces and locations; none of the other classes do.
+    # XXX shouldn't UniqueNamesMixin and therefore all named sets and dicts
+    #     set __parent__ like it currently does with __name__?  Previously
+    #     it couldn't do that because we had multicontainers, and therefore
+    #     __parent__ of an object was often different from the persistent
+    #     set/dict that actually contained the object.
 
     implements(ILocation)
 
