@@ -81,11 +81,6 @@ class Template(PageTemplateFile):
         self.content_type = content_type
         self.charset = charset
 
-    def pt_getEngineContext(self, *args, **kwargs):
-        engine = PageTemplateFile.pt_getEngineContext(*args, **kwargs)
-        engine.translate = self.translate
-        return engine
-
     def __call__(self, request, **kw):
         """Renders the page template.
 
@@ -100,8 +95,20 @@ class Template(PageTemplateFile):
         body = self.pt_render(context)
         return body.encode(self.charset, 'xmlcharrefreplace')
     
-    domain = "schooltool"
     # XXX should we state that we implement ITranslationDomain?
+
+    domain = "schooltool"
+
+    def pt_getEngineContext(self, *args, **kwargs):
+        """Get the engine context.
+        
+        Gets the engine context and adds our translation method to the
+        object before returning it.
+        """
+        engine = PageTemplateFile.pt_getEngineContext(*args, **kwargs)
+        engine.translate = self.translate
+        return engine
+
     def translate(self, msgid, mapping=None, context=None,
                         target_language=None, default=None):
         """Return the translation for the message referred to by msgid.
@@ -110,6 +117,7 @@ class Template(PageTemplateFile):
         of the server without regard to other arguments.
         """
         return _(msgid)
+
 
 #
 # HTTP view infrastructure
