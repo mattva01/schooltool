@@ -35,7 +35,7 @@ from schooltool.browser import valid_name
 from schooltool.browser.applog import ApplicationLogView
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
-from schooltool.browser.csv import CSVImportView
+from schooltool.browser.csv import CSVImportView, TimetableCSVImportView
 from schooltool.browser.model import PersonView, GroupView, ResourceView
 from schooltool.browser.model import NoteView
 from schooltool.browser.model import app_object_list
@@ -169,6 +169,8 @@ class RootView(View):
             return ApplicationLogView(self.context)
         elif name == 'csvimport.html':
             return CSVImportView(self.context)
+        elif name == 'tt_csvimport.html':
+            return TimetableCSVImportView(self.context)
         elif name == 'busysearch':
             return BusySearchView(self.context)
         elif name == 'ttschemas':
