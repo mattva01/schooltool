@@ -308,6 +308,7 @@ class Connection(ExportImport, object):
             obj._p_jar = self
             obj._p_oid = self.newObjectId()
             obj._p_changed = True
+            self._cache.set(obj._p_oid, obj)
 
 
     ######################################################################

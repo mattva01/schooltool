@@ -177,6 +177,7 @@ class ConnectionTests(IDataManagerTests):
         # This is a more 'functional' test than test_add
         self.datamgr.add(self.obj)
         oid = self.obj._p_oid
+        self.assert_(self.datamgr.get(oid) is self.obj)
         self.datamgr.root()["obj"] = self.obj
         get_transaction().commit()
 
