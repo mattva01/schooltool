@@ -161,6 +161,10 @@ class RequestStub:
         self.code = code
         self.reason = reason
 
+    def chooseMediaType(self, supported_types):
+        from schooltool.main import chooseMediaType
+        return chooseMediaType(supported_types, self.accept)
+
 
 class Utility:
 
@@ -1983,6 +1987,29 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
 
 class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
                                  unittest.TestCase):
+
+    def test_get_text_choice(self):
+        from schooltool.views import AbsenceTrackerView
+        context = C1()
+        context.absences = []
+        view = AbsenceTrackerView(context)
+        request = RequestStub("http://localhost/utils/absences/")
+        request.accept = [(1, 'text/plain', {}, {}),
+                          (0.5, 'text/html', {}, {})]
+        result = view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/plain; charset=UTF-8")
+
+        request.accept = [(0.1, 'text/plain', {}, {}),
+                          (0.5, 'text/xml', {}, {})]
+        result = view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+
+        request.accept = [(0, 'text/plain', {}, {})]
+        result = view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
 
     def test_get_text(self):
         from schooltool.model import Person, AbsenceTrackerUtility

@@ -29,6 +29,7 @@ import sys
 from StringIO import StringIO
 from zope.interface import moduleProvides
 from zope.interface import directlyProvides, directlyProvidedBy
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.interfaces import IModuleSetup
 
@@ -149,12 +150,10 @@ class TestSite(unittest.TestCase):
         self.assert_(channel.requestFactory is Request)
 
 
-class TestRequest(unittest.TestCase):
+class TestAcceptParsing(unittest.TestCase):
 
     def test_parseAcept(self):
-        from schooltool.main import Request
-        rq = Request(ChannelStub(), True)
-        p = rq._parseAccept
+        from schooltool.main import parseAccept as p
         self.assertEqual(p(None), [])
         self.assertEqual(p(''), [])
         self.assertEqual(p(', ,\t'), [])
@@ -217,55 +216,108 @@ class TestRequest(unittest.TestCase):
         self.assertRaises(ValueError, p, 'foo/bar;q =1')
         self.assertRaises(ValueError, p, 'foo/bar;q= 1')
 
-    def test_split(self):
-        from schooltool.main import Request
-        split = Request(None, True)._split
-        self.assertEqual(split('', ','), [''])
-        self.assertEqual(split('xyzzy', ','), ['xyzzy'])
-        self.assertEqual(split('x,y,zzy', ','), ['x', 'y', 'zzy'])
-        self.assertEqual(split(',xyzzy', ','), ['', 'xyzzy'])
-        self.assertEqual(split('xyzzy,', ','), ['xyzzy', ''])
-        self.assertEqual(split('x,y,zzy', 'y'), ['x,', ',zz', ''])
-        self.assertEqual(split(',,,', ','), ['', '', '', ''])
-        self.assertEqual(split('"xy, zzy"', ','), ['"xy, zzy"'])
-        self.assertEqual(split('"x,y",z,"z",y', ','),
+    def test_splitQuoted(self):
+        from schooltool.main import splitQuoted
+        self.assertEqual(splitQuoted('', ','), [''])
+        self.assertEqual(splitQuoted('xyzzy', ','), ['xyzzy'])
+        self.assertEqual(splitQuoted('x,y,zzy', ','), ['x', 'y', 'zzy'])
+        self.assertEqual(splitQuoted(',xyzzy', ','), ['', 'xyzzy'])
+        self.assertEqual(splitQuoted('xyzzy,', ','), ['xyzzy', ''])
+        self.assertEqual(splitQuoted('x,y,zzy', 'y'), ['x,', ',zz', ''])
+        self.assertEqual(splitQuoted(',,,', ','), ['', '', '', ''])
+        self.assertEqual(splitQuoted('"xy, zzy"', ','), ['"xy, zzy"'])
+        self.assertEqual(splitQuoted('"x,y",z,"z",y', ','),
                          ['"x,y"', 'z', '"z"', 'y'])
-        self.assertEqual(split(r'"x\"y,z","zy"', ','),
+        self.assertEqual(splitQuoted(r'"x\"y,z","zy"', ','),
                          [r'"x\"y,z"', '"zy"'])
 
-    def test_valid_token(self):
-        from schooltool.main import Request
-        valid_token = Request(None, True)._valid_token
-        self.assert_(valid_token('foo'))
-        self.assert_(valid_token('abcdefghijklmnopqrstuvwxyz'))
-        self.assert_(valid_token('ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
-        self.assert_(valid_token('0123456789'))
-        self.assert_(valid_token('`~!#$%^&*-_+\'|.'))
-        self.assert_(not valid_token(''))
+    def test_validToken(self):
+        from schooltool.main import validToken
+        self.assert_(validToken('foo'))
+        self.assert_(validToken('abcdefghijklmnopqrstuvwxyz'))
+        self.assert_(validToken('ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
+        self.assert_(validToken('0123456789'))
+        self.assert_(validToken('`~!#$%^&*-_+\'|.'))
+        self.assert_(not validToken(''))
         for c in '()<>@,;:\\"/[]?={} \t':
-            self.assert_(not valid_token(c),
+            self.assert_(not validToken(c),
                          '%r should not be a valid token' % c)
         for c in range(33):
-            self.assert_(not valid_token(chr(c)),
+            self.assert_(not validToken(chr(c)),
                          'chr(%r) should not be a valid token' % c)
-        self.assert_(not valid_token(chr(127)),
+        self.assert_(not validToken(chr(127)),
                      'chr(127) should not be a valid token')
 
-    def test_valid_media_type(self):
-        from schooltool.main import Request
-        valid_media_type = Request(None, True)._valid_media_type
-        self.assert_(valid_media_type('foo/bar'))
-        self.assert_(valid_media_type('foo/*'))
-        self.assert_(valid_media_type('*/*'))
-        self.assert_(not valid_media_type(''))
-        self.assert_(not valid_media_type('foo'))
-        self.assert_(not valid_media_type('*'))
-        self.assert_(not valid_media_type('/'))
-        self.assert_(not valid_media_type('foo/'))
-        self.assert_(not valid_media_type('foo/bar/baz'))
-        self.assert_(not valid_media_type('foo / bar'))
-        self.assert_(not valid_media_type('*/bar'))
-        self.assert_(not valid_media_type('foo/"bar"'))
+    def test_validMediaType(self):
+        from schooltool.main import validMediaType
+        self.assert_(validMediaType('foo/bar'))
+        self.assert_(validMediaType('foo/*'))
+        self.assert_(validMediaType('*/*'))
+        self.assert_(not validMediaType(''))
+        self.assert_(not validMediaType('foo'))
+        self.assert_(not validMediaType('*'))
+        self.assert_(not validMediaType('/'))
+        self.assert_(not validMediaType('foo/'))
+        self.assert_(not validMediaType('foo/bar/baz'))
+        self.assert_(not validMediaType('foo / bar'))
+        self.assert_(not validMediaType('*/bar'))
+        self.assert_(not validMediaType('foo/"bar"'))
+
+    def test_qualityOf(self):
+        from schooltool.main import qualityOf as q
+        self.assertEquals(1.0, q('text/plain', {}, []))
+        self.assertEquals(0.0, q('text/plain', {}, [
+                                    (0.5, 'text/html', {}, {}),
+                                  ]))
+        self.assertEquals(0.5, q('text/plain', {}, [
+                                    (0.5, '*/*',       {}, {}),
+                                    (0.7, 'text/html', {}, {}),
+                                  ]))
+        self.assertEquals(0.6, q('text/plain', {},[
+                                    (0.5, '*/*',       {}, {}),
+                                    (0.6, 'text/*',    {}, {}),
+                                    (0.7, 'text/html', {}, {}),
+                                  ]))
+        # Examples from of RFC 2616 section 14.1
+        levels = [(0.3, 'text/*',    {}, {}),
+                  (0.7, 'text/html', {}, {}),
+                  (1.0, 'text/html', {'level': '1'}, {}),
+                  (0.4, 'text/html', {'level': '2'}, {}),
+                  (0.5, '*/*',       {}, {}),]
+        self.assertEquals(q('text/html', {'level': '1'}, levels), 1)
+        self.assertEquals(q('text/html', {}, levels), 0.7)
+        self.assertEquals(q('text/plain', {}, levels), 0.3)
+        self.assertEquals(q('image/jpeg', {}, levels), 0.5)
+        self.assertEquals(q('text/html', {'level': '2'}, levels), 0.4)
+        self.assertEquals(q('text/html', {'level': '3'}, levels), 0.7)
+
+    def test_chooseMediaType(self):
+        from schooltool.main import chooseMediaType
+        self.assertEquals(chooseMediaType([], []), None)
+        self.assertEquals(chooseMediaType(['text/plain', 'image/png'], []),
+                          'text/plain')
+        levels = [(0.3, 'text/*',    {}, {}),
+                  (0.7, 'text/html', {}, {}),
+                  (1.0, 'text/html', {'level': '1'}, {}),
+                  (0.4, 'text/html', {'level': '2'}, {}),
+                  (0.0, 'application/x-msword', {}, {}),
+                  (0.5, '*/*',       {}, {}),]
+        self.assertEquals(chooseMediaType(['text/html', 'image/png'], levels),
+                          'text/html')
+        self.assertEquals(chooseMediaType(['text/html', 'image/png'], levels),
+                          'text/html')
+        self.assertEquals(chooseMediaType(['application/x-msword'], levels),
+                          None)
+        self.assertEquals(chooseMediaType(['text/html',
+                                           ('text/html', {'level': '1'}),
+                                           ('text/html', {'level': '2'})],
+                                          levels),
+                          ('text/html', {'level': '1'}))
+        self.assertEquals(chooseMediaType(['text/plain'],
+                                          [(1, 'image/*', {}, {})]), None)
+
+
+class TestRequest(unittest.TestCase):
 
     def test_process(self):
         from schooltool.main import Request, SERVER_VERSION
@@ -776,8 +828,11 @@ class TestSetUpModules(unittest.TestCase):
 
 
 def test_suite():
+    import schooltool.main
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite(schooltool.main))
     suite.addTest(unittest.makeSuite(TestSite))
+    suite.addTest(unittest.makeSuite(TestAcceptParsing))
     suite.addTest(unittest.makeSuite(TestRequest))
     suite.addTest(unittest.makeSuite(TestServer))
     suite.addTest(unittest.makeSuite(TestSetUpModules))

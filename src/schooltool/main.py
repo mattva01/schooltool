@@ -65,13 +65,202 @@ moduleProvides(IModuleSetup)
 SERVER_VERSION = "SchoolTool/0.2"
 
 
+def parseAccept(value):
+    """Parses HTTP Accept: header.
+
+    See RFC 2616, section 14.1 for a formal grammar.
+
+    Returns a list of tuples
+      (qvalue, media_type, media_params, accept_params)
+
+    qvalue is a float in range 0..1 (inclusive)
+    media_type is a string "type/subtype", it can be "type/*" or "*/*"
+    media_params is a dict
+    accept_params is a dict
+    """
+    if not value:
+         return []
+
+    results = []
+    for media in map(str.strip, splitQuoted(value, ',')):
+        if not media:
+            continue
+        items = splitQuoted(media, ';')
+        media_type = items[0].strip()
+        if not validMediaType(media_type):
+            raise ValueError('Invalid media type: %s' % media_type)
+        params = media_params = {}
+        accept_params = {}
+        q = 1.0
+        for item in items[1:]:
+            try:
+                key, value = item.split('=', 1)
+            except ValueError:
+                raise ValueError('Invalid parameter: %s' % item)
+            key = key.lstrip()
+            value = value.rstrip()
+            if not validToken(key):
+                raise ValueError('Invalid parameter name: %s' % key)
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1]
+            else:
+                if not validToken(value):
+                    raise ValueError('Invalid parameter value: %s'
+                                     % value)
+            if key in ('q', 'Q'):
+                try:
+                    q = float(value)
+                except ValueError:
+                    raise ValueError('Invalid qvalue: %s' % q)
+                else:
+                    if q < 0 or q > 1:
+                        raise ValueError('Invalid qvalue: %s' % q)
+                params = accept_params
+            else:
+                params[key] = value
+        results.append((q, media_type, media_params, accept_params))
+    return results
+
+
+def splitQuoted(s, sep):
+    """Split s using sep as the separator.
+
+    Does not split when sep occurs within a quoted string.
+    """
+    assert len(sep) == 1
+    results = []
+    start = 0
+    state = 0
+    for i, c in enumerate(s):
+        if state == 0 and c == sep:
+            results.append(s[start:i])
+            start = i + 1
+        elif state == 0 and c == '"':
+            state = 1
+        elif state == 1 and c == '"':
+            state = 0
+        elif state == 1 and c == '\\':
+            state = 2
+        elif state == 2:
+            state = 1
+    results.append(s[start:])
+    return results
+
+
+def validToken(s):
+    """Checks wheter s is a syntactically valid token."""
+    invalid_chars = list('()<>@,;:\\"/[]?={}\177') + map(chr, range(33))
+    for c in s:
+        if c in invalid_chars:
+            return False
+    return s != ''
+
+
+def validMediaType(s):
+    """Checks wheter s is a syntactically valid media type."""
+    if s.count('/') != 1:
+        return False
+    type, subtype = s.split('/')
+    if not validToken(type):
+        return False
+    if not validToken(subtype):
+        return False
+    if type == '*' and subtype != '*':
+        return False
+    return True
+
+
+def matchMediaType(media_type, params, pattern, pattern_params):
+    """Match the media type with a pattern and return the precedence level.
+
+    Returns -1 if the media type does not match the pattern.
+
+    >>> matchMediaType('text/css', {'level': '2'}, '*/*', {})
+    1
+    >>> matchMediaType('text/css', {'level': '2'}, 'text/*', {})
+    2
+    >>> matchMediaType('text/css', {'level': '2'}, 'text/css', {})
+    3
+    >>> matchMediaType('text/css', {'level': '2'}, 'text/css', {'level': '2'})
+    4
+    >>> matchMediaType('text/css', {'level': '2'}, 'text/css', {'level': '1'})
+    -1
+    >>> matchMediaType('text/plain', {}, '*/*', {})
+    1
+    >>> matchMediaType('text/plain', {}, 'text/*', {})
+    2
+    >>> matchMediaType('text/plain', {}, 'text/plain', {})
+    4
+    >>> matchMediaType('text/plain', {}, 'text/plain', {'level': '2'})
+    -1
+    >>> matchMediaType('text/plain', {}, 'text/html', {})
+    -1
+    >>> matchMediaType('text/plain', {}, 'image/png', {})
+    -1
+    >>> matchMediaType('text/plain', {}, 'image/*', {})
+    -1
+    """
+    if media_type == pattern and params == pattern_params:
+        return 4
+    elif media_type == pattern and not pattern_params:
+        return 3
+    elif pattern.endswith('/*') and media_type.startswith(pattern[:-1]):
+        return 2
+    elif pattern == '*/*':
+        return 1
+    else:
+        return -1
+
+
+def qualityOf(media_type, params, accept_list):
+    """Calculate the media quality value for a given media type.
+
+    See RFC 2616 section 14.1 for details.
+
+    The accept list is in the same format as returned by parseAccept.
+    """
+    if not accept_list:
+        return 1
+    best_qv = 0
+    best_precedence = 0
+    for qv, pattern, mparams, aparams in accept_list:
+        precedence = matchMediaType(media_type, params, pattern, mparams)
+        if precedence > best_precedence:
+            best_precedence = precedence
+            best_qv = qv
+    return best_qv
+
+
+def chooseMediaType(supported_types, accept_list):
+    """Chooses the best matching media type.
+
+    supported_types should be a sequence of media types.  Media type can
+    be a string or a tuples of (media_type, params_dict).
+
+    Returns the media type that has the largest quality value as calculated
+    by qualityOf.  If the largest quality value is 0, returns None.
+    """
+    best = None
+    best_q = 0
+    for choice in supported_types:
+        if isinstance(choice, tuple):
+            media_type, params = choice
+        else:
+            media_type, params = choice, {}
+        q = qualityOf(media_type, params, accept_list)
+        if q > best_q:
+            best_q = q
+            best = choice
+    return best
+
+
 class Request(server.Request):
     """Threaded request processor, integrated with ZODB.
 
     Another enhancement over Twisted's Request is that an attribute
     called 'accept' is available that lists all acceptable content types
     according to the provided HTTP Accept header.  See the docstring of
-    _parseAccept for more information about its structure.
+    parseAccept for more information about its structure.
 
     Note that HTTP/1.1 allows the server to return responses which are
     not acceptable according to the accept headers.  See RFC 2616 section
@@ -80,111 +269,6 @@ class Request(server.Request):
 
     reactor_hook = reactor
     get_transaction_hook = get_transaction
-
-    def _parseAccept(self, value):
-        """Parses HTTP Accept: header.
-
-        See RFC 2616, section 14.1 for a formal grammar.
-
-        Returns a list of tuples
-          (qvalue, media_type, media_params, accept_params)
-
-        qvalue is a float in range 0..1 (inclusive)
-        media_type is a string "type/subtype", it can be "type/*" or "*/*"
-        media_params is a dict
-        accept_params is a dict
-        """
-        if not value:
-             return []
-
-        split = self._split
-        valid_token = self._valid_token
-        valid_media_type = self._valid_media_type
-
-        results = []
-        for media in map(str.strip, split(value, ',')):
-            if not media:
-                continue
-            items = split(media, ';')
-            media_type = items[0].strip()
-            if not valid_media_type(media_type):
-                raise ValueError('Invalid media type: %s' % media_type)
-            params = media_params = {}
-            accept_params = {}
-            q = 1.0
-            for item in items[1:]:
-                try:
-                    key, value = item.split('=', 1)
-                except ValueError:
-                    raise ValueError('Invalid parameter: %s' % item)
-                key = key.lstrip()
-                value = value.rstrip()
-                if not valid_token(key):
-                    raise ValueError('Invalid parameter name: %s' % key)
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                else:
-                    if not valid_token(value):
-                        raise ValueError('Invalid parameter value: %s'
-                                         % value)
-                if key in ('q', 'Q'):
-                    try:
-                        q = float(value)
-                    except ValueError:
-                        raise ValueError('Invalid qvalue: %s' % q)
-                    else:
-                        if q < 0 or q > 1:
-                            raise ValueError('Invalid qvalue: %s' % q)
-                    params = accept_params
-                else:
-                    params[key] = value
-            results.append((q, media_type, media_params, accept_params))
-        return results
-
-    def _split(self, s, sep):
-        """Splits s using sep as the separator.
-
-        Does not split when sep occurs within a quoted string.
-        """
-        assert len(sep) == 1
-        results = []
-        start = 0
-        state = 0
-        for i, c in enumerate(s):
-            if state == 0 and c == sep:
-                results.append(s[start:i])
-                start = i + 1
-            elif state == 0 and c == '"':
-                state = 1
-            elif state == 1 and c == '"':
-                state = 0
-            elif state == 1 and c == '\\':
-                state = 2
-            elif state == 2:
-                state = 1
-        results.append(s[start:])
-        return results
-
-    def _valid_token(self, s):
-        """Checks wheter s is a syntactically valid token."""
-        invalid_chars = list('()<>@,;:\\"/[]?={}\177') + map(chr, range(33))
-        for c in s:
-            if c in invalid_chars:
-                return False
-        return s != ''
-
-    def _valid_media_type(self, s):
-        """Checks wheter s is a syntactically valid media type."""
-        if s.count('/') != 1:
-            return False
-        type, subtype = s.split('/')
-        if not self._valid_token(type):
-            return False
-        if not self._valid_token(subtype):
-            return False
-        if type == '*' and subtype != '*':
-            return False
-        return True
 
     def process(self):
         """Process the request"""
@@ -199,7 +283,7 @@ class Request(server.Request):
 
         # Parse the HTTP 'Accept' header:
         try:
-            self.accept = self._parseAccept(self.getHeader('Accept'))
+            self.accept = parseAccept(self.getHeader('Accept'))
         except ValueError, e:
             self.accept = []
             body = errorPage(self, 400, str(e))
@@ -304,6 +388,10 @@ class Request(server.Request):
         else:
             self.setHeader('Content-Length', len(body))
             return body
+
+    def chooseMediaType(self, supported_types):
+        """Choose a media type for presentation according to Accept: header."""
+        return chooseMediaType(supported_types, self.accept)
 
 
 def profile(fn, extension='prof'):
