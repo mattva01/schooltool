@@ -615,6 +615,7 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import WeeklyCalendarView
         from schooltool.browser.cal import MonthlyCalendarView
         from schooltool.browser.cal import YearlyCalendarView
+        from schooltool.browser.cal import EventAddView
         context = Calendar()
         view = CalendarView(context)
         self.assertTraverses(view, 'daily.html', DailyCalendarView, context)
@@ -622,6 +623,7 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'monthly.html', MonthlyCalendarView,
                              context)
         self.assertTraverses(view, 'yearly.html', YearlyCalendarView, context)
+        self.assertTraverses(view, 'add_event.html', EventAddView, context)
 
     def test_render(self):
         from schooltool.browser.cal import CalendarView
@@ -644,6 +646,71 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
             'http://localhost:7001/persons/boss/calendar/daily.html')
 
 
+class TestEventAddView(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.browser.cal import EventAddView
+        from schooltool.cal import Calendar
+
+        self.cal = Calendar()
+        setPath(self.cal, '/persons/somebody/calendar')
+        self.view = EventAddView(self.cal)
+        self.view.authorization = lambda x, y: True
+
+    def test_render(self):
+        request = RequestStub()
+        content = self.view.render(request)
+        self.assert_('Add event' in content)
+
+    def test_render_args(self):
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'duration': '50'})
+        content = self.view.render(request)
+        self.assert_('Add event' in content)
+        self.assert_('Hacking' in content)
+        self.assert_('2004-08-13' in content)
+        self.assert_('15:30' in content)
+        self.assert_('50' in content)
+
+    def test_post(self):
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'duration': '50'})
+        self.view.request = request
+        content = self.view.do_POST(request)
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/somebody/calendar/'
+                          'daily.html?date=2004-08-13')
+
+        events = list(self.cal)
+        self.assertEquals(len(events), 1)
+        self.assertEquals(events[0].title, 'Hacking')
+        self.assertEquals(events[0].dtstart, datetime(2004, 8, 13, 15, 30))
+        self.assertEquals(events[0].duration, timedelta(minutes=50))
+
+    def test_post_errors(self):
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-31-13',
+                                    'start_time': '15:30',
+                                    'duration': '50'})
+        self.view.request = request
+        content = self.view.do_POST(request)
+        self.assert_('Invalid date/time' in content)
+
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'duration': '100h'})
+        self.view.request = request
+        content = self.view.do_POST(request)
+        self.assert_('Invalid duration' in content)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
@@ -654,6 +721,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
     suite.addTest(unittest.makeSuite(TestYearlyCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestEventAddView))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 

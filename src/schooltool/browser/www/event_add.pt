@@ -1,0 +1,41 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title">Add event</title>
+</head>
+<body>
+
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Add event
+  </h1>
+
+  <metal:block metal:fill-slot="content" tal:define="update view/update">
+  <form method="POST" tal:attributes="action request/path">
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+
+    <div class="row">
+      <label for="title">Title</label>
+      <input id="title" name="title" type="text"
+             tal:attributes="value view/title" />
+    </div>
+    <div class="row">
+      <label for="start_date">Date</label>
+      <input id="start_date" name="start_date" type="text"
+             tal:attributes="value python:view.start.date()" />
+    </div>
+    <div class="row">
+      <label for="start_time">Time</label>
+      <input id="start_time" name="start_time" type="text"
+             tal:attributes="value python:view.start.strftime('%H:%M')" />
+    </div>
+    <div class="row">
+      <label for="duration">Duration</label>
+      <input id="duration" name="duration" type="text"
+             tal:attributes="value view/duration" />
+    </div>
+    <input name="CONFIRM_ADD" type="submit" value="Add" />
+
+  </form>
+  </metal:block>
+
+</body>
+</html>

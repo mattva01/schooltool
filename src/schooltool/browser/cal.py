@@ -38,6 +38,21 @@ from schooltool.common import parse_date
 __metaclass__ = type
 
 
+def parse_datetime(date_str, time_str):
+    # XXX unit tests
+    try:
+        arg = 'start_date'
+        year, month, day = map(int, date_str.split('-'))
+        date(year, month, day) # validation
+        arg = 'start_time'
+        hours, minutes = map(int, time_str.split(':'))
+        time(hours, minutes)   # validation
+    except TypeError, e:
+        raise ValueError(str(e))
+    return datetime(year, month, day, hours, minutes)
+
+
+
 class BookingView(View):
 
     __used_for__ = IResource
@@ -94,19 +109,15 @@ class BookingView(View):
             self.owner_name = owner.__name__
 
         try:
-            arg = 'start_date'
-            year, month, day = map(int, start_date_str.split('-'))
-            date(year, month, day) # validation
-            arg = 'start_time'
-            hours, seconds = map(int, start_time_str.split(':'))
-            time(hours, seconds)   # validation
+            start = parse_datetime(start_date_str, start_time_str)
+        except ValueError:
+            self.error = _("Invalid date/time")
+            return
 
-            start = datetime(year, month, day, hours, seconds)
-
-            arg = 'duration'
+        try:
             duration = timedelta(minutes=int(duration_str))
-        except (ValueError, TypeError):
-            self.error = _("%r argument incorrect") % arg
+        except ValueError:
+            self.error = _("Invalid duration")
             return
 
         self.booked = self.book(owner, start, duration, force=force)
@@ -427,7 +438,7 @@ class YearlyCalendarView(CalendarViewBase):
 class CalendarView(View):
     """The main calendar view.
 
-    Switches daily, weekly, monthly calendar presentations.
+    Switches daily, weekly, monthly, yearly calendar presentations.
     """
 
     authorization = PrivateAccess
@@ -441,8 +452,65 @@ class CalendarView(View):
             return MonthlyCalendarView(self.context)
         elif name == 'yearly.html':
             return YearlyCalendarView(self.context)
+        elif name == 'add_event.html':
+            return EventAddView(self.context)
         raise KeyError(name)
 
     def render(self, request):
         return str(request.redirect(
             absoluteURL(request, self.context) + '/daily.html'))
+
+
+class EventAddView(View):
+
+    authorization = PrivateAccess
+
+    template = Template('www/event_add.pt')
+
+    error = u""
+    title = u""
+    start = None
+
+    duration = 30 # default
+
+    # XXX The current way of handling arguments in this class is ugly.
+
+    def update(self):
+        """Parse arguments in request and put them into view attributes."""
+        request = self.request
+        self.start = datetime.today()
+        success = True
+
+        if 'title' in request.args:
+            self.title = to_unicode(request.args['title'][0])
+
+        if 'start_date' in request.args and 'start_time' in request.args:
+            start_date_str = to_unicode(request.args['start_date'][0])
+            start_time_str = to_unicode(request.args['start_time'][0])
+            try:
+                self.start = parse_datetime(start_date_str, start_time_str)
+            except ValueError:
+                self.error = _("Invalid date/time")
+                return False
+
+        if 'duration' in request.args:
+            duration_str = to_unicode(request.args['duration'][0])
+            try:
+                self.duration = int(duration_str)
+            except ValueError:
+                self.error = _("Invalid duration")
+                return False
+
+        return True
+
+    def do_POST(self, request):
+        if not self.update():
+            return self.do_GET(request)
+        duration = timedelta(minutes=self.duration)
+        ev = CalendarEvent(self.start, duration, self.title,
+                           self.context.__parent__, None)
+        self.context.addEvent(ev)
+
+        suffix = 'daily.html?date=%s' % self.start.date()
+        url = absoluteURL(request, self.context, suffix)
+        return self.redirect(url, request)
