@@ -1691,25 +1691,28 @@ previous_photo_dir = ""
 class AppLogFrame(wxDialog):
     """Window showing the application log."""
 
-    def __init__(self, title, log_data, parent=None, id=-1):
-        wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
-                          style=RESIZABLE_WIN_STYLE)
+    def __init__(self, client, parent=None, id=-1):
+        self.client = client
+
+        wxDialog.__init__(self, parent, id, _("Application log"),
+                          size=wxSize(600, 400), style=RESIZABLE_WIN_STYLE)
 
         main_sizer = wxBoxSizer(wxVERTICAL)
 
         top_bar = wxBoxSizer(wxHORIZONTAL)
         label = wxStaticText(self, -1, _("Show only lines containing"))
         top_bar.Add(label, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 16)
-        filter_ctrl = wxTextCtrl(self, -1, '')
+        filter_ctrl = self.filter_ctrl = wxTextCtrl(self, -1, '')
         top_bar.Add(filter_ctrl, 1, wxEXPAND)
         filter_btn = wxButton(self, -1, _("&Filter"))
         filter_btn.SetDefault()
+        EVT_BUTTON(self, filter_btn.GetId(), self.OnFilter)
         top_bar.Add(filter_btn, 0, wxLEFT, 16)
         main_sizer.Add(top_bar, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 16)
 
+        # XXX Darn, wxHSCROLL / wxTE_DONTWRAP is only supported by Windows...
         self.text_ctrl = wxTextCtrl(self, -1,
                                     style=wxTE_MULTILINE | wxTE_READONLY)
-        self.text_ctrl.SetValue(to_wx(log_data))
         main_sizer.Add(self.text_ctrl, 1, wxEXPAND|wxALL, 12)
 
         static_line = wxStaticLine(self, -1)
@@ -1718,8 +1721,8 @@ class AppLogFrame(wxDialog):
         button_bar = wxBoxSizer(wxHORIZONTAL)
         prev_btn = wxButton(self, -1, _("&Previous"))
         EVT_BUTTON(self, prev_btn.GetId(), self.OnPrev)
-        page_ctrl = wxTextCtrl(self, -1, "1", # XXX
-                               style=wxTE_CENTER)
+        page_ctrl = self.page_ctrl = wxTextCtrl(self, -1, "1", # XXX
+                                                style=wxTE_CENTER)
         size = page_ctrl.GetSize()
         size.width /= 2
         page_ctrl.SetSize(size)
@@ -1747,6 +1750,9 @@ class AppLogFrame(wxDialog):
         self.Layout()
         self.CenterOnScreen(wxBOTH)
 
+        # TODO: Get the number of pages.
+        self.OnFilter()
+
     def OnClose(self, event=None):
         """Close the window."""
         self.Close(True)
@@ -1758,6 +1764,22 @@ class AppLogFrame(wxDialog):
     def OnNext(self, event=None):
         """Show the next page."""
         raise NotImplementedError, 'XXX'
+
+    def OnFilter(self, event=None):
+        # XXX We might want to check here if the total number of pages has
+        #     changed and react.
+
+        # XXX Validation
+        page = int(self.page_ctrl.GetValue())
+        filter_str = self.filter_ctrl.GetValue()
+        pagesize = 20 # XXX
+        try:
+            log_data = self.client.getApplicationLog(page=page,
+                                                     pagesize=pagesize,
+                                                     filter=filter_str)
+        except SchoolToolError, e:
+            raise # XXX What do I do, what do I do?  We might want a statusbar.
+        self.text_ctrl.SetValue(to_wx(log_data))
 
 
 #
@@ -2610,11 +2632,14 @@ class MainFrame(wxFrame):
         Accessible via View|Application Log
         """
         try:
-            log = self.client.getApplicationLog()
+            # XXX This is grossly inefficient and should be replaced, but I
+            # think it's a good idea to check permissions before opening the
+            # log window.
+            self.client.getApplicationLog(page=1, pagesize=1)
         except SchoolToolError, e:
             self.SetStatusText(to_wx(unicode(e)))
         else:
-            dlg = AppLogFrame(_("Application log"), log, parent=self)
+            dlg = AppLogFrame(self.client, parent=self)
             dlg.Show()
 
 
