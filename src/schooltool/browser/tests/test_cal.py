@@ -497,6 +497,23 @@ class TestDailyCalendarView(unittest.TestCase):
                                    "Call Mark during lunch"))
         self.assertEquals(view.getColumns(), 3)
 
+        #
+        #    +-------------+-------------+-------------+
+        #    | 12:00-12:30 | 12:30-13:00 | 12:00-12:00 |
+        #    +-------------+-------------+-------------+
+
+        cal.clear()
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                   timedelta(minutes=30),
+                                   "a"))
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 30),
+                                   timedelta(minutes=30),
+                                   "b"))
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                   timedelta(minutes=0),
+                                   "c"))
+        self.assertEquals(view.getColumns(), 3)
+
     def test_getHours(self):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.cal import CalendarEvent as CE, Calendar

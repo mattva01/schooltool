@@ -309,16 +309,18 @@ class DailyCalendarView(CalendarViewBase):
 
     def getColumns(self):
         """Return the maximum number of events overlapping"""
-        spanning = Set()
-        overlap = 1
+        width = [0] * 24
+        daystart = datetime.combine(self.cursor, time())
         for event in self.dayEvents(self.cursor):
-            for oldevent in spanning.copy():
-                if oldevent.dtstart + oldevent.duration <= event.dtstart:
-                    spanning.remove(oldevent)
-            spanning.add(event)
-            if len(spanning) > overlap:
-                overlap = len(spanning)
-        return overlap
+            t = max(event.dtstart.replace(minute=0), daystart)
+            dtend = min(event.dtstart + event.duration,
+                        daystart + timedelta(1))
+            while True:
+                width[t.hour] += 1
+                t += timedelta(hours=1)
+                if t >= dtend:
+                    break
+        return max(width) or 1
 
     def _setRange(self, events):
         """Sets the starthour and endhour attributes according to the events
