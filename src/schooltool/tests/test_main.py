@@ -670,6 +670,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def setUp(self):
         self.setUpRegistries()
         self.original_path = sys.path[:]
+        if sys.platform[:3] == 'win': # ZConfig does this
+            self.defaulthost = 'localhost'
+        else:
+            self.defaulthost = ''
 
     def tearDown(self):
         sys.path[:] = self.original_path
@@ -686,7 +690,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         config_file = self.getConfigFileName()
         config = server.loadConfig(config_file)
         self.assertEquals(config.thread_pool_size, 42)
-        self.assertEquals(config.listen, [('', 123), ('10.20.30.40', 9999)])
+        self.assertEquals(config.listen,
+                          [(self.defaulthost, 123), ('10.20.30.40', 9999)])
         self.assert_(config.database is not None)
         self.assertEquals(config.path, ['/xxxxx', '/yyyyy/zzzzz'])
         self.assertEquals(config.module, ['schooltool.tests.test_main'])
@@ -709,7 +714,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.configure([])
         self.assertEquals(server.config.thread_pool_size, 42)
         self.assertEquals(server.config.listen,
-                          [('', 123), ('10.20.30.40', 9999)])
+                          [(self.defaulthost, 123), ('10.20.30.40', 9999)])
         self.assert_(server.config.database is not None)
         self.assertEquals(server.config.path, ['/xxxxx', '/yyyyy/zzzzz'])
         self.assertEquals(server.config.pid_file, None)
@@ -732,7 +737,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.configure(['-c', config_file])
         self.assertEquals(server.config.thread_pool_size, 42)
         self.assertEquals(server.config.listen,
-                          [('', 123), ('10.20.30.40', 9999)])
+                          [(self.defaulthost, 123), ('10.20.30.40', 9999)])
         self.assert_(server.config.database is not None)
         self.assertEquals(server.appname, 'schooltool')
         self.assertEquals(server.viewFactory, getView)
@@ -828,7 +833,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(reactor._suggested_thread_pool_size, 42)
         self.assertEqual(len(reactor._tcp_listeners), 2)
         self.assertEquals(reactor._tcp_listeners[0][0], 123)
-        self.assertEquals(reactor._tcp_listeners[0][2], '')
+        self.assertEquals(reactor._tcp_listeners[0][2], self.defaulthost)
         self.assertEquals(reactor._tcp_listeners[1][0], 9999)
         self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
         site = reactor._tcp_listeners[0][1]
