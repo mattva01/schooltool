@@ -28,6 +28,7 @@ from logging import INFO
 
 from zope.interface import implements
 from zope.app.traversing.api import getPath
+from zope.testing import doctest
 
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.browser.tests import HTMLDocument
@@ -722,6 +723,156 @@ class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
                             'empty': False}])
 
 
+def doctest_RelationshipViewMixin():
+    """RelationshipViewMixin needs some attributes defined in the view class
+
+        >>> from schooltool.browser import View
+        >>> from schooltool.browser.model import RelationshipViewMixin
+        >>> from schooltool.uris import URITeacher
+        >>> class MyRelationshipView(View, RelationshipViewMixin):
+        ...     linkrole = URITeacher
+        ...     relname = 'Teaching'
+        ...     errormessage = 'Could not create the relationship'
+        ...     def createRelationship(self, other):
+        ...         print 'Relating %s to %s' % (self.context, other)
+        ...         self.context.addTeacher(other)
+
+    The context of such a view needs to be able to participate in relationships
+
+        >>> from schooltool.interfaces import IQueryLinks
+        >>> from zope.interface import implements
+        >>> class Frog(object):
+        ...     implements(IQueryLinks)
+        ...     def __init__(self):
+        ...         self.links = []
+        ...     title = property(lambda self: self.__name__.title())
+        ...     def __repr__(self):
+        ...         return self.title
+        ...     def addTeacher(self, teacher):
+        ...         self.links.append(LinkStub(self, teacher, URITeacher))
+        ...     def listLinks(self, role=None):
+        ...         return [link for link in self.links if link.role == role]
+        >>> class LinkStub:
+        ...     def __init__(self, this, other, role):
+        ...         self.this = this
+        ...         self.other = other
+        ...         self.role = role
+        ...     def traverse(self):
+        ...         return self.other
+        ...     def unlink(self):
+        ...         print "Unlinking %s and %s" % (self.this, self.other)
+        ...         self.this.links.remove(self)
+
+    We also need to be able to get object paths and traverse to objects
+
+        >>> from zope.app.tests import setup
+        >>> setup.placelessSetUp()
+        >>> setup.setUpTraversal()
+
+        >>> from schooltool.tests.utils import setPath
+        >>> from schooltool.app import Application, ApplicationObjectContainer
+        >>> app = Application()
+        >>> pond = app['frogs'] = ApplicationObjectContainer(Frog)
+
+    Let's see if this stub magic works right:
+
+        >>> from schooltool.component import getRelatedObjects
+        >>> luke = pond.new('luke')
+        >>> yoda = pond.new('yoda')
+        >>> kermit = pond.new('kermit')
+        >>> bobo = pond.new('bobo')
+
+        >>> luke.addTeacher(yoda)
+        >>> getRelatedObjects(luke, URITeacher)
+        [Yoda]
+
+    We can now create a view
+
+        >>> from schooltool.rest.tests import RequestStub
+        >>> view = MyRelationshipView(luke)
+        >>> view.request = RequestStub()
+
+    The `list` method of RelationshipViewMixin returns dicts with information
+    for all related objects for the given relationship role:
+
+        >>> from pprint import pprint
+        >>> pprint(view.list())
+        [{'icon_text': 'Frog',
+          'icon_url': None,
+          'path': u'/frogs/yoda',
+          'title': 'Yoda',
+          'url': 'http://localhost:7001/frogs/yoda'}]
+
+    The `update` method handles form submissions, letting the user establish
+    and remove relationships.
+
+    To create one or more relationships, define a web form that has a submit
+    button with name 'FINISH_ADD' and one or more 'toadd' elements (checkboxes
+    or selections):
+
+        >>> view.request = RequestStub(args={'FINISH_ADD': 'Add',
+        ...                                  'toadd': ['/frogs/kermit',
+        ...                                            '/frogs/bobo']})
+        >>> view.update()
+        Relating Luke to Kermit
+        Relating Luke to Bobo
+
+    As you can see, our implementation of createRelationship was called (it
+    printed "Relating ...").  Also, some entries appeared in the application
+    log
+
+        >>> for user, msg, level in view.request.applog:
+        ...    print msg
+        Relationship 'Teaching' between /frogs/kermit and /frogs/luke created
+        Relationship 'Teaching' between /frogs/bobo and /frogs/luke created
+
+    It is up to the application to ensure that a relationship is not created
+    more than once (if it is necessary).
+
+        >>> view.request = RequestStub(args={'FINISH_ADD': 'Add',
+        ...                                  'toadd': ['/frogs/kermit']})
+        >>> view.update()
+        Relating Luke to Kermit
+
+    If a path in the request refers to a nonexistent object, update ignores
+    the path silently.  This situation can arise when an object is deleted
+    by another user, and the form is not reloaded before submission.
+
+        >>> view.request = RequestStub(args={'FINISH_ADD': 'Add',
+        ...                                  'toadd': ['/frogs/old_jones']})
+        >>> view.update()
+
+    (Nothing was printed -- see?)
+
+    To remove one or more relationships, define a web form that has a submit
+    button with name 'DELETE' and one or more 'CHECK' elements (checkboxes
+    or selections):
+
+        >>> view.request = RequestStub(args={'DELETE': 'Delete',
+        ...                                  'CHECK': ['/frogs/kermit',
+        ...                                            '/frogs/bobo']})
+        >>> view.update()
+        Unlinking Luke and Kermit
+        Unlinking Luke and Bobo
+        Unlinking Luke and Kermit
+
+    Note that we had two instances of Luke -> Kermit teaching relationships.
+    Both were removed.
+
+    Log:
+
+        >>> for user, msg, level in view.request.applog:
+        ...    print msg
+        Relationship 'Teaching' between /frogs/kermit and /frogs/luke removed
+        Relationship 'Teaching' between /frogs/bobo and /frogs/luke removed
+        Relationship 'Teaching' between /frogs/kermit and /frogs/luke removed
+
+    That's it.
+
+        >>> setup.placelessTearDown()
+
+    """
+
 class TestGroupEditView(SchoolToolSetup):
 
     def setUp(self):
@@ -1304,6 +1455,7 @@ class TestHelpers(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite())
     suite.addTest(unittest.makeSuite(TestPersonInfoMixin))
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestPersonEditView))

@@ -26,6 +26,7 @@ import sets
 import itertools
 from cStringIO import StringIO
 
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from schooltool.rest.cal import CalendarView as RestCalendarView
@@ -472,11 +473,16 @@ class RelationshipViewMixin:
         if "FINISH_ADD" in request.args:
             paths = filter(None, request.args.get("toadd", []))
             for path in paths:
-                obj = traverse(self.context, path)
-                # XXX traverse might raise TraversalError
+                try:
+                    obj = traverse(self.context, path)
+                except TraversalError:
+                    continue
                 try:
                     self.createRelationship(obj)
                 except ValueError:
+                    # XXX so if I choose three objects, A, B, C, and the
+                    # addition of B fails, then A will be added but C will be
+                    # ignored.  This is not very nice.
                     return self.errormessage % {'other': obj.title,
                                                 'this': self.context.title}
                 request.appLog(_("Relationship '%s' between %s and %s created")

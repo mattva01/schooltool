@@ -1210,7 +1210,7 @@ class DeleteView(View, ToplevelBreadcrumbsMixin):
                 obj = traverse(self.context, to_unicode(path))
                 if IApplicationObject.providedBy(obj):
                     objs.append(obj)
-            except (KeyError, UnicodeError): # XXX use TraversalError
+            except (TraversalError, UnicodeError):
                 pass
         return app_object_list(objs)
 
