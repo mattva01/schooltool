@@ -7,7 +7,7 @@ branch and the name of the directory in the tarball.  In this case,
 the branch is called milestone4 and the directory is schooltool-m4.
 
 If there are any problems on any step, you can delete the branch by
-executing the following commabnd:
+executing the following command:
 
     svn rm svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
 
