@@ -28,6 +28,7 @@ SchoolTool setup script.
 
 import sys
 import os
+import re
 
 if sys.version_info < (2, 3):
     print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
@@ -42,7 +43,6 @@ except ImportError:
     print >> sys.stderr, "You will not be able to run the SchoolTool server."
     print >> sys.stderr
 else:
-    import re
     m = re.match(r"(\d+)[.](\d+)[.](\d+)(?:[a-z]+\d*)?$",
                  twisted.copyright.version)
     if not m:
@@ -87,46 +87,23 @@ if sys.argv[1] == 'sdist':
     sys.argv[2:2] = ['-t', 'MANIFEST.in.' + package,
             '-m', 'MANIFEST.' + package]
 
+# regex for finding data files
+datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|pot)\Z')
+
 # TODO: ask distutils to build Zope 3 extension modules somehow
 if package == 'schooltool':
-    # Find the browser data files
-    browser_www = []
-    path = os.path.join('src', 'schooltool', 'browser', 'www')
-    for file in os.listdir(path):
-        if file.endswith('.pt') or file.endswith('.js') \
-                or file.endswith('.png') or file.endswith('.css'):
-            browser_www.append(os.path.join(path, file))
-    # Find the ReST data files
-    rest_www = []
-    path = os.path.join('src', 'schooltool', 'rest', 'www')
-    for file in os.listdir(path):
-        if file.endswith('.pt'):
-            rest_www.append(os.path.join(path, file))
-    # Find the schema data files
-    schemas = []
-    path = os.path.join('src', 'schooltool', 'schema')
-    for file in os.listdir(path):
-        if file.endswith('.xml') or file.endswith('.rng'):
-            schemas.append(os.path.join(path, file))
-    # find the translations
-    translations = []
-    path = os.path.join('src', 'schooltool', 'translation')
-    for root, dirs, files in os.walk(path):
-        mo_files = [os.path.join(root, file) for file in files \
-                if file.endswith('.mo')]
-        if mo_files:
-            translations.append((root, mo_files))
-    # Generate the sampleschool
-    basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
-    sys.path.insert(0, os.path.join(basedir, 'src'))
-    sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
-    import schooltool.clients.datagen
-    # If you change the seed, you will also have to recreate ttconfig.data
-    seed = 'schooltool-m4'
-    schooltool.clients.datagen.main(['datagen', seed])
-    # Setup schooltool
+    # find the data files
+    data_files = []
+    os.chdir('src')
+    for root, dirs, files in os.walk('schooltool'):
+        tmp = [os.path.join('src', root, file) for file in files \
+                if datafile_re.match(file, 1)]
+        if tmp:
+            data_files.append((root, tmp))
+    os.chdir('..')
+    # Setup SchoolTool
     setup(name="schooltool",
-        version="0.10",
+        version="0.10rc1",
         url='http://www.schooltool.org',
         package_dir={'': 'src'},
         packages=['schooltool', 'schooltool.interfaces',
@@ -134,18 +111,26 @@ if package == 'schooltool':
             'schooltool.rest', 'schooltool.browser',
             'schooltool.clients'],
         data_files=[('sampleschool', ['persons.csv', 'groups.csv',
-                'resources.csv', 'timetable.csv']),
-            ('browser/www', browser_www),
-            ('rest/www', rest_www),
-            ('', ['src/schooltool/schema.xml']),
-            ('schemas', schemas)] + translations,
+                'resources.csv', 'timetable.csv', 'ttconfig.data'])]
+            + data_files,
         scripts=['scripts/import-sampleschool', 'scripts/schooltool',
             'scripts/schooltool-client'])
-
 elif package == 'schoolbell':
+    # find the data files
+    data_files = []
+    os.chdir('src')
+    for root, dirs, files in os.walk('schoolbell'):
+        tmp = [os.path.join('src', root, file) for file in files \
+                if datafile_re.match(file, 1)]
+        if tmp:
+            data_files.append((root, tmp))
+    os.chdir('..')
+    # Setup SchoolBell
     setup(name="schoolbell",
         version="1.0rc1",
         url='http://www.schooltool.org/schoolbell',
         package_dir={'': 'src'},
         packages=['schoolbell', 'schoolbell.relationship',
-            'schooltool.app', 'schooltool.app.browser'])
+            'schoolbell.calendar', 'schoolbell.app', 'schoolbell.app.browser'],
+        data_files=data_files,
+        scripts=['scripts/schoolbell'])
