@@ -111,11 +111,14 @@ Sample resources.csv::
 
 $Id$
 """
-import httplib
+
 import csv
+import cgi
 import sys
 import base64
+import httplib
 from schooltool.translation import gettext as _
+from schooltool.common import locale_charset
 
 
 class DataError(Exception):
@@ -162,7 +165,7 @@ class CSVImporter:
                 ' xlink:type="simple"'
                 ' xlink:arcrole="http://schooltool.org/ns/membership"'
                 ' xlink:role="http://schooltool.org/ns/membership/group"'
-                ' xlink:href="%s"/>' % member_path)
+                ' xlink:href="%s"/>' % to_xml(member_path))
 
     def teaching(self, teacher, taught):
         """A tuple (path, method, body) to add a teacher to a group"""
@@ -172,7 +175,7 @@ class CSVImporter:
                 ' xlink:type="simple"'
                 ' xlink:arcrole="http://schooltool.org/ns/teaching"'
                 ' xlink:role="http://schooltool.org/ns/teaching/taught"'
-                ' xlink:href="/persons/%s"/>' % teacher)
+                ' xlink:href="/persons/%s"/>' % to_xml(teacher))
 
     def importGroup(self, name, title, parents, facets):
         """Returns a list of tuples of (path, method, body) to run
@@ -181,13 +184,13 @@ class CSVImporter:
         result = []
         result.append(('/groups/%s' % name, 'PUT',
                        '<object xmlns="http://schooltool.org/ns/model/0.1" '
-                       'title="%s"/>' % title))
+                       'title="%s"/>' % to_xml(title)))
         for parent in parents.split():
             result.append(self.membership(parent, "/groups/%s" % name))
         for facet in facets.split():
             result.append(('/groups/%s/facets' % name, 'POST',
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
-                           ' factory="%s"/>' % facet))
+                           ' factory="%s"/>' % to_xml(facet)))
         return result
 
     def importPerson(self, title):
@@ -196,7 +199,7 @@ class CSVImporter:
         """
         return [('/persons', 'POST',
                  '<object xmlns="http://schooltool.org/ns/model/0.1" '
-                 'title="%s"/>' % title)]
+                 'title="%s"/>' % to_xml(title))]
 
     def importResource(self, title):
         """Returns a list of tuples of (path, method, body) to run
@@ -204,7 +207,7 @@ class CSVImporter:
         """
         return [('/resources', 'POST',
                  '<object xmlns="http://schooltool.org/ns/model/0.1" '
-                 'title="%s"/>' % title)]
+                 'title="%s"/>' % to_xml(title))]
 
     def importPupil(self, name, parents):
         """Adds a pupil to the groups.  Need a name (generated path
@@ -236,7 +239,8 @@ class CSVImporter:
                  '<last_name>%s</last_name>'
                  '<date_of_birth>%s</date_of_birth>'
                  '<comment>%s</comment>'
-                 '</person_info>' % (first_name, last_name, dob, comment))]
+                 '</person_info>' % (to_xml(first_name), to_xml(last_name),
+                                     to_xml(dob), to_xml(comment)))]
 
     def getPersonName(self, response):
         loc = response.getheader('Location')
@@ -247,7 +251,7 @@ class CSVImporter:
 
     def process(self, method, resource, body):
         creds = "%s:%s" % (self.user, self.password)
-        auth = "Basic " + base64.encodestring(creds).strip()
+        auth = "Basic " + base64.encodestring(creds.encode('UTF-8')).strip()
         headers = {'Authorization': auth}
         response = self.server.request(method, resource,
                                        body=body, headers=headers)
@@ -361,6 +365,29 @@ class CSVImporter:
             raise
         except csv.Error, e:
             raise DataError(_("Error in %s line %d: %s") % (file, line, e))
+
+
+def to_xml(s):
+    r"""Prepare s for inclusion into XML (convert to UTF-8 and escape).
+
+        >>> to_xml('foo')
+        'foo'
+        >>> to_xml('<brackets> & "quotes"')
+        '&lt;brackets&gt; &amp; &quot;quotes&quot;'
+
+    It also converts from locale charset to UTF-8.
+
+        >>> from schooltool.clients import csvclient
+        >>> old_locale_charset = csvclient.locale_charset
+        >>> csvclient.locale_charset = 'ISO-8859-13'
+
+        >>> to_xml('\xe0')
+        '\xc4\x85'
+
+        >>> csvclient.locale_charset = old_locale_charset
+
+    """
+    return cgi.escape(unicode(s, locale_charset).encode('UTF-8'), True)
 
 
 def main():

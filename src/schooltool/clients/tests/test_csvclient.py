@@ -27,6 +27,7 @@ import socket
 from StringIO import StringIO
 from pprint import pformat
 from schooltool.tests.helpers import diff
+from zope.testing.doctestunit import DocTestSuite
 
 __metaclass__ = type
 
@@ -449,6 +450,7 @@ class TestCSVImporter(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite('schooltool.clients.csvclient'))
     suite.addTest(unittest.makeSuite(TestHTTPClient))
     suite.addTest(unittest.makeSuite(TestCSVImporter))
     return suite
