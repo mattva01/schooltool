@@ -1,4 +1,4 @@
-schooltool (0.8+0.9rc2-1) unstable; urgency=low
+schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
 
   * Delete SSL cerificate on purge. Ask debconf question whether to purge
     database, using the form used in the proposed database policy at
