@@ -192,7 +192,7 @@ class IMultiContainer(Interface):
 
     Use this interface when the intermediate container is a dumb one (e.g. a
     Python dict) that does not provide ILocation/ITraversable.  For example,
-    imagin ea hyphotetical LunchBox object located at /lunchbox that has
+    imagine a hyphotetical LunchBox object located at /lunchbox that has
     two kinds of children:
 
       - food items (e.g. sandwich), stored in an dict LunchBox.food
@@ -1064,20 +1064,28 @@ class ISchooldayModelWrite(Interface):
         If first is later than last, a ValueError is raised.
         """
 
-    # The functions below use the same numbering as one used by
-    # datetime.date.weekday() method, or the calendar module:
-    # 0 is Monday, 1 is Tuesday, etc.
-
     def addWeekdays(*weekdays):
         """Mark that all days of week with a number in weekdays within the
-        period will be schooldays."""
+        period will be schooldays.
+
+        The numbering used is the same as one used by datetime.date.weekday()
+        method, or the calendar module: 0 is Monday, 1 is Tuesday, etc.
+        """
 
     def removeWeekdays(*weekdays):
         """Mark that all days of week with a number in weekdays within the
-        period will be holidays."""
+        period will be holidays.
+
+        The numbering used is the same as one used by datetime.date.weekday()
+        method, or the calendar module: 0 is Monday, 1 is Tuesday, etc.
+        """
 
     def toggleWeekdays(*weekdays):
-        """Toggle the state of all days of week with a number in weekdays."""
+        """Toggle the state of all days of week with a number in weekdays.
+
+        The numbering used is the same as one used by datetime.date.weekday()
+        method, or the calendar module: 0 is Monday, 1 is Tuesday, etc.
+        """
 
 
 class ICalendar(Interface):
