@@ -325,6 +325,10 @@ table.cal_monthly {
 
 td.cal_monthly_weekno {
   border: 1px solid blue;
+}
+
+a.cal_monthly_weekno {
+  text-decoration: none;
   font-weight: bold;
   color: #777;
 }
@@ -339,7 +343,7 @@ th.cal_monthly_weekday {
   font-weight: bold;
 }
 
-div.cal_weekly_dayno {
+a.cal_weekly_dayno {
   font-size: smaller;
   color: #777;
 }

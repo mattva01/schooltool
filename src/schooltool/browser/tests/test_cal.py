@@ -157,6 +157,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_update(self):
         from schooltool.browser.cal import CalendarViewBase
+        from schooltool.model import Person
 
         view = CalendarViewBase(None)
         view.request = RequestStub()
@@ -166,6 +167,26 @@ class TestCalendarViewBase(unittest.TestCase):
         view.request = RequestStub(args={'date': '2004-08-18'})
         view.update()
         self.assertEquals(view.cursor, date(2004, 8, 18))
+
+    def test_urls(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.cal import Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+        cal.__parent__ = person
+
+        view = CalendarViewBase(cal)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 12)
+
+        prefix = 'http://localhost:7001/persons/boss/'
+        self.assertEquals(view.calURL("foo"),
+                          prefix + 'calendar_foo.html?date=2004-08-12')
+        self.assertEquals(view.calURL("bar", date(2005, 3, 22)),
+                          prefix + 'calendar_bar.html?date=2005-03-22')
 
 
 class TestWeeklyCalendarView(unittest.TestCase):

@@ -30,11 +30,14 @@
     </tr>
     <tr tal:repeat="week weeks">
       <!-- XXX not translatable -->
-      <td class="cal_monthly_weekno"
-          tal:content="python:'Week ' + week[0].strftime('%V')" />
+      <td class="cal_monthly_weekno">
+         <a class="cal_monthly_weekno"
+            tal:content="python:'Week ' + week[0].strftime('%V')"
+            tal:attributes="href python:view.calURL('weekly', week[0])" />
       <td class="cal_monthly_day"
           tal:repeat="day week">
-        <div class="cal_weekly_dayno" tal:content="day/day" />
+        <a class="cal_weekly_dayno" tal:content="day/day"
+           tal:attributes="href python:view.calURL('daily', day)" />
         <div class="event_weekly"
              tal:repeat="event python:context.byDate(day)"
              tal:content="python:event.title+event.dtstart.strftime(' (%H:%M)')"

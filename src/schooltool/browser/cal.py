@@ -24,7 +24,7 @@ $Id$
 
 from datetime import datetime, date, time, timedelta
 
-from schooltool.browser import View, Template
+from schooltool.browser import View, Template, absoluteURL
 from schooltool.browser.auth import TeacherAccess, PrivateAccess
 from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime
@@ -136,6 +136,11 @@ class CalendarViewBase(View):
         else:
             self.cursor = parse_date(self.request.args['date'][0])
 
+    def calURL(self, cal_type, cursor=None):
+        if cursor is None:
+            cursor = self.cursor
+        return absoluteURL(self.request, self.context.__parent__,
+                          'calendar_%s.html?date=%s' % (cal_type, cursor))
 
 
 class WeeklyCalendarView(CalendarViewBase):
