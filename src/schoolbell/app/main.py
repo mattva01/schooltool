@@ -438,7 +438,7 @@ SITE_DEFINITION = """
 
   <include package="schoolbell.app" />
 
-  <include package="zope.app.securitypolicy" />
+  <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
 
   <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
   <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
