@@ -47,10 +47,10 @@ welcome to change it and/or distribute copies of it under certain conditions."""
 
     server = 'localhost'
     accept = 'text/xml'
-    links = False
+    links = True
 
     http = httplib.HTTPConnection
-    port = 80
+    port = 8080
 
     file_hook = file
 

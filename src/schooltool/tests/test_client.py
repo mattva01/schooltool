@@ -32,13 +32,13 @@ __metaclass__ = type
 
 class HTTPStub:
 
-    def __init__(self, host, port=80):
+    def __init__(self, host, port=8080):
         self.host = host
         self.port = port
 
         if host == 'badhost':
             raise socket.error(-2, 'Name or service not known')
-        if port != 80:
+        if port != 8080:
             raise socket.error(111, 'Connection refused')
 
     def putrequest(self, method, resource, *args, **kw):
@@ -195,12 +195,14 @@ class TestClient(unittest.TestCase):
     def test_server(self):
         self.client.do_server("server.example.com")
         self.assertEqual(self.client.server, "server.example.com")
-        self.assertEqual(self.emitted, "Welcome")
+        self.assertEqual(self.emitted,
+                         "Error: could not connect to server.example.com")
 
         self.emitted = ""
         self.client.do_server("server2.example.com  \t")
         self.assertEqual(self.client.server, "server2.example.com")
-        self.assertEqual(self.emitted, "Welcome")
+        self.assertEqual(self.emitted,
+                         "Error: could not connect to server2.example.com")
 
         self.emitted = ""
         self.client.do_server("")
@@ -231,6 +233,7 @@ class TestClient(unittest.TestCase):
 
     def test_get(self):
         self.client.server = 'localhost'
+        self.client.links = False
         self.client.do_get("/")
         self.assertEqual(self.emitted, "Welcome")
         self.assertEqual(self.client.last_data, "Welcome")
@@ -294,7 +297,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.emitted, FileStub.msg)
 
     def test_links(self):
-        self.assertEqual(self.client.links, False)
+        self.assertEqual(self.client.links, True)
         data = (('on', True), ('off', False), ('ON', True), ('OFf', False))
         for set, result in data:
             self.client.do_links(set)
@@ -309,8 +312,6 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.emitted, "on")
 
     def test_links_get(self):
-        self.assertEqual(self.client.links, False)
-        self.client.do_links("on")
         self.assertEqual(self.client.links, True)
         self.client.do_get("/doc.xml")
         self.assertEqual(self.emitted, dedent("""
@@ -330,6 +331,7 @@ class TestClient(unittest.TestCase):
                          ['/student1', '/student2'])
 
     def test_follow(self):
+        self.client.links = False
         self.client.do_follow('1')
         self.assertEqual(self.emitted, "Wrong link number")
         self.emitted = ""
