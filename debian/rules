@@ -49,6 +49,7 @@ install-stamp: build
 		../debian/schooltool-clients/usr/lib/schooltool-clients/{} \;
 	for fn in schooltool/__init__.py \
 	          schooltool/common.py \
+	          schooltool/csvimport.py \
 	          schooltool/interfaces.py \
 	          schooltool/unchanged.py \
 	          schooltool/uris.py \
