@@ -32,6 +32,7 @@ from schooltool.browser.tests import TraversalTestMixin
 from schooltool.browser.tests.test_model import AppSetupMixin
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.tests.utils import NiceDiffsMixin
+from schooltool.tests.helpers import sorted
 from schooltool.common import dedent
 
 __metaclass__ = type
@@ -494,15 +495,24 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
         view = self.createView()
         self.assertEquals(list(view.list()), [Timetable([]), Timetable([])])
 
+    def test_update_delete_nothing(self):
+        view = self.createView()
+        view.request = RequestStub(args={'DELETE': 'Why not'})
+        result = view.update()
+        self.assertEquals(sorted(view.context.keys()), ['bimonthly', 'weekly'])
+        self.assertEquals(view.request.applog, [])
+        self.assertEquals(result, None)
+
     def test_update_delete(self):
         view = self.createView()
         view.request = RequestStub(args={'DELETE': 'Why not',
-                                         'CHECK': 'weekly'})
-        view.update()
+                                         'CHECK': ['weekly', 'nosuchthing']})
+        result = view.update()
         self.assertEquals(view.context.keys(), ['bimonthly'])
         self.assertEquals(view.request.applog,
                           [(None, 'Timetable schema /ttschemas/weekly deleted',
                             INFO)])
+        self.assertEquals(result, "Deleted weekly.")
 
     def test_update_add(self):
         view = self.createView()
@@ -547,16 +557,26 @@ class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
                                 [view.context['semester1'],
                                  view.context['semester2']])
 
+    def test_update_delete_nothing(self):
+        view = self.createView()
+        view.request = RequestStub(args={'DELETE': 'Why not'})
+        result = view.update()
+        self.assertEquals(sorted(view.context.keys()),
+                          ['semester1', 'semester2'])
+        self.assertEquals(view.request.applog, [])
+        self.assertEquals(result, None)
+
     def test_update_delete(self):
         view = self.createView()
         view.request = RequestStub(args={'DELETE': 'Why not',
-                                         'CHECK': 'semester2'})
-        view.update()
+                                         'CHECK': ['x', 'semester2']})
+        result = view.update()
         self.assertEquals(view.context.keys(), ['semester1'])
         self.assertEquals(view.request.applog,
                           [(None,
                             'Time period /time-periods/semester2 deleted',
                             INFO)])
+        self.assertEquals(result, "Deleted semester2.")
 
     def test_update_add(self):
         view = self.createView()

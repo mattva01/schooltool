@@ -509,10 +509,16 @@ class ContainerServiceViewBase(View):
     def update(self):
         result = None
         if 'DELETE' in self.request.args:
-            for name in self.request.args['CHECK']:
-                self.logDeletion(self.context[name])
-                del self.context[name]
-            result = _('Deleted %s.') % ", ".join(self.request.args['CHECK'])
+            deleted = []
+            for name in self.request.args.get('CHECK', []):
+                try:
+                    self.logDeletion(self.context[name])
+                    del self.context[name]
+                    deleted.append(name)
+                except KeyError:
+                    pass
+            if deleted:
+                result = _('Deleted %s.') % ", ".join(deleted)
         if 'ADD' in self.request.args:
             self.request.redirect(absoluteURL(self.request,
                                               self.context.__parent__,
