@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool example school.
+Teaching relationship.
 
 $Id$
 """
@@ -31,9 +31,17 @@ from schooltool.facet import FacetFactory
 
 moduleProvides(IModuleSetup)
 
-class URITeaching(ISpecificURI): "http://schooltool.org/ns/teaching"
-class URITeacher(ISpecificURI): "http://schooltool.org/ns/teaching/teacher"
-class URITaught(ISpecificURI): "http://schooltool.org/ns/teaching/taught"
+
+class URITeaching(ISpecificURI):
+    """http://schooltool.org/ns/teaching"""
+
+
+class URITeacher(ISpecificURI):
+    """http://schooltool.org/ns/teaching/teacher"""
+
+
+class URITaught(ISpecificURI):
+    """http://schooltool.org/ns/teaching/taught"""
 
 
 Teaching = RelationshipSchema(URITeaching,
@@ -41,6 +49,7 @@ Teaching = RelationshipSchema(URITeaching,
 
 
 class SubjectGroupFacet(RelationshipValenciesMixin):
+    """Facet for a group that is taught by a teacher."""
 
     implements(IFacet)
 
