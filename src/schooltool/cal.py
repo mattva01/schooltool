@@ -235,7 +235,7 @@ class CalendarEvent(Persistent):
 
     def __init__(self, dtstart, duration, title, owner=None, context=None,
                  location=None, unique_id=None, recurrence=None,
-		 privacy="public"):
+                 privacy="public"):
         self._dtstart = dtstart
         self._duration = duration
         self._title = title
@@ -243,10 +243,10 @@ class CalendarEvent(Persistent):
         self._context = context
         self._location = location
         self._recurrence = recurrence
-	if not privacy in ('private', 'public', 'hidden'):
-	    raise ValueError("privacy must be one of 'private',"
-			     " 'public', or 'hidden', got %r" % (privacy, ))
-	self._privacy = privacy
+        if not privacy in ('private', 'public', 'hidden'):
+             raise ValueError("privacy must be one of 'private',"
+                              " 'public', or 'hidden', got %r" % (privacy, ))
+        self._privacy = privacy
 
         if unique_id is None:
             # & 0x7ffffff to avoid FutureWarnings with negative numbers
@@ -358,7 +358,7 @@ class ExpandedCalendarEvent(CalendarEvent):
         return cls(ev.dtstart, ev.duration, ev.title, owner=ev.owner,
                    context=ev.context, location=ev.location,
                    unique_id=ev.unique_id, recurrence=ev.recurrence,
-		   privacy=ev.privacy)
+                   privacy=ev.privacy)
 
     duplicate = classmethod(duplicate)
 
