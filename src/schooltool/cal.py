@@ -492,11 +492,11 @@ class RecurrenceRule:
         result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
                   % (self.ical_freq, args, self.interval)]
         if self.exceptions:
-            exctime = dtstart.time()
-            exception_datetimes = [dtstart.combine(d, exctime)
-                                   for d in self.exceptions]
-            row = 'EXDATE:' + ','.join([ical_date_time(dt)
-                                        for dt in exception_datetimes])
+            # Exceptions should include the exact time portion as well
+            # (this was implemented in revision 1860), however,
+            # Mozilla Calendar refuses to work with such exceptions.
+            row = 'EXDATE:' + ','.join([ical_date_time(d)
+                                        for d in self.exceptions])
             result.append(row)
         return result
 
