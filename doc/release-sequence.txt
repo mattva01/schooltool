@@ -34,6 +34,13 @@ start again. XXX explain how to delete the branch.
      cd schooltool-m4
      make deb
      cd ..
+     mkdir m4
+     cp schooltool_0.4-0.1_i386.deb m4
+     dpkg-scanpackages m4 /dev/null | gzip > Packages.gz
+     rm -r m4
+
+    Upload the Packages.gz together with the Debian package to make it
+    installable with apt-get.
 
 5. Go into the export and make sure it's OK:
 
