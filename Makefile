@@ -10,7 +10,7 @@ TESTFLAGS=-w
 
 all: build
 
-build:
+build: build-translations
 	$(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
@@ -27,8 +27,15 @@ update-translations:
 	     msgfmt -o $${f%.po}.mo $$f;				   \
 	done
 
+build-translations:
+	for f in `find src/schooltool/translation/ -name '*.po'`; \
+	do								   \
+	     msgfmt -o $${f%.po}.mo $$f;				   \
+	done
+
 clean:
-	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
+	find . \( -path 'src/schooltool/*.mo' -o -name '*.o' \
+	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 	[ -x debian/rules ] && debian/rules debdirclean	
 	rm -f build-stamp install-stamp
