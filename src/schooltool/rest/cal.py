@@ -289,10 +289,13 @@ class CalendarView(CalendarReadView):
                 if has_complex_props:
                     return textErrorPage(request,
                          _("Repeating events/exceptions not yet supported"))
-                # XXX bug: ICalendarEvent.dtstart must be datetime.datetime
-                #          ICalReader may return events where dtstart is
-                #          datetime.date
-                events.append(CalendarEvent(event.dtstart, event.duration,
+                # ICalendarEvent.dtstart must be datetime.datetime
+                # ICalReader may return events where dtstart is datetime.date
+                dtstart = event.dtstart
+                if not isinstance(dtstart, datetime.datetime):
+                    dtstart = datetime.datetime.combine(dtstart,
+                                                        datetime.time(0))
+                events.append(CalendarEvent(dtstart, event.duration,
                                             event.summary,
                                             location=event.location,
                                             unique_id=event.uid))

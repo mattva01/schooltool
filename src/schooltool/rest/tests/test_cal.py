@@ -552,12 +552,17 @@ class TestCalendarView(TestCalendarReadView):
                           datetime.timedelta(minutes=60),
                           "Long\nLunch", location="Far far away",
                           unique_id="uid2"),
-            CalendarEvent(datetime.date(2003, 9, 4),
+            CalendarEvent(datetime.datetime(2003, 9, 4, 0, 0),
                           datetime.timedelta(days=1),
                           "Something else",
                           unique_id="uid3"),
         ]
         self.assertEquals(sorted(events), sorted(expected))
+        # ICalendarEvent requires dtstart to be a datetime.datetime instance
+        # but datetime.date(x, y, z) == datetime.datetime(x, y, z, 0, 0) so
+        # the comparison above is not enough
+        for ev in events:
+            assert isinstance(ev.dtstart, datetime.datetime)
 
     def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
         request = RequestStub("http://localhost/calendar", method="PUT",
