@@ -49,7 +49,22 @@ def unrelateOnCopy(event):
     """Remove all relationships when an object is copied."""
     if not IObjectCopiedEvent.providedBy(event):
         return
-    linkset = IRelationshipLinks(event.object, None)
+    # event.object may be a ContainedProxy
+    obj = getProxiedObject(event.object)
+    linkset = IRelationshipLinks(obj, None)
     if linkset is not None:
-        linkset.clear()
+        links_to_remove = []
+        for link in linkset:
+            other_linkset = IRelationshipLinks(link.target)
+            try:
+                other_linkset.find(link.role, obj, link.my_role, link.rel_type)
+            except ValueError:
+                # The corresponding other link was not copied, so we have a
+                # degenerate one-sided relationship.  Let's remove it
+                # altogether.  It would not difficult to have a different
+                # function, cloneRelationshipsOnCopy, that would create
+                # a corresponding link in other_linkset.
+                links_to_remove.append(link)
+        for link in links_to_remove:
+            linkset.remove(link)
 

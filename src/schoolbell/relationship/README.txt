@@ -355,10 +355,6 @@ Caveats
   have subobjects that participate in relationships with objects outside of
   the subtree, you will have problems.
 
-  XXX There is also a bug here.  If x is related to x.y where x.y is a
-  subobject of x, when you copy x to x', all links from x' will be removed,
-  but the copied link on x'.y' will remain.
-
   An alternative solution is to disallow copying of objects that may have
   subobjects related with other objects that are not located within the
   original object.  To do so, declare and IObjectCopier adapter for the object
