@@ -23,11 +23,12 @@ $Id$
 """
 
 import unittest
-
 from pprint import pformat
 from datetime import date, timedelta, datetime
 from StringIO import StringIO
-from zope.testing.doctestunit import DocTestSuite
+
+from zope.testing.doctest import DocTestSuite
+
 from schooltool.tests.helpers import diff, dedent
 from schooltool.tests.utils import TimezoneTestMixin
 

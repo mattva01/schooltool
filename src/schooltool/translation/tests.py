@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 
 
 class TestTranslatableString(unittest.TestCase):

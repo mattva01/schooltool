@@ -29,7 +29,7 @@ from logging import INFO
 from datetime import datetime, date, timedelta, time
 from pprint import pformat
 
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 from zope.interface import directlyProvides
 from schooltool.cal import ImmutableCalendar
 from schooltool.browser.tests import RequestStub, setPath

@@ -28,7 +28,7 @@ from logging import INFO
 from sets import Set
 
 from zope.interface import implements, directlyProvides
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 from zope.app.traversing.interfaces import ITraversable, TraversalError
 from zope.app.traversing.api import getPath
 

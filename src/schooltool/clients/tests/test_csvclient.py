@@ -26,7 +26,7 @@ import unittest
 import socket
 
 from schooltool.tests.utils import NiceDiffsMixin
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 
 __metaclass__ = type
 

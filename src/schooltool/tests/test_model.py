@@ -24,10 +24,12 @@ $Id$
 
 import unittest
 from datetime import datetime, time, date, timedelta
+
 from persistent import Persistent
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 from zope.interface import implements
 from zope.interface.verify import verifyObject
+
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import EqualsSortedMixin, NiceDiffsMixin
 from schooltool.interfaces import ILink, IFacet

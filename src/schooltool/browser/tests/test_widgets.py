@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 from zope.interface.verify import verifyObject
 from schooltool.browser.tests import RequestStub
 from schooltool.tests.utils import XMLCompareMixin

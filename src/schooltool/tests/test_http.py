@@ -26,17 +26,18 @@ import unittest
 import re
 import time
 import logging
+from StringIO import StringIO
 
 import ZODB.DB
 import ZODB.MappingStorage
 import transaction
-from StringIO import StringIO
 from zope.interface import moduleProvides
-from zope.testing.doctestunit import DocTestSuite
-from schooltool.interfaces import IModuleSetup, AuthenticationError
-from schooltool.tests.utils import TimezoneTestMixin
+from zope.testing.doctest import DocTestSuite
 from twisted.internet.address import IPv4Address
 from twisted.python.failure import Failure
+
+from schooltool.interfaces import IModuleSetup, AuthenticationError
+from schooltool.tests.utils import TimezoneTestMixin
 
 __metaclass__ = type
 

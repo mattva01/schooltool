@@ -27,7 +27,7 @@ import datetime
 import sets
 from logging import INFO
 
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.browser.tests import HTMLDocument

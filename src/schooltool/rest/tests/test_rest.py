@@ -23,10 +23,12 @@ $Id$
 """
 
 import unittest
-from zope.testing.doctestunit import DocTestSuite
+
+from zope.testing.doctest import DocTestSuite
+from zope.interface.declarations import implements, directlyProvides
+
 from schooltool.rest.tests import RequestStub
 from schooltool.interfaces import IContainmentRoot, ILocation
-from zope.interface.declarations import implements, directlyProvides
 from schooltool.tests.utils import SchoolToolSetup
 
 __metaclass__ = type

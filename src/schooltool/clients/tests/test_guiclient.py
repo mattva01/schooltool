@@ -25,7 +25,9 @@ import socket
 import datetime
 import urllib
 import base64
-from zope.testing.doctestunit import DocTestSuite
+
+from zope.testing.doctest import DocTestSuite
+
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin

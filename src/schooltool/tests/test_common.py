@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 import datetime
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
 
 __metaclass__ = type
 

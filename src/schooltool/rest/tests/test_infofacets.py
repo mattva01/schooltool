@@ -28,7 +28,8 @@ from StringIO import StringIO
 from logging import INFO
 import PIL.Image
 
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing.doctest import DocTestSuite
+
 from schooltool.rest.tests import RequestStub
 from schooltool.rest.tests import setPath
 from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup
