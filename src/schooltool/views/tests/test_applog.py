@@ -32,7 +32,9 @@ __metaclass__ = type
 class TestApplicationLogView(unittest.TestCase):
 
     def setUp(self):
+        import schooltool.common
         from schooltool.views.applog import ApplicationLogView
+        self.old_locale_charset = schooltool.common.locale_charset
         self.view = ApplicationLogView(None)
         self.view.authorization = lambda ctx, rq: True
         self.view.openLog = lambda f: StringIO('y00 h4v3 b33n 0wn3d')
@@ -41,11 +43,16 @@ class TestApplicationLogView(unittest.TestCase):
             applog_path = 'whatever'
         self.request.site = SiteStub()
 
+    def tearDown(self):
+        import schooltool.common
+        schooltool.common.locale_charset = self.old_locale_charset
+
     def test(self):
         result = self.view.render(self.request)
 
         self.assertEquals(self.request.code, 200)
-        self.assertEquals(self.request.headers['content-type'], "text/plain")
+        self.assertEquals(self.request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, 'y00 h4v3 b33n 0wn3d')
 
         self.request.site.applog_path = None
@@ -59,7 +66,8 @@ class TestApplicationLogView(unittest.TestCase):
         result = self.view.render(self.request)
 
         self.assertEquals(self.request.code, 200)
-        self.assertEquals(self.request.headers['content-type'], "text/plain")
+        self.assertEquals(self.request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(result, 'fit\nbit\nkite')
 
     def testPaging(self):
@@ -70,7 +78,8 @@ class TestApplicationLogView(unittest.TestCase):
         result = self.view.render(self.request)
 
         self.assertEquals(self.request.code, 200)
-        self.assertEquals(self.request.headers['content-type'], "text/plain")
+        self.assertEquals(self.request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
         self.assertEquals(self.request.headers['x-page'], "3")
         self.assertEquals(self.request.headers['x-total-pages'], "3")
         self.assertEquals(result, 'kite\n')
@@ -111,6 +120,16 @@ class TestApplicationLogView(unittest.TestCase):
         self.request.args.update({'pagesize': ["two"], 'page': ["1"]})
         result = self.view.render(self.request)
         self.assertEquals(self.request.code, 400)
+
+    def testCharsetTranscoding(self):
+        import schooltool.common
+        schooltool.common.locale_charset = 'latin-1'
+        self.view.openLog = lambda f: StringIO('\xff')
+        result = self.view.render(self.request)
+        self.assertEquals(self.request.code, 200)
+        self.assertEquals(self.request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
+        self.assertEquals(result, '\xc3\xbf')  # '\u00ff' in UTF-8
 
 
 def test_suite():

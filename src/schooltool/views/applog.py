@@ -25,6 +25,7 @@ $Id$
 from schooltool.views import View, textErrorPage
 from schooltool.views.auth import SystemAccess
 from schooltool.translation import ugettext as _
+from schooltool.common import from_locale
 
 __metaclass__ = type
 
@@ -35,7 +36,6 @@ class ApplicationLogView(View):
     authorization = SystemAccess
 
     def do_GET(self, request):
-        request.setHeader('Content-Type', 'text/plain')
         path = request.site.applog_path
         if path is None:
             return textErrorPage(request, _("Application log not configured"))
@@ -66,11 +66,13 @@ class ApplicationLogView(View):
             result = [line for line in result if filter in line]
 
         if page is not None:
-            page, total_pages = self.getPageInRange(page, pagesize, len(result))
+            page, total = self.getPageInRange(page, pagesize, len(result))
             request.setHeader('X-Page', str(page))
-            request.setHeader('X-Total-Pages', str(total_pages))
+            request.setHeader('X-Total-Pages', str(total))
             result = result[(page - 1) * pagesize:page * pagesize]
-        return "".join(result)
+
+        request.setHeader('Content-Type', 'text/plain; charset=UTF-8')
+        return from_locale("".join(result))
 
     def getPageInRange(self, page, pagesize, lines):
         """A helper to cut out a page out of an array of lines.
