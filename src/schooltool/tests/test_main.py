@@ -1013,8 +1013,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(site.viewFactory is getView)
         site = reactor._tcp_listeners[2][1]
         self.assertEquals(site.rootName, 'schooltool')
-        from schooltool.browser.app import LoginPage
-        self.assert_(site.viewFactory is LoginPage)
+        from schooltool.browser.app import RootView
+        self.assert_(site.viewFactory is RootView)
 
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.uris import ISpecificURI, URIMembership

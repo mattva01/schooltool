@@ -20,7 +20,9 @@
 The schooltool.browser package.
 """
 
-from schooltool.views import View as _View, Template, absoluteURL
+import os
+
+from schooltool.views import View as _View, Template, absoluteURL, read_file
 
 __metaclass__ = type
 
@@ -58,4 +60,22 @@ class View(_View):
         do_GET method.
         """
         return self.do_GET(request)
+
+    def getChild(self, name, request):
+        if name == '': # trailing slash in the URL
+            return self
+        else:
+            return _View.getChild(self, name, request)
+
+
+class StaticFile(View):
+
+    def __init__(self, filename, content_type):
+        View.__init__(self, None)
+        self.filename = filename
+        self.content_type = content_type
+
+    def do_GET(self, request):
+        request.setHeader('Content-Type', self.content_type)
+        return read_file(self.filename, os.path.dirname(__file__))
 

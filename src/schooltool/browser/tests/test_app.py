@@ -51,9 +51,12 @@ class TestAppView(unittest.TestCase):
 
     def createView(self):
         from schooltool.app import Application
-        from schooltool.browser.app import LoginPage
+        from schooltool.app import ApplicationObjectContainer
+        from schooltool.model import Person
+        from schooltool.browser.app import RootView
         app = Application()
-        view = LoginPage(app)
+        app['persons'] = ApplicationObjectContainer(Person)
+        view = RootView(app)
         return view
 
     def test(self):
@@ -61,6 +64,7 @@ class TestAppView(unittest.TestCase):
         request = RequestStub()
         result = view.render(request)
         self.assert_('Username' in result)
+        self.assert_('error' not in result)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
 
@@ -83,7 +87,29 @@ class TestAppView(unittest.TestCase):
                                     'password': '5ch001t001'})
         request.site = SiteStub()
         result = view.render(request)
-        self.assertEquals(result, 'Wrong')
+        self.assert_('error' in result)
+        self.assert_('Username' in result)
+        self.assert_('manager' in result)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+
+    def test_traversal(self):
+        from schooltool.browser import StaticFile
+        from schooltool.browser.app import PersonContainerView
+        view = self.createView()
+        app = view.context
+        request = RequestStub()
+
+        def assertTraverses(name, viewclass, context=None):
+            destination = view._traverse(name, request)
+            self.assert_(isinstance(destination, viewclass))
+            self.assert_(destination.context is context)
+            return destination
+
+        assertTraverses('persons', PersonContainerView, app['persons'])
+        css = assertTraverses('schooltool.css', StaticFile)
+        self.assertEquals(css.content_type, 'text/css')
+        self.assertRaises(KeyError, view._traverse, 'nosuchpage', request)
 
 
 class TestPersonInfo(unittest.TestCase):

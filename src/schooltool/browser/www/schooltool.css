@@ -1,0 +1,45 @@
+/* Stylesheet for SchoolTool */
+
+h1 {
+  color: #44d344;
+}
+
+form {
+  padding: 1ex;
+  background: #ffffd3;
+  border: 1px solid #eeeeb2;
+  float: left;
+}
+
+label {
+  display: block;
+  width: 7em;
+  float: left;
+  font-weight: bold;
+  color: #444422;
+}
+
+div.error {
+  margin: 0ex 0ex 2ex 0ex;
+  font-weight: bold;
+  color: red;
+}
+div.row {
+  margin: 1ex 0ex;
+}
+
+div.buttons {
+  margin: 2ex 0ex 0ex 0ex;
+}
+
+input.button {
+  border: 1px solid #cccc88;
+  background: #ffffd3;
+  color: #888844;
+  font-weight: bold;
+  padding: 2px 4px;
+}
+
+input.button:hover {
+  background: #ddddc2;
+}

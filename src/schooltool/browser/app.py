@@ -22,7 +22,8 @@ Web-application views for the schooltool.app objects.
 $Id$
 """
 
-from schooltool.browser import View, Template, absoluteURL
+from schooltool.browser import View, Template, StaticFile
+from schooltool.browser import absoluteURL
 from schooltool.interfaces import IApplication, IPerson
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import AuthenticationError
@@ -30,28 +31,41 @@ from schooltool.interfaces import AuthenticationError
 __metaclass__ = type
 
 
-class LoginPage(View):
+class RootView(View):
+    """View for the web application root.
+
+    Presents a login page.  Redirects to a person's information page after
+    a successful login.
+    """
 
     __used_for__ = IApplication
 
     template = Template("www/login.pt")
 
-    def do_POST(self, request):
-        request.setHeader('Content-Type', 'text/html')
-        try:
-            user = request.site.authenticate(self.context,
-                                             request.args['username'][0],
-                                             request.args['password'][0])
+    error = False
+    username = ''
 
+    def do_POST(self, request):
+        username = request.args['username'][0]
+        password = request.args['password'][0]
+        try:
+            user = request.site.authenticate(self.context, username, password)
+        except AuthenticationError:
+            self.error = True
+            self.username = username
+            return self.do_GET(request)
+        else:
             url = absoluteURL(request, user)
             request.redirect(url)
+            request.setHeader('Content-Type', 'text/plain')
             return 'OK'
-        except AuthenticationError:
-            return 'Wrong'
 
     def _traverse(self, name, request):
         if name == 'persons':
             return PersonContainerView(self.context['persons'])
+        elif name == 'schooltool.css':
+            return StaticFile('www/schooltool.css', 'text/css')
+        raise KeyError(name)
 
 
 # XXX Will be moved to a separate module.

@@ -125,12 +125,14 @@ def absolutePath(request, obj, suffix=''):
     return '/' + '/'.join(filter(None, path))
 
 
-def read_file(fn):
+def read_file(fn, basedir=None):
     """Return the contents of the specified file.
 
-    Filename is relative to the directory this module is placed in.
+    Filename is relative to basedir.  If basedir is none, then filename is
+    relative to the directory this module is placed in.
     """
-    basedir = os.path.dirname(__file__)
+    if basedir is None:
+        basedir = os.path.dirname(__file__)
     f = file(os.path.join(basedir, fn))
     try:
         return f.read()
@@ -274,7 +276,10 @@ class View(Resource):
             else:
                 return NotFoundView()
         try:
-            return self._traverse(name, request)
+            child = self._traverse(name, request)
+            assert child is not None, ("%s._traverse returned None"
+                                       % self.__class__.__name__)
+            return child
         except KeyError:
             return NotFoundView()
 

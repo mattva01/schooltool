@@ -45,10 +45,29 @@ class TestView(unittest.TestCase):
         request = RequestStub(method='POST')
         self.assert_(view.authorization(context, request))
 
+    def test_getChild(self):
+        from schooltool.browser import View
+        context = None
+        view = View(context)
+        request = RequestStub('/path//with/multiple/slashes/')
+        self.assert_(view.getChild('', request) is view)
+
+
+class TestStaticFile(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser import StaticFile
+        view = StaticFile('tests/test_browser.py', 'text/plain')
+        request = RequestStub()
+        result = view.render(request)
+        self.assert_(result.startswith('#'))
+        self.assertEquals(request.headers['content-type'], 'text/plain')
+
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestView))
+    suite.addTest(unittest.makeSuite(TestStaticFile))
     return suite
 
 if __name__ == '__main__':

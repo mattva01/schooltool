@@ -1,20 +1,27 @@
 <html>
 <head>
 <title>Welcome to SchoolTool</title>
+<link rel="stylesheet" href="/schooltool.css" />
 </head>
 <body>
 <h1>Welcome to SchoolTool</h1>
 
 <form action="." method="POST" tal:attributes="action request/uri">
+  <div class="error" tal:condition="view/error">
+    Incorrect username or password.
+  </div>
   <div class="row">
     <label for="username">Username</label>
-    <input id="username" name="username" type="text" />
+    <input id="username" name="username" type="text"
+           tal:attributes="value view/username" />
   </div>
   <div class="row">
     <label for="password">Password</label>
     <input id="password" name="password" type="password" />
   </div>
-  <input type="submit" value="Submit" />
+  <div class="buttons">
+    <input class="button" type="submit" value="Submit" />
+  </div>
 </form>
 
 </body>
