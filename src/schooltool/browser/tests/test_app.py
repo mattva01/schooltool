@@ -34,6 +34,13 @@ from schooltool.tests.utils import AppSetupMixin
 __metaclass__ = type
 
 
+class GroupStub:
+
+    def __init__(self, title='Group X', __name__='grp_x'):
+        self.__name__ = __name__
+        self.title = title
+
+
 class PersonStub:
     __name__ = 'manager'
     title = 'The Mgmt'
@@ -548,12 +555,79 @@ class TestObjectAddView(unittest.TestCase):
         self.assert_('foofoobar' in content)
 
 
-class TestGroupAddView(unittest.TestCase):
+class TestGroupAddView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import GroupAddView
+        view = GroupAddView(self.app['groups'])
+        return view
 
     def test(self):
-        from schooltool.browser.app import GroupAddView
-        view = GroupAddView({})
+        view = self.createView()
         self.assertEquals(view.title, "Add group")
+
+    def test_GET(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'parentgroup': 'teachers'})
+        result = view.render(request)
+        self.assertEquals(view.title, "Add group (a subgroup of Teachers)")
+        assert ('<input type="hidden" name="parentgroup"'
+                      ' value="teachers"' in result), result
+
+    def test_POST_with_parentgroup(self):
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIMember
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              method='POST',
+                              args={'title': 'New Group', 'name': 'newgrp',
+                                    'parentgroup': 'teachers'})
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        newgrp = self.app["groups"]["newgrp"]
+        assert newgrp in getRelatedObjects(self.teachers, URIMember)
+
+    def test_extractParentFromRequest_no_parent_specified(self):
+        view = self.createView()
+        request = RequestStub()
+        view._extractParentFromRequest(request)
+        assert view.parent is None
+        self.assertEquals(view.title, "Add group")
+
+    def test_extractParentFromRequest_parent_specified(self):
+        view = self.createView()
+        request = RequestStub(args={'parentgroup': 'teachers'})
+        view._extractParentFromRequest(request)
+        assert view.parent is self.teachers
+        self.assertEquals(view.title, "Add group (a subgroup of Teachers)")
+
+    def test_extractParentFromRequest_parent_does_not_exist(self):
+        view = self.createView()
+        request = RequestStub(args={'parentgroup': 'no such group'})
+        view._extractParentFromRequest(request)
+        assert view.parent is None
+        self.assertEquals(view.title, "Add group")
+
+    def test_afterCreationHook_no_parent(self):
+        view = self.createView()
+        view.parent = None
+        view.request = RequestStub()
+        view._afterCreationHook(self.pupils)
+        self.assertEquals(view.request.applog, [])
+
+    def test_afterCreationHook_with_parent(self):
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIMember
+        view = self.createView()
+        view.parent = self.teachers
+        view.request = RequestStub()
+        view._afterCreationHook(self.pupils)
+        assert self.pupils in getRelatedObjects(self.teachers, URIMember)
+        self.assertEquals(view.request.applog,
+                [(None,
+                  "Relationship 'Membership' between "
+                  "/groups/pupils and /groups/teachers created", INFO)])
 
 
 class TestResourceAddView(unittest.TestCase):

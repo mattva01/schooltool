@@ -25,29 +25,30 @@ $Id$
 import datetime
 
 from schooltool.app import create_application
+from schooltool.browser import ToplevelBreadcrumbsMixin
 from schooltool.browser import View, Template, StaticFile
-from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
+from schooltool.browser import notFoundPage
 from schooltool.browser import session_time_limit
 from schooltool.browser import valid_name
-from schooltool.browser import ToplevelBreadcrumbsMixin
 from schooltool.browser.applog import ApplicationLogView
-from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess
-from schooltool.browser.model import PersonView, GroupView, ResourceView
+from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.csv import CSVImportView
+from schooltool.browser.model import PersonView, GroupView, ResourceView
+from schooltool.browser.timetable import NewTimePeriodView
+from schooltool.browser.timetable import TimePeriodServiceView
+from schooltool.browser.timetable import TimetableSchemaServiceView
+from schooltool.browser.timetable import TimetableSchemaWizard
+from schooltool.browser.widgets import TextWidget, dateParser, intParser
 from schooltool.common import to_unicode
 from schooltool.component import getPath
 from schooltool.component import getTicketService, traverse
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
-from schooltool.translation import ugettext as _
+from schooltool.membership import Membership
 from schooltool.rest.app import AvailabilityQueryView
-from schooltool.browser.timetable import TimetableSchemaWizard
-from schooltool.browser.timetable import TimetableSchemaServiceView
-from schooltool.browser.timetable import TimePeriodServiceView
-from schooltool.browser.timetable import NewTimePeriodView
-from schooltool.browser.widgets import TextWidget, dateParser, intParser
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -276,17 +277,57 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
+        self._afterCreationHook(obj)
+
         url = absoluteURL(request, obj)
         if self.redirect_to_edit:
             url += '/edit.html'
         return self.redirect(url, request)
+
+    def _afterCreationHook(self, obj):
+        """This method is called once when obj is created.
+
+        Subclasses can override it and do any custom steps necessary (e.g. add
+        obj to a parent group).
+        """
+        pass
 
 
 class GroupAddView(ObjectAddView):
     """View for adding groups (/groups/add.html)."""
 
     title = _("Add group")
-    redirect_to_edit = True
+    redirect_to_edit = False
+
+    template = Template('www/group_add.pt')
+
+    def _extractParentFromRequest(self, request):
+        self.parent = None
+        parent_id = request.args.get('parentgroup', [None])[0]
+        if parent_id:
+            try:
+                self.parent = self.context[parent_id]
+            except KeyError:
+                pass
+            else:
+                self.title = (_("Add group (a subgroup of %s)")
+                              % self.parent.title)
+
+    def do_GET(self, request):
+        self._extractParentFromRequest(request)
+        return ObjectAddView.do_GET(self, request)
+
+    def do_POST(self, request):
+        self._extractParentFromRequest(request)
+        return ObjectAddView.do_POST(self, request)
+
+    def _afterCreationHook(self, obj):
+        """Add object to self.parent group if it is not None."""
+        if self.parent is not None:
+            Membership(group=self.parent, member=obj)
+            self.request.appLog(
+                    _("Relationship 'Membership' between %s and %s created")
+                    % (getPath(obj), getPath(self.parent)))
 
 
 class ResourceAddView(ObjectAddView):
