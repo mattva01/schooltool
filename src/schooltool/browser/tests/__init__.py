@@ -74,3 +74,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         Membership(group=self.locations, member=self.location)
         Membership(group=self.locations, member=self.location2)
 
+    setUp = setUpSampleApp
+
+    # tearDown is inherited from the RegistriesSetupMixin.
+

@@ -1,0 +1,67 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Access control
+  </title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Access control
+  </h1>
+<metal:block metal:fill-slot="content">
+
+<div class="info" tal:define="status view/update"
+     tal:condition="status" tal:content="status" />
+
+<form method="POST" tal:attributes="action request/uri">
+  <p tal:condition="not:python:list(context)" i18n:translate="">
+    The ACL is empty
+  </p>
+  <table tal:condition="python:list(context)">
+    <tr>
+      <th>&nbsp;</th>
+      <th i18n:translate="">Principal</th>
+      <th i18n:translate="">Permission</th>
+    </tr>
+
+    <tr tal:repeat="item context">
+      <tal:block define="person python:item[0];
+                         permission python:item[1]">
+      <td><input
+              type="checkbox" name="CHECK"
+              tal:attributes="value string:${permission}:${person/@@path}">
+      </td>
+      <td><a tal:attributes="href person/@@absolute_url"
+             tal:content="person/title"/></td>
+      <td tal:content="permission" i18n:translate=""/>
+      </tal:block>
+    </tr>
+  </table>
+
+  <div class="buttons">
+    <input type="submit" class="button" name="DELETE"
+           value="Revoke permission"
+           tal:condition="python:list(context)"
+           i18n:attributes="value" />
+  </div>
+  <div class="buttons">
+    <select name="principal">
+      <option i18n:translate="" value="">Select principal</option>
+      <option tal:repeat="obj view/allPrincipals"
+              tal:attributes="value obj/@@path" tal:content="obj/title"/>
+    </select>
+    <select name="permission">
+      <option i18n:translate="" value="">Select permission</option>
+      <option tal:repeat="perm view/allPermissions"
+              tal:attributes="value perm/id" tal:content="perm/title"/>
+    </select>
+    <input type="submit" class="button" name="ADD"
+           value="Grant permission"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

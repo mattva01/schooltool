@@ -30,10 +30,12 @@ from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
 from schooltool.cal import Calendar, CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime, parse_date
-from schooltool.component import traverse, getPath, getRelatedObjects
+from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
-from schooltool.interfaces import IContainmentRoot
+from schooltool.interfaces import IContainmentRoot, IPerson, IGroup
 from schooltool.translation import ugettext as _
+from schooltool.interfaces import ViewPermission
+from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.uris import URIMember
 
 
@@ -553,6 +555,8 @@ class CalendarView(View):
             return EventEditView(self.context)
         elif name == 'delete_event.html':
             return EventDeleteView(self.context)
+        elif name == 'acl.html':
+            return ACLView(self.context.acl)
         raise KeyError(name)
 
     def render(self, request):
@@ -770,6 +774,8 @@ class ComboCalendarView(CalendarView):
             return EventEditView(self.context)
         elif name == 'delete_event.html':
             return EventDeleteView(self.context)
+        elif name == 'acl.html':
+            return ACLView(self.context.acl)
         raise KeyError(name)
 
 
@@ -813,3 +819,64 @@ class CalendarEventView(View):
 
     def uniqueId(self):
         return urllib.quote(self.context.unique_id)
+
+
+class ACLView(View):
+
+    authorization = PrivateAccess
+
+    template = Template("www/acl.pt")
+
+    def allPermissions(self):
+        return [{'id':ViewPermission, 'title':_('View')},
+                {'id':AddPermission, 'title':_('Add')},
+                {'id':ModifyPermission, 'title':_('Modify')}]
+
+    def allPrincipals(self):
+        """Return a list of objects available for addition"""
+        result = []
+
+        for path in ('/groups', '/persons'):
+            for obj in traverse(self.context, path).itervalues():
+                result.append((obj.__class__.__name__, obj.title, obj))
+        result.sort()
+        return [obj for cls, title, obj in result]
+
+    def update(self):
+        result = []
+        if 'DELETE' in self.request.args:
+            for checkbox in self.request.args.get('CHECK', []):
+                perm, path = checkbox.split(':', 1)
+                obj = traverse(self.context, path)
+                try:
+                    self.context.remove((obj, perm))
+                    self.request.appLog(
+                        _("Revoked permission %s on %s from %s (%s)") %
+                        (perm, getPath(self.context), getPath(obj), obj.title))
+                    result.append(_("Revoked permission %s from %s") %
+                                  (perm, obj.title))
+                except KeyError:
+                    pass
+            return "; ".join(result)
+
+        if 'ADD' in self.request.args:
+            # XXX: This begs to be rewritten with widgets.
+            if not self.request.args.get('principal', [''])[0]:
+                return _("Please select a principal")
+            if not self.request.args.get('permission', [''])[0]:
+                return _("Please select a permission")
+            try:
+                principal = traverse(self.context,
+                                     self.request.args['principal'][0])
+                if (not IPerson.providedBy(principal) and
+                    not IGroup.providedBy(principal)):
+                    raise TypeError("Groups or persons please!")
+                permission = self.request.args['permission'][0]
+            except (KeyError, IndexError, TypeError):
+                return _("Incorrect arguments.")
+            self.context.add((principal, permission))
+            self.request.appLog(
+                _("Granted permission %s on %s to %s (%s)") %
+                (permission, getPath(self.context),
+                 getPath(principal), principal.title))
+            return _("Permission added.")

@@ -732,7 +732,7 @@ class TestYearlyCalendarView(unittest.TestCase):
 class TestCalendarView(unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
-        from schooltool.cal import Calendar
+        from schooltool.cal import ACLCalendar
         from schooltool.browser.cal import CalendarView
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.browser.cal import WeeklyCalendarView
@@ -741,7 +741,8 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import EventAddView
         from schooltool.browser.cal import EventEditView
         from schooltool.browser.cal import EventDeleteView
-        context = Calendar()
+        from schooltool.browser.cal import ACLView
+        context = ACLCalendar()
         view = CalendarView(context)
         self.assertTraverses(view, 'daily.html', DailyCalendarView, context)
         self.assertTraverses(view, 'weekly.html', WeeklyCalendarView, context)
@@ -752,6 +753,8 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'edit_event.html', EventEditView, context)
         self.assertTraverses(view, 'delete_event.html', EventDeleteView,
                              context)
+        self.assertTraverses(view, 'acl.html', ACLView,
+                             context.acl)
 
     def test_render(self):
         from schooltool.browser.cal import CalendarView
@@ -1054,7 +1057,7 @@ class TestCalendarComboMixin(unittest.TestCase):
 class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
-        from schooltool.cal import Calendar
+        from schooltool.cal import ACLCalendar
         from schooltool.browser.cal import ComboCalendarView
         from schooltool.browser.cal import ComboDailyCalendarView
         from schooltool.browser.cal import ComboWeeklyCalendarView
@@ -1063,7 +1066,8 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import EventAddView
         from schooltool.browser.cal import EventEditView
         from schooltool.browser.cal import EventDeleteView
-        context = Calendar()
+        from schooltool.browser.cal import ACLView
+        context = ACLCalendar()
         view = ComboCalendarView(context)
         self.assertTraverses(view, 'daily.html', ComboDailyCalendarView,
                              context)
@@ -1076,6 +1080,7 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'edit_event.html', EventEditView, context)
         self.assertTraverses(view, 'delete_event.html', EventDeleteView,
                              context)
+        self.assertTraverses(view, 'acl.html', ACLView, context.acl)
 
 
 class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
@@ -1184,6 +1189,73 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(view.uniqueId(), 'Weird%40stuff%21')
 
 
+class TestACLView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.cal import ACLView
+        return ACLView(self.person.calendar.acl)
+
+    def test(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+
+    def test_update_delete(self):
+        from schooltool.interfaces import ViewPermission
+        view = self.createView()
+        view.context.add((self.person, ViewPermission))
+        assert view.context.allows(self.person, ViewPermission)
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'DELETE': 'revoke',
+                                         'CHECK': 'View:/persons/johndoe'})
+        result = view.update()
+        assert not view.context.allows(self.person, ViewPermission)
+        self.assertEquals(view.request.applog,
+                          [(self.person,
+                           'Revoked permission View on'
+                           ' /persons/johndoe/calendar/acl from'
+                           ' /persons/johndoe (John Doe)', INFO)])
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'DELETE': 'revoke'})
+        result = view.update()
+
+    def test_update_add(self):
+        from schooltool.interfaces import ViewPermission
+        view = self.createView()
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'ADD': 'add',
+                                         'principal': '/persons/johndoe',
+                                         'permission': 'View'})
+        result = view.update()
+        assert view.context.allows(self.person, ViewPermission), result
+        self.assertEquals(view.request.applog,
+                          [(self.person,
+                           'Granted permission View on'
+                           ' /persons/johndoe/calendar/acl to'
+                           ' /persons/johndoe (John Doe)', INFO)])
+
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'ADD': 'grant permission',
+                                         'principal': ''})
+        result = view.update()
+        self.assertEquals(result, "Please select a principal")
+        self.assertEquals(view.request.applog, [])
+
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'ADD': 'grant permission',
+                                         'principal':'foo', 'permission': ''})
+        result = view.update()
+        self.assertEquals(result, "Please select a permission")
+
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'ADD': 'grant permission',
+                                         'principal':'foo',
+                                         'permission': 'bar'})
+        result = view.update()
+        self.assertEquals(result, "Incorrect arguments.")
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
@@ -1202,6 +1274,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
+    suite.addTest(unittest.makeSuite(TestACLView))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 
