@@ -180,7 +180,12 @@ def isURI(uri):
 # Relationships
 #
 
-from schooltool.relationships import relate
+# relate3 is replaced by a stub when unit testing
+from schooltool.relationships import relate as relate3
+
+def relate(title, a, role_a, b, role_b):
+    """See IRelationshipAPI"""
+    return relate3(title, a, role_a, b, role_b)
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""

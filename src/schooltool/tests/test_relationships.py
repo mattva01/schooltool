@@ -33,6 +33,12 @@ class URITutor(ISpecificURI):
 class URIRegClass(ISpecificURI):
     """http://schooltool.org/ns/regclass"""
 
+class URISuperior(ISpecificURI):
+    """http://army.gov/ns/superior"""
+
+class URIReport(ISpecificURI):
+    """http://army.gov/ns/report"""
+
 class Relatable:
     implements(IRelatable)
     def __init__(self):
@@ -83,6 +89,26 @@ class TestRelationship(unittest.TestCase):
         self.assert_(self.lklass.traverse() is self.tutor)
         self.assert_(self.ltutor.__parent__ is self.tutor)
         self.assert_(self.lklass.__parent__ is self.klass)
+
+    def test_relate(self):
+        from schooltool.relationships import relate
+        officer = Relatable()
+        soldier = Relatable()
+
+        links = relate("Command",
+                       officer, URISuperior,
+                       soldier, URIReport)
+        self.assertEqual(len(links), 2)
+        linka, linkb = links
+        for a, b, role, alink in ((officer, soldier, URIReport, linka),
+                                  (soldier, officer, URISuperior, linkb)):
+            self.assertEqual(len(a.__links__), 1)
+            link = list(a.__links__)[0]
+            self.assert_(link is alink)
+            self.assert_(link.traverse() is b)
+            self.assert_(link.role is role)
+            self.assertEqual(link.title, "Command")
+
 
 
 def test_suite():

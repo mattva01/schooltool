@@ -259,26 +259,7 @@ class Relatable:
 class URISuperior(ISpecificURI): """http://army.gov/ns/superior"""
 class URIReport(ISpecificURI): """http://army.gov/ns/report"""
 
-class TestRelate(unittest.TestCase):
-
-    def test_relate(self):
-        from schooltool.component import relate
-        officer = Relatable()
-        soldier = Relatable()
-
-        links = relate("Command",
-                       officer, URISuperior,
-                       soldier, URIReport)
-        self.assertEqual(len(links), 2)
-        linka, linkb = links
-        for a, b, role, alink in ((officer, soldier, URIReport, linka),
-                                 (soldier, officer, URISuperior, linkb)):
-            self.assertEqual(len(a.__links__), 1)
-            link = list(a.__links__)[0]
-            self.assert_(link is alink)
-            self.assert_(link.traverse() is b)
-            self.assert_(link.role is role)
-            self.assertEqual(link.title, "Command")
+class TestRelationships(unittest.TestCase):
 
     def test_getRelatedObjects(self):
         from schooltool.component import getRelatedObjects, relate
@@ -291,6 +272,38 @@ class TestRelate(unittest.TestCase):
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
 
+    def test_relate(self):
+        from schooltool import component
+        real_relate3 = component.relate3
+        component.relate3 = stub = Stub_relate3()
+        try:
+            from schooltool.component import relate
+            title = 'a title'
+            a = object()
+            role_a = URISuperior
+            b = object()
+            role_b = URIReport
+            relate('a title', a, role_a, b, role_b)
+            self.assertEquals(stub.title, title)
+            self.assert_(stub.a is a)
+            self.assert_(stub.role_a is role_a)
+            self.assert_(stub.b is b)
+            self.assert_(stub.role_b is role_b)
+        finally:
+            component.relate3 = real_relate3
+
+class Stub_relate3:
+    title = None
+    a = None
+    role_a = None
+    b = None
+    role_b = None
+    def __call__(self, title, a, role_a, b, role_b):
+        self.title = title
+        self.a = a
+        self.role_a = role_a
+        self.b = b
+        self.role_b = role_b
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -299,7 +312,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
-    suite.addTest(unittest.makeSuite(TestRelate))
+    suite.addTest(unittest.makeSuite(TestRelationships))
     return suite
 
 if __name__ == '__main__':
