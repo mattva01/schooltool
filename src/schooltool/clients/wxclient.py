@@ -1793,7 +1793,7 @@ class AppLogFrame(wxDialog):
 
     def OnFilter(self, event=None):
         """Set the new filter string and show results."""
-        self.filter_str = self.filter_ctrl.GetValue()
+        self.filter_str = from_wx(self.filter_ctrl.GetValue())
         self.page = -1
         self.refresh()
 
