@@ -43,10 +43,10 @@ class IContainmentAPI(Interface):
     def getRoot(obj):
         """Return the containment root for obj.
 
-        The object must implement ILocation or IContainmentRoot and must be
-        attached to the hierarchy (i.e. following parent references should not
-        reach None).  If either of those conditions is not met, raises a
-        TypeError.
+        The object must implement ILocation or IContainmentRoot or
+        IMultiContained and must be attached to the hierarchy
+        (i.e. following parent references should not reach None).  If
+        either of those conditions is not met, raises a TypeError.
         """
 
     def traverse(obj, path):
@@ -100,6 +100,26 @@ class ITraversable(Interface):
         Traversables do not have to handle special names '.' or '..'.
         """
 
+class IMultiContainer(Interface):
+    """A container that chooses names for its children.
+
+    The use of this is to make an object be able to tell the correct
+    way to traverse to its relationships or facets.
+    """
+
+    def getRelativePath(child):
+        """Returns the path of child relative to self."""
+
+class IMultiContained(Interface):
+    """Objects which rely on IMultiContainer parents to know their
+    path.
+    """
+
+    __parent__ = Attribute(
+        """The parent of an object.
+
+        Must implement IMultiContainer.
+        """)
 #
 # Services
 #

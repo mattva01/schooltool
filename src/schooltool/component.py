@@ -29,6 +29,7 @@ from zope.interface.type import TypeRegistry
 from persistence.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
+from schooltool.interfaces import IMultiContainer, IMultiContained
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IFacetManager
 from schooltool.interfaces import IServiceAPI, IServiceManager
@@ -61,6 +62,13 @@ def getPath(obj):
         elif ILocation.isImplementedBy(cur):
             segments.append(cur.__name__)
             cur = cur.__parent__
+        elif IMultiContained.isImplementedBy(cur):
+            parent = cur.__parent__
+            if IMultiContainer.isImplementedBy(parent):
+                segments.append(parent.getRelativePath(cur))
+                cur = parent
+            else:
+                raise TypeError("Cannot determine path for %s" % obj)
         else:
             raise TypeError("Cannot determine path for %s" % obj)
 

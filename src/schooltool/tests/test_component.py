@@ -32,6 +32,7 @@ from schooltool.interfaces import IUtility, IUtilityService
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
 from schooltool.interfaces import ITraversable
+from schooltool.interfaces import IMultiContainer, IMultiContained
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.interfaces import IViewAPI
 from schooltool.interfaces import ComponentLookupError
@@ -69,6 +70,19 @@ class LocationStub:
     def __repr__(self):
         return "LocationStub(%r, %r)" % (self.__parent__, self.__name__)
 
+class MulticontainerStub(LocationStub):
+    implements(IMultiContainer)
+
+    def getRelativePath(self, obj):
+        return 'magic/' + obj.__name__
+
+class MulticontainedStub:
+    implements(IMultiContained)
+
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+
 class TraversableStub:
     implements(ITraversable)
 
@@ -90,7 +104,9 @@ class TestCanonicalPath(unittest.TestCase):
         directlyProvides(a, IContainmentRoot)
         b = LocationStub(a, 'foo')
         c = LocationStub(b, 'bar')
-        return a, b, c
+        d = MulticontainerStub(b, 'baz')
+        e = MulticontainedStub(d, 'quux')
+        return a, b, c, d, e
 
     def test_getPath(self):
         from schooltool.component import getPath
@@ -98,11 +114,16 @@ class TestCanonicalPath(unittest.TestCase):
         x = LocationStub(None, 'root')
         self.assertRaises(TypeError, getPath, x)
         self.assertRaises(TypeError, getPath, object())
+        self.assertRaises(TypeError, getPath, MulticontainedStub(None, 'n'))
+        self.assertRaises(TypeError, getPath,
+                          MulticontainedStub(LocationStub(None, 'a'), 'n'))
 
-        a, b, c = self.buildTree()
+        a, b, c, d, e = self.buildTree()
         self.assertEqual(getPath(a), '/')
         self.assertEqual(getPath(b), '/foo')
         self.assertEqual(getPath(c), '/foo/bar')
+        self.assertEqual(getPath(d), '/foo/baz')
+        self.assertEqual(getPath(e), '/foo/baz/magic/quux')
 
     def test_getRoot(self):
         from schooltool.component import getRoot
@@ -111,7 +132,7 @@ class TestCanonicalPath(unittest.TestCase):
         self.assertRaises(TypeError, getRoot, x)
         self.assertRaises(TypeError, getRoot, object())
 
-        a, b, c = self.buildTree()
+        a, b, c, d, e = self.buildTree()
         self.assertEqual(getRoot(a), a)
         self.assertEqual(getRoot(b), a)
         self.assertEqual(getRoot(c), a)
@@ -122,7 +143,7 @@ class TestCanonicalPath(unittest.TestCase):
         x = LocationStub(None, 'root')
         y = object()
 
-        a, b, c = self.buildTree()
+        a, b, c, d, e = self.buildTree()
         for path in ('', '.', './', './.', './/'):
             self.assertEqual(traverse(x, path), x)
             self.assertEqual(traverse(y, path), y)
