@@ -303,6 +303,7 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             ok = importer.importTimetable(timetable_csv)
             if ok:
                 self.success.append(_("timetable.csv imported successfully."))
+                request.appLog(_("School timetable imported"))
             else:
                 self.errors.append(_("Failed to import timetable.csv"))
                 self._presentErrors(importer.errors)
@@ -310,11 +311,11 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             ok = importer.importRoster(roster_txt)
             if ok:
                 self.success.append(_("roster.txt imported successfully."))
+                request.appLog(_("School timetable roster imported"))
             else:
                 self.errors.append(("Failed to import roster.txt"))
                 self._presentErrors(importer.errors)
 
-        # TODO: log import
         return self.do_GET(request)
 
     def _presentErrors(self, err):

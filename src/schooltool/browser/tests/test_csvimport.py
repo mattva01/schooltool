@@ -385,11 +385,15 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(authenticated_user=self.manager,
                               method='POST',
                               args={'timetable.csv': '"fall","three-day"',
-                                    'roster.txt': '',
+                                    'roster.txt': 'Locations\nJohn Doe',
                                     'charset': 'UTF-8'})
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
         self.assert_('timetable.csv imported successfully' in result, result)
+
+        self.assertEquals(request.applog,
+                  [(self.manager, u'School timetable imported', INFO),
+                   (self.manager, u'School timetable roster imported', INFO)])
 
     def test_POST_empty(self):
         view = self.createView()
@@ -419,7 +423,8 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
                       'roster.txt': '', 'charset': 'UTF-8'})
         result = view.do_POST(view.request)
         self.assert_('timetable.csv imported successfully' in result, result)
-        self.assertEquals(view.request.applog, [])
+        self.assertEquals(view.request.applog,
+                          [(None, u'School timetable imported', INFO)])
 
 
 class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
