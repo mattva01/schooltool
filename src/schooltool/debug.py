@@ -22,8 +22,9 @@ Utilities for debugging SchoolTool
 
 import logging
 import datetime
+import time
 from persistence import Persistent
-from persistence.list import PersistentList
+from zodb.btrees.OOBTree import OOBTree
 from zope.interface import implements, moduleProvides, Attribute
 from schooltool.interfaces import IEventTarget, ILocation, IUtility
 from schooltool.interfaces import IEventConfigurable, IFacet
@@ -39,12 +40,11 @@ __metaclass__ = type
 class IEventLog(IEventTarget):
     """Event log that stores all received events persistently."""
 
-    received = Attribute(
-        """List of received events and their timestamps.
+    def getReceived():
+        """Returns events received as a sequence of (timestamp, received event)
 
-        Every item in the list is a tuple (timestamp, event), where timestamp
-        is a datetime.datetime instance (in UTC).
-        """)
+        Timestamps are datetime.datetime instances in UTC.
+        """
 
     def clear():
         """Clear the list of received events."""
@@ -66,13 +66,21 @@ class EventLog(Persistent):
     datetime_hook = datetime.datetime
 
     def __init__(self):
-        self.received = PersistentList()
+        self._received = OOBTree()
 
     def notify(self, event):
-        self.received.append((self.datetime_hook.utcnow(), event))
+        rest = 0.001
+        while not self._received.insert(self.datetime_hook.utcnow(), event):
+            time.sleep(rest)
+            rest *= 2
+            if rest > 1:
+                raise RuntimeError("Cannot insert event. Time has stopped.")
 
     def clear(self):
-        del self.received[:]
+        self._received.clear()
+
+    def getReceived(self):
+        return self._received.items()
 
 
 class EventLogUtility(EventLog):

@@ -899,6 +899,8 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
 
         class EventLogStub:
             received = []
+            def getReceived(self):
+                return self.received
 
         context = EventLogStub()
         view = EventLogView(context)
@@ -916,6 +918,8 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
 
         class EventLogStub:
             received = []
+            def getReceived(self):
+                return self.received
 
         class EventStub:
             def __str__(self):
@@ -944,6 +948,8 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
             received = []
             def clear(self):
                 self.received = []
+            def getReceived(self):
+                return self.received
 
         class EventStub:
             pass

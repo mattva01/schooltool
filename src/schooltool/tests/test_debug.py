@@ -49,10 +49,11 @@ class TestEventLog(unittest.TestCase):
         event1, event2 = object(), object()
         event_log.notify(event1)
         event_log.notify(event2)
-        self.assertEquals(event_log.received, [(100, event1), (110, event2)])
+        self.assertEquals(list(event_log.getReceived()),
+                          [(100, event1), (110, event2)])
 
         event_log.clear()
-        self.assertEquals(event_log.received, [])
+        self.assertEquals(list(event_log.getReceived()), [])
 
 
 class TestEventLogUtility(unittest.TestCase):

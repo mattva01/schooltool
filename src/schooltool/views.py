@@ -457,7 +457,7 @@ class EventLogView(View):
 
     def items(self):
         return [{'timestamp': ts.isoformat(' '), 'event': event}
-                for ts, event in self.context.received]
+                for ts, event in self.context.getReceived()]
 
     def do_PUT(self, request):
         # XXX RFC 2616, section 9.6:
@@ -467,7 +467,7 @@ class EventLogView(View):
         if request.content.read(1):
             return errorPage(request, 400, "Only PUT with an empty body"
                                            " is defined for event logs")
-        n = len(self.context.received)
+        n = len(self.context.getReceived())
         self.context.clear()
         request.setHeader('Content-Type', 'text/plain')
         if n == 1:
