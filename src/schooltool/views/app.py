@@ -149,12 +149,12 @@ class AvailabilityQueryView(View):
 
         Optional arguments (if not passed, 'all' assumed):
 
-            ========= ==========  ===========
-            Name      Type        Cardinality
-            ========= ==========  ===========
-            hours     int (0..23) many
-            resources str         many
-            ========= ==========  ===========
+            ========= ===========  ===========
+            Name      Type         Cardinality
+            ========= ===========  ===========
+            hours     int (0..23)  many
+            resources str          many
+            ========= ===========  ===========
 
         """
         for arg in 'first', 'last', 'duration':
@@ -171,24 +171,27 @@ class AvailabilityQueryView(View):
             self.duration = datetime.timedelta(minutes=minutes)
             arg = 'hours'
             if 'hours' not in request.args:
-                request.args['hours'] = range(24)
-            self.hours = self.parseHours(request.args['hours'])
+                self.hours = range(24)
+            else:
+                self.hours = self.parseHours(request.args['hours'])
         except ValueError:
             return textErrorPage(request,
                                  "%r argument is invalid" % arg)
         self.resources = []
         if 'resources' not in request.args:
             resource_container = traverse(self.context, 'resources')
-            request.args['resources'] = [getPath(obj) for obj in
-                                         resource_container.itervalues()]
-        for path in request.args['resources']:
-            try:
-                resource = traverse(self.context, path)
-            except KeyError:
-                return textErrorPage(request, "Invalid resource: %r" % path)
-            if not IResource.isImplementedBy(resource):
-                return textErrorPage(request, "%r is not a resource" % path)
-            self.resources.append(resource)
+            self.resources.extend(resource_container.itervalues())
+        else:
+            for path in request.args['resources']:
+                try:
+                    resource = traverse(self.context, path)
+                except KeyError:
+                    return textErrorPage(request,
+                                         "Invalid resource: %r" % path)
+                if not IResource.isImplementedBy(resource):
+                    return textErrorPage(request,
+                                         "%r is not a resource" % path)
+                self.resources.append(resource)
         return View.do_GET(self, request)
 
     def parseHours(self, hours):
