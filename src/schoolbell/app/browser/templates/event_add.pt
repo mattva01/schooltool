@@ -32,6 +32,23 @@
             monthly_box.style.display = 'none';
         }
     }
+    function allday_changed() {
+        /// FIXME: No effect in IE
+        form = document.getElementById('form');
+        var allday = document.getElementById('field.allday');
+        var start_time = document.getElementById('field.start_time');
+        var duration = document.getElementById('field.duration');
+        var duration_type = document.getElementById('field.duration_type');
+        if (allday.checked == true) {
+            start_time.disabled = true;
+            duration.disabled = true;
+            duration_type.disabled = true;
+        } else {
+            start_time.disabled = false;
+            duration.disabled = false;
+            duration_type.disabled = false;
+        }
+    }
     function range_changed() {
         var range_c = document.getElementById('field.range_c');
         var range_u = document.getElementById('field.range_u');
@@ -67,6 +84,10 @@
         var monthly_par = document.getElementById('monthly_par');
         monthly_par.style.display = 'none';
         weekly_par.style.display = 'none';
+
+        allday_changed();
+        var allday = document.getElementById('field.allday');
+        addEvent(allday, "click", allday_changed);
     }
     function addEvent(obj, event, handler) {
       if (obj.addEventListener) {
@@ -96,6 +117,9 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/start_date_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/allday_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/start_time_widget">

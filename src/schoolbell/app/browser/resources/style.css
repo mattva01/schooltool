@@ -626,6 +626,45 @@ h2.calendar-view-title {
     padding-top: 2px;
 }
 
+#events-allday {
+  margin-bottom: 1ex;
+}
+
+#events-allday .event-allday {
+  position: relative;
+  margin-top: 1px;
+}
+
+#events-allday .event-allday h6 {
+  margin: 0;
+  font-size: small;
+  text-align: center;
+}
+#events-allday .event-allday h6 a {
+    text-decoration: none;
+    display: block;
+}
+
+#events-allday .event-allday a.delete {
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+#events-allday .event-allday p {
+  font-size: smaller;
+  margin: 0 1em;
+  text-align: center;
+}
+
+
+
 #calendar-view-day .hour {
     border-top: 1px #bab5ab solid;
     width: 100%;

@@ -270,6 +270,36 @@ And lets make sure that time is listed as BUSY
     END:VCALENDAR
     <BLANKLINE>
 
+Now let's add an allday event 29th March, 2005:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=A Birthday&field.start_date=2005-03-29&field.allday=on&\
+    ... field.recurrence.used=&field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-03-29
+    ...
+
+The event should be visible in the daily calendar view but separate from normal
+events
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-03-29 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...A Birthday...
+    ...
+    ...calendar-view-day...
+    ...
+
 Editing events
 --------------
 

@@ -503,7 +503,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       schema=".cal.ICalendarEventAddForm"
       arguments=""
-      keyword_arguments="title start_date start_time duration
+      keyword_arguments="title allday start_date start_time duration
                          duration_type recurrence location description
                          recurrence_type interval range until count monthly
                          exceptions weekdays"
@@ -521,7 +521,7 @@
       name="edit.html"
       label="Edit Event"
       schema=".cal.ICalendarEventEditForm"
-      fields="title start_date start_time duration duration_type
+      fields="title allday start_date start_time duration duration_type
               recurrence location description recurrence_type interval
               range until count monthly exceptions weekdays"
       class=".cal.CalendarEventEditView"

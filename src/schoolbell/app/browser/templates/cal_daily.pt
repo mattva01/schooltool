@@ -1,6 +1,28 @@
 <tal:defs define="status view/update" />
 <html metal:use-macro="view/@@standard_macros/calendar-page" i18n:domain="schooltool">
 <metal:block fill-slot="calendar-body">
+
+<div id="events-allday">
+  <tal:loop repeat="allday view/getAllDayEvents">
+    <div class="event-allday"
+      tal:define="evdate python:allday.dtstart.strftime('%Y-%m-%d')"
+      tal:attributes="style string:border: 1px ${allday/color2} solid;;
+                      background: ${allday/color1};;">
+      <h6>
+        <a tal:attributes="href string:${allday/@@absolute_url}/edit.html?date=${evdate};
+          title allday/description" tal:content="allday/title"/>
+      </h6>
+          <a title="Delete this event" i18n:attributes="title" class="delete"
+            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${allday/unique_id}&date=${evdate}"
+            ><img alt="[X]"
+              tal:attributes="src context/++resource++delete.png"/></a>
+      <tal:if condition="allday/description">
+        <p tal:content="allday/description"></p>
+      </tal:if>
+    </div>
+  </tal:loop>
+</div>
+
 <div id="calendar-view-day"
      tal:define="height python:4;
                  hours python:list(view.getHours());
@@ -28,8 +50,8 @@
                repeat="ev hour/cols">
       <tal:if condition="ev">
         <div class="event"
-             onmouseover="this.style.zIndex=9; this.style.overflow='visible';"
-             onmouseout="this.style.zIndex=1; this.style.overflow='hidden';"
+             onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='table-cell';"
+             onmouseout="this.style.zIndex=1; this.style.overflow='hidden'; this.style.display='block';"
              tal:define="num repeat/ev/index;
                          compress python:view.getColumns() > 2;
                          unit python:compress and '%' or 'em';

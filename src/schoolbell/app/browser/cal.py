@@ -514,13 +514,30 @@ class CalendarViewBase(BrowserView):
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
                 if (removeSecurityProxy(event.__parent__) is removeSecurityProxy(self.context) and
-                    calendar is not self.context):
+                    calendar is not self.context) or event.allday:
                     # Skip resource booking events (coming from
                     # overlayed calendars) if they were booked by The
                     # person whose calendar we are viewing.
                     # removeSecurityProxy(event.__parent__) and
                     # removeSecurityProxy(self.context), needed so we
                     # could compare them.
+                    continue
+                yield EventForDisplay(event, color1, color2, calendar)
+
+    def getAllDayEvents(self):
+        """Get a list of EventForDisplay objects for the all-day events at the
+        cursors current position.
+
+        XXX This feels hackneyd, especialy the manual setting of the time span
+        to be passed to calendar.expand.  Suggestions welcome.
+        """
+        d = self.cursor
+        start = datetime(d.year, d.month, d.day)
+        end = datetime(d.year, d.month, d.day, 23, 59)
+        for calendar, color1, color2 in self.getCalendars():
+            for event in calendar.expand(start, end):
+                if event.__parent__ is self.context and calendar is not \
+                        self.context or not event.allday:
                     continue
                 yield EventForDisplay(event, color1, color2, calendar)
 
@@ -1111,6 +1128,9 @@ class ICalendarEventAddForm(Interface):
     title = TextLine(
         title=_("Title"),
         required=False)
+    allday = Bool(
+        title=_("All day"),
+        required=False)
     start_date = Date(
         title=_("Date"),
         required=False)
@@ -1342,8 +1362,12 @@ class CalendarEventViewMixin(object):
         errors = []
         self._requireField("title", errors)
         self._requireField("start_date", errors)
-        self._requireField("start_time", errors)
-        self._requireField("duration", errors)
+
+        # What we require depends on weather or not we have an allday event
+        allday = kwargs.pop('allday', None)
+        if not allday:
+            self._requireField("start_time", errors)
+            self._requireField("duration", errors)
 
         # Remove fields not needed for makeRecurrenceRule from kwargs
         title = kwargs.pop('title', None)
@@ -1361,6 +1385,15 @@ class CalendarEventViewMixin(object):
         location = kwargs.pop('location', None)
         description = kwargs.pop('description', None)
         recurrence = kwargs.pop('recurrence', None)
+
+        # Some fake data for allday events.
+        # XXX We need to do something special with allday events when TZ
+        # support comes in (we can't have the date changing because of a tz
+        # adjustment)
+        if allday:
+            duration = 1
+            duration_type = "minutes"
+            start_time = time(0, 0)
 
         if recurrence:
             self._requireField("interval", errors)
@@ -1399,6 +1432,7 @@ class CalendarEventViewMixin(object):
             'location': location,
             'description': description,
             'title': title,
+            'allday': allday,
             'start': start,
             'duration': duration,
             'rrule': rrule,
@@ -1431,6 +1465,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         event = self._factory(data['start'], data['duration'], data['title'],
                               recurrence=data['rrule'],
                               location=data['location'],
+                              allday=data['allday'],
                               description=data['description'])
         return event
 
@@ -1512,6 +1547,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         initial = {}
         initial["title"] = context.title
+        initial["allday"] = context.allday
         initial["start_date"] = context.dtstart.date()
         initial["start_time"] = context.dtstart.strftime("%H:%M")
         initial["duration"] = context.duration.seconds / 60
@@ -1566,6 +1602,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         widget_data = self.processRequest(kw)
 
+        self.context.allday = widget_data['allday']
         if self.context.dtstart != parse_datetimetz(widget_data['start'].isoformat()):
             self._redirectToDate = widget_data['start'].strftime("%Y-%m-%d")
         self.context.dtstart = parse_datetimetz(widget_data['start'].isoformat())

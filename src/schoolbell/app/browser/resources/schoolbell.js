@@ -43,3 +43,39 @@ function jumpTo(box) {
 	destination = box.form.jump.options[box.form.jump.selectedIndex].value;
 	if (destination) location.href = destination;
 }
+
+
+// Tooltips for various calendar views
+
+var x = 0;
+var y = 0;
+var tipon = false;
+var tip = null;
+
+function onBodyLoad() {
+    document.captureEvents(Event.MOUSEMOVE);
+    document.onmousemove = followMouse;
+}
+
+function followMouse(e) {
+    x = e.pageX;
+    y = e.pageY;
+    if(tip){
+        tip.style.top = (y + 10) + 'px';
+        tip.style.left = (x + 10) + 'px';
+    }
+    return true;
+}
+
+function showToolTip(elem, id) {
+    elem.style.borderColor = 'black';
+    tip = document.getElementById(id);
+    tip.style.visibility = 'visible';
+    tip.style.position = 'absolute';
+    tip.style.display = 'block';
+}
+
+function hideToolTip(elem) {
+    tip.style.visibility = 'hidden';
+    tip = null;
+}
