@@ -421,9 +421,9 @@ class RecurrenceRule:
         return self.__class__(interval, count, until, exceptions)
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %r,)' % (self.__class__.__name__, self.interval,
-                                        self.count, self.until,
-                                        self.exceptions)
+        return '%s(%r, %r, %r, %r)' % (self.__class__.__name__, self.interval,
+                                       self.count, self.until,
+                                       self.exceptions)
 
     def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
@@ -617,6 +617,11 @@ class MonthlyRecurrenceRule(RecurrenceRule):
         self.exceptions = exceptions
         self.monthly = monthly
         self._validate()
+
+    def __repr__(self):
+        return '%s(%r, %r, %r, %r, %r)' % (
+            self.__class__.__name__, self.interval,
+            self.count, self.until, self.exceptions, self.monthly)
 
     def _validate(self):
         RecurrenceRule._validate(self)
