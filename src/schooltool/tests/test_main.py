@@ -799,6 +799,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.reactor_hook = reactor = ReactorStub()
         server.notifyConfigFile = lambda x: None
         server.notifyServerStarted = lambda x, y: None
+        server.notifyShutdown = lambda: None
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
 
