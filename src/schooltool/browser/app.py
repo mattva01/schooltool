@@ -44,6 +44,7 @@ from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import NewTimePeriodView
+from schooltool.common import to_unicode
 
 __metaclass__ = type
 
@@ -51,8 +52,8 @@ __metaclass__ = type
 class RootView(View):
     """View for the web application root.
 
-    Presents a login page.  Redirects to a person's information page after
-    a successful login.
+    Presents a login page.  Redirects to the start page after a successful
+    login.
 
     Sublocations found at / are
 
@@ -246,7 +247,7 @@ class ObjectAddView(View):
                 return self.do_GET(request)
             self.prev_name = name
 
-        title = unicode(request.args['title'][0], 'utf-8')
+        title = to_unicode(request.args['title'][0])
         self.prev_title = title
 
         try:
@@ -265,11 +266,14 @@ class ObjectAddView(View):
 
 
 class GroupAddView(ObjectAddView):
+    """View for adding groups (/groups/add.html)."""
 
     title = _("Add group")
+    redirect_to_edit = True
 
 
 class ResourceAddView(ObjectAddView):
+    """View for adding resources (/resources/add.html)."""
 
     title = _("Add resource")
     redirect_to_edit = False
@@ -283,6 +287,8 @@ class ObjectContainerView(View):
     Traversing 'add.html' returns an instance of add_view on the container,
     traversing with an object's id returns an instance of obj_view on
     the object.
+
+    XXX this implies that an object the id 'add.html' is inaccessible.
     """
 
     __used_for__ = IApplicationObjectContainer
@@ -303,26 +309,33 @@ class ObjectContainerView(View):
 
 
 class PersonContainerView(ObjectContainerView):
+    """View for traversing to persons (/persons)."""
 
     add_view = PersonAddView
     obj_view = PersonView
 
 
 class GroupContainerView(ObjectContainerView):
+    """View for traversing to groups (/groups)."""
 
     add_view = GroupAddView
     obj_view = GroupView
 
 
 class ResourceContainerView(ObjectContainerView):
+    """View for traversing to resources (/resources)."""
 
     add_view = ResourceAddView
     obj_view = ResourceView
 
 
 class BusySearchView(View, AvailabilityQueryView):
+    """View for resource search (/busysearch)."""
+
+    __used_for__ = IApplication
 
     authorization = AuthenticatedAccess
+
     template = Template("www/busysearch.pt")
 
     defaultDur = 30

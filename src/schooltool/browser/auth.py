@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool web application authentication mechanism and authorization policies.
-
-Authentication is cookie-based.
+SchoolTool web application authorization policies.
 
 View authorization policy is a callable that takes a context and a request and
 returns True iff access is granted.

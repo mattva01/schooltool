@@ -48,6 +48,7 @@ class ApplicationLogView(View):
             self.error = _("Application log not configured")
             return View.do_GET(self, request)
 
+        # XXX use widgets
         if 'filter' in request.args:
             self.filter_str = to_unicode(request.args['filter'][0])
         else:
@@ -83,4 +84,6 @@ class ApplicationLogView(View):
         return url
 
     def openLog(self, filename):
+        """Open the log file (a hook for unit tests)."""
         return open(filename)
+

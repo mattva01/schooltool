@@ -74,6 +74,8 @@ class BrowserRequest(Request):
                 # allowed to view the page, the normal authorization mechanism
                 # will redirect him to a login page and say that her session
                 # has expired.
+                #
+                # It would be nice to ask the browser to purge the cookie here.
                 pass
 
     # We do not need to override renderAuthError here since maybeAuthenticate
