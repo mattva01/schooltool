@@ -24,6 +24,7 @@ $Id$
 
 import re
 import datetime
+import calendar
 import email.Utils
 from sets import Set
 from zope.interface import implements
@@ -1132,9 +1133,9 @@ class RecurrenceRule:
         """
         return hash(self._tupleForComparison())
 
-    def apply(self, ev, enddate=None):
+    def apply(self, event, enddate=None):
         """Generator that generates dates of recurrences"""
-        cur = ev.dtstart.date()
+        cur = event.dtstart.date()
         count = 0
         while True:
             if ((enddate and cur > enddate) or
@@ -1210,12 +1211,12 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.weekdays)
 
-    def apply(self, ev, enddate=None):
+    def apply(self, event, enddate=None):
         """Generator that generates dates of recurrences"""
-        cur = start = ev.dtstart.date()
+        cur = start = event.dtstart.date()
         count = 0
         weekdays = list(self.weekdays)
-        weekdays.append(ev.dtstart.weekday())
+        weekdays.append(event.dtstart.weekday())
         weekdays.sort()
         while True:
             if ((enddate and cur > enddate) or
@@ -1244,7 +1245,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     implements(IMonthlyRecurrenceRule)
 
     def __init__(self, interval=1, count=None, until=None, exceptions=(),
-                 monthly=None):
+                 monthly="monthday"):
         self.interval = interval
         self.count = count
         self.until = until
@@ -1254,8 +1255,8 @@ class MonthlyRecurrenceRule(RecurrenceRule):
 
     def _validate(self):
         RecurrenceRule._validate(self)
-        if self.monthly not in (None, "monthday", "weekday", "lastweekday"):
-                raise ValueError("monthly must be one of None, 'monthday',"
+        if self.monthly not in ("monthday", "weekday", "lastweekday"):
+                raise ValueError("monthly must be one of 'monthday',"
                                  " 'weekday', 'lastweekday'. Got %r"
                                  % (self.monthly, ))
 
@@ -1277,6 +1278,70 @@ class MonthlyRecurrenceRule(RecurrenceRule):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.monthly)
 
+    def _nextRecurrence(self, date):
+        """Adds the basic step of recurrence to the date"""
+        year, month = divmod(date.year * 12 + date.month + self.interval - 1,
+                             12)
+        month += 1
+        return date.replace(year=year, month=month)
+
+    def apply(self, event, enddate=None):
+        if self.monthly == 'monthday':
+            for date in  RecurrenceRule.apply(self, event, enddate):
+                yield date
+        elif self.monthly == 'weekday':
+            for date in self._applyWeekday(event, enddate):
+                yield date
+        elif self.monthly == 'lastweekday':
+            for date in self._applyLastWeekday(event, enddate):
+                yield date
+
+    def _applyWeekday(self, event, enddate=None):
+        """Generator that generates dates of recurrences"""
+        cur = start = event.dtstart.date()
+        count = 0
+        year = start.year
+        month = start.month
+        weekday = start.weekday()
+        index = start.day / 7 + 1
+
+        while True:
+            cur = monthindex(year, month, index, weekday)
+            if ((enddate and cur > enddate) or
+                (self.count is not None and count >= self.count) or
+                (self.until and cur > self.until)):
+                break
+            if cur not in self.exceptions:
+                yield cur
+            count += 1
+            # Next month, please.
+            year, month = divmod(year * 12 + month + self.interval - 1, 12)
+            month += 1
+
+    def _applyLastWeekday(self, event, enddate=None):
+        """Generator that generates dates of recurrences"""
+        cur = start = event.dtstart.date()
+        count = 0
+        year = start.year
+        month = start.month
+        weekday = start.weekday()
+        daysinmonth = calendar.monthrange(year, month)[1]
+        index = (start.day - daysinmonth - 1) / 7
+
+        while True:
+            cur = monthindex(year, month, index, weekday)
+            if ((enddate and cur > enddate) or
+                (self.count is not None and count >= self.count) or
+                (self.until and cur > self.until)):
+                break
+            if cur not in self.exceptions:
+                yield cur
+            count += 1
+            # Next month, please.
+            year, month = divmod(year * 12 + month + self.interval - 1, 12)
+            month += 1
+
+
 def weekspan(first, second):
     """Returns the distance in weeks between dates.
 
@@ -1286,3 +1351,28 @@ def weekspan(first, second):
     firstmonday = first - datetime.timedelta(first.weekday())
     secondmonday = second - datetime.timedelta(second.weekday())
     return (secondmonday - firstmonday).days / 7
+
+def monthindex(year, month, index, weekday):
+    """Returns the index-th weekday of the month in a year.
+
+    May return a date beyond month if index is too big.
+    """
+    # make corrections for the negative index
+    # if index is negative, we're really interested in the next month's
+    # first weekday, minus n weeks
+    if index < 0:
+        yeardelta, month = divmod(month, 12)
+        year += yeardelta
+        month += 1
+        index += 1
+
+    # find first weekday
+    for day in range(1, 8):
+        if datetime.date(year, month, day).weekday() == weekday:
+            break
+
+    # calculate the timedelta to the index-th
+    shift = (index - 1) * datetime.timedelta(7)
+
+    # return the result
+    return datetime.date(year, month, day) + shift

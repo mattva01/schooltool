@@ -1482,7 +1482,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
     def test_monthly_validation(self):
         self.assertRaises(ValueError, self.createRule, monthly="whenever")
         self.assertRaises(ValueError, self.createRule, monthly=date.today())
-        self.createRule(monthly=None)
+        self.assertRaises(ValueError, self.createRule, monthly=None)
         self.createRule(monthly="lastweekday")
         self.createRule(monthly="monthday")
         self.createRule(monthly="weekday")
@@ -1490,7 +1490,155 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
     def test_replace_(self):
         rule = self.createRule(monthly="lastweekday")
         assert rule == rule.replace()
-        assert rule != rule.replace(monthly=None)
+        assert rule != rule.replace(monthly="monthday")
+
+    def test_apply_monthday(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule(monthly="monthday")
+        ev = CalendarEvent(datetime(1978, 5, 17, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(1970, 1, 1)))
+        self.assertEqual(result, [])
+
+        # Simplest case
+        result = list(rule.apply(ev, date(1978, 8, 17)))
+        expected = [date(1978, m, 17) for m in range(5,9)]
+        self.assertEqual(result, expected)
+
+        # Over the end of the year
+        result = list(rule.apply(ev, date(1979, 2, 17)))
+        expected = ([date(1978, m, 17) for m in range(5, 13)] +
+                    [date(1979, m, 17) for m in range(1, 3)])
+        self.assertEqual(result, expected)
+
+        # With an end date
+        rule = self.createRule(monthly="monthday", until=date(1979, 2, 17))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With a count
+        rule = self.createRule(count=10)
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With an interval
+        rule = self.createRule(monthly="monthday", interval=2)
+        result = list(rule.apply(ev, date(1979, 2, 17)))
+        expected = [date(1978, 5, 17), date(1978, 7, 17),date(1978, 9, 17),
+                    date(1978, 11, 17), date(1979, 1, 17)]
+        self.assertEqual(result, expected)
+
+        # With exceptions
+        rule = self.createRule(monthly="monthday", interval=2,
+                               exceptions=[date(1978, 7, 17)])
+        result = list(rule.apply(ev, date(1978, 9, 17)))
+        expected = [date(1978, 5, 17), date(1978, 9, 17)]
+        self.assertEqual(result, expected)
+
+    def test_apply_weekday(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule(monthly="weekday")
+        ev = CalendarEvent(datetime(1978, 5, 17, 12, 0),  # 3rd Wednesday
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(1970, 1, 1)))
+        self.assertEqual(result, [])
+
+        # Simplest case
+        result = list(rule.apply(ev, date(1978, 8, 17)))
+        expected = [date(1978, 5, 17), date(1978, 6, 21),
+                    date(1978, 7, 19), date(1978, 8, 16)]
+        self.assertEqual(result, expected)
+
+        # Over the end of the year
+        result = list(rule.apply(ev, date(1979, 2, 21)))
+        expected = [date(1978, 5, 17), date(1978, 6, 21),
+                    date(1978, 7, 19), date(1978, 8, 16),
+                    date(1978, 9, 20), date(1978, 10, 18),
+                    date(1978, 11, 15), date(1978, 12, 20),
+                    date(1979, 1, 17), date(1979, 2, 21)]
+        self.assertEqual(result, expected)
+
+        # With an end date
+        rule = self.createRule(monthly="weekday", until=date(1979, 2, 21))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With a count
+        rule = self.createRule(monthly="weekday", count=10)
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With an interval
+        rule = self.createRule(monthly="weekday", interval=2)
+        result = list(rule.apply(ev, date(1979, 2, 21)))
+        expected = [date(1978, 5, 17), date(1978, 7, 19),
+                    date(1978, 9, 20), date(1978, 11, 15),
+                    date(1979, 1, 17)]
+        self.assertEqual(result, expected)
+
+        # With exceptions
+        rule = self.createRule(monthly="weekday", interval=2,
+                               exceptions=[date(1978, 7, 19)])
+        result = list(rule.apply(ev, date(1978, 9, 30)))
+        expected = [date(1978, 5, 17), date(1978, 9, 20)]
+        self.assertEqual(result, expected)
+
+    def test_apply_lastweekday(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule(monthly="lastweekday")
+        ev = CalendarEvent(datetime(1978, 5, 17, 12, 0),  # 3rd last Wednesday
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(1970, 1, 1)))
+        self.assertEqual(result, [])
+
+        # Simplest case
+        result = list(rule.apply(ev, date(1978, 8, 17)))
+        expected = [date(1978, 5, 17), date(1978, 6, 14),
+                    date(1978, 7, 12), date(1978, 8, 16)]
+        self.assertEqual(result, expected)
+
+        # Over the end of the year
+        result = list(rule.apply(ev, date(1979, 2, 21)))
+        expected = [date(1978, 5, 17), date(1978, 6, 14),
+                    date(1978, 7, 12), date(1978, 8, 16),
+                    date(1978, 9, 13), date(1978, 10, 11),
+                    date(1978, 11, 15), date(1978, 12, 13),
+                    date(1979, 1, 17), date(1979, 2, 14)]
+        self.assertEqual(result, expected)
+
+        # With an end date
+        rule = self.createRule(monthly="lastweekday", until=date(1979, 2, 21))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With a count
+        rule = self.createRule(monthly="lastweekday", count=10)
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
+        # With an interval
+        rule = self.createRule(monthly="lastweekday", interval=2)
+        result = list(rule.apply(ev, date(1979, 2, 21)))
+        expected = [date(1978, 5, 17), date(1978, 7, 12),
+                    date(1978, 9, 13), date(1978, 11, 15),
+                    date(1979, 1, 17)]
+        self.assertEqual(result, expected)
+
+        # With exceptions
+        rule = self.createRule(monthly="lastweekday", interval=2,
+                               exceptions=[date(1978, 7, 12)])
+        result = list(rule.apply(ev, date(1978, 9, 30)))
+        expected = [date(1978, 5, 17), date(1978, 9, 13)]
+        self.assertEqual(result, expected)
 
 
 class TestWeekSpan(unittest.TestCase):
@@ -1499,20 +1647,43 @@ class TestWeekSpan(unittest.TestCase):
         from schooltool.cal import weekspan
 
         # The days are in the same week
-        #                              Monday, w42         Sunday, w42
         self.assertEqual(weekspan(date(2004, 10, 11), date(2004, 10, 17)), 0)
+        #                              Monday, w42         Sunday, w42
 
         # The days are in the adjacent weeks
-        #                              Sunday, w42         Monday, w43
         self.assertEqual(weekspan(date(2004, 10, 17), date(2004, 10, 18)), 1)
+        #                              Sunday, w42         Monday, w43
 
         # The days span the end of year
-        #                              Thursday, w53       Friday, w1
         self.assertEqual(weekspan(date(2004, 12, 30), date(2005, 01, 07)), 1)
+        #                              Thursday, w53       Friday, w1
 
         # The days span the end of year, two weeks
-        #                              Thursday, w53       Friday, w2
         self.assertEqual(weekspan(date(2004, 12, 30), date(2005, 01, 14)), 2)
+        #                              Thursday, w53       Friday, w2
+
+class TestMonthIndex(unittest.TestCase):
+
+    def test_monthindex(self):
+        from schooltool.cal import monthindex
+        # First Friday of October 2004
+        self.assertEqual(monthindex(2004, 10, 1, 4), date(2004, 10, 1))
+        self.assertEqual(monthindex(2004, 10, 1, 3), date(2004, 10, 7))
+        self.assertEqual(monthindex(2004, 10, 1, 3), date(2004, 10, 7))
+
+        # Users must check whether the month is correct themselves.
+        self.assertEqual(monthindex(2004, 10, 5, 3), date(2004, 11, 4))
+
+        self.assertEqual(monthindex(2004, 10, 4, 3), date(2004, 10, 28))
+        self.assertEqual(monthindex(2004, 10, -1, 3), date(2004, 10, 28))
+
+        self.assertEqual(monthindex(2004, 11, -1, 1), date(2004, 11, 30))
+        self.assertEqual(monthindex(2004, 11, -1, 2), date(2004, 11, 24))
+
+        self.assertEqual(monthindex(2004, 12, -1, 3), date(2004, 12, 30))
+        self.assertEqual(monthindex(2004, 12, -1, 4), date(2004, 12, 31))
+        self.assertEqual(monthindex(2004, 12, -1, 3), date(2004, 12, 30))
+        self.assertEqual(monthindex(2004, 12, -2, 3), date(2004, 12, 23))
 
 
 def test_suite():
@@ -1533,4 +1704,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeeklyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestMonthlyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestWeekSpan))
+    suite.addTest(unittest.makeSuite(TestMonthIndex))
     return suite
