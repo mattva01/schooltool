@@ -661,6 +661,7 @@ class TestResourceContainerView(TestObjectContainerView):
         self.add_view = ResourceAddView
         self.obj_view = ResourceView
 
+
 class TestNoteContainerView(TestObjectContainerView):
 
     def setUp(self):
@@ -927,6 +928,7 @@ class TestResourceAddView(AppSetupMixin, unittest.TestCase):
         assert view.parent is self.locations
         assert view.prev_location
 
+
 class TestNoteAddView(AppSetupMixin, unittest.TestCase):
       
     def createView(self):
@@ -937,6 +939,7 @@ class TestNoteAddView(AppSetupMixin, unittest.TestCase):
     def test(self):
         view = self.createView()
         self.assertEquals(view.title, "Add note")
+
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
 

@@ -678,14 +678,10 @@ table.acl th {
 
 /* Notes */
 
-div.note .content{
+div.note .content {
     background: #ebe9bf;
     border: 1px #999999 solid;
     margin: 1em;
     padding: 1em;
-    width: 300px;
-}
-
-div.note a {
-    
+    width: 20em;
 }

@@ -534,10 +534,10 @@ class NoteView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
     template = Template("www/note.pt")
 
     def canEdit(self):
-        return isManager(self.request.authenticated_user)
+        return self.isManager()
 
     def editURL(self):
-        return absoluteURL(self.request, self.context) + '/edit.html'
+        return absoluteURL(self.request, self.context, 'edit.html')
 
     def _traverse(self, name, request):
         if name == "edit.html":

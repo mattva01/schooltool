@@ -1,7 +1,8 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
     <head>
-        <title metal:fill-slot="title" i18n:translate=""
-            tal:content="string:Note: ${context/title}">Note</title>
+        <title metal:fill-slot="title" i18n:translate="">
+            Note: <span tal:content="context/title" i18n:name="title"/>
+        </title>
     </head>
 
     <body>

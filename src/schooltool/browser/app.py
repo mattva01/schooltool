@@ -463,12 +463,16 @@ class ResourceAddView(ObjectAddView):
             self.parent = traverse(self.context, '/groups/locations')
 
 
-class NoteAddView(ObjectAddView):
+class NoteAddView(View):
     """View for adding notes """
 
     title = _("Add note")
 
+    error = u""
+
     template = Template('www/note_add.pt')
+
+    authorization = ManagerAccess
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -481,49 +485,31 @@ class NoteAddView(ObjectAddView):
             # Just show the form without any data.
             return self.do_GET(request)
 
-        name = request.args['name'][0]
-        body = request.args['body'][0]
+        name = None
+        #title = request.args['title'][0]
+        #name = request.args['name'][0]
+        #body = request.args['body'][0]
         url = request.args['url'][0]
 
-        if name == '':
-            name = None
-        else:
-            if not valid_name(name):
-                self.error = _("Invalid identifier")
-                return self.do_GET(request)
+        self.title_widget.update(request)
+        self.title_widget.require()
+        self.body_widget.update(request)
+        self.body_widget.require()
 
-        self.prev_name = name
-
-        try:
-            title = to_unicode(request.args['title'][0])
-        except UnicodeError:
-            self.error = _("Invalid UTF-8 data.")
+        if self.title_widget.error or self.body_widget.error:
             return self.do_GET(request)
 
-        self.prev_title = title
-        if not title:
-            self.error = _("Title should not be empty.")
-            return self.do_GET(request)
-
-        add_anyway = 'CONFIRM' in self.request.args
-
-        try:
-            obj = self.context.new(name, title=title, body=body, url=url)
-        except KeyError:
-            self.error = _('Identifier already taken')
-            return self.do_GET(request)
+        obj = self.context.new(name, 
+                title=self.title_widget.value, 
+                body=self.body_widget.value, 
+                url=url)
 
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
-        if self.parent is not None:
-            Membership(group=self.parent, member=obj)
-            self.request.appLog(
-                    _("Relationship 'Membership' between %s and %s created")
-                    % (getPath(obj), getPath(self.parent)))
+        nexturl = absoluteURL(request, obj)
 
-        url = absoluteURL(request, obj)
-        return self.redirect(url, request)
+        return self.redirect(nexturl, request)
 
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):
     """View for an ApplicationObjectContainer.

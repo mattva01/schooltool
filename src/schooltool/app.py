@@ -170,7 +170,6 @@ def create_application():
     app['notes'] = ApplicationObjectContainer(model.Note)
     Person = app['persons'].new
     Group = app['groups'].new
-    Note = app['notes'].new
 
     root = Group("root", title=_("Root Group"))
     app.addRoot(root)
