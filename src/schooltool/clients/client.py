@@ -101,6 +101,8 @@ welcome to change it and/or distribute copies of it under certain conditions.
                                              % (bold, normal))
                 except curses.error:
                     pass
+        # Do this after curses.setupterm()
+        self.stdout = StreamWrapper(self.stdout)
 
     def emit(self, *args):
         """Output the arguments.  A hook for tests"""
@@ -448,8 +450,6 @@ def http_join(path, rel):
 
 
 def main():
-    sys.stdout = StreamWrapper(sys.stdout)
-    sys.stderr = StreamWrapper(sys.stderr)
     c = Client()
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'h:p:s', ['host=', 'port=',

@@ -80,7 +80,7 @@ class ScriptTestCase(unittest.TestCase):
         dirname = os.path.dirname(__file__)
         self.filename = os.path.join(dirname, script)
         self.client = os.path.abspath(
-                os.path.join(dirname, '..', 'clients', 'client.py'))
+            os.path.join(dirname, '..', '..', '..', 'schooltool-client.py'))
 
     def __str__(self):
         return 'script %s' % self.script
@@ -126,7 +126,9 @@ class ScriptTestCase(unittest.TestCase):
         reader.join()
         result = reader.result
         exitcode = child.wait()
-        self.assertEqual(exitcode, 0, "child returned exit code %d" % exitcode)
+        self.assertEqual(exitcode, 0,
+                         "child returned exit code %d, output:\n%s"
+                         % (exitcode, result))
         if magic:
             # cannot use SequenceMatcher here
             result = result.splitlines(True)

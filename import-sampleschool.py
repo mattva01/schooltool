@@ -43,6 +43,7 @@ class SampleSchoolImporter:
 
     def main(self, argv):
         """Generate and import sample school data."""
+        self.real_stdout = sys.stdout
         sys.stdout = StreamWrapper(sys.stdout)
         sys.stderr = StreamWrapper(sys.stderr)
         try:
@@ -162,7 +163,8 @@ class SampleSchoolImporter:
         """Import timetable data from ttconfig.data."""
         import schooltool.clients.client
         ttconfig = file(self.ttconfig_filename)
-        c = schooltool.clients.client.Client(stdin=ttconfig)
+        c = schooltool.clients.client.Client(stdin=ttconfig,
+                                             stdout=self.real_stdout)
         c.use_rawinput = False
         c.input_hook = lambda prompt: ttconfig.readline()[:-1]
         c.server = self.host
