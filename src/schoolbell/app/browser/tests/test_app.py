@@ -356,24 +356,40 @@ def doctest_GroupView():
 def doctest_GroupAddView():
     r"""Test for GroupAddView
 
-    Let's create a view for adding a group:
+    Adding views in Zope 3 are somewhat unobvious.  The context of an adding
+    view is a view named '+' and providing IAdding.
+
+        >>> class AddingStub:
+        ...     pass
+        >>> context = AddingStub()
+
+    The container to which items will actually be added is accessible as the
+    `context` attribute
+
+        >>> from schoolbell.app.app import GroupContainer
+        >>> container = GroupContainer()
+        >>> context.context = container
+
+    ZCML configuration adds some attributes to GroupAddView, namely `schema`
+    and `_factory`.
 
         >>> from schoolbell.app.browser.app import GroupAddView
-        >>> from schoolbell.app.app import GroupContainer, Group
         >>> from schoolbell.app.interfaces import IGroup
-        >>> context = GroupContainer()
-        >>> context.context = context  # The view is expecting a + object
-        >>> request = TestRequest()
-
-        >>> class TestGroupAddView(GroupAddView):
+        >>> from schoolbell.app.app import Group
+        >>> class GroupAddViewForTesting(GroupAddView):
         ...     schema = IGroup
         ...     _factory = Group
 
-        >>> view = TestGroupAddView(context, request)
+    We can now finally create the view:
 
-    After successfully adding a group you should be redirected:
+        >>> request = TestRequest()
+        >>> view = GroupAddViewForTesting(context, request)
 
-        >>> directlyProvides(context, IContainmentRoot)
+    The `nextURL` method tells Zope 3 where you should be redirected after
+    successfully adding a group.  We will pretend that `container` is located
+    at the root so that zapi.absoluteURL(container) returns 'http://127.0.0.1'.
+
+        >>> directlyProvides(container, IContainmentRoot)
         >>> view.nextURL()
         'http://127.0.0.1'
 
@@ -381,14 +397,27 @@ def doctest_GroupAddView():
 
         >>> request = TestRequest()
         >>> request.form = {'CANCEL': 'Cancel'}
-        >>> view = TestGroupAddView(context, request)
+        >>> view = GroupAddViewForTesting(context, request)
         >>> view.update()
         >>> request.response.getStatus()
         302
         >>> request.response.getHeaders()['Location']
         'http://127.0.0.1'
 
+    If 'CANCEL' is not present in the request, the view calls inherited
+    'update'.  We will use a trick and set update_status to some value to
+    short-circuit AddView.update().
+
+        >>> request = TestRequest()
+        >>> request.form = {'field.title': 'a_group',
+        ...                 'UPDATE_SUBMIT': 'Add'}
+        >>> view = GroupAddViewForTesting(context, request)
+        >>> view.update_status = 'Just checking'
+        >>> view.update()
+        'Just checking'
+
     """
+
 
 def doctest_GroupEditView():
     r"""Test for GroupEditView
@@ -417,7 +446,8 @@ def doctest_GroupEditView():
         >>> request.response.getStatus()
         599
 
-    After changing name of the group you should get redirected to the group list:
+    After changing name of the group you should get redirected to the group
+    list:
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': 'Apply',
@@ -433,7 +463,8 @@ def doctest_GroupEditView():
         >>> group.title
         u'new_title'
 
-    Even if the title has not changed you should get redirected to the group list:
+    Even if the title has not changed you should get redirected to the group
+    list:
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': 'Apply',
