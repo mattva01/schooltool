@@ -30,6 +30,7 @@ Python bindings are available from http://www.xmlsoft.org/python.html
 PoV are using libxml2 2.5.11-2 and libxml2-python2.3 2.5.11-2 from debian
 unstable. However, any recent release should work.
 
+$Id$
 """
 import libxml2
 import sys
