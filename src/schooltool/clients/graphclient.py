@@ -55,13 +55,14 @@ class GraphGenerator(SchoolToolClient):
 
     def drawGroupTree(self):
         groups = self.getGroupTree()
-        parents = ["/groups/root", "", "", "", "", "", "", "", "", "", ""]#hack
-        level = 1
+        parents = ["/groups/root"]
         for group in groups:
-            if group[0] > 0:
-                line = '"%s" -> "%s" [color=gray];' % (parents[group[0]-1],
+            level = group[0]
+            if level > 0:
+                line = '"%s" -> "%s" [color=gray];' % (parents[level-1],
                                                        group[2])
-                level = group[0]
+                while level >= len(parents):
+                    parents.append('')
                 parents[level] = group[2]
                 self.DOT.append(line)
 
