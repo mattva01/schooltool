@@ -28,17 +28,93 @@ Community Contributed Features
 * Debconf configuration for Debian packages including SSL certificate
   generation and server ports. - Brian Sutherland
 
-* TODO - missed anything?
-
-
 Second SchoolBell Milestone (Programmers of Vilnius)
 ----------------------------------------------------
 
 Support for a calendering server for groups and organizations to coordinate
 schedules and timetables.
 
-TODO - get stories for Second SchoolBell Milestone when the webpage is fixed.
+Infrastructure
+++++++++++++++
 
+* Refactor URIs to be normal objects, not interfaces. They should be available
+  to the client over a restive interface.
+
+Basic functionality
++++++++++++++++++++
+
+* "Add a sub-group" will be an option of each group.
+
+* When creating a new group, membership in the group is limited to members of
+  its immediate parent(s). This restriction can be removed
+
+* The ability do delete a person, group, or resource, and break all existing
+  relationships, including resource bookings.
+
+* The system should provide lists of all persons, groups and resources.
+
+* When creating a person with a name that already exists, the user should
+  receive a warning.
+
+* Resource calendars should be accessible and editable through the web, and
+  their ACLs should be editable by manager. The manager specify who can book
+  the resource, who can cancel bookings, and who can view the resource's
+  calendar.
+
+Calendaring functionality
++++++++++++++++++++++++++
+
+* Handling recurring events in the calendar. Each event will support the full
+  iCalendar specs recurring event model. iCal vie%s/\s\+$// will support
+  retrieving and creating recurring events, so will web vie%s/\s\+$//.
+
+* A user can choose groups whose calendars will be merged onto his web calendar
+  view. This is intended a device for communication between group members.
+
+* The manager can set the global policy whether publicly available personal
+  calendars will be displayed as freebusy calendars or if all the events will
+  be visible.
+
+* A user can select, on per-event basis, whether the event is publicly
+  available, is visible as a "busy" block, or is not visible to others at all.
+
+* This should be chosen from a list in the add/edit form for the event. There
+  should also be visible feed back on the calendar view indicating the status.
+
+Timetables
+++++++++++
+
+* A view for entering a school timetable
+
+* A simple HTML UI for entering a timetable for the whole school prepared by
+  some other means.
+
+* A web page that lets the user to set add a person to the appropriate groups.
+  The page will contain a form with a row for each period for each day in the
+  timetable, which would contain a dropdown box of groups meeting on that
+  period. Choosing certain groups and submitting a form will result in a person
+  being added to those groups as a member, and being removed from the groups
+  which were in the form but were not selected, and the person were a member
+  of. Conflicts will be represented in the form if they occur, but the user
+  will not be able to intentionally create them in this form: if a person is a
+  member in the groups that have an activity in the same time slot, two
+  dropdown boxes are displayed, but either of them can be set to 'None'.
+
+* A manager needs to be able to edit and cancel individual occurrences of
+  events in the timetable.
+
+* When scheduling a resource, the system should by default assume that you want
+  to book the resource for a block of time that corresponds to a period (or
+  several periods) as defined in the main school's timetable. For example,
+  teachers will be thinking, "I need the computer lab first period", and not "I
+  need the computer lab 9:03 - 9:51".
+
+Events
+++++++
+
+* A resource's event has to have a property stipulating who is responsible for
+  the resource during the scheduled block of time. A person can be responsible
+  for a resource.
 
 Student Information, Address and Relationship Tracking - (Etria)
 ----------------------------------------------------------------
