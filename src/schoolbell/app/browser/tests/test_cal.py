@@ -43,6 +43,9 @@ from schoolbell.app.browser.cal import CalendarEventEditView
 from schoolbell.app.browser.cal import ICalendarEventEditForm
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
+# Used for the PrincipalStub
+from schoolbell.app.app import Person
+from schoolbell.app.interfaces import IPerson
 
 def doctest_CalendarOwnerTraverser():
     """Tests for CalendarOwnerTraverser.
@@ -333,13 +336,13 @@ def createEvent(dtstart, duration, title, **kw):
 
 
 class PrincipalStub:
-    from schoolbell.app.app import Person
+
+    _person = Person()
 
     def __conform__(self, interface):
         if interface is IPerson:
-            return PersonStub()
+            return self._person
 
-    _person = Person()
 
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
@@ -578,7 +581,14 @@ class TestCalendarViewBase(unittest.TestCase):
             ...         self.color1 = color1
             ...         self.color2 = color2
             ...         self.show = show
+            >>> class PreferenceStub:
+            ...     def __init__(self):
+            ...         self.weekstart = "Monday"
+            >>> from schoolbell.app.interfaces import IPersonPreferences
             >>> class PersonStub:
+            ...     def __conform__(self, interface):
+            ...         if interface is IPersonPreferences:
+            ...             return PreferenceStub()
             ...     calendar = calendar
             ...     overlaid_calendars = [
             ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
@@ -2301,16 +2311,16 @@ class TestDailyCalendarView(unittest.TestCase):
 
         result = list(view.getHours())
         self.assertEquals(clearTimeAndDuration(result),
-                          [{'title': '0:00', 'cols': (ev4, None, None)},
-                           {'title': '1:00', 'cols': ('', None, None)},
-                           {'title': '2:00', 'cols': ('', None, None)},
-                           {'title': '3:00', 'cols': ('', None, None)},
-                           {'title': '4:00', 'cols': ('', None, None)},
-                           {'title': '5:00', 'cols': ('', None, None)},
-                           {'title': '6:00', 'cols': ('', None, None)},
-                           {'title': '7:00', 'cols': ('', None, None)},
-                           {'title': '8:00', 'cols': ('', None, None)},
-                           {'title': '9:00', 'cols': ('', None, None)},
+                          [{'title': '00:00', 'cols': (ev4, None, None)},
+                           {'title': '01:00', 'cols': ('', None, None)},
+                           {'title': '02:00', 'cols': ('', None, None)},
+                           {'title': '03:00', 'cols': ('', None, None)},
+                           {'title': '04:00', 'cols': ('', None, None)},
+                           {'title': '05:00', 'cols': ('', None, None)},
+                           {'title': '06:00', 'cols': ('', None, None)},
+                           {'title': '07:00', 'cols': ('', None, None)},
+                           {'title': '08:00', 'cols': ('', None, None)},
+                           {'title': '09:00', 'cols': ('', None, None)},
                            {'title': '10:00', 'cols': ('', None, None)},
                            {'title': '11:00', 'cols': ('', None, None)},
                            {'title': '12:00', 'cols': ('', ev1, None)},
