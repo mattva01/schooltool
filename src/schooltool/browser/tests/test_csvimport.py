@@ -522,7 +522,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         ok = imp.importTimetable('"summer","four-day"')
         self.failIf(ok)
         self.assert_(imp.errors.generic[0].startswith(
-                                "The timetable schema 'four-day' "),
+                                "The timetable schema four-day "),
                      imp.errors.generic)
 
         csv = dedent("""
@@ -557,8 +557,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp = self.createImporter()
         self.failIf(imp.importTimetable(csv))
         self.assertEquals(imp.errors.generic[0],
-                "The number of records ['many', 'values', 'here'] (line 5)"
-                " is more than the number of periods ['A', 'B'].")
+                "There are more records [many, values, here] (line 5)"
+                " than periods [A, B].")
 
         csv = dedent("""
                 "summer","three-day"
@@ -570,7 +570,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.failIf(imp.importTimetable(csv))
         self.assertEquals(imp.errors.generic[0],
                 "The first cell on the period list row"
-                " ('this should be empty!') should be empty.")
+                " (this should be empty!) should be empty.")
         self.assertEquals(imp.errors.periods, ["Invalid"])
 
     def test_findByTitle(self):

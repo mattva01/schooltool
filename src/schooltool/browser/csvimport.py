@@ -164,7 +164,7 @@ class CSVImporterZODB(CSVImporterBase):
         try:
             group = self.groups.new(__name__=name, title=title)
         except KeyError, e:
-            raise DataError(_("Group already exists: %r") % name)
+            raise DataError(_("Group already exists: %s") % name)
 
         for path in parents.split():
             try:
@@ -193,12 +193,12 @@ class CSVImporterZODB(CSVImporterBase):
             try:
                 person = self.persons.new(title=title)
             except KeyError, e:
-                raise DataError(_("Person already exists: %r") % name)
+                raise DataError(_("Person already exists: %s") % name)
         else:
             try:
                 person = self.persons.new(__name__=name, title=title)
             except KeyError, e:
-                raise DataError(_("Person already exists: %r") % name)
+                raise DataError(_("Person already exists: %s") % name)
 
         Membership(group=self.groups['root'], member=person)
 
@@ -206,9 +206,9 @@ class CSVImporterZODB(CSVImporterBase):
             try:
                 Membership(group=self.groups[group], member=person)
             except KeyError, e:
-                raise DataError(_("No such group: %r") % group)
+                raise DataError(_("No such group: %s") % group)
             except ValueError:
-                raise DataError(_("Cannot add %r to %r") % (person, group))
+                raise DataError(_("Cannot add %s to %s") % (person, group))
         self.logs.append(_('Imported person: %s') % title)
 
         return person.__name__
@@ -223,7 +223,7 @@ class CSVImporterZODB(CSVImporterBase):
             try:
                 Membership(group=other, member=resource)
             except ValueError:
-                raise DataError(_("Cannot add %r to %r") % (person, group))
+                raise DataError(_("Cannot add %s to %s") % (person, group))
         self.logs.append(_('Imported resource: %s') % title)
         return resource.__name__
 
@@ -321,7 +321,7 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             ('records', _("Invalid records: %s."))]:
             v = getattr(err, key)
             if v:
-                values = ', '.join([repr(st) for st in v])
+                values = ', '.join([str(st) for st in v])
                 self.errors.append(msg % values)
 
 
@@ -382,7 +382,7 @@ class TimetableCSVImporter:
         self.period_id, self.ttschema = rows[0]
         if self.ttschema not in self.app.timetableSchemaService.keys():
             self.errors.generic.append(
-                _("The timetable schema %r does not exist." % self.ttschema))
+                _("The timetable schema %s does not exist." % self.ttschema))
             return False
 
         for dry_run in [True, False]:
@@ -398,7 +398,7 @@ class TimetableCSVImporter:
                 elif state == 'periods':
                     if row[0] is not None:
                         self.errors.generic.append(
-                            "The first cell on the period list row (%r)"
+                            "The first cell on the period list row (%s)"
                             " should be empty." % row[0])
                     periods = row[1:]
                     self.validatePeriods(day_ids, periods)
@@ -407,10 +407,12 @@ class TimetableCSVImporter:
 
                 location, records = row[0], self.parseRecordRow(row[1:])
                 if len(records) > len(periods):
+                    nice_row = ", ".join(row[1:])
+                    nice_periods = ", ".join(periods)
                     self.errors.generic.append(
-                            _("The number of records %r (line %d) is more than"
-                              " the number of periods %r."
-                              % (row[1:], row_no + 3, periods)))
+                            _("There are more records [%s] (line %d)"
+                              " than periods [%s]."
+                              % (nice_row, row_no + 3, nice_periods)))
                     continue
 
                 for period, record in zip(periods, records):
@@ -531,7 +533,7 @@ class TimetableCSVImporter:
             return obj
         else:
             if error_list is None:
-                raise KeyError("Object %r not found" % title)
+                raise KeyError("Object %s not found" % title)
             else:
                 if title not in error_list:
                     error_list.append(title)
