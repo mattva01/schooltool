@@ -710,6 +710,7 @@ class TestICalReader(unittest.TestCase):
         self.assertRaises(ICalParseError, parseRow, "k;:no param")
         self.assertRaises(ICalParseError, parseRow, "k;a?=b:bad param")
         self.assertRaises(ICalParseError, parseRow, "k;a=\":bad param")
+        self.assertRaises(ICalParseError, parseRow, "k;a=\"\177:bad param")
         self.assertRaises(ICalParseError, parseRow, "k;a=\001:bad char")
         self.assertEqual(parseRow("key;param=a,b,c:value"),
                          ("KEY", "value", {'PARAM': ['A', 'B', 'C']}))
