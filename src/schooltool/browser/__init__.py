@@ -26,7 +26,6 @@ from schooltool.interfaces import AuthenticationError
 from schooltool.views import View as _View
 from schooltool.views import Template, read_file        # reexport
 from schooltool.views import absoluteURL, absolutePath  # reexport
-from schooltool.views import notFoundPage               # XXX temporary
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import globalTicketService
 
@@ -89,8 +88,13 @@ class View(_View):
         """Traverse to a child view."""
         if name == '': # trailing slash in the URL
             return self
-        else:
-            return _View.getChild(self, name, request)
+        try:
+            child = self._traverse(name, request)
+            assert child is not None, ("%s._traverse returned None"
+                                       % self.__class__.__name__)
+            return child
+        except KeyError:
+            return NotFoundView()
 
     def redirect(self, url, request):
         """Redirect to a URL and return a html page explaining the redirect."""
@@ -118,4 +122,24 @@ class StaticFile(View):
     def do_GET(self, request):
         request.setHeader('Content-Type', self.content_type)
         return read_file(self.filename, os.path.dirname(__file__))
+
+
+class NotFoundView(View):
+    """View that always returns a 404 error page."""
+
+    template = Template("www/notfound.pt")
+
+    authorization = PublicAccess
+
+    def __init__(self):
+        View.__init__(self, None)
+
+    def do_GET(self, request):
+        request.setResponseCode(404)
+        return View.do_GET(self, request)
+
+
+def notFoundPage(request):
+    """Render a simple 'not found' error page."""
+    return NotFoundView().render(request)
 

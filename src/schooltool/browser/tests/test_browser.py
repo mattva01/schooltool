@@ -124,6 +124,13 @@ class TestView(unittest.TestCase):
         request = RequestStub('/path//with/multiple/slashes/')
         self.assert_(view.getChild('', request) is view)
 
+    def test_getChild_not_found(self):
+        from schooltool.browser import NotFoundView
+        view = self.createView()
+        request = RequestStub('/path')
+        view2 = view.getChild('nosuchpage', request)
+        self.assert_(isinstance(view2, NotFoundView))
+
     def test_redirect(self):
         view = self.createView()
         request = RequestStub()
@@ -169,10 +176,35 @@ class TestStaticFile(unittest.TestCase):
         self.assertEquals(request.headers['content-type'], 'text/plain')
 
 
+class TestNotFound(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser import NotFoundView
+        view = NotFoundView()
+        request = RequestStub(uri='/path')
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.reason, "Not Found")
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_("Not found: /path" in result)
+
+    def test_notFoundPage(self):
+        from schooltool.browser import notFoundPage
+        request = RequestStub(uri='/path')
+        result = notFoundPage(request)
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.reason, "Not Found")
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_("Not found: /path" in result)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestView))
     suite.addTest(unittest.makeSuite(TestStaticFile))
+    suite.addTest(unittest.makeSuite(TestNotFound))
     return suite
 
 if __name__ == '__main__':
