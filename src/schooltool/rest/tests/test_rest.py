@@ -322,6 +322,21 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           'text/plain; charset=UTF-8')
 
+    def test_render_calls_unauthorized(self):
+        from schooltool.rest import View
+        from schooltool.rest import Unauthorized
+        view = View(None)
+
+        def do_GET(request):
+            raise Unauthorized
+
+        view.do_GET = do_GET
+        view.authorization = lambda ctx, rq: True
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(result, "Bad username or password")
+        self.assertEquals(request.code, 401)
+
 
 def test_suite():
     suite = unittest.TestSuite()

@@ -291,6 +291,16 @@ def notFoundPage(request):
     return textErrorPage(request, _('Not found: %s') % request.uri, code=404)
 
 
+class Unauthorized(Exception):
+    """Unauthorized exception.
+
+    A view's do_xxx method may raise Unauthorized to indicate that the
+    authenticated user is not allowed to do whatever he tried to do.  Use this
+    when view.authorization cannot tell in advance if the user is allowed to
+    perform the request or not.
+    """
+
+
 class View(Resource):
     """View for a content component.
 
@@ -314,7 +324,10 @@ class View(Resource):
                     of FOO.  Its signature should match render.  It can return
                     either an 8-bit string or a Unicode object (which will be
                     converted to UTF-8 by render).  It must set the
-                    Content-Type header in the request.
+                    Content-Type header in the request.  If do_FOO raises
+                    Unauthorized, an authorization challenge will be returned
+                    to the user in the same way as if authorization (see below)
+                    returned False.
         authorization
                     Callable that takes a context and a request and returns
                     True if that request is authorized.  See also,
@@ -361,7 +374,11 @@ class View(Resource):
         else:
             culprit = 'do_%s' % request.method
             self.request = request
-            body = handler(request)
+            try:
+                body = handler(request)
+            except Unauthorized:
+                culprit = 'unauthorized'
+                body = self.unauthorized(request)
             self.request = None
 
         # Twisted's http.Request keeps outgoing headers in a dict keyed by
