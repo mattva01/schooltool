@@ -155,6 +155,7 @@ def createResources():
         print >> f, '"Projector %d"' % i
     f.close()
 
+
 def main():
     if len(sys.argv) > 1:
         random.seed(sys.argv[1])

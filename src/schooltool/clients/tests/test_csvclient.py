@@ -129,7 +129,6 @@ class TestCSVImporter(unittest.TestCase):
                            'factory="Super Facet"'),
                           ])
 
-
     def test_importResource(self):
         from schooltool.clients.csvclient import CSVImporter
 
@@ -388,6 +387,7 @@ class TestCSVImporter(unittest.TestCase):
         im.process("POST", "/people/001/password", "foo")
         self.assertEqual(im.server.lastconn.sent_headers['authorization'],
                          'Basic bWFuYWdlcjpzY2hvb2x0b29s')
+
 
 def test_suite():
     suite = unittest.TestSuite()
