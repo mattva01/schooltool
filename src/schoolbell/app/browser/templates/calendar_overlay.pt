@@ -20,9 +20,11 @@
                tal:attributes="value item/id; checked item/checked" />
         <span tal:content="item/title">Title</span>
       </label>
-      <a class="go" tal:attributes="href item/calendar/@@absolute_url"
-      ><img alt="go" title="View only this calendar"
-            tal:attributes="src context/++resource++next.png" /></a>
+      <a class="go"
+         tal:attributes="href item/calendar/@@absolute_url;
+                         style string:background: ${item/color2};;
+                                      color: ${item/color2}"
+      >&nbsp;</a>
     </div>
 
     <div class="controls">

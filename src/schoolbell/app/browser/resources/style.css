@@ -782,8 +782,12 @@ body#path-login form.standalone {
 
 #portlet-calendar-overlay a.go {
     float: right;
-    top: -1.5em;
+    top: -1.25em;
+    margin-right: 0.25em;
+    width: 1em;
+    height: 1em;
     position: relative;
+    text-decoration: none;
 }
 #portlet-calendar-overlay a.go img {
     border: none;
