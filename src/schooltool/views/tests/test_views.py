@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from schooltool.views.tests import RequestStub, setPath
+from schooltool.views.tests import LocatableStub, RequestStub, setPath
 
 __metaclass__ = type
 
@@ -42,10 +42,6 @@ class TemplateStub:
         assert context is self.context
         request.setHeader('Content-Type', 'text/plain')
         return self.body
-
-
-class LocatableStub:
-    pass
 
 
 class TestHelpers(unittest.TestCase):

@@ -463,7 +463,7 @@ class TestTimetablingPersistence(unittest.TestCase):
         from transaction import get_transaction
         from schooltool.model import Person, Resource
 
-        parent = LocatableStub()
+        parent = PersistentLocatableStub()
         directlyProvides(parent, IContainmentRoot)
         owner = Person()
         owner.__parent__ = parent
@@ -800,7 +800,7 @@ class TimetabledStub(TimetabledMixin, RelatableMixin,
         FacetedMixin.__init__(self)
 
 
-class LocatableStub(Persistent):
+class PersistentLocatableStub(Persistent):
     implements(ILocation)
     __name__ = None
     __parent__ = None
@@ -822,7 +822,7 @@ class TestTimetableDict(unittest.TestCase):
         from schooltool.timetable import TimetableDict
 
         td = TimetableDict()
-        item = LocatableStub()
+        item = PersistentLocatableStub()
         td['aa', 'bb'] = item
         self.assertEqual(item.__name__, ('aa', 'bb'))
         self.assertEqual(item.__parent__, td)
@@ -839,7 +839,7 @@ class TestTimetableDict(unittest.TestCase):
         from zope.interface import directlyProvides
 
         td = TimetableDict()
-        item = LocatableStub()
+        item = PersistentLocatableStub()
         directlyProvides(td, IContainmentRoot)
 
         td['a', 'b'] = item

@@ -100,6 +100,10 @@ class TraversableRoot(TraversableStub):
     implements(IContainmentRoot)
 
 
+class LocatableStub:
+    pass
+
+
 def setPath(obj, path, root=None):
     """Trick getPath(obj) into returning path."""
     assert path.startswith('/')
