@@ -1,4 +1,4 @@
-<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<html metal:use-macro="view/macros/calendarpage" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">Calendar</title>
 </head>
@@ -9,17 +9,14 @@
   <metal:block metal:fill-slot="content">
     <div class="error" tal:content="view/update" />
     <h2 tal:content="python:view.cursor.strftime('%B, %Y')" />
-    <div>
-      <a tal:attributes="href python:view.calURL('weekly')"
-         i18n:translate="">Weekly calendar</a>
+    <div class="calnav">
+      <a tal:attributes="href python:view.calURL('monthly', view.prevMonth())"
+	 i18n:translate="">Previous month</a>
+      <a tal:attributes="href request/path"
+	 i18n:translate="">Current month</a>
+      <a tal:attributes="href python:view.calURL('monthly', view.nextMonth())"
+	 i18n:translate="">Next month</a>
     </div>
-    <a tal:attributes="href python:view.calURL('monthly', view.prevMonth())"
-       i18n:translate="">Previous month</a> |
-    <a tal:attributes="href request/path"
-       i18n:translate="">Current month</a> |
-    <a tal:attributes="href python:view.calURL('monthly', view.nextMonth())"
-       i18n:translate="">Next month</a>
-
     <table class="cal_monthly"
            tal:define="weeks view/getMonth">
     <tr>

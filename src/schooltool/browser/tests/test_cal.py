@@ -30,6 +30,7 @@ from pprint import pformat
 from datetime import datetime, date, time, timedelta
 
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
+from schooltool.browser.tests import TraversalTestMixin
 from schooltool.tests.utils import NiceDiffsMixin
 
 __metaclass__ = type
@@ -195,6 +196,7 @@ class TestCalendarViewBase(unittest.TestCase):
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
+        cal.__name__ = 'calendar'
 
         view = CalendarViewBase(cal)
         view.request = RequestStub()
@@ -202,9 +204,9 @@ class TestCalendarViewBase(unittest.TestCase):
 
         prefix = 'http://localhost:7001/persons/boss/'
         self.assertEquals(view.calURL("foo"),
-                          prefix + 'calendar_foo.html?date=2004-08-12')
+                          prefix + 'calendar/foo.html?date=2004-08-12')
         self.assertEquals(view.calURL("bar", date(2005, 3, 22)),
-                          prefix + 'calendar_bar.html?date=2005-03-22')
+                          prefix + 'calendar/bar.html?date=2005-03-22')
 
     def test_getDays(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
@@ -258,6 +260,7 @@ class TestWeeklyCalendarView(unittest.TestCase):
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
+        cal.__name__ = 'calendar'
         cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
                                    timedelta(hours=1),
                                    "Stuff happens"))
@@ -267,7 +270,7 @@ class TestWeeklyCalendarView(unittest.TestCase):
         view.cursor = date(2004, 8, 12)
         request = RequestStub()
         content = view.render(request)
-        self.assert_("Da Boss" in content)
+        self.assert_("Da Boss" in content, content)
         self.assert_("Stuff happens" in content)
 
     def test_getWeek(self):
@@ -471,14 +474,14 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
         cal.__parent__ = person
+        cal.__name__ = 'calendar'
         cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
                                    timedelta(hours=1),
                                    "Stuff happens"))
 
         view = MonthlyCalendarView(cal)
         view.authorization = lambda x, y: True
-        view.cursor = date(2004, 8, 12)
-        request = RequestStub()
+        request = RequestStub(args={'date': '2004-08-12'})
         content = view.render(request)
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
@@ -528,6 +531,41 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         weeks = view.getMonth()
 
 
+class TestCalendarView(unittest.TestCase, TraversalTestMixin):
+
+    def test_traverse(self):
+        from schooltool.cal import Calendar
+        from schooltool.browser.cal import CalendarView
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.browser.cal import WeeklyCalendarView
+        from schooltool.browser.cal import MonthlyCalendarView
+        context = Calendar()
+        view = CalendarView(context)
+        self.assertTraverses(view, 'daily.html', DailyCalendarView, context)
+        self.assertTraverses(view, 'weekly.html', WeeklyCalendarView, context)
+        self.assertTraverses(view, 'monthly.html', MonthlyCalendarView,
+                             context)
+
+    def test_render(self):
+        from schooltool.browser.cal import CalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+        cal.__parent__ = person
+        cal.__name__ = 'calendar'
+
+        view = CalendarView(cal)
+        request = RequestStub()
+        view.authorization = lambda x, y: True
+        view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(
+            request.headers['location'],
+            'http://localhost:7001/persons/boss/calendar/daily.html')
+
 class GetDaysStub:
 
     def __init__(self):
@@ -545,6 +583,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
+    suite.addTest(unittest.makeSuite(TestCalendarView))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 

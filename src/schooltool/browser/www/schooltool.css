@@ -291,19 +291,23 @@ div.available {
 }
 
 div.day {
-  border: 1px solid blue;
+  border: 0.5px solid gray;
   background: white; /* #8af; */
-  margin: 1ex;
-  padding: 1ex 0.5em;
+  padding: 0.5ex 0.5em;
 }
 
 div.event {
   border: 1px solid darkgreen;
   background: #8f9;
   margin: 1ex;
-  padding: 1ex 0.5em;
+  padding: 0.5ex 0.5em;
   border-bottom-width: 3px;
   border-right-width: 3	px;
+  font-size: smaller;
+}
+
+div.calweekly {
+   border: 1px solid gray;
 }
 
 div.day h2,
@@ -316,28 +320,27 @@ div.day h3  {
 table.cal_monthly {
   table-layout: fixed;
   width: 90%;
-  border: 2px solid #40f;
+  border: 1px solid #888;
   empty-cells: show;
   border-collapse: collapse;
 }
 
 td.cal_monthly_weekno {
-  border: 1px solid blue;
+  border: 1px solid #ccc;
 }
 
 a.cal_monthly_weekno {
   text-decoration: none;
   font-weight: bold;
-  color: #777;
+  color: navy;
 }
 
 td.cal_monthly_day {
-  border: 1px solid blue;
+  border: 1px solid #ccc;
   vertical-align: top;
 }
 
 th.cal_monthly_weekday {
-  text-size: larger;
   font-weight: bold;
 }
 
@@ -350,35 +353,36 @@ div.event_weekly {
   font-size: smaller;
   background: #ff7;
   margin: 2px;
-  border: 1px solid #447;
+  border: 0.5px solid #447;
+  padding: 1px;
 }
 
 table.daycal {
-  border-collapse: collapse;
-  border: 2px solid lightgray;
+  border: 1px solid gray;
   width: 80%;
 }
 
-table.daycal td{
+table.daycal td.empty {
   border-bottom: 1px solid #ddd;
   border-right-width: 3px;
+  /* border-bottom-width: 3px; */
   padding: 0;
+  margin: 0;
 }
 
 table.daycal td.event{
-  border: 1px solid darkgreen;
-  background: #8f9;
+  border: 1px solid #070;
+  background: #af9;
   padding: 1ex 0.5em;
+  border-right-width: 3px;
   border-bottom-width: 3px;
-  border-right-width: 3	px;
-  margin: 0;
   vertical-align: top;
   font-size: smaller;
 }
 
 td.daycalhour {
   padding: 1px;
-  background: #8af;
+  background: #cef;
   text-align: right;
   width: 1%;
 }
@@ -387,5 +391,31 @@ td.daycalhour {
 .event h3 {
   font-size: smaller;
   color: navy;
+  margin: 0;
+}
+
+div.calnav a {
+  padding: 0 0.5em;
+  text-decoration: None;
+  background: #cef;
+  color: black;
+  font-size: smaller;
+  font-weight: bold;
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  margin-left: 1em;
+}
+
+div.calcontent {
+  border: 1px solid gray;
+  padding: 1ex 1em;
+}
+
+div.section {
+}
+
+div.section h2 {
+  font-size: medium;
   margin: 0;
 }

@@ -36,3 +36,32 @@
 </body>
 </html>
 </metal:block>
+
+<metal:block define-macro="calendarpage" i18n:domain="schooltool">
+<html metal:use-macro="view/macros/page">
+<title metal:define-slot="title" metal:fill-slot="title">[Title]</title>
+<body>
+  <h1 metal:define-slot="h1" metal:fill-slot="h1"
+      i18n:translate="">Welcome to SchoolTool</h1>
+  <div metal:fill-slot="content">
+    <div class="calnav">
+      <a class="calnav"
+	 tal:attributes="href string:${context/@@absolute_url}/daily.html"
+	 >Daily</a>
+      <a class="calnav"
+	 tal:attributes="href string:${context/@@absolute_url}/weekly.html"
+	 >Weekly</a>
+      <a class="calnav"
+	 tal:attributes="href string:${context/@@absolute_url}/monthly.html"
+	 >Monthly</a>
+      <a class="calnav"
+	 tal:attributes="href string:${context/@@absolute_url}/daily.html"
+	 >Yearly</a>
+    </div>
+    <div class="calcontent">
+      <p metal:define-slot="content">[Content]</p>
+    </div>
+  </div>
+</body>
+</html>
+</metal:block>

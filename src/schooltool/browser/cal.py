@@ -166,8 +166,8 @@ class CalendarViewBase(View):
     def calURL(self, cal_type, cursor=None):
         if cursor is None:
             cursor = self.cursor
-        return absoluteURL(self.request, self.context.__parent__,
-                          'calendar_%s.html?date=%s' % (cal_type, cursor))
+        return absoluteURL(self.request, self.context,
+                          '%s.html?date=%s' % (cal_type, cursor))
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -391,6 +391,7 @@ class MonthlyCalendarView(CalendarViewBase):
             last = end
         return weeks
 
+
 class CalendarView(View):
     """The main calendar view.
 
@@ -398,4 +399,16 @@ class CalendarView(View):
     """
 
     authorization = PrivateAccess
-    template = Template("www/calendar.pt")
+
+    def _traverse(self, name, request):
+        if name == 'weekly.html':
+            return WeeklyCalendarView(self.context)
+        elif name == 'daily.html':
+            return DailyCalendarView(self.context)
+        elif name == 'monthly.html':
+            return MonthlyCalendarView(self.context)
+        raise KeyError(name)
+
+    def render(self, request):
+        return str(request.redirect(
+            absoluteURL(request, self.context) + '/daily.html'))
