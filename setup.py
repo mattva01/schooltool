@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool setup script.
+SchoolBell setup script.
 """
 
 # TODO - allow for separate installation of iCal parser
@@ -44,9 +44,9 @@ from distutils.command.install_scripts \
 #
 
 class install_data(_install_data):
-    """Specialized Python installer for schoolbell.
+    """Specialized Python installer for SchoolBell.
 
-    This install data command changes the default schoolbell data install
+    This install data command changes the default SchoolBell data install
     directory to be the same as the directory for install_lib, this should
     dissapear when python 2.4 is available more widely and package_data is
     available.
@@ -84,10 +84,13 @@ class install(_install):
 
 
 class install_scripts(_install_scripts):
-    """Specialized Python installer for schooltool and schoolbell.
+    """Specialized Python installer for SchoolBell.
 
-    The primary purpose of this sub class it to configure the scripts on
-    installation.
+    The primary purpose of this sub class it to customize the scripts on
+    installation. By setting their default path and config file.
+
+    By default, no extra paths are added and the default config file is set to
+    be a file in the same directory as the script with a .conf extension.
     """
 
     user_options = _install_scripts.user_options + [
@@ -159,7 +162,7 @@ if sys.version_info < (2, 3):
         _setup(**kwargs)
 
 # find the data files
-# (this regex should be similar to the MANIFEST.in recursive includes)
+# this regex should be similar to the MANIFEST.in recursive includes
 datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|zcml)\Z')
 data_files = []
 for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
