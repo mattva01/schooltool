@@ -28,13 +28,19 @@ from pprint import pformat
 from sets import Set
 from datetime import date, time, timedelta, datetime
 from StringIO import StringIO
+from persistence import Persistent
 from zope.interface.verify import verifyObject
 from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.helpers import diff, dedent
 from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import LocatableEventTargetMixin
+from schooltool.facet import FacetedMixin
 from schooltool.interfaces import ISchooldayModel
-
+from schooltool.cal import TimetabledMixin
+from schooltool.relationship import RelatableMixin
 
 class TestSchooldayModel(unittest.TestCase):
 
@@ -781,6 +787,63 @@ class TestTimetable(unittest.TestCase):
         tt3["A"] = TimetableDay(periods)
         self.assertRaises(ValueError, tt.update, tt3)
 
+    def test_cloneEmpty(self):
+        from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+
+        days = ('A', 'B')
+        periods = ('Green', 'Blue')
+        tt = Timetable(days)
+        tt["A"] = TimetableDay(periods)
+        tt["B"] = TimetableDay(periods)
+        english = TimetableActivity("English")
+        math = TimetableActivity("Math")
+        bio = TimetableActivity("Biology")
+        tt["A"].add("Green", english)
+        tt["A"].add("Blue", math)
+        tt["B"].add("Green", bio)
+
+        tt2 = tt.cloneEmpty()
+        self.assert_(tt2 is not tt)
+        self.assertEquals(tt.day_ids, tt2.day_ids)
+        for day_id in tt2.day_ids:
+            day = tt[day_id]
+            day2 = tt2[day_id]
+            self.assert_(day is not day2)
+            self.assertEquals(day.periods, day2.periods)
+            for period in day2.periods:
+                self.assertEquals(list(day2[period]), [])
+
+    def testComparison(self):
+        from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+
+        days = ('A', 'B')
+        periods = ('Green', 'Blue')
+        tt = Timetable(days)
+        tt["A"] = TimetableDay(periods)
+        tt["B"] = TimetableDay(periods)
+        english = TimetableActivity("English")
+        math = TimetableActivity("Math")
+        bio = TimetableActivity("Biology")
+        tt["A"].add("Green", english)
+        tt["A"].add("Blue", math)
+        tt["B"].add("Green", bio)
+
+        self.assertEquals(tt, tt)
+        self.assertNotEquals(tt, None)
+
+        tt2 = Timetable(days)
+        tt2["A"] = TimetableDay(periods)
+        tt2["B"] = TimetableDay(periods)
+        self.assertNotEquals(tt, tt2)
+
+        tt2["A"].add("Green", english)
+        tt2["A"].add("Blue", math)
+        tt2["B"].add("Green", bio)
+        self.assertEquals(tt, tt2)
+
+        tt2["B"].remove("Green", bio)
+        self.assertNotEquals(tt, tt2)
+
 
 class TestTimetableDay(unittest.TestCase):
 
@@ -796,16 +859,40 @@ class TestTimetableDay(unittest.TestCase):
         from schooltool.cal import TimetableDay
         from schooltool.interfaces import ITimetableActivity
 
+        class ActivityStub:
+            implements(ITimetableActivity)
+
         periods = ('1', '2', '3', '4', '5')
         td = TimetableDay(periods)
         self.assertEqual(td.keys(), [])
-        class ActivityStub:
-            implements(ITimetableActivity)
         td.add("5", ActivityStub())
         td.add("1", ActivityStub())
         td.add("3", ActivityStub())
         td.add("2", ActivityStub())
         self.assertEqual(td.keys(), ['1', '2', '3', '5'])
+
+    def testComparison(self):
+        from schooltool.cal import TimetableDay
+        from schooltool.interfaces import ITimetableActivity
+
+        class ActivityStub:
+            implements(ITimetableActivity)
+
+        periods = ('A', 'B')
+        td1 = TimetableDay(periods)
+        td2 = TimetableDay(periods)
+        self.assertEquals(td1, td2)
+        self.assertNotEquals(td1, None)
+        self.failIf(td1 != td2)
+
+        a1 = ActivityStub()
+        td1.add("A", a1)
+        self.assertNotEquals(td1, td2)
+        td2.add("A", a1)
+        self.assertEquals(td1, td2)
+
+        td3 = TimetableDay(('C', 'D'))
+        self.assertNotEquals(td1, td3)
 
     def test_getitem_add_items_clear_remove(self):
         from schooltool.cal import TimetableDay
@@ -1307,6 +1394,144 @@ class TestCalendarEvent(unittest.TestCase):
         verifyObject(ICalendarEvent, ce)
 
 
+class TimetabledStub(TimetabledMixin, RelatableMixin,
+                     LocatableEventTargetMixin, FacetedMixin):
+
+    def __init__(self, parent):
+        RelatableMixin.__init__(self)
+        TimetabledMixin.__init__(self)
+        LocatableEventTargetMixin.__init__(self, parent)
+        FacetedMixin.__init__(self)
+
+
+class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
+                          unittest.TestCase):
+
+    def setUp(self):
+        self.setUpRegistries()
+        self.setUpEventService()
+
+    def tearDown(self):
+        self.tearDownRegistries()
+
+    def test_interface(self):
+        from schooltool.interfaces import ITimetabled
+        from schooltool.cal import TimetabledMixin
+
+        tm = TimetabledMixin()
+        verifyObject(ITimetabled, tm)
+
+    def newTimetable(self):
+        from schooltool.cal import Timetable, TimetableDay
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(("Green", "Blue"))
+        tt["B"] = TimetableDay(("Green", "Blue"))
+        return tt
+
+    def test_getCompositeTable_own(self):
+        from schooltool.cal import Timetable, TimetableDay
+
+        tm = TimetabledStub(self.eventService)
+        self.assertEqual(tm.timetables, {})
+        self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
+
+        tt = tm.timetables["sequential", "2003 fall"] = self.newTimetable()
+
+        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        self.assertEqual(result, tt)
+        self.assert_(result is not tt)
+
+    def test_getCompositeTable_related(self):
+        from schooltool.cal import TimetableActivity
+        from schooltool.membership import Membership
+        from schooltool.uris import URIGroup
+        import schooltool.membership
+
+        schooltool.membership.setUp()
+
+        tm = TimetabledStub(self.eventService)
+        parent = TimetabledStub(self.eventService)
+        Membership(group=parent, member=tm)
+
+        composite = self.newTimetable()
+        english = TimetableActivity("English")
+        composite["A"].add("Green", english)
+
+        def newComposite(schema_id, period_id):
+            if schema_id == "sequential" and period_id == "2003 fall":
+                return composite
+            else:
+                return None
+
+        parent.getCompositeTimetable = newComposite
+
+        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        self.assertEqual(result, composite)
+        self.assert_(result is not composite)
+
+        # Now test with our object having a private timetable
+        private = self.newTimetable()
+        math = TimetableActivity("Math")
+        private["B"].add("Blue", math)
+        tm.timetables["sequential", "2003 fall"] = private
+
+        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        expected = composite.cloneEmpty()
+        expected.update(composite)
+        expected.update(private)
+        self.assertEqual(result, expected)
+
+        # Now test things with a table which says (URIGroup, False)
+        tm.timetableSource = ((URIGroup, False), )
+
+        parent_private = self.newTimetable()
+        french = TimetableActivity("French")
+        parent_private["A"].add("Green", french)
+        parent.timetables["sequential", "2003 fall"] = parent_private
+
+        result = tm.getCompositeTimetable("sequential", "2003 fall")
+        expected = composite.cloneEmpty()
+        expected.update(private)
+        expected.update(parent_private)
+        self.assertEqual(result, expected)
+
+        self.assertEqual(Set(result["B"]["Blue"]), Set([math]))
+        self.assertEqual(Set(result["A"]["Green"]), Set([french]))
+
+    def test_getCompositeTable_facets(self):
+        from schooltool.cal import TimetableActivity
+        from schooltool.component import FacetManager
+        from schooltool.interfaces import IFacet, ICompositeTimetableProvider
+        from schooltool.teaching import Teaching
+        from schooltool.uris import URITaught
+        import schooltool.relationship
+
+        schooltool.relationship.setUp()
+
+        class TeacherFacet(Persistent):
+            implements(IFacet, ICompositeTimetableProvider)
+            __parent__ = None
+            __name__ = None
+            active = False
+            owner = None
+            timetableSource = ((URITaught, False), )
+
+        teacher = TimetabledStub(self.eventService)
+        taught = TimetabledStub(self.eventService)
+        Teaching(teacher=teacher, taught=taught)
+
+        facets = FacetManager(teacher)
+        facets.setFacet(TeacherFacet())
+
+        tt = self.newTimetable()
+        taught.timetables['sequential', '2003 fall'] = tt
+        stuff = TimetableActivity("Stuff")
+        tt["A"].add("Green", stuff)
+
+        result = teacher.getCompositeTimetable('sequential', '2003 fall')
+        self.assertEqual(result, tt)
+
+
 def test_suite():
     import schooltool.cal
     suite = unittest.TestSuite()
@@ -1326,4 +1551,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
     suite.addTest(unittest.makeSuite(TestCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestTimetabledFacet))
     return suite

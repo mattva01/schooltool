@@ -1066,6 +1066,21 @@ class ITimetable(Interface):
     def __getitem__(key):
         """Returns a ITimetableDay for a given day id"""
 
+    def cloneEmpty():
+        """Returns a new empty timetable with the same structure.
+
+        The new timetable has the same set of day_ids, and the sets of
+        period ids within each day.
+        """
+
+    def __eq__(other):
+        """Return True iff other is a Timetable with the same set of
+        day_ids and each day compares equal.
+        """
+
+    def __ne__(other):
+        """Returns True iff __eq__ returns False."""
+
 
 class ITimetableWrite(Interface):
 
@@ -1106,6 +1121,14 @@ class ITimetableDay(Interface):
 
         If there is no activity for the period, an empty set is returned.
         """
+
+    def __eq__(other):
+        """Return True iff other is a TimetableDay with the same set of
+        periods and with the same activities scheduled for those periods.
+        """
+
+    def __ne__(other):
+        """Returns True iff __eq__ returns False."""
 
 
 class ITimetableDayWrite(Interface):
@@ -1148,10 +1171,6 @@ class ICompositeTimetableProvider(Interface):
                link_role    The role URI of a link to traverse
                composed     A boolean value specifying whether to use
                             the composed timetable, otherwise private.
-
-               filter       A callable which decides whether the
-                            ITimetableActivity passed should be included
-                            or not.
         """)
 
 
@@ -1160,15 +1179,20 @@ class ITimetabled(Interface):
     either its own, or composed of the timetables of related objects.
     """
 
-    timetable = Attribute(
-        """A private timetable of this object.
+    timetables = Attribute(
+        """A mapping of private timetables of this object.
 
-        It can be directly manipulated.  For a lot of objects this
-        timetable will be empty.
+        The keys of this mapping are tuples of
+        (timetable_schema_id, time_period_id), e.g.
+        ('Weekly', '2003 autumn semester')
+
+        These timetables can be directly manipulated.  For a lot of
+        objects this mapping will be empty.
         """)
 
-    def getCompositeTimetable():
-        """Returns a composite timetable for a given object.
+    def getCompositeTimetable(tt_schema_id, time_period_id):
+        """Returns a composite timetable for a given object with a
+        given timetable schema for a given time period id.
 
         The timetable returned includes the events from the timetables
         of parent groups, groups taught, etc.

@@ -37,6 +37,9 @@ from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarEvent
+from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
+from schooltool.uris import URIGroup
+from schooltool.component import getRelatedObjects, FacetManager
 
 __metaclass__ = type
 
@@ -787,6 +790,22 @@ class Timetable(Persistent):
                 for activity in activities:
                     self[day_id].add(period, activity)
 
+    def cloneEmpty(self):
+        other = Timetable(self.day_ids)
+        for day_id in self.day_ids:
+            other[day_id] = TimetableDay(self[day_id].periods)
+        return other
+
+    def __eq__(self, other):
+        if not isinstance(other, Timetable):
+            return False
+        return self.items() == other.items()
+
+    def __ne__(self, other):
+        if not isinstance(other, Timetable):
+            return True
+        return self.items() != other.items()
+
 
 class TimetableDay(Persistent):
 
@@ -825,6 +844,19 @@ class TimetableDay(Persistent):
             raise ValueError("Key %r not in periods %r" % (key, self.periods))
         self.activities[key].remove(value)
 
+    def __eq__(self, other):
+        if not isinstance(other, TimetableDay):
+            return False
+        if self.periods != other.periods:
+            return False
+        for period in self.periods:
+            if Set(self.activities[period]) != Set(other.activities[period]):
+                return False
+        return True
+
+    def __ne__(self, other):
+        return not self == other
+
 
 class TimetableActivity:
     # This is immutable!   Otherwise, need to make it persistent.
@@ -835,7 +867,7 @@ class TimetableActivity:
         self.title = title
 
     def __repr__(self):
-        return "<TimetableActivity %s>" % repr(self.title)
+        return "TimetableActivity(%r)" % self.title
 
 
 class SchooldayPeriod:
@@ -1028,3 +1060,46 @@ class CalendarEvent:
         self.duration = duration
         self.title = title
 
+
+class TimetabledMixin:
+    """A mixin providing ITimetabled with the default semantics of
+    timetable composition by membership and logic for searching for
+    ICompositeTimetableProvider facets.
+    """
+
+    implements(ITimetabled, ICompositeTimetableProvider)
+
+    timetableSource = ((URIGroup, True), )
+
+    def __init__(self):
+        self.timetables = PersistentDict()
+
+    def getCompositeTimetable(self, schema_id, period_id):
+        sources = list(self.timetableSource)
+
+        for facet in FacetManager(self).iterFacets():
+            if ICompositeTimetableProvider.isImplementedBy(facet):
+                sources += facet.timetableSource
+
+        timetables = []
+        for role, composite in sources:
+            for related in getRelatedObjects(self, role):
+                if composite:
+                    tt = related.getCompositeTimetable(schema_id, period_id)
+                else:
+                    tt = related.timetables.get((schema_id, period_id))
+                if tt is not None:
+                    timetables.append(tt)
+        try:
+            timetables.append(self.timetables[schema_id, period_id])
+        except KeyError:
+            pass
+
+        if not timetables:
+            return None
+
+        result = timetables[0].cloneEmpty()
+        for tt in timetables:
+            result.update(tt)
+
+        return result
