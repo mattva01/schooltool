@@ -23,7 +23,8 @@ $Id$
 """
 
 import unittest
-from helpers import dedent, diff
+from StringIO import StringIO
+from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import RegistriesSetupMixin
 from zope.interface import Interface, implements
 
@@ -39,6 +40,7 @@ class RequestStub:
 
     code = 200
     reason = 'OK'
+    content = StringIO()
 
     def __init__(self, uri='', method='GET'):
         self.headers = {}
@@ -150,8 +152,8 @@ class TestView(unittest.TestCase):
         view._traverse = _traverse
         self.assertRaises(AssertionError, view.getChild, 'frob', request)
 
-    def test_render(self):
-        from schooltool.views import View, NotFoundView
+    def test_do_GET(self):
+        from schooltool.views import View
         context = object()
         body = 'foo'
         view = View(context)
@@ -174,16 +176,47 @@ class TestView(unittest.TestCase):
         view.template = TemplateStub(request, view, context, body)
         self.assertEquals(view.render(request), body)
 
+    def test_do_HEAD(self):
+        from schooltool.views import View
+        context = object()
+        body = 'foo'
+        view = View(context)
+
+        class TemplateStub:
+
+            def __init__(self, request, view, context, body):
+                self.request = request
+                self.view = view
+                self.context = context
+                self.body = body
+
+            def __call__(self, request, view=None, context=None):
+                assert request is self.request
+                assert view is self.view
+                assert context is self.context
+                return self.body
+
         request = RequestStub(method='HEAD')
         view.template = TemplateStub(request, view, context, body)
         self.assertEquals(view.render(request), '')
         self.assertEquals(request.headers['Content-Length'], len(body))
 
+    def test_render(self):
+        from schooltool.views import View
+        context = object()
+        view = View(context)
+        view.do_FOO = lambda request: "Foo"
+
         request = RequestStub(method='PUT')
         self.assertNotEquals(view.render(request), '')
         self.assertEquals(request.code, 405)
         self.assertEquals(request.reason, 'Method Not Allowed')
-        self.assertEquals(request.headers['Allow'], 'GET, HEAD')
+        self.assertEquals(request.headers['Allow'], 'FOO, GET, HEAD')
+
+        request = RequestStub(method='FOO')
+        self.assertEquals(view.render(request), 'Foo')
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.reason, 'OK')
 
 
 class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
@@ -326,7 +359,7 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
             </schooltool>
             """)
 
-        self.assertEquals(result, expected, diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(result, expected))
 
     def test__traverse(self):
         from schooltool.views import ApplicationObjectContainerView
@@ -377,7 +410,7 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
             </container>
             """)
 
-        self.assertEquals(result, expected, diff(result, expected))
+        self.assertEquals(result, expected, "\n" + diff(result, expected))
 
     def test__traverse(self):
         from schooltool.views import GroupView
@@ -386,6 +419,80 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
         view = self.view._traverse('root', request)
         self.assert_(view.__class__ is GroupView)
         self.assertRaises(KeyError, view._traverse, 'moot', request)
+
+
+class TestEventLogView(unittest.TestCase):
+
+    def test_empty(self):
+        from schooltool.views import EventLogView
+
+        class EventLogStub:
+            received = []
+
+        context = EventLogStub()
+        view = EventLogView(context)
+        request = RequestStub("http://localhost/foo/eventlog")
+        result = view.render(request)
+        expected = dedent("""
+            <eventLog>
+            </eventLog>
+        """)
+        self.assertEquals(result, expected, "\n" + diff(result, expected))
+
+    def test_nonempty(self):
+        from schooltool.views import EventLogView
+
+        class EventLogStub:
+            received = []
+
+        class EventStub:
+            def __str__(self):
+                return "Fake event"
+            def __repr__(self):
+                return "EventStub()"
+
+        context = EventLogStub()
+        context.received = [EventStub()]
+        view = EventLogView(context)
+        request = RequestStub("http://localhost/foo/eventlog")
+        result = view.render(request)
+        expected = dedent("""
+            <eventLog>
+              <event>Fake event</event>
+            </eventLog>
+        """)
+        self.assertEquals(result, expected, "\n" + diff(result, expected))
+
+    def test_clear(self):
+        from schooltool.views import EventLogView
+
+        class EventLogStub:
+            received = []
+            def clear(self):
+                self.received = []
+
+        class EventStub:
+            pass
+
+        context = EventLogStub()
+        context.received = [EventStub()]
+        view = EventLogView(context)
+        request = RequestStub("http://localhost/foo/eventlog", "PUT")
+        result = view.render(request)
+        expected = "1 event cleared"
+        self.assertEquals(result, expected, "\n" + diff(result, expected))
+
+        result = view.render(request)
+        expected = "0 events cleared"
+        self.assertEquals(result, expected, "\n" + diff(result, expected))
+
+        request = RequestStub("http://localhost/foo/eventlog", "PUT")
+        request.content.write("something")
+        request.content.seek(0)
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason,
+                "Only PUT with an empty body is defined for event logs")
 
 
 def test_suite():
@@ -397,6 +504,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
+    suite.addTest(unittest.makeSuite(TestEventLogView))
     return suite
 
 if __name__ == '__main__':

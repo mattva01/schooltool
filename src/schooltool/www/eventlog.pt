@@ -1,0 +1,4 @@
+<eventLog xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <event tal:repeat="event context/received"
+         tal:content="event" />
+</eventLog>

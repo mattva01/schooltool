@@ -32,6 +32,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.component import getPath, getRelatedObjects
 from schooltool.component import ComponentLookupError
 from schooltool.component import getView, registerView
+from schooltool.debug import IEventLog
 
 __metaclass__ = type
 
@@ -128,6 +129,8 @@ class View(Resource):
         template    attribute that contains a Template instance for rendering
         _traverse   method that should return a view for a contained object
                     or raise a KeyError
+        do_XXX      methot that processes HTTP requests XXX for various values
+                    of XXX.  Its signature should match render.
 
     """
 
@@ -150,15 +153,27 @@ class View(Resource):
         raise KeyError(name)
 
     def render(self, request):
-        if request.method == 'GET':
-            return self.template(request, view=self, context=self.context)
-        elif request.method == 'HEAD':
-            body = self.template(request, view=self, context=self.context)
-            request.setHeader('Content-Length', len(body))
-            return ""
+        handler = getattr(self, 'do_%s' % request.method, None)
+        if handler is not None:
+            return handler(request)
         else:
-            request.setHeader('Allow', 'GET, HEAD')
+            request.setHeader('Allow', ', '.join(self.allowedMethods()))
             return errorPage(request, 405, "Method Not Allowed")
+
+    def allowedMethods(self):
+        """Lists all allowed methods."""
+        return [name[3:] for name in dir(self)
+                         if name.startswith('do_')
+                             and name[3:].isalpha()
+                             and name[3:].isupper()]
+
+    def do_GET(self, request):
+        return self.template(request, view=self, context=self.context)
+
+    def do_HEAD(self, request):
+        body = self.do_GET(request)
+        request.setHeader('Content-Length', len(body))
+        return ""
 
 
 class GroupView(View):
@@ -210,9 +225,27 @@ class ApplicationObjectContainerView(ItemTraverseView):
                 for key in self.context.keys()]
 
 
+class EventLogView(View):
+    """View for EventLogFacet."""
+
+    template = Template("www/eventlog.pt", content_type="text/xml")
+
+    def do_PUT(self, request):
+        if request.content.read(1):
+            return errorPage(request, 400, "Only PUT with an empty body"
+                                           " is defined for event logs")
+        n = len(self.context.received)
+        self.context.clear()
+        if n == 1:
+            return "1 event cleared"
+        else:
+            return "%d events cleared" % n
+
+
 def setUp():
     registerView(IPerson, PersonView)
     registerView(IGroup, GroupView)
     registerView(IApplication, ApplicationView)
     registerView(IApplicationObjectContainer, ApplicationObjectContainerView)
+    registerView(IEventLog, EventLogView)
 
