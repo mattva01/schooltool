@@ -74,6 +74,12 @@ class RootView(View):
     error = False
     username = ''
 
+    def do_GET(self, request):
+        if request.authenticated_user is not None:
+            return self.redirect('/start', request)
+        else:
+            return View.do_GET(self, request)
+
     def do_POST(self, request):
         username = request.args['username'][0]
         password = request.args['password'][0]

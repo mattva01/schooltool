@@ -111,6 +111,14 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
 
+    def test_render_already_logged_in(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user='the_boss')
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/start')
+
     def test_post(self):
         from schooltool.component import getTicketService
         view = self.createView()
