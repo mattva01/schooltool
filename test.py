@@ -43,21 +43,22 @@ regexp is applied to the whole path (package/package/module.py). Test regexp
 is applied to a full test id (package.package.module.class.test_method).
 
 Options:
-  -h               print this help message
-  -v               verbose (print dots for each test run)
-  -vv              very verbose (print test names)
-  -q               quiet (do not print anything on success)
-  -w               enable warnings about omitted test cases
-  -p               show progress bar (can be combined with -v or -vv)
-  -u               select unit tests (default)
-  -f               select functional tests
-  --level n        select only tests at level n or lower
-  --all-levels     select all tests
-  --list-files     list all selected test files
-  --list-tests     list all selected test cases
-  --list-hooks     list all loaded test hooks
-  --coverage       create code coverage reports
-  --search-in dir  limit directory tree walk to dir (optimisation)
+  -h                    print this help message
+  -v                    verbose (print dots for each test run)
+  -vv                   very verbose (print test names)
+  -q                    quiet (do not print anything on success)
+  -w                    enable warnings about omitted test cases
+  -p                    show progress bar (can be combined with -v or -vv)
+  -u                    select unit tests (default)
+  -f                    select functional tests
+  --level n             select only tests at level n or lower
+  --all-levels          select all tests
+  --list-files          list all selected test files
+  --list-tests          list all selected test cases
+  --list-hooks          list all loaded test hooks
+  --coverage            create code coverage reports
+  --search-in dir       limit directory tree walk to dir (optimisation)
+  --immediate-errors    show errors as soon as they happen
 """
 #
 # This script borrows ideas from Zope 3's test runner heavily.  It is smaller
@@ -478,7 +479,7 @@ def main(argv):
     opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufw',
                                    ['list-files', 'list-tests', 'list-hooks',
                                     'level=', 'all-levels', 'coverage',
-                                    'search-in='])
+                                    'search-in=', 'immediate-errors'])
     for k, v in opts:
         if k == '-h':
             print __doc__
@@ -527,6 +528,8 @@ def main(argv):
                                       % (argv[0], v, cfg.basedir))
                 return 1
             cfg.search_in += (dir, )
+        elif k == '--immediate-errors':
+            cfg.immediate_errors = True
         else:
             print >> sys.stderr, '%s: invalid option: %s' % (argv[0], k)
             print >> sys.stderr, 'run %s -h for help'
