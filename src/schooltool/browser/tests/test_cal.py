@@ -22,6 +22,7 @@ Unit tests for schooltool.browser.cal
 $Id$
 """
 
+import urllib
 import re
 import unittest
 from logging import INFO
@@ -2179,11 +2180,11 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         delete_url = absoluteURL(request, self.calendar,
                                  'delete_event.html?date=%s&event_id=%s'
                                  % ('2004-08-14', event_id))
-        url = 'http://localhost:7001/?forbidden=1&url=%s' % delete_url
+        quoted_url = urllib.quote(delete_url)
+        url = 'http://localhost:7001/?forbidden=1&url=%s' % quoted_url
         self.assertRedirectedTo(request, url)
         # If the event was not deleted, calendar.find will not raise KeyError
-        calendar = self.combinedCalendar()
-        calendar.find(event_id)
+        self.assert_(self.combinedCalendar().find(event_id))
 
     def tryToDelete(self, user, event_id):
         from schooltool.browser.cal import EventDeleteView
