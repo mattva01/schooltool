@@ -46,9 +46,8 @@ from wxPython.html import wxHtmlWindow
 from schooltool.clients.guiclient import SchoolToolClient, Unchanged
 from schooltool.clients.guiclient import RollCallEntry, PersonInfo
 from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
-from schooltool.uris import URIMembership, URIGroup
-from schooltool.uris import URITeaching, URITaught
-from schooltool.uris import nameURI
+from schooltool.clients.guiclient import URIMembership_uri, URIGroup_uri
+from schooltool.clients.guiclient import URITeaching_uri, URITaught_uri
 from schooltool.common import parse_date, parse_time, to_locale, from_locale
 from schooltool.translation import gettext, ugettext
 
@@ -2075,7 +2074,7 @@ class MainFrame(wxFrame):
         person_path = persons[choice][1]
         try:
             self.client.createRelationship(group_path, person_path,
-                                           URIMembership, URIGroup)
+                                           URIMembership_uri, URIGroup_uri)
         except SchoolToolError, e:
             wxMessageBox(_("Could not add member: %s") % e,
                          _("Add Member"), wxICON_ERROR|wxOK)
@@ -2117,7 +2116,7 @@ class MainFrame(wxFrame):
         person_path = persons[choice].person_path
         try:
             self.client.createRelationship(group_path, person_path,
-                                           URITeaching, URITaught)
+                                           URITeaching_uri, URITaught_uri)
         except SchoolToolError, e:
             wxMessageBox(_("Could not add teacher: %s") % e,
                          _("Add Teacher"), wxICON_ERROR|wxOK)
@@ -2157,7 +2156,7 @@ class MainFrame(wxFrame):
         subgroup_path = groups[choice][1]
         try:
             self.client.createRelationship(group_path, subgroup_path,
-                                           URIMembership, URIGroup)
+                                           URIMembership_uri, URIGroup_uri)
         except SchoolToolError, e:
             wxMessageBox(_("Could not add subgroup: %s") % e,
                          _("Add Subgroup"), wxICON_ERROR|wxOK)
@@ -2328,9 +2327,9 @@ class MainFrame(wxFrame):
                         to_wx(item.target_title))
             self.relationshipListCtrl.SetItemData(idx, idx)
             self.relationshipListCtrl.SetStringItem(idx, 1,
-                        to_wx(nameURI(item.role)))
+                        to_wx(item.role.name))
             self.relationshipListCtrl.SetStringItem(idx, 2,
-                        to_wx(nameURI(item.arcrole)))
+                        to_wx(item.arcrole.name))
         self.relationshipListCtrl.Thaw()
 
     def DoRefresh(self, event=None):
@@ -2697,8 +2696,6 @@ class SchoolToolApp(wxApp):
 
 
 def main():
-    import schooltool.uris
-    schooltool.uris.setUp()
     # Do not output XML parsing errors to the terminal
     libxml2.registerErrorHandler(lambda ctx, error: None, None)
     wxInitAllImageHandlers()
