@@ -853,12 +853,12 @@ class WeeklyCalendarView(CalendarViewBase):
     template = Template("www/cal_weekly.pt")
 
     def title(self):
+        # XXX Not tested.
         month_name = unicode(self.month_names[self.cursor.month])
-        return _('%(month)s, %(year)s (week %(week)s)') % {
-                                'month': month_name,
-                                'year': self.cursor.year,
-                                'week': self.cursor.isocalendar()[1],
-                            }
+        args = {'month': month_name,
+                'year': self.cursor.year,
+                'week': self.cursor.isocalendar()[1]}
+        return _('%(month)s, %(year)s (week %(week)s)') % args
 
     def prevWeek(self):
         """Return the day a week before."""
@@ -1943,7 +1943,7 @@ def next_month(date):
 def week_start(date, first_day_of_week=0):
     """Calculate the first day of the week for a given date.
 
-    Assuming that week starts on Mondays:
+    Assuming that weeks start on Mondays:
 
         >>> week_start(date(2004, 8, 19))
         datetime.date(2004, 8, 16)
@@ -1958,7 +1958,7 @@ def week_start(date, first_day_of_week=0):
         >>> week_start(date(2004, 8, 23))
         datetime.date(2004, 8, 23)
 
-    Assuming that week starts on Sundays:
+    Assuming that weeks start on Sundays:
 
         >>> import calendar
         >>> week_start(date(2004, 8, 19), calendar.SUNDAY)

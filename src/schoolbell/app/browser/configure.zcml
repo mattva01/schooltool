@@ -267,15 +267,24 @@
 <!-- Calendar views -->
 
   <page
-      name="calendar_plain.html"
+      name="cal_plain.html"
       for="schoolbell.app.interfaces.ICalendarOwner"
       class="schoolbell.app.browser.cal.PlainCalendarView"
-      template="templates/calendar_plain.pt"
+      template="templates/cal_plain.pt"
       permission="zope.View"
       menu="zmi_views"
       title="Calendar (plain)"
       />
 
+  <page
+      name="cal_weekly.html"
+      for="schoolbell.app.interfaces.ICalendarOwner"
+      class="schoolbell.app.browser.cal.WeeklyCalendarView"
+      template="templates/cal_weekly.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Calendar (weekly)"
+      />
 
 <!-- Skin and resources -->
 

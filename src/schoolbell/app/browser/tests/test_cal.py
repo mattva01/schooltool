@@ -23,7 +23,12 @@ $Id$
 """
 
 import unittest
+from datetime import datetime, date
 from zope.testing import doctest
+from zope.publisher.browser import TestRequest
+from zope.app.tests import setup, ztapi
+from zope.interface import directlyProvides
+from zope.app.traversing.interfaces import IContainmentRoot
 
 
 def doctest_PlainCalendarView():
@@ -31,7 +36,6 @@ def doctest_PlainCalendarView():
 
         >>> from schoolbell.app.browser.cal import PlainCalendarView
         >>> from schoolbell.app.app import Person
-        >>> from zope.publisher.browser import TestRequest
         >>> person = Person()
         >>> request = TestRequest()
         >>> view = PlainCalendarView(person, request)
@@ -49,9 +53,54 @@ def doctest_PlainCalendarView():
     """
 
 
+class TestCalendarViewBase(unittest.TestCase):
+    # Legacy unit tests from SchoolTool
+
+    def test_dayTitle(self):
+        from schoolbell.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, None)
+        dt = datetime(2004, 7, 1)
+        self.assertEquals(view.dayTitle(dt), "Thursday, 2004-07-01")
+
+
+def doctest_CalendarViewBase():
+    """Tests for CalendarViewBase.
+
+        >>> from schoolbell.app.browser.cal import CalendarViewBase
+
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> directlyProvides(person, IContainmentRoot)
+
+    CalendarViewBase has a method calURL used for forming links to other
+    calendar views on other dates.
+
+        >>> request = TestRequest()
+        >>> view = CalendarViewBase(person, request)
+        >>> view.cursor = date(2005, 2, 3)
+
+        >>> view.calURL("quarterly")
+        'http://127.0.0.1/cal_quarterly.html?date=2005-02-03'
+        >>> view.calURL("quarterly", date(2005, 12, 13))
+        'http://127.0.0.1/cal_quarterly.html?date=2005-12-13'
+
+
+    """
+
+
+def setUp(test):
+    setup.placelessSetUp()
+    setup.setUpTraversal()
+
+
+def tearDown(test):
+    setup.placelessTearDown()
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(unittest.makeSuite(TestCalendarViewBase))
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.cal'))
     return suite
 
