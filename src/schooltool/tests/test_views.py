@@ -88,6 +88,16 @@ class FacetStub:
         self.owner = owner
 
 
+class TestHelpers(unittest.TestCase):
+
+    def test_absoluteURL(self):
+        from schooltool.views import absoluteURL
+        request = RequestStub("http://locahost/foo/bar")
+        self.assertEquals(absoluteURL(request, '/moo/spoo'),
+                          "http://localhost/moo/spoo")
+        self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
+
+
 class TestTemplate(unittest.TestCase):
 
     def test_call(self):
@@ -841,6 +851,8 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                      [l.traverse() for l in self.sub.listLinks()])
         self.assertEquals(request.headers['Content-Type'],
                           "text/plain")
+        self.assertEquals(request.headers['Location'],
+                          "http://localhost/groups/new/relationships/0001")
 
     def testBadPOSTs(self):
         bad_requests = (
@@ -1080,6 +1092,7 @@ class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestHelpers))
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
     suite.addTest(unittest.makeSuite(TestView))

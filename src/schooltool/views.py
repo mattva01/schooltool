@@ -43,6 +43,17 @@ __metaclass__ = type
 moduleProvides(IModuleSetup)
 
 #
+# Helpers
+#
+
+def absoluteURL(request, path):
+    """Returns the absulute URL of the object adddressed with path"""
+    if not len(path) or path[0] != '/':
+        raise ValueError("Path must be absolute")
+    return 'http://%s%s' % (request.getRequestHostname(), path)
+
+
+#
 # Page templates
 #
 
@@ -289,8 +300,7 @@ class ApplicationObjectCreator(XMLPseudoParser):
         except KeyError:
             pass
         obj = container.new(**kw)
-        location = ('http://%s%s'
-                    % (request.getRequestHostname(), getPath(obj)))
+        location = absoluteURL(request, getPath(obj))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)
@@ -465,9 +475,8 @@ class FacetManagementView(View, XMLPseudoParser):
         facet = factory()
         self.context.setFacet(facet)
 
-        location = ('http://%s%s/%s'
-                    % (request.getRequestHostname(), request.path,
-                       facet.__name__))
+        location = absoluteURL(request,
+                               '%s/%s' % (request.path, facet.__name__))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)
@@ -536,13 +545,11 @@ class RelationshipsView(View, XMLPseudoParser):
             return "Valency does not exist"
         kw = {val.this: self.context, val.other: other}
         links = val.schema(**kw)
+        link = links[val.this]
+        location = absoluteURL(request, getPath(link))
+        request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
-        # XXX HTTP/1.1, section 9.5:
-        #     If a resource has been created on the origin server, the response
-        #     SHOULD be 201 (Created) and contain an entity which describes the
-        #     status of the request and refers to the new resource, and a
-        #     Location header (see section 14.30).
         return "Relationship created"
 
 class LinkView(View):
