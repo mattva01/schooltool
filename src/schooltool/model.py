@@ -118,6 +118,8 @@ class Absence(Persistent):
             self.expected_presence = comment.expected_presence_change
         self.comments.append(comment)
         self.comments = self.comments
+        event = AbsenteeismEvent(self, comment)
+        event.dispatch(self.person)
 
 
 class AbsenceComment:

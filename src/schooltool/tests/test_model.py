@@ -29,11 +29,13 @@ from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IFaceted
 from schooltool.interfaces import IEventConfigurable
+from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import LocatableEventTargetMixin
 
 __metaclass__ = type
 
 
-class TestPerson(unittest.TestCase):
+class TestPerson(EventServiceTestMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IPerson, IEventTarget, IRelatable
@@ -50,6 +52,7 @@ class TestPerson(unittest.TestCase):
         from schooltool.interfaces import ILink
         from schooltool.model import Person, AbsenceComment
         person = Person('John Smith')
+        person.__parent__ = self.eventService
         absence = person.addAbsence(AbsenceComment(None, None))
 
         class LinkStub:
@@ -76,6 +79,7 @@ class TestPerson(unittest.TestCase):
         from schooltool.interfaces import IAbsence
         from schooltool.model import Person, AbsenceComment
         person = Person('John Smith')
+        person.__parent__ = self.eventService
 
         self.assert_(person.getCurrentAbsence() is None)
         self.assertEquals(list(person.iterAbsences()), [])
@@ -147,7 +151,7 @@ class TestGroup(unittest.TestCase):
         verifyObject(IRelatable, group)
 
 
-class TestAbsenteeism(unittest.TestCase):
+class TestAbsenteeism(EventServiceTestMixin, unittest.TestCase):
 
     def setUp(self):
         from zodb.db import DB
@@ -156,6 +160,7 @@ class TestAbsenteeism(unittest.TestCase):
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
         get_transaction().begin()
+        self.setUpEventService()
 
     def tearDown(self):
         from transaction import get_transaction
@@ -168,7 +173,7 @@ class TestAbsenteeism(unittest.TestCase):
         from schooltool.interfaces import IAbsenteeismEvent
         from schooltool.model import Absence, AbsenceComment, AbsenteeismEvent
 
-        person = object()
+        person = LocatableEventTargetMixin(self.eventService)
         absence = Absence(person)
         verifyObject(IAbsence, absence)
         self.assertEquals(absence.person, person)
@@ -203,7 +208,14 @@ class TestAbsenteeism(unittest.TestCase):
 
         absence.addComment(comment1)
         self.assertEquals(absence.comments, [comment1])
+        e = self.check_one_event_received([person])
+        self.assert_(IAbsenteeismEvent.isImplementedBy(e))
+        self.assert_(e.absence, absence)
+        self.assert_(e.comment, comment1)
+
         self.assertRaises(TypeError, absence.addComment, object())
+        e2 = self.check_one_event_received([person])
+        self.assert_(e is e2)
 
         self.datamgr.add(absence)
         absence._p_changed = False

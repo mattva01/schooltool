@@ -256,14 +256,6 @@ class TestEvents(unittest.TestCase):
 
 class TestRelate(EventServiceTestMixin, unittest.TestCase):
 
-    def check_one_event_received(self, receivers):
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        for target in receivers:
-            self.assertEquals(len(target.events), 1)
-            self.assert_(target.events[0] is e)
-        return e
-
     def test_relate(self):
         from schooltool.relationship import relate
         self.doChecks(relate)

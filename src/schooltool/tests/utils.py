@@ -45,6 +45,9 @@ class LocatableEventTargetMixin:
     def notify(self, e):
         self.events.append(e)
 
+    def clearEvents(self):
+        self.events = []
+
 
 class EventServiceTestMixin:
     """Mixin for setting up an event service."""
@@ -68,10 +71,30 @@ class EventServiceTestMixin:
             def notify(self, e):
                 self.events.append(e)
 
+            def clearEvents(self):
+                self.events = []
+
         self.serviceManager = ServiceManager()
         self.eventService = self.serviceManager.eventService
 
     setUp = setUpEventService
+
+    def check_one_event_received(self, receivers=None):
+        """Check that exactly one event was received by the event service.
+
+        Returns that one event.
+
+        Also check that all receivers have received the event and only
+        that one event (this only works if receivers are stubs that collect
+        received events in their events attribute).
+        """
+        self.assertEquals(len(self.eventService.events), 1)
+        e = self.eventService.events[0]
+        if receivers:
+            for target in receivers:
+                self.assertEquals(len(target.events), 1)
+                self.assert_(target.events[0] is e)
+        return e
 
 
 class RegistriesSetupMixin:
