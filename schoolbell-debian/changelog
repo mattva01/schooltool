@@ -1,3 +1,9 @@
+schoolbell (0.9.99+1.0rc1) unstable; urgency=low
+
+  * Split the schoolbell and schooltool packages.
+
+ -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
+
 schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
 
   * Delete SSL cerificate on purge. Ask debconf question whether to purge

@@ -8,13 +8,13 @@ It was downloaded from http://www.schooltool.org
 
 Copyright:
 
-SchoolTool is copyright (c) 2003, 2004 Shuttleworth Foundation
+SchoolBell is copyright (c) 2003, 2004, 2004, 2005 Shuttleworth Foundation
 
-All files in the /usr/dir/schooltool directory (with some exceptions in
-/usr/dir/schooltool/translation) are part of SchoolTool, and are (c) Shuttleworth
-Foundation.
+All files in the /usr/dir/schoolbell directory (with some exceptions in
+/usr/dir/schoolbell/translation) are part of SchoolTool, and are (c)
+Shuttleworth Foundation.
 
-Unless otherwise stated, files in /usr/dir/schooltool are released under the
+Unless otherwise stated, files in /usr/dir/schoolbell are released under the
 terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2 of the License, or (at your option)
 any later version.
@@ -31,11 +31,8 @@ the individual files and directories for details of the licenses (see below [1])
   /usr/dir/schooltool/translation
 
 where dir can be
-    share/schooltool-clients
-    lib/schooltool-clients
-    share/schooltool
     share/schoolbell
-    lib/schooltool
+    lib/schoolbell
 
 Files in the same directory of the source tree as the main README file are (c)
 Shuttleworth Foundation, with the exception of GPL, which is a copy of the Free
