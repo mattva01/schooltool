@@ -263,6 +263,8 @@ pre.traceback span.source {
   color: black;
 }
 
+/* Busy search for resources */
+
 form.busysearch select {
   height: 20ex;
   width: 10em;
@@ -289,6 +291,8 @@ table.available td {
 div.available {
   clear: both;
 }
+
+/* Calendars */
 
 div.day {
   border: 0.5px solid gray;
@@ -472,10 +476,28 @@ div.calcontent {
   padding: 1ex 1em;
 }
 
+/* Start page */
+
 div.section {
 }
 
 div.section h2 {
   font-size: medium;
   margin: 0;
+}
+
+/* Timetable schemas */
+
+table.timetable th.day input.text {
+  width: 100%;
+  background: #cccccc;
+  border: 1px solid #888888;
+}
+table.timetable td.period input.text {
+  width: 100%;
+  background: #eeeeee;
+  border: 1px solid #888888;
+}
+table.timetable td.buttons {
+  text-align: right;
 }

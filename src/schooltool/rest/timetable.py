@@ -111,24 +111,76 @@ class TimetableReadView(View, TimetableContentNegotiation):
         return template(request, view=self, context=self.context)
 
     def rows(self):
-        rows = []
-        for ncol, (id, day) in enumerate(self.context.items()):
-            for nrow, (period, actiter) in enumerate(day.items()):
-                activities = []
-                for a in actiter:
-                    resources = [r.title for r in a.resources]
-                    if resources:
-                        resources.sort()
-                        activities.append('%s (%s)'
-                                          % (a.title, ', '.join(resources)))
-                    else:
-                        activities.append(a.title)
-                activities.sort()
-                if nrow >= len(rows):
-                    rows.append([{'period': '', 'activity': ''}] * ncol)
-                rows[nrow].append({'period': period,
-                                   'activity': " / ".join(activities)})
-        return rows
+        return format_timetable_for_presentation(self.context)
+
+
+def format_timetable_for_presentation(timetable):
+    """Prepare a timetable for presentation with Page Templates.
+
+    Returns a matrix where columns correspond to days, rows correspond to
+    periods, and cells contain a dict with two keys
+
+      'period' -- the name of this period (different days may have different
+                  periods)
+
+      'activity' -- activity or activities that occur during that period of a
+                    day.
+
+    First, let us create a timetable:
+
+      >>> from pprint import pprint
+      >>> timetable = Timetable(['day 1', 'day 2', 'day 3'])
+      >>> timetable['day 1'] = TimetableDay(['A', 'B'])
+      >>> timetable['day 2'] = TimetableDay(['C', 'D', 'E'])
+      >>> timetable['day 3'] = TimetableDay(['F'])
+      >>> timetable['day 1'].add('A', TimetableActivity('Something'))
+      >>> timetable['day 1'].add('B', TimetableActivity('A2'))
+      >>> timetable['day 1'].add('B', TimetableActivity('A1'))
+
+    Some timetable activities may have associated resources
+
+      >>> from schooltool.model import Resource
+      >>> from schooltool.rest.tests import setPath
+      >>> r1 = Resource('R1'); setPath(r1, '/resources/r1')
+      >>> r2 = Resource('R2'); setPath(r2, '/resources/r2')
+      >>> timetable['day 2'].add('C', TimetableActivity('Else',
+      ...                                               resources=[r1]))
+      >>> timetable['day 3'].add('F', TimetableActivity('A3',
+      ...                                               resources=[r2, r1]))
+
+    Here's how it looks like
+
+      >>> matrix = format_timetable_for_presentation(timetable)
+      >>> for row in matrix:
+      ...    for cell in row:
+      ...        print '%(period)1s: %(activity)-11s |' % cell,
+      ...    print
+      A: Something   | C: Else (R1)   | F: A3 (R1, R2) |
+      B: A1 / A2     | D:             |  :             |
+       :             | E:             |  :             |
+
+
+    """
+    rows = []
+    for ncol, (id, day) in enumerate(timetable.items()):
+        for nrow, (period, actiter) in enumerate(day.items()):
+            activities = []
+            for a in actiter:
+                resources = [r.title for r in a.resources]
+                if resources:
+                    resources.sort()
+                    activities.append('%s (%s)'
+                                      % (a.title, ', '.join(resources)))
+                else:
+                    activities.append(a.title)
+            activities.sort()
+            if nrow >= len(rows):
+                rows.append([{'period': '', 'activity': ''}] * ncol)
+            rows[nrow].append({'period': period,
+                               'activity': " / ".join(activities)})
+        for nrow in range(nrow + 1, len(rows)):
+            rows[nrow].append({'period': '', 'activity': ''})
+    return rows
 
 
 class TimetableReadWriteView(TimetableReadView):

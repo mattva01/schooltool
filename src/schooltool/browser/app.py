@@ -37,8 +37,10 @@ from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.translation import ugettext as _
 from schooltool.component import getTicketService, traverse
 from schooltool.rest.app import AvailabilityQueryView
-__metaclass__ = type
+from schooltool.component import getTimetableSchemaService
+from schooltool.browser.timetable import TimetableSchemaWizard
 
+__metaclass__ = type
 
 # Time limit for session expiration
 session_time_limit = datetime.timedelta(hours=5)
@@ -119,6 +121,9 @@ class RootView(View):
             return ApplicationLogView(self.context)
         elif name == 'busysearch':
             return BusySearchView(self.context)
+        elif name == 'TEST_tt': # XXX remove this
+            service = getTimetableSchemaService(self.context)
+            return TimetableSchemaWizard(service)
         raise KeyError(name)
 
 

@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.browser.tests.test_model import AppSetupMixin
@@ -113,10 +114,160 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
                           "John Smith's timetable for 2004 fall, default")
 
 
+class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def createView(self):
+        from schooltool.browser.timetable import TimetableSchemaWizard
+        view = TimetableSchemaWizard(None)
+        view.request = RequestStub(authenticated_user=self.manager)
+        return view
+
+    def createDefaultSchema(self, days=('Day 1', ), periods=('Period 1', )):
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        schema = Timetable(days)
+        for day in days:
+            schema[day] = TimetableDay(list(periods))
+        return schema
+
+    def createSchema(self, days, *periods_for_each_day):
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        schema = Timetable(days)
+        for day, periods in zip(days, periods_for_each_day):
+            schema[day] = TimetableDay(list(periods))
+        return schema
+
+    def test(self):
+        view = self.createView()
+        request = view.request
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+
+    def test_buildSchema_empty(self):
+        view = self.createView()
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createDefaultSchema())
+
+    def test_buildSchema_from_request(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Monday']
+        view.request.args['day2'] = [' Tuesday ']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = [' B ']
+        view.request.args['day2.period1'] = ['C']
+        view.request.args['day2.period2'] = ['']
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
+                                                    ['A', 'B'], ['C']))
+
+    def test_buildSchema_empty_day(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Monday']
+        view.request.args['day2'] = ['Tuesday']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['B']
+        view.request.args['day2.period1'] = ['']
+        view.request.args['day2.period2'] = ['']
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
+                                                    ['A', 'B'], ['Period 1']))
+
+    def test_buildSchema_repeated_day_name(self):
+        view = self.createView()
+        view.request.args['day1'] = ['D']
+        view.request.args['day2'] = ['D']
+        view.request.args['day3'] = ['D']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day2.period1'] = ['B']
+        view.request.args['day3.period1'] = ['C']
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['D', 'D (2)', 'D (3)'],
+                                                    ['A'], ['B'], ['C']))
+
+    def test_buildSchema_add_day(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Monday']
+        view.request.args['ADD_DAY'] = ["Add"]
+        schema = view._buildSchema()
+        self.assertEquals(schema,
+                          self.createDefaultSchema(['Monday', 'Day 2']))
+
+    def test_buildSchema_add_period(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Monday']
+        view.request.args['day2'] = ['Tuesday']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['B']
+        view.request.args['day2.period1'] = ['C']
+        view.request.args['day2.period2'] = ['']
+        view.request.args['ADD_PERIOD'] = ["Add"]
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
+                                                    ['A', 'B', 'Period 3'],
+                                                    ['C']))
+
+    def test_buildSchema_add_period_not_first_day(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Monday']
+        view.request.args['day2'] = ['Tuesday']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day2.period1'] = ['C']
+        view.request.args['day2.period2'] = ['D']
+        view.request.args['ADD_PERIOD'] = ["Add"]
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Monday', 'Tuesday'],
+                                                    ['A'],
+                                                    ['C', 'D', 'Period 3']))
+
+    def test_buildSchema_delete_day(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Day 1']
+        view.request.args['day2'] = ['Day 1']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['B']
+        view.request.args['day2.period1'] = ['C']
+        view.request.args['day2.period2'] = ['D']
+        view.request.args['DELETE_DAY_1'] = ["Delete"]
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Day 1'], ['C', 'D']))
+
+    def test_buildSchema_copy_day(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Day 1']
+        view.request.args['day2'] = ['Day 2']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['B']
+        view.request.args['day2.period1'] = ['C']
+        view.request.args['day2.period2'] = ['D']
+        view.request.args['COPY_DAY_2'] = ["Copy"]
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Day 1', 'Day 2'],
+                                                    ['A', 'B'], ['A', 'B']))
+
+    def test_buildSchema_copy_day_1(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Day 1']
+        view.request.args['day2'] = ['Day 2']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['B']
+        view.request.args['day2.period1'] = ['C']
+        view.request.args['day2.period2'] = ['D']
+        view.request.args['COPY_DAY_1'] = ["Copy"]
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['Day 1', 'Day 2'],
+                                                    ['A', 'B'], ['C', 'D']))
+
+
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite('schooltool.browser.timetable'))
     suite.addTest(unittest.makeSuite(TestTimetableTraverseView))
     suite.addTest(unittest.makeSuite(TestTimetableView))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
     return suite
 
 

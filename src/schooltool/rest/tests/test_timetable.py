@@ -23,10 +23,12 @@ $Id$
 """
 
 import unittest
-from logging import INFO
 import datetime
+from logging import INFO
 from sets import Set
+
 from zope.interface import implements
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.interfaces import ITraversable
 from schooltool.rest.tests import RequestStub, TraversableRoot, setPath
@@ -1673,6 +1675,7 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite('schooltool.rest.timetable'))
     suite.addTest(unittest.makeSuite(TestTimetableContentNegotiation))
     suite.addTest(unittest.makeSuite(TestTimetableTraverseViews))
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
