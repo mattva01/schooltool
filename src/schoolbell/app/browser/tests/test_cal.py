@@ -2691,10 +2691,13 @@ def doctest_EventDeleteView():
 
     We'll need a little context here:
 
+        >>> from schoolbell.app.app import Person, PersonContainer
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
         >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
-        >>> cal = Calendar()
-        >>> directlyProvides(cal, IContainmentRoot)
+        >>> container = PersonContainer()
+        >>> directlyProvides(container, IContainmentRoot)
+        >>> person = container['person'] = Person('person')
+        >>> cal = Calendar(person)
         >>> dtstart = datetime(2005, 2, 3, 12, 15)
         >>> martyr = CalendarEvent(dtstart, timedelta(hours=3), "Martyr",
         ...                        unique_id="killme")
@@ -2703,6 +2706,17 @@ def doctest_EventDeleteView():
         >>> innocent = CalendarEvent(dtstart, timedelta(hours=3), "Innocent",
         ...                          unique_id="leavemealone")
         >>> cal.addEvent(innocent)
+
+    In order to deal with overlaid calendars, request.principal is adapted
+    to IPerson.  To make the adaptation work, we will define a simple stub.
+
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> class ConformantStub:
+        ...     def __init__(self, obj):
+        ...         self.obj = obj
+        ...     def __conform__(self, interface):
+        ...         if interface is IPerson:
+        ...             return self.obj
 
     EventDeleteView can get rid of events for you.  Just ask:
 
@@ -2719,11 +2733,12 @@ def doctest_EventDeleteView():
 
     As a side effect, you will be shown your way to the calendar view:
 
-        >>> def redirected(request, day):
+        >>> def redirected(request, day, person='person'):
         ...     if view.request.response.getStatus() != 302:
         ...         return False
         ...     location = view.request.response.getHeaders()['Location']
-        ...     expected = 'http://127.0.0.1/calendar/2005-02-%02d' % day
+        ...     expected = ('http://127.0.0.1/%s/calendar/'
+        ...                 '2005-02-%02d' % (person, day))
         ...     assert location == expected, location
         ...     return True
         >>> redirected(request, 3)
@@ -2734,6 +2749,7 @@ def doctest_EventDeleteView():
 
         >>> request = TestRequest(form={'event_id': 'idontexist',
         ...                             'date': '2005-02-03'})
+        >>> request.setPrincipal(ConformantStub(object()))
         >>> view = EventDeleteView(cal, request)
         >>> view.handleEvent()
 
@@ -2846,6 +2862,48 @@ def doctest_EventDeleteView():
         >>> view.handleEvent()
         >>> cal.find('counted').recurrence
         DailyRecurrenceRule(1, None, datetime.date(2005, 2, 7), ())
+
+    Overlaid events are also found and handled properly:
+
+        >>> cal2 = Calendar() # a dummy calendar
+        >>> owner = container['friend'] = Person('friend')
+        >>> owner.overlaid_calendars.add(cal)
+        >>> owner.overlaid_calendars.add(cal2)
+        >>> request = TestRequest(form={'event_id': 'counted',
+        ...                             'date': '2005-02-03'})
+        >>> request.setPrincipal(ConformantStub(owner))
+
+        >>> view = EventDeleteView(owner.calendar, request)
+        >>> view.handleEvent() # doctest: +ELLIPSIS
+        <schoolbell.app.cal.CalendarEvent object at 0x...>
+
+    We have been presented with a form.  We say: nuke it.
+
+        >>> request.form['ALL'] = 'All'
+        >>> view.handleEvent()
+        >>> cal.find('counted')
+        Traceback (most recent call last):
+        ...
+        KeyError: 'counted'
+
+    We have been redirected to the right calendar too:
+
+        >>> redirected(request, 3, 'friend')
+        True
+
+    Note that if the context calendar's parent is different from the
+    principal's calendar, overlaid events are not even scanned.
+
+        >>> evt = CalendarEvent(dtstart, timedelta(hours=3), "Butterfly",
+        ...                     unique_id='counted', recurrence=rrule)
+        >>> cal.addEvent(evt)
+
+        >>> foe = container['foe'] = Person('foe')
+        >>> view.context.__parent__ = foe
+        >>> del view.request.form['ALL']
+
+        >>> print view.handleEvent()
+        None
 
     """
 

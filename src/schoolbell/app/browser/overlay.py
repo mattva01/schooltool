@@ -134,7 +134,7 @@ class CalendarSelectionView(BrowserView):
     """A view for calendar selection.
 
     This view can be used with any context, but always operates on the
-    currently authenticated user's list of overlayed calendars.
+    currently authenticated user's list of overlaid calendars.
     """
 
     error = None

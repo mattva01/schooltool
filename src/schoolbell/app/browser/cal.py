@@ -50,7 +50,7 @@ from zope.security.checker import canWrite, canAccess
 
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schoolbell.app.interfaces import IPerson
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
@@ -981,12 +981,11 @@ class EventDeleteView(BrowserView):
         """
         event_id = self.request['event_id']
         date = parse_date(self.request['date'])
-        try:
-            event = self.context.find(event_id)
-        except KeyError:
-            # Somebody else did the job for us, how nice of them.
+
+        event = self._findEvent(event_id)
+        if event is None:
+            # The event was not found.
             return self._redirectBack(date)
-        # TODO: inherited events
 
         if event.recurrence is None:
             # Bah, the event is not recurrent.  Easy!
@@ -996,6 +995,30 @@ class EventDeleteView(BrowserView):
         else:
             # The event is recurrent, we might need to show a form.
             return self._deleteRepeatingEvent(event, date)
+
+    def _findEvent(self, event_id):
+        """Find an event that has the id event_id.
+
+        First the event is searched for in the current calendar and then,
+        overlaid calendars if any.
+
+        If no event with the given id is found, None is returned.
+        """
+        try:
+            return self.context.find(event_id)
+        except KeyError:
+            pass
+
+        # We could not find the event in the current calendar, so we scan
+        # the overlaid ones.  We only need to look if the current calendar
+        # is the owner's (otherwise the overlays are not active).
+        owner = IPerson(self.request.principal)
+        if owner.username == self.context.__parent__.username:
+            for info in owner.overlaid_calendars:
+                try:
+                    return info.calendar.find(event_id)
+                except KeyError:
+                    pass
 
     def _redirectBack(self, date):
         """Redirect to the current calendar's daily view."""
