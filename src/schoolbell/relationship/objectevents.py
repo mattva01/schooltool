@@ -29,6 +29,7 @@ others) that update relationships on these changes.
 
 from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container.contained import getProxiedObject
+from zope.app.event.interfaces import IObjectCopiedEvent
 
 from schoolbell.relationship.interfaces import IRelationshipLinks
 from schoolbell.relationship.relationship import unrelateAll
@@ -42,3 +43,13 @@ def unrelateOnDeletion(event):
     if linkset is not None:
         # event.object may be a ContainedProxy
         unrelateAll(getProxiedObject(event.object))
+
+
+def unrelateOnCopy(event):
+    """Remove all relationships when an object is copied."""
+    if not IObjectCopiedEvent.providedBy(event):
+        return
+    linkset = IRelationshipLinks(event.object, None)
+    if linkset is not None:
+        linkset.clear()
+

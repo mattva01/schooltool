@@ -436,6 +436,12 @@ class LinkSet(Persistent):
           ...
         ValueError: ...
 
+    You can remove all links
+
+        >>> linkset.clear()
+        >>> Set(linkset) == Set([])
+        True
+
     It is documented in IRelationshipLinks
 
         >>> from zope.interface.verify import verifyObject
@@ -454,6 +460,9 @@ class LinkSet(Persistent):
 
     def remove(self, link):
         self._links.remove(link)
+
+    def clear(self):
+        del self._links[:]
 
     def __iter__(self):
         return iter(self._links)

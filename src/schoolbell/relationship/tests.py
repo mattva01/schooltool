@@ -28,6 +28,7 @@ from zope.testing import doctest
 from zope.app.tests import setup
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.container.contained import Contained
 
 
 class SomeObject(object):
@@ -40,6 +41,10 @@ class SomeObject(object):
 
     def __repr__(self):
         return self._name
+
+
+class SomeContained(SomeObject, Contained):
+    """A simple annotatable contained object for tests."""
 
 
 def setUp():
@@ -477,7 +482,69 @@ def doctest_delete_breaks_relationships():
     """
 
 
-# TODO: copy & paste, cut & paste
+def doctest_copy_breaks_relationships():
+   """When you copy an object, all of its relationships should be removed
+
+   (An alternative solution would be to clone the relationships, but I'm
+   wary of that path.  What happens if you copy and paste objects between
+   different application instances?)
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> from schoolbell.relationship.objectevents import unrelateOnCopy
+        >>> zope.event.subscribers.append(unrelateOnCopy)
+
+    Suppose we have two related objects.  We must have objects that are
+    IContained, otherwise ObjectCopier will happily duplicate all related
+    objects as well as relationship links.
+
+        >>> from schoolbell.relationship.tests import SomeContained
+        >>> apple = SomeContained('apple')
+        >>> orange = SomeContained('orange')
+
+        >>> from schoolbell.relationship import getRelatedObjects, relate
+        >>> relate('example:Relationship',
+        ...             (apple, 'example:One'),
+        ...             (orange, 'example:Two'))
+        >>> getRelatedObjects(apple, 'example:Two')
+        [orange]
+
+    We put those objects to a Zope 3 container.
+
+        >>> from zope.app.container.btree import BTreeContainer
+        >>> container = BTreeContainer()
+        >>> container['apple'] = apple
+        >>> container['orange'] = orange
+
+    We copy one of the objects to another container.
+
+        >>> from zope.app.copypastemove import ObjectCopier
+        >>> another_container = BTreeContainer()
+        >>> copier = ObjectCopier(container['orange'])
+        >>> new_name = copier.copyTo(another_container)
+        >>> copy_of_orange = another_container[new_name]
+
+    When we copy an object, all of its relationships should disappear
+
+        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> list(IRelationshipLinks(copy_of_orange))
+        []
+
+    The old relationships should still work
+
+        >>> getRelatedObjects(apple, 'example:Two')
+        [orange]
+        >>> getRelatedObjects(orange, 'example:One')
+        [apple]
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> tearDown()
+
+    """
+
 
 def test_suite():
     return unittest.TestSuite([

@@ -7,7 +7,6 @@
     <allow attributes="__iter__ __contains__" />
   </content>
 
-
   <adapter
       for="zope.app.annotation.interfaces.IAnnotatable"
       provides="schoolbell.relationship.interfaces.IRelationshipLinks"
@@ -18,6 +17,11 @@
   <subscriber
       for="zope.app.container.interfaces.IObjectRemovedEvent"
       handler="schoolbell.relationship.objectevents.unrelateOnDeletion"
+      />
+
+  <subscriber
+      for="zope.app.event.interfaces.IObjectCopiedEvent"
+      handler="schoolbell.relationship.objectevents.unrelateOnCopy"
       />
 
 </configure>

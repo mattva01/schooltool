@@ -91,6 +91,9 @@ class IRelationshipLinks(Interface):
         Raises ValueError if link is not in the set.
         """
 
+    def clear():
+        """Remove all links."""
+
     def find(my_role, target, role, rel_type):
         """Find a link with matching attributes.
 
