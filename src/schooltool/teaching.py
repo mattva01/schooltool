@@ -27,6 +27,7 @@ from schooltool.relationship import RelationshipSchema
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency
 from schooltool.component import registerFacetFactory
+from schooltool.component import registerURI
 from schooltool.facet import FacetFactory
 
 moduleProvides(IModuleSetup)
@@ -62,3 +63,6 @@ class SubjectGroupFacet(RelationshipValenciesMixin):
 
 def setUp():
     registerFacetFactory(FacetFactory(SubjectGroupFacet, 'Subject Group'))
+    registerURI(URITeacher)
+    registerURI(URITeaching)
+    registerURI(URITaught)

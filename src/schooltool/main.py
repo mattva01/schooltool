@@ -542,7 +542,8 @@ def setUp():
         'schooltool.membership',
         'schooltool.views',
         'schooltool.debug',
-        'schooltool.interfaces'
+        'schooltool.interfaces',
+        'schooltool.teaching'
         ])
 
 
