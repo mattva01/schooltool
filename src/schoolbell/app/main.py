@@ -138,18 +138,18 @@ def load_options(argv):
 
     # Complain about obsolete options.  This section should be removed
     # in later SchoolBell versions.
-    deprecated = ['module', 'test_mode', 'domain', 'lang', 'path']
+    deprecated = ['module', 'test_mode', 'domain', 'lang',
+                  'path', 'app_log_file']
     for setting in deprecated:
         if getattr(options.config, setting):
-            print >> sys.stderr, ("%s: warning: the `%s` option is"
-                                  " obsolete." % (progname, setting))
+            print >> sys.stderr, ("%s: warning: ignored configuration option"
+                                  " '%s'" % (progname, setting))
     return options
 
 
 def setup(options):
     """Configure SchoolBell."""
-    # TODO: configure logging as the config file says
-    logging.basicConfig()
+    setUpLogger('accesslog', options.config.web_access_log_file)
 
     # Process ZCML
     configure()
@@ -187,6 +187,138 @@ def setup(options):
         pidfile.close()
 
     return db
+
+
+import locale
+locale_charset = locale.getpreferredencoding()
+
+
+class StreamWrapper:
+    r"""Unicode-friendly wrapper for writable file-like objects.
+
+    Here the terms 'encoding' and 'charset' are used interchangeably.
+
+    The main use case for StreamWrapper is wrapping sys.stdout and sys.stderr
+    so that you can forget worrying about charsets of your data.
+
+        >>> from StringIO import StringIO
+        >>> import schoolbell.app.main
+        >>> old_locale_charset = schoolbell.app.main.locale_charset
+        >>> schoolbell.app.main.locale_charset = 'UTF-8'
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
+        >>> sw.stm.getvalue()
+        'Hello, world! \xc2\xb7\xe2\x98\xbb\xc2\xb7\n'
+
+    By default printing Unicode strings to stdout/stderr will raise Unicode
+    errors if the stream encoding does not include some characters you are
+    printing.  StreamWrapper will replace unconvertable characters to question
+    marks, therefore you should only use it for informative messages where such
+    loss of information is acceptable.
+
+        >>> schoolbell.app.main.locale_charset = 'US-ASCII'
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
+        >>> sw.stm.getvalue()
+        'Hello, world! ???\n'
+
+    StreamWrapper converts all unicode strings that are written to it to the
+    encoding defined in the wrapped stream's 'encoding' attribute, or, if that
+    is None, to the locale encoding.  Typically the stream's encoding attribute
+    is set when the stream is connected to a console device, and None when the
+    stream is connected to a file.  On Unix systems the console encoding
+    matches the locale charset, but on Win32 systems they differ.
+
+        >>> s = StringIO()
+        >>> s.encoding = 'ISO-8859-1'
+        >>> sw = StreamWrapper(s)
+        >>> print >> sw, u"Hello, world! \u00b7\u263b\u00b7"
+        >>> sw.stm.getvalue()
+        'Hello, world! \xb7?\xb7\n'
+
+    You can print other kinds of objects:
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, 1, 2,
+        >>> print >> sw, 3
+        >>> sw.stm.getvalue()
+        '1 2 3\n'
+
+    but not 8-bit strings:
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> print >> sw, "\xff"
+        Traceback (most recent call last):
+          ...
+        UnicodeDecodeError: 'ascii' codec can't decode byte 0xff in position 0: ordinal not in range(128)
+
+    In addition to 'write', StreamWrapper provides 'flush' and 'writelines'
+
+        >>> sw = StreamWrapper(StringIO())
+        >>> sw.write('xyzzy\n')
+        >>> sw.flush()
+        >>> sw.writelines(['a', 'b', 'c', 'd'])
+        >>> sw.stm.getvalue()
+        'xyzzy\nabcd'
+
+    Clean up:
+
+        >>> schoolbell.app.main.locale_charset = old_locale_charset
+
+    """
+
+    def __init__(self, stm):
+        self.stm = stm
+        self.encoding = getattr(stm, 'encoding', None)
+        if self.encoding is None:
+            self.encoding = locale_charset
+
+    def write(self, obj):
+        self.stm.write(obj.encode(self.encoding, 'replace'))
+
+    def flush(self):
+        self.stm.flush()
+
+    def writelines(self, seq):
+        for obj in seq:
+            self.write(obj)
+
+
+class UnicodeFileHandler(logging.StreamHandler):
+    # XXX UNTESTED ;(
+    """A handler class which writes records to disk files.
+
+    This class differs from logging.FileHandler in that it can handle Unicode
+    strings with graceful degradation.
+    """
+
+    def __init__(self, filename):
+        stm = StreamWrapper(open(filename, 'a'))
+        logging.StreamHandler.__init__(self, stm)
+
+    def close(self):
+        self.stream.close()
+
+
+def setUpLogger(name, filenames):
+    """Set up a named logger.
+
+    Sets up a named logger to log into filenames with the given format.
+    Two filenames are special: 'STDOUT' means sys.stdout and 'STDERR'
+    means sys.stderr.
+    """
+    logger = logging.getLogger(name)
+    logger.propagate = False
+    logger.setLevel(logging.INFO)
+    for filename in filenames:
+        if filename == 'STDOUT':
+            handler = logging.StreamHandler(sys.stdout)
+        elif filename == 'STDERR':
+            handler = logging.StreamHandler(sys.stderr)
+        else:
+            handler = UnicodeFileHandler(filename)
+        logger.addHandler(handler)
 
 
 def daemonize():

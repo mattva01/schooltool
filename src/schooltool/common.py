@@ -234,8 +234,8 @@ class StreamWrapper:
 
     Here the terms 'encoding' and 'charset' are used interchangeably.
 
-    The main use case for StreamWrapper is wrapping sys.stdout and sys.stder so
-    that you can forget worrying about charsets of your data.
+    The main use case for StreamWrapper is wrapping sys.stdout and sys.stderr
+    so that you can forget worrying about charsets of your data.
 
         >>> from StringIO import StringIO
         >>> from schooltool import common
@@ -289,7 +289,7 @@ class StreamWrapper:
           ...
         UnicodeDecodeError: 'ascii' codec can't decode byte 0xff in position 0: ordinal not in range(128)
 
-    In addition to 'write' StreamWrapper provides 'flush' and 'writelines'
+    In addition to 'write', StreamWrapper provides 'flush' and 'writelines'
 
         >>> sw = StreamWrapper(StringIO())
         >>> sw.write('xyzzy\n')
@@ -297,6 +297,10 @@ class StreamWrapper:
         >>> sw.writelines(['a', 'b', 'c', 'd'])
         >>> sw.stm.getvalue()
         'xyzzy\nabcd'
+
+    Clean up:
+
+        >>> common.locale_charset = old_locale_charset
 
     """
 

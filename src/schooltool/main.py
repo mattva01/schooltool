@@ -190,7 +190,7 @@ class Server:
                             test_mode
                             pid_file
                             error_log_file
-                            access_log_file
+                            web_access_log_file
                             app_log_file
         """
         # Defaults

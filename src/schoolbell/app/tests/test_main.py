@@ -111,10 +111,12 @@ def doctest_load_options():
         >>> from schoolbell.app.main import load_options
         >>> o = load_options(['sb.py', '-c', sample_config_file, '-d'])
         Reading configuration from ...sample.conf
-        sb.py: warning: the `module` option is obsolete.
-        sb.py: warning: the `domain` option is obsolete.
-        sb.py: warning: the `lang` option is obsolete.
-        sb.py: warning: the `path` option is obsolete.
+        sb.py: warning: ignored configuration option 'module'
+        sb.py: warning: ignored configuration option 'domain'
+        sb.py: warning: ignored configuration option 'lang'
+        sb.py: warning: ignored configuration option 'path'
+        sb.py: warning: ignored configuration option 'app_log_file'
+
 
     Some options come from the command line
 
@@ -213,10 +215,27 @@ def doctest_setup():
         ...     database = DatabaseConfigStub()
         ...     pid_file = ''
         ...     path = []
+        ...     web_access_log_file = ['STDOUT']
         >>> options.config = ConfigStub()
 
         >>> setup(options)
         <ZODB.DB.DB object at ...>
+
+    Let's see that a web access logger has been set up:
+
+        >>> import logging
+        >>> logger = logging.getLogger('accesslog')
+        >>> logger.propagate
+        False
+        >>> logger.handlers
+        [<logging.StreamHandler instance at 0x...>]
+
+    Let's clean up logging:
+
+        >>> del logger.handlers[:]
+        >>> logger.propagate = True
+        >>> logger.disabled = False
+        >>> logger.setLevel(0)
 
     TODO: perform checks!
     TODO: clean up everything!
@@ -310,6 +329,37 @@ def doctest_bootstrapSchoolBell():
 
         >>> from zope.app.testing import setup
         >>> setup.placelessTearDown()
+
+    """
+
+
+def test_setUpLogger():
+    r"""Tests for setUpLogger.
+
+    setUpLogger sets up a logger:
+
+        >>> import logging
+        >>> from schoolbell.app.main import setUpLogger
+        >>> setUpLogger('schoolbell.just_testing',
+        ...             ['STDERR', '_just_testing.log'])
+
+        >>> logger = logging.getLogger('schoolbell.just_testing')
+        >>> logger.propagate
+        False
+        >>> logger.handlers
+        [<logging.StreamHandler instance ...>, <...UnicodeFileHandler ...>]
+        >>> logger.handlers[0].stream
+        <open file '<stderr>', mode 'w' at 0x...>
+
+    Let's clean up after ourselves (logging is messy):
+
+        >>> del logger.handlers[:]
+        >>> logger.propagate = True
+        >>> logger.disabled = False
+        >>> logger.setLevel(0)
+
+        >>> import os
+        >>> os.unlink('_just_testing.log')
 
     """
 
