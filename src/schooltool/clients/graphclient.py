@@ -27,9 +27,10 @@ with the "dot" application in your command path.
 import os
 from schooltool.clients.guiclient import SchoolToolClient
 
+
 class GraphGenerator(SchoolToolClient):
     """Creates a DOT file from data on a SchoolTool server"""
-    
+
     def makeHeader(self):
         self.DOT = ["""digraph SchoolTool {
   nodesep=0.1;
@@ -37,7 +38,7 @@ class GraphGenerator(SchoolToolClient):
   color="black";
   bgcolor="white";
   node [fontsize=10];
-  edge [fontsize=10]; 
+  edge [fontsize=10];
   rankdir=LR;
 """]
 
@@ -51,28 +52,28 @@ class GraphGenerator(SchoolToolClient):
         draw = os.system('dot -Tpng -o graph.png schooltool.dot')
         if draw:
             raise DOT_Error
-        
+
     def drawGroupTree(self):
         groups = self.getGroupTree()
         parents = ["/groups/root", "", "", "", "", "", "", "", "", "", ""]#hack
         level = 1
         for group in groups:
             if group[0] > 0:
-                line = '"%s" -> "%s" [color=gray];' % (parents[group[0]-1], 
+                line = '"%s" -> "%s" [color=gray];' % (parents[group[0]-1],
                                                        group[2])
                 level = group[0]
                 parents[level] = group[2]
                 self.DOT.append(line)
-                
+
     def drawGroupInfo(self):
         groups = self.getListOfGroups()
         for group in groups:
             members = self.getGroupInfo(group[1]).members
             for member in members:
                 line = '"%s" -> "%s" [color=slateblue];'\
-                 % (group[1], member.person_path) 
+                 % (group[1], member.person_path)
                 self.DOT.append(line)
-                
+
     def drawPersonInfo(self):
         persons = self.getListOfPersons()
         for person in persons:
@@ -81,8 +82,8 @@ class GraphGenerator(SchoolToolClient):
             if info.first_name or info.last_name:
                 self.DOT.append('"%s %s"[shape=box, color=salmon];' \
                                 % (info.first_name, info.last_name))
-                self.DOT.append('"%s" -> "%s %s" [color=salmon];' 
-                                % (person[1], info.first_name, info.last_name)) 
+                self.DOT.append('"%s" -> "%s %s" [color=salmon];'
+                                % (person[1], info.first_name, info.last_name))
             if info.date_of_birth:
                 self.DOT.append('"%s"[shape=box, color=salmon];' % info.date_of_birth)
                 self.DOT.append('"%s" -> "%s" [color=salmon];' % (person[1],
@@ -91,44 +92,45 @@ class GraphGenerator(SchoolToolClient):
                 self.DOT.append('"%s"[shape=box, color=salmon];' % info.comment)
                 self.DOT.append('"%s" -> "%s" [color=salmon];' % (person[1],
                                                               info.comment))
-                                                              
+
     def drawResources(self):
         resources = self.getListOfResources()
         for resource in resources:
             self.DOT.append('"%s" [color=brown, shape=house];' % resource[1])
-            
+
     def drawRelationships(self, node):
         self.DOT.append('"%s";' % node)
         relationshipPath = node + '/relationships'
         self.DOT.append('"%s" -> "%s";' % (node, relationshipPath))
         relationships = self.getObjectRelationships(node)
         for relationship in relationships:
-            self.DOT.append('"%s" [shape=box,color=orange]' % 
+            self.DOT.append('"%s" [shape=box,color=orange]' %
             relationship.target_title)
-            self.DOT.append('"%s" -> "%s"' % (relationshipPath, 
+            self.DOT.append('"%s" -> "%s"' % (relationshipPath,
                                               relationship.link_path))
-            self.DOT.append('"%s" -> "%s" [label="%s"]' % 
-                            (relationship.link_path, 
+            self.DOT.append('"%s" -> "%s" [label="%s"]' %
+                            (relationship.link_path,
                              relationship.target_title,
                              'xlink:title'))
-            self.DOT.append('"%s" -> "%s" [label="%s"]' % 
-                            (relationship.link_path, 
+            self.DOT.append('"%s" -> "%s" [label="%s"]' %
+                            (relationship.link_path,
                              relationship.target_path,
                              'xlink:href'))
-            self.DOT.append('"%s" -> "%s" [label="%s"]' % 
-                            (relationship.link_path, 
+            self.DOT.append('"%s" -> "%s" [label="%s"]' %
+                            (relationship.link_path,
                              self.getDoc(relationship.arcrole),
                              'xlink:arcrole'))
-            self.DOT.append('"%s" -> "%s" [label="%s"]' % 
-                            (relationship.link_path, 
+            self.DOT.append('"%s" -> "%s" [label="%s"]' %
+                            (relationship.link_path,
                              self.getDoc(relationship.role),
                              'xlink:role'))
-    
+
     def getDoc(self, relationship):
         """I have no idea why URIstub is stored so weirdly."""
         repeat = relationship.__doc__
         uris = repeat.split(' ')
         return uris[0].strip()
-                 
+
+
 class DOT_Error(Exception):
     """Error in generating graph from DOT file."""
