@@ -712,6 +712,33 @@ class TestRecurrenceRule:
         self.createRule(until=date.today())
         self.createRule(count=42)
 
+    def test_iCalRepresentation(self):
+        # simple case
+        rule = self.createRule(interval=2)
+        freq = rule.ical_freq
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=%s;INTERVAL=2' % freq])
+
+        # count
+        rule = self.createRule(interval=3, count=5)
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=%s;COUNT=5;INTERVAL=3' % freq])
+
+        # until
+        rule = self.createRule(until=date(2004, 10, 20))
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=%s;UNTIL=20041020T000000Z;INTERVAL=1'
+                           % freq])
+
+        # exceptions
+        rule = self.createRule(exceptions=[date(2004, 10, 2*d)
+                                           for d in range(3, 6)])
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=%s;INTERVAL=1' % freq,
+                           'EXDATE:20041006T000000Z,'
+                                  '20041008T000000Z,'
+                                  '20041010T000000Z'])
+
 
 class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
@@ -769,31 +796,7 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         self.assertEqual(result, [date(2004, 10, 13), date(2004, 10, 14),
                                   date(2004, 10, 15)])
 
-    def test_iCalRepresentation(self):
-        # simple case
-        rule = self.createRule(interval=2)
-        self.assertEquals(rule.iCalRepresentation(None),
-                          ['RRULE:FREQ=DAILY;INTERVAL=2'])
 
-        # count
-        rule = self.createRule(interval=3, count=5)
-        self.assertEquals(rule.iCalRepresentation(None),
-                          ['RRULE:FREQ=DAILY;COUNT=5;INTERVAL=3'])
-
-        # until
-        rule = self.createRule(until=date(2004, 10, 20))
-        self.assertEquals(rule.iCalRepresentation(None),
-                          ['RRULE:FREQ=DAILY;UNTIL=20041020T000000Z;'
-                                 'INTERVAL=1'])
-
-        # exceptions
-        rule = self.createRule(exceptions=[date(2004, 10, 2*d)
-                                           for d in range(3, 6)])
-        self.assertEquals(rule.iCalRepresentation(None),
-                          ['RRULE:FREQ=DAILY;INTERVAL=1',
-                           'EXDATE:20041006T000000Z,'
-                                  '20041008T000000Z,'
-                                  '20041010T000000Z'])
 
 class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
@@ -919,6 +922,11 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                     date(1978, 6, 14), date(1978, 6, 15),
                     date(1978, 6, 28), date(1978, 7, 12)]
         self.assertEqual(result, expected)
+
+    def test_iCalRepresentation_weekly(self):
+        rule = self.createRule(weekdays=(0, 3, 5, 6))
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=WEEKLY;BYDAY=MO,TH,SA,SU;INTERVAL=1'])
 
 
 class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
@@ -1116,6 +1124,35 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         result = list(rule.apply(ev, date(1978, 9, 30)))
         expected = [date(1978, 5, 17), date(1978, 9, 13)]
         self.assertEqual(result, expected)
+
+    def test_iCalRepresentation(self):
+        # This method deliberately overrides the test in the base class.
+
+        # monthday
+        rule = self.createRule(monthly="monthday")
+        self.assertEquals(rule.iCalRepresentation(date(2004, 10, 26)),
+                          ['RRULE:FREQ=MONTHLY;BYMONTHDAY=26;INTERVAL=1'])
+
+        # weekday
+        rule = self.createRule(monthly="weekday")
+        self.assertEquals(rule.iCalRepresentation(date(2004, 10, 26)),
+                          ['RRULE:FREQ=MONTHLY;BYDAY=4TU;INTERVAL=1'])
+
+        # lastweekday
+        rule = self.createRule(monthly="lastweekday")
+        self.assertEquals(rule.iCalRepresentation(date(2004, 10, 26)),
+                          ['RRULE:FREQ=MONTHLY;BYDAY=-1TU;INTERVAL=1'])
+
+        # some standard stuff
+        rule = self.createRule(interval=3, count=7,
+                               exceptions=[date(2004, 10, 2*d)
+                                           for d in range(3, 6)])
+        self.assertEquals(rule.iCalRepresentation(date(2004, 10, 26)),
+                          ['RRULE:FREQ=MONTHLY;COUNT=7;BYMONTHDAY=26;'
+                           'INTERVAL=3',
+                           'EXDATE:20041006T000000Z,'
+                                  '20041008T000000Z,'
+                                  '20041010T000000Z'])
 
 
 class TestWeekSpan(unittest.TestCase):

@@ -379,9 +379,22 @@ class CalendarOwnerMixin(Persistent):
         self.calendar.acl.add((self, ModifyPermission))
 
 
+def ical_date(dt):
+    """Return a date in iCalendar format."""
+    # TODO: tests?
+    return dt.strftime("%Y%m%dT%H%M%SZ")
+
+
+ical_weekdays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+
+
 class RecurrenceRule:
 
     implements(IRecurrenceRule)
+
+    # A string that represents the recurrence frequency in iCalendar.
+    # Must be overridden by subclasses.
+    ical_freq = None
 
     def __init__(self, interval=1, count=None, until=None, exceptions=()):
         self.interval = interval
@@ -461,18 +474,35 @@ class RecurrenceRule:
         """Add the basic step of recurrence to the date."""
         return date + self.interval * date.resolution
 
-    def _iCalExceptions(self):
-        """Return exceptions for this event in iCal format as a string."""
-        return ''
-
     def iCalRepresentation(self, dtstart):
-        raise NotImplementedError()
+        """See IRecurrenceRule"""
+        assert self.ical_freq, 'RecurrenceRule.ical_freq must be overridden'
 
+        if self.count:
+            args = 'COUNT=%d;' % self.count
+        elif self.until:
+            args = 'UNTIL=%s;' % ical_date(self.until)
+        else:
+            args = ''
+        extra = self._iCalArgs(dtstart)
+        if extra is not None:
+            args += extra + ';'
 
-def ical_date(dt):
-    """Return a date in iCalendar format."""
-    # TODO: tests?
-    return dt.strftime("%Y%m%dT%H%M%SZ")
+        result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
+                  % (self.ical_freq, args, self.interval)]
+        if self.exceptions:
+            row = 'EXDATE:' + ','.join([ical_date(d) for d in self.exceptions])
+            result.append(row)
+        return result
+
+    def _iCalArgs(self, dtstart):
+        """Return extra iCal arguments as a string.
+
+        Should be overridden by child classes that have specific arguments.
+        The returned string must not include the terminating semicolon.
+        If None is returned, no arguments are inserted.
+        """
+        pass
 
 
 class DailyRecurrenceRule(RecurrenceRule):
@@ -482,19 +512,7 @@ class DailyRecurrenceRule(RecurrenceRule):
     """
     implements(IDailyRecurrenceRule)
 
-    def iCalRepresentation(self, dtstart):
-        """See IRecurrenceRule"""
-        if self.count:
-            args = 'COUNT=%d;' % self.count
-        elif self.until:
-            args = 'UNTIL=%s;' % ical_date(self.until)
-        else:
-            args = ''
-        result = ['RRULE:FREQ=DAILY;%sINTERVAL=%d' % (args, self.interval)]
-        if self.exceptions:
-            row = 'EXDATE:' + ','.join([ical_date(d) for d in self.exceptions])
-            result.append(row)
-        return result
+    ical_freq = 'DAILY'
 
 
 class YearlyRecurrenceRule(RecurrenceRule):
@@ -504,6 +522,8 @@ class YearlyRecurrenceRule(RecurrenceRule):
     """
     implements(IYearlyRecurrenceRule)
 
+    ical_freq = 'YEARLY'
+
     def _nextRecurrence(self, date):
         """Adds the basic step of recurrence to the date"""
         nextyear = date.year + self.interval
@@ -512,7 +532,10 @@ class YearlyRecurrenceRule(RecurrenceRule):
 
 class WeeklyRecurrenceRule(RecurrenceRule):
     """Weekly recurrence rule."""
+
     implements(IWeeklyRecurrenceRule)
+
+    ical_freq = 'WEEKLY'
 
     def __init__(self, interval=1, count=None, until=None, exceptions=(),
                  weekdays=()):
@@ -554,7 +577,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
                 self.until, self.exceptions, self.weekdays)
 
     def apply(self, event, enddate=None):
-        """Generator that generates dates of recurrences"""
+        """Generate dates of recurrences."""
         cur = start = event.dtstart.date()
         count = 0
         weekdays = list(self.weekdays)
@@ -575,8 +598,13 @@ class WeeklyRecurrenceRule(RecurrenceRule):
             cur = self._nextRecurrence(cur)
 
     def _nextRecurrence(self, date):
-        """Adds the basic step of recurrence to the date"""
+        """Add the basic step of recurrence to the date."""
         return date + date.resolution
+
+    def _iCalArgs(self, dtstart):
+        if self.weekdays:
+            return 'BYDAY=' + ','.join([ical_weekdays[weekday]
+                                        for weekday in self.weekdays])
 
 
 class MonthlyRecurrenceRule(RecurrenceRule):
@@ -585,6 +613,8 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     Immutable hashable object.
     """
     implements(IMonthlyRecurrenceRule)
+
+    ical_freq = 'MONTHLY'
 
     def __init__(self, interval=1, count=None, until=None, exceptions=(),
                  monthly="monthday"):
@@ -644,7 +674,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
                 yield date
 
     def _applyWeekday(self, event, enddate=None):
-        """Generator that generates dates of recurrences"""
+        """Generator that generates dates of recurrences."""
         cur = start = event.dtstart.date()
         count = 0
         year = start.year
@@ -666,7 +696,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
             month += 1
 
     def _applyLastWeekday(self, event, enddate=None):
-        """Generator that generates dates of recurrences"""
+        """Generator that generates dates of recurrences."""
         cur = start = event.dtstart.date()
         count = 0
         year = start.year
@@ -687,6 +717,18 @@ class MonthlyRecurrenceRule(RecurrenceRule):
             # Next month, please.
             year, month = divmod(year * 12 + month + self.interval - 1, 12)
             month += 1
+
+    def _iCalArgs(self, dtstart):
+        if self.monthly == 'monthday':
+            return 'BYMONTHDAY=%d' % dtstart.day
+        elif self.monthly == 'weekday':
+            week = dtstart.day / 7 + 1
+            return 'BYDAY=%d%s' % (week, ical_weekdays[dtstart.weekday()])
+        elif self.monthly == 'lastweekday':
+            return 'BYDAY=-1%s' % ical_weekdays[dtstart.weekday()]
+        else:
+            raise NotImplementedError(self.monthly)
+
 
 
 def weekspan(first, second):
