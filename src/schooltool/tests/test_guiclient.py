@@ -427,7 +427,6 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.getAbsenceComments, '/p')
 
     def test_createFacet(self):
-        from schooltool.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
                                     location='http://localhost/p/facets/001'))
         result = client.createFacet('/p', 'foo"factory')
@@ -442,6 +441,52 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         from schooltool.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.createFacet, '/p', 'foo')
+
+    def test_createPerson(self):
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                    location='http://localhost/persons/00004'))
+        result = client.createPerson('John "mad cat" Doe')
+        self.assertEquals(result, '/persons/00004')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                             '<person title="John &quot;mad cat&quot; Doe"/>')
+
+    def test_createPerson_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        self.assertRaises(SchoolToolError, client.createPerson, 'John Doe')
+
+    def test_createGroup(self):
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                    location='http://localhost/groups/00004'))
+        result = client.createGroup('Title<with"strange&chars')
+        self.assertEquals(result, '/groups/00004')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/groups')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<group title="Title&lt;with&quot;strange&amp;chars"/>')
+
+    def test_createGroup_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
+
+    def test__pathFromResponse(self):
+        client = self.newClient(None)
+        response = ResponseStub(200, 'OK',
+                                location='http://localhost/path/to/something')
+        self.assertEquals(client._pathFromResponse(response),
+                          '/path/to/something')
+
+        # XXX What if the server is broken and does not return a Location
+        #     header, or returns an ill-formed location header, or something
+        #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
+        #     without a trailing slash?
 
     def test__parseGroupTree(self):
         from schooltool.guiclient import SchoolToolClient

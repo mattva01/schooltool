@@ -584,13 +584,16 @@ class MainFrame(wxFrame):
 
         self.SetMenuBar(menubar(
             menu("&File",
-                item("E&xit\tAlt+X", "Terminate the program", self.DoExit),
+                item("New &Person", "Create a new person", self.DoNewPerson),
+                item("New &Group", "Create a new group", self.DoNewGroup),
+                separator(),
+                item("E&xit\tCtrl+Q", "Terminate the program", self.DoExit),
                 ),
             menu("&View",
                 item("All &Absences", "List all absences in the system",
                      self.DoViewAllAbsences),
                 separator(),
-                item("&Refresh\tAlt+R", "Refresh data from the server",
+                item("&Refresh\tCtrl+R", "Refresh data from the server",
                      self.DoRefresh),
                 ),
             menu("&Settings",
@@ -670,10 +673,40 @@ class MainFrame(wxFrame):
         self.SetSizeHints(minW=100, minH=150)
         self.DoRefresh()
 
+    def DoNewPerson(self, event):
+        """Create a new person.
+
+        Accessible from File|New Person.
+        """
+        name = wxGetTextFromUser("Full name", "New Person")
+        if name == "":
+            return
+        try:
+            self.client.createPerson(name)
+        except SchoolToolError, e:
+            wxMessageBox("Could not create a person: %s" % e,
+                         "New Person", wxICON_ERROR|wxOK)
+            return
+
+    def DoNewGroup(self, event):
+        """Create a new group.
+
+        Accessible from File|New Group.
+        """
+        title = wxGetTextFromUser("Title", "New Group")
+        if title == "":
+            return
+        try:
+            self.client.createGroup(title)
+        except SchoolToolError, e:
+            wxMessageBox("Could not create a group: %s" % e,
+                         "New Group", wxICON_ERROR|wxOK)
+            return
+
     def DoExit(self, event):
         """Exit the application.
 
-        Accessible via Alt+X and from File|Exit.
+        Accessible via Ctrl+Q and from File|Exit.
         """
         self.Close(True)
 
@@ -795,11 +828,11 @@ class MainFrame(wxFrame):
     def DoRefresh(self, event=None):
         """Refresh data from the server.
 
-        Accessible via Alt+R, from View|Refresh and from the group tree
+        Accessible via Ctrl+R, from View|Refresh and from the group tree
         popup menu.
         """
 
-        # If the user holds down Alt+R, wxWindows tends to call DoRefresh
+        # If the user holds down Ctrl+R, wxWindows tends to call DoRefresh
         # before the previous call finishes, thus causing reentrancy problems
         if not self.refresh_lock.acquire(False):
             return

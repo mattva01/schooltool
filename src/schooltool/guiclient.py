@@ -263,11 +263,24 @@ class SchoolToolClient:
         response = self.post('%s/facets' % object_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)
+        return self._pathFromResponse(response)
 
-        # XXX What if the server is broken and does not return a Location
-        #     header, or returns an ill-formed location header, or something
-        #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
-        #     without a trailing slash?
+    def createPerson(self, person_title):
+        body = '<person title="%s"/>' % cgi.escape(person_title, True)
+        response = self.post('/persons', body)
+        if response.status != 201:
+            raise ResponseStatusError(response)
+        return self._pathFromResponse(response)
+
+    def createGroup(self, group_title):
+        body = '<group title="%s"/>' % cgi.escape(group_title, True)
+        response = self.post('/groups', body)
+        if response.status != 201:
+            raise ResponseStatusError(response)
+        return self._pathFromResponse(response)
+
+    def _pathFromResponse(self, response):
+        """Return the path portion of the Location header in the response."""
         location = response.getheader('Location')
         slashslash = location.index('//')
         slash = location.index('/', slashslash + 2)
