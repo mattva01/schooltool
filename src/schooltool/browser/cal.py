@@ -469,48 +469,46 @@ class EventAddView(View):
 
     error = u""
     title = u""
-    start = None
-
-    duration = 30 # default
-
-    # XXX The current way of handling arguments in this class is ugly.
+    start_date = u""
+    start_time = u""
+    duration = u"30" # default
 
     def update(self):
         """Parse arguments in request and put them into view attributes."""
         request = self.request
-        self.start = datetime.today()
-        success = True
 
         if 'title' in request.args:
             self.title = to_unicode(request.args['title'][0])
-
         if 'start_date' in request.args and 'start_time' in request.args:
-            start_date_str = to_unicode(request.args['start_date'][0])
-            start_time_str = to_unicode(request.args['start_time'][0])
-            try:
-                self.start = parse_datetime(start_date_str, start_time_str)
-            except ValueError:
-                self.error = _("Invalid date/time")
-                return False
-
+            self.start_date = to_unicode(request.args['start_date'][0])
+            self.start_time = to_unicode(request.args['start_time'][0])
         if 'duration' in request.args:
-            duration_str = to_unicode(request.args['duration'][0])
-            try:
-                self.duration = int(duration_str)
-            except ValueError:
-                self.error = _("Invalid duration")
-                return False
-
-        return True
+            self.duration = to_unicode(request.args['duration'][0])
 
     def do_POST(self, request):
-        if not self.update():
+        self.update()
+
+        if not self.title:
+            self.error = _("Missing title")
             return self.do_GET(request)
-        duration = timedelta(minutes=self.duration)
-        ev = CalendarEvent(self.start, duration, self.title,
-                           self.context.__parent__, None)
+
+        try:
+            start = parse_datetime(self.start_date, self.start_time)
+        except ValueError:
+            self.error = _("Invalid date/time")
+            return self.do_GET(request)
+
+        try:
+            duration = int(self.duration)
+        except ValueError:
+            self.error = _("Invalid duration")
+            return self.do_GET(request)
+
+        duration = timedelta(minutes=duration)
+        ev = CalendarEvent(start, duration, self.title,
+                           self.context.__parent__, self.context.__parent__)
         self.context.addEvent(ev)
 
-        suffix = 'daily.html?date=%s' % self.start.date()
+        suffix = 'daily.html?date=%s' % start.date()
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)

@@ -694,6 +694,14 @@ class TestEventAddView(unittest.TestCase):
         self.assertEquals(events[0].duration, timedelta(minutes=50))
 
     def test_post_errors(self):
+        request = RequestStub(args={'title': '',
+                                    'start_date': '2004-31-13',
+                                    'start_time': '15:30',
+                                    'duration': '50'})
+        self.view.request = request
+        content = self.view.do_POST(request)
+        self.assert_('Missing title' in content)
+
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-31-13',
                                     'start_time': '15:30',

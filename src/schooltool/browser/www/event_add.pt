@@ -20,12 +20,12 @@
     <div class="row">
       <label for="start_date">Date</label>
       <input id="start_date" name="start_date" type="text"
-             tal:attributes="value python:view.start.date()" />
+             tal:attributes="value view/start_date" />
     </div>
     <div class="row">
       <label for="start_time">Time</label>
       <input id="start_time" name="start_time" type="text"
-             tal:attributes="value python:view.start.strftime('%H:%M')" />
+             tal:attributes="value view/start_time" />
     </div>
     <div class="row">
       <label for="duration">Duration</label>
