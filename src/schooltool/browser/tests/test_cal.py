@@ -354,8 +354,16 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getHours(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.cal import CalendarEvent as CE, Calendar
         from schooltool.model import Person
+
+        class CalendarEvent(CE):
+            """Calendar events that can be compared to '' or None"""
+            def __cmp__(self, other):
+                if other is None or other == '':
+                    return 1
+                else:
+                    return CE.__cmp__(self, other)
 
         cal = Calendar()
         cal.__parent__ = Person(title="Da Boss")
@@ -412,6 +420,45 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'time': '14:00', 'cols': (ev3,'')},
                            {'time': '15:00', 'cols': ('', None)},],
                           pformat(result))
+
+        ev4 = CalendarEvent(datetime(2004, 8, 11, 14, 0),
+                            timedelta(days=3), "Visit")
+
+        cal.addEvent(ev4)
+
+        result = list(view.getHours())
+        self.assertEquals(result,
+                          [{'time': '10:00', 'cols': (ev4, None, None)},
+                           {'time': '11:00', 'cols': ('', None, None)},
+                           {'time': '12:00', 'cols': ('', ev1, None)},
+                           {'time': '13:00', 'cols': ('', '', ev2)},
+                           {'time': '14:00', 'cols': ('', ev3,'')},
+                           {'time': '15:00', 'cols': ('', '', None)},],
+                          pformat(result))
+
+    def test_rowspan(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        view = DailyCalendarView(None)
+        view.starthour = 10
+        view.endhour = 18
+        view.cursor = date(2004, 8, 12)
+
+        self.assertEquals(view.rowspan(CalendarEvent(
+            datetime(2004, 8, 12, 12, 0), timedelta(days=1), "Long")), 6)
+
+        self.assertEquals(view.rowspan(CalendarEvent(
+            datetime(2004, 8, 11, 12, 0), timedelta(days=3), "Very")), 8)
+
+        self.assertEquals(view.rowspan(CalendarEvent(
+            datetime(2004, 8, 12, 12, 0), timedelta(seconds=600), "")), 1)
+
+        self.assertEquals(view.rowspan(CalendarEvent(
+            datetime(2004, 8, 12, 12, 0),timedelta(seconds=3601), "")), 2)
+
+        self.assertEquals(view.rowspan(CalendarEvent(
+            datetime(2004, 8, 12, 9, 0), timedelta(hours=3), "")), 2)
+
 
 class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
 

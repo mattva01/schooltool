@@ -14,7 +14,7 @@
     <a tal:attributes="href request/path">
        Today</a> |
     <a tal:attributes="href string:${request/path}?date=${view/next}">
-        Previous day</a>
+        Next day</a>
 
     <table class="daycal">
       <tr tal:repeat="row view/getHours">
@@ -23,11 +23,13 @@
 	  <td tal:condition="python:ev is None"></td>
 	  <td tal:condition="python:ev" class="event"
               tal:attributes="rowspan python:view.rowspan(ev)">
+	     <div class="daycalevent">
 	       <h3 tal:content="ev/title" />
 		  <span tal:replace="python:ev.dtstart.strftime('%H:%M')"
 		  />&ndash;<span 
                   tal:replace="python:(ev.dtstart + ev.duration).strftime(
                                                                    '%H:%M')"/>
+             </div>
           </td>
         </tal:block>
       </tr>

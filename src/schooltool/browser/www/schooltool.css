@@ -373,6 +373,7 @@ table.daycal td.event{
   border-right-width: 3	px;
   margin: 0;
   vertical-align: top;
+  font-size: smaller;
 }
 
 td.daycalhour {

@@ -212,7 +212,7 @@ class DailyCalendarView(View):
 
     starthour = 0
 
-    endhour = 24
+    endhour = 23
 
     def update(self):
         if 'date' not in self.request.args:
@@ -259,8 +259,8 @@ class DailyCalendarView(View):
                 if ev is not None and ev.dtstart + ev.duration <= start:
                     del slots[i]
 
-            # Add events that start during this hour
-            while (events and start <= events[0].dtstart < end):
+            # Add events that start during (or before) this hour
+            while (events and events[0].dtstart < end):
                 event = events.pop(0)
                 slots.add(event)
             cols = []
@@ -268,8 +268,10 @@ class DailyCalendarView(View):
             # Format the row
             for i in range(nr_cols):
                 ev = slots.get(i, None)
-                if ev is not None and ev.dtstart < start:
-                    # The event started before this hour
+                if (ev is not None
+                    and ev.dtstart < start
+                    and hour != self.starthour):
+                    # The event started before this hour (except first row)
                     cols.append('')
                 else:
                     # Either None, or new event
@@ -278,7 +280,21 @@ class DailyCalendarView(View):
             yield {'time': "%d:00" % hour, 'cols': tuple(cols)}
 
     def rowspan(self, event):
-        return (event.duration.seconds - 1)/3600 + 1
+        """Calculate how many hours the event will take today"""
+        start = datetime.combine(self.cursor, time(self.starthour))
+        end = datetime.combine(self.cursor, time(self.endhour))
+
+        eventstart = event.dtstart
+        eventend = event.dtstart + event.duration
+
+        if event.dtstart < start:
+            eventstart = start
+        if end < event.dtstart + event.duration:
+            eventend = end
+
+        duration = eventend - eventstart
+        seconds = duration.days * 24 * 3600 + duration.seconds
+        return (seconds - 1)/3600 + 1
 
 
 class Slots(dict):
