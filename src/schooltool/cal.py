@@ -306,8 +306,51 @@ class SchooldayTemplate:
         self.events.remove(obj)
 
 
-class SequentialDaysTimetableModel:
+class BaseTimetableModel:
+    """An abstract base class for timetable models.
 
+    Subclasses must define these methods:
+
+       def schooldayStrategy(self, date, generator):
+           'Returns a day_id for a certain date'
+
+       def _dayGenerator(self):
+           'Returns a generator to be passed to each call to schooldayStrategy'
+    """
+    implements(ITimetableModel)
+
+    timetableDayIds = ()
+    dayTemplates = {}
+
+    def createCalendar(self, schoolday_model, timetable):
+        cal = Calendar(schoolday_model.first, schoolday_model.last)
+        day_id_gen = self._dayGenerator()
+        for date in schoolday_model:
+            if schoolday_model.isSchoolday(date):
+                day_id = self.schooldayStrategy(date, day_id_gen)
+                day_template = self._getTemplateForDay(date)
+                for period in day_template:
+                    dt = datetime.datetime.combine(date, period.tstart)
+                    activity = timetable[day_id][period.title]
+                    event = CalendarEvent(dt, period.duration,
+                                          activity.title)
+                    cal.addEvent(event)
+        return cal
+
+    def _getTemplateForDay(self, date):
+        try:
+            return self.dayTemplates[date.weekday()]
+        except KeyError:
+            return self.dayTemplates[None]
+
+    def schooldayStrategy(self, date, generator):
+        raise NotImplementedError
+
+    def _dayGenerator(self):
+        raise NotImplementedError
+
+
+class SequentialDaysTimetableModel(BaseTimetableModel):
     """A timetable model in which the school days go in sequence with
     shifts over non-schooldays:
 
@@ -328,37 +371,33 @@ class SequentialDaysTimetableModel:
     Mon     Day 2
     """
 
-    implements(ITimetableModel)
-
     def __init__(self, day_ids, day_templates):
         self.timetableDayIds = day_ids
         self.dayTemplates = day_templates
 
-    def createCalendar(self, schoolday_model, timetable):
-        cal = Calendar(schoolday_model.first, schoolday_model.last)
-        day_id_gen = self._nextDayId()
-        for date in schoolday_model:
-            if schoolday_model.isSchoolday(date):
-                day_id = day_id_gen.next()
-                day_template = self._getTemplateForDay(date)
-                for period in day_template:
-                    dt = datetime.datetime.combine(date, period.tstart)
-                    activity = timetable[day_id][period.title]
-                    event = CalendarEvent(dt, period.duration,
-                                          activity.title)
-                    cal.addEvent(event)
-        return cal
-
-    def _getTemplateForDay(self, date):
-        try:
-            return self.dayTemplates[date.weekday()]
-        except KeyError:
-            return self.dayTemplates[None]
-
-    def _nextDayId(self):
+    def _dayGenerator(self):
         while True:
             for day_id in self.timetableDayIds:
                 yield day_id
+
+    def schooldayStrategy(self, date, generator):
+        return generator.next()
+
+
+class WeeklyTimetableModel(BaseTimetableModel):
+    """A timetable model where the schedule depends only on weekdays."""
+
+    timetableDayIds = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+
+    def __init__(self, day_templates):
+        self.dayTemplates = day_templates
+
+    def schooldayStrategy(self, date, generator):
+        return {0: "Monday", 1: "Tuesday", 2: "Wednesday",
+                3: "Thursday", 4: "Friday"}[date.weekday()]
+
+    def _dayGenerator(self):
+        return None
 
 
 class Calendar:

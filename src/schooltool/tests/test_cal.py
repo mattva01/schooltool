@@ -455,13 +455,28 @@ class SchooldayModelStub:
         return date(2003, 11, 20) <= day <= date(2003, 11, 26)
 
 
-class TestSequentialDaysTimetableModel(unittest.TestCase):
+class BaseTestTimetableModel:
+
+    def extractCalendarEvents(self, cal):
+        result = []
+        for d in cal.daterange:
+            calday = cal.byDate(d)
+            events = []
+            for event in calday:
+                events.append(event)
+            result.append(dict([(event.dtstart, event.title)
+                           for event in events]))
+        return result
+
+
+class TestSequentialDaysTimetableModel(unittest.TestCase,
+                                       BaseTestTimetableModel):
 
     def test_interface(self):
         from schooltool.cal import SequentialDaysTimetableModel
         from schooltool.interfaces import ITimetableModel
 
-        model = SequentialDaysTimetableModel(("A","B"), ())
+        model = SequentialDaysTimetableModel(("A","B"), {})
         verifyObject(ITimetableModel, model)
 
     def test_createCalendar(self):
@@ -498,27 +513,100 @@ class TestSequentialDaysTimetableModel(unittest.TestCase):
         self.assertEqual(cal.daterange.first, date(2003, 11, 20))
         self.assertEqual(cal.daterange.last, date(2003, 11, 26))
 
-        result = []
-        for d in daterange(date(2003, 11, 20), date(2003, 11, 26)):
-            calday = cal.byDate(d)
-            events = []
-            for event in calday:
-                events.append(event)
-            result.append(dict([(event.dtstart, event.title)
-                           for event in events]))
+        result = self.extractCalendarEvents(cal)
 
-        dt = datetime
-        expected = [{dt(2003, 11, 20, 9, 0): "English",
-                     dt(2003, 11, 20, 11, 0): "Math"},
-                    {dt(2003, 11, 21, 9, 0): "Biology",
-                     dt(2003, 11, 21, 10, 30): "Geography"},
+        expected = [{datetime(2003, 11, 20, 9, 0): "English",
+                     datetime(2003, 11, 20, 11, 0): "Math"},
+                    {datetime(2003, 11, 21, 9, 0): "Biology",
+                     datetime(2003, 11, 21, 10, 30): "Geography"},
                     {}, {},
-                    {dt(2003, 11, 24, 9, 0): "English",
-                     dt(2003, 11, 24, 11, 0): "Math"},
-                    {dt(2003, 11, 25, 9, 0): "Biology",
-                     dt(2003, 11, 25, 11, 0): "Geography"},
-                    {dt(2003, 11, 26, 9, 0): "English",
-                     dt(2003, 11, 26, 11, 0): "Math"}]
+                    {datetime(2003, 11, 24, 9, 0): "English",
+                     datetime(2003, 11, 24, 11, 0): "Math"},
+                    {datetime(2003, 11, 25, 9, 0): "Biology",
+                     datetime(2003, 11, 25, 11, 0): "Geography"},
+                    {datetime(2003, 11, 26, 9, 0): "English",
+                     datetime(2003, 11, 26, 11, 0): "Math"}]
+
+        self.assertEqual(expected, result,
+                         diff(pformat(expected), pformat(result)))
+
+
+class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
+
+    def test(self):
+        from schooltool.cal import WeeklyTimetableModel, daterange
+        from schooltool.cal import SchooldayTemplate, SchooldayPeriod
+        from schooltool.interfaces import ITimetableModel
+        from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+
+        days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+        tt = Timetable(days)
+        periods = ('1', '2', '3', '4')
+        for day_id in days:
+            tt[day_id] = TimetableDay(periods)
+
+        tt["Monday"]["1"] = TimetableActivity("English")
+        tt["Monday"]["2"] = TimetableActivity("History")
+        tt["Monday"]["3"] = TimetableActivity("Biology")
+        tt["Monday"]["4"] = TimetableActivity("Physics")
+
+        tt["Tuesday"]["1"] = TimetableActivity("Geography")
+        tt["Tuesday"]["2"] = TimetableActivity("Math")
+        tt["Tuesday"]["3"] = TimetableActivity("English")
+        tt["Tuesday"]["4"] = TimetableActivity("Music")
+
+        tt["Wednesday"]["1"] = TimetableActivity("English")
+        tt["Wednesday"]["2"] = TimetableActivity("History")
+        tt["Wednesday"]["3"] = TimetableActivity("Biology")
+        tt["Wednesday"]["4"] = TimetableActivity("Physics")
+
+        tt["Thursday"]["1"] = TimetableActivity("Chemistry")
+        tt["Thursday"]["2"] = TimetableActivity("English")
+        tt["Thursday"]["3"] = TimetableActivity("English")
+        tt["Thursday"]["4"] = TimetableActivity("Math")
+
+        tt["Friday"]["1"] = TimetableActivity("Geography")
+        tt["Friday"]["2"] = TimetableActivity("Drawing")
+        tt["Friday"]["3"] = TimetableActivity("History")
+        tt["Friday"]["4"] = TimetableActivity("Math")
+
+        t, td = time, timedelta
+        template = SchooldayTemplate()
+        template.add(SchooldayPeriod('1', t(9, 0), td(minutes=45)))
+        template.add(SchooldayPeriod('2', t(9, 50), td(minutes=45)))
+        template.add(SchooldayPeriod('3', t(10, 50), td(minutes=45)))
+        template.add(SchooldayPeriod('4', t(12, 0), td(minutes=45)))
+
+        model = WeeklyTimetableModel({None: template})
+        verifyObject(ITimetableModel, model)
+
+        cal = model.createCalendar(SchooldayModelStub(), tt)
+
+        result = self.extractCalendarEvents(cal)
+
+        expected = [
+            {datetime(2003, 11, 20, 9, 0): "Chemistry",
+             datetime(2003, 11, 20, 9, 50): "English",
+             datetime(2003, 11, 20, 10, 50): "English",
+             datetime(2003, 11, 20, 12, 00): "Math"},
+            {datetime(2003, 11, 21, 9, 0): "Geography",
+             datetime(2003, 11, 21, 9, 50): "Drawing",
+             datetime(2003, 11, 21, 10, 50): "History",
+             datetime(2003, 11, 21, 12, 00): "Math"},
+            {}, {},
+            {datetime(2003, 11, 24, 9, 0): "English",
+             datetime(2003, 11, 24, 9, 50): "History",
+             datetime(2003, 11, 24, 10, 50): "Biology",
+             datetime(2003, 11, 24, 12, 00): "Physics"},
+            {datetime(2003, 11, 25, 9, 0): "Geography",
+             datetime(2003, 11, 25, 9, 50): "Math",
+             datetime(2003, 11, 25, 10, 50): "English",
+             datetime(2003, 11, 25, 12, 00): "Music"},
+            {datetime(2003, 11, 26, 9, 0): "English",
+             datetime(2003, 11, 26, 9, 50): "History",
+             datetime(2003, 11, 26, 10, 50): "Biology",
+             datetime(2003, 11, 26, 12, 00): "Physics"},
+            ]
 
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
@@ -651,6 +739,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
+    suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
