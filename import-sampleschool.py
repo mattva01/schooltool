@@ -122,7 +122,7 @@ class SampleSchoolImporter:
 
     def check_data_files(self):
         """Check that the data files exist."""
-        for filename in ('groups.csv', 'pupils.csv', 'teachers.csv',
+        for filename in ('groups.csv', 'persons.csv',
                          'resources.csv'):
             if not os.path.exists(os.path.join(self.datadir, filename)):
                 raise Error(_("%s does not exist.  "
