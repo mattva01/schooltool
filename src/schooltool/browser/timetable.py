@@ -30,6 +30,7 @@ from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import valid_name
 from schooltool.browser import AppObjectBreadcrumbsMixin
+from schooltool.browser import isManager
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
@@ -120,7 +121,7 @@ class TimetableView(View, AppObjectBreadcrumbsMixin):
         #     who can add timetable exceptions?
         #     that is a deep question!
         #     a timetable is shared through composition!
-        user = request.authenticated_user
+        user = self.request.authenticated_user
         return isManager(user)
 
 
