@@ -1,1 +1,6 @@
 src/zope/interface/*.so
+./build
+src/persistence/*.so
+src/zodb/*.so
+src/zodb/btrees/*.so
+src/zodb/storage/*.so
