@@ -29,8 +29,9 @@ ftest: build
 	@PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/main.py -m -c test.conf & \
 	pid=$$! ; \
 	sleep 2 ; \
+	ps -p $$pid > /dev/null && (\
 	$(PYTHON) test.py -f $(TESTFLAGS) ; \
-	kill $$pid
+	kill $$pid )
 
 run: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py
