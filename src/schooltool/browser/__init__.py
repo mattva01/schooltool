@@ -265,5 +265,8 @@ def notFoundPage(request):
 
 class ToplevelBreadcrumbsMixin:
     def breadcrumbs(self):
-        app = traverse(self.context, '/')
-        return [(_('Start'), absoluteURL(self.request, app, 'start'))]
+        if self.context is not None:
+            app = traverse(self.context, '/')
+            return [(_('Start'), absoluteURL(self.request, app, 'start'))]
+        else:
+            return []
