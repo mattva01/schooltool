@@ -26,6 +26,9 @@ import datetime
 import PIL.Image
 from StringIO import StringIO
 
+from schooltool.rest.cal import CalendarView as RestCalendarView
+from schooltool.rest.cal import CalendarReadView as RestCalendarReadView
+
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
@@ -109,6 +112,10 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
             return DailyCalendarView(self.context.calendar)
         elif name == 'calendar_monthly.html':
             return MonthlyCalendarView(self.context.calendar)
+        elif name == 'calendar.ics':
+            return RestCalendarView(self.context.calendar)
+        elif name == 'timetable-calendar.ics':
+            return RestCalendarReadView(self.context.makeCalendar())
         raise KeyError(name)
 
     def canEdit(self):

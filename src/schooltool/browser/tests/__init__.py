@@ -38,7 +38,8 @@ class TraversalTestMixin:
             request = RequestStub()
         destination = view._traverse(name, request)
         self.assert_(isinstance(destination, viewclass))
-        self.assert_(destination.context is context)
+        if context is not None:
+            self.assert_(destination.context is context)
         return destination
 
 

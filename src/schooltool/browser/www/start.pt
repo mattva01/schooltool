@@ -42,11 +42,9 @@
      your password</a></p>
 
   <!-- XXX Hardcoded localhost paths -->
-  <p><a tal:attributes="href
-    string:http://localhost:7001${context/@@absolute_path}/calendar">
+  <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics">
     Your private calendar (iCal)</a>
-  <p><a tal:attributes="href
-    string:http://localhost:7001${context/@@absolute_path}/timetable-calendar">
+  <p><a tal:attributes="href string:${context/@@absolute_url}/timetable-calendar.ics">
     Your read-only timetable calendar (iCal)</a>
   <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
 </div>

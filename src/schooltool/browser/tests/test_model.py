@@ -87,8 +87,11 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         from schooltool.browser.model import PersonView, PhotoView
         from schooltool.browser.model import PersonEditView, PersonPasswordView
         from schooltool.browser.timetable import TimetableTraverseView
+        from schooltool.browser.cal import DailyCalendarView
         from schooltool.browser.cal import WeeklyCalendarView
         from schooltool.browser.cal import MonthlyCalendarView
+        from schooltool.rest.cal import CalendarView as RestCalendarView
+        from schooltool.rest.cal import CalendarReadView as RestCalReadView
         view = PersonView(self.person)
         self.assertTraverses(view, 'photo.jpg', PhotoView, self.person)
         self.assertTraverses(view, 'edit.html', PersonEditView, self.person)
@@ -96,10 +99,16 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                              self.person)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.person)
+        self.assertTraverses(view, 'calendar_daily.html', DailyCalendarView,
+                             self.person.calendar)
         self.assertTraverses(view, 'calendar_weekly.html', WeeklyCalendarView,
                              self.person.calendar)
         self.assertTraverses(view, 'calendar_monthly.html',
                              MonthlyCalendarView, self.person.calendar)
+        self.assertTraverses(view, 'calendar.ics',
+                             RestCalendarView, self.person.calendar)
+        self.assertTraverses(view, 'timetable-calendar.ics',
+                             RestCalReadView)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
     def test_getParentGroups(self):
