@@ -357,14 +357,14 @@ class TestPersonInfoMixin(unittest.TestCase):
         from schooltool.model import Person
 
         person = Person()
-        setPath(person, '/persons/>me')
+        setPath(person, '/persons/me')
         facet = FacetManager(person).facetByName('person_info')
         facet.photo = ';-)'
         mixin = PersonInfoMixin()
         mixin.context = person
         mixin.request = RequestStub()
         self.assertEquals(mixin.photoURL(),
-                          'http://localhost:7001/persons/&gt;me/photo.jpg')
+                          'http://localhost:7001/persons/me/photo.jpg')
 
         facet.photo = None
         self.assertEquals(mixin.photoURL(), '')

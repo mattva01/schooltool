@@ -22,7 +22,6 @@ Web-application views for the schooltool.model objects.
 $Id$
 """
 
-import cgi
 import datetime
 import PIL.Image
 from StringIO import StringIO
@@ -64,8 +63,7 @@ class PersonInfoMixin:
         if self.info().photo is None:
             return u''
         else:
-            path = absoluteURL(self.request, self.context) + '/photo.jpg'
-            return cgi.escape(path)
+            return absoluteURL(self.request, self.context) + '/photo.jpg'
 
 
 class PersonView(View, GetParentsMixin, PersonInfoMixin):
