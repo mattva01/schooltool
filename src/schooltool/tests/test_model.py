@@ -270,6 +270,7 @@ class TestAbsencePersistence(EventServiceTestMixin, unittest.TestCase):
         absence2 = datamgr2.root()['a']
         self.assertEquals(len(absence2.comments), 1)
 
+
 class TestAbsence(EventServiceTestMixin, unittest.TestCase):
 
     def setUp(self):
@@ -304,13 +305,12 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.assert_(e.absence, self.absence)
         self.assert_(e.comment, comment1)
 
-        comment2 = AbsenceComment(object(), "still absent")
-        self.absence.addComment(comment2)
-        # Still the same event
-        e = self.checkOneEventReceived([self.person])
-        self.assert_(INewAbsenceEvent.isImplementedBy(e))
         self.eventService.clearEvents()
         self.person.clearEvents()
+        comment2 = AbsenceComment(object(), "still absent")
+        self.absence.addComment(comment2)
+        self.assertEquals(len(self.eventService.events), 0)
+        self.assertEquals(len(self.person.events), 0)
 
         comment3 = AbsenceComment(object(), "I'll be back",
                                   resolution=True)
