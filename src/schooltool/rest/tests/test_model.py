@@ -524,7 +524,7 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestApplicationObjectTraverserView))
-    suite.addTest(unittest.makeSuite(TestApplicationObjectDeleteMixin))
+    suite.addTest(unittest.makeSuite(TestApplicationObjectDeletion))
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestTreeView))
     suite.addTest(unittest.makeSuite(TestPersonView))
