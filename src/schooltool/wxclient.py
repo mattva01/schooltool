@@ -275,6 +275,11 @@ class MainFrame(wxFrame):
         info = self.client.getPersonInfo(person_id)
         if info is None:
             info = 'Could not connect to server'
+        else:
+            # XXX: horrible, but good enough for a proof-of-concept prototype
+            info = info.replace('<img src="/people',
+                                '<img src="http://%s:%s/people'
+                                % (self.client.server, self.client.port))
         self.personInfoText.SetPage(info)
         self.SetStatusText(self.client.status)
 
@@ -308,6 +313,7 @@ class SchoolToolApp(wxApp):
 
 
 def main():
+    wxInitAllImageHandlers()
     client = SchoolToolClient()
     app = SchoolToolApp(client)
     app.MainLoop()

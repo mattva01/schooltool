@@ -44,10 +44,28 @@ __metaclass__ = type
 # Some fake content
 #
 
+def readFile(filename):
+    dirname = os.path.dirname(__file__)
+    pathname = os.path.join(dirname, filename)
+    f = open(pathname)
+    data = f.read()
+    f.close()
+    return data
+
+
+class FakePhoto:
+
+    format = 'image/jpeg'
+    data = readFile('photo.jpg')
+
+
 class FakePerson:
+
+    photo = FakePhoto()
 
     def __init__(self, name):
         self.name = name
+
 
 class FakeApplication(Persistent):
 
@@ -364,6 +382,27 @@ class PersonView(View):
     """View for /people/person_name"""
 
     template = Template('www/person.pt')
+
+    def _traverse(self, name, request):
+        if name == 'photo':
+            return PhotoView(self.context.photo)
+        raise KeyError(name)
+
+
+class PhotoView(View):
+    """View for /people/person_name/photo"""
+
+    def render(self, request):
+        if request.method == 'GET':
+            request.setHeader('Content-Type', self.context.format)
+            return self.context.data
+        elif request.method == 'HEAD':
+            request.setHeader('Content-Type', self.context.format)
+            request.setHeader('Content-Length', len(self.context.data))
+            return ""
+        else:
+            request.setHeader('Allow', 'GET, HEAD')
+            return errorPage(request, 405, "Method Not Allowed")
 
 
 #

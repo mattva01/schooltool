@@ -151,6 +151,12 @@ class TestPerson(ConnectionMixin, unittest.TestCase):
         response = self.make_request("DELETE", "/people/john")
         self.assertEqual(response.status, 405)
 
+    def test_photo(self):
+        response = self.make_request("GET", "/people/john/photo")
+        self.assertEqual(response.status, 200)
+        ctype = response.getheader("Content-Type")
+        self.assertEqual(ctype, "image/jpeg")
+
 
 class TestNotFoundPage(ConnectionMixin, unittest.TestCase):
     """Tests the 404 page."""
