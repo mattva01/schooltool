@@ -1,0 +1,14 @@
+<html>
+<head>
+  <title tal:content="view/title">Title</title>
+</head>
+<body>
+  <h1 tal:content="view/title">Title</h1>
+  <ul>
+    <li tal:repeat="tt view/timetables">
+      <a href="timetable" tal:attributes="href tt/path"
+         tal:content="string:${tt/period}, ${tt/schema}">timetable</a>
+    </li>
+  </ul>
+</body>
+</html>
