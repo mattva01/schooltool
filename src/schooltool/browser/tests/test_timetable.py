@@ -34,6 +34,46 @@ from schooltool.tests.utils import EqualsSortedMixin
 __metaclass__ = type
 
 
+def createSchema(days, *periods_for_each_day):
+    """Create a timetable schema.
+
+    Example:
+
+        createSchema(['D1', 'D2', 'D3'], ['A'], ['B', 'C'], ['D'])
+
+    creates a schema with three days, the first of which (D1) has one
+    period (A), the second (D2) has two periods (B and C), and the third
+    (D3) has again one period (D).
+    """
+
+    from schooltool.timetable import Timetable
+    from schooltool.timetable import TimetableDay
+    schema = Timetable(days)
+    for day, periods in zip(days, periods_for_each_day):
+        schema[day] = TimetableDay(list(periods))
+    return schema
+
+
+def createDayTemplate(periods):
+    """Create a SchooldayTemplate.
+
+    Example:
+
+        createDayTemplate([('Period 1', 9, 30, 45),
+                           ('Period 2', 10, 30, 45)])
+
+    would create a day template containing two periods, the first one starting
+    at 9:30, the second one starting at 10:30, both 45 minutes long.
+    """
+    from schooltool.timetable import SchooldayTemplate
+    from schooltool.timetable import SchooldayPeriod
+    day = SchooldayTemplate()
+    for period, h, m, duration in periods:
+        day.add(SchooldayPeriod(period, datetime.time(h, m),
+                                datetime.timedelta(minutes=duration)))
+    return day
+
+
 class TestTimetableTraverseView(AppSetupMixin, TraversalTestMixin,
                                 unittest.TestCase):
 
@@ -298,6 +338,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         schema = view._buildSchema()
         self.assertEquals(schema, createSchema(['D', 'D (2)', 'D (3)'],
                                                ['A'], ['B'], ['C']))
+
     def test_buildSchema_repeated_period_nam(self):
         view = self.createView()
         view.request.args['day1'] = ['D']
@@ -413,48 +454,9 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         self.assertEquals(times[4]['times'], ['10:30-11:10'] + [None] * 6) # F
 
 
-def createSchema(days, *periods_for_each_day):
-    """Create a timetable schema.
-
-    Example:
-
-        createSchema(['D1', 'D2', 'D3'], ['A'], ['B', 'C'], ['D'])
-
-    creates a schema with three days, the first of which (D1) has one
-    period (A), the second (D2) has two periods (B and C), and the third
-    (D3) has again one period (D).
-    """
-
-    from schooltool.timetable import Timetable
-    from schooltool.timetable import TimetableDay
-    schema = Timetable(days)
-    for day, periods in zip(days, periods_for_each_day):
-        schema[day] = TimetableDay(list(periods))
-    return schema
-
-
-def createDayTemplate(periods):
-    """Create a SchooldayTemplate.
-
-    Example:
-
-        createDayTemplate([('Period 1', 9, 30, 45),
-                           ('Period 2', 10, 30, 45)])
-
-    would create a day template containing two periods, the first one starting
-    at 9:30, the second one starting at 10:30, both 45 minutes long.
-    """
-    from schooltool.timetable import SchooldayTemplate
-    from schooltool.timetable import SchooldayPeriod
-    day = SchooldayTemplate()
-    for period, h, m, duration in periods:
-        day.add(SchooldayPeriod(period, datetime.time(h, m),
-                                datetime.timedelta(minutes=duration)))
-    return day
-
-
 class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
                                      TraversalTestMixin):
+
     def setUp(self):
         self.setUpSampleApp()
 
@@ -499,8 +501,10 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
         self.assertEquals(view.request.headers['location'],
                           'http://localhost:7001/newttschema')
 
+
 class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
                                 TraversalTestMixin, EqualsSortedMixin):
+
     def setUp(self):
         self.setUpSampleApp()
 
@@ -548,6 +552,103 @@ class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
                           'http://localhost:7001/newtimeperiod')
 
 
+class TestNewTimePeriodView(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def createView(self):
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import TimePeriodService
+        from schooltool.browser.timetable import NewTimePeriodView
+        context = TimePeriodService()
+        context['2004-fall'] = SchooldayModel(None, None)
+        view = NewTimePeriodView(context)
+        view.request = RequestStub(authenticated_user=self.manager)
+        return view
+
+    def test(self):
+        view = self.createView()
+        request = view.request
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(view.name_widget.value, None)
+        self.assertEquals(view.name_widget.error, None)
+        self.assertEquals(view.start_widget.value, None)
+        self.assertEquals(view.start_widget.error, None)
+        self.assertEquals(view.end_widget.value, None)
+        self.assertEquals(view.end_widget.error, None)
+
+    def test_name_missing(self):
+        view = self.createView()
+        view.request.args['name'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.name_widget.error,
+                          "Time period name must not be empty")
+
+    def test_name_error(self):
+        view = self.createView()
+        view.request.args['name'] = ['not valid']
+        view.render(view.request)
+        self.assert_(view.name_widget.error.startswith(
+                            "Time period name can only contain "))
+
+    def test_name_duplicate(self):
+        view = self.createView()
+        view.request.args['name'] = ['2004-fall']
+        view.render(view.request)
+        self.assertEquals(view.name_widget.error,
+                          "Time period with this name already exists.")
+
+    def test_start_date_missing(self):
+        view = self.createView()
+        view.request.args['start'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.error, "This field is required.")
+
+    def test_start_date_error(self):
+        view = self.createView()
+        view.request.args['start'] = ['xyzzy']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.error,
+                          "Invalid date.  Please specify YYYY-MM-DD.")
+
+    def test_start_date_ok(self):
+        view = self.createView()
+        view.request.args['start'] = ['2004-01-02']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.value, datetime.date(2004, 1, 2))
+        self.assertEquals(view.start_widget.error, None)
+
+    def test_end_date_missing(self):
+        view = self.createView()
+        view.request.args['end'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error, "This field is required.")
+
+    def test_end_date_error(self):
+        view = self.createView()
+        view.request.args['end'] = ['xyzzy']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error,
+                          "Invalid date.  Please specify YYYY-MM-DD.")
+
+    def test_end_date_early(self):
+        view = self.createView()
+        view.request.args['start'] = ['2004-01-02']
+        view.request.args['end'] = ['2004-01-01']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error,
+                          "End date cannot be earlier than start date.")
+
+    def test_end_date_ok(self):
+        view = self.createView()
+        view.request.args['end'] = ['2004-01-02']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.value, datetime.date(2004, 1, 2))
+        self.assertEquals(view.end_widget.error, None)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.browser.timetable'))
@@ -557,6 +658,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
     suite.addTest(unittest.makeSuite(TestTimePeriodServiceView))
+    suite.addTest(unittest.makeSuite(TestNewTimePeriodView))
     return suite
 
 

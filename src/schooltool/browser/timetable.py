@@ -23,23 +23,28 @@ $Id$
 """
 
 import re
+import cgi
 import sets
 import datetime
+
 from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage
 from schooltool.browser import valid_name
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
+from schooltool.browser.widgets import TextWidget
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
 from schooltool.interfaces import ITimetableSchemaService
+from schooltool.interfaces import ITimePeriodService
 from schooltool.translation import ugettext as _
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import SchooldayPeriod
 from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
+from schooltool.common import parse_date
 from schooltool.component import getTimetableModel
 from schooltool.rest import absoluteURL
 
@@ -138,7 +143,7 @@ class TimetableSchemaWizard(View):
                 self.name_error = _("Timetable schema name can only contain"
                                     " English letters, numbers, and the"
                                     " following punctuation characters:"
-                                    " . , ' ( )")
+                                    " - . , ' ( )")
             elif self.name in self.context.keys():
                 self.name_error = _("Timetable schema with this name"
                                     " already exists.")
@@ -269,7 +274,7 @@ class TimetableSchemaWizard(View):
 
 
 class TimePeriodView(View):
-    """This is a stub ofa time period (schoolday model) view for use
+    """This is a stub of a time period (schoolday model) view for use
     until the real one gets implemented.
     """
 
@@ -278,6 +283,68 @@ class TimePeriodView(View):
 
     def title(self):
         return _("Time period %s") % self.context.__name__
+
+
+class NewTimePeriodView(View):
+    """View for defining a new time period.
+
+    Can be accessed at /newtimeperiod.
+    """
+
+    __used_for__ = ITimePeriodService
+
+    authorization = ManagerAccess
+
+    template = Template("www/new-time-period.pt")
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.name_widget = TextWidget('name', _('Name'), self.name_parser,
+                                      self.name_validator)
+        self.start_widget = TextWidget('start', _('Start date'),
+                                       self.date_parser)
+        self.end_widget = TextWidget('end', _('End date'),
+                                     self.date_parser, self.end_date_validator)
+
+    def name_parser(self, name):
+        if name is None:
+            return None
+        return name.strip()
+
+    def name_validator(self, name):
+        if name is None:
+            return
+        if not name:
+            raise ValueError(_("Time period name must not be empty"))
+        elif not valid_name(name):
+            raise ValueError(_("Time period name can only contain"
+                               " English letters, numbers, and the"
+                               " following punctuation characters:"
+                               " - . , ' ( )"))
+        elif name in self.context.keys():
+            raise ValueError(_("Time period with this name already exists."))
+
+    def date_parser(self, date):
+        if date is None:
+            return None
+        if not date.strip():
+            raise ValueError(_("This field is required."))
+        try:
+            return parse_date(date)
+        except ValueError:
+            raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
+
+    def end_date_validator(self, date):
+        if date is None or self.start_widget.value is None:
+            return
+        if date < self.start_widget.value:
+            raise ValueError(_("End date cannot be earlier than start date."))
+
+    def do_GET(self, request):
+        self.name_widget.update(request)
+        self.start_widget.update(request)
+        self.end_widget.update(request)
+        return View.do_GET(self, request)
 
 
 class ContainerServiceViewBase(View):
@@ -460,4 +527,3 @@ def format_time_range(start, duration):
         return '00:00-24:00' # special case
     else:
         return '%s-%s' % (start.strftime('%H:%M'), ends)
-

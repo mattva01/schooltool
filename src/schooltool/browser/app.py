@@ -43,6 +43,7 @@ from schooltool.component import getTimetableSchemaService
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimePeriodServiceView
+from schooltool.browser.timetable import NewTimePeriodView
 
 __metaclass__ = type
 
@@ -124,6 +125,8 @@ class RootView(View):
             return TimetableSchemaWizard(self.context.timetableSchemaService)
         elif name == 'time-periods':
             return TimePeriodServiceView(self.context.timePeriodService)
+        elif name == 'newtimeperiod':
+            return NewTimePeriodView(self.context.timePeriodService)
         raise KeyError(name)
 
 

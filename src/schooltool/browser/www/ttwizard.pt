@@ -177,7 +177,7 @@ way to correct it will be to remove this timetable schema and recreate it.
      tal:define="tabindex python:ncols*(nrows+3)+7*nperiods+40">
   <input type="submit" class="button" name="CREATE"
          value="Create timetable schema"
-          tal:attributes="tabindex python:tabindex"
+         tal:attributes="tabindex python:tabindex"
          i18n:attributes="value" />
 </div>
 

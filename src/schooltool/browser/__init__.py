@@ -48,7 +48,7 @@ session_time_limit = datetime.timedelta(hours=5)
 #     See also http://issues.schooltool.org/issue96
 #     Note that group names must not have spaces, or CSV import/export will
 #     break.
-valid_name = re.compile("^[a-zA-Z0-9.,'()]+$").match
+valid_name = re.compile("^[-a-zA-Z0-9.,'()]+$").match
 
 
 class BrowserRequest(Request):

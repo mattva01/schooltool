@@ -140,6 +140,10 @@ div.row {
   clear: both;
 }
 
+div.row div.error {
+  margin: 1ex 0ex 1ex 2ex;
+}
+
 div.buttons {
   margin: 2ex 0ex 0ex 0ex;
 }

@@ -176,6 +176,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.timetable import TimetableSchemaWizard
         from schooltool.browser.timetable import TimetableSchemaServiceView
         from schooltool.browser.timetable import TimePeriodServiceView
+        from schooltool.browser.timetable import NewTimePeriodView
 
         view = self.createView()
         app = view.context
@@ -192,6 +193,8 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'newttschema', TimetableSchemaWizard,
                              app.timetableSchemaService)
         self.assertTraverses(view, 'time-periods', TimePeriodServiceView,
+                             app.timePeriodService)
+        self.assertTraverses(view, 'newtimeperiod', NewTimePeriodView,
                              app.timePeriodService)
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
