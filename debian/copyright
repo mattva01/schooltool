@@ -25,7 +25,6 @@ the individual files and directories for details of the licenses (see below [1])
   /usr/dir/BTrees
   /usr/dir/ZConfig
   /usr/dir/ZODB
-  /usr/dir/persistence
   /usr/dir/persistent
   /usr/dir/transaction
   /usr/dir/zope

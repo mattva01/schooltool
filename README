@@ -246,7 +246,6 @@ the individual files and directories for details of the licences.
   src/BTrees
   src/ZConfig
   src/ZODB
-  src/persistence
   src/persistent
   src/transaction
   src/zope
