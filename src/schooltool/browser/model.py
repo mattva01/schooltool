@@ -46,6 +46,7 @@ from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.teaching import Teaching
 from schooltool.common import parse_date
 from schooltool.common import to_unicode
+from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
 
 __metaclass__ = type
 
@@ -187,44 +188,60 @@ class PersonEditView(View, PersonInfoMixin):
 
     back = True
 
+    def __init__(self, context):
+        View.__init__(self, context)
+        info = self.info()
+        self.first_name_widget = TextWidget('first_name', _('First name'),
+                                            value=info.first_name)
+        self.last_name_widget = TextWidget('last_name', _('Last name'),
+                                           value=info.last_name)
+        self.dob_widget = TextWidget('date_of_birth', _('Birth date'),
+                                     unit=_('(YYYY-MM-DD)'), parser=dateParser,
+                                     value=info.date_of_birth)
+        self.comment_widget = TextAreaWidget('comment', _('Comment'),
+                                             value=info.comment)
+
     def do_POST(self, request):
-        first_name = to_unicode(request.args['first_name'][0])
-        last_name = to_unicode(request.args['last_name'][0])
-        dob_string = request.args['date_of_birth'][0]
-        comment = to_unicode(request.args['comment'][0])
-        photo = request.args['photo'][0]
+        self.first_name_widget.update(request)
+        self.last_name_widget.update(request)
+        self.dob_widget.update(request)
+        self.comment_widget.update(request)
 
-        # XXX use a widget
-        if not dob_string:
-            dob = None
-        else:
-            try:
-                dob = parse_date(dob_string)
-            except (TypeError, ValueError):
-                self.error = _('Invalid date')
-                return self.do_GET(request)
+        if self.dob_widget.error:
+            return self.do_GET(request)
 
-        if photo:
+        first_name = self.first_name_widget.value
+        last_name = self.last_name_widget.value
+        dob = self.dob_widget.value
+        comment = self.comment_widget.value
+        remove_photo = 'REMOVE_PHOTO' in request.args
+        photo = request.args.get('photo', [None])[0]
+
+        if photo and not remove_photo:
             try:
                 photo = resize_photo(StringIO(photo),
                                      self.canonical_photo_size)
             except IOError:
                 self.error = _('Invalid photo')
                 return self.do_GET(request)
-            else:
-                request.appLog(_("Photo added on %s (%s)") %
-                               (self.context.title, getPath(self.context)))
 
         infofacet = self.info()
         infofacet.first_name = first_name
         infofacet.last_name = last_name
         infofacet.date_of_birth = dob
         infofacet.comment = comment
-        if photo:
-            infofacet.photo = photo
 
         request.appLog(_("Person info updated on %s (%s)") %
                        (self.context.title, getPath(self.context)))
+
+        if remove_photo:
+            infofacet.photo = None
+            request.appLog(_("Photo removed from %s (%s)") %
+                           (self.context.title, getPath(self.context)))
+        elif photo:
+            infofacet.photo = photo
+            request.appLog(_("Photo added on %s (%s)") %
+                           (self.context.title, getPath(self.context)))
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)

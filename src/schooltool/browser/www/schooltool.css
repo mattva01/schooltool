@@ -131,9 +131,10 @@ div.info {
   color: green;
 }
 
+form div.info,
 div.form div.info {
   margin: 0ex 0ex 2ex 0ex;
-  padding: 0ex
+  padding: 0ex;
   border: none;
   background: transparent;
 }

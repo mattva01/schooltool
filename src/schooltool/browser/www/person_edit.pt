@@ -17,39 +17,25 @@
     <div class="row"><b>Title:</b>
       <span tal:replace="context/title">John, but not Doe</span>
     </div>
-    <div class="row">
-      <label for="first_name">First name</label>
-      <input id="first_name" name="first_name" type="text"
-             tal:attributes="value info/first_name" />
-    </div>
-    <div class="row">
-      <label for="last_name">Last name</label>
-      <input id="last_name" name="last_name" type="text"
-             tal:attributes="value info/last_name" />
-    </div>
-    <div class="row">
-      <label for="date_of_birth">Birth date</label>
-      <input id="date_of_birth" name="date_of_birth" type="text"
-             tal:attributes="value info/date_of_birth" /> (YYYY-MM-DD)
-    </div>
-    <div class="row">
-      <label for="comment">Comment</label>
-      <textarea id="comment" name="comment" type="text" value="foo"
-                tal:content="info/comment">Comment...</textarea>
-    </div>
+    <div class="row" tal:replace="structure view/first_name_widget" />
+    <div class="row" tal:replace="structure view/last_name_widget" />
+    <div class="row" tal:replace="structure view/dob_widget" />
+    <div class="row" tal:replace="structure view/comment_widget" />
     <div class="row">
       <label for="photo">Photo</label>
       <input id="photo" type="file" name="photo" />
       <p tal:condition="not:view/photoURL">No photo currently set</p>
       <p tal:condition="view/photoURL">
         <img src="photo.jpg" tal:attributes="src view/photoURL" />
-        <!-- TODO: remove photo -->
       </p>
     </div>
-  <div class="buttons">
-    <input class="button" type="submit" value="Submit" />
-  </div>
-
+    <div class="buttons">
+      <input class="button" type="submit" name="SUBMIT" value="Submit"
+             i18n:attributes="value" />
+      <input tal:condition="view/photoURL" class="button" type="submit"
+             name="REMOVE_PHOTO" value="Remove photo"
+             i18n:attributes="value" />
+    </div>
   </form>
   </metal:block>
 </body>

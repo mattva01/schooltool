@@ -306,8 +306,9 @@ class TestPersonEditView(unittest.TestCase):
         view.do_POST(request)
 
         self.assertEquals(request.applog,
-            [(None, u'Photo added on Mr. Wise Guy (/persons/somebody)', INFO),
-             (None, u'Person info updated on I Changed \u0105'
+            [(None, u'Person info updated on I Changed \u0105'
+                    u' My Name \u010d Recently (/persons/somebody)', INFO),
+             (None, u'Photo added on I Changed \u0105'
                     u' My Name \u010d Recently (/persons/somebody)', INFO)])
 
         self.assertEquals(self.info.first_name, u'I Changed \u0105')
@@ -364,6 +365,22 @@ class TestPersonEditView(unittest.TestCase):
                                     'photo': 'eeevill'})
         body = view.do_POST(request)
         self.assert_('Invalid photo' in body, body)
+
+    def test_remove_photo(self):
+        view = self.createView()
+        self.info.photo = 'pretend this is jpeg'
+        request = RequestStub(args={'first_name': 'I Changed',
+                                    'last_name': 'My Name Recently',
+                                    'date_of_birth': '2004-08-05',
+                                    'comment': 'For some reason.',
+                                    'REMOVE_PHOTO': 'remove'})
+        view.do_POST(request)
+        self.assertEquals(request.applog,
+            [(None, u'Person info updated on I Changed'
+                    u' My Name Recently (/persons/somebody)', INFO),
+             (None, u'Photo removed from I Changed'
+                    u' My Name Recently (/persons/somebody)', INFO)])
+        self.assert_(self.info.photo is None)
 
 
 class TestPersonInfoMixin(unittest.TestCase):
