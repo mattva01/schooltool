@@ -21,6 +21,8 @@ schooltool (0.8-1) unstable; urgency=low
   * Add release notes to packages.
   * Merge build the schoolbell package in this source package. The schoolbell
     source package will be removed from debian.
+  * schooltool and schoolbell conflict and replace each other
+    (Closes: Bug#281621). 
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 
