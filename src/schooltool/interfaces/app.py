@@ -418,7 +418,7 @@ class IPersonInfoFacet(IFacet):
 
 
 class INote(ILocation, IRelatable):
-    """An abitrary notation on an IApplicationObject."""
+    """An arbitrary notation on an IApplicationObject."""
 
     title = TextLine(
         title=u"The title of the note.")

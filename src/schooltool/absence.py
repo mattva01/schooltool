@@ -160,10 +160,11 @@ class AbsenceTrackerUtility(AbsenceTrackerMixin):
 
     implements(IAbsenceTrackerUtility)
 
+    __name__ = None
+    __parent__ = None
+
     def __init__(self):
         AbsenceTrackerMixin.__init__(self)
-        self.__parent__ = None
-        self.__name__ = None
         self.title = _("Absence Tracker")
 
 
