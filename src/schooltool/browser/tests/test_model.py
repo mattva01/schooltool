@@ -453,12 +453,37 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
     def test_traverse(self):
         from schooltool.browser.model import GroupView, GroupEditView
         from schooltool.browser.model import GroupTeachersView
+        from schooltool.browser.timetable import TimetableTraverseView
         request = RequestStub()
         view = GroupView(self.group)
         self.assertTraverses(view, 'edit.html', GroupEditView, self.group)
         self.assertTraverses(view, 'teachers.html',
                              GroupTeachersView, self.group)
+        self.assertTraverses(view, 'timetables', TimetableTraverseView,
+                             self.group)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+    def test_timetables(self):
+        from schooltool.browser.model import GroupView
+        from schooltool.timetable import Timetable
+        view = GroupView(self.group)
+        view.request = RequestStub()
+        self.assertEquals(view.timetables(), [])
+
+        view.context.timetables['2004-spring', 'default'] = Timetable([])
+        view.context.timetables['2004-spring', 'another'] = Timetable([])
+        view.context.timetables['2003-fall', 'another'] = Timetable([])
+        self.root.timetables['2003-fall', 'default'] = Timetable([])
+        pp = 'http://localhost:7001/groups/new'
+        self.assertEquals(view.timetables(),
+                          [{'title': '2003-fall, another',
+                            'url': '%s/timetables/2003-fall/another' % pp},
+                           {'title': '2003-fall, default',
+                            'url': '%s/timetables/2003-fall/default' % pp},
+                           {'title': '2004-spring, another',
+                            'url': '%s/timetables/2004-spring/another' % pp},
+                           {'title': '2004-spring, default',
+                            'url': '%s/timetables/2004-spring/default' % pp}])
 
 
 class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):

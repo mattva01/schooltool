@@ -68,7 +68,23 @@ class PersonInfoMixin:
             return absoluteURL(self.request, self.context) + '/photo.jpg'
 
 
-class PersonView(View, GetParentsMixin, PersonInfoMixin):
+class TimetabledViewMixin:
+    """A helper for views for ITimetabled objects."""
+
+    def timetables(self):
+        """Return a sorted list of all composite timetables on self.context.
+
+        The list contains dicts with 'title' and 'url' in them.
+        """
+        path = absoluteURL(self.request, self.context)
+        keys = list(self.context.listCompositeTimetables())
+        keys.sort()
+        return [{'title': '%s, %s' % (period, schema),
+                 'url': '%s/timetables/%s/%s' % (path, period, schema)}
+                for period, schema in keys]
+
+
+class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
     """Person information view (/persons/id)."""
 
     __used_for__ = IPerson
@@ -100,14 +116,6 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
 
     def passwordURL(self):
         return absoluteURL(self.request, self.context) + '/password.html'
-
-    def timetables(self):
-        path = absoluteURL(self.request, self.context)
-        keys = list(self.context.listCompositeTimetables())
-        keys.sort()
-        return [{'title': '%s, %s' % (period, schema),
-                 'url': '%s/timetables/%s/%s' % (path, period, schema)}
-                for period, schema in keys]
 
 
 class PersonPasswordView(View):
@@ -217,7 +225,7 @@ class PersonEditView(View, PersonInfoMixin):
         return buf.getvalue()
 
 
-class GroupView(View, GetParentsMixin):
+class GroupView(View, GetParentsMixin, TimetabledViewMixin):
     """Group information view (/group/id)."""
 
     __used_for__ = IGroup
@@ -229,8 +237,10 @@ class GroupView(View, GetParentsMixin):
     def _traverse(self, name, request):
         if name == "edit.html":
             return GroupEditView(self.context)
-        if name == "teachers.html":
+        elif name == "teachers.html":
             return GroupTeachersView(self.context)
+        elif name == 'timetables':
+            return TimetableTraverseView(self.context)
         raise KeyError(name)
 
     def getOtherMembers(self):
