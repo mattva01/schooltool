@@ -100,7 +100,9 @@ class TimetableReadView(View, TimetableContentNegotiation):
         self.key = key
 
     def title(self):
-        return "%s, %s" % self.key
+        timetabled = self.context.__parent__.__parent__
+        return "%s's complete timetable for %s" % (timetabled.title,
+                                                   ", ".join(self.key))
 
     def do_GET(self, request):
         template = self.chooseRepresentation(request)
@@ -131,6 +133,11 @@ class TimetableReadWriteView(TimetableReadView):
             timetable = None
         TimetableReadView.__init__(self, timetable, key)
         self.timetabled = timetabled
+
+    def title(self):
+        timetabled = self.context.__parent__.__parent__
+        return "%s's own timetable for %s" % (timetabled.title,
+                                              ", ".join(self.key))
 
     def do_GET(self, request):
         if self.context is None:

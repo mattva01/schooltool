@@ -251,17 +251,17 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </timetable>
         """
 
-    empty_html = """
+    empty_html_template = """
         <html>
         <head>
-          <title>2003 fall, weekly</title>
+          <title>John Smith's %(tt_type)s timetable for 2003 fall, weekly</title>
           <style type="text/css">
             table { border-collapse: collapse; }
             td, th { border: 1px solid black; }
           </style>
         </head>
         <body>
-          <h1>2003 fall, weekly</h1>
+          <h1>John Smith's %(tt_type)s timetable for 2003 fall, weekly</h1>
           <table border="1">
             <tr>
               <th colspan="2">Day 1</th>
@@ -305,17 +305,17 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </timetable>
         """
 
-    full_html = """
+    full_html_template = """
         <html>
         <head>
-          <title>2003 fall, weekly</title>
+          <title>John Smith's %(tt_type)s timetable for 2003 fall, weekly</title>
           <style type="text/css">
             table { border-collapse: collapse; }
             td, th { border: 1px solid black; }
           </style>
         </head>
         <body>
-          <h1>2003 fall, weekly</h1>
+          <h1>John Smith's %(tt_type)s timetable for 2003 fall, weekly</h1>
           <table border="1">
             <tr>
               <th colspan="2">Day 1</th>
@@ -338,9 +338,17 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </html>
         """
 
+    empty_html = empty_html_template % {'tt_type': "complete"}
+    full_html = full_html_template % {'tt_type': "complete"}
+
     def createEmpty(self):
         from schooltool.timetable import Timetable, TimetableDay
+        grandparent = TimetabledStub()
+        grandparent.title = "John Smith"
+        parent = TimetabledStub()  # in real life this is a TimetableDict
+        parent.__parent__ = grandparent
         tt = Timetable(['Day 1', 'Day 2'])
+        tt.__parent__ = parent
         tt['Day 1'] = TimetableDay(['A', 'B'])
         tt['Day 2'] = TimetableDay(['C', 'D'])
         return tt
@@ -420,6 +428,9 @@ class TestTimetableReadWriteView(TestTimetableReadView):
           </day>
         </timetable>
         """
+
+    empty_html = TestTimetableReadView.empty_html_template % {'tt_type': "own"}
+    full_html = TestTimetableReadView.full_html_template % {'tt_type': "own"}
 
     def setUp(self):
         TestTimetableReadView.setUp(self)
