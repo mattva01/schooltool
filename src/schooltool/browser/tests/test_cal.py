@@ -26,6 +26,7 @@ import re
 import unittest
 from logging import INFO
 from datetime import datetime, date, timedelta
+from pprint import pformat
 
 from zope.testing.doctestunit import DocTestSuite
 from zope.interface import directlyProvides
@@ -1262,6 +1263,7 @@ class TestCalendarComboMixin(unittest.TestCase):
     def test(self):
         from schooltool.browser.cal import CalendarComboMixin
         from schooltool.model import Person
+        from schooltool.cal import CalendarEvent, DailyRecurrenceRule
 
         person = Person(title="Da Boss")
         setPath(person, '/persons/boss')
@@ -1278,16 +1280,26 @@ class TestCalendarComboMixin(unittest.TestCase):
 
         view = CalendarComboMixin(cal)
 
-        result = list(view.iterEvents())
+        result = list(view.iterEvents(date(2004, 8, 12), date(2004,8,13)))
         self.assertEquals(result, [])
 
         ev1 = createEvent('2004-08-12 12:00', '1h', 'ev1')
         ev2 = createEvent('2004-08-12 13:00', '1h', 'ev2')
+        ev3 = createEvent('2004-01-01 9:00', '1h', 'coffee',
+                          recurrence=DailyRecurrenceRule(), unique_id="42")
+        ev3_1 = createEvent('2004-08-12 9:00', '1h', 'coffee', unique_id="r1")
+        ev3_2 = createEvent('2004-08-13 9:00', '1h', 'coffee', unique_id="r2")
         cal.addEvent(ev1)
+        cal.addEvent(ev3)
         tcal.addEvent(ev2)
 
-        result = list(view.iterEvents())
-        self.assertEquals(result, [ev1, ev2])
+        result = list(view.iterEvents(date(2004, 8, 12), date(2004,8,13)))
+        result.sort()
+        result[0] = result[0].replace(unique_id="r1")
+        result[3] = result[3].replace(unique_id="r2")
+        expected = [ev3_1, ev1, ev2, ev3_2]
+        self.assertEquals(result, expected,
+                          diff(pformat(result), pformat(expected)))
 
 
 class TestComboCalendarView(AppSetupMixin, unittest.TestCase,

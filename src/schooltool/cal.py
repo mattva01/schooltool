@@ -171,7 +171,8 @@ class Calendar(Persistent):
                 for recdate in event.recurrence.apply(event, last):
                     if first <= recdate <= last:
                         start = datetime.datetime.combine(recdate, starttime)
-                        new = event.replace(dtstart=start, recurrence=None)
+                        new = event.replace(dtstart=start, recurrence=None,
+                                            unique_id=None)
                         expanded = ExpandedCalendarEvent.duplicate(
                             new, event.unique_id)
                         cal.addEvent(expanded)

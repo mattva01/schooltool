@@ -38,6 +38,7 @@ from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
+from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ModifyPermission
@@ -263,7 +264,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             self.__url = absoluteURL(self.request, self.context)
         return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
-    def iterEvents(self):
+    def iterEvents(self, first, last):
         """Iterate over the events of the calendars displayed
 
         This is a hook for subclasses that have to iterate over
@@ -285,7 +286,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             events[day] = []
             day += timedelta(1)
 
-        for event in self.iterEvents():
+        for event in self.iterEvents(start, end):
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
             # |     |  [-- event --)  |     |
@@ -952,9 +953,9 @@ class EventDeleteView(View, EventViewHelpers):
 class CalendarComboMixin(View):
     """Mixin for views over the combined calendar of a person."""
 
-    def iterEvents(self):
+    def iterEvents(self, first, last):
         """Iterate over the events of the calendars displayed."""
-        return itertools.chain(self.context,
+        return itertools.chain(self.context.expand(first, last),
                                self.context.__parent__.makeCalendar())
 
 
@@ -994,6 +995,15 @@ class ComboCalendarView(CalendarView):
             return EventDeleteView(self.context)
         elif name == 'acl.html':
             return ACLView(self.context.acl)
+        elif name == 'populate':
+            # XXX this is a hack for fabricating recurring events until we have
+            # a recurring event view
+            from schooltool.cal import DailyRecurrenceRule
+            self.context.addEvent(CalendarEvent(
+                datetime(2004, 1, 1, 9),
+                timedelta(minutes=30),
+                "Coffee", recurrence=DailyRecurrenceRule()))
+            return self
         raise KeyError(name)
 
 
@@ -1071,6 +1081,14 @@ class CalendarEventView(View):
     def uniqueId(self):
         """Format the event ID for inclusion in a URL."""
         return urllib.quote(self.context.unique_id)
+
+    def editId(self):
+        """Format the id of the event to edit when this one is clicked"""
+        if (IExpandedCalendarEvent.providedBy(self.context)
+            and self.context.original):
+            return urllib.quote(self.context.original)
+        else:
+            return self.uniqueId()
 
 
 def durationValidator(value):

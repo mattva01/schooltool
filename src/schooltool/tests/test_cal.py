@@ -252,10 +252,10 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
                             "English", recurrence=daily, unique_id="123")
         ev1_1 = CalendarEvent(datetime(2004, 10, 11, 10, 0),
                               timedelta(minutes=10),
-                              "English", unique_id="123")
+                              "English", unique_id="newid1")
         ev1_2 = CalendarEvent(datetime(2004, 10, 12, 10, 0),
                               timedelta(minutes=10),
-                              "English", unique_id="123")
+                              "English", unique_id="newid2")
         ev2 = CalendarEvent(datetime(2004, 10, 11, 11, 0),
                             timedelta(minutes=10),
                             "Coffee", unique_id="124")
@@ -263,10 +263,25 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
                             timedelta(minutes=10),
                             "Coffee 2", unique_id="124")
         cal = self.makeCal([ev1, ev2, ev3])
-        result = cal.expand(date(2004, 10, 11), date(2004, 10, 12))
-        self.assertEqualSorted(list(result), [ev1_1, ev2, ev1_2])
+        result = list(cal.expand(date(2004, 10, 11), date(2004, 10, 12)))
+        result.sort()
+
+        # Ids of recurrences are not the same as the ids of the original
+        # and not None
+        self.assertNotEquals(result[0].unique_id, "123")
+        self.assertNotEquals(result[2].unique_id, "123")
+        self.assertNotEquals(result[0].unique_id, None)
+        self.assertNotEquals(result[2].unique_id, None)
+
+        result[0] = result[0].replace(unique_id="newid1")
+        result[2] = result[2].replace(unique_id="newid2")
+        self.assertEqual(result, [ev1_1, ev2, ev1_2])
+
         for event in result:
             assert IExpandedCalendarEvent.providedBy(event)
+        # original is the id of the original recurring event
+        self.assertEqual(result[0].original, "123")
+        self.assertEqual(result[2].original, "123")
 
     def test_clear(self):
         from schooltool.cal import CalendarEvent

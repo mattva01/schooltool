@@ -1,10 +1,10 @@
 <div class="calevent" i18n:domain="schooltool">
   <div class="dellink" tal:condition="view/canEdit">
-    <a tal:attributes="href string:delete_event.html?event_id=${view/uniqueId}"
+    <a tal:attributes="href string:delete_event.html?event_id=${view/editId}"
        i18n:translate="">[delete]</a>
   </div>
   <h3>
-    <a tal:attributes="href string:edit_event.html?event_id=${view/uniqueId}"
+    <a tal:attributes="href string:edit_event.html?event_id=${view/editId}"
        tal:omit-tag="not:view/canEdit"
        tal:content="context/title">event_title</a>
   </h3>
