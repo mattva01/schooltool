@@ -419,14 +419,14 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:1668453774-/person/calendar@localhost
+            UID:-474248539
             SUMMARY:Quick Lunch
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
             END:VEVENT
             BEGIN:VEVENT
-            UID:-1822792810-/person/calendar@localhost
+            UID:2003890074
             SUMMARY:Long\\nLunch
             LOCATION:San Valentino
             DTSTART:20030903T120000
@@ -488,14 +488,14 @@ class TestCalendarView(TestCalendarReadView):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:1668453774-/person/calendar@localhost
+            UID:uid1
             SUMMARY:Quick Lunch
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
             END:VEVENT
             BEGIN:VEVENT
-            UID:-1822792810-/person/calendar@localhost
+            UID:uid2
             SUMMARY:Long\\nLunch
             LOCATION:Far far away
             DTSTART:20030903T120000
@@ -503,7 +503,7 @@ class TestCalendarView(TestCalendarReadView):
             DTSTAMP:20040102T030405Z
             END:VEVENT
             BEGIN:VEVENT
-            UID:1234idontcare-/person/calendar@localhost
+            UID:uid3
             SUMMARY:Something else
             DTSTART;VALUE=DATE:20030904
             DTSTAMP:20040102T030405Z
@@ -531,13 +531,16 @@ class TestCalendarView(TestCalendarReadView):
         expected = [
             CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
                           datetime.timedelta(minutes=20),
-                          "Quick Lunch"),
+                          "Quick Lunch",
+                          unique_id="uid1"),
             CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
                           datetime.timedelta(minutes=60),
-                          "Long\nLunch", location="Far far away"),
+                          "Long\nLunch", location="Far far away",
+                          unique_id="uid2"),
             CalendarEvent(datetime.date(2003, 9, 4),
                           datetime.timedelta(days=1),
-                          "Something else"),
+                          "Something else",
+                          unique_id="uid3"),
         ]
         self.assertEquals(sorted(events), sorted(expected))
 
@@ -587,7 +590,7 @@ class TestCalendarView(TestCalendarReadView):
                      errmsg="Repeating events/exceptions not yet supported")
 
 
-class TestCalendarViewBookingEvents(unittest.TestCase):
+class TestCalendarViewBookingEvents(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.app import Application, ApplicationObjectContainer
@@ -606,7 +609,8 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
         e = CalendarEvent(datetime.datetime(2004, 1, 1, 10, 0, 0),
                           datetime.timedelta(minutes=60),
                           "Hall booked by John",
-                          self.person, self.resource)
+                          self.person, self.resource,
+                          unique_id="12345")
         self.event = e
         self.resource.calendar.addEvent(e)
         self.person.calendar.addEvent(e)
@@ -625,7 +629,7 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN\r
             VERSION:2.0\r
             BEGIN:VEVENT\r
-            UID:602343351-/persons/john/calendar@localhost\r
+            UID:12345\r
             SUMMARY:Hall booked by John\r
             DTSTART:20040101T100000\r
             DURATION:PT1H\r
@@ -647,7 +651,7 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN\r
             VERSION:2.0\r
             BEGIN:VEVENT\r
-            UID:602343351-/persons/john/calendar@localhost\r
+            UID:12345\r
             SUMMARY:Hall booked by John\r
             DTSTART:20040101T100100\r
             DURATION:PT1H\r

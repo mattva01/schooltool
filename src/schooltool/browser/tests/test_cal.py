@@ -920,6 +920,7 @@ class TestEventEditView(unittest.TestCase):
         self.assertEquals(new_ev.location, 'Inbetween')
         self.assertEquals(new_ev.dtstart, datetime(2004, 8, 16, 13, 30))
         self.assertEquals(new_ev.duration, timedelta(minutes=70))
+        self.assertEquals(new_ev.unique_id, "pick me")
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],

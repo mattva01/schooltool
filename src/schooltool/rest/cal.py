@@ -217,21 +217,17 @@ class CalendarReadView(View):
 
     def do_GET(self, request):
         dtstamp = self.datetime_hook.utcnow().strftime("%Y%m%dT%H%M%SZ")
-        uid_suffix = "%s@%s" % (getPath(self.context),
-                                request.getRequestHostname())
         result = [
             "BEGIN:VCALENDAR",
             "PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN",
             "VERSION:2.0",
         ]
-        uid_hash = None
         events = list(self.context)
         events.sort()
         for event in events:
-            uid_hash = hash((event.title, event.dtstart, event.duration))
             result += [
                 "BEGIN:VEVENT",
-                "UID:%d-%s" % (uid_hash, uid_suffix),
+                "UID:%s" % ical_text(event.unique_id),
                 "SUMMARY:%s" % ical_text(event.title)]
             if event.location is not None:
                 result.append("LOCATION:%s" % ical_text(event.location))
@@ -241,7 +237,7 @@ class CalendarReadView(View):
                 "DTSTAMP:%s" % dtstamp,
                 "END:VEVENT",
             ]
-        if uid_hash is None:
+        if not events:
             # There were no events.  iCalendar spec (RFC 2445) requires
             # VCALENDAR to have at least one subcomponent.  Let's create
             # a fake event.
@@ -250,7 +246,8 @@ class CalendarReadView(View):
             # (http://bugzilla.mozilla.org/show_bug.cgi?id=229266).
             result += [
                 "BEGIN:VEVENT",
-                "UID:placeholder-%s" % uid_suffix,
+                "UID:placeholder-%s@%s" % (getPath(self.context),
+                                           request.getRequestHostname()),
                 "SUMMARY:%s" % ical_text("Empty calendar"),
                 "DTSTART;VALUE=DATE:%s" % dtstamp[:8],
                 "DTSTAMP:%s" % dtstamp,
@@ -287,7 +284,8 @@ class CalendarView(CalendarReadView):
                          _("Repeating events/exceptions not yet supported"))
                 events.append(CalendarEvent(event.dtstart, event.duration,
                                             event.summary,
-                                            location=event.location))
+                                            location=event.location,
+                                            unique_id=event.uid))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:
@@ -302,7 +300,7 @@ class CalendarView(CalendarReadView):
                     # owner and context are not represented in the
                     # iCalendar representation
                     e = CalendarEvent(event.dtstart, event.duration,
-                                      event.title)
+                                      event.title, unique_id=event.unique_id)
                     if e in events:
                         # old event
                         events.remove(e)

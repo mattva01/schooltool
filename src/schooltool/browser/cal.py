@@ -649,10 +649,11 @@ class EventEditView(EventViewBase):
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
+        uid = self.event.unique_id
         self.context.removeEvent(self.event)
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
-                           location=location)
+                           location=location, unique_id=uid)
         self.context.addEvent(ev)
 
 

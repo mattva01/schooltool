@@ -335,41 +335,49 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('summary', 'An event', {})
+        vevent.add('uid', 'unique', {})
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.validate()
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.summary, 'An event')
+        self.assertEquals(vevent.uid, 'unique')
         self.assertEquals(vevent.dtend, date(2001, 2, 4))
         self.assertEquals(vevent.duration, timedelta(days=1))
 
         vevent = VEvent()
         vevent.add('summary', 'An\\nevent\\; with backslashes', {})
+        vevent.add('uid', 'unique2', {})
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('dtend', '20010205', {'VALUE': 'DATE'})
         vevent.validate()
         self.assertEquals(vevent.summary, 'An\nevent; with backslashes')
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
+        self.assertEquals(vevent.uid, 'unique2')
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
         self.assertEquals(vevent.duration, timedelta(days=2))
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        vevent.add('uid', 'unique3', {})
         vevent.add('duration', 'P2D')
         vevent.validate()
         self.assertEquals(vevent.summary, None)
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
+        self.assertEquals(vevent.uid, 'unique3')
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
         self.assertEquals(vevent.duration, timedelta(days=2))
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        vevent.add('uid', 'unique4', {})
         vevent.add('dtend', '20010201', {'VALUE': 'DATE'})
         self.assertRaises(ICalParseError, vevent.validate)
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        vevent.add('uid', 'unique5', {})
         vevent.add('dtend', '20010203', {'VALUE': 'DATE'})
         self.assertRaises(ICalParseError, vevent.validate)
 
@@ -378,6 +386,7 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
+        vevent.add('uid', 'unique', {})
         vevent.validate()
         self.assert_(not vevent.all_day_event)
         self.assertEquals(vevent.dtstart, datetime(2001, 2, 3, 4, 5, 6))
@@ -387,6 +396,7 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040000')
+        vevent.add('uid', 'unique', {})
         vevent.add('dtend', '20010204T050102')
         vevent.validate()
         self.assert_(not vevent.all_day_event)
@@ -397,6 +407,7 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040000')
+        vevent.add('uid', 'unique', {})
         vevent.add('duration', 'P1DT1H1M2S')
         vevent.validate()
         self.assert_(not vevent.all_day_event)
@@ -407,11 +418,13 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T010203')
+        vevent.add('uid', 'unique', {})
         vevent.add('dtend', '20010203T010202')
         self.assertRaises(ICalParseError, vevent.validate)
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T010203')
+        vevent.add('uid', 'unique', {})
         vevent.add('rdate', '20010205T040506')
         vevent.add('exdate', '20010206T040506')
         vevent.validate()
@@ -423,6 +436,7 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
+        vevent.add('uid', 'unique5', {})
         vevent.add('location', 'Somewhere')
         vevent.validate()
         self.assertEquals(vevent.location, 'Somewhere')
@@ -539,6 +553,8 @@ class TestICalReader(unittest.TestCase):
          :20020430T114937Z
         END:VEVENT
         BEGIN:VEVENT
+        UID
+         :wh4t3v3r
         DTSTART;VALUE=DATE:20031225
         SUMMARY:Christmas again!
         END:VEVENT
@@ -564,6 +580,7 @@ class TestICalReader(unittest.TestCase):
                     BEGIN:VCALENDAR
                     BEGIN:VEVENT
                     DTSTART:20030902T124500
+                    UID:foo
                     DURATION:PT0H15M
                     SUMMARY:Nap
                     END:VEVENT
@@ -595,6 +612,7 @@ class TestICalReader(unittest.TestCase):
         reader = ICalReader(StringIO(dedent("""
                     BEGIN:VCALENDAR
                     BEGIN:VEVENT
+                    UID:hello
                     DTSTART;VALUE=DATE:20010203
                     BEGIN:VALARM
                     X-PROP:foo
@@ -605,8 +623,19 @@ class TestICalReader(unittest.TestCase):
         result = list(reader.iterEvents())
         self.assertEquals(len(result), 1)
         vevent = result[0]
+        self.assert_(vevent.hasProp('uid'))
         self.assert_(vevent.hasProp('dtstart'))
         self.assert_(not vevent.hasProp('x-prop'))
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    BEGIN:VEVENT
+                    DTSTART;VALUE=DATE:20010203
+                    END:VEVENT
+                    END:VCALENDAR
+                    """)))
+        # missing UID
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
 
         reader = ICalReader(StringIO(dedent("""
                     BEGIN:VCALENDAR

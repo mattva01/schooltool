@@ -446,6 +446,8 @@ class VEvent:
         'EXRULE': 'RECUR',
         'RDATE': 'DATE-TIME',
         'RRULE': 'RECUR',
+        'LOCATION': 'TEXT',
+        'UID': 'TEXT',
     }
 
     converters = {
@@ -510,6 +512,7 @@ class VEvent:
         """Check that this VEvent has all the necessary properties.
 
         Also sets the following attributes:
+          uid               The unique id of this event
           summary           Textual summary of this event
           all_day_event     True if this is an all-day event
           dtstart           start of the event (inclusive)
@@ -519,6 +522,8 @@ class VEvent:
           rdates            a list of recurrence dates or periods
           exdates           a list of exception dates
         """
+        if not self.hasProp('UID'):
+            raise ICalParseError("VEVENT must have a UID property")
         if not self.hasProp('DTSTART'):
             raise ICalParseError("VEVENT must have a DTSTART property")
         if self._getType('DTSTART') not in ('DATE', 'DATE-TIME'):
@@ -536,6 +541,7 @@ class VEvent:
                 raise ICalParseError("DURATION property should have type"
                                      " DURATION")
 
+        self.uid = self.getOne('UID')
         self.summary = self.getOne('SUMMARY')
 
         self.all_day_event = self._getType('DTSTART') == 'DATE'
@@ -953,8 +959,8 @@ class CalendarEvent(Persistent):
 
     def __repr__(self):
         return ("CalendarEvent%r"
-                % ((self.dtstart, self.duration, self.title,
-                    self.owner, self.context, self.location), ))
+                % ((self.dtstart, self.duration, self.title, self.owner,
+                    self.context, self.location, self.unique_id), ))
 
 
 class CalendarOwnerMixin:

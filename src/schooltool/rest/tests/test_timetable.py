@@ -1606,6 +1606,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             SUMMARY:School Period
+            UID:unique
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20041001
             END:VEVENT
