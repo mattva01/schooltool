@@ -7,9 +7,6 @@ Debian Package Todo
         - Zope 3 package in Debian and Ubuntu.
         - Trunk to work with the above package.
 
-*   Split the package into two source packages, schoolbell ad schooltool.
-        - Different upstream release cycles.
-
 *   Put architecture independent files into /usr/share/schooolbell
     How:
         patch the Template class
