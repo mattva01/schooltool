@@ -1,0 +1,68 @@
+ACL security tests
+
+SchoolTool> links off
+
+SchoolTool> put /persons/Aiste/password
+PUT> Aiste
+PUT> .
+200 OK
+Content-Type: text/plain; charset=UTF-8
+Password changed
+
+SchoolTool> put /persons/Mark/password
+PUT> Mark
+PUT> .
+200 OK
+Content-Type: text/plain; charset=UTF-8
+Password changed
+
+SchoolTool> put /groups/pupils/acl
+PUT> <acl xmlns='http://schooltool.org/ns/model/0.1'>
+PUT>  <allow principal="/groups/teachers" permission="Modify" />
+PUT> </acl>
+PUT> .
+201 Created
+Content-Type: text/plain; charset=UTF-8
+ACL saved
+
+SchoolTool> user Mark Mark
+User Mark
+
+SchoolTool> post /groups/pupils/relationships
+POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+POST>               xmlns="http://schooltool.org/ns/model/0.1"
+POST>               xlink:type="simple"
+POST>               xlink:arcrole="http://schooltool.org/ns/membership"
+POST>               xlink:role="http://schooltool.org/ns/membership/group"
+POST>               xlink:href="/persons/Mark" />
+POST> .
+201 Created
+Content-Type: text/plain; charset=UTF-8
+Relationship created: http://localhost:8813/groups/pupils/relationships/0002
+
+SchoolTool> user manager schooltool
+User manager
+
+SchoolTool> put /groups/pupils/acl
+PUT> <acl xmlns='http://schooltool.org/ns/model/0.1'>
+PUT> </acl>
+PUT> .
+201 Created
+Content-Type: text/plain; charset=UTF-8
+ACL saved
+
+SchoolTool> user Mark Mark
+User Mark
+
+SchoolTool> post /groups/pupils/relationships
+POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+POST>               xmlns="http://schooltool.org/ns/model/0.1"
+POST>               xlink:type="simple"
+POST>               xlink:arcrole="http://schooltool.org/ns/membership"
+POST>               xlink:role="http://schooltool.org/ns/membership/group"
+POST>               xlink:href="/persons/Steve" />
+POST> .
+401 Unauthorized
+Content-Type: text/plain; charset=UTF-8
+Bad username or password
+

@@ -76,6 +76,12 @@ Content-Type: text/xml; charset=UTF-8
     link='http://schooltool.org/ns/teaching/teacher', '/persons/Steve'
     link='http://schooltool.org/ns/teaching/taught', '/groups/students'
 </event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Pupils'
+    link='http://schooltool.org/ns/membership/group', '/groups/pupils'
+    link='http://schooltool.org/ns/membership/member', '/persons/Mark'
+</event>
 </eventLog>
 
 
@@ -83,7 +89,7 @@ SchoolTool> put /utils/eventlog
 SchoolTool> .
 200 OK
 Content-Type: text/plain; charset=UTF-8
-12 events cleared in /utils/eventlog
+13 events cleared in /utils/eventlog
 
 SchoolTool> get /utils/eventlog
 200 OK
