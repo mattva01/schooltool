@@ -73,13 +73,13 @@ Views are Resources in terms of twisted.web.
 Facets
 ------
 
-The groups and persons can exhibit certain polymorphic behaviour.  For
+The groups and persons can exhibit certain polymorphic behavior.  For
 instance, the same person might be a pupil and later become a teacher.
 Or, more commonly, a teacher might periodically become an
 administrator.
 
 There might be some data pertinent to a teacher, which is not relevant
-when a person is not a teacher.  In order to accomodate these cases,
+when a person is not a teacher.  In order to accommodate these cases,
 the concept of a facet is introduced.
 
 A facet is a persistent auxiliary object that is stored in the
