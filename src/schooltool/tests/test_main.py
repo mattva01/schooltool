@@ -439,21 +439,22 @@ class TestRequest(unittest.TestCase):
         from schooltool.main import Request
 
         class ResourceStub:
-            def getChildForRequest(self, request):
-                return request
+            isLeaf = True
 
         class SiteStub:
             rootName = 'app'
+            resource = ResourceStub()
 
             def viewFactory(self, context):
                 assert context is ConnectionStub.app
-                return ResourceStub()
+                return self.resource
 
         rq = Request(None, True)
         rq.zodb_conn = ConnectionStub()
         rq.site = SiteStub()
         rq.prepath = ['some', 'thing']
-        self.assertEquals(rq.traverse(), rq)
+        rq.postpath = []
+        self.assertEquals(rq.traverse(), SiteStub.resource)
         self.assertEquals(rq.sitepath, rq.prepath)
         self.assert_(rq.sitepath is not rq.prepath)
         self.assertEquals(rq.acqpath, rq.prepath)

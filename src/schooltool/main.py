@@ -286,8 +286,8 @@ class Request(server.Request):
         # Get a persistent application object from ZODB
         root = self.zodb_conn.root()
         app = root[self.site.rootName]
-        resource = self.site.viewFactory(app)
-        return resource.getChildForRequest(self)
+        rsc = self.site.viewFactory(app)
+        return resource.getChildForRequest(rsc, self)
 
     def render(self, resrc):
         """Render a resource.
