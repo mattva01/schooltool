@@ -107,7 +107,7 @@ class XMLWriter:
 def setUpApplication(dbpath):
     """Get the SchoolBell application object out of the database."""
 
-    storage = FileStorage(dbpath)
+    storage = FileStorage(dbpath, read_only=True)
     db = DB(storage)
     conn = db.open()
     root = conn.root()
@@ -167,7 +167,7 @@ def getCalendarText(calendar):
 
 def dumpCalendar(filename, obj):
     outfile = file(filename, 'w')
-    outfile.write(getCalendarText(obj.calendar))
+    outfile.write(getCalendarText(obj.calendar).encode('UTF-8'))
     outfile.close()
 
 def exportPerson(person):
