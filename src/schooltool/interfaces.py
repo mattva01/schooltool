@@ -885,9 +885,16 @@ class IACLCalendar(ICalendarWrite):
 
 
 class ICalendarEvent(Interface):
-    """A calendar event."""
+    """A calendar event.
 
-    unique_id = Attribute("""A unique id for this calendar event.""")
+    Calendar events are immutable, hashable and comparable.  Events are
+    compared in chronological order (i.e., if e1 and e2 are events, then
+    e1.dtstart < e2.dtstart implies e1 < e2.  If events start at the same
+    time, their relative ordering is determined lexicographically comparing
+    their titles.
+    """
+
+    unique_id = Attribute("""A globally unique id for this calendar event.""")
     dtstart = Attribute("""The datetime.datetime of the start of the event.""")
     duration = Attribute("""The duration of the event (datetime.timedelta).""")
     title = Attribute("""The title of the event.""")
@@ -902,13 +909,12 @@ class ICalendarEvent(Interface):
     location = Attribute(
           """The title of the location where this event takes place.""")
 
-    def __cmp__(other):
-        """Compare calendar events in chronological order.
-
-        Events that occur at the same time are compared by their titles.
-
-        Events are considered equal only if all attributes are equal.
-        """
+    def __eq__(other): """See if self == other."""
+    def __ne__(other): """See if self != other."""
+    def __lt__(other): """See if self < other."""
+    def __gt__(other): """See if self > other."""
+    def __le__(other): """See if self <= other."""
+    def __ge__(other): """See if self >= other."""
 
     def __hash__():
         """Return the hash value of this event.

@@ -951,19 +951,42 @@ class CalendarEvent(Persistent):
         self._location = location
 
         if unique_id is None:
+            # XXX The unique id must be globally unique to be suitable for
+            #     iCalendar; str(hash()) is *not* enough
             unique_id = str(hash(self))
         self._unique_id = unique_id
 
-    def __cmp__(self, other):
+    def __tuple_for_comparison(self):
+        return (self.dtstart, self.title, self.duration, hash(self.owner),
+                hash(self.context), self.location, self.unique_id)
+
+    def __eq__(self, other):
         if not isinstance(other, CalendarEvent):
-            raise NotImplementedError('Cannot compare CalendarEvent with %r'
-                                      % other)
-        return cmp((self.dtstart, self.title, self.duration,
-                    hash(self.owner), hash(self.context),
-                    self.location, self.unique_id),
-                   (other.dtstart, other.title, other.duration,
-                    hash(other.owner), hash(other.context),
-                    other.location, other.unique_id))
+            return False
+        return self.__tuple_for_comparison() == other.__tuple_for_comparison()
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        if not isinstance(other, CalendarEvent):
+            raise TypeError('Cannot compare CalendarEvent with %r' % other)
+        return self.__tuple_for_comparison() < other.__tuple_for_comparison()
+
+    def __le__(self, other):
+        if not isinstance(other, CalendarEvent):
+            raise TypeError('Cannot compare CalendarEvent with %r' % other)
+        return self.__tuple_for_comparison() <= other.__tuple_for_comparison()
+
+    def __gt__(self, other):
+        if not isinstance(other, CalendarEvent):
+            raise TypeError('Cannot compare CalendarEvent with %r' % other)
+        return self.__tuple_for_comparison() > other.__tuple_for_comparison()
+
+    def __ge__(self, other):
+        if not isinstance(other, CalendarEvent):
+            raise TypeError('Cannot compare CalendarEvent with %r' % other)
+        return self.__tuple_for_comparison() >= other.__tuple_for_comparison()
 
     def __hash__(self):
         return hash((self.dtstart, self.title, self.duration,
