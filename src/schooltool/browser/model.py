@@ -399,6 +399,23 @@ class ResourceView(View):
     template = Template("www/resource.pt")
 
 
+class ResourceEditView(View):
+    """View for displaying a resource."""
+
+    __used_for__ = IResource
+
+    authorization = ManagerAccess
+
+    template = Template("www/resource_edit.pt")
+
+    def do_POST(self, request):
+        title = unicode(request.args['title'][0], 'utf-8')
+        self.context.title = title
+
+        url = absoluteURL(request, self.context)
+        return self.redirect(url, request)
+
+
 class PhotoView(View):
     """View for displaying a person's photo (/persons/id/photo.jpg)."""
 

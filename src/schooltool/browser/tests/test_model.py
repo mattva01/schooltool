@@ -708,6 +708,33 @@ class TestResourceView(unittest.TestCase):
         self.assert_("re123" in content)
 
 
+class TestResourceEditView(unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.model import ResourceEditView
+        from schooltool.model import Resource
+        resource = self.resource = Resource(title=u"Foo resource bar")
+        setPath(resource, '/resources/foo')
+        view = ResourceEditView(resource)
+        view.authorization = lambda x, y: True
+        return view
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
+        content = view.render(request)
+        self.assert_("Foo resource bar" in content)
+
+    def test_post(self):
+        view = self.createView()
+        request = RequestStub(args={'title': 'New \xc4\x85'})
+        view.do_POST(request)
+        self.assertEquals(self.resource.title, u'New \u0105')
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/resources/foo')
+
+
 class TestPhotoView(unittest.TestCase):
 
     def createView(self, photo):
@@ -744,6 +771,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupEditView))
     suite.addTest(unittest.makeSuite(TestGroupTeachersView))
     suite.addTest(unittest.makeSuite(TestResourceView))
+    suite.addTest(unittest.makeSuite(TestResourceEditView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     return suite
 

@@ -1,0 +1,27 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Edit resource info</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Edit resource info for <span tal:replace="context/title"/>
+  </h1>
+  <metal:block metal:fill-slot="content">
+
+  <form method="POST" tal:attributes="action request/path">
+    <div class="row"><b>Name:</b>
+      <span tal:replace="python:context.__name__">name</span>
+    </div>
+    <div class="row">
+      <label for="title">Title</label>
+      <input id="first_name" name="first_name" type="text"
+             tal:attributes="value context/title" />
+    </div>
+    <div class="buttons">
+      <input class="button" type="submit" value="Submit" />
+    </div>
+
+  </form>
+  </metal:block>
+</body>
+</html>
