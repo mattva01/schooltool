@@ -77,6 +77,31 @@ from schoolbell.calendar.simple import SimpleCalendarEvent
 
 EMPTY_CALENDAR_PLACEHOLDER = 'empty-calendar-placeholder@schooltool.org'
 
+def convert_event_to_vfb(event):
+    r"""Convert an ICalendarEvent to iCalendar FREEBUSY component.
+
+    Returns a list of strings (without newlines) in UTF-8.
+
+        >>> from datetime import datetime, timedelta
+        >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 7, 29),
+        ...                             timedelta(hours=1), "iCal rendering",
+        ...                             location="Big room",
+        ...                             description="Blah blah\nblah!",
+        ...                             unique_id="12345678-5432@example.com")
+        >>> lines = convert_event_to_vfb(event)
+        >>> print "\n".join(lines)
+        FREEBUSY:20041216T100729/20041216T11072900Z
+
+    """
+    dtstamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    dtend = event.dtstart + event.duration
+    result = []
+    # XXX: not handling recurrence yet
+    result += [
+        "FREEBUSY:%s/%s00Z" % (ical_datetime(event.dtstart), ical_datetime(dtend)),
+    ]
+    return result
+
 
 def convert_event_to_ical(event):
     r"""Convert an ICalendarEvent to iCalendar VEVENT component.
@@ -137,6 +162,66 @@ def convert_event_to_ical(event):
         "END:VEVENT",
     ]
     return result
+
+
+def convert_calendar_to_vfb(calendar):
+    r"""Convert an ICalendar to a VFREEBUSY component
+    Returns a list of strings (without newlines) in UTF-8.  They should be
+    joined with '\r\n' to get a valid iCalendar file.
+
+        >>> from schoolbell.calendar.simple import ImmutableCalendar
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from datetime import datetime, timedelta
+        >>> event1 = SimpleCalendarEvent(datetime(2004, 11, 16, 10, 7, 29),
+        ...                             timedelta(hours=1), "iCal rendering",
+        ...                             location="Big room",
+        ...                             unique_id="12345678-5432@example.com")
+        >>> event2 = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 7, 29),
+        ...                             timedelta(hours=2), "iCal rendering",
+        ...                             location="Big room",
+        ...                             unique_id="12345678-9876@example.com")
+        >>> calendar = ImmutableCalendar([event1, event2])
+        >>> lines = convert_calendar_to_vfb(calendar)
+        >>> print "\n".join(lines)
+        BEGIN:VCALENDAR
+        VERSION:2.0
+        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        METHOD:PUBLISH
+        BEGIN:VFREEBUSY
+        FREEBUSY:20041116T100729/20041116T11072900Z
+        FREEBUSY:20041216T100729/20041216T12072900Z
+        END:VFREEBUSY
+        END:VCALENDAR
+
+    Not sure yet how VFB is supposed to handle empty calendars.
+
+        >>> lines = convert_calendar_to_vfb(ImmutableCalendar())
+        >>> print "\n".join(lines)
+        BEGIN:VCALENDAR
+        VERSION:2.0
+        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        METHOD:PUBLISH
+        BEGIN:VFREEBUSY
+        END:VFREEBUSY
+        END:VCALENDAR
+
+
+    """
+    header = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
+        "METHOD:PUBLISH",
+        "BEGIN:VFREEBUSY"
+    ]
+    footer = [
+        "END:VFREEBUSY",
+        "END:VCALENDAR"
+    ]
+    events = []
+    for event in calendar:
+        events += convert_event_to_vfb(event)
+    return header + events + footer
 
 
 def convert_calendar_to_ical(calendar):
