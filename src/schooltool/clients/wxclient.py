@@ -1439,17 +1439,19 @@ class MainFrame(wxFrame):
             old_selection = self.groupTreeCtrl.GetPyData(item)[1]
 
         # Remember which items were expanded
-        root = self.groupTreeCtrl.GetRootItem()
         expanded = sets.Set()
-        stack = [root]
-        while stack:
-            item = stack.pop()
-            if item is not root and self.groupTreeCtrl.IsExpanded(item):
-                expanded.add(self.groupTreeCtrl.GetPyData(item)[1])
-            next, cookie = self.groupTreeCtrl.GetFirstChild(item, 0)
-            while next.IsOk():
-                stack.append(next)
-                next, cookie = self.groupTreeCtrl.GetNextChild(item, cookie)
+        root = self.groupTreeCtrl.GetRootItem()
+        if root.IsOk(): # do not do this before the root item is first created
+            stack = [root]
+            while stack:
+                item = stack.pop()
+                if item is not root and self.groupTreeCtrl.IsExpanded(item):
+                    expanded.add(self.groupTreeCtrl.GetPyData(item)[1])
+                next, cookie = self.groupTreeCtrl.GetFirstChild(item, 0)
+                while next.IsOk():
+                    stack.append(next)
+                    next, cookie = self.groupTreeCtrl.GetNextChild(item,
+                                                                   cookie)
 
         # Reload tree
         self.groupTreeCtrl.Freeze()
