@@ -171,6 +171,7 @@ from schooltool.interfaces import Unchanged
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
+from schooltool.component import getTimetableSchemaService
 from schooltool.component import registerTimetableModel
 from schooltool.component import getPath, getOptions
 from schooltool.uris import URIGroup
@@ -951,6 +952,47 @@ class TimePeriodService(Persistent):
     def __delitem__(self, period_id):
         del self.periods[period_id]
 
+
+def getTimePeriodForDate(date, context):
+    """Find the time period that contains `date`.
+
+    Returns None if there is `date` falls outside all time periods.
+
+    `context` is used to get the time period service.
+    """
+    period_service = getTimePeriodService(context)
+    for period_id in period_service.keys():
+        time_period = period_service[period_id]
+        if date in time_period:
+            return time_period
+    return None
+
+
+def getPeriodsForDay(date, context):
+    """Return a list of timetable periods defined for `date`.
+
+    This function uses the default timetable schema and the appropriate time
+    period for `date`.
+
+    `context` is used to get the time period and timetable schema services.
+
+    Returns a list of ISchooldayPeriod objects.
+
+    Returns an empty list if there are no periods defined for `date` (e.g.
+    if there is no default timetable schema, or `date` falls outside all
+    time periods, or it happens to be a holiday).
+    """
+    schooldays = getTimePeriodForDate(date, context)
+    ttservice = getTimetableSchemaService(context)
+    if ttservice.default_id is None or schooldays is None:
+        return []
+    ttschema = ttservice.getDefault()
+    return ttschema.model.periodsInDay(schooldays, ttschema, date)
+
+
+#
+# Module setup
+#
 
 def setUp():
     registerTimetableModel('SequentialDaysTimetableModel',

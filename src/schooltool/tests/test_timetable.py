@@ -27,6 +27,7 @@ import unittest
 from sets import Set
 from pprint import pformat
 from datetime import date, time, timedelta, datetime
+
 from persistent import Persistent
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
@@ -1555,6 +1556,62 @@ class TestTimePeriodService(unittest.TestCase):
         self.assertRaises(KeyError, service.__delitem__, '2003 fall')
 
 
+class TestGetPeriodsForDay(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.interfaces import IServiceManager
+        from schooltool.timetable import TimePeriodService
+        from schooltool.timetable import Timetable
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import TimetableSchemaService
+        context = TraversableRoot()
+        directlyProvides(context, IServiceManager)
+        context.timePeriodService = TimePeriodService()
+        self.sm1 = SchooldayModel(date(2004, 9, 1), date(2004, 12, 20))
+        self.sm2 = SchooldayModel(date(2005, 1, 1), date(2005, 6, 1))
+        context.timePeriodService['2004-fall'] = self.sm1
+        context.timePeriodService['2005-spring'] = self.sm2
+        context.timetableSchemaService = TimetableSchemaService()
+        tt = Timetable([])
+
+        class TimetableModelStub:
+            def periodsInDay(self, schooldays, ttschema, date):
+                return 'periodsInDay', schooldays, ttschema, date
+
+        tt.model = TimetableModelStub()
+        self.tt = tt
+        context.timetableSchemaService['default'] = tt
+        self.context = context
+
+    def test_getTimePeriodForDate(self):
+        from schooltool.timetable import getTimePeriodForDate
+        c = self.context
+        self.assert_(getTimePeriodForDate(date(2004, 8, 31), c) is None)
+        self.assert_(getTimePeriodForDate(date(2004, 9, 1), c) is self.sm1)
+        self.assert_(getTimePeriodForDate(date(2004, 11, 5), c) is self.sm1)
+        self.assert_(getTimePeriodForDate(date(2004, 12, 20), c) is self.sm1)
+        self.assert_(getTimePeriodForDate(date(2004, 12, 21), c) is None)
+        self.assert_(getTimePeriodForDate(date(2005, 3, 17), c) is self.sm2)
+        self.assert_(getTimePeriodForDate(date(2005, 11, 5), c) is None)
+
+    def test_getPeriodsForDay(self):
+        from schooltool.timetable import getPeriodsForDay
+        # A white-box test: we delegate to ITimetableModel.periodsInDay
+        # with the correct arguments
+        self.assertEquals(getPeriodsForDay(date(2004, 10, 14), self.context),
+                          ('periodsInDay', self.sm1, self.tt,
+                           date(2004, 10, 14)))
+
+        # However, if there is no time period, we return []
+        self.assertEquals(getPeriodsForDay(date(2005, 10, 14), self.context),
+                          [])
+
+        # If there is no timetable schema, we return []
+        self.context.timetableSchemaService.default_id = None
+        self.assertEquals(getPeriodsForDay(date(2004, 10, 14), self.context),
+                          [])
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetable))
@@ -1574,4 +1631,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
     suite.addTest(unittest.makeSuite(TestTimePeriodService))
+    suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
