@@ -182,10 +182,6 @@ def setup(options):
     # to lock the database file, and we don't want that.
     logging.getLogger('ZODB.lock_file').disabled = True
 
-    # ZODB should have a channel to complain in case of trouble
-    setUpLogger('ZODB', options.config.error_log_file)
-    setUpLogger('txn', options.config.error_log_file)
-
     # Process ZCML
     configure()
 
