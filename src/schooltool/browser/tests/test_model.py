@@ -113,8 +113,6 @@ class TestPersonEditView(unittest.TestCase):
         return PersonEditView(self.person)
 
     def test_info(self):
-        from schooltool.browser.model import PersonEditView
-        from schooltool.model import Person
         view = self.createView()
         self.assert_(view.info() is self.info)
 
@@ -132,8 +130,6 @@ class TestPersonEditView(unittest.TestCase):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody')
-
-
 
 
 class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):

@@ -123,7 +123,7 @@ class RequestStub:
         self.setHeader("location", url)
 
     def chooseMediaType(self, supported_types):
-        from schooltool.main import chooseMediaType
+        from schooltool.http import chooseMediaType
         return chooseMediaType(supported_types, self.accept)
 
     def appLog(self, message, level=logging.INFO):

@@ -24,7 +24,6 @@ $Id$
 
 import datetime
 from schooltool.browser import View, Template, StaticFile
-from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import globalTicketService

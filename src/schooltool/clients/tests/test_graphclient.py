@@ -28,7 +28,7 @@ __metaclass__ = type
 class TestGraphClient(unittest.TestCase):
 
     def test(self):
-        import schooltool.clients.graphclient
+        import schooltool.clients.graphclient # at least check that it imports
 
 
 def test_suite():
