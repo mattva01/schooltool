@@ -35,6 +35,14 @@ from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.interfaces import ISchooldayModel
 
 
+class PersonStub(object):
+    pass
+
+
+class ResourceStub(object):
+    pass
+
+
 class TestSchooldayModel(unittest.TestCase):
 
     def test_interface(self):
@@ -916,6 +924,26 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         assert copy_of_ev2 is not ev2
         cal.removeEvent(copy_of_ev2)
         self.assertEquals(list(cal), [])
+
+    def test_removeEvent_magic(self):
+        from schooltool.cal import CalendarEvent
+        owner = PersonStub()
+        context = ResourceStub()
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English", owner=owner, context=context)
+
+        owner.calendar = self.makeCal([ev1])
+        context.calendar = self.makeCal([ev1])
+        owner.calendar.removeEvent(ev1)
+        self.assertEquals(list(owner.calendar), [])
+        self.assertEquals(list(context.calendar), [])
+
+        owner.calendar = self.makeCal([ev1])
+        context.calendar = self.makeCal([ev1])
+        context.calendar.removeEvent(ev1)
+        self.assertEquals(list(owner.calendar), [])
+        self.assertEquals(list(context.calendar), [])
 
     def test_update(self):
         from schooltool.cal import CalendarEvent

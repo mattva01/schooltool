@@ -924,9 +924,26 @@ class Calendar(Persistent):
         self.events.add(event)
         self.events = self.events  # make persistence work
 
-    def removeEvent(self, event):
+    def _removeEvent(self, event):
         self.events.remove(event)
         self.events = self.events  # make persistence work
+
+    def removeEvent(self, event):
+        self._removeEvent(event)
+        # In SchoolTool resource booking works as follows:
+        #   1. A CalendarEvent is created with owner == the user who booked
+        #      the resource and context == the resource.
+        #   2. That event is added to both the owner's calendar and the
+        #   resource's calendar.
+        # When that event is removed from either the owner's or the resource's
+        # calendar, it should be removed from the other one as well.
+        owner_calendar = event.owner is not None and event.owner.calendar
+        context_calendar = event.context is not None and event.context.calendar
+        if self is owner_calendar or self is context_calendar:
+            if owner_calendar is not None and owner_calendar is not self:
+                owner_calendar._removeEvent(event)
+            if context_calendar is not None and context_calendar is not self:
+                context_calendar._removeEvent(event)
 
     def update(self, calendar):
         for event in calendar:

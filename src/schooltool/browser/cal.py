@@ -823,7 +823,6 @@ class EventEditView(EventViewBase):
 
     def process(self, dtstart, duration, title, location):
         uid = self.event.unique_id
-        # XXX this may break the invariant!
         self.context.removeEvent(self.event)
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
@@ -846,7 +845,6 @@ class EventDeleteView(View):
             suffix = 'daily.html'
         else:
             suffix = 'daily.html?date=%s' % event.dtstart.date()
-            # XXX this may break the invariant!
             self.context.removeEvent(event)
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)
@@ -1067,4 +1065,5 @@ def week_start(date, first_day_of_week=0):
     if delta < 0:
         delta += 7
     return date - timedelta(delta)
+
 

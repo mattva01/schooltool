@@ -347,18 +347,7 @@ class CalendarView(CalendarReadView):
                                             " to modify the calendar"), 401)
 
         for event in events_to_delete:
-            if event.owner or event.context:
-                # self.context is either event.owner.calendar or
-                # event.context.calendar
-                #
-                # XXX: This business logic should be in an event
-                #      handler, not in a view.
-                if event.owner is not None:
-                    event.owner.calendar.removeEvent(event)
-                if event.context is not None:
-                    event.context.calendar.removeEvent(event)
-            else:
-                self.context.removeEvent(event)
+            self.context.removeEvent(event)
 
         for event in events_to_add:
             self.context.addEvent(event)
