@@ -5,6 +5,7 @@ A script to start the SchoolBell server in a Debian system.
 
 import sys
 sys.path.insert(0, '/usr/lib/schooltool')
+sys.path.insert(0, '/usr/lib/schoolbell')
 
 # Change the default config file name by prepending a command-line argument
 sys.argv.insert(1, '--config=/etc/schoolbell/schoolbell.conf')
