@@ -255,6 +255,81 @@ def chooseMediaType(supported_types, accept_list):
     return best
 
 
+def formatHitTime(seconds=None):
+    """Format the time stamp for Apache-style HTTP hit logs.
+
+    Let's define a method for switching timezones for ease of demonstration:
+
+        >>> def get_tz():
+        ...     import os
+        ...     return os.getenv('TZ')
+        ...
+        >>> def set_tz(tz):
+        ...     import os, time
+        ...     if tz is None:
+        ...         os.unsetenv('TZ')
+        ...     else:
+        ...         os.putenv('TZ', tz)
+        ...     time.tzset()
+        ...
+        >>> old_tz = get_tz()
+
+    The 'seconds' argument is the traditional time_t value that defaults to
+    time.time() if not specified explicitly.
+
+        >>> def date_part(s):
+        ...     return s.split(':')[0]
+        ...
+        >>> date_part('01/Apr/2003:14:44:34 +0100')
+        '01/Apr/2003'
+
+        >>> date_part(formatHitTime()) == date_part(formatHitTime(time.time()))
+        True
+
+    There is a small race in the test above, expect if to fail occasionally
+    if you run it at midnight.
+
+    Some tests:
+
+        >>> set_tz('UTC')
+        >>> formatHitTime(0)
+        '01/Jan/1970:00:00:00 +0000'
+        >>> formatHitTime(1083251124)
+        '29/Apr/2004:15:05:24 +0000'
+
+        >>> set_tz('EET-2EEST')
+        >>> formatHitTime(1083251124)
+        '29/Apr/2004:18:05:24 +0300'
+        >>> formatHitTime(1075475124)
+        '30/Jan/2004:17:05:24 +0200'
+
+        >>> set_tz('EST+5EDT')
+        >>> formatHitTime(1083251124)
+        '29/Apr/2004:11:05:24 -0400'
+        >>> formatHitTime(1075475124)
+        '30/Jan/2004:10:05:24 -0500'
+
+    Cleaning up:
+
+        >>> set_tz(old_tz)
+
+    """
+    if seconds is None:
+        seconds = time.time()
+    tt = time.localtime(seconds)
+    if tt.tm_isdst:
+        tzoffset = -time.altzone / 60
+    else:
+        tzoffset = -time.timezone / 60
+    if tzoffset < 0:
+        sign = '-'
+    else:
+        sign = '+'
+    hoffs, moffs = divmod(abs(tzoffset), 60)
+    timezone = '%c%02d%02d' % (sign, hoffs, moffs)
+    return time.strftime('%d/%b/%Y:%H:%M:%S ', tt) + timezone
+
+
 class Request(http.Request):
     """Threaded request processor, integrated with ZODB.
 
@@ -283,7 +358,7 @@ class Request(http.Request):
     def __init__(self, *args, **kwargs):
         self.get_transaction_hook = get_transaction
         self.hitlogger = logging.getLogger('access')
-        self.hit_time = time.strftime('%d/%b/%Y:%H:%M:%S %z')
+        self.hit_time = formatHitTime()
         http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):
