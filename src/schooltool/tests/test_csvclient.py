@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import socket
+from StringIO import StringIO
 from helpers import diff
 from pprint import pformat
 
@@ -191,6 +192,159 @@ class TestCSVImporter(unittest.TestCase):
                 return default
         name = im.getPersonName(FakeResnonse())
         self.assertEqual(name, '123')
+
+    def test_run_empty(self):
+        from schooltool.csvclient import CSVImporter
+        im = CSVImporter()
+        im.verbose = False
+
+        def file(name):
+            return StringIO()
+        im.file = file
+
+        results = []
+        def process(method, resource, body):
+            results.append((method, resource, body))
+            class ResponseStub:
+                def getheader(self, header):
+                    return 'foo://bar/baz/quux'
+            return ResponseStub()
+        im.process = process
+        im.run()
+        expected = [
+            ('PUT', '/groups/teachers', 'title="Teachers"'),
+            ('POST', '/groups/root/relationships',
+             'arcrole="http://schooltool.org/ns/membership"\n'
+             'role="http://schooltool.org/ns/membership/group"\n'
+             'href="/groups/teachers"\n'),
+            ('PUT', '/groups/pupils', 'title="Pupils"'),
+            ('POST', '/groups/root/relationships',
+             'arcrole="http://schooltool.org/ns/membership"\n'
+             'role="http://schooltool.org/ns/membership/group"\n'
+             'href="/groups/pupils"\n')]
+
+        self.assertEqual(results, expected, diff(pformat(results),
+                                                 pformat(expected)))
+
+
+    def test_run(self):
+        from schooltool.csvclient import CSVImporter
+        im = CSVImporter()
+        im.verbose = False
+
+        def file(name):
+            if name == 'groups.csv':
+                return StringIO('"year1","Year 1","root",')
+            if name == 'pupils.csv':
+                return StringIO('"Jay Hacker","group1 group2"')
+            if name == 'teachers.csv':
+                return StringIO('"Doc Doc","group1"')
+        im.file = file
+
+        results = []
+        def process(method, resource, body):
+            results.append((method, resource, body))
+            class ResponseStub:
+                def getheader(self, header):
+                    return 'foo://bar/baz/quux'
+            return ResponseStub()
+        im.process = process
+        im.run()
+        expected = [('PUT', '/groups/teachers', 'title="Teachers"'),
+                    ('POST', '/groups/root/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/groups/teachers"\n'),
+                    ('PUT', '/groups/pupils', 'title="Pupils"'),
+                    ('POST', '/groups/root/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/groups/pupils"\n'),
+                    ('PUT', '/groups/year1', 'title="Year 1"'),
+                    ('POST', '/groups/root/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/groups/year1"\n'),
+                    ('POST', '/persons', 'title="Doc Doc"'),
+                    ('POST', '/groups/teachers/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/persons/quux"\n'),
+                    ('POST', '/groups/group1/relationships',
+                     'arcrole="http://schooltool.org/ns/teaching"\n'
+                     'role="http://schooltool.org/ns/teaching/taught"\n'
+                     'href="/persons/quux"\n'),
+                    ('POST', '/persons', 'title="Jay Hacker"'),
+                    ('POST', '/groups/pupils/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/persons/quux"\n'),
+                    ('POST', '/groups/group1/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/persons/quux"\n'),
+                    ('POST', '/groups/group2/relationships',
+                     'arcrole="http://schooltool.org/ns/membership"\n'
+                     'role="http://schooltool.org/ns/membership/group"\n'
+                     'href="/persons/quux"\n')]
+
+        self.assertEqual(results, expected,
+                         diff(pformat(results), pformat(expected)))
+
+    def test_run_badData(self):
+        from schooltool.csvclient import CSVImporter
+        from schooltool.csvclient import DataError
+        im = CSVImporter()
+        im.verbose = False
+
+        def file(name):
+            if name == 'groups.csv':
+                return StringIO('"year1","Year 1","root"')
+            if name == 'pupils.csv':
+                return StringIO('"Jay Hacker","group1 group2"')
+            if name == 'teachers.csv':
+                return StringIO('"Doc Doc","group1"')
+        im.file = file
+
+        class ResponseStub:
+            def getheader(self, header):
+                return 'foo://bar/baz/quux'
+
+        def process(method, resource, body):
+            pass
+        im.process = lambda x, y, body=None: ResponseStub()
+        self.assertRaises(DataError, im.run)
+
+        def file(name):
+            if name == 'groups.csv':
+                return StringIO('"year1","Year 1","root",')
+            if name == 'pupils.csv':
+                return StringIO('"Jay Hacker","group1 group2","what is this"')
+            if name == 'teachers.csv':
+                return StringIO('"Doc Doc","group1"')
+        im.file = file
+        self.assertRaises(DataError, im.run)
+
+        def file(name):
+            if name == 'groups.csv':
+                return StringIO('"year1","Year 1","root",')
+            if name == 'pupils.csv':
+                return StringIO('"Jay Hacker","group1 group2"')
+            if name == 'teachers.csv':
+                return StringIO('kria kria')
+        im.file = file
+        self.assertRaises(DataError, im.run)
+
+        def file(name):
+            if name == 'groups.csv':
+                return StringIO('"year1","Year 1","root",')
+            if name == 'pupils.csv':
+                return StringIO('"Jay Hacker","group1 group2"')
+            if name == 'teachers.csv':
+                return StringIO('1,"2')
+        im.file = file
+        self.assertRaises(DataError, im.run)
+
 
 def test_suite():
     suite = unittest.TestSuite()
