@@ -58,7 +58,7 @@ class CSVImportView(View, ToplevelBreadcrumbsMixin):
                                               self.charsets,
                                               validator=self.validate_charset)
         self.other_charset_widget = TextWidget('other_charset',
-                                               _('Specify other'),
+                                               _('Specify other charset'),
                                                validator=self.validate_charset)
 
     def validate_charset(self, charset):

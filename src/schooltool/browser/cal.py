@@ -719,7 +719,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
         self.location_widget = SelectionWidget('location', _('Location'),
                                                choices, value='')
         self.other_location_widget = TextWidget('location_other',
-                                                _('Specify other'))
+                                                _('Specify other location'))
         self.error = None
 
     def update(self):
