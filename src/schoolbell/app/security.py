@@ -23,15 +23,22 @@ $Id$
 """
 
 from persistent import Persistent
-from zope.interface import implements, directlyProvides
+from zope.interface import implements, directlyProvides, directlyProvidedBy
 from zope.app import zapi
 from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.app.component.localservice import getNextService
-from schoolbell.app.app import getSchoolBellApplication
 from zope.app.session.interfaces import ISession
+from zope.app.site.interfaces import ISite
+from zope.app.site.service import ServiceManager, ServiceRegistration
+from zope.app.utility.utility import LocalUtilityService, UtilityRegistration
+from zope.component.servicenames import Utilities
+from zope.app.container.interfaces import IObjectAddedEvent
+
+from schoolbell.app.app import getSchoolBellApplication
+from schoolbell.app.interfaces import ISchoolBellApplication
 
 class Principal(Contained):
     implements(IGroupAwarePrincipal)
@@ -42,7 +49,7 @@ class Principal(Contained):
         self.groups = []
 
 
-class SchoolBellAuthenticationUtility(Persistent):
+class SchoolBellAuthenticationUtility(Persistent, Contained):
     """A local SchoolBell authentication utility.
 
     This utility serves principals for groups and persons in the
@@ -106,3 +113,42 @@ class SchoolBellAuthenticationUtility(Persistent):
 
         next = getNextService(self, 'Utilities')
         return next.getUtility(IAuthentication).getPrincipal(id)
+
+
+def setUpLocalAuth(site, auth=None):
+    """Set up local authentication for SchoolBell.
+
+    Creates a site management folder in a site and sets up local
+    authentication.
+    """
+
+    if auth is None:
+        auth = SchoolBellAuthenticationUtility()
+
+    if not ISite.providedBy(site):
+        site.setSiteManager(ServiceManager(site))
+        provided = directlyProvidedBy(site)
+        directlyProvides(site, provided + ISite)
+
+    default = zapi.traverse(site, '++etc++site/default')
+    reg_manager = default.getRegistrationManager()
+
+    if 'SchoolBellAuth' not in default:
+        # Set up the utility service
+        utils = LocalUtilityService()
+        default['Utilities'] = utils
+        registration = ServiceRegistration(Utilities, utils)
+        reg_manager.addRegistration(registration)
+        registration.status = 'Active'
+
+        # Add and register the auth utility
+        default['SchoolBellAuth'] = auth
+        registration = UtilityRegistration('', IAuthentication, auth)
+        reg_manager.addRegistration(registration)
+        registration.status = 'Active'
+
+
+def authSetUpSubscriber(event):
+    if IObjectAddedEvent.providedBy(event):
+        if ISchoolBellApplication.providedBy(event.object):
+            setUpLocalAuth(event.object)

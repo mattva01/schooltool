@@ -54,15 +54,21 @@ SchoolBell authentication utility
 
 
 
-SchoolBell is a site:
+SchoolBell is a possible site:
 
     >>> from zope.interface.verify import verifyObject
-    >>> from zope.app.site.interfaces import IPossibleSite
+    >>> from zope.app.site.interfaces import IPossibleSite, ISite
 
     >>> from schoolbell.app.app import SchoolBellApplication
     >>> app = SchoolBellApplication()
     >>> verifyObject(IPossibleSite, app)
     True
+    >>> verifyObject(ISite, app)
+    Traceback (most recent call last):
+    ...
+    DoesNotImplement: ...
+    ...
+
 
 The SchoolBellAuthenticationUtility is an IAuthentication utility that
 lives in that site:
@@ -75,16 +81,16 @@ lives in that site:
 Let's provide the location of auth:
 
     >>> root['frogpond'] = app
-    >>> app.__parent__ = root
-    >>> app.__name__ = 'frogpond'
-    >>> sm = setup.createServiceManager(app)
+    >>> from schoolbell.app.security import setUpLocalAuth
+    >>> setUpLocalAuth(app, auth)
+
+Now, we get our local authentication service:
+
     >>> from zope.app import zapi
-    >>> pkg = zapi.traverse(sm, 'default')
-    >>> auth.__parent__ = None
-    >>> auth.__name__ = 'auth'
-    >>> pkg['auth'] = auth
-
-
+    >>> zapi.getUtility(IAuthentication, context=app) is auth
+    True
+    >>> verifyObject(ISite, app)
+    True
 
 getPrincipal
 ------------
@@ -196,6 +202,7 @@ login page:
     302
     >>> request.response.getHeader('Location')
     'http://127.0.0.1/frogpond/@@login.html'
+
 
 Clean up:
 

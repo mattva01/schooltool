@@ -76,9 +76,22 @@
   </content>
 
   <subscriber
-      handler=".membership.enforceMembershipConstraints"
       for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+      handler=".membership.enforceMembershipConstraints"
       />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.authSetUpSubscriber"
+      />
+
+  <localUtility class=".security.SchoolBellAuthenticationUtility">
+    <require
+        permission="zope.ManageServices"
+        interface="zope.app.security.interfaces.IAuthentication"
+        />
+  </localUtility>
+
 
   <include package=".browser" />
 
