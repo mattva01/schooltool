@@ -28,12 +28,17 @@
         </div>
       </div>
       <div class="tools">
-        <table metal:define-macro="zmi_tabs">
+        <table width="100%" metal:define-macro="zmi_tabs">
         <tr>
-          <td tal:repeat="view context/@@view_get_menu/zmi_views">
-            <a tal:attributes="href view/action"
-               tal:content="view/title" i18n:translate="">label</a>
-            <tal:block condition="not: repeat/view/end">|</tal:block>
+          <td align="left">
+            <span tal:repeat="view context/@@view_get_menu/zmi_views">
+              <a tal:attributes="href view/action"
+                 tal:content="view/title" i18n:translate="">label</a>
+              <tal:block condition="not: repeat/view/end">|</tal:block>
+            </span>
+          </td>
+          <td align="right">
+            <a href="@@login.html">Log in</a>
           </td>
         </tr>
         </table>

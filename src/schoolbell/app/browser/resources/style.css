@@ -188,11 +188,16 @@ input.button-cancel {
 #header .tools a {
     text-decoration: none;
     color: #f0f0f0;
+    padding: 0.5ex 1ex;
     font-weight: bold;
     font-size: smaller;
     line-height: 0.75em;
 }
 
+#header .tools a:hover {
+    color: #ffffff;
+    background: #a83636;
+}
 
 /*
 * Left Column and portlets
