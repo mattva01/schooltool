@@ -310,7 +310,6 @@ def _parse_recurrence_weekly(args):
     WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
 
     """
-    # XXX Circular import!
     from schooltool.cal import WeeklyRecurrenceRule
     weekdays = []
     days = args.get('BYDAY', None)
@@ -339,7 +338,6 @@ def _parse_recurrence_monthly(args):
     >>> _parse_recurrence_monthly({'BYDAY': '-1WE'})
     MonthlyRecurrenceRule(1, None, None, (), 'lastweekday')
     """
-    # XXX Circular import!
     from schooltool.cal import MonthlyRecurrenceRule
     if 'BYDAY' in args:
         if args['BYDAY'][0] == '-':
@@ -399,7 +397,6 @@ def parse_recurrence_rule(value):
     DailyRecurrenceRule(1, None, None, ())
 
     """
-    # XXX Circular import!
     from schooltool.cal import DailyRecurrenceRule, YearlyRecurrenceRule
 
     # split up the given value into parameters
