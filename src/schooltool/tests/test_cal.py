@@ -26,8 +26,10 @@ import sets
 import unittest
 import calendar
 from datetime import date, timedelta, datetime
+from persistent import Persistent
 from zope.interface.verify import verifyObject
-from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import EqualsSortedMixin, LinkStub
+from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.interfaces import ISchooldayModel
 
 
@@ -677,7 +679,12 @@ class TestACLCalendar(unittest.TestCase):
         self.assertEquals(calendar.acl.__name__, 'acl')
 
 
-class TestCalendarOwnerMixin(unittest.TestCase):
+class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpRegistries()
+        from schooltool import relationship
+        relationship.setUp()
 
     def test(self):
         from schooltool.cal import CalendarOwnerMixin
@@ -685,6 +692,7 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         from schooltool.interfaces import IACLCalendar, IACL
         from schooltool.interfaces import ViewPermission, ModifyPermission
         from schooltool.interfaces import AddPermission
+
         com = CalendarOwnerMixin()
         verifyObject(ICalendarOwner, com)
         verifyObject(IACLCalendar, com.calendar)
@@ -702,8 +710,8 @@ class TestCalendarOwnerMixin(unittest.TestCase):
     def test_makeCompositeCalendar(self):
         from schooltool.cal import CalendarOwnerMixin, Calendar, CalendarEvent
         from schooltool.model import Group
-
-        com = CalendarOwnerMixin()
+        from schooltool.relationship import RelatableMixin
+        from schooltool.uris import URICalendarProvider
 
         gr1 = Group("Little")
         gr1.calendar.addEvent(CalendarEvent(datetime(2003, 11, 26, 12, 00),
@@ -713,7 +721,20 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         gr2.calendar.addEvent(CalendarEvent(datetime(2003, 11, 26, 13, 00),
                                             timedelta(minutes=30), "AB"))
 
-        com.composite_cal_groups = [gr1, gr2]
+        class AppObjectStub(CalendarOwnerMixin, RelatableMixin):
+
+            def __init__(self):
+                CalendarOwnerMixin.__init__(self)
+                RelatableMixin.__init__(self)
+
+            def listLinks(self, uri):
+                if uri == URICalendarProvider:
+                    return [LinkStub(gr1), LinkStub(gr2)]
+                else:
+                    return []
+
+        com = AppObjectStub()
+
         result = com.makeCompositeCalendar()
         self.assertEquals(result.events,
                           gr1.calendar.events | gr2.calendar.events)

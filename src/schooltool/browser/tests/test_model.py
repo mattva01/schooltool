@@ -78,6 +78,9 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
     def setUp(self):
         self.setUpSampleApp()
 
+        from schooltool import relationship
+        relationship.setUp()
+
         from schooltool.cal import SchooldayModel
         from schooltool.timetable import Timetable
         self.app.timePeriodService['2003-fall'] = SchooldayModel(
@@ -217,25 +220,42 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         from schooltool.model import Group
         from schooltool.browser.model import PersonView
         from schooltool.timetable import Timetable
+        from schooltool.uris import URICalendarProvider
+
         view = PersonView(self.person)
         groups = [self.teachers, self.managers, self.pupils]
         view.getParentGroups = lambda: groups
+
+        self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 0)
+
+        def assertChecked(doc, name, checked):
+            ch = doc.query('//input[@name="group.%s" and @checked="checked"]'
+                           % name)
+            self.assert_(bool(ch) == bool(checked), name)
+
         request = RequestStub(method='POST', args={'group.teachers': '',
                                                    'group.managers': '',
                                                    'SUBMIT': ''},
                               authenticated_user=self.manager)
         result = view.render(request)
-
         doc = HTMLDocument(result)
-        ch = doc.query('//input[@name="group.teachers"'
-                       ' and @checked="checked"]')
-        self.assert_(ch)
-        ch = doc.query('//input[@name="group.managers"'
-                       ' and @checked="checked"]')
-        self.assert_(ch)
-        ch = doc.query('//input[@name="group.pupils"'
-                       ' and @checked="checked"]')
-        self.assert_(not ch)
+        assertChecked(doc, 'teachers', True)
+        assertChecked(doc, 'managers', True)
+        assertChecked(doc, 'pupils', False)
+
+        self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 2)
+
+        request = RequestStub(method='POST', args={'group.teachers': '',
+                                                   'group.pupils': '',
+                                                   'SUBMIT': ''},
+                              authenticated_user=self.manager)
+        result = view.render(request)
+        doc = HTMLDocument(result)
+        assertChecked(doc, 'teachers', True)
+        assertChecked(doc, 'managers', False)
+        assertChecked(doc, 'pupils', True)
+
+        self.assertEquals(len(view.context.listLinks(URICalendarProvider)), 2)
 
 
 class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):

@@ -30,6 +30,7 @@ from zope.interface import implements
 from persistent import Persistent
 from persistent.list import PersistentList
 from schooltool.auth import ACL
+from schooltool.component import getRelatedObjects
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
@@ -41,6 +42,7 @@ from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IRecurrenceRule
 from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
 from schooltool.interfaces import IWeeklyRecurrenceRule, IMonthlyRecurrenceRule
+from schooltool.uris import URICalendarProvider
 from icalendar import ical_weekdays, ical_date, ical_date_time
 
 __metaclass__ = type
@@ -383,13 +385,12 @@ class CalendarOwnerMixin(Persistent):
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
-        self.composite_cal_groups = PersistentList() # XXX Use relationships.
 
     def makeCompositeCalendar(self):
         result = Calendar()
         result.__parent__ = self
         result.__name__ = 'composite-calendar'
-        for group in self.composite_cal_groups:
+        for group in getRelatedObjects(self, URICalendarProvider):
             result.update(group.calendar)
         # TODO: Mark the resulting events as coming from a composite calendar.
         return result

@@ -26,6 +26,7 @@ import unittest
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IEvent
+from schooltool.tests.utils import LinkStub
 
 __metaclass__ = type
 
@@ -237,12 +238,6 @@ class TestEventActionMixins(unittest.TestCase):
         from schooltool.uris import URIObject
 
         URIFriend = URIObject("http://ns.example.org/role/friend")
-
-        class LinkStub:
-            def __init__(self, friend):
-                self._friend = friend
-            def traverse(self):
-                return self._friend
 
         class RelatableStub:
             def __init__(self, role, friend):

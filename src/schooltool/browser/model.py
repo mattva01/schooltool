@@ -41,13 +41,15 @@ from schooltool.browser.acl import ACLView
 from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.browser.cal import CalendarView
 from schooltool.component import FacetManager
-from schooltool.component import getRelatedObjects, getPath, traverse
+from schooltool.component import getRelatedObjects, relate, getPath, traverse
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IPerson, IGroup, IResource, INote
 from schooltool.membership import Membership
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
+from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
+from schooltool.uris import URICalendarProvider
 from schooltool.teaching import Teaching
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
@@ -147,16 +149,23 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
 
     def do_POST(self, request):
         if 'SUBMIT' in request.args:
-            groups = []
+            # Unlink old calendar subscriptions.
+            for link in self.context.listLinks(URICalendarProvider):
+                link.unlink()
+
+            # Link selected groups.
             for group in self.getParentGroups():
                 if ('group.' + group.__name__) in request.args:
-                    groups.append(group)
-            self.context.composite_cal_groups = groups
+                    relate(URICalendarSubscription,
+                           (self.context, URICalendarSubscriber),
+                           (group, URICalendarProvider))
         return self.do_GET(request)
 
     def checked(self, group):
-        if group in self.context.composite_cal_groups:
-            return "checked"
+        for providing in getRelatedObjects(self.context,
+                                           URICalendarProvider):
+            if group is providing:
+                return "checked"
         else:
             return None
 
