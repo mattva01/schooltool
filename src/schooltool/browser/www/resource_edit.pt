@@ -9,7 +9,7 @@
   <metal:block metal:fill-slot="content">
 
   <form method="POST" tal:attributes="action request/path">
-    <div class="row"><strong i18n:translate="">Name:</strong>
+    <div class="row"><strong i18n:translate="">Identifier:</strong>
       <span tal:replace="python:context.__name__">name</span>
     </div>
     <div class="row" tal:replace="structure view/title_widget" />
