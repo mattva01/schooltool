@@ -1192,7 +1192,7 @@ class ITimetable(Interface):
     """
 
     model = Attribute(
-        """A timetable model this timetable should be used with""")
+        """A timetable model this timetable should be used with.""")
 
     exceptions = Attribute(
         """A list of timetable exceptions (ITimetableException).""")
@@ -1204,7 +1204,7 @@ class ITimetable(Interface):
         """Return a sequence of tuples of (day_id, ITimetableDay)."""
 
     def __getitem__(key):
-        """Return a ITimetableDay for a given day id"""
+        """Return a ITimetableDay for a given day id."""
 
     def cloneEmpty():
         """Return a new empty timetable with the same structure.
