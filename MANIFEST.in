@@ -26,6 +26,8 @@ recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
 
 # Zope
 include Zope3/setup.py
+include Zope3/utilities/runurl.py
+include Zope3/z3.py
 include Zope3/test.py
 include Zope3/Makefile
 include Zope3/ftesting.zcml
