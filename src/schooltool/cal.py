@@ -26,9 +26,10 @@ import re
 import datetime
 from sets import Set
 from zope.interface import implements
+from persistence import Persistent
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
-from schooltool.interfaces import ICalendar, ICalendarEvent
+from schooltool.interfaces import ICalendar, ICalendarEvent, ICalendarOwner
 
 __metaclass__ = type
 
@@ -849,7 +850,7 @@ def markNonSchooldays(ical_reader, schoolday_model):
 # Calendaring
 #
 
-class Calendar:
+class Calendar(Persistent):
     implements(ICalendar)
 
     def __init__(self, first, last):
@@ -868,6 +869,7 @@ class Calendar:
 
     def addEvent(self, event):
         self.events.add(event)
+        self.events = self.events  # make persistence work
 
     def _overlaps(self, event):
         """Returns whether the event's timespan overlaps with the timespan
@@ -888,13 +890,17 @@ class Calendar:
             return False
 
 
-class CalendarEvent:
+class CalendarEvent(Persistent):
     implements(ICalendarEvent)
 
+    dtstart = property(lambda self: self._dtstart)
+    duration = property(lambda self: self._duration)
+    title = property(lambda self: self._title)
+
     def __init__(self, dt, duration, title):
-        self.dtstart = dt
-        self.duration = duration
-        self.title = title
+        self._dtstart = dt
+        self._duration = duration
+        self._title = title
 
     def __cmp__(self, other):
         if not isinstance(other, CalendarEvent):
@@ -903,8 +909,16 @@ class CalendarEvent:
         return cmp((self.dtstart, self.title, self.duration),
                    (other.dtstart, other.title, other.duration))
 
+    def __hash__(self):
+        return hash((self.dtstart, self.title, self.duration))
+
     def __repr__(self):
         return ("CalendarEvent%r"
                 % ((self.dtstart, self.duration, self.title), ))
 
+
+class CalendarOwnerMixin:
+    implements(ICalendarOwner)
+
+    calendar = None
 

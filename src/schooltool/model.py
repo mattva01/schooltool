@@ -38,6 +38,7 @@ from schooltool.membership import Membership
 from schooltool.db import PersistentKeysSetWithNames, PersistentKeysSet
 from schooltool.event import EventMixin, CallAction
 from schooltool.component import registerFacetFactory
+from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 
 __metaclass__ = type
@@ -46,13 +47,14 @@ moduleProvides(IModuleSetup)
 
 
 class Person(FacetedEventTargetMixin, RelationshipValenciesMixin,
-             TimetabledMixin):
+             CalendarOwnerMixin, TimetabledMixin):
 
     implements(IPerson)
 
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
         RelationshipValenciesMixin.__init__(self)
+        CalendarOwnerMixin.__init__(self)
         TimetabledMixin.__init__(self)
         self.title = title
         self.__name__ = None
@@ -91,13 +93,14 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin,
 
 
 class Group(FacetedEventTargetMixin, RelationshipValenciesMixin,
-            TimetabledMixin):
+            CalendarOwnerMixin, TimetabledMixin):
 
     implements(IGroup)
 
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
         RelationshipValenciesMixin.__init__(self)
+        CalendarOwnerMixin.__init__(self)
         TimetabledMixin.__init__(self)
         self.title = title
         self.__name__ = None

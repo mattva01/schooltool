@@ -744,11 +744,15 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         cal.addEvent(ev1)
         self.assertEqual(list(cal), [ev1])
 
-    def test_byDate(self):
+    def makeCal(self, events):
         from schooltool.cal import Calendar
-        from schooltool.cal import CalendarEvent
-
         cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+        for event in events:
+            cal.addEvent(event)
+        return cal
+
+    def test_byDate(self):
+        from schooltool.cal import CalendarEvent
 
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
                             timedelta(minutes=10),
@@ -759,34 +763,72 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         ev3 = CalendarEvent(datetime(2003, 11, 26, 10, 0),
                             timedelta(minutes=10),
                             "German")
-        cal.addEvent(ev1)
-        cal.addEvent(ev2)
-        cal.addEvent(ev3)
 
+        cal = self.makeCal([ev1, ev2, ev3])
         self.assertEqual(list(cal.byDate(date(2003, 11, 26))), [ev3])
 
         # event end date within the period
         ev4 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
                             timedelta(1),
                             "Solar eclipse")
-        cal.addEvent(ev4)
+        cal = self.makeCal([ev1, ev2, ev3, ev4])
         self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
                                [ev3, ev4])
 
         # calendar daterange is within the event period
-        ev4.duration = timedelta(2)
+        ev4 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(2),
+                            "Solar eclipse")
+        cal = self.makeCal([ev1, ev2, ev3, ev4])
         self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
                                [ev3, ev4])
 
         # only the event start date falls within the period
-        ev4.dtstart = datetime(2003, 11, 26, 10, 0)
+        ev4 = CalendarEvent(datetime(2003, 11, 26, 10, 0),
+                            timedelta(2),
+                            "Solar eclipse")
+        cal = self.makeCal([ev1, ev2, ev3, ev4])
         self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
                                [ev3, ev4])
 
         # the event is after the period
-        ev4.dtstart = datetime(2003, 11, 27, 10, 0)
+        ev4 = CalendarEvent(datetime(2003, 11, 27, 10, 0),
+                            timedelta(2),
+                            "Solar eclipse")
+        cal = self.makeCal([ev1, ev2, ev3, ev4])
         self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
                                [ev3])
+
+
+class TestCalendarPersistence(unittest.TestCase):
+    """A functional test for timetables persistence."""
+
+    def setUp(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        self.db = DB(MappingStorage())
+        self.datamgr = self.db.open()
+
+    def test(self):
+        from schooltool.cal import Calendar, CalendarEvent
+        from transaction import get_transaction
+        dt1 = date(2003, 9, 1)
+        dt2 = date(2003, 9, 30)
+        cal = Calendar(dt1, dt2)
+        self.datamgr.root()['cal'] = cal
+        get_transaction().commit()
+
+        e = CalendarEvent(dt1, timedelta(1), "xyzzy")
+        cal.addEvent(e)
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            cal2 = datamgr.root()['cal']
+            self.assertEquals(list(cal2), [e])
+        finally:
+            get_transaction().abort()
+            datamgr.close()
 
 
 class TestCalendarEvent(unittest.TestCase):
@@ -816,6 +858,18 @@ class TestCalendarEvent(unittest.TestCase):
         self.assertNotEquals(ce, ce2)
         self.assertNotEquals(ce, ce3)
         self.assertNotEquals(ce, ce4)
+        self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
+        self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
+        self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')
+
+
+class TestCalendarOwnerMixin(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import CalendarOwnerMixin
+        from schooltool.interfaces import ICalendarOwner
+        com = CalendarOwnerMixin()
+        verifyObject(ICalendarOwner, com)
 
 
 def test_suite():
@@ -828,5 +882,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestVEvent))
     suite.addTest(unittest.makeSuite(TestICalReader))
     suite.addTest(unittest.makeSuite(TestCalendar))
+    suite.addTest(unittest.makeSuite(TestCalendarPersistence))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     return suite

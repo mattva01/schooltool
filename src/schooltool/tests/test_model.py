@@ -187,6 +187,7 @@ class TestGroup(unittest.TestCase):
     def test(self):
         from schooltool.interfaces import IGroup, IFaceted, IRelatable
         from schooltool.interfaces import IEventConfigurable, IEventTarget
+        from schooltool.interfaces import IMultiContainer
         from schooltool.interfaces import ITimetabled
         from schooltool.model import Group
         group = Group("root")
@@ -196,6 +197,7 @@ class TestGroup(unittest.TestCase):
         verifyObject(IEventConfigurable, group)
         verifyObject(IRelatable, group)
         verifyObject(ITimetabled, group)
+        verifyObject(IMultiContainer, group)
 
     def test_getRelativePath(self):
         from schooltool.model import Group

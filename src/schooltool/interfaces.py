@@ -718,205 +718,6 @@ class IFacetAPI(Interface):
 
 
 #
-# Application objects
-#
-
-class IGroup(IFaceted, ILocation):
-    """A set of group members.
-
-    Participates in URIMembership as URIGroup or URIMember.
-    """
-
-
-class IPerson(IFaceted, ILocation, IMultiContainer):
-    """A person.
-
-    Participates in URIMembership as URIMember.
-    """
-
-    title = Attribute("""Person's name""")
-
-    def iterAbsences():
-        """Iterate over all absences."""
-
-    def getAbsence(key):
-        """Return the absence with a given key."""
-
-    def getCurrentAbsence():
-        """Return the current absence or None.
-
-        At any given time a person can have at most one absence that is not
-        ended.  It is called the current absence.
-        """
-
-    def reportAbsence(comment):
-        """Report that this person is absent, still absent, or no
-        longer absent.
-
-        Returns the IAbsence which may be a new absence or this
-        person's current absence extended by the comment.
-        """
-
-
-class IAbsence(ILocation):
-    """Absence object.
-
-    The __parent__ of an absence is its person.  The absence can be
-    located in IPersons.absences by its __name__.
-
-    All attributes are read-only.  They can be changed by adding new
-    comments, therefore the list of comments also doubles as an audit log.
-    """
-
-    person = Attribute("""Person that was absent""")
-    comments = Attribute("""Comments (a sequence of IAbsenceComment)""")
-    ended = Attribute("""Has this absence been ended?""")
-    resolved = Attribute("""Has this absence been resolved?""")
-    expected_presence = Attribute(
-        """Date and time after which the person is expected to be present""")
-
-    def addComment(comment):
-        """Add a comment.
-
-        Sends out an IAbsenceEvent after the comment has been added.  The
-        event is sent to the person and all application objects that the person
-        was absent from.
-        """
-
-
-class IAbsenceComment(Interface):
-
-    __parent__ = Attribute("""The absence this comment belongs to""")
-    datetime = Attribute("""Date and time of the comment""")
-    reporter = Attribute("""Person that made this comment""")
-    text = Attribute("""Text of the comment""")
-    absent_from = Attribute(
-        """Application object (group or whatever) the person was absent
-        from (can be None)""")
-    ended = Attribute(
-        """New value of ended (True, False or Unchanged)""")
-    resolved = Attribute(
-        """New value of resolved (True, False or Unchanged)""")
-    expected_presence = Attribute(
-        """New value of expected_presence (datetime, None, or Unchanged)""")
-
-
-class IAttendanceEvent(IEvent):
-    """Event that gets sent out when an absence is recorded or updated."""
-
-    absence = Attribute("""IAbsence""")
-    comment = Attribute("""IAbsenceComment that describes the change""")
-
-
-class IAbsenceEvent(IAttendanceEvent):
-    """An event that gets sent when a person is found absent."""
-
-
-class IAbsenceEndedEvent(IAttendanceEvent):
-    """An event that gets sent when an absence is ended."""
-
-
-class IAbsenceTracker(IEventTarget):
-    """An object which listens to the AttendanceEvents and keeps a set
-    of unended absences."""
-
-    absences = Attribute(
-        """A set of unended absences this object has been notified
-        of.""")
-
-
-class IAbsenceTrackerUtility(IUtility, IAbsenceTracker):
-    pass
-
-
-class IAbsenceTrackerFacet(IFacet, IEventConfigurable, IAbsenceTracker):
-    pass
-
-
-class IApplication(IContainmentRoot, IServiceManager, ITraversable):
-    """The application object.
-
-    Services (as given by IServiceManager) are found by attribute.
-
-    Root application objects are found by getRoots().
-
-    Application object containers are found by __getitem__.
-    """
-
-    def getRoots():
-        """Return a sequence of root application objects."""
-
-    def __getitem__(name):
-        """Get the named application object container."""
-
-    def keys():
-        """List the names of application object containers."""
-
-
-class IApplicationObjectContainer(ILocation, ITraversable):
-    """A collection of application objects."""
-    # XXX split this into read and write interfaces.
-
-    def __getitem__(name):
-        """Return the contained object that has the given name."""
-
-    def new(__name__=None, **kw):
-        """Create and return a new contained object.
-
-        If __name__ is None, a name is chosen for the object.
-        Otherwise, __name__ is a unicode or seven bit safe string.
-        The rest of the keyword arguments are passed to the object's
-        constructor.
-
-        If the given name is already taken, raises a KeyError.
-
-        The contained object will be an ILocation, and will have this
-        container as its __parent__, and the name as its __name__.
-        """
-
-    def __delitem__(name):
-        """Remove the contained object that has the given name.
-
-        Raises a KeyError if there is no such object.
-        """
-
-    def keys():
-        """Return a list of the names of contained objects."""
-
-
-#
-# Modules
-#
-
-class IModuleSetup(Interface):
-    """Module that needs initialization"""
-
-    def setUp():
-        """Initialize the module."""
-
-
-#
-# Views
-#
-
-class IViewAPI(Interface):
-
-    def getView(object):
-        """Select a view for an object by its class or its interface.
-
-        Views registered for a class take precedence.
-
-        Returns a View object for obj.
-        """
-
-    def registerView(interface, factory):
-        """Register a view for an interface."""
-
-    def registerViewForClass(cls, factory):
-        """Register a view for a content class."""
-
-
-#
 # Calendaring
 #
 
@@ -1029,6 +830,19 @@ class ICalendarEvent(Interface):
 
         Events are considered equal only if all three attributes are equal.
         """
+
+    def __hash__():
+        """Compare the hash value of this event.
+
+        It is guaranteed that if calendar events compare equal, hash will
+        return the same value.
+        """
+
+
+class ICalendarOwner(Interface):
+    """An object that has a calendar."""
+
+    calendar = Attribute("""The object's calendar.""")
 
 
 #
@@ -1351,6 +1165,213 @@ class ITimePeriodService(ILocation):
 
     def __delitem__(period_id):
         """Removes the specified period."""
+
+
+#
+# Application objects
+#
+
+class IApplicationObject(ILocation, IRelatable, IEventTarget,
+                         IEventConfigurable, IFaceted, ICalendarOwner,
+                         ITimetabled):
+    """A collection of interfaces common to all application objects."""
+
+    title = Attribute("""Title of the application object""")
+
+
+class IGroup(IApplicationObject):
+    """A set of group members.
+
+    Participates in URIMembership as URIGroup or URIMember.
+    """
+
+
+class IPerson(IApplicationObject):
+    """A person.
+
+    Participates in URIMembership as URIMember.
+    """
+
+    title = Attribute("""Person's name""")
+
+    def iterAbsences():
+        """Iterate over all absences."""
+
+    def getAbsence(key):
+        """Return the absence with a given key."""
+
+    def getCurrentAbsence():
+        """Return the current absence or None.
+
+        At any given time a person can have at most one absence that is not
+        ended.  It is called the current absence.
+        """
+
+    def reportAbsence(comment):
+        """Report that this person is absent, still absent, or no
+        longer absent.
+
+        Returns the IAbsence which may be a new absence or this
+        person's current absence extended by the comment.
+        """
+
+
+class IAbsence(ILocation):
+    """Absence object.
+
+    The __parent__ of an absence is its person.  The absence can be
+    located in IPersons.absences by its __name__.
+
+    All attributes are read-only.  They can be changed by adding new
+    comments, therefore the list of comments also doubles as an audit log.
+    """
+
+    person = Attribute("""Person that was absent""")
+    comments = Attribute("""Comments (a sequence of IAbsenceComment)""")
+    ended = Attribute("""Has this absence been ended?""")
+    resolved = Attribute("""Has this absence been resolved?""")
+    expected_presence = Attribute(
+        """Date and time after which the person is expected to be present""")
+
+    def addComment(comment):
+        """Add a comment.
+
+        Sends out an IAbsenceEvent after the comment has been added.  The
+        event is sent to the person and all application objects that the person
+        was absent from.
+        """
+
+
+class IAbsenceComment(Interface):
+
+    __parent__ = Attribute("""The absence this comment belongs to""")
+    datetime = Attribute("""Date and time of the comment""")
+    reporter = Attribute("""Person that made this comment""")
+    text = Attribute("""Text of the comment""")
+    absent_from = Attribute(
+        """Application object (group or whatever) the person was absent
+        from (can be None)""")
+    ended = Attribute(
+        """New value of ended (True, False or Unchanged)""")
+    resolved = Attribute(
+        """New value of resolved (True, False or Unchanged)""")
+    expected_presence = Attribute(
+        """New value of expected_presence (datetime, None, or Unchanged)""")
+
+
+class IAttendanceEvent(IEvent):
+    """Event that gets sent out when an absence is recorded or updated."""
+
+    absence = Attribute("""IAbsence""")
+    comment = Attribute("""IAbsenceComment that describes the change""")
+
+
+class IAbsenceEvent(IAttendanceEvent):
+    """An event that gets sent when a person is found absent."""
+
+
+class IAbsenceEndedEvent(IAttendanceEvent):
+    """An event that gets sent when an absence is ended."""
+
+
+class IAbsenceTracker(IEventTarget):
+    """An object which listens to the AttendanceEvents and keeps a set
+    of unended absences."""
+
+    absences = Attribute(
+        """A set of unended absences this object has been notified
+        of.""")
+
+
+class IAbsenceTrackerUtility(IUtility, IAbsenceTracker):
+    pass
+
+
+class IAbsenceTrackerFacet(IFacet, IEventConfigurable, IAbsenceTracker):
+    pass
+
+
+class IApplication(IContainmentRoot, IServiceManager, ITraversable):
+    """The application object.
+
+    Services (as given by IServiceManager) are found by attribute.
+
+    Root application objects are found by getRoots().
+
+    Application object containers are found by __getitem__.
+    """
+
+    def getRoots():
+        """Return a sequence of root application objects."""
+
+    def __getitem__(name):
+        """Get the named application object container."""
+
+    def keys():
+        """List the names of application object containers."""
+
+
+class IApplicationObjectContainer(ILocation, ITraversable):
+    """A collection of application objects."""
+    # XXX split this into read and write interfaces.
+
+    def __getitem__(name):
+        """Return the contained object that has the given name."""
+
+    def new(__name__=None, **kw):
+        """Create and return a new contained object.
+
+        If __name__ is None, a name is chosen for the object.
+        Otherwise, __name__ is a unicode or seven bit safe string.
+        The rest of the keyword arguments are passed to the object's
+        constructor.
+
+        If the given name is already taken, raises a KeyError.
+
+        The contained object will be an ILocation, and will have this
+        container as its __parent__, and the name as its __name__.
+        """
+
+    def __delitem__(name):
+        """Remove the contained object that has the given name.
+
+        Raises a KeyError if there is no such object.
+        """
+
+    def keys():
+        """Return a list of the names of contained objects."""
+
+
+#
+# Modules
+#
+
+class IModuleSetup(Interface):
+    """Module that needs initialization"""
+
+    def setUp():
+        """Initialize the module."""
+
+
+#
+# Views
+#
+
+class IViewAPI(Interface):
+
+    def getView(object):
+        """Select a view for an object by its class or its interface.
+
+        Views registered for a class take precedence.
+
+        Returns a View object for obj.
+        """
+
+    def registerView(interface, factory):
+        """Register a view for an interface."""
+
+    def registerViewForClass(cls, factory):
+        """Register a view for a content class."""
 
 
 #
