@@ -16,6 +16,9 @@
 #  provide IModuleSetup. The module 'schooltool.main' is implicitly listed
 #  first.
 #
+# Example:
+#   module school.example
+#
 
 #
 # listen port
