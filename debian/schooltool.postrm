@@ -23,9 +23,9 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 # and:
-# Log files should be removed when the package is purged (but not when it 
-# is only removed). This should be done by the postrm script when it is 
-# called with the argument purge (see Details of removal and/or 
+# Log files should be removed when the package is purged (but not when it
+# is only removed). This should be done by the postrm script when it is
+# called with the argument purge (see Details of removal and/or
 # configuration purging, Section 6.7).
 
 package=schooltool

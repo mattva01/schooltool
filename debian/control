@@ -56,7 +56,7 @@ Description: Architecture dependent files for the SchoolTool clients
  SchoolTool is a project to develop a common global school administration
  infrastructure that is freely available under an Open Source licence.
  .
- This package contains the the architecture dependent parts of the 
+ This package contains the the architecture dependent parts of the
  SchoolTool clients for the RESTive interface (GUI and command line).
  .
  Homepage: http://www.schooltool.org

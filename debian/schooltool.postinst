@@ -38,17 +38,17 @@ set_simple () {
         stanza="$stanza$1 $i\n"
     done
     cp -a $config $config.tmp
-    
+
     if [ `grep -c "$header" $config` == 0 ]; then
         echo "$header" >> $config
     fi
-    
+
     cat $config                 \
     | grep -v "^ *${1} .*"      \
     | sed "s|$header|$stanza|"  \
     > $config.tmp
-    
-    mv -f $config.tmp $config 
+
+    mv -f $config.tmp $config
 }
 
 . /usr/share/debconf/confmodule
@@ -78,7 +78,7 @@ case "$1" in
     if [ ! -e $config ]; then
         cp -a /usr/share/$package/$package.default $config
     fi
-    
+
     # Setup Interfaces
     db_get $package/listen
     set_simple listen "$RET"
@@ -88,13 +88,13 @@ case "$1" in
     set_simple listen_ssl "$RET"
     db_get $package/web_ssl
     set_simple web_ssl "$RET"
-    
+
     # Should we create an SSL cert?
-    db_get $package/create-cert 
+    db_get $package/create-cert
     Create="$RET"
     # re-set the default
-    db_reset $package/create-cert 
-    if [ "z$Create" == ztrue ]; then 
+    db_reset $package/create-cert
+    if [ "z$Create" == ztrue ]; then
         db_get $package/cert-type
         case "$RET" in
 
@@ -110,7 +110,7 @@ case "$1" in
                 ans="$RET"
                 sed -e s#@"$template"@#"$ans"# $TMPFILE1 > $TMPFILE2
                 cp $TMPFILE2 $TMPFILE1
-            done 
+            done
             export RANDFILE=/dev/random
             openssl req -config $TMPFILE1 -new -x509 -nodes -out $sslcert \
                 -keyout $sslkey
@@ -135,12 +135,12 @@ case "$1" in
                 fi
             done <$sslkey >$sslcert
             ;;
-            
+
         esac
         chown $package:$package $sslkey
         chmod 600 $sslkey
         set_simple ssl_certificate $sslkey
-        
+
     fi
     ;;
 
@@ -152,7 +152,7 @@ case "$1" in
         echo "postinst called with unknown argument \`$1'" >&2
         exit 1
     ;;
-    
+
 esac
 
 db_stop

@@ -2,28 +2,28 @@ Template: schooltool/listen
 Type: string
 Default: 7001
 Description: Interfaces for the RESTive interface over HTTP
- Please type in a space separated list of [address:]port values that you 
+ Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/web
 Type: string
 Default: 7080
 Description: Interfaces for the web interface over HTTP
- Please type in a space separated list of [address:]port values that you 
+ Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/listen_ssl
 Type: string
-Default: 
+Default:
 Description: Interfaces for the RESTive interface over HTTPS
- Please type in a space separated list of [address:]port values that you 
+ Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/web_ssl
 Type: string
-Default: 
+Default:
 Description: Interfaces for the web interface over HTTPS
- Please type in a space separated list of [address:]port values that you 
+ Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/cert-type

@@ -48,7 +48,7 @@ install-stamp: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	
+
 	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
 
 
@@ -61,7 +61,7 @@ install-stamp: build
 	     \( -name '*.so' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkg)/usr/lib/$(libpkg)/{} \;
-	
+
 	# make server package
 	# arch-indep files
 	cd src && \
@@ -90,11 +90,11 @@ install-stamp: build
 	install -m 644 -D -p debian/$(package).logrotate \
 		debian/$(package)/etc/logrotate.d/$(package)
 	install -m 644 -D -p debian/ssl-cert.cnf \
-	    debian/$(package)/etc/$(package)/ssl-cert.cnf	
+	    debian/$(package)/etc/$(package)/ssl-cert.cnf
 	install -m 644 -D -p debian/$(package).conf.default \
 	    debian/$(package)/usr/share/$(package)/$(package).conf.default
 
-	
+
 	###### Client Packages ######
 
 	# Make client library
@@ -170,7 +170,7 @@ binary-arch: build install
 	dh_python
 	dh_makeshlibs
 	dh_installdeb
-	dh_shlibdeps	
+	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
