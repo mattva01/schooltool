@@ -71,6 +71,7 @@ class TransactionChecks:
         txn = get_transaction()
         if txn._resources:
             warn("%s left an unclean transaction" % test)
+            txn.abort()
 
 
 class StdoutWrapper:
