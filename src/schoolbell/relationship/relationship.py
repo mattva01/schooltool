@@ -111,10 +111,14 @@ class RelationshipAddedEvent(RelationshipEvent):
     implements(IRelationshipAddedEvent)
 
 
-def getRelatedObjects(obj, role):
+def getRelatedObjects(obj, role, rel_type=None):
     """Return all objects related to `obj` with a given role."""
-    return [link.target for link in IRelationshipLinks(obj)
-            if link.role == role]
+    if rel_type is None:
+        return [link.target for link in IRelationshipLinks(obj)
+                if link.role == role]
+    else:
+        return [link.target for link in IRelationshipLinks(obj)
+                if link.role == role and link.rel_type == rel_type]
 
 
 class RelationshipSchema(object):

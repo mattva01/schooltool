@@ -104,6 +104,7 @@ import sets
 from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
+from schoolbell.relationship.interfaces import InvalidRelationship
 from schoolbell.app.interfaces import IGroup
 
 
@@ -117,10 +118,6 @@ URIMember = URIObject('http://schooltool.org/ns/membership/member',
 Membership = RelationshipSchema(URIMembership,
                                 member=URIMember,
                                 group=URIGroup)
-
-
-class InvalidRelationship(Exception):
-    """Invalid relationship."""
 
 
 def enforceMembershipConstraints(event):

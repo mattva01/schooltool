@@ -63,13 +63,19 @@ class IRelationshipEvent(Interface):
     role2 = Attribute("""Role of `participant2`.""")
 
     def __getitem__(role):
-        """Return the participant with a given role."""
+        """Return the participant with a given role.
+
+        This does not work well with "peer-to-peer" relationships, that is,
+        when role1 == role2.
+        """
 
 
 class IBeforeRelationshipEvent(IRelationshipEvent):
     """A relationship is about to be established.
 
     You can register subscribers for this event to implement constraints.
+    By convention, subscribers raise InvalidRelationship or a subclass
+    when a relationship does not meet all the constraints.
     """
 
 
@@ -77,6 +83,10 @@ class IRelationshipAddedEvent(IRelationshipEvent):
     """A relationship has been established."""
 
 
-class DuplicateRelationship(Exception):
+class InvalidRelationship(Exception):
+    """Invalid relationship."""
+
+
+class DuplicateRelationship(InvalidRelationship):
     """Relationship already exists"""
 

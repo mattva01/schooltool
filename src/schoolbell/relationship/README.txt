@@ -84,6 +84,16 @@ belongs to
     >>> getRelatedObjects(frogger, URIGroup)
     [frogs]
 
+You can also explicitly say that you want all URIGroups that participate
+in a URIMembership relationship.
+
+    >>> getRelatedObjects(frogger, URIGroup, URIMembership)
+    [frogs]
+    >>> getRelatedObjects(frogger, URIGroup, 'example:Groupship')
+    []
+
+In general, avoid reusing the same role for different relationship types.
+
 
 Events
 ------
