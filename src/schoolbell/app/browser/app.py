@@ -152,14 +152,10 @@ class GroupView(BrowserView):
         return True # TODO: implement permission checking
 
     def getPersons(self):
-        persons = [member for member in self.context.members
-                   if IPerson.providedBy(member)] # not really nice...
-        return sorted_by_title(persons)
+        return filter(IPerson.providedBy, self.context.members)
 
     def getResources(self):
-        persons = [member for member in self.context.members
-                   if IResource.providedBy(member)] # not really nice...
-        return sorted_by_title(persons)
+        return filter(IResource.providedBy, self.context.members)
 
 
 class MemberViewBase(BrowserView):

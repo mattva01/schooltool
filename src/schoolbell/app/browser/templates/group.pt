@@ -46,7 +46,7 @@
              have resources as members. -->
       </tal:comment>
       <h3 i18n:translate="">Resources</h3>
-      <div tal:repeat="resource resources">
+      <div tal:repeat="resource resources/sortby:title">
         <a tal:attributes="href resource/@@absolute_url"
            tal:content="resource/title" />
       </div>

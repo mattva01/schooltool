@@ -309,12 +309,16 @@ def doctest_GroupView():
 
     A person list from that view should be sorted by title.
 
-        >>> [person.title for person in view.getPersons()]
+        >>> titles = [person.title for person in view.getPersons()]
+        >>> titles.sort()
+        >>> titles
         ['First', 'Intermediate', 'Last']
 
     Same for the resource list.
 
-        >>> [resource.title for resource in view.getResources()]
+        >>> titles = [resource.title for resource in view.getResources()]
+        >>> titles.sort()
+        >>> titles
         ['Another', 'Average', 'The last']
 
 
