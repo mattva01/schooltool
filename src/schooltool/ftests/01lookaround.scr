@@ -98,7 +98,8 @@ Content-Type: text/xml; charset=UTF-8
          xlink:title="001" class="EventLogFacet"
          owned="unowned"
          xlink:href="/persons/Marius/facets/001"/>
-  <facetFactory name="Subject Group" title="Subject Group"/>
+  <facetFactory name="absence_tracker" title="Absence Tracker"/>
+  <facetFactory name="subject_group" title="Subject Group"/>
   <facetFactory name="eventlog" title="Event Log Factory"/>
 </facets>
 %% END XML

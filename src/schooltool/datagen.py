@@ -66,12 +66,12 @@ def createGroups():
     # name, title, parents, facet
 
     for subj, subject in subjects.items():
-        print >> f, '"%s","Department of %s","root",' % (subj, subject)
+        print >> f, '"%s","%s Department","root",' % (subj, subject)
 
     for year in range(1, years + 1):
         print >> f, '"year%d","Year %d","root",' % (year, year)
         for subj, subject in subjects.items():
-            print >> f, ('"%s%d","%s %d","%s year%d","Subject Group"' %
+            print >> f, ('"%s%d","%s %d","%s year%d","subject_group"' %
                          (subj, year, subject, year, subj, year))
     f.close()
 

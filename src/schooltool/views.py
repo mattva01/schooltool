@@ -715,7 +715,8 @@ class AbsenceListViewMixin:
                    'datetime': absence.comments[0].datetime.isoformat(' '),
                    'expected_presence': expected_presence,
                    'ended': endedness[absence.ended],
-                   'resolved': resolvedness[absence.resolved]}
+                   'resolved': resolvedness[absence.resolved],
+                   'last_comment': absence.comments[-1].text}
 
 
 class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):

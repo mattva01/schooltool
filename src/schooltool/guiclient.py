@@ -441,11 +441,12 @@ class SchoolToolClient:
                         expected_presence = parse_datetime(expected_presence)
                     except ValueError, e:
                         raise SchoolToolError(str(e))
+                last_comment = node.content.strip()
                 absences.append(AbsenceInfo(href, dt, person_title,
                                             person_href,
                                             ended == "ended",
                                             resolved == "resolved",
-                                            expected_presence))
+                                            expected_presence, last_comment))
             return absences
         finally:
             doc.freeDoc()
@@ -586,9 +587,10 @@ class AbsenceInfo:
     ended = None                # Is the absence ended? (bool)
     resolved = None             # Is the absence resolved? (bool)
     expected_presence = None    # Expected presence or None
+    last_comment = None         # Last comment text
 
     def __init__(self, uri, datetime, person_title, person_href, ended,
-                 resolved, expected_presence):
+                 resolved, expected_presence, last_comment):
         self.uri = uri
         self.datetime = datetime
         self.person_title = person_title
@@ -596,6 +598,7 @@ class AbsenceInfo:
         self.ended = ended
         self.resolved = resolved
         self.expected_presence = expected_presence
+        self.last_comment = last_comment
 
     def expected(self):
         """Is this absence expected?"""
@@ -608,10 +611,10 @@ class AbsenceInfo:
                                       % (self, other))
         return cmp((self.datetime, self.uri, self.person_title,
                     self.person_href, self.ended, self.resolved,
-                    self.expected_presence),
+                    self.expected_presence, self.last_comment),
                    (other.datetime, other.uri, other.person_title,
                     other.person_href, other.ended, other.resolved,
-                    other.expected_presence))
+                    other.expected_presence, other.last_comment))
 
     def __str__(self):
         if self.expected_presence:

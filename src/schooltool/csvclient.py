@@ -228,6 +228,8 @@ class CSVImporter:
                 for resource, method, body in self.importPupil(name, groups):
                     self.process(method, resource, body=body)
                 line += 1
+            if self.verbose:
+                print
         except DataError:
             raise
         except csv.Error, e:

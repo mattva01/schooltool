@@ -23,8 +23,9 @@ $Id$
 """
 
 from datetime import datetime
-from zope.interface import implements
+from zope.interface import implements, moduleProvides
 from persistence import Persistent
+from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPerson, IGroup, Unchanged
 from schooltool.interfaces import IAbsence, IAbsenceComment
 from schooltool.interfaces import IEventTarget
@@ -32,12 +33,15 @@ from schooltool.interfaces import IAbsenceEvent, IAbsenceEndedEvent
 from schooltool.interfaces import IAbsenceTracker, IAbsenceTrackerUtility
 from schooltool.interfaces import IAbsenceTrackerFacet
 from schooltool.relationship import RelationshipValenciesMixin, Valency
-from schooltool.facet import FacetedEventTargetMixin
+from schooltool.facet import FacetedEventTargetMixin, FacetFactory
 from schooltool.membership import Membership
 from schooltool.db import PersistentKeysSetWithNames, PersistentKeysSet
 from schooltool.event import EventMixin, CallAction
+from schooltool.component import registerFacetFactory
 
 __metaclass__ = type
+
+moduleProvides(IModuleSetup)
 
 
 class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
@@ -239,3 +243,11 @@ class AbsenceTrackerFacet(AbsenceTrackerMixin):
         self.active = False
         self.owner = None
         self.eventTable = (CallAction(self.notify), )
+
+
+def setUp():
+    """Register the AbsenceTrackerFacet factory."""
+    registerFacetFactory(FacetFactory(AbsenceTrackerFacet, 'absence_tracker',
+                                      'Absence Tracker'))
+
+

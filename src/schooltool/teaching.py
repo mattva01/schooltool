@@ -62,7 +62,8 @@ class SubjectGroupFacet(RelationshipValenciesMixin):
 
 
 def setUp():
-    registerFacetFactory(FacetFactory(SubjectGroupFacet, 'Subject Group'))
+    registerFacetFactory(FacetFactory(SubjectGroupFacet, 'subject_group',
+                                      'Subject Group'))
     registerURI(URITeacher)
     registerURI(URITeaching)
     registerURI(URITaught)

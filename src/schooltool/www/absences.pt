@@ -8,5 +8,6 @@
                            datetime item/datetime;
                            expected_presence item/expected_presence;
                            ended item/ended;
-                           resolved item/resolved" />
+                           resolved item/resolved"
+           tal:content="item/last_comment" />
 </absences>

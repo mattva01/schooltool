@@ -565,6 +565,7 @@ def setUp():
     setUpModules([
         'schooltool.relationship',
         'schooltool.membership',
+        'schooltool.model',
         'schooltool.views',
         'schooltool.debug',
         'schooltool.interfaces',

@@ -259,30 +259,46 @@ class AbsenceFrame(wxFrame):
 
         main_sizer = wxBoxSizer(wxVERTICAL)
         splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
+
+        panel1 = wxPanel(splitter, -1)
+        label1 = wxStaticText(panel1, -1, "Absences")
         ID_ABSENCE_LIST = wxNewId()
-        self.absence_list = wxListCtrl(splitter, ID_ABSENCE_LIST,
+        self.absence_list = wxListCtrl(panel1, ID_ABSENCE_LIST,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
         if self.detailed:
-            self.absence_list.InsertColumn(0, "Date", width=110)
-            self.absence_list.InsertColumn(1, "Ended?", width=110)
-            self.absence_list.InsertColumn(2, "Resolved?", width=110)
+            self.absence_list.InsertColumn(0, "Date", width=140)
+            self.absence_list.InsertColumn(1, "Ended?", width=80)
+            self.absence_list.InsertColumn(2, "Resolved?", width=80)
             self.absence_list.InsertColumn(3, "Expected Presence", width=150)
+            self.absence_list.InsertColumn(4, "Last Comment", width=200)
             if self.persons:
                 self.absence_list.InsertColumn(1, "Person", width=110)
         else:
             self.absence_list.InsertColumn(0, "Absence", width=580)
         EVT_LIST_ITEM_SELECTED(self, ID_ABSENCE_LIST, self.DoSelectAbsence)
-        self.comment_list = wxListCtrl(splitter, -1,
+        sizer1 = wxBoxSizer(wxVERTICAL)
+        sizer1.Add(label1)
+        sizer1.Add(self.absence_list, 1, wxEXPAND)
+        panel1.SetSizer(sizer1)
+
+        panel2 = wxPanel(splitter, -1)
+        label2 = wxStaticText(panel2, -1, "Comments")
+        self.comment_list = wxListCtrl(panel2, -1,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
-        self.comment_list.InsertColumn(0, "Date", width=110)
+        self.comment_list.InsertColumn(0, "Date", width=140)
         self.comment_list.InsertColumn(1, "Reporter", width=110)
         self.comment_list.InsertColumn(2, "Absent From", width=110)
-        self.comment_list.InsertColumn(3, "Ended?", width=110)
-        self.comment_list.InsertColumn(4, "Resolved?", width=110)
+        self.comment_list.InsertColumn(3, "Ended?", width=80)
+        self.comment_list.InsertColumn(4, "Resolved?", width=80)
         self.comment_list.InsertColumn(5, "Expected Presence", width=150)
         self.comment_list.InsertColumn(6, "Comment", width=200)
+        sizer2 = wxBoxSizer(wxVERTICAL)
+        sizer2.Add(label2)
+        sizer2.Add(self.comment_list, 1, wxEXPAND)
+        panel2.SetSizer(sizer2)
+
         splitter.SetMinimumPaneSize(50)
-        splitter.SplitHorizontally(self.absence_list, self.comment_list, 200)
+        splitter.SplitHorizontally(panel1, panel2, 200)
         main_sizer.Add(splitter, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
@@ -320,10 +336,7 @@ class AbsenceFrame(wxFrame):
             self.absence_data.reverse()
             for idx, absence in enumerate(self.absence_data):
                 self.absence_list.InsertStringItem(idx,
-                        absence.datetime.isoformat(' '))
-                self.absence_list.SetItemData(idx, idx)
-                self.absence_list.InsertStringItem(idx,
-                        absence.datetime.isoformat(' '))
+                        absence.datetime.strftime('%Y-%m-%d %H:%M'))
                 self.absence_list.SetItemData(idx, idx)
                 if self.persons:
                     self.absence_list.SetStringItem(idx, 1,
@@ -337,7 +350,8 @@ class AbsenceFrame(wxFrame):
                         absence.resolved and "Yes" or "No")
                 if absence.expected_presence is not None:
                     self.absence_list.SetStringItem(idx, n+3,
-                            absence.expected_presence.isoformat(' '))
+                        absence.expected_presence.strftime('%Y-%m-%d %H:%M'))
+                self.absence_list.SetStringItem(idx, n+4, absence.last_comment)
                 if not absence.ended:
                     item = self.absence_list.GetItem(idx)
                     item.SetTextColour(wxRED)
@@ -377,7 +391,7 @@ class AbsenceFrame(wxFrame):
         self.comment_data.reverse()
         for idx, comment in enumerate(self.comment_data):
             self.comment_list.InsertStringItem(idx,
-                    comment.datetime.isoformat(' '))
+                    comment.datetime.strftime('%Y-%m-%d %H:%M'))
             self.comment_list.SetItemData(idx, idx)
             self.comment_list.SetStringItem(idx, 1, comment.reporter_title)
             self.comment_list.SetStringItem(idx, 2, comment.absent_from_title)
@@ -390,7 +404,7 @@ class AbsenceFrame(wxFrame):
             if comment.expected_presence is not Unchanged:
                 if comment.expected_presence is not None:
                     self.comment_list.SetStringItem(idx, 5,
-                            comment.expected_presence.isoformat(' '))
+                        comment.expected_presence.strftime('%Y-%m-%d %H:%M'))
                 else:
                     self.comment_list.SetStringItem(idx, 5, "-")
             self.comment_list.SetStringItem(idx, 6, comment.text)
@@ -467,11 +481,13 @@ class MainFrame(wxFrame):
         self.groupTreeCtrl = wxTreeCtrl(splitter, ID_GROUP_TREE,
                 style=wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT|wxSUNKEN_BORDER)
         EVT_TREE_SEL_CHANGED(self, ID_GROUP_TREE, self.DoSelectGroup)
-        # XXX temporarily allow doing roll calls with a double click
-        EVT_TREE_ITEM_ACTIVATED(self, ID_GROUP_TREE, self.DoRollCall)
         self.treePopupMenu = popupmenu(
-                item("&Refresh", "Refresh", self.DoRefresh),
-                item("Roll &Call", "Do a roll call", self.DoRollCall)
+                item("Roll &Call", "Do a roll call", self.DoRollCall),
+##              item("&Absence Tracker",
+##                   "Inspect the absence tracker for this group",
+##                   self.DoGroupAbsenceTracker),
+                separator(),
+                item("&Refresh", "Refresh", self.DoRefresh)
             )
         EVT_RIGHT_DOWN(self.groupTreeCtrl, self.DoTreeRightDown)
         # looks like I need both for this to work on Gtk and MSW
@@ -769,6 +785,17 @@ class MainFrame(wxFrame):
         window = AbsenceFrame(self.client, "/utils/absences", parent=self,
                               title="All absences", detailed=False)
         window.Show()
+
+    def DoGroupAbsenceTracker(self, event=None):
+        """Open the absences window for the currently selected group.
+
+        Accessible from group popup menu.
+        """
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            self.SetStatusText("No group selected")
+            return
+        group_id = self.groupTreeCtrl.GetPyData(item)
 
 
 class SchoolToolApp(wxApp):

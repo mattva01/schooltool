@@ -422,7 +422,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         expected = [AbsenceInfo('/p/absences/003',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
                                 'p', '/p', True, False,
-                                datetime.datetime(2001, 2, 3, 4, 5, 6))]
+                                datetime.datetime(2001, 2, 3, 4, 5, 6), '')]
         client = self.newClient(ResponseStub(200, 'OK', body))
         results = client.getAbsences('/p/absences')
         self.assertEquals(results, expected, "\n" +
@@ -676,10 +676,15 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               <absence xlink:type="simple" xlink:href="/persons/p/absences/001"
                        person_title="Person Foo"
                        datetime="2001-02-28 01:01:01"
-                       ended="ended" resolved="resolved" />
+                       ended="ended" resolved="resolved">
+                Some text
+              </absence>
               <absence xlink:type="simple" xlink:href="/p/absences/002"
                        datetime="2001-02-28 01:01:01"
-                       ended="unended" resolved="unresolved" />
+                       ended="unended" resolved="unresolved">
+                More
+                text
+              </absence>
               <absence xlink:type="simple" xlink:href="/p/absences/003"
                        datetime="2001-02-28 01:01:01"
                        ended="ended" resolved="unresolved"
@@ -689,15 +694,15 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         expected = [AbsenceInfo('/persons/p/absences/001',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
                                 'Person Foo', '/persons/p',
-                                True, True, None),
+                                True, True, None, 'Some text'),
                     AbsenceInfo('/p/absences/002',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
                                 'p', '/p',
-                                False, False, None),
+                                False, False, None, 'More\n    text'),
                     AbsenceInfo('/p/absences/003',
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
                                 'p', '/p', True, False,
-                                datetime.datetime(2001, 2, 3, 4, 5, 6))]
+                                datetime.datetime(2001, 2, 3, 4, 5, 6), '')]
         client = SchoolToolClient()
         results = client._parseAbsences(body)
         self.assertEquals(results, expected, "\n" +
@@ -957,7 +962,7 @@ class TestAbsenceInfo(unittest.TestCase):
 
     def test_cmp(self):
         from schooltool.guiclient import AbsenceInfo
-        nargs = 7 # number of constructor arguments
+        nargs = 8 # number of constructor arguments
         ai = AbsenceInfo(*range(nargs))
         self.assertEquals(ai, ai)
         for i in range(nargs):
@@ -975,11 +980,11 @@ class TestAbsenceInfo(unittest.TestCase):
     def test_expected(self):
         from schooltool.guiclient import AbsenceInfo
         dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
-        ai = AbsenceInfo(None, dt, None, None, None, None, None)
+        ai = AbsenceInfo(None, dt, None, None, None, None, None, None)
         self.assert_(not ai.expected())
 
         et = datetime.datetime(2002, 3, 4, 5, 6, 7)
-        ai = AbsenceInfo(None, dt, None, None, None, None, et)
+        ai = AbsenceInfo(None, dt, None, None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2002, 3, 4, 5, 6, 6)
         self.assert_(ai.expected())
         ai.now = lambda: datetime.datetime(2002, 3, 4, 5, 6, 7)
@@ -990,26 +995,26 @@ class TestAbsenceInfo(unittest.TestCase):
     def test_str(self):
         from schooltool.guiclient import AbsenceInfo
         dt = datetime.datetime(2001, 2, 3, 15, 44, 57)
-        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, None)
+        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, None, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
         self.assertEquals(str(ai), "John Smith absent for 2h15m,"
                                    " since 03:44pm today")
 
         et = datetime.datetime(2001, 2, 3, 18, 30, 00)
-        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et)
+        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
         self.assertEquals(str(ai), "John Smith expected in 0h30m,"
                                    " at 06:30pm today")
 
         et = datetime.datetime(2001, 2, 3, 18, 30, 00)
-        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et)
+        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et, None)
         ai.now = lambda: datetime.datetime(2001, 2, 4, 12, 14, 17)
         self.assertEquals(str(ai), "John Smith expected 17h44m ago,"
                                    " at 06:30pm 2001-02-03")
 
     def test_format_date(self):
         from schooltool.guiclient import AbsenceInfo
-        ai = AbsenceInfo(None, None, None, None, None, None, None)
+        ai = AbsenceInfo(None, None, None, None, None, None, None, None)
         dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
         ai.now = lambda: datetime.datetime(2001, 2, 3, 6, 5, 4)
         self.assertEquals(ai.format_date(dt), 'today')
@@ -1018,7 +1023,7 @@ class TestAbsenceInfo(unittest.TestCase):
 
     def test_format_age(self):
         from schooltool.guiclient import AbsenceInfo
-        ai = AbsenceInfo(None, None, None, None, None, None, None)
+        ai = AbsenceInfo(None, None, None, None, None, None, None, None)
         format_age = ai.format_age
         self.assertEquals(format_age(datetime.timedelta(minutes=5)), '0h5m')
         self.assertEquals(format_age(datetime.timedelta(hours=2, minutes=15)),
