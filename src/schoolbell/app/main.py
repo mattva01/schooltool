@@ -149,9 +149,6 @@ def load_options(argv):
 
 def setup(options):
     """Configure SchoolBell."""
-    if options.daemon:
-        daemonize()
-
     setUpLogger(None, options.config.error_log_file)
     setUpLogger('accesslog', options.config.web_access_log_file)
 
@@ -173,11 +170,13 @@ def setup(options):
 
     notify(DatabaseOpened(db))
 
+    if options.daemon:
+        daemonize()
+
     task_dispatcher = ThreadedTaskDispatcher()
     task_dispatcher.setThreadCount(options.config.thread_pool_size)
 
     for ip, port in options.config.web:
-        print "Started HTTP server for web UI on %s:%d" % (ip or "*", port)
         http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
 
     notify(ProcessStarting())
