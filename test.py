@@ -676,7 +676,8 @@ def main(argv):
     sys.path[0] = cfg.basedir
     # XXX The following bit is SchoolTool specific: we need the Zope3 tree in
     #     sys.path, in addition to basedir.
-    sys.path.insert(1, os.path.join(os.path.dirname(argv[0]), 'Zope3', 'src'))
+    sys.path.insert(1, os.path.join(os.path.dirname(cfg.basedir),
+                                    'Zope3', 'src'))
 
     # Set up tracing before we start importing things
     tracer = None
