@@ -62,7 +62,7 @@ runwxclient: build
 sampledata teachers.csv groups.csv pupils.csv:
 	PYTHONPATH=src $(PYTHON) src/schooltool/clients/datagen.py schooltool-m4
 
-sampleschool: teachers.csv groups.csv pupils.csv
+sampleschool: build teachers.csv groups.csv pupils.csv
 	PYTHONPATH=src $(PYTHON) runimport.py
 
 coverage: build
