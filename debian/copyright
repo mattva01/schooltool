@@ -7,8 +7,8 @@ Copyright:
 
 SchoolTool is copyright (c) 2003 Shuttleworth Foundation
 
-All files in the src/schooltool directory are part of SchoolTool, and
-are (c) Shuttleworth Foundation.
+All files in the /usr/lib/schooltool/schooltool directory are part of
+SchoolTool, and are (c) Shuttleworth Foundation.
 
 Unless otherwise stated, files in src/schooltool are released under the
 terms of the GNU General Public License as published by the Free
@@ -18,16 +18,16 @@ any later version.
 Files in the following directories are (c) their respective owners. See
 the individual files and directories for details of the licences.
 
-  src/ZConfig
-  src/persistence
-  src/transaction
-  src/zdaemon
-  src/zodb
-  src/zope
+  /usr/lib/schooltool/ZConfig
+  /usr/lib/schooltool/persistence
+  /usr/lib/schooltool/transaction
+  /usr/lib/schooltool/zdaemon
+  /usr/lib/schooltool/zodb
+  /usr/lib/schooltool/zope
 
-Files in the same directory as this README file are (c) Shuttleworth
-Foundation, with the exception of GPL, which is a copy of the Free Software
-Foundation's General Public License, and is (c) FSF.
+Files in the same directory of the source tree as the main README file are (c)
+Shuttleworth Foundation, with the exception of GPL, which is a copy of the Free
+Software Foundation's General Public License, and is (c) FSF.
 
 
 SchoolTool is distributed in the hope that it will be useful,

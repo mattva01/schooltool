@@ -35,16 +35,16 @@ ftest: build
 	kill $$pid )
 
 run: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/main.py
+	$(PYTHON) schooltool-server.py
 
 runtestserver: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf
+	$(PYTHON) schooltool-server.py -c test.conf
 
 runclient: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/clients/client.py
+	$(PYTHON) schooltool-client.py
 
 runwxclient: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/clients/wxclient.py
+	$(PYTHON) wxschooltool.py
 
 sampledata teachers.csv groups.csv pupils.csv:
 	PYTHONPATH=src $(PYTHON) src/schooltool/clients/datagen.py schooltool-m4
@@ -69,7 +69,7 @@ vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
 deb:
-	dpkg-buildpackage -uc -us -rfakeroot
+	dpkg-buildpackage -uc -b -rfakeroot
 
 
 .PHONY: all build clean test ftest run coverage sampleschool

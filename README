@@ -43,7 +43,15 @@ essential unit and functional tests pass.
 Running SchoolTool
 ------------------
 
-The Makefile contains several useful shortcuts:
+The top-level project directory contains the following executable Python
+scripts:
+
+  schooltool-server.py  starts the SchoolTool server
+  schooltool-client.py  starts the command line client
+  wxschooltool.py       starts the wxWindows GUI client
+
+The Makefile also contains several shortcuts, which are kept mainly for
+backwards-compatibility:
 
   make sampleschool     generates and imports sample data into the server
 
