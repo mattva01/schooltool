@@ -1,0 +1,33 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Add exception</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Add exception <!-- TODO: more info -->
+  </h1>
+  <metal:block metal:fill-slot="content">
+
+  <form method="POST" tal:attributes="action request/path">
+
+    You are trying to delete an event that has been generated from a timetable.
+    An exception for this day will be marked in the corresponding timetable.
+    Are you sure you want to add the exception?
+
+    <!-- TODO: more info about the exception -->
+
+    <input type="hidden" name="event_id"
+           tal:attributes="value python:request.args['event_id'][0]" />
+
+    <div class="buttons">
+      <input class="button" type="submit" name="CONFIRM" value="Confirm"
+             i18n:attributes="value" />
+
+      <a href=".">Back</a> <!-- TODO -->
+    </div>
+
+  </form>
+  </metal:block>
+
+</body>
+</html>

@@ -1,17 +1,20 @@
 <div class="calevent" i18n:domain="schooltool"
-     tal:define="source python:getattr(context, 'source', None);
-                 editable python:source != 'timetable-calendar'">
-  <tal:block condition="editable">
-    <div class="dellink">
-      <a tal:attributes="href string:delete_event.html?event_id=${view/uniqueId}"
-         i18n:translate="">[delete]</a>
-    </div>
+     tal:define="ttevent python:hasattr(context, 'activity')">
+<tal:comment replace="nothing">
+     <!-- XXX this define will be removed in the future, because the views will
+               care about the type of the event rather than this template -->
+</tal:comment>
+  <div class="dellink">
+    <a tal:attributes="href string:delete_event.html?event_id=${view/uniqueId}"
+       i18n:translate="">[delete]</a>
+  </div>
+  <tal:block condition="not:ttevent">
     <h3>
       <a tal:attributes="href string:edit_event.html?event_id=${view/uniqueId}"
          tal:content="context/title">event_title</a>
     </h3>
   </tal:block>
-  <h3 tal:condition="not:editable" tal:content="context/title" />
+  <h3 tal:condition="ttevent" tal:content="context/title" />
   <span tal:replace="structure view/duration" />
   <span tal:condition="context/location"
         tal:replace="string:(${context/location})" />

@@ -37,6 +37,7 @@ from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.interfaces import ISchooldayModel
 from schooltool.interfaces import ILocation
+from schooltool.interfaces import ITimetableActivity
 from schooltool.facet import FacetedMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
@@ -55,6 +56,17 @@ def setPath(obj, path):
     directlyProvides(obj, ILocation)
     obj.__parent__ = TraversableRoot()
     directlyProvides(obj.__parent__, IContainmentRoot)
+
+
+class ActivityStub:
+
+    implements(ITimetableActivity)
+    replaced = False
+    timetable = None
+
+    def replace(self, **kwargs):
+        self.replaced = True
+        return self
 
 
 class TestTimetable(unittest.TestCase):
@@ -86,6 +98,7 @@ class TestTimetable(unittest.TestCase):
 
         class DayStub:
             implements(ITimetableDay)
+            timetable = None
 
         self.assertRaises(TypeError, t.__setitem__, "Mo", object())
         self.assertRaises(ValueError, t.__setitem__, "Mon", DayStub())
@@ -102,6 +115,7 @@ class TestTimetable(unittest.TestCase):
 
         class DayStub:
             implements(ITimetableDay)
+            timetable = None
 
         monday = DayStub()
         t["Mo"] = monday
@@ -227,6 +241,12 @@ class TestTimetable(unittest.TestCase):
         tt.model = model
         self.assertEquals(tt, tt2)
 
+        tt.exceptions.append('foo')
+        self.assertNotEquals(tt, tt2)
+
+        tt2.exceptions.append('foo')
+        self.assertEquals(tt, tt2)
+
         tt2["B"].remove("Green", bio)
         self.assertNotEquals(tt, tt2)
 
@@ -258,10 +278,6 @@ class TestTimetableDay(unittest.TestCase):
 
     def test_keys(self):
         from schooltool.timetable import TimetableDay
-        from schooltool.interfaces import ITimetableActivity
-
-        class ActivityStub:
-            implements(ITimetableActivity)
 
         periods = ('1', '2', '3', '4', '5')
         td = TimetableDay(periods)
@@ -274,10 +290,6 @@ class TestTimetableDay(unittest.TestCase):
 
     def testComparison(self):
         from schooltool.timetable import TimetableDay
-        from schooltool.interfaces import ITimetableActivity
-
-        class ActivityStub:
-            implements(ITimetableActivity)
 
         periods = ('A', 'B')
         td1 = TimetableDay(periods)
@@ -297,7 +309,6 @@ class TestTimetableDay(unittest.TestCase):
 
     def test_getitem_add_items_clear_remove(self):
         from schooltool.timetable import TimetableDay
-        from schooltool.interfaces import ITimetableActivity
 
         periods = ('1', '2', '3', '4')
         td = TimetableDay(periods)
@@ -305,14 +316,12 @@ class TestTimetableDay(unittest.TestCase):
         self.assertEqual(len(list(td["1"])), 0)
         self.assert_(hasattr(td["1"], 'next'), "not an iterator")
 
-        class ActivityStub:
-            implements(ITimetableActivity)
-
         self.assertRaises(TypeError, td.add, "1", object())
         math = ActivityStub()
         self.assertRaises(ValueError, td.add, "Mo", math)
         td.add("1", math)
         self.assertEqual(list(td["1"]), [math])
+        self.assert_(list(td["1"])[0].replaced)
 
         result = [(p, Set(i)) for p, i in td.items()]
 
@@ -369,6 +378,8 @@ class TestTimetableActivity(unittest.TestCase):
         res2 = object()
         te = TimetableActivity("Dancing", owner, [res1, res2])
         tf = TimetableActivity("Dancing", owner, [res2, res1])
+        tg = TimetableActivity("Dancing", owner, [res1, res2], timetable=object())
+        # XXX Do we really want to ignore timetable when hashing/comparing?
 
         # __eq__
         self.assertEqual(ta, ta)
@@ -378,6 +389,7 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertNotEqual(ta, fake_thing)
         self.assertNotEqual(ta, te)
         self.assertEqual(te, tf)
+        self.assertEqual(tf, tg)
 
         # __ne__
         self.failIf(ta != ta)
@@ -387,6 +399,7 @@ class TestTimetableActivity(unittest.TestCase):
         self.assert_(ta != fake_thing)
         self.assert_(ta != te)
         self.failIf(te != tf)
+        self.failIf(tf != tg)
 
         # __hash__
         self.assertEqual(hash(ta), hash(tb))
@@ -394,6 +407,7 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertNotEqual(hash(ta), hash(td))
         self.assertNotEqual(hash(ta), hash(te))
         self.assertEqual(hash(te), hash(tf))
+        self.assertEqual(hash(tf), hash(tg))
 
     def test_immutability(self):
         from schooltool.timetable import TimetableActivity
@@ -413,6 +427,15 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertRaises(AttributeError, try_to_assign_resources)
         self.assertRaises(AttributeError, try_to_modify_resources)
         self.assertEquals(ta.title, "Dancing")
+
+    def test_replace(self):
+        from schooltool.timetable import TimetableActivity
+        owner = object()
+        owner2 = object()
+        ta = TimetableActivity("Dancing", owner)
+        tb = ta.replace(title=None, owner=owner2)
+        self.assertEquals(tb.title, None)
+        self.assertEquals(tb.owner, owner2)
 
 
 class TestTimetableException(unittest.TestCase):
@@ -535,6 +558,22 @@ class TestTimetablingPersistence(unittest.TestCase):
         finally:
             transaction.abort()
             datamgr.close()
+
+
+class TestTimetableCalendarEvent(unittest.TestCase):
+
+    def test(self):
+        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.interfaces import ITimetableCalendarEvent
+
+        period_id = 'Mathematics'
+        activity = object()
+
+        ev = TimetableCalendarEvent(date(2004, 10, 13), timedelta(45), "Math",
+                                    period_id=period_id, activity=activity)
+        verifyObject(ITimetableCalendarEvent, ev)
+        for attr in ['period_id', 'activity']:
+            self.assertRaises(AttributeError, setattr, ev, attr, object())
 
 
 class TestSchooldayPeriod(unittest.TestCase):
@@ -978,6 +1017,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
     def newTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
         tt = Timetable(("A", "B"))
+        tt.exceptions = ['exc1', 'exc2']
         tt["A"] = TimetableDay(("Green", "Blue"))
         tt["B"] = TimetableDay(("Green", "Blue"))
         return tt
@@ -1047,6 +1087,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         expected = composite.cloneEmpty()
         expected.update(composite)
         expected.update(private)
+        expected.exceptions = composite.exceptions + private.exceptions
         self.assertEqual(result, expected)
         self.assertEqual(tm.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
@@ -1063,6 +1104,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         expected = composite.cloneEmpty()
         expected.update(private)
         expected.update(parent_private)
+        expected.exceptions = composite.exceptions + private.exceptions
         self.assertEqual(result, expected)
         self.assertEqual(Set(result["B"]["Blue"]), Set([math]))
         self.assertEqual(Set(result["A"]["Green"]), Set([french]))
@@ -1261,6 +1303,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
     suite.addTest(unittest.makeSuite(TestTimetableException))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
+    suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))
     suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))

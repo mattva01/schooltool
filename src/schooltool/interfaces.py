@@ -1256,6 +1256,8 @@ class ITimetableWrite(Interface):
 class ITimetableDay(Interface):
     """A model of a day with a mapping of periods to ITimetableActivities"""
 
+    timetable = Attribute("""The timetable that contains this day.""")
+
     periods = Attribute("""A list of periods which are meaningful within
                         this day.""")
 
@@ -1296,15 +1298,15 @@ class ITimetableDayWrite(Interface):
        and all the timetables of its resources.
     """
 
-    def clear(key):
+    def clear(period):
         """Remove all the activities for a certain period id."""
 
-    def add(key, value):
+    def add(period, activity):
         """Adds a single activity to the set of activities planned for
         a given period.
         """
 
-    def remove(key, value):
+    def remove(period, value):
         """Remove a certain activity from a set of activities planned
         for a given period.
         """
@@ -1319,13 +1321,15 @@ class ITimetableActivity(Interface):
     Timetable activities are immutable.
     """
 
-    title = Attribute("""The title of the activity""")
+    title = Attribute("""The title of the activity.""")
 
     owner = Attribute(
         """The group or person or other object that owns the activity.
 
         The activity lives in the owner's timetable.
         """)
+
+    timetable = Attribute("""The timetable that contains this activity.""")
 
     resources = Attribute("""A set of resources assigned to this activity.
 
@@ -1354,6 +1358,16 @@ class ITimetableException(Interface):
 
         If None, then the activity is simply removed.
         """)
+
+
+class ITimetableCalendarEvent(ICalendarEvent):
+    """A calendar event that has been created from a timetable."""
+
+    period_id = Attribute(
+        """The period id of the corresponding timetable event.""")
+
+    activity = Attribute(
+        """The activity from which this event was created.""")
 
 
 class ICompositeTimetableProvider(Interface):

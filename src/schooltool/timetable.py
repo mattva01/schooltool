@@ -34,6 +34,7 @@ from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
+from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IModuleSetup
@@ -41,6 +42,7 @@ from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ILocation, IMultiContainer
+from schooltool.interfaces import Unchanged
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
@@ -76,6 +78,10 @@ class Timetable(Persistent):
     def items(self):
         return [(day, self.days.get(day, None)) for day in self.day_ids]
 
+    def __repr__(self):
+        return '<Timetable: %s, %s, %s, %s>' % (self.day_ids, self.days,
+                                                self.model, self.exceptions)
+
     def __getitem__(self, key):
         return self.days[key]
 
@@ -83,8 +89,12 @@ class Timetable(Persistent):
         if not ITimetableDay.providedBy(value):
             raise TypeError("Timetable cannot set a non-ITimetableDay "
                             "(got %r)" % (value,))
-        if key not in self.day_ids:
+        elif key not in self.day_ids:
             raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
+        elif value.timetable is not None:
+            raise ValueError("%r already belongs to timetable %r"
+                             % (value, value.timetable))
+        value.timetable = self
         self.days[key] = value
 
     def clear(self):
@@ -114,7 +124,9 @@ class Timetable(Persistent):
 
     def __eq__(self, other):
         if isinstance(other, Timetable):
-            return self.items() == other.items() and self.model == other.model
+            return (self.items() == other.items()
+                    and self.model == other.model
+                    and self.exceptions == other.exceptions)
         else:
             return False
 
@@ -132,6 +144,8 @@ class TimetableDay(Persistent):
 
     implements(ITimetableDay, ITimetableDayWrite)
 
+    timetable = None
+
     def __init__(self, periods=()):
         self.periods = periods
         self.activities = PersistentDict()
@@ -144,26 +158,31 @@ class TimetableDay(Persistent):
     def items(self):
         return [(period, self.activities[period]) for period in self.periods]
 
-    def __getitem__(self, key):
-        return iter(self.activities[key])
+    def __getitem__(self, period):
+        return iter(self.activities[period])
 
-    def clear(self, key):
-        if key not in self.periods:
-            raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        self.activities[key].clear()
+    def clear(self, period):
+        if period not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (period,
+                                                           self.periods))
+        self.activities[period].clear()
 
-    def add(self, key, value):
-        if key not in self.periods:
-            raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        if not ITimetableActivity.providedBy(value):
+    def add(self, period, activity):
+        if period not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (period,
+                                                            self.periods))
+        if not ITimetableActivity.providedBy(activity):
             raise TypeError("TimetableDay cannot set a "
-                            "non-ITimetableActivity (got %r)" % (value,))
-        self.activities[key].add(value)
+                             "non-ITimetableActivity (got %r)" % (activity, ))
+        if activity.timetable is None:
+            # XXX hacky
+            activity = activity.replace(timetable=self.timetable)
+        self.activities[period].add(activity)
 
-    def remove(self, key, value):
-        if key not in self.periods:
-            raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        self.activities[key].remove(value)
+    def remove(self, period, value):
+        if period not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (period, self.periods))
+        self.activities[period].remove(value)
 
     def __eq__(self, other):
         if not isinstance(other, TimetableDay):
@@ -190,18 +209,20 @@ class TimetableActivity:
 
     implements(ITimetableActivity)
 
-    def __init__(self, title=None, owner=None, resources=()):
+    def __init__(self, title=None, owner=None, resources=(), timetable=None):
         self._title = title
         self._owner = owner
         self._resources = ImmutableSet(resources)
+        self._timetable = timetable
 
     title = property(lambda self: self._title)
     owner = property(lambda self: self._owner)
     resources = property(lambda self: self._resources)
+    timetable = property(lambda self: self._timetable)
 
     def __repr__(self):
-        return ("TimetableActivity(%r, %r, %r)"
-                % (self.title, self.owner, self.resources))
+        return ("TimetableActivity(%r, %r, %r, %r)"
+                % (self.title, self.owner, self.resources, self.timetable))
 
     def __eq__(self, other):
         if isinstance(other, TimetableActivity):
@@ -216,13 +237,21 @@ class TimetableActivity:
     def __hash__(self):
         return hash((self.title, self.owner, self.resources))
 
+    def replace(self, title=Unchanged, owner=Unchanged,
+                      resources=Unchanged, timetable=Unchanged):
+        if title is Unchanged: title = self.title
+        if owner is Unchanged: owner = self.owner
+        if resources is Unchanged: resources = self.resources
+        if timetable is Unchanged: timetable = self.timetable
+        return TimetableActivity(title=title, owner=owner,
+                                 resources=resources, timetable=timetable)
+
 
 class TimetableException(Persistent):
 
     implements(ITimetableException)
 
     def __init__(self, date, period_id, activity, replacement):
-        assert isinstance(date, datetime.date)
         self.date = date
         self.period_id = period_id
         self.activity = activity
@@ -232,6 +261,23 @@ class TimetableException(Persistent):
 #
 #  Timetable model stuff
 #
+
+
+class TimetableCalendarEvent(CalendarEvent):
+
+    implements(ITimetableCalendarEvent)
+
+    period_id = property(lambda self: self._period_id)
+    activity = property(lambda self: self._activity)
+
+    def __init__(self, *args, **kwargs):
+        self._period_id = kwargs.pop('period_id')
+        self._activity = kwargs.pop('activity')
+        CalendarEvent.__init__(self, *args, **kwargs)
+
+    def replace(self, *args, **kwargs):
+        raise NotImplementedError()
+
 
 class SchooldayPeriod:
 
@@ -332,8 +378,10 @@ class BaseTimetableModel(Persistent):
                         # functionally derived, and not random
                         uid = '%d-%s' % (hash((activity.title, dt,
                                                period.duration)), uid_suffix)
-                        event = CalendarEvent(dt, period.duration,
-                                              activity.title, unique_id=uid)
+                        event = TimetableCalendarEvent(
+                                    dt, period.duration, activity.title,
+                                    unique_id=uid,
+                                    period_id=period.title, activity=activity)
                         cal.addEvent(event)
                     elif exception.replacement is not None:
                         cal.addEvent(exception.replacement)
@@ -483,6 +531,7 @@ class TimetabledMixin:
         result = timetables[0].cloneEmpty()
         for tt in timetables:
             result.update(tt)
+            result.exceptions.extend(tt.exceptions)
 
         parent = TimetableDict()
         parent.__parent__ = self

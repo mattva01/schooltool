@@ -35,6 +35,8 @@ from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
+from schooltool.interfaces import ITimetableCalendarEvent
+from schooltool.timetable import TimetableException
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
@@ -831,31 +833,41 @@ class EventDeleteView(View):
 
     __used_for__ = ICalendar
 
+    template = Template('www/ttevent_delete.pt')
+
     authorization = ACLModifyAccess
 
     def do_GET(self, request):
+        event_id = to_unicode(request.args['event_id'][0])
+
+        # XXX Two-level try-excepts don't look pretty.  And the whole method
+        #     is rather convoluted, it needs to be cleaned up.
         try:
-            event_id = to_unicode(request.args['event_id'][0])
             event = self.context.find(event_id)
-        except (KeyError, UnicodeError):
-            suffix = 'daily.html'
+        except KeyError:
+            # the event could be a timetable event
+            try:
+                appobject = self.context.__parent__
+                event = appobject.makeCalendar().find(event_id)
+            except KeyError:
+                suffix = 'daily.html'
+            else:
+                if 'CONFIRM' not in request.args:
+                    return View.do_GET(self, request)
+                else:
+                    dt = event.dtstart.date()
+                    exception = TimetableException(dt, event.period_id,
+                                                   event.activity, None)
+                    tt = event.activity.timetable
+                    tt.exceptions.append(exception)
+
+                    suffix = 'daily.html?date=%s' % dt
         else:
             suffix = 'daily.html?date=%s' % event.dtstart.date()
             self.context.removeEvent(event)
+
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)
-
-
-def EventSourceDecorator(e, source):
-    """A decorator for an ICalendarEvent that provides a 'source' attribute.
-
-    Here we rely on the fact that CalendarEvents are immutable, that is, we
-    can substitute an event instance with a (decorated) copy and not worry
-    about editing views making modifications to copies.
-    """
-    result = e.replace()
-    result.source = source
-    return result
 
 
 class CalendarComboMixin(View):
@@ -869,12 +881,9 @@ class CalendarComboMixin(View):
         """Iterate over the events of the calendars displayed"""
 
         for event in self.context:
-            decorated = EventSourceDecorator(event, 'calendar')
-            yield decorated
-
+            yield event
         for event in self.context.__parent__.makeCalendar():
-            decorated = EventSourceDecorator(event, 'timetable-calendar')
-            yield decorated
+            yield event
 
 
 class ComboDailyCalendarView(CalendarComboMixin, DailyCalendarView):
@@ -938,8 +947,8 @@ class CalendarEventView(View):
 
     def cssClass(self):
         """Choose a CSS class for the event."""
-        if getattr(self.context, 'source', None) == 'timetable-calendar':
-            return 'ro_event'
+        if ITimetableCalendarEvent.providedBy(self.context):
+            return 'ro_event' # TODO: rename
         else:
             return 'event'
 

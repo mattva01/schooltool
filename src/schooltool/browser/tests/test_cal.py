@@ -980,12 +980,24 @@ class TestEventEditView(AppSetupMixin, unittest.TestCase):
 class TestEventDeleteView(unittest.TestCase):
 
     def createView(self):
+        from schooltool.model import Person
         from schooltool.browser.cal import EventDeleteView
+
+        person = Person(title="Somebody")
+        setPath(person, '/persons/somebody')
         cal = createCalendar()
-        setPath(cal, '/persons/somebody/calendar')
+        cal.__name__ = 'calendar'
+        cal.__parent__ = person
         view = EventDeleteView(cal)
         view.authorization = lambda x, y: True
         return view
+
+    def createTTCal(self, person, events):
+        ttcal = createCalendar()
+        person.makeCalendar = lambda: ttcal
+        for event in events:
+            ttcal.addEvent(event)
+        return ttcal
 
     def test(self):
         from schooltool.cal import CalendarEvent
@@ -1013,6 +1025,7 @@ class TestEventDeleteView(unittest.TestCase):
 
     def test_no_such_event(self):
         view = self.createView()
+        ttcal = self.createTTCal(view.context.__parent__, [])
         request = RequestStub(args={'event_id': "nosuchid"})
         content = view.render(request)
         self.assertEquals(request.code, 302)
@@ -1020,25 +1033,63 @@ class TestEventDeleteView(unittest.TestCase):
                           'http://localhost:7001/persons/somebody/calendar/'
                           'daily.html')
 
+    def test_tt_event(self):
+        from schooltool.cal import Calendar
+        from schooltool.timetable import TimetableCalendarEvent
+        period = "Math"
+        act = object()
+        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                    timedelta(hours=1), "Math",
+                                    unique_id="uniq",
+                                    period_id=period,
+                                    activity=act)
+        view = self.createView()
+        ttcal = self.createTTCal(view.context.__parent__, [ev])
 
-class TestEventSourceDecorator(unittest.TestCase):
+        request = RequestStub(args={'event_id': "uniq"})
+        content = view.render(request)
 
-    def test(self):
-        from schooltool.browser.cal import EventSourceDecorator
-        from schooltool.cal import CalendarEvent
-        from schooltool.interfaces import ICalendarEvent
-        from zope.interface.verify import verifyObject
+        self.assert_(ev in list(ttcal))
+        self.assertNotEquals(request.code, 302)
+        self.assert_("Are you sure" in content)
+        self.assert_("uniq" in content)
 
-        event = CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                              timedelta(hours=2), "Event",
-                              location="foo", unique_id="bar")
-        decorated = EventSourceDecorator(event, 'src')
-        verifyObject(ICalendarEvent, decorated)
+    def test_tt_event_confirm(self):
+        from schooltool.cal import Calendar
+        from schooltool.timetable import TimetableCalendarEvent
 
-        self.assertEquals(decorated.source, 'src')
-        self.assertEquals(decorated, event)
-        self.assertEquals(hash(event), hash(decorated))
-        self.assertEquals(event.unique_id, decorated.unique_id)
+        class TimetableStub:
+            def __init__(self):
+                self.exceptions = []
+
+        period = "Math"
+        tt = TimetableStub()
+        act = lambda: None
+        act.timetable = tt
+        ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                    timedelta(hours=1), "Math",
+                                    unique_id="uniq",
+                                    period_id=period,
+                                    activity=act)
+        view = self.createView()
+        ttcal = self.createTTCal(view.context.__parent__, [ev])
+
+        request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm'})
+        content = view.render(request)
+
+        self.assert_(ev in list(ttcal))
+        self.assertEquals(len(tt.exceptions), 1)
+
+        exc = tt.exceptions[0]
+        self.assertEquals(exc.date, date(2004, 8, 12))
+        self.assertEquals(exc.period_id, "Math")
+        self.assertEquals(exc.activity, act)
+        self.assertEquals(exc.replacement, None)
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/somebody/calendar/'
+                          'daily.html?date=2004-08-12')
 
 
 class TestCalendarComboMixin(unittest.TestCase):
@@ -1072,8 +1123,6 @@ class TestCalendarComboMixin(unittest.TestCase):
 
         result = list(view.iterEvents())
         self.assertEquals(result, [ev1, ev2])
-        self.assertEquals([e.source for e in result],
-                          ['calendar', 'timetable-calendar'])
 
 
 class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
@@ -1121,9 +1170,9 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
         content = re.sub('\s+\n', '\n', content)
         expected = dedent("""
             <div class="calevent">
-                <div class="dellink">
-                  <a href="delete_event.html?event_id=id%21">[delete]</a>
-                </div>
+              <div class="dellink">
+                <a href="delete_event.html?event_id=id%21">[delete]</a>
+              </div>
                 <h3>
                   <a href="edit_event.html?event_id=id%21">Main event</a>
                 </h3>
@@ -1135,21 +1184,23 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
 
         self.assertEquals(view.cssClass(), 'event')
 
-    def test_ro(self):
-        from schooltool.cal import CalendarEvent
+    def test_tt_event(self):
         from schooltool.browser.cal import CalendarEventView
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
+        from schooltool.timetable import TimetableCalendarEvent
+        ev = TimetableCalendarEvent(datetime(2004, 12, 01, 12, 01),
                            timedelta(hours=1), "Main event",
-                           unique_id="id")
+                           unique_id="id", period_id=None, activity=None)
         view = CalendarEventView(ev)
-        view.context.source = 'timetable-calendar'
         request = RequestStub()
 
         content = view.render(request)
         # eat trailing whitespace and empty lines
-        content = re.sub('\s+\n', '\n', content)
+        content = re.sub(r'\s+\n', '\n', content)
         expected = dedent("""
                      <div class="calevent">
+                       <div class="dellink">
+                         <a href="delete_event.html?event_id=id">[delete]</a>
+                       </div>
                        <h3>Main event</h3>
                        12:01&ndash;13:01
                      </div>
@@ -1226,7 +1277,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventAddView))
     suite.addTest(unittest.makeSuite(TestEventEditView))
     suite.addTest(unittest.makeSuite(TestEventDeleteView))
-    suite.addTest(unittest.makeSuite(TestEventSourceDecorator))
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
