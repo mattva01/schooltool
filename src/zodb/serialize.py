@@ -60,7 +60,7 @@ changed the class of an object, a new record with new class metadata
 would be written but all the old references would still include the
 old class.
 
-$Id: serialize.py,v 1.22 2003/06/19 21:41:10 jeremy Exp $
+$Id: serialize.py,v 1.23 2003/09/21 17:29:59 jim Exp $
 """
 
 __metaclass__ = type
@@ -79,7 +79,7 @@ def getClassMetadata(obj):
         newargs = getattr(obj, "__getnewargs__", None)
         if newargs is not None:
             newargs = newargs()
-    return obj.__class__, newargs
+    return type(obj), newargs
 
 class RootJar:
     def newObjectId(self):
@@ -164,6 +164,14 @@ class ObjectWriter:
 
     def getState(self, obj):
         data = self._dump(getClassMetadata(obj), obj.__getstate__())
+        refs = findrefs(data)
+        return data, refs
+
+    def getStateFromResolved(self, ghost, state):
+        # This method is only used in the ResolvedObjectWriter subclass,
+        # but it is defined here to keep all the details of the data
+        # record format internal to this module.
+        data = self._dump(getClassMetadata(ghost), state)
         refs = findrefs(data)
         return data, refs
 

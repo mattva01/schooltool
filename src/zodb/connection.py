@@ -34,7 +34,7 @@ application has more than one thread that uses the connection or the
 transaction the connection is registered with, the application should
 provide locking.
 
-$Id: connection.py,v 1.35 2003/06/19 21:41:10 jeremy Exp $
+$Id: connection.py,v 1.36 2003/09/21 17:29:58 jim Exp $
 """
 
 import logging
@@ -107,7 +107,7 @@ class Connection(ExportImport, object):
         # These sets are clear()ed at transaction boundaries.
 
         # XXX Is a Set safe?  What if the objects are not hashable?
-        self._registered = Set()
+        self._registered = {}
         self._modified = Set() # XXX is this the same as registered?
         self._created = Set()
         # _conflicts: set of objects that failed to load because
@@ -244,7 +244,7 @@ class Connection(ExportImport, object):
         self._log.debug("register oid=%s" % _fmt_oid(obj._p_oid))
         if not self._registered:
             self._get_transaction().join(self)
-        self._registered.add(obj)
+        self._registered[obj._p_oid] = obj
 
     def mtime(self, obj):
         # required by the IPersistentDataManager interface, but unimplemented
@@ -313,7 +313,7 @@ class Connection(ExportImport, object):
         else:
             self._storage.tpcBegin(txn)
 
-        for obj in self._registered:
+        for obj in self._registered.itervalues():
             self._objcommit(obj, txn)
 
         s = self._storage.tpcVote(txn)
@@ -326,8 +326,7 @@ class Connection(ExportImport, object):
         self._storage.tpcAbort(txn)
 
         if self._registered:
-            self._cache.invalidate([obj._p_oid
-                                        for obj in self._registered])
+            self._cache.invalidate(list(self._registered))
             self._registered.clear()
         self._invalidate_created(self._created)
         self._cache.invalidate(self._modified)
@@ -364,7 +363,7 @@ class Connection(ExportImport, object):
         self._created = Set()
         self._storage.tpcBegin(txn)
 
-        for obj in self._registered:
+        for obj in self._registered.itervalues():
             self._objcommit(obj, txn)
         self.importHook(txn) # hook for ExportImport
 

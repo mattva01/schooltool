@@ -24,7 +24,6 @@ import logging
 import asyncore
 import threading
 
-import ZConfig.Context
 from zodb import config
 import zodb.zeo.server
 from zodb.zeo import threadedasync

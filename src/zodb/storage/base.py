@@ -13,7 +13,7 @@
 ##############################################################################
 """Handy standard storage machinery
 
-$Id: base.py,v 1.32 2003/07/29 22:07:11 bwarsaw Exp $
+$Id: base.py,v 1.33 2003/09/12 14:45:33 chrisw Exp $
 """
 
 __metaclass__ = type
@@ -23,6 +23,7 @@ import time
 import errno
 import shutil
 import struct
+import sys
 import threading
 import logging
 
@@ -36,6 +37,10 @@ try:
     berkeley_is_available = True
 except ImportError:
     berkeley_is_available = False
+    # If we're supposed to be running all tests, output a warning
+    if os.environ.get("COMPLAIN_IF_TESTS_MISSED"):
+        sys.stderr.write("bsdbb not available, some tests disabled\n")        
+
     # But, MemoryStorage piggybacks on the implementation of BDBFullStorage so
     # create a fake db object that has some useful constants.
     class db:

@@ -28,34 +28,6 @@ from zodb.utils import u64
 
 ResolvedSerial = "rs"
 
-class ResolvedObjectAdapter:
-    """Adapt an object's raw state to the ObjectWriter protocol.
-
-    ObjectWriter uses an object's __class__ and __getstate__() method
-    to determine how to pickle it.  When conflict resolution occurs,
-    there is no instantiated object; the code deals with the concrete
-    state as returned by __getstate__().  This adapter allows the
-    state to be passed to ObjectWriter without instantiating the
-    object.
-
-    This object should only be used in conjunction with the ObjectWriter.
-    """
-
-    def __init__(self, ghost, state):
-        self._class = ghost.__class__
-        self._state = state
-        self._p_state = 0 # required to make getClassMetadata() happy
-
-    def __getattribute__(self, name):
-        if name == "__class__":
-            return self._class
-        else:
-            _super = super(ResolvedObjectAdapter, self).__getattribute__
-            return _super(name)
-
-    def __getstate__(self):
-        return self._state
-
 class PersistentReference:
 
     __slots__ = "oid",
@@ -191,7 +163,6 @@ class ConflictResolver:
         resolved = resolve(old, committed, newstate)
 
         writer = ResolvedObjectWriter()
-        obj = ResolvedObjectAdapter(get_self(resolve), resolved)
-        state = writer.getState(obj)
+        state = writer.getStateFromResolved(get_self(resolve), resolved)
         writer.close()
         return state
