@@ -25,6 +25,7 @@ $Id$
 import unittest
 import datetime
 import sets
+import libxml2
 from zope.interface import Interface, implements
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
@@ -363,7 +364,8 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
             </group>
             """ % (getPath(self.per), getPath(self.sub)))
         for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result, segment)
+            self.assert_(segment in result,
+                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
 
@@ -1335,6 +1337,34 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         comment = absence.comments[0]
         self.assertEquals(comment.text, "Foo")
 
+    def test_post_another_one(self):
+        from schooltool.views import AbsenceManagementView
+        from schooltool.model import Person, AbsenceComment
+        context = Person()
+        setPath(context, '/person', root=self.serviceManager)
+        absence = context.reportAbsence(AbsenceComment(None, ''))
+        basepath = "/person/absences/"
+        baseurl = "http://localhost%s" % basepath
+        view = AbsenceManagementView(context)
+        request = RequestStub(baseurl[:-1], method="POST",
+                    body='text="Bar" reporter="."')
+
+        result = view.render(request)
+
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.reason, "OK")
+        location = request.headers['Location']
+        self.assert_(location.startswith(baseurl),
+                     "%r.startswith(%r) failed" % (location, baseurl))
+        name = location[len(baseurl):]
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        path = '%s%s' % (basepath, name)
+        self.assert_(path in result, '%r not in %r' % (path, result))
+        self.assertEquals(len(list(context.iterAbsences())), 1)
+        self.assertEquals(name, absence.__name__)
+        comment = absence.comments[-1]
+        self.assertEquals(comment.text, "Bar")
+
     def test_post_errors(self):
         from schooltool.views import AbsenceManagementView
         from schooltool.model import Person
@@ -1471,16 +1501,24 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
         self.persona = app['persons'].new("a", title="a")
         self.personb = app['persons'].new("b", title="b")
         self.personc = app['persons'].new("c", title="c")
+        self.persond = app['persons'].new("d", title="d")
+        self.personq = app['persons'].new("q", title="q")
 
         Membership(group=self.group, member=self.sub)
         Membership(group=self.sub, member=self.subsub)
         Membership(group=self.group, member=self.persona)
         Membership(group=self.sub, member=self.personb)
         Membership(group=self.subsub, member=self.personc)
+        Membership(group=self.subsub, member=self.persond)
+
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
     def test_get(self):
         from schooltool.views import RollcallView
-        from schooltool.model import Group
+        from schooltool.model import AbsenceComment
+        self.personb.reportAbsence(AbsenceComment(None, ""))
+        self.personc.reportAbsence(AbsenceComment(None, "",
+                expected_presence=datetime.datetime(2001, 1, 1, 2, 2, 2)))
         view = RollcallView(self.group)
         request = RequestStub("http://localhost/group/rollcall")
         result = view.render(request)
@@ -1490,20 +1528,261 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
                       xlink:href="/groups/root">
             ---8<---
               <person xlink:type="simple" xlink:href="/persons/a"
-                      xlink:title="a"/>
+                      xlink:title="a" presence="present"/>
             ---8<---
               <person xlink:type="simple" xlink:href="/persons/b"
-                      xlink:title="b"/>
+                      xlink:title="b" presence="absent"/>
             ---8<---
               <person xlink:type="simple" xlink:href="/persons/c"
-                      xlink:title="c"/>
+                      xlink:title="c"
+                      expected_presence="2001-01-01 02:02:02"
+                      presence="absent"/>
+            ---8<---
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="present"/>
             ---8<---
             </rollcall>
             """)
         for segment in expected.split("---8<---\n"):
-            self.assert_(segment in result, segment)
+            self.assert_(segment in result,
+                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
+
+    def test_post(self):
+        from schooltool.views import RollcallView
+        from schooltool.model import AbsenceComment
+        personc_absence = self.personc.reportAbsence(AbsenceComment(None, ""))
+        persond_absence = self.persond.reportAbsence(AbsenceComment(None, ""))
+        view = RollcallView(self.group)
+        text = "I just did a roll call and noticed Mr. B. is missing again"
+        request = RequestStub("http://localhost/group/rollcall",
+                              method="POST", body="""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>%s</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>
+                              """ % text)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.reason, "OK")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "2 absences and 1 presences reported")
+
+        # persona was present and is present, no comments should be added.
+        self.assertEqual(len(list(self.persona.iterAbsences())), 0)
+
+        # personb was present, now should be absent
+        absence = self.personb.getCurrentAbsence()
+        self.assert_(absence is not None)
+        comment = absence.comments[-1]
+        self.assert_(comment.absent_from is self.group)
+        self.assert_(comment.reporter is self.persona)
+        self.assertEquals(comment.text, text)
+        self.assertEquals(comment.datetime,
+                          datetime.datetime(2001, 2, 3, 4, 5, 6))
+
+        # personc was absent, now should be present
+        self.assert_(self.personc.getCurrentAbsence() is None)
+        comment = personc_absence.comments[-1]
+        self.assert_(comment.absent_from is self.group)
+        self.assert_(comment.reporter is self.persona)
+        self.assertEquals(comment.text, text)
+        self.assertEquals(comment.resolution, True)
+        self.assertEquals(comment.datetime,
+                          datetime.datetime(2001, 2, 3, 4, 5, 6))
+
+        # persond was absent, now should be absent
+        absence = self.persond.getCurrentAbsence()
+        self.assert_(absence is persond_absence)
+        comment = absence.comments[-1]
+        self.assert_(comment.absent_from is self.group)
+        self.assert_(comment.reporter is self.persona)
+        self.assertEquals(comment.text, text)
+        self.assertEquals(comment.datetime,
+                          datetime.datetime(2001, 2, 3, 4, 5, 6))
+
+    def post_errors(self, body, errmsg):
+        from schooltool.views import RollcallView
+        view = RollcallView(self.group)
+        request = RequestStub("http://localhost/group/rollcall",
+                              method="POST", body=body)
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, errmsg)
+
+    def test_post_syntax_errors(self):
+        self.post_errors("""This is not a roll call""",
+            "Bad roll call representation")
+
+    def test_post_structure_errors(self):
+        # I expect that we can validate all these errors with a schema
+        # and just return a generic "Bad roll call representation" error
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Reporter not specified")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Comment not specified")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Comment not specified")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Person does not specify xlink:href")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Bad presence value for /persons/a")
+
+    def test_post_logic_errors(self):
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/x" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Reporter not found: /persons/x")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Person mentioned more than once: /persons/a")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/a"
+                      xlink:title="a" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/c"
+                      xlink:title="c" presence="present"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/q"
+                      xlink:title="q" presence="present"/>
+            </rollcall>""",
+            "Person /persons/q is not a member of /groups/root")
+        self.post_errors("""
+            <rollcall xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple" xlink:title="group"
+                      xlink:href="/groups/root"
+                      datetime="2001-02-03 04:05:06">
+              <reporter xlink:type="simple" xlink:href="/persons/a" />
+              <comment>XXX</comment>
+              <person xlink:type="simple" xlink:href="/persons/b"
+                      xlink:title="b" presence="absent"/>
+              <person xlink:type="simple" xlink:href="/persons/d"
+                      xlink:title="d" presence="absent"/>
+            </rollcall>""",
+            "Persons not mentioned: /persons/a, /persons/c")
 
 
 def test_suite():

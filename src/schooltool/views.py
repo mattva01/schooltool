@@ -23,7 +23,9 @@ $Id$
 """
 
 import re
+import sets
 import datetime
+import libxml2
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
@@ -694,10 +696,14 @@ class AbsenceManagementView(View, AbsenceCommentParser):
             return str(e)
         absence = self.context.reportAbsence(comment)
         location = absoluteURL(request, getPath(absence))
-        request.setResponseCode(201, 'Created')
         request.setHeader('Location', location)
         request.setHeader('Content-Type', 'text/plain')
-        return "Absence created: %s" % getPath(absence)
+        if len(absence.comments) == 1:
+            request.setResponseCode(201, 'Created')
+            return "Absence created: %s" % getPath(absence)
+        else:
+            request.setResponseCode(200, 'OK')
+            return "Absence updated: %s" % getPath(absence)
 
 
 class AbsenceView(View, AbsenceCommentParser):
@@ -766,10 +772,109 @@ class RollcallView(View):
         results = []
         for member in getRelatedObjects(group, URIMember):
             if IPerson.isImplementedBy(member):
-                results.append({'title': member.title, 'href': getPath(member)})
+                absence = member.getCurrentAbsence()
+                if absence is None:
+                    presence = "present"
+                    expected_presence = None
+                else:
+                    presence = "absent"
+                    expected_presence = absence.expected_presence
+                    if expected_presence:
+                        expected_presence = expected_presence.isoformat(' ')
+                results.append({'title': member.title, 'href': getPath(member),
+                                'presence': presence,
+                                'expected_presence': expected_presence})
             if IGroup.isImplementedBy(member):
                 results.extend(self.listPersons(member))
         return results
+
+    def parseRollcall(self, request):
+        """Parse roll call document.
+
+        Returns (datetime, reporter, comment_text, items) where items is a list
+        of (person, present).
+        """
+        body = request.content.read()
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            # XXX register error callbacks so that no errors are printed onscreen
+            raise ValueError("Bad roll call representation")
+        ctx = doc.xpathNewContext()
+        xlink = "http://www.w3.org/1999/xlink"
+        try:
+            ctx.xpathRegisterNs("xlink", xlink)
+
+            res = ctx.xpathEval("/rollcall/@datetime")
+            if res:
+                dt = parse_datetime(res[0].content)
+            else:
+                dt = None
+
+            res = ctx.xpathEval("/rollcall/reporter/@xlink:href")
+            if not res:
+                raise ValueError("Reporter not specified")
+            path = res[0].content
+            try:
+                reporter = traverse(self.context, path)
+            except KeyError:
+                raise ValueError("Reporter not found: %s" % path)
+
+            res = ctx.xpathEval("/rollcall/comment")
+            if not res:
+                raise ValueError("Comment not specified")
+            text = res[0].content
+
+            items = []
+            presence = {'present': True, 'absent': False}
+            seen = sets.Set()
+            members = sets.Set([item['href'] for item in self.listPersons()])
+            for node in ctx.xpathEval("/rollcall/person"):
+                path = node.nsProp('href', xlink)
+                if path is None:
+                    raise ValueError("Person does not specify xlink:href")
+                if path in seen:
+                    raise ValueError("Person mentioned more than once: %s"
+                                     % path)
+                seen.add(path)
+                if path not in members:
+                    raise ValueError("Person %s is not a member of %s"
+                                     % (path, getPath(self.context)))
+                person = traverse(self.context, path)
+                try:
+                    present = presence[node.nsProp('presence', None)]
+                except KeyError:
+                    raise ValueError("Bad presence value for %s" % path)
+                items.append((person, present))
+            if seen != members:
+                missing = list(members - seen)
+                missing.sort()
+                raise ValueError("Persons not mentioned: %s"
+                                 % ', '.join(missing))
+            return dt, reporter, text, items
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
+    def do_POST(self, request):
+        request.setHeader('Content-Type', 'text/plain')
+        nabsences = npresences = 0
+        try:
+            dt, reporter, text, items = self.parseRollcall(request)
+        except ValueError, e:
+            request.setResponseCode(400, 'Bad request')
+            return str(e)
+        for person, present in items:
+            if not present:
+                person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
+                                                    absent_from=self.context))
+                nabsences += 1
+            if present and person.getCurrentAbsence() is not None:
+                person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
+                                                    absent_from=self.context,
+                                                    resolution=True))
+                npresences += 1
+        return "%d absences and %d presences reported" % (nabsences, npresences)
 
 
 def setUp():

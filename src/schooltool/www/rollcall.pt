@@ -5,5 +5,7 @@
   <person tal:repeat="person view/listPersons"
           xlink:type="simple"
           tal:attributes="xlink:title person/title;
-                          xlink:href person/href"/>
+                          xlink:href person/href;
+                          presence person/presence;
+                          expected_presence person/expected_presence"/>
 </rollcall>
