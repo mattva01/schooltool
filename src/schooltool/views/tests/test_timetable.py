@@ -48,7 +48,9 @@ class TimetabledStub:
     implements(ILocation)
 
     def __init__(self):
-        self.timetables = {}
+        from schooltool.timetable import TimetableDict
+        self.timetables = TimetableDict()
+        self.timetables.__parent__ = self
         self.overlay = {}
         self.title = "Foo"
 
@@ -461,16 +463,18 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     def setUp(self):
         self.root = ServiceManagerStub()
 
+    def createTimetabled(self):
+        timetabled = TimetabledStub()
+        timetabled.title = "John Smith"
+        return timetabled
+
     def createEmpty(self):
         from schooltool.timetable import Timetable, TimetableDay
-        grandparent = TimetabledStub()
-        grandparent.title = "John Smith"
-        parent = TimetabledStub()  # in real life this is a TimetableDict
-        parent.__parent__ = grandparent
+        timetabled = self.createTimetabled()
         tt = Timetable(['Day 1', 'Day 2'])
-        tt.__parent__ = parent
         tt['Day 1'] = TimetableDay(['A', 'B'])
         tt['Day 2'] = TimetableDay(['C', 'D'])
+        timetabled.timetables[('random', 'something')] = tt
         return tt
 
     def createFull(self, owner=None):
@@ -583,10 +587,9 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.tearDownLibxml2()
 
     def createTimetabled(self):
-        from schooltool.timetable import TimetableSchemaService
-        from schooltool.timetable import TimePeriodService
         timetabled = TimetabledStub()
         timetabled.__parent__ = self.root
+        timetabled.title = "John Smith"
         return timetabled
 
     def createView(self, context=None, timetabled=None,
