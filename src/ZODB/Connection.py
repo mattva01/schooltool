@@ -497,7 +497,26 @@ class Connection(ExportImport, object):
 
     def _store_objects(self, writer, transaction):
         self._added_during_commit = []
-        for obj in itertools.chain(writer, self._added_during_commit):
+
+        def chain(writer, _added_during_commit):
+            """Iterate over all objects in writer and _added_during_commit
+
+            XXX This is used here instead of itertools.chain because
+                the latter causes failures in SchoolTool functional tests.
+                A proper fix would entail figuring why the problem occurs
+                and writing a unit test for it.
+            """
+            done = False
+            while not done:
+                done = True
+                for o in writer:
+                    done = False
+                    yield o
+                while _added_during_commit:
+                    done = False
+                    yield _added_during_commit.pop()
+
+        for obj in chain(writer, self._added_during_commit):
             oid = obj._p_oid
             serial = getattr(obj, "_p_serial", z64)
 
