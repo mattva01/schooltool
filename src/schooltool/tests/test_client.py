@@ -21,7 +21,6 @@ Unit tests for schooltool.client
 """
 
 import unittest
-import httplib
 import socket
 import sys
 from StringIO import StringIO

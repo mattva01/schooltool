@@ -25,8 +25,7 @@ $Id$
 import unittest
 from sets import Set
 from persistence import Persistent
-from zope.interface import Interface, implements
-from zope.interface import directlyProvidedBy, directlyProvides
+from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember, IFacet, IFaceted
 

@@ -22,14 +22,11 @@ SchoolTool organisational model.
 $Id$
 """
 
-from sets import Set
 import UserDict
-import logging
-from zope.interface import implements, directlyProvidedBy, directlyProvides
+from zope.interface import implements
 from persistence import Persistent
 from persistence.list import PersistentList
 from persistence.dict import PersistentDict
-from zodb.btrees.OOBTree import OOSet
 from zodb.btrees.IOBTree import IOBTree
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.interfaces import IFaceted
@@ -233,3 +230,4 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
     def checkKey(self, key):
         if not hasattr(key, '_p_oid'):
             raise TypeError("the key must be persistent (got %r)" % (key, ))
+

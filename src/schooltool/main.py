@@ -36,7 +36,6 @@ import ZConfig
 import urllib
 import copy
 import getopt
-from persistence import Persistent
 from transaction import get_transaction
 from zodb.interfaces import ConflictError
 from twisted.web import server, resource
