@@ -50,6 +50,16 @@ def dedent(text):
     return '\n'.join([line[indent:] for line in lines[first:]])
 
 
+def unidiff(old, new, oldlabel="expected output", newlabel="actual output"):
+    """Display a compact unified diff between old text and new text.
+
+    Bugs: does not work when old or new is an empty string (this seems to
+    be a bug/limitation of the Python 2.3 difflib module).
+    """
+    return "\n".join(difflib.unified_diff(old.splitlines(), new.splitlines(),
+                                          oldlabel, newlabel, lineterm=''))
+
+
 def diff(old, new, oldlabel="expected output", newlabel="actual output"):
     """Display a unified diff between old text and new text."""
     old = old.splitlines()

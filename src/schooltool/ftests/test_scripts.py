@@ -35,7 +35,7 @@ import os
 import re
 from popen2 import Popen4
 from threading import Thread
-from schooltool.tests.helpers import diff
+from schooltool.tests.helpers import unidiff
 
 __metaclass__ = type
 
@@ -115,8 +115,8 @@ class ScriptTestCase(unittest.TestCase):
                           % "".join(diffs))
         else:
             expected = "".join(expected)
-            self.assertEqual(expected, result,
-                             "%s\n%s" % (self.script, diff(expected, result)))
+            self.assertEqual(expected, result, "%s\n%s" % (self.script,
+                                                    unidiff(expected, result)))
 
 
 def find_scripts():
