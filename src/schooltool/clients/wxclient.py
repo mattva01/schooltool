@@ -33,9 +33,12 @@ the Free Software Foundation; either version 2 of the License, or
 
 import sets
 import libxml2
+import datetime
 import threading
 from wxPython.wx import *
 from wxPython.grid import *
+from wxPython.calendar import *
+from wxPython.lib.popupctl import wxPopupControl
 from wxPython.lib.scrolledpanel import wxScrolledPanel
 from wxPython.html import wxHtmlWindow
 from schooltool.clients.guiclient import SchoolToolClient, Unchanged
@@ -43,6 +46,7 @@ from schooltool.clients.guiclient import RollCallEntry
 from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
+from schooltool.common import parse_date
 
 __metaclass__ = type
 
@@ -172,6 +176,44 @@ def setupPopupMenu(control, menu):
     # The following ones work for all controls
     EVT_RIGHT_UP(control, mouse_up)
     EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), click)
+
+
+#
+# A date entry box
+#
+
+class DateCtrl(wxPopupControl):
+    """A text control with a popup for calendars."""
+
+    def __init__(self, *args, **kw):
+        wxPopupControl.__init__(self, *args, **kw)
+        self.win = wxWindow(self, -1, pos=(0, 0), style=wxSIMPLE_BORDER)
+        self.cal = wxCalendarCtrl(self.win, -1, pos=(0, 0))
+        self.win.SetSize(self.cal.GetBestSize())
+        self.SetPopupContent(self.win)
+        EVT_CALENDAR_DAY(self.cal, self.cal.GetId(), self.OnCalSelected)
+
+    def OnCalSelected(self, event):
+        self.PopDown()
+        date = self.cal.GetDate()
+        self.SetValue('%04d-%02d-%02d' %
+                      (date.GetYear(), date.GetMonth() + 1, date.GetDay()))
+        event.Skip()
+
+    def FormatContent(self):
+        """Called just before the popup is displayed.
+
+        Method overridden from wxPopupControl.
+
+        Parse the text in the control and select the correct date in the
+        calendar control.
+        """
+        try:
+            d = parse_date(self.GetValue())
+        except ValueError:
+            self.cal.SetDate(wxDateTime_Today())
+        else:
+            self.cal.SetDate(wxDateTimeFromDMY(d.day, d.month - 1, d.year))
 
 
 #
@@ -990,6 +1032,120 @@ class BrowserFrame(wxDialog):
         self.Close(True)
 
 
+class AvailabilitySearchFrame(wxDialog):
+    """Window for doing resource availability searches."""
+
+    default_hour_selection = range(9, 21)
+    default_duration = 30
+
+    def __init__(self, client, parent=None, id=-1):
+        title = "Search for Available Resources"
+        wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
+            style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+        self.client = client
+        self.title = title
+        self.ok = False
+
+        try:
+            self.resources = self.client.getListOfResources()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the list of resources: %s" % e,
+                         title, wxICON_ERROR|wxOK)
+            return
+        else:
+            self.resources.sort()
+
+        main_sizer = wxBoxSizer(wxVERTICAL)
+        splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
+
+        panel1 = wxPanel(splitter, -1)
+        sizer1 = wxBoxSizer(wxHORIZONTAL)
+
+        sizer1a = wxBoxSizer(wxVERTICAL)
+        label1 = wxStaticText(panel1, -1, "Resources")
+        self.resource_list = wxListBox(panel1, -1, style=wxLB_MULTIPLE,
+                                       choices=[r[0] for r in self.resources])
+        sizer1a.Add(label1)
+        sizer1a.Add(self.resource_list, 1, wxEXPAND)
+
+        sizer1b = wxBoxSizer(wxVERTICAL)
+        label2 = wxStaticText(panel1, -1, "Hours")
+        self.hour_list = wxListBox(panel1, -1, style=wxLB_MULTIPLE,
+                                   choices=[str(h) for h in range(24)])
+        if self.default_hour_selection:
+            for hour in self.default_hour_selection:
+                self.hour_list.SetSelection(hour)
+            self.hour_list.SetFirstItem(self.default_hour_selection[0])
+        sizer1b.Add(label2)
+        sizer1b.Add(self.hour_list, 1, wxEXPAND)
+
+        sizer1c = wxBoxSizer(wxVERTICAL)
+        grid_sizer = wxFlexGridSizer(2, 3, 8, 8)
+        grid_sizer.Add(wxStaticText(panel1, -1, "First date"))
+        self.first_date_ctrl = DateCtrl(panel1, -1)
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        self.first_date_ctrl.SetValue(today)
+        self.first_date_ctrl.SetSizeHints(minW=110, minH=22) # XXX wrong
+        grid_sizer.Add(self.first_date_ctrl, 1)
+        grid_sizer.Add(wxStaticText(panel1, -1, ""))
+        grid_sizer.Add(wxStaticText(panel1, -1, "Last date"))
+        self.last_date_ctrl = DateCtrl(panel1, -1)
+        self.last_date_ctrl.SetValue(today)
+        self.last_date_ctrl.SetSizeHints(minW=110, minH=22) # XXX wrong
+        grid_sizer.Add(self.last_date_ctrl, 1)
+        grid_sizer.Add(wxStaticText(panel1, -1, ""))
+        grid_sizer.Add(wxStaticText(panel1, -1, "Duration"))
+        self.duration_ctrl = wxTextCtrl(panel1, -1, str(self.default_duration))
+        grid_sizer.Add(self.duration_ctrl, 1)
+        grid_sizer.Add(wxStaticText(panel1, -1, "min"))
+        find_btn = wxButton(self, -1, "&Find")
+        sizer1c.Add(grid_sizer)
+        sizer1c.Add(wxPanel(panel1, -1), 1)
+        sizer1c.Add(find_btn, 0, wxALIGN_RIGHT|wxTOP, 16)
+
+        sizer1.Add(sizer1a, 1, wxEXPAND)
+        sizer1.Add(sizer1b, 0, wxEXPAND|wxLEFT, 16)
+        sizer1.Add(sizer1c, 0, wxEXPAND|wxLEFT, 16)
+        panel1.SetSizer(sizer1)
+
+        panel2 = wxPanel(splitter, -1)
+        label2 = wxStaticText(panel2, -1, "Results")
+        self.result_list = wxListCtrl(panel2, -1,
+                style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
+        self.result_list.InsertColumn(0, "Resource", width=300)
+        self.result_list.InsertColumn(1, "Available from", width=140)
+        self.result_list.InsertColumn(2, "Available until", width=140)
+        sizer2 = wxBoxSizer(wxVERTICAL)
+        sizer2.Add(label2)
+        sizer2.Add(self.result_list, 1, wxEXPAND)
+        panel2.SetSizer(sizer2)
+
+        splitter.SetMinimumPaneSize(100)
+        splitter.SplitHorizontally(panel1, panel2, 200)
+        main_sizer.Add(splitter, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        close_btn = wxButton(self, wxID_CLOSE, "Close")
+        EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
+        close_btn.SetDefault()
+        button_bar.Add(close_btn)
+        main_sizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+
+        self.SetSizer(main_sizer)
+        self.SetSizeHints(minW=500, minH=300)
+        self.Layout()
+        self.ok = True
+
+    def OnClose(self, event=None):
+        """Close the absence window."""
+        self.Close(True)
+
+    def DoFind(self, event=None):
+        """Find available resources."""
+        self.result_list.DeleteAllItems()
+        # XXX TODO
+
+
 #
 # Main application window
 #
@@ -1044,6 +1200,9 @@ class MainFrame(wxFrame):
                 item("&School Timetable",
                      "Edit a timetable for the whole school",
                      self.DoViewSchoolTimetable),
+                item("Search &for Available Resources",
+                     "Search for available resources",
+                     self.DoAvailabilitySearch),
                 separator(),
                 item("&Refresh\tCtrl+R", "Refresh data from the server",
                      self.DoRefresh),
@@ -1742,6 +1901,17 @@ class MainFrame(wxFrame):
         window = SchoolTimetableFrame(self.client, key, tt, resources,
                                       parent=self)
         window.Show()
+
+    def DoAvailabilitySearch(self, event=None):
+        """Open the resource availability search window.
+
+        Accessible via View|Search for Available Resources
+        """
+        window = AvailabilitySearchFrame(self.client, parent=self)
+        if window.ok:
+            window.Show()
+        else:
+            window.Destroy()
 
 
 class SchoolToolApp(wxApp):
