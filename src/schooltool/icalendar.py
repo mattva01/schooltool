@@ -731,8 +731,10 @@ class VEvent:
 
 
 class ICalReader:
-    """An object which reads in an iCalendar file of public holidays and marks
-    them off the schoolday calendar.
+    """An object which reads in an iCalendar file.
+
+    The `iterEvents` method returns an iterator over all VEvent objects
+    corresponding to the events in the iCalendar file.
 
     Short grammar of iCalendar files (RFC 2445 is the full spec):
 
