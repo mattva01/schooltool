@@ -4,6 +4,36 @@ Relationship
 schoolbell.relationship is a library for managing arbitrary many-to-many binary
 relationships.
 
+Quick overview
+--------------
+
+This package lets you define arbitrary many-to-many relationship schemas and
+use them to relate arbitrary components (that are annotatable or have an
+adapter to IRelationshipLinks).
+
+Usage example:
+
+    # Establish a relationship
+    Membership(member=frog, group=frogpond)
+
+    # Find all related objects for a given role (URIGroup in this case)
+    for group in getRelatedObjects(frog, URIGroup):
+        print group
+
+You can also define relationship properties in your component classes, and
+rewrite the example above as
+
+    # Establish a relationship
+    frogpond.members.add(frog)      # or frog.groups.add(frogpond)
+
+    # Find all related objects for a given role (URIGroup in this case)
+    for group in frogpond.members:
+        print group
+
+
+Details
+-------
+
 Relationship types and roles are identified by URIs (the idea was borrowed
 from XLink and RDF).  You can use strings containing those URIs directly,
 or you can use introspectable URI objects that also have an optional short name
@@ -71,11 +101,19 @@ than once, you will get a DuplicateRelationship exception.
     DuplicateRelationship
 
 You can query relationships by calling the `getRelatedObjects` function.
+It returns a list of objects in undefined order, so we'll define a function
+to sort them alphabetically:
+
+    >>> def sorted(list):
+    ...     items = [(repr(item), item) for item in list]
+    ...     items.sort()
+    ...     return [row[-1] for row in items]
+
 For example, you can get a list of all members of the `frogs` group like
 this:
 
     >>> from schoolbell.relationship import getRelatedObjects
-    >>> getRelatedObjects(frogs, URIMember)
+    >>> sorted(getRelatedObjects(frogs, URIMember))
     [frogger, lilfroggy]
 
 The relationship is bidirectional, so you can ask an object what groups it
@@ -93,6 +131,38 @@ in a URIMembership relationship.
     []
 
 In general, avoid reusing the same role for different relationship types.
+
+
+Relationship properties
+-----------------------
+
+You can define a property in a class and use it instead of explicitly
+calling global functions and passing roles around.
+
+    >>> from schoolbell.relationship import RelationshipProperty
+
+    >>> class Group(SomeObject):
+    ...     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
+
+    >>> class Member(SomeObject):
+    ...     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
+
+Usage example:
+
+    >>> fido = Member('fido')
+    >>> dogs = Group('dogs')
+
+    >>> list(fido.groups)
+    []
+    >>> list(dogs.members)
+    []
+
+    >>> dogs.members.add(fido)
+
+    >>> list(fido.groups)
+    [dogs]
+    >>> list(dogs.members)
+    [fido]
 
 
 Events
@@ -140,6 +210,33 @@ When you establish a relationship, a RelationshipAddedEvent is sent out.
     >>> Membership(member=kermit, group=frogs)
     Relationship Membership added between kermit (Member) and frogs (Group)
 
+
+Symmetric relationships
+-----------------------
+
+Symmetric relationships work too:
+
+    >>> URIFriendship = URIObject('example:Friendship', 'Friendship')
+    >>> URIFriend = URIObject('example:Friend', 'Friend')
+
+    >>> Friendship = RelationshipSchema(URIFriendship,
+    ...                                 one=URIFriend, other=URIFriend)
+    >>> Friendship(one=fido, other=kermit)
+    Relationship Friendship added between kermit (Friend) and fido (Friend)
+
+    >>> class FriendlyObject(SomeObject):
+    ...     friends = RelationshipProperty(URIFriendship, URIFriend, URIFriend)
+
+    >>> neko = FriendlyObject('neko')
+    >>> neko.friends.add(kermit)
+    Relationship Friendship added between neko (Friend) and kermit (Friend)
+    >>> list(neko.friends)
+    [kermit]
+    >>> sorted(getRelatedObjects(kermit, URIFriend))
+    [fido, neko]
+
+Note that if you use symmetric relationships, you cannot use `__getitem__`
+on IBeforeRelationshipEvents.
 
 TODO: API to remove relationships
 TODO: API to list all relationships?

@@ -27,3 +27,4 @@ from schoolbell.relationship.uri import URIObject, IURIObject       # reexport
 from schoolbell.relationship.relationship import relate             # reexport
 from schoolbell.relationship.relationship import getRelatedObjects  # reexport
 from schoolbell.relationship.relationship import RelationshipSchema # reexport
+from schoolbell.relationship.relationship import RelationshipProperty # ditto

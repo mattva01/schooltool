@@ -176,6 +176,64 @@ class RelationshipSchema(object):
         relate(self.rel_type, (a, role_of_a), (b, role_of_b))
 
 
+class RelationshipProperty(object):
+    """Relationship property.
+
+    Instead of calling global functions and passing URIs around you can define
+    a property on an object and use it to create and query relationships:
+
+        >>> class SomeClass(object): # must be a new-style class
+        ...     friends = RelationshipProperty('example:Friendship',
+        ...                                    'example:Friend',
+        ...                                    'example:Friend')
+
+    The property is introspectable, although that's not very useful
+
+        >>> SomeClass.friends.rel_type
+        'example:Friendship'
+
+        >>> SomeClass.friends.my_role
+        'example:Friend'
+
+        >>> SomeClass.friends.other_role
+        'example:Friend'
+
+    """
+
+    def __init__(self, rel_type, my_role, other_role):
+        self.rel_type = rel_type
+        self.my_role = my_role
+        self.other_role = other_role
+
+    def __get__(self, instance, owner):
+        """Bind the property to an instance."""
+        if instance is None:
+            return self
+        else:
+            return BoundRelationshipProperty(instance, self.rel_type,
+                                             self.my_role, self.other_role)
+
+
+class BoundRelationshipProperty(object):
+    """Relationship property bound to an object."""
+
+    def __init__(self, this, rel_type, my_role, other_role):
+        self.this = this
+        self.rel_type = rel_type
+        self.my_role = my_role
+        self.other_role = other_role
+
+    def __iter__(self):
+        for link in IRelationshipLinks(self.this):
+            if link.role == self.other_role and link.rel_type == self.rel_type:
+                yield link.target
+
+    def add(self, other):
+        """Establish a relationship between `self.this` and `other`."""
+        relate(self.rel_type, (self.this, self.my_role),
+                              (other, self.other_role))
+
+
 class Link(Persistent):
     """One half of a relationship.
 
