@@ -294,8 +294,8 @@ class CalendarViewBase(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        if hasattr(self.request.principal, '_person'):
-            person = self.request.principal._person
+        person = IPerson(self.request.principal, None)
+        if person is not None:
             prefs = IPersonPreferences(person)
             if prefs.weekstart == "Sunday":
                 self.first_day_of_week = 6

@@ -43,6 +43,9 @@ from schoolbell.app.browser.cal import CalendarEventEditView
 from schoolbell.app.browser.cal import ICalendarEventEditForm
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
+# Used for the PrincipalStub
+from schoolbell.app.app import Person
+from schoolbell.app.interfaces import IPerson
 
 def doctest_CalendarOwnerTraverser():
     """Tests for CalendarOwnerTraverser.
@@ -333,13 +336,13 @@ def createEvent(dtstart, duration, title, **kw):
 
 
 class PrincipalStub:
-    from schoolbell.app.app import Person
+
+    _person = Person()
 
     def __conform__(self, interface):
         if interface is IPerson:
-            return PersonStub()
+            return self._person
 
-    _person = Person()
 
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
@@ -578,7 +581,14 @@ class TestCalendarViewBase(unittest.TestCase):
             ...         self.color1 = color1
             ...         self.color2 = color2
             ...         self.show = show
+            >>> class PreferenceStub:
+            ...     def __init__(self):
+            ...         self.weekstart = "Monday"
+            >>> from schoolbell.app.interfaces import IPersonPreferences
             >>> class PersonStub:
+            ...     def __conform__(self, interface):
+            ...         if interface is IPersonPreferences:
+            ...             return PreferenceStub()
             ...     calendar = calendar
             ...     overlaid_calendars = [
             ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
