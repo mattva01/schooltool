@@ -22,8 +22,8 @@ The schooltool component.
 $Id$
 """
 
-from zope.interface import moduleProvides, Declaration, implements
-from zope.interface.type import TypeRegistry
+from zope.interface import moduleProvides, implements, providedBy, Interface
+from zope.interface.adapter import AdapterRegistry
 from persistence.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
@@ -250,32 +250,36 @@ def getTicketService(context):
 # Relationships
 #
 
-relationship_registry = TypeRegistry()
+relationship_registry = AdapterRegistry()
+relationship_registry_shadow = {}
 
 
 def resetRelationshipRegistry():
     """Replace the relationship registry with an empty one."""
     global relationship_registry
-    relationship_registry = TypeRegistry()
+    global relationship_registry_shadow
+    relationship_registry = AdapterRegistry()
+    relationship_registry_shadow = {}
 
 
 def registerRelationship(rel_type, handler):
     """See IRelationshipAPI"""
-    reghandler = relationship_registry.get(rel_type)
+    reghandler = relationship_registry_shadow.get(rel_type)
     if reghandler is handler:
         return
     elif reghandler is not None:
         raise ValueError("Handler for %s already registered" % rel_type)
     else:
-        relationship_registry.register(rel_type, handler)
+        relationship_registry.register([rel_type], Interface, '', handler)
+        relationship_registry_shadow[rel_type] = handler
 
 
 def getRelationshipHandlerFor(rel_type):
     """Returns the registered handler for relationship_type."""
-    handlers = relationship_registry.getAll(Declaration(rel_type))
-    if not handlers:
+    handler = relationship_registry.lookup([rel_type], Interface, '')
+    if handler is None:
         raise ComponentLookupError("No handler registered for %s" % rel_type)
-    return handlers[0]
+    return handler
 
 
 def relate(relationship_type, (a, role_a), (b, role_b)):
@@ -293,7 +297,7 @@ def getRelatedObjects(obj, role):
 #  Views
 #
 
-view_registry = TypeRegistry()
+view_registry = AdapterRegistry()
 class_view_registry = {}
 
 
@@ -301,24 +305,24 @@ def resetViewRegistry():
     """Replace the view registry with an empty one."""
     global view_registry
     global class_view_registry
-    view_registry = TypeRegistry()
+    view_registry = AdapterRegistry()
     class_view_registry = {}
 
 
 def getView(obj):
     """See IViewAPI"""
-    try:
-        if obj.__class__ in class_view_registry:
-            return class_view_registry[obj.__class__](obj)
-        else:
-            return view_registry.getAllForObject(obj)[0](obj)
-    except IndexError:
+    if obj.__class__ in class_view_registry:
+        factory = class_view_registry.get(obj.__class__)
+    else:
+        factory = view_registry.lookup([providedBy(obj)], Interface, '')
+    if factory is None:
         raise ComponentLookupError("No view found for %r" % (obj,))
+    return factory(obj)
 
 
 def registerView(interface, factory):
     """See IViewAPI"""
-    view_registry.register(interface, factory)
+    view_registry.register([interface], Interface, '', factory)
 
 
 def registerViewForClass(cls, factory):

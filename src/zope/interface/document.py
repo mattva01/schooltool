@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -16,12 +16,10 @@
 This module provides a function, asStructuredText, for rendering an
 interface as structured text.
 
-Revision information:
-$Id: document.py,v 1.5 2003/11/21 17:11:43 jim Exp $
+$Id$
 """
-
-import zope.interface
 from string import maketrans
+import zope.interface
 
 def asStructuredText(I, munge=0):
     """ Output structured text format.  Note, this will wack any existing

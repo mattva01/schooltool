@@ -1,16 +1,16 @@
-/*
-
- Copyright (c) 2003 Zope Corporation and Contributors.
- All Rights Reserved.
-
- This software is subject to the provisions of the Zope Public License,
- Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
- THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
- WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
- FOR A PARTICULAR PURPOSE.
-
-*/
+/*###########################################################################
+ #
+ # Copyright (c) 2003 Zope Corporation and Contributors.
+ # All Rights Reserved.
+ #
+ # This software is subject to the provisions of the Zope Public License,
+ # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+ # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+ # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+ # FOR A PARTICULAR PURPOSE.
+ #
+ ############################################################################*/
 
 #include "Python.h"
 #include "structmember.h"
@@ -19,7 +19,7 @@
 #define OBJECT(O) ((PyObject*)(O))
 #define CLASSIC(O) ((PyClassObject*)(O))
 
-static PyObject *str__dict__, *str__implements__, *strextends;
+static PyObject *str__dict__, *str__implemented__, *strextends;
 static PyObject *BuiltinImplementationSpecifications, *str__provides__;
 static PyObject *str__class__, *str__providedBy__, *strisOrExtends;
 static PyObject *empty, *fallback, *str_implied, *str_cls, *str_implements;
@@ -106,7 +106,7 @@ implementedBy(PyObject *ignored, PyObject *cls)
       return implementedByFallback(cls);
     }
 
-  spec = PyObject_GetItem(dict, str__implements__);
+  spec = PyObject_GetItem(dict, str__implemented__);
   Py_DECREF(dict);
   if (spec)
     {
@@ -178,7 +178,7 @@ providedBy(PyObject *ignored, PyObject *ob)
       return getObjectSpecification(NULL, ob);
     } 
 
-  
+
   /* We want to make sure we have a spec. We can't do a type check
      because we may have a proxy, so we'll just try to get the
      only attribute.
@@ -256,7 +256,7 @@ Spec_extends(PyObject *self, PyObject *other)
 
   implied = inst_attr(self, str_implied);
   if (implied == NULL)
-    return implied;
+    return NULL;
 
 #ifdef Py_True
   if (PyDict_GetItem(implied, other) != NULL)
@@ -285,7 +285,9 @@ Spec_providedBy(PyObject *self, PyObject *ob)
   PyObject *decl, *item;
 
   decl = providedBy(NULL, ob);
-  
+  if (decl == NULL)
+    return NULL;
+
   if (PyObject_TypeCheck(ob, &SpecType))
     item = Spec_extends(decl, self);
   else
@@ -509,7 +511,7 @@ init_zope_interface_coptimizations(void)
   if(! (str ## S = PyString_FromString(# S))) return
 
   DEFINE_STRING(__dict__);
-  DEFINE_STRING(__implements__);
+  DEFINE_STRING(__implemented__);
   DEFINE_STRING(__provides__);
   DEFINE_STRING(__class__);
   DEFINE_STRING(__providedBy__);
@@ -522,20 +524,20 @@ init_zope_interface_coptimizations(void)
   
         
   /* Initialize types: */
-  SpecType.tp_new = PyType_GenericNew;
+  SpecType.tp_new = PyBaseObject_Type.tp_new;
   if (PyType_Ready(&SpecType) < 0)
     return;
-  OSDType.tp_new = PyType_GenericNew;
+  OSDType.tp_new = PyBaseObject_Type.tp_new;
   if (PyType_Ready(&OSDType) < 0)
     return;
-  CPBType.tp_new = PyType_GenericNew;
+  CPBType.tp_new = PyBaseObject_Type.tp_new;
   if (PyType_Ready(&CPBType) < 0)
     return;
   
   /* Create the module and add the functions */
   m = Py_InitModule3("_zope_interface_coptimizations", m_methods,
                      "C optimizations for zope.interface\n\n"
-                     "$Id: _zope_interface_coptimizations.c,v 1.5 2004/04/05 19:43:57 jim Exp $");  
+                     "$Id: _zope_interface_coptimizations.c 26898 2004-08-04 09:38:12Z hdima $");  
   if (m == NULL)
     return;
   

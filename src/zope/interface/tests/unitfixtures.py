@@ -4,13 +4,17 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+"""Unit Test Fixtures
+
+$Id$
+"""
 from zope.interface import Interface, invariant
 from zope.interface.interface import Attribute
 from zope.interface.exceptions import Invalid
@@ -18,7 +22,7 @@ from zope.interface.exceptions import Invalid
 class mytest(Interface):
     pass
 
-class C:
+class C(object):
     def m1(self, a, b):
         "return 1"
         return 1
@@ -28,9 +32,6 @@ class C:
         return 2
 
 # testInstancesOfClassImplements
-
-
-
 
 #  YAGNI IC=Interface.impliedInterface(C)
 class IC(Interface):
@@ -42,7 +43,7 @@ class IC(Interface):
 
 
 
-C.__implements__=IC
+C.__implemented__=IC
 
 class I1(Interface):
     def ma():
@@ -55,15 +56,15 @@ class I3(Interface): pass
 class I4(Interface): pass
 
 class A(I1.deferred()):
-    __implements__=I1
+    __implemented__=I1
 
-class B:
-    __implements__=I2, I3
+class B(object):
+    __implemented__=I2, I3
 
 class D(A, B): pass
 
 class E(A, B):
-    __implements__ = A.__implements__, C.__implements__
+    __implemented__ = A.__implemented__, C.__implemented__
 
 
 class FooInterface(Interface):
@@ -83,10 +84,10 @@ class FooInterface(Interface):
     def useless(**keywords):
         """ useless code is fun! """
 
-class Foo:
+class Foo(object):
     """ A concrete class """
 
-    __implements__ = FooInterface,
+    __implemented__ = FooInterface,
 
     foobar = "yeah"
 
@@ -108,7 +109,7 @@ class Foo:
 
 foo_instance = Foo()
 
-class Blah:
+class Blah(object):
     pass
 
 new = Interface.__class__

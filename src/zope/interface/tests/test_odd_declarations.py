@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -16,9 +16,8 @@
 These tests are to make sure we do something sane in the presense of
 classic ExtensionClass classes and instances.
 
-$Id: test_odd_declarations.py,v 1.4 2003/08/16 00:44:48 srichter Exp $
+$Id$
 """
-
 import unittest, odd
 from zope.interface import Interface, implements, implementsOnly
 from zope.interface import directlyProvides, providedBy, directlyProvidedBy
@@ -31,14 +30,14 @@ class I31(I3): pass
 class I4(Interface): pass
 class I5(Interface): pass
 
-class Odd: __metaclass__ = odd.MetaClass
+class Odd(object): __metaclass__ = odd.MetaClass
 
-class B(Odd): __implements__ = I2
+class B(Odd): __implemented__ = I2
 
 
-# XXX We are going to need more magic to make classProvides work with odd
-#     classes. This will work in the next iteration. For now, we'll use
-#     a different mechanism.
+# TODO: We are going to need more magic to make classProvides work with odd
+#       classes. This will work in the next iteration. For now, we'll use
+#       a different mechanism.
 
 # from zope.interface import classProvides
 
@@ -87,7 +86,7 @@ class Test(unittest.TestCase):
         self.assert_(providedBy(c).extends(I31))
         self.assert_(providedBy(c).extends(I5))
 
-        class COnly(A, B): __implements__ = I31
+        class COnly(A, B): __implemented__ = I31
         class D(COnly):
             implements(I5)
 

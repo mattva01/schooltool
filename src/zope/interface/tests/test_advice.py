@@ -5,7 +5,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -25,7 +25,7 @@ not require) Zope 3 and Twisted.  It provides tools for manipulating UML
 models, object-relational persistence, aspect-oriented programming, and more.
 Visit the PEAK home page at http://peak.telecommunity.com for more information.
 
-$Id: test_advice.py,v 1.4 2003/06/04 13:58:43 stevea Exp $
+$Id$
 """
 
 from unittest import TestCase, makeSuite, TestSuite
@@ -88,7 +88,7 @@ class AdviceTests(TestCase):
 
     def checkOrder(self):
         log = []
-        class Foo:
+        class Foo(object):
             ping(log, 1)
             ping(log, 2)
             ping(log, 3)
@@ -173,23 +173,5 @@ TestClasses = (AdviceTests, FrameInfoTest)
 def test_suite():
     return TestSuite([makeSuite(t,'check') for t in TestClasses])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    unittest.main(defaultTest=test_suite)

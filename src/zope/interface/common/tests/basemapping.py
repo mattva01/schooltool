@@ -4,19 +4,17 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Base Mapping tests
 
-Revision information:
-$Id: basemapping.py,v 1.3 2003/02/03 14:58:46 jim Exp $
+$Id$
 """
-
 from operator import __getitem__
 
 def testIReadMapping(self, inst, state, absent):
@@ -67,7 +65,7 @@ def testIEnumerableMapping(self, inst, state):
     test___len__(self, inst, state)
 
 
-class BaseTestIReadMapping:
+class BaseTestIReadMapping(object):
     def testIReadMapping(self):
         inst = self._IReadMapping__sample()
         state = self._IReadMapping__stateDict()

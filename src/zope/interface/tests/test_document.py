@@ -4,22 +4,20 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Documentation tests.
 
-Revision information:
-$Id: test_document.py,v 1.3 2003/05/01 19:35:44 faassen Exp $
+$Id$
 """
-
 from unittest import TestCase, main, makeSuite
-from zope.interface import Interface
-from zope.interface.interface import Attribute
+
+from zope.interface import Interface, Attribute
 
 class Test(TestCase):
 

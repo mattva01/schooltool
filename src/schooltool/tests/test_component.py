@@ -387,9 +387,9 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
                         unittest.TestCase):
 
     def setUp(self):
-        from schooltool.relationship import setUp as setUpRelationships
+        import schooltool.relationship
         self.setUpRegistries()
-        setUpRelationships()
+        schooltool.relationship.setUp()
         self.setUpEventService()
 
     def test_api(self):
@@ -494,17 +494,13 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
         registerView(I1, SomeView)
         self.assert_(getView(C1()).__class__ is SomeView)
 
-        records1 = len(view_registry)
+        # Repeated declarations are OK
         registerView(I1, SomeView)
-        records2 = len(view_registry)
-        self.assertEqual(records1, records2)
 
         registerViewForClass(C2, ClassView)
         registerViewForClass(C1, ClassView)
         self.assert_(getView(C2()).__class__ is ClassView)
         self.assert_(getView(C1()).__class__ is ClassView)
-
-        self.assertRaises(TypeError, registerView, object(), object())
 
 
 class Utility:

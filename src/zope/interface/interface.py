@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,8 +13,11 @@
 ##############################################################################
 """Interface object implementation
 
-$Id: interface.py,v 1.24 2004/03/08 17:26:56 jim Exp $
+$Id$
 """
+
+from __future__ import generators
+
 import sys
 import warnings
 import weakref
@@ -86,10 +89,10 @@ class SpecificationBasePy(object):
           >>> from zope.interface import *
           >>> class I1(Interface):
           ...     pass
-          >>> class C:
+          >>> class C(object):
           ...     implements(I1)
           >>> c = C()
-          >>> class X:
+          >>> class X(object):
           ...     pass
           >>> x = X()
           >>> I1.providedBy(x)
@@ -200,7 +203,9 @@ class Specification(SpecificationBase):
     providedBy = SpecificationBase.providedBy
 
     #########################################################################
-    # XXX Backward Compat
+    # BBB 2004-07-13: Backward compatabilty.  These methods have been
+    # deprecated in favour of providedBy and implementedBy.
+
     def isImplementedByInstancesOf(self, cls):
         warnings.warn(
             "isImplementedByInstancesOf has been renamed to implementedBy",
@@ -254,6 +259,7 @@ class Specification(SpecificationBase):
         implied.clear()
 
         ancestors = ro(self)
+        self.__sro__ = tuple(ancestors)
         self.__iro__ = tuple([ancestor for ancestor in ancestors
                               if isinstance(ancestor, InterfaceClass)
                              ])
@@ -397,8 +403,12 @@ class InterfaceClass(Element, Specification):
             __doc__ = ''
 
         Element.__init__(self, name, __doc__)
-        
-        tagged_data = attrs.pop(TAGGED_DATA, None)
+
+        if attrs.has_key(TAGGED_DATA):
+            tagged_data = attrs[TAGGED_DATA]
+            del attrs[TAGGED_DATA]
+        else:
+            tagged_data = None
         if tagged_data is not None:
             for key, val in tagged_data.items():
                 self.setTaggedValue(key, val)
@@ -608,7 +618,7 @@ class InterfaceClass(Element, Specification):
                If an object already implements the interface, then it will be
                returned::
 
-                 >>> class C:
+                 >>> class C(object):
                  ...     zope.interface.implements(I)
 
                  >>> obj = C()
@@ -617,7 +627,7 @@ class InterfaceClass(Element, Specification):
 
                If an object implements __conform__, then it will be used::
 
-                 >>> class C:
+                 >>> class C(object):
                  ...     zope.interface.implements(I)
                  ...     def __conform__(self, proto):
                  ...          return 0
@@ -699,7 +709,7 @@ class InterfaceClass(Element, Specification):
 
            unless the object given provides the interface::
 
-             >>> class C:
+             >>> class C(object):
              ...     zope.interface.implements(I)
 
              >>> obj = C()
@@ -747,22 +757,21 @@ class InterfaceClass(Element, Specification):
         # __eq__, which is really fast.
         """Make interfaces sortable
 
-        It would ne nice if:
+        TODO: It would ne nice if:
 
            More specific interfaces should sort before less specific ones.
            Otherwise, sort on name and module.
 
            But this is too complicated, and we're going to punt on it
-           for now. XXX
+           for now.
 
-        XXX For now, sort on interface and module name.
+        For now, sort on interface and module name.
 
         None is treated as a pseudo interface that implies the loosest
         contact possible, no contract. For that reason, all interfaces
         sort before None.
 
         """
-
         if o1 == o2:
             return 0
 
@@ -801,7 +810,7 @@ class Attribute(Element):
     # We can't say this yet because we don't have enough
     # infrastructure in place.
     #
-    #__implements__ = IAttribute
+    #__implemented__ = IAttribute
 
 class Method(Attribute):
     """Method interfaces
@@ -813,7 +822,7 @@ class Method(Attribute):
     # We can't say this yet because we don't have enough
     # infrastructure in place.
     #
-    #__implements__ = IMethod
+    #__implemented__ = IMethod
 
     interface=''
 

@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -24,7 +24,7 @@ not require) Zope 3 and Twisted.  It provides tools for manipulating UML
 models, object-relational persistence, aspect-oriented programming, and more.
 Visit the PEAK home page at http://peak.telecommunity.com for more information.
 
-$Id: advice.py,v 1.1 2003/06/03 19:52:39 pje Exp $
+$Id$
 """
 
 from types import ClassType, FunctionType

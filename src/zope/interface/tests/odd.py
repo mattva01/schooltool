@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -15,7 +15,7 @@
 
 This is used for testing support for ExtensionClass in new interfaces.
 
-  >>> class A:
+  >>> class A(object):
   ...     __metaclass__ = MetaClass
   ...     a = 1
   ...
@@ -23,7 +23,7 @@ This is used for testing support for ExtensionClass in new interfaces.
   'A'
   >>> A.__bases__
   ()
-  >>> class B:
+  >>> class B(object):
   ...     __metaclass__ = MetaClass
   ...     b = 1
   ...
@@ -61,7 +61,7 @@ This is used for testing support for ExtensionClass in new interfaces.
   >>> int(C.__class__.__class__ is C.__class__)
   1
 
-$Id: odd.py,v 1.2 2003/05/03 16:38:00 jim Exp $
+$Id$
 """
 
 # class OddClass is an odd meta class

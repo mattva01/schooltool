@@ -4,16 +4,16 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Interface Package Interfaces
 
-$Id: interfaces.py,v 1.26 2004/04/05 19:44:01 jim Exp $
+$Id$
 """
 
 from zope.interface import Interface
@@ -52,10 +52,29 @@ class IAttribute(IElement):
 class IMethod(IAttribute):
     """Method attributes
     """
-    # XXX What the heck should methods provide? Grrrr
+
+    def getSignatureInfo():
+        """Returns the signature information.
+
+        This method returns a dictionary with the following keys:
+
+        o `positional` - All positional arguments.
+
+        o `required` - A list of all required arguments.
+
+        o `optional` - A list of all optional arguments.
+
+        o `varargs' - The name of the varargs argument.
+
+        o `kwargs` - The name of the kwargs argument.
+        """
 
     def getSignatureString():
         """Return a signature string suitable for inclusion in documentation.
+
+        This method returns the function signature string. For example, if you
+        have `func(a, b, c=1, d='f')`, then the signature string is `(a, b,
+        c=1, d='f')`.
         """
 
 class ISpecification(Interface):
@@ -93,6 +112,20 @@ class ISpecification(Interface):
 
     """)
 
+    __sro__ = Attribute("""Specification-resolution order
+
+    A tuple of the specification and all of it's ancestor
+    specifications from most specific to least specific.
+
+    (This is similar to the method-resolution order for new-style classes.)
+    """)
+
+    def get(name, default=None):
+        """Look up the description for a name
+
+        If the named attribute is not defined, the default is
+        returned.
+        """
 
         
 class IInterface(ISpecification, IElement):
@@ -239,13 +272,6 @@ class IInterface(ISpecification, IElement):
         raises first Invalid error; if errors is a list, appends all errors
         to list, then raises Invalid with the errors as the first element
         of the "args" tuple."""
-
-    def get(name, default=None):
-        """Look up the description for a name
-
-        If the named attribute is not defined, the default is
-        returned.
-        """
 
     def __contains__(name):
         """Test whether the name is defined by the interface"""

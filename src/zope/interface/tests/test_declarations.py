@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,10 +13,8 @@
 ##############################################################################
 """Test the new API for making and checking interface declarations
 
-
-$Id: test_declarations.py,v 1.11 2004/03/05 22:09:30 jim Exp $
+$Id$
 """
-
 import unittest
 from zope.interface import *
 from zope.testing.doctestunit import DocTestSuite
@@ -28,9 +26,9 @@ class I3(Interface): pass
 class I4(Interface): pass
 class I5(Interface): pass
 
-class A:
+class A(object):
     implements(I1)
-class B:
+class B(object):
     implements(I2)
 class C(A, B):
     implements(I3)
@@ -39,7 +37,7 @@ class COnly(A, B):
     implementsOnly(I3)
 
 class COnly_old(A, B):
-    __implements__ = I3
+    __implemented__ = I3
     
 class D(COnly):
     implements(I5)
@@ -76,11 +74,11 @@ class Test(unittest.TestCase):
 
     def test_backward_compat(self):
 
-        class C1: __implements__ = I1
-        class C2(C1): __implements__ = I2, I5
-        class C3(C2): __implements__ = I3, C2.__implements__
+        class C1(object): __implemented__ = I1
+        class C2(C1): __implemented__ = I2, I5
+        class C3(C2): __implemented__ = I3, C2.__implemented__
 
-        self.assert_(C3.__implements__.__class__ is tuple)
+        self.assert_(C3.__implemented__.__class__ is tuple)
 
         self.assertEqual(
             [i.getName() for i in providedBy(C3())],
@@ -96,16 +94,16 @@ class Test(unittest.TestCase):
             )
 
         self.assertEqual(
-            [i.getName() for i in C4.__implements__],
+            [i.getName() for i in C4.__implemented__],
             ['I4', 'I3', 'I2', 'I5'],
             )
 
-        # Note that C3.__implements__ should now be a sequence of interfaces
+        # Note that C3.__implemented__ should now be a sequence of interfaces
         self.assertEqual(
-            [i.getName() for i in C3.__implements__],
+            [i.getName() for i in C3.__implemented__],
             ['I3', 'I2', 'I5'],
             )
-        self.failIf(C3.__implements__.__class__ is tuple)
+        self.failIf(C3.__implemented__.__class__ is tuple)
 
     def test_module(self):
         import zope.interface.tests.m1
@@ -149,7 +147,7 @@ class Test(unittest.TestCase):
 def test_signature_w_no_class_interfaces():
     """
     >>> from zope.interface import *
-    >>> class C:
+    >>> class C(object):
     ...     pass
     >>> c = C()
     >>> list(providedBy(c))
@@ -167,13 +165,13 @@ def test_classImplement_on_deeply_nested_classes():
     contrived
 
     >>> from zope.interface import *
-    >>> class B1:
+    >>> class B1(object):
     ...     pass
     >>> class B2(B1):
     ...     pass
     >>> class B3(B2):
     ...     pass
-    >>> class D:
+    >>> class D(object):
     ...     implements()
     >>> class S(B3, D):
     ...     implements()
@@ -200,7 +198,7 @@ def test_pickle_provides_specs():
 
 def test_that_we_dont_inherit_class_provides():
     """
-    >>> class X:
+    >>> class X(object):
     ...     classProvides(I1)
     >>> class Y(X):
     ...     pass
@@ -220,10 +218,10 @@ def test_that_we_dont_inherit_provides_optimizations():
     descriptors that provides a default for instances that don't have
     instance-specific declarations:
     
-    >>> class A:
+    >>> class A(object):
     ...     implements(I1)
 
-    >>> class B:
+    >>> class B(object):
     ...     implements(I2)
 
     >>> [i.__name__ for i in A().__provides__]
@@ -270,7 +268,7 @@ def test_classProvides_before_implements():
           ...     pass
           >>> class IFoo(Interface):
           ...     pass
-          >>> class C:
+          >>> class C(object):
           ...     classProvides(IFooFactory)
           ...     implements(IFoo)
           >>> [i.getName() for i in C.__provides__]
@@ -278,6 +276,39 @@ def test_classProvides_before_implements():
 
           >>> [i.getName() for i in C().__provides__]
           ['IFoo']
+    """
+
+def test_getting_spec_for_proxied_builtin_class():
+    """
+
+    In general, we should be able to get a spec
+    for a proxied class if someone has declared or
+    asked for a spec before.
+
+    We don't want to depend on proxies in this (zope.interface)
+    package, but we do want to work with proxies.  Proxies have the
+    effect that a class's __dict__ cannot be gotten. Further, for
+    built-in classes, we can't save, and thus, cannot get, any class
+    attributes.  We'll emulate this by treating a plain object as a class:
+
+      >>> cls = object()
+
+    We'll create an implements specification:
+
+      >>> import zope.interface.declarations
+      >>> impl = zope.interface.declarations.Implements(I1, I2)
+
+    Now, we'll emulate a declaration for a built-in type by putting
+    it in BuiltinImplementationSpecifications:
+
+      >>> zope.interface.declarations.BuiltinImplementationSpecifications[
+      ...   cls] = impl
+
+    Now, we should be able to get it back:
+
+      >>> implementedBy(cls) is impl
+      True
+    
     """
 
 def test_suite():
