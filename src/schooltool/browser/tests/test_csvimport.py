@@ -464,7 +464,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 """)
         ok = imp.importTimetable(csv)
         self.assert_(ok)
-        group = imp.findByTitle(self.app['groups'], 'Math1 - Curtin')
+        group = imp.findByTitle('groups', 'Math1 - Curtin')
         tt = group.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
@@ -490,7 +490,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp.importTimetable(csv)
 
         # A little poking around.  We could be more comprehensive...
-        group = imp.findByTitle(self.app['groups'], 'English1 - Lorch')
+        group = imp.findByTitle('groups', 'English1 - Lorch')
         tt = group.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
@@ -581,6 +581,19 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "The number of cells ['few', 'values'] (line 5)"
                 " does not match the number of periods ['A', 'B', 'C'].")
 
+    def test_findByTitle(self):
+        imp = self.createImporter()
+        errs = []
+        self.assert_(imp.findByTitle('persons', 'Lorch')
+                     is self.app['persons']['lorch'])
+        self.assert_(imp.findByTitle('persons', 'Missing', errs) is None)
+        self.assert_(imp.findByTitle('groups', 'Foo', errs) is None)
+        self.assertEquals(errs, ['Missing', 'Foo'])
+        self.assertRaises(KeyError, imp.findByTitle, 'persons', 'Missing')
+
+        new_person = self.app['persons'].new(title='New guy')
+        self.assert_(imp.findByTitle('persons', 'New guy') is new_person)
+
     def test_clearTimetables(self):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
@@ -623,12 +636,12 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                           day_ids=['day1', 'day2'], location='Inside',
                           dry_run=True)
         self.assertRaises(KeyError, imp.findByTitle,
-                          self.app['groups'], 'Math 101 - Prof. Bar')
+                          'groups', 'Math 101 - Prof. Bar')
 
         imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
                           day_ids=['day1', 'day2'], location='Inside')
 
-        group = imp.findByTitle(self.app['groups'], 'Math 101 - Prof. Bar')
+        group = imp.findByTitle('groups', 'Math 101 - Prof. Bar')
         self.assertIsRelated(group, math101)
         self.assertIsRelated(group, self.teacher, rel=uris.URITaught)
 

@@ -368,6 +368,7 @@ class TimetableCSVImporter:
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
         self.charset = charset
+        self.cache = {}
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data.
@@ -495,17 +496,28 @@ class TimetableCSVImporter:
                         and period not in self.errors.periods):
                         self.errors.periods.append(period)
 
-    def findByTitle(self, container, title, error_list=None):
+    def _updateCache(self, container_name):
+        """Update self.cache."""
+        # I would be happy if this method lived in ApplicationObjectContainer
+        objs = {}
+        for obj in self.app[container_name].itervalues():
+            objs[obj.title] = obj
+        self.cache[container_name] = objs
+
+    def findByTitle(self, container_name, title, error_list=None):
         """Find an object with provided title in a container.
 
         Raises KeyError if no object is found and error_list is not provided.
         Otherwise, adds the missing string to error_list (but does not create
         duplicates) and returns None.
         """
-        # TODO Speed this up by constructing a dict once
-        for obj in container.itervalues():
-            if obj.title == title:
-                return obj
+        objs = self.cache.get(container_name, {})
+        if title not in objs:
+            self._updateCache(container_name)
+            objs = self.cache[container_name]
+        obj = objs.get(title)
+        if obj is not None:
+            return obj
         else:
             if error_list is None:
                 raise KeyError("Object %r not found" % title)
@@ -526,16 +538,16 @@ class TimetableCSVImporter:
         If dry_run is set, no objects are changed.
         """
         errors = False
-        subject = self.findByTitle(self.groups, subject, self.errors.groups)
-        teacher = self.findByTitle(self.persons, teacher, self.errors.persons)
-        location = self.findByTitle(self.app['resources'], location,
+        subject = self.findByTitle('groups', subject, self.errors.groups)
+        teacher = self.findByTitle('persons', teacher, self.errors.persons)
+        location = self.findByTitle('resources', location,
                                     self.errors.locations)
         if dry_run or not (subject and teacher and location):
             return # some objects were not found; do not process
 
         group_name = '%s - %s' % (subject.title, teacher.title)
         try:
-            group = self.findByTitle(self.groups, group_name)
+            group = self.findByTitle('groups', group_name)
         except KeyError:
             group = self.groups.new(title=group_name)
             Membership(group=subject, member=group)
@@ -567,7 +579,7 @@ class TimetableCSVImporter:
             for line in roster_txt.splitlines():
                 line = line.strip()
                 if group is None:
-                    group = self.findByTitle(self.groups, line,
+                    group = self.findByTitle('groups', line,
                                              self.errors.groups)
                     if group is None:
                         group = 'Invalid'
@@ -576,7 +588,7 @@ class TimetableCSVImporter:
                     group = None
                     continue
                 else:
-                    person = self.findByTitle(self.persons, line,
+                    person = self.findByTitle('persons', line,
                                               self.errors.persons)
                     if not dry_run and not memberOf(person, group):
                         Membership(group=group, member=person)
