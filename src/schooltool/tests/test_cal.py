@@ -638,44 +638,55 @@ class TestTimetableDay(unittest.TestCase):
         td.add("2", ActivityStub())
         self.assertEqual(td.keys(), ['1', '2', '3', '5'])
 
-    def test_getitem_setitem_items_delitem(self):
+    def test_getitem_add_items_clear_remove(self):
         from schooltool.cal import TimetableDay
         from schooltool.interfaces import ITimetableActivity
 
         periods = ('1', '2', '3', '4')
         td = TimetableDay(periods)
         self.assertRaises(KeyError, td.__getitem__, "Mo")
-        self.assertEqual(td["1"], Set([]))
+        self.assertEqual(len(list(td["1"])), 0)
+        self.assert_(hasattr(td["1"], 'next'), "not an iterator")
 
         class ActivityStub:
             implements(ITimetableActivity)
 
-        self.assertRaises(TypeError, td.__setitem__, "1", object())
         self.assertRaises(TypeError, td.add, "1", object())
         math = ActivityStub()
         self.assertRaises(ValueError, td.add, "Mo", math)
         td.add("1", math)
-        self.assertEqual(td["1"], Set([math]))
+        self.assertEqual(list(td["1"]), [math])
 
-        self.assertEqual(td.items(), [('1', Set([math])), ('2', Set([])),
-                                      ('3', Set([])), ('4', Set([]))])
+        result = [(p, Set(i)) for p, i in td.items()]
+
+        self.assertEqual(result, [('1', Set([math])), ('2', Set([])),
+                                  ('3', Set([])), ('4', Set([]))])
         english = ActivityStub()
         td.add("2", english)
-        self.assertEqual(td.items(), [('1', Set([math])),
-                                      ('2', Set([english])),
-                                      ('3', Set([])), ('4', Set([]))])
+        result = [(p, Set(i)) for p, i in td.items()]
+        self.assertEqual(result, [('1', Set([math])), ('2', Set([english])),
+                                  ('3', Set([])), ('4', Set([]))])
 
-        self.assertEqual(td["2"], Set([english]))
-        self.assertRaises(ValueError, td.__delitem__, "Mo")
-        del td["2"]
-        self.assertRaises(ValueError, td.__delitem__, "foo")
-        self.assertEqual(td["2"], Set([]))
 
+        # test clear()
+        self.assertEqual(Set(td["2"]), Set([english]))
+        self.assertRaises(ValueError, td.clear, "Mo")
+        td.clear("2")
+        self.assertRaises(ValueError, td.clear, "foo")
+        self.assertEqual(Set(td["2"]), Set([]))
+
+        # test remove()
         td.add("1", english)
-        td.remove("2", english)
-        self.assertEqual(td.items(), [('1', Set([math, english])),
-                                      ('2', Set([])),
-                                      ('3', Set([])), ('4', Set([]))])
+        result = [(p, Set(i)) for p, i in td.items()]
+        self.assertEqual(result, [('1', Set([english, math])),
+                                  ('2', Set([])), ('3', Set([])),
+                                  ('4', Set([]))])
+        td.remove("1", math)
+        self.assertRaises(KeyError, td.remove, "1", math)
+        result = [(p, Set(i)) for p, i in td.items()]
+        self.assertEqual(result, [('1', Set([english])),
+                                  ('2', Set([])), ('3', Set([])),
+                                  ('4', Set([]))])
 
 
 class TestTimetableActivity(unittest.TestCase):
@@ -689,19 +700,65 @@ class TestTimetableActivity(unittest.TestCase):
         self.assertEqual(ta.title, "Dancing")
 
 
-class TestTimetabling(unittest.TestCase):
-    """A functional test for timetables"""
+class TestTimetablingPersistence(unittest.TestCase):
+    """A functional test for timetables persistence."""
+
+    def setUp(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        self.db = DB(MappingStorage())
+        self.datamgr = self.db.open()
 
     def test(self):
         from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+        from transaction import get_transaction
         tt = Timetable(('A', 'B'))
+        self.datamgr.root()['tt'] = tt
+        get_transaction().commit()
+
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            tt2 = datamgr.root()['tt']
+            self.assert_(tt2["A"].periods, periods)
+            self.assert_(tt2["B"].periods, periods)
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
         tt["A"].add("Green", TimetableActivity("English"))
         tt["A"].add("Blue", TimetableActivity("Math"))
         tt["B"].add("Green", TimetableActivity("Biology"))
         tt["B"].add("Blue", TimetableActivity("Geography"))
+        get_transaction().commit()
+
+        ## TimetableActivities are not persistent
+        # geo = tt["B"]["Blue"].next()
+        # geo.title = "Advanced geography"
+        # get_transaction().commit()
+
+        self.assertEqual(len(list(tt["A"]["Green"])), 1)
+        self.assertEqual(len(list(tt["A"]["Blue"])), 1)
+        self.assertEqual(len(list(tt["B"]["Green"])), 1)
+        self.assertEqual(len(list(tt["B"]["Blue"])), 1)
+
+        try:
+            datamgr = self.db.open()
+            tt3 = datamgr.root()['tt']
+            self.assertEqual(len(list(tt3["A"]["Green"])), 1)
+            self.assertEqual(len(list(tt3["A"]["Blue"])), 1)
+            self.assertEqual(len(list(tt3["B"]["Green"])), 1)
+            self.assertEqual(len(list(tt3["B"]["Blue"])), 1)
+            last = tt3["B"]["Blue"].next()
+            # self.assertEqual(last.title, "Advanced geography")
+            self.assertEqual(last.title, "Geography")
+        finally:
+            get_transaction().abort()
+            datamgr.close()
 
 
 class TestSchooldayPeriod(unittest.TestCase):
@@ -846,10 +903,10 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
-        tt["A"]["Green"].add(TimetableActivity("English"))
-        tt["A"]["Blue"].add(TimetableActivity("Math"))
-        tt["B"]["Green"].add(TimetableActivity("Biology"))
-        tt["B"]["Blue"].add(TimetableActivity("Geography"))
+        tt["A"].add("Green", TimetableActivity("English"))
+        tt["A"].add("Blue", TimetableActivity("Math"))
+        tt["B"].add("Green", TimetableActivity("Biology"))
+        tt["B"].add("Blue", TimetableActivity("Geography"))
 
         t, td = time, timedelta
         template1 = SchooldayTemplate()
@@ -902,30 +959,29 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         for day_id in days:
             tt[day_id] = TimetableDay(periods)
 
-        tt["Monday"]["1"].add(TimetableActivity("English"))
-        tt["Monday"]["2"].add(TimetableActivity("History"))
-        tt["Monday"]["3"].add(TimetableActivity("Biology"))
-        tt["Monday"]["4"].add(TimetableActivity("Physics"))
+        tt["Monday"].add("1", TimetableActivity("English"))
+        tt["Monday"].add("2", TimetableActivity("History"))
+        tt["Monday"].add("3", TimetableActivity("Biology"))
+        tt["Monday"].add("4", TimetableActivity("Physics"))
 
-        tt["Tuesday"]["1"].add(TimetableActivity("Geography"))
-        tt["Tuesday"]["2"].add(TimetableActivity("Math"))
-        tt["Tuesday"]["3"].add(TimetableActivity("English"))
-        tt["Tuesday"]["4"].add(TimetableActivity("Music"))
+        tt["Tuesday"].add("1", TimetableActivity("Geography"))
+        tt["Tuesday"].add("2", TimetableActivity("Math"))
+        tt["Tuesday"].add("3", TimetableActivity("English"))
+        tt["Tuesday"].add("4", TimetableActivity("Music"))
 
-        tt["Wednesday"]["1"].add(TimetableActivity("English"))
-        tt["Wednesday"]["2"].add(TimetableActivity("History"))
-        tt["Wednesday"]["3"].add(TimetableActivity("Biology"))
-        tt["Wednesday"]["4"].add(TimetableActivity("Physics"))
+        tt["Wednesday"].add("1", TimetableActivity("English"))
+        tt["Wednesday"].add("2", TimetableActivity("History"))
+        tt["Wednesday"].add("3", TimetableActivity("Biology"))
+        tt["Wednesday"].add("4", TimetableActivity("Physics"))
 
-        tt["Thursday"]["1"].add(TimetableActivity("Chemistry"))
-        tt["Thursday"]["2"].add(TimetableActivity("English"))
-        tt["Thursday"]["3"].add(TimetableActivity("English"))
-        tt["Thursday"]["4"].add(TimetableActivity("Math"))
+        tt["Thursday"].add("1", TimetableActivity("Chemistry"))
+        tt["Thursday"].add("2", TimetableActivity("English"))
+        tt["Thursday"].add("3", TimetableActivity("English"))
+        tt["Thursday"].add("4", TimetableActivity("Math"))
 
-        tt["Friday"]["1"].add(TimetableActivity("Geography"))
-        tt["Friday"]["2"].add(TimetableActivity("Drawing"))
-        # skip! tt["Friday"]["3"].add(TimetableActivity("History"))
-        tt["Friday"]["4"].add(TimetableActivity("Math"))
+        tt["Friday"].add("1", TimetableActivity("Geography"))
+        tt["Friday"].add("2", TimetableActivity("Drawing"))
+        tt["Friday"].add("4", TimetableActivity("Math"))
 
         t, td = time, timedelta
         template = SchooldayTemplate()
@@ -1093,7 +1149,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
-    suite.addTest(unittest.makeSuite(TestTimetabling))
+    suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))

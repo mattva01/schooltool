@@ -26,6 +26,9 @@ import re
 import datetime
 from sets import Set
 from zope.interface import implements
+from persistence import Persistent
+from persistence.dict import PersistentDict
+from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, ISchooldayPeriod
 from schooltool.interfaces import ITimetable, ITimetableWrite
@@ -590,7 +593,7 @@ def markNonSchooldays(ical_reader, schoolday_model):
 # Timetabling
 #
 
-class Timetable:
+class Timetable(Persistent):
 
     implements(ITimetable, ITimetableWrite)
 
@@ -598,7 +601,7 @@ class Timetable:
         """day_ids is a sequence of the day ids of this timetable.
         """
         self.day_ids = day_ids
-        self.days = {}
+        self.days = PersistentDict()
 
     def keys(self):
         return list(self.day_ids)
@@ -618,15 +621,15 @@ class Timetable:
         self.days[key] = value
 
 
-class TimetableDay:
+class TimetableDay(Persistent):
 
     implements(ITimetableDay, ITimetableDayWrite)
 
     def __init__(self, periods=()):
         self.periods = periods
-        self.activities = {}
+        self.activities = PersistentDict()
         for p in periods:
-            self.activities[p] = Set()
+            self.activities[p] = MaybePersistentKeysSet()
 
     def keys(self):
         return [period for period in self.periods if self.activities[period]]
@@ -635,23 +638,12 @@ class TimetableDay:
         return [(period, self.activities[period]) for period in self.periods]
 
     def __getitem__(self, key):
-        return self.activities[key]
+        return iter(self.activities[key])
 
-    def __setitem__(self, key, value):
-        set = Set(value)
-        for activity in set:
-            if not ITimetableActivity.isImplementedBy(activity):
-                raise TypeError("TimetableDay cannot set a "
-                                "non-ITimetableActivity (got %r)"
-                                % (activity,))
+    def clear(self, key):
         if key not in self.periods:
             raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        self.activities[key] = set
-
-    def __delitem__(self, key):
-        if key not in self.periods:
-            raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        self.activities[key] = Set()
+        self.activities[key].clear()
 
     def add(self, key, value):
         if key not in self.periods:
@@ -662,10 +654,13 @@ class TimetableDay:
         self.activities[key].add(value)
 
     def remove(self, key, value):
-        pass
+        if key not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (key, self.periods))
+        self.activities[key].remove(value)
 
 
 class TimetableActivity:
+    # This is immutable!   Otherwise, need to make it persistent.
 
     implements(ITimetableActivity)
 

@@ -1085,14 +1085,15 @@ class ITimetableDay(Interface):
         """
 
     def items():
-        """Returns a sequence of tuples (period_id, Set([ITimetableActivity])).
+        """Returns a sequence of tuples (period_id, iter(ITimetableActivities)).
 
         If there is no activity for a certain period, the timetable an
         empty set is given.
         """
 
     def __getitem__(key):
-        """Get a set of ITimetableActivities for a given period identifier.
+        """Get an iterator over ITimetableActivities for a given period
+        identifier.
 
         If there is no activity for the period, an empty set is returned.
         """
@@ -1100,16 +1101,8 @@ class ITimetableDay(Interface):
 
 class ITimetableDayWrite(Interface):
 
-    def __setitem__(key, value):
-        """Sets a sequence of ITimetableActivities for a given period.
-
-        Throws a TypeError if one of the the values does not implement
-        ITimetableActivity.  Throws a ValueError if the key is not a
-        period id.
-        """
-
-    def __delitem__(key):
-        """Remove all the activities planned for a given period"""
+    def clear(key):
+        """Remove all the activities for a certain period id."""
 
     def add(key, value):
         """Adds a single activity to the set of activities planned for
