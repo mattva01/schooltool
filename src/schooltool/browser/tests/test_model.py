@@ -478,6 +478,7 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
         from schooltool.browser.model import GroupView, GroupEditView
         from schooltool.browser.model import GroupTeachersView
         from schooltool.browser.timetable import TimetableTraverseView
+        from schooltool.browser.cal import ComboCalendarView
         from schooltool.browser.acl import ACLView
         request = RequestStub()
         view = GroupView(self.group)
@@ -486,6 +487,8 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
                              GroupTeachersView, self.group)
         self.assertTraverses(view, 'acl.html',
                              ACLView, self.group.acl)
+        self.assertTraverses(view, 'calendar',
+                             ComboCalendarView, self.group.calendar)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.group)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())

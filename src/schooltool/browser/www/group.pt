@@ -7,11 +7,29 @@
 <h1 metal:fill-slot="h1"><span tal:replace="context/title" /></h1>
 <metal:block metal:fill-slot="content">
 
-  <div class="timetables" tal:condition="view/timetables">
-    <h3 i18n:translate="">Timetables</h3>
-    <p tal:repeat="tt view/timetables">
-     <a tal:attributes="href tt/url" tal:content="tt/title"/>
-    </p>
+  <div class="timetables">
+    <div tal:condition="view/timetables">
+      <h3 i18n:translate="">Timetables</h3>
+      <p tal:repeat="tt view/timetables">
+       <a tal:attributes="href tt/url" tal:content="tt/title"/>
+      </p>
+    </div>
+    <h3 i18n:translate="">Calendar</h3>
+     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
+           i18n:translate="">Use calendar for this group</a></p>
+
+    <div tal:condition="view/isManager">
+      <h3 i18n:translate="">Access control</h3>
+       <ul>
+       <li><a tal:attributes="href string:${context/@@absolute_url}/acl.html"
+             i18n:translate="">Set who can add/remove members<br/>and
+             teachers of this group.</a></li>
+       <li><a tal:attributes="href
+             string:${context/@@absolute_url}/calendar/acl.html"
+             i18n:translate="">Set who can view, edit, and add<br/>
+             events to the calendar of this group.</a></li>
+       </ul>
+    </div>
   </div>
 
   <div class="parentgroups">

@@ -252,8 +252,14 @@ div.timetables h3 {
 div.members p,
 div.groups p,
 div.parentgroups p,
-div.timetables p {
+div.timetables p,
+div.timetables li,
+div.timetables ul {
   margin: 0 0 0.5ex 0;
+}
+
+div.timetables ul {
+  padding: 0 1em;
 }
 
 /* Timetables */

@@ -265,6 +265,8 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin):
             return GroupTeachersView(self.context)
         elif name == 'acl.html':
             return ACLView(self.context.acl)
+        elif name == 'calendar':
+            return ComboCalendarView(self.context.calendar)
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         raise KeyError(name)
