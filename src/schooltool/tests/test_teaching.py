@@ -80,7 +80,6 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         from schooltool import teaching
         from schooltool.interfaces import IModuleSetup
         from schooltool.component import getFacetFactory
-        from schooltool.uris import getURI
         verifyObject(IModuleSetup, teaching)
         teaching.setUp()
         getFacetFactory('subject_group')

@@ -371,7 +371,8 @@ class SchoolToolClient:
                     title = href.split('/')[-1]
                 role = self.role_names.get(role, role)
                 arcrole = self.role_names.get(arcrole, arcrole)
-                relationships.append(RelationshipInfo(arcrole, role, title, href))
+                relationships.append(RelationshipInfo(arcrole, role, title,
+                                                      href))
             return relationships
         finally:
             doc.freeDoc()
@@ -400,7 +401,8 @@ class SchoolToolClient:
                 if presence not in ('present', 'absent'):
                     raise SchoolToolError("Unrecognized presence value: %s"
                                           % presence)
-                persons.append(RollCallInfo(title, href, presence == 'present'))
+                presence = (presence == 'present')
+                persons.append(RollCallInfo(title, href, presence))
             return persons
         finally:
             doc.freeDoc()
@@ -701,8 +703,8 @@ class AbsenceInfo:
     expected_presence = None    # Expected presence or None
     last_comment = None         # Last comment text
 
-    def __init__(self, absence_path, datetime, person_title, person_path, ended,
-                 resolved, expected_presence, last_comment):
+    def __init__(self, absence_path, datetime, person_title, person_path,
+                 ended, resolved, expected_presence, last_comment):
         self.absence_path = absence_path
         self.datetime = datetime
         self.person_title = person_title
