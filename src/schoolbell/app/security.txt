@@ -50,9 +50,6 @@ Let's provide the location of auth:
     >>> root['frogpond'] = app
     >>> app.__parent__ = root
     >>> app.__name__ = 'frogpond'
-    >>> from zope.app.traversing.interfaces import IContainmentRoot
-    >>> from zope.interface import directlyProvides
-    >>> directlyProvides(app, IContainmentRoot)
     >>> sm = setup.createServiceManager(app)
     >>> from zope.app import zapi
     >>> pkg = zapi.traverse(sm, 'default')
