@@ -29,6 +29,7 @@ from schooltool.interfaces import AuthenticationError
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.component import getTicketService, traverse
 from schooltool.rest import View as _View
+from schooltool.rest import Unauthorized               # reexport
 from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
 from schooltool.http import Request

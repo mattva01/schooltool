@@ -28,6 +28,7 @@ from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser import AppObjectBreadcrumbsMixin
+from schooltool.browser import Unauthorized
 from schooltool.browser.auth import TeacherAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
@@ -895,11 +896,12 @@ class EventEditView(EventViewBase):
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
-        # TODO: check permissions -- only managers can edit timetable events
         uid = self.event.unique_id
         ev = self.event.replace(dtstart=dtstart, duration=duration,
                                 title=title, location=location, unique_id=uid)
         if self.tt_event:
+            if not self.isManager():
+                raise Unauthorized
             self._addTimetableException(self.event, replacement=ev)
         else:
             self.context.removeEvent(self.event)

@@ -988,6 +988,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         from schooltool.browser.cal import EventEditView
         view = EventEditView(self.person.calendar)
         view.authorization = lambda x, y: True
+        view.isManager = lambda: True
         return view
 
     def test_render(self):
@@ -1128,6 +1129,34 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                           datetime(2004, 8, 16, 13, 30))
         self.assertEquals(exc.replacement.duration, timedelta(minutes=70))
         self.assertEquals(exc.replacement.unique_id, event.unique_id)
+
+    def testTimetableEventPermissionChecking(self):
+        from schooltool.browser import Unauthorized
+        view = self.createView()
+        view.event = createEvent('2004-08-16 13:45', '5 min', 'Anything')
+        view.tt_event = True
+
+        args = (datetime(2004, 8, 16, 13, 55), timedelta(minutes=5),
+                'Anything *', None)
+
+        # Not a manager -- should redirect to unauthorized
+        view.isManager = lambda: False
+        def addTimetableExceptionStub(*args, **kw):
+            self.fail("view.isManager returns False so"
+                      " _addTimetableException should not get called")
+        view._addTimetableException = addTimetableExceptionStub
+        self.assertRaises(Unauthorized, view.process, *args)
+
+        # Manager -- should call _addTimetableException
+        view.isManager = lambda: True
+        called = []
+        def addTimetableExceptionStub(*args, **kw):
+            called.append((args, kw))
+        view._addTimetableException = addTimetableExceptionStub
+        view.process(*args)
+        if not called:
+            self.fail("view.isManager returns True so"
+                      " _addTimetableException should get called")
 
 
 class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
