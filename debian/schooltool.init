@@ -41,7 +41,8 @@ case "$1" in
   stop)
 	echo -n "Stopping $DESC: $NAME"
 	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
-		--name $PNAME
+		--name $PNAME --retry 30
+        sleep 1
 	echo "."
 	;;
   restart|force-reload)
@@ -54,7 +55,8 @@ case "$1" in
 
 	echo -n "Restarting $DESC: $NAME"
 	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
-		--name $PNAME
+		--name $PNAME --retry 30
+        sleep 1
 	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
 		--chuid $package --startas $DAEMON -- -d >/dev/null
 	echo "."
