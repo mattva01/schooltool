@@ -977,15 +977,15 @@ def doctest_ACLView():
           </h3>
         ...
           <fieldset>
-            <legend>Permissions</legend>
+            <legend>Permissions for Groups</legend>
             <table class="acl">
-              <tr>
-                 <th class="principal">User/Group</th>
+              <tr class="header">
+                 <th class="principal">Group</th>
                  <th class="permission">View</th>
                  <th class="permission">Manage</th>
                  <th class="permission">Manage Site</th>
               </tr>
-              <tr>
+              <tr class="odd">
                  <th class="principal">office</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
@@ -1001,7 +1001,7 @@ def doctest_ACLView():
                  </td>
               </tr>
               ...
-              <tr>
+              <tr class="odd">
                  <th class="principal">Albert</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
@@ -1068,7 +1068,7 @@ def doctest_ACLView():
                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html>
         ...
-              <tr>
+              <tr class="odd">
                  <th class="principal">office</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
@@ -1084,7 +1084,7 @@ def doctest_ACLView():
                  </td>
               </tr>
         ...
-              <tr>
+              <tr class="odd">
                  <th class="principal">Albert</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
@@ -1278,7 +1278,8 @@ def tearDown(test):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS))
+                                       optionflags=doctest.ELLIPSIS
+                                                  |doctest.REPORT_NDIFF))
     return suite
 
 

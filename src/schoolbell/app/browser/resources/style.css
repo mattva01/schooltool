@@ -83,6 +83,8 @@ form.standalone h3 {
 
 form.standalone fieldset {
     border: 1px #bab5ab solid;
+    /* Mozilla's default padding for fieldsets -- makes it nice in MSIE too */
+    padding: 0.35em 0.625em 0.75em 0.625em;
 }
 
 form.standalone .controls input {
@@ -804,12 +806,19 @@ body#path-login form.standalone {
 
 table.acl {
     background: #eae8e3;
-    border: 1px #bab5ab solid;
+    border: none;
     border-collapse: collapse;
+    width: 100%;
+}
+
+table.acl tr.header th {
+    border-bottom: 1px solid #bab5ab;
+}
+table.acl tr.even {
+    background: #bab5ab;
 }
 
 table.acl td, table.acl th {
-    border: 1px #bab5ab solid;
 }
 
 table.acl td {

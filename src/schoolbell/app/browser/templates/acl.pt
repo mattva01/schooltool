@@ -14,14 +14,15 @@
       tal:replace="context/title">something</span>
   </h3>
   <fieldset>
-    <legend i18n:translate="">Permissions</legend>
+    <legend i18n:translate="">Permissions for Groups</legend>
     <table class="acl">
-      <tr>
-         <th class="principal" i18n:translate="">User/Group</th>
+      <tr class="header">
+         <th class="principal" i18n:translate="">Group</th>
          <th class="permission" tal:repeat="perm view/permissions"
              tal:content="python: perm[1]" />
       </tr>
-      <tr tal:repeat="prin view/getGroups">
+      <tr tal:repeat="prin view/getGroups"
+          tal:attributes="class repeat/prin/parity">
          <th class="principal" tal:content="prin/title">Group foo</th>
          <td class="permission" tal:repeat="perm view/permissions">
             <input
@@ -31,7 +32,17 @@
                                 checked python: perm[0] in prin['perms']" />
          </td>
       </tr>
-      <tr tal:repeat="prin view/getPersons">
+  </fieldset>
+  <fieldset>
+    <legend i18n:translate="">Permissions for Users</legend>
+    <table class="acl">
+      <tr class="header">
+         <th class="principal" i18n:translate="">User</th>
+         <th class="permission" tal:repeat="perm view/permissions"
+             tal:content="python: perm[1]" />
+      </tr>
+      <tr tal:repeat="prin view/getPersons"
+          tal:attributes="class repeat/prin/parity">
          <th class="principal" tal:content="prin/title">User foo</th>
          <td class="permission" tal:repeat="perm view/permissions">
             <input
@@ -42,8 +53,8 @@
          </td>
       </tr>
     </table>
-
   </fieldset>
+
   <div class="controls">
     <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set"
            i18n:attributes="value" />
