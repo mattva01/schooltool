@@ -19,6 +19,8 @@
 #
 """
 Schooltool HTTP server.
+
+$Id$
 """
 
 import os

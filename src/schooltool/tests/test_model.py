@@ -18,6 +18,8 @@
 #
 """
 Unit tests for schooltool.model
+
+$Id$
 """
 
 import unittest
