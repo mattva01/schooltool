@@ -48,7 +48,7 @@ from schooltool.rest import absoluteURL
 from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import Timetable, TimetableDay
-from schooltool.translation import ugettext as _
+from schooltool.translation import ugettext as _, TranslatableString
 from schooltool.uris import URIGroup
 
 __metaclass__ = type
@@ -498,6 +498,8 @@ class TimetableSchemaWizard(View, TabindexMixin):
 
     template = Template("www/ttwizard.pt")
 
+    _ = TranslatableString  # postpone translations
+
     days_of_week = (_("Monday"),
                     _("Tuesday"),
                     _("Wednesday"),
@@ -506,6 +508,8 @@ class TimetableSchemaWizard(View, TabindexMixin):
                     _("Saturday"),
                     _("Sunday"),
                    )
+
+    del _ # go back to immediate translations
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -762,6 +766,8 @@ class TimePeriodViewBase(View):
     # in schooltool.browser.cal
     first_day_of_week = 0
 
+    _ = TranslatableString  # postpone translations
+
     month_names = {
         1: _("January"),
         2: _("February"),
@@ -776,6 +782,8 @@ class TimePeriodViewBase(View):
         11: _("November"),
         12: _("December"),
     }
+
+    del _ # go back to immediate translations
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -817,8 +825,9 @@ class TimePeriodViewBase(View):
         limit = self.model.last + datetime.timedelta(1)
         index = 0
         while start_of_month < limit:
+            month_name = unicode(self.month_names[start_of_month.month])
             month_title = _('%(month)s %(year)s') % {
-                              'month': self.month_names[start_of_month.month],
+                              'month': month_name,
                               'year': start_of_month.year}
             weeks = []
             start_of_week = week_start(start_of_month, self.first_day_of_week)
