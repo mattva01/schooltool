@@ -34,6 +34,8 @@ __metaclass__ = type
 
 class HTTPStub:
 
+    open_connections = []
+
     def __init__(self, host, port=7001):
         self.host = host
         self.port = port
@@ -44,6 +46,8 @@ class HTTPStub:
             raise socket.error(-2, 'Name or service not known')
         if port != 7001:
             raise socket.error(111, 'Connection refused')
+
+        self.open_connections.append(self)
 
     def request(self, method, url, body=None, headers={}):
         self.putrequest(method, url)
@@ -72,6 +76,9 @@ class HTTPStub:
         if not s:
             raise AssertionError("send('') breaks when SSL is used")
         self.sent_data += s
+
+    def close(self):
+        self.open_connections.remove(self)
 
 
 class ResponseStub:
@@ -109,7 +116,12 @@ class ResponseStub:
             self._data = "404 :-)"
 
     def read(self):
-        return self._data
+        if self.request not in HTTPStub.open_connections:
+            raise AssertionError("read() called after connection was closed.")
+        try:
+            return self._data
+        finally:
+            self._data = None
 
     def getheader(self, name, default=None):
         if name.lower() == 'content-type':
@@ -364,6 +376,7 @@ class TestClient(unittest.TestCase):
             Content-Type: text/plain
             Welcome"""))
         self.assertEqual(self.client.last_data, "Welcome")
+        self.assertEqual(HTTPStub.open_connections, [])
 
     def test_get_binary(self):
         self.client.server = 'localhost'

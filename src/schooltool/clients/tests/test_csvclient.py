@@ -96,7 +96,10 @@ class ResponseStub:
     def read(self):
         if self.request not in HTTPStub.open_connections:
             raise AssertionError("read() called after connection was closed.")
-        return self._data
+        try:
+            return self._data
+        finally:
+            self._data = None
 
     def getheader(self, name, default=None):
         if name.lower() == 'content-type':

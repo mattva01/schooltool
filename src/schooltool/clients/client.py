@@ -229,11 +229,13 @@ welcome to change it and/or distribute copies of it under certain conditions.
             self.emit("%s %s" % (response.status, response.reason))
             if ignore_data:
                 data = response.read()
+                conn.close()
                 return
             ctype = response.getheader('Content-Type',
                                        'application/octet-stream')
             self.emit("Content-Type: %s" % ctype)
             self.last_data = data = response.read()
+            conn.close()
             if not ctype.startswith('text/'):
                 self.emit("Resource is not text, use save <filename>"
                           " to save it")
