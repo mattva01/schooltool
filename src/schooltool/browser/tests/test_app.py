@@ -398,7 +398,8 @@ class TestObjectAddView(unittest.TestCase):
 
     def test_POST(self):
         view = self.createView()
-        request = RequestStub(args={'name': 'newobj'})
+        request = RequestStub(args={'name': 'newobj',
+                                    'title': 'New \xc4\x85 stuff'})
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -409,7 +410,7 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(len(self.container.objs), 1)
         obj = self.container.objs[0]
         self.assertEquals(obj.__name__, 'newobj')
-        self.assertEquals(obj.title, 'newobj')
+        self.assertEquals(obj.title, u'New \u0105 stuff')
 
     def test_POST_errors(self):
         view = self.createView()

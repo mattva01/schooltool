@@ -206,7 +206,9 @@ class ObjectAddView(View):
             self.error = _("Invalid name")
             return self.do_GET(request)
 
-        obj = self.context.new(name, title=name)
+        title = unicode(request.args['title'][0], 'utf-8')
+
+        obj = self.context.new(name, title=title)
         request.appLog(_("Object created: %s") % getPath(obj))
 
         url = absoluteURL(request, obj) + '/edit.html'
