@@ -352,13 +352,6 @@ class CalendarViewBase(BrowserView):
 
         return '%s/%s' % (self.__url, dt)
 
-    def ellipsizeTitle(self, title):
-        """For labels with limited space replace the tail with '...'."""
-        if len(title) < 17:
-             return title
-        else:
-             return title[:15] + '...'
-
     def update(self):
         if 'date' not in self.request:
             self.cursor = date.today()
