@@ -1391,8 +1391,10 @@ class CalendarEventViewMixin(object):
         # support comes in (we can't have the date changing because of a tz
         # adjustment)
         if allday:
+            # iCalendar has no spec for describing all-day events, but it seems
+            # to be the de facto standard to give them a 1d duration.
             duration = 1
-            duration_type = "minutes"
+            duration_type = "days"
             start_time = time(0, 0)
 
         if recurrence:
