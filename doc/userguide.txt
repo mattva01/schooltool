@@ -182,5 +182,5 @@ Teachers and System Managers groups respectively.
 All successful user actions and failed logins are recorded in the
 application log, which is accessible through the "View->Application Log"
 menu item.  Each entry includes a timestamp and the user name of the person
-who performed the action.
+who performed the action.  Only Managers can view the application log.
 
