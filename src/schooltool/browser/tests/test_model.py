@@ -860,10 +860,18 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         from schooltool.model import Resource
         from schooltool.browser.model import ResourceView, ResourceEditView
         from schooltool.browser.cal import BookingView
+        from schooltool.browser.timetable import TimetableTraverseView
+        from schooltool.browser.cal import ComboCalendarView
+        from schooltool.browser.acl import ACLView
         resource = self.resource
         view = ResourceView(resource)
         self.assertTraverses(view, 'edit.html', ResourceEditView, resource)
         self.assertTraverses(view, 'book', BookingView, resource)
+        self.assertTraverses(view, 'acl.html', ACLView, self.resource.acl)
+        self.assertTraverses(view, 'calendar',
+                             ComboCalendarView, self.resource.calendar)
+        self.assertTraverses(view, 'timetables', TimetableTraverseView,
+                             self.resource)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 

@@ -7,15 +7,28 @@
     Resource info
   </h1>
   <metal:block metal:fill-slot="content">
+
+    <div class="actions">
+      <a class="action" tal:condition="view/canEdit"
+         tal:attributes="href view/editURL" i18n:translate="">Edit</a>
+      <a class="action" tal:condition="view/isManager"
+         tal:attributes="href string:${context/@@absolute_url}/calendar"
+         i18n:translate="">View calendar</a>
+    </div>
+
+    <div class="groups">
+      <h3 i18n:translate="">Groups</h3>
+      <p tal:repeat="group view/getParentGroups">
+       <a tal:attributes="href group/@@absolute_url"
+          tal:content="group/title"/>
+      </p>
+    </div>
+
     <div class="row"><b i18n:translate="">Identifier:</b>
       <span tal:replace="python:context.__name__">res123</span>
     </div>
     <div class="row"><b i18n:translate="">Title:</b>
       <span tal:replace="context/title">Resource title</span>
-    </div>
-    <div class="actions">
-      <a class="action" tal:condition="view/canEdit"
-         tal:attributes="href view/editURL" i18n:translate="">Edit</a>
     </div>
   </metal:block>
 </body>

@@ -423,7 +423,8 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         Membership(group=self.context, member=other)
 
 
-class GroupTeachersView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+class GroupTeachersView(View, RelationshipViewMixin,
+                        AppObjectBreadcrumbsMixin):
 
     __used_for__ = IGroup
 
@@ -451,7 +452,7 @@ class GroupTeachersView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         Teaching(taught=self.context, teacher=other)
 
 
-class ResourceView(View, AppObjectBreadcrumbsMixin):
+class ResourceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
     """View for displaying a resource."""
 
     __used_for__ = IResource
@@ -471,6 +472,12 @@ class ResourceView(View, AppObjectBreadcrumbsMixin):
             return ResourceEditView(self.context)
         elif name == "book":
             return BookingView(self.context)
+        elif name == 'acl.html':
+            return ACLView(self.context.acl)
+        elif name == 'calendar':
+            return ComboCalendarView(self.context.calendar)
+        elif name == 'timetables':
+            return TimetableTraverseView(self.context)
         else:
             raise KeyError(name)
 
