@@ -31,6 +31,7 @@ and start again.
 
      svn export milestone4 schooltool-m4
      tar zcvf schooltool-m4.tar.gz schooltool-m4
+     # copy Win32 *.pyd files into schooltool-m4
      zip -r schooltool-m4.zip schooltool-m4
 
 4a. Optionally, build a Debian package.  You'll need dpkg-dev, fakeroot and
@@ -40,7 +41,8 @@ and start again.
      make deb
      cd ..
      mkdir m4
-     cp schooltool_0.4-0.1_i386.deb m4
+     cp schooltool-clients_0.4-1_i386.deb m4
+     cp schooltool-server_0.4-1_i386.deb m4
      dpkg-scanpackages m4 /dev/null | gzip > Packages.gz
      rm -r m4
 
@@ -66,7 +68,7 @@ and start again.
 
 6. Write a release page for the web.  Take screenshots.
 
-7. Upload the page, the screenshots, and the tarball.
+7. Upload the page, the screenshots, and the archives.
 
    These go in http://schooltool.org/releases/m4
 
