@@ -493,7 +493,7 @@ class TestObjectAddView(unittest.TestCase):
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/objects/newobj/edit.html')
+                          'http://localhost:7001/objects/newobj')
         self.assertEquals(request.applog,
                           [(None, u'Object /objects/newobj of type'
                             ' ApplicationObjectMixin created', INFO)])
@@ -503,17 +503,6 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(obj.__name__, 'newobj')
         self.assertEquals(obj.title, u'New \u0105 stuff')
 
-    def test_POST_alt_redirect(self):
-        view = self.createView()
-        view.redirect_to_edit = False
-        request = RequestStub(args={'name': 'newobj',
-                                    'title': 'New \xc4\x85 stuff'})
-        view.request = request
-        content = view.do_POST(request)
-        self.assertEquals(request.code, 302)
-        self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/objects/newobj')
-
     def test_POST_noname(self):
         view = self.createView()
         request = RequestStub(args={'name': '',
@@ -522,7 +511,7 @@ class TestObjectAddView(unittest.TestCase):
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/objects/auto/edit.html')
+                          'http://localhost:7001/objects/auto')
         self.assertEquals(request.applog,
                           [(None, u'Object /objects/auto of type'
                             ' ApplicationObjectMixin created', INFO)])
@@ -636,7 +625,6 @@ class TestResourceAddView(unittest.TestCase):
         from schooltool.browser.app import ResourceAddView
         view = ResourceAddView({})
         self.assertEquals(view.title, "Add resource")
-        self.assertEquals(view.redirect_to_edit, False)
 
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):

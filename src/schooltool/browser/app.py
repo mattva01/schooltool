@@ -248,7 +248,6 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
     prev_title = u""
 
     title = _("Add object") # should be overridden by subclasses
-    redirect_to_edit = True
 
     def do_POST(self, request):
         name = request.args['name'][0]
@@ -280,8 +279,6 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
         self._afterCreationHook(obj)
 
         url = absoluteURL(request, obj)
-        if self.redirect_to_edit:
-            url += '/edit.html'
         return self.redirect(url, request)
 
     def _afterCreationHook(self, obj):
@@ -297,7 +294,6 @@ class GroupAddView(ObjectAddView):
     """View for adding groups (/groups/add.html)."""
 
     title = _("Add group")
-    redirect_to_edit = False
 
     template = Template('www/group_add.pt')
 
@@ -334,7 +330,6 @@ class ResourceAddView(ObjectAddView):
     """View for adding resources (/resources/add.html)."""
 
     title = _("Add resource")
-    redirect_to_edit = False
 
 
 class ObjectContainerView(View):
