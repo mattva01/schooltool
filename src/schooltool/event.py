@@ -29,6 +29,7 @@ from zope.interface import implements
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
+from schooltool.component import getEventService
 
 __metaclass__ = type
 
@@ -39,8 +40,13 @@ class EventMixin:
 
     def __init__(self):
         self.__seen = Set()
+        self.__sent_to_event_service = False
 
     def dispatch(self, target):
+        if not self.__sent_to_event_service:
+            self.__sent_to_event_service = True
+            event_service = getEventService(target)
+            self.dispatch(event_service)
         if target not in self.__seen:
             self.__seen.add(target)
             target.notify(self)
@@ -54,7 +60,7 @@ class EventTargetMixin:
         self.eventTable = PersistentList()
 
     def getEventTable(self):
-        # this method can be overriden in subclasses
+        # this method can be overridden in subclasses
         return self.eventTable
 
     def notify(self, event):

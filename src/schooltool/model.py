@@ -29,7 +29,7 @@ from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentListSet, PersistentKeysDict
-from schooltool.event import EventTargetMixin
+from schooltool.event import EventTargetMixin, EventService
 
 __metaclass__ = type
 
@@ -159,4 +159,8 @@ class Group(Persistent, GroupMember, FacetedEventTargetMixin):
 class RootGroup(Group):
     """A persistent application root object"""
     implements(IRootGroup)
+
+    def __init__(self, name, facetFactory=None):
+        Group.__init__(self, name, facetFactory)
+        self.eventService = EventService()
 

@@ -38,6 +38,19 @@ class TargetStub:
 
 class TestEventMixin(unittest.TestCase):
 
+    def setUp(self):
+        from schooltool import event
+        self.event_service = TargetStub()
+        self.real_getEventService = event.getEventService
+        event.getEventService = self.getEventService
+
+    def tearDown(self):
+        from schooltool import event
+        event.getEventService = self.real_getEventService
+
+    def getEventService(self, context):
+        return self.event_service
+
     def test(self):
         from schooltool.event import EventMixin
         from schooltool.interfaces import IEvent
@@ -46,10 +59,14 @@ class TestEventMixin(unittest.TestCase):
 
     def test_dispatch(self):
         from schooltool.event import EventMixin
-        target = TargetStub()
+        target1 = TargetStub()
+        target2 = TargetStub()
         e = EventMixin()
-        e.dispatch(target)
-        self.assertEquals(target.events, (e, ))
+        e.dispatch(target1)
+        e.dispatch(target2)
+        self.assertEquals(self.event_service.events, (e, ))
+        self.assertEquals(target1.events, (e, ))
+        self.assertEquals(target2.events, (e, ))
 
     def test_dispatch_repeatedly(self):
         from schooltool.event import EventMixin
@@ -58,6 +75,7 @@ class TestEventMixin(unittest.TestCase):
         e.dispatch(target)
         e.dispatch(target)
         e.dispatch(target)
+        self.assertEquals(self.event_service.events, (e, ))
         self.assertEquals(target.events, (e, ))
 
 

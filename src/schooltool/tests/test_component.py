@@ -68,6 +68,11 @@ class TestGetAdapter(unittest.TestCase):
 
 class TestCanonicalPath(unittest.TestCase):
 
+    def test_api(self):
+        from schooltool import component
+        from schooltool.interfaces import IContainmentAPI
+        verifyObject(IContainmentAPI, component)
+
     def test_path(self):
         from schooltool.component import getPath
         from schooltool.interfaces import ILocation, IContainmentRoot
@@ -103,10 +108,8 @@ class TestFacetFunctions(unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IFacetAPI, IContainmentAPI, IURIAPI
+        from schooltool.interfaces import IFacetAPI
         verifyObject(IFacetAPI, component)
-        verifyObject(IContainmentAPI, component)
-        verifyObject(IURIAPI, component)
 
     def test_setFacet(self):
         from schooltool.component import setFacet
@@ -142,7 +145,48 @@ class TestFacetFunctions(unittest.TestCase):
         self.assertEqual(result, [(self.marker, self.facet)])
         self.assertRaises(TypeError, getFacetItems, object())
 
+
+class TestServiceAPI(unittest.TestCase):
+
+    def test_api(self):
+        from schooltool import component
+        from schooltool.interfaces import IServiceAPI
+        verifyObject(IServiceAPI, component)
+
+    def test_getEventService(self):
+        from schooltool.component import getEventService
+        from schooltool.interfaces import IServiceManager, ILocation
+        from schooltool.interfaces import ComponentLookupError
+
+        class RootStub:
+            implements(IServiceManager)
+            eventService = object()
+
+        class ObjectStub:
+            implements(ILocation)
+
+            def __init__(self, parent, name='foo'):
+                self.__parent__ = parent
+                self.__name__ = name
+
+        root = RootStub()
+        a = ObjectStub(root)
+        b = ObjectStub(a)
+        cloud = ObjectStub(None)
+
+        self.assertEquals(getEventService(root), root.eventService)
+        self.assertEquals(getEventService(a), root.eventService)
+        self.assertEquals(getEventService(b), root.eventService)
+        self.assertRaises(ComponentLookupError, getEventService, cloud)
+        self.assertRaises(ComponentLookupError, getEventService, None)
+
+
 class TestSpecificURI(unittest.TestCase):
+
+    def test_api(self):
+        from schooltool import component
+        from schooltool.interfaces import IURIAPI
+        verifyObject(IURIAPI, component)
 
     def test_inspectSpecificURI(self):
         from schooltool.component import inspectSpecificURI
@@ -199,11 +243,13 @@ class TestSpecificURI(unittest.TestCase):
         for string in bad:
             self.assert_(not isURI(string), string)
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGetAdapter))
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
+    suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
     return suite
 

@@ -74,9 +74,14 @@ class IContainmentAPI(Interface):
 class IServiceAPI(Interface):
     """Service API"""
 
-    def getEventService():
+    def getEventService(context):
         """Returns the global event service."""
 
+
+class IServiceManager(Interface):
+    """Container of services"""
+
+    eventService = Attribute("""Event service for this application""")
 
 #
 # Facets
@@ -398,7 +403,7 @@ class IPerson(IGroupMember, IFaceted):
     name = Attribute("Person's name")
 
 
-class IRootGroup(IGroup, IContainmentRoot):
+class IRootGroup(IGroup, IContainmentRoot, IServiceManager):
     """An interface for the application root group."""
 
 

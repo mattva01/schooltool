@@ -26,9 +26,10 @@ from zope.interface import moduleProvides
 from zope.interface.interfaces import IInterface
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
+from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
 
-moduleProvides(IContainmentAPI, IFacetAPI, IURIAPI)
+moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
 
 adapterRegistry = {}
 
@@ -107,8 +108,38 @@ def getFacetItems(ob):
     return ob.__facets__.items()
 
 #
+# IServiceAPI
+#
+
+def getEventService(context):
+    """See IServiceAPI"""
+
+    # The following options for finding the event service are available:
+    #   1. Use a thread-global variable
+    #      - downside: only one event service per process
+    #   2. Use context._p_jar.root()[some_hardcoded_name]
+    #      - downside: only one event service per database
+    #      - downside: context might not be in the database yet
+    #   3. Traverse context until you get at the root and look for services
+    #      there
+    #      - downside: context might not be attached to the hierarchy yet
+    # I dislike globals immensely, so I won't use option 1 without a good
+    # reason.  Option 2 smells of too much magic.  I will consider it if
+    # option 3 proves to be non-viable.
+
+    place = context
+    while not IServiceManager.isImplementedBy(place):
+        if not ILocation.isImplementedBy(place):
+            raise ComponentLookupError(
+                    "Could not find the service manager for ", context)
+        place = place.__parent__
+    return place.eventService
+
+
+#
 # URI API
 #
+
 def inspectSpecificURI(uri):
     """Returns a tuple of a URI and the documentation of the ISpecificURI.
 
@@ -134,6 +165,7 @@ def inspectSpecificURI(uri):
 
     return uri, doc
 
+
 def isURI(uri):
     """Checks if the argument looks like a URI.
 
@@ -142,5 +174,4 @@ def isURI(uri):
     """
     uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
     return uri_re.search(uri)
-
 
