@@ -190,6 +190,7 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.interfaces import IEvent, IAttendanceEvent
         from schooltool.interfaces import ITimetableReplacedEvent
         from schooltool.interfaces import ITimetableExceptionEvent
+        from schooltool.interfaces import ITimetableActivityEvent
         from schooltool.interfaces import IBeforeMembershipEvent
         from schooltool.uris import URIGroup
         from schooltool.app import create_application
@@ -229,6 +230,7 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
                 if isinstance(target, TimetableResourceSynchronizer)]
         self.assert_(ITimetableReplacedEvent in tt_subscriptions)
         self.assert_(ITimetableExceptionEvent in tt_subscriptions)
+        self.assert_(ITimetableActivityEvent in tt_subscriptions)
 
         restr_subscriptions = [iface for target, iface in subscriptions
                 if isinstance(target, RestrictedMembershipPolicy)]

@@ -754,15 +754,7 @@ class SchoolTimetableView(View):
                     group_path = absolutePath(self.request, group)
                     if group_path in timetables:
                         continue
-                    if self.key in group.timetables:
-                        tt = group.timetables[self.key]
-                        for day_id, period_id, activity in tt.itercontent():
-                            for resource in activity.resources:
-                                res_tt = resource.timetables[self.key]
-                                res_tt[day_id].remove(period_id, activity)
-                        tt.clear()
-                    else:
-                        tt = schema.cloneEmpty()
+                    tt = schema.cloneEmpty()
                     group.timetables[self.key] = tt
                     timetables[group_path] = tt
 
@@ -770,11 +762,6 @@ class SchoolTimetableView(View):
                 iterator = self._walkXml(doc, schema, timetables, groups)
                 for tt, day_id, period_id, activity in iterator:
                     tt[day_id].add(period_id, activity)
-                    for res in activity.resources:
-                        if self.key not in res.timetables:
-                            res.timetables[self.key] = schema.cloneEmpty()
-                        res_tt = res.timetables[self.key]
-                        res_tt[day_id].add(period_id, activity)
             except ViewError, e:
                 return textErrorPage(request, e)
 

@@ -59,8 +59,6 @@ broken invariants.
 
 The event handler is hooked up in schooltool.app.create_application.
 
-TODO: event for activity removal.
-
 
 Calendaring
 -----------
@@ -91,6 +89,7 @@ $Id$
 from zope.interface import implements
 from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import ITimetableActivityAddedEvent
+from schooltool.interfaces import ITimetableActivityRemovedEvent
 from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableExceptionAddedEvent
 from schooltool.interfaces import ITimetableExceptionRemovedEvent
@@ -106,6 +105,8 @@ class TimetableResourceSynchronizer:
     def notify(self, event):
         if ITimetableActivityAddedEvent.providedBy(event):
             self.notifyActivityAdded(event)
+        elif ITimetableActivityRemovedEvent.providedBy(event):
+            self.notifyActivityRemoved(event)
         elif ITimetableReplacedEvent.providedBy(event):
             self.notifyTimetableReplaced(event)
         elif ITimetableExceptionAddedEvent.providedBy(event):
@@ -119,6 +120,12 @@ class TimetableResourceSynchronizer:
         self._activityAdded(event.activity, event.activity.timetable.__name__,
                             event.day_id, event.period_id,
                             event.activity.timetable)
+
+    def notifyActivityRemoved(self, event):
+        self._activityRemoved(event.activity,
+                              event.activity.timetable.__name__,
+                              event.day_id, event.period_id,
+                              event.activity.timetable)
 
     def notifyTimetableReplaced(self, event):
         if event.old_timetable is not None:
@@ -150,7 +157,7 @@ class TimetableResourceSynchronizer:
                 obj.timetables[key] = timetable.cloneEmpty()
             tt = obj.timetables[key]
             if tt is not timetable:
-                tt[day_id].add(period_id, activity)
+                tt[day_id].add(period_id, activity, False)
 
     def _activityRemoved(self, activity, key, day_id, period_id, timetable):
         if activity.owner is None:
@@ -159,7 +166,7 @@ class TimetableResourceSynchronizer:
         for obj in [activity.owner] + list(activity.resources):
             tt = obj.timetables.get(key)
             if tt is not timetable:
-                tt[day_id].remove(period_id, activity)
+                tt[day_id].remove(period_id, activity, False)
 
     def _exceptionAdded(self, exception, key):
         activity = exception.activity

@@ -153,6 +153,7 @@ from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
 from schooltool.interfaces import ITimetableActivityAddedEvent
+from schooltool.interfaces import ITimetableActivityRemovedEvent
 from schooltool.interfaces import ITimetableExceptionList
 from schooltool.interfaces import ITimetableExceptionEvent
 from schooltool.interfaces import ITimetableExceptionAddedEvent
@@ -234,16 +235,16 @@ class Timetable(Persistent):
         value.day_id = key
         self.days[key] = value
 
-    def clear(self):
+    def clear(self, send_events=True):
         for day in self.days.itervalues():
             for period in day.periods:
-                day.clear(period)
+                day.clear(period, send_events)
 
     def update(self, other):
         if self.cloneEmpty() != other.cloneEmpty():
             raise ValueError("Timetables have different schemas")
         for day, period, activity in other.itercontent():
-            self[day].add(period, activity)
+            self[day].add(period, activity, False)
         self.exceptions.extend(other.exceptions)
 
     def cloneEmpty(self):
@@ -293,38 +294,43 @@ class TimetableDay(Persistent):
     def __getitem__(self, period):
         return self.activities[period]
 
-    def clear(self, period):
+    def clear(self, period, send_events=True):
         if period not in self.periods:
             raise ValueError("Key %r not in periods %r" % (period,
                                                            self.periods))
+        activities = [act.replace(timetable=self.timetable)
+                      for act in self.activities[period]]
         self.activities[period].clear()
+        if send_events and IEventTarget.providedBy(self.timetable.__parent__):
+            for act in activities:
+                ev = TimetableActivityRemovedEvent(act, self.day_id, period)
+                ev.dispatch(self.timetable.__parent__)
 
-    def add(self, period, activity):
+    def add(self, period, activity, send_events=True):
         if period not in self.periods:
             raise ValueError("Key %r not in periods %r" % (period,
                                                            self.periods))
         if not ITimetableActivity.providedBy(activity):
             raise TypeError("TimetableDay can only contain ITimetableActivity"
                             " objects (got %r)" % (activity, ))
-        # I think the next statement depends on the fact that events are
-        # added to their owner timetables before being added to resource
-        # timetables.  That doesn't seem to be very clean.
         if activity.timetable is None:
-            original = True # protect from infinite recursion
             activity = activity.replace(timetable=self.timetable)
-        else:
-            original = False
         self.activities[period].add(activity)
 
-        if original and IEventTarget.providedBy(self.timetable.__parent__):
+        if send_events and IEventTarget.providedBy(self.timetable.__parent__):
+            activity = activity.replace(timetable=self.timetable)
             event = TimetableActivityAddedEvent(activity, self.day_id, period)
             event.dispatch(self.timetable.__parent__)
 
-    def remove(self, period, value):
+    def remove(self, period, value, send_events=True):
         if period not in self.periods:
             raise ValueError("Key %r not in periods %r"
                              % (period, self.periods))
         self.activities[period].remove(value)
+        if send_events and IEventTarget.providedBy(self.timetable.__parent__):
+            activity = value.replace(timetable=self.timetable)
+            ev = TimetableActivityRemovedEvent(activity, self.day_id, period)
+            ev.dispatch(self.timetable.__parent__)
 
     def __eq__(self, other):
         if not ITimetableDay.providedBy(other):
@@ -449,15 +455,21 @@ class TimetableReplacedEvent(EventMixin):
                 % (getPath(self.object), self.object.title, self.key))
 
 
-class TimetableActivityAddedEvent(EventMixin):
-
-    implements(ITimetableActivityAddedEvent)
+class TimetableActivityEvent(EventMixin):
 
     def __init__(self, activity, day_id, period_id):
         EventMixin.__init__(self)
         self.activity = activity
         self.day_id = day_id
         self.period_id = period_id
+
+
+class TimetableActivityAddedEvent(TimetableActivityEvent):
+    implements(ITimetableActivityAddedEvent)
+
+
+class TimetableActivityRemovedEvent(TimetableActivityEvent):
+    implements(ITimetableActivityRemovedEvent)
 
 
 class TimetableExceptionEvent(EventMixin):

@@ -1519,6 +1519,18 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         tt["B"] = TimetableDay(("Red", "Yellow"))
         service[self.key[1]] = tt
 
+        from schooltool.booking import TimetableResourceSynchronizer
+        from schooltool.interfaces import ITimetableReplacedEvent
+        from schooltool.interfaces import ITimetableExceptionEvent
+        from schooltool.interfaces import ITimetableActivityEvent
+        timetable_resource_synchronizer = TimetableResourceSynchronizer()
+        app.eventService.subscribe(timetable_resource_synchronizer,
+                                   ITimetableReplacedEvent)
+        app.eventService.subscribe(timetable_resource_synchronizer,
+                                   ITimetableExceptionEvent)
+        app.eventService.subscribe(timetable_resource_synchronizer,
+                                   ITimetableActivityEvent)
+
     def tearDown(self):
         self.tearDownRegistries()
         self.tearDownLibxml2()
@@ -1582,6 +1594,10 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         tt["B"].add("Red", email_activity)
         self.sg3.timetables[self.key] = tt
 
+        # Strictly speaking the following bit of code is redundant, because
+        # TimetableResourceSynchronizer already copied the activity.  However,
+        # this bit of code exposed a bug in TimetableResourceSynchronizer, so
+        # I'm leaving it as a regression test.
         tt = tt.cloneEmpty()
         tt["B"].add("Red", email_activity)
         self.room1.timetables[self.key] = tt

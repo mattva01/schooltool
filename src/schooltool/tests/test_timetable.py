@@ -74,6 +74,8 @@ class ActivityStub:
 
     def replace(self, **kwargs):
         self.replaced = True
+        if 'timetable' in kwargs:
+            self.timetable = kwargs['timetable']
         return self
 
 
@@ -325,6 +327,7 @@ class TestTimetableDay(EventServiceTestMixin, unittest.TestCase):
     def test_getitem_add_items_clear_remove(self):
         from schooltool.timetable import TimetableDay, Timetable, TimetableDict
         from schooltool.interfaces import ITimetableActivityAddedEvent
+        from schooltool.interfaces import ITimetableActivityRemovedEvent
 
         periods = ('1', '2', '3', '4')
         timetable = Timetable(['td'])
@@ -343,6 +346,8 @@ class TestTimetableDay(EventServiceTestMixin, unittest.TestCase):
         td.add("1", math)
         e1 = self.checkOneEventReceived()
         self.assert_(ITimetableActivityAddedEvent.providedBy(e1))
+        self.assert_(e1.activity.timetable is timetable)
+        self.assertEquals(e1.activity, math)
         self.assertEquals(e1.day_id, 'td')
         self.assertEquals(e1.period_id, '1')
 
@@ -367,7 +372,14 @@ class TestTimetableDay(EventServiceTestMixin, unittest.TestCase):
         # test clear()
         self.assertEqual(Set(td["2"]), Set([english]))
         self.assertRaises(ValueError, td.clear, "Mo")
+        self.eventService.clearEvents()
         td.clear("2")
+        e2 = self.checkOneEventReceived()
+        self.assert_(ITimetableActivityRemovedEvent.providedBy(e2))
+        self.assert_(e2.activity.timetable is timetable)
+        self.assertEquals(e2.activity, english)
+        self.assertEquals(e2.day_id, 'td')
+        self.assertEquals(e2.period_id, '2')
         self.assertRaises(ValueError, td.clear, "foo")
         self.assertEqual(Set(td["2"]), Set([]))
 
@@ -377,7 +389,14 @@ class TestTimetableDay(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(result, [('1', Set([english, math])),
                                   ('2', Set([])), ('3', Set([])),
                                   ('4', Set([]))])
+        self.eventService.clearEvents()
         td.remove("1", math)
+        e3 = self.checkOneEventReceived()
+        self.assert_(ITimetableActivityRemovedEvent.providedBy(e3))
+        self.assert_(e3.activity.timetable is timetable)
+        self.assertEquals(e3.activity, math)
+        self.assertEquals(e3.day_id, 'td')
+        self.assertEquals(e3.period_id, '1')
         self.assertRaises(KeyError, td.remove, "1", math)
         result = [(p, Set(i)) for p, i in td.items()]
         self.assertEqual(result, [('1', Set([english])),
@@ -557,6 +576,15 @@ class TestTimetableEvents(unittest.TestCase):
         period_id = 'autumn'
         e = TimetableActivityAddedEvent(obj, day_id, period_id)
         verifyObject(ITimetableActivityAddedEvent, e)
+
+    def test_activity_removed_event(self):
+        from schooltool.timetable import TimetableActivityRemovedEvent
+        from schooltool.interfaces import ITimetableActivityRemovedEvent
+        obj = object()
+        day_id = 'Monday'
+        period_id = 'autumn'
+        e = TimetableActivityRemovedEvent(obj, day_id, period_id)
+        verifyObject(ITimetableActivityRemovedEvent, e)
 
 
 class TestTimetableException(unittest.TestCase):

@@ -1367,13 +1367,19 @@ class ITimetableWrite(Interface):
         Throws a ValueError if the key is not a valid day id.
         """
 
-    def clear():
-        """Remove all activities for all periods."""
+    def clear(send_events=True):
+        """Remove all activities for all periods.
+
+        If send_events is True, sends ITimetableActivityRemovedEvents for
+        all removed activities.
+        """
 
     def update(timetable):
         """Add all the events and exceptions from timetable to self.
 
         Useful for producing combined timetables.
+
+        Does not send any events.
         """
 
 
@@ -1424,16 +1430,26 @@ class ITimetableDayWrite(Interface):
     """
 
     def clear(period):
-        """Remove all the activities for a certain period id."""
+        """Remove all the activities for a certain period id.
 
-    def add(period, activity):
+        If send_events is True, sends an ITimetableActivityRemovedEvent
+        for each removed activity.
+        """
+
+    def add(period, activity, send_event=True):
         """Add a single activity to the set of activities planned for
         a given period.
+
+        If send_events is True, sends an ITimetableActivityAddedEvent.
         """
 
     def remove(period, value):
         """Remove a certain activity from a set of activities planned
         for a given period.
+
+        Raises KeyError if there is no matching activity.
+
+        If send_events is True, sends an ITimetableActivityRemovedEvent.
         """
 
 
@@ -1489,12 +1505,20 @@ class ITimetableActivity(Interface):
         """Calculate the hash value of a timetable activity."""
 
 
-class ITimetableActivityAddedEvent(IEvent):
+class ITimetableActivityEvent(IEvent):
     """Event that gets sent when an activity is added to a timetable day."""
 
-    activity = Attribute("""A timetable activity.""")
+    activity = Attribute("""The timetable activity.""")
     day_id = Attribute("""The day_id of the containing timetable day.""")
-    period_id = Attribute("""The period_id of the activity.""")
+    period_id = Attribute("""The period_id of the containing period.""")
+
+
+class ITimetableActivityAddedEvent(ITimetableActivityEvent):
+    """Event that gets sent when an activity is added to a timetable."""
+
+
+class ITimetableActivityRemovedEvent(ITimetableActivityEvent):
+    """Event that gets sent when an activity is removed from a timetable."""
 
 
 class ITimetableExceptionList(Interface):

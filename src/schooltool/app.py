@@ -39,6 +39,8 @@ from schooltool.translation import ugettext as _
 from schooltool.booking import TimetableResourceSynchronizer
 from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableExceptionEvent
+from schooltool.interfaces import ITimetableActivityEvent
+
 
 __metaclass__ = type
 
@@ -171,6 +173,8 @@ def create_application():
                                ITimetableReplacedEvent)
     app.eventService.subscribe(timetable_resource_synchronizer,
                                ITimetableExceptionEvent)
+    app.eventService.subscribe(timetable_resource_synchronizer,
+                               ITimetableActivityEvent)
 
     restricted_membership_policy = RestrictedMembershipPolicy()
     app.eventService.subscribe(restricted_membership_policy,
