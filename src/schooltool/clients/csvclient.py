@@ -83,9 +83,9 @@ columns:
   groups   -- A space-separated list of groups this teacher is a member of.
   birthday -- Date of birth in ISO 8601 format (YYYY-MM-DD).
   comment  -- A comment (a free form string).
-  teaches  -- A space-separated list of groups (classes/sections) 
+  teaches  -- A space-separated list of groups (classes/sections)
               this person teaches.
-  
+
 
 Teachers are implicitly added to the teachers group (/groups/teachers).
 

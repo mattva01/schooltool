@@ -72,7 +72,8 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
 
     def test_importPersonsCsv(self):
         im = self.createImporter()
-        im.importPersonsCsv(['"Jay Hacker","group1 group2","1998-01-01","yay","class1 class2"'], 'teachers')
+        csv = '"Jay Hacker","group1 group2","1998-01-01","yay","class1 class2"'
+        im.importPersonsCsv([csv], 'teachers')
         self.assertEquals(im.persons, [(u'jay hacker', u'teachers',
                                         u'group1 group2', 'class1 class2')])
         self.assertEquals(im.personinfo, [(u'jay hacker', u'jay hacker',

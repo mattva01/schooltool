@@ -189,7 +189,8 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
             (None, u'CSV data import finished successfully', INFO)])
 
     def test_POST_teachers(self):
-        request = RequestStub(args={'teachers.csv':'"C D","","1922-11-22","",""',
+        request = RequestStub(args={'teachers.csv':
+                                        '"C D","","1922-11-22","",""',
                                     'groups.csv': '',
                                     'pupils.csv': '',
                                     'resources.csv': '',
@@ -559,7 +560,6 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                  (["Biology|Nut", "", "Chemistry|Nerd"],
                   [("Biology", "Nut"), None, ("Chemistry", "Nerd")])]:
             self.assertEquals(imp.parseRecordRow(row), expected)
-
 
     def assertIsRelated(self, obj, group, expected=True, rel=uris.URIMember):
         from schooltool.component import getRelatedObjects
