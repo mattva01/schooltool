@@ -68,7 +68,7 @@
                   tal:attributes="href person/calendar/@@absolute_url"
                   >My Calendar</a> |
                 <a id="tools-preferences" i18n:translate=""
-                  tal:attributes="href person/calendar/@@absolute_url"
+                  tal:attributes="href string:${person/@@absolute_url}/preferences.html"
                   >My Preferences</a> |
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"
