@@ -421,8 +421,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         ttday = tt['day1'] = TimetableDay(['A', 'B'])
         ttday.add('A', TimetableActivity(title="Sleeping"))
         ttday.add('B', TimetableActivity(title="Snoring"))
-        self.pupils.timetables[('period1', 'some_schema')] = tt
-        tt_blank = self.pupils.timetables['period1', 'some_schema'] # XXX
+        self.pupils.timetables['period1', 'some_schema'] = tt
 
         tt2 = Timetable(['day2'])
         tt2day = tt2['day2'] = TimetableDay(['A', 'B'])
