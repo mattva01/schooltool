@@ -21,9 +21,10 @@ Unit tests for the relationships.
 
 $Id$
 """
+
 from sets import Set
 import unittest
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
@@ -373,7 +374,6 @@ class TestLinkSet(unittest.TestCase):
         verifyObject(ILinkSet, s)
 
     def test(self):
-        from persistence import Persistent
         from schooltool.relationship import LinkSet
         s = LinkSet()
         reltype_a = object()
@@ -398,7 +398,6 @@ class TestLinkSet(unittest.TestCase):
         self.assertEquals([b], list(s))
 
     def testPlaceholders(self):
-        from persistence import Persistent
         from schooltool.relationship import LinkSet
         s = LinkSet()
         link = LinkStub(object(), object(), Persistent())

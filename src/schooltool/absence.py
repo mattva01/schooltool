@@ -23,7 +23,7 @@ $Id$
 """
 
 from datetime import datetime
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import IAbsenceEvent, IAbsenceEndedEvent

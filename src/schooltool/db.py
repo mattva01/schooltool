@@ -21,9 +21,10 @@ The persistent helper objects for SchoolTool.
 
 $Id$
 """
+
 import UserDict
-from persistence import Persistent
-from persistence.dict import PersistentDict
+from persistent import Persistent
+from persistent.dict import PersistentDict
 import itertools
 
 __metaclass__ = type

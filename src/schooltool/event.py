@@ -23,8 +23,8 @@ $Id$
 """
 
 from sets import Set
-from persistence import Persistent
-from persistence.list import PersistentList
+from persistent import Persistent
+from persistent.list import PersistentList
 from zope.interface import implements
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction

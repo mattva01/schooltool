@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 from datetime import datetime, time, date, timedelta
-from persistence import Persistent
+from persistent import Persistent
 from zope.testing.doctestunit import DocTestSuite
 from zope.interface import implements
 from zope.interface.verify import verifyObject

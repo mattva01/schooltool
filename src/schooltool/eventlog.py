@@ -23,7 +23,7 @@ Utilities for debugging SchoolTool
 import logging
 import datetime
 import time
-from persistence import Persistent
+from persistent import Persistent
 from BTrees._OOBTree import OOBTree
 from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IEventTarget, ILocation, IUtility

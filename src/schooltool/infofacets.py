@@ -21,7 +21,8 @@ The information facets for the Schooltool objects.
 
 $Id$
 """
-from persistence import Persistent
+
+from persistent import Persistent
 from zope.interface import implements
 from schooltool.interfaces import IPersonInfoFacet
 

@@ -22,7 +22,7 @@ Functional tests for SchoolTool event system
 
 import unittest
 from sets import Set
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements, Attribute
 from schooltool.interfaces import IEvent, IEventTarget, IRelatable, ILocation
 from schooltool.tests.utils import RegistriesSetupMixin

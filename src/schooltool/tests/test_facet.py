@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 from sets import Set
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink

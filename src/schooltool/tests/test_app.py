@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import ILocation

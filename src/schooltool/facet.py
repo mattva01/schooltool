@@ -27,7 +27,7 @@ Facets depend on events.
 $Id$
 """
 
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements, classProvides
 from zope.interface.advice import addClassAdvisor
 from schooltool.interfaces import IFacet, IFaceted, IEventConfigurable

@@ -21,8 +21,9 @@ Unit tests for the persistent helper objects.
 
 $Id$
 """
+
 import unittest
-from persistence import Persistent
+from persistent import Persistent
 from schooltool.tests.utils import EqualsSortedMixin
 
 

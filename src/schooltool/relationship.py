@@ -23,7 +23,7 @@ $Id$
 """
 
 import sets
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface import implements, classProvides, moduleProvides
 from schooltool.db import PersistentPairKeysDictWithNames
 from schooltool.db import MaybePersistentKeysSet

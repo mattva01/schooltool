@@ -20,8 +20,8 @@
 The SchoolTool application support objects.
 """
 
-from persistence import Persistent
-from persistence.dict import PersistentDict
+from persistent import Persistent
+from persistent.dict import PersistentDict
 from zope.interface import implements
 from schooltool import model, absence
 from schooltool.auth import TicketService

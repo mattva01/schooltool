@@ -23,7 +23,7 @@ $Id: test_model.py 153 2003-10-16 12:33:50Z mg $
 """
 
 import unittest
-from persistence import Persistent
+from persistent import Persistent
 from zope.interface.verify import verifyObject
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin

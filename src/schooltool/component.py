@@ -24,7 +24,7 @@ $Id$
 
 from zope.interface import moduleProvides, implements, providedBy, Interface
 from zope.interface.adapter import AdapterRegistry
-from persistence.dict import PersistentDict
+from persistent.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IMultiContainer
