@@ -27,37 +27,29 @@ import sets
 import datetime
 import itertools
 
-from schooltool.browser import View, Template
-from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
-from schooltool.browser import valid_name
 from schooltool.browser import AppObjectBreadcrumbsMixin
-from schooltool.browser.auth import PublicAccess
-from schooltool.browser.auth import PrivateAccess
-from schooltool.browser.auth import ManagerAccess
-from schooltool.browser.widgets import TextWidget, dateParser, intParser
-from schooltool.browser.widgets import SelectionWidget
+from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
+from schooltool.browser import View, Template
+from schooltool.browser import valid_name
+from schooltool.browser.auth import ManagerAccess, PrivateAccess, PublicAccess
 from schooltool.browser.cal import next_month, week_start
-from schooltool.interfaces import ITimetabled
-from schooltool.interfaces import ITimetable
-from schooltool.interfaces import ITimetableSchemaService
-from schooltool.interfaces import ISchooldayModel
-from schooltool.interfaces import IApplicationObject
-from schooltool.interfaces import IPerson
-from schooltool.translation import ugettext as _
-from schooltool.timetable import Timetable, TimetableDay
-from schooltool.timetable import SchooldayTemplate
-from schooltool.timetable import SchooldayPeriod
+from schooltool.browser.widgets import SelectionWidget, TextWidget
+from schooltool.browser.widgets import dateParser, intParser
 from schooltool.cal import SchooldayModel
-from schooltool.rest.timetable import format_timetable_for_presentation
-from schooltool.common import to_unicode
-from schooltool.common import parse_date
-from schooltool.component import getTimetableModel
+from schooltool.common import to_unicode, parse_date
 from schooltool.component import getPath, traverse
-from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
+from schooltool.component import getTimetableModel, getTimetableSchemaService
+from schooltool.interfaces import IApplication, IApplicationObject, IPerson
+from schooltool.interfaces import ITimetableSchemaService, ISchooldayModel
+from schooltool.interfaces import ITimetabled, ITimetable
 from schooltool.membership import Membership, memberOf
-from schooltool.uris import URIGroup
 from schooltool.rest import absoluteURL
+from schooltool.rest.timetable import format_timetable_for_presentation
+from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import Timetable, TimetableDay
+from schooltool.translation import ugettext as _
+from schooltool.uris import URIGroup
 
 __metaclass__ = type
 
