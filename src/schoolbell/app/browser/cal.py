@@ -500,15 +500,16 @@ class CalendarViewBase(BrowserView):
     def getJumpToYears(self):
         """Return jump targets for five years centered on the current year."""
         this_year = datetime.today().year
-        return [{'label': year, 'value': year}
+        return [{'label': year,
+                 'href': self.calURL('yearly', date(year, 1, 1))}
                 for year in range(this_year - 2, this_year + 3)]
 
     def getJumpToMonths(self):
         """Return a list of months for the drop down in the jump portlet."""
-        months = []
-        for k, v in month_names.items():
-            months.append({'label': v, 'value': k})
-        return months
+        year = self.cursor.year
+        return [{'label': v,
+                 'href': self.calURL('monthly', date(year, k, 1))}
+                for k, v in month_names.items()]
 
     def monthTitle(self, date):
         return month_names[date.month]

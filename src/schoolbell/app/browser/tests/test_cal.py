@@ -344,15 +344,22 @@ class PrincipalStub:
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
+    def setUp(self):
+        setup.placelessSetUp()
+        setup.setUpTraversal()
+        setup.setUpAnnotations()
+
+    def tearDown(self):
+        setup.placelessTearDown()
+
     def test_dayTitle(self):
         from schoolbell.app.browser.cal import CalendarViewBase
         from schoolbell.app.app import getPersonPreferences
         from schoolbell.app.interfaces import IPersonPreferences
         from schoolbell.app.interfaces import IHavePreferences
 
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -372,9 +379,8 @@ class TestCalendarViewBase(unittest.TestCase):
         from schoolbell.app.interfaces import IPersonPreferences
         from schoolbell.app.interfaces import IHavePreferences
 
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -393,9 +399,8 @@ class TestCalendarViewBase(unittest.TestCase):
         from schoolbell.app.interfaces import IPersonPreferences
         from schoolbell.app.interfaces import IHavePreferences
 
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -435,9 +440,8 @@ class TestCalendarViewBase(unittest.TestCase):
         from schoolbell.app.interfaces import IPersonPreferences
         from schoolbell.app.interfaces import IHavePreferences
 
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -476,9 +480,8 @@ class TestCalendarViewBase(unittest.TestCase):
         from schoolbell.app.interfaces import IPersonPreferences
         from schoolbell.app.interfaces import IHavePreferences
 
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -521,9 +524,8 @@ class TestCalendarViewBase(unittest.TestCase):
         from schoolbell.app.interfaces import IPersonPreferences
         from schoolbell.app.interfaces import IHavePreferences
 
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
-                                 getPersonPreferences)
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -678,6 +680,42 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(len(days), 1)
         self.assertEquals(days[0].date, start)
         self.assertEqualEventLists(days[0].events, [e5, e2])
+
+    def test_getJumpToYears(self):
+        from schoolbell.app.cal import Calendar
+        from schoolbell.app.browser.cal import CalendarViewBase
+        cal = Calendar()
+        directlyProvides(cal, IContainmentRoot)
+
+        first_year = datetime.today().year - 2
+        last_year = datetime.today().year + 2
+
+        view = CalendarViewBase(cal, TestRequest())
+
+        displayed_years = view.getJumpToYears()
+
+        self.assertEquals(displayed_years[0]['label'], first_year)
+        self.assertEquals(displayed_years[0]['href'],
+                          'http://127.0.0.1/calendar/%s' % first_year)
+        self.assertEquals(displayed_years[-1]['label'], last_year)
+        self.assertEquals(displayed_years[-1]['href'],
+                          'http://127.0.0.1/calendar/%s' % last_year)
+
+    def test_getJumpToMonths(self):
+        from schoolbell.app.cal import Calendar
+        from schoolbell.app.browser.cal import CalendarViewBase
+        cal = Calendar()
+        directlyProvides(cal, IContainmentRoot)
+
+        view = CalendarViewBase(cal, TestRequest())
+        view.cursor = date(2005, 3, 1)
+
+        displayed_months = view.getJumpToMonths()
+
+        self.assertEquals(displayed_months[0]['href'],
+                          'http://127.0.0.1/calendar/2005-01')
+        self.assertEquals(displayed_months[-1]['href'],
+                          'http://127.0.0.1/calendar/2005-12')
 
 
 class CalendarEventAddTestView(CalendarEventAddView):
