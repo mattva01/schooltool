@@ -127,13 +127,11 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.browser.csv import CSVImporterZODB
         from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool import membership
+        from schooltool import membership, teaching, relationship
         self.setUpRegistries()
         membership.setUp()
-
-        # Register the teacher_group facet.
-        import schooltool.teaching
-        schooltool.teaching.setUp()
+        relationship.setUp()
+        teaching.setUp()
 
         self.groups = ApplicationObjectContainer(Group)
         self.group1 = self.groups.new(__name__='group1')
@@ -185,16 +183,16 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
 
-#    def test_importPerson_teacher(self):
-#        name = self.im.importPerson('Wesson', 'group1', 'group2',
-#                                    teaching=True)
-#        person = self.persons[name]
-#        self.assertEquals(person.title, 'Wesson')
-#
-#        objs = [link.traverse() for link in person.listLinks()]
-#        self.assertEquals(len(objs), 2)
-#        self.assert_(self.group1 in objs)
-#        self.assert_(self.group2 in objs)
+    def test_importPerson_teacher(self):
+        name = self.im.importPerson('Wesson', 'group1', 'group2',
+                                    teaching=True)
+        person = self.persons[name]
+        self.assertEquals(person.title, 'Wesson')
+
+        objs = [link.traverse() for link in person.listLinks()]
+        self.assertEquals(len(objs), 2)
+        self.assert_(self.group1 in objs)
+        self.assert_(self.group2 in objs)
 
     def test_importResource(self):
         name = self.im.importResource('Stool', 'group1 group2')

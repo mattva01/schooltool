@@ -108,7 +108,6 @@ class CSVImporterZODB(CSVImporterBase):
                 Membership(group=self.groups[group], member=person)
         else:
             for group in groups.split():
-                # XXX Doesn't work!  "No handler registered for URITeaching"
                 Teaching(teacher=person, taught=self.groups[group])
 
         return person.__name__
