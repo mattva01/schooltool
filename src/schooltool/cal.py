@@ -1096,7 +1096,7 @@ class DailyRecurrenceRule:
         """See if self != other."""
 
     def __hash__():
-        """Return the hash value of this recurrence rule
+        """Return the hash value of this recurrence rule.
 
         It is guaranteed that if recurrence rules compare equal, hash will
         return the same value.
