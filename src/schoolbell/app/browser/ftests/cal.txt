@@ -198,22 +198,19 @@ SchoolBell lets users overlay calendars of other users and groups, and see all
 calendar events in one view.  When you are logged in, and you look at your own
 calendar, you will see a new portlet on the left:
 
-XXX This test is disabled for now, because regular user's can't even access
-    their own calendars yet -- mg
-
-##  >>> print http(r"""
-##  ... GET /frogpond/persons/frog/calendar HTTP/1.1
-##  ... Authorization: Basic frog:pwd
-##  ... """, handle_errors=False)
-##  HTTP/1.1 200 Ok
-##  Content-Type: text/html;charset=utf-8
-##  <BLANKLINE>
-##  ...
-##  <div id="portlet-calendar-overlay" class="portlet">
-##    <h4>Calendars</h4>
-##    ...
-##    <form ...>
-##    </form>
-##  </div>
-##  ...
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    ...
+    <div id="portlet-calendar-overlay" class="portlet">
+      <h4>Calendars</h4>
+      ...
+      <form ...>
+      </form>
+    </div>
+    ...
 

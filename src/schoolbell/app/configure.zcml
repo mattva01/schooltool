@@ -22,22 +22,25 @@
   </content>
 
   <content class=".app.PersonContainer">
-    <require permission="schoolbell.view"
-             interface="zope.app.container.interfaces.IReadContainer" />
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view" 
+             attributes="keys values __iter__ __len__" />
     <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".app.GroupContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
-             interface="zope.app.container.interfaces.IReadContainer" />
+             attributes="keys values __iter__ __len__" />
     <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".app.ResourceContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
-             interface="zope.app.container.interfaces.IReadContainer" />
+             attributes="keys values __iter__ __len__" />
     <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
