@@ -39,6 +39,7 @@ from schooltool.interfaces import ISpecificURI, IFaceted
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IUnlinkHook
 from schooltool.component import inspectSpecificURI, registerRelationship
+from schooltool.component import strURI, getPath
 from schooltool import component
 from schooltool.event import EventMixin
 
@@ -199,6 +200,25 @@ class RelationshipEvent(EventMixin):
     def __init__(self, links):
         EventMixin.__init__(self)
         self.links = links
+
+    def __str__(self):
+        event = self.__class__.__name__
+        s = ["<%s>" % event]
+        reltype = self.links[0].reltype
+        if reltype is not None:
+            s.append("  <reltype>%s</reltype>" % strURI(reltype))
+        title = self.links[0].title
+        if title:
+            s.append("  <title>%s</title>" % title)
+        for link in self.links:
+            try:
+                path = getPath(link.traverse())
+            except TypeError:
+                path = str(link.traverse())
+            s.append("  <link role=\"%s\" target=\"%s\"/>"
+                     % (strURI(link.role), path))
+        s.append("</%s>" % event)
+        return "\n".join(s)
 
 
 class RelationshipAddedEvent(RelationshipEvent):

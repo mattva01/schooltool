@@ -652,6 +652,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(transaction.history, 'C')
 
     def test_createApplication(self):
+        from schooltool.interfaces import IEvent
         from schooltool.main import Server
         from schooltool import relationship
         relationship.setUp()
@@ -663,6 +664,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         a = app['groups']['teachers']
         b = app['persons']['Aiste']
         c = app['persons']['Steve']
+
+        event_log = app.utilityService['eventlog']
+        event_service = app.eventService
+        self.assert_((event_log, IEvent) in event_service.listSubscriptions())
 
 
 def test_suite():

@@ -50,6 +50,8 @@ from schooltool import model
 from schooltool.views import errorPage
 from schooltool.membership import Membership
 from schooltool.component import getView
+from schooltool.debug import EventLogUtility
+from schooltool.interfaces import IEvent
 
 __metaclass__ = type
 
@@ -482,6 +484,11 @@ class Server:
     def createApplication(self):
         """Instantiate a new application"""
         app = Application()
+
+        event_log = EventLogUtility()
+        app.utilityService['eventlog'] = event_log
+        app.eventService.subscribe(event_log, IEvent)
+
         app['groups'] = ApplicationObjectContainer(model.Group)
         app['persons'] = ApplicationObjectContainer(model.Person)
         Person = app['persons'].new
@@ -501,6 +508,7 @@ class Server:
         Membership(group=students, member=Person("Aiste", title="Aiste"))
         Membership(group=cleaners, member=Person("Albert", title="Albert"))
         Membership(group=cleaners, member=Person("Marius", title="Marius"))
+
         return app
 
     def notifyConfigFile(self, config_file):

@@ -735,6 +735,7 @@ class IUtility(ILocation):
 
     title = Attribute("Short descriptive text")
 
+
 class IUtilityService(ILocation):
     """The utility service manages utilities."""
 

@@ -59,6 +59,18 @@ class Relatable(LocatableEventTargetMixin):
         LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = Set()
 
+class LinkStub:
+    implements(ILink)
+
+    def __init__(self, reltype=None, role=None, target=None, title=None):
+        self.reltype = reltype
+        self.role = role
+        self._target = target
+        self.title = title
+
+    def traverse(self):
+        return self._target
+
 class TestRelationship(EventServiceTestMixin, unittest.TestCase):
     """Conceptual relationships are really represented by three
     closely bound objects -- two links and a median relationship
@@ -233,14 +245,17 @@ class TestEvents(unittest.TestCase):
         from schooltool.relationship import RelationshipRemovedEvent
         from schooltool.interfaces import IRelationshipAddedEvent
         from schooltool.interfaces import IRelationshipRemovedEvent
-        links = (object(), object())
+        links = (LinkStub(role=URIReport, target=object()),
+                 LinkStub(role=URISuperior, target=object()))
         e = RelationshipAddedEvent(links)
         verifyObject(IRelationshipAddedEvent, e)
         self.assert_(e.links is links)
+        self.assert_('RelationshipAddedEvent' in str(e))
 
         e = RelationshipRemovedEvent(links)
         verifyObject(IRelationshipRemovedEvent, e)
         self.assert_(e.links is links)
+        self.assert_('RelationshipRemovedEvent' in str(e))
 
 
 class TestRelate(EventServiceTestMixin, unittest.TestCase):
@@ -328,12 +343,8 @@ class TestRelatableMixin(unittest.TestCase):
         class URIJanitor(URIEmployee): "foo:janitor"
         class URIWindowWasher(URIJanitor): "foo:windowman"
 
-        class LinkStub:
-            def __init__(self, role):
-                self.role = role
-
-        j = LinkStub(URIJanitor)
-        e = LinkStub(URIEmployee)
+        j = LinkStub(role=URIJanitor)
+        e = LinkStub(role=URIEmployee)
 
         a.__links__ = [e, j]
 
@@ -341,18 +352,6 @@ class TestRelatableMixin(unittest.TestCase):
         self.assertEqual(a.listLinks(URIEmployee), [e, j])
         self.assertEqual(a.listLinks(URIJanitor), [j])
         self.assertEqual(a.listLinks(URIWindowWasher), [])
-
-
-class LinkStub:
-    implements(ILink)
-
-    def __init__(self, reltype, role, target):
-        self.reltype = reltype
-        self.role = role
-        self._target = target
-
-    def traverse(self):
-        return self._target
 
 
 class SimplePlaceholder:
