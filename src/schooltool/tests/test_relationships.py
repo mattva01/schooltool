@@ -209,8 +209,60 @@ class TestRelationshipSchema(unittest.TestCase):
             self.assert_(link_to_report.traverse() is report)
 
 
+class TestEvents(unittest.TestCase):
+
+    def test_relationship_events(self):
+        from schooltool.relationships import RelationshipAddedEvent
+        from schooltool.relationships import RelationshipRemovedEvent
+        from schooltool.interfaces import IRelationshipAddedEvent
+        from schooltool.interfaces import IRelationshipRemovedEvent
+        links = (object(), object())
+        e = RelationshipAddedEvent(links)
+        verifyObject(IRelationshipAddedEvent, e)
+        self.assert_(e.links is links)
+
+        e = RelationshipRemovedEvent(links)
+        verifyObject(IRelationshipRemovedEvent, e)
+        self.assert_(e.links is links)
+
+
+class TestRelate(EventServiceTestMixin, unittest.TestCase):
+
+    def check_one_event_received(self, receivers):
+        self.assertEquals(len(self.eventService.events), 1)
+        e = self.eventService.events[0]
+        for target in receivers:
+            self.assertEquals(len(target.events), 1)
+            self.assert_(target.events[0] is e)
+        return e
+
+    def test_relate(self):
+        from schooltool.interfaces import IRelationshipAddedEvent
+        from schooltool.relationships import relate_default as relate
+        title = 'a title'
+        a = Relatable(self.serviceManager)
+        role_a = URISuperior
+        b = Relatable(self.serviceManager)
+        role_b = URIReport
+
+        links = relate(URICommand, (a, role_a), (b, role_b), title='a title')
+
+        self.assertEqual(len(links), 2)
+        self.assertEquals(Set([l.traverse() for l in links]), Set([a, b]))
+        self.assertEquals(Set([l.role for l in links]), Set([role_a, role_b]))
+        self.assertEquals(links[0].title, title)
+        self.assertEquals(links[1].title, title)
+        self.assertEquals(links[0].reltype, URICommand)
+        self.assertEquals(links[1].reltype, URICommand)
+        e = self.check_one_event_received([a, b])
+        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
+        self.assert_(e.links is links)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestRelationship))
     suite.addTest(unittest.makeSuite(TestRelationshipSchema))
+    suite.addTest(unittest.makeSuite(TestEvents))
+    suite.addTest(unittest.makeSuite(TestRelate))
     return suite

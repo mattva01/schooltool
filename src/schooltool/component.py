@@ -29,7 +29,6 @@ from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
-from schooltool.interfaces import URIGroup, URIMember, URIMembership
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
 
@@ -183,59 +182,38 @@ def isURI(uri):
 # Relationships
 #
 
-# These are here to avoid circular imports
-from schooltool.membership import MemberLink, GroupLink
+relationship_registry = []
 
-# relate3 is replaced by a stub when unit testing
-from schooltool.relationships import relate as relate3
+def resetRelationshipRegistry():
+    """Clears the relationship registry"""
+    global relationship_registry
+    relationship_registry = []
+
+
+def registerRelationship(rel_type, handler):
+    """See IRelationshipAPI"""
+    for type, ignore in relationship_registry:
+        if type is rel_type:
+            raise ValueError("Handler for %s already registered" % rel_type)
+    relationship_registry.append((rel_type, handler))
+
+
+def getRelationshipHandlerFor(rel_type):
+    """Returns the registered handler for relationship_type."""
+    best, best_handler = None, None
+    for type, handler in relationship_registry:
+        if (rel_type.extends(type, False)
+            and (best is None or type.extends(best, False))):
+            best, best_handler = type, handler
+    if best is None:
+        raise ComponentLookupError("No handler registered for %s" % rel_type)
+    return best_handler
+
 
 def relate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipAPI"""
-    # XXX This is to avoid a circular import
-    from schooltool.event import RelationshipAddedEvent, MemberAddedEvent
-
-    if relationship_type is URIMembership:
-        if title is not None and title != "Membership":
-            raise TypeError(
-                "A relationship of type URIMembership must have roles"
-                " URIMember and URIGroup, and the title (if any) must be"
-                " 'Membership'.")
-
-        r = Set((role_a, role_b))
-        try:
-            r.remove(URIMember)
-            r.remove(URIGroup)
-        except KeyError:
-            raise TypeError(
-                "A relationship of type URIMembership must have roles"
-                " URIMember and URIGroup, and the title (if any) must be"
-                " 'Membership'.")
-
-        if r:
-            raise TypeError(
-                "A relationship of type URIMembership must have roles"
-                " URIMember and URIGroup, and the title (if any) must be"
-                " 'Membership'.")
-
-        if role_a is URIGroup:
-            group, member = a, b
-            name = group.add(member)
-            links = (MemberLink(group, member, name),
-                     GroupLink(member, group, name))
-        else:
-            group, member = b, a
-            name = group.add(member)
-            links = (GroupLink(member, group, name),
-                     MemberLink(group, member, name))
-        event = MemberAddedEvent(links)
-    else:
-        links = relate3(relationship_type, (a, role_a), (b, role_b),
-                        title=title)
-        event = RelationshipAddedEvent(links)
-
-    event.dispatch(a)
-    event.dispatch(b)
-    return links
+    handler = getRelationshipHandlerFor(relationship_type)
+    return handler(relationship_type, (a, role_a), (b, role_b), title=title)
 
 
 def getRelatedObjects(obj, role):

@@ -30,13 +30,6 @@ from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 from schooltool.interfaces import IRouteToRelationshipsAction
-from schooltool.interfaces import IRelationshipEvent
-from schooltool.interfaces import IRelationshipAddedEvent
-from schooltool.interfaces import IRelationshipRemovedEvent
-from schooltool.interfaces import IMembershipEvent
-from schooltool.interfaces import IMemberAddedEvent
-from schooltool.interfaces import IMemberRemovedEvent
-from schooltool.interfaces import URIMember, URIGroup
 from schooltool.component import getEventService
 from schooltool.component import getRelatedObjects, inspectSpecificURI
 
@@ -59,55 +52,6 @@ class EventMixin:
         if target not in self.__seen:
             self.__seen.add(target)
             target.notify(self)
-
-
-class RelationshipEvent(EventMixin):
-
-    implements(IRelationshipEvent)
-
-    def __init__(self, links):
-        EventMixin.__init__(self)
-        self.links = links
-
-
-class RelationshipAddedEvent(RelationshipEvent):
-    implements(IRelationshipAddedEvent)
-
-
-class RelationshipRemovedEvent(RelationshipEvent):
-    implements(IRelationshipRemovedEvent)
-
-
-class MembershipEvent(RelationshipEvent):
-
-    implements(IMembershipEvent)
-
-    def __init__(self, links):
-        RelationshipEvent.__init__(self, links)
-        self.member = None
-        self.group = None
-        for link in links:
-            if link.role.extends(URIMember, False):
-                if self.member is not None:
-                    raise TypeError("only one URIMember must be present"
-                                    " among links", links)
-                self.member = link.traverse()
-            if link.role.extends(URIGroup, False):
-                if self.group is not None:
-                    raise TypeError("only one URIGroup must be present"
-                                    " among links", links)
-                self.group = link.traverse()
-        if self.member is None or self.group is None:
-            raise TypeError("both URIGroup and URIMember must be present"
-                            " among links", links)
-
-
-class MemberAddedEvent(MembershipEvent):
-    implements(IMemberAddedEvent)
-
-
-class MemberRemovedEvent(MembershipEvent):
-    implements(IMemberRemovedEvent)
 
 
 class EventTargetMixin:

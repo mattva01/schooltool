@@ -28,19 +28,16 @@ from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember, IFacet, IFaceted
 from schooltool.interfaces import IEventConfigurable
-from schooltool.tests.utils import LocatableEventTargetMixin
-from schooltool.tests.utils import EventServiceTestMixin
 
 __metaclass__ = type
 
 class P(Persistent):
     pass
 
-class MemberStub(LocatableEventTargetMixin):
+class MemberStub:
     implements(IGroupMember, IFaceted)
 
-    def __init__(self, parent=None, name='does not matter'):
-        LocatableEventTargetMixin.__init__(self, parent, name)
+    def __init__(self):
         self.__facets__ = {}
         self.added = None
         self.removed = None
@@ -51,7 +48,7 @@ class MemberStub(LocatableEventTargetMixin):
     def notifyRemove(self, group):
         self.removed = group
 
-class GroupStub(LocatableEventTargetMixin):
+class GroupStub:
     deleted = None
 
     def __delitem__(self, key):

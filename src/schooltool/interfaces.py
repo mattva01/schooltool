@@ -321,6 +321,16 @@ class IRelationshipAPI(Interface):
             [link.traverse() for link in obj.listLinks(role)]
         """
 
+    def registerRelationshipType(relationship_type, handler):
+        """Register a relationship type.
+
+        relationship_type is an ISpecificURI.
+        handler is a function whose signature mathes IRelationshipAPI.relate.
+
+        When IRelationshipAPI.relate is called, it will find the handler for
+        the most specific relationship type and defer to that.
+        """
+
 
 #
 # Groups and membership

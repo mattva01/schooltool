@@ -270,6 +270,18 @@ class URIReport(ISpecificURI):
 
 class TestRelationships(EventServiceTestMixin, unittest.TestCase):
 
+    def setUp(self):
+        from schooltool.relationships import setUp as setUpRelationships
+        from schooltool import component
+        self.old_registry = component.relationship_registry
+        component.resetRelationshipRegistry()
+        setUpRelationships()
+        self.setUpEventService()
+
+    def tearDown(self):
+        from schooltool import component
+        component.relationship_registry = self.old_registry
+
     def test_getRelatedObjects(self):
         from schooltool.component import getRelatedObjects, relate
         officer = Relatable(self.serviceManager)
@@ -281,161 +293,45 @@ class TestRelationships(EventServiceTestMixin, unittest.TestCase):
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
 
-
-class Stub_relate3:
-    reltype = None
-    title = None
-    a = None
-    role_a = None
-    b = None
-    role_b = None
-
-    def __call__(self, reltype, (a, role_a), (b, role_b), title=None):
-        self.reltype = reltype
-        self.title = title
-        self.a = a
-        self.role_a = role_a
-        self.b = b
-        self.role_b = role_b
-        return object(), object()
-
-class MemberStub(LocatableEventTargetMixin):
-    pass
-
-class GroupStub(LocatableEventTargetMixin):
-
-    def add(self, value):
-        return "name"
-
-class TestRelate(EventServiceTestMixin, unittest.TestCase):
-
-    def setUp(self):
-        from schooltool import component
-        self.real_relate3 = component.relate3
-        component.relate3 = self.stub = Stub_relate3()
-        self.setUpEventService()
-
-    def tearDown(self):
-        from schooltool import component
-        component.relate3 = self.real_relate3
-
-    def check_one_event_received(self, receivers):
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        for target in receivers:
-            self.assertEquals(len(target.events), 1)
-            self.assert_(target.events[0] is e)
-        return e
-
-    def test_relate(self):
+    def test_relate_and_registry(self):
+        from schooltool.component import registerRelationship
+        from schooltool.component import resetRelationshipRegistry
+        from schooltool.component import getRelationshipHandlerFor
         from schooltool.component import relate
-        from schooltool.interfaces import IRelationshipAddedEvent
-        title = 'a title'
-        a = Relatable(self.serviceManager)
-        role_a = URISuperior
-        b = Relatable(self.serviceManager)
-        role_b = URIReport
+        from schooltool.interfaces import ISpecificURI, ComponentLookupError
 
-        links = relate(URICommand, (a, role_a), (b, role_b), title='a title')
+        class URISomething(ISpecificURI):
+            """http://ns.example.com/something"""
 
-        self.assertEqual(len(links), 2)
-        self.assertEqual(self.stub.reltype, URICommand)
-        self.assertEqual(self.stub.title, title)
-        self.assert_(self.stub.a is a)
-        self.assert_(self.stub.role_a is role_a)
-        self.assert_(self.stub.b is b)
-        self.assert_(self.stub.role_b is role_b)
-        e = self.check_one_event_received([a, b])
-        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
-        self.assert_(e.links is links)
+        def stub(*args, **kw):
+            return ('stub', args, kw)
 
-    def test_relate_membership(self):
-        from schooltool.component import relate
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
+        def stub2(*args, **kw):
+            return ('stub2', args, kw)
 
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
+        resetRelationshipRegistry()
+        self.assertRaises(ComponentLookupError,
+                          getRelationshipHandlerFor, ISpecificURI)
+        self.assertRaises(ComponentLookupError,
+                          getRelationshipHandlerFor, URISomething)
 
-        links = relate(URIMembership, (g, URIGroup), (m, URIMember))
+        registerRelationship(ISpecificURI, stub)
+        self.assertEquals(getRelationshipHandlerFor(ISpecificURI), stub)
+        self.assertEquals(getRelationshipHandlerFor(URISomething), stub)
 
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), MemberLink)
-        self.assertEqual(type(links[1]), GroupLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(e.links is links)
-        self.assert_(e.member is m)
-        self.assert_(e.group is g)
+        registerRelationship(URISomething, stub2)
+        self.assertEquals(getRelationshipHandlerFor(ISpecificURI), stub)
+        self.assertEquals(getRelationshipHandlerFor(URISomething), stub2)
 
-    def test_relate_membership_with_title(self):
-        from schooltool.component import relate
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
+        self.assertRaises(ValueError, registerRelationship, ISpecificURI, stub)
 
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        links = relate(URIMembership, (g, URIGroup), (m, URIMember),
-                       title="Membership")
-
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), MemberLink)
-        self.assertEqual(type(links[1]), GroupLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(e.links is links)
-        self.assert_(e.member is m)
-        self.assert_(e.group is g)
-
-    def test_relate_membership_reverse_order(self):
-        from schooltool.component import relate
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        links = relate(URIMembership,  (m, URIMember), (g, URIGroup))
-
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), GroupLink)
-        self.assertEqual(type(links[1]), MemberLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(e.links is links)
-        self.assert_(e.member is m)
-        self.assert_(e.group is g)
-
-    def test_relate_membership_not(self):
-        from schooltool.component import relate
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IRelationshipAddedEvent
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        links = relate(URIMember,  (m, URIMember), (g, URIGroup))
-
-        self.assertEqual(len(links), 2)
-        self.assertNotEqual(type(links[0]), GroupLink)
-        self.assertNotEqual(type(links[1]), MemberLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
-        self.assert_(not IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(e.links is links)
-
-        self.assertRaises(TypeError, relate,
-                          URIMembership,  (m, URIMember), (g, URISuperior))
-
-        self.assertRaises(TypeError, relate,
-                          URIMembership,  (m, URIMember), (g, URISuperior),
-                          title="foo")
+        m, g = object(), object()
+        args = (URISomething, (m, URISomething), (g, URISomething))
+        self.assertEquals(relate(*args), ('stub2', args, {'title': None}))
+        title = 'foo'
+        args = (ISpecificURI, (m, URISomething), (g, URISomething))
+        self.assertEquals(relate(title=title, *args),
+                          ('stub', args, {'title': title}))
 
 
 def test_suite():
@@ -446,7 +342,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
     suite.addTest(unittest.makeSuite(TestRelationships))
-    suite.addTest(unittest.makeSuite(TestRelate))
     return suite
 
 if __name__ == '__main__':

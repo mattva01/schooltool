@@ -22,14 +22,19 @@ SchoolTool groups and members
 $Id: model.py 153 2003-10-16 12:33:50Z mg $
 """
 
+from sets import Set
 from zope.interface import implements
 from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
 from schooltool.interfaces import IQueryLinks, IGroupMember, IGroup
 from schooltool.interfaces import ISpecificURI, IRemovableLink
 from schooltool.interfaces import URIMembership, URIGroup, URIMember
+from schooltool.interfaces import IMembershipEvent
+from schooltool.interfaces import IMemberAddedEvent
+from schooltool.interfaces import IMemberRemovedEvent
 from schooltool.db import PersistentKeysDict
-from schooltool.relationships import RelationshipSchema
+from schooltool.relationships import RelationshipSchema, RelationshipEvent
+from schooltool.component import registerRelationship
 
 __metaclass__ = type
 
@@ -63,7 +68,6 @@ class GroupLink:
     def unlink(self):
         """See IRemovableLink"""
         del self._group[self.name]
-        from schooltool.event import MemberRemovedEvent
         otherlink = MemberLink(self._group, self.__parent__, self.name)
         event = MemberRemovedEvent((self, otherlink))
         event.dispatch(self.traverse())
@@ -96,7 +100,6 @@ class MemberLink:
     def unlink(self):
         """See IRemovableLink"""
         del self.__parent__[self.name]
-        from schooltool.event import MemberRemovedEvent
         otherlink = GroupLink(self._member, self.__parent__, self.name)
         event = MemberRemovedEvent((self, otherlink))
         event.dispatch(self.traverse())
@@ -172,6 +175,7 @@ class GroupMixin(Persistent):
         """See IGroup"""
         if not IGroupMember.isImplementedBy(member):
             raise TypeError("Members must implement IGroupMember")
+        ## XXX can we remove this?
         ##if self._p_jar is not None:
         ##    self._p_jar.add(member)
         key = self._next_key
@@ -207,4 +211,82 @@ class GroupMixin(Persistent):
 
 Membership = RelationshipSchema(URIMembership,
                                 group=URIGroup, member=URIMember)
+
+
+class MembershipEvent(RelationshipEvent):
+
+    implements(IMembershipEvent)
+
+    def __init__(self, links):
+        RelationshipEvent.__init__(self, links)
+        self.member = None
+        self.group = None
+        for link in links:
+            if link.role.extends(URIMember, False):
+                if self.member is not None:
+                    raise TypeError("only one URIMember must be present"
+                                    " among links", links)
+                self.member = link.traverse()
+            if link.role.extends(URIGroup, False):
+                if self.group is not None:
+                    raise TypeError("only one URIGroup must be present"
+                                    " among links", links)
+                self.group = link.traverse()
+        if self.member is None or self.group is None:
+            raise TypeError("both URIGroup and URIMember must be present"
+                            " among links", links)
+
+
+class MemberAddedEvent(MembershipEvent):
+    implements(IMemberAddedEvent)
+
+
+class MemberRemovedEvent(MembershipEvent):
+    implements(IMemberRemovedEvent)
+
+
+def relate_membership(relationship_type, (a, role_a), (b, role_b), title=None):
+    """See IRelationshipAPI.relate"""
+
+    assert relationship_type is URIMembership
+    if title is not None and title != "Membership":
+        raise TypeError(
+            "A relationship of type URIMembership must have roles"
+            " URIMember and URIGroup, and the title (if any) must be"
+            " 'Membership'.")
+
+    r = Set((role_a, role_b))
+    try:
+        r.remove(URIMember)
+        r.remove(URIGroup)
+    except KeyError:
+        raise TypeError(
+            "A relationship of type URIMembership must have roles"
+            " URIMember and URIGroup, and the title (if any) must be"
+            " 'Membership'.")
+
+    if r:
+        raise TypeError(
+            "A relationship of type URIMembership must have roles"
+            " URIMember and URIGroup, and the title (if any) must be"
+            " 'Membership'.")
+
+    if role_a is URIGroup:
+        group, member = a, b
+        name = group.add(member)
+        links = (MemberLink(group, member, name),
+                 GroupLink(member, group, name))
+    else:
+        group, member = b, a
+        name = group.add(member)
+        links = (GroupLink(member, group, name),
+                 MemberLink(group, member, name))
+    event = MemberAddedEvent(links)
+    event.dispatch(a)
+    event.dispatch(b)
+    return links
+
+
+def setUp():
+    registerRelationship(URIMembership, relate_membership)
 

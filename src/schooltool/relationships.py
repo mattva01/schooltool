@@ -26,7 +26,12 @@ from zope.interface import implements, classProvides
 from schooltool.interfaces import IRemovableLink, IRelatable
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
-from schooltool.component import inspectSpecificURI
+from schooltool.interfaces import IRelationshipEvent
+from schooltool.interfaces import IRelationshipAddedEvent
+from schooltool.interfaces import IRelationshipRemovedEvent
+from schooltool.interfaces import ISpecificURI
+from schooltool.component import inspectSpecificURI, registerRelationship
+from schooltool.event import EventMixin
 
 __metaclass__ = type
 
@@ -69,7 +74,6 @@ class Link(Persistent):
         self.__parent__.__links__.remove(self)
         otherlink = self.relationship.traverse(self)
         self.traverse().__links__.remove(otherlink)
-        from schooltool.event import RelationshipRemovedEvent
         event = RelationshipRemovedEvent((self, otherlink))
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
@@ -146,3 +150,36 @@ def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
     link_b = Link(b, role_of_a)
     _LinkRelationship(reltype, title, link_a, link_b)
     return link_a, link_b
+
+
+class RelationshipEvent(EventMixin):
+
+    implements(IRelationshipEvent)
+
+    def __init__(self, links):
+        EventMixin.__init__(self)
+        self.links = links
+
+
+class RelationshipAddedEvent(RelationshipEvent):
+    implements(IRelationshipAddedEvent)
+
+
+class RelationshipRemovedEvent(RelationshipEvent):
+    implements(IRelationshipRemovedEvent)
+
+
+def relate_default(relationship_type, (a, role_a), (b, role_b), title=None):
+    """See IRelationshipAPI.relate"""
+
+    links = relate(relationship_type, (a, role_a), (b, role_b),
+                   title=title)
+    event = RelationshipAddedEvent(links)
+    event.dispatch(a)
+    event.dispatch(b)
+    return links
+
+
+def setUp():
+    registerRelationship(ISpecificURI, relate_default)
+
