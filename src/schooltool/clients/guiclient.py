@@ -153,7 +153,8 @@ class SchoolToolClient:
                 hdrs['Content-Type'] = 'text/xml'
                 hdrs['Content-Length'] = len(body)
             if self.user is not None:
-                data = "Basic " + base64.encodestring("foo:bar").strip()
+                creds = "%s:%s" % (self.user, self.password)
+                data = "Basic " + base64.encodestring(creds).strip()
                 hdrs['Authorization'] = data
             if headers:
                 hdrs.update(headers)

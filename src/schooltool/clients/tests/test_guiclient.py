@@ -253,6 +253,15 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         conn = self.oneConnection(client)
         self.assertEquals(conn.headers['Authorization'], "Basic " + data)
 
+        response = ResponseStub(200, 'OK')
+        client = self.newClient(response)
+        client.user = 'erk'
+        client.password = 'frump'
+        data = base64.encodestring("erk:frump").strip()
+        result = client._request('GET', '/')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.headers['Authorization'], "Basic " + data)
+
     def test_request_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError
         path = '/path'
