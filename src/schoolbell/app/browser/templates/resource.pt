@@ -6,7 +6,7 @@
 <h1 metal:fill-slot="content-header" i18n:translate="">Resource info</h1>
 <metal:block metal:fill-slot="body">
 
-  <p class="description" tal:content="context/description|nothing"/>
+  <p class="description" tal:content="context/description"/>
 
   <div class="row">
     <strong i18n:translate="">Identifier:</strong>

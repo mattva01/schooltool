@@ -17,7 +17,7 @@
 
 <metal:block metal:fill-slot="body">
 
-  <p class="description" tal:content="context/description|nothing"/>
+  <p class="description" tal:content="context/description"/>
 
   <div>
     <h3 i18n:translate="">Calendar</h3>
