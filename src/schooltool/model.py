@@ -207,7 +207,8 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
     def keys(self):
         self.checkJar()
         # XXX returning a lazy sequence is one optimization we might make
-        return [self._toExternalKey(key) for key in self._data]
+        toExternalKey = self._toExternalKey
+        return [toExternalKey(key) for key in self._data]
 
     def __contains__(self, key):
         self.checkKey(key)
@@ -215,8 +216,9 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
 
     def __iter__(self):
         self.checkJar()
+        toExternalKey = self._toExternalKey
         for key in self._data:
-            yield self._toExternalKey(key)
+            yield toExternalKey(key)
 
     def __len__(self):
         return len(self._data)
@@ -226,12 +228,13 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
             raise TypeError("PersistentKeyDict %r must be added "
                             "to the connection before being used" % (self, ))
 
+    # Override the next four methods in a subclass if you need to support
+    # keys more complex than a single persistent object.
+
     def checkKey(self, key):
         if not hasattr(key, '_p_oid'):
             raise TypeError("the key must be persistent (got %r)" % (key, ))
 
-    # Override the next three methods in a subclass if you need to support
-    # keys more complex than a single persistent object.
     def _toExternalKey(self, key):
         return self._p_jar.get(key)
 
