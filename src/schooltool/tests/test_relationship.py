@@ -266,7 +266,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
 
         a, b, links  = self.doChecks(defaultRelate)
 
-        e = self.check_one_event_received([a, b])
+        e = self.checkOneEventReceived([a, b])
         self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
         self.assert_(URICommand.isImplementedBy(e))
         self.assert_(e.links is links)

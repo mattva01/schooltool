@@ -23,7 +23,8 @@ $Id$
 """
 
 from zope.interface import implements
-from schooltool.interfaces import ILocation, IEventTarget
+from schooltool.interfaces import ILocation, IContainmentRoot
+from schooltool.interfaces import IServiceManager, IEventTarget
 
 __metaclass__ = type
 
@@ -49,6 +50,20 @@ class LocatableEventTargetMixin:
         self.events = []
 
 
+class ServiceManager:
+    implements(IContainmentRoot, IServiceManager, IEventTarget)
+
+    def __init__(self):
+        self.eventService = self
+        self.events = []
+
+    def notify(self, e):
+        self.events.append(e)
+
+    def clearEvents(self):
+        self.events = []
+
+
 class EventServiceTestMixin:
     """Mixin for setting up an event service."""
 
@@ -60,27 +75,12 @@ class EventServiceTestMixin:
         (self.eventService) holds all received events in a list in its
         'events' attribute.
         """
-        from schooltool.interfaces import IServiceManager, IEventTarget
-        from schooltool.interfaces import IContainmentRoot
-
-        class ServiceManager:
-            implements(IContainmentRoot, IServiceManager, IEventTarget)
-            def __init__(self):
-                self.eventService = self
-                self.events = []
-
-            def notify(self, e):
-                self.events.append(e)
-
-            def clearEvents(self):
-                self.events = []
-
         self.serviceManager = ServiceManager()
         self.eventService = self.serviceManager.eventService
 
     setUp = setUpEventService
 
-    def check_one_event_received(self, receivers=None):
+    def checkOneEventReceived(self, receivers=None):
         """Check that exactly one event was received by the event service.
 
         Returns that one event.
