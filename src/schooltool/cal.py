@@ -38,6 +38,7 @@ from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
 from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
+from schooltool.interfaces import IWeeklyRecurrenceRule, IMonthlyRecurrenceRule
 
 __metaclass__ = type
 
@@ -1076,17 +1077,22 @@ class CalendarOwnerMixin(Persistent):
 
 class RecurrenceRule:
 
-    def __init__(self, interval=None, count=None, until=None, exceptions=[]):
+    def __init__(self, interval=None, count=None, until=None, exceptions=()):
         self.interval = interval
         self.count = count
         self.until = until
-        self.exceptions = exceptions
+        self.exceptions = tuple(exceptions)
         self._validate()
 
     def _validate(self):
         if self.count is not None and self.until is not None:
             raise ValueError("count and until cannot be both set (%s, %s)"
                              % (self.count, self.until))
+        for ex in self.exceptions:
+            if not isinstance(ex, datetime.date):
+                raise ValueError("Exceptions must be a sequence of"
+                                 " datetime.dates (got %r in exceptions)"
+                                 % (ex, ))
 
     def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
                 exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
@@ -1097,7 +1103,7 @@ class RecurrenceRule:
         if until is Unchanged:
             until = self.until
         if exceptions is Unchanged:
-            exceptions = list(self.exceptions)
+            exceptions = tuple(self.exceptions)
         return self.__class__(interval, count, until, exceptions)
 
     def _tupleForHash(self):
@@ -1130,9 +1136,49 @@ class DailyRecurrenceRule(RecurrenceRule):
 
 
 
-class YearlyRecurrenceRule(DailyRecurrenceRule):
+class YearlyRecurrenceRule(RecurrenceRule):
     """Yearly recurrence rule.
 
     Immutable hashable object.
     """
     implements(IYearlyRecurrenceRule)
+
+
+class WeeklyRecurrenceRule(RecurrenceRule):
+    """Weekly recurrence rule."""
+    implements(IWeeklyRecurrenceRule)
+
+    def __init__(self, interval=None, count=None, until=None, exceptions=(),
+                 weekdays=()):
+        self.interval = interval
+        self.count = count
+        self.until = until
+        self.exceptions = exceptions
+        self.weekdays = weekdays
+        self._validate()
+
+    def _validate(self):
+        RecurrenceRule._validate(self)
+        for dow in self.weekdays:
+            if not isinstance(dow, int) or not  0 <= dow <= 6:
+                raise ValueError("Day of week must be an integer 0..6 (got %r)"
+                                 % (dow, ))
+
+    def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
+        if interval is Unchanged:
+            interval = self.interval
+        if count is Unchanged:
+            count = self.count
+        if until is Unchanged:
+            until = self.until
+        if exceptions is Unchanged:
+            exceptions = tuple(self.exceptions)
+        if weekdays is Unchanged:
+            weekdays = self.weekdays
+        return self.__class__(interval, count, until, exceptions, weekdays)
+
+    def _tupleForHash(self):
+        return (self.__class__.__name__, self.interval, self.count,
+                self.until, self.exceptions, self.weekdays)
+

@@ -1269,6 +1269,14 @@ class TestRecurrenceRule:
         assert rule != rule2
         self.assertRaises(ValueError, rule.replace, count=20)
 
+    def test_validate(self):
+        self.assertRaises(ValueError, self.createRule, count=3,
+                          until=date.today())
+        self.assertRaises(ValueError, self.createRule, exceptions=(1,))
+        self.createRule(exceptions=(date.today(),))
+        self.createRule(until=date.today())
+        self.createRule(count=42)
+
 
 class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
@@ -1278,8 +1286,8 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
     def test(self):
         from schooltool.interfaces import IDailyRecurrenceRule
-        d = self.createRule()
-        verifyObject(IDailyRecurrenceRule, d)
+        rule = self.createRule()
+        verifyObject(IDailyRecurrenceRule, rule)
 
 
 class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
@@ -1290,8 +1298,29 @@ class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
     def test(self):
         from schooltool.interfaces import IYearlyRecurrenceRule
-        d = self.createRule()
-        verifyObject(IYearlyRecurrenceRule, d)
+        rule = self.createRule()
+        verifyObject(IYearlyRecurrenceRule, rule)
+
+
+class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+
+    def createRule(self, *args, **kwargs):
+        from schooltool.cal import WeeklyRecurrenceRule
+        return WeeklyRecurrenceRule(*args, **kwargs)
+
+    def test(self):
+        from schooltool.interfaces import IWeeklyRecurrenceRule
+        rule = self.createRule()
+        verifyObject(IWeeklyRecurrenceRule, rule)
+
+    def test_weeekday_validation(self):
+        self.assertRaises(ValueError, self.createRule, weekdays=(1, 7))
+        self.assertRaises(ValueError, self.createRule, weekdays=(1, "TH"))
+
+    def test_replace_weekly(self):
+        rule = self.createRule(weekdays=(1, 3))
+        assert rule == rule.replace()
+        assert rule != rule.replace(weekdays=(1,))
 
 
 def test_suite():
@@ -1309,4 +1338,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestYearlyRecurrenceRule))
+    suite.addTest(unittest.makeSuite(TestWeeklyRecurrenceRule))
     return suite
