@@ -53,7 +53,7 @@ Incorrect password:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-                  Unauthenticated User |
+                   href="http://localhost/frogpond/@@login.html">Log in</a>
     ...
         <p class="error">Username or password is incorrect</p>
     ...
@@ -80,7 +80,7 @@ Now we are authenticated:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-                    Some User |
+    ...Some User</a> |
     ...
 
 Now we can log out:
@@ -101,5 +101,5 @@ We are logged out:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-                  Unauthenticated User |
+                   href="http://localhost/frogpond/@@login.html">Log in</a>
     ...

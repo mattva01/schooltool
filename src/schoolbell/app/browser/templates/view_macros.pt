@@ -29,28 +29,42 @@
       </div>
       <div class="tools">
         <div
-            tal:define="loggedin request/principal/schoolbell:person;
-                        url context/schoolbell:app/@@absolute_url"
-            tal:on-error="nothing">
-            <tal:if condition="not:loggedin">
-              <span tal:replace="request/principal/title">User Name</span> |
-              <a id="tools-login" i18n:translate=""
-                tal:attributes="href string:${url}/@@login.html">Log in</a>
-            </tal:if>
-            <tal:if tal:condition="loggedin">
-              <div metal:define-macro="logged_user">
-                <span tal:replace="request/principal/title">User Name</span> |
+          tal:define="user request/principal;
+                      url context/schoolbell:app/@@absolute_url"
+          tal:on-error="nothing">
+
+          <tal:if condition="not:user/schoolbell:authenticated">
+            <a id="tools-login" i18n:translate=""
+              tal:attributes="href string:${url}/@@login.html">Log in</a>
+          </tal:if>
+
+          <tal:if condition="user/schoolbell:authenticated"
+                  define="person user/schoolbell:person">
+            <div metal:define-macro="logged_user">
+
+              <tal:if condition="not:person">
+                <span id="tools-zmi-principal" i18n:translate=""
+                  tal:content="user/title">ZMI Principal</span>
+              </tal:if>
+
+              <tal:if condition="person">
+                <a id="tools-principal" i18n:translate=""
+                  tal:attributes="href person/@@absolute_url"
+                  tal:content="user/title">Schoolbell Person</a> |
                 <a id="tools-calendar" i18n:translate=""
-                  tal:attributes="href loggedin/calendar/@@absolute_url"
+                  tal:attributes="href person/calendar/@@absolute_url"
                   >My Calendar</a> |
                 <a id="tools-preferences" i18n:translate=""
-                  tal:attributes="href loggedin/calendar/@@absolute_url"
+                  tal:attributes="href person/calendar/@@absolute_url"
                   >Preferences</a> |
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"
                   >Log out</a>
-              </div>
-            </tal:if>
+              </tal:if>
+
+            </div>
+          </tal:if>
+
         </div>
       </div>
     </div>
@@ -147,14 +161,14 @@
        tal:attributes="href python:view.calURL('monthly')"
        title="View monthly calendar"
        i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++week.png"
+       i18n:translate=""><img tal:attributes="src context/++resource++month.png"
                               border="0"
                               alt="Monthly"/></a>
     <a id="calendar-navigation-year"
        tal:attributes="href python:view.calURL('yearly')"
        title="View yearly calendar"
        i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++week.png"
+       i18n:translate=""><img tal:attributes="src context/++resource++year.png"
                               border="0"
                               alt="Yearly"/></a>
   </div>

@@ -201,6 +201,10 @@ input.button-cancel {
     background: #a83636;
 }
 
+#tools-zmi-principal {
+  font-style: italic;
+}
+
 /*
 * Left Column and portlets
 */
