@@ -1497,6 +1497,19 @@ class ITimetableModel(Interface):
         """Return a sequence of periods defined in this day"""
 
 
+class ITimetableModelFactory(Interface):
+    """A factory of a timetable model"""
+
+    def __call__(day_ids, day_templates):
+        """Return a timetable model.
+
+        `day_ids` is a sequence of day ids.
+
+        `day_templates` is a dict with weekday numbers as keys and
+        ITimetableDay objects as values.
+        """
+
+
 class ITimetableActivity(Interface):
     """An event in a timetable.
 
@@ -1947,17 +1960,13 @@ class ITimetableModelRegistry(Interface):
     """A registry of timetable model classes present in the system.
 
     The timetable model classes are identified by the dotted class names.
-    """
 
-    def getTimetableModel(id):
-        """Return a timetable schema identified by a given id."""
+    Timetable model classes are acquired as named utilities
+    implementing ITimetableModelFactory.
+    """
 
     def registerTimetableModel(id, factory):
         """Register a timetable schema identified by a given id."""
-
-    def listTimetableModels():
-        """Return a sequence of keys of the timetable models in the
-        registry."""
 
 
 class ITimetableSchemaService(ILocation):

@@ -27,6 +27,7 @@ import sets
 import datetime
 import itertools
 
+from zope.component import getUtility
 from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import View, Template
@@ -39,10 +40,11 @@ from schooltool.cal import SchooldayModel
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import getPath, traverse
 from schooltool.component import getTimePeriodService
-from schooltool.component import getTimetableModel, getTimetableSchemaService
+from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IApplicationObject, IPerson
 from schooltool.interfaces import ITimetableSchemaService, ISchooldayModel
 from schooltool.interfaces import ITimetabled, ITimetable
+from schooltool.interfaces import ITimetableModelFactory
 from schooltool.membership import Membership, memberOf
 from schooltool.rest import absoluteURL
 from schooltool.rest.timetable import format_timetable_for_presentation
@@ -604,7 +606,7 @@ class TimetableSchemaWizard(View, TabindexMixin):
 
         if 'CREATE' in request.args:
             try:
-                factory = getTimetableModel(self.model_name)
+                factory = getUtility(ITimetableModelFactory, self.model_name)
             except KeyError:
                 self.model_error = _("Please select a value")
             if not self.name_widget.error and not self.model_error:

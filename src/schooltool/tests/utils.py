@@ -134,10 +134,8 @@ class RegistriesCleanupMixin:
         self.old_relationship_registry = component.relationship_registry
         self.old_view_registry = component.view_registry
         self.old_class_view_registry = component.class_view_registry
-        self.old_timetable_model_registry = component.timetable_model_registry
         component.resetRelationshipRegistry()
         component.resetViewRegistry()
-        component.resetTimetableModelRegistry()
         CleanUp().cleanUp()
 
     def restoreRegistries(self):
@@ -145,7 +143,6 @@ class RegistriesCleanupMixin:
         component.relationship_registry = self.old_relationship_registry
         component.view_registry = self.old_view_registry
         component.class_view_registry = self.old_class_view_registry
-        component.timetable_model_registry = self.old_timetable_model_registry
         CleanUp().cleanUp()
 
     setUp = saveRegistries

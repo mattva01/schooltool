@@ -24,9 +24,10 @@ $Id$
 
 import unittest
 from sets import Set
-from zope.interface import Interface, implements, directlyProvides
+from zope.interface import Interface, implements
+from zope.interface import directlyProvides, classProvides
 from zope.interface.verify import verifyObject
-from zope.component.exceptions import ComponentLookupError
+from zope.component.exceptions import ComponentLookupError, Invalid
 from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
@@ -568,7 +569,7 @@ class TestUtilityService(unittest.TestCase):
         self.assert_(foo.__name__ is None)
 
 
-class TestTimetableModelRegistry(RegistriesSetupMixin, unittest.TestCase):
+class TestTimetableModelRegistry(RegistriesCleanupMixin, unittest.TestCase):
 
     def test_interface(self):
         from schooltool.interfaces import ITimetableModelRegistry
@@ -576,28 +577,31 @@ class TestTimetableModelRegistry(RegistriesSetupMixin, unittest.TestCase):
         verifyObject(ITimetableModelRegistry, component)
 
     def test(self):
-        from schooltool.component import getTimetableModel
-        from schooltool.component import registerTimetableModel
-        from schooltool.component import listTimetableModels
-        from schooltool.component import resetTimetableModelRegistry
+        from zope.component import getUtility, getUtilitiesFor
+        from schooltool.component import registerTimetableModel, setUp
         from schooltool.interfaces import ITimetableModel
+        from schooltool.interfaces import ITimetableModelFactory
 
-        resetTimetableModelRegistry()
-        self.assertEqual(listTimetableModels(), [])
+        setUp()
+        self.assertEqual(list(getUtilitiesFor(ITimetableModelFactory)), [])
 
         class TMStub:
             implements(ITimetableModel)
+            classProvides(ITimetableModelFactory)
 
         registerTimetableModel("Foo.Bar.Baz", TMStub)
         registerTimetableModel("Foo.Bar.Baz", TMStub)
-        self.assertEqual(listTimetableModels(), ["Foo.Bar.Baz"])
-        self.assertRaises(ValueError, registerTimetableModel,
+        self.assertEqual(list(getUtilitiesFor(ITimetableModelFactory)),
+                         [("Foo.Bar.Baz", TMStub)])
+        self.assertRaises(Invalid, registerTimetableModel,
                           "Foo.Bar.Baz", object)
-        self.assertEqual(getTimetableModel("Foo.Bar.Baz"), TMStub)
+        self.assertEqual(getUtility(ITimetableModelFactory, "Foo.Bar.Baz"),
+                         TMStub)
         registerTimetableModel("Moo.Spoo", TMStub)
-        self.assertEqual(Set(listTimetableModels()),
-                         Set(["Foo.Bar.Baz", "Moo.Spoo"]))
-        self.assertEqual(getTimetableModel("Moo.Spoo"), TMStub)
+        self.assertEqual(Set(getUtilitiesFor(ITimetableModelFactory)),
+                         Set([("Foo.Bar.Baz", TMStub), ("Moo.Spoo", TMStub)]))
+        self.assertEqual(getUtility(ITimetableModelFactory, "Moo.Spoo"),
+                         TMStub)
 
 
 class TestComponentArchitecture(unittest.TestCase):

@@ -147,7 +147,7 @@ from sets import Set, ImmutableSet
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
-from zope.interface import implements, moduleProvides
+from zope.interface import implements, moduleProvides, classProvides
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
@@ -164,6 +164,7 @@ from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IModuleSetup
+from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
@@ -773,6 +774,8 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
     Mon     Day 2
     """
 
+    classProvides(ITimetableModelFactory)
+
     def __init__(self, day_ids, day_templates):
         self.timetableDayIds = day_ids
         self.dayTemplates = day_templates
@@ -789,6 +792,8 @@ class WeeklyTimetableModel(BaseTimetableModel):
     """A timetable model where the schedule depends only on weekdays."""
 
     timetableDayIds = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+
+    classProvides(ITimetableModelFactory)
 
     def __init__(self, day_ids=None, day_templates={}):
         self.dayTemplates = day_templates

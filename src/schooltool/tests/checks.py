@@ -50,8 +50,6 @@ class ComponentChecks:
         self.relationship_registry = dict(component.relationship_registry)
         self.view_registry = adapter_registry_contents(component.view_registry)
         self.class_view_registry = dict(component.class_view_registry)
-        self.timetable_model_registry = dict(
-            component.timetable_model_registry)
 
     def stopTest(self, test):
         from schooltool import component
@@ -62,8 +60,6 @@ class ComponentChecks:
             warn("%s changed view registry" % test)
         if self.class_view_registry != component.class_view_registry:
             warn("%s changed class view registry" % test)
-        if self.timetable_model_registry != component.timetable_model_registry:
-            warn("%s changed timetable model registry" % test)
 
 
 class TransactionChecks:

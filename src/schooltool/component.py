@@ -41,6 +41,7 @@ from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import IUtilityService
 from schooltool.interfaces import ITimetableModelRegistry
+from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import IOptions
 from schooltool.interfaces import IDynamicSchemaField, IDynamicSchema
 from schooltool.interfaces import IDynamicSchemaService
@@ -495,34 +496,11 @@ class UtilityService:
 # ITimetableModelRegistry methods
 #
 
-timetable_model_registry = {}
-
-
-def resetTimetableModelRegistry():
-    """Replace the timetable model registry with an empty one."""
-    global timetable_model_registry
-    timetable_model_registry = {}
-
-
-def getTimetableModel(id):
-    """Returns a timetable schema identified by a given id."""
-    return timetable_model_registry[id]
-
-
 def registerTimetableModel(id, factory):
     """Registers a timetable schema identified by a given id."""
-    if id not in timetable_model_registry:
-        timetable_model_registry[id] = factory
-    elif timetable_model_registry[id] is factory:
-        pass
-    else:
-        raise ValueError("%s already in the timetable model" % (id,))
+    utilities = getService('Utilities')
+    utilities.provideUtility(ITimetableModelFactory, factory, id)
 
-
-def listTimetableModels():
-    """Returns a sequence of keys of the timetable models in the
-    registry."""
-    return timetable_model_registry.keys()
 
 def setUp():
     serviceManager.defineService('Utilities', IGlobalUtilityService)

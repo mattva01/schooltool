@@ -25,9 +25,11 @@ $Id$
 import sets
 import datetime
 from zope.interface import moduleProvides
+from zope.component import getUtility
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
+from schooltool.interfaces import ITimetableModelFactory
 from schooltool.rest import View, Template, textErrorPage, notFoundPage
 from schooltool.rest import absoluteURL, absolutePath, read_file
 from schooltool.rest import ViewError
@@ -43,7 +45,6 @@ from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, traverse, getPath
 from schooltool.component import getRelatedObjects
-from schooltool.component import getTimetableModel
 from schooltool.uris import URIMember, URITaught
 from schooltool.cal import SchooldayModel
 from schooltool.translation import ugettext as _
@@ -505,7 +506,7 @@ class TimetableSchemaView(TimetableReadView):
             model_node = doc.query('/tt:timetable/tt:model')[0]
             factory_id = model_node['factory']
             try:
-                factory = getTimetableModel(factory_id)
+                factory = getUtility(ITimetableModelFactory, factory_id)
             except KeyError:
                 return textErrorPage(request,
                                      _("Incorrect timetable model factory"))
