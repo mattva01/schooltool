@@ -207,6 +207,18 @@ def doctest_Person():
     """
 
 
+def doctest_Group():
+    r"""Tests for Group
+
+        >>> from schoolbell.app.interfaces import IGroupContained
+        >>> from schoolbell.app.app import Group
+        >>> group = Group()
+        >>> verifyObject(IGroupContained, group)
+        True
+
+    """
+
+
 def run_unit_tests(testcase):
     r"""Hack to call into unittest from doctests.
 

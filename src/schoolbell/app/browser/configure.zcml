@@ -45,18 +45,34 @@
 
   <addform
       label="Add a Person"
-      name="add.html"
+      name="addSchoolBellPerson.html"
       schema="schoolbell.app.interfaces.IPerson"
       content_factory="schoolbell.app.app.Person"
       permission="zope.ManageContent"
       />
 
   <addMenuItem
-      title="Person"
+      title="SchoolBell Person"
       description="A Person"
       class="schoolbell.app.app.Person"
       permission="zope.ManageContent"
-      view="add.html"
+      view="addSchoolBellPerson.html"
+      />
+
+ <addform
+      label="Add a Group"
+      name="addSchoolBellGroup.html"
+      schema="schoolbell.app.interfaces.IGroup"
+      content_factory="schoolbell.app.app.Group"
+      permission="zope.ManageContent"
+      />
+
+  <addMenuItem
+      title="SchoolBell Group"
+      description="A Group"
+      class="schoolbell.app.app.Group"
+      permission="zope.ManageContent"
+      view="addSchoolBellGroup.html"
       />
 
 </configure>

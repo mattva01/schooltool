@@ -33,7 +33,7 @@ from zope.app.container.contained import Contained
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
-from schoolbell.app.interfaces import IGroupContainer
+from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer
 
 
@@ -129,3 +129,10 @@ def hash_password(password):
         return None
     return sha.sha(password.encode('UTF-8')).digest()
 
+
+class Group(Persistent, Contained):
+    """Group."""
+
+    implements(IGroupContained)
+
+    title = None

@@ -129,6 +129,12 @@ class IGroupContainer(IContainer):
     contains(IGroup)
 
 
+class IGroupContained(IGroup, IContained):
+    """Group contained in an IGroupContainer."""
+
+    containers(IGroupContainer)
+
+
 class IResource(Interface):
     """Resource."""
 

@@ -34,6 +34,13 @@
              set_schema="schoolbell.app.interfaces.IPerson" />
   </content>
 
+  <content class=".app.Group">
+    <require permission="zope.View"
+             interface="schoolbell.app.interfaces.IGroup" />
+    <require permission="zope.ManageContent"
+             set_schema="schoolbell.app.interfaces.IGroup" />
+  </content>
+
   <include package=".browser" />
 
 </configure>
