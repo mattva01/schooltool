@@ -603,6 +603,7 @@ class SchoolTimetableGrid(wxGrid):
         self.tt = tt
         self.SetTable(SchoolTimetableGridTable(tt), True)
         # There is no way to auto-size row labels.
+        self.SetRowLabelSize(150)
 
         EVT_GRID_EDITOR_SHOWN(self, self.OnEditorShown)
         EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
@@ -641,20 +642,24 @@ class SchoolTimetableFrame(wxDialog):
         self.tt = tt
 
         main_sizer = wxBoxSizer(wxVERTICAL)
-        grid = SchoolTimetableGrid(self, tt)
+        self.grid = grid = SchoolTimetableGrid(self, tt)
         main_sizer.Add(grid, 1, wxEXPAND|wxALL, 8)
 
         static_line = wxStaticLine(self, -1)
         main_sizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
+        resize_btn = wxButton(self, -1, "&Fit cells")
         ok_btn = wxButton(self, wxID_OK, "OK")
         cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
         ok_btn.SetDefault()
         EVT_BUTTON(self, wxID_OK, self.OnOk)
-        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        EVT_BUTTON(self, resize_btn.GetId(), self.OnResize)
+        button_bar.Add(resize_btn, 0, 0, 0)
+        button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
+        button_bar.Add(ok_btn, 0, wxRIGHT|wxLEFT, 16)
         button_bar.Add(cancel_btn, 0, 0, 0)
-        main_sizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+        main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
 
         self.SetSizer(main_sizer)
         min_size = main_sizer.GetMinSize()
@@ -677,6 +682,10 @@ class SchoolTimetableFrame(wxDialog):
         else:
             self.Close(True)
 
+    def OnResize(self, event=None):
+        """Auto-size the grid"""
+        self.grid.AutoSizeRows()
+        self.grid.AutoSizeColumns()
 
 class MainFrame(wxFrame):
     """Main frame.
