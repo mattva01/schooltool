@@ -494,6 +494,7 @@ class RollCallDlg(wxDialog):
         self.SetSizer(vsizer)
         vsizer.SetSizeHints(self)
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
 
     def OnPresentSelected(self, event):
         """Mark the person as present or absent."""
@@ -627,6 +628,7 @@ class AbsenceFrame(wxDialog):
         self.SetSizer(main_sizer)
         self.SetSizeHints(minW=200, minH=200)
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
 
         self.DoRefresh(data=absence_data)
 
@@ -1067,6 +1069,7 @@ class SchoolTimetableFrame(wxDialog):
         self.SetSizeHints(minW=max(200, min_size.width),
                           minH=max(200, min_size.height))
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
 
     def OnClose(self, event=None):
         """Close the window."""
@@ -1123,6 +1126,7 @@ class BrowserFrame(wxDialog):
         self.SetSizeHints(minW=max(200, min_size.width),
                           minH=max(200, min_size.height))
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
 
     def OnBack(self, event=None):
         """Go back in histrory."""
@@ -1248,6 +1252,7 @@ class AvailabilitySearchFrame(wxDialog):
         self.SetSizer(main_sizer)
         self.SetSizeHints(minW=500, minH=300)
         self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
         self.ok = True
 
     def OnClose(self, event=None):
@@ -1485,6 +1490,7 @@ class PersonInfoDlg(wxDialog):
         self.title = person.person_title
         self.person_path = person.person_path
         self.client = client
+        self.mainframe = parent
         self.ok = False
 
         try:
@@ -1580,6 +1586,7 @@ class PersonInfoDlg(wxDialog):
                          % e, self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
+            self.mainframe.DoRefresh()
 
     def OnPhoto(self, event=None):
         global previous_photo_dir

@@ -104,7 +104,7 @@ class Options:
     progress = False            # show running progress (-v)
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
-    immediate_errors = True     # show tracebacks twice (currently hardcoded)
+    immediate_errors = False    # show tracebacks twice (currently hardcoded)
     screen_width = 80           # screen width (currently hardcoded)
 
 
