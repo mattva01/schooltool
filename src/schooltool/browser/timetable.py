@@ -27,7 +27,7 @@ import sets
 import datetime
 
 from schooltool.browser import View, Template
-from schooltool.browser import notFoundPage
+from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import valid_name
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
@@ -47,7 +47,7 @@ from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
 from schooltool.common import parse_date
 from schooltool.component import getTimetableModel
-from schooltool.component import getPath
+from schooltool.component import getPath, traverse
 from schooltool.rest import absoluteURL
 
 __metaclass__ = type
@@ -97,6 +97,15 @@ class TimetableView(View):
         View.__init__(self, context)
         self.key = key
 
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        owner = self.context.__parent__.__parent__
+        name = self.context.__name__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            ((owner.title), absoluteURL(self.request, owner)),
+            (_('Timetable for %s, %s') % name, self.request.uri)]
+
     def title(self):
         timetabled = self.context.__parent__.__parent__
         return _("%s's timetable for %s") % (timetabled.title,
@@ -113,6 +122,15 @@ class TimetableSchemaView(TimetableView):
     """
 
     authorization = ManagerAccess
+
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        name = self.context.__name__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            (_('Timetable schemas'),
+             absoluteURL(self.request, app, 'ttschemas')),
+            (name, absoluteURL(self.request, app, 'ttschemas/%s' % name))]
 
     def __init__(self, context):
         TimetableView.__init__(self, context, None)
@@ -415,6 +433,14 @@ class TimetableSchemaWizard(View, TabindexMixin):
                     times_for[event.title][day] = range
         return result
 
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        name = self.context.__name__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            (_('Timetable schemas'),
+             absoluteURL(self.request, app, 'ttschemas'))]
+
 
 class TimePeriodViewBase(View):
     """Base class for time period views."""
@@ -531,6 +557,16 @@ class TimePeriodView(TimePeriodViewBase):
     def title(self):
         return _("Time period %s") % self.context.__name__
 
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        name = self.context.__name__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            (_('Timetable periods'),
+             absoluteURL(self.request, app, 'time-periods')),
+            (name,
+             absoluteURL(self.request, app, 'time-periods/%s' % name))]
+
     def do_GET(self, request):
         self.status = None
         self.start_widget.update(request)
@@ -569,6 +605,13 @@ class NewTimePeriodView(TimePeriodViewBase):
         self.service = service
         self.name_widget = TextWidget('name', _('Name'), self.name_parser,
                                       self.name_validator)
+
+    def breadcrumbs(self):
+        app = traverse(self.service, '/')
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            (_('Timetable periods'), absoluteURL(self.request, self.service))]
+
 
     def name_parser(self, name):
         if name is None:
@@ -612,7 +655,7 @@ class NewTimePeriodView(TimePeriodViewBase):
         return View.do_GET(self, request)
 
 
-class ContainerServiceViewBase(View):
+class ContainerServiceViewBase(View, ToplevelBreadcrumbsMixin):
     """A base view for timetable schema and time period services
 
     Subclasses must define:
@@ -660,6 +703,14 @@ class TimetableSchemaServiceView(ContainerServiceViewBase):
     def logDeletion(self, schema):
         self.request.appLog(_("Timetable schema %s deleted") % getPath(schema))
 
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        name = self.context.__name__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            (_('Timetable schemas'), absoluteURL(self.request, app,
+                                                 'ttschemas'))]
+
 
 class TimePeriodServiceView(ContainerServiceViewBase):
 
@@ -670,6 +721,13 @@ class TimePeriodServiceView(ContainerServiceViewBase):
 
     def logDeletion(self, period):
         self.request.appLog(_("Time period %s deleted") % getPath(period))
+
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        name = self.context.__name__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            (_('Time periods'), absoluteURL(self.request, app, 'time-periods'))]
 
 
 def fix_duplicates(names):

@@ -23,7 +23,7 @@ Web-application views for managing SchoolTool data in CSV format.
 $Id$
 """
 
-from schooltool.browser import View, Template
+from schooltool.browser import View, Template, ToplevelBreadcrumbsMixin
 from schooltool.browser.auth import ManagerAccess
 from schooltool.csvimport import CSVImporterBase, DataError
 from schooltool.common import parse_date
@@ -35,7 +35,7 @@ from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
 
 
-class CSVImportView(View):
+class CSVImportView(View, ToplevelBreadcrumbsMixin):
 
     __used_for__ = IApplication
 

@@ -54,6 +54,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('No data provided' in content)
         self.assert_('Data imported successfully' not in content)
@@ -66,6 +67,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'no-such-charset'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Unknown charset' in content)
         self.assert_('No data provided' not in content)
@@ -91,6 +93,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'pupils.csv': '',
                                     'charset': '',
                                     'other_charset': ''})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('This field is required' in content)
         self.assert_('No data provided' not in content)
@@ -106,6 +109,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -121,6 +125,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' not in content)
         self.assert_('Error in group data' in content)
@@ -135,6 +140,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -153,6 +159,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('incorrect charset' in content)
         self.assert_('Data imported successfully' not in content)
@@ -164,6 +171,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'pupils.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -182,6 +190,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'teachers.csv': '',
                                     'resources.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
@@ -200,6 +209,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'pupils.csv': '',
                                     'resources.csv': '',
                                     'charset': 'UTF-8'})
+        self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 

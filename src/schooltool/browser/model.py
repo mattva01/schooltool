@@ -91,8 +91,18 @@ class TimetabledViewMixin:
                  'url': '%s/timetables/%s/%s' % (path, period, schema)}
                 for period, schema in keys]
 
+class AppObjectViewMixin:
+    """Mixin for views that are top-level objects"""
+    def breadcrumbs(self):
+        return [(_('Start'),
+                 absoluteURL(self.request, traverse(self.context, '/'),
+                             'start')),
+                (self.context.title,
+                 absoluteURL(self.request, self.context))]
 
-class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
+
+class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
+                 AppObjectViewMixin):
     """Person information view (/persons/id)."""
 
     __used_for__ = IPerson
@@ -134,7 +144,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
     canViewCalendar = canChangePassword
 
 
-class PersonPasswordView(View):
+class PersonPasswordView(View, AppObjectViewMixin):
     """Page for changing a person's password (/persons/id/password.html)."""
 
     __used_for__ = IPerson
@@ -173,7 +183,7 @@ class PersonPasswordView(View):
         return self.do_GET(request)
 
 
-class PersonEditView(View, PersonInfoMixin):
+class PersonEditView(View, PersonInfoMixin, AppObjectViewMixin):
     """Page for changing information about a person.
 
     Can be accessed at /persons/$id/edit.html.
@@ -251,7 +261,8 @@ class PersonEditView(View, PersonInfoMixin):
         return self.redirect(url, request)
 
 
-class GroupView(View, GetParentsMixin, TimetabledViewMixin):
+class GroupView(View, GetParentsMixin, TimetabledViewMixin,
+                AppObjectViewMixin):
     """Group information view (/group/id)."""
 
     __used_for__ = IGroup
@@ -367,7 +378,7 @@ class RelationshipViewMixin:
                                   getPath(self.context)))
 
 
-class GroupEditView(View, RelationshipViewMixin):
+class GroupEditView(View, RelationshipViewMixin, AppObjectViewMixin):
     """Page for "editing" a Group (/group/id/edit.html)."""
 
     __used_for__ = IGroup
@@ -401,7 +412,7 @@ class GroupEditView(View, RelationshipViewMixin):
         Membership(group=self.context, member=other)
 
 
-class GroupTeachersView(View, RelationshipViewMixin):
+class GroupTeachersView(View, RelationshipViewMixin, AppObjectViewMixin):
 
     __used_for__ = IGroup
 
@@ -429,7 +440,7 @@ class GroupTeachersView(View, RelationshipViewMixin):
         Teaching(taught=self.context, teacher=other)
 
 
-class ResourceView(View):
+class ResourceView(View, AppObjectViewMixin):
     """View for displaying a resource."""
 
     __used_for__ = IResource
@@ -453,7 +464,7 @@ class ResourceView(View):
             raise KeyError(name)
 
 
-class ResourceEditView(View):
+class ResourceEditView(View, AppObjectViewMixin):
     """View for displaying a resource."""
 
     __used_for__ = IResource

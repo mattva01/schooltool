@@ -18,6 +18,8 @@
        account (password: 'schooltool').</p>
     <input id="confirm" type="submit" class="button" name="confirm"
            value="Confirm" i18n:attributes="value" />
+    <input id="cancel" type="submit" class="button" name="cancel"
+           value="Cancel" i18n:attributes="value" />
   </form>
 
 </metal:block>

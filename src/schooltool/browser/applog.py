@@ -30,9 +30,10 @@ from schooltool.common import to_unicode
 from schooltool.rest import absoluteURL
 from schooltool.rest.applog import ApplicationLogQuery
 from schooltool.translation import ugettext as _
+from schooltool.browser import ToplevelBreadcrumbsMixin
 
 
-class ApplicationLogView(View):
+class ApplicationLogView(View, ToplevelBreadcrumbsMixin):
 
     authorization = ManagerAccess
 

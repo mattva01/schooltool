@@ -304,6 +304,7 @@ class TestPersonEditView(unittest.TestCase):
                                     'date_of_birth': '2004-08-05',
                                     'comment': 'For some \xc4\x99 reason.',
                                     'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
+        view.request = request
         view.do_POST(request)
 
         self.assertEquals(request.applog,
@@ -355,6 +356,7 @@ class TestPersonEditView(unittest.TestCase):
                                         'date_of_birth': dob,
                                         'comment': 'For various reasons.',
                                         'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
+            view.request = request
             body = view.do_POST(request)
             self.assert_('Invalid date' in body)
 
@@ -364,6 +366,7 @@ class TestPersonEditView(unittest.TestCase):
                                     'date_of_birth': '2004-08-05',
                                     'comment': 'For various reasons.',
                                     'photo': 'eeevill'})
+        view.request = request
         body = view.do_POST(request)
         self.assert_('Invalid photo' in body, body)
 
@@ -375,6 +378,7 @@ class TestPersonEditView(unittest.TestCase):
                                     'date_of_birth': '2004-08-05',
                                     'comment': 'For some reason.',
                                     'REMOVE_PHOTO': 'remove'})
+        view.request = request
         view.do_POST(request)
         self.assertEquals(request.applog,
             [(None, u'Person info updated on I Changed'
@@ -776,30 +780,26 @@ class TestGroupTeachersView(RegistriesSetupMixin, NiceDiffsMixin,
         self.assertEquals(result, 'Cannot add teacher Josh to Group')
 
 
-class TestResourceView(unittest.TestCase, TraversalTestMixin,):
+class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
     def test(self):
-        from schooltool.model import Resource
         from schooltool.browser.model import ResourceView
-        resource = Resource("I'm a resource")
-        resource.__name__ = 're123'
+        resource = self.resource
         view = ResourceView(resource)
         view.authorization = lambda x, y: True
         request = RequestStub()
         content = view.render(request)
 
-        self.assert_("I'm a resource" in content)
-        self.assert_("re123" in content)
+        self.assert_("Kitchen sink" in content)
+        self.assert_("resource" in content)
 
     def test_editURL(self):
-        from schooltool.model import Resource
         from schooltool.browser.model import ResourceView
-        resource = Resource("I'm a resource")
-        setPath(resource, '/resources/foo')
+        resource = self.resource
         view = ResourceView(resource)
         view.request = RequestStub()
         self.assertEquals(view.editURL(),
-                          'http://localhost:7001/resources/foo/edit.html')
+                          'http://localhost:7001/resources/resource/edit.html')
 
     def test_traverse(self):
         from schooltool.model import Resource
@@ -832,6 +832,7 @@ class TestResourceEditView(unittest.TestCase):
     def test_post(self):
         view = self.createView()
         request = RequestStub(args={'title': 'New \xc4\x85'})
+        view.request = request
         view.do_POST(request)
         self.assertEquals(self.resource.title, u'New \u0105')
         self.assertEquals(request.code, 302)

@@ -60,6 +60,9 @@ class BookingView(View):
 
     booked = False
 
+    def breadcrumbs(self):
+        return [(_('Start'), self.request.uri)]
+
     def update(self):
         request = self.request
         if 'CONFIRM_BOOK' not in request.args:
@@ -152,7 +155,18 @@ class CalendarDay:
         return cmp(self.date, other.date)
 
 
-class CalendarViewBase(View):
+class CalendarBreadcrumbsMixin:
+
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        owner = self.context.__parent__
+        return [
+            (_('Start'), absoluteURL(self.request, app, 'start')),
+            ((owner.title), absoluteURL(self.request, owner)),
+            (_('Calendar'), absoluteURL(self.request, owner, 'calendar'))]
+
+
+class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
     __used_for__ = ICalendar
 
@@ -656,7 +670,7 @@ class CalendarView(View):
         return self.redirect(url, request)
 
 
-class EventViewBase(View):
+class EventViewBase(View, CalendarBreadcrumbsMixin):
     """A base class for event adding and editing views."""
 
     __used_for__ = ICalendar

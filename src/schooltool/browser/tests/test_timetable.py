@@ -166,9 +166,8 @@ class TestTimetableSchemaView(AppSetupMixin, unittest.TestCase):
     def createView(self):
         from schooltool.timetable import Timetable
         from schooltool.browser.timetable import TimetableSchemaView
-        tts = Timetable([])
-        tts.__name__ = 'weekly'
-        return TimetableSchemaView(tts)
+        self.app.timetableSchemaService['weekly'] = Timetable([])
+        return TimetableSchemaView(self.app.timetableSchemaService['weekly'])
 
     def test_render(self):
         view = self.createView()

@@ -30,6 +30,7 @@ from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
 from schooltool.browser import session_time_limit
 from schooltool.browser import valid_name
+from schooltool.browser import ToplevelBreadcrumbsMixin
 from schooltool.browser.applog import ApplicationLogView
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess
@@ -162,7 +163,7 @@ class LogoutView(View):
         return self.redirect('/', request)
 
 
-class StartView(View):
+class StartView(View, ToplevelBreadcrumbsMixin):
     """Start page (/start).
 
     This is where the user is redirected after logging in.  The start page
@@ -179,7 +180,7 @@ class StartView(View):
         return absoluteURL(self.request, self.context)
 
 
-class PersonAddView(View):
+class PersonAddView(View, ToplevelBreadcrumbsMixin):
     """A view for adding persons."""
 
     __used_for__ = IApplicationObjectContainer
@@ -232,7 +233,7 @@ class PersonAddView(View):
         return self.redirect(url, request)
 
 
-class ObjectAddView(View):
+class ObjectAddView(View, ToplevelBreadcrumbsMixin):
     """A view for adding a new object (usually a group or a resource)."""
 
     __used_for__ = IApplicationObjectContainer
@@ -341,7 +342,7 @@ class ResourceContainerView(ObjectContainerView):
     obj_view = ResourceView
 
 
-class BusySearchView(View, AvailabilityQueryView):
+class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
     """View for resource search (/busysearch)."""
 
     # Two methods from AvailabilityQueryView are used:
@@ -426,7 +427,7 @@ class BusySearchView(View, AvailabilityQueryView):
         return [item for title, path, item in results]
 
 
-class DatabaseResetView(View):
+class DatabaseResetView(View, ToplevelBreadcrumbsMixin):
     """View for clearing the database (/reset_db.html)."""
 
     __used_for__ = IApplication

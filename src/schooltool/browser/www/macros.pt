@@ -28,10 +28,13 @@
          tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
     </div>
     <metal:block metal:define-slot="navigation">
-    <a tal:attributes="href context/@@absolute_url"
-       tal:condition="python:getattr(view, 'back', False)"
-       i18n:translate="">
-       Back to <span tal:replace="context/title" i18n:name="title"/></a>
+      <span tal:define="crumbs
+                        python:getattr(view, 'breadcrumbs', lambda: [])()"
+	    tal:condition="crumbs" tal:repeat="crumb crumbs">
+	<a tal:attributes="href python:crumb[1]"
+	   tal:content="python:crumb[0]" />
+	<span tal:condition="not: repeat/crumb/end">&gt;</span>
+      </span>
     </metal:block>
     &nbsp;
   </div>
@@ -50,6 +53,7 @@
 <body>
   <h1 metal:define-slot="h1" metal:fill-slot="h1"
       i18n:translate="">Welcome to SchoolTool</h1>
+
   <div metal:fill-slot="content">
     <div class="calnav" tal:define="update view/update">
       <a class="calnav" tal:attributes="href python:view.calURL('daily')"
@@ -64,6 +68,11 @@
     <div class="calcontent">
       <p metal:define-slot="content">[Content]</p>
     </div>
+    <p tal:condition="view/isManager">
+      <a class="action"
+         tal:attributes="href string:${context/@@absolute_url}/acl.html"
+         i18n:translate="">Edit ACL</a>
+    </p>
   </div>
 </body>
 </html>

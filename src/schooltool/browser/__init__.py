@@ -26,13 +26,14 @@ import datetime
 import logging
 
 from schooltool.interfaces import AuthenticationError
-from schooltool.component import getTicketService
+from schooltool.component import getTicketService, traverse
 from schooltool.rest import View as _View
 from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import isManager, isTeacher
+from schooltool.translation import ugettext as _
 
 
 __metaclass__ = type
@@ -260,3 +261,9 @@ class NotFoundView(View):
 def notFoundPage(request):
     """Render a simple 'not found' error page."""
     return NotFoundView().render(request)
+
+
+class ToplevelBreadcrumbsMixin:
+    def breadcrumbs(self):
+        app = traverse(self.context, '/')
+        return [(_('Start'), absoluteURL(self.request, app, 'start'))]

@@ -295,6 +295,7 @@ class TestPersonAddView(unittest.TestCase):
         view = self.createView()
 
         request = RequestStub()
+        view.request = request
         result = view.do_GET(request)
         self.assert_('Add person' in result)
 
@@ -319,6 +320,7 @@ class TestPersonAddView(unittest.TestCase):
         request = RequestStub(args={'username': '',
                                     'password': 'foo',
                                     'verify_password': 'foo'})
+        view.request = request
         result = view.do_POST(request)
         self.assertEquals(request.applog,
                           [(None, u'Object /persons/auto of type'
@@ -340,6 +342,7 @@ class TestPersonAddView(unittest.TestCase):
             request = RequestStub(args={'username': username,
                                         'password': 'bar',
                                         'verify_password': 'bar'})
+            view.request = request
             content = view.do_POST(request)
             self.assert_('Add person' in content)
             self.assert_('Invalid username' in content)
@@ -349,6 +352,7 @@ class TestPersonAddView(unittest.TestCase):
         request = RequestStub(args={'username': 'badpass',
                                     'password': 'foo',
                                     'verify_password': 'bar'})
+        view.request = request
         content = view.do_POST(request)
         self.assert_('Add person' in content)
         self.assert_('Passwords do not match' in content)
@@ -359,6 +363,7 @@ class TestPersonAddView(unittest.TestCase):
         request = RequestStub(args={'username': 'conflict',
                                     'password': 'foo',
                                     'verify_password': 'foo'})
+        view.request = request
         content = view.do_POST(request)
         self.assert_('Add person' in content)
         self.assert_('Username already registered' in content)
@@ -469,6 +474,7 @@ class TestObjectAddView(unittest.TestCase):
     def test_GET(self):
         view = self.createView()
         request = RequestStub()
+        view.request = request
         content = view.do_GET(request)
         self.assert_('Add object' in content)
 
@@ -476,6 +482,7 @@ class TestObjectAddView(unittest.TestCase):
         view = self.createView()
         request = RequestStub(args={'name': 'newobj',
                                     'title': 'New \xc4\x85 stuff'})
+        view.request = request
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -494,6 +501,7 @@ class TestObjectAddView(unittest.TestCase):
         view.redirect_to_edit = False
         request = RequestStub(args={'name': 'newobj',
                                     'title': 'New \xc4\x85 stuff'})
+        view.request = request
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -503,6 +511,7 @@ class TestObjectAddView(unittest.TestCase):
         view = self.createView()
         request = RequestStub(args={'name': '',
                                     'title': ''})
+        view.request = request
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -519,6 +528,7 @@ class TestObjectAddView(unittest.TestCase):
     def test_POST_errors(self):
         view = self.createView()
         request = RequestStub(args={'name': 'new/obj', 'title': 'abc'})
+        view.request = request
         content = view.do_POST(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])
@@ -528,6 +538,7 @@ class TestObjectAddView(unittest.TestCase):
     def test_POST_conflict(self):
         view = self.createView()
         request = RequestStub(args={'name': 'conflict', 'title': 'foofoobar'})
+        view.request = request
         content = view.do_POST(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])

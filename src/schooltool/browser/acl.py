@@ -28,7 +28,7 @@ from schooltool.component import traverse, getPath, traverse
 from schooltool.translation import ugettext as _
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
-from schooltool.interfaces import IPerson, IGroup
+from schooltool.interfaces import IPerson, IGroup, ICalendar
 from schooltool.browser.widgets import SelectionWidget
 from schooltool.browser import absoluteURL
 
@@ -41,6 +41,22 @@ class ACLView(View):
     authorization = PrivateAccess
 
     template = Template("www/acl.pt")
+
+    def breadcrumbs(self):
+        result = []
+        app = traverse(self.context, '/')
+        result.append((_('Start'), absoluteURL(self.request, app, 'start')))
+        if ICalendar.providedBy(self.context.__parent__):
+            owner = self.context.__parent__.__parent__
+            result.append((owner.title, absoluteURL(self.request, owner)))
+            result.append((_('Calendar'),
+                           absoluteURL(self.request, owner.calendar)))
+        else:
+            owner = self.context.__parent__
+            result.append((owner.title, absoluteURL(self.request, owner)))
+
+        result.append((_('ACL'), self.request.uri))
+        return result
 
     def __init__(self, context):
         View.__init__(self, context)

@@ -828,7 +828,8 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
                                     'location': '',
                                     'location_other': 'Moon',
                                     'duration': '50'},
-                              method='POST')
+                              method='POST',
+                              authenticated_user=self.manager)
 
         def processStub(dtstart, duration, title, location):
             self.assertEquals(location, 'Moon')

@@ -38,9 +38,6 @@
 </head>
 <body>
   <h1 metal:fill-slot="h1" tal:content="view/title">Time period</h1>
-<metal:block metal:fill-slot="navigation">
-  <a href="/time-periods" i18n:translate="">Back to time periods</a>
-</metal:block>
 <metal:block metal:fill-slot="content">
 
 <form class="invisible" method="POST" tal:attributes="action request/uri"
