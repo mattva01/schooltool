@@ -1,0 +1,70 @@
+Sample functional test scenario.
+
+SchoolTool> get /utils/eventlog
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<eventLog>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/teachers'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/students'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/cleaners'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Teachers'
+    link='http://schooltool.org/ns/membership/group', '/groups/teachers'
+    link='http://schooltool.org/ns/membership/member', '/persons/Mark'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Teachers'
+    link='http://schooltool.org/ns/membership/group', '/groups/teachers'
+    link='http://schooltool.org/ns/membership/member', '/persons/Steve'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Students'
+    link='http://schooltool.org/ns/membership/group', '/groups/students'
+    link='http://schooltool.org/ns/membership/member', '/persons/Aiste'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Cleaners'
+    link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
+    link='http://schooltool.org/ns/membership/member', '/persons/Albert'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Cleaners'
+    link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
+    link='http://schooltool.org/ns/membership/member', '/persons/Marius'
+</event>
+</eventLog>
+
+
+SchoolTool> put /utils/eventlog
+SchoolTool> .
+200 OK
+Content-Type: text/plain
+8 events cleared
+
+SchoolTool> get /utils/eventlog
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<eventLog>
+</eventLog>
+
+

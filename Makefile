@@ -26,7 +26,7 @@ testall: build
 	$(PYTHON) $(PWD)/test.py $(TESTFLAGS)
 
 ftest: build
-	@PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/main.py -m -c test.conf & \
+	@PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/main.py -c test.conf & \
 	pid=$$! ; \
 	sleep 2 ; \
 	ps -p $$pid > /dev/null && (\
