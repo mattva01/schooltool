@@ -161,6 +161,41 @@ class CalendarViewBase(View):
     # in schooltool.browser.timetable
     first_day_of_week = 0
 
+    month_names = {
+        1: _("January"),
+        2: _("February"),
+        3: _("March"),
+        4: _("April"),
+        5: _("May"),
+        6: _("June"),
+        7: _("July"),
+        8: _("August"),
+        9: _("September"),
+        10: _("October"),
+        11: _("November"),
+        12: _("December"),
+    }
+
+    day_of_week_names = {
+        0: _("Monday"),
+        1: _("Tuesday"),
+        2: _("Wednesday"),
+        3: _("Thursday"),
+        4: _("Friday"),
+        5: _("Saturday"),
+        6: _("Sunday"),
+    }
+
+    short_day_of_week_names = {
+        0: _("Mon"),
+        1: _("Tue"),
+        2: _("Wed"),
+        3: _("Thu"),
+        4: _("Fri"),
+        5: _("Sat"),
+        6: _("Sun"),
+    }
+
     __url = None
 
     def renderEvent(self, event):
@@ -469,12 +504,18 @@ class WeeklyCalendarView(CalendarViewBase):
     template = Template("www/cal_weekly.pt")
 
     def title(self):
-        # XXX: i18n
-        return self.cursor.strftime('%B, %Y (week %V)')
+        return _('%(month)s, %(year)s (week %(week)s)') % {
+                                'month': self.month_names[self.cursor.month],
+                                'year': self.cursor.year,
+                                'week': self.cursor.isocalendar()[1],
+                            }
 
     def dayTitle(self, day):
-        # XXX: i18n
-        return day.strftime('%A, %Y-%m-%d')
+        return _('%(day_of_week)s, %(year)s-%(month)s-%(day)s') % {
+                    'year': day.year,
+                    'month': day.month,
+                    'day': day.day,
+                    'day_of_week': self.day_of_week_names[day.weekday()]}
 
     def prevWeek(self):
         """Return the day a week before."""
@@ -495,12 +536,13 @@ class MonthlyCalendarView(CalendarViewBase):
     template = Template("www/cal_monthly.pt")
 
     def title(self):
-        # XXX: i18n
-        return self.cursor.strftime('%B, %Y')
+        return _('%(month)s, %(year)s') % {
+                                'month': self.month_names[self.cursor.month],
+                                'year': self.cursor.year,
+                            }
 
     def dayOfWeek(self, date):
-        # XXX: i18n
-        return date.strftime('%A')
+        return self.day_of_week_names[date.weekday()]
 
     def weekTitle(self, date):
         return _('Week %d') % date.isocalendar()[1]
@@ -524,12 +566,10 @@ class YearlyCalendarView(CalendarViewBase):
     template = Template('www/cal_yearly.pt')
 
     def monthTitle(self, date):
-        # XXX: i18n
-        return date.strftime('%B')
+        return self.month_names[date.month]
 
     def dayOfWeek(self, date):
-        # XXX: i18n
-        return date.strftime('%a')
+        return self.short_day_of_week_names[date.weekday()]
 
     def prevYear(self):
         """Return the first day of the next year."""

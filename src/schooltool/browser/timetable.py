@@ -428,6 +428,21 @@ class TimePeriodViewBase(View):
     # in schooltool.browser.cal
     first_day_of_week = 0
 
+    month_names = {
+        1: _("January"),
+        2: _("February"),
+        3: _("March"),
+        4: _("April"),
+        5: _("May"),
+        6: _("June"),
+        7: _("July"),
+        8: _("August"),
+        9: _("September"),
+        10: _("October"),
+        11: _("November"),
+        12: _("December"),
+    }
+
     def __init__(self, context):
         View.__init__(self, context)
         self.start_widget = TextWidget('start', _('Start date'), dateParser)
@@ -469,9 +484,8 @@ class TimePeriodViewBase(View):
         index = 0
         while start_of_month < limit:
             month_title = _('%(month)s %(year)s') % {
-                                # XXX: i18n
-                                'month': start_of_month.strftime('%B'),
-                                'year': start_of_month.year
+                                'month': self.month_names[start_of_month.month],
+                                'year': start_of_month.year,
                             }
             weeks = []
             start_of_week = week_start(start_of_month, self.first_day_of_week)
