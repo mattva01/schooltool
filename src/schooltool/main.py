@@ -738,6 +738,7 @@ class Server:
             elif filename == 'STDERR':
                 handler = logging.StreamHandler(sys.stderr)
             else:
+                # RotatingFileHandler might help solve log rotation issues
                 handler = logging.FileHandler(filename)
             handler.setFormatter(formatter)
             logger.addHandler(handler)
