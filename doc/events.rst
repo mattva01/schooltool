@@ -15,9 +15,9 @@ to have absences particularly noted), or collectively on behalf of groups
 of objects. (For example, all teachers who are class tutors need to note
 when pupils are absent for several consecutive registrations.)
 
-After the event has been processed by all SchoolTool event subscribers,
-it is forwarded to the Zope3 event system.  You may use Zope3 adapters
-to register event handlers, as in schooltool.booking.
+Before the the event is propagated through the SchoolTool event system, it is
+forwarded to the Zope3 event system.  You may use Zope3 adapters to register
+event handlers, as in schooltool.booking.
 
 See code
 --------

@@ -332,9 +332,9 @@ class TestEventService(SchoolToolSetup):
 
         es.notify(event)
         self.assertEquals(event.dispatched_to, [target2, target2])
-        self.assertEquals(target2.events, ('EventA', 'EventA', event))
-        # The first two events were sent by EventService.notify, while the
-        # third one arrived through the Zope3 event system.
+        self.assertEquals(target2.events, (event, 'EventA', 'EventA'))
+        # The first event arrived through the Zope3 event system,
+        # the next two were dispatched by EventService.notify.
 
     def test_nonevents(self):
         from zope.interface import Interface, directlyProvides
