@@ -65,7 +65,7 @@ class XMLDocument(object):
 
     root = property(lambda self: XMLNode(self._doc.getRootElement(), self))
 
-    def __init__(self, body, schema=None):
+    def __init__(self, body, schema=None, namespaces=None):
         """Parse the document (and validate with a RelaxNG schema if given).
 
         Ill-formed documents cause XMLParseError to be raised.
@@ -94,6 +94,17 @@ class XMLDocument(object):
 
             >>> XMLDocument("<sample>Hi!</sample>", schema).free()
 
+        You can pass a dictionary with namespaces directly to the constructor
+        instead of calling registerNs:
+
+            >>> doc = XMLDocument("<sample/>",
+            ...                   namespaces={'n1': 'http://example.com/n1',
+            ...                               'n2': 'http://example.com/n2'})
+            >>> doc.namespaces['n1']
+            'http://example.com/n1'
+            >>> doc.query('n2:nosuchelement')
+            []
+
         """
         self._doc = self._xpathctx = None # __del__ wants them
         if schema is not None:
@@ -112,6 +123,9 @@ class XMLDocument(object):
             raise XMLParseError(_("Ill-formed document."))
         self._xpathctx = self._doc.xpathNewContext()
         self.namespaces = {}
+        if namespaces:
+            for ns, url in namespaces.items():
+                self.registerNs(ns, url)
 
     def registerNs(self, ns, url):
         """Register an XML namespace.
