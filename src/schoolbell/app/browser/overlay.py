@@ -104,8 +104,8 @@ class CalendarOverlayView(BrowserView):
 
         """
         person = IPerson(self.request.principal)
-        items = [(item.calendar.__parent__.title,
-                  {'title': item.calendar.__parent__.title,
+        items = [(item.calendar.title,
+                  {'title': item.calendar.title,
                    'id': getPath(item.calendar.__parent__),
                    'calendar': item.calendar,
                    'checked': item.show and "checked" or '',

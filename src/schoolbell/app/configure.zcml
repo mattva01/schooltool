@@ -99,7 +99,8 @@
 
   <content class=".app.Calendar">
     <require permission="schoolbell.viewCalendar"
-             interface="schoolbell.calendar.interfaces.ICalendar" />
+             interface="schoolbell.calendar.interfaces.ICalendar"
+             attributes="title" />
     <require permission="schoolbell.addEvent"
              attributes="addEvent" />
     <require permission="schoolbell.modifyEvent"

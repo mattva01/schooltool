@@ -198,7 +198,7 @@
 
     <metal:block fill-slot="content-header">
       <h1 i18n:translate="">
-        Calendar for <span tal:replace="context/__parent__/title"
+        Calendar for <span tal:replace="context/title"
                            i18n:name="title" />
       </h1>
     </metal:block>
