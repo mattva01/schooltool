@@ -26,6 +26,7 @@ import sys
 import ZConfig
 import urllib
 import copy
+import getopt
 from persistence import Persistent
 from transaction import get_transaction
 from zodb.interfaces import ConflictError
@@ -371,19 +372,33 @@ class PersonView(View):
 
 def main():
     """Starts the SchoolTool mockup HTTP server on port 8080."""
+
+    # Tell Twisted we'll be using threads
     threadable.init()
+
+    # Find a default configuration file
+    dirname = os.path.dirname(__file__)
+    dirname = os.path.normpath(os.path.join(dirname, '..', '..'))
+    config_file = os.path.join(dirname, 'schooltool.conf')
+    if not os.path.exists(config_file):
+        config_file = os.path.join(dirname, 'schooltool.conf.in')
+
+    # Check if a different config file is specified on the command line
+    opts, args = getopt.getopt(sys.argv[1:], 'c:', ['config='])
+    for k, v in opts:
+        if k in ('-c', '--config'):
+            config_file = v
+
+    # Read configuration file
     dirname = os.path.dirname(__file__)
     schema = ZConfig.loadSchema(os.path.join(dirname, 'schema.xml'))
+    print "Reading configuration from %s" % config_file
+    config, handler = ZConfig.loadConfig(schema, config_file)
 
-    dirname = os.path.normpath(os.path.join(dirname, '..', '..'))
-    filename = os.path.join(dirname, 'schooltool.conf')
-    if not os.path.exists(filename):
-        filename = os.path.join(dirname, 'schooltool.conf.in')
-    print "Reading configuration from %s" % filename
-    config, handler = ZConfig.loadConfig(schema, filename)
-
+    # Apply misc. config settings
     reactor.suggestThreadPoolSize(config.thread_pool_size)
 
+    # Open the database
     db = config.database.open()
     conn = db.open()
     root = conn.root()
@@ -392,6 +407,7 @@ def main():
         get_transaction().commit()
     conn.close()
 
+    # Start web servers
     site = Site(db, 'schooltool', RootView)
     for interface, port in config.listen:
         reactor.listenTCP(port, site, interface=interface)

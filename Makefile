@@ -22,7 +22,8 @@ test: build
 	$(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
-	@PYTHONPATH=src $(PYTHON) src/schooltool/main.py & pid=$$! ; \
+	@PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf & \
+	pid=$$! ; \
 	sleep 2 ; \
 	$(PYTHON) test.py -f $(TESTFLAGS) ; \
 	kill $$pid
