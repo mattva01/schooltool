@@ -200,69 +200,6 @@ class IMultiContainer(Interface):
 
 
 #
-# Services
-#
-
-class IServiceAPI(Interface):
-    """Service API.
-
-    There are a number of global services stored in the object database.  This
-    API lets the code access those services.  The context argument passed to
-    each of the functions in this API is an object connected to the containment
-    hierarchy.  Looking up a service entails traversing up the chain of object
-    parents until an object providing IServiceManager is found (usually this
-    will be the root object).
-
-    Every service has its own API defined in a separate interface.
-    """
-
-    def getEventService(context):
-        """Return the global event service."""
-
-    def getUtilityService(context):
-        """Return the global utility service."""
-
-    def getTimetableSchemaService(context):
-        """Return the global timetable schema service."""
-
-    def getTimePeriodService(context):
-        """Return the global time period service."""
-
-    def getTicketService(context):
-        """Return the ticket service for authentication."""
-
-    def getDynamicFacetSchemaService(context):
-        """Return the global DynamicFacet schema service"""
-
-    def getOptions(context):
-        """Return an IOptions object found from the context."""
-
-
-class IServiceManager(Interface):
-    """Container of services"""
-
-    # TODO: Object()s
-
-    eventService = Field(
-        title=u"Event service for this application")
-
-    utilityService = Field(
-        title=u"Utility service for this application")
-
-    timetableSchemaService = Field(
-        title=u"Timetable schema service")
-
-    timePeriodService = Field(
-        title=u"Time period service")
-
-    ticketService = Field(
-        title=u"Ticket service")
-
-    dynamicFacetSchemaService = Field(
-        title=u"Info Facet schema service")
-
-
-#
 # Utilities
 #
 
@@ -2279,33 +2216,6 @@ class IOptions(Interface):
         """)
 
 
-class IApplication(IContainmentRoot, IServiceManager, ITraversable, IOptions):
-    """The application object.
-
-    Services (as given by IServiceManager) are found by attribute.
-
-    Application objects (of which there currently are persons, groups and
-    resources) form a second hierarchy in addition to the usual containment
-    hierarchy that all objects form.  The second hierarchy is expressed
-    by Membership relationships.  Roots of the membership hierarchy are found
-    by getRoots().
-
-    Application object containers are found by __getitem__.  They do not
-    participate in the second (membership) hierarchy.  All application objects
-    are children of application object containers if you look at the
-    containment hierarchy.
-    """
-
-    def getRoots():
-        """Return a sequence of root application objects."""
-
-    def __getitem__(name):
-        """Get the named application object container."""
-
-    def keys():
-        """List the names of application object containers."""
-
-
 class IApplicationObjectContainer(ILocation, ITraversable):
     """A collection of application objects."""
 
@@ -2555,3 +2465,102 @@ class ComponentLookupError(Exception):
 
 class AuthenticationError(Exception):
     """Bad username or password."""
+
+
+#
+# Services
+#
+
+class IServiceAPI(Interface):
+    """Service API.
+
+    There are a number of global services stored in the object database.  This
+    API lets the code access those services.  The context argument passed to
+    each of the functions in this API is an object connected to the containment
+    hierarchy.  Looking up a service entails traversing up the chain of object
+    parents until an object providing IServiceManager is found (usually this
+    will be the root object).
+
+    Every service has its own API defined in a separate interface.
+    """
+
+    def getEventService(context):
+        """Return the global event service."""
+
+    def getUtilityService(context):
+        """Return the global utility service."""
+
+    def getTimetableSchemaService(context):
+        """Return the global timetable schema service."""
+
+    def getTimePeriodService(context):
+        """Return the global time period service."""
+
+    def getTicketService(context):
+        """Return the ticket service for authentication."""
+
+    def getDynamicFacetSchemaService(context):
+        """Return the global DynamicFacet schema service"""
+
+    def getOptions(context):
+        """Return an IOptions object found from the context."""
+
+
+class IServiceManager(Interface):
+    """Container of services"""
+
+    # TODO: Object()s
+
+    eventService = Object(
+        title=u"Event service for this application",
+        schema=IEventService)
+
+    utilityService = Object(
+        title=u"Utility service for this application",
+        schema=IUtilityService)
+
+    timetableSchemaService = Object(
+        title=u"Timetable schema service",
+        schema=ITimetableSchemaService)
+
+    timePeriodService = Object(
+        title=u"Time period service",
+        schema=ITimePeriodService)
+
+    ticketService = Field(
+        title=u"Ticket service")
+
+    dynamicFacetSchemaService = Object(
+        title=u"Info Facet schema service",
+        schema=IDynamicFacetSchemaService)
+
+
+#
+# The main application object
+#
+
+class IApplication(IContainmentRoot, IServiceManager, ITraversable, IOptions):
+    """The application object.
+
+    Services (as given by IServiceManager) are found by attribute.
+
+    Application objects (of which there currently are persons, groups and
+    resources) form a second hierarchy in addition to the usual containment
+    hierarchy that all objects form.  The second hierarchy is expressed
+    by Membership relationships.  Roots of the membership hierarchy are found
+    by getRoots().
+
+    Application object containers are found by __getitem__.  They do not
+    participate in the second (membership) hierarchy.  All application objects
+    are children of application object containers if you look at the
+    containment hierarchy.
+    """
+
+    def getRoots():
+        """Return a sequence of root application objects."""
+
+    def __getitem__(name):
+        """Get the named application object container."""
+
+    def keys():
+        """List the names of application object containers."""
