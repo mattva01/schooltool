@@ -435,7 +435,7 @@ class TimetableDict(PersistentDict):
 
     def getRelativePath(self, child):
         if self[child.__name__]  != child:
-            raise TypeError("Cannot determine path of  %r, because it does"
+            raise TypeError("Cannot determine path of %r, because it does"
                             " not appear to be a child of %r"  %
                             (child, self))
         return "/".join(child.__name__)
