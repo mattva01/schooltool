@@ -138,7 +138,7 @@ class PersistentKeysSet(Persistent):
 
 
 class PersistentPairKeysDict(Persistent, UserDict.DictMixin):
-    """A dict  indexed strictly by pairs (persistent, hashable)."""
+    """A dict indexed strictly by pairs (persistent, hashable)."""
 
     def __init__(self):
         self._data = PersistentKeysDict()
@@ -154,8 +154,11 @@ class PersistentPairKeysDict(Persistent, UserDict.DictMixin):
         return self._data[persistent][hashable]
 
     def __delitem__(self, (persistent, hashable)):
-        del self._data[persistent][hashable]
-        if not self._data[persistent]:
+        d = self._data[persistent]
+        del d[hashable]
+        if d:
+            self._data[persistent] = d
+        else:
             del self._data[persistent]
 
     def keys(self):

@@ -189,30 +189,80 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(KeyError, d.__getitem__, (p, 2))
 
     def testPersistentSetitem(self):
+        from schooltool.db import PersistentPairKeysDict
         from zodb.db import DB
         from zodb.storage.mapping import MappingStorage
+        from transaction import get_transaction
         db = DB(MappingStorage())
-        datamgr = db.open()
-        from schooltool.db import PersistentPairKeysDict
 
+        datamgr = db.open()
         d = PersistentPairKeysDict()
-        value = object()
         p = P()
-        d[(p, 2)] = value
+        value = 23
+        d[(p, 1)] = value
         datamgr.root()['D'] = d
         datamgr.root()['P'] = p
-        from transaction import get_transaction
         get_transaction().commit()
         datamgr.close()
 
         datamgr = db.open()
         d = datamgr.root()['D']
         p = datamgr.root()['P']
-        self.assertEqual(d._data._data._p_changed, False)
+        self.assertEqual(d[(p, 1)], value)
+        d[(p, 2)] = value
+        get_transaction().commit()
+
+        # Opening a second datamanager while this one is still open to
+        # ensure that the second datamanager is not the first one
+        # recycled.
+        datamgr2 = db.open()
+        d2_d = datamgr2.root()['D']
+        d2_p = datamgr2.root()['P']
+        self.assertEqual(d2_d[(d2_p, 1)], value)
+        # The next assert will fail if the item with key (p, 2) is not
+        # persisted properly on __setitem__.
+        self.assertEqual(d2_d[(d2_p, 2)], value)
+        get_transaction().commit()
+        datamgr2.close()
+        datamgr.close()
+
+    def testPersistentDelitem(self):
+        from schooltool.db import PersistentPairKeysDict
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        from transaction import get_transaction
+        db = DB(MappingStorage())
+
+        datamgr = db.open()
+        d = PersistentPairKeysDict()
+        p = P()
+        value = 23
         d[(p, 1)] = value
-        # The next line fails if __setitem__ does not activate persistence
-        # properly.
-        self.assertEqual(d._data._data._p_changed, True)
+        d[(p, 2)] = value
+        datamgr.root()['D'] = d
+        datamgr.root()['P'] = p
+        get_transaction().commit()
+        datamgr.close()
+
+        datamgr = db.open()
+        d = datamgr.root()['D']
+        p = datamgr.root()['P']
+        del d[(p, 2)]
+        get_transaction().commit()
+
+        # Opening a second datamanager while this one is still open to
+        # ensure that the second datamanager is not the first one
+        # recycled.
+        datamgr2 = db.open()
+        d2_d = datamgr2.root()['D']
+        d2_p = datamgr2.root()['P']
+        self.assertEqual(d2_d[(d2_p, 1)], value)
+        # The next assert will fail if the item with key (p, 2) is not
+        # persisted properly on __delitem__.
+        self.assertRaises(KeyError, d2_d.__getitem__, (d2_p, 2))
+        get_transaction().commit()
+        datamgr2.close()
+        datamgr.close()
 
     def testNoEmptyDicts(self):
         from schooltool.db import PersistentPairKeysDict
