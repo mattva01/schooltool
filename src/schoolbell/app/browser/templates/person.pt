@@ -42,7 +42,7 @@
 
     <div class="groups">
       <h3 i18n:translate="">Groups</h3>
-      <div tal:repeat="group context/groups">
+      <div tal:repeat="group context/groups"> <!-- TODO: ordering -->
         <a tal:attributes="href group/@@absolute_url"
            tal:content="group/title"></a>
       </div>

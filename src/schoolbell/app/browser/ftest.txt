@@ -705,6 +705,21 @@ We should have a view for that resource as well:
     ...resource...
     ...
 
+The supergroup list works for resources too:
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/Resource/groups.html HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    <input type="checkbox" name="group.Group" />
+    group
+    ...
+
 
 
 Navigation view

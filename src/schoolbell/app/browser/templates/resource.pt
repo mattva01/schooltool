@@ -17,10 +17,17 @@
     </div>
 
     <div class="groups">
-      <h3 i18n:translate="">Groups XXX NOT IMPLEMENTED</h3>
-      <p tal:repeat="group view/getParentGroups">
-       <a tal:attributes="href group/@@absolute_url"
-          tal:content="group/title"/>
+      <h3 i18n:translate="">Groups</h3>
+      <div tal:repeat="group context/groups"> <!-- TODO: ordering -->
+        <a tal:attributes="href group/@@absolute_url"
+           tal:content="group/title"></a>
+      </div>
+      <div tal:condition="not:context/groups">
+        This resource does not belong to any groups.
+      </div>
+      <p>
+        <a tal:attributes="href string:${context/@@absolute_url}/groups.html"
+          >Add this resource to a group</a>
       </p>
     </div>
 
