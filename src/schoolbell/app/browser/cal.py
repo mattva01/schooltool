@@ -1711,6 +1711,7 @@ def makeRecurrenceRule(interval=None, until=None,
     else:
         raise NotImplementedError()
 
+
 def datesParser(raw_dates):
     r"""Parse dates on separate lines into a tuple of date objects.
 
@@ -1733,8 +1734,10 @@ def datesParser(raw_dates):
                 results.append(d)
     return tuple(results)
 
+
 def enableVfbView(ical_view):
     return IReadFile(ical_view.context)
+
 
 def enableICalendarUpload(ical_view):
     """An adapter that enables HTTP PUT for calendars.

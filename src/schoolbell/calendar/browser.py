@@ -99,6 +99,7 @@ Register the iCalendar read view in ZCML as
         />
 
 Register the VfbView as calendar.vfb
+
     <browser:page
         for="schoolbell.calendar.interfaces.ICalendar"
         name="calendar.vfb"
@@ -139,5 +140,4 @@ class CalendarVfbView(object):
             request.response.setHeader('Content-Length', len(data))
 
         return data
-
 

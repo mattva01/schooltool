@@ -32,6 +32,7 @@ from pytz import timezone
 
 utc = timezone("UTC")
 
+
 def prev_month(date):
     """Calculate the first day of the previous month for a given date.
 
@@ -253,13 +254,13 @@ def parse_time(s):
         ValueError: minute must be in 0..59
 
     """
-
     parts = s.split(":")
     hh, mm = map(int, parts[:2])
     ss = 0
     if len(parts) > 2:
         ss = int(parts[2])
     return time(hh, mm, ss)
+
 
 def parse_timetz(s, tz=utc):
     """Timezone aware time parser.
@@ -298,7 +299,6 @@ def parse_timetz(s, tz=utc):
 
 
     """
-
     parts = s.split(":")
     hh, mm = map(int, parts[:2])
     ss = 0
