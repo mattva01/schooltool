@@ -31,13 +31,16 @@ clean:
 	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 	rm -rf debian/schooltool-server debian/schooltool-clients
-	rm -f debian/schooltool.substvars \
-		debian/schooltool.postinst.debhelper \
-		debian/import-sampleschool \
-		debian/schooltool.prerm.debhelper \
-		debian/files \
-		build-stamp \
-		install-stamp
+	rm -f debian/schooltool-clients.substvars
+	rm -f debian/schooltool-clients.postinst.debhelper
+	rm -f debian/schooltool-clients.prerm.debhelper
+	rm -f debian/schooltool-server.substvars
+	rm -f debian/schooltool-server.postinst.debhelper
+	rm -f debian/schooltool-server.postrm.debhelper
+	rm -f debian/schooltool-server.prerm.debhelper
+	rm -f debian/import-sampleschool
+	rm -f debian/files
+	rm -f build-stamp install-stamp
 
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;

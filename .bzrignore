@@ -432,3 +432,7 @@ debian/schooltool.postrm.debhelper
 debian/schooltool.prerm.debhelper
 debian/files
 src/schooltool/translation/schooltool.pot
+./*.pid
+./schooltool.log
+./access.log
+./testserver_access.log
