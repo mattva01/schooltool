@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 import datetime
-from zope.interface import implements
+from zope.interface import directlyProvides
 from schooltool.views.tests import RequestStub, setPath
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.helpers import dedent, diff, sorted
@@ -456,9 +456,10 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
         schooltool.views.cal.setUp()
 
         def viewClass(iface):
-            class FakeClass:
-                implements(iface)
-            obj = FakeClass()
+            """Return the view class registered for an interface."""
+            cls = type(iface.getName(), (), {})
+            obj = cls()
+            directlyProvides(obj, iface)
             return getView(obj).__class__
 
         self.assert_(viewClass(ISchooldayModel) is SchooldayModelCalendarView)

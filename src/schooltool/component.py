@@ -351,20 +351,24 @@ class UtilityService:
     def values(self):
         return self._utils.values()
 
+
 #
 # ITimetableModelRegistry methods
 #
 
 timetable_model_registry = {}
 
+
 def resetTimetableModelRegistry():
     global timetable_model_registry
     timetable_model_registry = {}
+
 
 def getTimetableModel(id):
     """Returns a timetable schema identified by a given id."""
     global timetable_model_registry
     return timetable_model_registry[id]
+
 
 def registerTimetableModel(id, factory):
     """Registers a timetable schema identified by a given id."""
@@ -375,6 +379,7 @@ def registerTimetableModel(id, factory):
         pass
     else:
         raise ValueError("%s already in the timetable model" % (id,))
+
 
 def listTimetableModels():
     """Returns a sequence of keys of the timetable models in the

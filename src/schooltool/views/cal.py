@@ -28,7 +28,7 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.views import View, textErrorPage
-from schooltool.cal import ICalReader, ICalParseError, DateRange, CalendarEvent
+from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration
 from schooltool.component import getPath
 from schooltool.component import registerView

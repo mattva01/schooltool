@@ -254,7 +254,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html_template = """
         <html>
         <head>
-          <title>John Smith's %(tt_type)s timetable for 2003 fall, weekly</title>
+          <title>
+            John Smith's %(tt_type)s timetable for 2003 fall, weekly
+          </title>
           <style type="text/css">
             table { border-collapse: collapse; }
             td, th { border: 1px solid black; }
@@ -308,7 +310,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     full_html_template = """
         <html>
         <head>
-          <title>John Smith's %(tt_type)s timetable for 2003 fall, weekly</title>
+          <title>
+            John Smith's %(tt_type)s timetable for 2003 fall, weekly
+          </title>
           <style type="text/css">
             table { border-collapse: collapse; }
             td, th { border: 1px solid black; }

@@ -44,6 +44,7 @@ __metaclass__ = type
 
 moduleProvides(IModuleSetup)
 
+
 #
 # Timetabling
 #
