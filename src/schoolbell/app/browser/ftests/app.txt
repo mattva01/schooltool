@@ -220,11 +220,12 @@ We should see a new user in the user table:
                   <a href="http://localhost/frogpond/persons/frog">Frog</a>
     ...
 
-We should have a view for that person as well:
+We should have a view for that person as well, and the person
+themselves can see it:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -245,34 +246,34 @@ If we try to create a person with the same login name, we get a nice error:
     ... POST /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 1342
-    ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
+    ... Content-Type: multipart/form-data; boundary=---8<---
     ... 
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.title"
     ... 
     ... Other frog with the same id
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.username"
     ... 
     ... frog
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.password"
     ... 
     ... pwd
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.verify_password"
     ... 
     ... pwd
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.photo"; filename=""
     ... Content-Type: application/octet-stream
     ... 
     ... 
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
     ... 
     ... Add
-    ... -----------------------------705046721187019535891597004--
+    ... -----8<-----
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -283,7 +284,7 @@ We should have a view for editing him as well:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/edit.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -322,34 +323,34 @@ You can create a person without providing a password:
     ... POST /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 1314
-    ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
+    ... Content-Type: multipart/form-data; boundary=---8<---
     ... 
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.title"
     ... 
     ... Frog2
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.username"
     ... 
     ... frog2
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.password"
     ... 
     ... 
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.verify_password"
     ... 
     ... 
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="field.photo"; filename=""
     ... Content-Type: application/octet-stream
     ... 
     ... 
-    ... -----------------------------705046721187019535891597004
+    ... -----8<---
     ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
     ... 
     ... Add
-    ... -----------------------------705046721187019535891597004--
+    ... -----8<-----
     ... """)
     HTTP/1.1 303 See Other
     Content-Length: ...
