@@ -258,7 +258,8 @@ class TimetableException(Persistent):
         return self._replacement
 
     def _setReplacement(self, replacement):
-        if not IExceptionalTTCalendarEvent.providedBy(replacement):
+        if (replacement is not None and
+            not IExceptionalTTCalendarEvent.providedBy(replacement)):
             raise ValueError("%r is not an exceptional TT event" % replacement)
         self._replacement = replacement
 

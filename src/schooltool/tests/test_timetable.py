@@ -454,6 +454,7 @@ class TestTimetableException(unittest.TestCase):
         self.assertEquals(e.date, date(2004, 10, 12))
         self.assertEquals(e.period_id, 123)
         assert e.activity is activity
+        e.replacement = None
 
         self.assertRaises(ValueError, setattr, e, 'replacement', object())
 
