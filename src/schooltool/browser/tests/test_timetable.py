@@ -152,6 +152,8 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
 
+    # XXX test rendering when there are timetable exceptions
+
     def test_title(self):
         view = self.createView()
         self.assertEquals(view.title(),

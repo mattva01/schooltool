@@ -23,6 +23,49 @@
     </tal:block></tr>
   </table>
 
+<tal:if condition="context/exceptions">
+  <h2 i18n:translate="">Timetable exceptions</h2>
+
+  <ul>
+    <tal:block repeat="exc context/exceptions">
+    <li tal:condition="not:exc/replacement" i18n:translate="">
+      On <span tal:replace="python:exc.date.strftime('%Y-%m-%d')"
+      i18n:name="date" />, period <span tal:replace="exc/period_id"
+      i18n:name="period" />, <span tal:replace="exc/activity/title"
+      i18n:name="activity" /> is canceled.
+    </li>
+    <li tal:define="ev exc/replacement"
+        tal:condition="python: ev and ev.dtstart.date() == exc.date"
+        i18n:translate="">
+      On <span tal:replace="python:exc.date.strftime('%Y-%m-%d')"
+      i18n:name="date" />, period <span tal:replace="exc/period_id"
+      i18n:name="period" />, <span tal:replace="exc/activity/title"
+      i18n:name="activity" /> is replaced with <span tal:replace="ev/title"
+      i18n:name="title" />
+      from <span tal:replace="python: ev.dtstart.strftime('%H:%M')"
+      i18n:name="start" /> to <span tal:define="dtend python:ev.dtstart +
+      ev.duration" tal:replace="python: dtend.strftime('%H:%M')"
+      i18n:name="end" />.
+    </li>
+    <li tal:define="ev exc/replacement"
+        tal:condition="python: ev and ev.dtstart.date() != exc.date"
+        i18n:translate="">
+      On <span tal:replace="python:exc.date.strftime('%Y-%m-%d')"
+      i18n:name="date" />, period <span tal:replace="exc/period_id"
+      i18n:name="period" />, <span tal:replace="exc/activity/title"
+      i18n:name="activity" /> is replaced with <span tal:replace="ev/title"
+      i18n:name="title" />
+      from <span tal:replace="python: ev.dtstart.strftime('%H:%M')"
+      i18n:name="start" /> to <span tal:define="dtend python:ev.dtstart +
+      ev.duration" tal:replace="python: dtend.strftime('%H:%M')"
+      i18n:name="end" /> on <span
+      tal:replace="python:ev.dtstart.strftime('%Y-%m-%d')" i18n:name="new_date"
+      />.
+    </li>
+    </tal:block>
+  </ul>
+</tal:if>
+
 </metal:block>
 </body>
 </html>
