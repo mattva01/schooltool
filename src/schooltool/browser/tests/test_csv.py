@@ -31,6 +31,31 @@ from schooltool.tests.utils import RegistriesSetupMixin, AppSetupMixin
 __metaclass__ = type
 
 
+class TestCharsetMixin(unittest.TestCase):
+
+    def createMixin(self):
+        from schooltool.browser.csv import CharsetMixin
+        return CharsetMixin(None)
+
+    def test_getCharset(self):
+        mixin = self.createMixin()
+
+        request = RequestStub(args={'charset': 'UTF-8',
+                                    'other_charset': ''})
+        self.assertEquals(mixin.getCharset(request), 'UTF-8')
+
+        request = RequestStub(args={'charset': '',
+                                    'other_charset': 'ISO-8859-1'})
+        self.assertEquals(mixin.getCharset(request), 'ISO-8859-1')
+
+        self.assertRaises(ValueError, mixin.getCharset,
+                          RequestStub(args={'charset': 'bogus-charset',
+                                            'other_charset': 'UTF-8'}))
+        self.assertRaises(ValueError, mixin.getCharset,
+                          RequestStub(args={'charset': '',
+                                            'other_charset': 'bogus-charset'}))
+
+
 class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
@@ -48,6 +73,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 
         self.assert_('Upload CSV' in content)
 
+
     def test_POST_empty(self):
         request = RequestStub(args={'groups.csv': '',
                                     'resources.csv': '',
@@ -57,46 +83,6 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('No data provided' in content)
-        self.assert_('Data imported successfully' not in content)
-
-        self.assertEquals(request.applog, [])
-
-    def test_POST_bad_charset(self):
-        request = RequestStub(args={'groups.csv': '',
-                                    'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
-                                    'charset': 'no-such-charset'})
-        self.view.request = request
-        content = self.view.do_POST(request)
-        self.assert_('Unknown charset' in content)
-        self.assert_('No data provided' not in content)
-        self.assert_('Data imported successfully' not in content)
-
-        request = RequestStub(args={'groups.csv': '',
-                                    'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
-                                    'charset': 'UTF-8',
-                                    'other_charset': 'no-such-charset'})
-        content = self.view.do_POST(request)
-        self.assert_('Unknown charset' in content)
-        self.assert_('No data provided' not in content)
-        self.assert_('Data imported successfully' not in content)
-
-        self.assertEquals(request.applog, [])
-
-    def test_POST_no_charset(self):
-        request = RequestStub(args={'groups.csv': '',
-                                    'resources.csv': '',
-                                    'teachers.csv': '',
-                                    'pupils.csv': '',
-                                    'charset': '',
-                                    'other_charset': ''})
-        self.view.request = request
-        content = self.view.do_POST(request)
-        self.assert_('This field is required' in content)
-        self.assert_('No data provided' not in content)
         self.assert_('Data imported successfully' not in content)
 
         self.assertEquals(request.applog, [])
@@ -152,8 +138,6 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                        (None, u'CSV data import finished successfully', INFO)])
 
     def test_POST_groups_wrong_charset(self):
-        from schooltool.component import FacetManager
-        from schooltool.teaching import TeacherGroupFacet
         request = RequestStub(args={'groups.csv':'"year1","\xff","root",""',
                                     'resources.csv': '',
                                     'teachers.csv': '',
@@ -371,9 +355,35 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
 
+    def test_post(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+
+    def test_POST_empty(self):
+        view = self.createView()
+        view.request = RequestStub(args={'timetable.csv': '',
+                                         'roster.csv': '',
+                                         'charset': 'UTF-8'})
+        content = view.do_POST(view.request)
+        self.assert_('No data provided' in content)
+
+        self.assertEquals(view.request.applog, [])
+
+    def test_POST_wrong_charset(self):
+        view = self.createView()
+        view.request = RequestStub(args={'timetable.csv':'"A","\xff","C","D"',
+                                         'roster.csv': '',
+                                         'charset': 'UTF-8'})
+        content = view.do_POST(view.request)
+        self.assert_('incorrect charset' in content)
+        self.assertEquals(view.request.applog, [])
+
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestCharsetMixin))
     suite.addTest(unittest.makeSuite(TestCSVImportView))
     suite.addTest(unittest.makeSuite(TestCSVImporterZODB))
     suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))

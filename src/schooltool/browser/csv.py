@@ -35,11 +35,7 @@ from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
 
 
-class CSVImportViewBase(View):
-
-    __used_for__ = IApplication
-
-    authorization = ManagerAccess
+class CharsetMixin:
 
     charsets = [('UTF-8', _('Unicode (UTF-8)')),
                 ('ISO-8859-1', _('Western (ISO-8859-1)')),
@@ -48,13 +44,32 @@ class CSVImportViewBase(View):
                 ('', _('Other (please specify)'))]
 
     def __init__(self, context):
-        View.__init__(self, context)
         self.charset_widget = SelectionWidget('charset', _('Charset'),
                                               self.charsets,
                                               validator=self.validate_charset)
         self.other_charset_widget = TextWidget('other_charset',
                                                _('Specify other charset'),
                                                validator=self.validate_charset)
+
+    def getCharset(self, request):
+        """Return the charset (as a string) that was specified in request.
+
+        Uses the widgets charset_widget and other_charset_widget.
+        Raises ValueError if the charset is missing or invalid.
+        """
+        self.charset_widget.update(request)
+        if self.charset_widget.error:
+            raise ValueError("No charset specified")
+
+        if not self.charset_widget.value:
+            self.other_charset_widget.update(request)
+            if self.other_charset_widget.value == "":
+                # Force a "field is required" error if value is ""
+                self.other_charset_widget.setRawValue(None)
+            self.other_charset_widget.require()
+            if self.other_charset_widget.error:
+                raise ValueError("No charset specified")
+        return (self.charset_widget.value or self.other_charset_widget.value)
 
     def validate_charset(self, charset):
         if not charset:
@@ -65,31 +80,26 @@ class CSVImportViewBase(View):
             raise ValueError(_('Unknown charset'))
 
 
-class CSVImportView(CSVImportViewBase, ToplevelBreadcrumbsMixin):
+class CSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
 
     __used_for__ = IApplication
+
+    authorization = ManagerAccess
 
     template = Template('www/csvimport.pt')
 
     error = u""
     success = False
 
+    def __init__(self, context):
+        View.__init__(self, context)
+        CharsetMixin.__init__(self, context)
+
     def do_POST(self, request):
-        self.charset_widget.update(request)
-        self.charset_widget.require()
-        if self.charset_widget.error:
+        try:
+            charset = self.getCharset(request)
+        except ValueError:
             return self.do_GET(request)
-
-        self.other_charset_widget.update(request)
-        if not self.charset_widget.value:
-            if self.other_charset_widget.value == "":
-                # Force a "field is required" error if value is ""
-                self.other_charset_widget.setRawValue(None)
-            self.other_charset_widget.require()
-        if self.other_charset_widget.error:
-            return self.do_GET(request)
-
-        charset = self.charset_widget.value or self.other_charset_widget.value
 
         groups_csv = request.args['groups.csv'][0]
         resources_csv = request.args['resources.csv'][0]
@@ -101,10 +111,8 @@ class CSVImportView(CSVImportViewBase, ToplevelBreadcrumbsMixin):
             return self.do_GET(request)
 
         try:
-            unicode(groups_csv, charset)
-            unicode(resources_csv, charset)
-            unicode(teachers_csv, charset)
-            unicode(pupils_csv, charset)
+            for csv in [groups_csv, resources_csv, teachers_csv, pupils_csv]:
+                unicode(csv, charset)
         except UnicodeError:
             self.error = _('Could not convert data to Unicode'
                            ' (incorrect charset?).')
@@ -195,8 +203,7 @@ class CSVImporterZODB(CSVImporterBase):
                 except KeyError, e:
                     raise DataError(_("No such group: %r") % group)
                 except ValueError:
-                    raise DataError(_("Cannot add %r to %r") % (person,
-                                                                group))
+                    raise DataError(_("Cannot add %r to %r") % (person, group))
             self.logs.append(_('Imported person: %s') % title)
         else:
             for group in groups.split():
@@ -245,7 +252,7 @@ class CSVImporterZODB(CSVImporterBase):
                             infofacet.date_of_birth))
 
 
-class TimetableCSVImportView(CSVImportViewBase):
+class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
     """View to upload the school timetable as CSV."""
 
     __used_for__ = IApplication
@@ -257,5 +264,46 @@ class TimetableCSVImportView(CSVImportViewBase):
     error = None
     success = None
 
+    def __init__(self, context):
+        View.__init__(self, context)
+        CharsetMixin.__init__(self, context)
+
     def do_POST(self, request):
-        raise NotImplementedError() # TODO
+        try:
+            charset = self.getCharset(request)
+        except ValueError:
+            return self.do_GET(request)
+
+        timetable_csv = request.args['timetable.csv'][0]
+        roster_csv = request.args['roster.csv'][0]
+
+        if not (timetable_csv or roster_csv):
+            self.error = _('No data provided.')
+            return self.do_GET(request)
+
+        try:
+            # TODO timetable_csv = unicode(timetable_csv, charset) ?
+            unicode(timetable_csv, charset)
+            unicode(roster_csv, charset)
+        except UnicodeError:
+            self.error = _('Could not convert data to Unicode'
+                           ' (incorrect charset?).')
+            return self.do_GET(request)
+
+        try:
+            if timetable_csv:
+                self.importTimetable(timetable_csv)
+            if roster:
+                self.importRoster(resources_csv)
+        except DataError, e:
+            self.error = _("Import failed: %s") % e
+            return self.do_GET(request)
+
+        # TODO: log import
+        return self.do_GET(request)
+
+    def importTimetable(self, timetable_csv):
+        pass # TODO
+
+    def importRoster(self, timetable_csv):
+        pass # TODO
