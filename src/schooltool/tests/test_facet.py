@@ -139,6 +139,7 @@ class LinkStub:
         self.reltype = reltype
         self.role = role
         self.callbacks = Set()
+        self.__name__ = None
 
     def traverse(self):
         return self.target

@@ -293,3 +293,18 @@ class PersistentKeysSetWithNames(UniqueNamesMixin):
     def clear(self):
         self._data.clear()
         self.clearNames()
+
+class PersistentPairKeysDictWithNames(PersistentPairKeysDict,
+                                      UniqueNamesMixin):
+    def __init__(self):
+        PersistentPairKeysDict.__init__(self)
+        UniqueNamesMixin.__init__(self, name_length=4)
+
+    def __setitem__(self, key, value):
+        PersistentPairKeysDict.__setitem__(self, key, value)
+        self.newName(value, value)
+
+    def __delitem__(self, key):
+        name = self[key].__name__
+        PersistentPairKeysDict.__delitem__(self, key)
+        self.removeName(name)

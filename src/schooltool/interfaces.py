@@ -223,6 +223,8 @@ class ILink(Interface):
 
     __parent__ = Attribute("The object at this end of the relationship")
 
+    __name__ = Attribute("""Unique name within the parent's links""")
+
     def traverse():
         """Returns the object at the other end of the relationship.
 

@@ -133,6 +133,8 @@ class FacetOwnershipSetter(Persistent):
 
     facets = ()
 
+    __name__ = None
+
     def replacedBy(self, link):
         for facet in self.facets:
             facet.owner = link

@@ -482,6 +482,25 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         self.assertEquals(list(p.getNames()), ['003'])
 
 
+class TestPersistentPairKeysDictWithNames(unittest.TestCase,
+                                          EqualsSortedMixin):
+
+    def test(self):
+        from schooltool.db import PersistentPairKeysDictWithNames
+        s = PersistentPairKeysDictWithNames()
+        p = P()
+        s[p, 1] = x = N()
+        self.assert_(x.__name__ is not None)
+        self.assert_(s.valueForName(x.__name__) is x)
+        del s[p, 1]
+        self.assertRaises(KeyError, s.valueForName, x.__name__)
+        s[p, 1] = x = N()
+        s[p, 2] = y = N()
+        s.clear()
+        self.assertRaises(KeyError, s.valueForName, x.__name__)
+        self.assertRaises(KeyError, s.valueForName, y.__name__)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
@@ -491,4 +510,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersistentPairKeysDict))
     suite.addTest(unittest.makeSuite(TestUniqueNamesMixin))
     suite.addTest(unittest.makeSuite(TestPersistentKeysSetWithNames))
+    suite.addTest(unittest.makeSuite(TestPersistentPairKeysDictWithNames))
     return suite

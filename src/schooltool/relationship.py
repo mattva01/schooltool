@@ -25,7 +25,7 @@ from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
-from schooltool.db import PersistentPairKeysDict
+from schooltool.db import PersistentPairKeysDictWithNames
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
 from schooltool.interfaces import ILinkSet, ILink, IPlaceholder
@@ -63,6 +63,7 @@ class Link(Persistent):
         if not IRelatable.isImplementedBy(parent):
             raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent
+        self.__name__ = None
         self.role = role
         self.callbacks = MaybePersistentKeysSet()
         # self.relationship is set when this link becomes part of a
@@ -246,7 +247,7 @@ class LinkSet:
     implements(ILinkSet)
 
     def __init__(self):
-        self._data = PersistentPairKeysDict()
+        self._data = PersistentPairKeysDictWithNames()
 
     def add(self, link):
         """Add a link to the set.

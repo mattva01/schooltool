@@ -67,6 +67,7 @@ class LinkStub:
         self.role = role
         self._target = target
         self.title = title
+        self.__name__ = None
 
     def traverse(self):
         return self._target
@@ -359,6 +360,8 @@ class SimplePlaceholder:
 
     replacedByLink = None
 
+    __name__ = None
+
     def replacedBy(self, link):
         self.replacedByLink = link
 
@@ -385,6 +388,8 @@ class TestLinkSet(unittest.TestCase):
         s.add(b)
         self.assertRaises(ValueError, s.add, a)
         self.assertEquals(sorted([a, b]), sorted(s))
+        self.assert_(a.__name__ is not None)
+        self.assert_(b.__name__ is not None)
 
         self.assertRaises(ValueError, s.remove, equivalent_to_a)
         s.remove(a)
@@ -405,6 +410,7 @@ class TestLinkSet(unittest.TestCase):
         self.assertEqual(list(iter(s)), [])
         self.assertEqual(list(s.iterPlaceholders()), [placeholder])
         s.remove(placeholder)
+        placeholder.__name__ = None
         self.assertEqual(list(s.iterPlaceholders()), [])
 
         # test that placeholder.replaced(link) is called
