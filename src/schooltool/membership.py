@@ -65,6 +65,7 @@ def checkForPotentialCycles(group, potential_member):
             new_last.difference_update(seen)
             last = new_last
 
+
 class MembershipEvent(RelationshipEvent):
 
     implements(IMembershipEvent, URIMembership)

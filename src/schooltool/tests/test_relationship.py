@@ -27,6 +27,7 @@ from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import ISpecificURI, IRelatable, ILink, IUnlinkHook
+from schooltool.interfaces import ILinkSet, IPlaceholder
 from schooltool.component import inspectSpecificURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -334,6 +335,8 @@ class TestRelatableMixin(unittest.TestCase):
 
 
 class LinkStub:
+    implements(ILink)
+
     def __init__(self, reltype, role, target):
         self.reltype = reltype
         self.role = role
@@ -342,22 +345,66 @@ class LinkStub:
     def traverse(self):
         return self._target
 
+
+class SimplePlaceholder:
+    implements(IPlaceholder)
+
+    replacedByLink = None
+
+    def replacedBy(self, link):
+        self.replacedByLink = link
+
+
 class TestLinkSet(unittest.TestCase):
+
+    def testInterface(self):
+        from schooltool.relationship import LinkSet
+        s = LinkSet()
+        verifyObject(ILinkSet, s)
 
     def test(self):
         from persistence import Persistent
         from schooltool.relationship import LinkSet
         s = LinkSet()
-        a = LinkStub(object(), object(), Persistent())
+        reltype_a = object()
+        role_a = object()
+        target_a = Persistent()
+        a = LinkStub(reltype_a, role_a, target_a)
+        equivalent_to_a = LinkStub(reltype_a, role_a, target_a)
         b = LinkStub(object(), object(), Persistent())
+        self.assertRaises(TypeError, s.add, object())
         s.add(a)
         s.add(b)
         self.assertRaises(ValueError, s.add, a)
         self.assertEquals(sorted([a, b]), sorted(s))
 
+        self.assertRaises(ValueError, s.remove, equivalent_to_a)
         s.remove(a)
         self.assertRaises(ValueError, s.remove, a)
-        self.assertEquals(sorted([b]), sorted(s))
+        self.assertEquals([b], list(s))
+
+    def testPlaceholders(self):
+        from persistence import Persistent
+        from schooltool.relationship import LinkSet
+        s = LinkSet()
+        link = LinkStub(object(), object(), Persistent())
+        placeholder = SimplePlaceholder()
+        self.assertRaises(TypeError, s.addPlaceholder, link, object())
+        self.assertRaises(TypeError, s.addPlaceholder, object(), placeholder)
+        self.assertRaises(ValueError, s.remove, placeholder)
+        s.addPlaceholder(link, placeholder)
+        # __iter__ should only iterate over links, not placeholders
+        self.assertEqual(list(iter(s)), [])
+        self.assertEqual(list(s.iterPlaceholders()), [placeholder])
+        s.remove(placeholder)
+        self.assertEqual(list(s.iterPlaceholders()), [])
+
+        # test that placeholder.replaced(link) is called
+        s.addPlaceholder(link, placeholder)
+        self.assertEqual(placeholder.replacedByLink, None)
+        s.add(link)
+        self.assertEqual(placeholder.replacedByLink, link)
+        self.assertRaises(ValueError, s.addPlaceholder, link, placeholder)
 
 
 class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
@@ -424,6 +471,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         facet.active = False
         self.assertEqualsSorted(list(rvm.getValencies()),
                                 [(URIMembership, URIMember)])
+
 
 def test_suite():
     suite = unittest.TestSuite()

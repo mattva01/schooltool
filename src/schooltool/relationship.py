@@ -28,6 +28,7 @@ from zope.interface import directlyProvides
 from schooltool.db import PersistentKeysSet, PersistentPairKeysDict
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
+from schooltool.interfaces import ILinkSet, ILink, IPlaceholder
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
 from schooltool.interfaces import IRelationshipEvent
@@ -221,6 +222,10 @@ def defaultRelate(reltype, (a, role_of_a), (b, role_of_b), title=None):
 
 class LinkSet:
     """Set of links."""
+    # Note: add and addPlaceholder methods are type-checked because we care
+    #       a lot about the type of objects in this set.
+
+    implements(ILinkSet)
 
     def __init__(self):
         self._data = PersistentPairKeysDict()
@@ -231,24 +236,78 @@ class LinkSet:
         If an equivalent link (with the same reltype, role and target)
         already exists in the set, raises a ValueError.
         """
-        key = (link.traverse(), (link.reltype, link.role))
-        if key in self._data:
-            raise ValueError('duplicate link', link)
-        self._data[key] = link
+        if ILink.isImplementedBy(link):
+            key = (link.traverse(), (link.reltype, link.role))
+            value = self._data.get(key)
+            if value is None:
+                self._data[key] = link
+            elif IPlaceholder.isImplementedBy(value):
+                self._data[key] = link
+                value.replacedBy(link)
+            else:
+                assert ILink.isImplementedBy(value)
+                raise ValueError('duplicate link', link)
+        else:
+            raise TypeError('link must provide ILink', link)
 
-    def remove(self, link):
+    def _removeLink(self, link):
+        key = (link.traverse(), (link.reltype, link.role))
+        try:
+            value = self._data[key]
+        except KeyError:
+            raise ValueError('link not in set', link)
+
+        if value is link:
+            del self._data[key]
+        else:
+            raise ValueError('link not in set', link)
+
+    def _removePlaceholder(self, placeholder):
+        for key, value in self._data.iteritems():
+            if value is placeholder:
+                del self._data[key]
+                break
+        else:
+            raise ValueError('placeholder not in set', placeholder)
+
+    def remove(self, link_or_placeholder):
         """Remove a link from the set.
 
         If an equivalent link does not exist in the set, raises a ValueError.
         """
-        key = (link.traverse(), (link.reltype, link.role))
-        try:
-            del self._data[key]
-        except KeyError:
-            raise ValueError('link not in set', link)
+        if ILink.isImplementedBy(link_or_placeholder):
+            self._removeLink(link_or_placeholder)
+        elif IPlaceholder.isImplementedBy(link_or_placeholder):
+            self._removePlaceholder(link_or_placeholder)
+        else:
+            raise TypeError('remove must be called with a link or a'
+                            ' placeholder. Got %r' % (link_or_placeholder,))
 
     def __iter__(self):
-        return self._data.itervalues()
+        for value in self._data.itervalues():
+            if ILink.isImplementedBy(value):
+                yield value
+
+    def addPlaceholder(self, for_link, placeholder):
+        """Add a placeholder to the set to fill the place of the given link.
+        """
+        if (ILink.isImplementedBy(for_link) and 
+            IPlaceholder.isImplementedBy(placeholder)):
+            key = (for_link.traverse(), (for_link.reltype, for_link.role))
+            if key in self._data:
+                raise ValueError(
+                    'Tried to add placeholder as duplicate for link',
+                    for_link)
+            self._data[key] = placeholder
+        else:
+            raise TypeError('for_link must be an ILink and placeholder must'
+                            ' by an IPlaceholder', for_link, placeholder)
+
+    def iterPlaceholders(self):
+        """Returns an iterator over the placeholders in the set."""
+        for value in self._data.itervalues():
+            if IPlaceholder.isImplementedBy(value):
+                yield value
 
 
 class RelatableMixin(Persistent):

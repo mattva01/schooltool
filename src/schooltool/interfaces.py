@@ -212,6 +212,13 @@ class IUnlinkHook(Interface):
         """The given link was unlinked."""
 
 
+class IPlaceholder(Interface):
+    """A placeholder for a link."""
+
+    def replacedBy(link):
+        """The placeholder was replaced in the link set by the given link."""
+
+
 class ILinkSet(Interface):
     """A set of links.
 
@@ -229,16 +236,27 @@ class ILinkSet(Interface):
 
         If an equivalent link (with the same reltype, role and target)
         already exists in the set, raises a ValueError.
+
+        If an equivalent placeholder is in the set, replace the placeholder
+        with the link, and call IPlaceholder.replacedBy(link).
         """
 
-    def remove(link):
-        """Remove a link from the set.
+    def addPlaceholder(for_link, placeholder):
+        """Add a placeholder to the set to fill the place of the given link.
+        """
 
-        If an equivalent link does not exist in the set, raises a ValueError.
+    def iterPlaceholders():
+        """Returns an iterator over the placeholders in the set."""
+
+    def remove(link_or_placeholder):
+        """Remove a link or a placeholder from the set.
+
+        If the given object is not in the set, raises a ValueError.
+        The error is raised even if there is an equivalent link in the set.
         """
 
     def __iter__():
-        """Return an iterator over the set."""
+        """Return an iterator over the links in the set."""
 
 
 class IRelatable(Interface):
