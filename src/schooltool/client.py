@@ -53,6 +53,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
     port = 8080
 
     file_hook = file
+    input_hook = raw_input
 
     def __init__(self, *args):
         Cmd.__init__(self, *args)
@@ -202,6 +203,64 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             self.emit(str(e))
         else:
             self.emit("Saved %s: %d bytes" % (filename, len(self.last_data)))
+
+    def do_put(self, line):
+        """Put a resource on the server.
+
+        put <resource> [<content-type>]
+
+        Content-type defaults to text/plain.  The new representation of the
+        resource should be terminated with a line containing just a single
+        period.  If the data contains a line consisting of just periods,
+        prepend it with an additional one that will be stripped automatically.
+        """
+        args = line.split()
+        if len(args) < 1:
+            self.emit("Resource not provided")
+            return
+        if len(args) > 2:
+            self.emit("Extra arguments provided")
+            return
+        resource = args[0]
+        content_type = 'text/plain'
+        if len(args) > 1:
+            content_type = args[1]
+        if self.stdin.isatty():
+            self.emit("End data with a line containing just a single period.")
+        data = []
+        while 1:
+            try:
+                row = self.input_hook()
+            except EOFError:
+                self.emit('Unexpected EOF -- PUT aborted')
+                return
+            if row.startswith('.'):
+                if row == '.':
+                    break
+                if row == '.' * len(row):
+                    row = row[:-1]
+            data.append(row)
+        data.append('')
+        data = '\n'.join(data)
+        try:
+            conn = self.http(self.server, self.port)
+            conn.putrequest('PUT', resource)
+            conn.putheader('Content-Type', content_type)
+            conn.putheader('Content-Length', len(data))
+            conn.endheaders()
+            conn.send(data)
+            response = conn.getresponse()
+            self.last_data = data = response.read()
+            self.resources = []
+            ctype = response.getheader('Content-Type',
+                                       'application/octet-stream')
+            if not ctype.startswith('text/'):
+                self.emit("Resource is not text: %s" % ctype)
+                self.emit("use save <filename> to save it")
+                return
+            self.emit(data)
+        except socket.error:
+            self.emit('Error: could not connect to %s' % self.server)
 
     def do_links(self, line):
         """Toggle the display of xlinks found in the response.

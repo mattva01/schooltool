@@ -35,6 +35,8 @@ class HTTPStub:
     def __init__(self, host, port=8080):
         self.host = host
         self.port = port
+        self.sent_headers = {}
+        self.sent_data = ''
 
         if host == 'badhost':
             raise socket.error(-2, 'Name or service not known')
@@ -46,13 +48,16 @@ class HTTPStub:
         self.resource = resource
 
     def putheader(self, key, value):
-        pass
+        self.sent_headers[key.lower()] = value
 
     def endheaders(self):
         pass
 
     def getresponse(self):
         return ResponseStub(self)
+
+    def send(self, s):
+        self.sent_data += s
 
 class ResponseStub:
 
@@ -75,6 +80,12 @@ class ResponseStub:
                            xlink:title="Kate"/>
                 </index>
                 """)
+        elif self.request.resource == "/place_to_put_things":
+            return ("%s %s %s\n%s"
+                    % (self.request.method,
+                       self.request.sent_headers['content-type'],
+                       self.request.sent_headers['content-length'],
+                       self.request.sent_data))
         else:
             return "404 :-)"
 
@@ -295,6 +306,56 @@ class TestClient(unittest.TestCase):
         self.client.file_hook = FileStub
         self.client.do_save(filename)
         self.assertEqual(self.emitted, FileStub.msg)
+
+    def test_put(self):
+        self.client.input_hook = lambda: '.'
+        self.client.do_put('   ')
+        self.assertEqual(self.emitted, "Resource not provided")
+
+        self.emitted = ""
+        self.client.do_put('x y z')
+        self.assertEqual(self.emitted, "Extra arguments provided")
+
+        self.emitted = ""
+        self.client.resources = ['x']
+        self.client.do_put('/place_to_put_things')
+        self.assertEqual(self.emitted,
+                         "End data with a line containing just a single"
+                           " period.\n"
+                         "PUT text/plain 0\n")
+        self.assertEqual(self.client.resources, [])
+        self.assertEqual(self.client.last_data, 'PUT text/plain 0\n')
+
+        self.emitted = ""
+        self.client.input_hook = ['.', '..', '...', 'foo'].pop
+        self.client.do_put('/place_to_put_things text/x-plain')
+        self.assertEqual(self.emitted,
+                         "End data with a line containing just a single"
+                           " period.\n"
+                         "PUT text/x-plain 9\n"
+                         "foo\n"
+                         "..\n"
+                         ".\n")
+
+        def raise_eof():
+            raise EOFError
+        self.emitted = ""
+        self.client.input_hook = raise_eof
+        self.client.do_put('/place_to_put_things')
+        self.assertEqual(self.emitted,
+                         "End data with a line containing just a single"
+                           " period.\n"
+                         "Unexpected EOF -- PUT aborted")
+
+        self.emitted = ""
+        self.client.input_hook = lambda: '.'
+        self.client.do_put('/binfile')
+        self.assertEqual(self.emitted,
+                         "End data with a line containing just a single"
+                           " period.\n"
+                         "Resource is not text: application/octet-stream\n"
+                         "use save <filename> to save it")
+        self.assertEqual(self.client.last_data, "(binary data)")
 
     def test_links(self):
         self.assertEqual(self.client.links, True)
