@@ -8,10 +8,12 @@
 
 <h1 metal:fill-slot="h1" tal:content="view/index_title">Contents</h1>
 
-<metal:block metal:fill-slot="body">
+<metal:block metal:fill-slot="body"
+             tal:define="objects context/values">
 
-  <ul>
-    <li tal:repeat="obj view/sortedObjects">
+  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
+  <ul tal:condition="objects">
+    <li tal:repeat="obj objects/sortby:title">
       <a tal:content="obj/title"
          tal:attributes="href obj/@@absolute_url">Some Object</a>
     </li>

@@ -30,34 +30,6 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 
 
-def doctest_ContainerView():
-    """Tests for ContainerView.
-
-    It is a generic class for containers that contain objects with a `title`
-    attribute.
-
-        >>> class SomeObject:
-        ...     def __init__(self, title):
-        ...         self.title = title
-        ...     def __repr__(self):
-        ...         return '<SomeObject %r>' % self.title
-
-        >>> from schoolbell.app.browser.app import ContainerView
-        >>> context = {'id1': SomeObject('orange'),
-        ...            'id2': SomeObject('apple'),
-        ...            'id3': SomeObject('banana')}
-        >>> request = TestRequest()
-        >>> view = ContainerView(context, request)
-
-    The view defines a method called `sortedObjects` so that page templates
-    can display the items in alphabetical order.
-
-        >>> view.sortedObjects()
-        [<SomeObject 'apple'>, <SomeObject 'banana'>, <SomeObject 'orange'>]
-
-    """
-
-
 def doctest_PersonView():
     r"""Test for PersonView
 

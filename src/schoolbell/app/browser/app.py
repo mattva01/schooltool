@@ -65,10 +65,6 @@ class ContainerView(BrowserView):
 
     """
 
-    def sortedObjects(self):
-        """Return a list of contained objects sorted by title."""
-        return sorted_by_title(self.context.values())
-
 
 class PersonContainerView(ContainerView):
     """A Person Container view."""
