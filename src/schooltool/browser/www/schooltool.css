@@ -144,7 +144,11 @@ div.buttons {
   margin: 2ex 0ex 0ex 0ex;
 }
 
-input.button {
+input.button,
+form a.action:link,
+form a.action:visited,
+div.form a.action:link,
+div.form a.action:visited {
   border: 1px solid #b34848;
   background: #b0b0b0;
   color: black;
@@ -158,7 +162,11 @@ form.invisible input.button {
 }
 
 
-input.button:hover {
+input.button:hover,
+form a.action:hover,
+form a.action:active,
+div.form a.action:hover,
+div.form a.action:active {
   background: #dedede;
   color: black;
 }

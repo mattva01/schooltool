@@ -10,46 +10,51 @@
 
   <div class="error" tal:condition="view/error" tal:content="view/error" />
 
-  <tal:block condition="not:view/error">
+<tal:block condition="not:view/error">
   <form method="GET" tal:attributes="action request/path">
 
-    <p>
-    <label for="page">Page</label>
-    <input id="page" name="page" type="text"
-           tal:attributes="value view/query/page">
-    (of <span tal:replace="view/query/total" />)
-    <br />
-    <input type="hidden" name="prev_filter"
-           tal:attributes="value view/filter_str">
-    <label for="filter">Show lines containing</label>
-    <input id="filter" name="filter" type="text"
-           tal:attributes="value view/filter_str">
+    <div class="row">
+      <label for="page" i18n:translate="">Page</label>
+      <input id="page" name="page" type="text"
+             tal:attributes="value view/query/page" />
+      <span tal:content="string:(of ${view/query/total})" i18n:translate=""
+            tal:omit-tag="" />
+      <input class="button" type="submit" value="Go" i18n:attributes="value" />
+    </div>
+    <div class="row">
+      <input type="hidden" name="prev_filter"
+             tal:attributes="value view/filter_str">
+      <label for="filter" i18n:translate="">Substring</label>
+      <input id="filter" name="filter" type="text"
+             tal:attributes="value view/filter_str" />
+      <input class="button" type="submit" value="Filter"
+             i18n:attributes="value" />
+    </div>
 
-    <br />
-    <input type="submit" value="Go" />
-    </p>
-
-      <pre tal:content="python:'\n'.join(view.query.result)">
-        Log
-        contents
-        here
-      </pre>
+    <pre tal:content="python:'\n'.join(view.query.result)">
+      Log
+      contents
+      here
+    </pre>
 
     <p>
     <!-- XXX This way of navigation is clumsy and impractical -->
+    <a tal:attributes="href python:view.pageURL(1)"
+       class="action" i18n:translate="">First page</a>
     <a tal:condition="python:view.query.page > 1"
        tal:attributes="href python:view.pageURL(view.query.page - 1)"
+       class="action" i18n:translate=""
        >Previous page</a>
     <a tal:condition="python:view.query.page < view.query.total"
        tal:attributes="href python:view.pageURL(view.query.page + 1)"
+       class="action" i18n:translate=""
        >Next page</a>
-    <br />
-    <a tal:attributes="href python:view.pageURL(1)">First page</a>
-    <a tal:attributes="href python:view.pageURL(-1)">Last page</a>
+    <a tal:attributes="href python:view.pageURL(-1)"
+       class="action" i18n:translate="">Last page</a>
     </p>
 
   </form>
-  </tal:block>
+</tal:block>
 
 </metal:block>
 </body>
