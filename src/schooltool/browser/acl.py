@@ -113,7 +113,7 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
     def permissionValidator(self, value):
         if value is None:
             return
-        for perm  in value:
+        for perm in value:
             if perm not in (ViewPermission, AddPermission, ModifyPermission):
                 raise ValueError(_("Please select a permission"))
 
