@@ -282,6 +282,8 @@ We should have a view for that person as well:
     ...Photo:...
     ...N/A...
     ...
+    This person does not belong to any groups.
+    ...
 
 We should have a view for changing his password as well:
 
@@ -504,8 +506,46 @@ We should see the group in this person's possible super group list.
     <BLANKLINE>
     <!DOCTYPE html ...
     ...
-    <input type="checkbox" name="Group" />
+    <input type="checkbox" name="group.Group" />
+    group
     ...
+
+Let's add the person to the group.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/groups.html?APPLY=Apply&group.Group=on HTTP/1.1
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/frogpond/persons/frog
+    ...
+
+The person's info view should show the group:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+    <a href=".../groups/Group">group</a>
+    ...
+
+And the groups page shows the checkbox checked.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/groups.html HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    <input type="checkbox" checked="checked"
+           name="group.Group" />
     group
     ...
 

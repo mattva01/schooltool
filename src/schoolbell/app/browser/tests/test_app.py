@@ -129,7 +129,8 @@ def doctest_GroupListView():
 
         >>> from schoolbell.app.app import SchoolBellApplication
         >>> app = SchoolBellApplication()
-        >>> app['persons']['mg'] = person
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app['persons']['ignas'] = person
 
     We will be testing the person's awareness of the world, so we will
     create some (empty) groups.
@@ -145,8 +146,73 @@ def doctest_GroupListView():
         >>> request = TestRequest()
         >>> view = GroupListView(person, request)
 
+    Rendering the view does no harm:
+
+        >>> view.update()
+
+    First, all groups should be listed in alphabetical order:
+
         >>> [g.title for g in view.getGroupList()]
         ['Etria', 'Others', 'PoV']
+
+    Let's tell the person to join PoV:
+
+        >>> request = TestRequest()
+        >>> request.form = {'group.pov': 'on', 'APPLY': 'Apply'}
+        >>> view = GroupListView(person, request)
+        >>> view.update()
+
+    He should have joined:
+
+        >>> [group.title for group in person.groups]
+        ['PoV']
+
+    And we should be directed to the person info page:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/persons/ignas'
+
+    Had we decided to make the guy join Etria but then changed our mind:
+
+        >>> request = TestRequest()
+        >>> request.form = {'group.pov': 'on', 'group.etria': 'on',
+        ...                 'CANCEL': 'Cancel'}
+        >>> view = GroupListView(person, request)
+        >>> view.update()
+
+    Nothing would have happened!
+
+        >>> [group.title for group in person.groups]
+        ['PoV']
+
+    Yet we would find ourselves in the person info page:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/persons/ignas'
+
+    Finally, let's remove him out of PoV for a weekend and add him
+    to The World.
+
+        >>> request = TestRequest()
+        >>> request.form = {'group.the_world': 'on', 'APPLY': 'Apply'}
+        >>> view = GroupListView(person, request)
+        >>> view.update()
+
+    Mission successful:
+
+        >>> [group.title for group in person.groups]
+        ['Others']
+
+    Yadda yadda, redirection works:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/persons/ignas'
 
     """
 
@@ -193,10 +259,6 @@ def doctest_ResourceView():
 
 def doctest_PersonChangePasswordView():
     r"""Test for PersonChangePasswordView
-
-    We need some setup to make widgets work in a unit test.
-
-        >>> setUpViewsAndForms()
 
     PersonChangePasswordView is a view on IPerson.
 
@@ -318,29 +380,37 @@ def doctest_PersonChangePasswordView():
         >>> view.error
         u'Passwords do not match.'
 
-    That's all.
-
-        >>> tearDownViewsAndForms()
-
     """
 
 
-def setUpViewsAndForms():
+def setUp(test):
+    """Set up the test fixture for doctests in this module.
+
+    Performs what is called a "placeless setup" in the Zope 3 world, then
+    sets up annotations, relationships, and registers widgets as views for some
+    schema fields.
+    """
     from zope.app.form.browser import PasswordWidget
     from zope.app.form.interfaces import IInputWidget
     from zope.schema.interfaces import IPassword
     setup.placelessSetUp()
+    setup.setUpAnnotations()
+    setup.setUpTraversal()
+    # relationships
+    from schoolbell.relationship.tests import setUpRelationships
+    setUpRelationships()
     # widgets
     ztapi.browserViewProviding(IPassword, PasswordWidget, IInputWidget)
 
 
-def tearDownViewsAndForms():
+def tearDown(test):
+    """Tear down the test fixture for doctests in this module."""
     setup.placelessTearDown()
 
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
     return suite
 
 

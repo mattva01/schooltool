@@ -30,6 +30,7 @@ from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
 from zope.security import checkPermission
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember
@@ -111,6 +112,26 @@ class GroupListView(BrowserView):
         items = [(group.title, group) for group in groups.values()]
         items.sort()
         return [row[-1] for row in items]
+
+    def update(self):
+        context_url = zapi.absoluteURL(self.context, self.request)
+        if 'APPLY' in self.request:
+            context_groups = removeSecurityProxy(self.context.groups)
+            for group in self.getGroupList():
+                want = bool('group.' + group.__name__ in self.request)
+                have = bool(group in context_groups)
+                # add() and remove() could throw an exception, but at the
+                # moment the constraints are never violated, so we ignore
+                # the problem.
+                if want != have:
+                    group = removeSecurityProxy(group)
+                    if want:
+                        context_groups.add(group)
+                    else:
+                        context_groups.remove(group)
+            self.request.response.redirect(context_url)
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(context_url)
 
 
 class GroupView(BrowserView):
