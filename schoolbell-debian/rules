@@ -26,7 +26,7 @@ build-stamp:
 clean::
 	dh_testdir
 	dh_testroot
-	-$(MAKE) realclean
+	-$(MAKE) clean
 	rm -f garbage
 	rm -f install-arch-stamp
 	rm -f install-indep-stamp
