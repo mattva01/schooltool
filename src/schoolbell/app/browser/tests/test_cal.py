@@ -153,7 +153,7 @@ def doctest_CalendarTraverser():
       >>> traverser.getViewByDate(request, '2002-w11')
       'weekly.html'
       >>> request['date']
-      '2002-03-15'
+      '2002-03-11'
 
     The daily view is supported too:
 

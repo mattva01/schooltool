@@ -46,7 +46,7 @@ from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
 from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
-from schoolbell.calendar.utils import parse_time
+from schoolbell.calendar.utils import parse_time, weeknum_bounds
 
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
@@ -76,7 +76,7 @@ class CalendarOwnerTraverser(object):
 
 
 class CalendarTraverser(object):
-    """A traverser that allows to traverse to a calendar's calendar."""
+    """A smart calendar traverser that can handle dates in the URL."""
 
     adapts(ICalendarOwner)
     implements(IBrowserPublisher)
@@ -142,20 +142,18 @@ class CalendarTraverser(object):
     def getWeek(self, year, week):
         """Get the start of a week by week number.
 
-        The function does not return the first day of the week, but that
-        is good enough for our views.
+        The Monday of the given week is returned as a datetime.date.
 
             >>> traverser = CalendarTraverser(None, None)
             >>> traverser.getWeek(2002, 11)
-            datetime.date(2002, 3, 15)
+            datetime.date(2002, 3, 11)
             >>> traverser.getWeek(2005, 1)
-            datetime.date(2005, 1, 4)
+            datetime.date(2005, 1, 3)
             >>> traverser.getWeek(2005, 52)
-            datetime.date(2005, 12, 27)
+            datetime.date(2005, 12, 26)
 
         """
-        # TODO: use weeknum_bounds form schoolbell.calendar.utils
-        return date(year, 1, 4) + timedelta(weeks=(week-1))
+        return weeknum_bounds(year, week)[0]
 
 
 class CalendarDay(object):
