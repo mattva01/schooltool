@@ -592,7 +592,7 @@ class TimetableCSVImporter:
                 else:
                     person = self.findByTitle('persons', line,
                                               self.errors.persons)
-                    if group is not invalid:
+                    if group is not invalid and person is not None:
                         if not belongsToParentGroup(person, group):
                             msg = _("%s does not belong to a parent group"
                                     " of %s") % (person.title, group.title)

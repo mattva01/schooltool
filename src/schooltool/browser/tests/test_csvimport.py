@@ -757,12 +757,14 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         from schooltool.membership import Membership
         master = self.app['groups'].new(title="Master")
         slave = self.app['groups'].new(title="Slave")
+        Membership(group=self.app['groups']['pupils'], member=master)
         Membership(group=master, member=slave)
 
         imp = self.createImporter()
-        self.failIf(imp.importRoster("Slave\nLorch"))
+        self.failIf(imp.importRoster("Slave\nLorch\nNonexistent"))
         self.assertEquals(imp.errors.generic,
                           ['Lorch does not belong to a parent group of Slave'])
+        self.assertEquals(imp.errors.persons, ['Nonexistent'])
 
 
 def test_suite():
