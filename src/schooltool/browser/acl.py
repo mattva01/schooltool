@@ -87,10 +87,7 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
             return value
         elif value == Everybody:
             return Everybody
-        try:
-           return traverse(self.context, value)
-        except TypeError:
-           return None
+       return traverse(self.context, value)
 
     def formatUser(self, value):
         if value in ('', None):
