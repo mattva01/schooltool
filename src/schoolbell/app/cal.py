@@ -47,36 +47,12 @@ class Calendar(Persistent):
         return len(self.events)
 
     def addEvent(self, event):
+        if event.unique_id in self.events:
+            raise ValueError('an event with this unique_id already exists')
         self.events[event.unique_id] = event
 
-    def _removeEvent(self, event):
-        del self.events[event.unique_id]
-
     def removeEvent(self, event):
-        self._removeEvent(event)
-        # In SchoolTool resource booking works as follows:
-        #   1. A CalendarEvent is created with owner == the user who booked
-        #      the resource and context == the resource.
-        #   2. That event is added to both the owner's calendar and the
-        #      resource's calendar.
-        # When that event is removed from either the owner's or the resource's
-        # calendar, it should be removed from the other one as well.  It would
-        # be nice to move the extra logic into schooltool.booking, if possible.
-        ## XXX Disabled for now.
-        ##owner_calendar = context_calendar = None
-        ##if event.owner is not None:
-        ##    owner_calendar = event.owner.calendar
-        ##if event.context is not None:
-        ##    context_calendar = event.context.calendar
-        ##if self is owner_calendar or self is context_calendar:
-        ##    if owner_calendar is not None and owner_calendar is not self:
-        ##        owner_calendar._removeEvent(event)
-        ##    if context_calendar is not None and context_calendar is not self:
-        ##        context_calendar._removeEvent(event)
-
-    def update(self, calendar):
-        for event in calendar:
-            self.events[event.unique_id] = event
+        del self.events[event.unique_id]
 
     def clear(self):
         self.events.clear()

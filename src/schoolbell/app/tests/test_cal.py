@@ -28,12 +28,6 @@ from zope.testing import doctest
 from zope.interface.verify import verifyObject
 
 
-def test_suite():
-    return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-           ])
-
-
 def doctest_Calendar():
     r"""Tests for Calendar.
 
@@ -76,6 +70,15 @@ def doctest_Calendar():
         >>> event3 = SimpleCalendarEvent(None, None, 'Example 3')
         >>> cal.addEvent(event3)
 
+    You can't, however, add multiple events with the same unique_id
+
+        >>> event3a = SimpleCalendarEvent(None, None, 'Example 3',
+        ...                               unique_id=event3.unique_id)
+        >>> cal.addEvent(event3a)
+        Traceback (most recent call last):
+          ...
+        ValueError: an event with this unique_id already exists
+
     You can iterate through a calendar:
 
         >>> len(cal)
@@ -95,32 +98,6 @@ def doctest_Calendar():
         ...
         KeyError: 'nonexistent'
 
-    Several calendars can be combined by using update():
-
-        >>> another_cal = Calendar()
-        >>> another_cal.addEvent(SimpleCalendarEvent(None, None, 'Example 4'))
-        >>> another_cal.addEvent(SimpleCalendarEvent(None, None, 'Example 5'))
-        >>> cal.update(another_cal)
-        >>> titles = [ev.title for ev in cal]
-        >>> titles.sort()
-        >>> titles
-        ['Example 1', 'Example 2', 'Example 3', 'Example 4', 'Example 5']
-
-    If there are two events with the same id when updating a calendar,
-    the original event is overwritten with the one from the given calendar:
-
-        >>> evt_clone1 = SimpleCalendarEvent(None, None, 'Clone A',
-        ...                                  unique_id='conflict')
-        >>> evt_clone2 = SimpleCalendarEvent(None, None, 'Clone B',
-        ...                                  unique_id='conflict')
-        >>> cal.addEvent(evt_clone1)
-        >>> another_cal.addEvent(evt_clone2)
-        >>> cal.update(another_cal)
-        >>> evt_clone1 in cal
-        False
-        >>> evt_clone2 in cal
-        True
-
     All events can be removed from a calendar by using clear():
 
         >>> cal.clear()
@@ -128,6 +105,12 @@ def doctest_Calendar():
         []
 
     """
+
+
+def test_suite():
+    return unittest.TestSuite([
+                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
+           ])
 
 
 if __name__ == '__main__':
