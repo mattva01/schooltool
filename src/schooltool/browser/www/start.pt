@@ -3,10 +3,6 @@
   <title metal:fill-slot="title" i18n:translate="">Start page</title>
 </head>
 <body>
-<!-- XXX according to what Jim said on IRC, the following should work.  It
-     doesn't (grep for "Start page for" in schooltool.pot after make
-     extract-translations).  Perhaps we need to upgrade i18nextractor or page
-     templates? -->
 <h1 metal:fill-slot="h1" i18n:translate="">
   Start page for <span tal:replace="context/title" i18n:name="user" />
 </h1>

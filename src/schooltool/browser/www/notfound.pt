@@ -1,12 +1,12 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">404 Not Found</title>
+  <title metal:fill-slot="title" i18n:translate="">404 Not Found</title>
 </head>
 <body>
-<h1 metal:fill-slot="h1">Not Found</h1>
+<h1 metal:fill-slot="h1" i18n:translate="">Not Found</h1>
 <metal:block metal:fill-slot="content">
 
-<p>Not found: <tal:x replace="request/uri" /></p>
+<p i18n:translate="">Not found: <tal:x replace="request/uri" i18n:name="uri" /></p>
 
 </metal:block>
 </body>

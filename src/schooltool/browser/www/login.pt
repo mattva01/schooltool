@@ -35,7 +35,7 @@
   </div>
   <div class="buttons">
     <input class="button" type="submit" value="Log in" accesskey="L"
-           i18n:attributes="value" />
+           i18n:attributes="value; accesskey" />
   </div>
 </form>
 

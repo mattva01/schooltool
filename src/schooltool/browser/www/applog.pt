@@ -17,8 +17,9 @@
       <label for="page" i18n:translate="">Page</label>
       <input id="page" name="page" type="text"
              tal:attributes="value view/query/page" />
-      <span tal:content="string:(of ${view/query/total})" i18n:translate=""
-            tal:omit-tag="" />
+      <tal:span i18n:translate="">
+        (of <span i18n:name="total" tal:replace="view/query/total" />)
+      </tal:span>
       <input class="button" type="submit" value="Go" i18n:attributes="value" />
     </div>
     <div class="row">

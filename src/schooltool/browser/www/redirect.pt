@@ -1,15 +1,16 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Redirecting to
-    <tal:x replace="destination" /></title>
+  <title metal:fill-slot="title" i18n:translate="">Redirecting to
+    <tal:x replace="destination" i18n:name="destination" /></title>
 </head>
 <body>
-<h1 metal:fill-slot="h1">Redirecting</h1>
+<h1 metal:fill-slot="h1" i18n:translate="">Redirecting</h1>
 <metal:block metal:fill-slot="content">
 
-<p>Your browser is now being redirected to <a tal:attributes="href destination"
-tal:content="destination" />.  If the redirect does not work, please click on
-the link manually.</p>
+<p i18n:translate="">Your browser is now being redirected to <a
+tal:attributes="href destination" tal:content="destination"
+i18n:name="destination" />.  If the redirect does not work, please click on the
+link manually.</p>
 
 </metal:block>
 </body>

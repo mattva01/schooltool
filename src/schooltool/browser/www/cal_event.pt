@@ -1,16 +1,13 @@
-<div class="calevent" tal:define="editable
-             python:getattr(context, 'source', None) != 'timetable-calendar'">
+<div class="calevent" i18n:domain="schooltool"
+     tal:define="editable python:getattr(context, 'source', None) != 'timetable-calendar'">
   <tal:block condition="editable">
     <div class="dellink">
-      <a tal:attributes="href
-              string:delete_event.html?event_id=${view/uniqueId}"
-         >[delete]</a>
+      <a tal:attributes="href string:delete_event.html?event_id=${view/uniqueId}"
+         i18n:translate="">[delete]</a>
     </div>
     <h3>
-      <a tal:attributes="href
-              string:edit_event.html?event_id=${view/uniqueId}"
-         tal:content="context/title" >
-      </a>
+      <a tal:attributes="href string:edit_event.html?event_id=${view/uniqueId}"
+         tal:content="context/title">event_title</a>
     </h3>
   </tal:block>
   <h3 tal:condition="not:editable" tal:content="context/title" />

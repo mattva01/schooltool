@@ -3,8 +3,8 @@
   <title metal:fill-slot="title" i18n:translate="">Calendar</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">
-    Calendar for <span tal:replace="context/__parent__/title" />
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Calendar for <span tal:replace="context/__parent__/title" i18n:name="title" />
   </h1>
   <metal:block metal:fill-slot="content">
     <h2 tal:content="view/cursor/isoformat" />
