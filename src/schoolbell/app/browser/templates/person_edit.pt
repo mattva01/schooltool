@@ -1,0 +1,62 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Edit person</title>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+  <form action="." method="POST" tal:attributes="action request/URL"
+        class="standalone" enctype="multipart/form-data">
+
+    <h3 i18n:translate="">
+      Change info for <span tal:replace="context/title"
+      i18n:name="user">User</span>
+    </h3>
+
+    <div class="info" tal:condition="view/message" tal:content="view/message" />
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+
+    <fieldset>
+      <div class="row" tal:define="widget nocall:view/title_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <p tal:condition="context/photo">
+        <img src="photo" alt="Photo"
+             tal:attributes="src string:${context/@@absolute_url}/photo" />
+      </p>
+      <div class="row" tal:define="widget nocall:view/photo_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/clear_photo_widget">
+        <div metal:use-macro="context/@@form_macros/checkbox_widget " />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend i18n:translate="">Change password</legend>
+      <div class="row" tal:define="widget nocall:view/new_password_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/verify_password_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+    </fieldset>
+
+    <div class="controls">
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value submit-button; accesskey" />
+        <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+               i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+
+</metal:block>
+</body>
+</html>

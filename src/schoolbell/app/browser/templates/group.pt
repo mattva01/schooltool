@@ -1,0 +1,42 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+
+<metal:block metal:fill-slot="body">
+
+  <p class="description" tal:content="context/description"/>
+
+  <div class="members">
+    <div tal:define="members view/getPersons">
+      <h3 i18n:translate="">Members</h3>
+      <ul>
+        <li tal:repeat="obj members/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
+      <p tal:condition="not:members" i18n:translate="">
+        This group has no members.
+      </p>
+    </div>
+    <div tal:define="resources view/getResources"
+         tal:condition="resources">
+      <tal:comment condition="nothing">
+        <!-- The resource section is hidden altogether when there are no
+             resources as members - I presume that many groups will not
+             have resources as members. -->
+      </tal:comment>
+      <h3 i18n:translate="">Resources</h3>
+      <ul>
+        <li tal:repeat="obj resources/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</metal:block>
+</body>
+</html>

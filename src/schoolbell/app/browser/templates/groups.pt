@@ -1,0 +1,42 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<metal:block metal:fill-slot="body"
+             tal:define="all_groups view/getAllGroups">
+
+<form method="POST" tal:attributes="action request/URL" class="standalone">
+<h3 i18n:translate="">
+  Groups of <span i18n:name="title" tal:replace="context/title" />
+</h3>
+<p tal:condition="not:all_groups" i18n:translate="">
+  There are no groups defined.
+</p>
+<fieldset tal:condition="all_groups">
+  <div class="group_list">
+    <div tal:repeat="group all_groups/sortby:title">
+      <label>
+        <input tal:attributes="name string:group.${group/__name__};
+                               checked python:group in context.groups"
+               type="checkbox" />
+        <span tal:replace="group/title" />
+      </label>
+    </div>
+  </div>
+</fieldset>
+
+<div class="controls">
+  <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+         tal:condition="all_groups"
+         title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value submit-button; accesskey" />
+  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+         i18n:attributes="value cancel-button" />
+</div>
+</form>
+
+</metal:block>
+</body>
+</html>

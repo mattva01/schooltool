@@ -1,0 +1,861 @@
+/*
+ * Stylesheet for SchoolTool
+ *
+ * Aesthetic styling
+ *
+ */
+
+/*
+ * Normalize font size across browsers
+ */
+
+body {
+    font-size: x-small; /* for IE5/Win */
+    voice-family: "\"}\"";
+    voice-family: inherit;
+    font-size: small; /* for IE6/Win */
+}
+
+html>body {
+    font-size: x-small; /* for Opera */
+}
+
+head:first-child+body {
+    font-size: small; /* for Mozilla, IE5/Mac */
+}
+
+/*
+ * END Font
+ */
+
+body {
+    font-family: Verdana, Helvetica, Arial, Sans-Serif;
+    background: #fff;
+    color: #000;
+    min-width: 700px;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+    color: #314e6c;
+    font-weight: bold;
+}
+
+a:hover {
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Trebuchet MS", Sans-Serif;
+}
+
+h1 {
+    font-size: large;
+}
+
+h2, h3, h4, h5, h6 {
+    font-size: medium;
+}
+
+.center {
+    text-align: center;
+}
+
+.popup {
+    font-size: smaller;
+
+    width:100% !important;
+}
+
+div.search-results {
+    height:10em;
+    overflow: auto;
+    border: 1px #bab5ab solid;
+    background: #eae8e3;
+}
+
+form.standalone {
+    background: #eae8e3;
+    border: 1px #bab5ab solid;
+}
+
+form.standalone h3 {
+    background: #bab5ab;
+}
+
+form.standalone fieldset {
+    border: 1px #bab5ab solid;
+    /* Mozilla's default padding for fieldsets -- makes it nice in MSIE too */
+    padding: 0.35em 0.625em 0.75em 0.625em;
+}
+
+form.standalone p {
+    margin: 0.5em;
+}
+
+form.standalone .controls input {
+    background: #fff;
+}
+
+form.standalone div.label {
+    float: left;
+    clear: left;
+    width: 10em;
+    padding-top: 0.5ex;
+}
+
+input[type=text],
+input[type=password],
+input[type=submit],
+select,
+textarea {
+    padding: 2px;
+    border: 1px #bab5ab solid;
+    background: #ffffff;
+    vertical-align: middle;
+}
+
+select {
+    padding: 0;
+    vertical-align: top;
+}
+
+#column-left select {
+    width: 10em;
+}
+
+option {
+    border-bottom: 1px #eae8e3 solid;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=submit]:focus,
+input[type=checkbox]:focus,
+input[type=radio]:focus,
+select:focus,
+textarea:focus  {
+    border: 1px #565248 solid;
+}
+
+div.info {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #009900;
+}
+
+p.error {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #990000;
+}
+
+div.error {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #990000;
+}
+
+.error label {
+    font-weight: bold;
+    color: #990000;
+}
+
+.error input[type=text],
+.error input[type=password],
+.error input[type=checkbox],
+.error select,
+.error textarea  {
+    padding: 2px;
+    border: 1px #C1665A solid;
+    background: #e0b6af;
+}
+
+.error input[type=text]:focus,
+.error input[type=password]:focus,
+.error input[type=checkbox]:focus,
+.error select:focus,
+.error textarea:focus  {
+    border: 1px #663822 solid;
+}
+
+.controls {
+    margin-top: 1ex;
+}
+
+input.button-ok {
+    background: #83A67F !important;
+    border: 1px #445632 solid !important;
+    color: #fff;
+    font-weight: bold;
+}
+
+input.button-cancel {
+    background: #C1665A !important;
+    border: 1px #663822 solid !important;
+    color: #fff;
+    font-weight: bold;
+}
+
+/***************************/
+
+#header {
+    background: #eae8e3;
+}
+
+#header .tools {
+    color: #f0f0f0;
+    background: #990000;
+    font-size: smaller;
+    line-height: 0.75em;
+}
+
+#header .tools a {
+    color: #f0f0f0;
+    background: #990000;
+    text-decoration: none;
+    padding: 0.4ex 1ex 0.5ex 1ex;
+    font-weight: bold;
+}
+
+#header .tools a:hover {
+    color: #ffffff;
+    background: #a83636;
+}
+
+#tools-zmi-principal {
+    font-style: italic;
+}
+
+/*
+* Left Column and portlets
+*/
+
+#column-left {
+    border-right: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+    background: #eae8e3;
+}
+
+#column-left .portlet {
+    margin-top: 1em;
+}
+
+#column-left .portlet h4 {
+    margin: 0;
+    padding: 0 1em;
+    border-bottom: 1px #bab5ab solid;
+}
+
+#column-left .portlet ul {
+    margin: 0;
+    padding: 0;
+}
+
+#portlet-next-day-events.portlet ul {
+    margin: 0.5em;
+    padding: 0;
+}
+
+#column-left .portlet li {
+    list-style: none;
+    padding: 0;
+    margin-top: 1px;
+}
+
+#column-left .portlet li a {
+    display: block;
+    padding: 0.5em 1em;
+    color: #304D6B;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#column-left .portlet li a:hover {
+    background: #748FAD;
+    color: #fff;
+}
+
+#column-left .portlet .controls {
+    margin: 1ex 1ex 1ex 1ex;
+    text-align: right;
+}
+
+#column-left .portlet .controls input {
+    font-size: x-small;
+}
+
+/*
+* Center Column and Content
+*/
+
+#column-center {
+    padding: 1em 2em;
+}
+
+#content-header,
+#content-header h1 {
+    margin: 0;
+}
+
+#content-header h1 {
+    border-bottom: 1px #d6d6d6 solid;
+}
+#breadcrumbs {
+    list-style: none;
+    padding: 0;
+    /* This compensates for the padding on #column-center */
+    margin: -0.5em 0 0 -1em;
+}
+
+#breadcrumbs li {
+    display: inline;
+    margin: 0;
+}
+
+#breadcrumbs li.breadcrumb:after {
+    content: "\00BB \0020";
+}
+
+#breadcrumbs li.last:after {
+    content: '';
+}
+
+.breadcrumb a {
+    font-size: smaller;
+    text-decoration: none;
+}
+
+#message {
+    /*
+    * A status message for the user.  There should only be one of these as it
+    * is meant to be displayed prominently
+    */
+
+    margin: 1em;
+    padding: 1em;
+    background: #EED680;
+    border: 1px #D1940C solid;
+}
+
+#footer {
+    font-size: xx-small;
+    background: #eae8e3;
+    border-top: 1px solid #bab5ab;
+    line-height: 1em;
+}
+
+/*
+* Calendar Views
+*/
+
+#calendar-navigation {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}
+
+#calendar-navigation-day,
+#calendar-navigation-week,
+#calendar-navigation-month,
+#calendar-navigation-year {
+    display: block;
+    margin: 2px;
+    float: left;
+    text-decoration: none;
+    border: 0;
+    padding: 0;
+    width: 24px;
+}
+
+/* FIXME: Currently uses tables in the layout */
+#calendar-navigation-context {
+    background: #eae3eb;
+    border: 1px #aaa solid;
+    margin: 1em;
+    vertical-align: center;
+}
+
+#calendar-navigation-context-previous,
+#calendar-navigation-context-current,
+#calendar-navigation-context-next {
+    display: block;
+    margin: 2px;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+}
+
+#calendar-navigation-context-previous:hover,
+#calendar-navigation-context-current:hover,
+#calendar-navigation-context-next:hover {
+    background: #f9f1fa;
+}
+
+h2.calendar-view-title {
+    font-size: larger;
+    text-align: center;
+    border-bottom: 1px #4B6983 dotted;
+    margin: 1em;
+    margin-top: 0;
+    margin: 0;
+    clear: right;
+}
+
+#calendar-view-year td.month {
+    padding: 1em;
+}
+
+#calendar-view-year table.month,
+#portlet-calendar-view-month table.month,
+#calendar-view-month {
+    background: #eae8e3;
+    border: 1px #4B6983 solid;
+}
+
+#calendar-view-month {
+    width: 100%;
+}
+
+#calendar-view-year table.month th,
+#portlet-calendar-view-month table.month th,
+#calendar-view-month th,
+#calendar-view-month td.weekno {
+    background: #9DB8D2;
+}
+
+#calendar-view-month td.weekno {
+    border-right: 2px #4B6983 solid;
+    border-bottom: 1px #4b6983 solid;
+    font-family: cursive, serif;
+    font-size: x-large;
+    font-style: italic;
+}
+
+#calendar-view-year table.month th.month-weekday,
+#calendar-view-month th.weekday {
+    font-weight: normal;
+    padding: 2px;
+    border-bottom: 1px #4B6983 solid;
+}
+
+.cal_yearly_day_busy {
+    background: #9DB8D2;
+    color: #9C0000;
+}
+
+#calendar-view-year table.month th.month-title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #f0f0f0;
+    background: #4B6983;
+    padding-top: 3px;
+    padding-bottom: 1px;
+}
+
+#calendar-view-year table.month th.month-title a:hover {
+    background: #314e6c;
+}
+
+#calendar-view-year table.month th {
+}
+
+#calendar-view-year table.month td {
+}
+
+#calendar-view-year table.month td a,
+#calendar-view-month td a  {
+    text-decoration: none;
+    display: block;
+    padding: 1px;
+}
+
+#portlet-calendar-view-month table.month td a {
+    text-decoration: none;
+    display: block;
+    font-weight: normal;
+    padding: 1px;
+}
+
+#calendar-view-month th.month-title {
+    color: #f0f0f0;
+    background: #4B6983;
+}
+
+#calendar-view-year table.month td a:hover,
+#calendar-view-month td a:hover,
+#portlet-calendar-view-month table.month td a:hover,
+#calendar-view-week th a:hover {
+    color: #f0f0f0;
+    background: #314e6c;
+}
+
+#calendar-view-month td.weekno {
+}
+
+#calendar-view-month td.day,
+#portlet-calendar-view-month table.month td {
+    border-right: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+}
+
+#calendar-view-month td.day a,
+#calendar-view-month td.day-other a,
+#calendar-view-month td.weekno a {
+    margin: auto;
+    display: block;
+    height: 100%;
+    min-height: 80px;
+}
+
+#calendar-view-month td.weekno a {
+    height: 100%;
+    width: 100%;
+    color: #7590AE;
+    padding-left: 0.5ex;
+    padding-right: 0.5ex;
+}
+
+#calendar-view-month td.day-other {
+    background: #bab5ab;
+}
+
+#calendar-view-month td.day-other a {
+    color: #807d74;
+}
+
+#calendar-view-month .event,
+#calendar-view-month .comp_event {
+    font-weight: normal;
+    font-size: xx-small;
+    display: block;
+    padding: 1px;
+    border: 1px #eae8e3 solid;
+}
+
+#calendar-view-month a:hover .event,
+#calendar-view-month a:hover .comp_event {
+    color: #000;
+    border: 1px #314e6c solid;
+}
+
+#calendar-view-month .event {
+    background: #9db8d2;
+}
+
+#calendar-view-month .comp_event {
+    background: #e0b6af;
+}
+
+#calendar-view-week {
+    border-top: 1px #4B6983 solid;
+}
+
+#calendar-view-week td {
+    width: 20em;
+    background: #eae8e3;
+}
+#calendar-view-week th {
+    border-right: 1px #4B6983 solid;
+}
+
+#calendar-view-week th.first {
+    border-left: 1px #4B6983 solid;
+}
+
+#calendar-view-week th.day-title {
+    background: #9DB8D2;
+    border-bottom: 1px #4B6983 solid;
+}
+
+#calendar-view-week th a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+#calendar-view-week td {
+    border-right: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+}
+
+#calendar-view-week td.first {
+    border-left: 1px #bab5ab solid;
+}
+
+#calendar-view-week td a {
+    display: block;
+    border: 1px solid;
+    margin: 2px;
+    padding: 0.5em;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+#calendar-view-week td a .time {
+    font-size: smaller;
+}
+
+#calendar-view-week td a.first {
+}
+
+#calendar-view-week td a:hover {
+    color: #f0f0f0;
+    background: #314e6c;
+}
+
+/* Day View
+* The height attribute is defined inline depending on the length of the visible
+* day
+*/
+#calendar-view-day {
+    border: #aaaaaa 1px solid;
+    border-top: none;
+    position: relative;
+    padding-top: 2px;
+}
+
+#calendar-view-day .hour {
+    border-top: 1px #bab5ab solid;
+    width: 100%;
+    position: absolute;
+    height: 4em;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#calendar-view-day .even {
+    background: #eae8e3;
+}
+
+#calendar-view-day .hour .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: bold;
+    margin-left: 0.5em;
+}
+
+#calendar-view-day .events {
+    position: absolute;
+    margin-left: 5em;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+#calendar-view-day .event {
+    display: block;
+    position: absolute;
+    margin-left: 5em;
+    width: 20em;
+    min-width: 20em;
+    border: 1px #4b6983 solid;
+    background: #9db8d2;
+    opacity: 0.85;
+    z-index: 1;
+}
+
+#calendar-view-day .other {
+    background: #e0b6af;
+    border: 1px #884631 solid;
+}
+
+#calendar-view-day .event:hover {
+    opacity: 1;
+    z-index: 9;
+}
+
+#calendar-view-day .event h6 {
+    font-size: small;
+    margin: 0;
+    padding: 2px;
+    background: #7590ae;
+    font-weight: bold;
+    line-height: 1em;
+    opacity: 1 !important;
+}
+
+#calendar-view-day .other h6 {
+    background: #c1665a;
+}
+
+
+#calendar-view-day .event h6 a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+#calendar-view-day .event h6 .start-end {
+    font-weight: bold;
+    color: #000;
+}
+
+#calendar-view-day .event a.delete {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+#calendar-view-day .event .description {
+    padding: 0.5ex;
+}
+
+#calendar-view-day .hour a.event-new {
+    padding: 0.5ex;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+/*
+* Content specific styling
+*/
+
+body#path-login h1 {
+    display: none;
+}
+
+body#path-login #column-center {
+    margin-left: 0;
+}
+
+body#path-login form.standalone {
+    vertical-align: middle;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#portlet-navigation-calendar {
+    padding-left: 3em !important;
+    background: url("/calendar.png") left no-repeat;
+}
+
+#portlet-navigation-calendar:hover {
+    padding-left: 3em !important;
+    background: #748fad url("/calendar.png") left no-repeat !important;
+}
+
+#portlet-navigation-information {
+    padding-left: 3em !important;
+    background: url("/information.png") left no-repeat;
+}
+
+#portlet-navigation-information:hover {
+    padding-left: 3em !important;
+    background: #748fad url(".png") left no-repeat !important;
+}
+
+#portlet-calendar-view-month {
+    text-align: center;
+}
+
+#portlet-calendar-view-month table.month {
+    margin: 0.5em auto;
+}
+
+#portlet-jumpto form {
+    border-bottom: 1px #aaa dashed;
+    padding: 0.5em;
+    font-size: smaller;
+    margin: auto;
+}
+
+#portlet-calendar-overlay form {
+    margin: 2px;
+}
+#portlet-calendar-overlay input {
+    margin-left: 0.5em;
+}
+
+#portlet-calendar-overlay label {
+    display: block;
+}
+
+#portlet-calendar-overlay label:hover {
+    color: #888888;
+}
+
+#portlet-calendar-overlay label.disabled {
+    color: #888888;
+}
+
+#portlet-calendar-overlay a.go {
+    float: right;
+    top: -1.25em;
+    margin-right: 0.25em;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    text-decoration: none;
+}
+#portlet-calendar-overlay a.go img {
+    border: none;
+}
+
+/** Specific Page Styling **/
+
+.person-info {
+    /* XXX: We want person-info to expand to fit person-photo.. by default the
+    * float on person-photo causes person-info to ignore it and only expand to
+    * contain whatever other contents there are, but for some reason adding
+    * 'overflow: auto' or 'overflow: hidden' causes person-info to expand to
+    * the height of person-photo.  This is what we want, but I have no idea why
+    * auto/hidden would cause this. 
+    */ 
+    overflow: auto;
+    width: 45%;
+}
+
+.person-info .person-photo {
+    float: left;
+    margin: 0.5em;
+    background: #d6d6d6;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
+.person-info .person-details {
+    margin: 0.5em;
+    padding: 0.5em;
+    float: left;
+}
+
+.person-groups {
+    margin: 0.5em 0;
+}
+
+table.acl {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.acl tr.header th {
+    border-bottom: 1px solid #bab5ab;
+}
+table.acl tr.even {
+    background: #d6d6d6;
+}
+
+table.acl td {
+    text-align: center;
+}
+
+table.acl th {
+    text-align: left;
+}
+
+table.acl th.permission {
+    width: 7em;
+    text-align: center;
+}

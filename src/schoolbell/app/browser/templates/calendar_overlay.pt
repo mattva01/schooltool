@@ -1,0 +1,37 @@
+<div id="portlet-calendar-overlay" class="portlet"
+     tal:condition="view/show_overlay">
+
+  <h4 i18n:translate="">Calendars</h4>
+
+  <form method="POST" action="" tal:attributes="action request/URL"
+        tal:define="dummy view/update">
+
+    <div class="row" style="background: #9db8d2">
+      <label class="disabled">
+        <input type="checkbox" checked="checked" disabled="disabled" />
+        <tal:translate i18n:translate="">My Calendar</tal:translate>
+      </label>
+    </div>
+
+    <div class="row" tal:repeat="item view/items"
+         tal:attributes="style string:background: ${item/color1}">
+      <label>
+        <input type="checkbox" name="overlay:list"
+               tal:attributes="value item/id; checked item/checked" />
+        <span tal:content="item/title">Title</span>
+      </label>
+      <a class="go"
+         tal:attributes="href item/calendar/@@absolute_url;
+                         style string:background: ${item/color2};;
+                                      color: ${item/color2}"
+      >&nbsp;</a>
+    </div>
+
+    <div class="controls">
+      <input name="OVERLAY_APPLY" type="submit" value="Apply"
+            i18n:attributes="value"/>
+      <input name="OVERLAY_MORE" type="submit" value="More..."
+            i18n:attributes="value"/>
+    </div>
+  </form>
+</div>
