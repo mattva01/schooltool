@@ -593,7 +593,7 @@ def main(argv):
                                 'delayed-errors', 'help'])
     except getopt.error, e:
         print >> sys.stderr, '%s: %s' % (argv[0], e)
-        print >> sys.stderr, 'run %s -h for help'
+        print >> sys.stderr, 'run %s -h for help' % argv[0]
         return 1
     for k, v in opts:
         if k in ['-h', '--help']:
@@ -633,7 +633,7 @@ def main(argv):
                 cfg.level = int(v)
             except ValueError:
                 print >> sys.stderr, '%s: invalid level: %s' % (argv[0], v)
-                print >> sys.stderr, 'run %s -h for help'
+                print >> sys.stderr, 'run %s -h for help' % argv[0]
                 return 1
         elif k == '--all-levels':
             cfg.level = None
@@ -651,7 +651,7 @@ def main(argv):
             cfg.immediate_errors = False
         else:
             print >> sys.stderr, '%s: invalid option: %s' % (argv[0], k)
-            print >> sys.stderr, 'run %s -h for help'
+            print >> sys.stderr, 'run %s -h for help' % argv[0]
             return 1
     if args:
         cfg.pathname_regex = args[0]
@@ -659,7 +659,7 @@ def main(argv):
         cfg.test_regex = args[1]
     if len(args) > 2:
         print >> sys.stderr, '%s: too many arguments: %s' % (argv[0], args[2])
-        print >> sys.stderr, 'run %s -h for help'
+        print >> sys.stderr, 'run %s -h for help' % argv[0]
         return 1
     if not cfg.unit_tests and not cfg.functional_tests:
         cfg.unit_tests = True
