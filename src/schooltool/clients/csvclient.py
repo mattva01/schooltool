@@ -66,29 +66,33 @@ pupils.csv contains lines of comma-separated values with the following columns:
   groups   -- A space-separated list of groups this pupil is a member in.
   birthday -- Date of birth in ISO 8601 format (YYYY-MM-DD).
   comment  -- A comment (a free form string).
+  blank    -- Leave a blank column.
 
 Pupils are implicitly added to the pupils group (/groups/pupils).
 
 Sample pupils.csv::
 
-  "James Cox","year1 math1 ling1","1994-03-10",""
-  "Tom Hall","year1 biol1 math1","1994-07-20",""
+  "James Cox","year1 math1 ling1","1994-03-10","",""
+  "Tom Hall","year1 biol1 math1","1994-07-20","",""
 
 
 teachers.csv contains lines of comma-separated values with the following
 columns:
 
   title    -- The full name of a teacher.
-  groups   -- A space-separated list of groups this teacher teaches to.
+  groups   -- A space-separated list of groups this teacher is a member of.
   birthday -- Date of birth in ISO 8601 format (YYYY-MM-DD).
   comment  -- A comment (a free form string).
+  teaches  -- A space-separated list of groups (classes/sections) 
+              this person teaches.
+  
 
 Teachers are implicitly added to the teachers group (/groups/teachers).
 
 Sample teachers.csv::
 
-  "Nicola Smith","ling3","1952-12-06",""
-  "Jeff Cox","biol3","1967-06-13",""
+  "Nicola Smith","","1952-12-06","","ling3"
+  "Jeff Cox","griffindor","1967-06-13","","bio3"
 
 
 resources.csv contains lines of comma-separated values with the following

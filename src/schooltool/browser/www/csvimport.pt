@@ -114,6 +114,7 @@
              (YYYY-MM-DD).</li>
       <li i18n:translate=""><strong>comment</strong>  -- A comment
              (a free form string).</li>
+      <li i18n:translate=""><strong>blank</strong>  --  A blank column.</li>
     </ul>
 
     <p i18n:translate="">Pupils are automatically added to the pupils group
@@ -122,8 +123,8 @@
     <p i18n:translate="">Sample pupils.csv:</p>
 
     <code i18n:translate="">"James Cox","year1 math1 ling1",
-             "1994-03-10",""<br />
-             "Tom Hall","year1 biol1 math1","1994-07-20",""</code>
+             "1994-03-10","", ""<br />
+             "Tom Hall","year1 biol1 math1","1994-07-20","", ""</code>
 
     <p i18n:translate=""><strong>teachers.csv</strong>
              contains lines of comma-separated values with the
@@ -133,11 +134,13 @@
       <li i18n:translate=""><strong>title</strong> -- The full name of
              a teacher.</li>
       <li i18n:translate=""><strong>groups</strong> -- A space-separated list
-             of groups this teacher teaches to.</li>
+             of groups this teacher is a member of (but doesn't teach to).</li>
       <li i18n:translate=""><strong>birthday</strong> -- Date of birth in
              ISO 8601 format (YYYY-MM-DD).</li>
       <li i18n:translate=""><strong>comment</strong> -- A comment
             (a free form string).</li>
+      <li i18n:translate=""><strong>teaches</strong> -- A space-separated list
+             of groups (classes/sections) that this person teaches.</li>
     </ul>
 
     <p i18n:translate="">Teachers are automatically added to the teachers group
@@ -145,8 +148,8 @@
 
     <p i18n:translate="">Sample teachers.csv:</p>
 
-   <code i18n:translate="">"Nicola Smith","ling3","1952-12-06",""<br />
-             "Jeff Cox","biol3","1967-06-13",""</code>
+   <code i18n:translate="">"Nicola Smith","","1952-12-06","","ling3"<br />
+             "Jeff Cox","griffindor","1967-06-13","","biol3"</code>
 
 
    <p i18n:translate=""><strong>resources.csv</strong> contains lines of
