@@ -23,11 +23,12 @@ $Id$
 """
 
 import datetime
-import re
+
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
 from schooltool.browser import session_time_limit
+from schooltool.browser import valid_name
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.model import PersonView, GroupView, ResourceView
@@ -44,11 +45,6 @@ from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimePeriodServiceView
 
 __metaclass__ = type
-
-
-# Person username / group __name__ validation
-# XXX Perhaps this constraint is a bit too strict.
-valid_name = re.compile("^[a-zA-Z0-9.,'()]+$")
 
 
 class RootView(View):
@@ -185,7 +181,7 @@ class PersonAddView(View):
         if username == '':
             username = None
         else:
-            if not valid_name.match(username):
+            if not valid_name(username):
                 self.error = _('Invalid username')
                 return self.do_GET(request)
             self.prev_username = username
@@ -240,7 +236,7 @@ class ObjectAddView(View):
         if name == '':
             name = None
         else:
-            if not valid_name.match(name):
+            if not valid_name(name):
                 self.error = _("Invalid name")
                 return self.do_GET(request)
             self.prev_name = name

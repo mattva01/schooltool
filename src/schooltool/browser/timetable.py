@@ -27,6 +27,7 @@ import sets
 import datetime
 from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage
+from schooltool.browser import valid_name
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
@@ -99,7 +100,10 @@ class TimetableView(View):
 
 
 class TimetableSchemaView(TimetableView):
-    """View for a timetable schema"""
+    """View for a timetable schema
+
+    Can be accessed at /ttschemas/$schema.
+    """
 
     authorization = ManagerAccess
 
@@ -111,7 +115,10 @@ class TimetableSchemaView(TimetableView):
 
 
 class TimetableSchemaWizard(View):
-    """View for defining a timetable schema."""
+    """View for defining a new timetable schema.
+
+    Can be accessed at /newttschema.
+    """
 
     __used_for__ = ITimetableSchemaService
 
@@ -121,18 +128,31 @@ class TimetableSchemaWizard(View):
 
     def do_GET(self, request):
         self.ttschema = self._buildSchema()
+        self.name = self.request.args.get('name', ['default'])[0].strip()
+        if not self.name:
+            self.name_error = _("Timetable schema name must not be empty")
+        elif not valid_name(self.name):
+            self.name_error = _("Timetable schema name can only contain"
+                                " English letters, numbers, and the following"
+                                " punctuation characters: . , ' ( )")
+        elif self.name in self.context.keys():
+            self.name_error = _("Timetable schema with this name"
+                                " already exists.")
+        else:
+            self.name_error = None
         self.model_name = self.request.args.get('model', [None])[0]
-        self.model_error = False
+        self.model_error = None
         self.day_templates = self._buildDayTemplates()
         if 'CREATE' in request.args:
             try:
                 factory = getTimetableModel(self.model_name)
             except KeyError:
-                self.model_error = True
-            # TODO: actual schema creation
-            #   model = factory(self.ttschema.day_ids, self.day_templates)
-            #   self.ttschema.model = model
-            #   self.context[self.key] = self.ttschema
+                self.model_error = _("Please select a value")
+            if not self.name_error and not self.model_error:
+                model = factory(self.ttschema.day_ids, self.day_templates)
+                self.ttschema.model = model
+                self.context[self.name] = self.ttschema
+                return self.redirect("/ttschemas", request)
         return View.do_GET(self, request)
 
     def rows(self):
@@ -195,7 +215,7 @@ class TimetableSchemaWizard(View):
         The dict is suitable to be passed as the second argument to the
         timetable model factory.
         """
-        result = {}
+        result = {None: SchooldayTemplate()}
         n = 1
         while 'time%d.period' % n in self.request.args:
             raw_value = self.request.args['time%d.period' % n][0]

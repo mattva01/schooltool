@@ -144,8 +144,11 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         self.setUpSampleApp()
 
     def createView(self):
+        from schooltool.timetable import TimetableSchemaService
         from schooltool.browser.timetable import TimetableSchemaWizard
-        view = TimetableSchemaWizard(None)
+        context = TimetableSchemaService()
+        context['default'] = createSchema(['Day 1'], ['Period 1'])
+        view = TimetableSchemaWizard(context)
         view.request = RequestStub(authenticated_user=self.manager)
         return view
 
@@ -159,6 +162,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         request = view.request
         view.request.args['day1'] = ['Monday']
+        view.request.args['name'] = [' something ']
         view.request.args['model'] = ['SequentialDaysTimetableModel']
         view.request.args['time1.period'] = ['Period 1']
         view.request.args['time1.day0'] = ['9:00-9:45']
@@ -166,28 +170,70 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(view.ttschema,
                           createSchema(['Monday'], ['Period 1']))
+        self.assertEquals(view.name, 'something')
+        self.assertEquals(view.name_error, None)
         self.assertEquals(view.model_name, 'SequentialDaysTimetableModel')
-        self.assertEquals(view.model_error, False)
+        self.assertEquals(view.model_error, None)
         self.assertEquals(view.day_templates,
-                          {0: createDayTemplate([('Period 1', 9, 0, 45)])})
+                          {None: createDayTemplate([]),
+                           0: createDayTemplate([('Period 1', 9, 0, 45)])})
+
+    def test_creation(self):
+        view = self.createView()
+        request = view.request
+        view.request.args['day1'] = ['Monday']
+        view.request.args['name'] = [' something ']
+        view.request.args['model'] = ['SequentialDaysTimetableModel']
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['CREATE'] = ['Create']
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/ttschemas')
+        schema = view.context['something']
+        self.assertEquals(schema, view.ttschema)
+        self.assertEquals(schema.model.timetableDayIds, view.ttschema.keys())
+        self.assertEquals(schema.model.dayTemplates, view.day_templates)
+
+    def test_name_missing(self):
+        view = self.createView()
+        view.request.args['name'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.name_error,
+                          "Timetable schema name must not be empty")
+
+    def test_name_error(self):
+        view = self.createView()
+        view.request.args['name'] = ['not valid']
+        view.render(view.request)
+        self.assert_(view.name_error.startswith(
+                            "Timetable schema name can only contain "))
+
+    def test_name_duplicate(self):
+        view = self.createView()
+        view.request.args['name'] = ['default']
+        view.render(view.request)
+        self.assertEquals(view.name_error,
+                          "Timetable schema with this name already exists.")
 
     def test_model_error(self):
         view = self.createView()
         view.request.args['model'] = ['xxx']
         view.request.args['CREATE'] = ['Create']
         view.render(view.request)
-        self.assertEquals(view.model_error, True)
+        self.assertEquals(view.model_error, "Please select a value")
 
     def test_model_error_ignored_unless_this_is_the_final_submit(self):
         view = self.createView()
         view.request.args['model'] = ['xxx']
         view.render(view.request)
-        self.assertEquals(view.model_error, False)
+        self.assertEquals(view.model_error, None)
 
     def test_buildDayTemplates_empty(self):
         view = self.createView()
         dt = view._buildDayTemplates()
-        self.assertEquals(dt, {})
+        self.assertEquals(dt, {None: createDayTemplate([])})
 
     def test_buildDayTemplates_simple(self):
         view = self.createView()
@@ -198,7 +244,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['time2.day6'] = ['10:30-11:10']
         dt = view._buildDayTemplates()
         self.assertEquals(dt,
-                          {0: createDayTemplate([('Period 1', 9, 0, 45),
+                          {None: createDayTemplate([]),
+                           0: createDayTemplate([('Period 1', 9, 0, 45),
                                                  ('Period 2', 10, 0, 45)]),
                            6: createDayTemplate([('Period 2', 10, 30, 40)])})
 
@@ -207,7 +254,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         view.request.args['time1.period'] = ['Period 1']
         view.request.args['time1.day0'] = ['foo']
         dt = view._buildDayTemplates()
-        self.assertEquals(dt, {})
+        self.assertEquals(dt, {None: createDayTemplate([])})
 
     def test_buildSchema_empty(self):
         view = self.createView()

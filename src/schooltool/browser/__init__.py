@@ -20,6 +20,7 @@
 The schooltool.browser package.
 """
 
+import re
 import os
 import datetime
 
@@ -38,6 +39,16 @@ __metaclass__ = type
 
 # Time limit for session expiration
 session_time_limit = datetime.timedelta(hours=5)
+
+
+# Person username / group __name__ validation
+# XXX Perhaps this constraint is a bit too strict.
+#     If you change this constraint, be sure to update the error message in
+#     TimetableSchemaWizard
+#     See also http://issues.schooltool.org/issue96
+#     Note that group names must not have spaces, or CSV import/export will
+#     break.
+valid_name = re.compile("^[a-zA-Z0-9.,'()]+$").match
 
 
 class BrowserRequest(Request):

@@ -14,6 +14,16 @@
                   period_times view/period_times;
                   nperiods python:len(period_times)">
 
+<div class="form">
+  <div class="error" tal:condition="view/name_error"
+       tal:content="view/name_error">
+    Error.
+  </div>
+  <label for="name">Name</label>
+  <input class="text" type="text" name="name" id="name"
+         tal:attributes="value view/name" />
+</div>
+
 <p i18n:translate="">
 First, please define the days and periods of the timetable.
 </p>
@@ -75,8 +85,9 @@ Second, select the way timetable days are aligned with calendar days.
 </p>
 
 <div class="form" tal:define="tabindex python:ncols*(nrows+3)+10">
-  <div class="error" tal:condition="view/model_error">
-    Please select a value.
+  <div class="error" tal:condition="view/model_error"
+       tal:content="view/model_error">
+    Error.
   </div>
   <table>
     <tr>
