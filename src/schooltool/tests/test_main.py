@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import re
+import os
 
 __metaclass__ = type
 
@@ -38,6 +39,9 @@ class ReactorStub:
     def __init__(self):
         self._called_in_thread = []
         self._called_from_thread = []
+        self._tcp_listeners = []
+        self._suggested_thread_pool_size = None
+        self._main_loop_running = False
 
     def callInThread(self, callback):
         self._called_in_thread.append(callback)
@@ -45,9 +49,26 @@ class ReactorStub:
     def callFromThread(self, *args):
         self._called_from_thread.append(args)
 
+    def suggestThreadPoolSize(self, size):
+        self._suggested_thread_pool_size = size
+
+    def listenTCP(self, port, site, interface=None):
+        self._tcp_listeners.append((port, site, interface))
+
+    def run(self):
+        self._main_loop_running = True
+
+
 class ConnectionStub:
+
+    app = object()
+
     def __init__(self):
+        self._root = {'app': self.app}
         self.closed = False
+
+    def root(self):
+        return self._root
 
     def close(self):
         self.closed = True
@@ -280,14 +301,6 @@ class TestRequest(unittest.TestCase):
     def test_traverse(self):
         from schooltool.main import Request
 
-        app = object()
-
-        class ConnectionStub:
-            _root = {'app': app}
-
-            def root(self):
-                return self._root
-
         class ResourceStub:
             def getChildForRequest(self, request):
                 return request
@@ -296,7 +309,7 @@ class TestRequest(unittest.TestCase):
             rootName = 'app'
 
             def viewFactory(self, context):
-                assert context is app
+                assert context is ConnectionStub.app
                 return ResourceStub()
 
         rq = Request(None, True)
@@ -368,13 +381,87 @@ class TestRequest(unittest.TestCase):
         self.assertRaises(AssertionError, rq.render, resource)
 
 
-# XXX: test main (tricky)
+class TestServer(unittest.TestCase):
+
+    def getConfigFileName(self):
+        dirname = os.path.dirname(__file__)
+        return os.path.join(dirname, 'sample.conf')
+
+    def test_loadConfig(self):
+        from schooltool.main import Server
+        from zodb.storage.mapping import MappingStorage
+        server = Server()
+        server.notifyConfigFile = lambda x: None
+        config_file = self.getConfigFileName()
+        config = server.loadConfig(config_file)
+        self.assertEquals(config.thread_pool_size, 42)
+        self.assertEquals(config.listen, [('', 123), ('10.20.30.40', 9999)])
+        self.assert_(config.database is not None)
+
+    def test_run(self):
+        from schooltool.main import Server
+
+        class ThreadableStub:
+            def init(self):
+                self._initialized = True
+
+        server = Server()
+        server.threadable_hook = threadable = ThreadableStub()
+        server.reactor_hook = reactor = ReactorStub()
+        server.notifyConfigFile = lambda x: None
+        server.notifyServerStarted = lambda x, y: None
+        config_file = self.getConfigFileName()
+        server.run(['-c', config_file])
+
+        self.assert_(threadable._initialized)
+        self.assert_(reactor._main_loop_running)
+        # these should match sample.conf
+        self.assert_(reactor._suggested_thread_pool_size, 42)
+        self.assertEqual(len(reactor._tcp_listeners), 2)
+        self.assertEquals(reactor._tcp_listeners[0][0], 123)
+        self.assertEquals(reactor._tcp_listeners[0][2], '')
+        self.assertEquals(reactor._tcp_listeners[1][0], 9999)
+        self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
+        site = reactor._tcp_listeners[0][1]
+        self.assertEquals(site.rootName, 'schooltool')
+
+    def test_ensureAppExists(self):
+        from schooltool.main import Server
+        server = Server()
+        transaction = TransactionStub()
+        server.get_transaction_hook = lambda: transaction
+        db = DbStub()
+        appname = 'app'
+        server.ensureAppExists(db, appname)
+        self.assertEquals(len(db._connections), 1)
+        conn = db._connections[0]
+        self.assert_(conn.closed)
+        self.assert_(conn.root()['app'] is ConnectionStub.app)
+        self.assertEquals(transaction.history, '')
+
+    def test_ensureAppExists_creates(self):
+        from schooltool.main import Server, FakeApplication
+        server = Server()
+        transaction = TransactionStub()
+        server.get_transaction_hook = lambda: transaction
+        db = DbStub()
+        appname = 'foo'
+        server.ensureAppExists(db, appname)
+        self.assertEquals(len(db._connections), 1)
+        conn = db._connections[0]
+        self.assert_(conn.closed)
+        self.assert_(conn.root()['app'] is ConnectionStub.app)
+        self.assert_(type(conn.root()['foo']) is FakeApplication)
+        self.assertEquals(transaction.history, 'C')
+
+    # XXX test configure, findDefaultConfigFile
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSite))
     suite.addTest(unittest.makeSuite(TestRequest))
+    suite.addTest(unittest.makeSuite(TestServer))
     return suite
 
 if __name__ == '__main__':

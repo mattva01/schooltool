@@ -39,5 +39,17 @@ coverage: build
 	rm -rf coverage
 	$(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
 
+coverage-report:
+	@cd coverage && ls schooltool* | grep -v tests | xargs grep -c '^>>>>>>' | grep -v ':0$$'
+
+coverage-report-list:
+	@cd coverage && ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'
+
+edit-coverage-reports:
+	@cd coverage && $(EDITOR) `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
+
+vi-coverage-reports:
+	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
+
 
 .PHONY: all build clean test ftest run coverage

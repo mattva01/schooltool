@@ -43,6 +43,10 @@ from schooltool.mockup import FakeApplication, RootView
 __metaclass__ = type
 
 
+#
+# HTTP server
+#
+
 SERVER_VERSION = "SchoolTool/0.1"
 
 class Request(server.Request):
@@ -192,59 +196,105 @@ class Site(server.Site):
 # Main loop
 #
 
+class Server:
+    """SchoolTool HTTP server."""
+
+    threadable_hook = threadable
+    reactor_hook = reactor
+    get_transaction_hook = get_transaction
+
+    def configure(self, args):
+        """Process command line arguments and configuration files.
+
+        This is called automatically from run.
+
+        The following attributes define server configuration and are set by
+        this method:
+          appname       name of the application instance in ZODB
+          config        configuration loaded from a config file, contains the
+                        following attributes (see schema.xml for the definitive
+                        list):
+                            thread_pool_size
+                            listen
+                            database
+        """
+
+        # Defaults
+        config_file = self.findDefaultConfigFile()
+        self.appname = 'schooltool'
+
+        # Process command line arguments
+        opts, args = getopt.getopt(args, 'c:m', ['config=', 'mockup'])
+
+        # Read configuration file
+        for k, v in opts:
+            if k in ('-c', '--config'):
+                config_file = v
+        self.config = self.loadConfig(config_file)
+
+        # Process any command line arguments that may override config file
+        # settings here.
+        for k, v in opts:
+            if k in ('-m', '--mockup'):
+                self.appname = 'mockup'
+
+    def findDefaultConfigFile(self):
+        """Returns the default config file pathname."""
+        dirname = os.path.dirname(__file__)
+        dirname = os.path.normpath(os.path.join(dirname, '..', '..'))
+        config_file = os.path.join(dirname, 'schooltool.conf')
+        if not os.path.exists(config_file):
+            config_file = os.path.join(dirname, 'schooltool.conf.in')
+
+    def loadConfig(self, config_file):
+        """Loads configuration from a given config file."""
+        dirname = os.path.dirname(__file__)
+        schema = ZConfig.loadSchema(os.path.join(dirname, 'schema.xml'))
+        self.notifyConfigFile(config_file)
+        config, handler = ZConfig.loadConfig(schema, config_file)
+        return config
+
+    def run(self, args):
+        """Starts the SchoolTool HTTP server."""
+
+        self.configure(args)
+
+        self.threadable_hook.init()
+        self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
+
+        db = self.config.database.open()
+        self.ensureAppExists(db, self.appname)
+
+        site = Site(db, self.appname, RootView)
+        for interface, port in self.config.listen:
+            self.reactor_hook.listenTCP(port, site, interface=interface)
+            self.notifyServerStarted(interface, port)
+
+        self.reactor_hook.run()
+
+    def ensureAppExists(self, db, appname):
+        """Makes sure the database has an application instance.
+
+        Creates the application if necessary.
+        """
+        conn = db.open()
+        root = conn.root()
+        if root.get(appname) is None:
+            root[appname] = FakeApplication()
+            self.get_transaction_hook().commit()
+        conn.close()
+
+    def notifyConfigFile(self, config_file):
+        print "Reading configuration from %s" % config_file
+
+    def notifyServerStarted(self, network_interface, port):
+        print "Started HTTP server on %s:%s" % (network_interface or "*", port)
+
+
 def main():
     """Starts the SchoolTool HTTP server."""
+    Server().run(sys.argv[1:])
 
-    # Tell Twisted we'll be using threads
-    threadable.init()
-
-    # Find a default configuration file
-    dirname = os.path.dirname(__file__)
-    dirname = os.path.normpath(os.path.join(dirname, '..', '..'))
-    config_file = os.path.join(dirname, 'schooltool.conf')
-    if not os.path.exists(config_file):
-        config_file = os.path.join(dirname, 'schooltool.conf.in')
-
-    # Check if a different config file is specified on the command line
-    appname = 'schooltool'
-    opts, args = getopt.getopt(sys.argv[1:], 'c:m', ['config=', 'mockup'])
-    for k, v in opts:
-        if k in ('-c', '--config'):
-            config_file = v
-        if k in ('-m', '--mockup'):
-            appname = 'mockup'
-
-    # Read configuration file
-    dirname = os.path.dirname(__file__)
-    schema = ZConfig.loadSchema(os.path.join(dirname, 'schema.xml'))
-    print "Reading configuration from %s" % config_file
-    config, handler = ZConfig.loadConfig(schema, config_file)
-
-    # Apply misc. config settings
-    reactor.suggestThreadPoolSize(config.thread_pool_size)
-
-    # Open the database
-    db = config.database.open()
-    conn = db.open()
-    root = conn.root()
-    if root.get(appname) is None:
-        if appname == 'mockup':
-            root[appname] = FakeApplication()
-        else:
-            root[appname] = createApplication(appname)
-        get_transaction().commit()
-    conn.close()
-
-    # Start web servers
-    site = Site(db, appname, RootView)
-    for interface, port in config.listen:
-        reactor.listenTCP(port, site, interface=interface)
-        print "Started HTTP server on %s:%s" % (interface or "*", port)
-    reactor.run()
-
-def createApplication(name):
-    """Instantiate a new application"""
-    return FakeApplication()
 
 if __name__ == '__main__':
     main()
