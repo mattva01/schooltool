@@ -51,8 +51,8 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
             def importResource(self, title, groups):
                 self.resources.append((title, groups))
 
-            def importPerson(self, title, parent, groups, teaching=False):
-                self.persons.append((title, parent, groups, teaching))
+            def importPerson(self, title, parent, groups, teaches=None):
+                self.persons.append((title, parent, groups, teaches))
                 return title
 
             def importPersonInfo(self, name, title, dob, comment):
@@ -72,10 +72,9 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
 
     def test_importPersonsCsv(self):
         im = self.createImporter()
-        im.importPersonsCsv(['"Jay Hacker","group1 group2","1998-01-01",'
-                             '"yay"'], 'teachers', True)
-        self.assertEquals(im.persons, [(u'jay hacker', 'teachers',
-                                        u'group1 group2', True)])
+        im.importPersonsCsv(['"Jay Hacker","group1 group2","1998-01-01","yay","class1 class2"'], 'teachers')
+        self.assertEquals(im.persons, [(u'jay hacker', u'teachers',
+                                        u'group1 group2', 'class1 class2')])
         self.assertEquals(im.personinfo, [(u'jay hacker', u'jay hacker',
                                            u'1998-01-01', u'yay')])
 
@@ -100,13 +99,12 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
         self.assertRaises(DataError, im.importResourcesCsv,
                           ['"year1","Year 1","root"'])
         self.assertRaises(DataError, im.importPersonsCsv,
-                          ['"Foo","bar","baz"'], 'pupils',
-                          lambda group, member_path: None)
+                          ['"Foo","bar","baz","fourth"'], 'pupils')
 
         self.assertRaises(DataError, im.importGroupsCsv, ['"invalid","csv'])
         self.assertRaises(DataError, im.importResourcesCsv, ['"b0rk","b0rk'])
         self.assertRaises(DataError, im.importPersonsCsv, ['"invalid","csv'],
-                          'pupils', lambda group, member_path: None)
+                          'pupils')
 
 
 def test_suite():

@@ -169,7 +169,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                        (None, u'CSV data import finished successfully', INFO)])
 
     def test_POST_pupils(self):
-        request = RequestStub(args={'pupils.csv':'"A B","","1922-11-22",""',
+        request = RequestStub(args={'pupils.csv':'"A B","","1922-11-22","",""',
                                     'groups.csv': '',
                                     'teachers.csv': '',
                                     'resources.csv': '',
@@ -188,7 +188,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
             (None, u'CSV data import finished successfully', INFO)])
 
     def test_POST_teachers(self):
-        request = RequestStub(args={'teachers.csv':'"C D","","1922-11-22",""',
+        request = RequestStub(args={'teachers.csv':'"C D","","1922-11-22","",""',
                                     'groups.csv': '',
                                     'pupils.csv': '',
                                     'resources.csv': '',
@@ -202,7 +202,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assert_('C D' in titles)
         self.assertEquals(request.applog,
            [(None, u'CSV data import started', INFO),
-            (None, u'Imported person (teacher): C D', INFO),
+            (None, u'Imported person: C D', INFO),
             (None, u'Imported person info for 000001 (C D, 1922-11-22)', INFO),
             (None, u'CSV data import finished successfully', INFO)])
 
@@ -280,13 +280,13 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
     def test_importPerson_teacher(self):
         name = self.im.importPerson('Wesson', 'group1', 'group2',
-                                    teaching=True)
-        self.assertEquals(self.im.logs, ["Imported person (teacher): Wesson"])
+                                    'group2')
+        self.assertEquals(self.im.logs, ["Imported person: Wesson"])
         person = self.persons[name]
         self.assertEquals(person.title, 'Wesson')
 
         objs = [link.traverse() for link in person.listLinks()]
-        self.assertEquals(len(objs), 2)
+        self.assertEquals(len(objs), 3)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
 
@@ -297,9 +297,9 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(DataError, self.im.importPerson,
                           'Smith', 'group1', 'invalid_group')
         self.assertRaises(DataError, self.im.importPerson,
-                          'Smith', 'invalid_group', 'group2', True)
+                          'Smith', 'invalid_group', 'group2')
         self.assertRaises(DataError, self.im.importPerson,
-                          'Smith', 'group1', 'invalid_group', True)
+                          'Smith', 'group1', 'invalid_group')
         self.assertEquals(self.im.logs, [])
 
     def test_importResource(self):

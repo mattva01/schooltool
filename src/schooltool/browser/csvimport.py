@@ -133,10 +133,10 @@ class CSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
                 importer.importResourcesCsv(resources_csv.splitlines())
             if teachers_csv:
                 importer.importPersonsCsv(teachers_csv.splitlines(),
-                                          'teachers', teaching=True)
+                                          'teachers')
             if pupils_csv:
                 importer.importPersonsCsv(pupils_csv.splitlines(),
-                                          'pupils', teaching=False)
+                                          'pupils')
         except DataError, e:
             self.error = _("Import failed: %s") % e
             return self.do_GET(request)
@@ -190,11 +190,11 @@ class CSVImporterZODB(CSVImporterBase):
         self.logs.append(_('Imported group: %s') % name)
         return group.__name__
 
-    def importPerson(self, title, parent, groups, teaching=False):
+    def importPerson(self, title, parent, groups, teaches=None):
         try:
             person = self.persons.new(title=title)
         except KeyError, e:
-            raise DataError(_("Group already exists: %r") % name)
+            raise DataError(_("Person already exists: %r") % name)
 
         if parent:
             try:
@@ -202,17 +202,17 @@ class CSVImporterZODB(CSVImporterBase):
             except KeyError:
                 raise DataError(_("Invalid group: %s") % parent)
 
-        if not teaching:
-            for group in groups.split():
-                try:
-                    Membership(group=self.groups[group], member=person)
-                except KeyError, e:
-                    raise DataError(_("No such group: %r") % group)
-                except ValueError:
-                    raise DataError(_("Cannot add %r to %r") % (person, group))
-            self.logs.append(_('Imported person: %s') % title)
-        else:
-            for group in groups.split():
+
+        for group in groups.split():
+            try:
+                Membership(group=self.groups[group], member=person)
+            except KeyError, e:
+                raise DataError(_("No such group: %r") % group)
+            except ValueError:
+                raise DataError(_("Cannot add %r to %r") % (person, group))
+        self.logs.append(_('Imported person: %s') % title)
+        if teaches:
+            for group in teaches.split():
                 try:
                     Teaching(teacher=person, taught=self.groups[group])
                 except KeyError, e:
@@ -220,7 +220,6 @@ class CSVImporterZODB(CSVImporterBase):
                 except ValueError:
                     raise DataError(_("Cannot add %r as a teacher for %r")
                                     % (person, group))
-            self.logs.append(_('Imported person (teacher): %s') % title)
 
         return person.__name__
 

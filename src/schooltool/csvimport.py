@@ -55,17 +55,16 @@ class CSVImporterBase:
             raise DataError(_("Error in group data line %d: %s")
                             % (lineno + 1, e))
 
-    def importPersonsCsv(self, csvdata, parent_group, teaching=False):
+    def importPersonsCsv(self, csvdata, parent_group):
         lineno = 0
         try:
             for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 4:
+                if len(row) != 5:
                     raise DataError(_("Error in %s data line %d:"
-                                      " expected 4 columns, got %d") %
+                                      " expected 5 columns, got %d") %
                                     (parent_group, lineno + 1, len(row)))
-                title, groups, dob, comment = map(self.recode, row)
-                name = self.importPerson(title, parent_group, groups,
-                                         teaching=teaching)
+                title, groups, dob, comment, teaches = map(self.recode, row)
+                name = self.importPerson(title, parent_group, groups, teaches)
                 self.importPersonInfo(name, title, dob, comment)
         except csv.Error, e:
             raise DataError(_("Error in %s parent_group data line %d: %s")
@@ -90,7 +89,7 @@ class CSVImporterBase:
     def importGroup(self, name, title, parents, facets):
         raise NotImplementedError()
 
-    def importPerson(self, title, parent, groups, teaching=False):
+    def importPerson(self, title, parent, groups, teaches):
         raise NotImplementedError()
 
     def importResource(self, title, groups):
