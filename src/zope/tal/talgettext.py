@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##############################################################################
 #
 # Copyright (c) 2002 Zope Corporation and Contributors.
