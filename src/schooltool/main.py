@@ -711,10 +711,10 @@ class Server:
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
 
-        logformat = "%(asctime)s [%(name)s] %(message)s"
-        # ZODB should have a way to complain in case of trouble
-        self.setUpLogger('ZODB', self.config.error_log_file, logformat)
-        self.setUpLogger('txn', self.config.error_log_file, logformat)
+        # ZODB and libxml2 should have a way to complain in case of trouble
+        for logger_name in ['ZODB', 'txn', 'libxml2']:
+            self.setUpLogger(logger_name, self.config.error_log_file,
+                             "%(asctime)s [%(name)s] %(message)s")
 
         # Process any command line arguments that may override config file
         # settings here.
@@ -789,9 +789,10 @@ class Server:
 
         setUpModules(self.config.module)
 
-        # XXX when we have configurable logging, this should register a
-        # callback that logs the error to the appropriate channel.
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        # Log libxml2 complaints
+        libxml2.registerErrorHandler(
+                lambda logger, error: logger.error(error.strip()),
+                logging.getLogger('libxml2'))
 
         # This must be called here because we use threads
         libxml2.initParser()
