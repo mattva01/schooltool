@@ -16,7 +16,7 @@ The simplest way to start playing with SchoolBell is as follows:
   4. Open http://localhost:7080/ in a web browser and play with the web
      frontend.
 
-By default a user 'manager' with password 'schoolbell' is created with full
+By default a user 'manager' with password 'schooltool' is created with full
 access and modification privileges.
 
 SSL Certificates
