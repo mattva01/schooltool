@@ -44,10 +44,6 @@ class ConnectionTests(IDataManagerTests):
         self.obj = P()
         self.txn_factory = Transaction
 
-    def tearDown(self):
-        # Make sure the test doesn't leave a transaction active.
-        get_transaction().abort()
-
     def get_transaction(self):
         t = super(ConnectionTests, self).get_transaction()
         t.setUser('IDataManagerTests')
@@ -177,6 +173,7 @@ class ConnectionTests(IDataManagerTests):
 
 
     def tearDown(self):
+        get_transaction().abort()
         self.datamgr.close()
         self.db.close()
 
