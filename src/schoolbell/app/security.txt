@@ -187,6 +187,12 @@ Now, it is authenticated by our utility:
     >>> principal.id
     'sb.person.frog'
 
+Our principal is adaptable to IPerson:
+
+    >>> from schoolbell.app.interfaces import IPerson
+    >>> IPerson(principal) is  app['persons']['frog']
+    True
+
 If the password is incorrect, authentication does not work:
 
     >>> auth.clearCredentials(request)

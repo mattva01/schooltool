@@ -40,15 +40,22 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellAuthentication
+from schoolbell.app.interfaces import IPerson
 
 
 class Principal(Contained):
     implements(IGroupAwarePrincipal)
-    def __init__(self, id, title):
+
+    def __init__(self, id, title, person=None):
         self.id = id
         self.title = title
         self.description = ""
         self.groups = []
+        self._person = person
+
+    def __conform__(self, interface):
+        if interface is IPerson:
+            return self._person
 
 
 class SchoolBellAuthenticationUtility(Persistent, Contained):
@@ -102,7 +109,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
             username = id[len(self.person_prefix):]
             if username in app['persons']:
                 person = app['persons'][username]
-                principal = Principal(id, person.title)
+                principal = Principal(id, person.title, person=person)
                 for group in person.groups:
                     group_principal_id = self.group_prefix + group.__name__
                     principal.groups.append(group_principal_id)
