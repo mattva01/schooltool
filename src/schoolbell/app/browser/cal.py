@@ -347,7 +347,7 @@ class CalendarViewBase(BrowserView):
         if cal_type == 'daily':
             dt = cursor.isoformat()
         elif cal_type == 'weekly':
-            dt = cursor.strftime('%G-w%V')
+            dt = '%04d-w%02d' % cursor.isocalendar()[:2]
         elif cal_type == 'monthly':
             dt = cursor.strftime('%Y-%m')
         elif cal_type == 'yearly':
