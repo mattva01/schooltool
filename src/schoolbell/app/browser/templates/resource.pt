@@ -8,12 +8,11 @@
   </h1>
   <metal:block metal:fill-slot="body">
 
-    <div class="actions">
-      <a class="action" tal:condition="view/canEdit"
-         tal:attributes="href string:${context/@@absolute_url}/edit.html" i18n:translate="">Edit XXX NOT IMPLEMENTED</a>
-      <a class="action"
-         tal:attributes="href string:${context/@@absolute_url}/calendar"
-         i18n:translate="">View calendar XXX NOT IMPLEMENTED</a>
+    <div class="row"><b i18n:translate="">Identifier:</b>
+      <span tal:replace="python:context.__name__">res123</span>
+    </div>
+    <div class="row"><b i18n:translate="">Title:</b>
+      <span tal:replace="context/title">Resource title</span>
     </div>
 
     <div class="groups" tal:define="groups context/groups/sortby:title">
@@ -27,17 +26,6 @@
       <div tal:condition="not:groups">
         This resource does not belong to any groups.
       </div>
-      <p>
-        <a tal:attributes="href string:${context/@@absolute_url}/groups.html"
-          >Add this resource to a group</a>
-      </p>
-    </div>
-
-    <div class="row"><b i18n:translate="">Identifier:</b>
-      <span tal:replace="python:context.__name__">res123</span>
-    </div>
-    <div class="row"><b i18n:translate="">Title:</b>
-      <span tal:replace="context/title">Resource title</span>
     </div>
   </metal:block>
 </body>

@@ -35,10 +35,6 @@
       <div tal:condition="not:groups">
         This person does not belong to any groups.
       </div>
-      <p>
-        <a tal:attributes="href string:${context/@@absolute_url}/groups.html"
-          >Add this person to a group</a>
-      </p>
     </div>
 
     <!--

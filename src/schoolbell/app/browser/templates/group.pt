@@ -4,33 +4,30 @@
 </head>
 <body>
 <h1 metal:fill-slot="h1"><span tal:replace="context/title" /></h1>
+
+<div class="portlet" metal:fill-slot="column-left-extra">
+  <h4 i18n:translate="">Access control</h4>
+  <ul>
+    <li><a tal:attributes="href string:${context/@@absolute_url}/acl.html"
+           i18n:translate="">Set who can add/remove members<br/>and
+           teachers of this group.</a></li>
+    <li><a tal:attributes="href
+           string:${context/@@absolute_url}/calendar/acl.html"
+           i18n:translate="">Set who can view, edit, and add<br/>
+           events to the calendar of this group.</a></li>
+  </ul>
+</div>
+
 <metal:block metal:fill-slot="body">
 
-  <div class="timetables">
-    <h3 i18n:translate="">Calendar XXX NOT IMPLEMENTED</h3>
+  <div>
+    <h3 i18n:translate="">Calendar</h3>
      <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
            i18n:translate="">Use calendar for this group</a></p>
 
-    <div>
-      <h3 i18n:translate="">Access control XXX NOT IMPLEMENTED</h3>
-       <ul>
-       <li><a tal:attributes="href string:${context/@@absolute_url}/acl.html"
-             i18n:translate="">Set who can add/remove members<br/>and
-             teachers of this group.</a></li>
-       <li><a tal:attributes="href
-             string:${context/@@absolute_url}/calendar/acl.html"
-             i18n:translate="">Set who can view, edit, and add<br/>
-             events to the calendar of this group.</a></li>
-       </ul>
-    </div>
   </div>
 
   <div class="members">
-    <div class="actions"  tal:condition="view/canEdit">
-      <a class="action"
-     tal:attributes="href string:${context/@@absolute_url}/edit.html"
-         i18n:translate="">Edit</a>
-    </div>
     <div tal:define="members view/getPersons">
       <h3 i18n:translate="">Members</h3>
       <ul>
@@ -56,14 +53,6 @@
     </div>
 
     <br />
-    <div class="actions" tal:condition="view/canEdit">
-      <div><a class="action"
-         tal:attributes="href string:${context/@@absolute_url}/members_persons.html"
-         i18n:translate="">Add / remove a person</a></div>
-      <div><a class="action"
-         tal:attributes="href string:${context/@@absolute_url}/members_resources.html"
-         i18n:translate="">Add / remove a resource</a></div>
-    </div>
   </div>
 
 </metal:block>

@@ -10,12 +10,6 @@
 
 <metal:block metal:fill-slot="body">
 
-  <p>
-    <a class="action"
-       tal:attributes="href string:${context/@@absolute_url}/${view/add_url}"
-       tal:content="view/add_title">Add new</a>
-  </p>
-
   <ul>
     <li tal:repeat="obj view/sortedObjects">
       <a tal:content="obj/title"
