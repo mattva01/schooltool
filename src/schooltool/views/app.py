@@ -165,7 +165,7 @@ class ApplicationObjectContainerView(TraversableView,
             # XXX It would be nice if the log message would denote the
             #     type of the object created (e.g., 'Person created').
             request.site.logAppEvent(request.authenticated_user, self.obj_path,
-                                     'Object created')
+                                     _('Object created'))
         return msg
 
 
@@ -185,7 +185,7 @@ class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
         msg = self.create(request, self.context, self.name)
         if request.code == 201:
             request.site.logAppEvent(request.authenticated_user, self.obj_path,
-                                     'Object created')
+                                     _('Object created'))
         return msg
 
 

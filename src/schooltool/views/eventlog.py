@@ -57,14 +57,13 @@ class EventLogView(View):
                                             " is defined for event logs"))
         n = len(self.context.getReceived())
         self.context.clear()
-        request.site.logAppEvent(request.authenticated_user, "",
-                                 n == 1 and "1 event cleared"
-                                         or "%d events cleared" % n)
-        request.setHeader('Content-Type', 'text/plain')
         if n == 1:
-            return _("1 event cleared")
+            msg = _("1 event cleared")
         else:
-            return _("%d events cleared") % n
+            msg = _("%d events cleared") % n
+        request.site.logAppEvent(request.authenticated_user, "", msg)
+        request.setHeader('Content-Type', 'text/plain')
+        return msg
 
 
 class EventLogFacetView(EventLogView, FacetView):
