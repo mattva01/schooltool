@@ -24,7 +24,7 @@ import logging
 import datetime
 import time
 from persistent import Persistent
-from BTrees._OOBTree import OOBTree
+from BTrees.OOBTree import OOBTree
 from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IEventTarget, ILocation, IUtility
 from schooltool.interfaces import IEventConfigurable, IFacet

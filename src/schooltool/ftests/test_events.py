@@ -22,12 +22,14 @@ Functional tests for SchoolTool event system
 
 import unittest
 from sets import Set
+
+import transaction
 from persistent import Persistent
 from zope.interface import implements, Attribute
 from schooltool.interfaces import IEvent, IEventTarget, IRelatable, ILocation
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.event import EventMixin
-import transaction
+
 
 __metaclass__ = type
 
