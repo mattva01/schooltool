@@ -35,6 +35,7 @@ from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, isURI, registerURI
 from schooltool.uris import ISpecificURI, URITeaching, URITaught
 from schooltool.common import parse_datetime, parse_date, to_unicode
+from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
@@ -1466,7 +1467,7 @@ class ResourceTimeSlot:
 # Exceptions
 #
 
-class SchoolToolError(Exception):
+class SchoolToolError(UnicodeAwareException):
     """Communication error"""
 
 

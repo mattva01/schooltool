@@ -35,7 +35,7 @@ from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.views.auth import PublicAccess
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
-from schooltool.common import to_unicode
+from schooltool.common import UnicodeAwareException, to_unicode
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, traverse
@@ -52,7 +52,7 @@ __metaclass__ = type
 moduleProvides(IModuleSetup)
 
 
-class ViewError(Exception):
+class ViewError(UnicodeAwareException):
 
     def __unicode__(self):
         return u" ".join(self.args)
