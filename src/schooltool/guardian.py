@@ -27,6 +27,7 @@ from schooltool.interfaces import IGuardianEvent
 from schooltool.interfaces import IGuardianAddedEvent
 from schooltool.interfaces import IGuardianRemovedEvent
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
+from schooltool.component import registerRelationship
 from schooltool.uris import URIGuardian
 from schooltool.uris import URICustodian
 from schooltool.uris import URIWard
