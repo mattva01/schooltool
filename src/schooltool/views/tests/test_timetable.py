@@ -473,6 +473,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         from schooltool.timetable import Timetable, TimetableDay
         timetabled = self.createTimetabled()
         tt = Timetable(['Day 1', 'Day 2'])
+        tt.__parent__ = timetabled
         tt['Day 1'] = TimetableDay(['A', 'B'])
         tt['Day 2'] = TimetableDay(['C', 'D'])
         timetabled.timetables[('random', 'something')] = tt
@@ -648,7 +649,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
                 [(None, '/john/timetables/2003 fall/weekly',
-                  'Timetable updated', INFO)])
+                  "Timetable of John Smith for 2003 fall, weekly, updated",
+                  INFO)])
         self.assertEquals(timetabled.timetables[key], expected)
 
     def test_put_nonexistent(self):
@@ -730,7 +732,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
                 [(None, '/john/timetables/2003 fall/weekly',
-                  'Timetable deleted', INFO)])
+                  "Timetable of John Smith for 2003 fall, weekly, deleted",
+                  INFO)])
         self.assert_(key not in timetabled.timetables)
 
     def test_delete_nonexistent(self):
@@ -1069,8 +1072,9 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '/ttservice/weekly', 'Timetable schema updated', INFO)])
+        self.assertEquals(request.site.applog, [(None, '/ttservice/weekly',
+                                                 'Timetable schema updated',
+                                                 INFO)])
         self.assertEquals(service[key], self.createEmpty())
 
     def test_roundtrip(self):

@@ -233,8 +233,9 @@ class TimetableReadWriteView(TimetableReadView):
                     resource.timetables[self.key] = tt.cloneEmpty()
                 resource.timetables[self.key][day_id].add(period_id, activity)
         path = getPath(self.timetabled.timetables[self.key])
-        request.site.logAppEvent(request.authenticated_user, path,
-                                 _("Timetable updated"))
+        msg = _("Timetable of %s for %s, updated") % (self.timetabled.title,
+                                                      ", ".join(self.key))
+        request.site.logAppEvent(request.authenticated_user, path, msg)
         request.setHeader('Content-Type', 'text/plain')
         return _("OK")
 
@@ -242,9 +243,11 @@ class TimetableReadWriteView(TimetableReadView):
         if self.context is None:
             return notFoundPage(request)
         path = getPath(self.context)
+        timetabled = self.context.__parent__.__parent__
+        msg = _("Timetable of %s for %s, deleted") % (timetabled.title,
+                                                     ", ".join(self.key))
         del self.timetabled.timetables[self.key]
-        request.site.logAppEvent(request.authenticated_user, path,
-                                 _("Timetable deleted"))
+        request.site.logAppEvent(request.authenticated_user, path, msg)
         request.setHeader('Content-Type', 'text/plain')
         return _("Deleted timetable")
 
@@ -705,7 +708,7 @@ class TimePeriodServiceView(View):
 
 
 class TimePeriodCreatorView(SchooldayModelCalendarView):
-    """View for the time period service items"""
+    """View for the time period service items."""
 
     authorization = PublicAccess
 
@@ -730,9 +733,8 @@ class TimePeriodCreatorView(SchooldayModelCalendarView):
         return SchooldayModelCalendarView.do_PUT(self, request)
 
     def log_PUT(self, request):
-        path = getPath(self.context)
-        request.site.logAppEvent(request.authenticated_user, path,
-                                 _("Calendar created"))
+        request.site.logAppEvent(request.authenticated_user,
+                                 getPath(self.context), _("Calendar created"))
 
     def do_DELETE(self, request):
         try:

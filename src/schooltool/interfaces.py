@@ -202,15 +202,14 @@ class ILink(ILocation):
         This attribute's value is an ISpecificURI.
         """)
 
-    __parent__ = Attribute("The object at this end of the relationship")
+    __parent__ = Attribute("""The object at this end of the relationship.""")
 
-    __name__ = Attribute("""Unique name within the parent's links""")
+    __name__ = Attribute("""Unique name within the parent's links.""")
 
     def traverse():
         """Return the object at the other end of the relationship.
 
-        The object returned by traversing a link is known as the link's
-        target.
+        The object returned by traversing a link is known as the link's target.
         """
 
 
@@ -296,8 +295,7 @@ class ILinkSet(Interface):
 class IRelatable(Interface):
     """An object which can take part in relationships."""
 
-    __links__ = Attribute(
-        """An object implementing ILinkSet.""")
+    __links__ = Attribute("""An object implementing ILinkSet.""")
 
     def getLink(name):
         """Returns a link by a name within this relatable"""

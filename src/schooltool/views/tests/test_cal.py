@@ -79,7 +79,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         from schooltool.views.cal import SchooldayModelCalendarView
         self.sm = SchooldayModel(datetime.date(2003, 9, 1),
                                  datetime.date(2003, 9, 30))
-        setPath(self.sm, '/calendar')
+        setPath(self.sm, '/person/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
         self.view.datetime_hook = DatetimeStub()
         self.view.authorization = lambda ctx, rq: True
@@ -94,7 +94,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20030901
             DTEND;VALUE=DATE:20031001
@@ -110,7 +110,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20030901
             DTEND;VALUE=DATE:20031001
@@ -122,7 +122,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                 s = date.strftime("%Y%m%d")
                 expected += dedent("""
                     BEGIN:VEVENT
-                    UID:schoolday-%s-/calendar@localhost
+                    UID:schoolday-%s-/person/calendar@localhost
                     SUMMARY:Schoolday
                     DTSTART;VALUE=DATE:%s
                     DTSTAMP:20040102T030405Z
@@ -136,7 +136,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20041001
@@ -159,7 +159,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             END:VCALENDAR
         """)
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
-        request = RequestStub("http://localhost/calendar", method="PUT",
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
                               body=calendar)
         result = self.view.render(request)
@@ -168,7 +168,8 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, '/calendar', 'Calendar updated', INFO)])
+                          [(None, '/person/calendar',
+                            'Calendar updated', INFO)])
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
         for date in self.sm:
@@ -179,7 +180,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
 
     def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
         self.sm.add(datetime.date(2003, 9, 15))
-        request = RequestStub("http://localhost/calendar", method="PUT",
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": content_type},
                               body=body)
         result = self.view.render(request)
@@ -205,13 +206,13 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20040930
             END:VEVENT
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20040929
@@ -237,7 +238,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20040930
@@ -264,7 +265,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20040930
@@ -291,7 +292,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20041001
@@ -322,13 +323,14 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
               <holiday date="2003-09-23">Holiday</holiday>
             </schooldays>
         """)
-        request = RequestStub("http://localhost/calendar", method="PUT",
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/xml"},
                               body=body)
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, '/calendar', 'Calendar updated', INFO)])
+                          [(None, '/person/calendar',
+                            'Calendar updated', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -382,7 +384,8 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
     def _create(self):
         from schooltool.cal import Calendar
         context = Calendar()
-        setPath(context, '/calendar')
+        setPath(context, '/person/calendar')
+        context.__parent__.title = "A Person"
         self.view = self._newView(context)
         self.view.datetime_hook = DatetimeStub()
         self.view.authorization = lambda ctx, rq: True
@@ -395,7 +398,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:placeholder-/calendar@localhost
+            UID:placeholder-/person/calendar@localhost
             SUMMARY:Empty calendar
             DTSTART;VALUE=DATE:20040102
             DTSTAMP:20040102T030405Z
@@ -417,14 +420,14 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:1668453774-/calendar@localhost
+            UID:1668453774-/person/calendar@localhost
             SUMMARY:Quick Lunch
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
             END:VEVENT
             BEGIN:VEVENT
-            UID:-1822792810-/calendar@localhost
+            UID:-1822792810-/person/calendar@localhost
             SUMMARY:Long\\nLunch
             DTSTART:20030903T120000
             DURATION:PT1H
@@ -442,7 +445,7 @@ class TestCalendarView(TestCalendarReadView):
 
     def test_put_empty(self, body=""):
         from schooltool.cal import CalendarEvent
-        request = RequestStub("http://localhost/calendar", method="PUT",
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
                               body=body)
         cal = self._create()
@@ -452,7 +455,8 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, '/calendar', 'Imported calendar', INFO)])
+                          [(None, '/person/calendar',
+                            'Calendar for A Person imported', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -466,7 +470,7 @@ class TestCalendarView(TestCalendarReadView):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:placeholder-/calendar@localhost
+            UID:placeholder-/person/calendar@localhost
             SUMMARY:Empty calendar
             DTSTART;VALUE=DATE:20040103
             DTSTAMP:20040103T030405Z
@@ -483,21 +487,21 @@ class TestCalendarView(TestCalendarReadView):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:1668453774-/calendar@localhost
+            UID:1668453774-/person/calendar@localhost
             SUMMARY:Quick Lunch
             DTSTART:20030902T154000
             DURATION:PT20M
             DTSTAMP:20040102T030405Z
             END:VEVENT
             BEGIN:VEVENT
-            UID:-1822792810-/calendar@localhost
+            UID:-1822792810-/person/calendar@localhost
             SUMMARY:Long\\nLunch
             DTSTART:20030903T120000
             DURATION:PT1H
             DTSTAMP:20040102T030405Z
             END:VEVENT
             BEGIN:VEVENT
-            UID:1234idontcare-/calendar@localhost
+            UID:1234idontcare-/person/calendar@localhost
             SUMMARY:Something else
             DTSTART;VALUE=DATE:20030904
             DTSTAMP:20040102T030405Z
@@ -505,7 +509,7 @@ class TestCalendarView(TestCalendarReadView):
             END:VCALENDAR
         """)
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
-        request = RequestStub("http://localhost/calendar", method="PUT",
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
                               body=calendar)
         cal = self._create()
@@ -515,7 +519,8 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, '/calendar', 'Imported calendar', INFO)])
+                          [(None, '/person/calendar',
+                            'Calendar for A Person imported', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -556,7 +561,7 @@ class TestCalendarView(TestCalendarReadView):
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
             VERSION:2.0
             BEGIN:VEVENT
-            UID:school-period-/calendar@localhost
+            UID:school-period-/person/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
             DTEND;VALUE=DATE:20040930

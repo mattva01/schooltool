@@ -200,8 +200,13 @@ class SchooldayModelCalendarView(View):
         return _("Calendar imported")
 
     def log_PUT(self, request):
+        """Add an entry to the application log.
+
+        This method is overriden by subclasses of SchooldayModelCalendarView.
+        """
         request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context), _("Calendar updated"))
+                                 getPath(self.context),
+                                 _("Calendar updated"))
 
 
 class CalendarReadView(View):
@@ -308,11 +313,11 @@ class CalendarView(CalendarReadView):
                     self.context.removeEvent(event)
 
             for event in events:
-                # newly added  events
+                # newly added events
                 self.context.addEvent(event)
             request.site.logAppEvent(request.authenticated_user,
-                                     getPath(self.context),
-                                     _("Imported calendar"))
+                    getPath(self.context), _("Calendar for %s imported")
+                                           % self.context.__parent__.title)
             request.setHeader('Content-Type', 'text/plain')
             return _("Calendar imported")
 

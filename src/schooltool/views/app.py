@@ -139,7 +139,7 @@ class ApplicationObjectCreator:
 
 class ApplicationObjectContainerView(TraversableView,
                                      ApplicationObjectCreator):
-    """The view for the application object containers"""
+    """A view for the application object containers."""
 
     template = Template("www/aoc.pt", content_type="text/xml")
     authorization = PublicAccess
@@ -170,7 +170,7 @@ class ApplicationObjectContainerView(TraversableView,
 
 
 class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
-    """View for non-existing application objects"""
+    """A view for non-existing application objects."""
 
     authorization = PublicAccess
 

@@ -196,6 +196,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         from schooltool.views.model import AbsenceManagementView
         from schooltool.model import Person
         context = Person()
+        context.title = 'Mr. Foo'
         setPath(context, '/person', root=self.serviceManager)
         basepath = "/person/absences/"
         baseurl = "http://localhost:7001%s" % basepath
@@ -211,7 +212,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         self.assertEquals(request.site.applog,
-                [(None, '/person/absences/001', 'Absence created', INFO)])
+                [(None, '/person/absences/001',
+                  'Absence of Mr. Foo created', INFO)])
         location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
@@ -230,6 +232,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         from schooltool.model import Person
         from schooltool.absence import AbsenceComment
         context = Person()
+        context.title = 'Mr. Foo'
         setPath(context, '/person', root=self.serviceManager)
         absence = context.reportAbsence(AbsenceComment())
         basepath = "/person/absences/"
@@ -244,7 +247,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
 
         self.assertEquals(request.site.applog,
-                [(None, '/person/absences/001', 'Absence updated', INFO)])
+                [(None, '/person/absences/001',
+                  'Absence of Mr. Foo updated', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
         location = request.headers['location']
@@ -356,7 +360,8 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, '/person/absences/001', 'Comment added', INFO)])
+                [(None, '/person/absences/001',
+                  'Comment for absence of A Person added', INFO)])
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
         self.assertEquals(comment.text, u"Foo \u2730")
@@ -403,7 +408,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog, [])
         self.assertEquals(result,
-            "Cannot reopen an absence when another one is not ended")
+            "Cannot reopen an absence when another one has not ended")
         self.assertEquals(len(absence.comments), 2)
 
 
@@ -514,9 +519,9 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.site.applog,
                 [(self.manager, path, msg, INFO)
                  for path, msg in
-                        [('/persons/b/absences/001', 'Absence reported'),
-                         ('/persons/c/absences/001', 'Presence reported'),
-                         ('/persons/d/absences/001', 'Absence reported')]])
+                        [('/persons/b/absences/001', 'Absence of b reported'),
+                         ('/persons/c/absences/001', 'Presence of c reported'),
+                         ('/persons/d/absences/001', 'Absence of d reported')]])
 
         # persona was present and is present, no comments should be added.
         self.assertEqual(len(list(self.persona.iterAbsences())), 0)
@@ -576,7 +581,8 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.site.applog,
                 [(self.personb, '/persons/%s/absences/001' % person,
-                  'Absence reported', INFO) for person in ['a', 'c', 'd']])
+                  'Absence of %s reported' % person, INFO)
+                 for person in ['a', 'c', 'd']])
         self.assertEquals(request.code, 200, 'request failed:\n' + result)
         absence = self.persona.getCurrentAbsence()
         comment = absence.comments[-1]
