@@ -19,35 +19,39 @@
   <body>
     <div id="header">
       <div class="logo">
-        <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
-             tal:attributes="src context/++resource++logo.png"/>
-        <div metal:define-macro="logged_user" style="float: right">
-          <p i18n:translate="">User:
-            <span tal:replace="request/principal/title">User</span>
-          </p>
-        </div>
+        <a href=""
+          tal:define="url context/schoolbell:app/@@absolute_url"
+          tal:attributes="href url">
+          <img src="logo.png" alt="SchoolTool" border="0"
+            i18n:attributes="alt"
+            tal:attributes="src context/++resource++logo.png"/>
+        </a>
       </div>
       <div class="tools">
-        <table width="100%" metal:define-macro="zmi_tabs">
-        <tr>
-          <td align="left">
-            <span tal:repeat="view context/@@view_get_menu/zmi_views">
-              <a tal:attributes="href view/action"
-                 tal:content="view/title" i18n:translate="">label</a>
-              <tal:block condition="not: repeat/view/end">|</tal:block>
-            </span>
-          </td>
-          <td align="right"
-              tal:define="loggedin request/principal/schoolbell:person;
-                          url context/schoolbell:app/@@absolute_url"
-              tal:on-error="nothing">
-            <a tal:condition="not:loggedin"
-               tal:attributes="href string:${url}/@@login.html">Log in</a>
-            <a tal:condition="loggedin"
-               tal:attributes="href string:${url}/@@logout.html">Log out</a>
-          </td>
-        </tr>
-        </table>
+        <div
+            tal:define="loggedin request/principal/schoolbell:person;
+                        url context/schoolbell:app/@@absolute_url"
+            tal:on-error="nothing">
+            <tal:if condition="not:loggedin">
+              <span tal:replace="request/principal/title">User Name</span> |
+              <a id="tools-login" i18n:translate=""
+                tal:attributes="href string:${url}/@@login.html">Log in</a>
+            </tal:if>
+            <tal:if tal:condition="loggedin">
+              <div metal:define-macro="logged_user">
+                <span tal:replace="request/principal/title">User Name</span> |
+                <a id="tools-calendar" i18n:translate=""
+                  tal:attributes="href loggedin/calendar/@@absolute_url"
+                  >My Calendar</a> |
+                <a id="tools-preferences" i18n:translate=""
+                  tal:attributes="href loggedin/calendar/@@absolute_url"
+                  >Preferences</a> |
+                <a id="tools-logout" i18n:translate=""
+                  tal:attributes="href string:${url}/@@logout.html"
+                  >Log out</a>
+              </div>
+            </tal:if>
+        </div>
       </div>
     </div>
     <div id="columns">

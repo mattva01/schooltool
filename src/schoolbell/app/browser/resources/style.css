@@ -182,12 +182,14 @@ input.button-cancel {
 }
 
 #header .tools {
+    color: #f0f0f0;
     background: #990000;
 }
 
 #header .tools a {
-    text-decoration: none;
     color: #f0f0f0;
+    background: #990000;
+    text-decoration: none;
     padding: 0.5ex 1ex;
     font-weight: bold;
     font-size: smaller;

@@ -53,10 +53,9 @@ Incorrect password:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...User:
-      Unauthenticated User
+                  Unauthenticated User |
     ...
-    <p class="error">Username or password is incorrect</p>
+        <p class="error">Username or password is incorrect</p>
     ...
 
 Another attempt:
@@ -81,8 +80,7 @@ Now we are authenticated:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...User:
-         Some User
+                    Some User |
     ...
 
 Now we can log out:
@@ -103,6 +101,5 @@ We are logged out:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...User:
-         Unauthenticated User
+                  Unauthenticated User |
     ...
