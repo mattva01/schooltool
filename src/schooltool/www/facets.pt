@@ -1,0 +1,12 @@
+<facets
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <facet
+    tal:repeat="item view/listFacets"
+    xlink:type="simple"
+    tal:attributes="active item/active;
+                    class item/class_name;
+                    xlink:title item/title;
+                    xlink:href item/path"
+  />
+</facets>

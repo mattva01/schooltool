@@ -258,6 +258,15 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
     def tearDown(self):
         self.tearDownRegistries()
 
+    def test_traverse(self):
+        from schooltool.views import FacetManagementView
+        from schooltool.interfaces import IFacetManager
+        request = RequestStub()
+        self.assertRaises(KeyError, self.view._traverse, 'foo', request)
+        child = self.view._traverse('facets', request)
+        self.assert_(isinstance(child, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(child.context))
+
     def test_render(self):
         from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
@@ -304,6 +313,15 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.sub, member=self.per)
 
         self.view = PersonView(self.per)
+
+    def test_traverse(self):
+        from schooltool.views import FacetManagementView
+        from schooltool.interfaces import IFacetManager
+        request = RequestStub()
+        self.assertRaises(KeyError, self.view._traverse, 'foo', request)
+        child = self.view._traverse('facets', request)
+        self.assert_(isinstance(child, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(child.context))
 
     def test_render(self):
         from schooltool.component import getPath
@@ -700,6 +718,70 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                           '/groups/new')
         self.assertRaises(KeyError, extr, text, 'shmoo')
 
+class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
+
+    def test_traverse(self):
+        from schooltool.views import View, FacetManagementView
+        from schooltool.interfaces import IFacet
+        from schooltool.component import registerView
+
+        class IFacetStub(IFacet):
+            pass
+
+        class FacetStub:
+            implements(IFacetStub)
+
+        class FacetManagerStub:
+            def __init__(self):
+                self.facets = {}
+
+            def facetByName(self, name):
+                return self.facets[name]
+
+        registerView(IFacetStub, View)
+
+        context = FacetManagerStub()
+        facet = FacetStub()
+        context.facets['foo'] = facet
+        view = FacetManagementView(context)
+        request = RequestStub()
+        self.assertRaises(KeyError, view._traverse, 'bar', request)
+        child = view._traverse('foo', request)
+        self.assertEquals(child.context, facet)
+
+    def test_render(self):
+        from schooltool.views import FacetManagementView
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+        from schooltool.debug import EventLogFacet
+        request = RequestStub("http://localhost/group/facets")
+        facetable = Person()
+        owner = Person()
+        context = FacetManager(facetable)
+        facet = EventLogFacet()
+        context.setFacet(facet)
+        facet.active = False
+        context.setFacet(EventLogFacet(), owner=owner)
+        view = FacetManagementView(context)
+        result = view.render(request)
+        expected = dedent("""
+            <facets xmlns:xlink="http://www.w3.org/1999/xlink">
+            ---8<---
+              <facet xlink:type="simple" xlink:title="001"
+                     class="EventLogFacet" xlink:href="001"/>
+            ---8<---
+              <facet xlink:type="simple" active="active"
+                     xlink:title="002" class="EventLogFacet"
+                     xlink:href="002"/>
+            ---8<---
+            </facets>
+            """)
+        for segment in expected.split("---8<---\n"):
+            self.assert_(segment in result,
+                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -713,6 +795,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestUtilityServiceView))
     suite.addTest(unittest.makeSuite(TestUtilityView))
     suite.addTest(unittest.makeSuite(TestEventLogView))
+    suite.addTest(unittest.makeSuite(TestFacetManagementView))
     suite.addTest(unittest.makeSuite(TestRelationshipsView))
     return suite
 

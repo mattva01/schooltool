@@ -30,6 +30,7 @@ from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
+from schooltool.component import FacetManager
 from schooltool.debug import IEventLog, IEventLogUtility
 
 __metaclass__ = type
@@ -188,12 +189,20 @@ class TraversableView(View):
         return getView(self.context.traverse(name))
 
 
+class FacetableView(View):
+    """A view that supports traversing to ./facets/."""
+
+    def _traverse(self, name, request):
+        if name == 'facets':
+            return FacetManagementView(FacetManager(self.context))
+        raise KeyError(name)
+
+
 #
 # Concrete views
 #
 
-
-class GroupView(View):
+class GroupView(FacetableView):
     """The view for a group"""
 
     template = Template("www/group.pt", content_type="text/xml")
@@ -203,7 +212,7 @@ class GroupView(View):
             yield {'title': item.title, 'path': getPath(item)}
 
 
-class PersonView(View):
+class PersonView(FacetableView):
     """The view for a person object"""
 
     template = Template("www/person.pt", content_type="text/xml")
@@ -289,8 +298,23 @@ class EventLogView(View):
             return "%d events cleared" % n
 
 
-class RelationshipsView(View):
+class FacetManagementView(View):
+    """A view of IFacetManager."""
 
+    template = Template("www/facets.pt", content_type="text/xml")
+
+    def _traverse(self, name, request):
+        return getView(self.context.facetByName(name))
+
+    def listFacets(self):
+        return [{'active': {False: None, True: 'active'}[bool(facet.active)],
+                 'title': facet.__name__,
+                 'class_name': facet.__class__.__name__,
+                 'path': facet.__name__}
+                for facet in self.context.iterFacets()]
+
+
+class RelationshipsView(View):
     """A view of relationships on IRelatable which is also
     IRelationshipValencies.
 

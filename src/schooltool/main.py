@@ -50,7 +50,8 @@ from schooltool import model
 from schooltool.views import errorPage
 from schooltool.membership import Membership
 from schooltool.component import getView
-from schooltool.debug import EventLogUtility
+from schooltool.component import FacetManager
+from schooltool.debug import EventLogUtility, EventLogFacet
 from schooltool.interfaces import IEvent
 
 __metaclass__ = type
@@ -507,7 +508,9 @@ class Server:
         Membership(group=teachers, member=Person("Steve", title="Steve"))
         Membership(group=students, member=Person("Aiste", title="Aiste"))
         Membership(group=cleaners, member=Person("Albert", title="Albert"))
-        Membership(group=cleaners, member=Person("Marius", title="Marius"))
+        marius = Person("Marius", title="Marius")
+        FacetManager(marius).setFacet(EventLogFacet())
+        Membership(group=cleaners, member=marius)
 
         return app
 
