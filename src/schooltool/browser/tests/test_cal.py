@@ -1016,6 +1016,28 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(view.eventHeight(
                             createEvent('2004-08-12 10:00', '2h+45m', "")), 11)
 
+    def test_do_POST(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.cal import ACLCalendar
+        from schooltool.model import Person, Group
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URICalendarProvider
+
+        from schooltool import relationship
+        relationship.setUp()
+
+        context = self.manager.calendar
+        view = DailyCalendarView(context)
+
+        view.request = RequestStub(authenticated_user=self.manager,
+                args={'overlay':['/groups/locations','/groups/managers'],
+                    'OVERLAY': ''})
+
+        view.do_POST(view.request)
+
+        related = getRelatedObjects(self.manager, URICalendarProvider)
+        self.assertEquals(related, [self.locations, self.managers])
+
 
 class DefaultTimetableSetup(AppSetupMixin):
 
