@@ -34,6 +34,9 @@ class URITutor(ISpecificURI):
 class URIRegClass(ISpecificURI):
     """http://schooltool.org/ns/regclass"""
 
+class URIClassTutor(ISpecificURI):
+    """http://schooltool.org/ns/classtutor"""
+
 class URICommand(ISpecificURI):
     """http://army.gov/ns/command"""
 
@@ -60,7 +63,7 @@ class TestRelationship(unittest.TestCase):
         self.tutor = Relatable()
         self.lklass = Link(self.klass, URITutor)
         self.ltutor = Link(self.tutor, URIRegClass)
-        self.rel = _LinkRelationship("Tutor of a class",
+        self.rel = _LinkRelationship(URIClassTutor, "Tutor of a class",
                                      self.ltutor, self.lklass)
 
     def test_interface(self):
@@ -100,9 +103,9 @@ class TestRelationship(unittest.TestCase):
         officer = Relatable()
         soldier = Relatable()
 
-        links = relate("Command",
+        links = relate(URICommand,
                        (officer, URISuperior),
-                       (soldier, URIReport))
+                       (soldier, URIReport), title="Command")
         self.assertEqual(len(links), 2)
         linka, linkb = links
         for a, b, role, alink in ((officer, soldier, URIReport, linka),

@@ -58,6 +58,11 @@ class Link(Persistent):
 
     title = property(_getTitle, _setTitle)
 
+    def _getReltype(self):
+        return self.relationship.reltype
+
+    reltype = property(_getReltype)
+
     def traverse(self):
         return self.relationship.traverse(self).__parent__
 
@@ -74,8 +79,9 @@ class _LinkRelationship(Persistent):
     two links and its name.
     """
 
-    def __init__(self, title, a, b):
+    def __init__(self, reltype, title, a, b):
         self.title = unicode(title)
+        self.reltype = reltype
         self.a = a
         self.b = b
         a.relationship = self
@@ -96,11 +102,13 @@ class _LinkRelationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
-def relate(title, (a, role_of_a), (b, role_of_b)):
+def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
     """See IRelationshipAPI"""
+    if title is None:
+        title, doc = inspectSpecificURI(reltype)
     link_a = Link(a, role_of_b)
     link_b = Link(b, role_of_a)
-    _LinkRelationship(title, link_a, link_b)
+    _LinkRelationship(reltype, title, link_a, link_b)
     return link_a, link_b
 
 
@@ -125,7 +133,6 @@ class RelationshipSchema:
 
     def __call__(self, **parties):
         if len(self.roles) != len(parties):
-            # XXX testme
             raise TypeError("Wrong number of parties to this relationship."
                             " Need %s, got %r" % (len(self.roles), parties))
         L = []
@@ -135,5 +142,5 @@ class RelationshipSchema:
                 raise TypeError("This relationship needs a %s party."
                                 " Got %r" % (name, parties))
             L.append((party, uri))
-        return relate(self.title, L[0], L[1])
+        return relate(self.type, L[0], L[1], title=self.title)
 

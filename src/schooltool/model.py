@@ -27,8 +27,8 @@ from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
 from schooltool.interfaces import IFaceted, IEventConfigurable, IQueryLinks
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
-from schooltool.interfaces import ISpecificURI, URIGroup, URIMember
-from schooltool.interfaces import IRemovableLink
+from schooltool.interfaces import ISpecificURI, IRemovableLink
+from schooltool.interfaces import URIMembership, URIGroup, URIMember
 from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentKeysSet, PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
@@ -46,6 +46,7 @@ class GroupLink:
     __slots__ = '_group', 'name', '__parent__'
     role = URIGroup
     title = "Membership"
+    reltype = URIMembership
 
     def __init__(self, parent, group, name):
         """The arguments are the following:
@@ -72,6 +73,7 @@ class MemberLink:
     __slots__ = '_member', 'name', '__parent__'
     role = URIMember
     title = "Membership"
+    reltype = URIMembership
 
     def __init__(self, parent, member, name):
         """The arguments are the following:

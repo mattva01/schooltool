@@ -22,13 +22,14 @@ The schooltool component.
 $Id$
 """
 import re
+from sets import Set
 from zope.interface import moduleProvides
 from zope.interface.interfaces import IInterface
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
-from schooltool.interfaces import URIGroup, URIMember
+from schooltool.interfaces import URIGroup, URIMember, URIMembership
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
 
@@ -184,24 +185,35 @@ def isURI(uri):
 # relate3 is replaced by a stub when unit testing
 from schooltool.relationships import relate as relate3
 
-def relate(title, (a, role_a), (b, role_b)):
+def relate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipAPI"""
     # XXX This is to avoid a circular import
     from schooltool.model import MemberLink, GroupLink
 
-    group, member = None, None
-    if role_a is URIGroup and role_b is URIMember:
-        group = a
-        member = b
-        name = group.add(member)
-        return MemberLink(group, member, name), GroupLink(member, group, name)
-    elif role_a is URIMember and role_b is URIGroup:
-        group = b
-        member = a
-        name = group.add(member)
-        return GroupLink(member, group, name), MemberLink(group, member, name)
-    else:
-        return relate3(title, (a, role_a), (b, role_b))
+    if (relationship_type is URIMembership and
+        title is None or title == "Membership"):
+        r = Set((role_a, role_b))
+        try:
+            r.remove(URIMember)
+            r.remove(URIGroup)
+        except KeyError:
+            pass
+        else:
+            if not r:
+                group, member = None, None
+                if role_a is URIGroup:
+                    group = a
+                    member = b
+                    name = group.add(member)
+                    return (MemberLink(group, member, name),
+                            GroupLink(member, group, name))
+                else:
+                    group = b
+                    member = a
+                    name = group.add(member)
+                    return (GroupLink(member, group, name),
+                            MemberLink(group, member, name))
+    return relate3(relationship_type, (a, role_a), (b, role_b), title=title)
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""

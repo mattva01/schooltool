@@ -180,6 +180,11 @@ class URIMember(ISpecificURI):
     A group member role.
     """
 
+class URIMembership(ISpecificURI):
+    """http://schooltool.org/ns/membership
+
+    The membership relationship.
+    """
 
 #
 # Relationships
@@ -191,6 +196,12 @@ class ILink(Interface):
              A<--->Link<---->Relationship<---->Link<--->B
 
     """
+
+    reltype = Attribute(
+        """The SpecificURI of the relationship type.
+
+        The value of reltype may be None.
+        """)
 
     title = Attribute(
         """A title of the whole relationship.
@@ -271,25 +282,28 @@ class IRelationshipSchema(Interface):
 
 class IRelationshipAPI(Interface):
 
-    def relate(title, (a, role_a), (b, role_b)):
-        """Relate a and b via the roles and title.
+    def relate(relationship_type, (a, role_a), (b, role_b), title=None):
+        """Relate a and b via the roles and the relationship_type.
 
         Returns a tuple of links attached to a and b respectively.
 
         Example::
-                   my report
-              /----------------->
-          officer  'command'  soldier
-              <-----------------/
-                   my superior
+                        my report
+              /------------------------->
+          officer  relationship_type  soldier
+              <-------------------------/
+                       my superior
 
-        relate('command',
+        relate(URICommand,
                (officer, URIMySuperior),
                (soldier, URIMyReport))
 
         Returns a two-tuple of:
           * The link traversable from the officer, role is URIMyReport
           * The link traversable from the soldier, role is URIMySuperior
+
+        If title is not given, the title links defaults to the
+        relationship_type URI.
         """
 
     def getRelatedObjects(obj, role):
