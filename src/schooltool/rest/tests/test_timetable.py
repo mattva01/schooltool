@@ -1620,7 +1620,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.applog,
-                [(None, 'Calendar /time-periods/2003 fall created', INFO)])
+                [(None, 'Time period /time-periods/2003 fall updated', INFO)])
         self.assert_(key in service)
         self.assertEquals(service[key].first, datetime.date(2004, 9, 1))
         self.assertEquals(getPath(service[key]), '/time-periods/%s' % key)
@@ -1640,7 +1640,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.applog,
-                [(None, 'Calendar /tpservice/2003 fall deleted', INFO)])
+                [(None, 'Time period /tpservice/2003 fall deleted', INFO)])
         self.assert_(key not in service)
 
     def test_delete_nonexistent(self):

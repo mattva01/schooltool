@@ -782,13 +782,13 @@ class TimePeriodCreatorView(SchooldayModelCalendarView):
         return SchooldayModelCalendarView.do_PUT(self, request)
 
     def log_PUT(self, request):
-        request.appLog(_("Calendar %s created") % getPath(self.context))
+        request.appLog(_("Time period %s updated") % getPath(self.context))
 
     def do_DELETE(self, request):
         try:
             path = getPath(self.service[self.key])
             del self.service[self.key]
-            request.appLog(_("Calendar %s deleted") % getPath(self.context))
+            request.appLog(_("Time period %s deleted") % getPath(self.context))
         except KeyError:
             return notFoundPage(request)
         else:

@@ -500,6 +500,9 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
                                          'CHECK': 'weekly'})
         view.update()
         self.assertEquals(view.context.keys(), ['bimonthly'])
+        self.assertEquals(view.request.applog,
+                          [(None, 'Timetable schema /ttschemas/weekly deleted',
+                            INFO)])
 
     def test_update_add(self):
         view = self.createView()
@@ -550,6 +553,10 @@ class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
                                          'CHECK': 'semester2'})
         view.update()
         self.assertEquals(view.context.keys(), ['semester1'])
+        self.assertEquals(view.request.applog,
+                          [(None,
+                            'Time period /time-periods/semester2 deleted',
+                            INFO)])
 
     def test_update_add(self):
         view = self.createView()

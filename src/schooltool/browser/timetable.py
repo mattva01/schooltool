@@ -505,6 +505,7 @@ class ContainerServiceViewBase(View):
         result = None
         if 'DELETE' in self.request.args:
             for name in self.request.args['CHECK']:
+                self.logDeletion(self.context[name])
                 del self.context[name]
             result = _('Deleted %s.') % ", ".join(self.request.args['CHECK'])
         if 'ADD' in self.request.args:
@@ -521,6 +522,9 @@ class TimetableSchemaServiceView(ContainerServiceViewBase):
     newpath = '/newttschema'
     subview = TimetableSchemaView
 
+    def logDeletion(self, schema):
+        self.request.appLog(_("Timetable schema %s deleted") % getPath(schema))
+
 
 class TimePeriodServiceView(ContainerServiceViewBase):
 
@@ -528,6 +532,9 @@ class TimePeriodServiceView(ContainerServiceViewBase):
 
     newpath = '/newtimeperiod'
     subview = TimePeriodView
+
+    def logDeletion(self, period):
+        self.request.appLog(_("Time period %s deleted") % getPath(period))
 
 
 def fix_duplicates(names):
