@@ -9,6 +9,7 @@ PYTHONDIR=/usr/lib/python2.3
 TESTFLAGS=-w
 PO=$(wildcard src/schooltool/translation/*/LC_MESSAGES/*.po)
 MO=$(PO:.po=.mo)
+PYTHONPATH=src:Zope3/src
 
 
 %.mo : %.po
@@ -17,12 +18,18 @@ MO=$(PO:.po=.mo)
 
 all: build
 
-build: build-translations
-	$(PYTHON) setup.py build_ext -i
+get-zope:
+	if [ ! -d Zope3 ]; then \
+		svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3;\
+	fi
+	cd Zope3 && $(PYTHON) setup.py build_ext -i
+
+build: get-zope build-translations
 	$(PYTHON) remove-stale-bytecode.py
 
 extract-translations:
-	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
+                        src/schooltool/translation/i18nextract.py \
 			-d schooltool -o src/schooltool/translation/ \
 			src/schooltool *.py
 	$(MAKE) update-translations

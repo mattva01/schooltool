@@ -12,6 +12,7 @@ if sys.version_info < (2, 3):
 import os
 basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(basedir, 'src'))
+sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
 import schooltool.clients.datagen
 # If you change the seed, you will also have to recreate ttconfig.data

@@ -14,6 +14,7 @@ if sys.version_info < (2, 3):
 basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 datadir = basedir
 sys.path.insert(0, os.path.join(basedir, 'src'))
+sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
 # If you modify something above, take a look at debian/rules and
 # debian/import-sampleschool.head, too.
