@@ -445,18 +445,16 @@ class CustomTestResult(unittest._TextTestResult):
             hook.stopTest(test)
         self.__super_stopTest(test)
 
+    def getDescription(self, test):
+        return test.id() # package.module.class.method
+
     def getShortDescription(self, test):
-        s = self.getDescription(test)
+        s = test.id() # package.module.class.method
         if len(s) > self._maxWidth:
-            # s is 'testname (package.module.class)'
-            # try to shorten it to 'testname (...age.module.class)'
-            # if it is still too long, shorten it to 'testnam...'
-            # limit case is 'testname (...)'
-            pos = s.find(" (")
-            if pos + len(" (...)") > self._maxWidth:
-                s = s[:self._maxWidth - 3] + "..."
-            else:
-                s = "%s...%s" % (s[:pos + 2], s[pos + 5 - self._maxWidth:])
+            namelen = len(s.split('.')[-1])
+            left = max(0, (self._maxWidth - namelen) / 2 - 1)
+            right = self._maxWidth - left - 3
+            s = "%s...%s" % (s[:left], s[-right:])
         return s
 
     def printErrors(self):
@@ -474,7 +472,7 @@ class CustomTestResult(unittest._TextTestResult):
     def printTraceback(self, kind, test, err):
         self.stream.writeln()
         self.stream.writeln(self.separator1)
-        self.stream.writeln("%s: %s" % (kind, test))
+        self.stream.writeln("%s: %s" % (kind, self.getDescription(test)))
         self.stream.writeln(self.separator2)
         self.stream.writeln(self.formatError(err))
         self.stream.writeln()
