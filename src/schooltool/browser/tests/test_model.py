@@ -241,7 +241,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
 
         request = RequestStub(method='POST', args={'group.teachers': '',
                                                    'group.managers': '',
-                                                   'SUBMIT': ''},
+                                                   'CHOOSE_CALENDARS': ''},
                               authenticated_user=self.manager)
         result = view.render(request)
         doc = HTMLDocument(result)
@@ -251,7 +251,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
 
         request = RequestStub(method='POST', args={'group.teachers': '',
                                                    'group.pupils': '',
-                                                   'SUBMIT': ''},
+                                                   'CHOOSE_CALENDARS': ''},
                               authenticated_user=self.manager)
         result = view.render(request)
         doc = HTMLDocument(result)
@@ -264,7 +264,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         from schooltool.uris import URICalendarProvider
         view = PersonView(self.person)
         request = RequestStub(method='POST', args={'group.teachers': '',
-                                                   'SUBMIT': ''},
+                                                   'CHOOSE_CALENDARS': ''},
                               authenticated_user=self.person2)
         groups = [self.teachers, self.managers, self.pupils]
         view.getParentGroups = lambda: groups

@@ -24,7 +24,7 @@
             tal:attributes="action request/path">
         <h3 i18n:translate="">Groups</h3>
 
-        <p>Merge calendars:</p>
+        <p i18n:translate="">Merge calendars:</p>
         <p tal:repeat="group view/getParentGroups">
           <input type="checkbox"
                  tal:attributes="name string:group.${group/__name__};
@@ -33,8 +33,8 @@
              tal:content="group/title"></a>
         </p>
 
-        <input type="submit" name="SUBMIT" i18n:attributes="value"
-               value="Update" />
+        <input class="button" type="submit" name="CHOOSE_CALENDARS"
+               i18n:attributes="value" value="Update" />
       </form>
     </div>
 
