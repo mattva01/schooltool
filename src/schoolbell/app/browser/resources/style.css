@@ -106,6 +106,10 @@ form.standalone div.label {
     padding-top: 0.5ex;
 }
 
+form.booking_form {
+    width: 75%;
+}
+
 input[type=text],
 input[type=password],
 input[type=submit],
