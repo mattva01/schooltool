@@ -504,7 +504,8 @@ def main(argv):
 
     # Running
     if cfg.list_files:
-        print "\n".join(test_files)
+        baselen = len(cfg.basedir) + 1
+        print "\n".join([fn[baselen:] for fn in test_files])
     if cfg.list_tests:
         print "\n".join([test.id() for test in test_cases])
     if cfg.list_hooks:
