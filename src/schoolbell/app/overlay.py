@@ -30,6 +30,7 @@ We will need some sample persons and groups for the demonstration
     >>> john = Person(title="John")
     >>> smith = Person(title="Smith")
     >>> developers = Group(title="Developers")
+    >>> admins = Group(title="Admins")
 
 Let's say John wants to see the calendars of Smith and the Developers group
 overlaid on his own calendar
@@ -37,10 +38,21 @@ overlaid on his own calendar
     >>> john.overlaid_calendars.add(smith.calendar)
     >>> john.overlaid_calendars.add(developers.calendar)
 
-    >>> for calendar in john.overlaid_calendars:
-    ...     print calendar.__parent__.title
-    Smith
-    Developers
+He also wants the Admins group calendar to be displayed in the overlaid
+calendars portlet, but hidden by default:
+
+    >>> john.overlaid_calendars.add(admins.calendar, show=False)
+
+Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
+
+    >>> for item in john.overlaid_calendars:
+    ...     checked = item.show and "+" or " "
+    ...     title = item.calendar.__parent__.title
+    ...     print "[%s] %-10s (%s, %s)" % (checked, title,
+    ...                                    item.color1, item.color2)
+    [+] Smith      (#e0b6af, #c1665a)
+    [+] Developers (#eed680, #d1940c)
+    [ ] Admins     (#c5d2c8, #83a67f)
 
 Clean up
 
@@ -48,7 +60,15 @@ Clean up
 
 """
 
+import sys
+from persistent import Persistent
+from zope.interface import Interface, implements
+from zope.schema import Object, TextLine, Bool
+
 from schoolbell.relationship import URIObject
+from schoolbell.relationship.interfaces import IRelationshipLinks
+from schoolbell.relationship.relationship import BoundRelationshipProperty
+from schoolbell.app.interfaces import ISchoolBellCalendar
 
 
 URICalendarSubscription = URIObject(
@@ -66,3 +86,264 @@ URICalendarSubscriber = URIObject(
                 "Calendar subscriber",
                 "A role of an object that subscribes to a calendar.")
 
+
+DEFAULT_COLORS = (
+        ('#e0b6af', '#c1665a'), # Red Highlight, Red Medium
+        ('#eed680', '#d1940c'), # Accent Yellow, Accent Yellow Dark
+        ('#c5d2c8', '#83a67f'), # Green Highlight, Green Medium
+        ('#efe0cd', '#e0c39e'), # Face Skin Highlight, Face Skin Medium
+        ('#ada7c8', '#887fa3'), # Purple Highlight, Purple Medium
+        ('#eae8e3', '#bab5ab'), # Basic 3D Highlight, Basic 3D Medium
+        ('#e0c39e', '#b39169'), # Face Skin Medium, Face Skin Dark
+        ('#c1665a', '#884631'), # Red Medium, Red Dark
+        ('#b39169', '#826647'), # Face Skin Dark, Face Skin Shadow
+        ('#83a67f', '#5d7555'), # Green Medium, Green Dark
+    )
+
+
+class ICalendarOverlayInfo(Interface):
+    """Information about an overlaid calendar."""
+
+    calendar = Object(
+            title=u"Calendar",
+            schema=ISchoolBellCalendar,
+            description=u"""
+            Calendar.
+            """)
+
+    color1 = TextLine(
+            title=u"Color 1",
+            description=u"""
+            Color for this calendar.
+
+            This is a string that is acceptable as a CSS color, e.g. '#ccffee'.
+            """)
+
+    color2 = TextLine(
+            title=u"Color 2",
+            description=u"""
+            Color for this calendar.
+
+            This is a string that is acceptable as a CSS color, e.g. '#ccffee'.
+            """)
+
+    show = Bool(
+            title=u"Show",
+            description=u"""
+            An option that controls whether events from this calendar are shown
+            in the calendar views (show=True), or if they are only listed in
+            the portlet (show=False).
+            """)
+
+
+class IOverlaidCalendarsProperty(Interface):
+    """A property for maintaining a list of overlaid calendars."""
+
+    def __nonzero__():
+        """Are there any overlaid calendars?"""
+
+    def __len__():
+        """Return the number of overlaid calendars."""
+
+    def __iter__():
+        """Iterate over all overlaid calendars.
+
+        Returns ICalendarOverlayInfo objects.  Iteration order is unspecified.
+        """
+
+    def add(calendar, show=True, color1=None, color2=None):
+        """Add `calendar` to the list.
+
+        If `color1` or `color2` is not specified, a pair of colours are chosen
+        from a list of standard colors.  The color chooser tries to minimize
+        color conflicts with other overlaid calendars.
+        """
+
+    def remove(calendar):
+        """Remove `calendar` from the list."""
+
+
+class OverlaidCalendarsProperty(object):
+    """Property for `overlaid_calendars`
+
+    Stores the list of overlaid calendars in relationships.
+
+    Example:
+
+        >>> class SomeClass(object): # must be a new-style class
+        ...     calendars = OverlaidCalendarsProperty()
+
+        >>> from zope.interface.verify import verifyObject
+        >>> someinstance = SomeClass()
+        >>> verifyObject(IOverlaidCalendarsProperty, someinstance.calendars)
+        True
+
+    """
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        else:
+            return BoundOverlaidCalendarsProperty(instance)
+
+
+class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
+    """Bound property for `overlaid_calendars`
+
+    Stores the list of overlaid calendars in relationships.
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schoolbell.relationship.tests import SomeObject
+        >>> from schoolbell.relationship import getRelatedObjects
+        >>> setUp()
+
+    Given a relatable object, and a relatable calendar
+
+        >>> a = SomeObject('a')
+        >>> cal = SomeObject('cal')
+
+    we can create a BoundOverlaidCalendarsProperty
+
+        >>> overlaid_calendars = BoundOverlaidCalendarsProperty(a)
+
+    The `add` method establishes a URICalendarSubscriber relationship
+
+        >>> overlaid_calendars.add(cal)
+        >>> getRelatedObjects(a, URICalendarProvider)
+        [cal]
+        >>> getRelatedObjects(cal, URICalendarSubscriber)
+        [a]
+
+    `__nonzero__` and `__len__` do the obvious things
+
+        >>> bool(overlaid_calendars)
+        True
+        >>> len(overlaid_calendars)
+        1
+
+    The `remove` method breaks it
+
+        >>> overlaid_calendars.remove(cal)
+        >>> len(overlaid_calendars)
+        0
+        >>> bool(overlaid_calendars)
+        False
+        >>> getRelatedObjects(a, URICalendarProvider)
+        []
+        >>> getRelatedObjects(cal, URICalendarSubscriber)
+        []
+
+    You can specify extra arguments for `add`
+
+        >>> overlaid_calendars.add(cal, show=False,
+        ...                        color1="red", color2="green")
+
+    You can extract these when iterating
+
+        >>> for item in overlaid_calendars:
+        ...     print item.calendar, item.show, item.color1, item.color2
+        cal False red green
+
+    """
+
+    implements(IOverlaidCalendarsProperty)
+
+    def __init__(self, this):
+        BoundRelationshipProperty.__init__(self, this, URICalendarSubscription,
+                                           URICalendarSubscriber,
+                                           URICalendarProvider)
+
+    def add(self, calendar, show=True, color1=None, color2=None):
+        if not color1 or not color2:
+            used_colors = [(item.color1, item.color2) for item in self]
+            color1, color2 = choose_color(DEFAULT_COLORS, used_colors)
+        BoundRelationshipProperty.add(self, calendar,
+                    CalendarOverlayInfo(calendar, show, color1, color2))
+
+    def __iter__(self):
+        for link in IRelationshipLinks(self.this):
+            if link.role == self.other_role and link.rel_type == self.rel_type:
+                yield link.extra_info
+
+
+class CalendarOverlayInfo(Persistent):
+    """Information about an overlaid calendar.
+
+        >>> from zope.interface.verify import verifyObject
+        >>> calendar = object()
+        >>> item = CalendarOverlayInfo(calendar, True, 'red', 'yellow')
+        >>> verifyObject(ICalendarOverlayInfo, item)
+        True
+
+    The calendar attribute must be read-only, because a CalendarOverlayInfo is
+    stored as an attribute on a specific relationship with a specific calendar
+    object.
+
+        >>> item.calendar = object()
+        Traceback (most recent call last):
+          ...
+        AttributeError: can't set attribute
+
+    `show`, `color1` and `color2` attributes are changeable
+
+        >>> item.show = True
+        >>> item.color1 = 'blue'
+        >>> item.color2 = 'black'
+
+    """
+
+    implements(ICalendarOverlayInfo)
+
+    calendar = property(lambda self: self._calendar)
+
+    def __init__(self, calendar, show, color1, color2):
+        self._calendar = calendar
+        self.show = show
+        self.color1 = color1
+        self.color2 = color2
+
+
+def choose_color(colors, used_colors):
+    """Choose a color, avoiding colors that have been used already.
+
+        >>> colors = ('red', 'green', 'blue')
+
+    choose_color picks the first unused color.
+
+        >>> choose_color(colors, [])
+        'red'
+        >>> choose_color(colors, ['red'])
+        'green'
+        >>> choose_color(colors, ['green', 'red'])
+        'blue'
+
+    If all colors have been used, choose_color picks the one that
+    has been used the least number of times, and if there are several
+    such colors, picks the first of them.
+
+        >>> choose_color(colors, ['green', 'red', 'blue'])
+        'red'
+        >>> choose_color(colors, ['green', 'red', 'blue', 'red'])
+        'green'
+
+    You can also use choose_color for color pairs
+
+        >>> pairs = [('red', 'green'), ('red', 'yellow'), ('blue', 'green')]
+        >>> choose_color(pairs, [('red', 'green')])
+        ('red', 'yellow')
+
+    """
+    if not colors:
+        raise ValueError("no colors to choose from")
+    used_count = {}
+    for c in used_colors:
+        used_count[c] = used_count.get(c, 0) + 1
+    min_count = sys.maxint
+    for c in colors:
+        count = used_count.get(c, 0)
+        if count == 0:
+            return c
+        if count < min_count:
+            best_color = c
+            min_count = count
+    return best_color

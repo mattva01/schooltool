@@ -42,8 +42,7 @@ from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
-from schoolbell.app.overlay import URICalendarSubscription
-from schoolbell.app.overlay import URICalendarSubscriber, URICalendarProvider
+from schoolbell.app.overlay import OverlaidCalendarsProperty
 from schoolbell.relationship import RelationshipProperty
 
 
@@ -171,9 +170,7 @@ class Person(Persistent, Contained):
     _hashed_password = None
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
-    overlaid_calendars = RelationshipProperty(URICalendarSubscription,
-                                              URICalendarSubscriber,
-                                              URICalendarProvider)
+    overlaid_calendars = OverlaidCalendarsProperty()
 
     def __init__(self, username=None, title=None):
         self.title = title
