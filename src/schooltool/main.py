@@ -610,6 +610,10 @@ class ConfigurationError(UnicodeAwareException):
     pass
 
 
+class SchoolToolError(UnicodeAwareException):
+    pass
+
+
 class Server:
     """SchoolTool HTTP server."""
 
@@ -631,14 +635,17 @@ class Server:
         """
         try:
             self.configure(args)
+            self.run()
         except ConfigurationError, e:
             print >> self.stderr, u"schooltool: %s" % unicode(e)
             print >> self.stderr, _("run schooltool -h for help")
             return 1
+        except SchoolToolError, e:
+            print >> self.stderr, unicode(e)
+            return 1
         except SystemExit, e:
             return e.args[0]
         else:
-            self.run()
             return 0
 
     def configure(self, args):
@@ -787,7 +794,14 @@ class Server:
         libxml2.initParser()
 
         db_configuration = self.config.database
-        self.db = db_configuration.open()
+        try:
+            self.db = db_configuration.open()
+        except IOError, e:
+            msg = _("Could not initialize the database:\n  ") + unicode(e)
+            if e[0] == 11: # Resource temporarily unavailable
+                msg += "\n"
+                msg += _("Perhaps another SchoolTool instance is using it?")
+            raise SchoolToolError(msg)
         self.prepareDatabase()
 
         self.threadable_hook.init()
