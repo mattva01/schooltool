@@ -540,7 +540,6 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "The number of cells ['few', 'values'] (line 5)"
                 " does not match the number of periods ['A', 'B', 'C'].")
 
-
     def test_clearTimetables(self):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
