@@ -41,6 +41,8 @@ schoolbell (1.0-1) unstable; urgency=low
     (Closes: Bug#297146). (Even though SSL is not available in this release,
     it might be in the future)
   * Remove README.schoolbell from docs as it was removed upstream.
+  * Include a new revision of the Zope 3 upsream trunk which has accepted the
+    FTBFS patch by Andreas Jochens. (Closes: Bug#298392)
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 
