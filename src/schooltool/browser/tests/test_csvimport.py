@@ -472,7 +472,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         # simple case
         imp = self.createImporter()
         result = imp.parseCSVRows(['"some "," stuff"', '"here"'])
-        self.assertEquals(result, [["some ", " stuff"], ["here"]])
+        self.assertEquals(result, [["some", "stuff"], ["here"]])
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
         # invalid CSV
@@ -501,9 +501,9 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                                    '"two",""," \t ","elements"',
                                    '"cut","","the","tail",,,""'])
         self.failIf(imp.errors.anyErrors(), imp.errors)
-        self.assertEquals(result, [[], [], [], ['hi'], ['some ', 'data'],
-                                   ['two', None, None, 'elements'],
-                                   ['cut', None, 'the', 'tail']])
+        self.assertEquals(result, [[], [], [], ['hi'], ['some', 'data'],
+                                   ['two', '', '', 'elements'],
+                                   ['cut', '', 'the', 'tail']])
 
     def test_timetable_invalid(self):
         imp = self.createImporter()
@@ -552,12 +552,12 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 ""
                 "Monday","Tuesday"
                 "","A","B"
-                "too","many","values","here"
+                "too","many","","values"
                 """)
         imp = self.createImporter()
         self.failIf(imp.importTimetable(csv))
         self.assertEquals(imp.errors.generic[0],
-                "There are more records [many, values, here] (line 5)"
+                "There are more records [many, , values] (line 5)"
                 " than periods [A, B].")
 
         csv = dedent("""

@@ -396,7 +396,7 @@ class TimetableCSVImporter:
                     state = 'periods'
                     continue
                 elif state == 'periods':
-                    if row[0] is not None:
+                    if row[0]:
                         self.errors.generic.append(
                             "The first cell on the period list row (%s)"
                             " should be empty." % row[0])
@@ -443,18 +443,13 @@ class TimetableCSVImporter:
         try:
             while True:
                 line += 1
-                values = reader.next()
-                # Sanitize: convert empty or whitespace-only cells to None
-                # and remove trailing empty cells; convert others to unicode.
-                last = -1
-                for ind, s in enumerate(values):
-                    if s.strip():
-                        last = ind
-                        if self.charset:
-                            values[ind] = unicode(s, self.charset)
-                    else:
-                        values[ind] = None
-                result.append(values[:last+1])
+                values = [v.strip() for v in reader.next()]
+                if self.charset:
+                    values = [unicode(v, self.charset) for v in values]
+                # Remove trailing empty cells.
+                while values and not values[-1].strip():
+                    del values[-1]
+                result.append(values)
         except StopIteration:
             return result
         except csv.Error:
@@ -467,15 +462,14 @@ class TimetableCSVImporter:
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).
 
-        records is a list of strings.  Some elements may be None; in that case,
-        the corresponding tuple also contains None.
+        records is a list of strings.
 
         If invalid entries are encountered, self.errors.records is modified
         and None is put in place of the malformed record.
         """
         result = []
         for record in records:
-            if record is not None:
+            if record:
                 parts = record.split("|", 1)
                 if len(parts) != 2:
                     if record not in self.errors.records:
