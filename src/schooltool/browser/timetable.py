@@ -97,11 +97,20 @@ class TimetableView(View):
         return format_timetable_for_presentation(self.context)
 
 
-class TimetableSchemaWizard(View):
-    """View for defining a timetable schema.
+class TimetableSchemaView(TimetableView):
+    """View for a timetable schema"""
 
-    XXX can be accessed at /TEST/tt (for now, while debugging).
-    """
+    authorization = ManagerAccess
+
+    def __init__(self, context):
+        TimetableView.__init__(self, context, None)
+
+    def title(self):
+        return "Timetable schema %s" % self.context.__name__
+
+
+class TimetableSchemaWizard(View):
+    """View for defining a timetable schema."""
 
     __used_for__ = ITimetableSchemaService
 
@@ -229,6 +238,30 @@ class TimetableSchemaWizard(View):
                 if event.title in times_for:
                     range = format_time_range(event.tstart, event.duration)
                     times_for[event.title][day] = range
+        return result
+
+
+class TimetableSchemaServiceView(View):
+
+    template = Template("www/ttschemas.pt")
+
+    authorization = ManagerAccess
+
+    def list(self):
+        for key in self.context.keys():
+            yield self.context[key]
+
+    def _traverse(self, name, request):
+        return TimetableSchemaView(self.context[name])
+
+    def update(self):
+        result = None
+        if 'DELETE' in self.request.args:
+            for name in self.request.args['CHECK']:
+                del self.context[name]
+            result = _('Deleted %s.') % ", ".join(self.request.args['CHECK'])
+        if 'ADD' in self.request.args:
+            self.request.redirect('/newttschema')
         return result
 
 

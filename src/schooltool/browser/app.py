@@ -40,6 +40,7 @@ from schooltool.component import getTicketService, traverse
 from schooltool.rest.app import AvailabilityQueryView
 from schooltool.component import getTimetableSchemaService
 from schooltool.browser.timetable import TimetableSchemaWizard
+from schooltool.browser.timetable import TimetableSchemaServiceView
 
 __metaclass__ = type
 
@@ -119,9 +120,11 @@ class RootView(View):
             return ApplicationLogView(self.context)
         elif name == 'busysearch':
             return BusySearchView(self.context)
-        elif name == 'TEST_tt': # XXX remove this
-            service = getTimetableSchemaService(self.context)
-            return TimetableSchemaWizard(service)
+        elif name == 'ttschemas':
+            return TimetableSchemaServiceView(
+                self.context.timetableSchemaService)
+        elif name == 'newttschema':
+            return TimetableSchemaWizard(self.context.timetableSchemaService)
         raise KeyError(name)
 
 

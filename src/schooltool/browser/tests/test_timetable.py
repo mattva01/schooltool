@@ -106,13 +106,35 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         request = RequestStub(authenticated_user=self.person)
         result = view.render(request)
-        self.assertEquals(request.code, 200)
+        self.assertEquals(request.code, 200, result)
 
     def test_title(self):
         view = self.createView()
-        view.request = RequestStub()
         self.assertEquals(view.title(),
                           "John Smith's timetable for 2004 fall, default")
+
+
+class TestTimetableSchemaView(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def createView(self):
+        from schooltool.timetable import Timetable
+        from schooltool.browser.timetable import TimetableSchemaView
+        tts = Timetable([])
+        tts.__name__ = 'weekly'
+        return TimetableSchemaView(tts)
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+
+    def test_title(self):
+        view = self.createView()
+        self.assertEquals(view.title(), "Timetable schema weekly")
 
 
 class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
@@ -381,12 +403,51 @@ def createDayTemplate(periods):
     return day
 
 
+class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
+                                     TraversalTestMixin):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        assert 'weekly' in result
+        assert 'bimonthly' in result
+
+    def createView(self):
+        from schooltool.timetable import TimetableSchemaService, Timetable
+        from schooltool.browser.timetable import TimetableSchemaServiceView
+        context = self.app.timetableSchemaService
+        context['weekly'] = Timetable([])
+        context['bimonthly'] = Timetable([])
+        return TimetableSchemaServiceView(context)
+
+    def test__traverse(self):
+        from schooltool.browser.timetable import TimetableSchemaView
+        view = self.createView()
+        self.assertTraverses(view, 'weekly', TimetableSchemaView)
+
+    def test_list(self):
+        from schooltool.timetable import Timetable
+        view = self.createView()
+        self.assertEquals(list(view.list()), [Timetable([]), Timetable([])])
+
+    def test_update_delete(self):
+        view = self.createView()
+        request = RequestStub(args={'DELETE': 'Why not', 'CHECK': 'weekly'})
+        
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.browser.timetable'))
     suite.addTest(unittest.makeSuite(TestTimetableTraverseView))
     suite.addTest(unittest.makeSuite(TestTimetableView))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
     return suite
 
 

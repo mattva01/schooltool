@@ -173,6 +173,9 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import ResourceContainerView
         from schooltool.browser.app import BusySearchView
         from schooltool.browser.applog import ApplicationLogView
+        from schooltool.browser.timetable import TimetableSchemaWizard
+        from schooltool.browser.timetable import TimetableSchemaServiceView
+
         view = self.createView()
         app = view.context
         self.assertTraverses(view, 'logout', LogoutView, app)
@@ -183,6 +186,10 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'resources', ResourceContainerView,
                              app['resources'])
         self.assertTraverses(view, 'busysearch', BusySearchView, app)
+        self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
+                             app.timetableSchemaService)
+        self.assertTraverses(view, 'newttschema', TimetableSchemaWizard,
+                             app.timetableSchemaService)
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
         logo = self.assertTraverses(view, 'logo.png', StaticFile)
