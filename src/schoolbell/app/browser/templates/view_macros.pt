@@ -31,7 +31,8 @@
         <div class="breadcrumbs">
         <tal:for tal:repeat="breadcrumb context/@@absolute_url/breadcrumbs">
           <a tal:condition="repeat/breadcrumb/start"
-             tal:attributes="href breadcrumb/url">top</a>
+             tal:attributes="href breadcrumb/url"
+             i18n:translate="">top</a>
           <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
           <a tal:condition="not:repeat/breadcrumb/start"
              tal:attributes="href breadcrumb/url"
@@ -51,6 +52,8 @@
           <tal:if condition="user/schoolbell:authenticated"
                   define="person user/schoolbell:person">
             <div metal:define-macro="logged_user">
+
+              <tal:span i18n:translate="">User:</tal:span>
 
               <tal:if condition="not:person">
                 <span id="tools-zmi-principal" i18n:translate=""

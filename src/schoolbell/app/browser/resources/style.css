@@ -184,16 +184,16 @@ input.button-cancel {
 #header .tools {
     color: #f0f0f0;
     background: #990000;
+    font-size: smaller;
+    line-height: 0.75em;
 }
 
 #header .tools a {
     color: #f0f0f0;
     background: #990000;
     text-decoration: none;
-    padding: 0.5ex 1ex;
+    padding: 0.4ex 1ex 0.5ex 1ex;
     font-weight: bold;
-    font-size: smaller;
-    line-height: 0.75em;
 }
 
 #header .tools a:hover {
