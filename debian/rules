@@ -58,6 +58,7 @@ debdirclean:
 	rm -f debian/*.debhelper
 	rm -f debian/import-sampleschool
 	rm -f debian/files
+	rm -f debian/po/templates.pot
 	rm -f build-stamp install-arch-stamp install-indep-stamp
 
 clean::
@@ -65,6 +66,7 @@ clean::
 	dh_testroot
 	-$(MAKE) realclean
 	dh_clean
+	debconf-updatepo
 
 install: install-arch install-indep
 
