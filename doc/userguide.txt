@@ -178,3 +178,9 @@ manager by right-clicking on a user and choosing "Change Password".
 
 People can be given teacher or manager privileges by adding them to the
 Teachers and System Managers groups respectively.
+
+All successful user actions and failed logins are recorded in the
+application log, which is accessible through the "View->Application Log"
+menu item.  Each entry includes a timestamp and the user name of the person
+who performed the action.
+
