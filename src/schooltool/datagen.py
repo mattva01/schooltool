@@ -28,6 +28,7 @@ $Id$
 """
 import random
 import sys
+import sets
 
 names = ('David', 'Deb', 'Sue', 'Martin', 'Denise', 'Vicki', 'Lorne',
          'Jeff', 'Michael', 'Norma', 'Nicola', 'Wendy', 'Lesley',
@@ -54,6 +55,7 @@ subjects = {
     'biol': 'Biology'
     }
 
+
 def random_name():
     return "%s %s" % (random.choice(names), random.choice(surnames))
 
@@ -66,7 +68,7 @@ def createGroups():
     for subj, subject in subjects.items():
         print >> f, '"%s","Department of %s","root",' % (subj, subject)
 
-    for year in range (1, years + 1):
+    for year in range(1, years + 1):
         print >> f, '"year%d","Year %d","root",' % (year, year)
         for subj, subject in subjects.items():
             print >> f, ('"%s%d","%s %d","%s year%d","Subject Group"' %
@@ -80,7 +82,7 @@ def createPupils(nr=nr_pupils):
     f = open("pupils.csv", "w")
 
     # title, groups
-
+    names = sets.Set()
     for i in range(nr):
         year = i / (nr/years) + 1
         groups = ["%s%d" % (subj, year) for subj in subjects.keys()]
@@ -88,9 +90,14 @@ def createPupils(nr=nr_pupils):
         groups.remove(subject1)
         subject2 = random.choice(groups)
 
-        print >> f, '"%s","%s"' % (random_name(),
-                                   " ".join(("year%d" % year,
-                                            subject1, subject2)))
+        for counter in range(20):
+            name = random_name()
+            if name not in names:
+                break
+
+        names.add(name)
+        print >> f, '"%s","%s"' % (name, " ".join(("year%d" % year,
+                                                   subject1, subject2)))
     f.close()
 
 
