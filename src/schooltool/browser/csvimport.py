@@ -373,14 +373,21 @@ class TimetableCSVImporter:
         if rows is None:
             return False
 
-        if len(rows[0]) != 2:
+        def head(seq):
+            # XXX Move this elsewhere.
+            for ind, s in enumerate(seq):
+                if not s:
+                    return seq[:ind]
+            return seq
+
+        if len(head(rows[0])) != 2:
             self.errors.generic.append(
                     _("The first row of the CSV file should"
                       " contain the period id and the schema"
                       " of the timetable."))
             return False
 
-        self.period_id, self.ttschema = rows[0]
+        self.period_id, self.ttschema = head(rows[0])
         if self.ttschema not in self.app.timetableSchemaService.keys():
             self.errors.generic.append(
                 _("The timetable schema %r does not exist." % self.ttschema))
@@ -389,24 +396,24 @@ class TimetableCSVImporter:
         for dry_run in [True, False]:
             state = 'day_ids'
             for row_no, row in enumerate(rows[2:]):
-                if row == [] or (len(row) == 1 and row[0] == ''):
+                if not row:
                     state = 'day_ids'
                     continue
                 elif state == 'day_ids':
-                    day_ids = row
+                    day_ids = head(row)
                     state = 'periods'
                     continue
                 elif state == 'periods':
-                    periods = row[1:]
+                    periods = head(row[1:])
                     self.validatePeriods(day_ids, periods)
                     state = 'content'
                     continue
 
                 location, records = row[0], self.parseRecordRow(row[1:])
-                if len(records) != len(periods):
+                if len(records) < len(periods):
                     self.errors.generic.append(
-                            _("The number of cells %r (line %d) does"
-                              " not match the number of periods %r."
+                            _("The number of cells %r (line %d) is less than"
+                              " the provided number of periods %r."
                               % (row[1:], row_no + 3, periods)))
                     continue
 

@@ -422,7 +422,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "Inside","Math1|Curtin","","Math1|Curtin"
                 """)
         ok = imp.importTimetable(csv)
-        self.assert_(ok)
+        self.assert_(ok, imp.errors)
         group = imp.findByTitle('groups', 'Math1 - Curtin')
         tt = group.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
@@ -434,19 +434,20 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp = self.createImporter()
 
         csv = dedent("""
-                "summer","three-day"
-                ""
-                "Monday","Tuesday"
-                "","A","B","C"
-                "Inside","Math1|Curtin","Math2|Guzman","Math3|Curtin"
-                "Outside","English1|Lorch","English2|Lorch","English3|Lorch"
+                "summer","three-day",,
+                ,
+                "Monday","Tuesday",,
+                "","A","B","C",,,
+                "Inside","Math1|Curtin","Math2|Guzman","Math3|Curtin",
+                "Outside","English1|Lorch","English2|Lorch","English3|Lorch",,
 
                 "Wednesday"
                 "","A","B","C"
                 "Outside","Math1|Curtin","Math3|Guzman","Math2|Curtin"
                 "Inside","English3|Lorch","English2|Lorch","English1|Lorch"
                 """)
-        imp.importTimetable(csv)
+        success = imp.importTimetable(csv)
+        self.assert_(success, imp.errors)
 
         # A little poking around.  We could be more comprehensive...
         group = imp.findByTitle('groups', 'English1 - Lorch')
@@ -537,8 +538,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp = self.createImporter()
         self.failIf(imp.importTimetable(csv))
         self.assertEquals(imp.errors.generic[0],
-                "The number of cells ['few', 'values'] (line 5)"
-                " does not match the number of periods ['A', 'B', 'C'].")
+                "The number of cells ['few', 'values'] (line 5) is less"
+                " than the provided number of periods ['A', 'B', 'C'].")
 
     def test_findByTitle(self):
         imp = self.createImporter()
