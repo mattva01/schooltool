@@ -339,6 +339,15 @@ class TestPersonAddView(unittest.TestCase):
         self.assertEquals(view.first_name_widget.value, u'First')
         self.assertEquals(view.last_name_widget.value, u'Last')
 
+    def test_processForm_missing_required_field(self):
+        view = self.createView()
+        request = RequestStub(args={'first_name': 'First',
+                                    'last_name': ''})
+        assert not view._processForm(request)
+        self.assertEquals(view.first_name_widget.value, u'First')
+        self.assertEquals(view.last_name_widget.value, u'')
+        assert view.last_name_widget.error
+
     def test_processForm_password_mismatch(self):
         view = self.createView()
         request = RequestStub(args={'first_name': 'First',

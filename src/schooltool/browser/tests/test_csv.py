@@ -77,7 +77,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                                     'resources.csv': '',
                                     'teachers.csv': '',
                                     'pupils.csv': '',
-                                    'charset': '',
+                                    'charset': 'UTF-8',
                                     'other_charset': 'no-such-charset'})
         content = self.view.do_POST(request)
         self.assert_('Unknown charset' in content)

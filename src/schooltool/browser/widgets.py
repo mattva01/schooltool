@@ -125,7 +125,7 @@ class IWidget(Interface):
     def require():
         """Require the value to be supplied.
 
-        If self.raw_value is None, sets self.error.
+        If self.raw_value is None or an empty string, sets self.error.
         """
 
 
@@ -375,7 +375,7 @@ class Widget:
             self.raw_value = self.formatter(self.value)
 
     def require(self):
-        if self.raw_value is None:
+        if not self.error and not self.raw_value: # XXX workaround
             self.error = _("This field is required.")
 
     def _css_class(self):
