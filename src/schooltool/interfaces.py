@@ -919,16 +919,16 @@ class IDateRange(Interface):
     last = Attribute("""The last day of the period covered.""")
 
     def __iter__():
-        """Iterates over all dates in the range from the first to the last."""
+        """Iterate over all dates in the range from the first to the last."""
 
     def __contains__(date):
-        """Returns True if the date is within the range, otherwise False.
+        """Return True if the date is within the range, otherwise False.
 
         Raises a TypeError if date is not a datetime.date.
         """
 
     def __len__():
-        """Returns the number of dates covered by the range."""
+        """Return the number of dates covered by the range."""
 
 
 class ISchooldayModel(IDateRange):
@@ -937,7 +937,7 @@ class ISchooldayModel(IDateRange):
     """
 
     def isSchoolday(date):
-        """Returns whether the date is a schoolday.
+        """Return whether the date is a schoolday.
 
         Raises a ValueError if the date is outside of the period covered.
         """
@@ -946,13 +946,13 @@ class ISchooldayModel(IDateRange):
 class ISchooldayModelWrite(Interface):
 
     def add(day):
-        """Marks the day as a schoolday.
+        """Mark the day as a schoolday.
 
         Raises a ValueError if the date is outside of the period covered.
         """
 
     def remove(day):
-        """Marks the day as a holiday.
+        """Mark the day as a holiday.
 
         Raises a ValueError if the date is outside of the period covered.
         """
@@ -991,8 +991,7 @@ class ISchooldayModelWrite(Interface):
 
 
 class ICalendar(Interface):
-    """A calendar, containing days which in turn contain events.
-    """
+    """A calendar, containing days which in turn contain events."""
 
     def __iter__():
         """Return an iterator over the events in this calendar."""
@@ -1028,7 +1027,7 @@ class ICalendarWrite(Interface):
 
 
 class IACLCalendar(ICalendarWrite, IACLOwner):
-    """A calendar that has an ACL"""
+    """A calendar that has an ACL."""
 
 
 class IRecurrenceRule(Interface):
