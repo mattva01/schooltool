@@ -208,37 +208,33 @@ def test_resourceContainerView():
     """
 
 
-def test_personView():
+def doctest_PersonView():
     r"""Test for PersonView
 
-    Let's create a new person:
+    Let's create a view for a person:
 
+        >>> from schoolbell.app.browser.app import PersonView
         >>> from schoolbell.app.app import Person
         >>> person = Person()
-        >>> person.__name__ = "Jonas"
-        >>> person.title = "Jonas Petraitis"
-
-    Let's create a person view
         >>> request = TestRequest()
-        >>> request.setPrincipal(person)
-        >>> from schoolbell.app.browser.app import PersonView
         >>> view = PersonView(person, request)
 
-    User can change his password
+    TODO: implement proper permission checking.
+    For now, all these methods just return True
+
+        >>> view.canEdit()
+        True
         >>> view.canChangePassword()
         True
-
-    View his callendars
         >>> view.canViewCalendar()
         True
-
-    Choose his callendars
-        >>> view.canViewCalendar()
+        >>> view.canChooseCalendars()
         True
+
     """
 
 
-def test_personPhotoView():
+def doctest_PersonPhotoView():
     r"""Test for PersonPhotoView
 
     We will need a person that has a photo:
