@@ -428,8 +428,8 @@ class View(Resource):
         request.setHeader('Content-Length', len(body))
         return ""
 
-    def getNotes(self, request):
-        user = request.authenticated_user
+    def getNotes(self):
+        user = self.request.authenticated_user
         # We should really just check to see if the object implements
         # IRelatable
         try:
