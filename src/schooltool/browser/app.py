@@ -60,6 +60,7 @@ from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, IResource, AuthenticationError
 from schooltool.interfaces import IApplicationObject
 from schooltool.membership import Membership
+from schooltool.guardian import Guardian
 from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.rest.model import delete_app_object
@@ -332,6 +333,14 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
 
         person = self._addUser(self.username_widget.value,
                                self.password_widget.value)
+
+        if request.args.get('ward',[None])[0]:
+            # When we create a person to be part of the guardian relationship
+            # we pass a 'ward' request varible to link it to.
+            wid = request.args.get('ward',[None])[0]
+            new_guardian = traverse(self.context, '/persons/' + wid)
+            Guardian(custodian=new_guardian, ward=person)
+
         if person is None:
             # Unlikely, but possible
             self.username_widget.error = _("User with this username "

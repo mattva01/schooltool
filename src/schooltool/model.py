@@ -47,7 +47,7 @@ from schooltool.infofacets import PersonInfoFacet, AddressFacet
 from schooltool.infofacets import DynamicFacet
 from schooltool.auth import ACL
 from schooltool.uris import URICurrentlyResides, URICurrentResidence
-from schooltool.uris import URIWard
+from schooltool.uris import URIWard, URICustodian
 from schooltool.uris import URINotandum
 
 __metaclass__ = type
@@ -223,8 +223,11 @@ class Person(ApplicationObjectMixin):
     def getResidences(self):
         return getRelatedObjects(self, URICurrentResidence)
 
-    def getFamily(self):
+    def getCustodians(self):
         return getRelatedObjects(self, URIWard)
+
+    def getWards(self):
+        return getRelatedObjects(self, URICustodian)
 
     def getDynamicFacets(self):
         service = getDynamicFacetSchemaService(self)

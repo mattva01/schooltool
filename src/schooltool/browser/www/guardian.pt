@@ -56,7 +56,7 @@
   <div class="actions">
     <a class="action"
        tal:attributes="href
-                    string:/groups/add.html?parentgroup=${context/__name__}"
+                    string:/persons/add.html?ward=${context/__name__}"
        i18n:translate="">Create a new person</a>
   </div>
 

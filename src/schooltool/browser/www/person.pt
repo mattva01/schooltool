@@ -97,14 +97,27 @@
     </div>
 
     <div class="family-relationships"
-      tal:define="family context/getFamily">
-      <tal:if condition="family">
+      tal:define="custodians context/getCustodians|nothing;
+      children context/getWards|nothing">
+      <tal:if condition="children">
+        <h3>Children</h3>
+        <ul>
+          <tal:loop repeat="child children">
+            <li>
+              <a href="" tal:attributes="href child/@@absolute_url"
+                tal:content="child/title">
+              </a>
+            </li>
+          </tal:loop>
+        </ul>
+      </tal:if>
+      <tal:if condition="custodians">
         <h3>Guardians</h3>
         <ul>
-          <tal:loop repeat="member family">
+          <tal:loop repeat="custodian custodians">
             <li>
-              <a href="" tal:attributes="href member/@@absolute_url"
-                tal:content="member/title">
+              <a href="" tal:attributes="href custodian/@@absolute_url"
+                tal:content="custodian/title">
               </a>
             </li>
           </tal:loop>
@@ -113,7 +126,7 @@
             tal:attributes="href string:${context/@@absolute_url}/guardian/?pid=${context/__name__}"
             i18n:translate="">Add or remove a guardian</a>
       </tal:if>
-      <tal:if condition="not:family">
+      <tal:if condition="not:custodians">
         <h3>This person has no guardian defined.</h3>
         <a class="action"
             tal:attributes="href string:${context/@@absolute_url}/guardian/?pid=${context/__name__}"
