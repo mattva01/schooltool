@@ -41,6 +41,7 @@ from schooltool.rest.applog import ApplicationLogView
 from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
+from schooltool.uris import listURIs
 
 __metaclass__ = type
 
@@ -65,6 +66,8 @@ class ApplicationView(TraversableView):
             return CSVExporter(self.context)
         elif name == 'applog':
             return ApplicationLogView(self.context)
+        elif name == 'uris':
+            return UriObjectListView(self.context)
         else:
             return TraversableView._traverse(self, name, request)
 
@@ -290,6 +293,16 @@ class AvailabilityQueryView(View):
                                 'title': resource.title,
                                 'slots': res_slots})
         return results
+
+
+class UriObjectListView(View):
+    """A list of registered URIObjects."""
+
+    template = Template("www/uris.pt", content_type="text/xml")
+    authorization = PublicAccess
+
+    def uriobjects(self):
+        return listURIs()
 
 
 def setUp():

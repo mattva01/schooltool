@@ -23,9 +23,10 @@ $Id$
 """
 
 import unittest
+from schooltool.common import dedent
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
-from schooltool.tests.utils import QuietLibxml2Mixin
+from schooltool.tests.utils import QuietLibxml2Mixin, NiceDiffsMixin
 from schooltool.rest.tests import RequestStub, UtilityStub
 from schooltool.rest.tests import XPathTestContext
 
@@ -118,6 +119,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
     def test__traverse(self):
         from schooltool.rest.app import ApplicationObjectContainerView
         from schooltool.rest.app import AvailabilityQueryView
+        from schooltool.rest.app import UriObjectListView
         from schooltool.rest.utility import UtilityServiceView
         from schooltool.rest.timetable import SchoolTimetableTraverseView
         from schooltool.rest.cal import AllCalendarsView
@@ -144,6 +146,10 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         view = self.view._traverse('csvexport.zip', request)
         self.assert_(view.__class__ is CSVExporter)
+        self.assert_(view.context is self.view.context)
+
+        view = self.view._traverse('uris', request)
+        self.assert_(view.__class__ is UriObjectListView)
         self.assert_(view.context is self.view.context)
 
 
@@ -406,11 +412,48 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
             self.assertEquals(result, error)
 
 
+class TestUriObjectListView(NiceDiffsMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.rest.app import UriObjectListView
+        from schooltool.app import Application
+        from schooltool.uris import URIObject, registerURI
+        URI1 = URIObject("http://example.com/foobar",
+                         name="da name",
+                         description="A long\ndescription")
+        URI2 = URIObject("http://example.com/foo",
+                         name="da name",
+                         description="Another long\ndescription")
+        registerURI(URI1)
+        registerURI(URI2)
+        self.app = Application()
+        self.view = UriObjectListView(self.app)
+
+    def test_render(self):
+        request = RequestStub("http://localhost/uris")
+        result = self.view.render(request)
+        self.assertEquals(result, dedent("""
+                <uriobjects>
+                  <uriobject uri="http://example.com/foobar">
+                    <name>da name</name>
+                    <description>A long
+                description</description>
+                  </uriobject>
+                  <uriobject uri="http://example.com/foo">
+                    <name>da name</name>
+                    <description>Another long
+                description</description>
+                  </uriobject>
+                </uriobjects>
+                """))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
     suite.addTest(unittest.makeSuite(TestAvailabilityQueryView))
+    suite.addTest(unittest.makeSuite(TestUriObjectListView))
     return suite
 
 if __name__ == '__main__':

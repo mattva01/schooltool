@@ -1,0 +1,7 @@
+<uriobjects xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <uriobject tal:repeat="uriobject view/uriobjects"
+             tal:attributes="uri uriobject/uri">
+    <name tal:content="uriobject/name"/>
+    <description tal:content="uriobject/description"/>
+  </uriobject>
+</uriobjects>
