@@ -1,0 +1,24 @@
+<schema>
+  <key name="empty"        />
+  <key name="var1"         />
+  <key name="getname"      />
+  <key name="getnametwice" />
+  <key name="getdollars"   />
+  <key name="getempty"     />
+  <key name="getwords"     />
+
+  <key name="int-var"     datatype="integer" />
+  <key name="float-var"   datatype="float"   />
+  <key name="neg-int"     datatype="integer" />
+  <key name="true-var-1"  datatype="boolean" />
+  <key name="true-var-2"  datatype="boolean" />
+  <key name="true-var-3"  datatype="boolean" />
+  <key name="false-var-1" datatype="boolean" />
+  <key name="false-var-2" datatype="boolean" />
+  <key name="false-var-3" datatype="boolean" />
+
+  <key name="list-1" />
+  <key name="list-2" />
+  <key name="list-3" />
+  <key name="list-4" />
+</schema>
