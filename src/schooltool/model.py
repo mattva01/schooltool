@@ -42,8 +42,7 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
         self.title = title
         self.__name__ = None
         self.__parent__ = None
-        self._valencies[(URIMembership, URIMember)] = \
-                               Valency(Membership, 'member', 'group')
+        self.valencies = Valency(Membership, 'member')
 
 
 class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
@@ -56,5 +55,4 @@ class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
         self.title = title
         self.__name__ = None
         self.__parent__ = None
-        self._valencies[(URIMembership, URIGroup)] = \
-                               Valency(Membership, 'group', 'member')
+        self.valencies = Valency(Membership, 'group')

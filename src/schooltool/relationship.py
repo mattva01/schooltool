@@ -36,8 +36,8 @@ from schooltool.interfaces import IRelationshipEvent
 from schooltool.interfaces import IRelationshipAddedEvent
 from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import IRelationshipValencies
-from schooltool.interfaces import ISpecificURI, IFaceted, IValency
-from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import ISpecificURI, IFaceted, ISchemaInvocation
+from schooltool.interfaces import IModuleSetup, IValency
 from schooltool.interfaces import IUnlinkHook, IMultiContainer
 from schooltool.component import inspectSpecificURI, registerRelationship
 from schooltool.component import strURI, getPath
@@ -160,16 +160,8 @@ class RelationshipSchema:
     classProvides(IRelationshipSchemaFactory)
     implements(IRelationshipSchema)
 
-    def __init__(self, *reltype_and_optional_title, **roles):
-        if len(reltype_and_optional_title) == 1:
-            self.type, = reltype_and_optional_title
-            self.title, doc = inspectSpecificURI(self.type)
-        elif len(reltype_and_optional_title) == 2:
-            self.type, self.title = reltype_and_optional_title
-        else:
-            raise TypeError("There can be either one or two positional"
-                            " arguments. (got %r)"
-                            % (reltype_and_optional_title,))
+    def __init__(self, reltype, **roles):
+        self.type = reltype
         if len(roles) != 2:
             raise TypeError("A relationship must have exactly two ends.")
 
@@ -358,13 +350,31 @@ class RelationshipValenciesMixin(RelatableMixin):
 
     implements(IRelationshipValencies)
 
+    valencies = ()
+
     def __init__(self):
         RelatableMixin.__init__(self)
         self._valencies = PersistentDict()
 
+    def _valency2invocation(self, valency):
+        schema = valency.schema
+        this = valency.keyword
+        keywords = list(schema.roles.keys())
+        if this not in keywords:
+            raise ValueError("Incorrect key %r in valency %r used." %
+                             (this, valency))
+        keywords.remove(this)
+        other = keywords[0]
+        return {(schema.type, schema.roles[this]):
+                SchemaInvocation(schema, this, other)}
+
     def getValencies(self):
         result = {}
-        result.update(self._valencies)
+        valencies = self.valencies
+        if type(valencies) != type(()):
+            valencies = (valencies,)
+        for valency in valencies:
+            result.update(self._valency2invocation(valency))
         if IFaceted.isImplementedBy(self):
             for facet in component.FacetManager(self).iterFacets():
                 if (IRelationshipValencies.isImplementedBy(facet)
@@ -373,15 +383,22 @@ class RelationshipValenciesMixin(RelatableMixin):
         return result
 
 
-class Valency:
+class SchemaInvocation:
 
-    implements(IValency)
+    implements(ISchemaInvocation)
 
     def __init__(self, schema, this, other):
         self.schema = schema
         self.this = this
         self.other = other
 
+class Valency:
+
+    implements(IValency)
+
+    def __init__(self, schema, keyword):
+        self.schema = schema
+        self.keyword = keyword
 
 def setUp():
     """Register the default relationship handler."""

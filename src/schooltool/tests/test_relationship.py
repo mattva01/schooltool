@@ -190,8 +190,6 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
                           URICommand, report=URIReport)
         self.assertRaises(TypeError, RelationshipSchema,
                           report=URIReport, superior=URISuperior)
-        self.assertRaises(TypeError, RelationshipSchema, "foo",
-                          report=URIReport, superior=URISuperior)
 
     def testBadCreateRelationship(self):
         from schooltool.relationship import RelationshipSchema
@@ -209,36 +207,31 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
         from schooltool import relationship
         relationship.setUp()
 
-        title1, doc = inspectSpecificURI(URICommand)
-        schema1 = RelationshipSchema(URICommand,
-                                    superior=URISuperior, report=URIReport)
-        title2 = "optional title"
-        schema2 = RelationshipSchema(URICommand, title2,
+        title, doc = inspectSpecificURI(URICommand)
+        schema = RelationshipSchema(URICommand,
                                     superior=URISuperior, report=URIReport)
 
-        for title, schema in (title1, schema1), (title2, schema2):
-            self.assert_(schema.type is URICommand)
-            self.assertEqual(schema.title, title)
+        self.assert_(schema.type is URICommand)
 
-            superior = Relatable(self.serviceManager)
-            report = Relatable(self.serviceManager)
-            superior.title = 'superior'
-            report.title = 'report'
-            links = schema(superior=superior, report=report)
+        superior = Relatable(self.serviceManager)
+        report = Relatable(self.serviceManager)
+        superior.title = 'superior'
+        report.title = 'report'
+        links = schema(superior=superior, report=report)
 
-            link_to_superior = links.pop('superior')
-            link_to_report = links.pop('report')
-            self.assertEqual(links, {})
+        link_to_superior = links.pop('superior')
+        link_to_report = links.pop('report')
+        self.assertEqual(links, {})
 
-            verifyObject(ILink, link_to_superior)
-            self.assert_(link_to_superior.role is URISuperior)
-            self.assert_(link_to_superior.__parent__ is report)
-            self.assert_(link_to_superior.traverse() is superior)
+        verifyObject(ILink, link_to_superior)
+        self.assert_(link_to_superior.role is URISuperior)
+        self.assert_(link_to_superior.__parent__ is report)
+        self.assert_(link_to_superior.traverse() is superior)
 
-            verifyObject(ILink, link_to_report)
-            self.assert_(link_to_report.role is URIReport)
-            self.assert_(link_to_report.__parent__ is superior)
-            self.assert_(link_to_report.traverse() is report)
+        verifyObject(ILink, link_to_report)
+        self.assert_(link_to_report.role is URIReport)
+        self.assert_(link_to_report.__parent__ is superior)
+        self.assert_(link_to_report.traverse() is report)
 
 
 class TestEvents(unittest.TestCase):
@@ -451,26 +444,33 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.relationship import Valency
-        from schooltool.interfaces import URIMembership, URIMember, IValency
+        from schooltool.relationship import SchemaInvocation, Valency
+        from schooltool.interfaces import URIMembership, URIMember, URIGroup
+        from schooltool.interfaces import ISchemaInvocation
 
         rvm = RelationshipValenciesMixin()
         self.assertEquals(len(rvm.getValencies()), 0)
 
-        schema = object()
-        rvm._valencies[URIMembership, URIMember] = Valency(schema, 'a', 'b')
+        class SchemaStub:
+            def __init__(self, type, **roles):
+                self.type = type
+                self.roles = roles
+
+        schema = SchemaStub(URIMembership, a=URIMember, b=URIGroup)
+        rvm.valencies = Valency(schema, 'a')
         result = rvm.getValencies()
         self.assertEquals(list(result), [(URIMembership, URIMember)])
-        valency = result[URIMembership, URIMember]
-        verifyObject(IValency, valency)
-        self.assertEquals(valency.this, 'a')
-        self.assertEquals(valency.other, 'b')
-        self.assertEquals(valency.schema, schema)
+        invocation = result[URIMembership, URIMember]
+        verifyObject(ISchemaInvocation, invocation)
+        self.assertEquals(invocation.this, 'a')
+        self.assertEquals(invocation.other, 'b')
+        self.assertEquals(invocation.schema, schema)
 
     def test_getValencies_faceted(self):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.interfaces import ISpecificURI
-        from schooltool.interfaces import URIMembership, URIMember, IFacet
+        from schooltool.interfaces import URIMembership, URIMember, URIGroup
+        from schooltool.interfaces import IFacet
         from schooltool.relationship import Valency
         from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
@@ -495,15 +495,20 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
             __parent__ = None
             __name__ = None
 
+        class SchemaStub:
+            def __init__(self, type, **roles):
+                self.type = type
+                self.roles = roles
+
         # A facet with valencies
         rvm = MyValent()
         facet = Facet()
-        schema = object()
-        facet._valencies[(URIA, URIB)] = Valency(schema, 'a', 'b')
+        schema = SchemaStub(URIA, c=URIB, d=URIC)
+        facet.valencies = Valency(schema, 'c')
         FacetManager(rvm).setFacet(facet, self)
 
-        schema1, this, other = object(), 'c', 'd'
-        rvm._valencies[URIMembership, URIMember] = Valency(schema1, 'c', 'd')
+        schema1 = SchemaStub(URIMembership, member=URIMember, group=URIGroup)
+        rvm.valencies = Valency(schema1, 'member')
 
         self.assertEqualsSorted(list(rvm.getValencies()),
                                 [(URIMembership, URIMember), (URIA, URIB)])
@@ -518,6 +523,22 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         facet.active = False
         self.assertEqualsSorted(list(rvm.getValencies()),
                                 [(URIMembership, URIMember)])
+
+    def test__valency2invocation(self):
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.interfaces import URIMembership, URIMember, URIGroup
+        from schooltool.relationship import Valency
+        class SchemaStub:
+            def __init__(self, type, **roles):
+                self.type = type
+                self.roles = roles
+        schema = SchemaStub(URIMembership, member=URIMember, group=URIGroup)
+        valency = Valency(schema, 'member')
+        r = RelationshipValenciesMixin()
+        self.assertEqual(r._valency2invocation(valency).keys(),
+                         [(URIMembership, URIMember)])
+        valency = Valency(schema, 'bad')
+        self.assertRaises(ValueError, r._valency2invocation, valency)
 
 
 def test_suite():

@@ -115,6 +115,7 @@ class DummyRelationshipSchema:
         self.title = title
         self.type = type
         self.links_to_return = links_to_return
+        self.roles = {}
 
     def __call__(self, **parties):
         self.parties = parties

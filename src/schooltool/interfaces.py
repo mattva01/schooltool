@@ -350,17 +350,20 @@ class IRelationshipValencies(Interface):
     object.
     """
 
+    valencies = Attribute("""A tuple of IValency objects""")
+
     def getValencies():
         """Return a mapping of valencies.
 
         The return value is a dictionary with tuples containing the
-        relationship type (as an ISpecificURI) and the role of this object
-        (also an ISpecificURI) as keys, and IValency objects as values.
+        relationship type (as an ISpecificURI) and the role of this
+        object (also an ISpecificURI) as keys, and ISchemaInvocation
+        objects as values.
         """
 
 
-class IValency(Interface):
-    """An object describing a single valency"""
+class ISchemaInvocation(Interface):
+    """An object describing how to call a relationship schema for a valency"""
 
     schema = Attribute("""A relationship schema (IRelationshipSchema)""")
 
@@ -370,6 +373,14 @@ class IValency(Interface):
     other = Attribute(
         """A keyword argument the schema takes for the other object""")
 
+class IValency(Interface):
+    """An object signifying that the owner can participate in a
+    certain relationship schema in a certain role.
+    """
+    schema = Attribute("""A relationship schema (IRelationshipSchema)""")
+
+    keyword = Attribute(
+        """A keyword argument the schema takes for this object""")
 
 class IRelationshipSchemaFactory(Interface):
 
@@ -388,7 +399,11 @@ class IRelationshipSchema(Interface):
     """Object that represents a relationship."""
 
     type = Attribute("An ISpecificURI for the type of this relationship.")
-    title = Attribute("The title of this relationship.")
+
+    roles = Attribute(
+        """A mapping of symbolic parameter names this schema expects
+        to respective URIs""")
+
 
     def __call__(**parties):
         """Relate the parties to the relationship.

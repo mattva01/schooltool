@@ -90,6 +90,7 @@ class FacetedRelationshipSchema:
         self._factories = facet_factories
         self.type = relationship_schema.type
         self.title = relationship_schema.title
+        self.roles = relationship_schema.roles
 
     def __call__(self, **parties):
         """See IRelationshipSchema"""
