@@ -457,7 +457,11 @@ class LogoutView(BrowserView):
 class ACLView(BrowserView):
     """A view for editing SchoolBell-relevant local grants"""
 
-    permissions = 'zope.View', 'zope.ManageContent', 'zope.ManageSite'
+    permissions = [
+        ('zope.View', _('View')),
+        ('zope.ManageContent', _('Manage')),
+        ('zope.ManageSite', _('Manage Site')),
+        ]
 
     def getPersons(self):
         app = getSchoolBellApplication(self.context)
@@ -499,7 +503,7 @@ class ACLView(BrowserView):
             auth = zapi.getUtility(IAuthentication)
             for info in self.getPersons() + self.getGroups():
                 principalid = info['id']
-                for perm in self.permissions:
+                for perm, permtitle in self.permissions:
                     if (principalid in self.request and
                         (perm in self.request[principalid] or
                          perm == self.request[principalid])):

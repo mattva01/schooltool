@@ -13,7 +13,7 @@
       <tr>
          <th i18n:translate="">User/Group</th>
          <th tal:repeat="perm view/permissions"
-             tal:content="perm" />
+             tal:content="python: perm[1]" />
       </tr>
       <tr tal:repeat="prin view/getGroups">
          <th tal:content="prin/title">Group foo</th>
@@ -21,8 +21,8 @@
             <input
                 type="checkbox"
                 tal:attributes="name prin/id;
-                                value perm;
-                                checked python: perm in prin['perms']" />
+                                value python: perm[0];
+                                checked python: perm[0] in prin['perms']" />
          </td>
       </tr>
       <tr tal:repeat="prin view/getPersons">
@@ -31,8 +31,8 @@
             <input
                 type="checkbox"
                 tal:attributes="name prin/id;
-                                value perm;
-                                checked python: perm in prin['perms']" />
+                                value python: perm[0];
+                                checked python: perm[0] in prin['perms']" />
          </td>
       </tr>
     </table>

@@ -954,8 +954,10 @@ def doctest_ACLView():
 
     Also it knows a list of permissions to display:
 
-        >>> view.permissions
-        ('zope.View', 'zope.ManageContent', 'zope.ManageSite')
+        >>> pprint(view.permissions)
+        [('zope.View', u'View'),
+         ('zope.ManageContent', u'Manage'),
+         ('zope.ManageSite', u'Manage Site')]
 
     The view displays a matrix with groups and persons as rows and
     permisssions as columns:
@@ -973,9 +975,9 @@ def doctest_ACLView():
             <table class="acl">
               <tr>
                  <th>User/Group</th>
-                 <th>zope.View</th>
-                 <th>zope.ManageContent</th>
-                 <th>zope.ManageSite</th>
+                 <th>View</th>
+                 <th>Manage</th>
+                 <th>Manage Site</th>
               </tr>
               <tr>
                  <th>office</th>
