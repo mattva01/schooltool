@@ -34,10 +34,15 @@ from schoolbell.relationship.interfaces import IRelationshipLinks
 from schoolbell.relationship.interfaces import IRelationshipLink
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipAddedEvent
+from schoolbell.relationship.interfaces import DuplicateRelationship
 
 
 def relate(rel_type, (a, role_of_a), (b, role_of_b)):
     """Establish a relationship between objects `a` and `b`."""
+    for link in IRelationshipLinks(a):
+        if (link.target is b and link.role == role_of_b
+            and link.rel_type == rel_type):
+            raise DuplicateRelationship
     zope.event.notify(BeforeRelationshipEvent(rel_type,
                                               (a, role_of_a),
                                               (b, role_of_b)))
@@ -49,7 +54,16 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b)):
 
 
 class RelationshipEvent(object):
-    """Base class for relationship events."""
+    """Base class for relationship events.
+
+        >>> event = RelationshipEvent('Membership',
+        ...                           ('a', 'Member'), ('b', 'Group'))
+        >>> event['Member']
+        'a'
+        >>> event['Group']
+        'b'
+
+    """
 
     def __init__(self, rel_type, (a, role_of_a), (b, role_of_b)):
         self.rel_type = rel_type
@@ -57,6 +71,14 @@ class RelationshipEvent(object):
         self.role1 = role_of_a
         self.participant2 = b
         self.role2 = role_of_b
+
+    def __getitem__(self, role):
+        """Return the participant with a given role."""
+        if role == self.role1:
+            return self.participant1
+        if role == self.role2:
+            return self.participant2
+        raise KeyError(role)
 
 
 class BeforeRelationshipEvent(RelationshipEvent):
@@ -121,7 +143,7 @@ class RelationshipSchema(object):
 
     instead of having to explicitly say
 
-        >>> relate(URIMembership, (a, URIMember), (b, URIGroup))
+        relate(URIMembership, (a, URIMember), (b, URIGroup))
 
     That's it.
 

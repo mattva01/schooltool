@@ -62,6 +62,9 @@ class IRelationshipEvent(Interface):
     participant2 = Attribute("""One of the participants.""")
     role2 = Attribute("""Role of `participant2`.""")
 
+    def __getitem__(role):
+        """Return the participant with a given role."""
+
 
 class IBeforeRelationshipEvent(IRelationshipEvent):
     """A relationship is about to be established.
@@ -72,4 +75,8 @@ class IBeforeRelationshipEvent(IRelationshipEvent):
 
 class IRelationshipAddedEvent(IRelationshipEvent):
     """A relationship has been established."""
+
+
+class DuplicateRelationship(Exception):
+    """Relationship already exists"""
 

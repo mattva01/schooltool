@@ -210,6 +210,8 @@ def doctest_relate():
         ...         self._name = name
         ...     def __repr__(self):
         ...         return self._name
+        ...     def __iter__(self):
+        ...         return iter([])
         ...     def add(self, link):
         ...         print 'Linking %s with %s (the %s in %s)' % (self,
         ...                 link.target, link.role, link.rel_type)

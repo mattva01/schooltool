@@ -62,6 +62,14 @@ shortcut:
     >>> lilfroggy = SomeObject('lilfroggy')
     >>> Membership(member=lilfroggy, group=frogs)
 
+If you try to create the same relationship between the same objects more
+than once, you will get a DuplicateRelationship exception.
+
+    >>> Membership(member=lilfroggy, group=frogs)
+    Traceback (most recent call last):
+      ...
+    DuplicateRelationship
+
 You can query relationships by calling the `getRelatedObjects` function.
 For example, you can get a list of all members of the `frogs` group like
 this:
@@ -84,23 +92,27 @@ Events
     >>> old_subscribers = zope.event.subscribers
     >>> zope.event.subscribers = []
 
-Before you establis a relationship, a BeforeRelationshipEvent is sent out.
+Before you establish a relationship, a BeforeRelationshipEvent is sent out.
 You can implement constraints by raising an exception in an event subscriber.
 
-    >>> from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
-    >>> def no_duplicate_relationships(event):
-    ...     if IBeforeRelationshipEvent.providedBy(event):
-    ...         # This check assumes you will not mix-and-match roles for
-    ...         # different relationship types
-    ...         if event.participant1 in getRelatedObjects(event.participant2,
-    ...                                                    event.role1):
-    ...             raise Exception("Relationship already exists")
-    >>> zope.event.subscribers.append(no_duplicate_relationships)
+    >>> from zope.interface import Interface, directlyProvides
+    >>> class IFrog(Interface):
+    ...     pass
 
-    >>> Membership(member=lilfroggy, group=frogs)
+    >>> from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
+    >>> def no_toads(event):
+    ...     if (IBeforeRelationshipEvent.providedBy(event) and
+    ...             event.rel_type == URIMembership and
+    ...             event[URIGroup] is frogs and
+    ...             not IFrog.providedBy(event[URIMember])):
+    ...         raise Exception("Only frogs can be members of the frogs group")
+    >>> zope.event.subscribers.append(no_toads)
+
+    >>> toady = SomeObject('toady')
+    >>> Membership(member=toady, group=frogs)
     Traceback (most recent call last):
       ...
-    Exception: Relationship already exists
+    Exception: Only frogs can be members of the frogs group
 
 When you establish a relationship, a RelationshipAddedEvent is sent out.
 
@@ -114,6 +126,7 @@ When you establish a relationship, a RelationshipAddedEvent is sent out.
     >>> zope.event.subscribers.append(my_subscriber)
 
     >>> kermit = SomeObject('kermit')
+    >>> directlyProvides(kermit, IFrog)
     >>> Membership(member=kermit, group=frogs)
     Relationship Membership added between kermit (Member) and frogs (Group)
 
