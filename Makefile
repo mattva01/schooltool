@@ -7,6 +7,13 @@
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
 TESTFLAGS=-w
+PO=$(shell find src/schooltool/translation/ -name '*.po')
+MO=$(PO:.po=.mo)
+
+
+%.mo : %.po
+	msgfmt -o $@ $<
+
 
 all: build
 
@@ -27,11 +34,7 @@ update-translations:
 	     msgfmt -o $${f%.po}.mo $$f;				   \
 	done
 
-build-translations:
-	for f in `find src/schooltool/translation/ -name '*.po'`; \
-	do								   \
-	     msgfmt -o $${f%.po}.mo $$f;				   \
-	done
+build-translations: $(MO)
 
 clean:
 	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
