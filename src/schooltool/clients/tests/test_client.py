@@ -23,6 +23,7 @@ Unit tests for schooltool.clients.client
 import unittest
 import socket
 import sys
+import base64
 from StringIO import StringIO
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
@@ -268,6 +269,25 @@ class TestClient(unittest.TestCase):
         self.client.do_accept("text/xml, text/plain,  text/*   ")
         self.assertEmitted('text/xml, text/plain, text/*')
 
+    def test_accept(self):
+        self.assertEqual(self.client.user, None)
+        self.assertEqual(self.client.password, "")
+        self.client.do_user(" ")
+        self.assertEqual(self.client.user, None)
+        self.assertEqual(self.client.password, "")
+        self.assertEmitted('User Anonymous')
+        self.emitted = ""
+        self.client.do_user("foo")
+        self.assertEqual(self.client.user, "foo")
+        self.assertEqual(self.client.password, "")
+        self.assertEmitted('User foo')
+
+        self.emitted = ""
+        self.client.do_user("foo bar")
+        self.assertEqual(self.client.user, "foo")
+        self.assertEqual(self.client.password, "bar")
+        self.assertEmitted('User foo')
+
     def test_get(self):
         self.client.do_get('   ')
         self.assertEmitted("Resource not provided")
@@ -501,6 +521,18 @@ class TestClient(unittest.TestCase):
         self.client.lastcmd = "quit"
         self.assert_(not self.client.emptyline())
         self.assertEmitted("")
+
+    def test_authentication(self):
+        self.client.user = "foo"
+        self.client.password = "bar"
+        hash = base64.encodestring("foo:bar").strip()
+        self.client._request("GET", "/")
+        self.assertEqual(self.client.lastconn.sent_headers['authorization'],
+                         "Basic " + hash)
+
+    def test_no_authentication(self):
+        self.client._request("GET", "/")
+        self.assert_('authorization' not in self.client.lastconn.sent_headers)
 
     def assertEmitted(self, what):
         self.assertEqual(self.emitted, what, "\n" + diff(what, self.emitted))

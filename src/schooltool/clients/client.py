@@ -27,6 +27,7 @@ import sys
 import getopt
 import socket
 import httplib
+import base64
 from cmd import Cmd
 from StringIO import StringIO
 from xml.sax import make_parser, SAXParseException
@@ -50,11 +51,13 @@ welcome to change it and/or distribute copies of it under certain conditions.
     ruler = ""
 
     server = 'localhost'
+    port = 8080
+    user = None
+    password = ""
     accept = 'text/xml'
     links = True
 
     http = httplib.HTTPConnection
-    port = 8080
 
     file_hook = file
     input_hook = raw_input
@@ -159,6 +162,29 @@ welcome to change it and/or distribute copies of it under certain conditions.
             self.accept = line
         self.emit(self.accept)
 
+    def do_user(self, line):
+        """Set the user and password to be used with the server.
+
+        user [username] [password]
+
+        Missing password means empty password, missing username means
+        no authentication.
+        """
+        args = line.split(None, 1)
+        if len(args) == 0:
+            self.user = None
+            self.password = ""
+        elif len(args) == 1:
+            self.user = args[0]
+            self.password = ""
+        elif len(args) == 2:
+            self.user = args[0]
+            self.password = args[1]
+        user = self.user
+        if user == None:
+            user = 'Anonymous'
+        self.emit("User %s" % user)
+
     def _request(self, method, resource, headers=(), body=None):
         """Perform an HTTP request.
 
@@ -170,9 +196,14 @@ welcome to change it and/or distribute copies of it under certain conditions.
         self.resources = []
         try:
             conn = self.http(self.server, self.port)
+            self.lastconn = conn # Test hook
             conn.putrequest(method, resource)
             for header, value in headers:
                 conn.putheader(header, value)
+            if self.user is not None:
+                data = "%s:%s" % (self.user, self.password)
+                basic = "Basic %s" % base64.encodestring(data).strip()
+                conn.putheader('Authorization', basic)
             conn.endheaders()
             if body is not None:
                 conn.send(body)
