@@ -42,6 +42,8 @@ from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.browser.cal import ComboCalendarView
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
+from schooltool.component import getTimePeriodService
+from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IPerson, IGroup, IResource, INote
 from schooltool.membership import Membership
 from schooltool.translation import ugettext as _
@@ -80,17 +82,25 @@ class PersonInfoMixin:
 class TimetabledViewMixin:
     """A helper for views for ITimetabled objects."""
 
-    def timetables(self):
+    def timetables(self, empty=False):
         """Return a sorted list of all composite timetables on self.context.
 
-        The list contains dicts with 'title' and 'url' in them.
+        If `empty` is True, also includes empty timetables in the output.
+
+        The list contains dicts with 'title', 'url' and 'empty' in them.
         """
+        periods = getTimePeriodService(self.context).keys()
+        periods.sort()
+        schemas = getTimetableSchemaService(self.context).keys()
+        schemas.sort()
         path = absoluteURL(self.request, self.context)
-        keys = list(self.context.listCompositeTimetables())
-        keys.sort()
+        nonempty = sets.Set(self.context.listCompositeTimetables())
         return [{'title': '%s, %s' % (period, schema),
-                 'url': '%s/timetables/%s/%s' % (path, period, schema)}
-                for period, schema in keys]
+                 'url': '%s/timetables/%s/%s' % (path, period, schema),
+                 'empty': (period, schema) not in nonempty}
+                for period in periods
+                  for schema in schemas
+                    if empty or (period, schema) in nonempty]
 
 
 class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,

@@ -25,10 +25,13 @@
           tal:content="group/title"/>
       </p>
     </div>
-    <div class="timetables" tal:condition="view/timetables">
+    <div class="timetables"
+         tal:define="timetables python:view.timetables(view.isManager())"
+         tal:condition="timetables">
       <h3 i18n:translate="">Timetables</h3>
-      <p tal:repeat="tt view/timetables">
-       <a tal:attributes="href tt/url" tal:content="tt/title"/>
+      <p tal:repeat="tt timetables">
+       <a tal:omit-tag="tt/empty"
+          tal:attributes="href tt/url" tal:content="tt/title"/>
        <tal:if tal:condition="view/isManager">
          (<a tal:attributes="href string:${tt/url}/setup.html"
              i18n:translate="">setup</a>)

@@ -54,6 +54,7 @@ from schooltool.common import parse_date
 from schooltool.component import getTimetableModel
 from schooltool.component import getPath, traverse
 from schooltool.component import getTimetableSchemaService
+from schooltool.component import getTimePeriodService
 from schooltool.membership import Membership, memberOf
 from schooltool.uris import URIGroup
 from schooltool.rest import absoluteURL
@@ -85,8 +86,36 @@ class TimetableTraverseView(View):
         else:
             tt = self.context.getCompositeTimetable(self.period, name)
             if tt is None:
-                raise KeyError(self.period, name)
+                periods = getTimePeriodService(self.context).keys()
+                schemas = getTimetableSchemaService(self.context).keys()
+                if self.period not in periods or name not in schemas:
+                    raise KeyError(self.period, name)
+                else:
+                    return NoTimetableView(self.context, (self.period, name))
             return TimetableView(tt, (self.period, name))
+
+
+class NoTimetableView(View):
+    """View for a nonexistent timetable.
+
+    Can be accessed at /persons/$id/timetables/$period/$schema.
+    """
+
+    __used_for__ = ITimetabled
+
+    authorization = PublicAccess
+
+    do_GET = staticmethod(notFoundPage)
+
+    def __init__(self, context, key):
+        View.__init__(self, context)
+        self.key = key
+
+    def _traverse(self, name, request):
+        if name == 'setup.html' and IPerson.providedBy(self.context):
+            return TimetableSetupView(self.context, self.key)
+        else:
+            raise KeyError(name)
 
 
 class TimetableView(View, AppObjectBreadcrumbsMixin):

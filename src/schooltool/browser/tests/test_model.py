@@ -48,6 +48,16 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
     def setUp(self):
         self.setUpSampleApp()
 
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import Timetable
+        self.app.timePeriodService['2003-fall'] = SchooldayModel(
+                datetime.date(2003, 9, 1), datetime.date(2003, 12, 31))
+        self.app.timePeriodService['2004-spring'] = SchooldayModel(
+                datetime.date(2004, 1, 1), datetime.date(2004, 5, 31))
+        self.app.timetableSchemaService['default'] = Timetable([])
+        self.app.timetableSchemaService['another'] = Timetable([])
+
+
     def test(self):
         from schooltool.browser.app import PersonView
         view = PersonView(self.person)
@@ -134,19 +144,44 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.assertEquals(view.timetables(), [])
 
         view.context.timetables['2004-spring', 'default'] = Timetable([])
-        view.context.timetables['2004-spring', 'another'] = Timetable([])
         view.context.timetables['2003-fall', 'another'] = Timetable([])
         self.root.timetables['2003-fall', 'default'] = Timetable([])
         pp = 'http://localhost:7001/persons/johndoe'
         self.assertEquals(view.timetables(),
                           [{'title': '2003-fall, another',
-                            'url': '%s/timetables/2003-fall/another' % pp},
+                            'url': '%s/timetables/2003-fall/another' % pp,
+                            'empty': False},
                            {'title': '2003-fall, default',
-                            'url': '%s/timetables/2003-fall/default' % pp},
-                           {'title': '2004-spring, another',
-                            'url': '%s/timetables/2004-spring/another' % pp},
+                            'url': '%s/timetables/2003-fall/default' % pp,
+                            'empty': False},
                            {'title': '2004-spring, default',
-                            'url': '%s/timetables/2004-spring/default' % pp}])
+                            'url': '%s/timetables/2004-spring/default' % pp,
+                            'empty': False}])
+
+    def test_timetables_empty(self):
+        from schooltool.browser.model import PersonView
+        from schooltool.timetable import Timetable
+        view = PersonView(self.person)
+        view.request = RequestStub()
+        self.assertEquals(view.timetables(), [])
+
+        view.context.timetables['2004-spring', 'default'] = Timetable([])
+        view.context.timetables['2003-fall', 'another'] = Timetable([])
+        self.root.timetables['2003-fall', 'default'] = Timetable([])
+        pp = 'http://localhost:7001/persons/johndoe'
+        self.assertEquals(view.timetables(True),
+                          [{'title': '2003-fall, another',
+                            'url': '%s/timetables/2003-fall/another' % pp,
+                            'empty': False},
+                           {'title': '2003-fall, default',
+                            'url': '%s/timetables/2003-fall/default' % pp,
+                            'empty': False},
+                           {'title': '2004-spring, another',
+                            'url': '%s/timetables/2004-spring/another' % pp,
+                            'empty': True},
+                           {'title': '2004-spring, default',
+                            'url': '%s/timetables/2004-spring/default' % pp,
+                            'empty': False}])
 
 
 class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
@@ -497,6 +532,15 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
         Membership(group=self.group, member=self.sub)
         Membership(group=self.group, member=self.per)
 
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import Timetable
+        app.timePeriodService['2003-fall'] = SchooldayModel(
+                datetime.date(2003, 9, 1), datetime.date(2003, 12, 31))
+        app.timePeriodService['2004-spring'] = SchooldayModel(
+                datetime.date(2004, 1, 1), datetime.date(2004, 5, 31))
+        app.timetableSchemaService['default'] = Timetable([])
+        app.timetableSchemaService['another'] = Timetable([])
+
     def test(self):
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
@@ -567,13 +611,17 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
         pp = 'http://localhost:7001/groups/new'
         self.assertEquals(view.timetables(),
                           [{'title': '2003-fall, another',
-                            'url': '%s/timetables/2003-fall/another' % pp},
+                            'url': '%s/timetables/2003-fall/another' % pp,
+                            'empty': False},
                            {'title': '2003-fall, default',
-                            'url': '%s/timetables/2003-fall/default' % pp},
+                            'url': '%s/timetables/2003-fall/default' % pp,
+                            'empty': False},
                            {'title': '2004-spring, another',
-                            'url': '%s/timetables/2004-spring/another' % pp},
+                            'url': '%s/timetables/2004-spring/another' % pp,
+                            'empty': False},
                            {'title': '2004-spring, default',
-                            'url': '%s/timetables/2004-spring/default' % pp}])
+                            'url': '%s/timetables/2004-spring/default' % pp,
+                            'empty': False}])
 
 
 class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):

@@ -85,6 +85,15 @@ class TestTimetableTraverseView(AppSetupMixin, TraversalTestMixin,
     def setUp(self):
         self.setUpSampleApp()
 
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import Timetable
+        self.app.timePeriodService['2003-fall'] = SchooldayModel(
+                datetime.date(2003, 9, 1), datetime.date(2003, 12, 31))
+        self.app.timePeriodService['2004-spring'] = SchooldayModel(
+                datetime.date(2004, 1, 1), datetime.date(2004, 5, 31))
+        self.app.timetableSchemaService['default'] = Timetable([])
+        self.app.timetableSchemaService['another'] = Timetable([])
+
     def createView(self):
         from schooltool.browser.timetable import TimetableTraverseView
         return TimetableTraverseView(self.person)
@@ -112,11 +121,11 @@ class TestTimetableTraverseView(AppSetupMixin, TraversalTestMixin,
     def test_traverse(self):
         from schooltool.browser.timetable import TimetableTraverseView
         from schooltool.browser.timetable import TimetableView
+        from schooltool.browser.timetable import NoTimetableView
         from schooltool.timetable import Timetable
         view = self.createView()
         t1 = self.person.timetables['2004-spring', 'default'] = Timetable([])
         t2 = self.person.timetables['2004-spring', 'another'] = Timetable([])
-        t3 = self.person.timetables['2003-fall', 'another'] = Timetable([])
         t4 = self.root.timetables['2003-fall', 'default'] = Timetable([])
         view2 = self.assertTraverses(view, '2004-spring',
                                      TimetableTraverseView, view.context)
@@ -125,7 +134,9 @@ class TestTimetableTraverseView(AppSetupMixin, TraversalTestMixin,
         self.assertRaises(KeyError, view2._traverse, 'missing', RequestStub())
         view2 = self.assertTraverses(view, '2003-fall',
                                      TimetableTraverseView, view.context)
-        v3 = self.assertTraversesEq(view2, 'another', TimetableView, t3)
+        v3 = self.assertTraversesEq(view2, 'another', NoTimetableView,
+                                    view.context)
+        self.assertEquals(v3.key, ('2003-fall', 'another'))
         v4 = self.assertTraversesEq(view2, 'default', TimetableView, t4)
         self.assertRaises(KeyError, view2._traverse, 'missing', RequestStub())
 
@@ -133,6 +144,38 @@ class TestTimetableTraverseView(AppSetupMixin, TraversalTestMixin,
         self.assertEquals(v2.key, ('2004-spring', 'another'))
         self.assertEquals(v3.key, ('2003-fall', 'another'))
         self.assertEquals(v4.key, ('2003-fall', 'default'))
+
+
+class TestNoTimetableView(TraversalTestMixin, unittest.TestCase):
+
+    def createView(self, context=None):
+        from schooltool.browser.timetable import NoTimetableView
+        from schooltool.model import Person
+        if context is None:
+            context = Person()
+        key = ('2004-sprint', 'default')
+        return NoTimetableView(context, key)
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+
+    def test_traverse(self):
+        from schooltool.browser.timetable import TimetableSetupView
+        view = self.createView()
+        view2 = self.assertTraverses(view, 'setup.html', TimetableSetupView,
+                                     view.context)
+        self.assertEquals(view2.key, view.key)
+        request = RequestStub()
+        self.assertRaises(KeyError, view._traverse, 'anything else', request)
+
+    def test_traverse_not_a_person(self):
+        from schooltool.browser.timetable import TimetableSetupView
+        view = self.createView(context=object())
+        request = RequestStub()
+        self.assertRaises(KeyError, view._traverse, 'setup.html', request)
 
 
 class TestTimetableView(AppSetupMixin, TraversalTestMixin, unittest.TestCase):
@@ -201,7 +244,7 @@ class TestTimetableView(AppSetupMixin, TraversalTestMixin, unittest.TestCase):
         from schooltool.browser.timetable import TimetableSetupView
         view = self.createView()
         view2 = self.assertTraverses(view, 'setup.html', TimetableSetupView,
-                                self.person)
+                                     self.person)
         self.assertEquals(view2.key, view.key)
         request = RequestStub()
         self.assertRaises(KeyError, view._traverse, 'anything else', request)
@@ -1388,6 +1431,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.browser.timetable'))
     suite.addTest(unittest.makeSuite(TestTimetableTraverseView))
+    suite.addTest(unittest.makeSuite(TestNoTimetableView))
     suite.addTest(unittest.makeSuite(TestTimetableView))
     suite.addTest(unittest.makeSuite(TestTimetableSetupView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
