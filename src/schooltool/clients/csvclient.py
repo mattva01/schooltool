@@ -117,6 +117,7 @@ import httplib
 from schooltool.translation import ugettext as _
 from schooltool.csvimport import CSVImporterBase, DataError
 from schooltool.common import from_locale
+from schooltool.common import to_unicode
 
 
 class HTTPClient:
@@ -148,7 +149,12 @@ class HTTPClient:
 
 
 class CSVImporterHTTP(CSVImporterBase):
-    """A CSV importer that works over HTTP."""
+    """A CSV importer that works over HTTP.
+
+    Prints random stuff, including unicode strings to sys.stdout.
+    In other words, make sure sys.stdout is wrapped with a StreamWrapper,
+    or you may get unicode errors.
+    """
 
     fopen = open
     verbose = True
@@ -305,11 +311,11 @@ class CSVImporterHTTP(CSVImporterBase):
             print
             print method, resource
             print
-            print body
+            print to_unicode(body)
             print '-' * 70
             print response.status, response.reason
             print
-            print response.read()
+            print to_unicode(response.read())
             sys.exit(1)
         return response
 

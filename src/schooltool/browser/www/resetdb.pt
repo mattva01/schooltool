@@ -14,7 +14,7 @@
     <p i18n:translate="">Warning: resetting the database will irreversibly
        destroy all data in this SchoolTool instance.  Are you sure you want to
        proceed?</p>
-    <p i18n:translate="">You will have to relogin with the default manager
+    <p i18n:translate="">You may have to relogin with the default manager
        account (password: 'schooltool').</p>
     <input id="confirm" type="submit" class="button" name="confirm"
            value="Confirm" i18n:attributes="value" />

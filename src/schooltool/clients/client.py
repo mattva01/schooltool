@@ -32,6 +32,7 @@ from cmd import Cmd
 from StringIO import StringIO
 from xml.sax import make_parser, SAXParseException
 from xml.sax.handler import ContentHandler, feature_namespaces
+from schooltool.common import to_unicode, StreamWrapper
 
 __metaclass__ = type
 
@@ -234,7 +235,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
                 self.emit("Resource is not text, use save <filename>"
                           " to save it")
                 return
-            self.emit(data)
+            self.emit(to_unicode(data))
             if self.links and ctype.startswith('text/xml'):
                 try:
                     parser = make_parser()
@@ -258,7 +259,8 @@ welcome to change it and/or distribute copies of it under certain conditions.
                             if first:
                                 self.emit("=" * 50)
                                 first = False
-                            self.emit("%-3d %s (%s)" % (nr + 1, title, href))
+                            self.emit("%-3d %s (%s)"
+                                      % (nr + 1, to_unicode(title), href))
                         except (IndexError, ValueError):
                             pass
                 except SAXParseException, e:
@@ -447,6 +449,8 @@ def http_join(path, rel):
 
 
 def main():
+    sys.stdout = StreamWrapper(sys.stdout)
+    sys.stderr = StreamWrapper(sys.stderr)
     c = Client()
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'h:p:s', ['host=', 'port=',
