@@ -22,11 +22,14 @@ Views for facets.
 $Id$
 """
 
+import PIL.Image
+from cStringIO import StringIO
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
-from schooltool.views import Template
+from schooltool.views import View, Template
+from schooltool.views import notFoundPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
 
@@ -40,6 +43,70 @@ class PersonInfoFacetView(FacetView):
 
     template = Template("www/infofacets.pt", content_type="text/xml")
     authorization = PublicAccess
+
+    def _traverse(self, name, request):
+        if name == 'photo':
+            return PhotoView(self.context)
+        else:
+            return FacetView._traverse(self, name, request)
+
+
+class PhotoView(View):
+
+    authorization = PublicAccess
+
+    canonical_photo_size = (240, 240)
+
+    def do_GET(self, request):
+        if self.context.photo is None:
+            return notFoundPage(request)
+        else:
+            request.setHeader('Content-Type', 'image/jpeg')
+            return self.context.photo
+
+    def do_PUT(self, request):
+        img = PIL.Image.open(request.content)
+        size = maxspect(img.size, self.canonical_photo_size)
+        img2 = img.resize(size, PIL.Image.ANTIALIAS)
+        buf = StringIO()
+        img2.save(buf, 'JPEG')
+        self.context.photo = buf.getvalue()
+        return "Photo added"
+
+    def do_DELETE(self, request):
+        self.context.photo = None
+        return "Photo removed"
+
+
+def maxspect(size, limits):
+    """Returns the maximized image size maintaining aspect.
+
+    If size == (orig_w, orig_h) and limits == (limit_w, limit_h), then
+    (w, h) = maxspect(size, limits) will have the following properties:
+
+      w <= limit_w and h <= limit_h
+      w == limit_w or h == limit_h
+      w / h = orig_w / orig_h (or, more correctly, w * orig_h = h * orig_w)
+
+    >>> maxspect((1, 2), (100, 100))
+    (50, 100)
+    >>> maxspect((2, 1), (100, 100))
+    (100, 50)
+    >>> maxspect((4, 3), (640, 480))
+    (640, 480)
+    >>> maxspect((1280, 1024), (640, 480))
+    (600, 480)
+    """
+    orig_w, orig_h = size
+    limit_w, limit_h = limits
+    assert orig_w > 0
+    assert orig_h > 0
+    assert limit_w > 0
+    assert limit_h > 0
+    if limit_w * orig_h <= limit_h * orig_w:
+        return (limit_w, limit_w * orig_h / orig_w)
+    else:
+        return (limit_h * orig_w / orig_h, limit_h)
 
 
 def setUp():
