@@ -279,6 +279,8 @@ class GroupView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'rollcall':
             return RollcallView(self.context)
+        if name == 'tree':
+            return TreeView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def listItems(self):
@@ -920,6 +922,19 @@ class AbsenceTrackerView(View):
 
 class AbsenceTrackerFacetView(AbsenceTrackerView, FacetView):
     pass
+
+
+class TreeView(View):
+
+    template = Template('www/tree.pt', content_type='text/xml')
+    node_template = Template('www/tree_node.pt', content_type='text/xml')
+
+    def generate(self, node, request):
+        children = [child for child in getRelatedObjects(node, URIMember)
+                    if IGroup.isImplementedBy(child)]
+        res = self.node_template(request, title=node.title, href=getPath(node),
+                                 children=children, generate=self.generate)
+        return res.strip().replace('\n', '\n  ')
 
 
 def setUp():

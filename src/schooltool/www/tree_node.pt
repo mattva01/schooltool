@@ -1,0 +1,7 @@
+<group xmlns:tal="http://xml.zope.org/namespaces/tal"
+       xlink:type="simple"
+       tal:attributes="xlink:title title;
+                       xlink:href href">
+  <group tal:repeat="child children"
+         tal:replace="structure python: generate(child, request)"/>
+</group>

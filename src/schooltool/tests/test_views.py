@@ -460,7 +460,7 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.views import RelationshipsView, FacetManagementView
-        from schooltool.views import RollcallView
+        from schooltool.views import RollcallView, TreeView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/group")
 
@@ -474,6 +474,10 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
 
         result = self.view._traverse("rollcall", request)
         self.assert_(isinstance(result, RollcallView))
+        self.assert_(result.context is self.group)
+
+        result = self.view._traverse("tree", request)
+        self.assert_(isinstance(result, TreeView))
         self.assert_(result.context is self.group)
 
         self.assertRaises(KeyError, self.view._traverse, "otherthings",
@@ -581,7 +585,6 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.assert_(IFacetManager.isImplementedBy(result.context))
 
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
-
 
 
 class TestAppView(RegistriesSetupMixin, unittest.TestCase):
@@ -1965,12 +1968,67 @@ class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
         self.person.reportAbsence(AbsenceComment(None, ""))
         self.view = AbsenceTrackerFacetView(self.facet)
 
-
     def testDelete(self):
         request = RequestStub("http://localhost/persons/a/facets/001",
                               method="DELETE")
         result = self.view.render(request)
         expected = "Facet removed"
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+
+class TestTreeView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.group = app['groups'].new("root", title="root group")
+        self.group1 = app['groups'].new("group1", title="group1")
+        self.group2 = app['groups'].new("group2", title="group2")
+        self.group1a = app['groups'].new("group1a", title="group1a")
+        self.group1b = app['groups'].new("group1b", title="group1b")
+        self.persona = app['persons'].new("a", title="a")
+
+        Membership(group=self.group, member=self.group1)
+        Membership(group=self.group, member=self.group2)
+        Membership(group=self.group1, member=self.group1a)
+        Membership(group=self.group1, member=self.group1b)
+        Membership(group=self.group2, member=self.persona)
+
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
+    def test(self):
+        from schooltool.views import TreeView
+        view = TreeView(self.group)
+        request = RequestStub("http://localhost/groups/root/tree")
+        result = view.render(request)
+        expected = dedent("""
+            <tree xmlns:xlink="http://www.w3.org/1999/xlink">
+              <group xlink:type="simple" xlink:href="/groups/root"
+                     xlink:title="root group">
+                <group xlink:type="simple" xlink:href="/groups/group2"
+                       xlink:title="group2">
+                </group>
+                <group xlink:type="simple" xlink:href="/groups/group1"
+                       xlink:title="group1">
+                  <group xlink:type="simple" xlink:href="/groups/group1a"
+                         xlink:title="group1a">
+                  </group>
+                  <group xlink:type="simple" xlink:href="/groups/group1b"
+                         xlink:title="group1b">
+                  </group>
+                </group>
+              </group>
+            </tree>
+        """)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
 
@@ -1999,6 +2057,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRollcallView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerView))
     suite.addTest(unittest.makeSuite(TestAbsenceTrackerFacetView))
+    suite.addTest(unittest.makeSuite(TestTreeView))
     return suite
 
 if __name__ == '__main__':
