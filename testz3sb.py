@@ -43,18 +43,23 @@ class AppController:
         raise "Got bored"
 
     def reset(self):
-        self.http("""POST /@@contents.html HTTP/1.1
+        r = self.http("""GET / HTTP/1.1
 Authorization: Basic mgr:mgrpw
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 42
-
-ids:list=frogpond&container_delete_button=""")
-        self.http("""POST /@@contents.html HTTP/1.1
+""")
+        if 'frogpond-2' in str(r):
+            self.http("""POST /@@contents.html HTTP/1.1
 Authorization: Basic mgr:mgrpw
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 44
 
 ids:list=frogpond-2&container_delete_button=""")
+        if 'frogpond' in str(r):
+            self.http("""POST /@@contents.html HTTP/1.1
+Authorization: Basic mgr:mgrpw
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 42
+
+ids:list=frogpond&container_delete_button=""")
 
     def stop(self):
         if self.start:

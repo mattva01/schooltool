@@ -45,6 +45,8 @@ def setup():
     print "Opening schoolbell-data.fs"
     db = zope.app.appsetup.database('schoolbell-data.fs') # XXX hardcoded
 
+    logging.basicConfig()
+
     task_dispatcher = ThreadedTaskDispatcher()
     task_dispatcher.setThreadCount(4)  # XXX hardcoded
 
@@ -68,15 +70,21 @@ def config():
 
 
 SITE_DEFINITION = """
-<configure xmlns="http://namespaces.zope.org/zope">
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
 
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
 
-  <include package="zope.app.authentication" />
-<!--  <include package="zope.app.presentation" />  need fssync -->
+  <!-- XXX strange: testz3sb.py passes without zope.app.authentication.  Why? -->
+<!--  <include package="zope.app.authentication" /> -->
   <include package="zope.app.session" />
   <include package="zope.app.server" />
+
+  <!-- Workaround to shut down a DeprecationWarning that gets because we do not
+       include zope.app.onlinehelp and the rotterdam skin tries to look for
+       this menu -->
+  <browser:menu id="help_actions" />
 
   <include package="schoolbell.app" />
 
