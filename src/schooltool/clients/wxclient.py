@@ -1713,9 +1713,9 @@ class AppLogFrame(wxDialog):
         top_bar.Add(filter_btn, 0, wxLEFT, 16)
         main_sizer.Add(top_bar, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 16)
 
-        # XXX Darn, wxHSCROLL / wxTE_DONTWRAP is only supported by Windows...
+        # wxHSCROLL is only supported on Windows.
         self.text_ctrl = wxTextCtrl(self, -1,
-                                    style=wxTE_MULTILINE | wxTE_READONLY)
+                            style=wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL)
         main_sizer.Add(self.text_ctrl, 1, wxEXPAND|wxALL, 12)
 
         static_line = wxStaticLine(self, -1)
