@@ -78,6 +78,12 @@ class ResponseWrapper(object):
         self.response = response
         self.body = body
 
+    def getStatus(self):
+        return self.response.status
+
+    def getBody(self):
+        return self.body
+
     def __str__(self):
         version = {9: 'HTTP/0.9', 10: 'HTTP/1.0', 11: 'HTTP/1.1'}[self.response.version]
         status = '%s %s %s' % (version, self.response.status, self.response.reason)
