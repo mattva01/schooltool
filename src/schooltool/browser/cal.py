@@ -465,18 +465,15 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
     def getMergedCalendars(self):
         """List objects who's calendars the user subscribes to."""
-
         if self.request.authenticated_user:
             return [group for group in
                     getRelatedObjects(self.request.authenticated_user,
                             URICalendarProvider)]
-
         return []
 
     def checkedOverlay(self, calendar):
         if calendar in self.getMergedCalendars():
             return "checked"
-
         return None
 
     def getPortletCalendars(self):
@@ -487,14 +484,10 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         information page.
         """
         calendars = []
-        if self.request.authenticated_user:
-            for group in getRelatedObjects(self.request.authenticated_user, 
-                                            URIGroup):
-                calendars.append(group)
-            for cal in getRelatedObjects(self.request.authenticated_user, 
-                                            URICalendarListed):
-                calendars.append(cal)
-
+        user = self.request.authenticated_user
+        if user:
+            calendars.extend(getRelatedObjects(user, URIGroup))
+            calendars.extend(getRelatedObjects(user, URICalendarListed))
         return calendars
 
     def renderRow(self, week, month):
@@ -532,7 +525,6 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
     def ellipsizeTitle(self, str):
         """For labels with limited space replace the tail with '...'"""
-
         if len(str) < 17:
              return str
         else:
@@ -545,11 +537,11 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
                 for year in range(this_year - 2, this_year + 3)]
 
     def getJumpToMonths(self):
+        """Return a list of months for the drop down in the jump portlet."""
         months = []
-        for k,v in self.month_names.items():
-            months.append({'label' : v,
-                           'value' : k})
-
+        for k, v in self.month_names.items():
+            months.append({'label': v,
+                           'value': k})
         return months
 
     def canChooseCalendars(self):
@@ -562,6 +554,8 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     def _subscribeToCalendars(self, calendars):
         """Link user to selected calendar."""
 
+##      raise NotImplementedError('XXX this function is not unit tested')
+
         # Unlink old calendar subscriptions.
         for link in \
                 self.request.authenticated_user.listLinks(URICalendarProvider):
@@ -569,20 +563,20 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
         for calendar in calendars:
             relate(URICalendarSubscription,
-                   (self.request.authenticated_user , URICalendarSubscriber),
-                   (traverse(self.context,calendar), URICalendarProvider))
+                   (self.request.authenticated_user, URICalendarSubscriber),
+                   (traverse(self.context, calendar), URICalendarProvider))
 
     def eventColors(self, event):
-        """Figure out what color to display events from this calendar in.
+        """Figure out in what color to display events from this calendar.
 
-        Fallback to the standard blue.
+        Fall back to the standard blue.
         """
         if IInheritedCalendarEvent.providedBy(event):
+##          raise NotImplementedError('XXX this code branch is not unit tested')
             path = getPath(event.calendar.__parent__)
             user = self.request.authenticated_user
-            if user:
-                if path in user.cal_colors.keys():
-                    return user.cal_colors[path]
+            if user and path in user.cal_colors:
+                return user.cal_colors[path]
 
         return ('#9db8d2', '#7590ae')
 
@@ -591,6 +585,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
         This is only used in the portlet-calendar-overlay macro.
         """
+##      raise NotImplementedError('XXX this function is not unit tested')
         path = getPath(owner)
         user = self.request.authenticated_user
         if user:
