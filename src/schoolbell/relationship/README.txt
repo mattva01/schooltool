@@ -43,7 +43,8 @@ Dependencies
 - zope.schema
 - zope.event
 - ZODB (persistent and persistent.list)
-- zope.app (only if you want to use the provided adapter for IAnnotatable)
+- zope.app (only if you want to use the provided adapter for IAnnotatable,
+  and the provided event handlers for object change events)
 
 
 Details
@@ -330,7 +331,42 @@ Note that if you use symmetric relationships, you cannot use `__getitem__`
 on IBeforeRelationshipEvents.
 
 
-Cleaning up:
+Caveats
+-------
+
+- When you delete objects, you should remove all relationships for those
+  objects.  If you use Zope 3 objects events, you can register the
+  `unrelateOnDeletion` event handler from schoolbell.relationship.objectevents.
+  configure.zcml of schoolbell.relationship does that.
+
+- When you copy objects (e.g. using Zope's IObjectCopier), you should take
+  care to ensure that you do not duplicate just one half of relationship
+  links.  It is tricky.  locationCopy from zope.app.location.pickling
+  performs deep copies of all objects that are located within the object you
+  are copying.  It works if all relationships are within this subtree (or
+  outside it).  You will get problems if you have a relationship between
+  an object that is copied and another object that is not copied.
+
+  You can register the `unrelateOnCopy` event handler from
+  schoolbell.relationship.objectevents to solve *part* of the problem
+  (configure.zcml of schoolbell.relationship does that).  This event handler
+  removes all relationships from the copy of the object that you are copying.
+  It does not traverse the whole deply-copied subtree, therefore if you
+  have subobjects that participate in relationships with objects outside of
+  the subtree, you will have problems.
+
+  XXX There is also a bug here.  If x is related to x.y where x.y is a
+  subobject of x, when you copy x to x', all links from x' will be removed,
+  but the copied link on x'.y' will remain.
+
+  An alternative solution is to disallow copying of objects that may have
+  subobjects related with other objects that are not located within the
+  original object.  To do so, declare and IObjectCopier adapter for the object
+  and make the `copyable` method return False.
+
+
+Cleaning up
+-----------
 
     >>> zope.event.subscribers = old_subscribers
     >>> setup.placelessTearDown()
