@@ -16,7 +16,7 @@
 This module provides a DocTestSuite contructor for converting doctest
 tests to unit tests.
 
-$Id: doctestunit.py,v 1.9 2004/03/15 20:41:39 jim Exp $
+$Id: doctestunit.py,v 1.10 2004/03/30 21:40:02 jim Exp $
 """
 
 from StringIO import StringIO
@@ -231,7 +231,7 @@ def testsource(module, name):
         ])
     return testsrc
 
-def debug_src(src, pm=False):
+def debug_src(src, pm=False, globs=None):
     """Debug a single doctest test doc string
 
     The string is provided directly
@@ -242,7 +242,7 @@ def debug_src(src, pm=False):
         "%s%s" % (source, _expect(expect))
         for (source, expect, lineno) in examples
         ])
-    debug_script(src, pm)
+    debug_script(src, pm, globs)
 
 def debug_script(src, pm=False, globs=None):
     "Debug a test script"
@@ -277,4 +277,4 @@ def debug(module, name, pm=False):
     """
     module = _normalizeModule(module)
     testsrc = testsource(module, name)
-    debug_src(testsource, pm, module.__dict__)
+    debug_script(testsrc, pm, module.__dict__)

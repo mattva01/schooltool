@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: interfaces.py,v 1.23 2004/03/15 20:41:55 jim Exp $
+$Id: interfaces.py,v 1.25 2004/03/30 22:01:34 jim Exp $
 """
 
 from zope.interface import Interface
@@ -271,101 +271,6 @@ class IInterface(ISpecification, IElement):
         """
 
     __module__ = Attribute("""The name of the module defining the interface""")
-
-class ITypeRegistry(Interface):
-    """Type-specific registry
-
-    This registry stores objects registered for objects that implement
-    a required interface.
-    """
-
-    def register(interface, object):
-        """Register an object for an interface.
-
-        The interface argument may be None.  This effectively defines a
-        default object.
-        """
-
-    def unregister(interface):
-        """Remove the registration for the given interface
-
-        If nothing is registered for the interface, the call is ignored.
-        """
-
-    def get(interface, default=None):
-        """Return the object registered for the given interface.
-        """
-
-    def getAll(implements):
-        """Get registered objects
-
-        Return a sequence of all objects registered with interfaces
-        that are extended by or equal to one or more interfaces in the
-        given interface specification.
-
-        Objects that match more specific interfaces of the specification
-        come before those that match less specific interfaces, as per
-        the interface resolution order described in the flattened() operation
-        of IInterfaceSpecification.
-        """
-
-    def getAllForObject(object):
-        """Get all registered objects for types that object implements.
-        """
-
-    def getTypesMatching(interface):
-        """Get all registered interfaces matching the given interface
-
-        Returns a sequence of all interfaces registered that extend
-        or are equal to the given interface.
-        """
-
-    def __len__():
-        """Returns the number of distinct interfaces registered.
-        """
-
-class IImplementorRegistry(Interface):
-    """Implementor registry
-
-    This registry stores objects registered to implement (or help
-    implement) an interface. For example, this registry could be used
-    to register utilities.
-
-    The objects registered here don't need to be implementors. (They
-    might just be useful to implementation.) What's important is that
-    they are registered according to a provided interface.
-
-    """
-
-    def register(provide, object):
-        """Register an object for a required and provided interface.
-
-        There are no restrictions on what the object might be.
-        Any restrictions (e.g. callability, or interface
-        implementation) must be enforced by higher-level code.
-
-        The require argument may be None.
-
-        """
-
-    def get(provides, default=None):
-        """Return a registered object
-
-        The registered object is one that was registered that provides an
-        interface that extends or equals the 'provides' argument.
-
-        """
-
-    def getRegisteredMatching():
-        """Return a sequence of two-tuples, each tuple consisting of:
-
-        - interface
-
-        - registered object
-
-        One item is returned for each registration.
-
-        """
 
 class IDeclaration(ISpecification):
     """Interface declaration
@@ -712,6 +617,12 @@ class IAdapterRegistry(Interface):
 
         A value is looked up based on a *sequence* of required
         specifications, a provided interface, and a name.
+        """
+
+    def lookupAll(required, provided):
+        """Find all adapters from the required to the provided interfaces
+
+        An iterable object is returned that provides name-value two-tuples.
         """
 
     def names(required, provided):

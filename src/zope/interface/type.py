@@ -11,19 +11,68 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Adapter-style interface registry
+"""This module is DEPRECATED. Don't use it!
 
-See Adapter class.
-
-$Id: type.py,v 1.12 2004/03/05 22:09:29 jim Exp $
+$Id: type.py,v 1.13 2004/03/30 22:01:34 jim Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
 import zope.interface
 import types
-from zope.interface import providedBy, implements
+from zope.interface import providedBy, implements, Interface
 from zope.interface.interfaces import IInterface
-from zope.interface.interfaces import ITypeRegistry
+
+class ITypeRegistry(Interface):
+    """Type-specific registry
+
+    This registry stores objects registered for objects that implement
+    a required interface.
+    """
+
+    def register(interface, object):
+        """Register an object for an interface.
+
+        The interface argument may be None.  This effectively defines a
+        default object.
+        """
+
+    def unregister(interface):
+        """Remove the registration for the given interface
+
+        If nothing is registered for the interface, the call is ignored.
+        """
+
+    def get(interface, default=None):
+        """Return the object registered for the given interface.
+        """
+
+    def getAll(implements):
+        """Get registered objects
+
+        Return a sequence of all objects registered with interfaces
+        that are extended by or equal to one or more interfaces in the
+        given interface specification.
+
+        Objects that match more specific interfaces of the specification
+        come before those that match less specific interfaces, as per
+        the interface resolution order described in the flattened() operation
+        of IInterfaceSpecification.
+        """
+
+    def getAllForObject(object):
+        """Get all registered objects for types that object implements.
+        """
+
+    def getTypesMatching(interface):
+        """Get all registered interfaces matching the given interface
+
+        Returns a sequence of all interfaces registered that extend
+        or are equal to the given interface.
+        """
+
+    def __len__():
+        """Returns the number of distinct interfaces registered.
+        """
 
 class TypeRegistry:
 

@@ -118,7 +118,7 @@ class ZDOptions:
         add(name, confname)
             Configuration option 'confname' maps to attribute 'name'
         add(name, None, short, long)
-            Command line option '-short' or '--long' maps to 'name' 
+            Command line option '-short' or '--long' maps to 'name'
         add(None, None, short, long, handler)
             Command line option calls handler
         add(name, None, short, long, handler)
@@ -185,7 +185,8 @@ class ZDOptions:
             if required:
                 self.required_map[name] = required
 
-    def realize(self, args=None, progname=None, doc=None):
+    def realize(self, args=None, progname=None, doc=None,
+                raise_getopt_errs=True):
         """Realize a configuration.
 
         Optional arguments:
@@ -209,12 +210,16 @@ class ZDOptions:
         self.progname = progname
         self.doc = doc
 
+        self.options = []
+        self.args = []
+
         # Call getopt
         try:
             self.options, self.args = getopt.getopt(
                 args, "".join(self.short_options), self.long_options)
         except getopt.error, msg:
-            self.usage(msg)
+            if raise_getopt_errs:
+                self.usage(msg)
 
         # Check for positional args
         if self.args and not self.positional_args_allowed:
@@ -296,7 +301,7 @@ class ZDOptions:
         # This allows a default configuration file to be used without
         # affecting the -C command line option; setting self.configfile
         # before calling realize() makes the -C option unusable since
-        # the realize() thinks it has already seen the option.  If no
+        # then realize() thinks it has already seen the option.  If no
         # -C is used, realize() will call this method to try to locate
         # a configuration file.
         return None
@@ -314,10 +319,6 @@ class ZDOptions:
             ZConfig.loadConfig(self.schema, self.configfile,
                                self.zconfig_options)
 
-    # XXX The next two methods aren't any good for Zope 3 (there's no
-    # zLOG package); these need to be re-done to work in the Zope 3
-    # world.
-
     def load_logconf(self, sectname="eventlog"):
         parts = sectname.split(".")
         obj = self.configroot
@@ -327,17 +328,7 @@ class ZDOptions:
             obj = getattr(obj, p)
         self.config_logger = obj
         if obj is not None:
-            import zLOG
-            zLOG.set_initializer(self.log_initializer)
-            zLOG.initialize()
-
-    def log_initializer(self):
-        from zLOG import EventLogger
-        logger = self.config_logger()
-        for handler in logger.handlers:
-            if hasattr(handler, "reopen"):
-                handler.reopen()
-        EventLogger.event_logger.logger = logger
+            obj.startup()
 
 
 class RunnerOptions(ZDOptions):
@@ -356,6 +347,8 @@ class RunnerOptions(ZDOptions):
         self.add("exitcodes", "runner.exit_codes", "x:", "exit-codes=",
                  list_of_ints, default=[0, 2])
         self.add("user", "runner.user", "u:", "user=")
+        self.add("umask", "runner.umask", "m:", "umask=", octal_type,
+                 default=022)
         self.add("directory", "runner.directory", "z:", "directory=",
                  ZConfig.datatypes.existing_directory)
         self.add("hang_around", "runner.hang_around", default=0)
@@ -391,6 +384,9 @@ def list_of_ints(arg):
         return []
     else:
         return map(int, arg.split(","))
+
+def octal_type(arg):
+    return int(arg, 8)
 
 
 def _test():

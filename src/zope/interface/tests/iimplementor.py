@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: iimplementor.py,v 1.3 2003/04/03 22:05:36 fdrake Exp $
+$Id: iimplementor.py,v 1.4 2004/03/30 22:01:34 jim Exp $
 """
 
 import unittest
@@ -39,8 +39,7 @@ class TestIImplementorRegistry(unittest.TestCase):
 
     def testImplementsIImplementorRegistry(self):
         from zope.interface.verify import verifyObject
-        from zope.interface.interfaces \
-             import IImplementorRegistry
+        from zope.interface.implementor import IImplementorRegistry
 
         registry = self._new()
         verifyObject(IImplementorRegistry, registry)

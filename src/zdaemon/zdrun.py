@@ -24,6 +24,7 @@ Options:
 -h/--help -- print this usage message and exit
 -s/--socket-name SOCKET -- Unix socket name for client (default "zdsock")
 -u/--user USER -- run as this user (or numeric uid)
+-m/--umask UMASK -- use this umask for daemon subprocess (default is 022)
 -x/--exit-codes LIST -- list of fatal exit codes (default "0,2")
 -z/--directory DIRECTORY -- directory to chdir to when using -d (default off)
 program [program-arguments] -- an arbitrary application to run
@@ -70,7 +71,6 @@ import errno
 import socket
 import select
 import signal
-import logging
 from stat import ST_MODE
 
 if __name__ == "__main__":
@@ -81,16 +81,22 @@ if __name__ == "__main__":
     if basename(scriptdir).lower() == "zdaemon":
         sys.path.append(dirname(scriptdir))
 
-import ZConfig.datatypes
 from zdaemon.zdoptions import RunnerOptions
 
-log = logging.getLogger("ZD:%s" % os.getpid())
 
 class ZDRunOptions(RunnerOptions):
 
     positional_args_allowed = 1
-    logsectionname = "eventlog"
+    logsectionname = "runner.eventlog"
     program = None
+
+    def __init__(self):
+        RunnerOptions.__init__(self)
+        self.add("schemafile", short="S:", default="schema.xml",
+                 handler=self.set_schemafile)
+
+    def set_schemafile(self, file):
+        self.schemafile = file
 
     def realize(self, *args, **kwds):
         RunnerOptions.realize(self, *args, **kwds)
@@ -101,6 +107,19 @@ class ZDRunOptions(RunnerOptions):
         if self.sockname:
             # Convert socket name to absolute path
             self.sockname = os.path.abspath(self.sockname)
+        if self.config_logger is None:
+            import zdaemon.logger
+            import zLOG
+            zLOG.initialize()
+            self.logger = zdaemon.logger.Logger()
+        else:
+            self.logger = self.config_logger()
+
+    def load_logconf(self, sectname):
+        """Load alternate eventlog if the specified section isn't present."""
+        RunnerOptions.load_logconf(self, sectname)
+        if self.config_logger is None and sectname != "eventlog":
+            RunnerOptions.load_logconf(self, "eventlog")
 
 
 class Subprocess:
@@ -165,7 +184,7 @@ class Subprocess:
         if pid != 0:
             # Parent
             self.pid = pid
-            log.info("spawned process pid=%d", pid)
+            self.options.logger.info("spawned process pid=%d" % pid)
             return pid
         else:
             # Child
@@ -214,6 +233,7 @@ class Daemonizer:
     def main(self, args=None):
         self.options = ZDRunOptions()
         self.options.realize(args)
+        self.logger = self.options.logger
         self.set_uid()
         self.run()
 
@@ -223,8 +243,8 @@ class Daemonizer:
         uid = os.geteuid()
         if uid != 0 and uid != self.options.uid:
             self.options.usage("only root can use -u USER to change users")
-        os.setuid(self.options.uid)
         os.setgid(self.options.gid)
+        os.setuid(self.options.uid)
 
     def run(self):
         self.proc = Subprocess(self.options)
@@ -261,7 +281,7 @@ class Daemonizer:
                     # Stale socket -- delete, sleep, and try again.
                     msg = "Unlinking stale socket %s; sleep 1" % sockname
                     sys.stderr.write(msg + "\n")
-                    log.warn(msg)
+                    self.logger.warn(msg)
                     self.unlink_quietly(sockname)
                     sock.close()
                     time.sleep(1)
@@ -293,7 +313,7 @@ class Daemonizer:
             msg = ("Another zrdun is already up using socket %r:\n%s" %
                    (self.options.sockname, data))
             sys.stderr.write(msg + "\n")
-            log.critical(msg)
+            self.logger.critical(msg)
             sys.exit(1)
 
     def setsignals(self):
@@ -303,7 +323,7 @@ class Daemonizer:
         signal.signal(signal.SIGCHLD, self.sigchild)
 
     def sigexit(self, sig, frame):
-        log.critical("daemon manager killed by %s", signame(sig))
+        self.logger.critical("daemon manager killed by %s" % signame(sig))
         sys.exit(1)
 
     waitstatus = None
@@ -317,21 +337,44 @@ class Daemonizer:
             self.waitstatus = pid, sts
 
     def daemonize(self):
+
+        # To daemonize, we need to become the leader of our own session
+        # (process) group.  If we do not, signals sent to our
+        # parent process will also be sent to us.   This might be bad because
+        # signals such as SIGINT can be sent to our parent process during
+        # normal (uninteresting) operations such as when we press Ctrl-C in the
+        # parent terminal window to escape from a logtail command.
+        # To disassociate ourselves from our parent's session group we use
+        # os.setsid.  It means "set session id", which has the effect of
+        # disassociating a process from is current session and process group
+        # and setting itself up as a new session leader.
+        #
+        # Unfortunately we cannot call setsid if we're already a session group
+        # leader, so we use "fork" to make a copy of ourselves that is
+        # guaranteed to not be a session group leader.
+        #
+        # We also change directories, set stderr and stdout to null, and
+        # change our umask.
+        #
+        # This explanation was (gratefully) garnered from
+        # http://www.hawklord.uklinux.net/system/daemons/d3.htm
+
         pid = os.fork()
         if pid != 0:
             # Parent
-            log.debug("daemon manager forked; parent exiting")
+            self.logger.debug("daemon manager forked; parent exiting")
             os._exit(0)
         # Child
-        log.info("daemonizing the process")
+        self.logger.info("daemonizing the process")
         if self.options.directory:
             try:
                 os.chdir(self.options.directory)
             except os.error, err:
-                log.warn("can't chdir into %r: %s",
-                         self.options.directory, err)
+                self.logger.warn("can't chdir into %r: %s"
+                                 % (self.options.directory, err))
             else:
-                log.info("set current directory: %r", self.options.directory)
+                self.logger.info("set current directory: %r"
+                                 % self.options.directory)
         os.close(0)
         sys.stdin = sys.__stdin__ = open("/dev/null")
         os.close(1)
@@ -339,7 +382,7 @@ class Daemonizer:
         os.close(2)
         sys.stderr = sys.__stderr__ = open("/dev/null", "w")
         os.setsid()
-        os.umask(022) # Create no group/other writable files/directories
+        os.umask(self.options.umask)
         # XXX Stevens, in his Advanced Unix book, section 13.3 (page
         # 417) recommends calling umask(0) and closing unused
         # file descriptors.  In his Network Programming book, he
@@ -352,7 +395,7 @@ class Daemonizer:
     proc = None # Subprocess instance
 
     def runforever(self):
-        log.info("daemon manager started")
+        self.logger.info("daemon manager started")
         min_mood = not self.options.hang_around
         while self.mood >= min_mood or self.proc.pid:
             if self.mood > 0 and not self.proc.pid and not self.delay:
@@ -385,15 +428,17 @@ class Daemonizer:
                 try:
                     self.dorecv()
                 except socket.error, msg:
-                    log.exception("socket.error in dorecv(): %s", str(msg))
+                    self.logger.exception("socket.error in dorecv(): %s"
+                                          % str(msg))
                     self.commandsocket = None
             if self.mastersocket in r:
                 try:
                     self.doaccept()
                 except socket.error, msg:
-                    log.exception("socket.error in doaccept(): %s", str(msg))
+                    self.logger.exception("socket.error in doaccept(): %s"
+                                          % str(msg))
                     self.commandsocket = None
-        log.info("Exiting")
+        self.logger.info("Exiting")
         sys.exit(0)
 
     def reportstatus(self):
@@ -403,7 +448,7 @@ class Daemonizer:
         msg = "pid %d: " % pid + msg
         if pid != self.proc.pid:
             msg = "unknown " + msg
-            log.warn(msg)
+            self.logger.warn(msg)
         else:
             killing = self.killing
             if killing:
@@ -414,9 +459,9 @@ class Daemonizer:
             self.proc.setstatus(sts)
             if es in self.options.exitcodes and not killing:
                 msg = msg + "; exiting now"
-                log.info(msg)
+                self.logger.info(msg)
                 sys.exit(es)
-            log.info(msg)
+            self.logger.info(msg)
 
     backoff = 0
 
@@ -432,9 +477,9 @@ class Daemonizer:
                 if self.options.forever:
                     self.backoff = self.options.backofflimit
                 else:
-                    log.critical("restarting too frequently; quit")
+                    self.logger.critical("restarting too frequently; quit")
                     sys.exit(1)
-            log.info("sleep %s to avoid rapid restarts", self.backoff)
+            self.logger.info("sleep %s to avoid rapid restarts" % self.backoff)
             self.delay = now + self.backoff
         else:
             # Reset the backoff timer
@@ -530,7 +575,7 @@ class Daemonizer:
             self.delay = time.time() + self.options.backofflimit
         else:
             self.sendreply("Exiting now")
-            log.info("Exiting")
+            self.logger.info("Exiting")
             sys.exit(0)
 
     def cmd_kill(self, args):
@@ -563,7 +608,7 @@ class Daemonizer:
                        "backoff=%r\n" % self.backoff +
                        "lasttime=%r\n" % self.proc.lasttime +
                        "application=%r\n" % self.proc.pid +
-                       "manager=%r\n" % os.getpid() + 
+                       "manager=%r\n" % os.getpid() +
                        "backofflimit=%r\n" % self.options.backofflimit +
                        "filename=%r\n" % self.proc.filename +
                        "args=%r\n" % self.proc.args)
@@ -594,13 +639,14 @@ class Daemonizer:
                     sent = self.commandsocket.send(msg)
                     msg = msg[sent:]
         except socket.error, msg:
-            log.warn("Error sending reply: %s", str(msg))
+            self.logger.warn("Error sending reply: %s" % str(msg))
+
 
 # Helpers for dealing with signals and exit status
 
 def decode_wait_status(sts):
     """Decode the status returned by wait() or waitpid().
-    
+
     Return a tuple (exitstatus, message) where exitstatus is the exit
     status, or -1 if the process was killed by a signal; and message
     is a message telling what happened.  It is the caller's
@@ -658,9 +704,9 @@ def get_path():
     return path
 
 # Main program
-
 def main(args=None):
     assert os.name == "posix", "This code makes many Unix-specific assumptions"
+
     d = Daemonizer()
     d.main(args)
 

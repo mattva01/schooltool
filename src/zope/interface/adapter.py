@@ -15,7 +15,7 @@
 
 This implementationb is based on a notion of "surrogate" interfaces.
 
-$Id: adapter.py,v 1.12 2004/03/28 23:42:28 srichter Exp $
+$Id: adapter.py,v 1.13 2004/03/30 21:40:00 jim Exp $
 """
 
 
@@ -396,6 +396,61 @@ class AdapterRegistry(object):
                 return default
 
         return value
+
+    def lookupAll(self, required, provided):
+        order = len(required)
+        if order == 1:
+            # Simple adapter:
+            s = self.get(required[0])
+            byname = s.get(provided)
+            if byname:
+                for item in byname.iteritems():
+                    yield item
+
+            defbyname = self._default.get(provided)
+            if defbyname:
+                for name, value in defbyname.iteritems():
+                    if name in byname:
+                        continue
+                    yield name, value
+
+            return
+
+        elif order == 0:
+            # null adapter
+            byname = self._null.get(provided)
+            if byname:
+                for item in byname.iteritems():
+                    yield item
+
+            return
+
+
+        # Multi adapter
+
+        with = required[1:]
+        key = provided, order
+        first = ()
+
+        for surrogate in self.get(required[0]), self._default:
+            byname = surrogate.get(key)
+            if not byname:
+                continue
+
+            for name, bywith in byname.iteritems():
+                if not bywith or name in first:
+                    continue
+
+                for rwith, value in bywith:
+                    for rspec, spec in zip(rwith, with):
+                        if not spec.isOrExtends(rspec):
+                            break # This one is no good
+                    else:
+                        # Got this far, we have a match
+                        yield name, value
+                        break
+
+            first = byname
 
 
     def subscribe(self, required, provided, value):
