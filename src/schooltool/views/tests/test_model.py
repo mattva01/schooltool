@@ -259,6 +259,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.view = PersonView(self.per)
 
     def test_traverse(self):
+        from schooltool.views.model import PersonPasswordView
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.absence import AbsenceManagementView
@@ -282,6 +283,10 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.assert_(isinstance(result, TimetableTraverseView))
         self.assert_(result.context is self.view.context)
         self.assert_(not result.readonly)
+
+        result = self.view._traverse('password', request)
+        self.assert_(isinstance(result, PersonPasswordView))
+        self.assert_(result.context is self.view.context)
 
     def test_render(self):
         request = RequestStub("http://localhost/person")
@@ -315,6 +320,37 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
                         xlink:href="/persons/p/timetable-calendar"/>
             </person>
             """, recursively_sort=['groups'])
+
+
+class TestPersonPasswordView(unittest.TestCase):
+
+    def test_do_PUT(self):
+        from schooltool.model import Person
+        from schooltool.views.model import PersonPasswordView
+        p = Person("John")
+        v = PersonPasswordView(p)
+
+        passwd = """
+        Foo bar
+        """
+
+        request = RequestStub(method="PUT", body=passwd)
+        result = v.render(request)
+        self.assertEqual(request.code, 200)
+        self.assertEqual(result, "Password changed")
+        self.assert_(p.checkPassword("Foo bar"))
+
+    def test_do_DELETE(self):
+        from schooltool.model import Person
+        from schooltool.views.model import PersonPasswordView
+        p = Person("John")
+        p.setPassword("foo")
+        v = PersonPasswordView(p)
+        request = RequestStub(method="DELETE")
+        result = v.render(request)
+        self.assertEqual(request.code, 200)
+        self.assertEqual(result, "Account disabled")
+        self.assert_(not p.checkPassword("foo"))
 
 
 class TestResourceView(XMLCompareMixin, unittest.TestCase):
@@ -399,6 +435,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestTreeView))
     suite.addTest(unittest.makeSuite(TestPersonView))
+    suite.addTest(unittest.makeSuite(TestPersonPasswordView))
     suite.addTest(unittest.makeSuite(TestResourceView))
     suite.addTest(unittest.makeSuite(TestModuleSetup))
     return suite

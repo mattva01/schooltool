@@ -22,6 +22,7 @@ The views for the schooltool.model objects.
 $Id$
 """
 
+import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IGroup, IPerson, IResource
@@ -31,12 +32,14 @@ from schooltool.component import getPath
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
 from schooltool.views import View, Template
+from schooltool.views import notFoundPage
 from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
 from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.views.absence import RollcallView, AbsenceManagementView
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -104,11 +107,28 @@ class PersonView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'absences':
             return AbsenceManagementView(self.context)
+        if name == 'password':
+            return PersonPasswordView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def getGroups(self):
         return [{'title': group.title, 'path': getPath(group)}
                 for group in getRelatedObjects(self.context, URIGroup)]
+
+
+class PersonPasswordView(View):
+
+    do_GET = staticmethod(notFoundPage)
+
+    def do_PUT(self, request):
+        password = request.content.read()
+        password = password.strip()
+        self.context.setPassword(password)
+        return "Password changed"
+
+    def do_DELETE(self, request):
+        self.context.setPassword(None)
+        return "Account disabled"
 
 
 class ResourceView(ApplicationObjectTraverserView):
