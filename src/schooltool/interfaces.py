@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2003 Shuttleworth Foundation
+# Copyright (c) 2003, 2004 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,23 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool package interfaces
+SchoolTool package interfaces.
+
+An interface is a formal description of the public API of an object (usually a
+class instance, but sometimes a Python module as well).  Interfaces are
+introspectable, that is, we can ask whether an object provides a specific
+interface, or simply ask for a list of all interfaces that are provided by an
+object.  As you've already gathered, a single object may provide more than one
+interface.  Conversely, any given interface may be provided by many objects
+that may be instances of completely unrelated classes.
+
+We say that a class implements an interface if instances of that class provide
+the interface.
+
+Interfaces in SchoolTool are mostly used for documentation purposes.  One of
+the reasons why they are all declared in a single module is to keep the
+internal API documentation in one place, and to provide a coherent picture of
+interactions between different objects.
 
 $Id$
 """
@@ -33,7 +49,31 @@ from schooltool.unchanged import Unchanged  # reexport from here
 #
 
 class IContainmentAPI(Interface):
-    """Containment API"""
+    """Containment API.
+
+    Many of the objects in SchoolTool form a hierarchy with the main
+    application object at the top.  The root object (the application)
+    provides the IContainmentRoot interface, branches and leaves provide
+    ILocation.
+
+    Every object (except the root) has a reference to its parent (also known
+    as its container), and a name.  Often you can traverse a container to get
+    an object when you know its name (this is not always implemented, though):
+
+       >>> container = obj.__parent__
+       >>> name = obj.__name__
+       >>> traverse(container, name) is obj
+       True
+
+    Every object has a unique path.  Given a path, you can get the object
+    at that path by traversing the root object:
+
+       >>> root = getRoot(obj)
+       >>> path = getPath(obj)
+       >>> obj is traverse(root, path)
+       True
+
+    """
 
     def getPath(obj):
         """Return the unique path of an object in the containment hierarchy.
@@ -42,6 +82,12 @@ class IContainmentAPI(Interface):
         attached to the hierarchy (i.e. following parent references should not
         reach None).  If either of those conditions is not met, raises a
         TypeError.
+
+        The path of the root object is '/'.  The path of first-level objects
+        (those that have the root object as their parent) is '/' + the name
+        of the object.  The path of any other object is the path of the parent
+        object + '/' + the name of the object, except when the parent
+        implements IMultiContainer.  See also IMultiContainer.
         """
 
     def getRoot(obj):
@@ -59,10 +105,14 @@ class IContainmentAPI(Interface):
         Path is a list of names separated with forward slashes.  Multiple
         adjacent slashes are equivalent to a single slash.  Special names
         are '.' and '..'; they are treated as is customary in file systems.
-        Traversing to .. at the root keeps you at the root.
+        Traversing to '..' at the root keeps you at the root.
 
         If path starts with a slash, then the traversal starts from
         getRoot(obj), otherwise the traversal starts from obj.
+
+        Traversing to '..' requires the object to provide either ILocation
+        or IContainmentRoot.  Traversing to a non-empty name requires the
+        object to provide ITraversable.
         """
 
 
@@ -108,12 +158,43 @@ class ITraversable(Interface):
 class IMultiContainer(Interface):
     """A container that chooses names for its children.
 
-    The use of this is to make an object be able to tell the correct
-    way to traverse to its relationships or facets.
+    Use this interface when the intermediate container is a dumb one (e.g. a
+    Python dict) that does not provide ILocation/ITraversable.  For example,
+    imagin ea hyphotetical LunchBox object located at /lunchbox that has
+    two kinds of children:
+
+      - food items (e.g. sandwitch), stored in an dict LunchBox.food
+      - insects (e.g. ant), stored in a dict LunchBox.insects
+
+    We want the foot items to have paths like /lunchbox/food/sandwitch, and
+    insects to have paths like /lunchbox/insects/ant.  To achieve this we
+    can set the __parent__ of both the sandwitch and the ant to refer directly
+    to the lunchbox, and then make the LunchBox a multi-container:
+
+        class LunchBox:
+            implements(ILunchBox, IMultiContainer)
+
+            def getRelativePath(self, obj):
+                if obj in self.food.values():
+                    return 'food/%s' % obj.__name__
+                else:
+                    return 'insects/%s' % obj.__name__
+
+    Traversal of multi-containers is complicated and usually not implemented
+    (i.e. the objects providing IMultiContainer usually do not provide
+    ITraversal).
+
+    We actually use this to make an object be able to tell the correct way to
+    traverse to its relationships or facets.  Traversal in those cases is
+    hardcoded in view classes, and not with ITraversal interfaces.
     """
 
     def getRelativePath(child):
-        """Return the path of child relative to self."""
+        """Return the path of child relative to self.
+
+        The relative path may contain several path segments separated by
+        slashes, but it should not start nor end with a slash.
+        """
 
 
 #
@@ -121,7 +202,17 @@ class IMultiContainer(Interface):
 #
 
 class IServiceAPI(Interface):
-    """Service API"""
+    """Service API.
+
+    There are a number of global services stored in the object database.  This
+    API lets the code access those services.  The context argument passed to
+    each of the functions in this API is an object connected to the containment
+    hierarchy.  Looking up a service entails traversing up the chain of object
+    parents until an object providing IServiceManager is found (usually this
+    will be the root object).
+
+    Every service has its own API defined in a separate interface.
+    """
 
     def getEventService(context):
         """Return the global event service."""
