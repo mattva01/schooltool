@@ -535,6 +535,9 @@ class TestTimetableException(unittest.TestCase):
         e.replacement = None
 
         self.assertRaises(ValueError, setattr, e, 'replacement', object())
+        self.assertRaises(AttributeError, setattr, e, 'date', object())
+        self.assertRaises(AttributeError, setattr, e, 'period_id', object())
+        self.assertRaises(AttributeError, setattr, e, 'activity', object())
 
     def test_comparison(self):
         from schooltool.timetable import TimetableException

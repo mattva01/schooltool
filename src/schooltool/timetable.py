@@ -457,10 +457,11 @@ class TimetableException(Persistent):
 
     implements(ITimetableException)
 
-    _replacement = None
-
-    def _getReplacement(self):
-        return self._replacement
+    def __init__(self, date, period_id, activity, replacement=None):
+        self._date = date
+        self._period_id = period_id
+        self._activity = activity
+        self.replacement = replacement
 
     def _setReplacement(self, replacement):
         if (replacement is not None and
@@ -468,14 +469,10 @@ class TimetableException(Persistent):
             raise ValueError("%r is not an exceptional TT event" % replacement)
         self._replacement = replacement
 
-    replacement = property(_getReplacement, _setReplacement)
-
-    def __init__(self, date, period_id, activity):
-        self.date = date
-        self.period_id = period_id
-        self.activity = activity
-
-    # TODO: make date, period_id and activity read-only
+    date = property(lambda self: self._date)
+    period_id = property(lambda self: self._period_id)
+    activity = property(lambda self: self._activity)
+    replacement = property(lambda self: self._replacement, _setReplacement)
 
     def __eq__(self, other):
         if ITimetableException.providedBy(other):
