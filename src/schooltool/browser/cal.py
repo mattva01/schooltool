@@ -462,7 +462,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         self.update()
         return View.do_GET(self, request)
 
-    def getMergedCalendars(self):
+    def getMergedCalendarProviders(self):
         """List objects who's calendars the user subscribes to."""
         if self.request.authenticated_user:
             return [group for group in
@@ -471,7 +471,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return []
 
     def checkedOverlay(self, calendar):
-        if calendar in self.getMergedCalendars():
+        if calendar in self.getMergedCalendarProviders():
             return "checked"
         return None
 
@@ -582,7 +582,6 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
         This is only used in the portlet-calendar-overlay macro.
         """
-##      raise NotImplementedError('XXX this function is not unit tested')
         path = getPath(owner)
         user = self.request.authenticated_user
         if user:
