@@ -311,7 +311,10 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
 
 
 class TimetableCSVImporter:
-    """A timetable CSV parser and importer."""
+    """A timetable CSV parser and importer.
+
+    Two externally useful methods are importTimetable and importRoster.
+    """
 
     def __init__(self, app):
         self.app = app
@@ -320,58 +323,69 @@ class TimetableCSVImporter:
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data."""
-        lines = timetable_csv.splitlines()
-        reader = csv.reader(lines)
-        # TODO: error checking
-        self.ttschema_name, self.period_id = reader.next()
-        self.day_ids = reader.next()
-        try:
-            periods = reader.next()[1:]
-        except StopIteration:
-            return
+        reader = csv.reader(timetable_csv.splitlines())
+        rows = list(reader) # TODO: error checking
 
-        for period in periods:
-            pass # TODO: check existence of periods
+        self.period_id, self.ttschema = rows[0]
+        state = 'day_ids'
+        for row in rows[2:]:
+            if not row:
+                state = 'day_ids'
+                continue
+            elif state == 'day_ids':
+                day_ids = row
+                state = 'periods'
+                continue
+            elif state == 'periods':
+                periods = row[1:]
+                for period in periods:
+                    pass # TODO: check existence of periods
 
-        for row in reader:
-            location, row = row[0], row[1:]
-            # TODO: create location
-            subjects = [record.split(" ", 1)[0] for record in row]
-            teachers = [record.split(" ", 1)[1] for record in row]
+                state = 'content'
+                continue
+
+            location, records = row[0], row[1:]
+            # TODO: deal with location
+            subjects = [record.split(" ", 1)[0] for record in records]
+            teachers = [record.split(" ", 1)[1] for record in records]
 
             for period, subject, teacher in zip(periods, subjects, teachers):
-                pass # TODO: register
+                self.scheduleClass(period, subject, teacher, day_ids)
 
-    def _findByTitle(self, container, title):
-        # XXX Could be sped up by constructing a dict
+    def findByTitle(self, container, title):
+        """Find an object with provided title in a container.
+
+        Raises KeyError if no object is found.
+        """
+        # TODO Speed this up by constructing a dict once
         for obj in container.itervalues():
             if obj.title == title:
                 return obj
         else:
-            raise KeyError("Group %r not found" % subject)
+            raise KeyError("Object %r not found" % subject)
 
-    def _clearTimetables(self):
+    def clearTimetables(self):
         """Delete timetables of the period and schema we are dealing with."""
         for group in self.groups.itervalues():
-            if (self.period_id, self.ttschema_name) in group.timetables.keys():
-                del group.timetables[self.period_id, self.ttschema_name]
+            if (self.period_id, self.ttschema) in group.timetables.keys():
+                del group.timetables[self.period_id, self.ttschema]
 
-    def _scheduleClass(self, period, subject, teacher):
+    def scheduleClass(self, period, subject, teacher, day_ids):
         """Schedule a class of subject during a given period."""
-        group = self._findByTitle(self.groups, subject)
-        teacher = self._findByTitle(self.persons, teacher)
+        group = self.findByTitle(self.groups, subject)
+        teacher = self.findByTitle(self.persons, teacher)
 
         # Create the timetable if it does not exist yet.
-        if (self.period_id, self.ttschema_name) not in group.timetables.keys():
-            tt = self.app.timetableSchemaService[self.ttschema_name]
-            group.timetables[self.period_id, self.ttschema_name] = tt
+        if (self.period_id, self.ttschema) not in group.timetables.keys():
+            tt = self.app.timetableSchemaService[self.ttschema]
+            group.timetables[self.period_id, self.ttschema] = tt
         else:
-            tt = group.timetables[self.period_id, self.ttschema_name]
+            tt = group.timetables[self.period_id, self.ttschema]
 
         # Add a new activity to the timetable
         act = TimetableActivity(title=subject, owner=teacher)
         # TODO: resources
-        for day_id in self.day_ids:
+        for day_id in day_ids:
             tt[day_id].add(period, act)
 
     def importRoster(self, roster_txt):

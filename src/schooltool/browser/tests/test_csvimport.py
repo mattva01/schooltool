@@ -27,6 +27,7 @@ import datetime
 from logging import INFO
 from schooltool.browser.tests import RequestStub
 from schooltool.tests.utils import RegistriesSetupMixin, AppSetupMixin
+from schooltool.common import dedent
 
 __metaclass__ = type
 
@@ -391,18 +392,66 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
 
 class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
+    days = ("Monday", "Tuesday", "Wednesday")
+    periods = ("A", "B", "C")
+
+    def setUp(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        self.setUpSampleApp()
+
+        # set a timetable schema
+        ttschema = Timetable(self.days)
+        for day in self.days:
+            ttschema[day] = TimetableDay(self.periods)
+        self.app.timetableSchemaService['three-day'] = ttschema
+
+        # add some people and groups
+        for name, title in [('curtin', 'Curtin'), ('lorch', 'Lorch'),
+                            ('guzman', 'Guzman')]:
+            self.app['persons'].new(name, title=title)
+        for title in ['Math1', 'Math2', 'Math3',
+                      'English1', 'English2', 'English3']:
+            self.app['groups'].new(title, title=title)
+
     def createImporter(self):
         from schooltool.browser.csvimport import TimetableCSVImporter
         return TimetableCSVImporter(self.app)
 
     def test_timetable_headers(self):
         imp = self.createImporter()
-        csv = ('"ttschema name","period_id"\n'
-               '"Monday","Friday"\n')
+        csv = '"period_id","ttschema name"'
+
         imp.importTimetable(csv)
-        self.assertEquals(imp.ttschema_name, 'ttschema name')
         self.assertEquals(imp.period_id, 'period_id')
-        self.assertEquals(imp.day_ids, ['Monday', 'Friday'])
+        self.assertEquals(imp.ttschema, 'ttschema name')
+
+    def test_timetable_functional(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        imp = self.createImporter()
+
+        csv = dedent("""
+                "summer","three-day"
+                ""
+                "Monday","Tuesday"
+                "","A","B","C"
+                "105","Math1 Curtin","Math2 Guzman","Math3 Curtin"
+                "129","English1 Lorch","English2 Lorch","English3 Lorch"
+
+                "Wednesday"
+                "","A","B","C"
+                "105","Math1 Curtin","Math3 Guzman","Math2 Curtin"
+                "129","English3 Lorch","English2 Lorch","English1 Lorch"
+                """)
+        imp.importTimetable(csv)
+
+        # a little poking around; we could be more comprehensive
+        tt = self.app['groups']['English1'].timetables['summer', 'three-day']
+        self.assert_(list(tt['Monday']['A']))
+        self.assert_(not list(tt['Monday']['B']))
+        self.assert_(not list(tt['Monday']['C']))
+        self.assert_(not list(tt['Wednesday']['A']))
+        self.assert_(not list(tt['Wednesday']['B']))
+        self.assert_(list(tt['Wednesday']['C']))
 
 #    def test_timetable_empty(self):
 #        imp = self.createImporter()
@@ -413,24 +462,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 #        imp = self.createImporter()
 #        imp.importTimetable('"Some","invalid","csv')
 #        # TODO
-#
-#    def test_timetable(self):
-#        imp = self.createImporter()
-#        imp.importTimetable(
-#                '"","A","B","C"\n'
-#                '"105","Math1 Curtin","Math2 Guzman","Math3 Curtin"\n'
-#                '"129","English1 Lorch","English2 Lorch","English3 Lorch"\n')
-#        # TODO
-#
-#        class TimetableSchemaServiceStub:
-#            def getSchema(self, schema_id):
-#                if schema_id == 'weekly':
-#                    tt = Timetable(("day1", "day2"))
-#                    tt["day1"] = TimetableDay(("A", "B"))
-#                    tt["day2"] = TimetableDay(("A", "B"))
-#                    return tt
 
-    def test__clearTimetables(self):
+    def test_clearTimetables(self):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
         tt = Timetable(['day1'])
@@ -446,30 +479,29 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
         imp = self.createImporter()
         imp.period_id = 'period1'
-        imp.ttschema_name = 'some_schema'
-        imp._clearTimetables()
+        imp.ttschema = 'some_schema'
+        imp.clearTimetables()
 
         tt_notblank = self.pupils.timetables['period2', 'some_schema']
         self.assert_(('period1', 'some_schema')
                      not in self.pupils.timetables.keys())
         self.assertEquals(len(list(tt_notblank.itercontent())), 1)
 
-    def test__scheduleClass(self):
+    def test_scheduleClass(self):
         from schooltool.timetable import Timetable, TimetableDay
 
         math101 = self.app['groups'].new('math101', title='Math 101')
 
         imp = self.createImporter()
         imp.ttname = 'tt'
-        imp.ttschema_name = 'two_day'
+        imp.ttschema = 'two_day'
         imp.period_id = 'period1'
         ttschema = Timetable(("day1", "day2"))
         ttschema["day1"] = TimetableDay(("A", "B"))
         ttschema["day2"] = TimetableDay(("A", "B"))
         self.app.timetableSchemaService['two_day'] = ttschema
-        imp.day_ids = ['day1', 'day2']
 
-        imp._scheduleClass('A', 'Math 101', 'Prof. Bar')
+        imp.scheduleClass('A', 'Math 101', 'Prof. Bar', ['day1', 'day2'])
 
         tt = math101.timetables['period1', 'two_day']
         activities = list(tt.itercontent())
