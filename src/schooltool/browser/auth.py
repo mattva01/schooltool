@@ -47,7 +47,7 @@ __metaclass__ = type
 class TicketService:
     """Ticket service for authentication.
 
-    The idea of using a ticket service for authentication, is that once the
+    The idea of using a ticket service for authentication is that once the
     credentials are verified in a login form, the user gets a ticket for this
     session.  The ticket is usually stored as a browser cookie.
 
