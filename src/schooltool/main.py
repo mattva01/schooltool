@@ -449,6 +449,8 @@ class Request(http.Request):
                 self.authenticated_user = self.site.authenticate(app,
                         self.getUser(), self.getPassword())
             except AuthenticationError:
+                self.site.logAppEvent(None, "Failed login, username: %r"
+                                            % self.getUser(), 'WARNING')
                 body = textErrorPage(self, _("Bad username or password"),
                                      code=401)
                 self.setHeader('Content-Length', len(body))

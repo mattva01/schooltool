@@ -119,12 +119,16 @@ class SiteStub:
         self.conflictRetries = 5
         self.rootName = 'app'
         self.db = DbStub()
+        self.applog = []
 
     def authenticate(self, context, user, password):
         if user == 'fred' and password == 'wilma':
             return self.fred
         else:
             raise AuthenticationError('bad login (%r, %r)' % (user, password))
+
+    def logAppEvent(self, user, message, level='INFO'):
+        self.applog.append((user, message, level))
 
 
 class ChannelStub:
@@ -699,6 +703,11 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(rq.code, 401)
         self.assertEquals(rq.headers['www-authenticate'],
                           'basic realm="SchoolTool"')
+
+        self.assertEquals(rq.site.applog,
+                          [(None, "Failed login, username: 'fred'", "WARNING"),
+                           (None, "Failed login, username: 'freq'", "WARNING")]
+                          )
 
     # _handle_exception is tested indirectly, in test__process_on_exception
     # and test__process_many_conflict_errors
