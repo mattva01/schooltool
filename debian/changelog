@@ -2,6 +2,7 @@ schoolbell (1.1-1) unstable; urgency=low
 
   * Add --retry 30 to start-stop-daemon calls and a small sleep afterwards to
     try to prevent race conditions when the server takes a while to shut down.
+  * Remove the code dealing with incompatible databases from 0.7.
 
  -- Brian Sutherland <jinty@web.de>  Mon, 28 Mar 2005 16:28:20 +0200
 

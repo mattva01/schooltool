@@ -22,25 +22,6 @@ package=schoolbell
 
 . /usr/share/debconf/confmodule
 
-# If a database already exists delete it (but ask first)
-# yes, I know I shouldn't ask questions here. but this is a hack
-# which will dissapear when schoolbell can automatically upgrade
-# its own database.
-
-try_db_delete () { # This code must go in 1.1
-    db_fset $package/incompatible_database seen false
-    db_reset $package/incompatible_database
-    db_input high $package/incompatible_database || true
-    db_go || true
-    db_get $package/incompatible_database
-    if [ "z$RET" == ztrue ];then
-        rm -rf /var/lib/$package
-    else
-        echo Error: possible incompatible database, aborting upgrade
-        exit 1
-    fi
-}
-
 db_get $package/no_compat_libs
 ans="$RET"
 case "$ans" in
@@ -54,24 +35,10 @@ esac
 case "$1" in
 
     install)
-    case "${2}" in
-        0.7*)
-            # A database this old is lost, try to delete it!!!
-            if [ -d /var/lib/$package ];then
-                try_db_delete
-            fi
-        ;;
-    esac
     ;;
 
     upgrade)
     case "${2}" in
-        0.7*)
-            # A database this old is lost, try to delete it!!!
-            if [ -d /var/lib/$package ];then
-                try_db_delete
-            fi
-        ;;
         0.8*)
             # From 0.8 we can upgrade the database, but only if we have
             # the old ZDOB and schooltool modules in the postinst
