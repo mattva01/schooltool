@@ -31,7 +31,7 @@ from zope.app.location.interfaces import ILocation
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.app.component.localservice import getNextService
 from schoolbell.app.app import getSchoolBellApplication
-
+from zope.app.session.interfaces import ISession
 
 class Principal(Contained):
     implements(IGroupAwarePrincipal)
@@ -43,13 +43,32 @@ class Principal(Contained):
 
 
 class SchoolBellAuthenticationUtility(Persistent):
+    """A local SchoolBell authentication utility.
+
+    This utility serves principals for groups and persons in the
+    nearest SchoolBellApplication instance.
+
+    It authenticates the requests containing usernames and passwords
+    in the session.
+    """
+
     implements(IAuthentication, ILocation)
 
     person_prefix = "sb.person."
     group_prefix = "sb.group."
+    session_name = "schoolbell.auth"
 
     def authenticate(self, request):
-        """Identify a principal for request"""
+        """Identify a principal for request.
+
+        Retrieves the username and password from the session.
+        """
+        app = getSchoolBellApplication(self)
+        session = ISession(request)[self.session_name]
+        if 'username' in session and 'password' in session:
+            person = app['persons'][session['username']]
+            if person.checkPassword(session['password']):
+                return self.getPrincipal('sb.person.' + session['username'])
 
     def unauthenticatedPrincipal(self):
         """Return the unauthenticated principal, if one is defined."""
@@ -57,6 +76,7 @@ class SchoolBellAuthenticationUtility(Persistent):
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
+        raise NotImplemented
         request.redirect("login.html") #XXX
 
     def getPrincipal(self, id):

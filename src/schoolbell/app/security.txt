@@ -20,18 +20,39 @@ admin to set permissions on individual objects for persons and groups.
 
 
 SchoolBell authentication utility
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 (Handwaving...)
+
     >>> from zope.app.tests import setup
     >>> root = setup.placefulSetUp(True)
     >>> from schoolbell.relationship.tests import setUpRelationships
     >>> setUpRelationships()
 
+    Global auth utility:
+
     >>> from zope.app.security.principalregistry import principalRegistry
     >>> from zope.app.security.interfaces import IAuthentication
     >>> from zope.app.tests import ztapi
     >>> ztapi.provideUtility(IAuthentication, principalRegistry)
+
+    Session setup:
+
+    >>> from zope.app.session.session import ClientId, Session
+    >>> from zope.app.session.session import PersistentSessionDataContainer
+    >>> from zope.publisher.interfaces import IRequest
+    >>> from zope.app.session.http import CookieClientIdManager
+    >>> from zope.app.session.interfaces import ISessionDataContainer
+    >>> from zope.app.session.interfaces import IClientId
+    >>> from zope.app.session.interfaces import IClientIdManager, ISession
+    >>> ztapi.provideAdapter(IRequest, IClientId, ClientId)
+    >>> ztapi.provideAdapter(IRequest, ISession, Session)
+    >>> ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
+    >>> sdc = PersistentSessionDataContainer()
+    >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
+
+
 
 SchoolBell is a site:
 
@@ -63,10 +84,12 @@ Let's provide the location of auth:
     >>> auth.__name__ = 'auth'
     >>> pkg['auth'] = auth
 
-The utility knows about the users of the application:
 
-    XXX: for now we assume the Principal Id equal to the __name__ of
-    persons and groups.  this is wrong and will have to change.
+
+getPrincipal
+------------
+
+The utility knows about the users of the application:
 
     >>> from schoolbell.app.app import Person
     >>> from zope.app.security.interfaces import IPrincipal
@@ -123,6 +146,41 @@ to.  This list is used by the Zope Security Policy:
     >>> p.groups
     [u'sb.group.management']
 
+
+authenticate
+------------
+
+
+When no credentials are provided in the session, authenticate returns None:
+
+    >>> from zope.publisher.browser import TestRequest
+    >>> request = TestRequest()
+    >>> auth.authenticate(request)
+
+Suppose, the user 'frog' has a password:
+
+    >>> app['persons']['frog'].setPassword('pond')
+
+The frog has authenticated itself in the login form and the
+credentials are stored in the session:
+
+    >>> from zope.app.session.interfaces import ISession
+    >>> session = ISession(request)['schoolbell.auth']
+    >>> session['username'] = 'frog'
+    >>> session['password'] = 'pond'
+
+Now, it is authenticated by our utility:
+
+    >>> principal = auth.authenticate(request)
+    >>> verifyObject(IGroupAwarePrincipal, principal)
+    True
+    >>> principal.id
+    'sb.person.frog'
+
+If the password is incorrect, authentication does not work:
+
+    >>> session['password'] = 'pod'
+    >>> auth.authenticate(request)
 
 Clean up:
 
