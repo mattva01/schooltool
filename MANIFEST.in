@@ -21,7 +21,7 @@ include scripts/run-import.sh
 include doc/release-policy.txt doc/release-checklist.txt
 
 # modules
-recursive-include src/schoolbell *.py *.pt *.css *.png *.txt
+recursive-include src/schoolbell *.py *.pt *.css *.png *.txt *.gif
 recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
 
 # Zope
