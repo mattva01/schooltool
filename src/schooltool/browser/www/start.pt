@@ -26,6 +26,12 @@
     <p><a class="action" href="/applog"
           i18n:translate="">View the application log</a></p>
   </tal:block>
+
+  <tal:block condition="view/isTeacher">
+    <p><a class="action" href="/busysearch"
+          i18n:translate="">Book a resource</a></p>
+  </tal:block>
+
   <p><a class="action" tal:attributes="href view/person_url"
         i18n:translate="">View your information page</a></p>
   <p><a class="action" i18n:translate=""
