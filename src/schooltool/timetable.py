@@ -17,7 +17,125 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool timetabling code.
+Timetabling in SchoolTool
+=========================
+
+Note: timetabling here refers to the management of timetables of resources,
+persons and groups.  It is not related to automatic timetable generation
+or constraint solving.
+
+Every application object (person, group or a resource) can have a number of
+timetables.  First, the timetables can vary in the timetable schema (e.g. a
+school may have a 4-day rotating timetable for classes, and then another
+timetable for events that recur weekly). Second, there are separate timetables
+for different time periods, such as semesters.
+
+Global services
+---------------
+
+A list of all defined timetable schemas is available from the timetable schema
+service (see getTimetableSchemaService, ITimetableSchemaService).
+
+A list of all defined time periods is available from the time period service
+(see getTimePeriodService, ITimePeriodService).
+
+Timetable schemas and time periods are identified by alphanumeric IDs.
+
+Every timetable is defined for a given schema and a given time period.  A tuple
+consisting of the schema's ID and the time period's ID is often refered to as
+a timetable's key.
+
+Objects that have timetables
+----------------------------
+
+An object that has (or may have) timetables implements ITimettabled.
+
+An object's composite timetable is derived by combining the object's timetable
+with composite timetables of other objects, usually inherited through
+relationships.  See also ICompositeTimetableProvider.
+
+Timetables
+----------
+
+A timetable consists of several days, each of which has several periods (the
+sets of periods for different days may be different), and each period may have
+zero or more timetable activities (two or more activities represent scheduling
+conflicts).  See ITimetable, ITimetableDay, ITimetableActivity.
+
+A timetable may also have a list of exceptions that represent irregularities
+in activities.  For example, a certain activity may be canceled on a certain
+day, or an activity may be shifted in time, or it may be shortened.  See
+ITimetableException.
+
+A timetable model describes the mapping between timetable days and calendar
+days, and also the mapping between period IDs and time of the day.  Currently
+SchoolTool has two kinds of timetable models:
+
+  - Sequential days model may jump over calendar days if they are not school
+    days.  For example, if July 3 was timetable day 3, and July 4 is a holiday,
+    then July 5 will be timetable day 4.
+
+  - Weekly model maps week days directly to timetable days, that is, Monday is
+    always timetable day 1, and sunday is always timetable day 7.
+
+It is possible to define additional models.  See ITimetableModel.
+
+Example of a timetable::
+
+    day_id:     Monday      Tuesday     ... Friday
+    period_ids: 8:00-8:45   8:00-8:45   ... 8:00-8:40
+                9:00-9:45   9:00-9:45   ... 8:55-9:35
+                10:00-10:45 10:00-10:45 ... 10:50-10:30
+                ...         ...         ... ...
+                17:00-17:45 17:00-17:45 ... 16:15-16:55
+
+    For this particular timetable, timetable days are named after week days
+    (but note that there is no Saturday or Sunday because there are no classes
+    on those days), periods are named after time periods, and the set of
+    periods is the same for all days except for Friday.  This timetable
+    will be used with a weekly timetable model.
+
+Another example:
+
+    day_id:     Day 1  Day 2 ... Day 10
+    period_ids: 8:00   8:00  ... 8:00
+                9:00   9:00  ... 9:00
+                10:00  10:00 ... 10:00
+                ...    ...   ... ...
+                17:00  17:00 ... 17:00
+
+    For this particular timetable, timetable days are named sequentially,
+    periods are named after time periods (but only include the starting time),
+    and the set of periods is the same for all days.  This timetable will
+    be used with a sequential timetable model.
+
+Another example:
+
+    day_id:     Day 1  Day 2 ... Day 4
+    period_ids: A      B     ... D
+                B      C     ... A
+                C      D     ... B
+                D      A     ... C
+
+    For this particular timetable, timetable days are named sequentially,
+    periods are named arbitrarily, and the set of periods is the same for all
+    days, but listed in a different order.  This timetable will be used with a
+    sequential timetable model.
+
+Timetable schemas
+-----------------
+
+A timetable schema is just a timetable that has no activities and no exeptions.
+You can get a timetable schema by calling the cloneEmpty method of a timetable,
+but usually cloneEmpty is used to create a new empty timetable from a schema.
+
+Time periods
+------------
+
+A time period defines a range in time (e.g. September 1 to December 31,
+2004) and for every day within that range it defines whether that day is a
+schoolday or a holiday.
+
 
 $Id$
 """
@@ -65,19 +183,25 @@ class Timetable(Persistent):
     implements(ITimetable, ITimetableWrite, ILocation)
 
     def __init__(self, day_ids):
-        """day_ids is a sequence of the day ids of this timetable."""
+        """Create a new empty timetable.
+
+        day_ids is a sequence of the day ids of this timetable.
+
+        The caller must then assign a TimetableDay for each day ID and
+        set model before trying to use the timetable.
+        """
         self.day_ids = day_ids
         self.days = PersistentDict()
-        self.__parent__ = None
-        self.__name__ = None
         self.model = None
         self.exceptions = PersistentList()
+        self.__parent__ = None
+        self.__name__ = None
 
     def keys(self):
         return list(self.day_ids)
 
     def items(self):
-        return [(day, self.days.get(day, None)) for day in self.day_ids]
+        return [(day, self.days[day]) for day in self.day_ids]
 
     def __repr__(self):
         return '<Timetable: %s, %s, %s, %s>' % (self.day_ids, self.days,
@@ -88,7 +212,7 @@ class Timetable(Persistent):
 
     def __setitem__(self, key, value):
         if not ITimetableDay.providedBy(value):
-            raise TypeError("Timetable cannot set a non-ITimetableDay "
+            raise TypeError("Timetable can only contain ITimetableDay objects "
                             "(got %r)" % (value,))
         elif key not in self.day_ids:
             raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
@@ -104,17 +228,10 @@ class Timetable(Persistent):
                 day.clear(period)
 
     def update(self, other):
-        # XXX Right now we're trusting the user that the periods of
-        #     the timetable days are compatible.  Maybe that'll be enough?
-
-        if self.day_ids != other.day_ids:
-            raise ValueError("Cannot update -- timetables have different"
-                             " sets of days: %r and %r" % (self.day_ids,
-                                                           other.day_ids))
-        for day_id in other.keys():
-            for period, activities in other[day_id].items():
-                for activity in activities:
-                    self[day_id].add(period, activity)
+        if self.cloneEmpty() != other.cloneEmpty():
+            raise ValueError("Timetables have different schemas")
+        for day, period, activity in other.itercontent():
+            self[day].add(period, activity)
         self.exceptions += other.exceptions
 
     def cloneEmpty(self):
@@ -125,7 +242,7 @@ class Timetable(Persistent):
         return other
 
     def __eq__(self, other):
-        if isinstance(other, Timetable):
+        if ITimetable.providedBy(other):
             return (self.items() == other.items()
                     and self.model == other.model
                     and self.exceptions == other.exceptions)
@@ -133,7 +250,7 @@ class Timetable(Persistent):
             return False
 
     def __ne__(self, other):
-        return not self == other
+        return not self.__eq__(other)
 
     def itercontent(self):
         for day_id in self.day_ids:
@@ -155,13 +272,13 @@ class TimetableDay(Persistent):
             self.activities[p] = MaybePersistentKeysSet()
 
     def keys(self):
-        return [period for period in self.periods if self.activities[period]]
+        return self.periods
 
     def items(self):
         return [(period, self.activities[period]) for period in self.periods]
 
     def __getitem__(self, period):
-        return iter(self.activities[period])
+        return self.activities[period]
 
     def clear(self, period):
         if period not in self.periods:
@@ -174,8 +291,8 @@ class TimetableDay(Persistent):
             raise ValueError("Key %r not in periods %r" % (period,
                                                             self.periods))
         if not ITimetableActivity.providedBy(activity):
-            raise TypeError("TimetableDay cannot set a "
-                             "non-ITimetableActivity (got %r)" % (activity, ))
+            raise TypeError("TimetableDay can only contain ITimetableActivity"
+                            " objects (got %r)" % (activity, ))
         if activity.timetable is None:
             activity = activity.replace(timetable=self.timetable)
         self.activities[period].add(activity)
@@ -187,7 +304,7 @@ class TimetableDay(Persistent):
         self.activities[period].remove(value)
 
     def __eq__(self, other):
-        if not isinstance(other, TimetableDay):
+        if not ITimetableDay.providedBy(other):
             return False
         if self.periods != other.periods:
             return False
@@ -197,7 +314,7 @@ class TimetableDay(Persistent):
         return True
 
     def __ne__(self, other):
-        return not self == other
+        return not self.__eq__(other)
 
 
 class TimetableActivity:
@@ -227,14 +344,17 @@ class TimetableActivity:
                 % (self.title, self.owner, self.resources, self.timetable))
 
     def __eq__(self, other):
-        if isinstance(other, TimetableActivity):
+        # Is it really a good idea to ignore self.timetable?
+        # On further thought it does not matter -- we never compare activities
+        # that come from timetables with different keys.
+        if ITimetableActivity.providedBy(other):
             return (self.title == other.title and self.owner == other.owner
                     and self.resources == other.resources)
         else:
             return False
 
     def __ne__(self, other):
-        return not (self == other)
+        return not self.__eq__(other)
 
     def __hash__(self):
         return hash((self.title, self.owner, self.resources))

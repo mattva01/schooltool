@@ -110,23 +110,19 @@ class TestTimetable(unittest.TestCase):
         from schooltool.timetable import Timetable
         from schooltool.interfaces import ITimetableDay
 
-        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        days = ('Day 1', 'Day 2', 'Day 3')
         t = Timetable(days)
 
         class DayStub:
             implements(ITimetableDay)
             timetable = None
 
-        monday = DayStub()
-        t["Mo"] = monday
+        t["Day 1"] = day1 = DayStub()
+        t["Day 2"] = day2 = DayStub()
+        self.assertRaises(KeyError, t.items)
+        t["Day 3"] = day3 = DayStub()
         self.assertEqual(t.items(),
-                         [("Mo", monday), ("Tu", None), ("We", None),
-                          ("Th", None), ("Fr", None)])
-        tuesday = DayStub()
-        t["Tu"] = tuesday
-        self.assertEqual(t.items(),
-                         [("Mo", monday), ("Tu", tuesday), ("We", None),
-                          ("Th", None), ("Fr", None)])
+                         [("Day 1", day1), ("Day 2", day2), ("Day 3", day3)])
 
     def createTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -287,12 +283,7 @@ class TestTimetableDay(unittest.TestCase):
 
         periods = ('1', '2', '3', '4', '5')
         td = TimetableDay(periods)
-        self.assertEqual(td.keys(), [])
-        td.add("5", ActivityStub())
-        td.add("1", ActivityStub())
-        td.add("3", ActivityStub())
-        td.add("2", ActivityStub())
-        self.assertEqual(td.keys(), ['1', '2', '3', '5'])
+        self.assertEqual(td.keys(), periods)
 
     def testComparison(self):
         from schooltool.timetable import TimetableDay
@@ -320,7 +311,6 @@ class TestTimetableDay(unittest.TestCase):
         td = TimetableDay(periods)
         self.assertRaises(KeyError, td.__getitem__, "Mo")
         self.assertEqual(len(list(td["1"])), 0)
-        self.assert_(hasattr(td["1"], 'next'), "not an iterator")
 
         self.assertRaises(TypeError, td.add, "1", object())
         math = ActivityStub()
@@ -534,11 +524,6 @@ class TestTimetablingPersistence(unittest.TestCase):
         tt["B"].add("Blue", TimetableActivity("Geography"))
         transaction.commit()
 
-        ## TimetableActivities are not persistent
-        #geo = tt["B"]["Blue"].next()
-        #geo.title = "Advanced geography"
-        #transaction.commit()
-
         self.assertEqual(len(list(tt["A"]["Green"])), 1)
         self.assertEqual(len(list(tt["A"]["Blue"])), 1)
         self.assertEqual(len(list(tt["B"]["Green"])), 1)
@@ -551,9 +536,8 @@ class TestTimetablingPersistence(unittest.TestCase):
             self.assertEqual(len(list(tt3["A"]["Blue"])), 1)
             self.assertEqual(len(list(tt3["B"]["Green"])), 1)
             self.assertEqual(len(list(tt3["B"]["Blue"])), 1)
-            last = tt3["B"]["Blue"].next()
-            # self.assertEqual(last.title, "Advanced geography")
-            self.assertEqual(last.title, "Geography")
+            act = iter(tt3["B"]["Blue"]).next()
+            self.assertEqual(act.title, "Geography")
         finally:
             transaction.abort()
             datamgr.close()

@@ -1226,7 +1226,9 @@ class ICalendarOwner(Interface):
 #
 
 class ITimetable(Interface):
-    """A timetable is a collection of timetable days that contain
+    """A timetable.
+
+    A timetable is an ordered collection of timetable days that contain
     periods. Each period either contains a class, or is empty.
 
     A timetable represents the repeating lesson schedule for just one
@@ -1240,32 +1242,46 @@ class ITimetable(Interface):
         """A list of timetable exceptions (ITimetableException).""")
 
     def keys():
-        """Return a sequence of identifiers for days within the timetable"""
+        """Return a sequence of identifiers for days within the timetable.
+
+        The order of day IDs is fixed.
+        """
 
     def items():
-        """Return a sequence of tuples of (day_id, ITimetableDay)."""
+        """Return a sequence of tuples of (day_id, ITimetableDay).
+
+        The order of day IDs is fixed and is the same as returned by keys().
+        """
 
     def __getitem__(key):
         """Return a ITimetableDay for a given day id."""
+
+    def itercontent():
+        """Iterate over all activites in this timetable.
+
+        Return an iterator for tuples (day_id, period_id, activity).
+        """
 
     def cloneEmpty():
         """Return a new empty timetable with the same structure.
 
         The new timetable has the same set of day_ids, and the sets of
-        period ids within each day.
+        period ids within each day.  It has no activities nor exceptions.
         """
 
     def __eq__(other):
-        """Return True iff other is a Timetable with the same set of
-        day_ids and each day compares equal.
+        """Is this timetable equal to other?
+
+        Timetables are equal iff they have the same model, set of exceptions,
+        set of day IDs, and their corresponding days are equal.
+
+        Returns False if other is not a timetable.
         """
 
     def __ne__(other):
-        """Return True iff __eq__ returns False."""
+        """Is this timetable different from other?
 
-    def itercontent():
-        """Return an iterator for tuples (day_id, period_id, activity)
-        for all activities in this timetable.
+        The opposite of __eq__.
         """
 
 
@@ -1275,25 +1291,31 @@ class ITimetableWrite(Interface):
         """Set an ITimetableDay for a given day id.
 
         Throws a TypeError if the value does not implement ITimetableDay.
-        Throws a ValueError if the key is not a day id.
+        Throws a ValueError if the key is not a valid day id.
         """
 
     def clear():
         """Remove all activities for all periods."""
 
     def update(timetable):
-        """Add all the events in the timetable passed to self, thus
-        producing a combined template.
+        """Add all the events and exceptions from timetable to self.
+
+        Useful for producing combined timetables.
         """
 
 
 class ITimetableDay(Interface):
-    """A model of a day with a mapping of periods to ITimetableActivities"""
+    """A day in a timetable.
+
+    A timetable day is an ordered collection of periods that each have
+    a set of activites that occur during that period.
+
+    Different days within the same timetable may have different periods.
+    """
 
     timetable = Attribute("""The timetable that contains this day.""")
 
-    periods = Attribute("""A list of periods which are meaningful within
-                        this day.""")
+    periods = Attribute("""A list of periods IDs for this day.""")
 
     def keys():
         """Return a sequence of period_ids which have activities
@@ -1352,7 +1374,8 @@ class ITimetableActivity(Interface):
     Something that happens on a certain period_id in a certain
     day_id.
 
-    Timetable activities are immutable.
+    Timetable activities are immutable and can be hashed or compared for
+    equality.
     """
 
     title = Attribute("""The title of the activity.""")
@@ -1363,13 +1386,39 @@ class ITimetableActivity(Interface):
         The activity lives in the owner's timetable.
         """)
 
-    timetable = Attribute("""The timetable that contains this activity.""")
-
     resources = Attribute("""A set of resources assigned to this activity.
 
         The activity is also present in the timetables of all resources
         assigned to this activity.
         """)
+
+    timetable = Attribute("""The timetable that contains this activity.
+
+        This attribute refers to the timetable of `owner`.  It never refers
+        to a composite timetable or a timetable of a resource.
+        """)
+
+    def replace(title=Unchanged, owner=Unchanged, resources=Unchanged,
+                timetable=Unchanged):
+        """Return a copy of this activity with some fields changed."""
+
+    def __eq__(other):
+        """Is this timetable activity equal to `other`?
+
+        Timetable activities are equal iff their title, owner and resources
+        attributes are equal.
+
+        Returns false if other is not a timetable activity.
+        """
+
+    def __ne__(other):
+        """Is this timetable activity different from `other`?
+
+        The opposite of __eq__.
+        """
+
+    def __hash__():
+        """Calculate the hash value of a timetable activity."""
 
 
 class ITimetableException(Interface):
