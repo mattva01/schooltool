@@ -26,7 +26,14 @@ ISchoolBellApplication is the main interface.  From it you can get to all
 persons, groups and resources in the system via IPersonContainer,
 IGroupContainer and IResourceContainer.
 
-Persons, as described by IPerson, are users of the system.
+Persons, as described by IPerson, are users of the system.  Groups and
+resources (IGroup, IResource) are passive objects.  Groups may contain
+persons and resources, but there are no additional semantics attached
+to group membership (at the time of this writing).
+
+IPersonContained, IGroupContained and IResourceContained describe persons,
+groups and resources in context of the rest of the application.  Partly it is
+done to avoid a circular dependency between IXxxContained and IXxxContainer.
 
 $Id$
 """
@@ -36,6 +43,14 @@ from zope.schema import TextLine, Bytes
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
+
+
+class IAdaptableToSchoolBellApplication(Interface):
+    """An object that knows which application it came from.
+
+    This is a marker interface.  Objects providing this interface can be
+    adapted to ISchoolBellApplication.
+    """
 
 
 class IGroupMember(Interface):
@@ -97,13 +112,13 @@ class IPerson(IReadPerson, IWritePerson):
     """
 
 
-class IPersonContainer(IContainer):
+class IPersonContainer(IContainer, IAdaptableToSchoolBellApplication):
     """Container of persons."""
 
     contains(IPerson)
 
 
-class IPersonContained(IPerson, IContained):
+class IPersonContained(IPerson, IContained, IAdaptableToSchoolBellApplication):
     """Person contained in an IPersonContainer."""
 
     containers(IPersonContainer)
@@ -118,13 +133,13 @@ class IGroup(Interface):
     members = Attribute("""Members of the group (see IRelationshipProperty)""")
 
 
-class IGroupContainer(IContainer):
+class IGroupContainer(IContainer, IAdaptableToSchoolBellApplication):
     """Container of groups."""
 
     contains(IGroup)
 
 
-class IGroupContained(IGroup, IContained):
+class IGroupContained(IGroup, IContained, IAdaptableToSchoolBellApplication):
     """Group contained in an IGroupContainer."""
 
     containers(IGroupContainer)
@@ -137,13 +152,14 @@ class IResource(IGroupMember):
         description=u"Title of the resource.")
 
 
-class IResourceContainer(IContainer):
+class IResourceContainer(IContainer, IAdaptableToSchoolBellApplication):
     """Container of resources."""
 
     contains(IResource)
 
 
-class IResourceContained(IResource, IContained):
+class IResourceContained(IResource, IContained,
+                         IAdaptableToSchoolBellApplication):
     """Group contained in an IGroupContainer."""
 
     containers(IResourceContainer)

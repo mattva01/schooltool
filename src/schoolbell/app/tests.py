@@ -76,6 +76,15 @@ def doctest_SchoolBellApplication():
         >>> resources.__name__
         u'resources'
 
+    Containers are adaptable to ISchoolBellApplication
+
+        >>> ISchoolBellApplication(persons) is app
+        True
+        >>> ISchoolBellApplication(groups) is app
+        True
+        >>> ISchoolBellApplication(resources) is app
+        True
+
     """
 
 
@@ -96,6 +105,7 @@ def doctest_PersonContainer():
         ...        return PersonContainer()
         >>> run_unit_tests(Test)
 
+    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
     """
 
 
@@ -116,6 +126,7 @@ def doctest_GroupContainer():
         ...        return GroupContainer()
         >>> run_unit_tests(Test)
 
+    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
     """
 
 
@@ -136,6 +147,7 @@ def doctest_ResourceContainer():
         ...        return ResourceContainer()
         >>> run_unit_tests(Test)
 
+    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
     """
 
 
@@ -204,6 +216,15 @@ def doctest_Person():
         >>> person.checkPassword(u'\u1234')
         True
 
+    Persons can be adapted to ISchoolBellApplication
+
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> app['persons']['guest'] = person
+        >>> ISchoolBellApplication(person) is app
+        True
+
     """
 
 
@@ -216,6 +237,15 @@ def doctest_Group():
         >>> verifyObject(IGroupContained, group)
         True
 
+    Groups can be adapted to ISchoolBellApplication
+
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> app['groups']['friends'] = group
+        >>> ISchoolBellApplication(group) is app
+        True
+
     """
 
 
@@ -226,6 +256,15 @@ def doctest_Resource():
         >>> from schoolbell.app.app import Resource
         >>> resource = Resource()
         >>> verifyObject(IResourceContained, resource)
+        True
+
+    Resources can be adapted to ISchoolBellApplication
+
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> app['resources']['book1'] = resource
+        >>> ISchoolBellApplication(resource) is app
         True
 
     """

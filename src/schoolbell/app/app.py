@@ -64,17 +64,29 @@ class PersonContainer(BTreeContainer):
 
     implements(IPersonContainer)
 
+    def __conform__(self, protocol):
+        if protocol is ISchoolBellApplication:
+            return self.__parent__
+
 
 class GroupContainer(BTreeContainer):
     """Container of groups."""
 
     implements(IGroupContainer)
 
+    def __conform__(self, protocol):
+        if protocol is ISchoolBellApplication:
+            return self.__parent__
+
 
 class ResourceContainer(BTreeContainer):
     """Container of resources."""
 
     implements(IResourceContainer)
+
+    def __conform__(self, protocol):
+        if protocol is ISchoolBellApplication:
+            return self.__parent__
 
 
 class Person(Persistent, Contained):
@@ -100,6 +112,10 @@ class Person(Persistent, Contained):
 
     def hasPassword(self):
         return self._hashed_password is not None
+
+    def __conform__(self, protocol):
+        if protocol is ISchoolBellApplication:
+            return self.__parent__.__parent__
 
 
 def hash_password(password):
@@ -145,6 +161,10 @@ class Group(Persistent, Contained):
     def __init__(self, title=None):
         self.title = title
 
+    def __conform__(self, protocol):
+        if protocol is ISchoolBellApplication:
+            return self.__parent__.__parent__
+
 
 class Resource(Persistent, Contained):
     """Resource."""
@@ -155,3 +175,8 @@ class Resource(Persistent, Contained):
 
     def __init__(self, title=None):
         self.title = title
+
+    def __conform__(self, protocol):
+        if protocol is ISchoolBellApplication:
+            return self.__parent__.__parent__
+
