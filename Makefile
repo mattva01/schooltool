@@ -1,12 +1,11 @@
 #!/usr/bin/make
 #
-# Makefile for SchoolTool
+# Makefile for SchoolBell
 #
 # $Id$
 
 PYTHON=python2.3
-PYTHONDIR=/usr/lib/python2.3
-TESTFLAGS=-w
+TESTFLAGS=-w1
 PYTHONPATH=src:Zope3/src
 
 .PHONY: all
@@ -14,14 +13,13 @@ all: build
 
 .PHONY: build
 build:
-	$(PYTHON) setup.py schoolbell build_ext -i
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
 .PHONY: realclean
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
-	rm -f Data.fs* *.csv tags ID *.log
+	rm -f Data.fs* tags ID *.log
 	rm -f MANIFEST
 	rm -rf dist
 
