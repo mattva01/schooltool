@@ -354,8 +354,12 @@ def format_exception(etype, value, tb, limit=None, basedir=None):
         w = list.append
 
         def fn(filename):
-            if basedir and filename.startswith(basedir):
-                filename = filename[len(basedir)+1:]
+            """Shorten the file name if necessary."""
+            # Previously this function used to do this:
+            #   if basedir and filename.startswith(basedir):
+            #       filename = filename[len(basedir)+1:]
+            # it turned out to be a bad idea -- relative paths are hard to copy
+            # and paste.
             return filename
 
         for filename, lineno, name, locals in extract_tb(tb, limit):
