@@ -451,13 +451,15 @@ class SchoolTimetableView(View):
             timetables = {}
             service = getTimetableSchemaService(self.context)
             schema = service[self.key[1]]
+            groups = {}
             for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
                 path = teacher_node.nsProp('path', None)
                 try:
                     teacher = traverse(self.context, path)
                 except KeyError:
                     return textErrorPage(request, "Invalid path: %s" % path)
-                for group in getRelatedObjects(teacher, URITaught):
+                groups[path] = list(getRelatedObjects(teacher, URITaught))
+                for group in groups[path]:
                     path = getPath(group)
                     if path in timetables:
                         continue
@@ -470,6 +472,7 @@ class SchoolTimetableView(View):
                     timetables[path] = tt
 
             for teacher_node in xpathctx.xpathEval('/st:schooltt/st:teacher'):
+                teacher_path = teacher_node.nsProp('path', None)
                 xpathctx.setContextNode(teacher_node)
                 for day in xpathctx.xpathEval('st:day'):
                     day_id = day.nsProp('id', None)
@@ -490,6 +493,10 @@ class SchoolTimetableView(View):
                                 return textErrorPage(request,
                                            "Invalid group: %s" % path)
                             group = traverse(self.context, path)
+                            if group not in groups[teacher_path]:
+                                return textErrorPage(request,
+                                           "Invalid group %s for teacher %s"
+                                           % (path, teacher_path))
                             timetables[path][day_id].add(period_id,
                                 TimetableActivity(title, group))
 

@@ -1007,8 +1007,20 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
               </teacher>
             </schooltt>
             """
+        bad_teacher_xml = """
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
+              <teacher path="/persons/p1">
+                <day id="A">
+                  <period id="Blue">
+                    <activity group="/groups/sg3">Instead of p2</activity>
+                  </period>
+                </day>
+              </teacher>
+              <teacher path="/persons/p2" />
+            </schooltt>
+            """
         for body in (nonxml, badxml, bad_path_xml, bad_day_xml, bad_period_xml,
-                     bad_group_xml):
+                     bad_group_xml, bad_teacher_xml):
             request = RequestStub(method="PUT", body=body,
                                   headers={'Content-Type': 'text/xml'})
             result = self.view.render(request)
