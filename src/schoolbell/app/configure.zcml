@@ -17,6 +17,15 @@
   <permission id="schoolbell.create"  title="Create new objects" />
   <permission id="schoolbell.manageMembership"  title="Manage membership" />
 
+<!-- Generations -->
+
+  <!-- We are at generation 0 -->
+  <utility
+      name="schoolbell.app"
+      provides="zope.app.generations.interfaces.ISchemaManager"
+      factory="zope.app.generations.generations.SchemaManager"
+      />
+
 <!-- Core content objects -->
 
   <content class=".app.SchoolBellApplication">
