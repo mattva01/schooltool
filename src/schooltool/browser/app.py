@@ -24,7 +24,7 @@ $Id$
 
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
-from schooltool.browser.model import PersonInfoPage
+from schooltool.browser.model import PersonView
 from schooltool.interfaces import IApplication
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import AuthenticationError
@@ -71,5 +71,5 @@ class PersonContainerView(View):
     __used_for__ = IApplicationObjectContainer
 
     def _traverse(self, name, request):
-        return PersonInfoPage(self.context[name])
+        return PersonView(self.context[name])
 

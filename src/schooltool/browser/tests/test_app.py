@@ -111,9 +111,23 @@ class TestAppView(unittest.TestCase):
         self.assertRaises(KeyError, view._traverse, 'nosuchpage', request)
 
 
+class TestPersonContainerView(unittest.TestCase):
+
+    def test_traverse(self):
+        from schooltool.model import Person
+        from schooltool.browser.app import PersonContainerView
+        from schooltool.browser.model import PersonView
+        container = {'person': Person()}
+        view = PersonContainerView(container)
+        personview = view._traverse('person', RequestStub())
+        self.assert_(isinstance(personview, PersonView))
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
+    suite.addTest(unittest.makeSuite(TestPersonContainerView))
     return suite
 
 

@@ -13,6 +13,10 @@
       <b>Title:</b>
       <span tal:replace="context/title">John, but not Doe</span>
     </div>
+    <div class="row">
+      <b>Photo:</b>
+      <tal:block replace="structure view/photo" />
+    </div>
   </metal:block>
 </body>
 </html>

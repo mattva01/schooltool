@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 
-from schooltool.browser.tests import RequestStub
+from schooltool.browser.tests import RequestStub, setPath
 
 __metaclass__ = type
 
@@ -33,10 +33,10 @@ class TestPersonInfo(unittest.TestCase):
 
     def test(self):
         from schooltool.model import Person
-        from schooltool.browser.app import PersonInfoPage
+        from schooltool.browser.app import PersonView
         person = Person(title="John Doe")
         person.__name__ = 'johndoe'
-        view = PersonInfoPage(person)
+        view = PersonView(person)
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
@@ -44,18 +44,61 @@ class TestPersonInfo(unittest.TestCase):
         self.assert_('johndoe' in result)
         self.assert_('John Doe' in result)
 
-    def test_container(self):
+    def test_traverse(self):
         from schooltool.model import Person
-        from schooltool.browser.app import PersonContainerView
-        container = {'person': Person()}
-        view = PersonContainerView(container)
-        personview = view._traverse('person', RequestStub())
-        self.assertEquals(personview.__class__.__name__, 'PersonInfoPage')
+        from schooltool.browser.model import PersonView, PhotoView
+        person = Person(title="John Doe")
+        view = PersonView(person)
+        photoview = view._traverse('photo.jpg', RequestStub())
+        self.assert_(photoview.context is person)
+        self.assert_(isinstance(photoview, PhotoView))
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+    def test_photo(self):
+        from schooltool.model import Person
+        from schooltool.browser.model import PersonView
+        from schooltool.component import FacetManager
+        person = Person()
+        setPath(person, '/persons/>me')
+        facet = FacetManager(person).facetByName('person_info')
+        facet.photo = ';-)'
+        view = PersonView(person)
+        markup = view.photo()
+        self.assertEquals(markup, '<img src="/persons/&gt;me/photo.jpg" />')
+
+        facet.photo = None
+        markup = view.photo()
+        self.assertEquals(markup, '<i>N/A</i>')
+
+
+class TestPhotoView(unittest.TestCase):
+
+    def createView(self, photo):
+        from schooltool.model import Person
+        from schooltool.browser.model import PhotoView
+        from schooltool.component import FacetManager
+        person = Person()
+        facet = FacetManager(person).facetByName('person_info')
+        facet.photo = photo
+        return PhotoView(person)
+
+    def test(self):
+        view = self.createView(';-)')
+        request = RequestStub()
+        photo = view.render(request)
+        self.assertEquals(request.headers['content-type'], 'image/jpeg')
+        self.assertEquals(photo, ';-)')
+
+    def test_nophoto(self):
+        view = self.createView(None)
+        request = RequestStub()
+        self.assertRaises(ValueError, view.render, request)
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersonInfo))
+    suite.addTest(unittest.makeSuite(TestPhotoView))
     return suite
 
 
