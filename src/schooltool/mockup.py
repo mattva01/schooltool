@@ -21,10 +21,14 @@ The mockup objects for the HTTP server.
 
 $Id$
 """
+
 import os
 from persistence import Persistent
 from schooltool.model import Person, Group
 from schooltool.views import View, Template
+
+__metaclass__ = type
+
 
 #
 # Some fake content
@@ -63,7 +67,6 @@ class FakeApplication(Persistent):
         self.root.add(self.people)
 
 
-
 #
 #  Views for mockup objects
 #
@@ -89,8 +92,11 @@ class PeopleView(View):
     template = Template('www/people.pt')
 
     def _traverse(self, name, request):
-        person = self.context[int(name)]
-        return PersonView(person)
+        try:
+            person = self.context[int(name)]
+            return PersonView(person)
+        except (ValueError, TypeError):
+            raise KeyError(name)
 
 
 class PersonView(View):
