@@ -114,7 +114,7 @@ Frog should not be capable of booking any resources yet:
     ...
       <fieldset>
         <legend>Available Resources</legend>
-        <table class="acl">
+        <table class="event_booking">
         </table>
       </fieldset>
     ...
@@ -161,7 +161,7 @@ Frog should see the mud and the fish now:
     ...
       <fieldset>
         <legend>Available Resources</legend>
-        <table class="acl">
+        <table class="event_booking">
     ...
              <input type="hidden" value="1"
                     name="marker-fish" />
@@ -200,13 +200,13 @@ We should see the resource as a booked resource:
     ...
       <fieldset>
         <legend>Available Resources</legend>
-        <table class="acl">
+        <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
-                       name="fish" />
+                       name="fish" id="fish" />
     ...
                 <input type="checkbox" value="booked"
-                       checked="checked" name="mud" />
+                       checked="checked" name="mud" id="mud" />
     ...
         </table>
       </fieldset>
@@ -240,13 +240,13 @@ Now another resource is booked:
     ...
       <fieldset>
         <legend>Available Resources</legend>
-        <table class="acl">
+        <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
-                       checked="checked" name="fish" />
+                       checked="checked" name="fish" id="fish" />
     ...
                 <input type="checkbox" value="booked"
-                       name="mud" />
+                       name="mud" id="mud" />
     ...
         </table>
       </fieldset>
@@ -296,13 +296,13 @@ The fish should stay in the bookable resources list:
     ...
       <fieldset>
         <legend>Available Resources</legend>
-        <table class="acl">
+        <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
-                       checked="checked" name="fish" />
+                       checked="checked" name="fish" id="fish" />
     ...
                 <input type="checkbox" value="booked"
-                       name="mud" />
+                       name="mud" id="mud" />
     ...
         </table>
       </fieldset>
@@ -333,10 +333,10 @@ Unless unbooked:
     ...
       <fieldset>
         <legend>Available Resources</legend>
-        <table class="acl">
+        <table class="event_booking">
     ...
                 <input type="checkbox" value="booked"
-                       name="mud" />
+                       name="mud" id="mud" />
     ...
         </table>
       </fieldset>
