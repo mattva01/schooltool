@@ -451,9 +451,8 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
                 return self.do_GET(request)
 
             overlays = request.args.get('overlay', [])
-            user = request.authenticated_user
 
-            self._subscribeToCalendars(overlays)
+            self._subscribeToCalendarProviders(overlays)
 
         return self.do_GET(request)
 
@@ -551,20 +550,18 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     def getValue(self, obj):
         return getPath(obj)
 
-    def _subscribeToCalendars(self, calendars):
+    def _subscribeToCalendarProviders(self, providers):
         """Link user to selected calendar."""
-
-##      raise NotImplementedError('XXX this function is not unit tested')
 
         # Unlink old calendar subscriptions.
         for link in \
                 self.request.authenticated_user.listLinks(URICalendarProvider):
             link.unlink()
 
-        for calendar in calendars:
+        for provider in providers:
             relate(URICalendarSubscription,
                    (self.request.authenticated_user, URICalendarSubscriber),
-                   (traverse(self.context, calendar), URICalendarProvider))
+                   (traverse(self.context, provider), URICalendarProvider))
 
     def eventColors(self, event):
         """Figure out in what color to display events from this calendar.
