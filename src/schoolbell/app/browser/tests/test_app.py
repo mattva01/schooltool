@@ -896,6 +896,7 @@ def doctest_LogoutView():
 
     """
 
+
 def setUpSession():
     """Set up the session machinery."""
     from zope.app.session.session import ClientId, Session

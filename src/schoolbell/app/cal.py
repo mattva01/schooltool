@@ -51,9 +51,6 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
 class Calendar(Persistent, CalendarMixin):
     """A persistent calendar."""
 
-    # TODO: We could inherit from BTreeContainer
-    #       and get some functionality for free.
-
     # We use the expand() implementation from CalendarMixin
     # (although we do override find())
 
