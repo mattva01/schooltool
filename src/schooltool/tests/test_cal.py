@@ -667,6 +667,24 @@ class TestExpandedCalendarEvent(TestCalendarEvent):
         assert IExpandedCalendarEvent.providedBy(eev)
 
 
+class TestInheritedCalendarEvent(TestCalendarEvent):
+
+    def test(self):
+        from schooltool.cal import CalendarEvent, InheritedCalendarEvent
+        from schooltool.interfaces import IInheritedCalendarEvent
+        ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid',
+                           privacy="hidden")
+        iev = InheritedCalendarEvent(ev)
+        verifyObject(IInheritedCalendarEvent, ev)
+        self.assertEquals(ev, iev)
+        self.assertEquals(ev.dtstart, iev.dtstart)
+
+        self.assertRaises(AssertionError,
+                          InheritedCalendarEvent, ev.replace(recurrence="foo"))
+
+
 class TestACLCalendar(unittest.TestCase):
 
     def test(self):

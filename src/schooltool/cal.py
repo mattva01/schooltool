@@ -373,9 +373,8 @@ class InheritedCalendarEvent(CalendarEvent):
     implements(IInheritedCalendarEvent)
 
     def __init__(self, ev):
-        """Create a clone of a given event."""
-        # XXX untested
-        assert ev.recurrence is None
+        """Create a clone of a given event that says that it is inherited."""
+        assert ev.recurrence is None, ev
         CalendarEvent.__init__(self,
                     ev.dtstart, ev.duration, ev.title, owner=ev.owner,
                     context=ev.context, location=ev.location,
