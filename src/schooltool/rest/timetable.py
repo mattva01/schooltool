@@ -35,9 +35,10 @@ from schooltool.rest.auth import PublicAccess
 from schooltool.rest.xmlparsing import XMLDocument
 from schooltool.rest.xmlparsing import XMLParseError, XMLValidationError
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
+from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.common import UnicodeAwareException, to_unicode
-from schooltool.common import parse_time
+from schooltool.common import parse_date, parse_time
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, traverse, getPath
@@ -56,6 +57,74 @@ moduleProvides(IModuleSetup)
 
 class ViewError(UnicodeAwareException):
     pass
+
+
+def parseDate(date_str):
+    """Parse a date string and return a datetime.date object.
+
+    This is a thin wrapper over parse_date that converts ValueErrors into
+    (internationalized) ViewErrors.
+
+        >>> parseDate('2004-10-14')
+        datetime.date(2004, 10, 14)
+        >>> parseDate('foo')
+        Traceback (most recent call last):
+          ...
+        ViewError: Invalid date: foo
+
+    """
+    try:
+        return parse_date(date_str)
+    except ValueError:
+        raise ViewError(_("Invalid date: %s") % date_str)
+
+
+def parseTime(time_str):
+    """Parse a time string and return a datetime.time object.
+
+    This is a thin wrapper over parse_time that converts ValueErrors into
+    (internationalized) ViewErrors.
+
+        >>> parseTime('8:45')
+        datetime.time(8, 45)
+        >>> parseTime('foo')
+        Traceback (most recent call last):
+          ...
+        ViewError: Invalid time: foo
+    """
+    try:
+        return parse_time(time_str)
+    except ValueError:
+        raise ViewError(_("Invalid time: %s") % time_str)
+
+
+def parseDuration(duration_str):
+    """Parse a duration string and return a datetime.timedelta.
+
+        >>> parseDuration('1')
+        datetime.timedelta(0, 60)
+        >>> parseDuration('just a minute')
+        Traceback (most recent call last):
+          ...
+        ViewError: Invalid duration: just a minute
+        >>> parseDuration('0')
+        Traceback (most recent call last):
+          ...
+        ViewError: Invalid duration: 0
+        >>> parseDuration('-1')
+        Traceback (most recent call last):
+          ...
+        ViewError: Invalid duration: -1
+
+    """
+    try:
+        min = int(duration_str)
+        if min <= 0:
+            raise ValueError
+    except ValueError:
+        raise ViewError(_("Invalid duration: %s") % duration_str)
+    else:
+        return datetime.timedelta(minutes=min)
 
 
 class TimetableContentNegotiation:
@@ -246,6 +315,11 @@ class TimetableReadWriteView(TimetableReadView):
                         raise ViewError(_("Unknown period id: %r") % period_id)
                     for activity in period.query('tt:activity'):
                         ttday.add(period_id, self._parseActivity(activity))
+            all_periods = sets.Set()
+            for day_id, ttday in tt.items():
+                all_periods.update(ttday.keys())
+            for exc in doc.query('/tt:timetable/tt:exception'):
+                tt.exceptions.append(self._parseException(exc, all_periods))
             doc.free()
         except ViewError, e:
             doc.free()
@@ -283,6 +357,7 @@ class TimetableReadWriteView(TimetableReadView):
               ...
             </activity>
 
+        There can be zero or more resource elements.
         """
         title = activity_node['title']
         resources = []
@@ -294,6 +369,58 @@ class TimetableReadWriteView(TimetableReadView):
                 raise ViewError(_("Invalid path: %s") % path)
             resources.append(res)
         return TimetableActivity(title, self.timetabled, resources)
+
+    def _parseException(self, exception_node, all_periods):
+        """Parse the <exception> element and return a TimetableException.
+
+        The element looks like this:
+
+            <exception date="YYYY-MM-DD" period="PERIOD">
+              <activity ... />
+              <replacement date="YYYY-MM-DD" time="HH:MM" duration="DUR"
+                           uid="UID">
+                TITLE
+              </replacement>
+            </exception>
+
+        The replacement element is optional.  The date attribute of the
+        replacement is optional and defaults to the date of the exception.
+        """
+        date = parseDate(exception_node['date'])
+        period = exception_node['period']
+        if period not in all_periods:
+            raise ViewError(_("Unknown period id: %r") % period)
+        activity = self._parseActivity(exception_node.query('tt:activity')[0])
+        exc = TimetableException(date, period, activity)
+        replacement_nodes = exception_node.query('tt:replacement')
+        if replacement_nodes:
+            exc.replacement = self._parseReplacement(replacement_nodes[0],
+                                                     exc)
+        return exc
+
+    def _parseReplacement(self, replacement_node, exception):
+        """Parse <replacement> and return an ExceptionalTTCalendarEvent.
+
+        The element looks like this:
+
+            <replacement date="YYYY-MM-DD" time="HH:MM" duration="DUR"
+                         uid="UID">
+              TITLE
+            </replacement>
+
+        The date attribute of the replacement is optional.
+        """
+        if replacement_node.get('date') is None:
+            date = exception.date
+        else:
+            date = parseDate(replacement_node['date'])
+        time = parseTime(replacement_node['time'])
+        dtstart = datetime.datetime.combine(date, time)
+        duration = parseDuration(replacement_node['duration'])
+        uid = replacement_node['uid']
+        title = replacement_node.content.strip()
+        return ExceptionalTTCalendarEvent(dtstart, duration, title,
+                                          unique_id=uid, exception=exception)
 
     def do_DELETE(self, request):
         if self.context is None:

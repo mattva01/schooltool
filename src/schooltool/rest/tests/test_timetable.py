@@ -27,7 +27,7 @@ import datetime
 from logging import INFO
 from sets import Set
 
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.interfaces import ITraversable
@@ -560,6 +560,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
 
 class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
 
+    namespaces = {'tt': 'http://schooltool.org/ns/timetable/0.1',
+                  'xlink': 'http://www.w3.org/1999/xlink'}
+
     illformed_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <day id="Day 1"
@@ -680,6 +683,13 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(list(lab1.timetables[key].itercontent()), [])
         self.assertEquals(list(lab2.timetables[key].itercontent()), [])
 
+    def test_put_with_exceptions(self):
+        key = ('2003 fall', 'weekly')
+        ttd = self.createTimetabled()
+        expected = self.createFullWithExceptions(ttd)
+        self.do_test_put(ttd, key, self.full_xml_with_exceptions, expected)
+        # TODO: check timetable exceptions in resource timetables.
+
     def do_test_put(self, timetabled, key, xml, expected):
         view = self.createView(timetabled=timetabled, key=key)
         view.authorization = lambda ctx, rq: True
@@ -788,6 +798,123 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         result = view.render(request)
         self.assertEquals(request.code, 404)
         self.assertEquals(request.applog, [])
+
+    def createTimetableExceptionStub(self):
+        from schooltool.interfaces import ITimetableException
+        class TimetableExceptionStub:
+            implements(ITimetableException)
+        return TimetableExceptionStub()
+
+    def test_parseException(self):
+        from schooltool.rest.xmlparsing import XMLDocument
+        from schooltool.timetable import TimetableActivity
+        view = self.createView(None)
+        exc = view._parseException(XMLDocument("""
+                <exception date="2004-12-04" period="PERIOD"
+                           xmlns="http://schooltool.org/ns/timetable/0.1">
+                  <activity title="ACTIVITY" />
+                </exception>
+            """, namespaces=self.namespaces).root, ['PERIOD'])
+        self.assertEquals(exc.date, datetime.date(2004, 12, 4))
+        self.assertEquals(exc.period_id, 'PERIOD')
+        owner = view.timetabled
+        self.assertEquals(exc.activity, TimetableActivity('ACTIVITY', owner))
+
+    def test_parseException_with_replacement(self):
+        from schooltool.rest.xmlparsing import XMLDocument
+        from schooltool.timetable import TimetableActivity
+        view = self.createView(None)
+        exc = view._parseException(XMLDocument("""
+                <exception date="2004-12-04" period="PERIOD"
+                           xmlns="http://schooltool.org/ns/timetable/0.1">
+                  <activity title="ACTIVITY" />
+                  <replacement time="8:30" duration="45" uid="ID">
+                    TITLE
+                  </replacement>
+                </exception>
+            """, namespaces=self.namespaces).root, ['PERIOD'])
+        self.assertEquals(exc.date, datetime.date(2004, 12, 4))
+        self.assertEquals(exc.period_id, 'PERIOD')
+        owner = view.timetabled
+        self.assertEquals(exc.activity, TimetableActivity('ACTIVITY', owner))
+        self.assertEquals(exc.replacement.dtstart,
+                          datetime.datetime(2004, 12, 4, 8, 30))
+        self.assertEquals(exc.replacement.title, 'TITLE')
+
+    def test_parseException_errors(self):
+        from schooltool.rest.xmlparsing import XMLDocument
+        from schooltool.rest.timetable import ViewError
+        view = self.createView(None)
+        examples = XMLDocument("""
+                <testcases xmlns="http://schooltool.org/ns/timetable/0.1">
+                  <exception date="1/2/3" period="PERIOD">
+                    <activity title="ACTIVITY" />
+                  </exception>
+                  <exception date="2004-11-10" period="UNKNOWN">
+                    <activity title="ACTIVITY" />
+                  </exception>
+                </testcases>
+        """, namespaces=self.namespaces).query('//tt:exception')
+        for node in examples:
+            self.assertRaises(ViewError, view._parseException, node,
+                              ['PERIOD'])
+
+    def test_parseReplacement(self):
+        from schooltool.rest.xmlparsing import XMLDocument
+        view = self.createView(None)
+        exc = self.createTimetableExceptionStub()
+        replacement = view._parseReplacement(XMLDocument("""
+                <replacement date="2004-12-04" time="14:35"
+                             duration="15" uid="a_uid">
+                  Title
+                </replacement>
+            """).root, exc)
+        self.assertEquals(replacement.title, "Title")
+        self.assertEquals(replacement.dtstart,
+                          datetime.datetime(2004, 12, 4, 14, 35))
+        self.assertEquals(replacement.duration, datetime.timedelta(minutes=15))
+        self.assertEquals(replacement.unique_id, "a_uid")
+        self.assertEquals(replacement.exception, exc)
+
+    def test_parseReplacement_no_date(self):
+        from schooltool.rest.xmlparsing import XMLDocument
+        view = self.createView(None)
+        exc = self.createTimetableExceptionStub()
+        exc.date = datetime.date(2004, 12, 4)
+        replacement = view._parseReplacement(XMLDocument("""
+                <replacement time="14:35" duration="15" uid="a_uid">
+                  Title
+                </replacement>
+            """).root, exc)
+        self.assertEquals(replacement.title, "Title")
+        self.assertEquals(replacement.dtstart,
+                          datetime.datetime(2004, 12, 4, 14, 35))
+        self.assertEquals(replacement.duration, datetime.timedelta(minutes=15))
+        self.assertEquals(replacement.unique_id, "a_uid")
+        self.assertEquals(replacement.exception, exc)
+
+    def test_parseReplacement_error(self):
+        from schooltool.rest.xmlparsing import XMLDocument
+        from schooltool.rest.timetable import ViewError
+        view = self.createView(None)
+        exc = self.createTimetableExceptionStub()
+        examples = XMLDocument("""
+                <testcases>
+                  <replacement date="1/2/3" time="14:35" duration="15"
+                               uid="a">Title</replacement>
+                  <replacement date="2004-12-03" time="noon" duration="15"
+                               uid="a">Title</replacement>
+                  <replacement date="2004-12-03" time="14:35" duration="5min"
+                               uid="a">Title</replacement>
+                  <replacement date="2004-12-03" time="14:35" duration="-1"
+                               uid="a">Title</replacement>
+                  <replacement date="2004-12-03" time="14:35" duration="0"
+                               uid="a">Title</replacement>
+                </testcases>
+            """).query('//replacement')
+        for replacement_node in examples:
+            self.assertRaises(ViewError, view._parseReplacement,
+                              replacement_node, exc)
 
 
 class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
