@@ -129,7 +129,8 @@ def inspectSpecificURI(uri, translate=True):
         doc = ""
 
     if translate:
-        title, doc = gettext(title), gettext(doc)
+        title = title and gettext(title)
+        doc = gettext(doc)
 
     return uri, title, doc
 
