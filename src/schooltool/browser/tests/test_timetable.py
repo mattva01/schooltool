@@ -243,7 +243,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
         self.assertEquals(schema.model.dayTemplates, view.day_templates)
         self.assertEquals(request.applog,
                           [(self.manager,
-                            'Timetable schema /ttschemas/something updated',
+                            'Timetable schema /ttschemas/something created',
                             INFO)])
 
     def test_name_missing(self):
@@ -575,9 +575,8 @@ class TestTimePeriodViewBase(AppSetupMixin, NiceDiffsMixin,
 
     def createView(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.timetable import TimePeriodService
         from schooltool.browser.timetable import TimePeriodViewBase
-        context = TimePeriodService()
+        context = self.app.timePeriodService
         context['2004-fall'] = SchooldayModel(None, None)
         view = TimePeriodViewBase(context)
         view.title = lambda: u'title'
@@ -736,9 +735,8 @@ class TestTimePeriodView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.timetable import TimePeriodService
         from schooltool.browser.timetable import TimePeriodView
-        service = TimePeriodService()
+        service = self.app.timePeriodService
         service['2004-fall'] = SchooldayModel(datetime.date(2004, 2, 1),
                                               datetime.date(2004, 5, 31))
         view = TimePeriodView(service['2004-fall'])
@@ -789,6 +787,10 @@ class TestTimePeriodView(AppSetupMixin, unittest.TestCase):
         self.assert_(model.isSchoolday(datetime.date(2005, 5, 31)))
         self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
         self.assertEquals(view.status, "Saved changes.")
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            'Time period /time-periods/2004-fall updated',
+                            INFO)])
 
     def test_start_date_missing(self):
         view = self.createView()
@@ -848,9 +850,8 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
     def createView(self):
         from schooltool.cal import SchooldayModel
-        from schooltool.timetable import TimePeriodService
         from schooltool.browser.timetable import NewTimePeriodView
-        context = TimePeriodService()
+        context = self.app.timePeriodService
         context['2004-fall'] = SchooldayModel(None, None)
         view = NewTimePeriodView(context)
         view.request = RequestStub(authenticated_user=self.manager)
@@ -901,6 +902,10 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(model.last, datetime.date(2005, 5, 31))
         self.assert_(model.isSchoolday(datetime.date(2005, 5, 31)))
         self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            'Time period /time-periods/2005-spring created',
+                            INFO)])
 
     def test_with_dates(self):
         view = self.createView()

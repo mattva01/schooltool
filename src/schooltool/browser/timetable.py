@@ -182,7 +182,7 @@ class TimetableSchemaWizard(View):
                 self.ttschema.model = model
                 key = self.name_widget.value
                 self.context[key] = self.ttschema
-                request.appLog(_("Timetable schema %s updated") %
+                request.appLog(_("Timetable schema %s created") %
                                getPath(self.context[key]))
                 return self.redirect("/ttschemas", request)
         return View.do_GET(self, request)
@@ -415,8 +415,10 @@ class TimePeriodView(TimePeriodViewBase):
             if not (self.start_widget.error or self.end_widget.error):
                 service = self.context.__parent__
                 key = self.context.__name__
-                self.context = self.model
-                service[key] = self.context
+                service[key] = self.model
+                self.context = service[key]
+                request.appLog(_("Time period %s updated") %
+                               getPath(self.context))
                 self.status = _("Saved changes.")
         return View.do_GET(self, request)
 
@@ -468,7 +470,10 @@ class NewTimePeriodView(TimePeriodViewBase):
             self.end_widget.require()
             if not (self.name_widget.error or self.start_widget.error or
                     self.end_widget.error) and self.model is not None:
-                self.service[self.name_widget.value] = self.model
+                key = self.name_widget.value
+                self.service[key] = self.model
+                request.appLog(_("Time period %s created") %
+                               getPath(self.service[key]))
                 return self.redirect("/time-periods", request)
         return View.do_GET(self, request)
 
