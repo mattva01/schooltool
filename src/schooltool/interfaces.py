@@ -1583,9 +1583,16 @@ class IApplication(IContainmentRoot, IServiceManager, ITraversable):
 
     Services (as given by IServiceManager) are found by attribute.
 
-    Root application objects are found by getRoots().
+    Application objects (of which there currently are persons, groups and
+    resources) form a second hierarchy in addition to the usual containment
+    hierarchy that all objects form.  The second hierarchy is expressed
+    by Membership relationships.  Roots of the membership hierarchy are found
+    by getRoots().
 
-    Application object containers are found by __getitem__.
+    Application object containers are found by __getitem__.  They do not
+    participate in the second (membership) hierarchy.  All application objects
+    are children of application object containers if you look at the
+    containment hierarchy.
     """
 
     def getRoots():
