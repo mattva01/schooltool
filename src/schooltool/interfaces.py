@@ -1225,7 +1225,7 @@ class ITimePeriodService(ILocation):
     def __getitem__(period_id):
         """Return the schoolday model for this time period."""
 
-    def __setitem__(schema_id, schoolday_model):
+    def __setitem__(period_id, schoolday_model):
         """Store a schoolday model for this time period."""
 
     def __delitem__(period_id):
