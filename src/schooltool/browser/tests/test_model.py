@@ -128,6 +128,18 @@ class TestPersonEditView(unittest.TestCase):
         self.assertEquals(self.info.date_of_birth, datetime.date(2004, 8, 6))
         self.assert_('JFIF' in self.info.photo)
 
+        # Empty dates are explicitly allowed
+        request = RequestStub(args={'first_name': 'I Changed',
+                                    'last_name': 'My Name Recently',
+                                    'date_of_birth': '',
+                                    'comment': 'For various reasons.',
+                                    'photo': ''})
+        view.do_POST(request)
+        self.assertEquals(request.applog,
+            [(None, u'Person info updated on I Changed'
+                    u' My Name Recently (/persons/somebody)', INFO)])
+        self.assert_(self.info.date_of_birth is None)
+
     def test_post_errors(self):
         for dob in ['bwahaha', '2004-13-01', '2004-08-05-01']:
             view = self.createView()

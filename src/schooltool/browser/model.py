@@ -98,12 +98,15 @@ class PersonEditView(View, PersonInfoMixin):
         comment = unicode(request.args['comment'][0], 'utf-8')
         photo = request.args['photo'][0]
 
-        try:
-            date_elements = [int(el) for el in dob_string.split('-')]
-            dob = datetime.date(*date_elements)
-        except (TypeError, ValueError):
-            self.error = _('Invalid date')
-            return self.do_GET(request)
+        if not dob_string:
+            dob = None
+        else:
+            try:
+                date_elements = [int(el) for el in dob_string.split('-')]
+                dob = datetime.date(*date_elements)
+            except (TypeError, ValueError):
+                self.error = _('Invalid date')
+                return self.do_GET(request)
 
         if photo:
             try:

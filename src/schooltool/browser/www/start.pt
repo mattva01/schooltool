@@ -12,7 +12,8 @@
 
 <ul class="actions">
   <li><a href="/groups/root">Browse groups and persons</a></li>
-  <li><a tal:attributes="href view/person_url">View your information page</a></li>
+  <li><a tal:attributes="href view/person_url">View your information
+      page</a></li>
   <li><a href="/logout">Log out</a></li>
 </ul>
 
