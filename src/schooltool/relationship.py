@@ -70,6 +70,8 @@ class Link(Persistent):
         # Relationship
 
     def _getTitle(self):
+        # XXX this is an ad-hoc bogosity (who said a link's target has a
+        #     title?) that will need to be rethought later
         return self.traverse().title
 
     title = property(_getTitle)
