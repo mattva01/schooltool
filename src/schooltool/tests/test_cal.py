@@ -347,37 +347,37 @@ class TestTimetabling(unittest.TestCase):
         tt["B"]["Blue"] = TimetableActivity("Geography")
 
 
-class TestSchooldayPeriodEvent(unittest.TestCase):
+class TestSchooldayPeriod(unittest.TestCase):
 
     def test(self):
-        from schooltool.cal import SchooldayPeriodEvent
-        from schooltool.interfaces import ISchooldayPeriodEvent
+        from schooltool.cal import SchooldayPeriod
+        from schooltool.interfaces import ISchooldayPeriod
 
-        ev = SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45))
-        verifyObject(ISchooldayPeriodEvent, ev)
+        ev = SchooldayPeriod("1", time(9, 00), timedelta(minutes=45))
+        verifyObject(ISchooldayPeriod, ev)
         self.assertEqual(ev.title, "1")
         self.assertEqual(ev.tstart, time(9,0))
         self.assertEqual(ev.duration, timedelta(seconds=2700))
 
     def test_eq(self):
-        from schooltool.cal import SchooldayPeriodEvent
+        from schooltool.cal import SchooldayPeriod
         self.assertEqual(
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)))
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)))
         self.assertEqual(
-            hash(SchooldayPeriodEvent("1", time(9, 0), timedelta(minutes=45))),
-            hash(SchooldayPeriodEvent("1", time(9, 0), timedelta(minutes=45))))
+            hash(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45))),
+            hash(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45))))
         self.assertNotEqual(
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriodEvent("2", time(9, 00), timedelta(minutes=45)))
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriod("2", time(9, 00), timedelta(minutes=45)))
         self.assertNotEqual(
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriodEvent("1", time(9, 01), timedelta(minutes=45)))
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriod("1", time(9, 01), timedelta(minutes=45)))
         self.assertNotEqual(
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=90)))
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=90)))
         self.assertNotEqual(
-            SchooldayPeriodEvent("1", time(9, 00), timedelta(minutes=45)),
+            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
             object())
 
 
@@ -393,18 +393,18 @@ class TestSchooldayTemplate(unittest.TestCase):
         verifyObject(ISchooldayTemplateWrite, tmpl)
 
     def test_add_remove_iter(self):
-        from schooltool.cal import SchooldayTemplate, SchooldayPeriodEvent
-        from schooltool.interfaces import ISchooldayPeriodEvent
+        from schooltool.cal import SchooldayTemplate, SchooldayPeriod
+        from schooltool.interfaces import ISchooldayPeriod
 
         class SPEStub:
-            implements(ISchooldayPeriodEvent)
+            implements(ISchooldayPeriod)
 
         tmpl = SchooldayTemplate()
         self.assertEqual(list(iter(tmpl)), [])
         self.assertRaises(TypeError, tmpl.add, object())
 
-        lesson1 = SchooldayPeriodEvent("1", time(9, 0), timedelta(minutes=45))
-        lesson2 = SchooldayPeriodEvent("2", time(10, 0), timedelta(minutes=45))
+        lesson1 = SchooldayPeriod("1", time(9, 0), timedelta(minutes=45))
+        lesson2 = SchooldayPeriod("2", time(10, 0), timedelta(minutes=45))
 
         tmpl.add(lesson1)
         self.assertEqual(list(iter(tmpl)), [lesson1])
@@ -466,7 +466,7 @@ class TestSequentialDaysTimetableModel(unittest.TestCase):
 
     def test_createCalendar(self):
         from schooltool.cal import SequentialDaysTimetableModel, daterange
-        from schooltool.cal import SchooldayTemplate, SchooldayPeriodEvent
+        from schooltool.cal import SchooldayTemplate, SchooldayPeriod
         from schooltool.cal import Timetable, TimetableDay, TimetableActivity
         from schooltool.interfaces import ICalendar
 
@@ -481,8 +481,8 @@ class TestSequentialDaysTimetableModel(unittest.TestCase):
 
         t, td = time, timedelta
         template1 = SchooldayTemplate()
-        template1.add(SchooldayPeriodEvent('Green', t(9, 0), td(minutes=90)))
-        template1.add(SchooldayPeriodEvent('Blue', t(11, 0), td(minutes=90)))
+        template1.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
+        template1.add(SchooldayPeriod('Blue', t(11, 0), td(minutes=90)))
 
         model = SequentialDaysTimetableModel(("A", "B"), (template1,))
         schooldays = SchooldayModelStub()
@@ -643,7 +643,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
     suite.addTest(unittest.makeSuite(TestTimetabling))
-    suite.addTest(unittest.makeSuite(TestSchooldayPeriodEvent))
+    suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
     suite.addTest(unittest.makeSuite(TestDateRange))

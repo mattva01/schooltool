@@ -24,7 +24,7 @@ $Id$
 from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
-from schooltool.interfaces import ILocation, ISchooldayPeriodEvent
+from schooltool.interfaces import ILocation, ISchooldayPeriod
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity
@@ -263,9 +263,9 @@ class TimetableActivity:
         self.title = title
 
 
-class SchooldayPeriodEvent:
+class SchooldayPeriod:
 
-    implements(ISchooldayPeriodEvent)
+    implements(ISchooldayPeriod)
 
     def __init__(self, title, tstart, duration):
         self.title = title
@@ -273,7 +273,7 @@ class SchooldayPeriodEvent:
         self.duration = duration
 
     def __eq__(self, other):
-        if not ISchooldayPeriodEvent.isImplementedBy(other):
+        if not ISchooldayPeriod.isImplementedBy(other):
             return False
         return (self.title == other.title and
                 self.tstart == other.tstart and
@@ -297,9 +297,9 @@ class SchooldayTemplate:
         return iter(self.events)
 
     def add(self, obj):
-        if not ISchooldayPeriodEvent.isImplementedBy(obj):
+        if not ISchooldayPeriod.isImplementedBy(obj):
             raise TypeError("SchooldayTemplate can only contain "
-                            "ISchooldayPeriodEvents (got %r)" % (obj,))
+                            "ISchooldayPeriods (got %r)" % (obj,))
         self.events.add(obj)
 
     def remove(self, obj):

@@ -1064,7 +1064,7 @@ class ITimetableWrite(Interface):
 
 
 class ITimetableDay(Interface):
-    """A model of a day with a mapping of periods to ITimetableEvents"""
+    """A model of a day with a mapping of periods to ITimetableActivities"""
 
     def keys():
         """Returns a sequence of period_ids within this day"""
@@ -1097,9 +1097,13 @@ class ITimetableDayWrite(Interface):
 
 
 class ITimetableActivity(Interface):
-    """An event in a timetable"""
+    """An event in a timetable.
 
-    title = Attribute("""The title of the event""")
+    Something that happens on a certain period_id in a certain
+    day_id.
+    """
+
+    title = Attribute("""The title of the activity""")
 
 
 class ISchooldayTemplate(Interface):
@@ -1122,22 +1126,22 @@ class ISchooldayTemplate(Interface):
     """
 
     def __iter__():
-        """Returns an iterator over the ISchooldayPeriodEvents of this
+        """Returns an iterator over the ISchooldayPeriods of this
         template.
         """
 
 class ISchooldayTemplateWrite(Interface):
 
     def add(obj):
-        """Add an ISchooldayPeriodEvent to the template.
+        """Add an ISchooldayPeriod to the template.
 
-        Raises a TypeError if obj is not an ISchooldayPeriodEvent."""
+        Raises a TypeError if obj is not an ISchooldayPeriod."""
 
     def remove(obj):
         """Remove an object from the template."""
 
 
-class ISchooldayPeriodEvent(Interface):
+class ISchooldayPeriod(Interface):
     """An object binding a timetable period to a concrete time
     interval within a schoolday template.
     """
@@ -1150,22 +1154,22 @@ class ISchooldayPeriodEvent(Interface):
     #     and not the public interface.
 
     def __eq__(other):
-        """SchooldayPeriodEvents are equal if all three of their
+        """SchooldayPeriods are equal if all three of their
         attributes are equal.
 
-        Raises TypeError if other does not implement ISchooldayPeriodEvent.
+        Raises TypeError if other does not implement ISchooldayPeriod.
         """
 
     def __ne__(other):
-        """SchooldayPeriodEvents are not equal if any of their three
+        """SchooldayPeriods are not equal if any of their three
         attributes are not equal.
 
-        Raises TypeError if other does not implement ISchooldayPeriodEvent.
+        Raises TypeError if other does not implement ISchooldayPeriod.
         """
 
     def __hash__():
-        """Hashes of ISchooldayPeriodEvents are equal iff those
-        ISchooldayPeriodEvents are equal.
+        """Hashes of ISchooldayPeriods are equal iff those
+        ISchooldayPeriods are equal.
         """
 
 
