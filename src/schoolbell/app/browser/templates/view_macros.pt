@@ -153,13 +153,7 @@
 </metal:block>
 
 <metal:block define-macro="calendar-mode" i18n:domain="schooltool">
-  <div id="calendar-navigation" style="text-align:center;">
-    <a tal:attributes="href string:${context/@@absolute_url}.ics"
-       title="Open this calendar in an iCal client."
-       i18n:attributes="title"
-       i18n:translate="">
-      Open in iCal
-    </a>
+  <div id="calendar-navigation">
     <a id="calendar-navigation-day"
        tal:attributes="href python:view.calURL('daily')"
        title="View daily calendar"

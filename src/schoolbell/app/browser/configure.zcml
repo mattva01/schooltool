@@ -374,6 +374,16 @@
       title="Calendar (yearly)"
       />
 
+  <menuItem
+      for="schoolbell.calendar.interfaces.ICalendar"
+      menu="schoolbell_actions" title="Open in iCal"
+      action="../calendar.ics" permission="zope.View" />
+
+  <menuItem
+      for="schoolbell.calendar.interfaces.IEditCalendar"
+      menu="schoolbell_actions" title="New event"
+      action="add.html" permission="zope.View" />
+
 <!-- Calendar event views -->
 
   <addform

@@ -317,6 +317,7 @@ input.button-cancel {
 
 #calendar-navigation {
     float: right;
+    text-align: center;
 }
 
 #calendar-navigation-day,
