@@ -165,7 +165,8 @@ def doctest_CalendarTraverser():
     Invalid dates are not touched:
 
         >>> for name in ['', 'abc', 'index.html', '', '200a', '2004-1a',
-        ...              '2001-02-03-04', '2001/02/03', '2001-w3a', 'a-w2']:
+        ...              '2001-02-03-04', '2001/02/03', '2001-w3a', 'a-w2',
+        ...              '1000', '3000']:
         ...     assert traverser.getViewByDate(request, name) is None
 
     If we try to look up a nonexistent view, we should get a NotFound error:
@@ -175,6 +176,16 @@ def doctest_CalendarTraverser():
         Traceback (most recent call last):
         ...
         NotFound: Object: <...Calendar object at ...>, name: 'nonexistent.html'
+
+    You can traverse into calendar events by their unique id:
+
+        >>> from schoolbell.app.cal import CalendarEvent
+        >>> event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
+        ...                       timedelta(hours=2), "Some event",
+        ...                       unique_id="it's me!")
+        >>> cal.addEvent(event)
+        >>> traverser.publishTraverse(request, "it's me!") is event
+        True
 
     """
 
@@ -1730,6 +1741,7 @@ def doctest_EventDeleteView():
 
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
         >>> cal = Calendar()
+        >>> directlyProvides(cal, IContainmentRoot)
         >>> dtstart = datetime(2005, 2, 3, 12, 15)
         >>> martyr = CalendarEvent(dtstart, timedelta(hours=3), "Martyr")
         >>> cal.addEvent(martyr)
@@ -1747,6 +1759,13 @@ def doctest_EventDeleteView():
         False
         >>> innocent in cal
         True
+
+    As a side effect, you will be shown your way to the calendar view:
+
+        >>> view.request.response.getStatus()
+        302
+        >>> view.request.response.getHeaders()['Location']
+        'http://127.0.0.1/calendar/2005-02-03'
 
     """
 

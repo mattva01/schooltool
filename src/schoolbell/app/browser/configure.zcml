@@ -367,6 +367,15 @@
       title="Add Event"
       />
 
+<!-- Calendar event views -->
+
+  <page
+      name="delete.html"
+      for="schoolbell.app.interfaces.IContainedCalendarEvent"
+      class=".cal.EventDeleteView"
+      permission="zope.ManageContent"
+      attribute="delete"
+      />
 
 <!-- Skin and resources -->
 

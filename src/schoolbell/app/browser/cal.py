@@ -75,7 +75,7 @@ class CalendarOwnerTraverser(object):
 
 
 class CalendarTraverser(object):
-    """A traverser that allows to traverse to a calendar owner's calendar."""
+    """A traverser that allows to traverse to a calendar's calendar."""
 
     adapts(ICalendarOwner)
     implements(IBrowserPublisher)
@@ -98,7 +98,10 @@ class CalendarTraverser(object):
         if view is not None:
             return view
 
-        raise NotFound(self.context, name, request)
+        try:
+            return self.context.find(name)
+        except KeyError:
+            raise NotFound(self.context, name, request)
 
     def getViewByDate(self, request, name):
         parts = name.split('-')
@@ -120,6 +123,9 @@ class CalendarTraverser(object):
         if not parts:
             return
         parts = tuple(parts)
+
+        if not (1900 < parts[0] < 2100):
+            return
 
         if len(parts) == 1:
             request.form['date'] = "%d-01-01" % parts
@@ -625,6 +631,7 @@ class CalendarEventView(object):
 
     def deleteLink(self):
         """Return the link for deleting this event."""
+        # XXX TODO: not used any more
         return 'delete_event.html?' + self._params()
 
     def _params(self):
@@ -847,6 +854,9 @@ class EventDeleteView(BrowserView):
     def delete(self):
         calendar = ICalendar(self.context)
         calendar.removeEvent(self.context)
+        isodate = self.context.dtstart.date().isoformat()
+        url = '%s/%s' % (absoluteURL(calendar, self.request), isodate)
+        self.request.response.redirect(url)
 
 
 class Slots(dict):
