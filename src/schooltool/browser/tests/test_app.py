@@ -1188,7 +1188,8 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
                                        'end': '2004-08-11 10:50'}]}])
 
     def test_render(self):
-        request = RequestStub(args={}, authenticated_user=self.r1)
+        request = RequestStub(cookies={'cal_periods': 'no'},
+                              args={}, authenticated_user=self.r1)
         result = self.view.render(request)
         self.assert_(not self.view.by_periods)
         self.assert_(not self.view.searching)
@@ -1198,7 +1199,8 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.assert_('Periods' not in result)
         self.assert_('Hours' in result)
 
-        request = RequestStub(args={'first': '2004-08-11',
+        request = RequestStub(cookies={'cal_periods': 'no'},
+                              args={'first': '2004-08-11',
                                     'last': '2004-08-11',
                                     'duration': '30',
                                     'hours': ['13', '14'],
@@ -1215,7 +1217,8 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.assert_('2004-08-11 13:00' in result)
         self.assert_('2004-08-11 15:00' in result)
 
-        request = RequestStub(args={'first': '2004-08-11',
+        request = RequestStub(cookies={'cal_periods': 'no'},
+                              args={'first': '2004-08-11',
                                     'last': '2004-28-11',
                                     'duration': '30',
                                     'hours': ['13', '14'],
@@ -1241,8 +1244,7 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.assert_('Periods' in result)
         self.assert_('Hours' not in result)
 
-        request = RequestStub(cookies={'cal_periods': 'yes'},
-                              args={'first': '2004-08-11',
+        request = RequestStub(args={'first': '2004-08-11',
                                     'last': '2004-08-11',
                                     'periods': ['A'],
                                     'SEARCH': 'Submit'},
@@ -1262,7 +1264,7 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         result = self.view.render(request)
         self.assert_(not self.view.by_periods)
         self.assertEquals(request._outgoing_cookies['cal_periods'],
-                          {'value': '', 'expires': Anything, 'path': '/'})
+                          {'value': 'no', 'expires': None, 'path': '/'})
 
         request = RequestStub(args={'PERIODS': ''}, authenticated_user=self.r1)
         result = self.view.render(request)

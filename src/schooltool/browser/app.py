@@ -711,12 +711,12 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
         """Process the request."""
         if 'HOURS' in self.request.args:
             self.by_periods = False
-            request.clearCookie('cal_periods', path='/')
+            request.addCookie('cal_periods', 'no', path='/')
         elif 'PERIODS' in self.request.args:
             self.by_periods = True
             request.addCookie('cal_periods', 'yes', path='/')
         else:
-            self.by_periods = bool(request.getCookie('cal_periods'))
+            self.by_periods = bool(request.getCookie('cal_periods') != 'no')
         self.searching = False
         if self.by_periods:
             widgets = [self.resources_widget, self.periods_widget,

@@ -651,7 +651,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         cal.__parent__ = Person(title="Da Boss")
         cal.__parent__.makeTimetableCalendar = lambda: createCalendar()
         view = DailyCalendarView(cal)
-        view.request = RequestStub()
+        view.request = RequestStub(cookies={'cal_periods': 'no'})
         view.cursor = date(2004, 8, 12)
 
         self.assertEquals(view.getColumns(), 1)
@@ -734,7 +734,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         cal.__parent__ = Person(title="Da Boss")
         cal.__parent__.makeTimetableCalendar = lambda: createCalendar()
         view = DailyCalendarView(cal)
-        view.request = RequestStub()
+        view.request = RequestStub(cookies={'cal_periods': 'no'})
         view.cursor = date(2004, 8, 12)
         view.starthour = 10
         view.endhour = 16
@@ -829,7 +829,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         view.starthour = 10
         view.endhour = 18
         view.cursor = date(2004, 8, 12)
-        view.request = RequestStub()
+        view.request = RequestStub(cookies={'cal_periods': 'no'})
 
         self.assertEquals(view.rowspan(
                             createEvent('2004-08-12 12:00', '1d', "Long")), 6)
@@ -940,7 +940,7 @@ class TestDailyCalendarViewPeriods(DefaultTimetableSetup, NiceDiffsMixin,
         from schooltool.common import parse_datetime
 
         view = DailyCalendarView(self.person.calendar)
-        view.request = RequestStub(cookies={'cal_periods': 'yes'})
+        view.request = RequestStub()
         view.cursor = date(2004, 11, 5)
 
         result = list(view.calendarRows())
@@ -1064,7 +1064,7 @@ class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
                               args={'cal_periods': 'no', 'date': '123'})
         view._traverse('daily.html', request)
         self.assertEquals(request._outgoing_cookies['cal_periods'],
-                          {'value': '', 'expires': Anything, 'path': '/'})
+                          {'value': 'no', 'expires': None, 'path': '/'})
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://server/calendar?date=123')

@@ -487,7 +487,7 @@ class DailyCalendarView(CalendarViewBase):
         """Iterates over (title, start, duration) of time slots that make up
         the daily calendar.
         """
-        if self.request.getCookie('cal_periods'):
+        if self.request.getCookie('cal_periods') != 'no':
             periods = getPeriodsForDay(self.cursor, self.context)
         else:
             periods = []
@@ -759,8 +759,8 @@ class CalendarView(View):
     def _traverse(self, name, request):
         if 'cal_periods' in request.args:
             expires = None
-            if request.args['cal_periods'][0] != 'yes':
-                request.clearCookie('cal_periods', path='/')
+            if request.args['cal_periods'][0] == 'no':
+                request.addCookie('cal_periods', 'no', path='/')
             else:
                 request.addCookie('cal_periods', 'yes', path='/')
             uri = request.uri
