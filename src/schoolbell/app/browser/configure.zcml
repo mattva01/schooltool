@@ -2,6 +2,17 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schoolbell">
 
+<!-- TALES path expressions -->
+
+  <zope:adapter
+      for="*"
+      name="sortby"
+      provides="zope.app.traversing.interfaces.IPathAdapter"
+      factory=".SortBy"
+      />
+
+<!-- Views -->
+
   <addMenuItem
       title="SchoolBell"
       class="schoolbell.app.app.SchoolBellApplication"
