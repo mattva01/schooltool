@@ -11,7 +11,7 @@ TESTFLAGS=-w
 all: build
 
 build:
-	$(PYTHON) $(PWD)/setup.py build_ext -i
+	$(PYTHON) setup.py build_ext -i
 
 clean:
 	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
@@ -21,17 +21,17 @@ realclean: clean
 	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
 
 test: build
-	$(PYTHON) $(PWD)/test.py $(TESTFLAGS) src.schooltool
+	$(PYTHON) test.py $(TESTFLAGS) schooltool
 
 testall: build
-	$(PYTHON) $(PWD)/test.py $(TESTFLAGS)
+	$(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
-	@PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/main.py -c test.conf & \
+	@PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf & \
 	pid=$$! ; \
 	sleep 2 ; \
 	ps -p $$pid > /dev/null && (\
-	$(PYTHON) $(PWD)/test.py -f $(TESTFLAGS) ; \
+	$(PYTHON) test.py -f $(TESTFLAGS) ; \
 	kill $$pid )
 
 run: build
@@ -50,10 +50,10 @@ runwxclient: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/wxclient.py
 
 sampledata teachers.csv groups.csv pupils.csv:
-	PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/datagen.py schooltool-m2
+	PYTHONPATH=src $(PYTHON) src/schooltool/datagen.py schooltool-m2
 
 sampleschool: teachers.csv groups.csv pupils.csv
-	PYTHONPATH=src $(PYTHON) $(PWD)/runimport.py
+	PYTHONPATH=src $(PYTHON) runimport.py
 
 coverage: build
 	rm -rf coverage

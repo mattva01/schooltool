@@ -77,7 +77,7 @@ class Options:
 
     # test location
     basedir = ''                # base directory for tests (defaults to
-                                # basedir of argv[0] + 'src')
+                                # basedir of argv[0] + 'src'), must be absolute
     follow_symlinks = True      # should symlinks to subdirectories be
                                 # followed? (hardcoded, may cause loops)
 
@@ -154,6 +154,7 @@ def get_test_files(cfg):
         test_dirs.append('tests')
     if cfg.functional_tests:
         test_dirs.append('ftests')
+    baselen = len(cfg.basedir) + 1
     def visit(ignored, dir, files):
         if os.path.basename(dir) not in test_dirs:
             return
@@ -163,7 +164,7 @@ def get_test_files(cfg):
         for file in files:
             if file.startswith('test') and file.endswith('.py'):
                 path = os.path.join(dir, file)
-                if matcher(path):
+                if matcher(path[baselen:]):
                     results.append(path)
     if cfg.follow_symlinks:
         walker = walk_with_symlinks
@@ -408,6 +409,7 @@ def main(argv):
     # Defaults
     cfg = Options()
     cfg.basedir = os.path.join(os.path.dirname(argv[0]), 'src')
+    cfg.basedir = os.path.abspath(cfg.basedir)
 
     # Figure out terminal size
     try:
@@ -481,8 +483,10 @@ def main(argv):
 
     # Finding and importing
     test_files = get_test_files(cfg)
-    test_cases = get_test_cases(test_files, cfg)
-    test_hooks = get_test_hooks(test_files, cfg)
+    if cfg.list_tests or cfg.run_tests:
+        test_cases = get_test_cases(test_files, cfg)
+    if cfg.list_hooks or cfg.run_tests:
+        test_hooks = get_test_hooks(test_files, cfg)
 
     # Configure the logging module
     import logging
