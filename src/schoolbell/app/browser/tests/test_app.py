@@ -955,13 +955,36 @@ def doctest_ACLView():
         >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
 
-    The view has methods to list persons and groups:
+    The view has methods to list persons:
 
         >>> pprint(view.persons)
         [{'perms': [], 'id': u'sb.person.albert', 'title': 'Albert'},
          {'perms': [], 'id': u'sb.person.marius', 'title': 'Marius'}]
         >>> pprint(view.groups)
         [{'perms': [], 'id': u'sb.group.3', 'title': 'office'},
+         {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
+
+    If we have an authenticated group and an unauthenticated group, we
+    get then as well:
+
+        >>> from zope.app.security.interfaces import IAuthenticatedGroup
+        >>> from zope.app.security.interfaces import IUnauthenticatedGroup
+        >>> from zope.app.security.principalregistry \
+        ...     import UnauthenticatedGroup
+        >>> from zope.app.security.principalregistry \
+        ...     import AuthenticatedGroup
+        >>> ztapi.provideUtility(IUnauthenticatedGroup,
+        ...                      UnauthenticatedGroup('zope.unauthenticated',
+        ...                                           'Unauthenticated users',
+        ...                                           ''))
+        >>> ztapi.provideUtility(IAuthenticatedGroup,
+        ...                      AuthenticatedGroup('zope.authenticated',
+        ...                                         'Authenticated users',
+        ...                                         ''))
+        >>> pprint(view.groups)
+        [{'perms': [], 'id': 'zope.authenticated', 'title': 'Authenticated users'},
+         {'perms': [], 'id': 'zope.unauthenticated', 'title': 'Unauthenticated users'},
+         {'perms': [], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
     Also it knows a list of permissions to display:
@@ -1108,7 +1131,9 @@ def doctest_ACLView():
           'perms': ['schoolbell.create'],
           'title': 'Marius'}]
         >>> pprint(view.groups)
-        [{'perms': ['schoolbell.create'], 'id': u'sb.group.3', 'title': 'office'},
+        [{'perms': [], 'id': 'zope.authenticated', 'title': 'Authenticated users'},
+         {'perms': [], 'id': 'zope.unauthenticated', 'title': 'Unauthenticated users'},
+         {'perms': ['schoolbell.create'], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
     The view redirects to the context's default view:

@@ -35,6 +35,8 @@ from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.app.security.interfaces import IAuthentication
+from zope.app.security.interfaces import IAuthenticatedGroup
+from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.app.security.settings import Allow
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
@@ -474,28 +476,36 @@ class ACLView(BrowserView):
         result = []
         for person in app['persons'].values():
             pid = auth.person_prefix + person.__name__
-            result.append({'title': person.title,
-                           'id': pid,
-                           'perms': [perm
-                                     for perm, setting
-                                     in map.getPermissionsForPrincipal(pid)
-                                     if setting == Allow]})
+            result.append({'title': person.title, 'id': pid,
+                           'perms': self.permsForPrincipal(pid)})
         return result
     persons = property(persons)
+
+    def permsForPrincipal(self, principalid):
+        """Return a list of permissions allowed for principal"""
+        map = IPrincipalPermissionManager(self.context)
+        return [perm for perm, setting
+                in map.getPermissionsForPrincipal(principalid)
+                if setting == Allow]
 
     def groups(self):
         app = getSchoolBellApplication()
         auth = zapi.getUtility(IAuthentication)
         map = IPrincipalPermissionManager(self.context)
         result = []
+        all = zapi.queryUtility(IAuthenticatedGroup)
+        if all is not None:
+            result.append({'title': 'Authenticated users', 'id': all.id,
+                           'perms': self.permsForPrincipal(all.id)})
+        unauth = zapi.queryUtility(IUnauthenticatedGroup)
+        if unauth is not None:
+            result.append({'title': 'Unauthenticated users', 'id': unauth.id,
+                           'perms': self.permsForPrincipal(unauth.id)})
         for group in app['groups'].values():
             pid = auth.group_prefix + group.__name__
             result.append({'title': group.title,
                            'id': pid,
-                           'perms': [perm
-                                     for perm, setting
-                                     in map.getPermissionsForPrincipal(pid)
-                                     if setting == Allow]})
+                           'perms': self.permsForPrincipal(pid)})
         return result
     groups = property(groups)
 
