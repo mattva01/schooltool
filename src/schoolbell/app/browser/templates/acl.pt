@@ -23,7 +23,11 @@
       </tr>
       <tr tal:repeat="prin view/groups/sortby:title"
           tal:attributes="class repeat/prin/parity">
-         <th class="principal" tal:content="prin/title">Group foo</th>
+         <th class="principal">
+            <span tal:replace="prin/title">Group foo</span>
+            <input type="hidden" tal:attributes="name string:marker-${prin/id}"
+                   value="1" />
+         </th>
          <td class="permission" tal:repeat="perm view/permissions">
             <input
                 type="checkbox"
@@ -43,7 +47,11 @@
       </tr>
       <tr tal:repeat="prin view/persons/sortby:title"
           tal:attributes="class repeat/prin/parity">
-         <th class="principal" tal:content="prin/title">User foo</th>
+         <th class="principal">
+            <span tal:replace="prin/title">User foo</span>
+            <input type="hidden" tal:attributes="name string:marker-${prin/id}"
+                   value="1" />
+         </th>
          <td class="permission" tal:repeat="perm view/permissions">
             <input
                 type="checkbox"

@@ -520,6 +520,8 @@ class ACLView(BrowserView):
 
             for info in self.persons + self.groups:
                 principalid = info['id']
+                if 'marker-' + principalid not in self.request:
+                    continue # skip this principal
                 for perm, permtitle in self.permissions:
                     parent = self.context.__parent__
                     checked_in_request = permChecked(perm, principalid)

@@ -39,13 +39,15 @@ He can't access the ACL view:
 
 Grant him a 'schoolbell.controlAccess' permission on the app:
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/acl.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 88
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... sb.person.frog=schoolbell.controlAccess&sb.person.frog=schoolbell.view&UPDATE_SUBMIT=Set
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.controlAccess&\
+    ... sb.person.frog=schoolbell.view&\
+    ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -63,13 +65,19 @@ Now he can access the acl.html view on app:
 
 Also, he can set the permissions, even elevate his own permissions:
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/acl.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 225
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... sb.person.frog=schoolbell.view&sb.person.frog=schoolbell.edit&sb.person.frog=schoolbell.addEvent&sb.person.frog=schoolbell.modifyEvent&sb.person.frog=schoolbell.controlAccess&sb.person.frog=schoolbell.create&UPDATE_SUBMIT=Set
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schoolbell.edit&\
+    ... sb.person.frog=schoolbell.addEvent&\
+    ... sb.person.frog=schoolbell.modifyEvent&\
+    ... sb.person.frog=schoolbell.controlAccess&\
+    ... sb.person.frog=schoolbell.create&\
+    ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -78,13 +86,19 @@ Also, he can set the permissions, even elevate his own permissions:
 
 It works for subobjects of the app too:
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/persons/acl.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 225
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... sb.person.frog=schoolbell.view&sb.person.frog=schoolbell.edit&sb.person.frog=schoolbell.addEvent&sb.person.frog=schoolbell.modifyEvent&sb.person.frog=schoolbell.controlAccess&sb.person.frog=schoolbell.create&UPDATE_SUBMIT=Set
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schoolbell.edit&\
+    ... sb.person.frog=schoolbell.addEvent&\
+    ... sb.person.frog=schoolbell.modifyEvent&\
+    ... sb.person.frog=schoolbell.controlAccess&\
+    ... sb.person.frog=schoolbell.create&\
+    ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
     ...

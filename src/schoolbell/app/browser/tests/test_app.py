@@ -907,6 +907,7 @@ def doctest_LogoutView():
 
     """
 
+
 def doctest_ACLView():
     r"""
     Set up for local grants:
@@ -1038,7 +1039,11 @@ def doctest_ACLView():
               </tr>
         ...
               <tr class="even">
-                 <th class="principal">office</th>
+                 <th class="principal">
+                    office
+                    <input type="hidden" value="1"
+                           name="marker-sb.group.3" />
+                 </th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="schoolbell.view" />
@@ -1074,7 +1079,11 @@ def doctest_ACLView():
               </tr>
         ...
               <tr class="odd">
-                 <th class="principal">Albert</th>
+                 <th class="principal">
+                    Albert
+                    <input type="hidden" value="1"
+                           name="marker-sb.person.albert" />
+                 </th>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="schoolbell.view" />
@@ -1113,6 +1122,9 @@ def doctest_ACLView():
     If we submit a form with a checkbox marked, a user gets a grant:
 
         >>> request = TestRequest(form={
+        ...     'marker-sb.person.albert': '1',
+        ...     'marker-sb.person.marius': '1',
+        ...     'marker-sb.group.3': '1',
         ...     'sb.person.albert': ['schoolbell.view',
         ...                          'schoolbell.edit'],
         ...     'sb.person.marius': 'schoolbell.create',
@@ -1163,7 +1175,11 @@ def doctest_ACLView():
         <html>
         ...
               <tr class="even">
-                 <th class="principal">office</th>
+                 <th class="principal">
+                    office
+                    <input type="hidden" value="1"
+                           name="marker-sb.group.3" />
+                 </th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="schoolbell.view" />
@@ -1200,7 +1216,11 @@ def doctest_ACLView():
               </tr>
         ...
               <tr class="odd">
-                 <th class="principal">Albert</th>
+                 <th class="principal">
+                    Albert
+                    <input type="hidden" value="1"
+                           name="marker-sb.person.albert" />
+                 </th>
                  <td class="permission">
                     <input type="checkbox" checked="checked"
                            name="sb.person.albert"
@@ -1242,6 +1262,7 @@ def doctest_ACLView():
     If we submit a form without a submit button, nothing is changed:
 
         >>> request = TestRequest(form={
+        ...     'marker-sb.group.4': '1',
         ...     'sb.group.4': 'schoolbell.addEvent',})
         >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
@@ -1262,6 +1283,8 @@ def doctest_ACLView():
     and new ones granted:
 
         >>> request = TestRequest(form={
+        ...     'marker-sb.person.marius': '1',
+        ...     'marker-sb.group.4': '1',
         ...     'sb.group.4': 'schoolbell.addEvent',
         ...     'UPDATE_SUBMIT': 'Set'})
         >>> view = View(app, request)
@@ -1272,10 +1295,17 @@ def doctest_ACLView():
         >>> grants.getPermissionsForPrincipal('sb.group.4')
         [('schoolbell.addEvent', PermissionSetting: Allow)]
 
+    If the marker for a particular principal is not present in the request,
+    permission settings for that principal are left untouched:
+
+        >>> grants.getPermissionsForPrincipal('sb.group.3')
+        [('schoolbell.create', PermissionSetting: Allow)]
+
     If the cancel button is hit, the changes are not applied, but the
     browser is redirected to the default view for context:
 
         >>> request = TestRequest(form={
+        ...     'marker-sb.person.marius': '1',
         ...     'sb.person.marius': 'schoolbell.editEvent',
         ...     'CANCEL': 'Cancel'})
         >>> view = View(app, request)
@@ -1291,6 +1321,7 @@ def doctest_ACLView():
         >>> url = zapi.absoluteURL(app, request)
         >>> request.response.getHeader('Location') == url
         True
+
     """
 
 def doctest_ACLView_inheritance():
@@ -1365,6 +1396,8 @@ def doctest_ACLView_inheritance():
     but left the one for Albert:
 
         >>> request = TestRequest(form={
+        ...     'marker-sb.person.marius': '1',
+        ...     'marker-sb.person.albert': '1',
         ...     'sb.person.albert': 'schoolbell.controlAccess',
         ...     'UPDATE_SUBMIT': 'Set'})
         >>> view = View(app['persons'], request)
