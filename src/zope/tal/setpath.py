@@ -4,22 +4,23 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Read a module search path from .path file.
+"""Read a module search path from .path file.
 
 If .path file isn't found in the directory of the setpath.py module, then try
 to import ZODB.  If that succeeds, we assume the path is already set up
 correctly.  If that import fails, an IOError is raised.
+
+$Id$
 """
 
-# XXX Why does this want to find ZODB ???
+# TODO: Why does this want to find ZODB ???
 
 import os
 import sys

@@ -5,7 +5,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -26,8 +26,9 @@ Options:
     -u / --update <file>
         Update the existing translation <file> with any new translation strings
         found.
-"""
 
+$Id$
+"""
 import sys
 import time
 import getopt
@@ -39,9 +40,7 @@ from zope.tal.talinterpreter import TALInterpreter, normalize
 from zope.tal.dummyengine import DummyEngine
 from zope.tal.interfaces import ITALExpressionEngine
 from zope.tal.taldefs import TALExpressionError
-from zope.i18n.messageid import MessageID
-
-__version__ = '$Revision: 1.17 $'
+from zope.i18nmessageid import MessageID
 
 pot_header = '''\
 # SOME DESCRIPTIVE TITLE.
@@ -73,16 +72,16 @@ def usage(code, msg=''):
 
 class POTALInterpreter(TALInterpreter):
     def translate(self, msgid, default, i18ndict=None, obj=None):
-        # XXX is this right?
+        # If no i18n dict exists yet, create one.
         if i18ndict is None:
             i18ndict = {}
         if obj:
             i18ndict.update(obj)
-        # XXX Mmmh, it seems that sometimes the msgid is None; is that really
+        # Mmmh, it seems that sometimes the msgid is None; is that really
         # possible?
         if msgid is None:
             return None
-        # XXX We need to pass in one of context or target_language
+        # TODO: We need to pass in one of context or target_language
         return self.engine.translate(msgid, self.i18nContext.domain, i18ndict,
                                      position=self.position, default=default)
 
@@ -107,8 +106,8 @@ class POEngine(DummyEngine):
         return True # dummy
 
     def translate(self, msgid, domain=None, mapping=None, default=None,
-                  # XXX position is not part of the ITALExpressionEngine
-                  #     interface
+                  # Position is not part of the ITALExpressionEngine
+                  # interface
                   position=None):
 
         # Make the message is a MessageID object, if the default differs
@@ -116,7 +115,7 @@ class POEngine(DummyEngine):
         # text into a comment.
         if default is not None and normalize(default) != msgid:
             msgid = MessageID(msgid, default=default)
-        
+
         if domain not in self.catalog:
             self.catalog[domain] = {}
         domain = self.catalog[domain]
@@ -194,7 +193,7 @@ class UpdatePOEngine(POEngine):
             # Skip empty lines
             if not l.strip():
                 continue
-            # XXX: Does this always follow Python escape semantics?
+            # TODO: Does this always follow Python escape semantics?
             l = eval(l)
             if section == ID:
                 msgid += l
@@ -253,7 +252,7 @@ def main():
         return
 
     # We don't care about the rendered output of the .pt file
-    class Devnull:
+    class Devnull(object):
         def write(self, s):
             pass
 
@@ -296,7 +295,7 @@ def main():
                                         'version': __version__}
 
     msgids = catalog.keys()
-    # XXX: You should not sort by msgid, but by filename and position. (SR)
+    # TODO: You should not sort by msgid, but by filename and position. (SR)
     msgids.sort()
     for msgid in msgids:
         positions = engine.catalog[msgid]

@@ -5,7 +5,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -54,6 +54,8 @@ recovered by piping the output through
     sed -n '/^[+ ] /s/^..//p'
 
 See module comments for details and programmatic interface.
+
+$Id$
 """
 
 __version__ = 1, 5, 0
@@ -123,7 +125,7 @@ def IS_CHARACTER_JUNK(ch, ws=" \t"):
 
 del re
 
-class SequenceMatcher:
+class SequenceMatcher(object):
     def __init__(self, isjunk=None, a='', b=''):
         # Members:
         # a

@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,7 +13,7 @@
 ##############################################################################
 """Parse XML and compile to TALInterpreter intermediate code.
 
-$Id: talparser.py,v 1.6 2004/04/07 15:13:00 gintautasm Exp $
+$Id$
 """
 from zope.tal.taldefs import XML_NS, ZOPE_I18N_NS, ZOPE_METAL_NS, ZOPE_TAL_NS
 from zope.tal.talgenerator import TALGenerator
@@ -62,7 +62,8 @@ class TALParser(XMLParser):
         name, attrlist, taldict, metaldict, i18ndict \
               = self.process_ns(name, attrlist)
         attrlist = self.xmlnsattrs() + attrlist
-        self.gen.emitStartElement(name, attrlist, taldict, metaldict, i18ndict)
+        self.gen.emitStartElement(name, attrlist, taldict, metaldict, i18ndict,
+                                  self.getpos())
 
     def process_ns(self, name, attrlist):
         taldict = {}
@@ -122,7 +123,7 @@ class TALParser(XMLParser):
 
     def EndElementHandler(self, name):
         name = self.fixname(name)[0]
-        self.gen.emitEndElement(name)
+        self.gen.emitEndElement(name,  position=self.getpos())
 
     def DefaultHandler(self, text):
         self.gen.emitRawText(text)

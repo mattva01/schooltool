@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -15,7 +15,7 @@
 
 Each expression engine can have its own expression types and base names.
 
-$Id: engine.py,v 1.3 2004/02/24 13:56:07 srichter Exp $
+$Id$
 """
 from zope.tales.tales import ExpressionEngine
 from zope.tales.expressions import PathExpr, StringExpr, NotExpr, DeferExpr

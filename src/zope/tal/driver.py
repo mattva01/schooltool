@@ -5,15 +5,14 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Driver program to test METAL and TAL implementation.
+"""Driver program to test METAL and TAL implementation.
 
 Usage: driver.py [options] [file]
 Options:
@@ -34,6 +33,10 @@ Options:
         Leave TAL/METAL attributes in output
     -i
         Leave I18N substitution strings un-interpolated.
+    -a
+        Enable source annotations
+
+$Id$
 """
 
 import os
@@ -113,10 +116,11 @@ def main():
     mode = None
     showcode = 0
     showtal = -1
+    sourceAnnotations = 0
     strictinsert = 1
     i18nInterpolate = 1
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hHxlmsti",
+        opts, args = getopt.getopt(sys.argv[1:], "hHxlmstia",
                                    ['help', 'html', 'xml'])
     except getopt.error, msg:
         usage(2, msg)
@@ -141,6 +145,8 @@ def main():
             showtal = 1
         if opt == '-i':
             i18nInterpolate = 0
+        if opt == '-a':
+            sourceAnnotations = 1
     if args:
         file = args[0]
     else:
@@ -157,10 +163,11 @@ def main():
         interpretit(it, engine=engine,
                     tal=(not macros), showtal=showtal,
                     strictinsert=strictinsert,
-                    i18nInterpolate=i18nInterpolate)
+                    i18nInterpolate=i18nInterpolate,
+                    sourceAnnotations=sourceAnnotations)
 
 def interpretit(it, engine=None, stream=None, tal=1, showtal=-1,
-                strictinsert=1, i18nInterpolate=1):
+                strictinsert=1, i18nInterpolate=1, sourceAnnotations=0):
     from zope.tal.talinterpreter import TALInterpreter
     program, macros = it
     assert zope.tal.taldefs.isCurrentVersion(program)
@@ -168,7 +175,8 @@ def interpretit(it, engine=None, stream=None, tal=1, showtal=-1,
         engine = DummyEngine(macros)
     TALInterpreter(program, macros, engine, stream, wrap=0,
                    tal=tal, showtal=showtal, strictinsert=strictinsert,
-                   i18nInterpolate=i18nInterpolate)()
+                   i18nInterpolate=i18nInterpolate,
+                   sourceAnnotations=sourceAnnotations)()
 
 def compilefile(file, mode=None):
     assert mode in ("html", "xml", None)
@@ -178,12 +186,18 @@ def compilefile(file, mode=None):
             mode = "html"
         else:
             mode = "xml"
+    from zope.tal.talgenerator import TALGenerator
+    filename = os.path.abspath(file)
+    prefix = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
+    if filename.startswith(prefix):
+        filename = filename[len(prefix):]
+    filename = filename.replace(os.sep, '/') # test files expect slashes
     if mode == "html":
         from zope.tal.htmltalparser import HTMLTALParser
-        p = HTMLTALParser()
+        p = HTMLTALParser(gen=TALGenerator(source_file=filename, xml=0))
     else:
         from zope.tal.talparser import TALParser
-        p = TALParser()
+        p = TALParser(gen=TALGenerator(source_file=filename))
     p.parseFile(file)
     return p.getCode()
 

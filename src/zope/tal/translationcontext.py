@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -16,12 +16,11 @@
 The translation context provides a container for the information
 needed to perform translation of a marked string from a page template.
 
-$Id: translationcontext.py,v 1.2 2002/12/25 14:15:29 jim Exp $
+$Id$
 """
-
 DEFAULT_DOMAIN = "default"
 
-class TranslationContext:
+class TranslationContext(object):
     """Information about the I18N settings of a TAL processor."""
 
     def __init__(self, parent=None, domain=None, target=None, source=None):

@@ -5,7 +5,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -14,7 +14,7 @@
 ##############################################################################
 """Tests that run driver.py over input files comparing to output files.
 
-$Id: test_files.py,v 1.3 2004/03/08 23:33:58 srichter Exp $
+$Id$
 """
 
 import glob
@@ -43,7 +43,9 @@ class FileTestCase(unittest.TestCase):
         basename = os.path.basename(self.__file)
         #sys.stdout.write(basename + " ")
         sys.stdout.flush()
-        if basename.startswith('test_metal'):
+        if basename.startswith('test_sa'):
+            sys.argv = ["", "-Q", "-a", self.__file]
+        elif basename.startswith('test_metal'):
             sys.argv = ["", "-Q", "-m", self.__file]
         else:
             sys.argv = ["", "-Q", self.__file]

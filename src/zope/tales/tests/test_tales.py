@@ -4,13 +4,17 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+"""TALES Tests
+
+$Id$
+"""
 import unittest
 
 from zope.tales import tales
@@ -42,7 +46,7 @@ class TALESTests(unittest.TestCase):
         for c in 'text':
             context._assert_('setLocal', 'text', c)
         for c in 'text':
-            assert it.next(), "Multi-element iterator"
+            self.assert_(it.next(), "Multi-element iterator")
         self.assert_( not it.next(), "Multi-element iterator")
         context._complete_()
 
@@ -127,7 +131,7 @@ class TALESTests(unittest.TestCase):
         ctxt.endScope()
 
 
-class Harness:
+class Harness(object):
     def __init__(self, testcase):
         self._callstack = []
         self._testcase = testcase
@@ -136,12 +140,13 @@ class Harness:
         self._callstack.append((name, args, kwargs))
 
     def _complete_(self):
-        assert len(self._callstack) == 0, "Harness methods called"
+        self._testcase.assert_(len(self._callstack) == 0,
+                               "Harness methods called")
 
     def __getattr__(self, name):
         return HarnessMethod(self, name)
 
-class HarnessMethod:
+class HarnessMethod(object):
 
     def __init__(self, harness, name):
         self._harness = harness

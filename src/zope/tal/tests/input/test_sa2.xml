@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "DTD/xhtml1-transitional.dtd">
+<html>
+<title>Simple test of source annotations</title>
+<body>
+<p>Foo!</p>
+</body>
+</html>

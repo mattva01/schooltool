@@ -4,15 +4,18 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Interface that a TAL expression implementation provides to the METAL/TAL implementation."""
+"""Interface that a TAL expression implementation provides to the METAL/TAL
+implementation.
 
+$Id$
+"""
 from zope.interface import Attribute, Interface
 
 
@@ -39,6 +42,11 @@ class ITALExpressionCompiler(Interface):
         different ITALExpressionEngine implementations.
         """
 
+    def getContext(namespace):
+        """Create an expression execution context
+
+        The given namespace provides the initial top-level names.
+        """
 
 class ITALExpressionEngine(Interface):
     """Render-time interface provided by a TAL expression implementation.
@@ -155,8 +163,7 @@ class ITALExpressionEngine(Interface):
         """
 
     def translate(msgid, domain=None, mapping=None, default=None):
-        """See ITranslationService.translate()"""
-        # XXX ITranslationService does not exist!
+        """See zope.i18n.interfaces.ITranslationDomain.translate"""
 
     def evaluateCode(lang, code):
         """Evaluates code of the given language.
@@ -165,7 +172,7 @@ class ITALExpressionEngine(Interface):
         per-language basis. In Python this usually everything the print
         statement will return.
         """
-        
+
 
 class ITALIterator(Interface):
     """A TAL iterator

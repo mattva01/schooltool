@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,17 +13,13 @@
 ##############################################################################
 """Basic Page Template expression types.
 
-$Id: expressions.py,v 1.9 2004/03/05 22:09:42 jim Exp $
+$Id$
 """
 import re
-from types import StringTypes, TupleType
 
 from zope.interface import implements
-from zope.tales.tales import CompilerError
-from zope.tales.tales import _valid_name, _parse_expr, NAME_RE, Undefined 
+from zope.tales.tales import _valid_name, _parse_expr, NAME_RE, Undefined
 from zope.tales.interfaces import ITALESExpression, ITALESFunctionNamespace
-
-__metaclass__ = type
 
 Undefs = (Undefined, AttributeError, KeyError, TypeError, IndexError)
 
@@ -45,7 +41,7 @@ def simpleTraverse(object, path_items, econtext):
     return object
 
 
-class SubPathExpr:
+class SubPathExpr(object):
 
     def __init__(self, path, traverser, engine):
         self._traverser = traverser
@@ -55,33 +51,33 @@ class SubPathExpr:
         compiledpath = []
         currentpath = []
         for element in str(path).strip().split('/'):
+            if not element:
+                raise engine.getCompilerError()(
+                    'Path element may not be empty in %r' % path)
             if element.startswith('?'):
                 if currentpath:
                     compiledpath.append(tuple(currentpath))
-                    currentpath=[]
+                    currentpath = []
                 if not _valid_name(element[1:]):
-                    raise CompilerError('Invalid variable name "%s"'
-                                        % element[1:])
+                    raise engine.getCompilerError()(
+                        'Invalid variable name "%s"' % element[1:])
                 compiledpath.append(element[1:])
             else:
                 match = namespace_re.match(element)
                 if match:
                     if currentpath:
                         compiledpath.append(tuple(currentpath))
-                        currentpath=[]
+                        currentpath = []
                     namespace, functionname = match.groups()
                     if not _valid_name(namespace):
-                        raise CompilerError('Invalid namespace name "%s"'
-                                            % namespace)
-                    if not _valid_name(functionname):
-                        raise CompilerError('Invalid function name "%s"'
-                                            % functionname)
+                        raise engine.getCompilerError()(
+                            'Invalid namespace name "%s"' % namespace)
                     try:
                         compiledpath.append(
                             self._engine.getFunctionNamespace(namespace))
                     except KeyError:
-                        raise CompilerError('Unknown namespace "%s"'
-                                            % namespace)
+                        raise engine.getCompilerError()(
+                            'Unknown namespace "%s"' % namespace)
                     currentpath.append(functionname)
                 else:
                     currentpath.append(element)
@@ -94,21 +90,22 @@ class SubPathExpr:
 
         if callable(first):
             # check for initial function
-            raise CompilerError(
+            raise engine.getCompilerError()(
                 'Namespace function specified in first subpath element')
-        elif isinstance(first,StringTypes):
+        elif isinstance(first, basestring):
             # check for initial ?
-            raise CompilerError(
+            raise engine.getCompilerError()(
                 'Dynamic name specified in first subpath element')
 
         if base and not _valid_name(base):
-            raise CompilerError, 'Invalid variable name "%s"' % element
+            raise engine.getCompilerError()(
+                'Invalid variable name "%s"' % element)
         self._base = base
-        compiledpath[0]=first[1:]
+        compiledpath[0] = first[1:]
         self._compiled_path = tuple(compiledpath)
 
     def _eval(self, econtext,
-              list=list, isinstance=isinstance):
+              isinstance=isinstance):
         vars = econtext.vars
 
         compiled_path = self._compiled_path
@@ -122,18 +119,18 @@ class SubPathExpr:
             ob = ob()
 
         for element in compiled_path:
-            if isinstance(element,TupleType):
+            if isinstance(element, tuple):
                 ob = self._traverser(ob, element, econtext)
-            elif isinstance(element,StringTypes):
+            elif isinstance(element, basestring):
                 val = vars[element]
                 # If the value isn't a string, assume it's a sequence
                 # of path names.
-                if isinstance(val,StringTypes):
+                if isinstance(val, basestring):
                     val = (val,)
                 ob = self._traverser(ob, val, econtext)
             elif callable(element):
                 ob = element(ob)
-                # XXX: Once we have n-ary adapters, use them.
+                # TODO: Once we have n-ary adapters, use them.
                 if ITALESFunctionNamespace.providedBy(ob):
                     ob.setEngine(econtext)
             else:
@@ -142,7 +139,7 @@ class SubPathExpr:
 
 
 
-class PathExpr:
+class PathExpr(object):
     """One or more subpath expressions, separated by '|'."""
     implements(ITALESExpression)
 
@@ -216,7 +213,7 @@ class PathExpr:
 
 _interp = re.compile(r'\$(%(n)s)|\${(%(n)s(?:/[^}]*)*)}' % {'n': NAME_RE})
 
-class StringExpr:
+class StringExpr(object):
     implements(ITALESExpression)
 
     def __init__(self, name, expr, engine):
@@ -239,7 +236,7 @@ class StringExpr:
                     exp = exp[m.end():]
                     m = _interp.search(exp)
                 if '$' in exp:
-                    raise CompilerError, (
+                    raise engine.getCompilerError()(
                         '$ must be doubled or followed by a simple path')
                 parts.append(exp)
             expr = ''.join(parts)
@@ -259,7 +256,7 @@ class StringExpr:
         return '<StringExpr %s>' % `self._s`
 
 
-class NotExpr:
+class NotExpr(object):
     implements(ITALESExpression)
 
     def __init__(self, name, expr, engine):
@@ -273,7 +270,7 @@ class NotExpr:
         return '<NotExpr %s>' % `self._s`
 
 
-class DeferWrapper:
+class DeferWrapper(object):
     def __init__(self, expr, econtext):
         self._expr = expr
         self._econtext = econtext
@@ -285,7 +282,7 @@ class DeferWrapper:
         return self._expr(self._econtext)
 
 
-class DeferExpr:
+class DeferExpr(object):
     implements(ITALESExpression)
 
     def __init__(self, name, expr, compiler):
@@ -299,12 +296,16 @@ class DeferExpr:
         return '<DeferExpr %s>' % `self._s`
 
 
-class SimpleModuleImporter:
+class SimpleModuleImporter(object):
     """Minimal module importer with no security."""
 
     def __getitem__(self, module):
-        mod = __import__(module)
+        mod = self._get_toplevel_module(module)
         path = module.split('.')
         for name in path[1:]:
             mod = getattr(mod, name)
         return mod
+
+    def _get_toplevel_module(self, module):
+        # This can be overridden to add security proxies.
+        return __import__(module)

@@ -1,0 +1,49 @@
+=================
+Translatable Text
+=================
+
+Rationale
+---------
+
+To translate any text, we must be able to discover the source
+domain of the text. A source domain is an identifier that identifies a
+project that produces program source strings. Source strings include
+literals in python programs, text in templates, and some text in XML
+data. The project implies a source language and an application
+context.
+
+We can think of a source domain as a collection of message IDs
+and associated translation strings.
+
+We often need to create strings that will be displayed by separate
+views. The view cannot translate the string without knowing its source
+domain. A string literal carries no domain information, so we use
+message IDs. Message IDs are strings which carry a translation source
+domain. These are created by a message ID factory. The message ID
+factory is created by calling zope.i18n.messageIDFactory with the
+source domain::
+
+  from zope import i18n
+  _ = i18n.MessageIDFactory("mydomain")
+
+  class IContact(Interface):
+      "Provides access to basic contact information."
+
+      first = TextLine(title=_(u"First name"))
+      last = TextLine(title=_(u"Last name"))
+      email = TextLine(title=_(u"Electronic mail address"))
+      address = Text(title=_(u"Postal address"))
+      postal_code = TextLine(title=_(u"Postal code"),
+			    constraint=re.compile("\d{5,5}(-\d{4,4})?$").match)
+
+      def name():
+	  """Gets the contact name.
+
+	  The contact name is the first and last name."""
+
+In this example, we create a message ID factory and assign it to
+_. By convention, we use _ as the name of our factory to be compatible
+with translatable string extraction tools such as xgettext. We then
+call _ with each string that needs to be translatable.  The resulting
+message IDs can be used by a translation service.
+

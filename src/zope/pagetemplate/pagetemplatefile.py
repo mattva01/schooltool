@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -14,13 +14,9 @@
 """Filesystem Page Template module
 
 Zope object encapsulating a Page Template from the filesystem.
+
+$Id$
 """
-
-__version__ = '$Revision: 1.7 $'[11:-2]
-
-__metaclass__ = type
-
-
 import os, sys
 import logging
 
@@ -81,17 +77,6 @@ class PageTemplateFile(PageTemplate):
                 '\n'.join(self._v_errors))
             return
         self._v_last_read = mtime
-
-    def document_src(self, REQUEST=None):
-        """Return expanded document source."""
-
-        if REQUEST is not None:
-            # Since _cook_check() can cause self.content_type to change,
-            # we have to make sure we call it before setting the
-            # Content-Type header.
-            self._cook_check()
-            REQUEST.response.setHeader('Content-Type', self.content_type)
-        return self.read()
 
     def pt_source_file(self):
         return self.filename

@@ -5,7 +5,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -14,7 +14,7 @@
 ##############################################################################
 """Tests for TALInterpreter.
 
-$Id: test_talinterpreter.py,v 1.11 2004/03/23 19:18:15 srichter Exp $
+$Id$
 """
 import sys
 import unittest
@@ -26,7 +26,7 @@ from zope.tal.htmltalparser import HTMLTALParser
 from zope.tal.talinterpreter import TALInterpreter
 from zope.tal.dummyengine import DummyEngine, DummyTranslationDomain
 from zope.tal.tests import utils
-from zope.i18n.messageid import MessageID
+from zope.i18nmessageid import MessageID
 
 class TestCaseBase(unittest.TestCase):
 
@@ -155,7 +155,7 @@ class I18NCornerTestCase(TestCaseBase):
                     '<div>THIS IS TEXT FOR <span>BARVALUE</span>.</div>\n')
 
     def test_translate_static_text_as_dynamic_from_bytecode(self):
-        program =  [('version', '1.4'),
+        program =  [('version', '1.5'),
  ('mode', 'html'),
 ('setPosition', (1, 0)),
 ('beginScope', {'i18n:translate': ''}),
@@ -177,7 +177,8 @@ class I18NCornerTestCase(TestCaseBase):
            ('',
              [('insertText', ('$bar$', []))])),
          ('rawtextOffset', ('</span>', 7))],
-      None)),
+        None,
+        0)),
    ('endScope', ()),
    ('rawtextOffset', ('.', 1))])),
 ('endScope', ()),
@@ -369,14 +370,75 @@ class OutputPresentationTestCase(TestCaseBase):
         self.assertEqual(sio.getvalue(), EXPECTED)
 
 
+class TestSourceAnnotations(unittest.TestCase):
+
+    # there are additional test files in input/ and output/ subdirs
+    # (test_sa*)
+
+    def setUp(self):
+        program = []
+        macros = {}
+        engine = DummyEngine()
+        self.interpreter = TALInterpreter(program, macros, engine)
+        self.sio = self.interpreter.stream = StringIO()
+        self.interpreter._pending_source_annotation = True
+
+    def testFormatSourceAnnotation(self):
+        interpreter = self.interpreter
+        interpreter.sourceFile = '/path/to/source.pt'
+        interpreter.position = (123, 42)
+        self.assertEquals(interpreter.formatSourceAnnotation(),
+            "<!--\n" +
+            "=" * 78 + "\n" +
+            "/path/to/source.pt (line 123)\n" +
+            "=" * 78 + "\n" +
+            "-->")
+
+    def testFormatSourceAnnotation_no_position(self):
+        interpreter = self.interpreter
+        interpreter.sourceFile = '/path/to/source.pt'
+        interpreter.position = (None, None)
+        self.assertEquals(interpreter.formatSourceAnnotation(),
+            "<!--\n" +
+            "=" * 78 + "\n" +
+            "/path/to/source.pt\n" +
+            "=" * 78 + "\n" +
+            "-->")
+
+    def test_annotated_stream_write(self):
+        interpreter = self.interpreter
+        interpreter.formatSourceAnnotation = lambda: '@'
+        test_cases = [
+            '@some text',
+            '\n',
+            '<?xml ...?>@some text',
+            ' <?xml ...?>@some text',
+            '\n<?xml ...?>@some text',
+            '<?xml ...',
+            '<?xml ...?>@\n<!DOCTYPE ...>some text',
+        ]
+        for output in test_cases:
+            input = output.replace('@', '')
+            self.sio.seek(0)
+            self.sio.truncate()
+            interpreter._pending_source_annotation = True
+            interpreter._annotated_stream_write(input)
+            self.assertEquals(self.sio.getvalue(), output)
+            if '@' in output:
+                self.assert_(not interpreter._pending_source_annotation)
+            else:
+                self.assert_(interpreter._pending_source_annotation)
+
+
 def test_suite():
     suite = unittest.makeSuite(I18NErrorsTestCase)
     suite.addTest(unittest.makeSuite(MacroErrorsTestCase))
     suite.addTest(unittest.makeSuite(OutputPresentationTestCase))
     suite.addTest(unittest.makeSuite(ScriptTestCase))
     suite.addTest(unittest.makeSuite(I18NCornerTestCase))
+    suite.addTest(unittest.makeSuite(TestSourceAnnotations))
 
-    # XXX: Deactivated test, since we have not found a solution for this and
+    # TODO: Deactivated test, since we have not found a solution for this and
     # it is a deep and undocumented HTML parser issue.
     # Fred is looking into this.
     #suite.addTest(unittest.makeSuite(MacroFunkyErrorTest))

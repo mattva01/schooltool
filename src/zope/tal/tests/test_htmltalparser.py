@@ -5,7 +5,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -14,7 +14,7 @@
 ##############################################################################
 """Tests for the HTMLTALParser code generator.
 
-$Id: test_htmltalparser.py,v 1.8 2003/08/21 14:19:29 srichter Exp $
+$Id$
 """
 import pprint
 import sys
@@ -635,7 +635,8 @@ translated string</span>
          ('span',
           [('tal:replace', 'str:Lomax', 'tal'),
            ('i18n:name', 'name', 'i18n')]))],
-       '$str:Lomax$')),
+       '$str:Lomax$',
+       0)),
      ('rawtextBeginScope',
       (' was born in\n  ',
        2,
@@ -648,7 +649,8 @@ translated string</span>
          ('span',
           [('tal:replace', 'str:Antarctica', 'tal'),
            ('i18n:name', 'country', 'i18n')]))],
-       '$str:Antarctica$')),
+       '$str:Antarctica$',
+       0)),
      ('endScope', ()),
      ('rawtextColumn', ('.\n', 0))])),
   ('endScope', ()),
@@ -679,7 +681,8 @@ translated string</span>
            ('',
              [('insertText', ('$bar$', []))])),
          ('rawtextOffset', ('</span>', 7))],
-      None)),
+      None,
+        0)),
    ('endScope', ()),
    ('rawtextOffset', ('.', 1))])),
 ('endScope', ()),
@@ -702,12 +705,12 @@ translated string</span>
     [('rawtextBeginScope', ('\n  ', 2, (2, 2), 0, {'i18n:name': 'name'})),
      ('i18nVariable',
       ('name',
-       [('rawtextOffset', ('<b>Jim</b>', 10))], None)),
+       [('rawtextOffset', ('<b>Jim</b>', 10))], None, 0)),
      ('rawtextBeginScope',
       (' was born in\n  ', 2, (3, 2), 1, {'i18n:name': 'country'})),
      ('i18nVariable',
       ('country',
-       [('rawtextOffset', ('the USA', 7))], None)),
+       [('rawtextOffset', ('the USA', 7))], None, 0)),
      ('endScope', ()),
      ('rawtextColumn', ('.\n', 0))])),
   ('endScope', ()),
@@ -822,7 +825,7 @@ translated string</span>
          [('i18n:data', 'here/currentTime', 'i18n'),
           ('i18n:translate', 'timefmt', 'i18n'),
           ('i18n:name', 'time', 'i18n')])),
-       ('i18nVariable', ('time', [], None))],
+       ('i18nVariable', ('time', [], None, 0))],
       '$here/currentTime$')),
     ('endScope', ()),
     ('rawtextOffset', ('... beep!', 9))])),
@@ -857,7 +860,8 @@ translated string</span>
            ('i18n:name', 'jobnum', 'i18n')])),
         ('rawtextOffset', ('NN', 2)),
         ('rawtextOffset', ('</span>', 7))],
-       '$context/@@object_name$')),
+       '$context/@@object_name$',
+       0)),
      ('endScope', ())])),
   ('endScope', ()),
   ('rawtextColumn', ('</span>\n', 0))
@@ -901,7 +905,8 @@ translated string</span>
           [('rawtextOffset', ('user@host.com', 13))])),
         ('endScope', ()),
         ('rawtextOffset', ('</a>', 4))],
-       None)),
+       None,
+       0)),
      ('endScope', ()),
      ('rawtextColumn', ('\n', 0))])),
   ('endScope', ()),
@@ -941,7 +946,8 @@ translated string</span>
          ('$request/submitter$',
           [('rawtextOffset', ('user@host.com', 13))])),
         ('rawtextOffset', ('</a>', 4))],
-       None)),
+       None,
+       0)),
      ('endScope', ()),
      ('rawtextColumn', ('\n', 0))])),
   ('endScope', ()),

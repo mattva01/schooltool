@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,22 +13,32 @@
 ##############################################################################
 """Generic Python Expression Handler
 
-$Id: pythonexpr.py,v 1.2 2004/03/21 16:55:50 philikon Exp $
+$Id$
 """
 
-class PythonExpr:
+class PythonExpr(object):
     def __init__(self, name, expr, engine):
-        text = expr.replace('\n', ' ').strip()
+        text = '\n'.join(expr.splitlines()) # normalize line endings
+        text = '(' + text + ')' # Put text in parens so newlines don't matter
         self.text = text
-        # The next line can legally raise SyntaxError.
-        self._code = code = compile(text, '<string>', 'eval')
+        try:
+            code = self._compile(text, '<string>')
+        except SyntaxError, e:
+            raise engine.getCompilerError()(str(e))
+        self._code = code
         self._varnames = code.co_names
 
+    def _compile(self, text, filename):
+        return compile(text, filename, 'eval')
+
     def _bind_used_names(self, econtext, builtins):
-        # Bind template variables
+        # Construct a dictionary of globals with which the Python
+        # expression should be evaluated.
         names = {}
         vars = econtext.vars
         marker = self
+        if not isinstance(builtins, dict):
+            builtins = builtins.__dict__
         for vname in self._varnames:
             val = vars.get(vname, marker)
             if val is not marker:
@@ -55,7 +65,7 @@ class PythonExpr:
         return '<PythonExpr %s>' % self.text
 
 
-class ExprTypeProxy:
+class ExprTypeProxy(object):
     '''Class that proxies access to an expression type handler'''
     def __init__(self, name, handler, econtext):
         self._name = name

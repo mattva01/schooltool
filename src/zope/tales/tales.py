@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -15,10 +15,8 @@
 
 An implementation of a TAL expression engine
 
-$Id: tales.py,v 1.17 2004/03/23 19:18:17 srichter Exp $
+$Id$
 """
-__metaclass__ = type # All classes are new style when run with Python 2.2+
-
 import re
 
 from zope.interface import implements
@@ -468,10 +466,17 @@ class Iterator(object):
         >>> it.length()
         3
 
-        But you can't get the length if an iterable without a length
-        was provided:
+        But you can't get the length of an iterable which doesn't
+        support len():
 
-        >>> it = Iterator('foo', iter({"apple":1, "pear":2}), context)
+        >>> class MyIter(object):
+        ...     def __init__(self, seq):
+        ...         self._next = iter(seq).next
+        ...     def __iter__(self):
+        ...         return self
+        ...     def next(self):
+        ...         return self._next()
+        >>> it = Iterator('foo', MyIter({"apple":1, "pear":2}), context)
         >>> it.length()
         Traceback (most recent call last):
         ...
@@ -481,7 +486,7 @@ class Iterator(object):
         return len(self._seq)
 
 
-class ErrorInfo:
+class ErrorInfo(object):
     """Information about an exception passed to an on-error handler."""
     if tal:
         implements(ITALExpressionErrorInfo)
@@ -497,7 +502,7 @@ class ErrorInfo:
         self.offset = position[1]
 
 
-class ExpressionEngine:
+class ExpressionEngine(object):
     '''Expression Engine
 
     An instance of this class keeps a mutable collection of expression
@@ -533,7 +538,7 @@ class ExpressionEngine:
 
         example:
 
-           class stringFuncs:
+           class stringFuncs(object):
 
               def __init__(self,context):
                  self.context = str(context)
@@ -606,7 +611,7 @@ class ExpressionEngine:
         return CompilerError
 
 
-class Context:
+class Context(object):
     '''Expression Context
 
     An instance of this class holds context information that it can
@@ -708,7 +713,7 @@ class Context:
     evaluateStructure = evaluate
 
     def evaluateMacro(self, expr):
-        # XXX Should return None or a macro definition
+        # TODO: Should return None or a macro definition
         return self.evaluate(expr)
     evaluateMacro = evaluate
 
@@ -725,7 +730,7 @@ class Context:
         self.position = position
 
 
-class TALESTracebackSupplement:
+class TALESTracebackSupplement(object):
     """Implementation of zope.exceptions.ITracebackSupplement"""
 
     def __init__(self, context, expression):

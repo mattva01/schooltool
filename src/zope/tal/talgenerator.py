@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,7 +13,7 @@
 ##############################################################################
 """Code generator for TALInterpreter intermediate code.
 
-$Id: talgenerator.py,v 1.14 2004/03/08 23:33:58 srichter Exp $
+$Id$
 """
 import cgi
 import re
@@ -31,7 +31,7 @@ I18N_EXPRESSION = 3
 _name_rx = re.compile(NAME_RE)
 
 
-class TALGenerator:
+class TALGenerator(object):
 
     inMacroUse = 0
     inMacroDef = 0
@@ -339,7 +339,7 @@ class TALGenerator:
         m = _name_rx.match(varname)
         if m is None or m.group() != varname:
             raise TALError("illegal i18n:name: %r" % varname, self.position)
-        cexpr = None
+        key = cexpr = None
         program = self.popProgram()
         if action == I18N_REPLACE:
             # This is a tag with an i18n:name and a tal:replace (implicit or
@@ -355,7 +355,8 @@ class TALGenerator:
             assert action == I18N_EXPRESSION
             key, expr = parseSubstitution(expression)
             cexpr = self.compileExpression(expr)
-        self.emit('i18nVariable', varname, program, cexpr)
+        self.emit('i18nVariable',
+                  varname, program, cexpr, int(key == "structure"))
 
     def emitTranslation(self, msgid, i18ndata):
         program = self.popProgram()
@@ -556,12 +557,15 @@ class TALGenerator:
             # Hack to include preceding whitespace in the loop program
             repeatWhitespace = self.unEmitNewlineWhitespace()
         if position != (None, None):
-            # XXX at some point we should insist on a non-trivial position
+            # TODO: at some point we should insist on a non-trivial position
             self.emit("setPosition", position)
         if self.inMacroUse:
             if fillSlot:
                 self.pushProgram()
+                # generate a source annotation at the beginning of fill-slot
                 if self.source_file is not None:
+                    if position != (None, None):
+                        self.emit("setPosition", position)
                     self.emit("setSourceFile", self.source_file)
                 todo["fillSlot"] = fillSlot
                 self.inMacroUse = 0
@@ -574,7 +578,10 @@ class TALGenerator:
                 self.pushProgram()
                 self.emit("version", TAL_VERSION)
                 self.emit("mode", self.xml and "xml" or "html")
+                # generate a source annotation at the beginning of the macro
                 if self.source_file is not None:
+                    if position != (None, None):
+                        self.emit("setPosition", position)
                     self.emit("setSourceFile", self.source_file)
                 todo["defineMacro"] = defineMacro
                 self.inMacroDef = self.inMacroDef + 1
@@ -694,7 +701,7 @@ class TALGenerator:
             todo["repldict"] = repldict
             repldict = {}
         if script:
-            todo["script"] = script    
+            todo["script"] = script
         self.emitStartTag(name, self.replaceAttrs(attrlist, repldict), isend)
         if optTag:
             self.pushProgram()
@@ -705,14 +712,14 @@ class TALGenerator:
         if content and varname:
             self.pushProgram()
         if script:
-            self.pushProgram()            
+            self.pushProgram()
         if todo and position != (None, None):
             todo["position"] = position
         self.todoPush(todo)
         if isend:
-            self.emitEndElement(name, isend)
+            self.emitEndElement(name, isend, position=position)
 
-    def emitEndElement(self, name, isend=0, implied=0):
+    def emitEndElement(self, name, isend=0, implied=0, position=(None, None)):
         todo = self.todoPop()
         if not todo:
             # Shortcut
@@ -720,7 +727,7 @@ class TALGenerator:
                 self.emitEndTag(name)
             return
 
-        self.position = position = todo.get("position", (None, None))
+        self.position = todo.get("position", (None, None))
         defineMacro = todo.get("defineMacro")
         useMacro = todo.get("useMacro")
         defineSlot = todo.get("defineSlot")
@@ -747,7 +754,7 @@ class TALGenerator:
                 exc = TALError
                 what = "TAL"
             raise exc("%s attributes on <%s> require explicit </%s>" %
-                      (what, name, name), position)
+                      (what, name, name), self.position)
 
         if script:
             self.emitEvaluateCode(script)
@@ -791,13 +798,14 @@ class TALGenerator:
             #   - I18N_CONTENT for tal:content
             #   - I18N_EXPRESSION for explicit tal:replace
             # o varname[2] will be None for the first two actions and the
-            #   replacement tal expression for the third action.
+            #   replacement tal expression for the third action.  This
+            #   can include a 'text' or 'structure' indicator.
             assert (varname[1]
                     in [I18N_REPLACE, I18N_CONTENT, I18N_EXPRESSION])
             self.emitI18nVariable(varname)
         # Do not test for "msgid is not None", i.e. we only want to test for
         # explicit msgids here.  See comment above.
-        if msgid is not None: 
+        if msgid is not None:
             # in case tal:content, i18n:translate and i18n:name in the
             # same tag insertTranslation opcode has already been
             # emitted
@@ -823,11 +831,22 @@ class TALGenerator:
             self.emitUseMacro(useMacro)
         if defineMacro:
             self.emitDefineMacro(defineMacro)
+        if useMacro or defineSlot:
+            # generate a source annotation after define-slot or use-macro
+            # because the source file might have changed
+            if self.source_file is not None:
+                if position != (None, None):
+                    self.emit("setPosition", position)
+                self.emit("setSourceFile", self.source_file)
 
 
 def _parseI18nAttributes(i18nattrs, position, xml):
     d = {}
-    for spec in i18nattrs.split(";"):
+    # Filter out empty items, eg:
+    # i18n:attributes="value msgid; name msgid2;"
+    # would result in 3 items where the last one is empty
+    attrs = filter(None, i18nattrs.split(";"))
+    for spec in attrs:
         parts = spec.split()
         if len(parts) > 2:
             raise TALError("illegal i18n:attributes specification: %r" % spec,

@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,7 +13,7 @@
 ##############################################################################
 """Default TALES expression implementations tests.
 
-$Id: test_expressions.py,v 1.5 2003/09/19 10:27:11 srichter Exp $
+$Id$
 """
 import unittest
 
@@ -21,7 +21,7 @@ from zope.tales.engine import Engine
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.interface import implements
 
-class Data:
+class Data(object):
 
     def __init__(self, **kw):
         self.__dict__.update(kw)
@@ -126,13 +126,53 @@ class ExpressionTests(ExpressionTestBase):
         context=self.context
         self.assertEqual(expr(context), 4)
 
+    def testPythonDosNewline(self):
+        expr = self.engine.compile('python: 2 \r\n+\r\n 2\r\n')
+        context=self.context
+        self.assertEqual(expr(context), 4)
+
+    def testPythonErrorRaisesCompilerError(self):
+        self.assertRaises(self.engine.getCompilerError(),
+                          self.engine.compile, 'python: splat.0')
+
+    def testEmptyPathSegmentRaisesCompilerError(self):
+        CompilerError = self.engine.getCompilerError()
+        def check(expr):
+            self.assertRaises(CompilerError, self.engine.compile, expr)
+
+        # path expressions on their own:
+        check('/ab/cd | c/d | e/f')
+        check('ab//cd | c/d | e/f')
+        check('ab/cd/ | c/d | e/f')
+        check('ab/cd | /c/d | e/f')
+        check('ab/cd | c//d | e/f')
+        check('ab/cd | c/d/ | e/f')
+        check('ab/cd | c/d | /e/f')
+        check('ab/cd | c/d | e//f')
+        check('ab/cd | c/d | e/f/')
+
+        # path expressions embedded in string: expressions:
+        check('string:${/ab/cd}')
+        check('string:${ab//cd}')
+        check('string:${ab/cd/}')
+        check('string:foo${/ab/cd | c/d | e/f}bar')
+        check('string:foo${ab//cd | c/d | e/f}bar')
+        check('string:foo${ab/cd/ | c/d | e/f}bar')
+        check('string:foo${ab/cd | /c/d | e/f}bar')
+        check('string:foo${ab/cd | c//d | e/f}bar')
+        check('string:foo${ab/cd | c/d/ | e/f}bar')
+        check('string:foo${ab/cd | c/d | /e/f}bar')
+        check('string:foo${ab/cd | c/d | e//f}bar')
+        check('string:foo${ab/cd | c/d | e/f/}bar')
+
+
 class FunctionTests(ExpressionTestBase):
 
     def setUp(self):
         ExpressionTestBase.setUp(self)
 
         # a test namespace
-        class TestNameSpace:
+        class TestNameSpace(object):
             implements(ITALESFunctionNamespace)
 
             def __init__(self, context):
@@ -213,17 +253,6 @@ class FunctionTests(ExpressionTestBase):
                              'Invalid namespace name "1foo"')
         else:
             self.fail('Engine accepted invalid namespace name')
-
-    def testInvalidFunctionName(self):
-        from zope.tales.tales import CompilerError
-        try:
-            self.engine.compile('adapterTest/foo:1bar')
-        except CompilerError,e:
-            self.assertEqual(e.args[0],
-                             'Invalid function name "1bar"')
-        else:
-            self.fail('Engine accepted invalid function name')
-
 
     def testBadFunction(self):
         from zope.tales.tales import CompilerError

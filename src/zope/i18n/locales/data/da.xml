@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://www.openi18n.org/spec/ldml/1.0/ldml.dtd">
+<ldml>
+	<identity>
+		<version number="1.0"/>
+		<generation date="2003-12-19" />
+		<language type="da" /> 
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="am">Amharisk</language>
+			<language type="ar">Arabisk</language>
+			<language type="az">Aserbajdsjan</language>
+			<language type="be">Hviderussisk</language>
+			<language type="bg">Bulgarsk</language>
+			<language type="bn">Bengalsk</language>
+			<language type="ca">Katalansk</language>
+			<language type="cs">Tjekkisk</language>
+			<language type="da">Dansk</language>
+			<language type="de">Tysk</language>
+			<language type="el">Græsk</language>
+			<language type="en">Engelsk</language>
+			<language type="es">Spansk</language>
+			<language type="et">Estisk</language>
+			<language type="eu">Baskisk</language>
+			<language type="fa">Persisk</language>
+			<language type="fi">Finsk</language>
+			<language type="fo">Færøsk</language>
+			<language type="fr">Fransk</language>
+			<language type="ga">Irsk</language>
+			<language type="gl">Galicisk</language>
+			<language type="gu">Gujaratisk</language>
+			<language type="haw">Hawaii</language>
+			<language type="he">Hebraisk</language>
+			<language type="hr">Kroatisk</language>
+			<language type="hu">Ungarsk</language>
+			<language type="hy">Armensk</language>
+			<language type="id">Indonesisk</language>
+			<language type="is">Islandsk</language>
+			<language type="it">Italiensk</language>
+			<language type="ja">Japansk</language>
+			<language type="ka">Georgisk</language>
+			<language type="kk">Kasakhisk</language>
+			<language type="ko">Koreansk</language>
+			<language type="ku">Kurdisk</language>
+			<language type="kw">Cornisk</language>
+			<language type="lt">Litauisk</language>
+			<language type="lv">Lettisk</language>
+			<language type="mk">Makedonsk</language>
+			<language type="mr">Marathisk</language>
+			<language type="mt">Maltesisk</language>
+			<language type="nl">Hollandsk</language>
+			<language type="no">Norsk</language>
+			<language type="pl">Polsk</language>
+			<language type="pt">Portugisisk</language>
+			<language type="ro">Rumænsk</language>
+			<language type="ru">Russisk</language>
+			<language type="sh">Serbokroatisk</language>
+			<language type="sk">Slovakisk</language>
+			<language type="sl">Slovensk</language>
+			<language type="so">Somalisk</language>
+			<language type="sq">Albansk</language>
+			<language type="sr">Serbisk</language>
+			<language type="sv">Svensk</language>
+			<language type="ta">Tamilsk</language>
+			<language type="th">Thailandsk</language>
+			<language type="tr">Tyrkisk</language>
+			<language type="uk">Ukrainsk</language>
+			<language type="vi">Vietnamesisk</language>
+			<language type="zh">Kinesisk</language>
+		</languages>
+		<territories>
+			<territory type="AD">Andorra</territory>
+			<territory type="AE">Forenede Arabiske Emirater</territory>
+			<territory type="AF">Afghanistan</territory>
+			<territory type="AG">Antigua og Barbuda</territory>
+			<territory type="AI">Anguilla</territory>
+			<territory type="AL">Albanien</territory>
+			<territory type="AM">Armenien</territory>
+			<territory type="AN">Hollandske Antiller</territory>
+			<territory type="AO">Angola</territory>
+			<territory type="AQ">Antarktis</territory>
+			<territory type="AR">Argentina</territory>
+			<territory type="AS">Amerikansk Samoa</territory>
+			<territory type="AT">Østrig</territory>
+			<territory type="AU">Australien</territory>
+			<territory type="AW">Aruba</territory>
+			<territory type="AZ">Aserbajdsjan</territory>
+			<territory type="BA">Bosnien-Hercegovina</territory>
+			<territory type="BB">Barbados</territory>
+			<territory type="BD">Bangladesh</territory>
+			<territory type="BE">Belgien</territory>
+			<territory type="BF">Burkina Faso</territory>
+			<territory type="BG">Bulgarien</territory>
+			<territory type="BH">Bahrain</territory>
+			<territory type="BI">Burundi</territory>
+			<territory type="BJ">Benin</territory>
+			<territory type="BM">Bermuda</territory>
+			<territory type="BN">Brunei Darussalam</territory>
+			<territory type="BO">Bolivia</territory>
+			<territory type="BR">Brasilien</territory>
+			<territory type="BS">Bahamas</territory>
+			<territory type="BT">Bhutan</territory>
+			<territory type="BV">Bouvet Island</territory>
+			<territory type="BW">Botswana</territory>
+			<territory type="BY">Hviderusland</territory>
+			<territory type="BZ">Belize</territory>
+			<territory type="CA">Canada</territory>
+			<territory type="CC">Cocos (Keeling) Islands</territory>
+			<territory type="CD">Den Demokratiske Republik Congo</territory>
+			<territory type="CF">Centralafrikanske Republik</territory>
+			<territory type="CG">Congo</territory>
+			<territory type="CH">Schweiz</territory>
+			<territory type="CI">Elfenbenskysten</territory>
+			<territory type="CK">Cook Islands</territory>
+			<territory type="CL">Chile</territory>
+			<territory type="CM">Cameroun</territory>
+			<territory type="CN">Kina</territory>
+			<territory type="CO">Colombia</territory>
+			<territory type="CR">Costa Rica</territory>
+			<territory type="CU">Cuba</territory>
+			<territory type="CV">Kap Verde</territory>
+			<territory type="CX">Juleøen</territory>
+			<territory type="CY">Cypern</territory>
+			<territory type="CZ">Tjekkiet</territory>
+			<territory type="DE">Tyskland</territory>
+			<territory type="DJ">Djibouti</territory>
+			<territory type="DK">Danmark</territory>
+			<territory type="DM">Dominica</territory>
+			<territory type="DO">Den Dominikanske Republik</territory>
+			<territory type="DZ">Algeriet</territory>
+			<territory type="EC">Ecuador</territory>
+			<territory type="EE">Estland</territory>
+			<territory type="EG">Egypten</territory>
+			<territory type="EH">Vestsahara</territory>
+			<territory type="ER">Eritrea</territory>
+			<territory type="ES">Spanien</territory>
+			<territory type="ET">Etiopien</territory>
+			<territory type="FI">Finland</territory>
+			<territory type="FJ">Fiji</territory>
+			<territory type="FK">Falklandsøerne</territory>
+			<territory type="FM">Mikronesiens Forenede Stater</territory>
+			<territory type="FO">Færøerne</territory>
+			<territory type="FR">Frankrig</territory>
+			<territory type="Fallback">en</territory>
+			<territory type="GA">Gabon</territory>
+			<territory type="GB">Storbritannien</territory>
+			<territory type="GD">Grenada</territory>
+			<territory type="GE">Georgien</territory>
+			<territory type="GF">Fransk Guyana</territory>
+			<territory type="GH">Ghana</territory>
+			<territory type="GI">Gibraltar</territory>
+			<territory type="GL">Grønland</territory>
+			<territory type="GM">Gambia</territory>
+			<territory type="GN">Guinea</territory>
+			<territory type="GP">Guadeloupe</territory>
+			<territory type="GQ">Ækvatorialguinea</territory>
+			<territory type="GR">Grækenland</territory>
+			<territory type="GS">South Georgia og De Sydlige Sandwichøer</territory>
+			<territory type="GT">Guatemala</territory>
+			<territory type="GU">Guam</territory>
+			<territory type="GW">Guinea-Bissau</territory>
+			<territory type="GY">Guyana</territory>
+			<territory type="HK">Hong Kong S.A.R., China</territory>
+			<territory type="HM">Heard Island og McDonald Islands</territory>
+			<territory type="HN">Honduras</territory>
+			<territory type="HR">Kroatien</territory>
+			<territory type="HT">Haiti</territory>
+			<territory type="HU">Ungarn</territory>
+			<territory type="ID">Indonesien</territory>
+			<territory type="IE">Irland</territory>
+			<territory type="IL">Israel</territory>
+			<territory type="IN">Indien</territory>
+			<territory type="IO">Det Britiske Territorium i Det Indiske Ocean</territory>
+			<territory type="IQ">Irak</territory>
+			<territory type="IR">Iran</territory>
+			<territory type="IS">Island</territory>
+			<territory type="IT">Italien</territory>
+			<territory type="JM">Jamaica</territory>
+			<territory type="JO">Jordan</territory>
+			<territory type="JP">Japan</territory>
+			<territory type="KE">Kenya</territory>
+			<territory type="KG">Kirgisistan</territory>
+			<territory type="KH">Cambodja</territory>
+			<territory type="KI">Kiribati</territory>
+			<territory type="KM">Comorerne</territory>
+			<territory type="KN">Saint Kitts og Nevis</territory>
+			<territory type="KP">Nordkorea</territory>
+			<territory type="KR">Sydkorea</territory>
+			<territory type="KW">Kuwait</territory>
+			<territory type="KY">Caymanøerne</territory>
+			<territory type="KZ">Kasakhstan</territory>
+			<territory type="LA">Laos</territory>
+			<territory type="LB">Libanon</territory>
+			<territory type="LC">Saint Lucia</territory>
+			<territory type="LI">Liechtenstein</territory>
+			<territory type="LK">Sri Lanka</territory>
+			<territory type="LR">Liberia</territory>
+			<territory type="LS">Lesotho</territory>
+			<territory type="LT">Litauen</territory>
+			<territory type="LU">Luxembourg</territory>
+			<territory type="LV">Letland</territory>
+			<territory type="LY">Libyen</territory>
+			<territory type="MA">Marokko</territory>
+			<territory type="MC">Monaco</territory>
+			<territory type="MD">Republikken Moldova</territory>
+			<territory type="MG">Madagaskar</territory>
+			<territory type="MH">Marshalløerne</territory>
+			<territory type="MK">Republikken Makedonien</territory>
+			<territory type="ML">Mali</territory>
+			<territory type="MM">Myanmar</territory>
+			<territory type="MN">Mongoliet</territory>
+			<territory type="MO">Macao S.A.R. China</territory>
+			<territory type="MP">Nordmarianerne</territory>
+			<territory type="MQ">Martinique</territory>
+			<territory type="MR">Mauretanien</territory>
+			<territory type="MS">Montserrat</territory>
+			<territory type="MT">Malta</territory>
+			<territory type="MU">Mauritius</territory>
+			<territory type="MV">Maldiverne</territory>
+			<territory type="MW">Malawi</territory>
+			<territory type="MX">Mexico</territory>
+			<territory type="MY">Malaysia</territory>
+			<territory type="MZ">Mozambique</territory>
+			<territory type="NA">Namibia</territory>
+			<territory type="NC">Ny Caledonien</territory>
+			<territory type="NE">Niger</territory>
+			<territory type="NF">Norfolk Island</territory>
+			<territory type="NG">Nigeria</territory>
+			<territory type="NI">Nicaragua</territory>
+			<territory type="NL">Holland</territory>
+			<territory type="NO">Norge</territory>
+			<territory type="NP">Nepal</territory>
+			<territory type="NR">Nauru</territory>
+			<territory type="NU">Niue</territory>
+			<territory type="NZ">New Zealand</territory>
+			<territory type="OM">Oman</territory>
+			<territory type="PA">Panama</territory>
+			<territory type="PE">Peru</territory>
+			<territory type="PF">Fransk Polynesien</territory>
+			<territory type="PG">Papua Ny Guinea</territory>
+			<territory type="PH">Filippinerne</territory>
+			<territory type="PK">Pakistan</territory>
+			<territory type="PL">Polen</territory>
+			<territory type="PM">Saint Pierre og Miquelon</territory>
+			<territory type="PN">Pitcairn</territory>
+			<territory type="PR">Puerto Rico</territory>
+			<territory type="PS">De palæstinensiske områder</territory>
+			<territory type="PT">Portugal</territory>
+			<territory type="PW">Palau</territory>
+			<territory type="PY">Paraguay</territory>
+			<territory type="QA">Qatar</territory>
+			<territory type="RE">Reunion</territory>
+			<territory type="RO">Rumænien</territory>
+			<territory type="RU">Rusland</territory>
+			<territory type="RW">Rwanda</territory>
+			<territory type="SA">Saudi-Arabien</territory>
+			<territory type="SB">Salomonøerne</territory>
+			<territory type="SC">Seychellerne</territory>
+			<territory type="SD">Sudan</territory>
+			<territory type="SE">Sverige</territory>
+			<territory type="SG">Singapore</territory>
+			<territory type="SH">St. Helena</territory>
+			<territory type="SI">Slovenien</territory>
+			<territory type="SJ">Svalbard og Jan Mayen</territory>
+			<territory type="SK">Slovakiet</territory>
+			<territory type="SL">Sierra Leone</territory>
+			<territory type="SM">San Marino</territory>
+			<territory type="SN">Senegal</territory>
+			<territory type="SO">Somalia</territory>
+			<territory type="SP">Serbia</territory>
+			<territory type="SR">Surinam</territory>
+			<territory type="ST">Sao Tome og Principe</territory>
+			<territory type="SV">El Salvador</territory>
+			<territory type="SY">Syrien</territory>
+			<territory type="SZ">Swaziland</territory>
+			<territory type="TC">Turks and Caicos Islands</territory>
+			<territory type="TD">Tchad</territory>
+			<territory type="TF">Franske Besiddelser i Det Sydlige Indiske Ocean</territory>
+			<territory type="TG">Togo</territory>
+			<territory type="TH">Thailand</territory>
+			<territory type="TJ">Tadsjikistan</territory>
+			<territory type="TK">Tokelau</territory>
+			<territory type="TL">Østtimor</territory>
+			<territory type="TM">Turkmenistan</territory>
+			<territory type="TN">Tunesien</territory>
+			<territory type="TO">Tonga</territory>
+			<territory type="TR">Tyrkiet</territory>
+			<territory type="TT">Trinidad og Tobago</territory>
+			<territory type="TV">Tuvalu</territory>
+			<territory type="TW">Taiwan</territory>
+			<territory type="TZ">Tanzania</territory>
+			<territory type="UA">Ukraine</territory>
+			<territory type="UG">Uganda</territory>
+			<territory type="UM">De Mindre Amerikanske Oversøiske Øer</territory>
+			<territory type="US">Amerikas Forenede Stater</territory>
+			<territory type="UY">Uruguay</territory>
+			<territory type="UZ">Usbekistan</territory>
+			<territory type="VA">Vatikanstaten</territory>
+			<territory type="VC">St. Vincent og Grenadinerne</territory>
+			<territory type="VE">Venezuela</territory>
+			<territory type="VG">De britiske jomfruøer</territory>
+			<territory type="VI">De amerikanske jomfruøer</territory>
+			<territory type="VN">Vietnam</territory>
+			<territory type="VU">Vanuatu</territory>
+			<territory type="WF">Wallis og Futuna</territory>
+			<territory type="WS">Samoa</territory>
+			<territory type="YE">Yemen</territory>
+			<territory type="YT">Mayotte</territory>
+			<territory type="YU">Jugoslavien</territory>
+			<territory type="ZA">Sydafrika</territory>
+			<territory type="ZM">Zambia</territory>
+			<territory type="ZW">Zimbabwe</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z æ å ø á é í ó ú ý]</exemplarCharacters>
+	</characters>
+	<dates>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januar</month>
+					<month type="2">februar</month>
+					<month type="3">marts</month>
+					<month type="4">april</month>
+					<month type="5">maj</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">august</month>
+					<month type="9">september</month>
+					<month type="10">oktober</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">søndag</day>
+					<day type="mon">mandag</day>
+					<day type="tue">tirsdag</day>
+					<day type="wed">onsdag</day>
+					<day type="thu">torsdag</day>
+					<day type="fri">fredag</day>
+					<day type="sat">lørdag</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">søn</day>
+					<day type="mon">man</day>
+					<day type="tue">tir</day>
+					<day type="wed">ons</day>
+					<day type="thu">tor</day>
+					<day type="fri">fre</day>
+					<day type="sat">lør</day>
+				</dayAbbr>
+				<week>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">f.Kr.</era>
+						<era type="2">e.Kr.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d. MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd-MM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd-MM-yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="DKK">
+				<displayName>DKK</displayName>
+				<symbol>kr</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

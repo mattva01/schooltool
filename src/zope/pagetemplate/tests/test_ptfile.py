@@ -1,5 +1,20 @@
-"""Tests of PageTemplateFile."""
+##############################################################################
+#
+# Copyright (c) 2004 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+"""Tests of PageTemplateFile.
 
+$Id$
+"""
 import os
 import tempfile
 import unittest
@@ -111,7 +126,7 @@ class TypeSniffingTestCase(unittest.TestCase):
             "<html><head><title>sample document</title></head></html>",
             "text/html")
 
-    # XXX This reflects a case that simply isn't handled by the
+    # TODO: This reflects a case that simply isn't handled by the
     # sniffer; there are many, but it gets it right more often than
     # before.
     def donttest_sniffer_xml_simple(self):

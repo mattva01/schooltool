@@ -1,0 +1,15 @@
+<html>
+<body>
+  <div metal:define-macro="macro1">This is macro1 on sa3 line 3.
+    <span metal:define-slot="slot1">This is slot1 on sa3 line 4.</span>
+    This is the end of macro1 on sa3 line 5.
+  </div>
+  <p>Some text on sa3 line 7.</p>
+  <p metal:use-macro="macro1">
+    This text on sa3 line 9 will disappear.
+    <b metal:fill-slot="slot1">Text from sa3 line 10 is filled into slot1.</b>
+    This text on sa3 line 11 will disappear.
+  </p>
+  <p>This is some text on sa3 line 13.</p>
+</body>
+</html>

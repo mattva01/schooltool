@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,7 +13,7 @@
 ##############################################################################
 """Parse HTML and compile to TALInterpreter intermediate code.
 
-$Id: htmltalparser.py,v 1.5 2003/08/21 14:19:29 srichter Exp $
+$Id$
 """
 
 from HTMLParser import HTMLParser, HTMLParseError
@@ -171,7 +171,7 @@ class HTMLTALParser(HTMLParser):
                     self.getpos())
             self.gen.emitStartElement(tag, attrlist, taldict, metaldict,
                                       i18ndict, self.getpos())
-            self.gen.emitEndElement(tag, implied=-1)
+            self.gen.emitEndElement(tag, implied=-1, position=self.getpos())
         else:
             self.gen.emitStartElement(tag, attrlist, taldict, metaldict,
                                       i18ndict, self.getpos(), isend=1)
@@ -182,7 +182,7 @@ class HTMLTALParser(HTMLParser):
             # </img> etc. in the source is an error
             raise EmptyTagError(tag, self.getpos())
         self.close_enclosed_tags(tag)
-        self.gen.emitEndElement(tag)
+        self.gen.emitEndElement(tag, position=self.getpos())
         self.pop_xmlns()
         self.tagstack.pop()
 
@@ -231,7 +231,8 @@ class HTMLTALParser(HTMLParser):
             white = self.gen.unEmitWhitespace()
         else:
             white = None
-        self.gen.emitEndElement(tag, isend=isend, implied=implied)
+        self.gen.emitEndElement(tag, isend=isend, implied=implied,
+                                position=self.getpos())
         if white:
             self.gen.emitRawText(white)
         self.tagstack.pop()

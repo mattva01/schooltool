@@ -4,22 +4,22 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Common definitions used by TAL and METAL compilation an transformation.
-"""
+"""Common definitions used by TAL and METAL compilation and transformation.
 
+$Id$
+"""
 import re
 from zope.tal.interfaces import ITALExpressionErrorInfo
 from zope.interface import implements
 
-TAL_VERSION = "1.4"
+TAL_VERSION = "1.5"
 
 XML_NS = "http://www.w3.org/XML/1998/namespace" # URI for XML namespace
 XMLNS_NS = "http://www.w3.org/2000/xmlns/" # URI for XML NS declarations
@@ -48,8 +48,9 @@ KNOWN_TAL_ATTRIBUTES = [
     "attributes",
     "on-error",
     "omit-tag",
-    "tal tag",
-    "script"
+    "script",
+    "tal tag",      # a pseudo attribute that holds the namespace of elements
+                    # like <tal:x>, <metal:y>, <i18n:z>
     ]
 
 KNOWN_I18N_ATTRIBUTES = [
@@ -94,7 +95,7 @@ class I18NError(TALError):
     pass
 
 
-class ErrorInfo:
+class ErrorInfo(object):
     implements(ITALExpressionErrorInfo)
 
     def __init__(self, err, position=(None, None)):

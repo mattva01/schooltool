@@ -5,17 +5,17 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Driver program to run METAL and TAL regression tests.
-"""
+"""Driver program to run METAL and TAL regression tests.
 
+$Id$
+"""
 import glob
 import os
 import sys
@@ -79,6 +79,8 @@ def main():
         locopts = []
         if arg.find("metal") >= 0 and "-m" not in opts:
             locopts.append("-m")
+        if arg.find("_sa") >= 0 and "-a" not in opts:
+            locopts.append("-a")
         if not unittesting:
             print arg,
             sys.stdout.flush()

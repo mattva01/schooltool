@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -13,7 +13,7 @@
 ##############################################################################
 """Dummy TAL expression engine so that I can test out the TAL implementation.
 
-$Id: dummyengine.py,v 1.16 2004/03/23 19:18:17 srichter Exp $
+$Id$
 """
 import re
 
@@ -21,7 +21,7 @@ from zope.interface import implements
 from zope.tal.taldefs import NAME_RE, TALExpressionError, ErrorInfo
 from zope.tal.interfaces import ITALExpressionCompiler, ITALExpressionEngine
 from zope.i18n.interfaces import ITranslationDomain
-from zope.i18n.messageid import MessageID
+from zope.i18nmessageid import MessageID
 
 Default = object()
 
@@ -30,7 +30,7 @@ name_match = re.compile(r"(?s)(%s):(.*)\Z" % NAME_RE).match
 class CompilerError(Exception):
     pass
 
-class DummyEngine:
+class DummyEngine(object):
 
     position = None
     source_file = None
@@ -144,11 +144,11 @@ class DummyEngine:
         return text
 
     def evaluateStructure(self, expr):
-        # XXX Should return None or a DOM tree
+        # TODO Should return None or a DOM tree
         return self.evaluate(expr)
 
     def evaluateSequence(self, expr):
-        # XXX Should return a sequence
+        # TODO: Should return a sequence
         return self.evaluate(expr)
 
     def evaluateMacro(self, macroName):
@@ -215,7 +215,7 @@ class DummyEngine:
         if self.useEngineAttrDicts:
             globals = self.globals.copy()
             locals = self.locals.copy()
-            
+
         assert lang == 'text/server-python'
         import sys, StringIO
 
@@ -247,7 +247,7 @@ class DummyEngine:
 
         return result.getvalue()
 
-class Iterator:
+class Iterator(object):
 
     def __init__(self, name, seq, engine):
         self.name = name
@@ -266,7 +266,7 @@ class Iterator:
         return 1
 
 
-class DummyTranslationDomain:
+class DummyTranslationDomain(object):
     implements(ITranslationDomain)
 
     domain = ''

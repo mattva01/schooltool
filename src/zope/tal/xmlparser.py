@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -14,12 +14,13 @@
 """Generic Expat-based XML parser base class.
 
 This creates a parser with namespace processing enabled.
-"""
 
+$Id$
+"""
 import logging
 
 
-class XMLParser:
+class XMLParser(object):
 
     ordered_attributes = 0
 
@@ -84,3 +85,16 @@ class XMLParser:
 
     def parseFragment(self, s, end=0):
         self.parser.Parse(s, end)
+
+    def getpos(self):
+        # Apparently ErrorLineNumber and ErrorLineNumber contain the current
+        # position even when there was no error.  This contradicts the official
+        # documentation[1], but expat.h[2] contains the following definition:
+        #
+        #   /* For backwards compatibility with previous versions. */
+        #   #define XML_GetErrorLineNumber   XML_GetCurrentLineNumber
+        #
+        # [1] http://python.org/doc/current/lib/xmlparser-objects.html
+        # [2] http://cvs.sourceforge.net/viewcvs.py/expat/expat/lib/expat.h
+        return (self.parser.ErrorLineNumber, self.parser.ErrorColumnNumber)
+

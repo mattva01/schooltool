@@ -4,7 +4,7 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
@@ -15,10 +15,8 @@
 
 HTML- and XML-based template objects using TAL, TALES, and METAL.
 
-$Id: pagetemplate.py,v 1.10 2004/03/19 23:35:03 srichter Exp $
+$Id$
 """
-__metaclass__ = type # All classes are new style when run with Python 2.2+
-
 import sys
 from zope.tal.talparser import TALParser
 from zope.tal.htmltalparser import HTMLTALParser
@@ -28,16 +26,20 @@ from zope.tales.engine import Engine
 # Don't use cStringIO here!  It's not unicode aware.
 from StringIO import StringIO
 
+import zope.pagetemplate.interfaces
+import zope.interface
 
-class MacroCollection:
+
+class MacroCollection(object):
     def __get__(self, parent, type=None):
         parent._cook_check()
         return parent._v_macros
 
 
 _default_options = {}
+_error_start = '<!-- Page Template Diagnostics'
 
-class PageTemplate:
+class PageTemplate(object):
     """Page Templates using TAL, TALES, and METAL.
 
     Subclassing
@@ -51,7 +53,7 @@ class PageTemplate:
         engine.  This method is free to use the keyword arguments it
         receives.
 
-    pt_render(namespace, source=0)
+    pt_render(namespace, source=False, sourceAnnotations=False, showtal=False)
         Responsible the TAL interpreter to perform the rendering.  The
         namespace argument is a mapping which defines the top-level
         namespaces passed to the TALES expression engine.
@@ -61,6 +63,10 @@ class PageTemplate:
         passed to the TALES expression engine, then calls pt_render()
         to perform the rendering.
     """
+
+    zope.interface.implements(
+        zope.pagetemplate.interfaces.IPageTemplateSubclassing)
+
     content_type = 'text/html'
     expand = 1
     _v_errors = ()
@@ -69,8 +75,6 @@ class PageTemplate:
     _v_macros = None
     _v_cooked = 0
     _text = ''
-    _engine_name = 'default'
-    _error_start = '<!-- Page Template Diagnostics'
 
     macros = MacroCollection()
 
@@ -94,12 +98,14 @@ class PageTemplate:
     def __call__(self, *args, **kwargs):
         return self.pt_render(self.pt_getContext(args, kwargs))
 
-    pt_getEngineContext = Engine.getContext
+    def pt_getEngineContext(self, namespace):
+        return self.pt_getEngine().getContext(namespace)
 
     def pt_getEngine(self):
         return Engine
 
-    def pt_render(self, namespace, source=False):
+    def pt_render(self, namespace, source=False, sourceAnnotations=False,
+                  showtal=False):
         """Render this Page Template"""
         self._cook_check()
         __traceback_supplement__ = (PageTemplateTracebackSupplement,
@@ -110,7 +116,8 @@ class PageTemplate:
         output = StringIO(u'')
         context = self.pt_getEngineContext(namespace)
         TALInterpreter(self._v_program, self._v_macros,
-                       context, output, tal=not source, strictinsert=0)()
+                       context, output, tal=not source, showtal=showtal,
+                       strictinsert=0, sourceAnnotations=sourceAnnotations)()
         return output.getvalue()
 
     def pt_errors(self, namespace):
@@ -133,13 +140,17 @@ class PageTemplate:
         # which case we have already unicode. 
         assert isinstance(text, (str, unicode))
 
-        if text.startswith(self._error_start):
+        if text.startswith(_error_start):
             errend = text.find('-->')
             if errend >= 0:
-                text = text[errend + 4:]
+                text = text[errend + 3:]
+                if text[:1] == "\n":
+                    text = text[1:]
         if self._text != text:
             self._text = text
-        # XXX can this be done only if we changed self._text?
+
+        # Always cook on an update, even if the source is the same;
+        # the content-type might have changed.
         self._cook()
 
     def read(self):
@@ -149,15 +160,16 @@ class PageTemplate:
             if not self.expand:
                 return self._text
             try:
-                # XXX not clear how this ever gets called, but the
-                # first arg to pt_render() needs to change if it ever does.
+                # This gets called, if macro expansion is turned on.
+                # Note that an empty dictionary is fine for the context at
+                # this point, since we are not evaluating the template. 
                 return self.pt_render({}, source=1)
             except:
                 return ('%s\n Macro expansion failed\n %s\n-->\n%s' %
-                        (self._error_start, "%s: %s" % sys.exc_info()[:2],
+                        (_error_start, "%s: %s" % sys.exc_info()[:2],
                          self._text) )
 
-        return ('%s\n %s\n-->\n%s' % (self._error_start,
+        return ('%s\n %s\n-->\n%s' % (_error_start,
                                       '\n'.join(self._v_errors),
                                       self._text))
 
@@ -176,7 +188,7 @@ class PageTemplate:
         """
         engine = self.pt_getEngine()
         source_file = self.pt_source_file()
-        if self.html():
+        if self.content_type == 'text/html':
             gen = TALGenerator(engine, xml=0, source_file=source_file)
             parser = HTMLTALParser(gen)
         else:
@@ -193,13 +205,8 @@ class PageTemplate:
         self._v_warnings = parser.getWarnings()
         self._v_cooked = 1
 
-    def html(self):
-        if not hasattr(self, 'is_html'):
-            return self.content_type == 'text/html'
-        return self.is_html
 
-
-class TemplateUsage:
+class TemplateUsage(object):
     def __init__(self, value):
         if not isinstance(value, unicode):
             raise TypeError('TemplateUsage should be initialized with a '
@@ -226,7 +233,7 @@ class PTRuntimeError(RuntimeError):
     pass
 
 
-class PageTemplateTracebackSupplement:
+class PageTemplateTracebackSupplement(object):
     #implements(ITracebackSupplement)
 
     def __init__(self, pt, namespace):

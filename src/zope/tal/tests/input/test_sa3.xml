@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<html>
+<body xmlns:metal="http://xml.zope.org/namespaces/metal">
+  <div metal:define-macro="macro1">This is macro1 on sa3 line 4.
+    <span metal:define-slot="slot1">This is slot1 on sa3 line 5.</span>
+    This is the end of macro1 on sa3 line 6.
+  </div>
+  <p>Some text on sa3 line 8.</p>
+  <p metal:use-macro="macro1">
+    This text on sa3 line 10 will disappear.
+    <b metal:fill-slot="slot1">Text from sa3 line 11 is filled into slot1.</b>
+    This text on sa3 line 12 will disappear.
+  </p>
+  <p>This is some text on sa3 line 14.</p>
+</body>
+</html>

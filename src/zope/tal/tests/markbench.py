@@ -5,14 +5,17 @@
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-'''Run benchmarks of TAL vs. DTML'''
+"""Run benchmarks of TAL vs. DTML
+
+$Id$
+"""
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -154,7 +157,7 @@ if __name__ == "__main__":
         rc = os.spawnl(os.P_WAIT, sys.executable,
                        sys.executable, "test.py", "zope.tal.tests")
         if rc > 0:
-            # XXX Failing tests don't cause test.py to report an
+            # TODO: Failing tests don't cause test.py to report an
             # error; not sure why.  ;-(
             sys.exit(rc)
         elif rc < 0:

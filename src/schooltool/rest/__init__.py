@@ -29,6 +29,7 @@ from zope.tales.tales import ExpressionEngine
 from zope.tales.expressions import PathExpr, StringExpr, NotExpr, DeferExpr
 from zope.tales.expressions import SimpleModuleImporter
 from zope.tales.pythonexpr import PythonExpr
+from zope.i18n import interpolate
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import getView, getPath
@@ -257,17 +258,15 @@ class Template(PageTemplateFile):
     def pt_getEngine(self):
         return _Engine
 
-    def translate(self, msgid, mapping=None, context=None,
-                        target_language=None, default=None):
+    def translate(self, msgid, domain=None, mapping=None, default=None):
         """Return the translation for the message referred to by msgid.
 
         Translates the msgid according to the current locale of the server.
         """
         translation = self.ugettext_hook(msgid)
         if translation == msgid:
-            return default
-        else:
-            return translation
+            translation = default
+        return interpolate(translation, mapping)
 
 
 #
