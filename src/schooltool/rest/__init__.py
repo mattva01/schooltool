@@ -150,6 +150,7 @@ def read_file(fn, basedir=None):
 
 _marker = object()
 
+
 def schooltoolTraverse(object, path_items, econtext):
     """A SchoolTool traverser for TALES expressions.
 

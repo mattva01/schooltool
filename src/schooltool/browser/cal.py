@@ -197,7 +197,8 @@ class CalendarViewBase(View):
 
         `start` and `end` (date objects) are bounds (half-open) for the result.
 
-        Events spanning more than one day get included in all days they overlap.
+        Events spanning more than one day get included in all days they
+        overlap.
         """
         events = {}
         dt = start
@@ -671,7 +672,7 @@ class EventEditView(EventViewBase):
                 self.event = event
                 break
         else:
-            raise ValueError("Invalid event_id") # XXX Unfriendly?
+            raise ValueError("Invalid event_id") # XXX Unfriendly? and not i18nized!
             # TODO: Create a traversal view for events
             # and refactor the event edit view to take the event as context
 
@@ -707,7 +708,7 @@ class EventDeleteView(View):
                 url = absoluteURL(request, self.context, suffix)
                 return self.redirect(url, request)
         else:
-            raise ValueError("Invalid event_id") # XXX Unfriendly?
+            raise ValueError("Invalid event_id") # XXX Unfriendly? And not i18nized!
 
 
 def EventSourceDecorator(e, source):

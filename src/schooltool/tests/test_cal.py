@@ -1088,6 +1088,7 @@ class TestACLCalendar(unittest.TestCase):
         self.assertEquals(calendar.acl.__parent__, calendar)
         self.assertEquals(calendar.acl.__name__, 'acl')
 
+
 class TestCalendarOwnerMixin(unittest.TestCase):
 
     def test(self):

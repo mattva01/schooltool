@@ -125,8 +125,6 @@ class FacetManager:
         ob = self.__parent__
         if not IFacet.providedBy(facet):
             raise TypeError("%r does not implement IFacet" % facet)
-        # XXX Check that facet doesn't already have a parent.
-        #     An assert will do for now.
         assert (facet.__parent__ is None,
                 "Trying to add a facet that already has a parent")
         ob.__facets__.add(facet, name=name)  # This sets facet.__name__

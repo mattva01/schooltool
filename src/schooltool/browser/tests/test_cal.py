@@ -22,16 +22,17 @@ Unit tests for schooltool.browser.cal
 $Id$
 """
 
+import re
 import unittest
-from zope.testing.doctestunit import DocTestSuite
-
 from logging import INFO
 from pprint import pformat
 from datetime import datetime, date, time, timedelta
 
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.tests.helpers import diff
+from schooltool.common import dedent
 
 __metaclass__ = type
 
@@ -281,10 +282,10 @@ class TestCalendarViewBase(unittest.TestCase):
 
         for dt in (date(2004, 8, 11), date(2004, 8, 14), date(2004, 8, 17)):
             week = view.getWeek(dt)
-            self.assertEquals(week,
-                              [CalendarDay(date(2004, 8, 11)),
-                               CalendarDay(date(2004, 8, 18))],
-                              "%s: %s -- %s" % (dt, week[0].date, week[1].date))
+            self.assertEquals(week, [CalendarDay(date(2004, 8, 11)),
+                                     CalendarDay(date(2004, 8, 18))],
+                              "%s: %s -- %s"
+                              % (dt, week[0].date, week[1].date))
 
         dt = date(2004, 8, 10)
         week = view.getWeek(dt)
@@ -425,12 +426,12 @@ class TestDailyCalendarView(unittest.TestCase):
 
         do_test([], (8, 19))
 
-        events = [CalendarEvent(datetime(2004, 8, 16, 7, 00), timedelta(minutes=1),
-                                "workout")]
+        events = [CalendarEvent(datetime(2004, 8, 16, 7, 00),
+                                timedelta(minutes=1), "workout")]
         do_test(events, (7, 19))
 
-        events = [CalendarEvent(datetime(2004, 8, 15, 8, 00), timedelta(days=1),
-                                "long workout")]
+        events = [CalendarEvent(datetime(2004, 8, 15, 8, 00),
+                                timedelta(days=1), "long workout")]
         do_test(events, (0, 19))
 
         events = [CalendarEvent(datetime(2004, 8, 16, 20, 00),
@@ -442,8 +443,6 @@ class TestDailyCalendarView(unittest.TestCase):
                                 timedelta(hours=5),
                                 "long late workout")]
         do_test(events, (8, 24))
-
-
 
     def test_getColumns(self):
         from schooltool.browser.cal import DailyCalendarView
@@ -639,7 +638,6 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(view.rowspan(CalendarEvent(
             datetime(2004, 8, 12, 9, 0), timedelta(hours=3), "")), 2)
 
-
     def test_render(self):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.cal import CalendarEvent, Calendar
@@ -660,6 +658,7 @@ class TestDailyCalendarView(unittest.TestCase):
         content = view.render(request)
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
+
 
 class TestMonthlyCalendarView(unittest.TestCase):
 
@@ -1083,7 +1082,7 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'acl.html', ACLView, context.acl)
 
 
-class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
+class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.cal import CalendarEvent
@@ -1095,20 +1094,19 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         request = RequestStub()
 
         content = view.render(request)
-        expected = (
-                '<div class="calevent">\n'
-                '  \n'
-                '    <div class="dellink">\n'
-                '      <a href="delete_event.html?event_id=id%21">[delete]</a>\n'
-                '    </div>\n'
-                '    <h3>\n'
-                '      <a href="edit_event.html?event_id=id%21">Main event</a>\n'
-                '    </h3>\n'
-                '  \n'
-                '  \n'
-                '  12:01&ndash;13:01\n'
-                '  \n'
-                '</div>\n')
+        # eat trailing whitespace and empty lines
+        content = re.sub('\s+\n', '\n', content)
+        expected = dedent("""
+            <div class="calevent">
+                <div class="dellink">
+                  <a href="delete_event.html?event_id=id%21">[delete]</a>
+                </div>
+                <h3>
+                  <a href="edit_event.html?event_id=id%21">Main event</a>
+                </h3>
+              12:01&ndash;13:01
+            </div>
+            """)
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
 
@@ -1125,12 +1123,14 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         request = RequestStub()
 
         content = view.render(request)
-        expected = ('<div class="calevent">\n'
-                    '  \n'
-                    '  <h3>Main event</h3>\n'
-                    '  12:01&ndash;13:01\n'
-                    '  \n'
-                    '</div>\n')
+        # eat trailing whitespace and empty lines
+        content = re.sub('\s+\n', '\n', content)
+        expected = dedent("""
+                     <div class="calevent">
+                       <h3>Main event</h3>
+                       12:01&ndash;13:01
+                     </div>
+                    """)
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
 

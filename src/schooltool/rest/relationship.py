@@ -139,7 +139,8 @@ class LinkView(View):
 
     def do_DELETE(self, request):
         msg = (_("Relationship '%s' between %s and %s removed") %
-               (nameURI(self.context.reltype), getPath(self.context.__parent__),
+               (nameURI(self.context.reltype),
+                getPath(self.context.__parent__),
                 getPath(self.context.traverse())))
         self.context.unlink()
         request.appLog(msg)

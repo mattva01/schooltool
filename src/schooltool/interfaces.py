@@ -719,6 +719,7 @@ class IFacetAPI(Interface):
     def iterFacetFactories():
         """Iterate over all registered facet factories."""
 
+
 #
 # Access control
 #
@@ -726,6 +727,7 @@ class IFacetAPI(Interface):
 ViewPermission = 'View'
 AddPermission = 'Add'
 ModifyPermission = 'Modify'
+
 
 class IACL(Interface):
     """Access control list.
@@ -754,6 +756,7 @@ class IACL(Interface):
 
         Syntactic sugar.
         """
+
 
 #
 # Calendaring

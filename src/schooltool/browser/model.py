@@ -46,6 +46,7 @@ from schooltool.rest.infofacets import maxspect
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.teaching import Teaching
+from schooltool.common import parse_date
 
 __metaclass__ = type
 
@@ -169,7 +170,10 @@ class PersonPasswordView(View):
 
 
 class PersonEditView(View, PersonInfoMixin):
-    """Page for changing information about a person (/persons/id/edit.html)."""
+    """Page for changing information about a person.
+
+    Can be accessed at /persons/$id/edit.html.
+    """
 
     __used_for__ = IPerson
 
@@ -190,13 +194,12 @@ class PersonEditView(View, PersonInfoMixin):
         comment = unicode(request.args['comment'][0], 'utf-8')
         photo = request.args['photo'][0]
 
+        # XXX use a widget
         if not dob_string:
             dob = None
         else:
             try:
-                # XXX The format of the date is too strict
-                date_elements = [int(el) for el in dob_string.split('-')]
-                dob = datetime.date(*date_elements)
+                dob = parse_date(dob_string)
             except (TypeError, ValueError):
                 self.error = _('Invalid date')
                 return self.do_GET(request)
