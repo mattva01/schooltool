@@ -29,7 +29,7 @@ from schooltool.component import getPath
 from schooltool.component import registerView, getView
 from schooltool.component import FacetManager
 from schooltool.component import getFacetFactory, iterFacetFactories
-from schooltool.views import View, Template, errorPage
+from schooltool.views import View, Template, textErrorPage
 from schooltool.views import XMLPseudoParser
 from schooltool.views import absoluteURL
 
@@ -61,8 +61,8 @@ class FacetView(View):
 
     def do_DELETE(self, request):
         if self.context.owner is not None:
-            return errorPage(request, 400,
-                             "Owned facets may not be deleted manually")
+            return textErrorPage(request,
+                                 "Owned facets may not be deleted manually")
         FacetManager(self.context.__parent__).removeFacet(self.context)
         request.setHeader('Content-Type', 'text/plain')
         return "Facet removed"
@@ -94,27 +94,24 @@ class FacetManagementView(View, XMLPseudoParser):
         try:
             factory_name = self.extractKeyword(body, 'factory')
         except KeyError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Could not find a needed param: %s" % e
+            return textErrorPage(request,
+                                 "Could not find a needed param: %s" % e)
 
         try:
             factory = getFacetFactory(factory_name)
         except KeyError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Factory does not exist: %s" % e
+            return textErrorPage(request, "Factory does not exist: %s" % e)
 
         facet = factory()
         try:
             self.context.setFacet(facet, name=factory.facet_name)
         except ValueError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
             if factory.facet_name is not None:
-                return "Facet '%s' already exists" % factory.facet_name
+                return textErrorPage(request,
+                           "Facet '%s' already exists" % factory.facet_name)
             else:
-                return "Could not create facet: %s" % e
+                return textErrorPage(request,
+                           "Could not create facet: %s" % e)
 
         location = absoluteURL(request,
                                '%s/%s' % (request.path, facet.__name__))

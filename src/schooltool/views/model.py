@@ -38,7 +38,7 @@ from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
 from schooltool.model import AbsenceComment
 from schooltool.views import XMLPseudoParser
-from schooltool.views import parse_datetime, absoluteURL
+from schooltool.views import parse_datetime, absoluteURL, textErrorPage
 from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetView, FacetManagementView
 
@@ -204,8 +204,7 @@ class RollcallView(View):
         try:
             dt, reporter, items = self.parseRollcall(request)
         except ValueError, e:
-            request.setResponseCode(400, 'Bad request')
-            return str(e)
+            return textErrorPage(request, str(e))
         for person, present, resolved, text in items:
             if not present:
                 person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
@@ -352,9 +351,7 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
         try:
             comment = self.parseComment(request)
         except ValueError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return str(e)
+            return textErrorPage(request, str(e))
         absence = self.context.reportAbsence(comment)
         location = absoluteURL(request, getPath(absence))
         request.setHeader('Location', location)
@@ -423,15 +420,12 @@ class AbsenceView(View, AbsenceCommentParser):
         try:
             comment = self.parseComment(request)
         except ValueError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return str(e)
+            return textErrorPage(request, str(e))
         try:
             self.context.addComment(comment)
         except ValueError:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Cannot reopen an absence when another one is not ended"
+            return textErrorPage(request,
+                    "Cannot reopen an absence when another one is not ended")
         request.setHeader('Content-Type', 'text/plain')
         return "Comment added"
 

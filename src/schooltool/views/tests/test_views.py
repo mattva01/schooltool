@@ -141,6 +141,20 @@ class TestErrorViews(unittest.TestCase):
         self.assert_('<title>747 - Not ready to take off</title>' in result)
         self.assert_('<h1>747 - Not ready to take off</h1>' in result)
 
+    def test_textErrorPage(self):
+        from schooltool.views import textErrorPage
+        request = RequestStub()
+        result = textErrorPage(request, "Not ready to take off", 747, "Wait")
+        self.assertEquals(request.code, 747)
+        self.assertEquals(request.reason, "Wait")
+        self.assertEquals(result, "Not ready to take off")
+
+        request = RequestStub()
+        result = textErrorPage(request, 42)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason, "Bad Request")
+        self.assertEquals(result, "42")
+
 
 class TestView(unittest.TestCase):
 

@@ -109,8 +109,8 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.facet.owner = object()
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.reason,
-                          "Owned facets may not be deleted manually")
+        self.assertEquals(request.reason, "Bad Request")
+        self.assertEquals(result, "Owned facets may not be deleted manually")
 
     def test_delete_unowned(self):
         self.facet.__parent__ = FacetedStub([self.facet])

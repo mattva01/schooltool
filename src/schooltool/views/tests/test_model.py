@@ -461,7 +461,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
 
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result, "Text attribute missing")
 
@@ -546,7 +546,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         view = AbsenceView(absence)
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result, "Reporter not found: /does/not/exist")
         self.assertEquals(len(absence.comments), 2)
@@ -565,7 +565,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         view = AbsenceView(absence)
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result,
             "Cannot reopen an absence when another one is not ended")
@@ -707,7 +707,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                               method="POST", body=body)
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result, errmsg)
 

@@ -25,7 +25,7 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI
 from schooltool.component import getPath, traverse
-from schooltool.views import View, Template
+from schooltool.views import View, Template, textErrorPage
 from schooltool.views import XMLPseudoParser
 from schooltool.views import absoluteURL
 
@@ -67,39 +67,31 @@ class RelationshipsView(View, XMLPseudoParser):
             role = self.extractKeyword(body, 'role')
             path = self.extractKeyword(body, 'href')
         except KeyError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Could not find a needed param: %s" % e
+            return textErrorPage(request,
+                                 "Could not find a needed param: %s" % e)
 
         try:
             type = getURI(type)
             role = getURI(role)
         except ComponentLookupError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Bad URI: %s" % e
+            return textErrorPage(request, "Bad URI: %s" % e)
 
         try:
             other = traverse(self.context, path)
         except TypeError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Nontraversable path: %s" % e
+            return textErrorPage(request, "Nontraversable path: %s" % e)
 
         try:
             val = self.context.getValencies()[type, role]
         except KeyError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Valency does not exist"
+            return textErrorPage(request, "Valency does not exist")
 
         kw = {val.this: self.context, val.other: other}
         try:
             links = val.schema(**kw)
         except ValueError, e:
-            request.setResponseCode(400, 'Bad request')
-            request.setHeader('Content-Type', 'text/plain')
-            return "Cannot establish relationship: %s" % e
+            return textErrorPage(request,
+                                 "Cannot establish relationship: %s" % e)
 
         link = links[val.other]
         location = absoluteURL(request, getPath(link))

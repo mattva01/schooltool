@@ -152,6 +152,13 @@ def errorPage(request, code, reason):
     return ErrorView(code, reason).render(request)
 
 
+def textErrorPage(request, message, code=400, reason=None):
+    """Renders a simple error page and sets the HTTP status code and reason."""
+    request.setResponseCode(code, reason)
+    request.setHeader('Content-Type', 'text/plain')
+    return str(message)
+
+
 class View(Resource):
     """View for a content component.
 

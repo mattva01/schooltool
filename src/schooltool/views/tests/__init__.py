@@ -22,6 +22,7 @@ Unit tests for the schooltool.views package.
 
 from StringIO import StringIO
 from zope.interface import implements
+from twisted.protocols import http
 from schooltool.interfaces import ITraversable, IContainmentRoot, IUtility
 
 __metaclass__ = type
@@ -32,12 +33,19 @@ class RequestStub:
     code = 200
     reason = 'OK'
 
-    def __init__(self, uri='', method='GET', body=''):
-        self.headers = {}
+    def __init__(self, uri='', method='GET', body='', headers=None):
         self.uri = uri
         self.method = method
         self.path = ''
         self.content = StringIO(body)
+        self.headers = {}
+        if body:
+            self.request_headers = {'content-length': len(body)}
+        else:
+            self.request_headers = {'content-length': 0}
+        if headers:
+            for k, v in headers.items():
+                self.request_headers[k.lower()] = v
         start = uri.find('/', uri.find('://')+3)
         if start >= 0:
             self.path = uri[start:]
@@ -47,12 +55,18 @@ class RequestStub:
     def getRequestHostname(self):
         return self._hostname
 
+    def getHeader(self, header):
+        return self.request_headers[header.lower()]
+
     def setHeader(self, header, value):
         self.headers[header] = value
 
-    def setResponseCode(self, code, reason):
+    def setResponseCode(self, code, reason=None):
         self.code = code
-        self.reason = reason
+        if reason is None:
+            self.reason = http.RESPONSES.get(code, 'Unknown Status')
+        else:
+            self.reason = reason
 
     def chooseMediaType(self, supported_types):
         from schooltool.main import chooseMediaType
