@@ -27,7 +27,7 @@ from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import ILocation
-from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import EqualsSortedMixin, RegistriesSetupMixin
 
 
 class P(Persistent):
@@ -176,10 +176,56 @@ class TestApplicationObjectContainer(unittest.TestCase):
         self.assertEqual(obj.__name__, name)
 
 
+class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool import relationship, membership, teaching
+
+        self.setUpRegistries()
+        relationship.setUp()
+        membership.setUp()
+        teaching.setUp()
+
+    def test(self):
+        from schooltool.interfaces import IEvent, IAttendanceEvent
+        from schooltool.uris import URIGroup
+        from schooltool.app import create_application
+        from schooltool.model import Person, Group, Resource
+        from schooltool.component import getRelatedObjects
+
+        app = create_application()
+        root = app['groups']['root']
+        managers = app['groups']['managers']
+        locations = app['groups']['locations']
+        manager = app['persons']['manager']
+        self.assert_(manager.checkPassword('schooltool'))
+        self.assertEquals(getRelatedObjects(manager, URIGroup), [managers])
+        self.assertEquals(getRelatedObjects(managers, URIGroup), [root])
+        self.assertEquals(getRelatedObjects(locations, URIGroup), [])
+
+        person = app['persons'].new()
+        self.assert_(isinstance(person, Person))
+
+        group = app['groups'].new()
+        self.assert_(isinstance(group, Group))
+
+        resource = app['resources'].new()
+        self.assert_(isinstance(resource, Resource))
+
+        event_log = app.utilityService['eventlog']
+        event_service = app.eventService
+        self.assert_((event_log, IEvent) in event_service.listSubscriptions())
+
+        absence_tracker = app.utilityService['absences']
+        self.assert_((absence_tracker, IAttendanceEvent)
+                     in event_service.listSubscriptions())
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestApplication))
     suite.addTest(unittest.makeSuite(TestApplicationObjectContainer))
+    suite.addTest(unittest.makeSuite(TestCreateApplication))
     return suite
 
 if __name__ == '__main__':

@@ -23,13 +23,18 @@ The SchoolTool application support objects.
 from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements
-from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import ILocation
-from schooltool.event import EventService
-from schooltool.component import UtilityService
-from schooltool.db import PersistentKeysSet
-from schooltool.timetable import TimetableSchemaService, TimePeriodService
+from schooltool import model, absence
 from schooltool.auth import TicketService
+from schooltool.component import UtilityService, getFacetFactory, FacetManager
+from schooltool.db import PersistentKeysSet
+from schooltool.event import EventService
+from schooltool.eventlog import EventLogUtility
+from schooltool.interfaces import IApplication, IApplicationObjectContainer
+from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
+from schooltool.membership import Membership
+from schooltool.timetable import TimetableSchemaService, TimePeriodService
+from schooltool.translation import ugettext as _
+
 __metaclass__ = type
 
 
@@ -146,3 +151,44 @@ class ApplicationObjectContainer(Persistent):
     def itervalues(self):
         return self._contents.itervalues()
 
+
+def create_application():
+    """Instantiate a new application."""
+    app = Application()
+
+    event_log = EventLogUtility()
+    app.utilityService['eventlog'] = event_log
+    app.eventService.subscribe(event_log, IEvent)
+
+    absence_tracker = absence.AbsenceTrackerUtility()
+    app.utilityService['absences'] = absence_tracker
+    app.eventService.subscribe(absence_tracker, IAttendanceEvent)
+
+    app['groups'] = ApplicationObjectContainer(model.Group)
+    app['persons'] = ApplicationObjectContainer(model.Person)
+    app['resources'] = ApplicationObjectContainer(model.Resource)
+    Person = app['persons'].new
+    Group = app['groups'].new
+
+    root = Group("root", title=_("Root Group"))
+    app.addRoot(root)
+
+    managers = Group("managers", title=_("System Managers"))
+    manager = Person("manager", title=_("Manager"))
+    manager.setPassword('schooltool')
+    Membership(group=managers, member=manager)
+    Membership(group=root, member=managers)
+
+    teachers = Group("teachers", title=_("Teachers"))
+    Membership(group=root, member=teachers)
+
+    facet_factory = getFacetFactory('teacher_group')
+    facet = facet_factory()
+    FacetManager(teachers).setFacet(facet, name=facet_factory.facet_name)
+
+    pupils = Group("pupils", title=_("Pupils"))
+    Membership(group=root, member=pupils)
+
+    locations = Group("locations", title=_("Locations"))
+
+    return app

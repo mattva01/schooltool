@@ -24,6 +24,7 @@ $Id$
 
 import datetime
 
+from schooltool.app import create_application
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
 from schooltool.browser import absoluteURL
@@ -364,9 +365,7 @@ class DatabaseResetView(View):
     def do_POST(self, request):
         # TODO: Set the manager password immediately after resetting the db.
         if 'confirm' in request.args:
-            from schooltool.main import Server # circular import
             root = request.zodb_conn.root()
             rootname = request.site.rootName
-            del root[rootname]
-            root[rootname] = Server.createApplication()
+            root[rootname] = create_application()
         return self.redirect('/', request)

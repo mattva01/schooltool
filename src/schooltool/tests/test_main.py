@@ -177,6 +177,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_configure(self):
         from schooltool.main import Server
         from schooltool.component import getView
+        from schooltool.app import create_application
         server = Server()
         server.notifyConfigFile = lambda x: None
         server.findDefaultConfigFile = lambda: self.getConfigFileName()
@@ -192,7 +193,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
                           ['schooltool.main', 'schooltool.tests.test_main'])
         self.assertEquals(server.appname, 'schooltool')
         self.assertEquals(server.viewFactory, getView)
-        self.assertEquals(server.appFactory, server.createApplication)
+        self.assertEquals(server.appFactory, create_application)
         # Check that configure does not change sys.path
         self.assertEquals(sys.path, self.original_path)
 
@@ -205,6 +206,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_configure_with_args(self):
         from schooltool.main import Server
         from schooltool.component import getView
+        from schooltool.app import create_application
         server = Server()
         server.notifyConfigFile = lambda x: None
         config_file = self.getConfigFileName()
@@ -215,7 +217,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(server.config.database is not None)
         self.assertEquals(server.appname, 'schooltool')
         self.assertEquals(server.viewFactory, getView)
-        self.assertEquals(server.appFactory, server.createApplication)
+        self.assertEquals(server.appFactory, create_application)
         # Check that configure does not change sys.path
         self.assertEquals(sys.path, self.original_path)
 
@@ -380,52 +382,14 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.prepareDatabase()
         self.assertEquals(event_log.enabled, False)
 
-    def test_createApplication(self):
-        from schooltool.interfaces import IEvent, IAttendanceEvent
-        from schooltool.uris import URIGroup
-        from schooltool.main import Server
-        from schooltool.model import Person, Group, Resource
-        from schooltool.component import getRelatedObjects
-        from schooltool import relationship, membership, teaching
-        relationship.setUp()
-        membership.setUp()
-        teaching.setUp()
-
-        server = Server()
-        app = server.createApplication()
-        root = app['groups']['root']
-        managers = app['groups']['managers']
-        locations = app['groups']['locations']
-        manager = app['persons']['manager']
-        self.assert_(manager.checkPassword('schooltool'))
-        self.assertEquals(getRelatedObjects(manager, URIGroup), [managers])
-        self.assertEquals(getRelatedObjects(managers, URIGroup), [root])
-        self.assertEquals(getRelatedObjects(locations, URIGroup), [])
-
-        person = app['persons'].new()
-        self.assert_(isinstance(person, Person))
-
-        group = app['groups'].new()
-        self.assert_(isinstance(group, Group))
-
-        resource = app['resources'].new()
-        self.assert_(isinstance(resource, Resource))
-
-        event_log = app.utilityService['eventlog']
-        event_service = app.eventService
-        self.assert_((event_log, IEvent) in event_service.listSubscriptions())
-
-        absence_tracker = app.utilityService['absences']
-        self.assert_((absence_tracker, IAttendanceEvent)
-                     in event_service.listSubscriptions())
-
     def test_authenticate(self):
         from schooltool.main import Server
         from schooltool import relationship, membership, teaching
+        from schooltool.app import create_application
         relationship.setUp()
         membership.setUp()
         teaching.setUp()
-        app = Server.createApplication()
+        app = create_application()
         john = app['persons'].new("john", title="John Smith")
         john.setPassword('secret')
         auth = Server.authenticate

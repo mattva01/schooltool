@@ -36,13 +36,9 @@ from twisted.internet import reactor
 from twisted.python import threadable
 import twisted.python.runtime
 
-from schooltool.app import Application, ApplicationObjectContainer
-from schooltool import model, absence
+from schooltool.app import create_application
 from schooltool.component import getView, traverse
-from schooltool.component import getFacetFactory, FacetManager
-from schooltool.membership import Membership
-from schooltool.eventlog import EventLogUtility
-from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
+from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
 from schooltool.translation import ugettext as _
@@ -176,7 +172,7 @@ class Server:
         config_file = self.findDefaultConfigFile()
         self.appname = 'schooltool'
         self.viewFactory = getView
-        self.appFactory = self.createApplication
+        self.appFactory = create_application
         self.daemon = False
 
         # Process command line arguments
@@ -400,49 +396,6 @@ class Server:
         self.get_transaction_hook().commit()
 
         conn.close()
-
-    def createApplication():
-        """Instantiate a new application."""
-        app = Application()
-
-        event_log = EventLogUtility()
-        app.utilityService['eventlog'] = event_log
-        app.eventService.subscribe(event_log, IEvent)
-
-        absence_tracker = absence.AbsenceTrackerUtility()
-        app.utilityService['absences'] = absence_tracker
-        app.eventService.subscribe(absence_tracker, IAttendanceEvent)
-
-        app['groups'] = ApplicationObjectContainer(model.Group)
-        app['persons'] = ApplicationObjectContainer(model.Person)
-        app['resources'] = ApplicationObjectContainer(model.Resource)
-        Person = app['persons'].new
-        Group = app['groups'].new
-
-        root = Group("root", title=_("Root Group"))
-        app.addRoot(root)
-
-        managers = Group("managers", title=_("System Managers"))
-        manager = Person("manager", title=_("Manager"))
-        manager.setPassword('schooltool')
-        Membership(group=managers, member=manager)
-        Membership(group=root, member=managers)
-
-        teachers = Group("teachers", title=_("Teachers"))
-        Membership(group=root, member=teachers)
-
-        facet_factory = getFacetFactory('teacher_group')
-        facet = facet_factory()
-        FacetManager(teachers).setFacet(facet, name=facet_factory.facet_name)
-
-        pupils = Group("pupils", title=_("Pupils"))
-        Membership(group=root, member=pupils)
-
-        locations = Group("locations", title=_("Locations"))
-
-        return app
-
-    createApplication = staticmethod(createApplication)
 
     def authenticate(context, username, password):
         """See IAuthenticator."""
