@@ -15,7 +15,7 @@ build:
 
 extract-translations:
 	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
-			-o translation/
+			-d schooltool -o translation/
 	$(PYTHON) src/schooltool/translation/pygettext.py *.py
 	msgcat src/schooltool/translation/schooltool.pot messages.pot > all.pot
 	rm messages.pot src/schooltool/translation/schooltool.pot
@@ -37,13 +37,13 @@ realclean: clean
 	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
 
 test: build
-	$(PYTHON) test.py $(TESTFLAGS) schooltool
+	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
 
 testall: build
-	$(PYTHON) test.py $(TESTFLAGS)
+	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
-	@PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf & \
+	@PYTHONPATH=src LC_ALL="C" $(PYTHON) src/schooltool/main.py -c test.conf & \
 	pid=$$! ; \
 	sleep 2 ; \
 	ps -p $$pid > /dev/null && (\
@@ -54,7 +54,7 @@ run: build
 	$(PYTHON) schooltool-server.py
 
 runtestserver: build
-	$(PYTHON) schooltool-server.py -c test.conf
+	LC_ALL="C" $(PYTHON) schooltool-server.py -c test.conf
 
 runclient: build
 	$(PYTHON) schooltool-client.py
@@ -88,4 +88,4 @@ deb:
 	dpkg-buildpackage -uc -b -rfakeroot
 
 
-.PHONY: all build clean test ftest run coverage sampleschool
+.PHONY: all build clean test ftest run coverage sampleschool deb
