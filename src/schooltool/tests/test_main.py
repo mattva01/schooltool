@@ -726,6 +726,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
                 pass
         app = server.createApplication()
         root = app['groups']['root']
+        anonymous = app['persons']['anonymous']
 
         event_log = app.utilityService['eventlog']
         event_service = app.eventService

@@ -510,6 +510,9 @@ class Server:
 
         root = Group("root", title="Root Group")
         app.addRoot(root)
+
+        anonymous = Person("anonymous", title="Anonymous")
+
         return app
 
     def notifyConfigFile(self, config_file):
