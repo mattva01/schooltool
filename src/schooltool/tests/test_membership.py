@@ -29,6 +29,7 @@ from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember, IFaceted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import RelationshipTestMixin
 
 __metaclass__ = type
 
@@ -196,11 +197,27 @@ class TestGroupMixin(unittest.TestCase):
             self.assertEqual(links, [], str(role))
 
 
-class TestMembershipRelationship(unittest.TestCase):
+class TestMembershipRelationship(RelationshipTestMixin, unittest.TestCase):
 
     def test(self):
+        from schooltool.component import registerRelationship
         from schooltool.membership import Membership
-        # XXX unfinished
+        from schooltool.interfaces import URIMembership, URIGroup, URIMember
+
+        cookie = object()
+        def handler(*args, **kw):
+            return (cookie, args, kw)
+
+        registerRelationship(URIMembership, handler)
+
+        g, m = GroupStub(), MemberStub()
+        result = Membership(group=g, member=m)
+        check, (reltype, (a, role_of_a), (b, role_of_b)), kw = result
+        self.assert_(check is cookie, "our handler wasn't called")
+        self.assert_(reltype is URIMembership)
+        self.assert_((m, URIMember) in [(a, role_of_a), (b, role_of_b)])
+        self.assert_((g, URIGroup) in [(a, role_of_a), (b, role_of_b)])
+        self.assertEquals(kw, {'title': "http://schooltool.org/ns/membership"})
 
 
 class TestMemberLink(EventServiceTestMixin, unittest.TestCase):

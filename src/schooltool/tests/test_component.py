@@ -29,8 +29,10 @@ from zope.interface.verify import verifyObject
 from schooltool.interfaces import ISpecificURI, IRelatable, IQueryLinks
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import RelationshipTestMixin
 
 __metaclass__ = type
+
 
 class I1(Interface):
     def foo():
@@ -268,19 +270,17 @@ class URICommand(ISpecificURI):
 class URIReport(ISpecificURI):
     """http://army.gov/ns/report"""
 
-class TestRelationships(EventServiceTestMixin, unittest.TestCase):
+class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
+                        unittest.TestCase):
 
     def setUp(self):
         from schooltool.relationships import setUp as setUpRelationships
-        from schooltool import component
-        self.old_registry = component.relationship_registry
-        component.resetRelationshipRegistry()
+        self.setUpRelationshipRegistry()
         setUpRelationships()
         self.setUpEventService()
 
     def tearDown(self):
-        from schooltool import component
-        component.relationship_registry = self.old_registry
+        self.tearDownRelationshipRegistry()
 
     def test_getRelatedObjects(self):
         from schooltool.component import getRelatedObjects, relate

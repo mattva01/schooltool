@@ -32,6 +32,7 @@ from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import ISpecificURI
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import inspectSpecificURI, registerRelationship
+from schooltool.component import relate
 from schooltool.event import EventMixin
 
 moduleProvides(IModuleSetup)
@@ -146,16 +147,6 @@ class RelationshipSchema:
         return relate(self.type, L[0], L[1], title=self.title)
 
 
-def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
-    """See IRelationshipAPI"""
-    if title is None:
-        title, doc = inspectSpecificURI(reltype)
-    link_a = Link(a, role_of_b)
-    link_b = Link(b, role_of_a)
-    _LinkRelationship(reltype, title, link_a, link_b)
-    return link_a, link_b
-
-
 class RelationshipEvent(EventMixin):
 
     implements(IRelationshipEvent)
@@ -173,11 +164,14 @@ class RelationshipRemovedEvent(RelationshipEvent):
     implements(IRelationshipRemovedEvent)
 
 
-def relate_default(relationship_type, (a, role_a), (b, role_b), title=None):
+def relate_default(reltype, (a, role_of_a), (b, role_of_b), title=None):
     """See IRelationshipAPI.relate"""
-
-    links = relate(relationship_type, (a, role_a), (b, role_b),
-                   title=title)
+    if title is None:
+        title, doc = inspectSpecificURI(reltype)
+    link_a = Link(a, role_of_b)
+    link_b = Link(b, role_of_a)
+    _LinkRelationship(reltype, title, link_a, link_b)
+    links = link_a, link_b
     event = RelationshipAddedEvent(links)
     event.dispatch(a)
     event.dispatch(b)
@@ -185,5 +179,6 @@ def relate_default(relationship_type, (a, role_a), (b, role_b), title=None):
 
 
 def setUp():
+    """Register the default relationship handler."""
     registerRelationship(ISpecificURI, relate_default)
 

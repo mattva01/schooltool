@@ -72,3 +72,19 @@ class EventServiceTestMixin:
 
     setUp = setUpEventService
 
+
+class RelationshipTestMixin:
+    """Mixin for substituting a temporary relationship registry."""
+
+    def setUpRelationshipRegistry(self):
+        from schooltool import component
+        self.old_registry = component.relationship_registry
+        component.resetRelationshipRegistry()
+
+    def tearDownRelationshipRegistry(self):
+        from schooltool import component
+        component.relationship_registry = self.old_registry
+
+    setUp = setUpRelationshipRegistry
+    tearDown = tearDownRelationshipRegistry
+

@@ -112,27 +112,8 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(self.klass.events, [e])
         self.assertEquals(self.tutor.events, [e])
 
-    def test_relate(self):
-        from schooltool.relationships import relate
-        officer = Relatable()
-        soldier = Relatable()
 
-        links = relate(URICommand,
-                       (officer, URISuperior),
-                       (soldier, URIReport), title="Command")
-        self.assertEqual(len(links), 2)
-        linka, linkb = links
-        for a, b, role, alink in ((officer, soldier, URIReport, linka),
-                                  (soldier, officer, URISuperior, linkb)):
-            self.assertEqual(len(a.__links__), 1)
-            link = list(a.__links__)[0]
-            self.assert_(link is alink)
-            self.assert_(link.traverse() is b)
-            self.assert_(link.role is role)
-            self.assertEqual(link.title, "Command")
-
-
-class TestRelationshipSchema(unittest.TestCase):
+class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
 
     def test_interfaces(self):
         from schooltool.relationships import RelationshipSchema
@@ -183,8 +164,8 @@ class TestRelationshipSchema(unittest.TestCase):
             self.assert_(schema.type is URICommand)
             self.assertEqual(schema.title, title)
 
-            superior = Relatable()
-            report = Relatable()
+            superior = Relatable(self.serviceManager)
+            report = Relatable(self.serviceManager)
             links = schema(superior=superior, report=report)
 
             self.assertEqual(len(links), 2)
@@ -239,13 +220,11 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
     def test_relate(self):
         from schooltool.interfaces import IRelationshipAddedEvent
         from schooltool.relationships import relate_default as relate
-        title = 'a title'
-        a = Relatable(self.serviceManager)
-        role_a = URISuperior
-        b = Relatable(self.serviceManager)
-        role_b = URIReport
 
-        links = relate(URICommand, (a, role_a), (b, role_b), title='a title')
+        title = 'a title'
+        a, role_a = Relatable(self.serviceManager), URISuperior
+        b, role_b = Relatable(self.serviceManager), URIReport
+        links = relate(URICommand, (a, role_a), (b, role_b), title=title)
 
         self.assertEqual(len(links), 2)
         self.assertEquals(Set([l.traverse() for l in links]), Set([a, b]))
@@ -254,6 +233,19 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(links[1].title, title)
         self.assertEquals(links[0].reltype, URICommand)
         self.assertEquals(links[1].reltype, URICommand)
+
+        linka, linkb = links
+        self.assertEqual(len(a.__links__), 1)
+        self.assertEqual(len(b.__links__), 1)
+        self.assertEqual(list(a.__links__)[0], linka)
+        self.assertEqual(list(b.__links__)[0], linkb)
+        self.assertEqual(list(a.__links__)[0].traverse(), b)
+        self.assertEqual(list(b.__links__)[0].traverse(), a)
+        self.assertEqual(list(a.__links__)[0].role, role_b)
+        self.assertEqual(list(b.__links__)[0].role, role_a)
+        self.assertEqual(list(a.__links__)[0].title, title)
+        self.assertEqual(list(b.__links__)[0].title, title)
+
         e = self.check_one_event_received([a, b])
         self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
         self.assert_(e.links is links)

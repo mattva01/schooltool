@@ -291,5 +291,6 @@ def relate_membership(relationship_type, (a, role_a), (b, role_b), title=None):
 
 
 def setUp():
+    """Register the URIMembership relationship handler."""
     registerRelationship(URIMembership, relate_membership)
 
