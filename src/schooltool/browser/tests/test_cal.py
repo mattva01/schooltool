@@ -619,6 +619,51 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         self.assertEquals(displayed_months[0]['value'], 01)
         self.assertEquals(displayed_months[-1]['value'], 12)
 
+    def test_eventColors(self):
+        pass
+
+    def test_getMergedCalendarProviders(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.component import getRelatedObjects, relate
+        from zope.app.traversing.api import traverse
+        from schooltool.uris import URICalendarSubscription
+        from schooltool.uris import URICalendarProvider
+        from schooltool.uris import URICalendarSubscriber
+        from schooltool import relationship
+        relationship.setUp()
+
+        relate(URICalendarSubscription,
+                (self.manager, URICalendarSubscriber),
+                (self.managers, URICalendarProvider))
+
+        view = CalendarViewBase(self.manager)
+        view.request = RequestStub(authenticated_user=self.manager)
+        result = view.getMergedCalendarProviders()
+        self.assertEquals(result, [self.managers])
+
+    def test_checkedOverlay(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.component import getRelatedObjects, relate
+        from zope.app.traversing.api import traverse
+        from schooltool.uris import URICalendarSubscription
+        from schooltool.uris import URICalendarProvider
+        from schooltool.uris import URICalendarSubscriber
+        from schooltool import relationship
+        relationship.setUp()
+
+        view = CalendarViewBase(self.manager)
+        view.request = RequestStub()
+        result = view.checkedOverlay(self)
+        self.assertEquals(result, None)
+
+        relate(URICalendarSubscription,
+                (self.manager, URICalendarSubscriber),
+                (self.managers, URICalendarProvider))
+
+        view.request = RequestStub(authenticated_user=self.manager)
+        result = view.checkedOverlay(self.managers)
+        self.assertEquals(result, 'checked')
+
 
 class TestWeeklyCalendarView(AppSetupMixin, unittest.TestCase):
 
