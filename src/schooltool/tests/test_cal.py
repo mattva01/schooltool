@@ -22,6 +22,7 @@ Unit tests for the schooltool.calendar module.
 $Id$
 """
 
+import sets
 import unittest
 import calendar
 from pprint import pformat
@@ -892,10 +893,16 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
                             timedelta(minutes=10),
                             "Latin")
         cal = self.makeCal([ev1, ev2])
-        cal.removeEvent(CalendarEvent(datetime(2003, 11, 25, 10, 0),
-                                      timedelta(minutes=10),
-                                      "English"))
+        self.assertRaises(KeyError, cal.removeEvent,
+                          CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                                        timedelta(minutes=10),
+                                        "English")) # different unique ID
+        cal.removeEvent(ev1)
         self.assertEquals(list(cal), [ev2])
+        copy_of_ev2 = ev2.replace()
+        assert copy_of_ev2 is not ev2
+        cal.removeEvent(copy_of_ev2)
+        self.assertEquals(list(cal), [])
 
     def test_update(self):
         from schooltool.cal import CalendarEvent
@@ -1017,74 +1024,155 @@ class TestCalendarEvent(unittest.TestCase):
     def test(self):
         from schooltool.cal import CalendarEvent
         from schooltool.interfaces import ICalendarEvent
+        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10), "something")
+        verifyObject(ICalendarEvent, ce)
+        self.assertEquals(ce.dtstart, datetime(2003, 11, 25, 12, 0))
+        self.assertEquals(ce.duration, timedelta(minutes=10))
+        self.assertEquals(ce.title, 'something')
+        self.assert_(ce.owner is None)
+        self.assert_(ce.context is None)
+        self.assert_(ce.location is None)
+        self.assert_(ce.unique_id is not None)
+        # unique id is randomly generated in the style of rfc822, without angle
+        # brackets
+        self.assert_('@' in ce.unique_id)
+        self.assert_('<' not in ce.unique_id)
+        self.assert_('>' not in ce.unique_id)
 
+    def test_all_arguments(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import ICalendarEvent
         owner = object()
         context = object()
-
         ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check")
+                           timedelta(minutes=10), "something", owner=owner,
+                           context=context, location="The attic",
+                           unique_id='uid')
         verifyObject(ICalendarEvent, ce)
-        self.assert_(ce.unique_id)
+        self.assertEquals(ce.dtstart, datetime(2003, 11, 25, 12, 0))
+        self.assertEquals(ce.duration, timedelta(minutes=10))
+        self.assertEquals(ce.title, 'something')
+        self.assert_(ce.owner is owner)
+        self.assert_(ce.context is context)
+        self.assertEquals(ce.location, 'The attic')
+        self.assertEquals(ce.unique_id, 'uid')
 
-        ce_ = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                            timedelta(minutes=10),
-                            "reality check",
-                            unique_id="I am unique",
-                            location="PoV")
-        self.assertEquals(ce_.unique_id, "I am unique")
-        self.assertEquals(ce_.location, "PoV")
+    def test_unique_ids(self):
+        from schooltool.cal import CalendarEvent
+        seen_ids = sets.Set([])
+        count = 100
+        for n in range(count):
+            ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                               timedelta(minutes=10), "something")
+            if ev.unique_id in seen_ids:
+                self.fail("ID is not unique enough")
+            seen_ids.add(ev.unique_id)
 
-        ce1 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                            timedelta(minutes=10),
-                            "reality check")
-        ce2 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                            timedelta(minutes=10),
-                            "realty check")
-        ce3 = CalendarEvent(datetime(2003, 11, 25, 12, 1),
-                            timedelta(minutes=10),
-                            "reality check")
-        ce4 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                            timedelta(minutes=11),
-                            "reality check")
-        ce5 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                            timedelta(minutes=10),
-                            "reality check", owner=owner)
-        ce6 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                            timedelta(minutes=10),
-                            "reality check", owner=owner,
-                            context=context)
-        ce7 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check", location="Somewhere")
-        ce8 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check", unique_id="Chair")
-
-        self.assertEquals(ce, ce1)
-        self.assertNotEquals(ce, ce2)
-        self.assertNotEquals(ce, ce3)
-        self.assertNotEquals(ce, ce4)
-        self.assertNotEquals(ce, ce5)
-        self.assertNotEquals(ce5, ce6)
-        self.assertNotEquals(ce, ce6)
-        self.assertNotEquals(ce, ce7)
-        self.assert_(ce2 < ce3)
-        self.assert_(ce2 <= ce3)
-        self.assert_(ce3 > ce2)
-        self.assert_(ce3 >= ce2)
-        self.assert_(ce <= ce1)
-        self.assert_(ce >= ce1)
-        self.assertNotEquals(ce, None)
-        self.assertNotEquals(ce, 'a string')
-        self.assertNotEquals(ce, 42)
-        self.assertRaises(TypeError, lambda: ce2 < 42)
+    def test_immutability(self):
+        from schooltool.cal import CalendarEvent
+        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10), "something")
         self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'owner', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'context', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'location', 'not-ro')
+        self.assertRaises(AttributeError, setattr, ce, 'unique_id', 'not-ro')
+
+    def test_replace(self):
+        from schooltool.cal import CalendarEvent
+        owner = object()
+        owner2 = object()
+        context = object()
+        context2 = object()
+        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10), "something", owner=owner,
+                           context=context, location="The attic",
+                           unique_id='uid')
+        self.assertEquals(ce.replace(), ce)
+        fields_to_replace = {'dtstart': datetime(2004, 11, 12, 14, 30),
+                             'duration': timedelta(minutes=30),
+                             'title': 'news',
+                             'owner': owner2,
+                             'context': context2,
+                             'location': 'basement',
+                             'unique_id': 'uid2'}
+        all_fields = fields_to_replace.keys()
+        for field, value in fields_to_replace.items():
+            ce2 = ce.replace(**{field: value})
+            self.assertNotEquals(ce2, ce)
+            self.assertEquals(getattr(ce2, field), value)
+            for check_field in all_fields:
+                if check_field != field:
+                    self.assertEquals(getattr(ce2, check_field),
+                                      getattr(ce, check_field))
+        all_at_once = ce.replace(**fields_to_replace)
+        incremental = ce
+        for field, value in fields_to_replace.items():
+            incremental = incremental.replace(**{field: value})
+        self.assertEquals(all_at_once, incremental)
+
+    def test_comparisons(self):
+        from schooltool.cal import CalendarEvent
+        owner = object()
+        context = object()
+        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        ce1 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        self.assert_(ce == ce1)
+        self.assert_(ce <= ce1)
+        self.assert_(ce >= ce1)
+        self.assert_(not (ce != ce1))
+        self.assert_(not (ce < ce1))
+        self.assert_(not (ce > ce1))
+        self.assertEquals(hash(ce), hash(ce1))
+
+        fields_to_replace = {'dtstart': datetime(2004, 11, 12, 14, 30),
+                             'duration': timedelta(minutes=30),
+                             'title': 'news',
+                             'owner': owner,
+                             'context': context,
+                             'location': 'basement',
+                             'unique_id': 'uid2'}
+        for field, value in fields_to_replace.items():
+            ce2 = ce.replace(**{field: value})
+            self.assert_(ce != ce2)
+            self.assert_(not (ce == ce2))
+            self.assert_(ce < ce2 or ce > ce2)
+            self.assertNotEquals(ce < ce2, ce > ce2)
+            self.assertEquals(ce < ce2, ce <= ce2)
+            self.assertEquals(ce > ce2, ce >= ce2)
+
+        for not_event in [None, 42, 'a string']:
+            self.assert_(ce != not_event)
+            self.assert_(not (ce == not_event))
+            self.assertRaises(TypeError, lambda: ce < not_event)
+            self.assertRaises(TypeError, lambda: ce > not_event)
+            self.assertRaises(TypeError, lambda: ce <= not_event)
+            self.assertRaises(TypeError, lambda: ce >= not_event)
+
+    def test_ordering(self):
+        from schooltool.cal import CalendarEvent
+        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        ce2 = ce.replace(dtstart=datetime(2003, 11, 25, 12, 1))
+        self.assert_(ce < ce2)
+        self.assert_(ce2 > ce)
+
+        ce3 = ce.replace(title='zzz')
+        self.assert_(ce < ce3)
+        self.assert_(ce3 > ce)
+
+        ce4 = ce2.replace(title='a')
+        assert ce4.title < ce.title
+        assert ce4.dtstart > ce.dtstart
+        self.assert_(ce4 > ce) # dtstart is more important
 
 
 class TestACLCalendar(unittest.TestCase):

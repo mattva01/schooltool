@@ -42,6 +42,21 @@ from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
 
+class TraversableRoot(object):
+    pass
+
+
+def setPath(obj, path):
+    """Trick getPath(obj) into returning path."""
+    from schooltool.interfaces import ILocation
+    from schooltool.interfaces import IContainmentRoot
+    assert path.startswith('/')
+    obj.__name__ = path[1:]
+    directlyProvides(obj, ILocation)
+    obj.__parent__ = TraversableRoot()
+    directlyProvides(obj.__parent__, IContainmentRoot)
+
+
 class TestTimetable(unittest.TestCase):
 
     def test_interface(self):
@@ -636,7 +651,7 @@ class BaseTestTimetableModel:
         return result
 
 
-class TestSequentialDaysTimetableModel(unittest.TestCase,
+class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
                                        BaseTestTimetableModel):
 
     def test_interface(self):
@@ -667,6 +682,7 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
         from schooltool.interfaces import ICalendar
 
         tt = Timetable(('A', 'B'))
+        setPath(tt, '/path/to/tt')
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
@@ -690,6 +706,12 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
 
         cal = model.createCalendar(schooldays, tt)
         verifyObject(ICalendar, cal)
+
+        # The calendar is functionally derived, therefore everything
+        # in it (including unique calendar event IDs) must not change
+        # if it is regenerated.
+        cal2 = model.createCalendar(schooldays, tt)
+        self.assertEquals(cal.events, cal2.events)
 
         result = self.extractCalendarEvents(cal, schooldays)
 
@@ -720,6 +742,7 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
         tt = Timetable(days)
+        setPath(tt, '/path/to/tt')
         periods = ('1', '2', '3', '4')
         for day_id in days:
             tt[day_id] = TimetableDay(periods)

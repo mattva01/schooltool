@@ -911,6 +911,11 @@ class ICalendarEvent(Interface):
     location = Attribute(
           """The title of the location where this event takes place.""")
 
+    def replace(dtstart=Unchanged, duration=Unchanged, title=Unchanged,
+                owner=Unchanged, context=Unchanged, location=Unchanged,
+                unique_id=Unchanged):
+        """Return a calendar event with new specified fields."""
+
     def __eq__(other): """See if self == other."""
     def __ne__(other): """See if self != other."""
     def __lt__(other): """See if self < other."""

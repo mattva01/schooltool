@@ -22,6 +22,7 @@ SchoolTool timetabling code.
 $Id$
 """
 
+import socket
 import datetime
 from sets import Set, ImmutableSet
 from persistence import Persistent
@@ -41,6 +42,7 @@ from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerTimetableModel
+from schooltool.component import getPath
 from schooltool.uris import URIGroup
 
 __metaclass__ = type
@@ -291,19 +293,26 @@ class BaseTimetableModel(Persistent):
     dayTemplates = {}
 
     def createCalendar(self, schoolday_model, timetable):
+        uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
         cal = Calendar()
         day_id_gen = self._dayGenerator()
         for date in schoolday_model:
-            if schoolday_model.isSchoolday(date):
-                day_id = self.schooldayStrategy(date, day_id_gen)
-                day_template = self._getTemplateForDay(date)
-                for period in day_template:
-                    dt = datetime.datetime.combine(date, period.tstart)
-                    if period.title in timetable[day_id].keys():
-                        for activity in timetable[day_id][period.title]:
-                            event = CalendarEvent(dt, period.duration,
-                                                  activity.title)
-                            cal.addEvent(event)
+            if not schoolday_model.isSchoolday(date):
+                continue
+            day_id = self.schooldayStrategy(date, day_id_gen)
+            day_template = self._getTemplateForDay(date)
+            for period in day_template:
+                dt = datetime.datetime.combine(date, period.tstart)
+                if period.title not in timetable[day_id].keys():
+                    continue
+                for activity in timetable[day_id][period.title]:
+                    # IDs for functionally derived calendars should be
+                    # functionally derived, and not random
+                    uid = '%d-%s' % (hash((activity.title, dt,
+                                           period.duration)), uid_suffix)
+                    event = CalendarEvent(dt, period.duration, activity.title,
+                                          unique_id=uid)
+                    cal.addEvent(event)
         return cal
 
     def _getTemplateForDay(self, date):

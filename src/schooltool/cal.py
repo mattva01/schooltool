@@ -25,6 +25,7 @@ $Id$
 import re
 import datetime
 import itertools
+import email.Utils
 from sets import Set
 from zope.interface import implements
 from persistent import Persistent
@@ -37,6 +38,7 @@ from schooltool.interfaces import ICalendarOwner
 from schooltool.interfaces import IACL, IACLCalendar
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
+from schooltool.interfaces import Unchanged
 
 __metaclass__ = type
 
@@ -943,9 +945,9 @@ class CalendarEvent(Persistent):
     context = property(lambda self: self._context)
     location = property(lambda self: self._location)
 
-    def __init__(self, dt, duration, title,
-                 owner=None, context=None, location=None, unique_id=None):
-        self._dtstart = dt
+    def __init__(self, dtstart, duration, title, owner=None, context=None,
+                 location=None, unique_id=None):
+        self._dtstart = dtstart
         self._duration = duration
         self._title = title
         self._owner = owner
@@ -953,14 +955,32 @@ class CalendarEvent(Persistent):
         self._location = location
 
         if unique_id is None:
-            # XXX The unique id must be globally unique to be suitable for
-            #     iCalendar; str(hash()) is *not* enough
-            unique_id = str(hash(self))
+            # & 0x7ffffff to avoid FutureWarnings with negative numbers
+            nonnegative_hash = hash((self.dtstart, self.title, self.duration,
+                                     self.owner, self.context,
+                                     self.location)) & 0x7ffffff
+            more_uniqueness = '%d.%08X' % (datetime.datetime.now().microsecond,
+                                           nonnegative_hash)
+            # generate an rfc-822 style id and strip angle brackets
+            unique_id = email.Utils.make_msgid(more_uniqueness)[1:-1]
         self._unique_id = unique_id
 
+    def replace(self, dtstart=Unchanged, duration=Unchanged, title=Unchanged,
+                owner=Unchanged, context=Unchanged, location=Unchanged,
+                unique_id=Unchanged):
+        if dtstart is Unchanged: dtstart = self.dtstart
+        if duration is Unchanged: duration = self.duration
+        if title is Unchanged: title = self.title
+        if owner is Unchanged: owner = self.owner
+        if context is Unchanged: context = self.context
+        if location is Unchanged: location = self.location
+        if unique_id is Unchanged: unique_id = self.unique_id
+        return CalendarEvent(dtstart, duration, title, owner, context,
+                             location, unique_id)
+
     def __tuple_for_comparison(self):
-        return (self.dtstart, self.title, self.duration, hash(self.owner),
-                hash(self.context), self.location, self.unique_id)
+        return (self.dtstart, self.title, self.duration, self.owner,
+                self.context, self.location, self.unique_id)
 
     def __eq__(self, other):
         if not isinstance(other, CalendarEvent):
@@ -991,8 +1011,11 @@ class CalendarEvent(Persistent):
         return self.__tuple_for_comparison() >= other.__tuple_for_comparison()
 
     def __hash__(self):
-        return hash((self.dtstart, self.title, self.duration,
-                     self.owner, self.context, self.location))
+        # Technically speaking,
+        #    return hash(self.unique_id)
+        # should be enough, if the ID is really unique.
+        return hash((self.dtstart, self.title, self.duration, self.owner,
+                     self.context, self.location, self.unique_id))
 
     def __repr__(self):
         return ("CalendarEvent%r"

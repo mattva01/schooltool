@@ -23,6 +23,7 @@ $Id$
 """
 
 import sys
+import sets
 import unittest
 from pprint import pformat
 from zope.interface import implements
@@ -155,11 +156,21 @@ class NiceDiffsMixin:
             if (isinstance(expected, basestring)
                 and isinstance(results, basestring)):
                 msg = "\n" + diff(expected, results)
+            elif (isinstance(expected, sets.Set)
+                and isinstance(results, sets.Set)):
+                msg = "\n" + diff(pformat_set(expected), pformat_set(results))
             else:
                 msg = "\n" + diff(pformat(expected), pformat(results))
         unittest.TestCase.assertEquals(self, results, expected, msg)
 
     assertEqual = assertEquals
+
+
+def pformat_set(s):
+    """Pretty-print a Set."""
+    items = list(s)
+    items.sort()
+    return 'sets.Set(%s)' % pformat(items)
 
 
 class XMLCompareMixin:
@@ -198,3 +209,4 @@ class QuietLibxml2Mixin:
         def on_error_callback(ctx, msg):
             sys.stderr.write(msg)
         libxml2.registerErrorHandler(on_error_callback, None)
+
