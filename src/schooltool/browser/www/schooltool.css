@@ -361,6 +361,15 @@ table.cal_yearly_month {
   width: 100%;
 }
 
+table.cal_yearly_month th {
+  width: 14%;
+}
+
+table.cal_yearly_month td {
+  width: 14%;
+  padding-right: 0.5em;
+}
+
 td.cal_yearly_day {
   text-align: right;
 }
