@@ -640,7 +640,6 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
 
     def test_addList(self):
         from schooltool.browser.model import GroupTeachersView
-        from schooltool.membership import Membership
         view = GroupTeachersView(self.group)
         view.request = RequestStub()
         self.assertEquals(view.addList(), [self.teacher])

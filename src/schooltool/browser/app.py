@@ -40,7 +40,6 @@ from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.translation import ugettext as _
 from schooltool.component import getTicketService, traverse
 from schooltool.rest.app import AvailabilityQueryView
-from schooltool.component import getTimetableSchemaService
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimePeriodServiceView

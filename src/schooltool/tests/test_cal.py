@@ -1153,15 +1153,13 @@ class TestACL(unittest.TestCase):
                           (self.person, "Delete"))
 
     def test_iter(self):
-        from schooltool.interfaces import ViewPermission, AddPermission
-        from schooltool.interfaces import ModifyPermission
+        from schooltool.interfaces import ViewPermission
         self.assertEquals(list(self.acl), [])
         self.acl.add((self.person, ViewPermission))
         self.assertEquals(list(self.acl), [(self.person, ViewPermission)])
 
     def test_delitem(self):
-        from schooltool.interfaces import ViewPermission, AddPermission
-        from schooltool.interfaces import ModifyPermission
+        from schooltool.interfaces import ViewPermission
         self.acl.add((self.person, ViewPermission))
         assert (self.person, ViewPermission) in self.acl._data
         self.acl.remove((self.person, ViewPermission))

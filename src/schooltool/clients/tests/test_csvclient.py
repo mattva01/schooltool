@@ -25,10 +25,10 @@ $Id$
 import unittest
 import socket
 from StringIO import StringIO
-from pprint import pformat
-from schooltool.tests.helpers import diff
+
 from schooltool.tests.utils import NiceDiffsMixin
 from zope.testing.doctestunit import DocTestSuite
+from schooltool.tests.utils import NiceDiffsMixin
 
 __metaclass__ = type
 

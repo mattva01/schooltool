@@ -24,8 +24,6 @@ $Id$
 
 import urllib
 from datetime import datetime, date, time, timedelta
-from sets import Set
-from zope.interface import implements
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
 from schooltool.cal import Calendar, CalendarEvent, Period

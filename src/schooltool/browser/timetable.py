@@ -23,7 +23,6 @@ $Id$
 """
 
 import re
-import cgi
 import sets
 import datetime
 
@@ -37,7 +36,6 @@ from schooltool.browser.widgets import TextWidget
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
 from schooltool.interfaces import ITimetableSchemaService
-from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ISchooldayModel
 from schooltool.translation import ugettext as _
 from schooltool.timetable import Timetable, TimetableDay

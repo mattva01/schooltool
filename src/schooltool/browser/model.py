@@ -22,7 +22,6 @@ Web-application views for the schooltool.model objects.
 $Id$
 """
 
-import datetime
 import PIL.Image
 from StringIO import StringIO
 

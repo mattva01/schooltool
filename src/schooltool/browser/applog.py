@@ -26,7 +26,7 @@ import urllib
 
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
-from schooltool.common import from_locale, to_unicode
+from schooltool.common import to_unicode
 from schooltool.rest import absoluteURL
 from schooltool.rest.applog import ApplicationLogQuery
 from schooltool.translation import ugettext as _

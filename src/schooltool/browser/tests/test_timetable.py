@@ -470,7 +470,7 @@ class TestTimetableSchemaServiceView(AppSetupMixin, unittest.TestCase,
         self.setUpSampleApp()
 
     def createView(self):
-        from schooltool.timetable import TimetableSchemaService, Timetable
+        from schooltool.timetable import Timetable
         from schooltool.browser.timetable import TimetableSchemaServiceView
         context = self.app.timetableSchemaService
         context['weekly'] = Timetable([])

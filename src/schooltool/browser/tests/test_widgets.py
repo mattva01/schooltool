@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-import datetime
 
 from zope.testing.doctestunit import DocTestSuite
 from zope.interface.verify import verifyObject
@@ -35,9 +34,6 @@ class TestWidget(unittest.TestCase):
 
     def test(self):
         from schooltool.browser.widgets import Widget
-        from schooltool.browser.widgets import defaultParser
-        from schooltool.browser.widgets import defaultFormatter
-        from schooltool.browser.widgets import defaultValidator
         widget = Widget('field', 'Field Label')
         self.assertEquals(widget.name, 'field')
         self.assertEquals(widget.label, 'Field Label')

@@ -26,7 +26,7 @@ import re
 import unittest
 from logging import INFO
 from pprint import pformat
-from datetime import datetime, date, time, timedelta
+from datetime import datetime, date, timedelta
 
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
