@@ -32,11 +32,58 @@
 #   Specifies a ZODB database to use.
 #   This section is required.
 #
-#   XXX: more documentation needed
-#
 
 <zodb>
+  # <filestorage>		traditional FileStorage
+  #   path filename		required
+  #   create yes|no		default: yes
+  #   read-only yes|no		default: no
+  #   quota size		default: no quota
+  # </filestorage>
   <filestorage>
     path Data.fs
   </filestorage>
+
+  # <mappingstorage>		in-memory MappingStorage
+  #   name storage-name		default: Mapping Storage
+  # </mappingstorage>
+
+  # <fullstorage>		BerkeleyDB based storage
+  #   ...			XXX
+  # </fullstorage>
+
+  # <minimalstorage>		BerkeleyDB based storage, stripped down
+  #   ...			see <fullstorage>
+  # </minimalstorage>
+
+  # <zeoclient>
+  #   server address		one or more; required
+  #   cache-size n		default: 20000000 (bytes)
+  #   name storage-name		default: address of the server
+  #   client x			enables persistent cache for client x
+  #   var dirname		directory for persistent cache (default: .)
+  #   min-disconnect-poll n	default: 5
+  #   max-disconnect-poll n	default: 300
+  #   wait yes|no		default: yes
+  #   read-only yes|no		default: no
+  #   read-only-fallback yes|no	default: no
+  #   realm name		authentication realm
+  # </zeoclient>
+
+  # <demostorage>		currently broken
+  #   name			default: Demo Storage
+  #   quota			XXX
+  #   ...			another section describing base storage
+  # </demostorage>
+
+  # cache-size n
+  #
+  # Default:
+  #   cache-size 5000
+
+  # pool-size n
+  #
+  # Default:
+  #   pool-size 7
+
 </zodb>
