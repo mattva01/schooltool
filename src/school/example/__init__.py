@@ -25,12 +25,13 @@ $Id: views.py 265 2003-10-29 15:36:42Z mg $
 from zope.interface import moduleProvides, implements, classImplements
 from schooltool.component import registerFacetFactory
 from schooltool.facet import FacetFactory, FacetedRelationshipSchema
-from schooltool.interfaces import IModuleSetup, ISpecificURI, IFacet
+from schooltool.interfaces import IModuleSetup, IFacet
 from schooltool.interfaces import IRelationshipValencies
 from schooltool.membership import Membership
 from schooltool.relationship import RelationshipSchema
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency
+from schooltool.uris import ISpecificURI
 
 moduleProvides(IModuleSetup)
 
