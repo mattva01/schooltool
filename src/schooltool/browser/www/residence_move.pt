@@ -3,7 +3,7 @@
     <title metal:fill-slot="title" i18n:translate="">Move residence</title>
   </head>
   <body>
-    <h1 metal:fill-slot="h1" i18n:translate="">
+    <h1 metal:fill-slot="h1" i18n:translate="" style="display:none">
       Move residence
     </h1>
 
@@ -20,9 +20,11 @@
         </address>
       </div>
 
-      <form method="POST" tal:attributes="action request/path">
+      <form method="POST" tal:attributes="action request/path"
+          class="standalone">
+          <h3 i18n:translate="">Move to a new residence</h3>
         <fieldset>
-          <legend>New Residence</legend>
+          <legend i18n:translate="">New Residence</legend>
 
           <div class="row">
             <label for="title">Title</label>
@@ -69,11 +71,11 @@
             <b tal:content="link/_getTitle"/>
           </div>
         </fieldset>
-        <div class="buttons">
-          <input class="button" type="submit" name="SAVE" value="Save"
-            i18n:attributes="value" />
-          <input class="button" type="submit" name="CANCEL" value="Cancel"
-            i18n:attributes="value" />
+        <div class="controls">
+          <input class="button-ok" type="submit" name="SAVE" value="Save"
+              i18n:attributes="value" />
+          <input class="button-cancel" type="submit" name="CANCEL" 
+              value="Cancel" i18n:attributes="value" />
         </div>
       </form>
     </metal:block>
