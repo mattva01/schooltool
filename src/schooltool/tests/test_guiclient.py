@@ -30,6 +30,7 @@ from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
 
+
 class ConnectionFactory:
 
     def __init__(self, response, error=None):

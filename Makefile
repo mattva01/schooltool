@@ -37,9 +37,6 @@ ftest: build
 run: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py
 
-runmockup: build
-	PYTHONPATH=src $(PYTHON) src/schooltool/main.py -m
-
 runtestserver: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf
 

@@ -24,7 +24,6 @@ Usage: schooltool.py [options]
 Options:
 
   -c, --config xxx  use this configuration file instead of the default
-  -m, --mockup      start a mockup application
   -h, --help        show this help message
 
 $Id$
@@ -46,7 +45,6 @@ from twisted.protocols import http
 from twisted.python import threadable
 from twisted.python import failure
 
-from schooltool import mockup
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model
 from schooltool.views import errorPage
@@ -419,7 +417,7 @@ class Server:
         self.appFactory = self.createApplication
 
         # Process command line arguments
-        opts, args = getopt.getopt(args, 'c:hm', ['config=', 'help', 'mockup'])
+        opts, args = getopt.getopt(args, 'c:hm', ['config=', 'help'])
 
         for k, v in opts:
             if k in ('-h', '--help'):
@@ -440,11 +438,6 @@ class Server:
 
         # Process any command line arguments that may override config file
         # settings here.
-        for k, v in opts:
-            if k in ('-m', '--mockup'):
-                self.appname = 'mockup'
-                self.viewFactory = mockup.RootView
-                self.appFactory = mockup.FakeApplication
 
     def help(self):
         """Prints a help message."""

@@ -581,18 +581,18 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def test_configure_with_args(self):
         from schooltool.main import Server
-        from schooltool.mockup import RootView, FakeApplication
+        from schooltool.component import getView
         server = Server()
         server.notifyConfigFile = lambda x: None
         config_file = self.getConfigFileName()
-        server.configure(['-c', config_file, '-m'])
+        server.configure(['-c', config_file])
         self.assertEquals(server.config.thread_pool_size, 42)
         self.assertEquals(server.config.listen,
                           [('', 123), ('10.20.30.40', 9999)])
         self.assert_(server.config.database is not None)
-        self.assertEquals(server.appname, 'mockup')
-        self.assertEquals(server.viewFactory, RootView)
-        self.assertEquals(server.appFactory, FakeApplication)
+        self.assertEquals(server.appname, 'schooltool')
+        self.assertEquals(server.viewFactory, getView)
+        self.assertEquals(server.appFactory, server.createApplication)
         # Check that configure does not change sys.path
         self.assertEquals(sys.path, self.original_path)
 
