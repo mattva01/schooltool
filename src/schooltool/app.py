@@ -28,7 +28,7 @@ from schooltool.interfaces import ILocation
 from schooltool.event import EventService
 from schooltool.component import UtilityService
 from schooltool.db import PersistentKeysSet
-from schooltool.cal import TimetableSchemaService
+from schooltool.timetable import TimetableSchemaService
 
 __metaclass__ = type
 

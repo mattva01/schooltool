@@ -1,5 +1,5 @@
 <ttconfig xmlns="http://schooltool.org/ns/ttconfig/0.1">
-  <timetablemodel class="schooltool.cal.SequentialDaysTimetableModel" />
+  <timetablemodel class="schooltool.timetable.SequentialDaysTimetableModel" />
   <timetable>
     <day id="1A">
       <period id="P1">Science</period>

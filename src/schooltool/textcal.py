@@ -32,8 +32,9 @@ import sys
 import os.path
 from sets import Set
 import schooltool.cal
-from schooltool.cal import Timetable, TimetableDay, TimetableActivity
-from schooltool.cal import SchooldayModel, SchooldayPeriod, SchooldayTemplate
+from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
+from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
+from schooltool.cal import SchooldayModel
 from schooltool.schema.rng import validate_against_schema
 
 

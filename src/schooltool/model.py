@@ -38,7 +38,7 @@ from schooltool.membership import Membership
 from schooltool.db import PersistentKeysSetWithNames, PersistentKeysSet
 from schooltool.event import EventMixin, CallAction
 from schooltool.component import registerFacetFactory
-from schooltool.cal import TimetabledMixin
+from schooltool.timetable import TimetabledMixin
 
 __metaclass__ = type
 
