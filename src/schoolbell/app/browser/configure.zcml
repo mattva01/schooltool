@@ -96,6 +96,13 @@
       view="addSchoolBellGroup.html"
       />
 
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.IGroup"
+      class="schoolbell.app.browser.app.GroupView"
+      template="group.pt"
+      permission="zope.View" />
+
 <!-- ResourceContainer, Resource configuration -->
 
   <containerViews
@@ -126,6 +133,13 @@
       permission="zope.ManageContent"
       view="addSchoolBellResource.html"
       />
+
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.IResource"
+      class="schoolbell.app.browser.app.ResourceView"
+      template="resource.pt"
+      permission="zope.View" />
 
 <!-- Skin and resources -->
 

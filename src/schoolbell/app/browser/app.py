@@ -101,3 +101,40 @@ class PersonPhotoView(object):
             raise NotFound(self.context, u'photo', self.request)
         self.request.response.setHeader('Content-Type', "image/jpeg")
         return photo
+
+
+class GroupView(object):
+    """A Group info view."""
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def canEdit(self):
+        return True # TODO: implement permission checking
+
+    def getParentGroups(self):
+        # TODO: implement this
+        pass
+
+    def getSubGroups(self):
+        # TODO: implement this
+        pass
+
+    def getOtherMembers(self):
+        # TODO: implement this
+        pass
+
+
+class ResourceView(object):
+    """A Resource info view."""
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def canEdit(self):
+        return True # TODO: implement permission checking
+
+    def getParentGroups(self):
+        pass

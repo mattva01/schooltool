@@ -120,6 +120,44 @@ def doctest_PersonPhotoView():
 
     """
 
+def doctest_GroupView():
+    r"""Test for GroupView
+
+    Let's create a view for a group:
+
+        >>> from schoolbell.app.browser.app import GroupView
+        >>> from schoolbell.app.app import Group
+        >>> group = Group()
+        >>> request = TestRequest()
+        >>> view = GroupView(group, request)
+
+    TODO: implement proper permission checking.
+    For now, all these methods just return True
+
+        >>> view.canEdit()
+        True
+
+    """
+
+def doctest_ResourceView():
+    r"""Test for ResourceView
+
+    Let's create a view for a resource:
+
+        >>> from schoolbell.app.browser.app import ResourceView
+        >>> from schoolbell.app.app import Resource
+        >>> resource = Resource()
+        >>> request = TestRequest()
+        >>> view = ResourceView(resource, request)
+
+    TODO: implement proper permission checking.
+    For now, all these methods just return True
+
+        >>> view.canEdit()
+        True
+
+    """
+
 
 def test_suite():
     suite = unittest.TestSuite()

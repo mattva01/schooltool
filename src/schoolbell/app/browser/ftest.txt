@@ -283,6 +283,7 @@ The person should appear in the person list too:
 
 
 We should have a view for that person as well:
+
     >>> print http(r"""
     ... GET /frogpond/persons/frog HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
@@ -435,6 +436,22 @@ The group should appear in the group list too:
                   <a href="http://localhost/frogpond/groups/Group">group</a>
     ...
 
+We should have a view for that group as well:
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/Group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/groups/
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    ...Group...
+    ...
+
 
 There is a menu item for resources in resource list
 
@@ -487,7 +504,6 @@ We can click on it and get a form:
     ...
       </form>
     ...
-
 
 
 After submiting the form
@@ -555,6 +571,26 @@ The resource should appear in the resource list too:
                    href="http://localhost/frogpond/resources/+/addSchoolBellResource.html">Add a new resource</a>
     ...
                   <a href="http://localhost/frogpond/resources/Resource">resource</a>
+    ...
+
+We should have a view for that resource as well:
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/Resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/resources/
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    ...Identifier:...
+    ...Resource...
+    ...
+    ...Title:...
+    ...resource...
     ...
 
 

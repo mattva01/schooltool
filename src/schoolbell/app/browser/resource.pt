@@ -1,0 +1,35 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Resource info</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Resource info
+  </h1>
+  <metal:block metal:fill-slot="body">
+
+    <div class="actions">
+      <a class="action" tal:condition="view/canEdit"
+         tal:attributes="href string:${context/@@absolute_url}/edit.html" i18n:translate="">Edit XXX NOT IMPLEMENTED</a>
+      <a class="action"
+         tal:attributes="href string:${context/@@absolute_url}/calendar"
+         i18n:translate="">View calendar XXX NOT IMPLEMENTED</a>
+    </div>
+
+    <div class="groups">
+      <h3 i18n:translate="">Groups XXX NOT IMPLEMENTED</h3>
+      <p tal:repeat="group view/getParentGroups">
+       <a tal:attributes="href group/@@absolute_url"
+          tal:content="group/title"/>
+      </p>
+    </div>
+
+    <div class="row"><b i18n:translate="">Identifier:</b>
+      <span tal:replace="python:context.__name__">res123</span>
+    </div>
+    <div class="row"><b i18n:translate="">Title:</b>
+      <span tal:replace="context/title">Resource title</span>
+    </div>
+  </metal:block>
+</body>
+</html>
