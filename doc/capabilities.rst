@@ -139,7 +139,7 @@ based systems. However, it serves a different purpose here.
 Typical capability tags in a RESTful system are based on the actions Create,
 Retrieve, Update and Delete.
 
-There is a "current tag".
+There is notionally a "current tag".
 
 CO can provide a different tag than the current one, depending on the
 Name, perhaps the type of object returned, or its interfaces.
