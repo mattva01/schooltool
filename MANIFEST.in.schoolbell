@@ -32,6 +32,7 @@ include Zope3/ZopePublicLicense.txt
 include Zope3/overrides_ftesting.zcml.in
 
 recursive-include Zope3/src/BTrees *
+recursive-include Zope3/src/docutils *
 recursive-include Zope3/src/persistent *
 recursive-include Zope3/src/pytz *
 recursive-include Zope3/src/RestrictedPython *
