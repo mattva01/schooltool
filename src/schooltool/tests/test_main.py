@@ -644,14 +644,11 @@ class TestServer(unittest.TestCase):
 
     def test_createApplication(self):
         from schooltool.main import Server
-        from schooltool.interfaces import ITeacher, IStudent
         server = Server()
         app = server.createApplication()
         a = app[0][0]
         b = app[1][0]
         c = app[2][0]
-        self.assert_(ITeacher.isImplementedBy(a))
-        self.assert_(IStudent.isImplementedBy(b))
 
 
 def test_suite():

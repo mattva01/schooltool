@@ -21,8 +21,11 @@ The schooltool adapters.
 
 $Id$
 """
+from zope.interface import moduleProvides
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
-from schooltool.interfaces import ComponentLookupError
+from schooltool.interfaces import IFacetAPI, ComponentLookupError
+
+moduleProvides(IFacetAPI)
 
 adapterRegistry = {}
 
@@ -64,6 +67,10 @@ def getPath(obj):
             raise TypeError("Cannot determine path for %s" % obj)
 
 
+#
+# IFacetAPI
+#
+
 def setFacet(ob, key, facet):
     """Set a facet marked with a key on a faceted object."""
     if not IFaceted.isImplementedBy(ob):
@@ -84,3 +91,9 @@ def queryFacet(ob, key, default=None):
         return getFacet(ob, key)
     except KeyError:
         return default
+
+def getFacetItems(ob):
+    """Returns a sequence of (key, facet) for all facets of an object."""
+    if not IFaceted.isImplementedBy(ob):
+        raise TypeError("%r does not implement IFaceted" % ob)
+    return ob.__facets__.items()

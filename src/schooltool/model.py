@@ -26,13 +26,14 @@ from sets import Set
 import UserDict
 import logging
 from zope.interface import implements, directlyProvidedBy, directlyProvides
-from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
-from schooltool.interfaces import IMarkingGroup, IFaceted
 from persistence import Persistent
 from persistence.list import PersistentList
 from persistence.dict import PersistentDict
 from zodb.btrees.OOBTree import OOSet
 from zodb.btrees.IOBTree import IOBTree
+from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
+from schooltool.interfaces import IFaceted
+from schooltool.adapters import queryFacet, setFacet
 
 __metaclass__ = type
 
@@ -76,7 +77,7 @@ class FacetedMixin:
     implements(IFaceted)
 
     def __init__(self):
-        self.__facets__ = PersistentDict()
+        self.__facets__ = PersistentKeysDict()
 
 
 class Person(Persistent, GroupMember, FacetedMixin):
@@ -94,13 +95,14 @@ class Group(Persistent, GroupMember, FacetedMixin):
 
     implements(IGroup, IGroupMember)
 
-    def __init__(self, name):
+    def __init__(self, name, facetFactory=None):
         Persistent.__init__(self)
         GroupMember.__init__(self)
         FacetedMixin.__init__(self)
         self._next_key = 0
         self._members = IOBTree()
         self.name = name
+        self.facetFactory = facetFactory
 
     def keys(self):
         """See IGroup"""
@@ -125,12 +127,22 @@ class Group(Persistent, GroupMember, FacetedMixin):
         key = self._next_key
         self._next_key += 1
         self._members[key] = member
+        if self.facetFactory is not None:
+            facet = queryFacet(member, self)
+            if facet is None:
+                facet = self.facetFactory(member)
+                setFacet(member, self, facet)
+            facet.active = True
         member.notifyAdd(self, key)
         return key
 
     def __delitem__(self, key):
         """See IGroup"""
-        self._members[key].notifyRemove(self)
+        member = self._members[key]
+        member.notifyRemove(self)
+        facet = queryFacet(member, self)
+        if facet is not None:
+            facet.active = False
         del self._members[key]
 
 
@@ -138,27 +150,6 @@ class RootGroup(Group):
     """A persistent application root object"""
     implements(IRootGroup)
 
-class MarkingGroup(Group):
-    """A group which sets a marker interface on its members."""
-
-    implements(IMarkingGroup)
-
-    def __init__(self, name, marker):
-        self.marker = marker
-        super(MarkingGroup, self).__init__(name)
-
-    def add(self, member):
-        if self.marker.isImplementedBy(member):
-            logging.warning("%s already implements %s" % (member, self.marker))
-        directlyProvides(member, directlyProvidedBy(member), self.marker)
-        return super(MarkingGroup, self).add(member)
-
-    def __delitem__(self, key):
-        member = self[key]
-        directlyProvides(member, directlyProvidedBy(member) - self.marker)
-        if self.marker.isImplementedBy(member):
-            logging.warning("%s still implements %s" % (member, self.marker))
-        super(MarkingGroup, self).__delitem__(key)
 
 class PersistentListSet(Persistent):
     """A set implemented with a PersistentList as a backend storage.
@@ -181,6 +172,7 @@ class PersistentListSet(Persistent):
 
     def remove(self, item):
         self._data.remove(item)
+
 
 class PersistentKeysDict(Persistent, UserDict.DictMixin):
     """A PersistentDict which uses persistent objects as keys by
@@ -218,15 +210,12 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
 
     def keys(self):
         self.checkJar()
-        result = []
-        for oid in self._data:
-            result.append(self._p_jar.get(oid))
         # XXX returning a lazy sequence is one optimization we might make
-        return result
+        return [self._p_jar.get(oid) for oid in self._data]
 
     def __contains__(self, key):
         self.checkKey(key)
-        return  key._p_oid in self._data
+        return key._p_oid in self._data
 
     def __iter__(self):
         self.checkJar()
@@ -237,7 +226,7 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
         return len(self._data)
 
     def checkJar(self):
-        if  self._p_jar is None:
+        if self._p_jar is None:
             raise TypeError("PersistentKeyDict %r must be added "
                             "to the connection before being used" % (self, ))
 

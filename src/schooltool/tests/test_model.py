@@ -28,18 +28,28 @@ from persistence import Persistent
 from zope.interface import Interface, implements
 from zope.interface import directlyProvidedBy, directlyProvides
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IGroupMember
+from schooltool.interfaces import IGroupMember, IFacet, IFaceted
 
 __metaclass__ = type
 
 class MemberStub:
     added = None
     removed = None
-    implements(IGroupMember)
+    implements(IGroupMember, IFaceted)
+    def __init__(self):
+        self.__facets__ = {}
     def notifyAdd(self, group, name):
         self.added = group
     def notifyRemove(self, group):
         self.removed = group
+
+class FacetStub:
+    implements(IFacet)
+    active = False
+
+    def __init__(self, context):
+        self.context = context
+
 
 class TestPerson(unittest.TestCase):
 
@@ -48,6 +58,7 @@ class TestPerson(unittest.TestCase):
         from schooltool.model import Person
         person = Person('John Smith')
         verifyObject(IPerson, person)
+
 
 class TestGroupMember(unittest.TestCase):
 
@@ -109,6 +120,24 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(member, group[key])
         self.assertEqual(list(member.groups()), [group])
 
+    def test_facet_management(self):
+        from schooltool.model import Group
+        from schooltool.adapters import getFacet
+        group = Group("root", FacetStub)
+        member = MemberStub()
+        key = group.add(member)
+        facet = getFacet(member, group)
+        self.assertEquals(facet.context, member)
+        self.assert_(facet.active)
+
+        del group[key]
+        self.assert_(getFacet(member, group) is facet)
+        self.assert_(not facet.active)
+
+        key = group.add(member)
+        self.assert_(getFacet(member, group) is facet)
+        self.assert_(facet.active)
+
     def test_remove(self):
         from schooltool.model import Group
         group = Group("root")
@@ -140,48 +169,6 @@ class TestRootGroup(unittest.TestCase):
         group = RootGroup("root")
         verifyObject(IRootGroup, group)
 
-class TestMarkingGroup(unittest.TestCase):
-
-    def test_interface(self):
-        from schooltool.model import MarkingGroup
-        from schooltool.interfaces import IMarkingGroup
-        class ITeacher(Interface): pass
-        g = MarkingGroup("teachers", ITeacher)
-        verifyObject(IMarkingGroup, g)
-
-    def test_add(self):
-        from schooltool.model import MarkingGroup
-        class ITeacher(Interface): pass
-        a = MemberStub()
-        g = MarkingGroup("teachers", ITeacher)
-        k = g.add(a)
-        self.assert_(ITeacher.isImplementedBy(a))
-        self.assert_(a in g.values())
-        self.assertEqual(g[k], a)
-
-        b = MemberStub()
-        directlyProvides(b, ITeacher)
-        g.add(b)
-        # XXX how do I test that a log message has been fired away?
-
-    def test_remove(self):
-        from schooltool.model import MarkingGroup
-        class ITeacher(Interface): pass
-        class HardcoreTeacher(MemberStub):
-            implements(ITeacher)
-        a = MemberStub()
-        b = HardcoreTeacher()
-        g = MarkingGroup("teachers", ITeacher)
-        ak = g.add(a) # AK-47
-        bk = g.add(b) # BK-001
-        self.assert_(ITeacher.isImplementedBy(a))
-        self.assert_(ITeacher.isImplementedBy(b))
-        self.assert_(ITeacher in directlyProvidedBy(b))
-        del g[ak]
-        del g[bk]
-        self.failIf(ITeacher.isImplementedBy(a))
-        self.assert_(ITeacher.isImplementedBy(b))
-
 
 class TestPersistentListSet(unittest.TestCase):
 
@@ -199,6 +186,7 @@ class TestPersistentListSet(unittest.TestCase):
         self.assertEquals(list(p), [b])
         p.add(a)
         self.assertEquals(list(p), [b, a])
+
 
 class P(Persistent):
     pass
@@ -273,6 +261,7 @@ class TestPersistentKeysDict(unittest.TestCase):
         self.assertRaises(TypeError, d.__contains__, object())
         self.assert_(P() not in d)
 
+
 class TestFacetedMixin(unittest.TestCase):
 
     def test(self):
@@ -288,7 +277,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestRootGroup))
     suite.addTest(unittest.makeSuite(TestGroupMember))
-    suite.addTest(unittest.makeSuite(TestMarkingGroup))
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDict))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))

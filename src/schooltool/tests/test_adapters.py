@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 from zope.interface import Interface, implements, directlyProvides
+from zope.interface.verify import verifyObject
 
 __metaclass__ = type
 
@@ -87,6 +88,7 @@ class TestCanonicalPath(unittest.TestCase):
         c = Stub(b, 'bar')
         self.assertEqual(getPath(c), '/foo/bar')
 
+
 class TestFacetFunctions(unittest.TestCase):
 
     def setUp(self):
@@ -98,6 +100,11 @@ class TestFacetFunctions(unittest.TestCase):
         self.ob = Stub()
         self.marker = object()
         self.facet = object()
+
+    def test_api(self):
+        from schooltool import adapters
+        from schooltool.interfaces import IFacetAPI
+        verifyObject(IFacetAPI, adapters)
 
     def test_setFacet(self):
         from schooltool.adapters import setFacet
@@ -125,6 +132,13 @@ class TestFacetFunctions(unittest.TestCase):
         result = queryFacet(self.ob, object(), cookie)
         self.assertEqual(result, cookie)
         self.assertRaises(TypeError, queryFacet, object(), self.marker)
+
+    def test_getFacetItems(self):
+        from schooltool.adapters import getFacetItems
+        self.ob.__facets__[self.marker] = self.facet
+        result = getFacetItems(self.ob)
+        self.assertEqual(result, [(self.marker, self.facet)])
+        self.assertRaises(TypeError, getFacetItems, object())
 
 
 def test_suite():
