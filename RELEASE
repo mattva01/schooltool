@@ -1,110 +1,93 @@
-Release Notes - SchoolTool/SchoolBell 0.9
-=========================================
+Release Notes - SchoolBell 1.0
+==============================
 
+This is the first release of SchoolBell separately from SchoolTool. It also
+marks the completion of the transition of SchoolBell to being a component in
+the Zope3 framework and the start of full database database compatibility.
 
-Upgrade Issues
-~~~~~~~~~~~~~~
+This is aside from other wonderful features such as timezones, all day events
+etc...
+
+Enough for it to be 1.0!
+
+Major Changes from 0.9
+----------------------
+
+TODO - Remove those features not in time for release.
+
+Contributions by POV:
+
+* Integration with the Zope 3 framework and ZMI. SchoolBell is now a collection
+  of re-usable Zope 3 components that can be used in other Zope 3 applications.
+* Separate iCalender Parser which only depending on the python standard library.
+  (TODO am I right?)
+* Don't worry, SchoolBell can still be run as a stand alone server
+
+Contributions by Brian Sutherland
+
+* Distutils build system:
+
+  * Installation
+  * Tarball and zipfile generation
+  * (TODO Windows installer if tom tells me it works.)
+
+* Simplified packaging
+
+Contributions by Etria, LLP:
+
+* UI improvements:
+
+  * Start of week selection
+  * Choice of a date/time format
+  * Choice of a timezone
+  * TODO go through the svn checkout, or maybe someone will be kind enough to
+    make a list.
+
+* TimeZones
+* AllDayEvents
+* exporting FreeBusy
+* Partial SchoolTool / SchoolBell 0.8 and 0.9 database upgrade script.
+
+TODO - More???
+
+TODO Explain better: RefactorNotes and EventAndBooking form
+
+TODO Credits: Am I correct in my division and links.
+
+Known Issues
+------------
 
 Database Upgrades
------------------
+~~~~~~~~~~~~~~~~~
 
-The SchoolTool/SchoolBell database in 0.9 is compatible with previous databases.
-Upgrades are strictly one way and are performed automatically by the new server.
+This release will do a *partial* import of a database from the previous version
+of SchoolTool or SchoolBell. Only all persons and resources and their calendars
+are migrated, along with groups, their calendars and membership information.
+Other data, including school-related data like timetables and time periods is
+not migrated.
 
-Unfortunately only some database objects are currently upgraded [1]. The rest
-will be XXXed.
+Full upgrades will be maintained from this release onwards.
 
-Full upgrades from SchoolBell 1.0 onwards.
+Download and Installation
+-------------------------
 
-[1] XXX - a list of upgradable database objects upgraded
+Distributed Files:
 
-New Features in 0.9
-~~~~~~~~~~~~~~~~~~~
+* `Tarball`_
+* `Zip File`_
+* `Windows self installer`_
+* `GPG signed md5sums`_
+* Packages will be distributed with Ubuntu_ universe (Keep your fingers crossed
+  for Hoary) and in Debian_ unstable.
+* A Live CD based on the Ubuntu_ Hoary distribution will be available from
+  Brian Sutherland on request after Hoary is released.
 
-The new features in this release are primarily from the SchoolBell User
-Interface bounty by etria and the ongoing conversion to Zope 3 by POV.
-And of course, bug fixes.
+(TODO RPMs?, Install instructions?)
 
-The full text of the user interface bounty can be found at
-http://www.schooltool.org/bounties/ui/SchoolBell09.
+.. _`Tarball`: http://www.schooltool.org/releases/schoolbell1.0/final/schoolbell-1.0.tar.gz
+.. _`Zip File`: http://www.schooltool.org/releases/schoolbell1.0/final/schoolbell-1.0.zip
+.. _`Windows self installer`: http://www.schooltool.org/releases/schoolbell1.0/final/schoolbell-1.0.win32.exe
+.. _`GPG signed md5sums`: http://www.schooltool.org/releases/schoolbell1.0/final/md5sum
+.. _`Ubuntu`: http://www.ubuntulinux.org
+.. _`Debian`: http://www.debian.org
 
-The Zope 3 conversion is not very visible to the user and will be finished by
-SchoolBell 1.0. The aim of this conversion is to remove the dependency on
-Twisted.
-
-The user visible parts of the changes from 0.8 to 0.9 are described below.
-
-Anonymous User
---------------
-
-When an anonymous user navigates to the root of the site, they should see a
-calendar for the day containing public events from all the calendars that have
-been selected by the administrator. They'll also be able to use the legend to
-view additional public calendars.
-
-There won't be any navigational aids to view person/group/resource calendars,
-but if you navigate there by entering the right URL you'll see a similar
-calendar, showing public events for that person/group/resource.
-
-Regular User Point of View
---------------------------
-
-SchoolBell should give the user the option of getting a cookie that will
-automatically log them in from that browser.
-
-When an authenticated user logs in to the root of the site, they should be
-redirected to their calendar.
-
-For each hour (in the daily or weekly view) or each day (in the monthly view)
-there is a link to create an event which will pop up a form with the relevant
-day and time.
-
-For each hour there is also a "book" icon. The user clicks "book" at tomorrow
-9am he will get a simplified version of busysearch with the start time
-"Tomorrow 9am selected." He picks from all available resources and sets the
-duration. He gets back a list of everything available at that time for that
-duration. The resources which he is looking at are preselected.
-
-Changes to the legend (calendars added or removed from the list, turned visible
-or invisible) those changes should be persistent.
-
-Each event that the user can manage should should have a link which pops up an
-edit window for the event.
-
-Manager Point of View
----------------------
-
-When a user logs in as a manager, they'll still see the root calendar, which
-they'll be able to edit, and also a link to the admin page, similar to the
-current one, where they can:
-
-    * Set up the default page -- which calendars should be overlaid on it by
-      default.
-
-    * Add users, one at a time via form or via CSV import. They should be able
-      to add users to groups when they create the users.
-
-    * Add resources, via a text box (just the titles, one per row), in a form
-      one at a time (with groups and specifying id and title) or via CSV.
-
-    * Add groups, via text box, form or CSV, as for resources. I don't think we
-      need to allow members to be added at the time of creation. Perhaps that
-      could be a second step. All groups will just be subgroups of the root
-      group. All the UI elements related to the group hierarchy should be
-      removed.
-
-    * View index pages for persons/resources/groups
-
-    * The info pages for persons/resources/groups should be able to stay the
-      same, more or less.
-
-    * Logs (as is)
-
-    * Delete (as is)
-
-    * Reset (as is)
-
-    * Options. As is, plus an option to start or stop using the REST interface
-      (restart required?). REST will be off by default. Also, the iCal
-      representations of calendars should be made available via the browser
-      interface.
