@@ -269,6 +269,15 @@ class install_scripts(_install_scripts):
 
 from distutils.core import setup
 
+# Patch the setup command so that python 2.3 distutils can deal with the
+# classifiers option
+if sys.version_info < (2, 3):
+    _setup = setup
+    def setup(**kwargs):
+        if kwargs.has_key("classifiers"):
+            del kwargs["classifiers"]
+        _setup(**kwargs)
+
 # Set a default manifest
 if sys.argv[1] == 'sdist':
     sys.argv[2:2] = ['-t', 'MANIFEST.in.' + package,
@@ -317,8 +326,42 @@ elif package == 'schoolbell':
     os.chdir('..')
     # Setup SchoolBell
     setup(name="schoolbell",
+        description="A standalone or Zope 3 component calendaring server",
+        long_description="""A calendaring server which can be used as a
+            standalone server or a Zope 3 component. This server allows for
+            people and resources to have individual and group calendars.
+            The calendars are:
+            * Shareable
+            * Overlayable
+            * Time Zone Aware
+            * Access controllable
+            * Importable and exportable to iCal clients
+                (e.g. Apple's iCal or Mozilla Sunbird)
+
+            All of this is accessable through a web interface which is simple,
+            powerfull and beautiful.
+
+            For developers SchoolBell offers:
+            * Re-usable calendaring Zope 3 components.
+            * iCal parser which depends only on the standard library.
+            * Rigourous functional and unit testing.
+
+            Enjoy!""",
         version="1.0rc1",
         url='http://www.schooltool.org/schoolbell',
+        license="GPL",
+        maintainer="SchoolTool development team",
+        maintainer_email="schooltool-dev@schooltool.org",
+        platforms=["any"],
+        classifiers=["Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Intended Audience :: End Users/Desktop",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Zope",
+#        "Topic :: Office/Business :: Groupware", TODO are we groupware?
+        "Topic :: Office/Business :: Scheduling"],
         cmdclass={'install': install,
             'install_data': install_data,
             'install_scripts': install_scripts,
