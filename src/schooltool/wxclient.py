@@ -700,18 +700,27 @@ class MainFrame(wxFrame):
 
         # Remember current selection
         old_selection = None
+        old_selection_full_id = None
+        root = self.groupTreeCtrl.GetRootItem()
         item = self.groupTreeCtrl.GetSelection()
         if item.IsOk():
             old_selection = self.groupTreeCtrl.GetPyData(item)
+            old_selection_full_id = []
+            while item != root:
+                id = self.groupTreeCtrl.GetPyData(item)
+                old_selection_full_id.append(id)
+                item = self.groupTreeCtrl.GetItemParent(item)
+            old_selection_full_id.reverse()
+            old_selection_full_id = tuple(old_selection_full_id)
 
         # Remember which items were expanded
         expanded = sets.Set()
         stack = []
-        root = self.groupTreeCtrl.GetRootItem()
         stack = [root]
         while stack:
             item = stack.pop()
             if item is not root and self.groupTreeCtrl.IsExpanded(item):
+                # XXX the group href set in GetPyData is not unique
                 expanded.add(self.groupTreeCtrl.GetPyData(item))
             next, cookie = self.groupTreeCtrl.GetFirstChild(item, 0)
             if next.IsOk():
@@ -724,8 +733,7 @@ class MainFrame(wxFrame):
         self.groupTreeCtrl.Freeze()
         self.groupTreeCtrl.DeleteAllItems()
         root = self.groupTreeCtrl.AddRoot("Roots")
-        self.groupTreeCtrl.Expand(root)
-        stack = [(root, None)]
+        stack = [(root, None)]  # (item, href)
         selected_item = None
         for level, title, href in group_tree:
             while len(stack) > level + 1:
@@ -736,8 +744,11 @@ class MainFrame(wxFrame):
             if level == 1 or stack[-1][1] in expanded:
                 self.groupTreeCtrl.Expand(stack[-1][0])
             self.groupTreeCtrl.SetPyData(item, href)
-            if href == old_selection and selected_item is None:
-                selected_item = item
+            if selected_item is None and href == old_selection:
+                full_id = [h for i, h in stack[1:]]
+                full_id = tuple(full_id + [href])
+                if old_selection_full_id == full_id:
+                    selected_item = item
             stack.append((item, href))
         while stack:
             last = stack.pop()[0]
