@@ -569,7 +569,7 @@ class RecurrenceRule:
         return hash(self._tupleForComparison())
 
     def apply(self, event, enddate=None):
-        """Generator that generates dates of recurrences"""
+        """Generator that generates dates of recurrences."""
         cur = event.dtstart.date()
         count = 0
         while True:
