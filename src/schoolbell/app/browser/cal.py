@@ -363,7 +363,10 @@ class CalendarViewBase(BrowserView):
             events[day] = []
             day += timedelta(1)
 
-        for event in self.iterEvents(start, end):
+        # We have date objects, but ICalendar.expand needs datetime objects
+        start_dt = datetime.combine(start, time())
+        end_dt = datetime.combine(end, time())
+        for event in self.context.expand(start_dt, end_dt):
             if self.eventHidden(event):
                 continue
             #  day1  day2  day3  day4  day5
@@ -402,16 +405,6 @@ class CalendarViewBase(BrowserView):
             days.append(CalendarDay(day, events[day]))
             day += timedelta(1)
         return days
-
-    def iterEvents(self, first, last):
-        # XXX A an evil temporary hack follows.  Currently expand() as provided
-        #     in Calendar() (and CalendarMixin) compares dates with datetimes.
-        #     Because the comparison is not inclusive, in this case things
-        #     break horribly (date(2004, 1, 2) is not less than
-        #     datetime(2004, 1, 2, 3, 4).  We probably want to fix expand().
-        first = datetime(first.year, first.month, first.day)
-        last = datetime(last.year, last.month, last.day)
-        return self.context.expand(first, last)
 
     def prevMonth(self):
         """Return the first day of the previous month."""

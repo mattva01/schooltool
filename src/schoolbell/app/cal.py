@@ -56,7 +56,6 @@ class Calendar(Persistent, CalendarMixin):
     """A persistent calendar."""
 
     # We use the expand() implementation from CalendarMixin
-    # (although we do override find())
 
     implements(IEditCalendar, ILocation)
 
@@ -88,24 +87,3 @@ class Calendar(Persistent, CalendarMixin):
 
     def find(self, unique_id):
         return self.events[unique_id]
-
-    def expand(self, first, last):
-        # TODO Move into schoolbell.calendar.
-        events = []
-        for event in self:
-            if event.recurrence is not None: # event is recurrent
-                starttime = event.dtstart.time()
-                for recdate in event.recurrence.apply(event, last):
-                    if first <= recdate <= last:
-                        start = datetime.datetime.combine(recdate, starttime)
-                        evt = ExpandedCalendarEvent(event, dtstart=start)
-                        events.append(evt)
-            else: # event is not recurrent
-                event_start = event.dtstart.date()
-                event_end = (event.dtstart + event.duration).date()
-                if (first <= event_start <= last or
-                    event_start <= first <= event_end):
-                    # XXX Couldn't we just add the original event?
-                    evt = ExpandedCalendarEvent(event, event.dtstart)
-                    events.append(evt)
-        return ImmutableCalendar(events)
