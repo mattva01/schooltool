@@ -656,6 +656,7 @@ h2.calendar-view-title {
     background: #9db8d2;
     opacity: 0.85;
     z-index: 1;
+    overflow: hidden;
 }
 
 #calendar-view-day .other {
@@ -664,6 +665,7 @@ h2.calendar-view-title {
 }
 
 #calendar-view-day .event:hover {
+    height: auto !important;
     opacity: 1;
     z-index: 9;
 }
