@@ -540,7 +540,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         """Return a list of months for the drop down in the jump portlet."""
         months = []
         for k, v in self.month_names.items():
-            months.append({'label': v,
+            months.append({'label': unicode(v),
                            'value': k})
         return months
 
