@@ -2881,12 +2881,14 @@ def doctest_AtomCalendarView():
         >>> from schoolbell.app.browser.cal import CalendarDay
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> lastweek = CalendarEvent(datetime.now() - timedelta(8),
-        ...                           timedelta(hours=3), "Last Week")
-        >>> today = CalendarEvent(datetime.now(),
-        ...                           timedelta(hours=3), "Today")
-        >>> tomorrow = CalendarEvent(datetime.now() + timedelta(1),
-        ...                           timedelta(hours=3), "Tomorrow")
+        >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
+        ...                          timedelta(8),
+        ...                          timedelta(hours=3), "Last Week")
+        >>> today = CalendarEvent(datetime.now().replace(hour=12),
+        ...                          timedelta(hours=3), "Today")
+        >>> tomorrow = CalendarEvent(datetime.now().replace(hour=12) +
+        ...                          timedelta(1),
+        ...                          timedelta(hours=3), "Tomorrow")
         >>> calendar.addEvent(lastweek)
         >>> calendar.addEvent(today)
         >>> calendar.addEvent(tomorrow)
