@@ -83,6 +83,8 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         self.assertEqual(a.traverse('utils'), a.utilityService)
         a['ttschemas'] = marker
         self.assertEqual(a.traverse('ttschemas'), a.timetableSchemaService)
+        a['time-periods'] = marker
+        self.assertEqual(a.traverse('time-periods'), a.timePeriodService)
 
     def testRoots(self):
         from schooltool.app import Application

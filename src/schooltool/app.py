@@ -85,6 +85,8 @@ class Application(Persistent):
             return self.utilityService
         elif name == 'ttschemas':
             return self.timetableSchemaService
+        elif name == 'time-periods':
+            return self.timePeriodService
         return self[name]
 
     def keys(self):

@@ -28,6 +28,7 @@ import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
+from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.component import getTimetableSchemaService, getPath
@@ -282,6 +283,45 @@ class TimetableSchemaServiceView(View):
         return TimetableSchemaView(self.context, key)
 
 
+class TimePeriodServiceView(View):
+    """View for the time period service"""
+
+    template = Template("www/time_service.pt", content_type="text/xml")
+
+    def periods(self):
+        base = getPath(self.context)
+        return [{'name': key, 'path': '%s/%s' % (base, key)}
+                for key in self.context.keys()]
+
+    def _traverse(self, key, request):
+        return TimePeriodCreatorView(self.context, key)
+
+
+class TimePeriodCreatorView(View):
+    """View for the time period service items"""
+
+    def __init__(self, service, key):
+        View.__init__(self, None)
+        self.service = service
+        self.key = key
+
+    do_GET = staticmethod(notFoundPage)
+
+    def do_PUT(self, request):
+        self.service.register(self.key)
+        request.setHeader('Content-Type', 'text/plain')
+        return "OK"
+
+    def do_DELETE(self, request):
+        try:
+            del self.service[self.key]
+        except KeyError:
+            return notFoundPage(request)
+        else:
+            request.setHeader('Content-Type', 'text/plain')
+            return "OK"
+
+
 #
 # Setup
 #
@@ -289,4 +329,5 @@ class TimetableSchemaServiceView(View):
 def setUp():
     """See IModuleSetup."""
     registerView(ITimetableSchemaService, TimetableSchemaServiceView)
+    registerView(ITimePeriodService, TimePeriodServiceView)
 

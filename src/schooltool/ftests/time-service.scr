@@ -1,0 +1,74 @@
+Checking basic time period service functionality.
+Preconditions: time period service is empty.
+Postconditions: time period service contains a time period called '2003-fall'
+
+SchoolTool> links off
+
+SchoolTool> get /time-periods
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+</timePeriods>
+
+
+SchoolTool> get /time-periods/x
+404 Not Found
+Content-Type: text/html; charset=UTF-8
+<html>
+<head><title>404 - Not Found</title></head>
+<body>
+  <h1>404 - Not Found</h1>
+  <p>The following resource does not exist: /time-periods/x</p>
+</body>
+</html>
+
+
+SchoolTool> put /time-periods/2003-fall
+PUT> .
+200 OK
+Content-Type: text/plain
+OK
+
+SchoolTool> get /time-periods
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+  <period xlink:type="simple"
+          xlink:href="/time-periods/2003-fall"
+          xlink:title="2003-fall"/>
+</timePeriods>
+
+
+SchoolTool> put /time-periods/x
+PUT> .
+200 OK
+Content-Type: text/plain
+OK
+
+SchoolTool> get /time-periods
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+  <period xlink:type="simple"
+          xlink:href="/time-periods/2003-fall"
+          xlink:title="2003-fall"/>
+  <period xlink:type="simple" xlink:href="/time-periods/x"
+          xlink:title="x"/>
+</timePeriods>
+
+
+SchoolTool> delete /time-periods/x
+200 OK
+Content-Type: text/plain
+OK
+
+SchoolTool> get /time-periods
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+  <period xlink:type="simple"
+          xlink:href="/time-periods/2003-fall"
+          xlink:title="2003-fall"/>
+</timePeriods>
+
+
