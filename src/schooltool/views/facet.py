@@ -68,7 +68,10 @@ class FacetView(View):
         if self.context.owner is not None:
             return textErrorPage(request,
                                  _("Owned facets may not be deleted manually"))
+        path = absolutePath(request, self.context)
         FacetManager(self.context.__parent__).removeFacet(self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Facet removed: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("Facet removed")
 
@@ -134,6 +137,9 @@ class FacetManagementView(View):
                            _("Could not create facet: %s") % e)
 
         location = absoluteURL(request, facet)
+        path = absolutePath(request, facet)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Facet created: %s" % path)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)

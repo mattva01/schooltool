@@ -121,6 +121,9 @@ class PersonInfoFacetView(FacetView):
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
+        path = absolutePath(request, self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Facet updated: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("Updated")
 
@@ -148,11 +151,17 @@ class PhotoView(View):
         buf = StringIO()
         img2.save(buf, 'JPEG')
         self.context.photo = buf.getvalue()
+        path = absolutePath(request, self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Photo added: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("Photo added")
 
     def do_DELETE(self, request):
         self.context.photo = None
+        path = absolutePath(request, self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Photo removed: %s" % path)
         request.setHeader('Content-Type', 'text/plain')
         return _("Photo removed")
 

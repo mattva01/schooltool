@@ -24,7 +24,9 @@ $Id$
 
 import unittest
 import datetime
+from zope.interface import directlyProvides
 from zope.testing.doctestunit import DocTestSuite
+from schooltool.interfaces import ILocation
 from schooltool.views.tests import RequestStub
 from schooltool.views.tests import setPath
 from schooltool.tests.utils import XMLCompareMixin
@@ -76,14 +78,21 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
             </person_info>
             """
         person = Person()
+        setPath(person, '/persons/007')
+
         context = PersonInfoFacet()
         context.__parent__ = person
+        context.__name__ = 'info'
+        directlyProvides(context, ILocation)
+
         view = self.createView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='PUT', body=body,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(result, "Updated")
+        self.assertEquals(request.site.applog,
+                          [(None, 'Facet updated: /persons/007/info', 'INFO')])
         self.assertEquals(request.code, 200)
         self.assertEquals(context.first_name, u'John \u263B')
         self.assertEquals(context.last_name, u'Smith \u263B')
@@ -107,6 +116,8 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         result = view.render(request)
         self.assertEquals(result, "Updated")
         self.assertEquals(request.code, 200)
+        self.assertEquals(request.site.applog,
+                          [(None, 'Facet updated: /persons/007/info', 'INFO')])
         self.assertEquals(context.first_name, '')
         self.assertEquals(context.last_name, '')
         self.assert_(context.date_of_birth is None)
@@ -156,12 +167,15 @@ class TestPhotoView(unittest.TestCase):
         ctype = "image/jpeg"
 
         context = PersonInfoFacet()
+        setPath(context, '/my/dogs/photo')
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='PUT', body=photo,
                               headers={'Content-Type': ctype})
         result = view.render(request)
         self.assertEquals(request.code, 200)
+        self.assertEquals(request.site.applog,
+                          [(None, 'Photo added: /my/dogs/photo', 'INFO')])
         self.assert_(context.photo is not None)
 
     def test_put_errors(self):
@@ -172,6 +186,7 @@ class TestPhotoView(unittest.TestCase):
         ctype = "image/jpeg"
 
         context = PersonInfoFacet()
+        setPath(context, '/my/dogs/photo')
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='PUT', body=photo,
@@ -179,17 +194,21 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(result, 'cannot identify image file')
         self.assertEquals(request.code, 400)
+        self.assertEquals(request.site.applog, [])
 
     def test_delete(self):
         from schooltool.views.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
         context.photo = '8-)'
+        setPath(context, '/my/dogs/photo')
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 200)
+        self.assertEquals(request.site.applog,
+                          [(None, 'Photo removed: /my/dogs/photo', 'INFO')])
         self.assert_(context.photo is None)
 
 
