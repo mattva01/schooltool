@@ -1,13 +1,13 @@
 <html>
 <head>
-  <title>Timetable <em tal:replace="request/uri">path</em></title>
+  <title tal:content="view/title">Timetable</title>
   <style type="text/css">
     table { border-collapse: collapse; }
     td, th { border: 1px solid black; }
   </style>
 </head>
 <body>
-  <h1>Timetable <em tal:replace="request/uri">path</em></h1>
+  <h1 tal:content="view/title">Timetable</h1>
   <table border="1">
     <tr>
       <th tal:repeat="day context/day_ids" tal:content="day"

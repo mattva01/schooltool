@@ -48,6 +48,7 @@ class TimetabledStub:
     def __init__(self):
         self.timetables = {}
         self.overlay = {}
+        self.title = "Foo"
 
     def getCompositeTimetable(self, period_id, schema_id):
         try:
@@ -135,10 +136,10 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
-              <title>Timetables for /..object</title>
+              <title>Timetables for Foo</title>
             </head>
             <body>
-              <h1>Timetables for /..object</h1>
+              <h1>Timetables for Foo</h1>
               <ul>
                 <li><a href="http://localhost:8080/..object/timetables/\\
             2003 fall/weekly"
@@ -175,10 +176,10 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
-              <title>Composite timetables for /..object</title>
+              <title>Composite timetables for Foo</title>
             </head>
             <body>
-              <h1>Composite timetables for /..object</h1>
+              <h1>Composite timetables for Foo</h1>
               <ul>
                 <li><a href="http://localhost:8080/..object/\\
             composite-timetables/2003 fall/weekly"
@@ -253,14 +254,14 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html = """
         <html>
         <head>
-          <title>Timetable ...object/timetables/x/y</title>
+          <title>2003 fall, weekly</title>
           <style type="text/css">
             table { border-collapse: collapse; }
             td, th { border: 1px solid black; }
           </style>
         </head>
         <body>
-          <h1>Timetable ...object/timetables/x/y</h1>
+          <h1>2003 fall, weekly</h1>
           <table border="1">
             <tr>
               <th colspan="2">Day 1</th>
@@ -307,14 +308,14 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     full_html = """
         <html>
         <head>
-          <title>Timetable ...object/timetables/x/y</title>
+          <title>2003 fall, weekly</title>
           <style type="text/css">
             table { border-collapse: collapse; }
             td, th { border: 1px solid black; }
           </style>
         </head>
         <body>
-          <h1>Timetable ...object/timetables/x/y</h1>
+          <h1>2003 fall, weekly</h1>
           <table border="1">
             <tr>
               <th colspan="2">Day 1</th>
@@ -353,9 +354,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         tt['Day 2'].add('C', TimetableActivity('CompSci', owner))
         return tt
 
-    def createView(self, context):
+    def createView(self, context, key=('2003 fall', 'weekly')):
         from schooltool.views.timetable import TimetableReadView
-        return TimetableReadView(context)
+        return TimetableReadView(context, key)
 
     def do_test_get(self, context, expected, ctype="text/xml", accept=()):
         request = RequestStub('...object/timetables/x/y')
@@ -571,6 +572,40 @@ class TestTimetableSchemaView(TestTimetableReadView):
           </day>
         </timetable>
         """
+
+    empty_html = """
+        <html>
+        <head>
+          <title>Timetable schema: weekly</title>
+          <style type="text/css">
+            table { border-collapse: collapse; }
+            td, th { border: 1px solid black; }
+          </style>
+        </head>
+        <body>
+          <h1>Timetable schema: weekly</h1>
+          <table border="1">
+            <tr>
+              <th colspan="2">Day 1</th>
+              <th colspan="2">Day 2</th>
+            </tr>
+            <tr>
+              <th>A</th>
+              <td></td>
+              <th>C</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>B</th>
+              <td></td>
+              <th>D</th>
+              <td></td>
+            </tr>
+          </table>
+        </body>
+        </html>
+        """
+
 
     def createView(self, context, service=None, key='weekly'):
         from schooltool.timetable import TimetableSchemaService

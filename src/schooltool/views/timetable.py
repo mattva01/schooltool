@@ -95,6 +95,13 @@ class TimetableReadView(View, TimetableContentNegotiation):
     # wxWindows has problems with UTF-8
     wxhtml_template = Template("www/timetable_html.pt", charset='ISO-8859-1')
 
+    def __init__(self, context, key):
+        View.__init__(self, context)
+        self.key = key
+
+    def title(self):
+        return "%s, %s" % self.key
+
     def do_GET(self, request):
         template = self.chooseRepresentation(request)
         return template(request, view=self, context=self.context)
@@ -122,9 +129,8 @@ class TimetableReadWriteView(TimetableReadView):
             timetable = timetabled.timetables[key]
         except KeyError:
             timetable = None
-        TimetableReadView.__init__(self, timetable)
+        TimetableReadView.__init__(self, timetable, key)
         self.timetabled = timetabled
-        self.key = key
 
     def do_GET(self, request):
         if self.context is None:
@@ -211,9 +217,11 @@ class TimetableSchemaView(TimetableReadView):
             timetable = service[key]
         except KeyError:
             timetable = None
-        TimetableReadView.__init__(self, timetable)
+        TimetableReadView.__init__(self, timetable, key)
         self.service = service
-        self.key = key
+
+    def title(self):
+        return "Timetable schema: %s" % self.key
 
     def do_GET(self, request):
         if self.context is None:
@@ -318,7 +326,7 @@ class TimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/timetables."""
 
     def title(self):
-        return "Timetables for %s" % getPath(self.context)
+        return "Timetables for %s" % self.context.title
 
     def timetables(self):
         basepath = getPath(self.context) + '/timetables'
@@ -343,7 +351,7 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/composite-timetables."""
 
     def title(self):
-        return "Composite timetables for %s" % getPath(self.context)
+        return "Composite timetables for %s" % self.context.title
 
     def timetables(self):
         basepath = getPath(self.context) + '/composite-timetables'
@@ -363,7 +371,8 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
             tt = self.context.getCompositeTimetable(self.time_period, name)
             if tt is None:
                 raise KeyError(name)
-            return TimetableReadView(tt)
+            key = (self.time_period, name)
+            return TimetableReadView(tt, key)
 
 
 class SchoolTimetableTraverseView(BaseTimetableTraverseView):
