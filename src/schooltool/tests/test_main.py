@@ -159,6 +159,15 @@ class ConfigStub:
     event_logging = False
 
 
+class LoggerStub:
+
+    def __init__(self):
+        self.log = []
+
+    def info(self, msg):
+        self.log.append(msg)
+
+
 class TestSite(unittest.TestCase):
 
     def test(self):
@@ -394,8 +403,11 @@ class TestRequest(unittest.TestCase):
                                      (1.0, 'text/html', {}, {})])
 
         rq.received_headers['accept'] = 'invalid value for this header'
+        rq.client = IPv4Address("TCP", "192.193.194.195", 123, 'INET')
+        rq.hitlogger = LoggerStub()
         rq.process()
         self.assertEqual(rq.code, 400)
+        self.assertEqual(len(rq.hitlogger.log), 1)
 
     def test_process_vh(self):
         from schooltool.main import Request
@@ -411,10 +423,13 @@ class TestRequest(unittest.TestCase):
         self.assert_(rq.isSecure())
 
         rq = Request(channel, True)
+        rq.hitlogger = LoggerStub()
         rq.reactor_hook = ReactorStub()
         rq.path = '/++vh++https:www.example.com/schooltool/foo/ba%72'
+        rq.client = IPv4Address("TCP", "192.193.194.195", 123, 'INET')
         rq.process()
         self.assertEqual(rq.code, 400)
+        self.assertEqual(len(rq.hitlogger.log), 1)
 
     def test_handleVh(self):
         from schooltool.main import Request

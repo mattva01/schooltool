@@ -354,6 +354,7 @@ class Request(http.Request):
             self.setHeader('Content-Length', len(body))
             self.write(body)
             self.finish()
+            self.logHit()
             return
 
         # But perform traversal and rendering in a separate worker thread
@@ -379,13 +380,12 @@ class Request(http.Request):
 
         if self.postpath and self.postpath[0].startswith('++vh++'):
             dir = self.postpath.pop(0)
-            dir = dir[6:]
 
             try:
-                proto, host, port = dir.split(':')
+                proto, host, port = dir[6:].split(':')
             except ValueError:
                 raise ValueError(_('There should be two colons in the '
-                                   'virtual hosting directive'))
+                                   'virtual hosting directive'), dir)
             secure = (proto == 'https')
             port = int(port)
 
