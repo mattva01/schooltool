@@ -208,6 +208,7 @@ class View(Resource):
         raise KeyError(name)
 
     def render(self, request):
+        request.setHeader('Allow', ', '.join(self.allowedMethods()))
         handler = getattr(self, 'do_%s' % request.method, None)
         if handler is not None:
             body = handler(request)
@@ -215,7 +216,6 @@ class View(Resource):
                    "do_%s did not return a string" % request.method
             return body
         else:
-            request.setHeader('Allow', ', '.join(self.allowedMethods()))
             return errorPage(request, 405, "Method Not Allowed")
 
     def allowedMethods(self):
