@@ -48,6 +48,7 @@ from schooltool.rest.timetable import format_timetable_for_presentation
 from schooltool.common import to_unicode
 from schooltool.common import parse_date
 from schooltool.component import getTimetableModel
+from schooltool.component import getPath
 from schooltool.rest import absoluteURL
 
 __metaclass__ = type
@@ -179,7 +180,10 @@ class TimetableSchemaWizard(View):
             if not self.name_widget.error and not self.model_error:
                 model = factory(self.ttschema.day_ids, self.day_templates)
                 self.ttschema.model = model
-                self.context[self.name_widget.value] = self.ttschema
+                key = self.name_widget.value
+                self.context[key] = self.ttschema
+                request.appLog(_("Timetable schema %s updated") %
+                               getPath(self.context[key]))
                 return self.redirect("/ttschemas", request)
         return View.do_GET(self, request)
 

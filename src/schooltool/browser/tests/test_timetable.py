@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+from logging import INFO
 
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.browser.tests import RequestStub
@@ -180,15 +181,15 @@ class TestTimetableSchemaView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.title(), "Timetable schema weekly")
 
 
-class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
+class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
+                                unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
 
     def createView(self):
-        from schooltool.timetable import TimetableSchemaService
         from schooltool.browser.timetable import TimetableSchemaWizard
-        context = TimetableSchemaService()
+        context = self.app.timetableSchemaService
         context['default'] = createSchema(['Day 1'], ['Period 1'])
         view = TimetableSchemaWizard(context)
         view.request = RequestStub(authenticated_user=self.manager)
@@ -240,6 +241,10 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         self.assertEquals(schema, view.ttschema)
         self.assertEquals(schema.model.timetableDayIds, view.ttschema.keys())
         self.assertEquals(schema.model.dayTemplates, view.day_templates)
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            'Timetable schema /ttschemas/something updated',
+                            INFO)])
 
     def test_name_missing(self):
         view = self.createView()
