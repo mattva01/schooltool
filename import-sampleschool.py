@@ -163,14 +163,23 @@ class SampleSchoolImporter:
         """Import timetable data from ttconfig.data."""
         import schooltool.clients.client
         ttconfig = file(self.ttconfig_filename)
-        c = schooltool.clients.client.Client(stdin=ttconfig,
-                                             stdout=self.real_stdout)
-        c.use_rawinput = False
-        c.input_hook = lambda prompt: ttconfig.readline()[:-1]
-        c.server = self.host
-        c.port = self.port
-        c.ssl = self.ssl
-        c.cmdloop()
+        client = schooltool.clients.client.Client(stdin=ttconfig,
+                                                  stdout=self.real_stdout)
+        def input_hook(prompt):
+            line = ttconfig.readline()[:-1]
+            if line == '':
+                # readline() returns an empty string only when it has reached
+                # the end of the file; it does not raise EOFError by itself.
+                raise EOFError
+            else:
+                return line
+
+        client.input_hook = input_hook
+        client.use_rawinput = False
+        client.server = self.host
+        client.port = self.port
+        client.ssl = self.ssl
+        client.cmdloop()
 
 
 if __name__ == '__main__':

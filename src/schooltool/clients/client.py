@@ -307,7 +307,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
             self.emit("End data with a line containing just a single period.")
         data = []
         prompt = self.extra_prompt % {'what': what}
-        while 1:
+        while True:
             try:
                 row = self.input_hook(prompt)
             except EOFError:
@@ -316,7 +316,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
             if row.startswith('.'):
                 if row == '.':
                     break
-                if row == '.' * len(row):
+                elif row == '.' * len(row):
                     row = row[:-1]
             data.append(row)
         data.append('')
