@@ -64,6 +64,7 @@ class Link(Persistent):
         otherlink = self.relationship.traverse(self)
         self.traverse().__links__.remove(otherlink)
 
+
 class _Relationship(Persistent):
     """A central part of a relationship.
 
@@ -91,6 +92,7 @@ class _Relationship(Persistent):
             return self.a
         else:
             raise ValueError("Not one of my links: %r" % (link,))
+
 
 def relate(title, a, role_a, b, role_b):
     """See IRelationshipAPI"""
