@@ -961,6 +961,9 @@ class EventEditView(EventViewBase):
 
            self.interval_widget.setValue(event.recurrence.interval)
 
+        else:
+           self.recurrence_widget.setValue(False)
+
         self.event = event
         EventViewBase.update(self)
 
