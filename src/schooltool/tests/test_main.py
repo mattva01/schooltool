@@ -25,16 +25,64 @@ import unittest
 __metaclass__ = type
 
 
-class TestMiscFunctions(unittest.TestCase):
+class RequestStub:
+
+    code = 200
+    message = 'OK'
+
+    def __init__(self, uri=''):
+        self.headers = {}
+        self.uri = uri
+
+    def setHeader(self, header, value):
+        self.headers[header] = value
+
+    def setResponseCode(self, code, message):
+        self.code = code
+        self.message = message
+
+
+class TestTemplate(unittest.TestCase):
+
+    def test_call(self):
+        from schooltool.main import Template
+        templ = Template('sample.pt')
+        request = RequestStub()
+        result = templ(request, foo='Foo', bar='Bar')
+        self.assertEquals(request.headers['Content-Type'],
+                     "text/html; charset=UTF-8")
+        self.assertEquals(result, "code: 200\nfoo: Foo\nbar: Bar\n")
+
+
+class TestErrorViews(unittest.TestCase):
+
+    def test_ErrorView(self):
+        from schooltool.main import ErrorView
+        view = ErrorView(747, "Not ready to take off")
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/html; charset=UTF-8")
+        self.assertEquals(request.code, 747)
+        self.assertEquals(request.message, "Not ready to take off")
+        self.assert_('<title>747 - Not ready to take off</title>' in result)
+        self.assert_('<h1>747 - Not ready to take off</h1>' in result)
+
+    def test_NotFoundView(self):
+        from schooltool.main import NotFoundView
+        view = NotFoundView(404, "No Boeing found")
+        request = RequestStub(uri='/hangar')
+        result = view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/html; charset=UTF-8")
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.message, "No Boeing found")
+        self.assert_('<title>404 - No Boeing found</title>' in result)
+        self.assert_('<h1>404 - No Boeing found</h1>' in result)
+        self.assert_('/hangar' in result)
 
     def test_errorPage(self):
         from schooltool.main import errorPage
-        class RequestStub:
-            def setHeader(self, header, value):
-                pass
-            def setResponseCode(self, code, message):
-                self.code = code
-                self.message = message
         request = RequestStub()
         result = errorPage(request, 747, "Not ready to take off")
         self.assertEquals(request.code, 747)
@@ -43,9 +91,17 @@ class TestMiscFunctions(unittest.TestCase):
         self.assert_('<h1>747 - Not ready to take off</h1>' in result)
 
 
+# Other things that could use some unit tests:
+#   View.getChild
+#   View.render
+#   Request (tricky: threads)
+#   main (should be refactored and tested)
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestMiscFunctions))
+    suite.addTest(unittest.makeSuite(TestTemplate))
+    suite.addTest(unittest.makeSuite(TestErrorViews))
     return suite
 
 if __name__ == '__main__':
