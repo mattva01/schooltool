@@ -274,6 +274,14 @@
       permission="zope.Public"
       />
 
+  <menuItem
+      menu="schoolbell_actions"
+      title="View calendar"
+      for="schoolbell.app.interfaces.ICalendarOwner"
+      permission="zope.Public"
+      action="calendar"
+      />
+
   <defaultView
       for="schoolbell.calendar.interfaces.ICalendar"
       name="weekly.html" />
