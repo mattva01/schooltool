@@ -183,6 +183,12 @@ class LibxmlChecks:
 
     def stopTest(self, test):
         import libxml2
+        # Using libxml2 after cleanupParser was called might be unsafe, even
+        # though it appears to work just fine now. See
+        # http://mail.gnome.org/archives/xml/2004-October/msg00099.html
+        # I think catching memory leaks in the code is worth the risk of
+        # calling cleanupParser in unit tests -- we do not do that in real
+        # code.
         libxml2.cleanupParser()
         mem = libxml2.debugMemory(1)
         if mem > self.last_mem:
