@@ -1,0 +1,123 @@
+#!/usr/bin/make -f
+
+# This number and the dependencies should be the only thing needed to change
+# the python version
+PYTHON_VERSION=2.3
+PYTHON=python$(PYTHON_VERSION)
+
+# Server Packages
+package=schoolbell
+library=libschoolbell
+
+#
+# Rules to build tree
+#
+
+.PHONY: build
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	$(MAKE) PYTHON=$(PYTHON) PYTHONDIR=/usr/bin/$(PYTHON)
+	touch build-stamp
+
+.PHONY: clean
+clean::
+	dh_testdir
+	dh_testroot
+	-$(MAKE) clean
+	rm -rf debian/garbage
+	rm -f install-arch-stamp
+	rm -f install-indep-stamp
+	dh_clean
+	debconf-updatepo
+
+.PHONY:install
+install: install-arch install-indep
+
+.PHONY: install-indep
+install-indep: install-indep-stamp
+install-indep-stamp:
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+	dh_installdirs -i
+
+	################## schoolbell ########################
+	: # configuration for a standalone schoolbell server
+	$(PYTHON) setup.py $(package) install_scripts\
+	    --install-dir=debian/$(package)/usr/bin\
+	    --default-config=/etc/$(package)/$(package).conf\
+	    --paths=/usr/lib/$(library)
+	install -m 644 -D -p debian/$(package).logrotate \
+		debian/$(package)/etc/logrotate.d/$(package)
+	install -m 644 -D -p debian/ssl-cert.cnf \
+	    debian/$(package)/etc/$(package)/ssl-cert.cnf
+	install -m 644 -D -p debian/$(package).conf.default \
+	    debian/$(package)/usr/share/$(package)/$(package).conf.default
+
+	touch install-indep-stamp
+
+.PHONY: install-arch
+install-arch: install-arch-stamp
+install-arch-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k -s
+	dh_installdirs -s
+
+	: # what about ZConfig/doc/schema.dtd? zconfig.pdf?
+
+	################## schoolbell python libs ################
+	: # These are not really arch-dep, but zope is and is large in
+	: # comparison. When Zope3 is removed from the packages, these
+	: # will go in their own arch-indep library.
+	$(PYTHON) setup.py $(package) install --no-compile\
+	    --install-lib=debian/$(library)/usr/lib/$(library)\
+	    --install-data=debian/$(library)/usr/lib/$(library) \
+	    --install-scripts=debian/garbage\
+	    --datafile-dir=/usr/lib/$(package)
+
+	################ libschoolbell ###################
+	: # copy parts of Zope3 included in the tarball to libschoolbell
+	cd Zope3 && $(PYTHON) setup.py install_lib --no-compile\
+	    --install-dir=../debian/$(library)/usr/lib/$(library)\
+	#### Install the import/export scripts into /usr/lib
+	install -m 644 -D -p scripts/schoolbell-import.py \
+	    debian/$(library)/usr/lib/$(library)/scripts/schoolbell-import.py
+	install -m 644 -D -p scripts/schoolbell-export.py \
+	    debian/$(library)/usr/lib/$(library)/scripts/schoolbell-export.py
+
+	touch install-arch-stamp
+
+.PHONY: binary-common
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installinit
+	dh_installexamples
+	dh_installman
+	dh_installdebconf
+	dh_installchangelogs
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_python -V $(PYTHON_VERSION)
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+.PHONY: binary-indep
+binary-indep: build install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+.PHONY: binary-arch
+binary-arch: build install-arch
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+.PHONY: binary
+binary: binary-arch binary-indep

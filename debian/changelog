@@ -1,0 +1,212 @@
+schoolbell (0.9.99+1.0rc1-1) unstable; urgency=low
+
+  * Split the schoolbell and schooltool packages. Schoolbell is now spilt into
+    2 packages, a configuration package, an arch dependent library package
+    containing the Zope extensions. The library package is a temporary package
+    as schoolbell needs to contain its own version of Zope until Zope 3.1 is
+    packaged. After that, it will become a small arch-indep Zope component.
+  * Hack upstreams build process until it does everything debian/rules used to
+    do, then reduce and simplify the debian rules. Also the application startup
+    scripts are moved to the upstream scripts directory as they will be useful
+    for the RPM packages.
+  * Use the Zope 3 setup.py script to install the Zope libraries rather than
+    finding and copying individual files. Unfortunately this gives no
+    fine-grained control over where *.so and *.py files are put, so everything
+    goes in an arch-dep package. But it's temporary and the simplification
+    is worth it.
+  * Remove the dependencies on twisted and pyopenssl as schoolbell 1.0 has
+    been rewritten as a pure Zope 3.1 component. Also, the dependency on
+    libxml2 has been removed as it is not used in SchoolBell anymore.
+  * Rewrite database upgrade code to export/import upgrade databases from
+    schoolbell 0.8 and 0.9. Necessary as there was a major structural change
+    at schoolbell 1.0.
+  * Add `mkdir -p /var/run/schoolbell` to initscript because some people like
+    to mount tmpfs on /var/run.
+  * Correct name of server in initscript (SchoolTool > SchoolBell).
+  * Update README.Debian to have the new default manager password
+    (i.e. schoolbell).
+  * Temporarily add the python2.3-docutils as a dependency, because the
+    temporarily included Zope libraries need it.
+  * Removed unimplemented config file options that got lost in the transition
+    to a Zope 3 SchoolBell. i.e. 'domain' and 'app-log-file'.
+  * Removed the postinst code to generate the 'lang' config file option. This
+    is not implemented in the new Zope 3 SchoolBell. It would also probably be
+    better to have the server default to reading /etc/environment itself if
+    there is a future implementation of 'lang' (iff no lang is defined in the
+    config file).
+  * Disabled the SSL Certificate generation in the maintainer scripts as the
+    server SSL support did not survive the transition to Zope 3. Left the code
+    in, just in case that support is added.
+  * Added a note that generating SSL certificates might take a while
+    (Closes: Bug#297146). (Even though SSL is not available in this release,
+    it might be in the future)
+
+ -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
+
+schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
+
+  * Delete SSL certificate on purge. Ask debconf question whether to purge
+    database, using the form used in the proposed database policy at
+    http://people.debian.org/~seanius/policy/dbapp-policy.html.
+    (Closes: Bug#282369)
+  * Change password in debian README back to schooltool. (Closes: Bug#283430)
+  * Stop postinst scripts from adding blank lines to config files.
+  * Remove un-needed build dependency on python2.3.
+  * Make debconf questions for interface setup clearer.
+    (Closes: Bug#280698)
+  * On first installation, set default locale from default system locale.
+  * Change the section of libschooltool and libschooltool-clients to libs.
+  * Fix python dependencies to cope with upcoming python version 2.4
+    - Use python 2.3 explicitly.
+  * Undo past changes of putting some modules in /usr/share. It was a
+    violation of the FHS because the .py files are byte-compiled on
+    installation. There are now a _LOT_ of lintian warnings about arch-indep
+    files in /usr/lib, but this is the lesser evil.
+  * Fix package description style to conform to some new lintian warnings and
+    fixed spelling errors in templates.
+  * Disabled the wxschooltool client and removed it from the packages.
+  * Fix bug in setting the default language if /etc/environment does not
+    contain LANG=.
+  * Added french debconf translation, patch thanks to, Jean-Luc Coulon.
+    (Closes: Bug#290389)
+  * Re-wrote the package templates for DTSG compliance, patch thanks to,
+    Martin Quinson and Christian Perrier. (Closes: Bug#288805)
+  * Added chezh translation, patch thanks to Miroslav Kure.
+  * Reduced the changes necessary to update packages to a new python version
+    to one line in debian/rules and dependencies.Thanks to a suggestion from
+    Matthias Klose.
+  * Temporarily patch rules to install Zope modules from the Zope tree because
+    no Zope 3 package exists yet. Sigh! more lintian warnings, but it's
+    temporary and way too much effort to fix these.
+  * General cleanup:
+    - Removed debdirclean makefile target called from top level directory.
+    - Removed dependency references to old schooltool-server package.
+  * Fix the database versioning and keep database revision 0.8.
+  * Change the default ports for SchoolBell to 7101 for the RESTive interface
+    and 7180 for the web interface.
+  * Add *.js files to the list of files to install into the server package.
+
+ -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
+
+schooltool (0.7.99+0.8rc1-1) unstable; urgency=low
+
+  * New upstream release: 0.8 release candidate 1.
+  * Moved configuration file template to /usr/share (Policy 10.7.3).
+  * Try to remove configuration file on purge (10.7.3).
+  * Depend on ssl-cert rather than copy debconf templates at build.
+    Be careful about handling unavailable templates in .config.
+  * I18n of schooltool debconf templates with po-debconf.
+  * Fixed bug where the ssl_certificate configuration option was not added
+    to the configuration file if the certificate existed before installation.
+  * Moved the persistent, zope, BTrees and ZDOB modules to /usr/lib and
+    removed all links from /usr/share to /usr/lib.
+  * Changed priority to extra.
+  * Fixed rules so that binary-arch and binary-indep targets build the
+    correct packages (Closes: Bug#279111).
+  * On log rotation, only restart the server once and do not produce any
+    output on success.
+  * Changed dependency on python-tcpwrap from suggests to recommends.
+  * Added database versioning code. If the database is thought to be
+    incompatible, the user is asked in the preinst if it can be deleted.
+  * Copy translation files (*.mo) into server package on package build.
+  * Add release notes to packages.
+  * Merge build the schoolbell package in this source package. The schoolbell
+    source package will be removed from debian.
+  * schooltool and schoolbell conflict and replace each other
+    (Closes: Bug#281621).
+
+ -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
+
+schooltool (0.7.2-1) unstable; urgency=low
+
+  * Changed maintainer name.
+  * Moved logic for cleaning debian directory into debian/rules.
+  * Use dh_makeshlibs and dh_shlibdeps in rules.
+  * Created libschooltool-server package for arch dep server files.
+  * Added Zope Public License 2.0 and 2.1 to copyright files and merged
+    them into one.
+  * Use dh_installinit to install /etc/default/schooltool.
+  * Use dh_installexamples to install example config file.
+  * Added log rotation using logrotate script.
+  * Moved installation of clients into /usr/share as it is architecture
+    independent.
+  * Attempt to remove logs and other files on purge (but NOT database).
+  * Updated schooltool-client and import-sampleschool manpages.
+  * Added suggests for python-tcpwrap as we support TCP wrappers natively now.
+  * Rename schooltool-server packages to schooltool (Kept schooltool-server as
+    a dummy package depending on schooltool).
+  * Cleaned up debian/rules.
+  * Updated docs.
+  * Add pre-seedable debconf configuration for server ports and SSL
+    certificates.
+
+ -- Brian Sutherland <jinty@web.de>  Sat, 18 Sep 2004 13:05:48 +0200
+
+schooltool (0.6+svn20040825-0.1) unstable; urgency=low
+
+  * Not released.
+  * debian/README.Debian: mention the new web frontend.
+  * debian/schooltool.conf: added web 7080 and app-log-path.
+  * debian/rules: added schooltool.css to the server package
+  * debian/rules: added csvimport.py to the clients package (Gintas)
+
+ -- Marius Gedminas <marius@pov.lt>  Wed, 25 Aug 2004 15:16:16 +0300
+
+schooltool (0.6-0.1) unstable; urgency=low
+
+  * Released SchoolTool Milestone 6.
+
+ -- Albertas Agejevas <alga@pov.lt>  Thu, 22 Jul 2004 21:19:43 +0300
+
+schooltool (0.5+svn20040518-0.1) unstable; urgency=low
+
+  * Do not remove the system user on package removal, see
+    http://lists.debian.org/debian-devel/2004/05/msg01156.html
+
+ -- Marius Gedminas <marius@pov.lt>  Wed, 19 May 2004 00:45:34 +0300
+
+schooltool (0.5-0.1) unstable; urgency=low
+
+  * Released SchoolTool Milestone 5
+
+ -- Albertas Agejevas <alga@pov.lt>  Thu,  6 May 2004 20:05:50 +0300
+
+schooltool (0.4+svn20040505-0.1) unstable; urgency=low
+
+  * Packaged subversion snapshot as of 2004-05-05.
+  * Split the server and the client parts into separate packages.
+  * A number of files had been renamed for a while (e.g.
+    /etc/init.d/schooltool was renamed to /etc/init.d/schooltool-server).
+    They have now been renamed back.  Hopefully no one used debs built during
+    that period, as we have no migration logic in postinst scripts.
+  * Added /etc/default/schooltool so that the schooltool server could be
+    specified not to load on startup.
+
+ -- Gintautas Miliauskas <gintas@pov.lt>  Thu,  6 May 2004 15:13:40 +0300
+
+schooltool (0.4+svn20040413-0.1) unstable; urgency=low
+
+  * Packaged subversion snapshot as of 2004-04-13.
+  * Postinst script now creates a system user for schooltool.
+  * Added /etc/init.d/schooltool.
+  * Changed /etc/schooltool.conf to use /var/lib/schooltool/Data.fs for
+    data files, /var/log/schooltool/schooltool.log for event log, and
+    /var/run/schooltool/schooltool.pid as a pidfile.
+  * Updated manual pages.
+  * Note that this is an unofficial package, that is not part of Debian.
+
+ -- Marius Gedminas <marius@pov.lt>  Tue, 13 Apr 2004 19:59:06 +0300
+
+schooltool (0.4-0.1) unstable; urgency=low
+
+  * Released SchoolTool Milestone 4.
+  * Note that this is an unofficial package, that is not part of Debian.
+
+ -- Marius Gedminas <marius@pov.lt>  Mon,  9 Feb 2004 14:33:32 +0200
+
+schooltool (0.3.99rc1-0.1) unstable; urgency=low
+
+  * Initial release of SchoolTool Milestone 4 Release Candidate 1.
+  * Note that this is an unofficial package, that is not part of Debian.
+
+ -- Marius Gedminas <marius@pov.lt>  Fri, 30 Jan 2004 17:09:47 +0200

@@ -1,0 +1,68 @@
+#! /bin/sh
+#
+# Start the server.
+#
+set -e
+
+package=schoolbell
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/$package
+NAME=$package
+DESC="SchoolBell"
+PNAME=$package # truncated to 15 chars by the kernel
+PIDFILE=/var/run/$package/$package.pid
+SCRIPTNAME=/etc/init.d/$package
+CONFIGFILE=/etc/$package/$package.conf
+DEFAULTFILE=/etc/default/$package
+
+# Gracefully exit if the package has been removed or is not configured.
+test -x $DAEMON || exit 0
+test -f $CONFIGFILE || exit 0
+
+if [ -r $DEFAULTFILE ]; then
+    . $DEFAULTFILE
+fi
+
+case "$1" in
+  start)
+	# Exit if the server has been disabled in /etc/default/$package
+	[ "$SCHOOLBELL_ENABLE" != "yes" ] && exit 0
+
+	# Make sure we have a /var/run sub-directory
+        [ -d /var/run/$package ] || mkdir -p /var/run/$package
+        chown $package:$package /var/run/$package
+
+        echo -n "Starting $DESC: $NAME"
+	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
+		--chuid $package --startas $DAEMON -- -d >/dev/null
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
+		--name $PNAME
+	echo "."
+	;;
+  restart|force-reload)
+	# Exit if the server has been disabled in /etc/default/$package
+	[ "$SCHOOLBELL_ENABLE" != "yes" ] && exit 0
+
+	# Make sure we have a /var/run sub-directory
+        [ -d /var/run/$package ] || mkdir -p /var/run/$package
+        chown $package:$package /var/run/$package
+
+        echo -n "Restarting $DESC: $NAME"
+	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
+		--name $PNAME
+	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
+		--chuid $package --startas $DAEMON -- -d >/dev/null
+	echo "."
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
