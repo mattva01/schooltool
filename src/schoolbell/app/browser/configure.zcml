@@ -91,4 +91,30 @@
       view="addSchoolBellResource.html"
       />
 
+  <zope:subscriber
+      factory=".skin.schoolBellTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
+  <layer
+      name="SchoolBell"
+      interface=".skin.ISchoolBellLayer" />
+
+  <skin
+      name="SchoolBell"
+      interface=".skin.ISchoolBellSkin" />
+
+  <page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="view_macros.pt"
+      layer=".skin.ISchoolBellSkin"
+      />
+
+   <resource name="layout.css" file="layout.css" />
+   <resource name="style.css" file="style.css" />
+   <resource name="logo.png" file="schoolbell.png" />
+   <resource name="schoolbell.js" file="schoolbell.js" />
+
 </configure>

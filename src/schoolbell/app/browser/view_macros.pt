@@ -1,0 +1,60 @@
+<metal:block define-macro="page" i18n:domain="schooltool">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type"
+      content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/@@/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="/@@/style.css"/>
+    <script type="text/javascript" src="/@@/schoolbell.js">
+    </script>
+    <metal:block define-slot="title">
+      <title i18n:translate="">SchoolBell</title>
+    </metal:block>
+    <metal:block metal:define-slot="extrahead" />
+  </head>
+  <body>
+    <div id="header">
+      <div class="logo">
+        <img src="/@@/logo.png" alt="SchoolTool" i18n:attributes="alt" />
+         <div metal:define-macro="logged_user" style="float: right">
+           <p i18n:translate="">User: 
+             <span tal:replace="request/principal/title">User</span>
+           </p>
+         </div>
+      </div>
+      <div class="tools">
+        <table metal:define-macro="zmi_tabs"><tr>
+          <td tal:repeat="view context/@@view_get_menu/zmi_views">
+          <a href="" tal:attributes="href view/action" tal:content="view/title"
+             i18n:translate="">label</a>
+          <tal:block condition="not: repeat/view/end">|</tal:block>
+          </td>
+         </tr></table>
+      </div>
+    </div>
+    <div id="columns">
+      <metal:block define-slot="column-left">
+        <div id="column-left">
+          <metal:block define-slot="column-left-extra"/>
+        </div>
+      </metal:block>
+      <div id="column-center">
+        <metal:block define-slot="h1"></metal:block>
+        <metal:block define-slot="body"/>
+      </div>
+    </div>
+    <div id="footer" i18n:translate="">
+      <p>
+        &copy; The Shuttleworth Foundation 2003 - <span>200</span>:
+        Supporting Social Innovation. 
+      </p>
+      <p>
+        SchoolTool&trade; is a Trademark 
+        of The Shuttleworth Foundation.
+      </p>
+    </div>
+  </body>
+</html>
+</metal:block>
