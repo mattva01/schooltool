@@ -1,0 +1,28 @@
+<html metal:use-macro="view/macros/page">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title">Timetable</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" tal:content="view/title">Timetable</h1>
+<metal:block metal:fill-slot="content">
+
+  <table class="timetable"
+         tal:define="ncols python:len(context.day_ids) or 1;
+                     col_width python:'%d%%' % (100 / ncols);
+                     th_width python: '%d%%' % (10 / ncols);
+                     td_width python: '%d%%' % (90 / ncols)">
+    <tr>
+      <th tal:repeat="day context/day_ids" tal:content="day"
+          tal:attributes="width col_width" colspan="2" class="day">Day N</th>
+    </tr>
+    <tr tal:repeat="row view/rows"><tal:block tal:repeat="col row">
+      <th tal:attributes="width th_width" tal:content="col/period"
+          class="period">1</th>
+      <td tal:attributes="width td_width" tal:content="col/activity"
+          class="activity">Act1</td>
+    </tal:block></tr>
+  </table>
+
+</metal:block>
+</body>
+</html>

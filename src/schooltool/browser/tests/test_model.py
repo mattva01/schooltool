@@ -26,7 +26,8 @@ import unittest
 import datetime
 from logging import INFO
 
-from schooltool.browser.tests import RequestStub, setPath, TraversalTestMixin
+from schooltool.browser.tests import RequestStub, setPath
+from schooltool.browser.tests import TraversalTestMixin, AppSetupMixin
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 
 __metaclass__ = type
@@ -37,27 +38,6 @@ class UserStub:
 
     def listLinks(self, uri):
         return []
-
-class AppSetupMixin(RegistriesSetupMixin):
-
-    def setUpSampleApp(self):
-        from schooltool.model import Group, Person
-        from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership
-        from schooltool import membership
-        self.setUpRegistries()
-        membership.setUp()
-        app = Application()
-        app['groups'] = ApplicationObjectContainer(Group)
-        app['persons'] = ApplicationObjectContainer(Person)
-        self.root = app['groups'].new("root", title="root")
-        self.managers = app['groups'].new("managers", title="managers")
-        self.person = app['persons'].new("johndoe", title="John Doe")
-        self.person2 = app['persons'].new("notjohn", title="Not John Doe")
-        self.manager = app['persons'].new("manager", title="Manager")
-
-        Membership(group=self.root, member=self.person)
-        Membership(group=self.managers, member=self.manager)
 
 
 class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
@@ -105,10 +85,13 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
     def test_traverse(self):
         from schooltool.browser.model import PersonView, PhotoView
         from schooltool.browser.model import PersonEditView, PersonPasswordView
+        from schooltool.browser.timetable import TimetableTraverseView
         view = PersonView(self.person)
         self.assertTraverses(view, 'photo.jpg', PhotoView, self.person)
         self.assertTraverses(view, 'edit.html', PersonEditView, self.person)
         self.assertTraverses(view, 'password.html', PersonPasswordView,
+                             self.person)
+        self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.person)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 

@@ -32,6 +32,7 @@ from schooltool.browser import absoluteURL
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import isManager
+from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
 from schooltool.interfaces import IPerson
@@ -83,6 +84,8 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
             return PersonEditView(self.context)
         elif name == 'password.html':
             return PersonPasswordView(self.context)
+        elif name == 'timetables':
+            return TimetableTraverseView(self.context)
         raise KeyError(name)
 
     def canEdit(self):

@@ -191,6 +191,22 @@ div.timetables p {
   margin: 0 0 0.5ex 0;
 }
 
+/* Timetables */
+
+table.timetable {
+  width: 90%;
+}
+
+table.timetable th {
+  background: #cccccc;
+}
+table.timetable th.period {
+  background: #ccccff;
+}
+table.timetable td {
+  background: #eeeeee;
+}
+
 /* Internal error pages */
 
 pre.traceback {

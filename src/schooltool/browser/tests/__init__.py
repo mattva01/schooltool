@@ -21,6 +21,7 @@ Unit tests for the schooltool.browser package.
 """
 
 from schooltool.rest.tests import RequestStub, setPath     # reexport
+from schooltool.tests.utils import RegistriesSetupMixin
 
 
 class TraversalTestMixin:
@@ -39,3 +40,26 @@ class TraversalTestMixin:
         self.assert_(isinstance(destination, viewclass))
         self.assert_(destination.context is context)
         return destination
+
+
+class AppSetupMixin(RegistriesSetupMixin):
+
+    def setUpSampleApp(self):
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.root = app['groups'].new("root", title="root")
+        self.managers = app['groups'].new("managers", title="managers")
+        self.person = app['persons'].new("johndoe", title="John Doe")
+        self.person2 = app['persons'].new("notjohn", title="Not John Doe")
+        self.manager = app['persons'].new("manager", title="Manager")
+
+        Membership(group=self.root, member=self.person)
+        Membership(group=self.managers, member=self.manager)
+

@@ -41,9 +41,11 @@ __metaclass__ = type
 # Time limit for session expiration
 session_time_limit = datetime.timedelta(hours=5)
 
+
 # Person username / group name validation
 # XXX Perhaps this constraint is a bit too strict.
 valid_name = re.compile("^[a-zA-Z0-9.,'()]+$")
+
 
 class RootView(View):
     """View for the web application root.
