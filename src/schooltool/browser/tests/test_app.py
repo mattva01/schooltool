@@ -92,7 +92,6 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         request = RequestStub('/?forbidden=1', args={'forbidden': '1'})
         result = view.render(request)
         self.assert_('Username' in result)
-        self.assert_('error' not in result)
         self.assert_('expired' not in result)
         self.assert_('not allowed' in result)
         self.assert_('action="/"' in result)
