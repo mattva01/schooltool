@@ -139,7 +139,6 @@ input[type=password]:focus,
 input[type=submit]:focus,
 input[type=checkbox]:focus,
 input[type=radio]:focus,
-select:focus,
 textarea:focus  {
     border: 1px #565248 solid;
 }
