@@ -123,6 +123,65 @@ class IFacetAPI(Interface):
 
 
 #
+# Relationships
+#
+
+class ISpecificURI(Interface):
+    """All interfaces derived from this must have the URI they map on
+    to as their docstring:
+
+        class ITutor(ISpecificURI):
+            '''http://schooltool.org/ns/tutor'''
+    """
+
+
+class ILink(Interface):
+    """A link is a 'view' of a relationship the relating objects have.
+
+             A<--->Link<---->Relationship<---->Link<--->B
+
+    """
+
+    title = Attribute(
+        """A title of the whole relationship.
+
+        The title should be the same on both links of a relationship.
+        """)
+
+    role = Attribute(
+        """The role implied by traversing this link.
+
+        This is how the object got by traverse() relates to my __parent__.
+
+        This attribute's value is an ISpecificURI.
+        """)
+
+    __parent__ = Attribute("The object at this end of the relationship")
+
+    def traverse():
+        """Returns the object at the other end of the relationship."""
+
+
+class IRelatable(Interface):
+    """An object which can take part in relationships."""
+
+    __links__ = Attribute(
+        """A dictionary of links of relationships indexed by serial numbers."""
+        )
+
+class IQueryLinks(Interface):
+    """An interface for querying a collection of links for those that
+    meet certain conditions.
+    """
+    def listLinks(role=ISpecificURI):
+        """Return all the links matching a specified role.
+
+        Roles are matched by hierarchy (as interfaces).  The default
+        argument of ISpecificURI therefore means 'all roles'.
+        """
+
+
+#
 # Groups and membership
 #
 
