@@ -286,7 +286,8 @@ class CalendarView(CalendarReadView):
                     return textErrorPage(request,
                          _("Repeating events/exceptions not yet supported"))
                 events.append(CalendarEvent(event.dtstart, event.duration,
-                                            event.summary))
+                                            event.summary,
+                                            location=event.location))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:

@@ -497,6 +497,7 @@ class TestCalendarView(TestCalendarReadView):
             BEGIN:VEVENT
             UID:-1822792810-/person/calendar@localhost
             SUMMARY:Long\\nLunch
+            LOCATION:Far far away
             DTSTART:20030903T120000
             DURATION:PT1H
             DTSTAMP:20040102T030405Z
@@ -533,7 +534,7 @@ class TestCalendarView(TestCalendarReadView):
                           "Quick Lunch"),
             CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
                           datetime.timedelta(minutes=60),
-                          "Long\nLunch"),
+                          "Long\nLunch", location="Far far away"),
             CalendarEvent(datetime.date(2003, 9, 4),
                           datetime.timedelta(days=1),
                           "Something else"),
