@@ -22,7 +22,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SchoolTool (unknown version)\n"
-"POT-Creation-Date: Fri Oct 15 20:26:33 2004\n"
+"POT-Creation-Date: Thu Oct 21 15:52:06 2004\n"
 "PO-Revision-Date: 2004-10-05 19:56+0300\n"
 "Last-Translator: Albertas Agejevas <alga@pov.lt>\n"
 "Language-Team: SchoolTool Developers <schooltool@schooltool.org>\n"
@@ -108,30 +108,30 @@ msgstr "Members"
 msgid "Locations"
 msgstr ""
 
-#: src/schooltool/browser/__init__.py:285
-#: src/schooltool/browser/timetable.py:131
-#: src/schooltool/browser/timetable.py:460
-#: src/schooltool/browser/timetable.py:583
-#: src/schooltool/browser/timetable.py:631
-#: src/schooltool/browser/timetable.py:729
-#: src/schooltool/browser/timetable.py:748
+#: src/schooltool/browser/__init__.py:286
+#: src/schooltool/browser/timetable.py:161
+#: src/schooltool/browser/timetable.py:490
+#: src/schooltool/browser/timetable.py:613
+#: src/schooltool/browser/timetable.py:661
+#: src/schooltool/browser/timetable.py:759
+#: src/schooltool/browser/timetable.py:778
 #: src/schooltool/browser/www/busysearch.pt:66
 msgid "Start"
 msgstr ""
 
-#: src/schooltool/browser/__init__.py:293
+#: src/schooltool/browser/__init__.py:294
 #: src/schooltool/rest/www/all_calendars.pt:7
 #: src/schooltool/browser/www/person.pt:22
 #: src/schooltool/browser/www/resource.pt:20
 msgid "Groups"
 msgstr ""
 
-#: src/schooltool/browser/__init__.py:294
+#: src/schooltool/browser/__init__.py:295
 #: src/schooltool/rest/www/all_calendars.pt:20
 msgid "Persons"
 msgstr ""
 
-#: src/schooltool/browser/__init__.py:295
+#: src/schooltool/browser/__init__.py:296
 #: src/schooltool/clients/wxclient.py:836
 #: src/schooltool/clients/wxclient.py:1224
 #: src/schooltool/rest/www/all_calendars.pt:33
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Granted permission %s to %s"
 msgstr ""
 
-#: src/schooltool/browser/acl.py:53 src/schooltool/browser/cal.py:186
+#: src/schooltool/browser/acl.py:53 src/schooltool/browser/cal.py:190
 #: src/schooltool/browser/www/group.pt:16
 #: src/schooltool/browser/www/cal_monthly.pt:3
 #: src/schooltool/browser/www/cal_weekly.pt:3
@@ -217,175 +217,175 @@ msgstr ""
 msgid "Modify"
 msgstr ""
 
-#: src/schooltool/browser/app.py:125
+#: src/schooltool/browser/app.py:124
 msgid "www/logo.png"
 msgstr "www/schoolbell.png"
 
-#: src/schooltool/browser/app.py:204 src/schooltool/browser/model.py:198
+#: src/schooltool/browser/app.py:203 src/schooltool/browser/model.py:198
 msgid "First name"
 msgstr ""
 
-#: src/schooltool/browser/app.py:205 src/schooltool/browser/model.py:200
+#: src/schooltool/browser/app.py:204 src/schooltool/browser/model.py:200
 msgid "Last name"
 msgstr ""
 
-#: src/schooltool/browser/app.py:206 src/schooltool/clients/wxclient.py:276
+#: src/schooltool/browser/app.py:205 src/schooltool/clients/wxclient.py:276
 #: src/schooltool/clients/wxclient.py:984
 #: src/schooltool/browser/www/login.pt:28
 msgid "Username"
 msgstr ""
 
-#: src/schooltool/browser/app.py:209 src/schooltool/clients/wxclient.py:278
+#: src/schooltool/browser/app.py:208 src/schooltool/clients/wxclient.py:278
 #: src/schooltool/clients/wxclient.py:985
 #: src/schooltool/browser/www/login.pt:33
 msgid "Password"
 msgstr ""
 
-#: src/schooltool/browser/app.py:211 src/schooltool/clients/wxclient.py:1508
+#: src/schooltool/browser/app.py:210 src/schooltool/clients/wxclient.py:1508
 msgid "Confirm password"
 msgstr ""
 
-#: src/schooltool/browser/app.py:212 src/schooltool/browser/model.py:202
+#: src/schooltool/browser/app.py:211 src/schooltool/browser/model.py:202
 msgid "Birth date"
 msgstr ""
 
-#: src/schooltool/browser/app.py:213 src/schooltool/browser/model.py:203
+#: src/schooltool/browser/app.py:212 src/schooltool/browser/model.py:203
 msgid "(YYYY-MM-DD)"
 msgstr ""
 
-#: src/schooltool/browser/app.py:214 src/schooltool/browser/model.py:205
+#: src/schooltool/browser/app.py:213 src/schooltool/browser/model.py:205
 #: src/schooltool/clients/wxclient.py:650
 msgid "Comment"
 msgstr ""
 
-#: src/schooltool/browser/app.py:221
+#: src/schooltool/browser/app.py:220
 msgid ""
 "Username can only contain English letters, numbers, and the following "
 "punctuation characters: - . , ' ( )"
 msgstr ""
 
-#: src/schooltool/browser/app.py:226
+#: src/schooltool/browser/app.py:225
 msgid "User with this username already exists."
 msgstr ""
 
-#: src/schooltool/browser/app.py:246
+#: src/schooltool/browser/app.py:245
 msgid "User with this name already exists."
 msgstr ""
 
-#: src/schooltool/browser/app.py:253 src/schooltool/browser/model.py:169
+#: src/schooltool/browser/app.py:252 src/schooltool/browser/model.py:169
 msgid "Passwords do not match."
 msgstr ""
 
-#: src/schooltool/browser/app.py:272 src/schooltool/browser/model.py:248
+#: src/schooltool/browser/app.py:271 src/schooltool/browser/model.py:248
 msgid "Invalid photo"
 msgstr ""
 
-#: src/schooltool/browser/app.py:294
+#: src/schooltool/browser/app.py:291
 msgid "User with this username  already exists."
 msgstr ""
 
-#: src/schooltool/browser/app.py:317 src/schooltool/browser/app.py:404
+#: src/schooltool/browser/app.py:314 src/schooltool/browser/app.py:401
 #: src/schooltool/rest/app.py:139
 msgid "Object %s of type %s created"
 msgstr ""
 
-#: src/schooltool/browser/app.py:328 src/schooltool/browser/model.py:256
+#: src/schooltool/browser/app.py:325 src/schooltool/browser/model.py:256
 #: src/schooltool/rest/infofacets.py:125
 msgid "Person info updated on %s (%s)"
 msgstr ""
 
-#: src/schooltool/browser/app.py:337 src/schooltool/browser/model.py:265
+#: src/schooltool/browser/app.py:334 src/schooltool/browser/model.py:265
 #: src/schooltool/rest/infofacets.py:149
 msgid "Photo added on %s (%s)"
 msgstr ""
 
-#: src/schooltool/browser/app.py:359
+#: src/schooltool/browser/app.py:356
 msgid "Add object"
 msgstr ""
 
-#: src/schooltool/browser/app.py:379
+#: src/schooltool/browser/app.py:376
 msgid "Invalid identifier"
 msgstr ""
 
-#: src/schooltool/browser/app.py:386 src/schooltool/browser/timetable.py:307
+#: src/schooltool/browser/app.py:383 src/schooltool/browser/timetable.py:337
 #: src/schooltool/browser/widgets.py:326
 msgid "Invalid UTF-8 data."
 msgstr ""
 
-#: src/schooltool/browser/app.py:390
+#: src/schooltool/browser/app.py:387
 msgid "Title should not be empty."
 msgstr ""
 
-#: src/schooltool/browser/app.py:394
+#: src/schooltool/browser/app.py:391
 msgid "There is an object with this title already."
 msgstr ""
 
-#: src/schooltool/browser/app.py:401
+#: src/schooltool/browser/app.py:398
 msgid "Identifier already taken"
 msgstr ""
 
-#: src/schooltool/browser/app.py:410
+#: src/schooltool/browser/app.py:407
 msgid "Relationship 'Membership' between %s and %s created"
 msgstr ""
 
-#: src/schooltool/browser/app.py:434
+#: src/schooltool/browser/app.py:431
 msgid "Add group"
 msgstr ""
 
-#: src/schooltool/browser/app.py:445
+#: src/schooltool/browser/app.py:442
 msgid "Add group (a subgroup of %s)"
 msgstr ""
 
-#: src/schooltool/browser/app.py:452
+#: src/schooltool/browser/app.py:449
 msgid "Add resource"
 msgstr ""
 
-#: src/schooltool/browser/app.py:508
+#: src/schooltool/browser/app.py:505
 msgid "Person index"
 msgstr ""
 
-#: src/schooltool/browser/app.py:509 src/schooltool/browser/app.py:518
+#: src/schooltool/browser/app.py:506 src/schooltool/browser/app.py:515
 msgid "Add a new person"
 msgstr ""
 
-#: src/schooltool/browser/app.py:517
+#: src/schooltool/browser/app.py:514
 msgid "Group index"
 msgstr ""
 
-#: src/schooltool/browser/app.py:526
+#: src/schooltool/browser/app.py:523
 msgid "Resource index"
 msgstr ""
 
-#: src/schooltool/browser/app.py:527
+#: src/schooltool/browser/app.py:524
 msgid "Add a new resource"
 msgstr ""
 
-#: src/schooltool/browser/app.py:546
+#: src/schooltool/browser/app.py:543
 msgid "First"
 msgstr ""
 
-#: src/schooltool/browser/app.py:548
+#: src/schooltool/browser/app.py:545
 msgid "Last"
 msgstr ""
 
-#: src/schooltool/browser/app.py:550 src/schooltool/browser/cal.py:75
-#: src/schooltool/browser/cal.py:782 src/schooltool/browser/timetable.py:228
+#: src/schooltool/browser/app.py:547 src/schooltool/browser/cal.py:79
+#: src/schooltool/browser/cal.py:781 src/schooltool/browser/timetable.py:258
 #: src/schooltool/clients/wxclient.py:1261
 #: src/schooltool/clients/wxclient.py:1414
 #: src/schooltool/browser/www/busysearch.pt:45
 msgid "Duration"
 msgstr ""
 
-#: src/schooltool/browser/app.py:551 src/schooltool/browser/cal.py:76
-#: src/schooltool/browser/cal.py:783
+#: src/schooltool/browser/app.py:548 src/schooltool/browser/cal.py:80
+#: src/schooltool/browser/cal.py:782
 msgid "min."
 msgstr ""
 
-#: src/schooltool/browser/app.py:574 src/schooltool/browser/cal.py:1061
+#: src/schooltool/browser/app.py:571 src/schooltool/browser/cal.py:1169
 msgid "Duration cannot be negative."
 msgstr ""
 
-#: src/schooltool/browser/app.py:576
+#: src/schooltool/browser/app.py:573
 msgid "Duration cannot be zero."
 msgstr ""
 
@@ -397,200 +397,200 @@ msgstr ""
 msgid "Invalid value for 'page' parameter."
 msgstr ""
 
-#: src/schooltool/browser/cal.py:145
+#: src/schooltool/browser/cal.py:149
 msgid "The resource is busy at the specified time."
 msgstr ""
 
-#: src/schooltool/browser/cal.py:149 src/schooltool/rest/cal.py:423
+#: src/schooltool/browser/cal.py:153 src/schooltool/rest/cal.py:423
 msgid "%s booked by %s"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:153 src/schooltool/rest/cal.py:427
+#: src/schooltool/browser/cal.py:157 src/schooltool/rest/cal.py:427
 msgid "%s (%s) booked by %s (%s) at %s for %s"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:203 src/schooltool/browser/timetable.py:478
+#: src/schooltool/browser/cal.py:207 src/schooltool/browser/timetable.py:508
 msgid "January"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:204 src/schooltool/browser/timetable.py:479
+#: src/schooltool/browser/cal.py:208 src/schooltool/browser/timetable.py:509
 msgid "February"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:205 src/schooltool/browser/timetable.py:480
+#: src/schooltool/browser/cal.py:209 src/schooltool/browser/timetable.py:510
 msgid "March"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:206 src/schooltool/browser/timetable.py:481
+#: src/schooltool/browser/cal.py:210 src/schooltool/browser/timetable.py:511
 msgid "April"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:207 src/schooltool/browser/timetable.py:482
+#: src/schooltool/browser/cal.py:211 src/schooltool/browser/timetable.py:512
 msgid "May"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:208 src/schooltool/browser/timetable.py:483
+#: src/schooltool/browser/cal.py:212 src/schooltool/browser/timetable.py:513
 msgid "June"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:209 src/schooltool/browser/timetable.py:484
+#: src/schooltool/browser/cal.py:213 src/schooltool/browser/timetable.py:514
 msgid "July"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:210 src/schooltool/browser/timetable.py:485
+#: src/schooltool/browser/cal.py:214 src/schooltool/browser/timetable.py:515
 msgid "August"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:211 src/schooltool/browser/timetable.py:486
+#: src/schooltool/browser/cal.py:215 src/schooltool/browser/timetable.py:516
 msgid "September"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:212 src/schooltool/browser/timetable.py:487
+#: src/schooltool/browser/cal.py:216 src/schooltool/browser/timetable.py:517
 msgid "October"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:213 src/schooltool/browser/timetable.py:488
+#: src/schooltool/browser/cal.py:217 src/schooltool/browser/timetable.py:518
 msgid "November"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:214 src/schooltool/browser/timetable.py:489
+#: src/schooltool/browser/cal.py:218 src/schooltool/browser/timetable.py:519
 msgid "December"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:218 src/schooltool/browser/timetable.py:213
+#: src/schooltool/browser/cal.py:222 src/schooltool/browser/timetable.py:243
 #: src/schooltool/browser/www/time-period.pt:87
 #: src/schooltool/browser/www/time-period.pt:111
 msgid "Monday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:219 src/schooltool/browser/timetable.py:214
+#: src/schooltool/browser/cal.py:223 src/schooltool/browser/timetable.py:244
 #: src/schooltool/browser/www/time-period.pt:89
 #: src/schooltool/browser/www/time-period.pt:112
 msgid "Tuesday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:220 src/schooltool/browser/timetable.py:215
+#: src/schooltool/browser/cal.py:224 src/schooltool/browser/timetable.py:245
 #: src/schooltool/browser/www/time-period.pt:91
 #: src/schooltool/browser/www/time-period.pt:113
 msgid "Wednesday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:221 src/schooltool/browser/timetable.py:216
+#: src/schooltool/browser/cal.py:225 src/schooltool/browser/timetable.py:246
 #: src/schooltool/browser/www/time-period.pt:93
 #: src/schooltool/browser/www/time-period.pt:114
 msgid "Thursday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:222 src/schooltool/browser/timetable.py:217
+#: src/schooltool/browser/cal.py:226 src/schooltool/browser/timetable.py:247
 #: src/schooltool/browser/www/time-period.pt:95
 #: src/schooltool/browser/www/time-period.pt:115
 msgid "Friday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:223 src/schooltool/browser/timetable.py:218
+#: src/schooltool/browser/cal.py:227 src/schooltool/browser/timetable.py:248
 #: src/schooltool/browser/www/time-period.pt:97
 #: src/schooltool/browser/www/time-period.pt:116
 msgid "Saturday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:224 src/schooltool/browser/timetable.py:219
+#: src/schooltool/browser/cal.py:228 src/schooltool/browser/timetable.py:249
 #: src/schooltool/browser/www/time-period.pt:99
 #: src/schooltool/browser/www/time-period.pt:117
 msgid "Sunday"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:228
+#: src/schooltool/browser/cal.py:232
 msgid "Mon"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:229
+#: src/schooltool/browser/cal.py:233
 msgid "Tue"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:230
+#: src/schooltool/browser/cal.py:234
 msgid "Wed"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:231
+#: src/schooltool/browser/cal.py:235
 msgid "Thu"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:232
+#: src/schooltool/browser/cal.py:236
 msgid "Fri"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:233
+#: src/schooltool/browser/cal.py:237
 msgid "Sat"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:234
+#: src/schooltool/browser/cal.py:238
 msgid "Sun"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:545
+#: src/schooltool/browser/cal.py:546
 msgid "%(month)s, %(year)s (week %(week)s)"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:552
+#: src/schooltool/browser/cal.py:553
 msgid "%(day_of_week)s, %(year)s-%(month)s-%(day)s"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:577
+#: src/schooltool/browser/cal.py:578
 msgid "%(month)s, %(year)s"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:586 src/schooltool/browser/timetable.py:539
+#: src/schooltool/browser/cal.py:587 src/schooltool/browser/timetable.py:569
 msgid "Week %d"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:67
+#: src/schooltool/browser/cal.py:71
 msgid "Owner"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:70 src/schooltool/browser/cal.py:777
+#: src/schooltool/browser/cal.py:74 src/schooltool/browser/cal.py:776
 #: src/schooltool/clients/wxclient.py:624
 #: src/schooltool/clients/wxclient.py:644
 #: src/schooltool/clients/wxclient.py:1404
 msgid "Date"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:72 src/schooltool/browser/cal.py:779
+#: src/schooltool/browser/cal.py:76 src/schooltool/browser/cal.py:778
 #: src/schooltool/clients/wxclient.py:1410
 msgid "Time"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:776 src/schooltool/browser/model.py:500
+#: src/schooltool/browser/cal.py:775 src/schooltool/browser/model.py:500
 #: src/schooltool/clients/wxclient.py:1989
 #: src/schooltool/clients/wxclient.py:2034
 #: src/schooltool/browser/www/object_add.pt:17
 msgid "Title"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:788
+#: src/schooltool/browser/cal.py:787
 msgid "Other"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:789
+#: src/schooltool/browser/cal.py:788
 msgid "Location"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:792
+#: src/schooltool/browser/cal.py:791
 msgid "Specify other location"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:853
+#: src/schooltool/browser/cal.py:852
 msgid "Add event"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:867
+#: src/schooltool/browser/cal.py:866
 msgid "Edit event"
 msgstr ""
 
-#: src/schooltool/browser/cal.py:880
+#: src/schooltool/browser/cal.py:879
 msgid "This event does not exist."
 msgstr ""
 
-#: src/schooltool/browser/cal.py:95
+#: src/schooltool/browser/cal.py:99
 msgid "This user does not exist."
 msgstr ""
 
@@ -631,7 +631,7 @@ msgid "Imported group: %s"
 msgstr ""
 
 #: src/schooltool/browser/csv.py:184 src/schooltool/browser/csv.py:215
-#: src/schooltool/rest/timetable.py:820
+#: src/schooltool/rest/timetable.py:819
 msgid "Invalid group: %s"
 msgstr ""
 
@@ -731,7 +731,7 @@ msgstr ""
 msgid "Cannot create relationship between %(other)s and %(this)s"
 msgstr ""
 
-#: src/schooltool/browser/model.py:358 src/schooltool/uris.py:119
+#: src/schooltool/browser/model.py:358 src/schooltool/uris.py:118
 msgid "Group"
 msgstr ""
 
@@ -755,7 +755,7 @@ msgstr ""
 msgid "Relationship '%s' between %s and %s created"
 msgstr ""
 
-#: src/schooltool/browser/model.py:400 src/schooltool/uris.py:114
+#: src/schooltool/browser/model.py:400 src/schooltool/uris.py:113
 msgid "Membership"
 msgstr ""
 
@@ -763,7 +763,7 @@ msgstr ""
 msgid "Cannot add %(other)s to %(this)s"
 msgstr ""
 
-#: src/schooltool/browser/model.py:437 src/schooltool/uris.py:129
+#: src/schooltool/browser/model.py:437 src/schooltool/uris.py:128
 msgid "Teaching"
 msgstr ""
 
@@ -783,140 +783,140 @@ msgstr ""
 msgid "%s's timetable for %s"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:132
-#: src/schooltool/browser/timetable.py:461
-#: src/schooltool/browser/timetable.py:730
+#: src/schooltool/browser/timetable.py:162
+#: src/schooltool/browser/timetable.py:491
+#: src/schooltool/browser/timetable.py:760
 #: src/schooltool/browser/www/ttschemas.pt:3
 #: src/schooltool/browser/www/ttschemas.pt:8
 msgid "Timetable schemas"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:225
-#: src/schooltool/browser/timetable.py:625
+#: src/schooltool/browser/timetable.py:255
+#: src/schooltool/browser/timetable.py:655
 #: src/schooltool/clients/wxclient.py:983
 #: src/schooltool/browser/www/ttschemas.pt:24
 #: src/schooltool/browser/www/time-periods.pt:24
 msgid "Name"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:229
+#: src/schooltool/browser/timetable.py:259
 msgid "minutes (used if you do not specify the ending time explicitly)"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:256
+#: src/schooltool/browser/timetable.py:286
 msgid "Timetable schema name must not be empty"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:258
+#: src/schooltool/browser/timetable.py:288
 msgid ""
 "Timetable schema name can only contain English letters, numbers, and the "
 "following punctuation characters: - . , ' ( )"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:263
+#: src/schooltool/browser/timetable.py:293
 msgid "Timetable schema with this name already exists."
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:287
+#: src/schooltool/browser/timetable.py:317
 msgid "Duration cannot be negative"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:289
+#: src/schooltool/browser/timetable.py:319
 msgid "Duration cannot be longer than 24 hours"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:316
+#: src/schooltool/browser/timetable.py:346
 msgid "Please select a value"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:322
+#: src/schooltool/browser/timetable.py:352
 msgid "Timetable schema %s created"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:343
-#: src/schooltool/browser/timetable.py:348
+#: src/schooltool/browser/timetable.py:373
+#: src/schooltool/browser/timetable.py:378
 msgid "Day %d"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:371
+#: src/schooltool/browser/timetable.py:401
 msgid "Period 1"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:380
+#: src/schooltool/browser/timetable.py:410
 msgid "Period %d"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:494
+#: src/schooltool/browser/timetable.py:524
 msgid "Start date"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:495
+#: src/schooltool/browser/timetable.py:525
 msgid "End date"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:502
+#: src/schooltool/browser/timetable.py:532
 msgid "End date cannot be earlier than start date."
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:532
+#: src/schooltool/browser/timetable.py:562
 msgid "%(month)s %(year)s"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:577
+#: src/schooltool/browser/timetable.py:607
 msgid "Time period %s"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:584
-#: src/schooltool/browser/timetable.py:632
+#: src/schooltool/browser/timetable.py:614
+#: src/schooltool/browser/timetable.py:662
 msgid "Timetable periods"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:608
-#: src/schooltool/rest/timetable.py:896
+#: src/schooltool/browser/timetable.py:638
+#: src/schooltool/rest/timetable.py:895
 msgid "Time period %s updated"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:610
+#: src/schooltool/browser/timetable.py:640
 msgid "Saved changes."
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:643
+#: src/schooltool/browser/timetable.py:673
 msgid "Time period name must not be empty"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:645
+#: src/schooltool/browser/timetable.py:675
 msgid ""
 "Time period name can only contain English letters, numbers, and the "
 "following punctuation characters: - . , ' ( )"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:650
+#: src/schooltool/browser/timetable.py:680
 msgid "Time period with this name already exists."
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:653
+#: src/schooltool/browser/timetable.py:683
 msgid "New time period"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:670
+#: src/schooltool/browser/timetable.py:700
 msgid "Time period %s created"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:706
+#: src/schooltool/browser/timetable.py:736
 msgid "Deleted %s."
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:723
-#: src/schooltool/rest/timetable.py:498
+#: src/schooltool/browser/timetable.py:753
+#: src/schooltool/rest/timetable.py:497
 msgid "Timetable schema %s deleted"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:743
-#: src/schooltool/rest/timetable.py:902
+#: src/schooltool/browser/timetable.py:773
+#: src/schooltool/rest/timetable.py:901
 msgid "Time period %s deleted"
 msgstr ""
 
-#: src/schooltool/browser/timetable.py:749
+#: src/schooltool/browser/timetable.py:779
 #: src/schooltool/browser/www/time-periods.pt:3
 #: src/schooltool/browser/www/time-periods.pt:8
 msgid "Time periods"
@@ -1338,35 +1338,35 @@ msgid ""
 "The account for ${user} is <span class=\"accountenabled\">enabled</span>."
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:17
+#: src/schooltool/browser/www/password.pt:16
 msgid ""
 "The account for ${user} is <span class=\"accountdisabled\">disabled</span>. "
 "Enter a new password to enable it."
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:26
+#: src/schooltool/browser/www/password.pt:25
 msgid "Current password"
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:30
+#: src/schooltool/browser/www/password.pt:29
 msgid "Manager's password"
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:38
+#: src/schooltool/browser/www/password.pt:37
 msgid "Verify password"
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:42
+#: src/schooltool/browser/www/password.pt:41
 msgid "Shortcut: Alt-C"
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:42
+#: src/schooltool/browser/www/password.pt:41
 #: src/schooltool/browser/www/ttwizard.pt:45
 #: src/schooltool/browser/www/ttwizard.pt:148
 msgid "C"
 msgstr ""
 
-#: src/schooltool/browser/www/password.pt:46
+#: src/schooltool/browser/www/password.pt:45
 msgid "Disable account"
 msgstr ""
 
@@ -1384,7 +1384,7 @@ msgstr ""
 
 #: src/schooltool/browser/www/person.pt:14
 #: src/schooltool/browser/www/password.pt:3
-#: src/schooltool/browser/www/password.pt:42
+#: src/schooltool/browser/www/password.pt:41
 msgid "Change password"
 msgstr ""
 
@@ -1476,6 +1476,29 @@ msgstr ""
 msgid "Edit person info for ${title}"
 msgstr ""
 
+#: src/schooltool/browser/www/recevent_delete.pt:17
+msgid ""
+"You are trying to delete a repeating event. Do you want to delete the "
+"current occurrence, this and all future occurrences, or all ocurrences?"
+msgstr ""
+
+#: src/schooltool/browser/www/recevent_delete.pt:28
+msgid "Current"
+msgstr ""
+
+#: src/schooltool/browser/www/recevent_delete.pt:30
+msgid "Future"
+msgstr ""
+
+#: src/schooltool/browser/www/recevent_delete.pt:32
+msgid "All"
+msgstr ""
+
+#: src/schooltool/browser/www/recevent_delete.pt:4
+#: src/schooltool/browser/www/recevent_delete.pt:10
+msgid "Deleting a repeating event (${event_title})"
+msgstr ""
+
 #: src/schooltool/browser/www/redirect.pt:11
 msgid ""
 "Your browser is now being redirected to ${destination}. If the redirect does "
@@ -1502,11 +1525,6 @@ msgstr ""
 msgid ""
 "You may have to relogin with the default manager account (password: "
 "'schooltool')."
-msgstr ""
-
-#: src/schooltool/browser/www/resetdb.pt:19
-#: src/schooltool/browser/www/ttevent_delete.pt:32
-msgid "Confirm"
 msgstr ""
 
 #: src/schooltool/browser/www/resetdb.pt:3
@@ -1700,16 +1718,31 @@ msgstr ""
 msgid "Add time period"
 msgstr ""
 
-#: src/schooltool/browser/www/ttevent_delete.pt:15
+#: src/schooltool/browser/www/timetable.pt:77
+msgid "Remove this exception"
+msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:87
+msgid ""
+"To add a timetable exception, just edit or delete a timetable event in the "
+"${calendar}."
+msgstr ""
+
+#: src/schooltool/browser/www/ttevent_delete.pt:17
 msgid ""
 "You are trying to delete an event that has been generated from a timetable. "
 "An exception for this day will be marked in the corresponding timetable. Are "
 "you sure you want to add an exception for this activity?"
 msgstr ""
 
+#: src/schooltool/browser/www/ttevent_delete.pt:36
+#: src/schooltool/browser/www/resetdb.pt:19
+msgid "Confirm"
+msgstr ""
+
 #: src/schooltool/browser/www/ttevent_delete.pt:4
-#: src/schooltool/browser/www/ttevent_delete.pt:9
-msgid "Add exception for"
+#: src/schooltool/browser/www/ttevent_delete.pt:10
+msgid "Add exception for ${event_title}"
 msgstr ""
 
 #: src/schooltool/browser/www/ttschemas.pt:18
@@ -1875,24 +1908,24 @@ msgstr ""
 msgid "Year %d"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:1009
+#: src/schooltool/clients/guiclient.py:1008
 msgid "Could not parse resource availability slots"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:1025
-#: src/schooltool/clients/guiclient.py:1067
+#: src/schooltool/clients/guiclient.py:1024
+#: src/schooltool/clients/guiclient.py:1066
 msgid "Bad datetime: %r"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:1029
+#: src/schooltool/clients/guiclient.py:1028
 msgid "Bad duration: %r"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:1043
+#: src/schooltool/clients/guiclient.py:1042
 msgid "Could not parse person info"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:1060
+#: src/schooltool/clients/guiclient.py:1059
 msgid "Insufficient data in person info"
 msgstr ""
 
@@ -1937,88 +1970,88 @@ msgstr ""
 msgid "Could not parse school timetable"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:640
+#: src/schooltool/clients/guiclient.py:639
 msgid "Could not parse item list"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:679
+#: src/schooltool/clients/guiclient.py:678
 msgid "Group tag does not have xlink:href"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:701
-#: src/schooltool/clients/guiclient.py:704
+#: src/schooltool/clients/guiclient.py:700
+#: src/schooltool/clients/guiclient.py:703
 msgid "Could not parse group tree"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:712
+#: src/schooltool/clients/guiclient.py:711
 msgid "Could not parse member list"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:743
-#: src/schooltool/clients/guiclient.py:772
+#: src/schooltool/clients/guiclient.py:742
+#: src/schooltool/clients/guiclient.py:771
 msgid "Could not parse relationship list"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:787
+#: src/schooltool/clients/guiclient.py:786
 msgid "Could not parse roll call"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:803
+#: src/schooltool/clients/guiclient.py:802
 msgid "Unrecognized presence value: %s"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:818
+#: src/schooltool/clients/guiclient.py:817
 msgid "Could not parse absences"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:835
-#: src/schooltool/clients/guiclient.py:910
+#: src/schooltool/clients/guiclient.py:834
+#: src/schooltool/clients/guiclient.py:909
 msgid "Datetime not given"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:843
-#: src/schooltool/clients/guiclient.py:923
+#: src/schooltool/clients/guiclient.py:842
+#: src/schooltool/clients/guiclient.py:922
 msgid "Unrecognized ended value: %s"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:847
-#: src/schooltool/clients/guiclient.py:932
+#: src/schooltool/clients/guiclient.py:846
+#: src/schooltool/clients/guiclient.py:931
 msgid "Unrecognized resolved value: %s"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:873
+#: src/schooltool/clients/guiclient.py:872
 msgid "Could not parse absence comments"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:884
+#: src/schooltool/clients/guiclient.py:883
 msgid "Reporter not given"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:886
+#: src/schooltool/clients/guiclient.py:885
 msgid "More than one reporter given"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:890
+#: src/schooltool/clients/guiclient.py:889
 msgid "Reporter does not have xlink:href"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:897
+#: src/schooltool/clients/guiclient.py:896
 msgid "More than one absentfrom given"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:902
+#: src/schooltool/clients/guiclient.py:901
 msgid "absentfrom does not have xlink:href"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:950
+#: src/schooltool/clients/guiclient.py:949
 msgid "More than one text node"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:969
+#: src/schooltool/clients/guiclient.py:968
 msgid "Could not parse time period list"
 msgstr ""
 
-#: src/schooltool/clients/guiclient.py:989
+#: src/schooltool/clients/guiclient.py:988
 msgid "Could not parse timetable schema list"
 msgstr ""
 
@@ -2133,7 +2166,7 @@ msgid "Username: %s"
 msgstr ""
 
 #: src/schooltool/clients/wxclient.py:1505
-#: src/schooltool/browser/www/password.pt:34
+#: src/schooltool/browser/www/password.pt:33
 msgid "New password"
 msgstr ""
 
@@ -2682,8 +2715,9 @@ msgstr ""
 #: src/schooltool/browser/www/person_add.pt:29
 #: src/schooltool/browser/www/resource_edit.pt:19
 #: src/schooltool/browser/www/object_add.pt:30
+#: src/schooltool/browser/www/ttevent_delete.pt:38
 #: src/schooltool/browser/www/resetdb.pt:21
-#: src/schooltool/browser/www/ttevent_delete.pt:34
+#: src/schooltool/browser/www/recevent_delete.pt:34
 msgid "Cancel"
 msgstr ""
 
@@ -2713,8 +2747,8 @@ msgstr ""
 #: src/schooltool/clients/wxclient.py:1428
 #: src/schooltool/clients/wxclient.py:1517
 #: src/schooltool/clients/wxclient.py:1624 src/schooltool/rest/cal.py:431
-#: src/schooltool/rest/timetable.py:347 src/schooltool/rest/timetable.py:571
-#: src/schooltool/rest/timetable.py:801 src/schooltool/rest/timetable.py:907
+#: src/schooltool/rest/timetable.py:346 src/schooltool/rest/timetable.py:570
+#: src/schooltool/rest/timetable.py:800 src/schooltool/rest/timetable.py:906
 msgid "OK"
 msgstr ""
 
@@ -2882,7 +2916,7 @@ msgstr ""
 msgid "Failed login, username: %r"
 msgstr ""
 
-#: src/schooltool/http.py:579 src/schooltool/rest/__init__.py:395
+#: src/schooltool/http.py:579 src/schooltool/rest/__init__.py:412
 msgid "Bad username or password"
 msgstr ""
 
@@ -2930,23 +2964,23 @@ msgstr ""
 msgid "Started HTTPS server for RESTive API on %s:%s"
 msgstr ""
 
-#: src/schooltool/main.py:473
+#: src/schooltool/main.py:472
 msgid "Started HTTP server for RESTive API on %s:%s"
 msgstr ""
 
-#: src/schooltool/main.py:478
+#: src/schooltool/main.py:477
 msgid "Started HTTPS server for web UI on %s:%s"
 msgstr ""
 
-#: src/schooltool/main.py:481
+#: src/schooltool/main.py:479
 msgid "Started HTTP server for web UI on %s:%s"
 msgstr ""
 
-#: src/schooltool/main.py:485
+#: src/schooltool/main.py:483
 msgid "Going to background, daemon pid %d"
 msgstr ""
 
-#: src/schooltool/main.py:488
+#: src/schooltool/main.py:486
 msgid "Shutting down"
 msgstr ""
 
@@ -2972,7 +3006,7 @@ msgstr ""
 msgid "Not found: %s"
 msgstr ""
 
-#: src/schooltool/rest/__init__.py:356
+#: src/schooltool/rest/__init__.py:369
 msgid "Method Not Allowed"
 msgstr ""
 
@@ -3044,11 +3078,11 @@ msgstr ""
 msgid "%s expected in %s, at %s %s%s"
 msgstr ""
 
-#: src/schooltool/rest/acl.py:80
+#: src/schooltool/rest/acl.py:78
 msgid "Bad path %r"
 msgstr ""
 
-#: src/schooltool/rest/acl.py:87
+#: src/schooltool/rest/acl.py:85
 msgid "ACL saved"
 msgstr ""
 
@@ -3091,7 +3125,7 @@ msgid "Page size must be positive"
 msgstr ""
 
 #: src/schooltool/rest/cal.py:110 src/schooltool/rest/cal.py:278
-#: src/schooltool/rest/timetable.py:285 src/schooltool/rest/timetable.py:507
+#: src/schooltool/rest/timetable.py:284 src/schooltool/rest/timetable.py:506
 msgid "Unsupported content type: %s"
 msgstr ""
 
@@ -3152,7 +3186,7 @@ msgstr ""
 msgid "Input not valid according to schema"
 msgstr ""
 
-#: src/schooltool/rest/cal.py:384 src/schooltool/rest/timetable.py:515
+#: src/schooltool/rest/cal.py:384 src/schooltool/rest/timetable.py:514
 msgid "Not valid XML"
 msgstr ""
 
@@ -3268,118 +3302,118 @@ msgstr ""
 msgid "Link removed"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:125
+#: src/schooltool/rest/timetable.py:124
 msgid "Invalid duration: %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:174
+#: src/schooltool/rest/timetable.py:173
 msgid "%s's complete timetable for %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:272
+#: src/schooltool/rest/timetable.py:271
 msgid "%s's own timetable for %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:290 src/schooltool/rest/timetable.py:752
+#: src/schooltool/rest/timetable.py:289 src/schooltool/rest/timetable.py:751
 msgid "Timetable not valid XML"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:293 src/schooltool/rest/timetable.py:513
-#: src/schooltool/rest/timetable.py:750
+#: src/schooltool/rest/timetable.py:292 src/schooltool/rest/timetable.py:512
+#: src/schooltool/rest/timetable.py:749
 msgid "Timetable not valid according to schema"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:300
+#: src/schooltool/rest/timetable.py:299
 msgid "Time period not defined: %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:305
+#: src/schooltool/rest/timetable.py:304
 msgid "Timetable schema not defined: %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:310 src/schooltool/rest/timetable.py:811
+#: src/schooltool/rest/timetable.py:309 src/schooltool/rest/timetable.py:810
 msgid "Unknown day id: %r"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:315 src/schooltool/rest/timetable.py:392
-#: src/schooltool/rest/timetable.py:815
+#: src/schooltool/rest/timetable.py:314 src/schooltool/rest/timetable.py:391
+#: src/schooltool/rest/timetable.py:814
 msgid "Unknown period id: %r"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:343
+#: src/schooltool/rest/timetable.py:342
 msgid "Timetable of %s (%s) for %s, updated"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:369 src/schooltool/rest/timetable.py:768
-#: src/schooltool/rest/timetable.py:832
+#: src/schooltool/rest/timetable.py:368 src/schooltool/rest/timetable.py:767
+#: src/schooltool/rest/timetable.py:831
 msgid "Invalid path: %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:431
+#: src/schooltool/rest/timetable.py:430
 msgid "Timetable of %s (%s) for %s, deleted"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:435
+#: src/schooltool/rest/timetable.py:434
 msgid "Deleted timetable"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:458
+#: src/schooltool/rest/timetable.py:457
 msgid "Timetable schema: %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:501
+#: src/schooltool/rest/timetable.py:500
 msgid "Deleted timetable schema"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:529
+#: src/schooltool/rest/timetable.py:528
 msgid "Incorrect timetable model factory"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:540
+#: src/schooltool/rest/timetable.py:539
 msgid "Bad period"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:552
+#: src/schooltool/rest/timetable.py:551
 msgid "Unrecognised day of week %r"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:556
+#: src/schooltool/rest/timetable.py:555
 msgid "Duplicate days in schema"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:565
+#: src/schooltool/rest/timetable.py:564
 msgid "Duplicate periods in schema"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:568
+#: src/schooltool/rest/timetable.py:567
 msgid "Timetable schema %s updated"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:624
+#: src/schooltool/rest/timetable.py:623
 msgid "Timetables for %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:654
+#: src/schooltool/rest/timetable.py:653
 msgid "Composite timetables for %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:686
+#: src/schooltool/rest/timetable.py:685
 msgid "School timetables"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:79
+#: src/schooltool/rest/timetable.py:78
 msgid "Invalid date: %s"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:799
+#: src/schooltool/rest/timetable.py:798
 msgid "School timetable updated"
 msgstr ""
 
-#: src/schooltool/rest/timetable.py:823
+#: src/schooltool/rest/timetable.py:822
 msgid "Invalid group %s for teacher %s"
 msgstr "Invalid group %s for supervisor %s"
 
-#: src/schooltool/rest/timetable.py:98
+#: src/schooltool/rest/timetable.py:97
 msgid "Invalid time: %s"
 msgstr ""
 
@@ -3456,20 +3490,24 @@ msgid "Calendar_derived_from_timetables"
 msgstr ""
 
 #: src/schooltool/rest/www/timetable_html.pt:22
+#: src/schooltool/browser/www/timetable.pt:30
 msgid "Timetable exceptions"
 msgstr ""
 
 #: src/schooltool/rest/www/timetable_html.pt:28
+#: src/schooltool/browser/www/timetable.pt:43
 msgid "On ${date}, period ${period}, ${activity} is canceled."
 msgstr ""
 
 #: src/schooltool/rest/www/timetable_html.pt:40
+#: src/schooltool/browser/www/timetable.pt:56
 msgid ""
 "On ${date}, period ${period}, ${activity} is replaced with ${title} from "
 "${start} to ${end}."
 msgstr ""
 
 #: src/schooltool/rest/www/timetable_html.pt:55
+#: src/schooltool/browser/www/timetable.pt:72
 msgid ""
 "On ${date}, period ${period}, ${activity} is replaced with ${title} from "
 "${start} to ${end} on ${new_date}."
@@ -3507,39 +3545,39 @@ msgstr ""
 msgid "Teacher Group"
 msgstr "Supervisor Group"
 
-#: src/schooltool/uris.py:115
+#: src/schooltool/uris.py:114
 msgid "The membership relationship."
 msgstr ""
 
-#: src/schooltool/uris.py:120
+#: src/schooltool/uris.py:119
 msgid "A role of a containing group."
 msgstr ""
 
-#: src/schooltool/uris.py:124
+#: src/schooltool/uris.py:123
 msgid "Member"
 msgstr ""
 
-#: src/schooltool/uris.py:125
+#: src/schooltool/uris.py:124
 msgid "A group member role."
 msgstr ""
 
-#: src/schooltool/uris.py:130
+#: src/schooltool/uris.py:129
 msgid "The teaching relationship."
 msgstr "The supervision relationship."
 
-#: src/schooltool/uris.py:134
+#: src/schooltool/uris.py:133
 msgid "Teacher"
 msgstr "Supervisor"
 
-#: src/schooltool/uris.py:135
+#: src/schooltool/uris.py:134
 #, fuzzy
 msgid "A role of a teacher."
 msgstr "A role of a supervisor."
 
-#: src/schooltool/uris.py:139
+#: src/schooltool/uris.py:138
 msgid "Taught"
 msgstr "Supervised"
 
-#: src/schooltool/uris.py:140
+#: src/schooltool/uris.py:139
 msgid "A role of a group that has a teacher."
 msgstr "A role of a group that has a supervisor."
