@@ -250,38 +250,23 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
                             timedelta(minutes=10),
                             "English", recurrence=daily, unique_id="123")
-        ev1_1 = CalendarEvent(datetime(2004, 10, 11, 10, 0),
-                              timedelta(minutes=10),
-                              "English", unique_id="newid1")
-        ev1_2 = CalendarEvent(datetime(2004, 10, 12, 10, 0),
-                              timedelta(minutes=10),
-                              "English", unique_id="newid2")
         ev2 = CalendarEvent(datetime(2004, 10, 11, 11, 0),
                             timedelta(minutes=10),
                             "Coffee", unique_id="124")
         ev3 = CalendarEvent(datetime(2004, 10, 13, 11, 0),
                             timedelta(minutes=10),
-                            "Coffee 2", unique_id="124")
+                            "Coffee 2", unique_id="125")
         cal = self.makeCal([ev1, ev2, ev3])
         result = list(cal.expand(date(2004, 10, 11), date(2004, 10, 12)))
         result.sort()
 
-        # Ids of recurrences are not the same as the ids of the original
-        # and not None
-        self.assertNotEquals(result[0].unique_id, "123")
-        self.assertNotEquals(result[2].unique_id, "123")
-        self.assertNotEquals(result[0].unique_id, None)
-        self.assertNotEquals(result[2].unique_id, None)
-
-        result[0] = result[0].replace(unique_id="newid1")
-        result[2] = result[2].replace(unique_id="newid2")
+        # ev1 expands to [ev1_1, ev1_2]
+        ev1_1 = ev1.replace(dtstart=datetime(2004, 10, 11, 10, 0))
+        ev1_2 = ev1.replace(dtstart=datetime(2004, 10, 12, 10, 0))
         self.assertEqual(result, [ev1_1, ev2, ev1_2])
 
         for event in result:
             assert IExpandedCalendarEvent.providedBy(event)
-        # original is the id of the original recurring event
-        self.assertEqual(result[0].original, "123")
-        self.assertEqual(result[2].original, "123")
 
     def test_clear(self):
         from schooltool.cal import CalendarEvent
@@ -630,15 +615,6 @@ class TestExpandedCalendarEvent(TestCalendarEvent):
         eev = ExpandedCalendarEvent.duplicate(ev)
         self.assertEqual(ev, eev)
         assert IExpandedCalendarEvent.providedBy(eev)
-
-    def test_replace(self):
-        from schooltool.interfaces import IExpandedCalendarEvent
-        ev = self.createEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check", original="123")
-        ev2 = ev.replace()
-        verifyObject(IExpandedCalendarEvent, ev2)
-        self.assertEquals(ev2.original, "123")
 
 
 class TestACLCalendar(unittest.TestCase):

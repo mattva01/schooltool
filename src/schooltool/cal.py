@@ -166,16 +166,13 @@ class Calendar(Persistent):
     def expand(self, first, last):
         cal = Calendar()
         for event in self:
-            starttime = event.dtstart.time()
             if event.recurrence is not None:
+                starttime = event.dtstart.time()
                 for recdate in event.recurrence.apply(event, last):
                     if first <= recdate <= last:
                         start = datetime.datetime.combine(recdate, starttime)
-                        new = event.replace(dtstart=start, recurrence=None,
-                                            unique_id=None)
-                        expanded = ExpandedCalendarEvent.duplicate(
-                            new, event.unique_id)
-                        cal.addEvent(expanded)
+                        new = event.replace(dtstart=start)
+                        cal.addEvent(ExpandedCalendarEvent.duplicate(new))
             else:
                 event_start = event.dtstart.date()
                 event_end = (event.dtstart + event.duration).date()
@@ -271,7 +268,7 @@ class CalendarEvent(Persistent):
         title = kw.pop('title')
         return self.__class__(dtstart, duration, title, **kw)
 
-    def __tupleForComparison(self):
+    def _tupleForComparison(self):
         return (self.dtstart, self.title, self.duration, self.owner,
                 self.context, self.location, self.unique_id,
                 self.recurrence)
@@ -279,7 +276,7 @@ class CalendarEvent(Persistent):
     def __eq__(self, other):
         if not isinstance(other, CalendarEvent):
             return False
-        return self.__tupleForComparison() == other.__tupleForComparison()
+        return self._tupleForComparison() == other._tupleForComparison()
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -287,22 +284,22 @@ class CalendarEvent(Persistent):
     def __lt__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tupleForComparison() < other.__tupleForComparison()
+        return self._tupleForComparison() < other._tupleForComparison()
 
     def __le__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tupleForComparison() <= other.__tupleForComparison()
+        return self._tupleForComparison() <= other._tupleForComparison()
 
     def __gt__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tupleForComparison() > other.__tupleForComparison()
+        return self._tupleForComparison() > other._tupleForComparison()
 
     def __ge__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tupleForComparison() >= other.__tupleForComparison()
+        return self._tupleForComparison() >= other._tupleForComparison()
 
     def __hash__(self):
         # Technically speaking,
@@ -315,36 +312,27 @@ class CalendarEvent(Persistent):
         return ("%s%r"
                 % (self.__class__.__name__,
                    (self.dtstart, self.duration, self.title, self.owner,
-                    self.context, self.location, self.unique_id), ))
+                    self.context, self.location, self.unique_id,
+                    self.recurrence), ))
 
 
 class ExpandedCalendarEvent(CalendarEvent):
     """Event in an expanded calendar
 
-    Can be either a real event or a recurrence of some other event.
-    original is a unique_id of the original event or None.
+    Can be either a real event or a recurrence of some other event.  If it
+    is a recurrence, the dtstart attribute will be different from the original
+    event.
     """
 
     implements(IExpandedCalendarEvent)
 
-    def __init__(self, dtstart, duration, title, owner=None, context=None,
-                 location=None, unique_id=None, recurrence=None,
-                 original=None):
-        self.original = original
-        CalendarEvent.__init__(self, dtstart, duration, title, owner=owner,
-                               context=context, location=location,
-                               unique_id=unique_id, recurrence=recurrence)
-
-    def duplicate(cls, ev, original=None):
+    def duplicate(cls, ev):
         """Create an expanded event which is equal to the event passed."""
         return cls(ev.dtstart, ev.duration, ev.title, owner=ev.owner,
                    context=ev.context, location=ev.location,
-                   unique_id=ev.unique_id, recurrence=ev.recurrence,
-                   original=original)
+                   unique_id=ev.unique_id, recurrence=ev.recurrence)
 
     duplicate = classmethod(duplicate)
-
-    replace_kw = CalendarEvent.replace_kw + ('original', )
 
 
 class ACLCalendar(Calendar):

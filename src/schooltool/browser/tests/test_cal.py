@@ -646,7 +646,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
                            {'time': '11:00', 'cols': (None, None)},
                            {'time': '12:00', 'cols': (ev1, None)},
                            {'time': '13:00', 'cols': ('', ev2)},
-                           {'time': '14:00', 'cols': (ev3,'')},
+                           {'time': '14:00', 'cols': (ev3, '')},
                            {'time': '15:00', 'cols': ('', None)},])
 
         ev4 = createEvent('2004-08-11 14:00', '3d', "Visit")
@@ -668,7 +668,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
                            {'time': '11:00', 'cols': ('', None, None)},
                            {'time': '12:00', 'cols': ('', ev1, None)},
                            {'time': '13:00', 'cols': ('', '', ev2)},
-                           {'time': '14:00', 'cols': ('', ev3,'')},
+                           {'time': '14:00', 'cols': ('', ev3, '')},
                            {'time': '15:00', 'cols': ('', '', None)},
                            {'time': '16:00', 'cols': ('', None, None)},
                            {'time': '17:00', 'cols': ('', None, None)},
@@ -1424,23 +1424,21 @@ class TestCalendarComboMixin(unittest.TestCase):
 
         view = CalendarComboMixin(cal)
 
-        result = list(view.iterEvents(date(2004, 8, 12), date(2004,8,13)))
+        result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
         self.assertEquals(result, [])
 
         ev1 = createEvent('2004-08-12 12:00', '1h', 'ev1')
         ev2 = createEvent('2004-08-12 13:00', '1h', 'ev2')
         ev3 = createEvent('2004-01-01 9:00', '1h', 'coffee',
                           recurrence=DailyRecurrenceRule(), unique_id="42")
-        ev3_1 = createEvent('2004-08-12 9:00', '1h', 'coffee', unique_id="r1")
-        ev3_2 = createEvent('2004-08-13 9:00', '1h', 'coffee', unique_id="r2")
+        ev3_1 = ev3.replace(dtstart=datetime(2004, 8, 12, 9, 0))
+        ev3_2 = ev3.replace(dtstart=datetime(2004, 8, 13, 9, 0))
         cal.addEvent(ev1)
         cal.addEvent(ev3)
         tcal.addEvent(ev2)
 
-        result = list(view.iterEvents(date(2004, 8, 12), date(2004,8,13)))
+        result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
         result.sort()
-        result[0] = result[0].replace(unique_id="r1")
-        result[3] = result[3].replace(unique_id="r2")
         expected = [ev3_1, ev1, ev2, ev3_2]
         self.assertEquals(result, expected,
                           diff(pformat(result), pformat(expected)))

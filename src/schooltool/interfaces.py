@@ -1203,13 +1203,7 @@ class ICalendarEvent(Interface):
 
 
 class IExpandedCalendarEvent(ICalendarEvent):
-    """A calendar event that may be a recurrence of a recurrent event"""
-
-    original = Attribute(
-        """The unique_id of the original event if this event is a recurrence.
-
-        None if this event is not a recurrence of another event.
-        """)
+    """A calendar event that may be a recurrence of a recurrent event."""
 
 
 class ICalendarOwner(Interface):
