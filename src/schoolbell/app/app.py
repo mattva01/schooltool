@@ -33,7 +33,7 @@ from zope.app.container.contained import Contained
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
 from zope.app.annotation.interfaces import IAttributeAnnotatable
-from zope.app.site.servicecontainer import ServiceManagerContainer
+from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
 
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -46,7 +46,7 @@ from schoolbell.relationship import RelationshipProperty
 
 
 class SchoolBellApplication(Persistent, SampleContainer,
-                            ServiceManagerContainer):
+                            SiteManagerContainer):
     """The main application object.
 
     This object can be added as a regular content object to a folder,

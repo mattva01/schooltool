@@ -122,9 +122,9 @@ def doctest_CalendarTraverser():
     The traverser is smart enough to parse date-like URLs.  It will choose
     the right view and add the 'date' argument to the request.
 
-        >>> def queryViewStub(context, name, request):
+        >>> def queryMultiStub((context, request), name):
         ...     print name
-        >>> traverser.queryView = queryViewStub
+        >>> traverser.queryMultiAdapter = queryMultiStub
 
         >>> view = traverser.publishTraverse(request, '2003')
         yearly.html

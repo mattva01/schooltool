@@ -33,7 +33,7 @@ from zope.app.component import getNextUtility
 from zope.app.session.interfaces import ISession
 from zope.app.component.interfaces import ISite
 from zope.app.component.site import LocalSiteManager
-from zope.app.utility.utility import LocalUtilityService, UtilityRegistration
+from zope.app.component.site import UtilityRegistration
 from zope.component.servicenames import Utilities
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.component.interfaces.registration import ActiveStatus
@@ -161,7 +161,7 @@ def setUpLocalAuth(site, auth=None):
         #directlyProvides(site, provided + ISite)
 
     default = zapi.traverse(site, '++etc++site/default')
-    reg_manager = default.getRegistrationManager()
+    reg_manager = default.registrationManager
 
     if 'SchoolBellAuth' not in default:
         # Add and register the auth utility

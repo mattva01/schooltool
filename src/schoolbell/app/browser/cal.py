@@ -27,7 +27,7 @@ import urllib
 
 from zope.interface import implements, Interface
 from zope.schema import Date, TextLine, Choice, Int, Bool, Set, Text
-from zope.component import queryView, adapts
+from zope.component import queryView, queryMultiAdapter, adapts
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.publisher.browser import BrowserView
@@ -65,7 +65,7 @@ class CalendarOwnerTraverser(object):
         if name == 'calendar':
             return self.context.calendar
 
-        view = queryView(self.context, name, request)
+        view = queryMultiAdapter((self.context, request), name=name)
         if view is not None:
             return view
 
@@ -81,7 +81,7 @@ class CalendarTraverser(object):
     adapts(ICalendarOwner)
     implements(IBrowserPublisher)
 
-    queryView = queryView
+    queryMultiAdapter = queryMultiAdapter
 
     def __init__(self, context, request):
         self.context = context
@@ -93,9 +93,10 @@ class CalendarTraverser(object):
     def publishTraverse(self, request, name):
         view_name = self.getViewByDate(request, name)
         if view_name:
-            return self.queryView(self.context, view_name, request)
+            return self.queryMultiAdapter((self.context, request),
+                                          name=view_name)
 
-        view = queryView(self.context, name, request)
+        view = queryMultiAdapter((self.context, request), name=name)
         if view is not None:
             return view
 
