@@ -19,12 +19,24 @@
          i18n:translate="">View calendar</a>
     </div>
     <div class="groups">
-      <h3 i18n:translate="">Groups</h3>
-      <p tal:repeat="group view/getParentGroups">
-       <a tal:attributes="href group/@@absolute_url"
-          tal:content="group/title"/>
-      </p>
+      <!-- XXX The double frame looks ugly -->
+      <form method="POST" tal:attributes="action request/path">
+        <h3 i18n:translate="">Groups</h3>
+
+        <p>Merge calendars:</p>
+        <p tal:repeat="group view/getParentGroups">
+          <input type="checkbox"
+                 tal:attributes="name string:group.${group/__name__};
+                                 checked python:view.checked(group)" />
+          <a tal:attributes="href group/@@absolute_url"
+             tal:content="group/title"></a>
+        </p>
+
+        <input type="submit" name="SUBMIT" i18n:attributes="value"
+               value="Update" />
+      </form>
     </div>
+
     <div class="timetables"
          tal:define="timetables python:view.timetables(view.isManager())"
          tal:condition="timetables">

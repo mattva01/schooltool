@@ -145,6 +145,21 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
 
     canViewCalendar = canChangePassword
 
+    def do_POST(self, request):
+        if 'SUBMIT' in request.args:
+            groups = []
+            for group in self.getParentGroups():
+                if ('group.' + group.__name__) in request.args:
+                    groups.append(group)
+            self.context.composite_cal_groups = groups
+        return self.do_GET(request)
+
+    def checked(self, group):
+        if group in self.context.composite_cal_groups:
+            return "checked"
+        else:
+            return None
+
 
 class PersonPasswordView(View, AppObjectBreadcrumbsMixin):
     """Page for changing a person's password (/persons/id/password.html)."""

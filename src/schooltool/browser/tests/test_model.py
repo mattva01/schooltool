@@ -26,6 +26,7 @@ import unittest
 import datetime
 from logging import INFO
 
+from schooltool.browser.tests import HTMLDocument
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
@@ -182,6 +183,30 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                            {'title': '2004-spring, default',
                             'url': '%s/timetables/2004-spring/default' % pp,
                             'empty': False}])
+
+    def test_POST(self):
+        from schooltool.model import Group
+        from schooltool.browser.model import PersonView
+        from schooltool.timetable import Timetable
+        view = PersonView(self.person)
+        groups = [self.teachers, self.managers, self.pupils]
+        view.getParentGroups = lambda: groups
+        request = RequestStub(method='POST', args={'group.teachers': '',
+                                                   'group.managers': '',
+                                                   'SUBMIT': ''},
+                              authenticated_user=self.manager)
+        result = view.render(request)
+
+        doc = HTMLDocument(result)
+        ch = doc.query('//input[@name="group.teachers"'
+                       ' and @checked="checked"]')
+        self.assert_(ch)
+        ch = doc.query('//input[@name="group.managers"'
+                       ' and @checked="checked"]')
+        self.assert_(ch)
+        ch = doc.query('//input[@name="group.pupils"'
+                       ' and @checked="checked"]')
+        self.assert_(not ch)
 
 
 class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
