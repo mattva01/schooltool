@@ -88,7 +88,7 @@ class CSVImporterZODB(CSVImporterBase):
     def importGroup(self, name, title, parents, facets):
         group = self.groups.new(__name__=name, title=title)
         for parent in parents.split():
-            other = traverse(self.groups, parent) # XXX exceptions
+            other = self.groups[parent]
             Membership(group=other, member=group)
         for facet_name in facets.split():
             factory = getFacetFactory(facet_name)

@@ -114,13 +114,13 @@ class RootView(View):
             return StaticFile('www/logo.png', 'image/png')
         elif name == 'logout':
             return LogoutView(self.context)
-        elif name == 'reset':
+        elif name == 'reset_db.html':
             return DatabaseResetView(self.context)
         elif name == 'start':
             return StartView(request.authenticated_user)
         elif name == 'applog':
             return ApplicationLogView(self.context)
-        elif name == 'csvimport':
+        elif name == 'csvimport.html':
             return CSVImportView(self.context)
         elif name == 'busysearch':
             return BusySearchView(self.context)

@@ -30,9 +30,9 @@
           i18n:translate="">Manage timetable schemas</a></p>
     <p><a class="action" href="/time-periods"
           i18n:translate="">Manage time periods</a></p>
-    <p><a class="action" href="/csvimport"
+    <p><a class="action" href="/csvimport.html"
           i18n:translate="">Import CSV data</a></p>
-    <p><a class="action" href="/resetdb"
+    <p><a class="action" href="/reset_db.html"
           i18n:translate="">Reset the database</a></p>
   </div>
 
