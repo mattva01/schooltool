@@ -353,17 +353,8 @@ def format_exception(etype, value, tb, limit=None, basedir=None):
         list = ['Traceback (most recent call last):\n']
         w = list.append
 
-        def fn(filename):
-            """Shorten the file name if necessary."""
-            # Previously this function used to do this:
-            #   if basedir and filename.startswith(basedir):
-            #       filename = filename[len(basedir)+1:]
-            # it turned out to be a bad idea -- relative paths are hard to copy
-            # and paste.
-            return filename
-
         for filename, lineno, name, locals in extract_tb(tb, limit):
-            w('  File "%s", line %s, in %s\n' % (fn(filename), lineno, name))
+            w('  File "%s", line %s, in %s\n' % (filename, lineno, name))
             line = linecache.getline(filename, lineno)
             if line:
                 w('    %s\n' % line.strip())
@@ -380,10 +371,10 @@ def format_exception(etype, value, tb, limit=None, basedir=None):
                 if isinstance(tb_supplement, PageTemplateTracebackSupplement):
                     template = tb_supplement.manageable_object.pt_source_file()
                     if template:
-                        w('  Template "%s"\n' % fn(template))
+                        w('  Template "%s"\n' % template)
                 elif isinstance(tb_supplement, TALESTracebackSupplement):
                     w('  Template "%s", line %s, column %s\n'
-                      % (fn(tb_supplement.source_url), tb_supplement.line,
+                      % (tb_supplement.source_url, tb_supplement.line,
                          tb_supplement.column))
                     line = linecache.getline(tb_supplement.source_url,
                                              tb_supplement.line)
