@@ -510,6 +510,15 @@ class Request(http.Request):
         rsc = self.site.viewFactory(app)
         return resource.getChildForRequest(rsc, self)
 
+    def setHeader(self, header, value):
+        """Set an HTTP response header.
+
+        Header names and values must be convertible to 7-bit ASCII strings.
+        """
+        assert isinstance(header, str), "header name must be a string"
+        assert isinstance(value, (str, int)), "header value must be a string"
+        http.Request.setHeader(self, header, value)
+
     def render(self, resrc):
         """Render a resource.
 
