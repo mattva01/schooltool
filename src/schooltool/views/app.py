@@ -171,7 +171,7 @@ class AvailabilityQueryView(View):
             self.duration = datetime.timedelta(minutes=minutes)
             arg = 'hours'
             if 'hours' not in request.args:
-                self.hours = range(24)
+                self.hours = [(datetime.time(0), datetime.timedelta(hours=24))]
             else:
                 self.hours = self.parseHours(request.args['hours'])
         except ValueError:

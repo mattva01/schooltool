@@ -312,6 +312,17 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
                           [self.room1, self.room2])
         self.assertEqualsXML(result, expected)
 
+    def test_no_hours(self):
+        from datetime import date, time, timedelta
+        request = RequestStub('/availability', method="GET")
+        request.args.update({'first': ['2004-01-02'],
+                             'last': ['2004-01-03'],
+                             'duration': ['22'],
+                             'resources': ['/resources/room1',
+                                           '/resources/room2',]})
+        result = self.view.render(request)
+        self.assertEquals(self.view.hours, [(time(0, 0), timedelta(hours=24))])
+
     def testResourceArg(self):
         request = RequestStub('/availability', method="GET")
         request.args.update({'first': ['2004-01-02'],
