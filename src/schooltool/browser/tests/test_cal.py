@@ -75,7 +75,7 @@ class TestBookingView(unittest.TestCase):
         self.assert_('2004-08-10 19:01:00' not in content)
         self.assert_('19:01:00' not in content)
         self.assert_('2004-08-10' in content)
-        self.assert_('19:01' not in content)
+        self.assert_('19:01' in content)
         self.assert_('61' in content)
 
     def test_owner(self):

@@ -57,7 +57,7 @@ class BookingView(View):
                 start = to_unicode(request.args['start'][0])
                 parts = start.split(' ')
                 self.start_date = parts[0]
-                self.start_time = parts[1].split(':')[:2]
+                self.start_time = ":".join(parts[1].split(':')[:2])
             if 'mins' in request.args:
                 self.duration = to_unicode(request.args['mins'][0])
             return
