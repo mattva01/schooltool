@@ -28,7 +28,7 @@ import datetime
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.clients.csvclient import CSVImporterBase, DataError
-from schooltool.component import traverse, FacetManager
+from schooltool.component import traverse, FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
 from schooltool.translation import ugettext as _
@@ -81,7 +81,10 @@ class CSVImporterZODB(CSVImporterBase):
         for parent in parents.split():
             other = traverse(self.groups, parent) # XXX TODO exceptions
             Membership(group=other, member=group)
-            # TODO: facets
+        for facet_name in facets.split():
+            factory = getFacetFactory(facet_name)
+            facet = factory() # XXX exceptions
+            FacetManager(group).setFacet(facet, name=factory.facet_name)
         return group.__name__
 
     def importPerson(self, title, parent, groups, teaching=False):

@@ -41,6 +41,10 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         #     if the groups already exist.
         del self.app['groups']['teachers']
 
+        # Register the teacher_group facet.
+        import schooltool.teaching
+        schooltool.teaching.setUp()
+
         self.view = CSVImportView(self.app)
         self.view.authorization = lambda x, y: True
 
@@ -60,16 +64,21 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.applog, [])
 
     def test_POST_empty_groups(self):
+        from schooltool.component import FacetManager
+        from schooltool.teaching import TeacherGroupFacet
         request = RequestStub(args={'groups.csv': ''})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
         # The empty import should have created basic groups.
         self.assert_('teachers' in self.app['groups'].keys())
+        teachers = self.app['groups']['teachers']
+        facet = FacetManager(teachers).facetByName('001') # XXX Why 001?
+        self.assert_(isinstance(facet, TeacherGroupFacet))
         self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
 
     def test_POST_groups(self):
-        request = RequestStub(args={'groups.csv': '"year1","Year 1","root",'})
+        request = RequestStub(args={'groups.csv':'"year1","Year 1","root",""'})
         content = self.view.do_POST(request)
         self.assert_('Data imported successfully' in content)
 
