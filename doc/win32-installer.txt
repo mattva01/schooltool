@@ -1,11 +1,6 @@
 Creating a user-friendly Windows installer of SchoolTool clients
 ================================================================
 
-TODO: add sampleschool-import to the suite.
-TODO: add usage instructions.
-TODO: create a script to dynamically generate clients.nsi so that no files
-      would be accidentally lost.
-
 First, make sure that py2exe[1] and Nullsoft Scriptable Install System[2] are
 installed.
 
@@ -13,7 +8,7 @@ installed.
 [2] http://nsis.sourceforge.net/
 
 Set up a working installation of SchoolTool (you will need to compile the
-extension modules as described in building-with-mingw.txt.  The NSIS script
+extension modules as described in building-with-mingw.txt).  The NSIS script
 later assumes that SchoolTool is installed in C:\schooltool, so you might as
 well start with this location.  You may want to run the tests to make sure that
 everything is okay.
@@ -21,91 +16,69 @@ everything is okay.
 Next, apply *this* file (it has a diff section at the end) as a patch in the
 main SchoolTool directory.  (You can use 'patch' from cygwin or apply the patch
 elsewhere (on a Linux system) and copy the updated files manually.)  Several
-changes will be made to the client source and setup.py, and a NSIS script file,
-'clients.nsi', will be created.
+changes will be made to the client source and setup.py, and a script that
+creates the final executable, 'build-win32-dist.py', will be created.
 
-We want the final executable to have a nice icon, so you need to convert
-src/schooltool/clients/schooltool.xpm to the Windows *.ico format and put it
-at the main schooltool directory as schooltool.ico.
+Next, take a look at build-win32-dist.py and see if anything needs to be
+changed. Then just run build-win32-dist.py. If all went fine, you should have a
+Setup.exe ready in a minute.
 
-Run `setup.py py2exe` to create a suite of files in the 'dist' directory that
-can be used to run the clients and has no external dependencies.  (The warning
-about the missing module 'dl' can be ignored; the module 'curses' is referenced
-by the commandline client, but it is not essential and the warning about it can
-be ignored as well.)  It won't hurt to try and run the new executables to see
-if they work correctly.
-
-Now we will use NSIS to create a neat installer.
-
-The NSIS script should have appeared as 'clients.nsi' after applying the patch.
-As was previously mentioned, the script assumes that SchoolTool resides in
-C:\schooltool, so you will have to modify it if the location is different. You
-might want to have a look at the script anyway, to see if version numbers or
-dates need to be changed, or files need to be added. The script can be easily
-recreated by using the wizard in HM NIS Edit [3]
+The NSIS template was created by using the wizard in HM NIS Edit [3], and
+it can be used again should the need arise.
 
 [3] http://hmne.sourceforge.net/
 
-Then, just use the MakeNSISW utility to create the setup executable and you're
-done! You will probably want to test the installer before making it public.
+You will probably want to test the installer before making it public.
 
 XXX Currently we don't deal with translations.  After they are available, it
     would make sense to include the .mo files in the package as well.
 
 --- diff section follows ---
 
-Index: src/schooltool/clients/wxclient.py
+Index: build-win32-dist.py
 ===================================================================
---- src/schooltool/clients/wxclient.py  (revision 897)
-+++ src/schooltool/clients/wxclient.py  (working copy)
-@@ -54,6 +54,9 @@
-
- __metaclass__ = type
-
-+# __file__ is not defined in py2exe archives
+--- build-win32-dist.py	(revision 0)
++++ build-win32-dist.py	(revision 0)
+@@ -0,0 +1,165 @@
++#!/bin/env python
++
 +import sys
-+__file__ = sys.argv[0]
-
- #
- # Common sets of window style flags
-Index: setup.py
-===================================================================
---- setup.py    (revision 897)
-+++ setup.py    (working copy)
-@@ -65,6 +65,7 @@
- #
-
- from distutils.core import setup, Extension
-+import py2exe
-
- # Set up dependencies for the BTrees package
- base_btrees_depends = [
-@@ -135,6 +136,13 @@
- ]
-
- setup(name="schooltool",
--      version="0.0.1pre",
-+      version="0.0.1", # XXX py2exe does not like non-integer versions
-       package_dir={'': 'src'},
--      ext_modules=ext_modules)
-+      ext_modules=ext_modules,
-+      console=["src/schooltool/clients/client.py"],
-+      windows=[{script="src/schooltool/clients/wxclient.py",
-+                icon_resources=[(0, 'schooltool.ico')]}],
-+      data_files=[('.', ["src/schooltool/clients/nophoto.png",
-+                         "src/schooltool/clients/schooltool.xpm"])],
-+      options = {"py2exe": {"packages": ["encodings"]}},
-+     )
-Index: clients.nsi
-===================================================================
---- clients.nsi (revision 0)
-+++ clients.nsi (revision 0)
-@@ -0,0 +1,153 @@
++import os
++import shutil
++
++VERSION = "Milestone 5"
++
++def die(msg):
++    print >> sys.stderr, msg
++    sys.exit(1)
++
++basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
++distdir = os.path.join(basedir, 'dist')
++nsiscript = 'clients.nsi'
++makensis = 'C:\Progra~1\Nsis\makensis.exe'
++
++os.environ['PYTHONPATH'] = os.path.join(basedir, 'src') # needed for py2exe
++
++# Remove the old binaries
++try:
++    shutil.rmtree(distdir)
++except OSError:
++    pass
++
++# Create the binaries
++retval = os.system('setup.py py2exe')
++if retval:
++    die('`setup.py py2exe` returned %d.' % retval)
++elif not os.path.exists(distdir):
++    die('%s has not been created by py2exe.' % distdir)
++
++# Create the NSI script
++NSI_TEMPLATE = """\
 +; Script generated by the HM NIS Edit Script Wizard.
 +
 +; HM NIS Edit Wizard helper defines
-+!define PRODUCT_NAME "SchoolTool"
-+!define PRODUCT_VERSION "m5"
++!define PRODUCT_NAME "SchoolTool Client"
++!define PRODUCT_VERSION "%s"
 +!define PRODUCT_PUBLISHER "Shuttleworth Foundation"
 +!define PRODUCT_WEB_SITE "http://www.schooltool.org"
 +!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\wxclient.exe"
@@ -155,34 +128,13 @@ Index: clients.nsi
 +Section "MainSection" SEC01
 +  SetOutPath "$INSTDIR"
 +  SetOverwrite ifnewer
-+  File "C:\schooltool\dist\wxmsw24uh.dll"
-+  File "C:\schooltool\dist\wxclient.exe"
 +  CreateDirectory "$SMPROGRAMS\SchoolTool"
 +  CreateShortCut "$SMPROGRAMS\SchoolTool\SchoolTool.lnk" "$INSTDIR\wxclient.exe"
++  CreateShortCut "$SMPROGRAMS\SchoolTool\Import Sample School.lnk" "$INSTDIR\import-sampleschool.exe" "--interactive" "$INSTDIR\schooltool.ico"
 +  CreateShortCut "$DESKTOP\SchoolTool.lnk" "$INSTDIR\wxclient.exe"
-+  File "C:\schooltool\dist\wxc.pyd"
-+  File "C:\schooltool\dist\w9xpopen.exe"
-+  File "C:\schooltool\dist\schooltool.xpm"
-+  File "C:\schooltool\dist\python23.dll"
-+  File "C:\schooltool\dist\pyexpat.pyd"
-+  File "C:\schooltool\dist\nophoto.png"
-+  File "C:\schooltool\dist\libxsltmod.pyd"
-+  File "C:\schooltool\dist\libxslt.dll"
-+  File "C:\schooltool\dist\libxml2mod.pyd"
-+  File "C:\schooltool\dist\libxml2.dll"
-+  File "C:\schooltool\dist\library.zip"
-+  File "C:\schooltool\dist\libexslt.dll"
-+  File "C:\schooltool\dist\iconv.dll"
-+  File "C:\schooltool\dist\htmlc.pyd"
-+  File "C:\schooltool\dist\gridc.pyd"
-+  File "C:\schooltool\dist\datetime.pyd"
-+  File "C:\schooltool\dist\client.exe"
-+  File "C:\schooltool\dist\calendarc.pyd"
-+  File "C:\schooltool\dist\_zope_interface_coptimizations.pyd"
-+  File "C:\schooltool\dist\_winreg.pyd"
-+  File "C:\schooltool\dist\_ssl.pyd"
-+  File "C:\schooltool\dist\_sre.pyd"
-+  File "C:\schooltool\dist\_socket.pyd"
++
++%s
++
 +SectionEnd
 +
 +Section -AdditionalIcons
@@ -215,37 +167,14 @@ Index: clients.nsi
 +
 +Section Uninstall
 +  Delete "$INSTDIR\${PRODUCT_NAME}.url"
-+  Delete "$INSTDIR\uninst.exe"
-+  Delete "$INSTDIR\_socket.pyd"
-+  Delete "$INSTDIR\_sre.pyd"
-+  Delete "$INSTDIR\_ssl.pyd"
-+  Delete "$INSTDIR\_winreg.pyd"
-+  Delete "$INSTDIR\_zope_interface_coptimizations.pyd"
-+  Delete "$INSTDIR\calendarc.pyd"
-+  Delete "$INSTDIR\client.exe"
-+  Delete "$INSTDIR\datetime.pyd"
-+  Delete "$INSTDIR\gridc.pyd"
-+  Delete "$INSTDIR\htmlc.pyd"
-+  Delete "$INSTDIR\iconv.dll"
-+  Delete "$INSTDIR\libexslt.dll"
-+  Delete "$INSTDIR\library.zip"
-+  Delete "$INSTDIR\libxml2.dll"
-+  Delete "$INSTDIR\libxml2mod.pyd"
-+  Delete "$INSTDIR\libxslt.dll"
-+  Delete "$INSTDIR\libxsltmod.pyd"
-+  Delete "$INSTDIR\nophoto.png"
-+  Delete "$INSTDIR\pyexpat.pyd"
-+  Delete "$INSTDIR\python23.dll"
-+  Delete "$INSTDIR\schooltool.xpm"
-+  Delete "$INSTDIR\w9xpopen.exe"
-+  Delete "$INSTDIR\wxc.pyd"
-+  Delete "$INSTDIR\wxclient.exe"
-+  Delete "$INSTDIR\wxmsw24uh.dll"
++
++%s
 +
 +  Delete "$SMPROGRAMS\SchoolTool\Uninstall.lnk"
 +  Delete "$SMPROGRAMS\SchoolTool\Website.lnk"
 +  Delete "$DESKTOP\SchoolTool.lnk"
 +  Delete "$SMPROGRAMS\SchoolTool\SchoolTool.lnk"
++  Delete "$SMPROGRAMS\SchoolTool\Import Sample School.lnk"
 +
 +  RMDir "$SMPROGRAMS\SchoolTool"
 +  RMDir "$INSTDIR"
@@ -254,4 +183,72 @@ Index: clients.nsi
 +  DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
 +  SetAutoClose true
 +SectionEnd
-
++""" # % (version, install_files, delete_files)
++
++files = os.listdir(distdir)
++install_files = "".join(
++        ['  File "%s"\n' % os.path.join(distdir, f) for f in files])
++delete_files = "".join(['  Delete "$INSTDIR\%s"\n' % f for f in files])
++
++f = open(nsiscript, 'w')
++f.seek(0)
++f.truncate()
++f.write(NSI_TEMPLATE % (VERSION, install_files, delete_files))
++f.close()
++
++# Invoke NSIS to create Setup.exe
++retval = os.system('"%s" /V4 %s' % (makensis, nsiscript))
++if retval:
++    die('makensis returned %d' % retval)
++
++if not os.path.exists('Setup.exe'):
++    die('Setup.exe not created.')
++
++print "You're done!"
+Index: src/schooltool/clients/wxclient.py
+===================================================================
+--- src/schooltool/clients/wxclient.py	(revision 920)
++++ src/schooltool/clients/wxclient.py	(working copy)
+@@ -54,6 +54,9 @@
+ 
+ __metaclass__ = type
+ 
++# __file__ is not defined in py2exe archives
++import sys
++__file__ = sys.argv[0]
+ 
+ #
+ # Common sets of window style flags
+Index: setup.py
+===================================================================
+--- setup.py	(revision 920)
++++ setup.py	(working copy)
+@@ -65,6 +65,7 @@
+ #
+ 
+ from distutils.core import setup, Extension
++import py2exe
+ 
+ # Set up dependencies for the BTrees package
+ base_btrees_depends = [
+@@ -135,6 +136,18 @@
+ ]
+ 
+ setup(name="schooltool",
+-      version="0.0.1pre",
++      version="0.0.1", # XXX py2exe does not like non-integer versions
+       package_dir={'': 'src'},
+-      ext_modules=ext_modules)
++      ext_modules=ext_modules,
++      console=["src/schooltool/clients/client.py",
++               "import-sampleschool.py"],
++      windows=[{'script': "src/schooltool/clients/wxclient.py",
++                'icon_resources': [(0,'src/schooltool/clients/schooltool.ico')]
++               }],
++      data_files=[('.', ["src/schooltool/clients/nophoto.png",
++                         "src/schooltool/clients/schooltool.xpm",
++                         "src/schooltool/clients/schooltool.ico",
++                         "groups.csv", "pupils.csv", "teachers.csv",
++                         "resources.csv", "ttconfig.data"])],
++      options = {"py2exe": {"packages": ["encodings"]}},
++     )
