@@ -7,7 +7,7 @@
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
 TESTFLAGS=-w
-PO=$(shell find src/schooltool/translation/ -name '*.po')
+PO=$(wildcard src/schooltool/translation/*/LC_MESSAGES/*.po)
 MO=$(PO:.po=.mo)
 
 
