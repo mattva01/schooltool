@@ -1,0 +1,6 @@
+schooltool-debian/schooltool.substvars
+schooltool-debian/schooltool.postinst.debhelper
+schooltool-debian/import-sampleschool
+schooltool-debian/schooltool.postrm.debhelper
+schooltool-debian/schooltool.prerm.debhelper
+schooltool-debian/files

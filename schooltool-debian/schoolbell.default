@@ -1,0 +1,6 @@
+# This is a configuration file for /etc/init.d/schoolbell.
+
+# Comment out the line below or change the value to something else than "yes"
+# if you don't want to start the schoolbell server on system startup. The
+# init script will effectively be disabled.
+SCHOOLBELL_ENABLE="yes"
