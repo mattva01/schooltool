@@ -162,6 +162,18 @@ The daily calendar view works too:
     HTTP/1.1 200 Ok
     ...
 
+The atom view should be here
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/atom.xml HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <feed xmlns="http://purl.org/atom/ns#"
+    ...
+    </feed>
+
 The daily view should be the default:
 
     >>> print http(r"""
