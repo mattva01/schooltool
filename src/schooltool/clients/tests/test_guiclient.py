@@ -30,6 +30,8 @@ from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
+from schooltool.uris import URIMembership, URIGroup, getURI
+from schooltool.uris import URITeaching, URITaught, URITeacher
 
 __metaclass__ = type
 
@@ -498,11 +500,15 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
 
     def test_getObjectRelationships(self):
         from schooltool.clients.guiclient import RelationshipInfo
+        from schooltool.clients.guiclient import stubURI
+        arcrole1 = stubURI("test://arcrole1")
+        role1 = stubURI("test://role1")
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="title1" xlink:href="href1"
-                              xlink:role="role1" xlink:arcrole="arcrole1">
+                              xlink:role="test://role1"
+                              xlink:arcrole="test://arcrole1">
                     <manage xlink:href="mhref1"/>
                 </relationship>
                 <relationship xlink:title="title2" xlink:href="href2"
@@ -513,13 +519,14 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
               </existing>
               <valencies>
                 <relationship xlink:title="title3" xlink:href="href3"
-                              xlink:role="role3" xlink:arcrole="arcrole3" />
+                              xlink:role="test://role3"
+                              xlink:arcrole="test://arcrole3" />
               </valencies>
             </relationships>
         """)
         expected = [RelationshipInfo(*args) for args in [
-                ('arcrole1', 'role1', 'title1', 'href1', 'mhref1'),
-                ('Membership', 'Group', 'title2', 'href2', 'mhref2'),
+                (arcrole1, role1, 'title1', 'href1', 'mhref1'),
+                (URIMembership, URIGroup, 'title2', 'href2', 'mhref2'),
             ]]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
@@ -1128,11 +1135,15 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
     def test__parseRelationships(self):
         from schooltool.clients.guiclient import _parseRelationships
         from schooltool.clients.guiclient import RelationshipInfo
+        from schooltool.clients.guiclient import stubURI
+        role1 = stubURI('test://role1')
+        arcrole1 = stubURI('test://arcrole1')
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="title1" xlink:href="href1"
-                              xlink:role="role1" xlink:arcrole="arcrole1">
+                              xlink:role="test://role1"
+                              xlink:arcrole="test://arcrole1">
                     <manage xlink:href="mhref1"/>
                 </relationship>
                 <relationship xlink:title="title2" xlink:href="href2"
@@ -1141,48 +1152,65 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                     <manage xlink:href="mhref2"/>
                 </relationship>
                 <relationship                       xlink:href="/objects/href3"
-                              xlink:role="role3"    xlink:arcrole="arcrole3">
+                              xlink:role="test://role3"
+                              xlink:arcrole="test://arcrole3">
                     <manage xlink:href="mhref3"/>
                 </relationship>
                 <!-- the rest are ignored for because of missing/empty
                      attributes -->
                 <relationship xlink:title="title4"
-                              xlink:role="role4"    xlink:arcrole="arcrole4">
+                              xlink:role="test://role4"
+                              xlink:arcrole="test://arcrole4">
                     <manage xlink:href="mhref3"/>
                 </relationship>
                 <relationship                       xlink:href=""
-                              xlink:role="role4b"   xlink:arcrole="arcrole4b">
+                              xlink:role="test://role4b"
+                              xlink:arcrole="test://arcrole4b">
                     <manage xlink:href="mhref3"/>
                 </relationship>
                 <relationship xlink:title="title5"  xlink:href="href5"
-                                                    xlink:arcrole="arcrole5">
+                              xlink:arcrole="test://arcrole5">
                     <manage xlink:href="mhref3"/>
                 </relationship>
                 <relationship xlink:title="title5b" xlink:href="href5b"
-                              xlink:role=""         xlink:arcrole="arcrole5b">
+                              xlink:role=""
+                              xlink:arcrole="test://arcrole5b">
                     <manage xlink:href="mhref3"/>
                 </relationship>
                 <relationship xlink:title="title6"  xlink:href="href6"
-                              xlink:role="role6">
+                              xlink:role="test://role6">
                     <manage xlink:href="mhref3"/>
                 </relationship>
                 <relationship xlink:title="title6b" xlink:href="href6b"
-                              xlink:role="role6b"   xlink:arcrole="">
+                              xlink:role="test://role6b" xlink:arcrole="">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
+                <relationship xlink:title="title7b" xlink:href="href7b"
+                              xlink:role="not-a-uri"
+                              xlink:arcrole="test://arcrole7">
+                    <manage xlink:href="mhref3"/>
+                </relationship>
+                <relationship xlink:title="title8b" xlink:href="href8b"
+                              xlink:role="test://role7"
+                              xlink:arcrole="not a uri">
                     <manage xlink:href="mhref3"/>
                 </relationship>
               </existing>
               <valencies>
                 <relationship xlink:title="title0" xlink:href="href0"
-                              xlink:role="role0" xlink:arcrole="arcrole0" />
+                              xlink:role="test://role0"
+                              xlink:arcrole="test://arcrole0" />
               </valencies>
             </relationships>
         """)
-        expected = [RelationshipInfo(*args) for args in [
-                ('arcrole1', 'role1', 'title1', 'href1', 'mhref1'),
-                ('Membership', 'Group', 'title2', 'href2', 'mhref2'),
-                ('arcrole3', 'role3', 'href3', '/objects/href3', 'mhref3')
-            ]]
         result = _parseRelationships(body)
+        role3 = getURI('test://role3')
+        arcrole3 = getURI('test://arcrole3')
+        expected = [RelationshipInfo(*args) for args in [
+                (arcrole1, role1, 'title1', 'href1', 'mhref1'),
+                (URIMembership, URIGroup, 'title2', 'href2', 'mhref2'),
+                (arcrole3, role3, 'href3', '/objects/href3', 'mhref3'),
+            ]]
         self.assertEquals(list(result), expected)
 
     def test__parseRelationships_errors(self):
@@ -1191,11 +1219,13 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         body = "<This is not XML"
         self.assertRaises(SchoolToolError, _parseRelationships, body)
 
+        # Two manage elements
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="title1" xlink:href="href1"
-                              xlink:role="role1" xlink:arcrole="arcrole1">
+                              xlink:role="test://role1"
+                              xlink:arcrole="test://arcrole1">
                     <manage xlink:href="mhref1"/>
                     <manage xlink:href="mhref2"/>
                 </relationship>
@@ -1204,11 +1234,13 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         """)
         self.assertRaises(SchoolToolError, _parseRelationships, body)
 
+        # No manage elements
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="title1" xlink:href="href1"
-                              xlink:role="role1" xlink:arcrole="arcrole1" />
+                              xlink:role="test://role1"
+                              xlink:arcrole="test://arcrole1" />
               </existing>
             </relationships>
         """)
@@ -2002,11 +2034,11 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
         st = SchoolTimetableInfo([('/path1', None, None),
                                   ('/path2', None, None)])
         st.setTeacherRelationships(0, [
-                RelationshipInfo('Teaching', 'Taught', 'Maths',
+                RelationshipInfo(URITeaching, URITaught, 'Maths',
                                  '/groups/maths', None),
-                RelationshipInfo('Teaching', 'Teacher', 'Foo',
+                RelationshipInfo(URITeaching, URITeacher, 'Foo',
                                  '/groups/foo', None),
-                RelationshipInfo('Membership', 'Taught', 'Bar',
+                RelationshipInfo(URIMembership, URITaught, 'Bar',
                                  '/groups/bar', None),
             ])
         self.assertEquals(st.teachers, [('/path1', None,

@@ -39,12 +39,30 @@ import urllib
 import base64
 import cgi
 from schooltool.interfaces import ComponentLookupError
-from schooltool.uris import strURI, getURI, nameURI
+from schooltool.uris import strURI, getURI, nameURI, isURI, registerURI
+from schooltool.uris import ISpecificURI, URITeaching, URITaught
 from schooltool.common import parse_datetime, parse_date
 from schooltool.translation import _
 
 __metaclass__ = type
 
+
+#
+# Dealing with unknown URIs
+#
+
+def stubURI(uri):
+    """Create a stub ISpecificURI, register and return it"""
+
+    class URIStub(ISpecificURI):
+        __doc__ = """%s
+
+        %s
+        """ % (uri, uri)
+
+    uri_obj = URIStub
+    registerURI(uri_obj)
+    return uri_obj
 
 
 #
@@ -684,19 +702,19 @@ def _parseRelationships(body):
             href = node.nsProp('href', xlink)
             role = node.nsProp('role', xlink)
             arcrole = node.nsProp('arcrole', xlink)
-            if not href or not role or not arcrole:
+            if not href or not isURI(role) or not isURI(arcrole):
                 continue
             title = node.nsProp('title', xlink)
             if title is None:
                 title = href.split('/')[-1]
             try:
-                role = nameURI(getURI(role))
+                role = getURI(role)
             except ComponentLookupError:
-                pass
+                role = stubURI(role)
             try:
-                arcrole = nameURI(getURI(arcrole))
+                arcrole = getURI(arcrole)
             except ComponentLookupError:
-                pass
+                arcrole = stubURI(arcrole)
             ctx.setContextNode(node)
             manage_nodes = ctx.xpathEval("manage/@xlink:href")
             if len(manage_nodes) != 1:
@@ -1053,9 +1071,8 @@ class MemberInfo:
 class RelationshipInfo:
     """Information about a relationship."""
 
-    # XXX arcrole and role should hold ISpecificURIs
-    arcrole = None              # Role of the target (user friendly string)
-    role = None                 # Role of the relationship (user friendly)
+    arcrole = None              # Role of the target (ISpecificURI)
+    role = None                 # Role of the relationship (ISpecificURI)
     target_title = None         # Title of the target
     target_path = None          # Path of the target
     link_path = None            # Path of the link
@@ -1343,9 +1360,8 @@ class SchoolTimetableInfo:
         """
         activities = []
         for rel in relationships:
-            # Comparing strings is not nice, but this will be fixed when
-            # RelationshipInfo will store ISpecificURIs instead of strings
-            if (rel.arcrole, rel.role) == ('Teaching', 'Taught'):
+            if (rel.arcrole.extends(URITeaching, False) and
+                rel.role.extends(URITaught, False)):
                 activities.append((rel.target_title, rel.target_path))
         (path, title, old_activities) = self.teachers[idx]
         self.teachers[idx] = (path, title, activities)

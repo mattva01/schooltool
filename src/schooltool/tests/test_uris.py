@@ -104,6 +104,7 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
                "mailto:postmaster ",
                "mailto:postmaster text"
                "nocolon",
+               None,
                ]
         for string in good:
             self.assert_(isURI(string), string)

@@ -48,6 +48,7 @@ from schooltool.clients.guiclient import RollCallEntry, PersonInfo
 from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
+from schooltool.uris import nameURI
 from schooltool.common import parse_date, parse_time
 from schooltool.translation import _
 
@@ -2131,8 +2132,9 @@ class MainFrame(wxFrame):
         for idx, item in enumerate(self.relationshipListData):
             self.relationshipListCtrl.InsertStringItem(idx, item.target_title)
             self.relationshipListCtrl.SetItemData(idx, idx)
-            self.relationshipListCtrl.SetStringItem(idx, 1, item.role)
-            self.relationshipListCtrl.SetStringItem(idx, 2, item.arcrole)
+            self.relationshipListCtrl.SetStringItem(idx, 1, nameURI(item.role))
+            self.relationshipListCtrl.SetStringItem(idx, 2,
+                                                    nameURI(item.arcrole))
         self.relationshipListCtrl.Thaw()
 
     def DoRefresh(self, event=None):

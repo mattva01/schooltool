@@ -141,7 +141,7 @@ def isURI(uri):
     We're only approximating to the spec.
     """
     uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
-    return uri_re.search(uri)
+    return uri and uri_re.match(uri) is not None
 
 
 def strURI(uri):
