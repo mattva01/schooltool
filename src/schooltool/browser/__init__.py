@@ -72,6 +72,11 @@ class BrowserRequest(Request):
 
     def maybeAuthenticate(self):
         """Try to authenticate if the authentication cookie is there."""
+        try:
+            Request.maybeAuthenticate(self) # allow basic auth to work
+        except AuthenticationError:
+            # But ignore authentication failures
+            pass
         auth_cookie = self.getCookie('auth')
         if auth_cookie:
             try:

@@ -102,6 +102,26 @@ class TestBrowserRequest(unittest.TestCase):
         request.maybeAuthenticate()
         self.assert_(request.authenticated_user is None)
 
+    def test_maybeAuthenticate_basic_auth(self):
+        from schooltool.auth import TicketService
+        ts = TicketService()
+        user = object()
+        request = self.createRequestWithStubbedAuth('', user, ts)
+        request.user = 'username'
+        request.password = 'password'
+        request.maybeAuthenticate()
+        self.assert_(request.authenticated_user is user)
+
+    def test_maybeAuthenticate_bad_basic_auth(self):
+        from schooltool.auth import TicketService
+        ts = TicketService()
+        user = object()
+        request = self.createRequestWithStubbedAuth('', user, ts)
+        request.user = 'username'
+        request.password = 'dontknow'
+        request.maybeAuthenticate()
+        self.assert_(request.authenticated_user is None)
+
     def test_renderInternalError(self):
         rq = self.createRequest()
         # Request does this before calling renderInternalError:
