@@ -24,6 +24,7 @@ $Id$
 
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
+from schooltool.interfaces import IGroup, IPerson
 
 __metaclass__ = type
 
@@ -148,3 +149,23 @@ class View(Resource):
             return errorPage(request, 405, "Method Not Allowed")
 
 
+class GroupView(View):
+    """The view for a group"""
+
+    template = Template("www/group.pt")
+
+    def _traverse(self, name, request):
+        item = self.context[int(name)]
+        if IGroup.isImplementedBy(item):
+            return GroupView(item)
+        elif IPerson.isImplementedBy(item):
+            return PersonView(item)
+        else:
+            # XXX: This shouldn't really be KeyError -- this is a
+            # ViewForObjectNotFound error
+            raise KeyError
+
+
+class PersonView(View):
+    """The view for a person object"""
+    

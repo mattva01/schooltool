@@ -92,7 +92,8 @@ class Request(server.Request):
                         break
             except:
                 get_transaction().abort()
-                reactor.callFromThread(self.processingFailed, failure.Failure())
+                reactor.callFromThread(self.processingFailed,
+                                       failure.Failure())
             else:
                 reactor.callFromThread(self.write, body)
                 reactor.callFromThread(self.finish)
@@ -190,7 +191,7 @@ class Site(server.Site):
 #
 
 def main():
-    """Starts the SchoolTool mockup HTTP server on port 8080."""
+    """Starts the SchoolTool HTTP server."""
 
     # Tell Twisted we'll be using threads
     threadable.init()

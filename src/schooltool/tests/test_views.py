@@ -169,10 +169,51 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['Allow'], 'GET, HEAD')
 
 
+class TestGroupView(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import GroupView
+        from schooltool.model import Group, Person
+
+        self.group = Group("group")
+        self.sub = Group("subgroup")
+        self.per = Person("p")
+        self.subkey = self.group.add(self.sub)
+        self.perkey = self.group.add(self.per)
+
+        self.view = GroupView(self.group)
+
+    def test_traverse(self):
+        from schooltool.views import GroupView, PersonView
+
+        subview = self.view._traverse(str(self.subkey), RequestStub())
+        self.assertEqual(subview.__class__, GroupView)
+
+        perview = self.view._traverse(str(self.perkey), RequestStub())
+        self.assertEqual(perview.__class__, PersonView)
+
+    def test_render(self):
+        request = RequestStub("http://localhost/group/")
+        request.method = "GET"
+        request.path = '/group'
+        result = self.view.render(request)
+        expected = """\
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>group</name>
+  <item xlink:type="simple" xlink:title="subgroup"
+        xlink:href="/group/%(subkey)s" />
+  <item xlink:type="simple" xlink:title="p"
+        xlink:href="/group/%(perkey)s" />
+</group>
+""" % {'subkey': self.subkey, 'perkey': self.perkey}
+        self.assertEqual(result, expected)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
+    suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestView))
     return suite
 

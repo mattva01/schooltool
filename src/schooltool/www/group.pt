@@ -1,0 +1,8 @@
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name tal:content="view/context/name">group</name>
+  <tal:loop repeat="item view/context/items"><item
+      xlink:type="simple"
+      tal:attributes="xlink:href python: '%s/%s' % (request.path, item[0]);
+	              xlink:title python: item[1].name"
+    /></tal:loop>
+</group>
