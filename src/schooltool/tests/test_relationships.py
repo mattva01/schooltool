@@ -50,13 +50,13 @@ class TestRelationship(unittest.TestCase):
     object.  This test tests the whole construct.
     """
     def setUp(self):
-        from schooltool.relationships import _Relationship
+        from schooltool.relationships import _LinkRelationship
         from schooltool.relationships import Link
         self.klass = Relatable()
         self.tutor = Relatable()
         self.lklass = Link(self.klass, URITutor)
         self.ltutor = Link(self.tutor, URIRegClass)
-        self.rel = _Relationship("Tutor of a class", self.ltutor, self.lklass)
+        self.rel = _LinkRelationship("Tutor of a class", self.ltutor, self.lklass)
 
     def test_interface(self):
         from schooltool.interfaces import IRemovableLink

@@ -65,7 +65,7 @@ class Link(Persistent):
         self.traverse().__links__.remove(otherlink)
 
 
-class _Relationship(Persistent):
+class _LinkRelationship(Persistent):
     """A central part of a relationship.
 
     This an internal API for links.  Basically, it holds references to
@@ -94,10 +94,9 @@ class _Relationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
-def relate(title, a, role_a, b, role_b):
+def relate(title, a, role_of_a, b, role_of_b):
     """See IRelationshipAPI"""
-    link_a = Link(a, role_b)
-    link_b = Link(b, role_a)
-    _Relationship(title, link_a, link_b)
+    link_a = Link(a, role_of_b)
+    link_b = Link(b, role_of_a)
+    _LinkRelationship(title, link_a, link_b)
     return link_a, link_b
-
