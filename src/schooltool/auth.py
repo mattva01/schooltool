@@ -224,13 +224,13 @@ class ACL(Persistent):
         self.__parent__ = None
 
     def __iter__(self):
-        """Iterate over tuples of (principal, permission)"""
+        """Iterate over tuples of (principal, permission)."""
         return itertools.chain(iter(self._data),
                                iter([(Everybody, perm)
                                      for perm in self._everybody]))
 
     def __contains__(self, (principal,  permission)):
-        """Returns true iff the principal has the permission"""
+        """Return True iff principal has permission."""
         if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
         if principal == Everybody:
@@ -241,7 +241,7 @@ class ACL(Persistent):
             return (principal, permission) in self._data
 
     def add(self, (principal, permission)):
-        """Grants the permission to a principal"""
+        """Grant permission to principal."""
         if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
         if principal == Everybody:
@@ -250,7 +250,7 @@ class ACL(Persistent):
             self._data[(principal, permission)] = 1
 
     def remove(self, (principal, permission)):
-        """Revokes the permission from a principal"""
+        """Revoke permission from principal."""
         if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
         if principal == Everybody:
@@ -259,7 +259,7 @@ class ACL(Persistent):
             del self._data[(principal, permission)]
 
     def allows(self, principal, permission):
-        """Return whether the principal has the permission"""
+        """Tell if principal has permission."""
         if permission in self._everybody:
             return True
         if principal is not None:
@@ -269,7 +269,7 @@ class ACL(Persistent):
         return (principal, permission) in self
 
     def clear(self):
-        """Revoke all access from all principals"""
+        """Revoke all access from all principals."""
         self._data.clear()
         self._everybody.clear()
 
