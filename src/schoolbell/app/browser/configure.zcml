@@ -11,6 +11,10 @@
       factory=".SortBy"
       />
 
+<!-- Actions menu -->
+
+  <menu id="schoolbell_actions" title="Actions" />
+
 <!-- Views -->
 
   <addMenuItem
@@ -66,8 +70,8 @@
       class="schoolbell.app.browser.app.GroupListView"
       template="templates/groups.pt"
       permission="zope.View"
-      menu="zmi_views"
-      title="Groups"
+      menu="schoolbell_actions"
+      title="Change membership"
       />
 
   <page
@@ -75,14 +79,18 @@
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonEditView"
       template="templates/person_edit.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Edit info"
+      />
 
   <page
       name="add.html"
       for="schoolbell.app.interfaces.IPersonContainer"
       class="schoolbell.app.browser.app.PersonAddView"
       template="templates/person_add.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="schoolbell_actions" title="Add a person" />
 
   <zope:adapter
       for="schoolbell.app.interfaces.IPerson"
@@ -123,6 +131,13 @@
       class=".app.GroupAddView"
       />
 
+  <menuItem
+      menu="schoolbell_actions"
+      title="Add a group"
+      for="schoolbell.app.interfaces.IGroupContainer"
+      action="+/addSchoolBellGroup.html"
+      />
+
   <editform
       for="schoolbell.app.interfaces.IGroup"
       name="edit.html"
@@ -131,6 +146,8 @@
       permission="zope.ManageContent"
       template="templates/group_edit.pt"
       class=".app.GroupEditView"
+      menu="schoolbell_actions"
+      title="Edit info"
       />
 
   <addMenuItem
@@ -157,8 +174,8 @@
       class="schoolbell.app.browser.app.MemberViewPersons"
       template="templates/members.pt"
       permission="zope.View"
-      menu="zmi_views"
-      title="Members (persons)"
+      menu="schoolbell_actions"
+      title="Add/remove members"
       />
 
   <page
@@ -167,8 +184,8 @@
       class="schoolbell.app.browser.app.MemberViewResources"
       template="templates/members.pt"
       permission="zope.View"
-      menu="zmi_views"
-      title="Members (resources)"
+      menu="schoolbell_actions"
+      title="Add/remove resources"
       />
 
 <!-- ResourceContainer, Resource configuration -->
@@ -195,6 +212,13 @@
       schema="schoolbell.app.interfaces.IResource"
       content_factory="schoolbell.app.app.Resource"
       permission="zope.ManageContent"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="Add a resource"
+      for="schoolbell.app.interfaces.IResourceContainer"
+      action="+/addSchoolBellResource.html"
       />
 
   <addMenuItem

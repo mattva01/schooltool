@@ -38,6 +38,16 @@
       <metal:block define-slot="column-left">
         <div id="column-left">
           <div tal:replace="structure context/@@schoolbell_navigation" />
+          <div class="portlet" tal:condition="context/@@view_get_menu/schoolbell_actions">
+            <h4>Actions</h4>
+            <ul>
+              <li tal:repeat="view context/@@view_get_menu/schoolbell_actions">
+                <a tal:attributes="href view/action"
+                   tal:content="view/title"
+                   i18n:translate="" />
+              </li>
+            </ul>
+          </div>
           <metal:block define-slot="column-left-extra"/>
         </div>
       </metal:block>

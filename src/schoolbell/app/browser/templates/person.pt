@@ -7,18 +7,6 @@
     Person info for <span tal:replace="context/title" i18n:name="title"/>
   </h1>
 
-    <div class="portlet" metal:fill-slot="column-left-extra">
-      <h4>Actions</h4>
-      <ul>
-      <li><a class="action" tal:condition="view/canEdit"
-             tal:attributes="href string:${context/@@absolute_url}/edit.html"
-             i18n:translate="">Edit details</a>
-      <li><a class="action" tal:condition="view/canViewCalendar"
-             tal:attributes="href string:${context/@@absolute_url}/calendar"
-             i18n:translate="">View calendar</a>
-      </ul>
-    </div>
-
   <metal:block metal:fill-slot="body">
     <div class="row"><b i18n:translate="">Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
