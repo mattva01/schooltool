@@ -137,14 +137,27 @@ class TestCSVImporter(unittest.TestCase):
               membership_pattern % "/groups/Name"),
             ])
 
-        requests = im.importGroup('Name', 'Title', '', 'Super Facet')
+        requests = im.importGroup('Name', 'Title', '', 'super_facet')
         self.assertEqual(requests,
                          [('/groups/Name', 'PUT',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
                            ' title="Title"/>'),
                           ('/groups/Name/facets', 'POST',
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
-                           ' factory="Super Facet"/>'),
+                           ' factory="super_facet"/>'),
+                          ])
+
+        requests = im.importGroup('Name', 'Title', '', 'ff1 ff2')
+        self.assertEqual(requests,
+                         [('/groups/Name', 'PUT',
+                           '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                           ' title="Title"/>'),
+                          ('/groups/Name/facets', 'POST',
+                           '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                           ' factory="ff1"/>'),
+                          ('/groups/Name/facets', 'POST',
+                           '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                           ' factory="ff2"/>'),
                           ])
 
     def test_importResource(self):

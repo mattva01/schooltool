@@ -50,7 +50,8 @@ groups.csv contains lines of comma-separated values with the following columns:
   title   -- A human-readable title of the group.
   parents -- A space separated list of names of the groups this group is a
              member in.  The list can be empty.
-  facet   -- A name of a facet to add to this group (optional).
+  facet   -- A space separated list of facet factories to add to this group.
+             The list can be empty.
 
 The following two groups are always created and should not be defined
 explicitly:
@@ -172,7 +173,7 @@ class CSVImporter:
                 ' xlink:role="http://schooltool.org/ns/teaching/taught"'
                 ' xlink:href="/persons/%s"/>' % teacher)
 
-    def importGroup(self, name, title, parents, facet):
+    def importGroup(self, name, title, parents, facets):
         """Returns a list of tuples of (path, method, body) to run
         through the server to import this group.
         """
@@ -182,7 +183,7 @@ class CSVImporter:
                        'title="%s"/>' % title))
         for parent in parents.split():
             result.append(self.membership(parent, "/groups/%s" % name))
-        if facet:
+        for facet in facets.split():
             result.append(('/groups/%s/facets' % name, 'POST',
                            '<facet xmlns="http://schooltool.org/ns/model/0.1"'
                            ' factory="%s"/>' % facet))

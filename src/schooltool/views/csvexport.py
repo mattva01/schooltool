@@ -50,6 +50,9 @@ class CSVExporter(View):
     Note that currently the files are stored inside the zip archive
     uncompressed.  To enable compression add a compression=zipfile.ZIP_STORED
     argument to ZipFile in do_GET.
+
+    XXX Group or facet factory names that contain spaces will prevent the
+        generated CSV files from being reimported.
     """
 
     authorization = PublicAccess
