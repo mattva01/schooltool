@@ -4,7 +4,10 @@ A script to start the schooltool client in a Debian system.
 """
 
 import sys
-sys.path.insert(0, '/usr/lib/schooltool-clients')
+sys.path.insert(0, '/usr/lib/schooltool')
+
+#### The clients need the zope interfaces as well
+sys.path.insert(0, '/usr/lib/schoolbell')
 
 import schooltool.clients.client
 schooltool.clients.client.main()
