@@ -168,6 +168,7 @@ def get_test_files(cfg):
     else:
         walker = os.path.walk
     walker(cfg.basedir, visit, None)
+    results.sort()
     return results
 
 
