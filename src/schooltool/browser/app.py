@@ -357,7 +357,8 @@ class ObjectContainerView(View):
     # Must be overridden by actual subclasses.
     add_view = None     # The add view class
     obj_view = None     # The object view class
-    index_title = None  # The title of the container index view
+    index_title = ""    # The title of the container index view
+    add_title = ""      # The title of the link to add a new object
 
     def _traverse(self, name, request):
         if name == 'add.html':
@@ -377,6 +378,8 @@ class PersonContainerView(ObjectContainerView):
 
     add_view = PersonAddView
     obj_view = PersonView
+    index_title = _("Person index")
+    add_title = _("Add a new person")
 
 
 class GroupContainerView(ObjectContainerView):
@@ -384,6 +387,8 @@ class GroupContainerView(ObjectContainerView):
 
     add_view = GroupAddView
     obj_view = GroupView
+    index_title = _("Group index")
+    add_title = _("Add a new person")
 
 
 class ResourceContainerView(ObjectContainerView):
@@ -391,6 +396,8 @@ class ResourceContainerView(ObjectContainerView):
 
     add_view = ResourceAddView
     obj_view = ResourceView
+    index_title = _("Resource index")
+    add_title = _("Add a new resource")
 
 
 class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):

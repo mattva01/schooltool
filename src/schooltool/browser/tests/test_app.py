@@ -413,11 +413,19 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
 
     def test_render_index(self):
         view = self.createView()
+        view.isManager = lambda: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assert_('href="http://localhost:7001/container/obj"' in result)
-        self.assert_('Some Object' in result)
+        for s in ['href="http://localhost:7001/container/obj"',
+                  'Some Object',
+                  'href="http://localhost:7001/container/add.html"',
+                  view.index_title,
+                  view.add_title]:
+            self.assert_(s in result, s)
+
+        view.isManager = lambda: False
+        self.assert_('add.html' not in view.render(request))
 
     def test_traverse(self):
         view = self.createView()
