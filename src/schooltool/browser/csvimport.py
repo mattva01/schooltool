@@ -25,13 +25,14 @@ $Id$
 
 import csv
 
+from zope.component import getUtility
 from schooltool.browser import View, Template, ToplevelBreadcrumbsMixin
 from schooltool.browser.auth import ManagerAccess
 from schooltool.csvimport import CSVImporterBase, DataError
 from schooltool.common import parse_date
-from schooltool.component import FacetManager, getFacetFactory
+from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, relate
-from schooltool.interfaces import IApplication
+from schooltool.interfaces import IApplication, IFacetFactory
 from schooltool.membership import Membership, memberOf, belongsToParentGroup
 from schooltool.teaching import Teaching
 from schooltool.timetable import TimetableActivity
@@ -179,7 +180,7 @@ class CSVImporterZODB(CSVImporterBase):
 
         for facet_name in facets.split():
             try:
-                factory = getFacetFactory(facet_name)
+                factory = getUtility(IFacetFactory, facet_name)
             except KeyError:
                 raise DataError(_("Unknown facet type: %s") % facet_name)
             facet = factory()

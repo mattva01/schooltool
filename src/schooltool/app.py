@@ -23,9 +23,10 @@ The SchoolTool application support objects.
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
+from zope.component import getUtility
 from schooltool import model, absence
 from schooltool.auth import TicketService
-from schooltool.component import UtilityService, getFacetFactory, FacetManager
+from schooltool.component import UtilityService, FacetManager
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.db import PersistentKeysSet
 from schooltool.event import EventService
@@ -33,6 +34,7 @@ from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
 from schooltool.interfaces import IBeforeMembershipEvent
+from schooltool.interfaces import IFacetFactory
 from schooltool.membership import Membership
 from schooltool.membership import RestrictedMembershipPolicy
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
@@ -223,7 +225,7 @@ def create_application():
     teachers = Group("teachers", title=_("Teachers"))
     Membership(group=root, member=teachers)
 
-    facet_factory = getFacetFactory('teacher_group')
+    facet_factory = getUtility(IFacetFactory, 'teacher_group')
     facet = facet_factory()
     FacetManager(teachers).setFacet(facet, name=facet_factory.facet_name)
 

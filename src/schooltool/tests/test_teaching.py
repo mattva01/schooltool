@@ -78,12 +78,12 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testModuleSetup(self):
         from schooltool import teaching
-        from schooltool.interfaces import IModuleSetup
-        from schooltool.component import getFacetFactory
+        from schooltool.interfaces import IModuleSetup, IFacetFactory
+        from zope.component import getUtility
         verifyObject(IModuleSetup, teaching)
         teaching.setUp()
-        getFacetFactory('subject_group')
-        getFacetFactory('teacher_group')
+        getUtility(IFacetFactory, 'subject_group')
+        getUtility(IFacetFactory, 'teacher_group')
 
     def testTeacherFacet(self):
         from schooltool.teaching import TeacherFacet

@@ -488,8 +488,9 @@ class TestServer(RegistriesCleanupMixin, unittest.TestCase):
 
     def test_authenticate(self):
         from schooltool.main import Server
-        from schooltool import relationship, membership, teaching
+        from schooltool import relationship, membership, teaching, component
         from schooltool.app import create_application
+        component.setUp()
         relationship.setUp()
         membership.setUp()
         teaching.setUp()

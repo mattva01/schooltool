@@ -25,12 +25,13 @@ $Id$
 import csv
 import zipfile
 from cStringIO import StringIO
+from zope.component import getUtilitiesFor
 from schooltool.rest import View
 from schooltool.uris import URIMember, URIGroup, URITaught
 from schooltool.component import getRelatedObjects
 from schooltool.component import FacetManager
-from schooltool.component import iterFacetFactories
 from schooltool.rest.auth import PublicAccess
+from schooltool.interfaces import IFacetFactory
 
 __metaclass__ = type
 
@@ -128,7 +129,7 @@ class FactoryNameHack:
 
     def __init__(self):
         factory_map = {}
-        for factory in iterFacetFactories():
+        for name, factory in getUtilitiesFor(IFacetFactory):
             if hasattr(factory, 'factory'):
                 factory_map[factory.factory] = factory.name
         self.factory_map = factory_map

@@ -37,7 +37,7 @@ from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.interfaces import IViewAPI
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, RegistriesCleanupMixin
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.db import PersistentKeysSetWithNames
 
@@ -269,33 +269,34 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
                                [facet1, facet3])
 
 
-class TestFacetFunctions(unittest.TestCase):
+class TestFacetFunctions(RegistriesCleanupMixin, unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
         verifyObject(IFacetAPI, component)
 
-    def test_iterFacetFactories(self):
-        from schooltool.component import iterFacetFactories
+    def test_registerFacetFactory(self):
         from schooltool.component import registerFacetFactory
-        from schooltool.component import resetFacetFactoryRegistry
-        from schooltool.component import getFacetFactory
+        from schooltool.component import setUp
+        from schooltool.interfaces import IFacetFactory
+        from zope.component import getUtility, getUtilitiesFor
         from schooltool.facet import FacetFactory
+        setUp()
         name = "some facet"
         title = "some title"
         factory = FacetFactory(object, name, title)
-        self.assertEqual(len(list(iterFacetFactories())), 0)
+        self.assertEqual(list(getUtilitiesFor(IFacetFactory)), [])
         self.assertRaises(TypeError, registerFacetFactory, object)
-        self.assertRaises(KeyError, getFacetFactory, name)
+        self.assertRaises(KeyError, getUtility, IFacetFactory, name)
         registerFacetFactory(factory)
-        self.assertEqual(list(iterFacetFactories()), [factory])
-        self.assertEqual(getFacetFactory(name), factory)
+        self.assertEqual(list(getUtilitiesFor(IFacetFactory)),
+                         [(name, factory)])
+        self.assertEqual(getUtility(IFacetFactory, name), factory)
         registerFacetFactory(factory)  # no-op, already registered
         factory2 = FacetFactory(lambda: None, name, "another title")
-        self.assertRaises(ValueError, registerFacetFactory, factory2)
-        self.assertEqual(list(iterFacetFactories()), [factory])
-        resetFacetFactoryRegistry()
-        self.assertEqual(len(list(iterFacetFactories())), 0)
+        registerFacetFactory(factory2)
+        self.assertEqual(list(getUtilitiesFor(IFacetFactory)),
+                         [(name, factory2)])
 
 
 class TestDynamicSchemaField(unittest.TestCase):

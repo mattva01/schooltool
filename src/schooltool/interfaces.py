@@ -935,18 +935,11 @@ class IFacetAPI(Interface):
         Raises TypeError if the object is not IFaceted.
         """
 
-    def getFacetFactory(name):
-        """Return the factory with the given name."""
-
     def registerFacetFactory(factory):
         """Register the facet factory.
 
         factory must implement IFacetFactory
         """
-
-    def iterFacetFactories():
-        """Iterate over all registered facet factories."""
-
 
 #
 # Access control

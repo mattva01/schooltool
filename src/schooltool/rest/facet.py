@@ -24,11 +24,11 @@ $Id$
 
 import libxml2
 from zope.interface import moduleProvides
+from zope.component import getUtility, getUtilitiesFor
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IFacet
+from schooltool.interfaces import IFacet, IFacetFactory
 from schooltool.component import registerView, getView
 from schooltool.component import FacetManager
-from schooltool.component import getFacetFactory, iterFacetFactories
 from schooltool.component import getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
@@ -98,7 +98,7 @@ class FacetManagementView(View):
                 for facet in self.context.iterFacets()]
 
     def listFacetFactories(self):
-        return iterFacetFactories()
+        return [util for name, util in getUtilitiesFor(IFacetFactory)]
 
     def do_POST(self, request):
         body = request.content.read()
@@ -124,7 +124,7 @@ class FacetManagementView(View):
             xpathctx.xpathFreeContext()
 
         try:
-            factory = getFacetFactory(factory_name)
+            factory = getUtility(IFacetFactory, factory_name)
         except KeyError, e:
             return textErrorPage(request, _("Factory does not exist: %s") % e)
 

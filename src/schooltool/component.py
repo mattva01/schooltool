@@ -24,7 +24,8 @@ $Id$
 
 from zope.interface import moduleProvides, implements, providedBy, Interface
 from zope.interface.adapter import AdapterRegistry
-from zope.component import serviceManager
+from zope.component import serviceManager, getService
+from zope.component import getUtility, getUtilitiesFor
 from zope.component.utility import IGlobalUtilityService
 from zope.component.utility import GlobalUtilityService
 from zope.component.exceptions import ComponentLookupError
@@ -165,14 +166,6 @@ class FacetManager:
         return ob.__facets__.valueForName(name)
 
 
-facet_factory_registry = {}
-
-
-def resetFacetFactoryRegistry():
-    """Replace the facet factory registry with an empty one."""
-    global facet_factory_registry
-    facet_factory_registry = {}
-
 
 def registerFacetFactory(factory):
     """Register the given facet factory by the given name.
@@ -181,26 +174,8 @@ def registerFacetFactory(factory):
     """
     if not IFacetFactory.providedBy(factory):
         raise TypeError("factory must provide IFacetFactory", factory)
-
-    if factory.name in facet_factory_registry:
-        if facet_factory_registry[factory.name] is factory:
-            # Registering the same factory more than once. Ignore this.
-            return
-        else:
-            raise ValueError(
-                'Another factory with that name is registered already.',
-                factory.name, factory)
-    facet_factory_registry[factory.name] = factory
-
-
-def iterFacetFactories():
-    """Iterates over all registered facet factories."""
-    return facet_factory_registry.itervalues()
-
-
-def getFacetFactory(name):
-    """Returns the named facet factory."""
-    return facet_factory_registry[name]
+    utilities = getService('Utilities')
+    utilities.provideUtility(IFacetFactory, factory, factory.name)
 
 
 #

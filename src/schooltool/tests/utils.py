@@ -134,11 +134,9 @@ class RegistriesCleanupMixin:
         self.old_relationship_registry = component.relationship_registry
         self.old_view_registry = component.view_registry
         self.old_class_view_registry = component.class_view_registry
-        self.old_facet_factory_registry = component.facet_factory_registry
         self.old_timetable_model_registry = component.timetable_model_registry
         component.resetRelationshipRegistry()
         component.resetViewRegistry()
-        component.resetFacetFactoryRegistry()
         component.resetTimetableModelRegistry()
         CleanUp().cleanUp()
 
@@ -147,7 +145,6 @@ class RegistriesCleanupMixin:
         component.relationship_registry = self.old_relationship_registry
         component.view_registry = self.old_view_registry
         component.class_view_registry = self.old_class_view_registry
-        component.facet_factory_registry = self.old_facet_factory_registry
         component.timetable_model_registry = self.old_timetable_model_registry
         CleanUp().cleanUp()
 
