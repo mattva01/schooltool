@@ -14,7 +14,7 @@
 
   <zope:adapter
       for="*"
-      name="schoolbell" 
+      name="schoolbell"
       provides="zope.app.traversing.interfaces.IPathAdapter"
       factory=".SchoolBellAPI"
       />
