@@ -98,6 +98,8 @@ class GroupContainerView(View):
 
     __used_for__ = IApplicationObjectContainer
 
+    authorization = AuthenticatedAccess
+
     def _traverse(self, name, request):
         return GroupView(self.context[name])
 

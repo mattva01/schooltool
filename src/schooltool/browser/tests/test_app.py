@@ -47,7 +47,22 @@ class SiteStub:
             raise AuthenticationError()
 
 
-class TestAppView(unittest.TestCase):
+class TraversalTestMixin:
+
+    def assertTraverses(self, view, name, viewclass, context=None):
+        """Assert that traversal returns the appropriate view.
+
+        Checks that view._traverse(name, request) returns an instance of
+        viewclass, and that the context attribute of the new view is
+        identical to context.
+        """
+        destination = view._traverse(name, RequestStub())
+        self.assert_(isinstance(destination, viewclass))
+        self.assert_(destination.context is context)
+        return destination
+
+
+class TestAppView(unittest.TestCase, TraversalTestMixin):
 
     def createView(self):
         from schooltool.app import Application
@@ -145,43 +160,36 @@ class TestAppView(unittest.TestCase):
         from schooltool.browser.app import GroupContainerView
         view = self.createView()
         app = view.context
-        request = RequestStub()
-
-        def assertTraverses(name, viewclass, context=None):
-            destination = view._traverse(name, request)
-            self.assert_(isinstance(destination, viewclass))
-            self.assert_(destination.context is context)
-            return destination
-
-        assertTraverses('persons', PersonContainerView, app['persons'])
-        assertTraverses('groups', GroupContainerView, app['groups'])
-        css = assertTraverses('schooltool.css', StaticFile)
+        self.assertTraverses(view, 'persons', PersonContainerView,
+                             app['persons'])
+        self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
+        css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
-        self.assertRaises(KeyError, view._traverse, 'nosuchpage', request)
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
-class TestPersonContainerView(unittest.TestCase):
+class TestPersonContainerView(unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
         from schooltool.model import Person
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.model import PersonView
-        container = {'person': Person()}
-        view = PersonContainerView(container)
-        personview = view._traverse('person', RequestStub())
-        self.assert_(isinstance(personview, PersonView))
+        person = Person()
+        view = PersonContainerView({'person': person})
+        self.assertTraverses(view, 'person', PersonView, person)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
-class TestGroupContainerView(unittest.TestCase):
+class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
 
-    def test_container(self):
+    def test_traverse(self):
         from schooltool.model import Group
         from schooltool.browser.app import GroupContainerView
-        container = {'foo': Group('foo')}
-        view = GroupContainerView(container)
-        view2 = view._traverse('foo', RequestStub())
-        self.assertEquals(view2.__class__.__name__, 'GroupView')
+        from schooltool.browser.model import GroupView
+        group = Group('foo')
+        view = GroupContainerView({'foo': group})
+        self.assertTraverses(view, 'foo', GroupView, group)
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
 def test_suite():
