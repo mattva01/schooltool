@@ -165,9 +165,10 @@ class SampleSchoolImporter:
 
     def import_csv_files(self):
         """Import data from CSV files."""
-        from schooltool.clients.csvclient import CSVImporter, DataError
+        from schooltool.clients.csvclient import CSVImporterHTTP, DataError
         os.chdir(self.datadir)
-        importer = CSVImporter(host=self.host, port=self.port, ssl=self.ssl)
+        importer = CSVImporterHTTP(host=self.host, port=self.port,
+                                   ssl=self.ssl)
         try:
             importer.run()
         except DataError, e:
