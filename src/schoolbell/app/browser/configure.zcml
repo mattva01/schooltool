@@ -15,7 +15,7 @@
       permission="zope.Public"
       />
 
-<!-- Make index.html the default ZMI view for ISchoolBellApplication -->
+  <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
 
   <menuItem
       for="schoolbell.app.interfaces.ISchoolBellApplication"
@@ -23,18 +23,21 @@
 
 <!-- PersonContainer, Person configuration -->
 
-  <containerViews
-      for="schoolbell.app.interfaces.IPersonContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
-
   <page
       name="index.html"
       for="schoolbell.app.interfaces.IPersonContainer"
       class="schoolbell.app.browser.app.PersonContainerView"
       template="container.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <containerViews
+      for="schoolbell.app.interfaces.IPersonContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
 
   <addform
       label="Add a Person"
@@ -57,7 +60,10 @@
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonView"
       template="person.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
 
   <page
       name="photo"
@@ -67,18 +73,21 @@
 
 <!-- GroupContainer, Group configuration -->
 
-  <containerViews
-      for="schoolbell.app.interfaces.IGroupContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
-
   <page
       name="index.html"
       for="schoolbell.app.interfaces.IGroupContainer"
       class="schoolbell.app.browser.app.GroupContainerView"
       template="container.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <containerViews
+      for="schoolbell.app.interfaces.IGroupContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
 
   <addform
       label="Add a Group"
@@ -101,22 +110,28 @@
       for="schoolbell.app.interfaces.IGroup"
       class="schoolbell.app.browser.app.GroupView"
       template="group.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
 
 <!-- ResourceContainer, Resource configuration -->
-
-  <containerViews
-      for="schoolbell.app.interfaces.IResourceContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
 
   <page
       name="index.html"
       for="schoolbell.app.interfaces.IResourceContainer"
       class="schoolbell.app.browser.app.ResourceContainerView"
       template="container.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <containerViews
+      for="schoolbell.app.interfaces.IResourceContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
 
   <addform
       label="Add a Resource"
@@ -139,7 +154,10 @@
       for="schoolbell.app.interfaces.IResource"
       class="schoolbell.app.browser.app.ResourceView"
       template="resource.pt"
-      permission="zope.View" />
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
 
 <!-- Skin and resources -->
 
@@ -164,10 +182,11 @@
       layer=".skin.ISchoolBellSkin"
       />
 
-  <icon name="zmi_icon"
-        for="schoolbell.app.interfaces.ISchoolBellApplication"
-        file="icon.png"
-        />
+  <icon
+      name="zmi_icon"
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      file="icon.png"
+      />
 
    <resource name="layout.css" file="layout.css" />
    <resource name="style.css" file="style.css" />
