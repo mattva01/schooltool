@@ -68,6 +68,88 @@ def config():
     zope.app.component.hooks.setHooks()
     context = xmlconfig.string(SITE_DEFINITION)
 
+    # Evil hack
+    from zope.app.tests import ztapi
+    from zope.app.appsetup.appsetup import IDatabaseOpenedEvent
+    ztapi.handle([IDatabaseOpenedEvent], bootstrapSubscriber)
+
+    # Another evil hack
+    import transaction
+    from schoolbell.app.interfaces import ISchoolBellApplication
+    from zope.app.publisher.browser import BrowserView
+    from zope.publisher.interfaces.browser import IBrowserPublisher
+    from zope.publisher.interfaces import NotFound
+    from zope.interface import implements
+    class ResetDbView(BrowserView):
+        implements(IBrowserPublisher)
+        def browserDefault(self, request):
+            return self, ()
+        def publishTraverse(self, request, name):
+            raise NotFound(self, name, request)
+        def __call__(self):
+            db = self.request.publication.db
+            transaction.commit()
+            conn = db.open()
+            installAppInRoot(db, conn.root())
+            transaction.commit()
+            conn.close()
+            return 'OK'
+    from zope.security.checker import Checker
+    from zope.security.checker import defineChecker
+    defineChecker(ResetDbView, Checker(dict([(n, 'zope.ManageContent')
+                    for n in ('browserDefault', '__call__', 'publishTraverse')])))
+    ztapi.browserView(ISchoolBellApplication, 'resetdb.html', ResetDbView)
+
+
+def bootstrapSubscriber(event):
+    """Set up a SchoolBell application as the database root.
+
+    This is an evil hack that rips out the Zope 3 RootFolder and replaces it
+    with a SchoolBellApplication.
+    """
+    import transaction
+    from zope.app.appsetup.bootstrap import getInformationFromEvent
+    from schoolbell.app.interfaces import ISchoolBellApplication
+    db, connection, root, root_folder = getInformationFromEvent(event)
+    if not ISchoolBellApplication.providedBy(root_folder):
+        if root_folder is None:
+            print "Installing SchoolBellApplication as the root object"
+        else:
+            print "Root folder already exists.  Replacing it with a SchoolBellApplication."
+        installAppInRoot(db, root)
+        transaction.commit()
+        connection.close()
+
+def installAppInRoot(db, root):
+    from schoolbell.app.app import SchoolBellApplication
+    from zope.app.traversing.interfaces import IContainmentRoot
+    from zope.interface import directlyProvides
+    from zope.app.publication.zopepublication import ZopePublication
+    from zope.app.appsetup.bootstrap import getServiceManager
+    from zope.app.appsetup.bootstrap import ensureService
+    from zope.app.servicenames import Utilities
+    from zope.app.utility import LocalUtilityService
+
+    app = SchoolBellApplication()
+    directlyProvides(app, IContainmentRoot)
+    root[ZopePublication.root_name] = app
+
+    service_manager = getServiceManager(app)
+    ensureService(service_manager, app, Utilities, LocalUtilityService)
+
+    # Evil hack, continued:
+    #    1. We open the db, DatabaseOpened event gets published
+    #    2. zope.app.appsetup.bootstrap.bootStrapSubscriber adds a RootFolder
+    #    3. various other subscribers register various local utilities
+    #    4. our very own bootstrapSubscriber rips out the RootFolder and replaces
+    #       it with a SchoolBellApplication
+    # step (4) undoes the changes made in steps (2) and (3), but we need changes
+    # made in step (3)!  So, publish the event again.  (2) and (4) will not do
+    # anything this time because the root application object exists.
+    from zope.event import notify
+    from zope.app.appsetup.appsetup import DatabaseOpened
+    notify(DatabaseOpened(db))
+
 
 SITE_DEFINITION = """
 <configure xmlns="http://namespaces.zope.org/zope"
