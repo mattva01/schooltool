@@ -46,7 +46,8 @@ class IContainmentAPI(Interface):
         The object must implement ILocation or IContainmentRoot and
         must be attached to the hierarchy (i.e. following parent
         references should not reach None).  If either of those
-        conditions is not met, raises a TypeError.  """
+        conditions is not met, raises a TypeError.
+        """
 
     def traverse(obj, path):
         """Return the object accessible as path from obj.
@@ -57,7 +58,7 @@ class IContainmentAPI(Interface):
         Traversing to .. at the root keeps you at the root.
 
         If path starts with a slash, then the traversal starts from
-        getRoot(obj), otherwise the travelsal starts from obj.
+        getRoot(obj), otherwise the traversal starts from obj.
         """
 
 
@@ -99,6 +100,7 @@ class ITraversable(Interface):
         Traversables do not have to handle special names '.' or '..'.
         """
 
+
 class IMultiContainer(Interface):
     """A container that chooses names for its children.
 
@@ -107,7 +109,8 @@ class IMultiContainer(Interface):
     """
 
     def getRelativePath(child):
-        """Returns the path of child relative to self."""
+        """Return the path of child relative to self."""
+
 
 #
 # Services
@@ -117,10 +120,10 @@ class IServiceAPI(Interface):
     """Service API"""
 
     def getEventService(context):
-        """Returns the global event service."""
+        """Return the global event service."""
 
     def getUtilityService(context):
-        """Returns the global utility service."""
+        """Return the global utility service."""
 
 
 class IServiceManager(Interface):
@@ -156,28 +159,28 @@ class ISpecificURI(Interface):
 class IURIAPI(Interface):
 
     def inspectSpecificURI(uri):
-        """Returns a tuple of a URI and the documentation of the ISpecificURI.
+        """Return a tuple of a URI and the documentation of the ISpecificURI.
 
         Raises a TypeError if the argument is not ISpecificURI.
         Raises a ValueError if the URI's docstring does not conform.
         """
 
     def strURI(uri):
-        """Returns the URI of ISpecificURI as a string"""
+        """Return the URI of ISpecificURI as a string"""
 
     def isURI(uri):
-        """Checks if the argument looks like a URI.
+        """Check if the argument looks like a URI.
 
         Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
         We're only approximating to the spec.
         """
 
     def registerURI(uri):
-        """Adds a URI to the registry so it can be queried by the URI
+        """Add a URI to the registry so it can be queried by the URI
         string."""
 
     def getURI(str):
-        """Returns and ISpecificURI with a given URI string."""
+        """Return an ISpecificURI for a given URI string."""
 
 
 class URIGroup(ISpecificURI):
@@ -193,11 +196,13 @@ class URIMember(ISpecificURI):
     A group member role.
     """
 
+
 class URIMembership(ISpecificURI):
     """http://schooltool.org/ns/membership
 
     The membership relationship.
     """
+
 
 #
 # Relationships
@@ -231,7 +236,7 @@ class ILink(ILocation):
     __name__ = Attribute("""Unique name within the parent's links""")
 
     def traverse():
-        """Returns the object at the other end of the relationship.
+        """Return the object at the other end of the relationship.
 
         The object returned by traversing a link is known as the link's
         target.
@@ -241,7 +246,7 @@ class ILink(ILocation):
 class IRemovableLink(ILink):
 
     def unlink():
-        """Removes a link.
+        """Remove a link.
 
         Also removes the opposite direction of the relationship if the
         relationship is bidirectional.
@@ -301,7 +306,7 @@ class ILinkSet(Interface):
         """
 
     def iterPlaceholders():
-        """Returns an iterator over the placeholders in the set."""
+        """Return an iterator over the placeholders in the set."""
 
     def remove(link_or_placeholder):
         """Remove a link or a placeholder from the set.
@@ -340,10 +345,13 @@ class IRelationshipValencies(Interface):
     """
 
     def getValencies():
-        """Returns a dictionary with tuples (relationship type URI,
-        URI of a role of this object) as keys and IValency objects as
-        values.
+        """Return a mapping of valencies.
+
+        The return value is a dictionary with tuples containing the
+        relationship type (as an ISpecificURI) and the role of this object
+        (also an ISpecificURI) as keys, and IValency objects as values.
         """
+
 
 class IValency(Interface):
     """An object describing a single valency"""
@@ -355,6 +363,7 @@ class IValency(Interface):
 
     other = Attribute(
         """A keyword argument the schema takes for the other object""")
+
 
 class IRelationshipSchemaFactory(Interface):
 
@@ -461,7 +470,7 @@ class IEvent(Interface):
     """Base interface for events."""
 
     def dispatch(target):
-        """Dispatches the event to target (which can propagate it further).
+        """Dispatch the event to target (which can propagate it further).
 
         Target must implement IEventTarget.
 
@@ -478,8 +487,10 @@ class IRelationshipEvent(IEvent):
 
     links = Attribute("""Tuple containing the links of the relationship""")
 
+
 class IRelationshipAddedEvent(IRelationshipEvent):
     """Event that gets sent out after a relationship has been established."""
+
 
 class IRelationshipRemovedEvent(IRelationshipEvent):
     """Event that gets sent out after a relationship has been broken."""
@@ -495,8 +506,10 @@ class IMembershipEvent(IRelationshipEvent):
     group = Attribute("""The group""")
     member = Attribute("""The member""")
 
+
 class IMemberAddedEvent(IRelationshipAddedEvent, IMembershipEvent):
     """Event that gets sent out after a member has been added to a group."""
+
 
 class IMemberRemovedEvent(IRelationshipRemovedEvent, IMembershipEvent):
     """Event that gets sent out after a member has been removed from a group.
@@ -507,7 +520,7 @@ class IEventTarget(Interface):
     """An object that can receive events."""
 
     def notify(event):
-        """Handles the event.
+        """Handle the event.
 
         Event routing can be achieved by calling event.dispatch(other_target).
         """
@@ -549,7 +562,7 @@ class IEventService(IEventTarget):
         """
 
     def listSubscriptions():
-        """Returns a list of all subscribers as (target, event_type) tuples."""
+        """Return a list of all subscribers as (target, event_type) tuples."""
 
 
 class IEventConfigurable(Interface):
@@ -565,7 +578,7 @@ class IEventAction(Interface):
     eventType = Attribute("""Interface of an event this action pertains to""")
 
     def handle(event, target):
-        """Handles the event for a given target.
+        """Handle the event for a given target.
 
         Should be called only if event is of an appropriate type.
         """
@@ -629,7 +642,7 @@ class IFacet(Interface):
 class IFacetedRelationshipSchemaFactory(Interface):
 
     def __call__(relationship_schema, **facet_factories):
-        """Returns a faceted relationship schema."""
+        """Return a faceted relationship schema."""
 
 
 class IFacetedRelationshipSchema(IRelationshipSchema):
@@ -638,20 +651,19 @@ class IFacetedRelationshipSchema(IRelationshipSchema):
 
 
 class IFaceted(Interface):
-    """Denotes that the object can have facets.
-    """
+    """Denotes that the object can have facets."""
 
     __facets__ = Attribute("""A set of facets that manages unique names.""")
 
 
 class IFacetFactory(Interface):
-    """An inspectible object that creates facets."""
+    """An inspectable object that creates facets."""
 
     name = Attribute("The name of this factory")
     title = Attribute("Short description of this factory")
 
     def __call__():
-        """Returns a facet."""
+        """Return a facet."""
 
 
 class IFacetManager(Interface):
@@ -671,13 +683,13 @@ class IFacetManager(Interface):
         """Remove the facet from the object."""
 
     def iterFacets():
-        """Returns an iterator over facets of an object."""
+        """Return an iterator over facets of an object."""
 
     def facetsByOwner(owner):
-        """Returns a sequence of all facets that are owned by owner."""
+        """Return a sequence of all facets that are owned by owner."""
 
     def facetByName(name):
-        """Returns the facet with the given name.
+        """Return the facet with the given name.
 
         Raises KeyError if there is no facet with that name.
         """
@@ -687,12 +699,12 @@ class IFacetAPI(Interface):
     """Facet API"""
 
     def FacetManager(obj):
-        """Returns an IFacetManager for the given object.
+        """Return an IFacetManager for the given object.
 
         Raises TypeError if the object is not IFaceted.
         """
 
-    def getFacetFactory(name):
+    def getFacetFctory(name):
         """Returns the factory with the given name."""
 
     def registerFacetFactory(factory):
@@ -703,6 +715,7 @@ class IFacetAPI(Interface):
 
     def iterFacetFactories():
         """Iterate over all registered facet factories."""
+
 
 #
 # Application objects
@@ -716,6 +729,10 @@ class IGroup(IFaceted, ILocation):
 
 
 class IPerson(IFaceted, ILocation):
+    """A person.
+
+    Participates in URIMembership as URIMember.
+    """
 
     title = Attribute("Person's name")
 
@@ -731,7 +748,7 @@ class IApplication(IContainmentRoot, IServiceManager, ITraversable):
     """
 
     def getRoots():
-        """Returns a sequence of root application objects."""
+        """Return a sequence of root application objects."""
 
     def __getitem__(name):
         """Get the named application object container."""
@@ -745,10 +762,10 @@ class IApplicationObjectContainer(ILocation, ITraversable):
     # XXX split this into read and write interfaces.
 
     def __getitem__(name):
-        """Returns the contained object that has the given name."""
+        """Return the contained object that has the given name."""
 
     def new(__name__=None, **kw):
-        """Creates and returns a new contained object.
+        """Create and return a new contained object.
 
         If __name__ is None, a name is chosen for the object.
         Otherwise, __name__ is a unicode or seven bit safe string.
@@ -762,13 +779,13 @@ class IApplicationObjectContainer(ILocation, ITraversable):
         """
 
     def __delitem__(name):
-        """Removes the contained object that has the given name.
+        """Remove the contained object that has the given name.
 
         Raises a KeyError if there is no such object.
         """
 
     def keys():
-        """Returns a list of the names of contained objects."""
+        """Return a list of the names of contained objects."""
 
 
 #
@@ -779,7 +796,7 @@ class IModuleSetup(Interface):
     """Module that needs initialization"""
 
     def setUp():
-        """Initializes the module."""
+        """Initialize the module."""
 
 
 #
@@ -789,13 +806,14 @@ class IModuleSetup(Interface):
 class IViewAPI(Interface):
 
     def getView(object):
-        """Selects a view for an object by its interface.
+        """Select a view for an object by its interface.
 
         Returns a View object for obj.
         """
 
     def registerView(interface, factory):
         """Register a view for an interface."""
+
 
 #
 # Utilities
@@ -821,7 +839,7 @@ class IUtilityService(ILocation):
         """
 
     def values():
-        """Returns a list of utilities."""
+        """Return a list of utilities."""
 
 
 #
@@ -831,10 +849,10 @@ class IUtilityService(ILocation):
 class ComponentLookupError(Exception):
     """An exception for component architecture."""
 
+
 #
 #  Configuration
 #
-
 
 def setUp():
     """See IModuleSetup"""
