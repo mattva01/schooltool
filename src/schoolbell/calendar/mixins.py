@@ -150,8 +150,7 @@ class CalendarMixin:
 class EditableCalendarMixin:
     """Mixin for implementing some IEditCalendar methods.
 
-    This mixin implements `clear` and `update` by using `addEvent` and
-    `removeEvent`.
+    This mixin implements `clear` by using `removeEvent`.
 
         >>> class Event:
         ...     def __init__(self, uid):
@@ -174,21 +173,11 @@ class EditableCalendarMixin:
         >>> len(list(cal))
         3
 
-        >>> cal2 = SampleCalendar()
-        >>> cal2.update(cal)
-        >>> len(list(cal2))
-        3
-
         >>> cal.clear()
         >>> list(cal)
         []
 
     """
-
-    def update(self, calendar):
-        """Add all events from another calendar to this calendar."""
-        for event in calendar:
-            self.addEvent(event)
 
     def clear(self):
         """Remove all events from the calendar."""

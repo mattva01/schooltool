@@ -114,18 +114,6 @@ class IEditCalendar(ICalendar):
         Do not call removeEvent while iterating over the calendar.
         """
 
-    def update(calendar):
-        """Add all events from another calendar.
-
-            cal1.update(cal2)
-
-        is equivalent to
-
-            for event in cal2:
-                cal1.addEvent(event)
-
-        """
-
 
 class IRecurrenceRule(Interface):
     """Base interface of the recurrence rules.
