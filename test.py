@@ -668,6 +668,10 @@ def main(argv):
     if not cfg.search_in:
         cfg.search_in = (cfg.basedir, )
 
+    # Do not print "Imported %d modules in %.3fs" if --list-XXX was specified
+    if cfg.list_tests or cfg.list_hooks or cfg.list_files:
+        cfg.print_import_time = False
+
     # Set up the python path
     sys.path[0] = cfg.basedir
     # XXX The following bit is SchoolTool specific: we need the Zope3 tree in
