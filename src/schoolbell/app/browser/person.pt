@@ -24,16 +24,6 @@
     </div>
 
   <metal:block metal:fill-slot="body" tal:define="info context">
-    <div tal:condition="not:view/canChooseCalendars" class="groups">
-      <h3 i18n:translate="">Groups (XXX NOT IMPLEMENTED)</h3>
-      <tal tal:condition="nothing">
-        <p tal:repeat="group view/getParentGroups">
-          <a tal:attributes="href group/@@absolute_url"
-             tal:content="group/title"></a>
-        </p>
-      </tal>
-    </div>
-
     <div class="row"><b i18n:translate="">Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>
@@ -45,18 +35,25 @@
       <tal:block condition="not:info/photo"
                  i18n:translate="">N/A</tal:block>
       <p tal:condition="info/photo">
-        <img src="photo" tal:attributes="src string:${context/@@absolute_url}/photo" />
+        <img src="photo"
+             tal:attributes="src string:${context/@@absolute_url}/photo" />
       </p>
     </div>
 
     <div class="groups">
-      <h3 i18n:translate="">Groups (XXX NOT IMPLEMENTED)</h3>
-      <p tal:condition="nothing" tal:repeat="group view/getParentGroups">
-       <a tal:attributes="href group/@@absolute_url"
-          tal:content="group/title"></a>
+      <h3 i18n:translate="">Groups</h3>
+      <p tal:repeat="group context/groups">
+        <a tal:attributes="href group/@@absolute_url"
+           tal:content="group/title"></a>
       </p>
+      <p tal:condition="python:not list(context.groups)">
+        This person does not belong to any groups.
+      </p>
+      <a tal:attributes="href string:${context/@@absolute_url}/groups.html"
+        >Add this person to a group</a>
     </div>
 
+    <!--
     <tal:block condition="view/canChooseCalendars">
       <a id="calendar-form"></a>
       <form method="POST">
@@ -111,6 +108,7 @@
         </fieldset>
       </form>
     </tal:block>
+    -->
 
 </metal:block>
 </body>

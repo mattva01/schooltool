@@ -103,15 +103,7 @@ class GroupView(BrowserView):
     def canEdit(self):
         return True # TODO: implement permission checking
 
-    def getParentGroups(self):
-        # TODO: implement this
-        pass
-
-    def getSubGroups(self):
-        # TODO: implement this
-        pass
-
-    def getOtherMembers(self):
+    def getMembers(self):
         # TODO: implement this
         pass
 

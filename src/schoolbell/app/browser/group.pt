@@ -31,8 +31,8 @@
      tal:attributes="href string:${context/@@absolute_url}/edit_subgroups.html"
          i18n:translate="">Edit</a>
     </div>
-    <div tal:define="members view/getOtherMembers">
-      <h3 i18n:translate="">Members XXX NOT IMPLEMENTED</h3>
+    <div tal:define="members context/members">
+      <h3 i18n:translate="">Members</h3>
       <p tal:repeat="obj members">
        <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title"/>
       </p>
