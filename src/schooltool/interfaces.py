@@ -1460,13 +1460,17 @@ class ITimetableExceptionList(Interface):
     def append(exception):
         """Add a timetable exception.
 
-        Sends an ITimetableExceptionAddedEvent.
+        Sends an ITimetableExceptionAddedEvent to the __parent__ of the
+        timetable, if the timetable provides ILocation, and its __parent__
+        provides IEventTarget.
         """
 
     def remove(exception):
         """Remove a timetable exception.
 
-        Sends an ITimetableExceptionRemovedEvent.
+        Sends an ITimetableExceptionAddedEvent to the __parent__ of the
+        timetable, if the timetable provides ILocation, and its __parent__
+        provides IEventTarget.
         """
 
     def extend(exceptions):

@@ -699,7 +699,7 @@ class WeeklyTimetableModel(BaseTimetableModel):
 
 class TimetableDict(PersistentDict):
 
-    implements(ILocation, IMultiContainer)
+    implements(ILocation, IMultiContainer, IEventTarget)
 
     __name__ = 'timetables'
     __parent__ = None
@@ -721,6 +721,10 @@ class TimetableDict(PersistentDict):
                             " not appear to be a child of %r"  %
                             (child, self))
         return "/".join(child.__name__)
+
+    def notify(self, event):
+        if IEventTarget.providedBy(self.__parent__):
+            event.dispatch(self.__parent__)
 
 
 class TimetabledMixin:

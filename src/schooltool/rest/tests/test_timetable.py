@@ -36,6 +36,7 @@ from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
+from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
@@ -339,7 +340,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(KeyError, view1._traverse, '2033 faal', request)
 
 
-class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
+class TestTimetableReadView(XMLCompareMixin, EventServiceTestMixin,
+                            unittest.TestCase):
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -506,10 +508,12 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
 
     def setUp(self):
         self.root = ServiceManagerStub()
+        self.setUpEventService()
 
     def createTimetabled(self):
         timetabled = TimetabledStub()
         timetabled.title = "John Smith"
+        timetabled.__parent__ = self.eventService
         return timetabled
 
     def createEmpty(self):
@@ -666,6 +670,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         TestTimetableReadView.setUp(self)
         self.setUpLibxml2()
         self.root = ServiceManagerStub(self.createEmpty())
+        self.root.eventService = self.eventService
 
     def tearDown(self):
         self.tearDownLibxml2()

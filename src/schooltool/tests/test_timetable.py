@@ -1084,11 +1084,35 @@ class TestTimetableDict(unittest.TestCase):
         from schooltool.timetable import TimetableDict
         from persistent.dict import PersistentDict
         from schooltool.interfaces import ILocation, IMultiContainer
+        from schooltool.interfaces import IEventTarget
 
         timetables = TimetableDict()
         self.assert_(isinstance(timetables, PersistentDict))
         verifyObject(ILocation, timetables)
         verifyObject(IMultiContainer, timetables)
+        verifyObject(IEventTarget, timetables)
+
+    def test_notify(self):
+        from schooltool.timetable import TimetableDict
+        from schooltool.interfaces import IEventTarget
+
+        class EventStub:
+            def __init__(self):
+                self.dispatched_to = []
+            def dispatch(self, target):
+                self.dispatched_to.append(target)
+
+        class EventTargetStub:
+            implements(IEventTarget)
+
+        e = EventStub()
+        timetables = TimetableDict()
+        timetables.notify(e)
+        self.assertEquals(e.dispatched_to, [])
+
+        timetables.__parent__ = EventTargetStub()
+        timetables.notify(e)
+        self.assertEquals(e.dispatched_to, [timetables.__parent__])
 
     def test_setitem_delitem(self):
         from schooltool.timetable import TimetableDict
