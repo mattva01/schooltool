@@ -22,10 +22,11 @@ The schooltool adapters.
 $Id$
 """
 from zope.interface import moduleProvides
+from schooltool.interfaces import IContainmentAPI, IFacetAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
-from schooltool.interfaces import IFacetAPI, ComponentLookupError
+from schooltool.interfaces import ComponentLookupError
 
-moduleProvides(IFacetAPI)
+moduleProvides(IContainmentAPI, IFacetAPI)
 
 adapterRegistry = {}
 

@@ -24,20 +24,24 @@ $Id$
 
 from zope.interface import Interface, Attribute
 
+#
+# Containment
+#
+
 class ILocation(Interface):
-    """A location in the standard object *hierarchy*
+    """An object located in a containment hierarchy.
 
-    The location can be either a physical location for content objects
-    or an adapted location.  An adapter, like a view, gets a location
-    from the physically located objects that it directly or indirectly
-    adapts.
-
-    From the location information, a *unique* path can be computed for
+    From the location information, a unique path can be computed for
     an object. By definition, an object cannot be at two locations in
     a hierarchy.
     """
 
-    __parent__ = Attribute("The parent of an object")
+    __parent__ = Attribute(
+        """The parent of an object.
+
+        This value is None when the object is not attached to the hierarchy.
+        Otherwise parent must implement either ILocation or IContainmentRoot.
+        """)
 
     __name__ = Attribute(
         """The name of the object within the parent.
@@ -50,6 +54,21 @@ class ILocation(Interface):
 class IContainmentRoot(Interface):
     """A marker interface for the top level application object."""
 
+
+class IContainmentAPI(Interface):
+    """Containment API"""
+
+    def getPath(obj):
+        """Returns the unique path of an object in the containment hierarchy.
+
+        The object must implement ILocation or IContainmentRoot and must be
+        attached to the hierarchy (i.e. following parent references should not
+        reach None).
+        """
+
+#
+# Facets
+#
 
 class IFacet(Interface):
     """A facet.
@@ -90,6 +109,10 @@ class IFacetAPI(Interface):
     def getFacetItems(ob):
         """Returns a sequence of (key, facet) for all facets of an object."""
 
+
+#
+# Groups and membership
+#
 
 class IGroupRead(Interface):
     """A set of group members.
@@ -152,10 +175,6 @@ class IGroup(IGroupWrite, IGroupRead, IFaceted):
     __doc__ = IGroupRead.__doc__
 
 
-class IRootGroup(IGroup, IContainmentRoot):
-    """An interface for the application root group."""
-
-
 class IGroupMember(ILocation):
 
     name = Attribute("A human readable name of this member.")
@@ -170,10 +189,22 @@ class IGroupMember(ILocation):
         """Notifies the member that it's removed from a group."""
 
 
+#
+# Application objects
+#
+
 class IPerson(IGroupMember, IFaceted):
 
     name = Attribute("Person's name")
 
+
+class IRootGroup(IGroup, IContainmentRoot):
+    """An interface for the application root group."""
+
+
+#
+# Exceptions
+#
 
 class ComponentLookupError(Exception):
     """An exception for component architecture."""

@@ -103,8 +103,9 @@ class TestFacetFunctions(unittest.TestCase):
 
     def test_api(self):
         from schooltool import adapters
-        from schooltool.interfaces import IFacetAPI
+        from schooltool.interfaces import IFacetAPI, IContainmentAPI
         verifyObject(IFacetAPI, adapters)
+        verifyObject(IContainmentAPI, adapters)
 
     def test_setFacet(self):
         from schooltool.adapters import setFacet
