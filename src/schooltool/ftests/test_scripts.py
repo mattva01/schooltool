@@ -202,7 +202,9 @@ class AppLogSetup(unittest.TestCase):
 
     XXX: This might not work on windows.
     """
+
     def test(self):
+        # The same file name should be specified in test.conf
         log = file("testserver_app.log", "w")
         for l in range(1, 21):
             print >> log, "Ftest log line %d" % l
