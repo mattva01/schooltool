@@ -36,6 +36,7 @@ import ZConfig
 import urllib
 import copy
 import getopt
+import libxml2
 from zope.interface import moduleProvides
 from transaction import get_transaction
 from zodb.interfaces import ConflictError
@@ -455,6 +456,10 @@ class Server:
             sys.path.insert(0, dir)
 
         setUpModules(self.config.module)
+
+        # XXX when we have configurable logging, this should register a
+        # callback that logs the error to the appropriate channel.
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
         db_configuration = self.config.database
         self.db = db_configuration.open()
