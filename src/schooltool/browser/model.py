@@ -231,6 +231,12 @@ class GroupView(View, GetParentsMixin):
                 for g in getRelatedObjects(self.context, URIMember)
                 if IGroup.providedBy(g)]
 
+    def canEdit(self):
+        return isManager(self.request.authenticated_user)
+
+    def editURL(self):
+        return absoluteURL(self.request, self.context) + '/edit.html'
+
 
 class GroupEditView(View):
     """Page for "editing" a Group (/group/id/edit.html)."""

@@ -32,6 +32,12 @@ from schooltool.tests.utils import RegistriesSetupMixin
 __metaclass__ = type
 
 
+class UserStub:
+    title = 'Mango'
+
+    def listLinks(self, uri):
+        return []
+
 class AppSetupMixin(RegistriesSetupMixin):
 
     def setUpSampleApp(self):
@@ -382,11 +388,11 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
     def test(self):
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
-        request = RequestStub(authenticated_user='not None')
+        request = RequestStub(authenticated_user=UserStub())
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
-        self.assert_('Teachers' in result)
+        assert 'Teachers' in result, result
 
     def test_getOtherMembers(self):
         from schooltool.browser.model import GroupView
@@ -411,6 +417,13 @@ class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(view.getParentGroups(request),
                           [{'url': 'http://localhost:7001/groups/root',
                             'title': 'root'}])
+
+    def test_traverse(self):
+        from schooltool.browser.model import GroupView, GroupEditView
+        request = RequestStub()
+        view = GroupView(self.group)
+        result = view._traverse('edit.html', request)
+        assert result.__class__ is GroupEditView
 
 
 class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
