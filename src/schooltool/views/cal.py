@@ -26,7 +26,7 @@ import datetime
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.views import View, textErrorPage
-from schooltool.cal import daterange, ICalReader, ICalParseError
+from schooltool.cal import ICalReader, ICalParseError
 from schooltool.component import getPath
 
 __metaclass__ = type
@@ -58,7 +58,7 @@ class SchooldayModelCalendarView(View):
             "DTSTAMP:%s" % dtstamp,
             "END:VEVENT",
         ]
-        for date in daterange(self.context.first, self.context.last):
+        for date in self.context:
             if self.context.isSchoolday(date):
                 s = date.strftime("%Y%m%d")
                 result += [
@@ -113,9 +113,7 @@ class SchooldayModelCalendarView(View):
                 if not first <= day <= last:
                     return textErrorPage(request,
                                          "School day outside school period")
-            self.context.clear()
-            self.context.first = first
-            self.context.last = last
+            self.context.reset(first, last)
             for day in days:
                 self.context.add(day)
         request.setHeader('Content-Type', 'text/plain')

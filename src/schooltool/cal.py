@@ -21,6 +21,8 @@ SchoolTool calendaring stuff.
 
 $Id$
 """
+
+import datetime
 from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
@@ -31,30 +33,13 @@ from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarEvent
-import datetime
-
 
 __metaclass__ = type
 
 
-def daterange(date1, date2):
-    """Returns a generator of the range of dates from date1 to date2.
-
-    >>> from pprint import pprint
-    >>> from datetime import date
-    >>> pprint(list(daterange(date(2003, 9, 1), date(2003, 9, 3))))
-    [datetime.date(2003, 9, 1),
-     datetime.date(2003, 9, 2),
-     datetime.date(2003, 9, 3)]
-    >>> list(daterange(date(2003, 9, 2), date(2003, 9, 1)))
-    []
-
-    """
-    date = date1
-    while date <= date2:
-        yield date
-        date += datetime.date.resolution
-
+#
+# Date ranges and schoolday models
+#
 
 class DateRange:
 
@@ -111,18 +96,28 @@ class SchooldayModel(DateRange):
         self._schooldays.remove(date)
 
     def addWeekdays(self, *weekdays):
-        for date in daterange(self.first, self.last):
+        for date in self:
             if date.weekday() in weekdays:
                 self.add(date)
 
     def removeWeekdays(self, *weekdays):
-        for date in daterange(self.first, self.last):
+        for date in self:
             if date.weekday() in weekdays and self.isSchoolday(date):
                 self.remove(date)
 
-    def clear(self):
+    def reset(self, first, last):
+        if last < first:
+            # import timemachine
+            raise ValueError("Last date %r less than first date %r" %
+                             (last, first))
+        self.first = first
+        self.last = last
         self._schooldays.clear()
 
+
+#
+# iCalendar parsing
+#
 
 class VEvent(dict):
     pass
@@ -369,7 +364,7 @@ def markNonSchooldays(ical_reader, schoolday_model):
             # attributes on VEvent instances when the value type is DATE,
             # and does not do so when the value type is DATE-TIME.
             dtend = getattr(event, 'dtend', event.dtstart)
-            for day in daterange(event.dtstart, dtend):
+            for day in DateRange(event.dtstart, dtend):
                 try:
                     schoolday_model.remove(day)
                 except (KeyError, ValueError):
@@ -377,6 +372,10 @@ def markNonSchooldays(ical_reader, schoolday_model):
                     # outside the school period.  This is not an error.
                     pass
 
+
+#
+# Timetabling
+#
 
 class Timetable:
 
@@ -583,6 +582,10 @@ class WeeklyTimetableModel(BaseTimetableModel):
         return None
 
 
+#
+# Calendaring
+#
+
 class Calendar:
     implements(ICalendar)
 
@@ -629,3 +632,4 @@ class CalendarEvent:
         self.dtstart = dt
         self.duration = duration
         self.title = title
+

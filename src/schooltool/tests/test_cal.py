@@ -27,7 +27,6 @@ import calendar
 from pprint import pformat
 from zope.interface.verify import verifyObject
 from zope.interface import implements
-from zope.testing.doctestunit import DocTestSuite
 from datetime import date, time, timedelta, datetime
 from StringIO import StringIO
 from schooltool.tests.helpers import diff, dedent
@@ -63,13 +62,20 @@ class TestSchooldayModel(unittest.TestCase):
         self.assertRaises(ValueError, cal.add, date(2003, 9, 15))
         self.assertRaises(ValueError, cal.remove, date(2003, 9, 15))
 
-    def testClear(self):
-        from schooltool.cal import SchooldayModel, daterange
+    def testReset(self):
+        from schooltool.cal import SchooldayModel
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
         cal.addWeekdays(1, 3, 5)
-        cal.clear()
-        for d in daterange(cal.first, cal.last):
+
+        new_first, new_last = date(2003, 8, 1), date(2003, 9, 30)
+        cal.reset(new_first, new_last)
+
+        self.assertEqual(cal.first, new_first)
+        self.assertEqual(cal.last, new_last)
+        for d in cal:
             self.assert_(not cal.isSchoolday(d))
+
+        self.assertRaises(ValueError, cal.reset, new_last, new_first)
 
     def testMarkWeekday(self):
         from schooltool.cal import SchooldayModel
@@ -856,7 +862,6 @@ class TestCalendarEvent(unittest.TestCase):
 
 
 def test_suite():
-    import schooltool.cal
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchooldayModel))
     suite.addTest(unittest.makeSuite(TestICalReader))
@@ -871,5 +876,4 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
-    suite.addTest(DocTestSuite(schooltool.cal))
     return suite

@@ -943,6 +943,13 @@ class IViewAPI(Interface):
 #
 
 class IDateRange(Interface):
+    """A range of dates (inclusive).
+
+    If r is an IDateRange, then the following invariant holds:
+    r.first <= r.last
+
+    Note that empty date ranges cannot be represented.
+    """
 
     first = Attribute("""The first day of the period of time covered.""")
 
@@ -1005,8 +1012,11 @@ class ISchooldayModelWrite(Interface):
         0 is Monday, 1 is Tuesday, etc.
         """
 
-    def clear():
-        """Mark all days as holidays."""
+    def reset(first, last):
+        """Change the period and mark all days as holidays.
+
+        If first is later than last, a ValueError is raised.
+        """
 
 
 class ICalendar(Interface):

@@ -71,7 +71,6 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         """))
 
     def test_get(self):
-        from schooltool.cal import daterange
         self.sm.addWeekdays(0, 1, 2, 3, 4) # Mon to Fri
         expected = dedent("""
             BEGIN:VCALENDAR
@@ -85,7 +84,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             DTSTAMP:20040102T030405Z
             END:VEVENT
         """)
-        for date in daterange(self.sm.first, self.sm.last):
+        for date in self.sm:
             if date.weekday() not in (5, 6):
                 s = date.strftime("%Y%m%d")
                 expected += dedent("""
@@ -99,7 +98,6 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         self.do_test(expected + "END:VCALENDAR")
 
     def test_put(self):
-        from schooltool.cal import daterange
         calendar = dedent("""
             BEGIN:VCALENDAR
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
@@ -137,7 +135,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
-        for date in daterange(self.sm.first, self.sm.last):
+        for date in self.sm:
             if date == datetime.date(2004, 9, 12):
                 self.assert_(self.sm.isSchoolday(date))
             else:
