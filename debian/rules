@@ -22,8 +22,8 @@ packageclients=schooltool-clients
 libpkgclients=libschooltool-clients
 
 # Executable Scripts
-scripts=debian/schoolbell debian/schooltool debian/import-sampleschool \
-	debian/schooltool-client
+scripts=debian/schoolbell.py debian/schooltool.py \
+	debian/import-sampleschool.py debian/schooltool-client.py
 
 # list of files/directories which are required for the clients
 clientfiles=\(							\
@@ -45,11 +45,11 @@ clientfiles=\(							\
 
 build: build-stamp
 
-debian/import-sampleschool.py: debian/import-sampleschool.head
+debian/import-sampleschool.py.template: debian/import-sampleschool.head
 	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
 	    import-sampleschool.py) > $@
 
-$(scripts): %: %.py
+$(scripts): %: %.template
 	cat $< | sed s/@PYTHON@/$(PYTHON)/ > $@
 
 build-stamp: $(scripts)
@@ -109,7 +109,7 @@ install-indep-stamp:
 		../debian/$(package)/usr/lib/$(package)/{} \;
 	rm -f debian/$(package)/usr/lib/$(package)/trace.py
 	# executables
-	install -m 755 -D -p debian/$(package) \
+	install -m 755 -D -p debian/$(package).py \
 		debian/$(package)/usr/bin/$(package); \
 	# configuration
 	install -m 644 -D -p debian/$(package).logrotate \
@@ -131,7 +131,7 @@ install-indep-stamp:
 		../debian/$(bellpackage)/usr/lib/$(package)/{} \;
 	rm -f debian/$(bellpackage)/usr/lib/$(package)/trace.py
 	# executables
-	install -m 755 -D -p debian/$(bellpackage) \
+	install -m 755 -D -p debian/$(bellpackage).py \
 		debian/$(bellpackage)/usr/bin/$(bellpackage); \
 	# configuration
 	install -m 644 -D -p debian/$(bellpackage).logrotate \
@@ -158,7 +158,7 @@ install-indep-stamp:
 		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
 	# executables
 	for p in schooltool-client import-sampleschool; do \
-	    install -m 755 -D -p debian/$$p \
+	    install -m 755 -D -p debian/$$p.py \
 		    debian/$(packageclients)/usr/bin/$$p; \
 	done
 	# Setup sample school for clients
