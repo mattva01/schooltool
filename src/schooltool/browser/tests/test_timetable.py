@@ -147,6 +147,16 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200)
 
+    def test_with_data(self):
+        view = self.createView()
+        request = view.request
+        view.request.args['day1'] = ['Monday']
+        view.request.args['model'] = ['SequentialDaysTimetableModel']
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(view.ttschema, self.createDefaultSchema(['Monday']))
+        self.assertEquals(view.model_name, 'SequentialDaysTimetableModel')
+
     def test_buildSchema_empty(self):
         view = self.createView()
         schema = view._buildSchema()
@@ -187,6 +197,13 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         schema = view._buildSchema()
         self.assertEquals(schema, self.createSchema(['D', 'D (2)', 'D (3)'],
                                                     ['A'], ['B'], ['C']))
+    def test_buildSchema_repeated_period_nam(self):
+        view = self.createView()
+        view.request.args['day1'] = ['D']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['A']
+        schema = view._buildSchema()
+        self.assertEquals(schema, self.createSchema(['D'], ['A', 'A (2)']))
 
     def test_buildSchema_add_day(self):
         view = self.createView()
@@ -260,6 +277,20 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         schema = view._buildSchema()
         self.assertEquals(schema, self.createSchema(['Day 1', 'Day 2'],
                                                     ['A', 'B'], ['C', 'D']))
+
+    def test_all_periods(self):
+        view = self.createView()
+        view.request.args['day1'] = ['Day 1']
+        view.request.args['day2'] = ['Day 2']
+        view.request.args['day3'] = ['Day 3']
+        view.request.args['day1.period1'] = ['A']
+        view.request.args['day1.period2'] = ['C']
+        view.request.args['day2.period1'] = ['B']
+        view.request.args['day2.period2'] = ['D']
+        view.request.args['day3.period1'] = ['A']
+        view.request.args['day3.period2'] = ['F']
+        view.ttschema = view._buildSchema()
+        self.assertEquals(view.all_periods(), ['A', 'C', 'B', 'D', 'F'])
 
 
 def test_suite():

@@ -106,6 +106,10 @@ class TimetableSchemaWizard(View):
 
     def do_GET(self, request):
         self.ttschema = self._buildSchema()
+        self.model_name = self.request.args.get('model', [None])[0]
+        # TODO: verify if model_name is OK and display the dreaded red border
+        #       day templates
+        #       actual schema creation
         return View.do_GET(self, request)
 
     def rows(self):
@@ -113,7 +117,6 @@ class TimetableSchemaWizard(View):
 
     def _buildSchema(self):
         """Built a timetable schema from data contained in the request."""
-
         n = 1
         day_ids = []
         day_idxs = []
@@ -147,6 +150,8 @@ class TimetableSchemaWizard(View):
                 periods = filter(None, periods)
                 if not periods:
                     periods = [_('Period 1')]
+                else:
+                    periods = fix_duplicates(periods)
             periods_for_day.append(periods)
             if longest_day is None or len(periods) > len(longest_day):
                 longest_day = periods
@@ -159,8 +164,16 @@ class TimetableSchemaWizard(View):
         for day, periods in zip(day_ids, periods_for_day):
             ttschema[day] = TimetableDay(periods)
 
-        # TODO: ttschema.model = model
         return ttschema
+
+    def all_periods(self):
+        """Return a list of all period names in order of occurrence."""
+        periods = []
+        for day_id in self.ttschema.day_ids:
+            for period in self.ttschema[day_id].periods:
+                if period not in periods:
+                    periods.append(period)
+        return periods
 
 
 def fix_duplicates(names):

@@ -274,7 +274,7 @@ class BaseTimetableModel(Persistent):
     including the day templates, are not.  Timetable models are
     considered to be volatile.  Making the timetable models persistent
     is an optimisation.  Everything would work without that as well,
-    but a separate picle of a model would be included in each
+    but a separate pickle of a model would be included in each
     timetable.
 
     Subclasses must define these methods:

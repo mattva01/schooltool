@@ -83,16 +83,18 @@ a.action:active {
 
 /* Forms */
 
-form {
+form, div.form {
   padding: 1ex;
   background: #e2e2e2; /* #ffffd3; */
   border: 1px solid #b34848;
+}
+form {
   float: left;
 }
 
 form.invisible {
   padding: 0;
-  background: white;
+  background: inherit;
   border: none;
   float: none;
 }
@@ -107,6 +109,14 @@ label {
 
 label.wide {
   width: 12em;
+}
+
+label.block {
+  display: block;
+  width: auto;
+  float: none;
+  font-weight: normal;
+  margin: 1ex;
 }
 
 div.info {
@@ -488,12 +498,17 @@ div.section h2 {
 
 /* Timetable schemas */
 
+form table.timetable {
+  width: 90%;
+}
+
 table.timetable th.day input.text {
   width: 100%;
   background: #cccccc;
   border: 1px solid #888888;
 }
-table.timetable td.period input.text {
+table.timetable td.period input.text,
+table.timetable td.time input.text {
   width: 100%;
   background: #eeeeee;
   border: 1px solid #888888;

@@ -6,11 +6,17 @@
   <h1 metal:fill-slot="h1" i18n:translate="">New timetable schema</h1>
 <metal:block metal:fill-slot="content">
 
-<form id="ttwizard" method="POST" tal:attributes="action request/uri"
+<form class="invisible" method="POST" tal:attributes="action request/uri"
       tal:define="tt view/ttschema;
                   ncols python:len(tt.day_ids) or 1;
                   rows view/rows;
                   nrows python:len(rows)">
+
+<p i18n:translate="">
+First, please define the days and periods of the timetable.
+</p>
+
+<div class="form">
 
   <table class="timetable"
          tal:define="col_width python:'%d%%' % (100 / ncols);
@@ -59,6 +65,88 @@
            tal:attributes="tabindex python:tabindex+3"
            i18n:attributes="value" />
   </div>
+
+</div>
+
+<p i18n:translate="">
+Second, select the way timetable days are aligned with calendar days.
+</p>
+
+<div class="form">
+  <table>
+    <tr>
+      <td>
+        <input id="weekly_model" type="radio" name="model"
+               tal:attributes="checked
+                      python:view.model_name == 'WeeklyTimetableModel'"
+               value="WeeklyTimetableModel" />
+      </td>
+      <td>
+        <label class="block" for="weekly_model" i18n:translate="">
+          Timetable day always coincides with the day of week (i.e. on Mondays
+          the first timetable day is used, on Tuesdays the second, and so on).
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input id="sequential_model" type="radio" name="model"
+               tal:attributes="checked
+                      python:view.model_name == 'SequentialDaysTimetableModel'"
+               value="SequentialDaysTimetableModel" />
+      </td>
+      <td>
+        <label class="block" for="sequential_model" i18n:translate="">
+          Timetable days are used sequentially, jumping over days that are not
+          school days.
+        </label>
+      </td>
+</div>
+
+<p i18n:translate="">
+Third, define the time and duration of periods when they fall on certain
+days of week.  Use the following format: <tt>HH:MM-HH:MM</tt> (e.g.,
+9:30-10:15).  It is not necessary to define all periods for all days of week,
+omissions will just cause that period to be skipped if it happens to fall on
+that day of week.  If the list of periods is not up to date with the changes
+you made in the table above, use the Update button to refresh the form.
+</p>
+
+<div class="form">
+  <table class="timetable">
+    <tr>
+      <th class="day" i18n:translate=""></th>
+      <th class="day" width="12%" i18n:translate="">Monday</th>
+      <th class="day" width="12%" i18n:translate="">Tuesday</th>
+      <th class="day" width="12%" i18n:translate="">Wednesday</th>
+      <th class="day" width="12%" i18n:translate="">Thursday</th>
+      <th class="day" width="12%" i18n:translate="">Friday</th>
+      <th class="day" width="12%" i18n:translate="">Saturday</th>
+      <th class="day" width="12%" i18n:translate="">Sunday</th>
+    </tr>
+    <tr tal:repeat="period view/all_periods">
+      <th class="period" nowrap="" tal:content="period">Period 1</th>
+      <td class="time" tal:repeat="tmp python:range(7)"><input class="text" type="text" value="" /></td>
+    </tr>
+  </table>
+
+  <div class="buttons" tal:define="tabindex python:ncols*(nrows+3)">
+    <input type="submit" class="button" name="UPDATE" value="Update"
+           tal:attributes="tabindex python:tabindex+1"
+           i18n:attributes="value" />
+  </div>
+</div>
+
+<p i18n:translate="">
+Finally, make sure the information in this form is correct, because the only
+way to correct it will be to remove this timetable schema and recreate it.
+</p>
+
+<div class="form">
+  <input type="submit" class="button" name="CREATE"
+         value="Create timetable schema"
+         i18n:attributes="value" />
+</div>
 
 </form>
 
