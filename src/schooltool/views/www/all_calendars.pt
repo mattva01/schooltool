@@ -1,32 +1,47 @@
-<html>
+<html i18n:domain="schooltool">
 <head>
-  <title>Calendars</title>
+  <title i18n:translate="">Calendars</title>
 </head>
 <body>
-  <h1>Calendars</h1>
-  <h2>Groups</h2>
+  <h1 i18n:translate="">Calendars</h1>
+  <h2 i18n:translate="">Groups</h2>
   <ul>
     <li tal:repeat="item view/groups">
       <a tal:attributes="href item/href"
-         tal:content="string:${item/title} (private calendar)" />,
+        ><span tal:replace="item/title"
+        /> <tal:block i18n:translate="">(private calendar)</tal:block
+      ></a>,
       <a tal:attributes="href item/tthref"
-         tal:content="string:${item/title} (timetable)" /></li>
+        ><span tal:replace="item/title"
+        /> <tal:block i18n:translate="">(timetable)</tal:block
+      ></a>
+    </li>
   </ul>
-  <h2>Persons</h2>
+  <h2 i18n:translate="">Persons</h2>
   <ul>
     <li tal:repeat="item view/persons">
       <a tal:attributes="href item/href"
-         tal:content="string:${item/title} (private calendar)" />,
+        ><span tal:replace="item/title"
+        /> <tal:block i18n:translate="">(private calendar)</tal:block
+      ></a>,
       <a tal:attributes="href item/tthref"
-         tal:content="string:${item/title} (timetable)" /></li>
+        ><span tal:replace="item/title"
+        /> <tal:block i18n:translate="">(timetable)</tal:block
+      ></a>
+    </li>
   </ul>
-  <h2>Resources</h2>
+  <h2 i18n:translate="">Resources</h2>
   <ul>
     <li tal:repeat="item view/resources">
       <a tal:attributes="href item/href"
-         tal:content="string:${item/title} (private calendar)" />,
+        ><span tal:replace="item/title"
+        /> <tal:block i18n:translate="">(private calendar)</tal:block
+      ></a>,
       <a tal:attributes="href item/tthref"
-         tal:content="string:${item/title} (timetable)" /></li>
+        ><span tal:replace="item/title"
+        /> <tal:block i18n:translate="">(timetable)</tal:block
+      ></a>
+    </li>
   </ul>
 </body>
 </html>

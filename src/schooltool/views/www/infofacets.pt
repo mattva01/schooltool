@@ -1,10 +1,13 @@
 <person_info xmlns="http://schooltool.org/ns/model/0.1"
              xmlns:tal="http://xml.zope.org/namespaces/tal"
-             xmlns:xlink="http://www.w3.org/1999/xlink">
+             xmlns:xlink="http://www.w3.org/1999/xlink"
+             xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+             i18n:domain="schooltool">
   <first_name tal:content="context/first_name"/>
   <last_name tal:content="context/last_name"/>
   <date_of_birth tal:content="context/date_of_birth"/>
   <comment tal:content="context/comment"/>
   <photo xlink:type="simple" xlink:title="Photo"
+         i18n:attributes="xlink:title Photo"
          tal:attributes="xlink:href string:${view/path}/photo"/>
 </person_info>

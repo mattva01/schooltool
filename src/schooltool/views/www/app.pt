@@ -1,6 +1,8 @@
 <schooltool xmlns:xlink="http://www.w3.org/1999/xlink"
-            xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <message>Welcome to the SchoolTool server</message>
+            xmlns:tal="http://xml.zope.org/namespaces/tal"
+            xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+            i18n:domain="schooltool">
+  <message i18n:translate="">Welcome to the SchoolTool server</message>
   <roots>
     <root xlink:type="simple" tal:repeat="root view/getRoots"
           tal:attributes="xlink:title root/title; xlink:href root/path"/>
@@ -15,9 +17,9 @@
          tal:attributes="xlink:title utility/title; xlink:href utility/path"/>
   </utilities>
   <schooltt xlink:type="simple" xlink:title="Whole school timetables"
-            xlink:href="/schooltt"/>
+  xlink:href="/schooltt" i18n:attributes="xlink:title Whole_school_timetables"/>
   <ttschemas xlink:type="simple" xlink:title="Timetable schemas"
-             xlink:href="/ttschemas"/>
+             xlink:href="/ttschemas" i18n:attributes="xlink:title Timetable_schemas"/>
   <time-periods xlink:type="simple" xlink:title="Time periods"
-                xlink:href="/time-periods"/>
+             xlink:href="/time-periods" i18n:attributes="xlink:title Time_periods"/>
 </schooltool>

@@ -1,20 +1,28 @@
 <person xmlns:xlink="http://www.w3.org/1999/xlink"
-        xmlns:tal="http://xml.zope.org/namespaces/tal">
+        xmlns:tal="http://xml.zope.org/namespaces/tal"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="schooltool">
   <name tal:content="view/context/title">Pete</name>
   <groups>
     <item tal:repeat="group view/getGroups" xlink:type="simple"
           tal:attributes="xlink:title group/title; xlink:href group/path" />
   </groups>
   <relationships xlink:type="simple" xlink:title="Relationships"
+      i18n:attributes="xlink:title Relationships"
       tal:attributes="xlink:href string:${view/path}/relationships" />
   <facets xlink:type="simple" xlink:title="Facets"
+      i18n:attributes="xlink:title Facets"
       tal:attributes="xlink:href string:${view/path}/facets" />
   <timetables xlink:type="simple" xlink:title="Own timetables"
+      i18n:attributes="xlink:title Own_timetables"
       tal:attributes="xlink:href string:${view/path}/timetables" />
   <timetables xlink:type="simple" xlink:title="Composite timetables"
+      i18n:attributes="xlink:title Composite_timetables"
       tal:attributes="xlink:href string:${view/path}/composite-timetables" />
   <calendar xlink:type="simple" xlink:title="Private calendar"
+      i18n:attributes="xlink:title Private_calendar"
       tal:attributes="xlink:href string:${view/path}/calendar" />
   <calendar xlink:type="simple" xlink:title="Calendar derived from timetables"
+      i18n:attributes="xlink:title Calendar_derived_from_timetables"
       tal:attributes="xlink:href string:${view/path}/timetable-calendar" />
 </person>

@@ -113,11 +113,13 @@ class Template(PageTemplateFile):
                         target_language=None, default=None):
         """Return the translation for the message referred to by msgid.
 
-        For now this simply translates msgid according to the current locale
-        of the server without regard to other arguments.
+        Translates the msgid according to the current locale of the server.
         """
-        return _(msgid)
-
+        translated = _(msgid)
+        # XXX can this be done in a nicer way?
+        if translated == msgid:
+            translated = default
+        return translated
 
 #
 # HTTP view infrastructure
