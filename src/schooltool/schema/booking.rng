@@ -10,14 +10,9 @@ RelaxNG grammar for a resource booking
     <element name="booking">
       <optional>
         <attribute name="conflicts">
-          <text/>
+          <text/>  <!-- "ignore" or skip it -->
         </attribute>
       </optional>
-      <element name="resource">
-        <attribute name="path">
-          <text/>
-        </attribute>
-      </element>
       <element name="owner">
         <attribute name="path">
           <text/>

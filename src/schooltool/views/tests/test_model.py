@@ -352,7 +352,7 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
 
         result = self.view._traverse('booking', request)
         self.assert_(isinstance(result, BookingView))
-        self.assert_(result.context is self.view.context.calendar)
+        self.assert_(result.context is self.view.context)
 
     def test_render(self):
         request = RequestStub("http://localhost/resources/room3")

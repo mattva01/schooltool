@@ -120,7 +120,7 @@ class ResourceView(ApplicationObjectTraverserView):
         if name == 'timetables':
             return TimetableTraverseView(self.context, readonly=True)
         if name == 'booking':
-            return BookingView(self.context.calendar)
+            return BookingView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
 

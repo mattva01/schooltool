@@ -289,16 +289,6 @@ class BookingView(View):
             ns = 'http://schooltool.org/ns/calendar/0.1'
             xpathctx.xpathRegisterNs('cal', ns)
 
-            resource_node = xpathctx.xpathEval('/cal:booking/cal:resource')[0]
-            res_path = resource_node.nsProp('path', None)
-            try:
-                resource = traverse(self.context, res_path)
-            except KeyError:
-                return textErrorPage(request, "Invalid path: %r" % res_path)
-            if not IResource.isImplementedBy(resource):
-                return textErrorPage(request,
-                                     "'resource' in not a Resource.")
-
             owner_node = xpathctx.xpathEval('/cal:booking/cal:owner')[0]
             owner_path = owner_node.nsProp('path', None)
             try:
@@ -325,13 +315,13 @@ class BookingView(View):
                 force = True
             if not force:
                 p = Period(start, duration)
-                for e in resource.calendar:
+                for e in self.context.calendar:
                     if p.overlaps(Period(e.dtstart, e.duration)):
                         return textErrorPage(request, "The resource is "
                                              "busy at specified time")
-            title = '%s booked by %s' % (resource.title, owner.title)
+            title = '%s booked by %s' % (self.context.title, owner.title)
             ev = CalendarEvent(start, duration, title)
-            resource.calendar.addEvent(ev)
+            self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
             request.setHeader('Content-Type', 'text/plain')
             return "OK"

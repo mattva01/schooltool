@@ -805,15 +805,15 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         from schooltool.clients.guiclient import ResourceTimeSlot
         body = """
             <availability xmlns:xlink="http://www.w3.org/1999/xlink">
-               <resource xlink:type="simple"
-                         xlink:href="/resources/room101" xlink:title="101">
-                 <slot duration="1440" start="2004-01-01 00:00:00"/>
-               </resource>
-               <resource xlink:type="simple"
-                         xlink:href="/resources/hall" xlink:title="Hall">
-                 <slot duration="1440" start="2004-01-01 00:00:00"/>
-                 <slot duration="30" start="2004-01-02 12:30:00"/>
-               </resource>
+              <resource xlink:type="simple"
+                        xlink:href="/resources/room101" xlink:title="101">
+                <slot duration="1440" start="2004-01-01 00:00:00"/>
+              </resource>
+              <resource xlink:type="simple"
+                        xlink:href="/resources/hall" xlink:title="Hall">
+                <slot duration="1440" start="2004-01-01 00:00:00"/>
+                <slot duration="30" start="2004-01-02 12:30:00"/>
+              </resource>
             </availability>
         """
         expected = [ResourceTimeSlot('101', '/resources/room101',
@@ -834,6 +834,34 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                                ('duration', '30'), ('hours', [0, 12]),
                                ('resources', ['room101', 'hall'])], True)
         self.checkConnPath(client, '/busysearch?' + qs)
+
+    def test_bookResource(self):
+        client = self.newClient(ResponseStub(200, 'OK', 'Booked'))
+        client.bookResource('/resources/r001', '/persons/p001',
+                            datetime.datetime(2004, 2, 16, 14, 45),
+                            30, True)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/resources/r001/booking')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEqualsXML(conn.body, """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1"
+                     conflicts="ignore">
+              <owner path="/persons/p001" />
+              <slot start="2004-02-16 14:45:00" duration="30" />
+            </booking>
+        """)
+
+        client = self.newClient(ResponseStub(200, 'OK', 'Booked'))
+        client.bookResource('/resources/r001', '/persons/p001',
+                            datetime.datetime(2004, 2, 16, 14, 45),
+                            30, False)
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <owner path="/persons/p001" />
+              <slot start="2004-02-16 14:45:00" duration="30" />
+            </booking>
+        """)
 
 
 class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,

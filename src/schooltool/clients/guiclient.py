@@ -412,7 +412,19 @@ class SchoolToolClient:
     def bookResource(self, resource_path, owner_path, date_and_time, duration,
                      ignore_conflicts):
         """Book a resource."""
-        raise SchoolToolError("Not implemented yet") # XXX
+        if ignore_conflicts:
+            conflicts = ' conflicts="ignore"'
+        else:
+            conflicts = ''
+        body = ('<booking xmlns="http://schooltool.org/ns/calendar/0.1"%s>\n'
+                '  <owner path="%s"/>\n'
+                '  <slot start="%s" duration="%d" />\n'
+                '</booking>\n'
+                % (conflicts, owner_path,
+                   date_and_time.strftime('%Y-%m-%d %H:%M:%S'), duration))
+        response = self.post('%s/booking' % resource_path, body)
+        if response.status != 200:
+            raise ResponseStatusError(response)
 
 
 class Response:

@@ -568,12 +568,11 @@ class TestBookingView(unittest.TestCase):
         app['resources'] = ApplicationObjectContainer(Resource)
         self.person = app['persons'].new("john", title="John")
         self.resource = app['resources'].new("hall", title="Hall")
-        self.view = BookingView(self.resource.calendar)
+        self.view = BookingView(self.resource)
 
     def test(self):
         xml = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/hall"/>
               <owner path="/persons/john"/>
               <slot start="2004-01-01 10:00:00" duration="90"/>
             </booking>
@@ -593,7 +592,6 @@ class TestBookingView(unittest.TestCase):
         from schooltool.common import parse_datetime
         xml1 = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/hall"/>
               <owner path="/persons/john"/>
               <slot start="2004-01-01 10:00:00" duration="90"/>
             </booking>
@@ -601,7 +599,6 @@ class TestBookingView(unittest.TestCase):
         xml2 = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1"
                      conflicts="error">
-              <resource path="/resources/hall"/>
               <owner path="/persons/john"/>
               <slot start="2004-01-01 10:00:00" duration="90"/>
             </booking>
@@ -622,7 +619,6 @@ class TestBookingView(unittest.TestCase):
         xml3 = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1"
                      conflicts="ignore">
-              <resource path="/resources/hall"/>
               <owner path="/persons/john"/>
               <slot start="2004-01-01 10:00:00" duration="90"/>
             </booking>
@@ -641,42 +637,24 @@ class TestBookingView(unittest.TestCase):
         bad_xml = "<booking />"
         bad_path_xml = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/room1"/>
-              <owner path="/persons/john"/>
-              <slot start="2004-01-01 10:00:00" duration="90"/>
-            </booking>
-            """
-        bad_path2_xml = """
-            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/hall"/>
               <owner path="/persons/000001"/>
               <slot start="2004-01-01 10:00:00" duration="90"/>
             </booking>
             """
         bad_date_xml = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/hall"/>
               <owner path="/persons/john"/>
               <slot start="2004-01-01 10:00" duration="90"/>
             </booking>
             """
         bad_dur_xml = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/hall"/>
               <owner path="/persons/john"/>
               <slot start="2004-01-01 10:00:00" duration="1h"/>
             </booking>
             """
-        bad_res_xml = """
-            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/persons/john"/>
-              <owner path="/persons/john"/>
-              <slot start="2004-01-01 10:00:00" duration="10"/>
-            </booking>
-            """
         bad_owner_xml = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
-              <resource path="/resources/hall"/>
               <owner path="/"/>
               <slot start="2004-01-01 10:00:00" duration="10"/>
             </booking>
@@ -684,11 +662,9 @@ class TestBookingView(unittest.TestCase):
         cases = [
             (nonxml, "Not valid XML"),
             (bad_xml, "Input not valid according to schema"),
-            (bad_path_xml, "Invalid path: '/resources/room1'"),
-            (bad_path2_xml, "Invalid path: '/persons/000001'"),
+            (bad_path_xml, "Invalid path: '/persons/000001'"),
             (bad_date_xml, "'start' argument incorrect"),
             (bad_dur_xml, "'duration' argument incorrect"),
-            (bad_res_xml, "'resource' in not a Resource."),
             (bad_owner_xml, "'owner' in not an ApplicationObject."),
             ]
         for xml, error in cases:
