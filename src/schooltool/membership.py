@@ -218,7 +218,7 @@ Membership = RelationshipSchema(URIMembership,
 
 class MembershipEvent(RelationshipEvent):
 
-    implements(IMembershipEvent)
+    implements(IMembershipEvent, URIMembership)
 
     def __init__(self, links):
         RelationshipEvent.__init__(self, links)

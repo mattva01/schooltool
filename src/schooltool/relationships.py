@@ -23,6 +23,7 @@ $Id$
 """
 from persistence import Persistent
 from zope.interface import implements, classProvides, moduleProvides
+from zope.interface import directlyProvides
 from schooltool.interfaces import IRemovableLink, IRelatable
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
@@ -80,6 +81,7 @@ class Link(Persistent):
         otherlink = self.relationship.traverse(self)
         self.traverse().__links__.remove(otherlink)
         event = RelationshipRemovedEvent((self, otherlink))
+        directlyProvides(event, self.reltype)
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
 
@@ -173,6 +175,7 @@ def relate_default(reltype, (a, role_of_a), (b, role_of_b), title=None):
     _LinkRelationship(reltype, title, link_a, link_b)
     links = link_a, link_b
     event = RelationshipAddedEvent(links)
+    directlyProvides(event, reltype)
     event.dispatch(a)
     event.dispatch(b)
     return links

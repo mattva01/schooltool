@@ -285,6 +285,21 @@ class TestEventService(unittest.TestCase):
         es.notify(event)
         self.assertEquals(event.dispatched_to, [target2, target2])
 
+    def test_nonevents(self):
+        from zope.interface import Interface, directlyProvides
+        from schooltool.event import EventService
+
+        class IUnrelated(Interface):
+            pass
+
+        es = EventService()
+        target = TargetStub()
+        es.subscribe(target, IUnrelated)
+        event = EventAStub()
+        directlyProvides(event, IUnrelated)
+        es.notify(event)
+        self.assertEquals(event.dispatched_to, [target])
+
 
 def test_suite():
     suite = unittest.TestSuite()

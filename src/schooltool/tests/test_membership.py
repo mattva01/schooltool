@@ -238,7 +238,7 @@ class TestMemberLink(EventServiceTestMixin, unittest.TestCase):
 
     def test_unlink(self):
         from schooltool.membership import MemberLink
-        from schooltool.interfaces import IMemberRemovedEvent
+        from schooltool.interfaces import IMemberRemovedEvent, URIMembership
         member = MemberStub(self.serviceManager)
         group = GroupStub(self.serviceManager)
         link = MemberLink(group, member, 'foo')
@@ -249,6 +249,7 @@ class TestMemberLink(EventServiceTestMixin, unittest.TestCase):
         self.assert_(group.events, [e])
         self.assert_(member.events, [e])
         self.assert_(IMemberRemovedEvent.isImplementedBy(e))
+        self.assert_(URIMembership.isImplementedBy(e))
         self.assert_(e.member is member)
         self.assert_(e.group is group)
 
@@ -271,7 +272,7 @@ class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
 
     def test_unlink(self):
         from schooltool.membership import GroupLink
-        from schooltool.interfaces import IMemberRemovedEvent
+        from schooltool.interfaces import IMemberRemovedEvent, URIMembership
         member = MemberStub(self.serviceManager)
         group = GroupStub(self.serviceManager)
         link = GroupLink(member, group, 'foo')
@@ -282,6 +283,7 @@ class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
         self.assert_(group.events, [e])
         self.assert_(member.events, [e])
         self.assert_(IMemberRemovedEvent.isImplementedBy(e))
+        self.assert_(URIMembership.isImplementedBy(e))
         self.assert_(e.member is member)
         self.assert_(e.group is group)
 
@@ -363,6 +365,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(type(links[1]), GroupLink)
         e = self.check_one_event_received([m, g])
         self.assert_(IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(URIMembership.isImplementedBy(e))
         self.assert_(e.links is links)
         self.assert_(e.member is m)
         self.assert_(e.group is g)
@@ -384,6 +387,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(type(links[1]), GroupLink)
         e = self.check_one_event_received([m, g])
         self.assert_(IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(URIMembership.isImplementedBy(e))
         self.assert_(e.links is links)
         self.assert_(e.member is m)
         self.assert_(e.group is g)
@@ -404,6 +408,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(type(links[1]), MemberLink)
         e = self.check_one_event_received([m, g])
         self.assert_(IMemberAddedEvent.isImplementedBy(e))
+        self.assert_(URIMembership.isImplementedBy(e))
         self.assert_(e.links is links)
         self.assert_(e.member is m)
         self.assert_(e.group is g)
