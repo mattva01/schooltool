@@ -27,6 +27,8 @@ import urllib
 import calendar
 import sys
 
+from zope.event import notify
+from zope.app.event.objectevent import ObjectModifiedEvent
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.utility import setUpWidgets
@@ -1200,17 +1202,27 @@ class CalendarEventViewMixin(object):
         except ConversionError:
             return None
 
+    def updateForm(self):
+        # Just refresh the form.  It is necessary because some labels for
+        # monthly recurrence rules depend on the event start date.
+        self.update_status = ''
+        try:
+            data = getWidgetsData(self, self.schema, names=self.fieldNames)
+            kw = {}
+            for name in self._keyword_arguments:
+                if name in data:
+                    kw[str(name)] = data[name]
+            self.processRequest(kw)
+        except WidgetsError, errors:
+            self.errors = errors
+            self.update_status = _("An error occured.")
+            return self.update_status
+        # AddView.update() sets self.update_status and returns it.  Weird,
+        # but let's copy that behavior.
+        return self.update_status
 
-class CalendarEventAddView(CalendarEventViewMixin, AddView):
-    """A view for adding an event."""
-
-    __used_for__ = ISchoolBellCalendar
-    schema = ICalendarEventAddForm
-
-    error = None
-
-    def create(self, **kwargs):
-        """Create an event.
+    def processRequest(self, kwargs):
+        """Puts informations from the widgets into a dict.
 
         This method performs additional validation, because Zope 3 forms aren't
         powerful enough.  If any errors are encountered, a WidgetsError is
@@ -1269,8 +1281,29 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         duration = timedelta(minutes=duration)
 
         rrule = recurrence and makeRecurrenceRule(**kwargs) or None
-        event = self._factory(start, duration, title,
-                              recurrence=rrule, location=location)
+        return {
+            'location': location,
+            'title': title,
+            'start': start,
+            'duration': duration,
+            'rrule': rrule,
+            }
+
+
+
+class CalendarEventAddView(CalendarEventViewMixin, AddView):
+    """A view for adding an event."""
+
+    __used_for__ = ISchoolBellCalendar
+    schema = ICalendarEventAddForm
+
+    error = None
+
+    def create(self, **kwargs):
+        """Create an event."""
+        data = self.processRequest(kwargs)
+        event = self._factory(data['start'], data['duration'], data['title'],
+                              recurrence=data['rrule'], location=data['location'])
         return event
 
     def add(self, event):
@@ -1282,25 +1315,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     def update(self):
         """Process the form."""
         if 'UPDATE' in self.request:
-            # Just refresh the form.  It is necessary because some labels for
-            # monthly recurrence rules depend on the event start date.
-            self.update_status = ''
-            try:
-                data = getWidgetsData(self, self.schema, names=self.fieldNames)
-            except WidgetsError, errors:
-                self.errors = errors
-                self.update_status = _("An error occured.")
-                return self.update_status
-            else:
-                args = [data[name] for name in self._arguments]
-                kw = {}
-                for name in self._keyword_arguments:
-                    if name in data:
-                        kw[str(name)] = data[name]
-                self.create(*args, **kw)
-            # AddView.update() sets self.update_status and returns it.  Weird,
-            # but let's copy that behavior.
-            return self.update_status
+            return self.updateForm()
         elif 'CANCEL' in self.request:
             self.update_status = ''
             self.request.response.redirect(self.nextURL(date.today()))
@@ -1313,7 +1328,8 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
 
         If the date argument is specified, the user is redirected to that
         particular day in the calendar.  Otherwise, the date is taken from
-        self._redirectToDate, which is set by add(). # XXX A bit hacky...
+        self._redirectToDate, which is set by add() or any other method.
+        # XXX A bit hacky...
         """
         if date is None:
             date = self._redirectToDate
@@ -1324,11 +1340,20 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
 class ICalendarEventEditForm(ICalendarEventAddForm):
     pass
 
-
 class CalendarEventEditView(CalendarEventViewMixin, EditView):
     """A view for editing an event."""
 
     error = None
+    _redirectToDate = None
+
+    def keyword_arguments(self):
+        """Wraps fieldNames under another name.
+
+        AddView and EditView api does not match so some wraping is needed.
+        """
+        return self.fieldNames
+
+    _keyword_arguments = property(keyword_arguments, None)
 
     def _setUpWidgets(self):
         setUpWidgets(self, self.schema, IInputWidget, names=self.fieldNames,
@@ -1383,8 +1408,72 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         else:
             return self.context.dtstart.date()
 
+    def applyChanges(self):
+        data = getWidgetsData(self, self.schema, names=self.fieldNames)
+        kw = {}
+        for name in self._keyword_arguments:
+            if name in data:
+                kw[str(name)] = data[name]
+
+        widget_data = self.processRequest(kw)
+
+        if self.context.dtstart != widget_data['start']:
+            self._redirectToDate = widget_data['start'].strftime("%Y-%m-%d")
+        self.context.dtstart = widget_data['start']
+        self.context.duration = widget_data['duration']
+        self.context.title = widget_data['title']
+        self.context.location = widget_data['location']
+        self.context.recurrence = widget_data['rrule']
+        return True
+
     def update(self):
-        return ''
+        if self.update_status is not None:
+            # We've been called before. Just return the status we previously
+            # computed.
+            return self.update_status
+
+        status = ''
+
+        if "UPDATE" in self.request:
+            return self.updateForm()
+        elif "UPDATE_SUBMIT" in self.request:
+            # Replicating EditView functionality
+            changed = False
+            try:
+                self._redirectToDate = self.request.get(
+                    'date',
+                    self.context.dtstart.strftime("%Y-%m-%d"))
+                changed = self.applyChanges()
+                if changed:
+                    notify(ObjectModifiedEvent(self.context))
+            except WidgetsError, errors:
+                self.errors = errors
+                status = _("An error occured.")
+                get_transaction().abort()
+            else:
+                if changed:
+                    formatter = self.request.locale.dates.getFormatter(
+                        'dateTime', 'medium')
+                    status = _("Updated on ${date_time}")
+                    status.mapping = {'date_time': formatter.format(
+                            datetime.utcnow())}
+                self.request.response.redirect(self.nextURL())
+
+        self.update_status = status
+        return status
+
+    def nextURL(self, date=None):
+        """Return the URL to be displayed after the add operation.
+
+        If the date argument is specified, the user is redirected to that
+        particular day in the calendar.  Otherwise, the date is taken from
+        self._redirectToDate, which is set by add() or any other method.
+        # XXX A bit hacky...
+        """
+        if date is None:
+            date = self._redirectToDate
+        url = absoluteURL(self.context.__parent__, self.request)
+        return '%s/%s' % (url, date)
 
 
 def makeRecurrenceRule(interval=None, until=None,

@@ -1358,9 +1358,8 @@ class CalendarEventEditTestView(CalendarEventEditView):
     _set_before_add = []
     _set_after_add = []
 
-
 def doctest_CalendarEventEditView_edit():
-    r"""Tests for CalendarEventEditView editing of new event.
+    r"""Tests for CalendarEventEditView editing of an event.
 
     Let's create an event:
 
@@ -1383,24 +1382,228 @@ def doctest_CalendarEventEditView_edit():
         >>> view = CalendarEventEditTestView(event, request)
 
         >>> view.update()
-        ''
+        u'Updated on ${date_time}'
 
         >>> print view.errors
         ()
         >>> print view.error
         None
 
-        # TODO: does not work yet.
-        #>>> event.title
-        #u'NonHacking'
-        #>>> event.dtstart
-        #datetime.datetime(2004, 9, 13, 15, 30)
-        #>>> event.duration
-        #datetime.timedelta(0, 3000)
-        #>>> event.location is None
-        #True
+        >>> event.title
+        u'NonHacking'
+        >>> event.dtstart
+        datetime.datetime(2004, 9, 13, 15, 30)
+        >>> event.duration
+        datetime.timedelta(0, 3000)
+        >>> event.location is None
+        True
+
+     Now a recurring event:
+
+        >>> from schoolbell.app.browser.cal import makeRecurrenceRule
+        >>> rule = makeRecurrenceRule(recurrence_type='yearly', interval=2,
+        ...                           range='until', until='2004-01-02')
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=60),
+        ...                       recurrence=rule)
+        >>> request = TestRequest(form={'field.title': 'NonHacking',
+        ...                             'field.start_date': '2004-09-19',
+        ...                             'field.start_time': '15:35',
+        ...                             'field.duration': '50',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE_SUBMIT': 'Edit'})
+
+        >>> directlyProvides(event, IContainmentRoot)
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        u'Updated on ${date_time}'
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+        >>> event.title
+        u'NonHacking'
+        >>> event.dtstart
+        datetime.datetime(2004, 9, 19, 15, 35)
+        >>> event.duration
+        datetime.timedelta(0, 3000)
+        >>> event.location
+        u'Kitchen'
+
+    We have succesfully removed the recurrence:
+
+        >>> event.recurrence is None
+        True
+
+    Now lets add a new recurrence to the existing event:
+
+        >>> request = TestRequest(form={'field.title': 'NonHacking',
+        ...                             'field.start_date': '2004-09-19',
+        ...                             'field.start_time': '15:35',
+        ...                             'field.duration': '50',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence_type' : 'daily',
+        ...                             'field.range': 'count',
+        ...                             'field.count': '23',
+        ...                             'field.interval': '2',
+        ...                             'UPDATE_SUBMIT': 'Edit'})
+
+        >>> directlyProvides(event, IContainmentRoot)
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        u'Updated on ${date_time}'
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+        >>> event.title
+        u'NonHacking'
+        >>> event.dtstart
+        datetime.datetime(2004, 9, 19, 15, 35)
+        >>> event.duration
+        datetime.timedelta(0, 3000)
+        >>> event.location
+        u'Kitchen'
+        >>> event.recurrence
+        DailyRecurrenceRule(2, 23, None, ())
 
    """
+
+def doctest_CalendarEventEditView_nextURL():
+    r"""Tests nextURL of CalendarEventEditView.
+
+    Let's create an event:
+
+        >>> import datetime
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=60))
+        >>> calendar.addEvent(event)
+
+    Let's try to edit the event:
+
+        >>> request = TestRequest(form={'date': '2004-08-13',
+        ...                             'field.title': 'NonHacking',
+        ...                             'field.start_date': '2004-09-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE_SUBMIT': 'Edit'})
+
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        u'Updated on ${date_time}'
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/calendar/2004-09-13'
+
+    If the date stays unchanged - we should be redirected to the date
+    that was set in the request:
+
+        >>> request = TestRequest(form={'date': '2004-08-13',
+        ...                             'field.title': 'NonHacking',
+        ...                             'field.start_date': '2004-09-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE_SUBMIT': 'Edit'})
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        u'Updated on ${date_time}'
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/calendar/2004-08-13'
+
+    """
+
+def doctest_CalendarEventEditView_updateForm():
+    r"""Tests for CalendarEventEditView updateForm.
+
+    Let's create an event:
+
+        >>> import datetime
+        >>> event = CalendarEvent(title=u"Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=60))
+
+    Let's try to update the form after changing some values:
+
+        >>> request = TestRequest(form={'field.title': 'NonHacking',
+        ...                             'field.start_date': '2005-02-27',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE': 'Update'})
+
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        ''
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+    Original event should stay unmodified:
+
+        >>> event.title
+        u'Hacking'
+        >>> event.dtstart
+        datetime.datetime(2004, 8, 13, 20, 0)
+        >>> event.duration
+        datetime.timedelta(0, 3600)
+        >>> event.location is None
+        True
+
+    Yet the view should use the new start_date:
+
+    2005-02-27 is a Sunday:
+
+        >>> [day for day in range(7) if view.weekdayDisabled(str(day))]
+        [6]
+
+    If we submit an invalid form - errors should be generated:
+
+        >>> request = TestRequest(form={'field.title': 'NonHacking',
+        ...                             'field.start_date': '',
+        ...                             'field.start_time': '',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE': 'Update'})
+
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        u'An error occured.'
+        >>> print view.errors
+        WidgetInputError: ('start_date', 'Date', )
+        WidgetInputError: ('start_time', 'Time', )
+        >>> print view.error
+        None
+
+    """
 
 def doctest_CalendarEventEditView_getInitialData():
     """Tests for CalendarEventEditView editing of new event.
@@ -1697,7 +1900,6 @@ def doctest_CalendarEventEditView_getStartDate():
         True
 
     """
-
 
 class TestGetRecurrenceRule(unittest.TestCase):
 
