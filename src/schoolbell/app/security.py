@@ -39,6 +39,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.component.servicenames import Utilities
 from zope.interface import implements, directlyProvides, directlyProvidedBy
 from zope.security.interfaces import IGroupAwarePrincipal
+from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schoolbell.app.app import getSchoolBellApplication
@@ -131,7 +132,8 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
             username = id[len(self.person_prefix):]
             if username in app['persons']:
                 person = app['persons'][username]
-                principal = Principal(id, person.title, person=person)
+                principal = Principal(id, person.title,
+                                      person=ProxyFactory(person))
                 for group in person.groups:
                     group_principal_id = self.group_prefix + group.__name__
                     principal.groups.append(group_principal_id)

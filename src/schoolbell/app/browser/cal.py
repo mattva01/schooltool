@@ -413,9 +413,11 @@ class CalendarViewBase(BrowserView):
         Yields tuples (calendar, color1, color2)"""
         yield (self.context, '#9db8d2', '#7590ae')
         user = IPerson(self.request.principal, None)
-        if user and removeSecurityProxy(self.context) is user.calendar:
+        if (user and
+            removeSecurityProxy(self.context) is
+            removeSecurityProxy(user.calendar)):
             for item in user.overlaid_calendars:
-                if item.show:
+                if item.show and canAccess(item.calendar, '__iter__'):
                     yield (item.calendar, item.color1, item.color2)
 
     def getEvents(self, start_dt, end_dt):

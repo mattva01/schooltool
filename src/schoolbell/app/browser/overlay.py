@@ -80,7 +80,7 @@ class CalendarOverlayView(BrowserView):
         """
         if not ILocation.providedBy(self.context):
             return False
-        logged_in = IPerson(self.request.principal, None)
+        logged_in = removeSecurityProxy(IPerson(self.request.principal, None))
         calendar_owner = removeSecurityProxy(self.context.__parent__)
         return logged_in is calendar_owner
 
@@ -111,7 +111,8 @@ class CalendarOverlayView(BrowserView):
                    'checked': item.show and "checked" or '',
                    'color1': item.color1,
                    'color2': item.color2})
-                 for item in person.overlaid_calendars]
+                 for item in person.overlaid_calendars
+                 if canAccess(item.calendar, '__iter__')]
         items.sort()
         return [i[-1] for i in items]
 
@@ -144,7 +145,7 @@ class CalendarSelectionView(BrowserView):
 
     def getCalendars(self, container):
         """List all calendars from a given container."""
-        user = IPerson(self.request.principal, None)
+        user = removeSecurityProxy(IPerson(self.request.principal, None))
         if user is None:
             return []
         app = getSchoolBellApplication()
