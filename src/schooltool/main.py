@@ -43,12 +43,17 @@ from schooltool.component import getView
 from schooltool.component import FacetManager, getRelatedObjects
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import AuthenticationError
+from schooltool.interfaces import IApplicationObject
 from schooltool.common import StreamWrapper, UnicodeAwareException
 from schooltool.translation import setCatalog, ugettext, TranslatableString
 from schooltool.browser import BrowserRequest
 from schooltool.browser.app import RootView
 from schooltool.http import Site, SnapshottableDB
 from schooltool.uris import URIMembership, URIMember, URIGroup
+from schooltool.uris import URICalendarSubscription, URICalendarProvider
+from schooltool.uris import URICalendarSubscriber
+from schooltool.membership import Membership
+from schooltool.component import getOptions, relate
 
 
 
@@ -451,14 +456,10 @@ class Server:
             raise SchoolToolError(unicode(incompatible_version_msg))
 
         # Database schema change from 0.8 to 0.9
-        # FIXME: this try is here just because the testStub needs some more
-        # work
-        try:
+        if hasattr(app['groups'], 'keys'):
             if not 'community' in app['groups'].keys():
                 self.notifyUpgrade('0.8', '0.9')
                 self.migrate08to09(root)
-        except:
-            pass
 
         # Enable or disable global event logging
         eventlog = app.utilityService['eventlog']
@@ -530,9 +531,19 @@ class Server:
         relationships, copy PersonInfoFacets from old Person objects to new ones.
         """
 
+        def list08Links(obj, role=None):
+            if role is None:
+                return list(obj.__links__)
+            else:
+                return [link for link in obj.__links__ if link.role == role]
+
+        def get08RelatedObjects(obj, role):
+            return [link.relationship.traverse(link).__parent__ for link \
+                    in obj.listLinks(role) if IApplicationObject.providedBy(
+                            link.relationship.traverse(link).__parent__)]
+
         old_app = root[self.appname]
         new_app = self.appFactory()
-
 
         old_groups = old_app['groups']
         old_persons = old_app['persons']
@@ -544,6 +555,10 @@ class Server:
 
         # probably shouldn't assume that manager still exists
         old_new_map = {old_groups['root']: new_groups['community'],
+                       old_groups['locations']: new_groups['locations'],
+                       old_groups['managers']: new_groups['managers'],
+                       old_groups['teachers']: new_groups['teachers'],
+                       old_groups['pupils']: new_groups['pupils'],
                        old_persons['manager']: new_persons['manager']}
 
         for group in old_groups.keys():
@@ -610,13 +625,37 @@ class Server:
                                         context = old_new_map[event.context])
                     new_persons[person].calendar.addEvent(event)
 
-        # XXX: Anytime you access a link.source here it kills this whole
-        # method, nothing prints or gets assigned.  The next step in the
-        # method, assigning new_app to root[self.appname] never happens
-        #
-        #for person in new_persons.keys():
-        #    for link in old_persons[person].listLinks():
-        #        print link.source
+        # If the application objects don't match up migration will be
+        # unreliable, fail here and recommend removing Data.fs
+        if len(old_groups.keys()) - len(new_groups.keys()):
+            raise SchoolToolError(unicode(incompatible_version_msg))
+
+        if len(old_persons.keys()) - len(new_persons.keys()):
+            raise SchoolToolError(unicode(incompatible_version_msg))
+
+        if len(old_resources.keys()) - len(new_resources.keys()):
+            raise SchoolToolError(unicode(incompatible_version_msg))
+
+        for old, new in old_new_map.items():
+            for group in get08RelatedObjects(old, URIGroup):
+                if old_new_map[group] not in \
+                        getRelatedObjects(old_new_map[old], URIGroup):
+                    Membership(group=old_new_map[group],
+                               member=old_new_map[old])
+
+            for member in get08RelatedObjects(old, URIMember):
+                if old_new_map[member] not in \
+                        getRelatedObjects(old_new_map[old], URIMember):
+                    Membership(group=old_new_map[old],
+                               member=old_new_map[member])
+
+            for provider in get08RelatedObjects(old, URICalendarProvider):
+                try:
+                    relate(URICalendarSubscription,
+                       (old_new_map[old], URICalendarSubscriber),
+                       (old_new_map[provider], URICalendarProvider))
+                except Exception, e:
+                    print "INFO", e
 
         root[self.appname] = new_app
 

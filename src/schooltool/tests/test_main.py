@@ -80,9 +80,6 @@ class EventLogStub:
     enabled = False
 
 
-class Application08:
-    pass
-
 class AppStub:
 
     def __init__(self, old_version=False):
