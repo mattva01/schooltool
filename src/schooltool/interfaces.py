@@ -1454,7 +1454,6 @@ class IAuthenticator(Interface):
         """
 
 
-
 class IPersonInfoFacet(IFacet):
     """Some attributes fora person object"""
 

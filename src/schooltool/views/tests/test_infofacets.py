@@ -28,6 +28,7 @@ from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
 
+
 class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
 
     def test(self):

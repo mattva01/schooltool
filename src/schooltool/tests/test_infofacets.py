@@ -22,8 +22,6 @@ Unit tests for the schooltool.infofacets module.
 $Id$
 """
 import unittest
-from persistence import Persistent
-from zope.interface import implements
 from zope.interface.verify import verifyObject
 
 
@@ -38,7 +36,6 @@ class TestPersonInfoFacet(unittest.TestCase):
 
     def test_name(self):
         from schooltool.model import Person
-        from schooltool.infofacets import PersonInfoFacet
         from schooltool.component import FacetManager
 
         person = Person("Steve Alexander")

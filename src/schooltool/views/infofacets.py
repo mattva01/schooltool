@@ -22,25 +22,24 @@ Views for facets.
 $Id$
 """
 
-import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
-from schooltool.views import View, Template
+from schooltool.views import Template
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
-from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
 
 moduleProvides(IModuleSetup)
 
-class PersonInfoFacetView(FacetView):
-    authorization = PublicAccess
-    template = Template("www/infofacets.pt", content_type="text/xml")
 
+class PersonInfoFacetView(FacetView):
+
+    template = Template("www/infofacets.pt", content_type="text/xml")
+    authorization = PublicAccess
 
 
 def setUp():

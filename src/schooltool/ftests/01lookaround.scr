@@ -543,6 +543,9 @@ Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=facets
 <facets xmlns:xlink="http://www.w3.org/1999/xlink">
   <facet xlink:type="simple" active="active"
+         xlink:title="person_info" owned="owned"
+         xlink:href="/persons/Marius/facets/person_info"/>
+  <facet xlink:type="simple" active="active"
          xlink:title="eventlog" owned="unowned"
          xlink:href="/persons/Marius/facets/eventlog"/>
   <facetFactory name="eventlog" title="Event Log"/>
@@ -608,6 +611,9 @@ SchoolTool> get /persons/Mark/facets
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=facets
 <facets xmlns:xlink="http://www.w3.org/1999/xlink">
+  <facet xlink:type="simple" active="active"
+         xlink:title="person_info" owned="owned"
+         xlink:href="/persons/Mark/facets/person_info"/>
   <facet xlink:type="simple" active="active"
          xlink:title="teacher" owned="owned"
          xlink:href="/persons/Mark/facets/teacher"/>
