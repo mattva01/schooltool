@@ -37,7 +37,7 @@
                                                         week[0].date)" />
           </td>
           <tal:block tal:repeat="day week">
-            <td class="day" width="70" height="80" valign="top"
+            <td class="day" width="70" valign="top"
               tal:define="same_month python:day.date.month == view.cursor.month"
               tal:attributes="class python:same_month and 'day' or 'day-other'">
               <a tal:attributes="href python:view.calURL('daily', day.date)">

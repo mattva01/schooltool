@@ -479,6 +479,7 @@ h2.calendar-view-title {
     margin: auto;
     display: block;
     height: 100%;
+    min-height: 80px;
 }
 
 #calendar-view-month td.weekno a {
