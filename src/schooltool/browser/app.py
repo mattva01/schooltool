@@ -76,7 +76,7 @@ class RootView(View):
         username = request.args['username'][0]
         password = request.args['password'][0]
         try:
-            user = request.site.authenticate(self.context, username, password)
+            request.authenticate(username, password)
         except AuthenticationError:
             self.error = True
             self.username = username

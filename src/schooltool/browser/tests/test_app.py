@@ -37,16 +37,6 @@ class PersonStub:
     title = 'The Mgmt'
 
 
-class SiteStub:
-
-    def authenticate(self, app, username, password):
-        if username == 'manager' and password == 'schooltool':
-            person = PersonStub()
-            setPath(person, '/persons/manager')
-            return person
-        else:
-            raise AuthenticationError()
-
 
 class TestAppView(unittest.TestCase, TraversalTestMixin):
 
@@ -60,6 +50,21 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         app['groups'] = ApplicationObjectContainer(Group)
         view = RootView(app)
         return view
+
+    def createRequestWithAuthentication(self, *args, **kw):
+        person = PersonStub()
+        setPath(person, '/persons/manager')
+        request = RequestStub(*args, **kw)
+        def authenticate(username, password):
+            if username == 'manager' and password == 'schooltool':
+                request.authenticated_user = person
+                request.user = username
+            else:
+                request.authenticated_user = None
+                request.user = ''
+                raise AuthenticationError
+        request.authenticate = authenticate
+        return request
 
     def test_render(self):
         view = self.createView()
@@ -97,10 +102,9 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def test_post(self):
         from schooltool.browser.auth import globalTicketService
         view = self.createView()
-        request = RequestStub(method='POST',
+        request = self.createRequestWithAuthentication(method='POST',
                               args={'username': 'manager',
                                     'password': 'schooltool'})
-        request.site = SiteStub()
         result = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -113,11 +117,10 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def test_post_with_url(self):
         from schooltool.browser.auth import globalTicketService
         view = self.createView()
-        request = RequestStub(method='POST',
+        request = self.createRequestWithAuthentication(method='POST',
                               args={'username': 'manager',
                                     'password': 'schooltool',
                                     'url': '/some/path'})
-        request.site = SiteStub()
         result = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -129,10 +132,9 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
 
     def test_post_failed(self):
         view = self.createView()
-        request = RequestStub(method='POST',
+        request = self.createRequestWithAuthentication(method='POST',
                               args={'username': 'manager',
                                     'password': '5ch001t001'})
-        request.site = SiteStub()
         result = view.render(request)
         self.assert_('error' in result)
         self.assert_('Username' in result)
