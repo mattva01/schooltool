@@ -34,7 +34,7 @@ NEWDB=
 # 3- If you needed to change DUMPDIR in run-export.sh, make the same change
 #    here.
 
-DUMPDIR="/var/schooltool"
+DUMPDIR="/var/schoolbell/dump"
 
 # 4- If you need to use a specific python binary, set it here
 #

@@ -36,19 +36,18 @@
 PYTHONPATH=
 
 # 2- Set the OLDDB variable to point to your old database (Data.fs).
-# FIXME By default, where is this?
+#
 #    OLDDB="/var/lib/schooltool/Data.fs"
 
 OLDDB=
 
 # 3- In some situations you may need to edit this setting.  It controls where
-#    the data from the database is dumped on the filesystem.  Usually leaving
-#    it alone is fine unless you don't have write permissions to /tmp.
+#    the data from the database is dumped on the filesystem.
 #
 #    NOTE: if you change this here, remember to make the same change to
 #          run-import.sh
 
-DUMPDIR="/var/schooltool"
+DUMPDIR="/var/schoolbell/dump"
 
 # 4- If you need to use a specific python binary, set it here
 #
