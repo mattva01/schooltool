@@ -6,7 +6,7 @@
   <h1 metal:fill-slot="h1" i18n:translate="">New timetable schema</h1>
 <metal:block metal:fill-slot="content">
 
-<form class="invisible" method="POST" tal:attributes="action request/uri"
+<form class="plain" method="POST" tal:attributes="action request/uri"
       tal:define="tt view/ttschema;
                   ncols python:len(tt.day_ids) or 1;
                   rows view/rows;

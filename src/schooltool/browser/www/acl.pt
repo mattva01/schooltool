@@ -28,13 +28,13 @@
                  tal:attributes="value item/value;
                                  id string:check.${repeat/item/number}" />
       </td>
-      <td><label class="invisible"
+      <td><label class="plain"
                  tal:omit-tag="item/url"
                  tal:attributes="for string:check.${repeat/item/number}">
             <a tal:omit-tag="not:item/url"
                tal:attributes="href item/url" tal:content="item/title" />
           </label></td>
-      <td><label class="invisible"
+      <td><label class="plain"
                  tal:attributes="for string:check.${repeat/item/number}"
                  tal:content="item/permission" /></td>
     </tr>

@@ -26,12 +26,12 @@
       <td><input type="checkbox" name="CHECK"
                  tal:attributes="value item/path;
                                  id string:check.${repeat/item/number}" /></td>
-      <td><label class="invisible"
+      <td><label class="plain"
                  tal:attributes="for string:check.${repeat/item/number}">
             <img tal:attributes="src item/icon_url; alt item/icon_text" />
           </label>
       </td>
-      <td><label class="invisible" 
+      <td><label class="plain"
                  tal:attributes="for string:check.${repeat/item/number}"
                  tal:content="item/title" /></td>
     </tr>

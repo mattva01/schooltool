@@ -31,7 +31,7 @@
 
   <form tal:omit-tag="not:can_edit"
         tal:attributes="action request/uri"
-        class="invisible"
+        class="plain"
         method="POST">
 
   <ul>

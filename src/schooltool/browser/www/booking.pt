@@ -25,7 +25,7 @@
     <div class="row" tal:replace="structure view/duration_widget" />
     <div class="row">
       <input id="conflicts" name="conflicts" type="checkbox" value="ignore" />
-      <label class="invisible" for="conflicts" i18n:translate="">Ignore conflicts</label>
+      <label class="plain" for="conflicts" i18n:translate="">Ignore conflicts</label>
     </div>
     <div class="buttons">
       <input class="button" name="CONFIRM_BOOK" type="submit" value="Book"

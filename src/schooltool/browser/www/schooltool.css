@@ -126,7 +126,7 @@ form {
   float: left;
 }
 
-form.invisible {
+form.plain {
   padding: 0;
   background: inherit;
   border: none;
@@ -154,7 +154,7 @@ label.block {
   margin: 1ex;
 }
 
-label.invisible {
+label.plain {
   display: inline;
   width: auto;
   float: none;
@@ -215,7 +215,7 @@ div.form a.action:visited {
   padding: 2px 4px;
 }
 
-form.invisible input.button {
+form.plain input.button {
   padding: 0;
   margin: 1px;
 }
@@ -356,7 +356,12 @@ table.available th {
 
 table.available td {
    border: 1px solid #a52a2a;
-   padding: 0 0.5em;
+   padding: 2px 4px;
+   vertical-align: middle;
+}
+
+table.available td form {
+  margin: 0;
 }
 
 div.available {

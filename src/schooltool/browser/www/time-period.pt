@@ -23,7 +23,7 @@
   <h1 metal:fill-slot="h1" tal:content="view/title">Time period</h1>
 <metal:block metal:fill-slot="content">
 
-<form class="invisible" method="POST" tal:attributes="action request/uri"
+<form class="plain" method="POST" tal:attributes="action request/uri"
       tal:define="calendar view/calendar">
 
 <div class="info" tal:condition="view/status" tal:content="view/status">

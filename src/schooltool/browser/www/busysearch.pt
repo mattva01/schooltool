@@ -73,7 +73,7 @@
     <td tal:content="slot/start">Start</td>
     <td tal:content="slot/end">Duration</td>
     <td>
-      <form method="GET" class="invisible"
+      <form method="GET" class="plain"
             tal:attributes="action string:${resource/href}/book">
          <input type="hidden" name="start_date"
                 tal:attributes="value slot/start_date"/>

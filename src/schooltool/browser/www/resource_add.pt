@@ -12,7 +12,7 @@
     <div class="row" metal:fill-slot="extra_fields">
       <input id="location" name="location" type="checkbox"
              tal:attributes="checked view/prev_location"/>
-      <label class="invisible" for="location" i18n:translate="">This resource is a venue</label>
+      <label class="plain" for="location" i18n:translate="">This resource is a venue</label>
     </div>
   </form>
 
