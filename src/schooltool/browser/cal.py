@@ -899,6 +899,8 @@ class EventDeleteView(View):
                                        event.activity, None)
         tt = event.activity.timetable
         tt.exceptions.append(exception)
+        # TODO: add the same exception to the timetables of
+        #       all resources that are booked by this activity
 
     def _redirectToDailyView(self, date=None):
         """Redirect to the daily calendar view for a given date (or today)."""
