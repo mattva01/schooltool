@@ -54,7 +54,7 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
 
-import pytz
+from pytz import common_timezones
 
 class ContainerView(BrowserView):
     """A base view for all containers.
@@ -285,6 +285,10 @@ class PersonEditView(BrowserView):
 
 class IPersonPreferencesForm(Interface):
 
+    timezone = Choice(title=u"Time Zone",
+                    description=u"Time Zone used to display your calendar",
+                    values=common_timezones)
+
     timeformat = Choice(title=u"Time Format",
                     description=u"Time Format",
                     values=("HH:MM", "H:MM am/pm"))
@@ -311,7 +315,8 @@ class PersonPreferencesView(BrowserView):
         BrowserView.__init__(self, context, request)
 
         prefs = IPersonPreferences(self.context)
-        initial = {'timeformat': prefs.timeformat,
+        initial = {'timezone': prefs.timezone,
+                   'timeformat': prefs.timeformat,
                    'dateformat': prefs.dateformat,
                    'weekstart': prefs.weekstart}
 
@@ -330,6 +335,7 @@ class PersonPreferencesView(BrowserView):
                 return # Errors will be displayed next to widgets
 
             prefs = IPersonPreferences(self.context)
+            prefs.timezone = data['timezone']
             prefs.timeformat = data['timeformat']
             prefs.dateformat = data['dateformat']
             prefs.weekstart = data['weekstart']
