@@ -28,6 +28,7 @@ from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import getView
+from schooltool.translation import ugettext
 
 __metaclass__ = type
 
@@ -74,6 +75,8 @@ class Template(PageTemplateFile):
     in the output charset, a UnicodeError will be raised when rendering.
     """
 
+    ugettext_hook = ugettext
+
     def __init__(self, filename, content_type='text/html', charset='UTF-8',
                        _prefix=None):
         _prefix = self.get_path_from_prefix(_prefix)
@@ -94,14 +97,10 @@ class Template(PageTemplateFile):
         context.update(kw)
         body = self.pt_render(context)
         return body.encode(self.charset, 'xmlcharrefreplace')
-    
-    # XXX should we state that we implement ITranslationDomain?
-
-    domain = "schooltool"
 
     def pt_getEngineContext(self, *args, **kwargs):
         """Get the engine context.
-        
+
         Gets the engine context and adds our translation method to the
         object before returning it.
         """
@@ -115,11 +114,12 @@ class Template(PageTemplateFile):
 
         Translates the msgid according to the current locale of the server.
         """
-        translated = _(msgid)
-        # XXX can this be done in a nicer way?
-        if translated == msgid:
-            translated = default
-        return translated
+        translation = self.ugettext_hook(msgid)
+        if translation == msgid:
+            return default
+        else:
+            return translation
+
 
 #
 # HTTP view infrastructure

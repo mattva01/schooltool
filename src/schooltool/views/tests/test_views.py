@@ -75,6 +75,17 @@ class TestTemplate(unittest.TestCase):
                      "text/plain; charset=UTF-8")
         self.assertEquals(result, "code: 200\n")
 
+    def test_translate(self):
+        from schooltool.views import Template
+        templ = Template('sample_i18n.pt')
+
+        def fake_ugettext(msgid):
+            return unicode({'Hello': 'Labas'}.get(msgid, msgid))
+
+        templ.ugettext_hook = fake_ugettext
+        result = templ(RequestStub())
+        self.assertEquals(result, '<span title="A tooltip">Labas</span>\n')
+
 
 class TestErrorViews(unittest.TestCase):
 
