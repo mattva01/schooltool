@@ -720,9 +720,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         class DummyDataManager:
                 pass
         app = server.createApplication()
-        a = app['groups']['teachers']
-        b = app['persons']['Aiste']
-        c = app['persons']['Steve']
+        root = app['groups']['root']
 
         event_log = app.utilityService['eventlog']
         event_service = app.eventService

@@ -498,23 +498,8 @@ class Server:
         Person = app['persons'].new
         Group = app['groups'].new
 
-        root = Group(title="root")
+        root = Group("root", title="Root Group")
         app.addRoot(root)
-        teachers = Group("teachers", title="teachers")
-        students = Group("students", title="students")
-        cleaners = Group("cleaners", title="cleaners")
-        Membership(group=root, member=teachers)
-        Membership(group=root, member=students)
-        Membership(group=root, member=cleaners)
-
-        Membership(group=teachers, member=Person("Mark", title="Mark"))
-        Membership(group=teachers, member=Person("Steve", title="Steve"))
-        Membership(group=students, member=Person("Aiste", title="Aiste"))
-        Membership(group=cleaners, member=Person("Albert", title="Albert"))
-        marius = Person("Marius", title="Marius")
-        FacetManager(marius).setFacet(EventLogFacet())
-        Membership(group=cleaners, member=marius)
-
         return app
 
     def notifyConfigFile(self, config_file):
