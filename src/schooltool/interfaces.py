@@ -1247,6 +1247,10 @@ class IPerson(IApplicationObject):
         """
 
 
+class IResource(IApplicationObject):
+    """A bookable resource used in."""
+
+
 class IAbsence(ILocation):
     """Absence object.
 

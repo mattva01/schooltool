@@ -46,7 +46,7 @@ from twisted.python import threadable
 from twisted.python import failure
 
 from schooltool.app import Application, ApplicationObjectContainer
-from schooltool import model
+from schooltool import model, absence
 from schooltool.views import errorPage
 from schooltool.component import getView
 from schooltool.eventlog import EventLogUtility
@@ -605,12 +605,13 @@ class Server:
         app.utilityService['eventlog'] = event_log
         app.eventService.subscribe(event_log, IEvent)
 
-        absence_tracker = model.AbsenceTrackerUtility()
+        absence_tracker = absence.AbsenceTrackerUtility()
         app.utilityService['absences'] = absence_tracker
         app.eventService.subscribe(absence_tracker, IAttendanceEvent)
 
         app['groups'] = ApplicationObjectContainer(model.Group)
         app['persons'] = ApplicationObjectContainer(model.Person)
+        app['resources'] = ApplicationObjectContainer(model.Resource)
         Person = app['persons'].new
         Group = app['groups'].new
 
@@ -649,7 +650,7 @@ def setUp():
     setUpModules([
         'schooltool.relationship',
         'schooltool.membership',
-        'schooltool.model',
+        'schooltool.absence',
         'schooltool.views',
         'schooltool.eventlog',
         'schooltool.uris',

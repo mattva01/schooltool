@@ -778,15 +778,23 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_createApplication(self):
         from schooltool.interfaces import IEvent, IAttendanceEvent
         from schooltool.main import Server
+        from schooltool.model import Person, Group, Resource
         from schooltool import relationship
         relationship.setUp()
 
         server = Server()
-        class DummyDataManager:
-            pass
         app = server.createApplication()
         root = app['groups']['root']
         anonymous = app['persons']['anonymous']
+
+        person = app['persons'].new()
+        self.assert_(isinstance(person, Person))
+
+        group = app['groups'].new()
+        self.assert_(isinstance(group, Group))
+
+        resource = app['resources'].new()
+        self.assert_(isinstance(resource, Resource))
 
         event_log = app.utilityService['eventlog']
         event_service = app.eventService
