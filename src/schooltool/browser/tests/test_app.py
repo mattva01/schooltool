@@ -27,7 +27,7 @@ from logging import INFO
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
-from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import EqualsSortedMixin, RegistriesSetupMixin
 from datetime import date, time, timedelta
 
 __metaclass__ = type
@@ -167,6 +167,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def test_traversal(self):
         from schooltool.browser import StaticFile
         from schooltool.browser.app import LogoutView
+        from schooltool.browser.app import DatabaseResetView
         from schooltool.browser.app import StartView
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
@@ -182,6 +183,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         view = self.createView()
         app = view.context
         self.assertTraverses(view, 'logout', LogoutView, app)
+        self.assertTraverses(view, 'reset', DatabaseResetView, app)
         self.assertTraverses(view, 'applog', ApplicationLogView, app)
         self.assertTraverses(view, 'persons', PersonContainerView,
                              app['persons'])
@@ -597,6 +599,49 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         assert '2004-08-11 15:00' in result
 
 
+class TestDatabaseResetView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+
+    # tearDown inherited from RegistriesSetupMixin
+
+    def test_render(self):
+        from schooltool.browser.app import DatabaseResetView
+        view = DatabaseResetView(None)
+        view.authorization = lambda x, y: True
+        request = RequestStub()
+        content = view.render(request)
+        self.assert_('Confirm' in content)
+
+    def test_POST(self):
+        from schooltool.browser.app import DatabaseResetView
+        from schooltool.app import Application
+        view = DatabaseResetView(None)
+        request = RequestStub(args={'confirm': 'yes'})
+
+        class ConnectionStub:
+
+            def __init__(self):
+                self._root = {'app': None}
+
+            def root(self):
+                return self._root
+
+        class SiteStub:
+
+            rootName = 'app'
+
+        request.zodb_conn = ConnectionStub()
+        request.site = SiteStub()
+        content = view.do_POST(request)
+
+        root = request.zodb_conn.root()
+        self.assert_(isinstance(root['app'], Application))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
@@ -611,6 +656,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))
     suite.addTest(unittest.makeSuite(TestBusySearchView))
+    suite.addTest(unittest.makeSuite(TestDatabaseResetView))
     return suite
 
 

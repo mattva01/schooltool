@@ -34,17 +34,17 @@ from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.model import PersonView, GroupView, ResourceView
 from schooltool.browser.csv import CSVImportView
+from schooltool.common import to_unicode
 from schooltool.component import getPath
+from schooltool.component import getTicketService, traverse
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.translation import ugettext as _
-from schooltool.component import getTicketService, traverse
 from schooltool.rest.app import AvailabilityQueryView
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import NewTimePeriodView
-from schooltool.common import to_unicode
 
 __metaclass__ = type
 
@@ -113,6 +113,8 @@ class RootView(View):
             return StaticFile('www/logo.png', 'image/png')
         elif name == 'logout':
             return LogoutView(self.context)
+        elif name == 'reset':
+            return DatabaseResetView(self.context)
         elif name == 'start':
             return StartView(request.authenticated_user)
         elif name == 'applog':
@@ -350,3 +352,21 @@ class BusySearchView(View, AvailabilityQueryView):
         result.sort()
         return [obj for title, obj in result]
 
+
+class DatabaseResetView(View):
+
+    __used_for__ = IApplicationObjectContainer
+
+    authorization = ManagerAccess
+
+    template = Template('www/resetdb.pt')
+
+    def do_POST(self, request):
+        # TODO: Set the manager password immediately after resetting the db.
+        if 'confirm' in request.args:
+            from schooltool.main import Server # circular import
+            root = request.zodb_conn.root()
+            rootname = request.site.rootName
+            del root[rootname]
+            root[rootname] = Server.createApplication()
+        return self.redirect('/', request)

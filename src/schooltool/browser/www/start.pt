@@ -32,6 +32,8 @@
           i18n:translate="">Manage time periods</a></p>
     <p><a class="action" href="/csvimport"
           i18n:translate="">Import CSV data</a></p>
+    <p><a class="action" href="/resetdb"
+          i18n:translate="">Reset the database</a></p>
   </div>
 
   <div tal:condition="view/isTeacher" class="section">

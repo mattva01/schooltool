@@ -64,7 +64,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         location    (self.location)
         location2   (self.location2)
 
-    """
+    """ # XXX outdated
 
     def setUpSampleApp(self):
         from schooltool.model import Group, Person, Resource
