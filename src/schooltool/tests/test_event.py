@@ -180,7 +180,8 @@ class TestEventActionMixins(unittest.TestCase):
 
     def testRouteToMembersAction(self):
         from schooltool.event import RouteToMembersAction
-        from schooltool.interfaces import IRouteToMembersAction, URIMember
+        from schooltool.interfaces import IRouteToMembersAction
+        from schooltool.uris import URIMember
         action = RouteToMembersAction(IEventA)
         verifyObject(IRouteToMembersAction, action)
         self.assertEquals(action.eventType, IEventA)
@@ -205,7 +206,8 @@ class TestEventActionMixins(unittest.TestCase):
 
     def testRouteToGroupsAction(self):
         from schooltool.event import RouteToGroupsAction
-        from schooltool.interfaces import IRouteToGroupsAction, URIGroup
+        from schooltool.interfaces import IRouteToGroupsAction
+        from schooltool.uris import URIGroup
         action = RouteToGroupsAction(IEventA)
         verifyObject(IRouteToGroupsAction, action)
         self.assertEquals(action.eventType, IEventA)
@@ -230,7 +232,7 @@ class TestEventActionMixins(unittest.TestCase):
     def testRouteToRelationshipsAction(self):
         from schooltool.event import RouteToRelationshipsAction
         from schooltool.interfaces import IRouteToRelationshipsAction
-        from schooltool.interfaces import ISpecificURI
+        from schooltool.uris import ISpecificURI
 
         class URIFriend(ISpecificURI):
             """http://ns.example.org/role/friend"""

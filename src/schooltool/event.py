@@ -30,9 +30,10 @@ from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 from schooltool.interfaces import IRouteToRelationshipsAction, ICallAction
-from schooltool.interfaces import URIMember, URIGroup
+from schooltool.uris import URIMember, URIGroup
+from schooltool.uris import inspectSpecificURI
 from schooltool.component import getEventService
-from schooltool.component import getRelatedObjects, inspectSpecificURI
+from schooltool.component import getRelatedObjects
 
 __metaclass__ = type
 

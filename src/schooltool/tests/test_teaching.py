@@ -58,7 +58,7 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testURIs(self):
         from schooltool.teaching import URITeaching, URITeacher, URITaught
-        from schooltool.component import inspectSpecificURI
+        from schooltool.uris import inspectSpecificURI
 
         inspectSpecificURI(URITeaching)
         inspectSpecificURI(URITeacher)
@@ -79,7 +79,8 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
     def testModuleSetup(self):
         from schooltool import teaching
         from schooltool.interfaces import IModuleSetup
-        from schooltool.component import getFacetFactory, getURI
+        from schooltool.component import getFacetFactory
+        from schooltool.uris import getURI
         verifyObject(IModuleSetup, teaching)
         teaching.setUp()
         getFacetFactory('subject_group')

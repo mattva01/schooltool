@@ -26,9 +26,9 @@ import unittest
 from persistence import Persistent
 from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject, verifyClass
-from schooltool.interfaces import ISpecificURI, IRelatable, ILink, IUnlinkHook
+from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
 from schooltool.interfaces import ILinkSet, IPlaceholder, IContainmentRoot
-from schooltool.component import inspectSpecificURI
+from schooltool.uris import ISpecificURI, inspectSpecificURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
@@ -448,7 +448,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
     def test_getValencies(self):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.relationship import Valency
-        from schooltool.interfaces import URIMembership, URIMember, URIGroup
+        from schooltool.uris import URIMembership, URIMember, URIGroup
         from schooltool.interfaces import ISchemaInvocation
 
         rvm = RelationshipValenciesMixin()
@@ -471,8 +471,8 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies_faceted(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.interfaces import ISpecificURI
-        from schooltool.interfaces import URIMembership, URIMember, URIGroup
+        from schooltool.uris import ISpecificURI
+        from schooltool.uris import URIMembership, URIMember, URIGroup
         from schooltool.interfaces import IFacet
         from schooltool.relationship import Valency
         from schooltool.component import FacetManager
@@ -529,7 +529,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test__valency2invocation(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.interfaces import URIMembership, URIMember, URIGroup
+        from schooltool.uris import URIMembership, URIMember, URIGroup
         from schooltool.relationship import Valency
 
         class SchemaStub:

@@ -29,14 +29,15 @@ import libxml2
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
-from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
+from schooltool.interfaces import IGroup, IPerson
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility, IFacet
 from schooltool.interfaces import IModuleSetup, IAbsenceTrackerUtility
 from schooltool.interfaces import IAbsenceTrackerFacet
 from schooltool.interfaces import ComponentLookupError, Unchanged
+from schooltool.uris import URIMember, URIGroup, strURI, getURI
 from schooltool.component import getPath, traverse, getRelatedObjects
-from schooltool.component import getView, registerView, strURI, getURI
+from schooltool.component import getView, registerView
 from schooltool.component import FacetManager, iterFacetFactories
 from schooltool.component import getFacetFactory
 from schooltool.debug import IEventLog, IEventLogUtility, IEventLogFacet

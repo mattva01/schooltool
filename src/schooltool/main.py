@@ -562,7 +562,7 @@ def setUp():
         'schooltool.model',
         'schooltool.views',
         'schooltool.debug',
-        'schooltool.interfaces',
+        'schooltool.uris',
         'schooltool.teaching'
         ])
 

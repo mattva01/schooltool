@@ -25,11 +25,11 @@ $Id: model.py 153 2003-10-16 12:33:50Z mg $
 from sets import Set
 from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IQueryLinks
-from schooltool.interfaces import URIMembership, URIGroup, URIMember
 from schooltool.interfaces import IMembershipEvent
 from schooltool.interfaces import IMemberAddedEvent
 from schooltool.interfaces import IMemberRemovedEvent
 from schooltool.interfaces import IModuleSetup
+from schooltool.uris import URIMembership, URIGroup, URIMember
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool import relationship
 from schooltool.component import registerRelationship

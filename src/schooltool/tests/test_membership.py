@@ -44,13 +44,13 @@ class BasicRelatable(Relatable, RelatableMixin):
 class TestURIs(unittest.TestCase):
 
     def testURIGroup(self):
-        from schooltool.interfaces import URIGroup
-        from schooltool.component import inspectSpecificURI
+        from schooltool.uris import URIGroup
+        from schooltool.uris import inspectSpecificURI
         inspectSpecificURI(URIGroup)
 
     def testURIMember(self):
-        from schooltool.interfaces import URIMember
-        from schooltool.component import inspectSpecificURI
+        from schooltool.uris import URIMember
+        from schooltool.uris import inspectSpecificURI
         inspectSpecificURI(URIMember)
 
 
@@ -60,7 +60,7 @@ class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,
     def test(self):
         from schooltool.component import registerRelationship
         from schooltool.membership import Membership
-        from schooltool.interfaces import URIMembership, URIGroup, URIMember
+        from schooltool.uris import URIMembership, URIGroup, URIMember
 
         cookie = object()
         def handler(reltype, (a, role_of_a), (b, role_of_b), title=None):
@@ -91,7 +91,7 @@ class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
         # Standard relationships will do.
         from schooltool.membership import Membership, checkForPotentialCycles
         from schooltool.component import registerRelationship
-        from schooltool.interfaces import ISpecificURI
+        from schooltool.uris import ISpecificURI
         from schooltool.relationship import defaultRelate
         registerRelationship(ISpecificURI, defaultRelate)
         Relatable = lambda: BasicRelatable(self.serviceManager)
@@ -119,8 +119,7 @@ class TestEvents(unittest.TestCase):
         from schooltool.membership import MemberRemovedEvent
         from schooltool.interfaces import IMemberAddedEvent
         from schooltool.interfaces import IMemberRemovedEvent
-        from schooltool.interfaces import URIGroup, URIMember
-        from schooltool.interfaces import ISpecificURI
+        from schooltool.uris import URIGroup, URIMember, ISpecificURI
 
         class URIUnrelated(ISpecificURI):
             """http://ns.example.org/role/unrelated"""

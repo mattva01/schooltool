@@ -29,8 +29,9 @@ from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink
 from schooltool.interfaces import IFacetFactory
-from schooltool.interfaces import IEventConfigurable, ISpecificURI
+from schooltool.interfaces import IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
+from schooltool.uris import ISpecificURI
 from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type

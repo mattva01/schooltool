@@ -22,13 +22,13 @@ Teaching relationship.
 $Id$
 """
 from zope.interface import moduleProvides, implements
-from schooltool.interfaces import ISpecificURI, IModuleSetup, IFacet
+from schooltool.interfaces import IModuleSetup, IFacet
 from schooltool.relationship import RelationshipSchema
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency
-from schooltool.component import registerFacetFactory
-from schooltool.component import registerURI
+from schooltool.uris import ISpecificURI, registerURI
 from schooltool.facet import FacetFactory
+from schooltool.component import registerFacetFactory
 
 moduleProvides(IModuleSetup)
 

@@ -22,22 +22,20 @@ The schooltool component.
 $Id$
 """
 
-import re
 from zope.interface import moduleProvides, InterfaceSpecification, implements
-from zope.interface.interfaces import IInterface
 from zope.interface.type import TypeRegistry
 from persistence.dict import PersistentDict
-from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
+from schooltool.interfaces import IContainmentAPI, IFacetAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IMultiContainer
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IFacetManager
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
-from schooltool.interfaces import ComponentLookupError, ISpecificURI
+from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import IUtilityService
 
-moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI,
+moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
                IRelationshipAPI, IViewAPI)
 
 __metaclass__ = type
@@ -232,82 +230,6 @@ def getEventService(context):
 def getUtilityService(context):
     """See IServiceAPI"""
     return _getServiceManager(context).utilityService
-
-
-#
-# URI API
-#
-
-def inspectSpecificURI(uri):
-    """Returns a tuple of a URI and the documentation of the ISpecificURI.
-
-    Raises a TypeError if the argument is not ISpecificURI.
-    Raises a ValueError if the URI's docstring does not conform.
-    """
-    if not IInterface.isImplementedBy(uri):
-        raise TypeError("URI must be an interface (got %r)" % (uri,))
-
-    if not uri.extends(ISpecificURI, True):
-        raise TypeError("URI must strictly extend ISpecificURI (got %r)" %
-                        (uri,))
-
-    segments = uri.__doc__.split("\n", 1)
-    uri = segments[0].strip()
-    if not isURI(uri):
-        raise ValueError("This does not look like a URI: %r" % uri)
-
-    if len(segments) > 1:
-        doc = segments[1].lstrip()
-    else:
-        doc = ""
-
-    return uri, doc
-
-
-def isURI(uri):
-    """Checks if the argument looks like a URI.
-
-    Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
-    We're only approximating to the spec.
-    """
-    uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
-    return uri_re.search(uri)
-
-
-def strURI(uri):
-    """Returns the URI of ISpecificURI as a string"""
-    return inspectSpecificURI(uri)[0]
-
-
-_uri_registry = {}
-
-
-def resetURIRegistry():
-    """Replace the URI registry with an empty one."""
-    global _uri_registry
-    _uri_registry = {}
-
-
-def registerURI(uri):
-    """Adds an ISpecificURI to the registry so it can be queried by
-    the URI string."""
-    str_uri = strURI(uri)
-    if str_uri in _uri_registry:
-        if _uri_registry[str_uri] is not uri:
-            raise ValueError("Two interfaces with one URI:  "
-                             "%r, %r" % (_uri_registry[str_uri], uri))
-        else:
-            return
-    else:
-        _uri_registry[str_uri] = uri
-
-
-def getURI(str):
-    """Returns and ISpecificURI with a given URI string."""
-    try:
-        return _uri_registry[str]
-    except KeyError:
-        raise ComponentLookupError(str)
 
 
 #

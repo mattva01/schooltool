@@ -24,7 +24,7 @@ $Id$
 
 __metaclass__ = type
 
-from zope.interface import Interface, Attribute, moduleProvides
+from zope.interface import Interface, Attribute
 
 
 #
@@ -165,76 +165,6 @@ class IUtilityService(ILocation):
 
 
 #
-# URIs
-#
-
-class ISpecificURI(Interface):
-    """All interfaces derived from this must have the URI they map on
-    to as the first line of their docstring. Examples::
-
-        class URITutor(ISpecificURI):
-            '''http://schooltool.org/ns/tutor'''
-
-        class URITutor(ISpecificURI):
-            '''http://schooltool.org/ns/tutor
-
-            A person who is responsible for a registration class.
-            '''
-
-    The suggested naming convention for URIs is to prefix the
-    interface names with 'URI'.
-    """
-
-
-class IURIAPI(Interface):
-
-    def inspectSpecificURI(uri):
-        """Return a tuple of a URI and the documentation of the ISpecificURI.
-
-        Raises a TypeError if the argument is not ISpecificURI.
-        Raises a ValueError if the URI's docstring does not conform.
-        """
-
-    def strURI(uri):
-        """Return the URI of ISpecificURI as a string"""
-
-    def isURI(uri):
-        """Check if the argument looks like a URI.
-
-        Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
-        We're only approximating to the spec.
-        """
-
-    def registerURI(uri):
-        """Add a URI to the registry so it can be queried by the URI
-        string."""
-
-    def getURI(str):
-        """Return an ISpecificURI for a given URI string."""
-
-
-class URIGroup(ISpecificURI):
-    """http://schooltool.org/ns/membership/group
-
-    A role of a containing group.
-    """
-
-
-class URIMember(ISpecificURI):
-    """http://schooltool.org/ns/membership/member
-
-    A group member role.
-    """
-
-
-class URIMembership(ISpecificURI):
-    """http://schooltool.org/ns/membership
-
-    The membership relationship.
-    """
-
-
-#
 # Relationships
 #
 
@@ -367,7 +297,7 @@ class IQueryLinks(Interface):
     meet certain conditions.
     """
 
-    def listLinks(role=ISpecificURI):
+    def listLinks(role=None):
         """Return all the links matching a specified role.
 
         Roles are matched by hierarchy (as interfaces).  The default
@@ -1016,15 +946,3 @@ class ComponentLookupError(Exception):
     """An exception for component architecture."""
 
 
-#
-#  Configuration
-#
-
-def setUp():
-    """See IModuleSetup"""
-    from schooltool.component import registerURI
-    registerURI(URIMembership)
-    registerURI(URIMember)
-    registerURI(URIGroup)
-
-moduleProvides(IModuleSetup)

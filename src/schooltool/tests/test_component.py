@@ -26,7 +26,7 @@ import unittest
 from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IURIAPI, ISpecificURI
+from schooltool.uris import ISpecificURI
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
 from schooltool.interfaces import IServiceAPI, IServiceManager
@@ -344,99 +344,6 @@ class TestServiceAPI(unittest.TestCase):
         self.doTestService(getUtilityService, self.root.utilityService)
 
 
-class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
-
-    def test_api(self):
-        from schooltool import component
-        verifyObject(IURIAPI, component)
-
-    def test_inspectSpecificURI(self):
-        from schooltool.component import inspectSpecificURI, strURI
-        self.assertRaises(TypeError, inspectSpecificURI, object())
-        self.assertRaises(TypeError, inspectSpecificURI, I1)
-        self.assertRaises(TypeError, inspectSpecificURI, ISpecificURI)
-
-        class IURI(ISpecificURI):
-            """http://example.com/foo
-
-            Doc text
-            """
-
-        uri, doc = inspectSpecificURI(IURI)
-        self.assertEqual(uri, "http://example.com/foo")
-        self.assertEqual(uri, strURI(IURI))
-        self.assertEqual(doc, """Doc text
-            """)
-
-        class IURI2(ISpecificURI): """http://example.com/foo"""
-        uri, doc = inspectSpecificURI(IURI2)
-        self.assertEqual(uri, "http://example.com/foo")
-        self.assertEqual(uri, strURI(IURI2))
-        self.assertEqual(doc, "")
-
-        class IURI3(ISpecificURI): """foo"""
-        self.assertRaises(ValueError, inspectSpecificURI, IURI3)
-
-        class IURI4(ISpecificURI):
-            """\
-            mailto:foo
-            """
-        uri, doc = inspectSpecificURI(IURI4)
-        self.assertEqual(uri, "mailto:foo")
-        self.assertEqual(uri, strURI(IURI4))
-        self.assertEqual(doc, "")
-
-        class IURI5(ISpecificURI):
-            """
-            mailto:foo
-            """
-        self.assertRaises(ValueError, inspectSpecificURI, IURI5)
-
-    def test__isURI(self):
-        from schooltool.component import isURI
-        good = ["http://foo/bar?baz#quux",
-                "HTTP://foo/bar?baz#quux",
-                "mailto:root",
-                ]
-        bad = ["2HTTP://foo/bar?baz#quux",
-               "\nHTTP://foo/bar?baz#quux",
-               "mailto:postmaster ",
-               "mailto:postmaster text"
-               "nocolon",
-               ]
-        for string in good:
-            self.assert_(isURI(string), string)
-        for string in bad:
-            self.assert_(not isURI(string), string)
-
-    def testURIRegistry(self):
-        from schooltool.component import getURI, registerURI
-        class IURI1(ISpecificURI): """http://example.com/foobar"""
-        class IURI2(ISpecificURI): """http://example.com/foo"""
-        class IURI2Dupe(ISpecificURI): """http://example.com/foo"""
-
-        self.assertRaises(ComponentLookupError, getURI,
-                          """http://example.com/foobar""")
-        registerURI(IURI1)
-        self.assert_(getURI("http://example.com/foobar") is IURI1)
-
-        registerURI(IURI2)
-        registerURI(IURI2)
-        self.assert_(getURI("http://example.com/foo") is IURI2)
-        self.assertRaises(ValueError, registerURI, IURI2Dupe)
-        self.assert_(getURI("http://example.com/foo") is IURI2)
-
-    def testURISetup(self):
-        import schooltool.interfaces
-        from schooltool.component import getURI
-        verifyObject(schooltool.interfaces.IModuleSetup,
-                     schooltool.interfaces)
-        schooltool.interfaces.setUp()
-        getURI("http://schooltool.org/ns/membership")
-        getURI("http://schooltool.org/ns/membership/member")
-        getURI("http://schooltool.org/ns/membership/group")
-
-
 class Relatable(LocatableEventTargetMixin):
     implements(IRelatable, IQueryLinks)
 
@@ -628,7 +535,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetManager))
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
     suite.addTest(unittest.makeSuite(TestServiceAPI))
-    suite.addTest(unittest.makeSuite(TestSpecificURI))
     suite.addTest(unittest.makeSuite(TestRelationships))
     suite.addTest(unittest.makeSuite(TestViewRegistry))
     suite.addTest(unittest.makeSuite(TestUtilityService))

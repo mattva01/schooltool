@@ -35,11 +35,11 @@ from schooltool.interfaces import IRelationshipEvent
 from schooltool.interfaces import IRelationshipAddedEvent
 from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import IRelationshipValencies
-from schooltool.interfaces import ISpecificURI, IFaceted, ISchemaInvocation
+from schooltool.interfaces import IFaceted, ISchemaInvocation
 from schooltool.interfaces import IModuleSetup, IValency
 from schooltool.interfaces import IUnlinkHook, IMultiContainer
-from schooltool.component import inspectSpecificURI, registerRelationship
-from schooltool.component import strURI, getPath
+from schooltool.uris import ISpecificURI, inspectSpecificURI, strURI
+from schooltool.component import getPath, registerRelationship
 from schooltool import component
 from schooltool.event import EventMixin
 

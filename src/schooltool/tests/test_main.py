@@ -682,7 +682,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(site.viewFactory is getView)
 
         from schooltool.component import getRelationshipHandlerFor
-        from schooltool.interfaces import ISpecificURI, URIMembership
+        from schooltool.uris import ISpecificURI, URIMembership
         # make sure relationships.setUp was called
         x = getRelationshipHandlerFor(ISpecificURI)
         y = getRelationshipHandlerFor(URIMembership)
