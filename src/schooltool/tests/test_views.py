@@ -44,6 +44,17 @@ class RequestStub:
         self.code = code
         self.reason = reason
 
+class MemberStub:
+    from zope.interface import implements
+    from schooltool.interfaces import IGroupMember
+    added = None
+    removed = None
+    implements(IGroupMember)
+    def notifyAdd(self, group, name):
+        self.added = group
+    def notifyRemove(self, group):
+        self.removed = group
+
 
 class TestTemplate(unittest.TestCase):
 
@@ -185,12 +196,23 @@ class TestGroupView(unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.views import GroupView, PersonView
+        from schooltool.adapters import ComponentLookupError
 
         subview = self.view._traverse(str(self.subkey), RequestStub())
         self.assertEqual(subview.__class__, GroupView)
 
         perview = self.view._traverse(str(self.perkey), RequestStub())
         self.assertEqual(perview.__class__, PersonView)
+
+        self.assertRaises(KeyError, self.view._traverse,
+                          "Nonexistent", RequestStub())
+
+        self.assertRaises(KeyError, self.view._traverse,
+                          None, RequestStub())
+
+        trash = self.group.add(MemberStub())
+        self.assertRaises(ComponentLookupError, self.view._traverse,
+                          trash, RequestStub())
 
     def test_render(self):
         request = RequestStub("http://localhost/group/")

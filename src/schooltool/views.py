@@ -25,7 +25,7 @@ $Id$
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, IPath
-from schooltool.adapters import getAdapter
+from schooltool.adapters import getAdapter, ComponentLookupError
 
 __metaclass__ = type
 
@@ -156,15 +156,16 @@ class GroupView(View):
     template = Template("www/group.pt")
 
     def _traverse(self, name, request):
-        item = self.context[int(name)]
+        try:
+            item = self.context[int(name)]
+        except (TypeError, ValueError):
+            raise KeyError(name)
         if IGroup.isImplementedBy(item):
             return GroupView(item)
         elif IPerson.isImplementedBy(item):
             return PersonView(item)
         else:
-            # XXX: This shouldn't really be KeyError -- this is a
-            # ViewForObjectNotFound error
-            raise KeyError
+            raise ComponentLookupError("view for %s" % item)
 
 
 class PersonView(View):

@@ -134,8 +134,7 @@ class PersistentListSet(Persistent):
             self._data.append(item)
 
     def __iter__(self):
-        for item in self._data:
-            yield item
+        return iter(self._data)
 
     def remove(self, item):
         self._data.remove(item)
