@@ -80,6 +80,12 @@ Content-Type: text/xml; charset=UTF-8
     reltype='http://schooltool.org/ns/membership'
     title='Root Group'
     link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/pupils'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/students'
 </event>
   <event ts="*">MemberAddedEvent
@@ -193,6 +199,10 @@ Content-Type: text/html; charset=UTF-8
         Teachers (private calendar)</a>,
         <a href="http://localhost:8813/groups/teachers/timetable-calendar">
         Teachers (timetable)</a></li>
+    <li><a href="http://localhost:8813/groups/pupils/calendar">
+        Pupils (private calendar)</a>,
+        <a href="http://localhost:8813/groups/pupils/timetable-calendar">
+        Pupils (timetable)</a></li>
     <li><a href="http://localhost:8813/groups/managers/calendar">
         System Managers (private calendar)</a>,
         <a href="http://localhost:8813/groups/managers/timetable-calendar">
@@ -277,6 +287,10 @@ Content-Type: text/html; charset=UTF-8
         Teachers (private calendar)</a>,
         <a href="https://www.example.com:443/groups/teachers/timetable-calendar">
         Teachers (timetable)</a></li>
+    <li><a href="https://www.example.com:443/groups/pupils/calendar">
+        Pupils (private calendar)</a>,
+        <a href="https://www.example.com:443/groups/pupils/timetable-calendar">
+        Pupils (timetable)</a></li>
     <li><a href="https://www.example.com:443/groups/managers/calendar">
         System Managers (private calendar)</a>,
         <a href="https://www.example.com:443/groups/managers/timetable-calendar">
@@ -344,6 +358,8 @@ Content-Type: text/xml; charset=UTF-8
           xlink:type="simple"/>
     <item xlink:href="/groups/teachers" xlink:title="Teachers"
           xlink:type="simple"/>
+    <item xlink:href="/groups/pupils" xlink:title="Pupils"
+          xlink:type="simple"/>
     <item xlink:href="/groups/locations" xlink:title="Locations"
           xlink:type="simple"/>
     <item xlink:href="/groups/managers" xlink:title="System Managers"
@@ -361,6 +377,8 @@ Content-Type: text/xml; charset=UTF-8
   <name>Root Group</name>
   <item xlink:type="simple" xlink:title="Teachers"
         xlink:href="/groups/teachers"/>
+  <item xlink:type="simple" xlink:title="Pupils"
+        xlink:href="/groups/pupils"/>
   <item xlink:type="simple" xlink:title="Students"
         xlink:href="/groups/students"/>
   <item xlink:type="simple" xlink:title="Cleaners"
@@ -478,6 +496,9 @@ Content-Type: text/xml; charset=UTF-8
   <group xlink:href="/groups/root" xlink:title="Root Group"
          xlink:type="simple">
     <group xlink:href="/groups/teachers" xlink:title="Teachers"
+           xlink:type="simple">
+    </group>
+    <group xlink:href="/groups/pupils" xlink:title="Pupils"
            xlink:type="simple">
     </group>
     <group xlink:href="/groups/cleaners" xlink:title="Cleaners"

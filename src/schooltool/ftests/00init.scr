@@ -1,21 +1,6 @@
 Creates some sample persons and groups.
 Make sure you start with a clean Data.fs.
 
-SchoolTool> put /groups/teachers
-PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Teachers"/>
-PUT> .
-201 Created
-Content-Type: text/plain; charset=UTF-8
-Object created: http://localhost:8813/groups/teachers
-
-SchoolTool> post /groups/teachers/facets
-POST> <facet xmlns="http://schooltool.org/ns/model/0.1"
-POST>        factory="teacher_group"/>
-POST> .
-201 Created
-Content-Type: text/plain; charset=UTF-8
-Facet created: http://localhost:8813/groups/teachers/facets/001
-
 SchoolTool> put /groups/students
 PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Students"/>
 PUT> .
@@ -36,23 +21,11 @@ POST>               xmlns="http://schooltool.org/ns/model/0.1"
 POST>               xlink:type="simple"
 POST>               xlink:arcrole="http://schooltool.org/ns/membership"
 POST>               xlink:role="http://schooltool.org/ns/membership/group"
-POST>               xlink:href="/groups/teachers"/>
-POST> .
-201 Created
-Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/groups/root/relationships/0002
-
-SchoolTool> post /groups/root/relationships text/xml
-POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
-POST>               xmlns="http://schooltool.org/ns/model/0.1"
-POST>               xlink:type="simple"
-POST>               xlink:arcrole="http://schooltool.org/ns/membership"
-POST>               xlink:role="http://schooltool.org/ns/membership/group"
 POST>               xlink:href="/groups/students"/>
 POST> .
 201 Created
 Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/groups/root/relationships/0003
+Relationship created: http://localhost:8813/groups/root/relationships/0004
 
 SchoolTool> post /groups/root/relationships text/xml
 POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -64,7 +37,7 @@ POST>               xlink:href="/groups/cleaners"/>
 POST> .
 201 Created
 Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/groups/root/relationships/0004
+Relationship created: http://localhost:8813/groups/root/relationships/0005
 
 SchoolTool> put /persons/Mark
 PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Mark"/>
