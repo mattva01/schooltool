@@ -412,27 +412,33 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
             self.assertEquals(result, error)
 
 
-class TestUriObjectListView(NiceDiffsMixin, unittest.TestCase):
+class TestUriObjectListView(NiceDiffsMixin, XMLCompareMixin,
+                            RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.rest.app import UriObjectListView
         from schooltool.app import Application
-        from schooltool.uris import URIObject, registerURI
+        from schooltool.uris import URIObject, registerURI, resetURIRegistry
+        self.setUpRegistries()
         URI1 = URIObject("http://example.com/foobar",
                          name="da name",
                          description="A long\ndescription")
         URI2 = URIObject("http://example.com/foo",
                          name="da name",
                          description="Another long\ndescription")
+        resetURIRegistry()
         registerURI(URI1)
         registerURI(URI2)
         self.app = Application()
         self.view = UriObjectListView(self.app)
 
+    def tearDown(self):
+        self.tearDownRegistries()
+
     def test_render(self):
         request = RequestStub("http://localhost/uris")
         result = self.view.render(request)
-        self.assertEquals(result, dedent("""
+        self.assertEqualsXML(result, dedent("""
                 <uriobjects>
                   <uriobject uri="http://example.com/foobar">
                     <name>da name</name>
