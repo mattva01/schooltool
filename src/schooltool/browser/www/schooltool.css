@@ -694,11 +694,11 @@ table.acl th {
 /* Notes */
 
 div.note .content {
-    background: #ebe9bf;
-    border: 1px #999999 solid;
-    margin: 1em;
-    padding: 1em;
-    width: 20em;
+  background: #ebe9bf;
+  border: 1px #999999 solid;
+  margin: 1em;
+  padding: 1em;
+  width: 20em;
 }
 
 div.notes {
@@ -738,15 +738,15 @@ div.notes div.byline {
 /* Timetable setup form */
 
 table.timetable_setup {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 table.timetable_setup tr.conflict {
-    background: yellow;
+  background: yellow;
 }
 table.timetable_setup th,
 table.timetable_setup td {
-    padding: 1ex;
+  padding: 1ex;
 }
 table.timetable_setup th {
-    text-align: left;
+  text-align: left;
 }
