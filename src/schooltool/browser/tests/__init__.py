@@ -57,6 +57,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)
         self.root = app['groups'].new("root", title="root")
+        self.locations = app['groups'].new("locations", title="locations")
         self.managers = app['groups'].new("managers", title="managers")
         self.teachers = app['groups'].new("teachers", title="teachers")
         self.person = app['persons'].new("johndoe", title="John Doe")
@@ -64,8 +65,12 @@ class AppSetupMixin(RegistriesSetupMixin):
         self.manager = app['persons'].new("manager", title="Manager")
         self.teacher = app['persons'].new("teacher", title="Prof. Bar")
         self.resource = app['resources'].new("resource", title="Kitchen sink")
+        self.location = app['resources'].new("location", title="Inside")
+        self.location2 = app['resources'].new("location2", title="Outside")
 
         Membership(group=self.root, member=self.person)
         Membership(group=self.managers, member=self.manager)
         Membership(group=self.teachers, member=self.teacher)
+        Membership(group=self.locations, member=self.location)
+        Membership(group=self.locations, member=self.location2)
 

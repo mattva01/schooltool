@@ -774,6 +774,45 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
             'http://localhost:7001/persons/boss/calendar/daily.html')
 
 
+class TestEventViewBase(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def test_getLocations(self):
+        from schooltool.browser.cal import EventViewBase
+        from schooltool.cal import Calendar
+
+        cal = self.person.cal = Calendar()
+        cal.__parent__ = self.person
+
+        view = EventViewBase(cal)
+        locations = list(view.getLocations())
+        self.assertEquals(locations, ['Inside', 'Outside'])
+
+    def test_customized_location(self):
+        from schooltool.browser.cal import EventViewBase
+        from schooltool.cal import Calendar
+
+        cal = Calendar()
+        setPath(cal, '/persons/foo/calendar')
+        view = EventViewBase(cal)
+
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'location': 'custom_location',
+                                    'location_other': 'Moon',
+                                    'duration': '50'})
+        view.request = request
+
+        def processStub(dtstart, duration, title, location):
+            self.assertEquals(location, 'Moon')
+        view.process = processStub
+
+        content = view.do_POST(request)
+
+
 class TestEventAddView(unittest.TestCase):
 
     # XXX This class should be split into TestEventViewBase
@@ -787,6 +826,7 @@ class TestEventAddView(unittest.TestCase):
         setPath(self.cal, '/persons/somebody/calendar')
         self.view = EventAddView(self.cal)
         self.view.authorization = lambda x, y: True
+        self.view.getLocations = lambda: ["Bus stop"]
 
     def test_render(self):
         request = RequestStub()
@@ -827,15 +867,6 @@ class TestEventAddView(unittest.TestCase):
         self.assertEquals(events[0].location, 'Kitchen')
         self.assertEquals(events[0].dtstart, datetime(2004, 8, 13, 15, 30))
         self.assertEquals(events[0].duration, timedelta(minutes=50))
-
-    def test_post_nolocation(self):
-        request = RequestStub(args={'title': 'Hacking',
-                                    'start_date': '2004-08-13',
-                                    'start_time': '15:30',
-                                    'location': '',
-                                    'duration': '50'})
-        self.view.request = request
-        content = self.view.do_POST(request)
 
     def test_post_errors(self):
         request = RequestStub(args={'title': '',
@@ -884,6 +915,7 @@ class TestEventEditView(unittest.TestCase):
 
         self.view = EventEditView(self.cal)
         self.view.authorization = lambda x, y: True
+        self.view.getLocations = lambda: ["Bus stop"]
 
     def test_render(self):
         request = RequestStub(args={'event_id': "pick me"})
@@ -1162,6 +1194,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
     suite.addTest(unittest.makeSuite(TestYearlyCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestEventViewBase))
     suite.addTest(unittest.makeSuite(TestEventAddView))
     suite.addTest(unittest.makeSuite(TestEventEditView))
     suite.addTest(unittest.makeSuite(TestEventDeleteView))

@@ -4,9 +4,7 @@
 </head>
 <body>
 
-  <h1 metal:fill-slot="h1" i18n:translate="">
-    Edit event
-  </h1>
+  <h1 metal:fill-slot="h1" tal:content="view/page_title" />
 
   <metal:block metal:fill-slot="content" tal:define="update view/update">
   <form method="POST" tal:attributes="action request/path">
@@ -17,31 +15,39 @@
            tal:attributes="value view/event_id" />
 
     <div class="row">
-      <label for="title">Title</label>
+      <label for="title" i18n:translate="">Title</label>
       <input id="title" name="title" type="text"
              tal:attributes="value view/title" />
     </div>
     <div class="row">
-      <label for="start_date">Date</label>
+      <label for="start_date" i18n:translate="">Date</label>
       <input id="start_date" name="start_date" type="text"
              tal:attributes="value view/start_date" />
     </div>
     <div class="row">
-      <label for="start_time">Time</label>
+      <label for="start_time" i18n:translate="">Time</label>
       <input id="start_time" name="start_time" type="text"
              tal:attributes="value view/start_time" />
     </div>
     <div class="row">
-      <label for="location">Location</label>
-      <input id="location" name="location" type="text"
+      <label for="location" i18n:translate="">Location</label>
+      <select name="location">
+        <option tal:repeat="location view/getLocations"
+                tal:content="location" />
+        <option value="custom_location" i18n:translate="">other</option>
+      </select>
+      <br />
+      <label for="location_other" i18n:translate="">Specify other:</label>
+      <input id="location_other" name="location_other" type="text"
              tal:attributes="value view/location" />
     </div>
     <div class="row">
-      <label for="duration">Duration</label>
+      <label for="duration" i18n:translate="">Duration</label>
       <input id="duration" name="duration" type="text"
              tal:attributes="value view/duration" />
     </div>
-    <input name="CONFIRM_ADD" type="submit" value="Submit" />
+    <input name="CONFIRM_ADD" type="submit" value="Submit"
+           i18n:attributes="value Submit" />
 
   </form>
   </metal:block>

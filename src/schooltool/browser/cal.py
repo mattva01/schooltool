@@ -29,11 +29,12 @@ from zope.interface import implements
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
 from schooltool.cal import Calendar, CalendarEvent, Period
-from schooltool.common import to_unicode, parse_datetime
-from schooltool.component import traverse, getPath
+from schooltool.common import to_unicode, parse_datetime, parse_date
+from schooltool.component import traverse, getPath, getRelatedObjects
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
+from schooltool.interfaces import IContainmentRoot
 from schooltool.translation import ugettext as _
-from schooltool.common import parse_date
+from schooltool.uris import URIMember
 
 
 __metaclass__ = type
@@ -565,6 +566,7 @@ class EventViewBase(View):
     authorization = PrivateAccess
 
     template = Template('www/event.pt')
+    page_title = None # overridden by subclasses
 
     error = u""
     title = u""
@@ -586,6 +588,8 @@ class EventViewBase(View):
             self.duration = to_unicode(request.args['duration'][0])
         if 'location' in request.args:
             self.location = to_unicode(request.args['location'][0])
+        if 'location_other' in request.args:
+            self.location_other = to_unicode(request.args['location_other'][0])
 
     def do_POST(self, request):
         self.update()
@@ -609,7 +613,12 @@ class EventViewBase(View):
 
         duration = timedelta(minutes=duration)
 
-        self.process(start, duration, self.title, self.location)
+        if self.location != 'custom_location':
+            location = self.location
+        else:
+            location = self.location_other
+
+        self.process(start, duration, self.title, location)
 
         suffix = 'daily.html?date=%s' % start.date()
         url = absoluteURL(request, self.context, suffix)
@@ -618,9 +627,24 @@ class EventViewBase(View):
     def process(self, dtstart, duration, title, location):
         raise NotImplementedError()
 
+    def getLocations(self):
+        """Get a list of titles for possible locations."""
+        obj = self.context
+        while not IContainmentRoot.providedBy(obj):
+            obj = obj.__parent__
+        location_group = obj['groups']['locations']
+
+        locations = []
+        for location in getRelatedObjects(location_group, URIMember):
+            locations.append(location.title)
+        locations.sort()
+        return locations
+
 
 class EventAddView(EventViewBase):
     """A view for adding events."""
+
+    page_title = _("Add event")
 
     def process(self, dtstart, duration, title, location):
         ev = CalendarEvent(dtstart, duration, title,
@@ -632,6 +656,8 @@ class EventAddView(EventViewBase):
 class EventEditView(EventViewBase):
     """A view for editing events."""
 
+    page_title = _("Edit event")
+
     def update(self):
         self.event_id = to_unicode(self.request.args['event_id'][0])
         for event in self.context:
@@ -640,6 +666,8 @@ class EventEditView(EventViewBase):
                 break
         else:
             raise ValueError("Invalid event_id") # XXX Unfriendly?
+            # TODO: Create a traversal view for events
+            # and refactor the event edit view to take the event as context
 
         self.title = self.event.title
         self.start_date = str(self.event.dtstart.date())
