@@ -29,7 +29,7 @@ from schooltool.component import getPath
 from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import TraversableView, XMLPseudoParser
-from schooltool.views import absoluteURL
+from schooltool.views import absoluteURL, notFoundPage
 
 __metaclass__ = type
 
@@ -105,23 +105,15 @@ class ApplicationObjectContainerView(TraversableView,
 class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
     """View for non-existing application objects"""
 
-    template = Template('www/notfound.pt')
-    code = 404
-    reason = "Not Found"
-
     def __init__(self, container, name):
-        View.__init__(self, None)
-        self.container = container
+        View.__init__(self, container)
         self.name = name
 
-    def do_GET(self, request):
-        request.setResponseCode(self.code, self.reason)
-        return self.template(request, code=self.code, reason=self.reason)
-
-    do_DELETE = do_GET
+    do_GET = staticmethod(notFoundPage)
+    do_DELETE = staticmethod(notFoundPage)
 
     def do_PUT(self, request):
-        return self.create(request, self.container, self.name)
+        return self.create(request, self.context, self.name)
 
 
 def setUp():

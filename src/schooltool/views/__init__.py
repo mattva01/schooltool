@@ -152,6 +152,11 @@ def errorPage(request, code, reason):
     return ErrorView(code, reason).render(request)
 
 
+def notFoundPage(request):
+    """Renders a simple 'not found' error page."""
+    return NotFoundView().render(request)
+
+
 def textErrorPage(request, message, code=400, reason=None):
     """Renders a simple error page and sets the HTTP status code and reason."""
     request.setResponseCode(code, reason)

@@ -128,6 +128,9 @@ class IServiceAPI(Interface):
     def getUtilityService(context):
         """Return the global utility service."""
 
+    def getTimetableSchemaService(context):
+        """Return the global timetable schema service."""
+
 
 class IServiceManager(Interface):
     """Container of services"""
@@ -1093,6 +1096,9 @@ class ITimetableWrite(Interface):
         Throws a ValueError if the key is not a day id.
         """
 
+    def clear():
+        """Remove all activities for all periods."""
+
     def update(timetable):
         """Add all the events in the timetable passed to self, thus
         producing a combined template.
@@ -1322,7 +1328,7 @@ class ITimetableSchemaService(Interface):
     """
 
     def __getitem__(schema_id):
-        """Returns an empty timetable of a given schema."""
+        """Returns a new empty timetable of a given schema."""
 
     def __setitem__(schema_id, timetable):
         """Stores a given timetable as a schema with a given id."""

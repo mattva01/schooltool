@@ -95,15 +95,18 @@ class TestTimetable(unittest.TestCase):
                          [("Mo", monday), ("Tu", tuesday), ("We", None),
                           ("Th", None), ("Fr", None)])
 
-    def test_update(self):
+    def createTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
-        from schooltool.timetable import TimetableActivity
-
         days = ('A', 'B')
         periods = ('Green', 'Blue')
         tt = Timetable(days)
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
+        return tt
+
+    def test_clear(self):
+        from schooltool.timetable import TimetableActivity
+        tt = self.createTimetable()
         english = TimetableActivity("English")
         math = TimetableActivity("Math")
         bio = TimetableActivity("Biology")
@@ -111,9 +114,24 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
 
-        tt2 = Timetable(days)
-        tt2["A"] = TimetableDay(periods)
-        tt2["B"] = TimetableDay(periods)
+        tt.clear()
+
+        empty_tt = self.createTimetable()
+        self.assertEqual(tt, empty_tt)
+
+    def test_update(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableActivity
+
+        tt = self.createTimetable()
+        english = TimetableActivity("English")
+        math = TimetableActivity("Math")
+        bio = TimetableActivity("Biology")
+        tt["A"].add("Green", english)
+        tt["A"].add("Blue", math)
+        tt["B"].add("Green", bio)
+
+        tt2 = self.createTimetable()
         french = TimetableActivity("French")
         math2 = TimetableActivity("Math 2")
         geo = TimetableActivity("Geography")
@@ -132,18 +150,13 @@ class TestTimetable(unittest.TestCase):
                                  ("Blue", Set([geo]))])
 
         tt3 = Timetable(("A", ))
-        tt3["A"] = TimetableDay(periods)
+        tt3["A"] = TimetableDay(('Green', 'Blue'))
         self.assertRaises(ValueError, tt.update, tt3)
 
     def test_cloneEmpty(self):
-        from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
 
-        days = ('A', 'B')
-        periods = ('Green', 'Blue')
-        tt = Timetable(days)
-        tt["A"] = TimetableDay(periods)
-        tt["B"] = TimetableDay(periods)
+        tt = self.createTimetable()
         english = TimetableActivity("English")
         math = TimetableActivity("Math")
         bio = TimetableActivity("Biology")
@@ -163,14 +176,9 @@ class TestTimetable(unittest.TestCase):
                 self.assertEquals(list(day2[period]), [])
 
     def testComparison(self):
-        from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
 
-        days = ('A', 'B')
-        periods = ('Green', 'Blue')
-        tt = Timetable(days)
-        tt["A"] = TimetableDay(periods)
-        tt["B"] = TimetableDay(periods)
+        tt = self.createTimetable()
         english = TimetableActivity("English")
         math = TimetableActivity("Math")
         bio = TimetableActivity("Biology")
@@ -181,9 +189,7 @@ class TestTimetable(unittest.TestCase):
         self.assertEquals(tt, tt)
         self.assertNotEquals(tt, None)
 
-        tt2 = Timetable(days)
-        tt2["A"] = TimetableDay(periods)
-        tt2["B"] = TimetableDay(periods)
+        tt2 = self.createTimetable()
         self.assertNotEquals(tt, tt2)
 
         tt2["A"].add("Green", english)
@@ -304,6 +310,28 @@ class TestTimetableActivity(unittest.TestCase):
         ta = TimetableActivity("Dancing")
         verifyObject(ITimetableActivity, ta)
         self.assertEqual(ta.title, "Dancing")
+
+        class FakeThing:
+            title = "Dancing"
+        fake_thing = FakeThing()
+        tb = TimetableActivity("Dancing")
+        tc = TimetableActivity("Fencing")
+
+        # __eq__
+        self.assertEqual(ta, ta)
+        self.assertEqual(ta, tb)
+        self.assertNotEqual(ta, tc)
+        self.assertNotEqual(ta, fake_thing)
+
+        # __ne__
+        self.failIf(ta != ta)
+        self.failIf(ta != tb)
+        self.assert_(ta != tc)
+        self.assert_(ta != fake_thing)
+
+        # __hash__
+        self.assertEqual(hash(ta), hash(tb))
+        self.assertNotEqual(hash(ta), hash(tc))
 
 
 class TestTimetablingPersistence(unittest.TestCase):
@@ -806,6 +834,7 @@ class TestTimetableSchemaService(unittest.TestCase):
 
         del service["super"]
         self.assertRaises(KeyError, service.__getitem__, "super")
+
 
 def test_suite():
     suite = unittest.TestSuite()

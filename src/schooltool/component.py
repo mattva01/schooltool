@@ -232,6 +232,11 @@ def getUtilityService(context):
     return _getServiceManager(context).utilityService
 
 
+def getTimetableSchemaService(context):
+    """See IServiceAPI"""
+    return _getServiceManager(context).timetableSchemaService
+
+
 #
 # Relationships
 #

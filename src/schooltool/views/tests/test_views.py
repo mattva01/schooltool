@@ -141,6 +141,13 @@ class TestErrorViews(unittest.TestCase):
         self.assert_('<title>747 - Not ready to take off</title>' in result)
         self.assert_('<h1>747 - Not ready to take off</h1>' in result)
 
+    def test_notFoundPage(self):
+        from schooltool.views import notFoundPage
+        request = RequestStub()
+        result = notFoundPage(request)
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.reason, "Not Found")
+
     def test_textErrorPage(self):
         from schooltool.views import textErrorPage
         request = RequestStub()

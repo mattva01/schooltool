@@ -41,6 +41,8 @@ from schooltool.views import XMLPseudoParser
 from schooltool.views import parse_datetime, absoluteURL, textErrorPage
 from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetView, FacetManagementView
+from schooltool.views.timetable import TimetableTraverseView
+from schooltool.views.timetable import CompositeTimetableTraverseView
 
 __metaclass__ = type
 
@@ -232,6 +234,10 @@ class PersonView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'absences':
             return AbsenceManagementView(self.context)
+        elif name == 'timetable':
+            return TimetableTraverseView(self.context)
+        elif name == 'composite-timetable':
+            return CompositeTimetableTraverseView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def getGroups(self):

@@ -100,6 +100,8 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.model import AbsenceManagementView
+        from schooltool.views.timetable import TimetableTraverseView
+        from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/person")
 
@@ -113,6 +115,14 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         result = self.view._traverse('absences', request)
         self.assert_(isinstance(result, AbsenceManagementView))
+        self.assert_(result.context is self.per)
+
+        result = self.view._traverse('timetable', request)
+        self.assert_(isinstance(result, TimetableTraverseView))
+        self.assert_(result.context is self.per)
+
+        result = self.view._traverse('composite-timetable', request)
+        self.assert_(isinstance(result, CompositeTimetableTraverseView))
         self.assert_(result.context is self.per)
 
     def test_render(self):

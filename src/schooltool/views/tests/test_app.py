@@ -205,7 +205,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assert_(view.__class__ is GroupView)
         view = self.view._traverse('newchild', request)
         self.assert_(view.__class__ is ApplicationObjectCreatorView)
-        self.assertEquals(view.container, self.view.context)
+        self.assertEquals(view.context, self.view.context)
         self.assertEquals(view.name, 'newchild')
 
 

@@ -38,6 +38,7 @@ from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.uris import URIGroup
 
+
 #
 # Timetabling
 #
@@ -47,8 +48,7 @@ class Timetable(Persistent):
     implements(ITimetable, ITimetableWrite)
 
     def __init__(self, day_ids=()):
-        """day_ids is a sequence of the day ids of this timetable.
-        """
+        """day_ids is a sequence of the day ids of this timetable."""
         self.day_ids = day_ids
         self.days = PersistentDict()
 
@@ -68,6 +68,11 @@ class Timetable(Persistent):
         if key not in self.day_ids:
             raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
         self.days[key] = value
+
+    def clear(self):
+        for day in self.days.itervalues():
+            for period in day.periods:
+                day.clear(period)
 
     def update(self, other):
         # XXX Right now we're trusting the user that the periods of
@@ -89,14 +94,16 @@ class Timetable(Persistent):
         return other
 
     def __eq__(self, other):
-        if not isinstance(other, Timetable):
+        if isinstance(other, Timetable):
+            return self.items() == other.items()
+        else:
             return False
-        return self.items() == other.items()
 
     def __ne__(self, other):
-        if not isinstance(other, Timetable):
+        if isinstance(other, Timetable):
+            return self.items() != other.items()
+        else:
             return True
-        return self.items() != other.items()
 
 
 class TimetableDay(Persistent):
@@ -160,6 +167,22 @@ class TimetableActivity:
 
     def __repr__(self):
         return "TimetableActivity(%r)" % self.title
+
+    def __eq__(self, other):
+        if isinstance(other, TimetableActivity):
+            return self.title == other.title
+        else:
+            return False
+
+    def __ne__(self, other):
+        if isinstance(other, TimetableActivity):
+            return self.title != other.title
+        else:
+            return True
+
+    def __hash__(self):
+        return hash(self.title)
+
 
 #
 #  Timetable model stuff
