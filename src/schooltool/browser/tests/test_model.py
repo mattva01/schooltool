@@ -545,16 +545,18 @@ class TestPhotoView(unittest.TestCase):
         return PhotoView(person)
 
     def test(self):
-        view = self.createView(';-)')
+        view = self.createView(';-) \xff')
         request = RequestStub(authenticated_user='not None')
         photo = view.render(request)
+        self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'], 'image/jpeg')
-        self.assertEquals(photo, ';-)')
+        self.assertEquals(photo, ';-) \xff')
 
     def test_nophoto(self):
         view = self.createView(None)
         request = RequestStub(authenticated_user='not None')
-        self.assertRaises(ValueError, view.render, request)
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
 
 
 def test_suite():

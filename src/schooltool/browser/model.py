@@ -28,6 +28,7 @@ from StringIO import StringIO
 
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
+from schooltool.browser import notFoundPage
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import isManager
@@ -310,7 +311,8 @@ class PhotoView(View):
     def do_GET(self, request):
         facet = FacetManager(self.context).facetByName('person_info')
         if facet.photo is None:
-            raise ValueError('Photo not available')
-        request.setHeader('Content-Type', 'image/jpeg')
-        return facet.photo
+            return notFoundPage(request)
+        else:
+            request.setHeader('Content-Type', 'image/jpeg')
+            return facet.photo
 
