@@ -423,6 +423,18 @@ class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
             """
         self.assertEqualsXML(widget(), expected)
 
+    def test_update_nodata(self):
+        widget = self.createWidget()
+        request = RequestStub(args={})
+        widget.update(request)
+        self.assertEquals(widget.value, None)
+
+    def test_update_data(self):
+        widget = self.createWidget()
+        request = RequestStub(args={'field': 'a'})
+        widget.update(request)
+        self.assertEquals(widget.value, 'a')
+
 
 class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
 

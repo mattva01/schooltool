@@ -922,11 +922,18 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.time_widget.require()
         self.duration_widget.require()
 
+        if self.range_widget.value == 'count':
+            self.count_widget.require()
+        if self.range_widget.value == 'until':
+            self.until_widget.require()
+
         errors = (self.title_widget.error or self.date_widget.error or
                   self.time_widget.error or self.duration_widget.error or
                   self.location_widget.error or
-                  self.other_location_widget.error)
-        
+                  self.other_location_widget.error or
+                  self.interval_widget.error or
+                  self.count_widget.error or self.until_widget.error)
+
         if errors:
             return View.do_GET(self, request)
 

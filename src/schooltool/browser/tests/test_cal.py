@@ -854,9 +854,9 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
     def test_getRecurrenceRule(self):
         from schooltool.cal import DailyRecurrenceRule, WeeklyRecurrenceRule
         from schooltool.cal import MonthlyRecurrenceRule, YearlyRecurrenceRule
-        view = self.createView()
 
         def makeRule(**kwargs):
+            view = self.createView()
             args = {'title': 'Hacking',
                     'start_date': '2004-08-13',
                     'start_time': '15:30',
@@ -872,6 +872,9 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
         rule = makeRule(recurrence_type='daily', interval="1",
                         recurrence_shown="yes",)
         assert rule is None
+
+        rule = makeRule(recurrence="on", recurrence_shown="yes")
+        assert rule is None, rule
 
         rule = makeRule(recurrence='checked', recurrence_shown="yes",
                         recurrence_type='daily', interval="2")
@@ -1026,6 +1029,34 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                               method='POST')
         content = view.render(request)
         self.assert_('Invalid value' in content)
+
+        view = self.createView()
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'duration': '100',
+                                    'recurrence_type' : 'daily',
+                                    'recurrence': 'on',
+                                    'recurrence_shown': 'yes',
+                                    'range': 'count',
+                                    'until': '2004-01-01'},
+                              method='POST')
+        content = view.render(request)
+        assert 'This field is required' in content
+
+        view = self.createView()
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'duration': '100',
+                                    'recurrence_type' : 'daily',
+                                    'recurrence': 'on',
+                                    'recurrence_shown': 'yes',
+                                    'range': 'until',
+                                    'count': '23'},
+                              method='POST')
+        content = view.render(request)
+        assert 'This field is required' in content
 
 
 class EventTimetableTestHelpers:
