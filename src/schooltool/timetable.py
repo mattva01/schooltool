@@ -1065,6 +1065,15 @@ class TimetablePhysicallyLocatable(LocationPhysicallyLocatable):
     def getPath(self):
         if ITimetableSchemaService.providedBy(self.context.__parent__):
             # XXX Hacky!
+            #     This hack is necessary because at the moment timetable
+            #     objects in SchoolTool live in two places:
+            #       - some timetables live in the timetable schema service,
+            #         they have a regular unicode __name__, and their path
+            #         looks like "/parent/path/__name__"
+            #       - some timetables live in the timetables dict of an
+            #         ITimetabledObject, and their name is a tuple
+            #         (time_period_id, schema_id), and their path looks like
+            #         "/parent/path/time_period_id/schema_id"
             path = LocationPhysicallyLocatable.getPath(self)
         else:
             path = (getPath(self.context.__parent__) + "/"
