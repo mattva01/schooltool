@@ -921,9 +921,14 @@ def setUp(test):
     schema fields.
     """
     from zope.app.form.browser import PasswordWidget, TextWidget, BytesWidget
-    from zope.app.form.browser import CheckBoxWidget
+    from zope.app.form.browser import CheckBoxWidget, DateWidget, IntWidget
+    from zope.app.form.browser import ChoiceInputWidget, DropdownWidget, TextAreaWidget
+    from zope.app.form.browser import ChoiceCollectionInputWidget, CollectionInputWidget
+    from zope.app.form.browser import MultiSelectWidget
     from zope.app.form.interfaces import IInputWidget
-    from zope.schema.interfaces import IPassword, ITextLine, IBytes, IBool
+    from zope.publisher.interfaces.browser import IBrowserRequest
+    from zope.schema.interfaces import IPassword, ITextLine, IText, IBytes, IBool, ISet
+    from zope.schema.interfaces import IDate, IInt, IChoice, IIterableVocabulary
     setup.placelessSetUp()
     setup.setUpAnnotations()
     setup.setUpTraversal()
@@ -933,8 +938,22 @@ def setUp(test):
     # widgets
     ztapi.browserViewProviding(IPassword, PasswordWidget, IInputWidget)
     ztapi.browserViewProviding(ITextLine, TextWidget, IInputWidget)
+    ztapi.browserViewProviding(IText, TextAreaWidget, IInputWidget)
     ztapi.browserViewProviding(IBytes, BytesWidget, IInputWidget)
     ztapi.browserViewProviding(IBool, CheckBoxWidget, IInputWidget)
+    ztapi.browserViewProviding(IDate, DateWidget, IInputWidget)
+    ztapi.browserViewProviding(IInt, IntWidget, IInputWidget)
+    ztapi.browserViewProviding(IChoice, ChoiceInputWidget, IInputWidget)
+    ztapi.browserViewProviding(ISet, CollectionInputWidget, IInputWidget)
+
+    ztapi.provideMultiView((IChoice, IIterableVocabulary), IBrowserRequest,
+                           IInputWidget, '', DropdownWidget)
+
+    ztapi.provideMultiView((ISet, IChoice), IBrowserRequest,
+                           IInputWidget, '', ChoiceCollectionInputWidget)
+    ztapi.provideMultiView((ISet, IIterableVocabulary), IBrowserRequest,
+                           IInputWidget, '', MultiSelectWidget)
+
     # errors in forms
     from zope.app.form.interfaces import IWidgetInputError
     from zope.app.form.browser.interfaces import IWidgetInputErrorView

@@ -26,7 +26,7 @@ $Id$
 
 import re
 import calendar
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 
 
 def prev_month(date):
@@ -225,3 +225,35 @@ def parse_datetime(s):
     y, m, d, hh, mm, ss = map(int, m.groups()[:6])
     return datetime(y, m, d, hh, mm, ss, ssssss)
 
+
+def parse_time(s):
+    """Parse a ISO 8601 time value.
+
+    Only a small subset of ISO 8601 is accepted:
+
+      HH:MM
+      HH:MM:SS
+
+    Returns a datetime.time object without a time zone.
+
+    Examples:
+
+        >>> parse_time('11:22:33')
+        datetime.time(11, 22, 33)
+
+        >>> parse_time('11:22')
+        datetime.time(11, 22)
+
+        >>> parse_time('11:66')
+        Traceback (most recent call last):
+          ...
+        ValueError: minute must be in 0..59
+
+    """
+
+    parts = s.split(":")
+    hh, mm = map(int, parts[:2])
+    ss = 0
+    if len(parts) > 2:
+        ss = int(parts[2])
+    return time(hh, mm, ss)

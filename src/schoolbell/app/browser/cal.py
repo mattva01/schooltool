@@ -25,11 +25,13 @@ $Id$
 from datetime import datetime, date, time, timedelta
 import urllib
 
-from zope.interface import implements
+from zope.interface import implements, Interface
+from zope.schema import Date, TextLine, Choice, Int, Bool, Set, Text
 from zope.component import queryView, adapts
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.publisher.browser import BrowserView
+from zope.app.form.browser.add import AddView
 from zope.app.traversing.browser.absoluteurl import absoluteURL
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
@@ -40,6 +42,12 @@ from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.utils import parse_date
 from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
+from schoolbell.calendar.recurrent import DailyRecurrenceRule
+from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
+from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 
 class CalendarOwnerTraverser(object):
@@ -870,3 +878,180 @@ class Slots(dict):
             i += 1
         self[i] = obj
 
+
+def vocabulary(choices):
+    """Create a SimpleVocabulary from a list of values and titles.
+
+    >>> v = vocabulary([('value1', u"Title for value1"),
+    ...                 ('value2', u"Title for value2")])
+    >>> for term in v:
+    ...   print term.value, '|', term.token, '|', term.title
+    value1 | value1 | Title for value1
+    value2 | value2 | Title for value2
+
+    """
+    return SimpleVocabulary([SimpleTerm(v, title=t) for v, t in choices])
+
+
+class ICalendarEventAddForm(Interface):
+    """Schema for event adding form."""
+
+    title = TextLine(title=_("Title"))
+    start_date = Date(title=_("Date"))
+    start_time = TextLine(title=_("Time"))
+
+    duration = Int(
+        title=_("Duration"),
+        default=60)
+
+    location = TextLine(
+        title=_("Location"),
+        required=False)
+
+    # Recurrence
+    recurrence = Bool(
+        title=_("Recurring"),
+        required=False)
+
+    recurrence_type = Choice(
+        title=_("Recurs"),
+        required=False,
+        default="daily",
+        vocabulary=vocabulary([("daily", _("Day")),
+                               ("weekly", _("Week")),
+                               ("monthly", _("Month")),
+                               ("yearly", _("Year"))]))
+
+
+    interval = Int(
+        title=u"Repeat every",
+        required=False,
+        default=1)
+
+    range = Choice(
+        title=_("Range"),
+        required=False,
+        default="forever",
+        vocabulary=vocabulary([("count", _("Count")),
+                               ("until", _("Until")),
+                               ("forever", _("forever"))]))
+
+    count = Int(
+        title=_("Number of events"),
+        required=False)
+
+    until = Date(
+        title=_("Repeat until"),
+        required=False)
+
+    weekdays = Set(
+        title=_("Weekdays"),
+        required=False,
+        value_type=Choice(
+            title=_("Weekday"),
+            vocabulary=vocabulary([("0", _("Monday")),
+                                   ("1", _("Tuesday")),
+                                   ("2", _("Wednesday")),
+                                   ("3", _("Thursday")),
+                                   ("4", _("Friday")),
+                                   ("5", _("Saturday")),
+                                   ("6", _("Sunday"))])))
+
+    monthly = Choice(
+        title=_("Monthly"),
+        default="monthday",
+        required=False,
+        vocabulary=vocabulary([("monthday", "md"),
+                               ("weekday", "wd"),
+                               ("lastweekday", "lwd")]))
+
+    exceptions = Text(
+        title=_("Exception dates"),
+        required=False)
+
+
+class CalendarEventAddView(AddView):
+    """A view for adding an event."""
+
+    schema = ICalendarEventAddForm
+    error = None
+
+    _factory = CalendarEvent
+    _arguments = ['title', 'start_date', 'start_time', 'duration']
+    _keyword_arguments = ['location', 'recurrence', 'recurrence_type', 'interval']
+    _set_before_add = []
+    _set_after_add = []
+
+    def create(self, title, start_date, start_time, duration, **kwargs):
+        from schoolbell.calendar.utils import parse_time
+        start = datetime.combine(start_date, parse_time(start_time))
+        duration = timedelta(minutes=duration)
+
+        location = None
+        if 'location' in kwargs:
+            location = kwargs.pop('location')
+
+        recurrence = None
+        if 'recurrence' in kwargs:
+            kwargs.pop('recurrence')
+            recurrence = makeRecurrenceRule(**kwargs)
+
+        event = self._factory(start, duration, title,
+                              recurrence=recurrence,
+                              location=location)
+        return event
+
+    def add(self, event):
+        self.context.addEvent(event)
+
+    def nextURL(self):
+        pass
+
+    def getWeekDay(self):
+        """Return a description like '4th Tuesday'."""
+
+        evdate = self.start_date_widget.value
+        if evdate is None:
+            return _("same weekday")
+        weekday = evdate.weekday()
+        index = (evdate.day - 1) / 7 + 1
+
+        indexes = {1: _('1st'), 2: _('2nd'), 3: _('3rd'),
+                   4: _('4th'), 5: _('5th')}
+        day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
+
+        return "%s %s" % (indexes[index], day_of_week)
+
+
+def makeRecurrenceRule(interval=None, until=None,
+                       count=None, range=None,
+                       exceptions=None, recurrence_type=None,
+                       weekdays=None, monthly=None):
+    """Return a recurrence rule according to the argumentsx.
+    """
+    if interval is None:
+        interval = 1
+
+    if range != 'until':
+        until = None
+    if range != 'count':
+        count = None
+
+    if exceptions is None:
+        exceptions = ()
+
+    kwargs = {'interval': interval, 'count': count,
+              'until': until, 'exceptions': exceptions}
+
+    if recurrence_type == 'daily':
+        return DailyRecurrenceRule(**kwargs)
+    elif recurrence_type == 'weekly':
+        weekdays = weekdays or ()
+        return WeeklyRecurrenceRule(weekdays=tuple(weekdays), **kwargs)
+    elif recurrence_type == 'monthly':
+        monthly = monthly or "monthday"
+        return MonthlyRecurrenceRule(monthly=monthly, **kwargs)
+    elif recurrence_type == 'yearly':
+        return YearlyRecurrenceRule(**kwargs)
+    else:
+        raise "Non implemented!"

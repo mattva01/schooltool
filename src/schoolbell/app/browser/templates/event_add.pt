@@ -1,0 +1,12 @@
+<html >
+<!-- metal:use-macro="context/@@standard_macros/page" -->
+<body>
+<div >
+<!-- metal:fill-slot="body" -->
+<div metal:define-macro="addform">
+      <div metal:use-macro="context/@@form_macros/widget_rows" />
+</div>
+
+</div>
+</body>
+</html>

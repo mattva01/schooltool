@@ -357,6 +357,17 @@
       title="Calendar (yearly)"
       />
 
+  <page
+      name="add.html"
+      for="schoolbell.calendar.interfaces.ICalendar"
+      class=".cal.CalendarEventAddView"
+      template="templates/event_add.pt"
+      permission="zope.ManageContent"
+      menu="zmi_views"
+      title="Add Event"
+      />
+
+
 <!-- Skin and resources -->
 
   <zope:subscriber

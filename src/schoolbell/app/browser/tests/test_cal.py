@@ -800,6 +800,267 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(view.editLink(), 'edit_event.html?' + params)
 
 
+def doctest_CalendarEventAddView():
+    r"""Tests for CalendarEventAddView.
+
+    Let's create a CalendarEventAddView
+
+        >>> from schoolbell.app.browser.cal import CalendarEventAddView
+        >>> from schoolbell.app.app import Calendar
+
+        >>> view = CalendarEventAddView(Calendar(), TestRequest())
+        >>> view.update()
+
+    Let's try to add an event:
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar()
+        >>> view = CalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.title
+        u'Hacking'
+        >>> event.dtstart
+        datetime.datetime(2004, 8, 13, 15, 30)
+        >>> event.duration
+        datetime.timedelta(0, 3000)
+        >>> event.location is None
+        True
+
+    Let's try to add an event without a required field:
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar()
+        >>> view = CalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+
+        >>> print view.errors
+        MissingInputError: ('start_date', 'Date', 'the field is required')
+        >>> print view.error
+        None
+        >>> len(calendar)
+        0
+
+    Let's try to add an event with an optional location field:
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.location': 'Moon',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar()
+        >>> view = CalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.location
+        u'Moon'
+
+    Let's try to add a recurring event:
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.location': 'Moon',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'field.interval': '1',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar()
+        >>> view = CalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.recurrence
+        DailyRecurrenceRule(1, None, None, ())
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> calendar = Calendar()
+        >>> view = CalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.title
+        u'Hacking'
+        >>> event.location
+        u'Kitchen'
+        >>> event.dtstart
+        datetime.datetime(2004, 8, 13, 15, 30)
+        >>> event.duration
+        datetime.timedelta(0, 3000)
+        >>> event.recurrence is None
+        True
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.location': 'Kitchen',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence': 'checked',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'field.interval': '2',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+
+        >>> calendar = Calendar()
+        >>> view = CalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.title
+        u'Hacking'
+        >>> event.location
+        u'Kitchen'
+        >>> event.dtstart
+        datetime.datetime(2004, 8, 13, 15, 30)
+        >>> event.duration
+        datetime.timedelta(0, 3000)
+        >>> event.recurrence
+        DailyRecurrenceRule(2, None, None, ())
+
+        >>> view = CalendarEventAddView(calendar, request)
+
+    """
+
+class TestGetRecurrenceRule(unittest.TestCase):
+    def test_getRecurrenceRule(self):
+        from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+        from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
+        from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+        from schoolbell.app.browser.cal import makeRecurrenceRule
+
+
+        # Rule is not returned when the checkbox is unchecked
+        rule = makeRecurrenceRule(recurrence_type='daily', interval=1)
+        self.assertEquals(rule, DailyRecurrenceRule(interval=1))
+
+        rule = makeRecurrenceRule(recurrence_type='daily', interval=2)
+        self.assertEquals(rule, DailyRecurrenceRule(interval=2))
+
+        rule = makeRecurrenceRule(recurrence_type='weekly',
+                                  interval=3)
+        self.assertEquals(rule, WeeklyRecurrenceRule(interval=3))
+
+        rule = makeRecurrenceRule(recurrence_type='monthly',
+                                  interval=1)
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1))
+
+        rule = makeRecurrenceRule(recurrence_type='yearly')
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
+
+        rule = makeRecurrenceRule(recurrence_type='yearly', interval=1,
+                                  until=date(2004, 01, 02), count=3,
+                                  range="until")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1,
+                                                     until=date(2004, 1, 2)))
+
+        rule = makeRecurrenceRule(recurrence_type='yearly',
+                                  interval=1, until='2004-01-02',
+                                  count=3, range="count")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1, count=3),
+                          rule.__dict__)
+
+        rule = makeRecurrenceRule(recurrence_type='yearly', interval=1,
+                                  until='2004-01-02', count=3, range="forever")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
+
+        rule = makeRecurrenceRule(recurrence_type='yearly', interval=1,
+                                  until='2004-01-02', count=3)
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
+
+        dates = (date(2004, 1, 1), date(2004, 1, 2))
+        rule = makeRecurrenceRule(recurrence_type='daily',
+                                  interval=1,
+                                  exceptions=dates)
+        self.assertEquals(rule, DailyRecurrenceRule(interval=1,
+                                                    exceptions=dates))
+
+        rule = makeRecurrenceRule(recurrence_type='weekly',
+                                  interval=1,
+                                  weekdays=(2,))
+        self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
+                                                     weekdays=(2, )))
+
+        rule = makeRecurrenceRule(recurrence_type='weekly',
+                        interval=1,
+                        weekdays=[1, 2])
+        self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
+                                                     weekdays=(1, 2)))
+
+        rule = makeRecurrenceRule(recurrence_type='monthly',
+                                  interval=1,
+                                  monthly="monthday")
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
+                                                      monthly="monthday"))
+
+        rule = makeRecurrenceRule(recurrence_type='monthly',
+                                  interval=1,
+                                  monthly="weekday")
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
+                                                      monthly="weekday"))
+
+        rule = makeRecurrenceRule(recurrence_type='monthly',
+                                  interval=1,
+                                  monthly="lastweekday")
+        self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
+                                                      monthly="lastweekday"))
+
 class TestDailyCalendarView(unittest.TestCase):
 
     def test_title(self):
@@ -1495,20 +1756,14 @@ def doctest_EventDeleteView():
     """
 
 
-def setUp(test):
-    setup.placelessSetUp()
-    setup.setUpTraversal()
-
-
-def tearDown(test):
-    setup.placelessTearDown()
-
+from schoolbell.app.browser.tests.test_app import setUp, tearDown
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
+    suite.addTest(unittest.makeSuite(TestGetRecurrenceRule))
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.cal'))
     return suite
