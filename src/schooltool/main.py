@@ -39,6 +39,7 @@ import twisted.python.runtime
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model, absence
 from schooltool.component import getView, traverse
+from schooltool.component import getFacetFactory, FacetManager
 from schooltool.membership import Membership
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
@@ -426,6 +427,16 @@ class Server:
         manager.setPassword('schooltool')
         Membership(group=managers, member=manager)
         Membership(group=root, member=managers)
+
+        teachers = Group("teachers", title=_("Teachers"))
+        Membership(group=root, member=teachers)
+
+        facet_factory = getFacetFactory('teacher_group')
+        facet = facet_factory()
+        FacetManager(teachers).setFacet(facet, name=facet_factory.facet_name)
+
+        pupils = Group("pupils", title=_("Pupils"))
+        Membership(group=root, member=pupils)
 
         locations = Group("locations", title=_("Locations"))
 

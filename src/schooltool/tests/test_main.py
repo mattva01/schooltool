@@ -386,9 +386,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.main import Server
         from schooltool.model import Person, Group, Resource
         from schooltool.component import getRelatedObjects
-        from schooltool import relationship, membership
+        from schooltool import relationship, membership, teaching
         relationship.setUp()
         membership.setUp()
+        teaching.setUp()
 
         server = Server()
         app = server.createApplication()
@@ -420,9 +421,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def test_authenticate(self):
         from schooltool.main import Server
-        from schooltool import relationship, membership
+        from schooltool import relationship, membership, teaching
         relationship.setUp()
         membership.setUp()
+        teaching.setUp()
         app = Server.createApplication()
         john = app['persons'].new("john", title="John Smith")
         john.setPassword('secret')

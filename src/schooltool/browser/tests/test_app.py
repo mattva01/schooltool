@@ -606,6 +606,10 @@ class TestDatabaseResetView(RegistriesSetupMixin, unittest.TestCase):
         self.setUpRegistries()
         membership.setUp()
 
+        # Register the teacher_group facet.
+        import schooltool.teaching
+        schooltool.teaching.setUp()
+
     # tearDown inherited from RegistriesSetupMixin
 
     def test_render(self):

@@ -54,6 +54,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         locations   (self.locations)
         managers    (self.managers)
         teachers    (self.teachers)
+        pupils      (self.pupils)
       persons
         johndoe     (self.person)
         nothohn     (self.person2)
@@ -64,7 +65,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         location    (self.location)
         location2   (self.location2)
 
-    """ # XXX outdated
+    """
 
     def setUpSampleApp(self):
         from schooltool.model import Group, Person, Resource
@@ -81,6 +82,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         self.locations = app['groups'].new("locations", title="locations")
         self.managers = app['groups'].new("managers", title="managers")
         self.teachers = app['groups'].new("teachers", title="teachers")
+        self.pupils = app['groups'].new("pupils", title="pupils")
         self.person = app['persons'].new("johndoe", title="John Doe")
         self.person2 = app['persons'].new("notjohn", title="Not John Doe")
         self.manager = app['persons'].new("manager", title="Manager")

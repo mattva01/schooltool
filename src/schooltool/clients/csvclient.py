@@ -156,9 +156,6 @@ class CSVImporterBase:
 
     def importGroupsCsv(self, csvdata):
         lineno = 0
-        self.importGroup("teachers", _("Teachers"), "root", 'teacher_group')
-        self.importGroup("pupils", _("Pupils"), "root", '')
-
         try:
             for lineno, row in enumerate(csv.reader(csvdata)):
                 if len(row) != 4:

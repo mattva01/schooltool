@@ -157,9 +157,7 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
 
         im.importGroupsCsv(['"year1","Year 1","root",'])
         self.assertEquals(groups,
-                          [('teachers', u'Teachers', 'root', 'teacher_group'),
-                           ('pupils', u'Pupils', 'root', ''),
-                           (u'year1', u'Year 1', u'root', u'')])
+                          [(u'year1', u'Year 1', u'root', u'')])
 
     def test_importResourcesCsv(self):
         from schooltool.clients.csvclient import CSVImporterBase
