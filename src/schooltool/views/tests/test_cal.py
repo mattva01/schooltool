@@ -25,9 +25,8 @@ $Id$
 import unittest
 import datetime
 import libxml2
-from zope.interface import directlyProvides
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.views.tests import RequestStub, setPath
+from schooltool.views.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.helpers import dedent, diff, sorted
@@ -588,16 +587,8 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.interfaces import ISchooldayModel, ICalendar
         from schooltool.views.cal import SchooldayModelCalendarView
         from schooltool.views.cal import CalendarView
-        from schooltool.component import getView
         import schooltool.views.cal
         schooltool.views.cal.setUp()
-
-        def viewClass(iface):
-            """Return the view class registered for an interface."""
-            cls = type(iface.getName(), (), {})
-            obj = cls()
-            directlyProvides(obj, iface)
-            return getView(obj).__class__
 
         self.assert_(viewClass(ISchooldayModel) is SchooldayModelCalendarView)
         self.assert_(viewClass(ICalendar) is CalendarView)

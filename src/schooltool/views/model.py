@@ -24,7 +24,7 @@ $Id$
 
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IGroup, IPerson
+from schooltool.interfaces import IGroup, IPerson, IResource
 from schooltool.uris import URIMember, URIGroup
 from schooltool.component import registerView
 from schooltool.component import getPath
@@ -65,10 +65,6 @@ class ApplicationObjectTraverserView(View):
             return CompositeTimetableTraverseView(self.context)
         raise KeyError(name)
 
-
-#
-# Views on groups
-#
 
 class GroupView(ApplicationObjectTraverserView):
     """The view for a group"""
@@ -115,6 +111,11 @@ class PersonView(ApplicationObjectTraverserView):
                 for group in getRelatedObjects(self.context, URIGroup)]
 
 
+class ResourceView(ApplicationObjectTraverserView):
+    """A view on a resource"""
+
+    template = Template("www/resource.pt", content_type="text/xml")
+
 
 #
 # Setup
@@ -124,4 +125,4 @@ def setUp():
     """See IModuleSetup."""
     registerView(IPerson, PersonView)
     registerView(IGroup, GroupView)
-
+    registerView(IResource, ResourceView)

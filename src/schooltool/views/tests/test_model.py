@@ -26,7 +26,7 @@ import unittest
 import libxml2
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
-from schooltool.views.tests import RequestStub
+from schooltool.views.tests import RequestStub, viewClass
 
 __metaclass__ = type
 
@@ -86,82 +86,6 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.assert_(result.context is self.view.context)
 
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
-
-
-class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
-
-    def setUp(self):
-        from schooltool.views.model import PersonView
-        from schooltool.model import Group, Person
-        from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership
-        from schooltool import membership
-        self.setUpRegistries()
-        membership.setUp()
-        app = Application()
-        app['groups'] = ApplicationObjectContainer(Group)
-        app['persons'] = ApplicationObjectContainer(Person)
-        self.group = app['groups'].new("root", title="group")
-        self.sub = app['groups'].new("subgroup", title="subgroup")
-        self.per = app['persons'].new("p", title="Pete")
-
-        Membership(group=self.group, member=self.sub)
-        Membership(group=self.group, member=self.per)
-        Membership(group=self.sub, member=self.per)
-
-        self.view = PersonView(self.per)
-
-    def test_traverse(self):
-        from schooltool.views.facet import FacetManagementView
-        from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.absence import AbsenceManagementView
-        from schooltool.interfaces import IFacetManager
-        request = RequestStub("http://localhost/person")
-
-        result = self.view._traverse('relationships', request)
-        self.assert_(isinstance(result, RelationshipsView))
-        self.assert_(result.context is self.per)
-
-        result = self.view._traverse('facets', request)
-        self.assert_(isinstance(result, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(result.context))
-
-        result = self.view._traverse('absences', request)
-        self.assert_(isinstance(result, AbsenceManagementView))
-        self.assert_(result.context is self.per)
-
-    def test_render(self):
-        request = RequestStub("http://localhost/person")
-        result = self.view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result, """
-            <person xmlns:xlink="http://www.w3.org/1999/xlink">
-              <name>Pete</name>
-              <groups>
-                <item xlink:type="simple" xlink:href="/groups/root"
-                      xlink:title="group"/>
-                <item xlink:type="simple" xlink:href="/groups/subgroup"
-                      xlink:title="subgroup"/>
-              </groups>
-              <relationships xlink:type="simple"
-                             xlink:title="Relationships"
-                             xlink:href="/persons/p/relationships"/>
-              <facets xlink:type="simple" xlink:title="Facets"
-                      xlink:href="/persons/p/facets"/>
-              <timetables xlink:href="/persons/p/timetables"
-                          xlink:title="Own timetables"
-                          xlink:type="simple"/>
-              <timetables xlink:href="/persons/p/composite-timetables"
-                          xlink:title="Composite timetables"
-                          xlink:type="simple"/>
-              <calendar xlink:type="simple" xlink:title="Private calendar"
-                        xlink:href="/persons/p/calendar"/>
-              <calendar xlink:type="simple"
-                        xlink:title="Calendar derived from timetables"
-                        xlink:href="/persons/p/timetable-calendar"/>
-            </person>
-            """, recursively_sort=['groups'])
 
 
 class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
@@ -305,6 +229,146 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
             """, recursively_sort=['tree'])
 
 
+class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views.model import PersonView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.group = app['groups'].new("root", title="group")
+        self.sub = app['groups'].new("subgroup", title="subgroup")
+        self.per = app['persons'].new("p", title="Pete")
+
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
+        Membership(group=self.sub, member=self.per)
+
+        self.view = PersonView(self.per)
+
+    def test_traverse(self):
+        from schooltool.views.facet import FacetManagementView
+        from schooltool.views.relationship import RelationshipsView
+        from schooltool.views.absence import AbsenceManagementView
+        from schooltool.interfaces import IFacetManager
+        request = RequestStub("http://localhost/person")
+
+        result = self.view._traverse('relationships', request)
+        self.assert_(isinstance(result, RelationshipsView))
+        self.assert_(result.context is self.per)
+
+        result = self.view._traverse('facets', request)
+        self.assert_(isinstance(result, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(result.context))
+
+        result = self.view._traverse('absences', request)
+        self.assert_(isinstance(result, AbsenceManagementView))
+        self.assert_(result.context is self.per)
+
+    def test_render(self):
+        request = RequestStub("http://localhost/person")
+        result = self.view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <person xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>Pete</name>
+              <groups>
+                <item xlink:type="simple" xlink:href="/groups/root"
+                      xlink:title="group"/>
+                <item xlink:type="simple" xlink:href="/groups/subgroup"
+                      xlink:title="subgroup"/>
+              </groups>
+              <relationships xlink:type="simple"
+                             xlink:title="Relationships"
+                             xlink:href="/persons/p/relationships"/>
+              <facets xlink:type="simple" xlink:title="Facets"
+                      xlink:href="/persons/p/facets"/>
+              <timetables xlink:href="/persons/p/timetables"
+                          xlink:title="Own timetables"
+                          xlink:type="simple"/>
+              <timetables xlink:href="/persons/p/composite-timetables"
+                          xlink:title="Composite timetables"
+                          xlink:type="simple"/>
+              <calendar xlink:type="simple" xlink:title="Private calendar"
+                        xlink:href="/persons/p/calendar"/>
+              <calendar xlink:type="simple"
+                        xlink:title="Calendar derived from timetables"
+                        xlink:href="/persons/p/timetable-calendar"/>
+            </person>
+            """, recursively_sort=['groups'])
+
+
+class TestResourceView(XMLCompareMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views.model import ResourceView
+        from schooltool.model import Resource
+        from schooltool.app import Application, ApplicationObjectContainer
+        app = Application()
+        app['resources'] = ApplicationObjectContainer(Resource)
+        self.resource = app['resources'].new('room3', title='Room 3')
+
+        self.view = ResourceView(self.resource)
+
+    def test_traverse(self):
+        from schooltool.views.facet import FacetManagementView
+        from schooltool.views.relationship import RelationshipsView
+        from schooltool.views.absence import AbsenceManagementView
+        from schooltool.interfaces import IFacetManager
+        request = RequestStub("http://localhost/resources/room3")
+
+        result = self.view._traverse('relationships', request)
+        self.assert_(isinstance(result, RelationshipsView))
+        self.assert_(result.context is self.resource)
+
+        result = self.view._traverse('facets', request)
+        self.assert_(isinstance(result, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(result.context))
+
+    def test_render(self):
+        request = RequestStub("http://localhost/resources/room3")
+        result = self.view.render(request)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+              <title>Room 3</title>
+              <relationships xlink:href="/resources/room3/relationships"
+                             xlink:title="Relationships" xlink:type="simple"/>
+              <facets xlink:href="/resources/room3/facets" xlink:title="Facets"
+                      xlink:type="simple"/>
+              <timetables xlink:href="/resources/room3/timetables"
+                          xlink:title="Own timetables" xlink:type="simple"/>
+              <timetables xlink:href="/resources/room3/composite-timetables"
+                          xlink:title="Composite timetables"
+                          xlink:type="simple"/>
+              <calendar xlink:href="/resources/room3/calendar"
+                        xlink:title="Private calendar" xlink:type="simple"/>
+              <calendar xlink:href="/resources/room3/timetable-calendar"
+                        xlink:title="Calendar derived from timetables"
+                        xlink:type="simple"/>
+            </resource>
+            """)
+
+
+class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
+
+    def test(self):
+        from schooltool.interfaces import IGroup, IPerson, IResource
+        from schooltool.views.model import GroupView, PersonView, ResourceView
+        import schooltool.views.model
+        schooltool.views.model.setUp()
+
+        self.assert_(viewClass(IGroup) is GroupView)
+        self.assert_(viewClass(IPerson) is PersonView)
+        self.assert_(viewClass(IResource) is ResourceView)
 
 
 def test_suite():
@@ -313,6 +377,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestTreeView))
     suite.addTest(unittest.makeSuite(TestPersonView))
+    suite.addTest(unittest.makeSuite(TestResourceView))
+    suite.addTest(unittest.makeSuite(TestModuleSetup))
     return suite
 
 if __name__ == '__main__':

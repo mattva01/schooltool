@@ -563,5 +563,46 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /resources
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=container
+<container xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>resources</name>
+  <items>
+    <item xlink:type="simple" xlink:href="/resources/hall"
+          xlink:title="Hall"/>
+    <item xlink:type="simple" xlink:href="/resources/room1"
+          xlink:title="Room 1"/>
+    <item xlink:type="simple" xlink:href="/resources/room2"
+          xlink:title="Room 2"/>
+  </items>
+</container>
+%% END XML
+
+
+SchoolTool> get /resources/hall
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=resource
+<resource xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Hall</title>
+  <calendar xlink:href="/resources/hall/calendar"
+            xlink:title="Private calendar" xlink:type="simple"/>
+  <calendar xlink:href="/resources/hall/timetable-calendar"
+            xlink:title="Calendar derived from timetables"
+            xlink:type="simple"/>
+  <facets xlink:href="/resources/hall/facets" xlink:title="Facets"
+          xlink:type="simple"/>
+  <relationships xlink:href="/resources/hall/relationships"
+                 xlink:title="Relationships" xlink:type="simple"/>
+  <timetables xlink:href="/resources/hall/composite-timetables"
+              xlink:title="Composite timetables" xlink:type="simple"/>
+  <timetables xlink:href="/resources/hall/timetables"
+              xlink:title="Own timetables" xlink:type="simple"/>
+</resource>
+%% END XML
+
+
 SchoolTool> quit
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

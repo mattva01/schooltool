@@ -207,3 +207,11 @@ class UtilityStub:
     def __init__(self, title):
         self.title = title
 
+
+def viewClass(iface):
+    """Return the view class registered for an interface."""
+    from schooltool.component import getView
+    cls = type(iface.getName(), (), {})
+    obj = cls()
+    directlyProvides(obj, iface)
+    return getView(obj).__class__

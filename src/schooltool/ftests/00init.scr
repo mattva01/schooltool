@@ -152,4 +152,25 @@ POST> .
 Content-Type: text/plain
 Relationship created: http://localhost:8080/persons/Steve/relationships/0002
 
+SchoolTool> put /resources/hall
+PUT> title="Hall"
+PUT> .
+201 Created
+Content-Type: text/plain
+Object created: http://localhost:8080/resources/hall
+
+SchoolTool> put /resources/room1
+PUT> title="Room 1"
+PUT> .
+201 Created
+Content-Type: text/plain
+Object created: http://localhost:8080/resources/room1
+
+SchoolTool> put /resources/room2
+PUT> title="Room 2"
+PUT> .
+201 Created
+Content-Type: text/plain
+Object created: http://localhost:8080/resources/room2
+
 ## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:
