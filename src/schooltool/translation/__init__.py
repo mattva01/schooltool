@@ -19,6 +19,20 @@
 """
 SchoolTool translations.
 
+The following names are available in this module:
+
+  localedir     location of message catalogs
+  catalog       catalog of translations for domain 'schooltool'
+  gettext       alias for catalog.gettext
+  ugettext      alias for catalog.ugettext
+  _             alias for catalog.gettext
+
+Example usage:
+
+  from schooltool.translations import _
+  print _("Translated message")
+
+
 The following files were taken from Zope 3 CVS (src/zope/app/translation_files)
 and have their own copyright notices:
 
@@ -34,15 +48,13 @@ import gettext
 
 
 localedir = os.path.dirname(__file__)
+catalog = gettext.translation('schooltool', 'localedir', fallback=True)
+gettext = catalog.gettext
+ugettext = catalog.ugettext
+_ = gettext
 
-gettext.bindtextdomain('schooltool', localedir)
-gettext.textdomain('schooltool')
-_ = gettext.gettext
 
 def setUp():
-    """Initialize SchoolTool translations.
-
-    Note that this function installs _ into the built-in namespace.
-    """
-    gettext.install('schooltool', localedir)
+    """Install _ into the built-in namespace."""
+    catalog.install()
 
