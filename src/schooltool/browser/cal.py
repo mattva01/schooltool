@@ -579,11 +579,9 @@ class CalendarView(View):
             return ACLView(self.context.acl)
         raise KeyError(name)
 
-    def render(self, request):
-        # XXX: the str() here is completely bogus!
-        #      redirect returns an i18nized Unicode string!
-        return str(request.redirect(
-            absoluteURL(request, self.context) + '/daily.html'))
+    def do_GET(self, request):
+        url = absoluteURL(request, self.context, 'daily.html')
+        return self.redirect(url, request)
 
 
 class EventViewBase(View):
