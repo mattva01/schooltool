@@ -28,20 +28,20 @@
     function onloadhook() {
         location_changed();
         var location = document.getElementById('location');
-        addEvent(location, "change", location_changed);
+        addEvent(location, "click", location_changed);
         addEvent(location, "keyup", location_changed);
 
         recurrence_changed();
         var recurrence = document.getElementById('recurrence');
-        addEvent(recurrence, "change", recurrence_changed);
+        addEvent(recurrence, "click", recurrence_changed);
 
         range_changed();
         var range_c = document.getElementById('range_c');
         var range_u = document.getElementById('range_u');
         var range_f = document.getElementById('range_f');
-        addEvent(range_c, "change", range_changed);
-        addEvent(range_u, "change", range_changed);
-        addEvent(range_f, "change", range_changed);
+        addEvent(range_c, "click", range_changed);
+        addEvent(range_u, "click", range_changed);
+        addEvent(range_f, "click", range_changed);
     }
     function addEvent(obj, event, handler) {
       if (obj.addEventListener) {
