@@ -13,28 +13,24 @@
       <li><a class="action" tal:condition="view/canEdit"
              tal:attributes="href string:${context/@@absolute_url}/edit.html"
              i18n:translate="">Edit details</a>
-      <li><a class="action" tal:condition="view/canChangePassword"
-             tal:attributes="href
-                             string:${context/@@absolute_url}/password.html"
-             i18n:translate="">Change password</a>
       <li><a class="action" tal:condition="view/canViewCalendar"
              tal:attributes="href string:${context/@@absolute_url}/calendar"
              i18n:translate="">View calendar</a>
       </ul>
     </div>
 
-  <metal:block metal:fill-slot="body" tal:define="info context">
+  <metal:block metal:fill-slot="body">
     <div class="row"><b i18n:translate="">Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>
     <div class="row"><b i18n:translate="">Title:</b>
-      <span tal:replace="info/title">John, but not Doe</span>
+      <span tal:replace="context/title">John, but not Doe</span>
     </div>
     <div class="row">
       <b i18n:translate="">Photo:</b>
-      <tal:block condition="not:info/photo"
+      <tal:block condition="not:context/photo"
                  i18n:translate="">N/A</tal:block>
-      <p tal:condition="info/photo">
+      <p tal:condition="context/photo">
         <img src="photo"
              tal:attributes="src string:${context/@@absolute_url}/photo" />
       </p>
