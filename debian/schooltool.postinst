@@ -135,12 +135,14 @@ case "$1" in
                 fi
             done <$sslkey >$sslcert
             ;;
-
         esac
+    fi
+    # If an SSL Certificate exists, give it the right permissions and add it to the
+    # Config file
+    if [ -f $sslkey ]; then
         chown $package:$package $sslkey
         chmod 600 $sslkey
         set_simple ssl_certificate $sslkey
-
     fi
     ;;
 
