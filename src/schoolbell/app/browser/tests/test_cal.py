@@ -2885,14 +2885,16 @@ def doctest_AtomCalendarView():
         >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
         ...                          timedelta(8),
         ...                          timedelta(hours=3), "Last Week")
-        >>> today = CalendarEvent(datetime.now().replace(hour=12),
-        ...                          timedelta(hours=3), "Today")
-        >>> tomorrow = CalendarEvent(datetime.now().replace(hour=12) +
-        ...                          timedelta(1),
-        ...                          timedelta(hours=3), "Tomorrow")
+        >>> monday_date = (datetime.now().replace(hour=12) -
+        ...                timedelta(datetime.now().weekday()))
+        >>> tuesday_date = monday_date + timedelta(1)
+        >>> monday = CalendarEvent(monday_date,
+        ...                        timedelta(hours=3), "Today")
+        >>> tuesday = CalendarEvent(tuesday_date,
+        ...                         timedelta(hours=3), "Tomorrow")
         >>> calendar.addEvent(lastweek)
-        >>> calendar.addEvent(today)
-        >>> calendar.addEvent(tomorrow)
+        >>> calendar.addEvent(monday)
+        >>> calendar.addEvent(tuesday)
 
         >>> view = AtomCalendarView(calendar, TestRequest())
         >>> events = []
