@@ -47,6 +47,7 @@
             </tr>
             <tr>
               <th class="month-weekday"
+                  width="14%"
                   tal:repeat="weekday python:month[0]"
                   tal:content="python:view.shortDayOfWeek(weekday.date)" />
             </tr>

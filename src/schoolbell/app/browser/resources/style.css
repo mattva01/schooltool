@@ -427,6 +427,8 @@ h2.calendar-view-title {
     text-decoration: none;
     color: #f0f0f0;
     background: #4B6983;
+    padding-top: 3px;
+    padding-bottom: 1px;
 }
 
 #calendar-view-year table.month th.month-title a:hover {
