@@ -930,8 +930,10 @@ class ActivitySelectionDlg(wxDialog):
             resource_titles = ', '.join([r[0] for r in resources])
             if resource_titles:
                 title += ' (%s)' % resource_titles
+            self.listbox.Freeze() # needed to avoid a wxMSW bug
             self.listbox.SetString(idx, to_wx(title))
             self.listbox.Check(idx)
+            self.listbox.Thaw()
         dlg.Destroy()
 
     def setSelection(self, selection):
