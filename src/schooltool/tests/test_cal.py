@@ -759,10 +759,7 @@ class TestRecurrenceRule:
                                            for d in range(3, 6)])
         self.assertEquals(rule.iCalRepresentation(None),
                           ['RRULE:FREQ=%s;INTERVAL=1' % freq,
-                           'EXDATE:20041006T000000,'
-                                  '20041008T000000,'
-                                  '20041010T000000'])
-        # XXX bug: exceptions must include the exact time portion as well
+                           'EXDATE;VALUE=DATE:20041006,20041008,20041010'])
 
 
 class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
@@ -1173,11 +1170,8 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                                exceptions=[date(2004, 10, 2*d)
                                            for d in range(3, 6)])
         self.assertEquals(rule.iCalRepresentation(date(2004, 10, 26)),
-                          ['RRULE:FREQ=MONTHLY;COUNT=7;BYMONTHDAY=26;'
-                           'INTERVAL=3',
-                           'EXDATE:20041006T000000,'
-                                  '20041008T000000,'
-                                  '20041010T000000'])
+                      ['RRULE:FREQ=MONTHLY;COUNT=7;BYMONTHDAY=26;INTERVAL=3',
+                       'EXDATE;VALUE=DATE:20041006,20041008,20041010'])
 
 
 class TestWeekSpan(unittest.TestCase):

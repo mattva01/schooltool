@@ -491,13 +491,16 @@ class RecurrenceRule:
 
         result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
                   % (self.ical_freq, args, self.interval)]
+
+        def ical_date(dt):
+            return dt.strftime("%Y%m%d")
+
         if self.exceptions:
             # Exceptions should include the exact time portion as well
             # (this was implemented in revision 1860), however,
             # Mozilla Calendar refuses to work with such exceptions.
-            row = 'EXDATE:' + ','.join([ical_date_time(d)
-                                        for d in self.exceptions])
-            result.append(row)
+            dates = ','.join([ical_date(d) for d in self.exceptions])
+            result.append('EXDATE;VALUE=DATE:' + dates)
         return result
 
     def _iCalArgs(self, dtstart):
