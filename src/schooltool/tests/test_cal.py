@@ -241,6 +241,33 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
                                [ev3])
 
+    def test_expand(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.cal import DailyRecurrenceRule
+        from schooltool.interfaces import IExpandedCalendarEvent
+
+        daily = DailyRecurrenceRule(until=date(2004, 12, 31))
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English", recurrence=daily, unique_id="123")
+        ev1_1 = CalendarEvent(datetime(2004, 10, 11, 10, 0),
+                              timedelta(minutes=10),
+                              "English", unique_id="123")
+        ev1_2 = CalendarEvent(datetime(2004, 10, 12, 10, 0),
+                              timedelta(minutes=10),
+                              "English", unique_id="123")
+        ev2 = CalendarEvent(datetime(2004, 10, 11, 11, 0),
+                            timedelta(minutes=10),
+                            "Coffee", unique_id="124")
+        ev3 = CalendarEvent(datetime(2004, 10, 13, 11, 0),
+                            timedelta(minutes=10),
+                            "Coffee 2", unique_id="124")
+        cal = self.makeCal([ev1, ev2, ev3])
+        result = cal.expand(date(2004, 10, 11), date(2004, 10, 12))
+        self.assertEqualSorted(list(result), [ev1_1, ev2, ev1_2])
+        for event in result:
+            assert IExpandedCalendarEvent.providedBy(event)
+
     def test_clear(self):
         from schooltool.cal import CalendarEvent
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
@@ -410,11 +437,14 @@ class TestCalendarPersistence(unittest.TestCase):
 
 class TestCalendarEvent(unittest.TestCase):
 
-    def test(self):
+    def createEvent(self, *args, **kwargs):
         from schooltool.cal import CalendarEvent
+        return CalendarEvent(*args, **kwargs)
+
+    def test(self):
         from schooltool.interfaces import ICalendarEvent
-        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10), "something")
+        ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10), "something")
         verifyObject(ICalendarEvent, ce)
         self.assertEquals(ce.dtstart, datetime(2003, 11, 25, 12, 0))
         self.assertEquals(ce.duration, timedelta(minutes=10))
@@ -430,14 +460,13 @@ class TestCalendarEvent(unittest.TestCase):
         self.assert_('>' not in ce.unique_id)
 
     def test_all_arguments(self):
-        from schooltool.cal import CalendarEvent
         from schooltool.interfaces import ICalendarEvent
         owner = object()
         context = object()
-        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10), "something", owner=owner,
-                           context=context, location="The attic",
-                           unique_id='uid')
+        ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10), "something", owner=owner,
+                              context=context, location="The attic",
+                              unique_id='uid')
         verifyObject(ICalendarEvent, ce)
         self.assertEquals(ce.dtstart, datetime(2003, 11, 25, 12, 0))
         self.assertEquals(ce.duration, timedelta(minutes=10))
@@ -448,20 +477,18 @@ class TestCalendarEvent(unittest.TestCase):
         self.assertEquals(ce.unique_id, 'uid')
 
     def test_unique_ids(self):
-        from schooltool.cal import CalendarEvent
         seen_ids = sets.Set([])
         count = 100
         for n in range(count):
-            ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                               timedelta(minutes=10), "something")
+            ev = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                                  timedelta(minutes=10), "something")
             if ev.unique_id in seen_ids:
                 self.fail("ID is not unique enough")
             seen_ids.add(ev.unique_id)
 
     def test_immutability(self):
-        from schooltool.cal import CalendarEvent
-        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10), "something")
+        ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10), "something")
         self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')
@@ -471,16 +498,15 @@ class TestCalendarEvent(unittest.TestCase):
         self.assertRaises(AttributeError, setattr, ce, 'unique_id', 'not-ro')
 
     def test_replace(self):
-        from schooltool.cal import CalendarEvent
         from schooltool.cal import DailyRecurrenceRule
         owner = object()
         owner2 = object()
         context = object()
         context2 = object()
-        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10), "something", owner=owner,
-                           context=context, location="The attic",
-                           unique_id='uid')
+        ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10), "something", owner=owner,
+                              context=context, location="The attic",
+                              unique_id='uid')
         self.assertEquals(ce.replace(), ce)
         fields_to_replace = {'dtstart': datetime(2004, 11, 12, 14, 30),
                              'duration': timedelta(minutes=30),
@@ -506,16 +532,15 @@ class TestCalendarEvent(unittest.TestCase):
         self.assertEquals(all_at_once, incremental)
 
     def test_comparisons(self):
-        from schooltool.cal import CalendarEvent
         from schooltool.cal import DailyRecurrenceRule
         owner = object()
         context = object()
-        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check", unique_id='uid')
-        ce1 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check", unique_id='uid')
+        ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10),
+                              "reality check", unique_id='uid')
+        ce1 = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                               timedelta(minutes=10),
+                               "reality check", unique_id='uid')
         self.assert_(ce == ce1)
         self.assert_(ce <= ce1)
         self.assert_(ce >= ce1)
@@ -550,10 +575,9 @@ class TestCalendarEvent(unittest.TestCase):
             self.assertRaises(TypeError, lambda: ce >= not_event)
 
     def test_ordering(self):
-        from schooltool.cal import CalendarEvent
-        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
-                           timedelta(minutes=10),
-                           "reality check", unique_id='uid')
+        ce = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10),
+                              "reality check", unique_id='uid')
         ce2 = ce.replace(dtstart=datetime(2003, 11, 25, 12, 1))
         self.assert_(ce < ce2)
         self.assert_(ce2 > ce)
@@ -566,6 +590,40 @@ class TestCalendarEvent(unittest.TestCase):
         assert ce4.title < ce.title
         assert ce4.dtstart > ce.dtstart
         self.assert_(ce4 > ce) # dtstart is more important
+
+
+class TestExpandedCalendarEvent(TestCalendarEvent):
+
+    def createEvent(self, *args, **kwargs):
+        from schooltool.cal import ExpandedCalendarEvent
+        return ExpandedCalendarEvent(*args, **kwargs)
+
+    def test_interface(self):
+        from schooltool.interfaces import IExpandedCalendarEvent
+
+        ev = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                              timedelta(minutes=10),
+                              "reality check", unique_id='uid')
+        verifyObject(IExpandedCalendarEvent, ev)
+
+    def test_duplicate(self):
+        from schooltool.cal import CalendarEvent, ExpandedCalendarEvent
+        from schooltool.interfaces import IExpandedCalendarEvent
+        ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        eev = ExpandedCalendarEvent.duplicate(ev)
+        self.assertEqual(ev, eev)
+        assert IExpandedCalendarEvent.providedBy(eev)
+
+    def test_replace(self):
+        from schooltool.interfaces import IExpandedCalendarEvent
+        ev = self.createEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", original="123")
+        ev2 = ev.replace()
+        verifyObject(IExpandedCalendarEvent, ev2)
+        self.assertEquals(ev2.original, "123")
 
 
 class TestACLCalendar(unittest.TestCase):
@@ -1041,6 +1099,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarPersistence))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestExpandedCalendarEvent))
     suite.addTest(unittest.makeSuite(TestACLCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))

@@ -32,7 +32,7 @@ from schooltool.auth import ACL
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
-from schooltool.interfaces import ICalendarOwner
+from schooltool.interfaces import ICalendarOwner, IExpandedCalendarEvent
 from schooltool.interfaces import IACLCalendar
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
@@ -159,12 +159,29 @@ class Calendar(Persistent):
         for event in self:
             event_start = event.dtstart.date()
             event_end = (event.dtstart + event.duration).date()
-            if event_start <= date and event_end >= date:
+            if event_start <= date <= event_end:
                 cal.addEvent(event)
         return cal
 
     def expand(self, first, last):
-        raise NotImplementedError
+        cal = Calendar()
+        for event in self:
+            starttime = event.dtstart.time()
+            if event.recurrence is not None:
+                for recdate in event.recurrence.apply(event, last):
+                    if first <= recdate <= last:
+                        start = datetime.datetime.combine(recdate, starttime)
+                        new = event.replace(dtstart=start, recurrence=None)
+                        expanded = ExpandedCalendarEvent.duplicate(
+                            new, event.unique_id)
+                        cal.addEvent(expanded)
+            else:
+                event_start = event.dtstart.date()
+                event_end = (event.dtstart + event.duration).date()
+                if (first <= event_start <= last or
+                    event_start <= first <= event_end):
+                    cal.addEvent(ExpandedCalendarEvent.duplicate(event))
+        return cal
 
     def addEvent(self, event):
         self.events.add(event)
@@ -246,8 +263,8 @@ class CalendarEvent(Persistent):
         if location is Unchanged: location = self.location
         if unique_id is Unchanged: unique_id = self.unique_id
         if recurrence is Unchanged: recurrence = self.recurrence
-        return CalendarEvent(dtstart, duration, title, owner, context,
-                             location, unique_id, recurrence)
+        return self.__class__(dtstart, duration, title, owner, context,
+                              location, unique_id, recurrence)
 
     def __tupleForComparison(self):
         return (self.dtstart, self.title, self.duration, self.owner,
@@ -294,6 +311,49 @@ class CalendarEvent(Persistent):
                 % (self.__class__.__name__,
                    (self.dtstart, self.duration, self.title, self.owner,
                     self.context, self.location, self.unique_id), ))
+
+
+class ExpandedCalendarEvent(CalendarEvent):
+    """Event in an expanded calendar
+
+    Can be either a real event or a recurrence of some other event.
+    original is a unique_id of the original event or None.
+    """
+
+    implements(IExpandedCalendarEvent)
+
+    def __init__(self, dtstart, duration, title, owner=None, context=None,
+                 location=None, unique_id=None, recurrence=None,
+                 original=None):
+        self.original=original
+        CalendarEvent.__init__(self, dtstart, duration, title, owner=owner,
+                               context=context, location=location,
+                               unique_id=unique_id, recurrence=recurrence)
+
+    def duplicate(cls, ev, original=None):
+        """Create an expanded event which is equal to the event passed."""
+        return cls(ev.dtstart, ev.duration, ev.title, owner=ev.owner,
+                   context=ev.context, location=ev.location,
+                   unique_id=ev.unique_id, recurrence=ev.recurrence,
+                   original=original)
+
+    duplicate = classmethod(duplicate)
+
+    def replace(self, dtstart=Unchanged, duration=Unchanged, title=Unchanged,
+                owner=Unchanged, context=Unchanged, location=Unchanged,
+                unique_id=Unchanged, recurrence=Unchanged, original=Unchanged):
+        result = CalendarEvent.replace(self, dtstart, duration, title,
+                                       owner, context, location, unique_id,
+                                       recurrence)
+        if original is Unchanged:
+            original = self.original
+
+        # Expanded events are not supposed to be persisted, and
+        # 'original' is not used in comparison, so I consider this
+        # acceptable -- alga
+
+        result.original = original
+        return result
 
 
 class ACLCalendar(Calendar):

@@ -1013,9 +1013,9 @@ class ICalendar(Interface):
        """Expand recurring events.
 
        Returns an ICalendar with all the IExpandedCalendarEvents in
-       that occur in the given date range. If there are recurrences of
-       an event in the specified range, the original event is included
-       as well, even if it falls out of the specified range.
+       that occur in the given date range.  Recurrences of all events
+       in the calendar happening during the specified period are
+       included.
        """
 
 
@@ -1201,14 +1201,21 @@ class ICalendarEvent(Interface):
         return the same value.
         """
 
+
 class IExpandedCalendarEvent(ICalendarEvent):
-   """A calendar event that may be a recurrence of a recurrent event"""
+    """A calendar event that may be a recurrence of a recurrent event"""
 
-   original = Attribute(
-      """The unique_id of the original event if this event is a recurrence.
+    original = Attribute(
+        """The unique_id of the original event if this event is a recurrence.
 
-      None if this event is not a recurrence of another event.
-      """)
+        None if this event is not a recurrence of another event.
+        """)
+
+    def replace(dtstart=Unchanged, duration=Unchanged, title=Unchanged,
+                owner=Unchanged, context=Unchanged, location=Unchanged,
+                unique_id=Unchanged, recurrence=Unchanged, original=Unchanged):
+        """Return a calendar event with new specified fields."""
+
 
 class ICalendarOwner(Interface):
     """An object that has a calendar."""
