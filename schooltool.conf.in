@@ -1,0 +1,15 @@
+# Sample SchoolTool HTTP server configuration file
+
+#
+# listen port
+# listen interface:port
+#
+#   Specifies the port number and optionaly a network interface to listen on
+#   There can be one or more 'listen' directives
+#
+# Default:
+#   listen 8080
+#
+# Examples:
+#   listen 8080
+#   listen 127.0.0.1:80

@@ -21,6 +21,9 @@
 Schooltool HTTP server.
 """
 
+import os
+import sys
+import ZConfig
 from twisted.web import server, resource
 from twisted.internet import reactor
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
@@ -201,9 +204,17 @@ class PersonView(View):
 
 def main():
     """Starts the SchoolTool mockup HTTP server on port 8080."""
-    # XXX: hook up zconfig
+    dirname = os.path.dirname(__file__)
+    schema = ZConfig.loadSchema(os.path.join(dirname, 'schema.xml'))
+    filename = os.path.join(dirname, '..', '..', 'schooltool.conf')
+    if not os.path.exists(filename):
+        filename = os.path.join(dirname, '..', '..', 'schooltool.conf.in')
+    config, handler = ZConfig.loadConfig(schema, filename)
+
     site = server.Site(RootView(FakeApplication()))
-    reactor.listenTCP(8080, site)
+    for interface, port in config.listen:
+        reactor.listenTCP(port, site, interface=interface)
+        print "Started HTTP server on %s:%s" % (interface or "*", port)
     reactor.run()
 
 
