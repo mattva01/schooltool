@@ -581,9 +581,8 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         """Generate dates of recurrences."""
         cur = start = event.dtstart.date()
         count = 0
-        weekdays = list(self.weekdays)
-        weekdays.append(event.dtstart.weekday())
-        weekdays.sort()
+        weekdays = Set(self.weekdays)
+        weekdays.add(event.dtstart.weekday())
         while True:
             if ((enddate and cur > enddate) or
                 (self.count is not None and count >= self.count) or
