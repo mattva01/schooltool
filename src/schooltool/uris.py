@@ -139,6 +139,21 @@ URITaught = URIObject("http://schooltool.org/ns/teaching/taught",
                       _("A role of a group that has a teacher."))
 
 
+URIOccupies =  URIObject("http://schooltool.org/ns/occupies",
+                      _("Occupies"),
+                      _("The occupation relationship"))
+
+
+URICurrentlyResides = URIObject("http://schooltool.org/ns/occupies/currentlyresides",
+                      _("Resides"),
+                      _("The role of a person in Occupies"))
+
+
+URICurrentResidence = URIObject("http://schooltool.org/ns/occupies/currentresidence",
+                      _("Residence"),
+                      _("The role of an Address in Occupies"))
+
+
 #
 #  Configuration
 #
@@ -151,5 +166,8 @@ def setUp():
     registerURI(URITeacher)
     registerURI(URITeaching)
     registerURI(URITaught)
+    registerURI(URIOccupies)
+    registerURI(URICurrentlyResides)
+    registerURI(URICurrentResidence)
 
 moduleProvides(IModuleSetup, IURIAPI)
