@@ -24,7 +24,6 @@ $Id$
 
 # XXX should schooltool.browser depend on schooltool.views?
 from schooltool.views import View, Template
-from schooltool.views.auth import PublicAccess
 from schooltool.interfaces import IApplication, AuthenticationError
 
 __metaclass__ = type
