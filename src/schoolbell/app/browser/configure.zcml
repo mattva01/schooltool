@@ -414,6 +414,16 @@
       />
 
   <page
+      name="atom.xml"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.AtomCalendarView"
+      template="templates/cal_atom.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Atom View"
+      />
+
+  <page
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar.ics"
       permission="schoolbell.viewCalendar"

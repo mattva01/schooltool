@@ -2872,6 +2872,42 @@ def doctest_YearlyCalendarView():
     """
 
 
+def doctest_AtomCalendarView():
+    r"""Tests for AtomCalendarView.
+
+        >>> from schoolbell.app.browser.cal import AtomCalendarView
+
+        >>> from schoolbell.app.cal import Calendar
+        >>> from schoolbell.app.browser.cal import CalendarDay
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = AtomCalendarView(calendar, TestRequest())
+
+    getCurrentWeek() returns the remainder of the current week as CalendarDays
+
+        >>> isinstance(view.getCurrentWeek()[0], CalendarDay)
+        True
+
+    create ISO8601 date format for Atom spec
+    TODO: this should probably go in schoolbell.calendar.utils
+
+        >>> dt = datetime(2005, 03, 29, 15, 33, 22)
+        >>> view.w3cdtf_datetime(dt)
+        '2005-03-29T15:33:22Z'
+
+    this is a tricky thing to test, it should return datetime.now() in ISO8601
+
+        >>> len(view.w3cdtf_datetime_now())
+        20
+
+    for now, we know its always UTC so it should end with Z
+
+        >>> view.w3cdtf_datetime_now()[-1]
+        'Z'
+
+    """
+
+
 def doctest_EventDeleteView():
     r"""Tests for EventDeleteView.
 

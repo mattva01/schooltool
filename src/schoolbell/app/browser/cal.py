@@ -73,6 +73,7 @@ from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
 from schoolbell.calendar.utils import parse_date, parse_datetimetz
 from schoolbell.calendar.utils import parse_time, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
+from schoolbell.calendar.icalendar import ical_datetime
 from schoolbell import SchoolBellMessageID as _
 
 #
@@ -636,6 +637,20 @@ class WeeklyCalendarView(CalendarViewBase):
     def getCurrentWeek(self):
         """Return the current week as a list of CalendarDay objects."""
         return self.getWeek(self.cursor)
+
+
+class AtomCalendarView(WeeklyCalendarView):
+    """View the upcoming week's events in Atom formatted xml."""
+
+    def getCurrentWeek(self):
+        """Return the current week as a list of CalendarDay objects."""
+        return self.getWeek(date.today())
+
+    def w3cdtf_datetime(self, dt):
+        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    def w3cdtf_datetime_now(self):
+        return datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 class MonthlyCalendarView(CalendarViewBase):
