@@ -232,7 +232,7 @@ class TimetableDay:
         self.activities = {}
 
     def keys(self):
-        return self.activities.keys()
+        return list(self.periods)
 
     def items(self):
         return [(period, self.activities.get(period, None))
@@ -331,8 +331,8 @@ class BaseTimetableModel:
                 day_template = self._getTemplateForDay(date)
                 for period in day_template:
                     dt = datetime.datetime.combine(date, period.tstart)
-                    if period.title in timetable[day_id].keys():
-                        activity = timetable[day_id][period.title]
+                    activity = timetable[day_id][period.title]
+                    if activity is not None:
                         event = CalendarEvent(dt, period.duration,
                                               activity.title)
                         cal.addEvent(event)

@@ -36,6 +36,8 @@ class TomHoffmanConfig:
 
     days = ("1A", "2E", "3A", "4E")
 
+    periods = ("P1", "P2", "P3", "P4")
+
     timetable = { "1A" : { "P1": "Science",
                            "P2": "Mathematics",
                            "P3": "Beginning Spanish",
@@ -60,7 +62,7 @@ class TomHoffmanConfig:
                 "P4": (datetime.time(12, 45), datetime.timedelta(hours=1))}
 
     short_day = {"title": "Short day",
-                "P1": (datetime.time(9, 0), datetime.timedelta(hours=1)),
+                 "P1": (datetime.time(9, 0), datetime.timedelta(hours=1)),
                  "P2": (datetime.time(10, 5), datetime.timedelta(hours=1)),
                  "P3": (datetime.time(11, 10), datetime.timedelta(hours=1)),
                  "P4": (datetime.time(12, 15), datetime.timedelta(hours=1))}
@@ -90,6 +92,8 @@ class LithuanianConfig:
 
     # Names of the timetable weekdays, starting from Monday.
     days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+    periods = ("0", "1", "2", "3", "4", "5", "6", "7")
 
     timetable = { "Monday" : { "1": "Science",
                                "2": "Mathematics",
@@ -157,7 +161,7 @@ def createTimetable(config):
     tt_data = config.timetable
     tt = Timetable(days)
     for day in tt_data:
-        ttday = TimetableDay(tt_data[day].keys())
+        ttday = TimetableDay(config.periods)
         tt[day] = ttday
         for period in tt_data[day]:
             ttday[period] = TimetableActivity(tt_data[day][period])
