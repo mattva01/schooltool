@@ -1,0 +1,9 @@
+This directory contains the code to package SchoolTool for distribution.
+
+Current flavours are:
+
+Debian and Ubuntu:
+    debian-schooltool - Contains the debian directory for the schooltool
+                        source package.
+    debian-schoolbell - Contains the debian directory for the schoolbell
+                        source package.
