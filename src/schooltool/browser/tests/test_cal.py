@@ -408,6 +408,44 @@ class TestDailyCalendarView(unittest.TestCase):
         view.update()
         self.assertEquals(view.cursor, date(2004, 8, 18))
 
+    def test__setRange(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        cal.__parent__ = Person(title="Da Boss")
+        view = DailyCalendarView(cal)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 16)
+
+        def do_test(events, expected):
+            view.starthour, view.endhour = 8, 19
+            view._setRange(events)
+            self.assertEquals((view.starthour, view.endhour), expected)
+
+        do_test([], (8, 19))
+
+        events = [CalendarEvent(datetime(2004, 8, 16, 7, 00), timedelta(minutes=1),
+                                "workout")]
+        do_test(events, (7, 19))
+
+        events = [CalendarEvent(datetime(2004, 8, 15, 8, 00), timedelta(days=1),
+                                "long workout")]
+        do_test(events, (0, 19))
+
+        events = [CalendarEvent(datetime(2004, 8, 16, 20, 00),
+                                timedelta(minutes=30),
+                                "late workout")]
+        do_test(events, (8, 21))
+
+        events = [CalendarEvent(datetime(2004, 8, 16, 20, 00),
+                                timedelta(hours=5),
+                                "long late workout")]
+        do_test(events, (8, 24))
+
+
+
     def test_getColumns(self):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.cal import CalendarEvent, Calendar
@@ -536,12 +574,30 @@ class TestDailyCalendarView(unittest.TestCase):
 
         result = list(view.getHours())
         self.assertEquals(result,
-                          [{'time': '10:00', 'cols': (ev4, None, None)},
+                          [{'time': '0:00', 'cols': (ev4, None, None)},
+                           {'time': '1:00', 'cols': ('', None, None)},
+                           {'time': '2:00', 'cols': ('', None, None)},
+                           {'time': '3:00', 'cols': ('', None, None)},
+                           {'time': '4:00', 'cols': ('', None, None)},
+                           {'time': '5:00', 'cols': ('', None, None)},
+                           {'time': '6:00', 'cols': ('', None, None)},
+                           {'time': '7:00', 'cols': ('', None, None)},
+                           {'time': '8:00', 'cols': ('', None, None)},
+                           {'time': '9:00', 'cols': ('', None, None)},
+                           {'time': '10:00', 'cols': ('', None, None)},
                            {'time': '11:00', 'cols': ('', None, None)},
                            {'time': '12:00', 'cols': ('', ev1, None)},
                            {'time': '13:00', 'cols': ('', '', ev2)},
                            {'time': '14:00', 'cols': ('', ev3,'')},
-                           {'time': '15:00', 'cols': ('', '', None)},],
+                           {'time': '15:00', 'cols': ('', '', None)},
+                           {'time': '16:00', 'cols': ('', None, None)},
+                           {'time': '17:00', 'cols': ('', None, None)},
+                           {'time': '18:00', 'cols': ('', None, None)},
+                           {'time': '19:00', 'cols': ('', None, None)},
+                           {'time': '20:00', 'cols': ('', None, None)},
+                           {'time': '21:00', 'cols': ('', None, None)},
+                           {'time': '22:00', 'cols': ('', None, None)},
+                           {'time': '23:00', 'cols': ('', None, None)}],
                           pformat(result))
 
     def test_rowspan(self):

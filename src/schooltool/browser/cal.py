@@ -279,8 +279,8 @@ class DailyCalendarView(CalendarViewBase):
 
     template = Template("www/cal_daily.pt")
 
-    starthour = 0
-    endhour = 24
+    starthour = 8
+    endhour = 19
 
     def prev(self):
         return self.cursor - timedelta(1)
@@ -320,10 +320,36 @@ class DailyCalendarView(CalendarViewBase):
                 overlap = len(spanning)
         return overlap
 
+    def _setRange(self, events):
+        """Sets the starthour and endhour attributes according to the events
+
+        The range of the hours to display is the union of the range
+        8:00-18:00 and time spans of all the events in the events
+        list.
+        """
+        for event in events:
+            start = (datetime.combine(self.cursor, time()) +
+                     timedelta(hours=self.starthour))
+            end = (datetime.combine(self.cursor, time()) +
+                   timedelta(hours=self.endhour))
+            if event.dtstart < start:
+                newstart = max(datetime.combine(self.cursor, time()),
+                               event.dtstart)
+                self.starthour = newstart.hour
+
+            if event.dtstart + event.duration > end:
+                newend = min(
+                    datetime.combine(self.cursor, time()) + timedelta(1),
+                    event.dtstart + event.duration + timedelta(0, 3599))
+                self.endhour = newend.hour
+                if self.endhour == 0:
+                    self.endhour = 24
+
     def getHours(self):
         """Return an iterator over columns of the table"""
         nr_cols = self.getColumns()
         events = self.dayEvents(self.cursor)
+        self._setRange(events)
         slots = Slots()
         for hour in range(self.starthour, self.endhour):
             start = datetime.combine(self.cursor, time(hour, 0))
