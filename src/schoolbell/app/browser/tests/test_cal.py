@@ -1985,14 +1985,13 @@ def doctest_CalendarEventEditView_getInitialData():
         <textarea cols="60" id="field.exceptions" name="field.exceptions" rows="15" >2004-08-14
         2004-08-15</textarea>
 
-        #XXX OrderedMultiSelectWidget bug - it just ignores set rendered value!
-        #>>> print view.weekdays_widget() # doctest: +ELLIPSIS
-        #<script type="text/javascript">
-        #...
-        #      <select id="field.weekdays.to"
-        #              name="field.weekdays.to" size="5" multiple="">
-        #      </select>
-        #...
+        >>> print view.weekdays_widget() # doctest: +ELLIPSIS
+        <script type="text/javascript">
+        ...
+              <select id="field.weekdays.to"
+                      name="field.weekdays.to" size="5" multiple="">
+              </select>
+        ...
 
     """
 
