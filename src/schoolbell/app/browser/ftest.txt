@@ -258,6 +258,47 @@ We should have a view for that person as well:
     This person does not belong to any groups.
     ...
 
+If we try to create a person with the same login name, we get a nice error:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 1342
+    ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
+    ... Referer: http://localhost/frogpond/persons/add.html
+    ... 
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.title"
+    ... 
+    ... Other frog with the same id
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.username"
+    ... 
+    ... frog
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.password"
+    ... 
+    ... pwd
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.verify_password"
+    ... 
+    ... pwd
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.photo"; filename=""
+    ... Content-Type: application/octet-stream
+    ... 
+    ... 
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ... 
+    ... Add
+    ... -----------------------------705046721187019535891597004--
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...This username is already used!...
+    ...
+
 We should have a view for changing his password as well:
 
     >>> print http(r"""

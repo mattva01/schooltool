@@ -613,6 +613,20 @@ def doctest_PersonAddView():
         >>> 'jdoe' in pc
         True
 
+    If we try to add a user with the same login, we get a nice error message:
+
+        >>> from schoolbell.app.browser.app import PersonAddView
+        >>> request = TestRequest(form={'field.title': u'Another John Doe',
+        ...                             'field.username': u'jdoe',
+        ...                             'field.password': u'pass',
+        ...                             'field.verify_password': u'pass',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> view.error
+        u'This username is already used!'
+
     Let's try to add user with different password and verify_password fields:
 
         >>> from schoolbell.app.browser.app import PersonAddView

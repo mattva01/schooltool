@@ -366,11 +366,14 @@ class PersonAddView(AddView):
 
     def createAndAdd(self, data):
         """Create a Person from form data and add it to the container."""
-        if data['password'] == data['verify_password']:
-            return AddView.createAndAdd(self, data)
-        else:
+        if data['password'] != data['verify_password']:
             self.error = u'Passwords do not match!'
             raise WidgetsError([ValidationError('Passwords do not match!')])
+        elif data['username'] in self.context:
+            self.error = u'This username is already used!'
+            raise WidgetsError(
+                [ValidationError('This username is already used!')])
+        return AddView.createAndAdd(self, data)
 
     def add(self, person):
         """Add `person` to the container.
