@@ -19,6 +19,12 @@
        <a tal:attributes="href sub/url" tal:content="sub/title"/>
       </p>
     </div>
+    <div class="timetables" tal:condition="view/timetables">
+      <h3 i18n:translate="">Timetables</h3>
+      <p tal:repeat="tt view/timetables">
+       <a tal:attributes="href tt/url" tal:content="tt/title"/>
+      </p>
+    </div>
     <div class="row"><b>Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>

@@ -100,10 +100,10 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
 
     def timetables(self):
         path = absoluteURL(self.request, self.context)
-        keys = self.context.timetables.keys()
+        keys = list(self.context.listCompositeTimetables())
         keys.sort()
         return [{'title': '%s, %s' % (period, schema),
-                 'href': '%s/timetables/%s/%s' % (path, period, schema)}
+                 'url': '%s/timetables/%s/%s' % (path, period, schema)}
                 for period, schema in keys]
 
 

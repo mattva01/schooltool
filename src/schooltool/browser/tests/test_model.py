@@ -144,14 +144,17 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         view.context.timetables['2004-spring', 'default'] = Timetable([])
         view.context.timetables['2004-spring', 'another'] = Timetable([])
         view.context.timetables['2003-fall', 'another'] = Timetable([])
+        self.root.timetables['2003-fall', 'default'] = Timetable([])
         pp = 'http://localhost:7001/persons/johndoe'
         self.assertEquals(view.timetables(),
                           [{'title': '2003-fall, another',
-                            'href': '%s/timetables/2003-fall/another' % pp},
+                            'url': '%s/timetables/2003-fall/another' % pp},
+                           {'title': '2003-fall, default',
+                            'url': '%s/timetables/2003-fall/default' % pp},
                            {'title': '2004-spring, another',
-                            'href': '%s/timetables/2004-spring/another' % pp},
+                            'url': '%s/timetables/2004-spring/another' % pp},
                            {'title': '2004-spring, default',
-                            'href': '%s/timetables/2004-spring/default' % pp}])
+                            'url': '%s/timetables/2004-spring/default' % pp}])
 
 
 class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
