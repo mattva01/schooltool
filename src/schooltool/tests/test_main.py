@@ -390,7 +390,8 @@ class TestRequest(unittest.TestCase):
         rq.process()
         self.assertEqual(rq.code, 400)
 
-    def newRequest(self, path, render_stub, user=None, password=None):
+    def newRequest(self, path, render_stub=None, traverse_stub=None,
+                   user=None, password=None):
         from schooltool.main import Request
         channel = None
         rq = Request(channel, True)
@@ -398,16 +399,21 @@ class TestRequest(unittest.TestCase):
         rq.uri = path
         rq.method = "GET"
         rq.site = SiteStub()
-        rq.traverse = lambda app: path
-        rq.render = render_stub
+        if traverse_stub is None:
+            rq.traverse = lambda app: path
+        else:
+            rq.traverse = traverse_stub
+        if render_stub is not None:
+            rq.render = render_stub
         if user is not None:
             rq.user = user
         if password is not None:
             rq.password = password
         return rq
 
-    def do_test__process(self, path, render_stub, user=None, password=None):
-        rq = self.newRequest(path, render_stub, user, password)
+    def do_test__process(self, path, render_stub=None, traverse_stub=None,
+                         user=None, password=None):
+        rq = self.newRequest(path, render_stub, traverse_stub, user, password)
         transaction = TransactionStub()
         rq.get_transaction_hook = lambda: transaction
         rq.reactor_hook = ReactorStub()
@@ -442,6 +448,28 @@ class TestRequest(unittest.TestCase):
 
         self.assertEquals(transaction._note, "GET %s" % path)
         self.assertEquals(transaction._user, user)
+
+    def test__process_on_errors(self):
+        path = '/foo'
+        body = "Error"
+
+        class ResourceStub:
+
+            def render(self, request):
+                request.setResponseCode(400)
+                return body
+
+        traverse_stub = lambda app: ResourceStub()
+
+        rq, transaction = self.do_test__process(path,
+                                traverse_stub=traverse_stub)
+
+        called = rq.reactor_hook._called_from_thread
+        self.assertEquals(len(called), 2)
+        self.assertEquals(called[0], (rq.write, body))
+        self.assertEquals(called[1], (rq.finish, ))
+
+        self.assertEquals(transaction.history, 'A')
 
     def test__process_on_exception(self):
         path = '/foo'

@@ -343,9 +343,12 @@ class Request(http.Request):
                         self.zodb_conn = self.site.db.open()
                         body = self._generate_response()
                         txn = self.get_transaction_hook()
-                        txn.note("%s %s" % (self.method, self.uri))
-                        txn.setUser(self.getUser()) # anonymous is ""
-                        txn.commit()
+                        if self.code >= 400:
+                            txn.abort()
+                        else:
+                            txn.note("%s %s" % (self.method, self.uri))
+                            txn.setUser(self.getUser()) # anonymous is ""
+                            txn.commit()
                     except ConflictError:
                         if retries <= 0:
                             raise
