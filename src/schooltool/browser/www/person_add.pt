@@ -1,34 +1,34 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Add person</title>
+  <title metal:fill-slot="title" i18n:translate="">Add person</title>
 </head>
 <body>
 
-  <h1 metal:fill-slot="h1">
-    Add person
-  </h1>
+  <h1 metal:fill-slot="h1" i18n:translate="">Add person</h1>
 
-  <metal:block metal:fill-slot="content">
+<metal:block metal:fill-slot="content">
+
   <form method="POST" tal:attributes="action request/path">
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row">
-      <label class="wide" for="username">Username (optional)</label>
+      <label class="wide" for="username" i18n:translate="">Username (optional)</label>
       <input id="username" name="username" type="text"
              tal:attributes="value view/prev_username">
     </div>
     <div class="row">
-      <label class="wide" for="password">Password</label>
+      <label class="wide" for="password" i18n:translate="">Password</label>
       <input id="password" name="password" type="password" />
     </div>
     <div class="row">
-      <label class="wide" for="verify_password">Verify password</label>
+      <label class="wide" for="verify_password" i18n:translate="">Verify password</label>
       <input id="verify_password" name="verify_password" type="password" />
     </div>
     <div class="buttons">
-      <input class="button" type="submit" value="Add" />
+      <input class="button" type="submit" name="ADD" value="Add"
+             i18n:attributes="value" />
     </div>
   </form>
-  </metal:block>
 
+</metal:block>
 </body>
 </html>

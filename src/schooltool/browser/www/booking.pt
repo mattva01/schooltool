@@ -19,27 +19,27 @@
 
   <form method="POST" tal:attributes="action request/path">
     <div class="row" tal:condition="view/isManager">
-      <label for="owner">Owner</label>
+      <label for="owner" i18n:translate="">Owner</label>
       <input id="owner" name="owner" type="text"
              tal:attributes="value view/owner_name" />
     </div>
     <div class="row">
-      <label for="start_date">Date</label>
+      <label for="start_date" i18n:translate="">Date</label>
       <input id="start_date" name="start_date" type="text"
              tal:attributes="value view/start_date" />
     </div>
     <div class="row">
-      <label for="start_time">Time</label>
+      <label for="start_time" i18n:translate="">Time</label>
       <input id="start_time" name="start_time" type="text"
              tal:attributes="value view/start_time" />
     </div>
     <div class="row">
-      <label for="duration">Duration</label>
+      <label for="duration" i18n:translate="">Duration</label>
       <input id="duration" name="duration" type="text"
              tal:attributes="value view/duration" />
     </div>
     <div class="row">
-      <label for="conflicts">Ignore conflicts</label>
+      <label for="conflicts" i18n:translate="">Ignore conflicts</label>
       <input id="conflicts" name="conflicts" type="checkbox" value="ignore" />
     </div>
     <input name="CONFIRM_BOOK" type="submit" value="Book" />
