@@ -2571,7 +2571,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         suffix = '/daily.html?date=2004-08-14'
         url = absoluteURL(request, self.calendar) + suffix
         self.assertRedirectedTo(request, url)
-        # If the event was deleted, calendar.find will raise KeyError
+        # If the event was deleted, calendar.find will raise a KeyError.
         calendar = self.combinedCalendar()
         self.assertRaises(KeyError, calendar.find, event_id)
 
@@ -2584,7 +2584,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         quoted_url = urllib.quote(delete_url)
         url = 'http://localhost:7001/?forbidden=1&url=%s' % quoted_url
         self.assertRedirectedTo(request, url)
-        # If the event was not deleted, calendar.find will not raise KeyError
+        # If the event was not deleted, calendar.find will not raise a KeyError
         self.assert_(self.combinedCalendar().find(event_id))
 
     def tryToDelete(self, user, event_id):
