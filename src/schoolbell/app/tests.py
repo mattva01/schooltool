@@ -139,6 +139,74 @@ def doctest_ResourceContainer():
     """
 
 
+def doctest_Person():
+    r"""Tests for Person
+
+        >>> from schoolbell.app.interfaces import IPersonContained
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> verifyObject(IPersonContained, person)
+        True
+
+    Persons initially have no password
+
+        >>> person.hasPassword()
+        False
+
+    When a person has no password, he cannot log in
+
+        >>> person.checkPassword('')
+        False
+        >>> person.checkPassword(None)
+        False
+
+    You can set the password
+
+        >>> person.setPassword('secret')
+        >>> person.hasPassword()
+        True
+        >>> person.checkPassword('secret')
+        True
+        >>> person.checkPassword('justguessing')
+        False
+
+    Note that the password is not stored in plain text and cannot be recovered
+
+        >>> import pickle
+        >>> 'secret' not in pickle.dumps(person)
+        True
+
+    You can lock out the user's accound by setting the password to None
+
+        >>> person.setPassword(None)
+        >>> person.hasPassword()
+        False
+        >>> person.checkPassword('')
+        False
+        >>> person.checkPassword(None)
+        False
+
+    Note that you can set the password to an empty string, although that is
+    not a secure password
+
+        >>> person.setPassword('')
+        >>> person.hasPassword()
+        True
+        >>> person.checkPassword('')
+        True
+        >>> person.checkPassword(None)
+        False
+
+    It is probably not a very good idea to use non-ASCII characters in
+    passwords, but you can do that
+
+        >>> person.setPassword(u'\u1234')
+        >>> person.checkPassword(u'\u1234')
+        True
+
+    """
+
+
 def run_unit_tests(testcase):
     r"""Hack to call into unittest from doctests.
 
@@ -181,6 +249,7 @@ def run_unit_tests(testcase):
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
+                doctest.DocTestSuite('schoolbell.app.app'),
            ])
 
 if __name__ == '__main__':

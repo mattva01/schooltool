@@ -26,6 +26,14 @@
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
+  <content class=".app.Person">
+    <require permission="zope.View"
+             interface="schoolbell.app.interfaces.IReadPerson" />
+    <require permission="zope.ManageContent"
+             interface="schoolbell.app.interfaces.IWritePerson"
+             set_schema="schoolbell.app.interfaces.IPerson" />
+  </content>
+
   <include package=".browser" />
 
 </configure>

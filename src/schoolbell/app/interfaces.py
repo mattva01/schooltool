@@ -19,17 +19,89 @@
 """
 SchoolBell application interfaces
 
+Overview
+--------
+
+ISchoolBellApplication is the main interface.  From it you can get to all
+persons, groups and resources in the system via IPersonContainer,
+IGroupContainer and IResourceContainer.
+
+Persons, as described by IPerson, are users of the system.
+
 $Id$
 """
 
 from zope.interface import Interface
-from zope.schema import Object
+from zope.schema import Object, TextLine, Text, Date, Bytes
 from zope.app.container.interfaces import IReadContainer, IContainer
-from zope.app.container.constraints import contains
+from zope.app.container.interfaces import IContained
+from zope.app.container.constraints import contains, containers
 
 
-class IPerson(Interface):
-    """Person."""
+class IReadPerson(Interface):
+    """Publically accessible part of IPerson."""
+
+    display_name = TextLine(title=u"Display name",
+        description=u"Name that should be displayed")
+
+    first_name = TextLine(title=u"First name",
+        required=False)
+
+    last_name = TextLine(title=u"Last name",
+        required=False)
+
+    date_of_birth = Date(title=u"Date of birth",
+        required=False)
+
+    comment = Text(title=u"Comment",
+        required=False,
+        description=u"""Free form comments.""")
+
+    photo = Bytes(title=u"Photo",
+        required=False,
+        description=u"""Photo (in JPEG format)""")
+
+    username = TextLine(title=u"Username")
+
+    def checkPassword(password):
+        """Check if the provided password is the same as the one set
+        earlier using setPassword.
+
+        Returns True if the passwords match.
+        """
+
+    def hasPassword():
+        """Check if the user has a password.
+
+        You can remove user's password (effectively disabling the account) by
+        passing None to setPassword.  You can reenable the account by passing
+        a new password to setPassword.
+        """
+
+
+class IWritePerson(Interface):
+    """Protected part of IPerson."""
+
+    def setPassword(password):
+        """Set the password in a hashed form, so it can be verified later.
+
+        Setting password to None disables the user account.
+        """
+
+
+class IPerson(IReadPerson, IWritePerson):
+    """Person.
+
+    A person has a number of informative fields such as name, an optional
+    photo, and so on.
+
+    A person can also be a user of the system, therefore IPerson defines
+    `username`, and methods for setting/checking passwords (`setPassword`,
+    `checkPassword` and `hasPassword`).
+
+    Use IPersonContained instead if you want a person in context (that is,
+    one that you can use to traverse to other persons/groups/resources).
+    """
 
 
 class IPersonContainer(IContainer):
@@ -38,8 +110,17 @@ class IPersonContainer(IContainer):
     contains(IPerson)
 
 
+class IPersonContained(IPerson, IContained):
+    """Person contained in an IPersonContainer."""
+
+    containers(IPersonContainer)
+
+
 class IGroup(Interface):
     """Group."""
+
+    title = TextLine(title=u"Title",
+        description=u"Title of the group.")
 
 
 class IGroupContainer(IContainer):

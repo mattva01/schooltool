@@ -3,6 +3,10 @@
 <body>
 <div metal:fill-slot="body">
 <h2 i18n:translate="">Welcome to SchoolBell</h2>
+
+<p><a href="persons">Persons</a></p>
+<p><a href="groups">Groups</a></p>
+<p><a href="resources">Resources</a></p>
 </div>
 </body>
 
