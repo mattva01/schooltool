@@ -338,10 +338,12 @@
           <tal:loop repeat="cal view/getPortletCalendars">
             <div class="row"
                 tal:attributes="style python:'background: %s;;' % view.calendarColors(cal)[0]">
-              <input type="checkbox" name="overlay"
-                tal:attributes="value python:view.getValue(cal);
-                    checked python:view.checkedOverlay(cal)" />
-                  <label tal:content="cal/title"/>
+              <label>
+                <input type="checkbox" name="overlay"
+                       tal:attributes="value python:view.getValue(cal);
+                              checked python:view.checkedOverlay(cal)" />
+                <span tal:replace="cal/title"/>
+              </label>
             </div>
           </tal:loop>
           <input name="OVERLAY" type="submit" value="Overlay"/>
