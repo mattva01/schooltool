@@ -31,14 +31,29 @@
      tal:attributes="href string:${context/@@absolute_url}/edit_subgroups.html"
          i18n:translate="">Edit</a>
     </div>
-    <div tal:define="members context/members">
+    <div tal:define="members view/getPersons">
       <h3 i18n:translate="">Members</h3>
-      <p tal:repeat="obj members"> <!-- XXX sort order? -->
+      <div tal:repeat="obj members"> <!-- XXX sort order? -->
         <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-      </p>
+      </div>
       <p tal:condition="not:members" i18n:translate="">
         This group has no members.</p>
     </div>
+    <div tal:define="resources view/getResources"
+         tal:condition="resources">
+      <tal:comment condition="nothing">
+        <!-- The resource section is hidden altogether when there are no
+             resources as members - I presume that many groups will not
+             have resources as members. -->
+      </tal:comment>
+      <h3 i18n:translate="">Resources</h3>
+      <div tal:repeat="resource resources">
+        <a tal:attributes="href resource/@@absolute_url"
+           tal:content="resource/title" />
+      </div>
+    </div>
+
+    <br />
     <div class="actions" tal:condition="view/canEdit">
       <div><a class="action"
          tal:attributes="href string:${context/@@absolute_url}/members_persons.html"

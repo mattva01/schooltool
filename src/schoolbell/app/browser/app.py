@@ -34,6 +34,17 @@ from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IGroupContained
+from schoolbell.app.interfaces import IPerson, IResource
+
+
+def sorted_by_title(objects):
+    """Sort a list of objects by title.
+
+    The objects must have a title attribute.
+    """
+    objs = [(o.title, o) for o in objects]
+    objs.sort()
+    return [o for (title, o) in objs]
 
 
 class ContainerView(BrowserView):
@@ -50,9 +61,7 @@ class ContainerView(BrowserView):
 
     def sortedObjects(self):
         """Return a list of contained objects sorted by title."""
-        objs = [(o.title, o) for o in self.context.values()]
-        objs.sort()
-        return [o for title, o in objs]
+        return sorted_by_title(self.context.values())
 
 
 class PersonContainerView(ContainerView):
@@ -109,9 +118,7 @@ class GroupListView(BrowserView):
     def getGroupList(self):
         """Return a sorted list of all groups in the system."""
         groups = self.context.__parent__.__parent__['groups'] # XXX Ugly.
-        items = [(group.title, group) for group in groups.values()]
-        items.sort()
-        return [row[-1] for row in items]
+        return sorted_by_title(groups.values())
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
@@ -142,6 +149,16 @@ class GroupView(BrowserView):
     def canEdit(self):
         return True # TODO: implement permission checking
 
+    def getPersons(self):
+        persons = [member for member in self.context.members
+                   if IPerson.providedBy(member)] # not really nice...
+        return sorted_by_title(persons)
+
+    def getResources(self):
+        persons = [member for member in self.context.members
+                   if IResource.providedBy(member)] # not really nice...
+        return sorted_by_title(persons)
+
 
 class MemberViewBase(BrowserView):
     """A base view class for adding / removing members from a group.
@@ -156,10 +173,8 @@ class MemberViewBase(BrowserView):
     def getMemberList(self):
         """Return a sorted list of all possible members."""
         # XXX Ugly.  Maybe we could use adaptation here.
-        member = self.context.__parent__.__parent__[self.container_name]
-        items = [(member.title, member) for member in member.values()]
-        items.sort()
-        return [row[-1] for row in items]
+        container = self.context.__parent__.__parent__[self.container_name]
+        return sorted_by_title(container.values())
 
     def update(self):
         # XXX This method is rather similar to GroupListView.update().

@@ -49,7 +49,7 @@ def doctest_ContainerView():
         >>> request = TestRequest()
         >>> view = ContainerView(context, request)
 
-    The view defines a method called `sortedObject` so that page templates
+    The view defines a method called `sortedObjects` so that page templates
     can display the items in alphabetical order.
 
         >>> view.sortedObjects()
@@ -322,6 +322,27 @@ def doctest_GroupView():
         >>> group = Group()
         >>> request = TestRequest()
         >>> view = GroupView(group, request)
+
+    Let's relate some objects to our group:
+
+        >>> from schoolbell.app.app import Person, Resource
+        >>> group.members.add(Person('First'))
+        >>> group.members.add(Person('Last'))
+        >>> group.members.add(Person('Intermediate'))
+        >>> group.members.add(Resource('Average'))
+        >>> group.members.add(Resource('Another'))
+        >>> group.members.add(Resource('The last'))
+
+    A person list from that view should be sorted by title.
+
+        >>> [person.title for person in view.getPersons()]
+        ['First', 'Intermediate', 'Last']
+
+    Same for the resource list.
+
+        >>> [resource.title for resource in view.getResources()]
+        ['Another', 'Average', 'The last']
+
 
     TODO: implement proper permission checking.
     For now, all these methods just return True
