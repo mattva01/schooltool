@@ -270,16 +270,6 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
     __url = None
 
-    days_widget = SelectionWidget('day',_('Day'),
-                                    (('1',_("Sunday")),
-                                     ('2',_("Monday")),
-                                     ('3',_("Tuesday")),
-                                     ('4',_("Wednesday")),
-                                     ('5',_("Thursday")),
-                                     ('6',_("Friday")),
-                                     ('7',_("Saturday"))),
-                                    value='month')
-
     def _eventView(self, event):
         return CalendarEventView(event, self.context)
 
