@@ -241,6 +241,86 @@ Content-Type: text/html; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /++vh++https:www.example.com:443/schooltool/++/calendars.html
+200 OK
+Content-Type: text/html; charset=UTF-8
+%% XML recursively_sort=ul
+<html>
+<head>
+  <title>Calendars</title>
+</head>
+<body>
+  <h1>Calendars</h1>
+  <h2>Groups</h2>
+  <ul>
+    <li><a href="https://www.example.com:443/schooltool/groups/root/calendar">
+        Root Group (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/groups/root/timetable-calendar">
+        Root Group (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/groups/cleaners/calendar">
+        Cleaners (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/groups/cleaners/timetable-calendar">
+        Cleaners (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/groups/students/calendar">
+        Students (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/groups/students/timetable-calendar">
+        Students (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/groups/teachers/calendar">
+        Teachers (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/groups/teachers/timetable-calendar">
+        Teachers (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/groups/managers/calendar">
+        System Managers (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/groups/managers/timetable-calendar">
+        System Managers (timetable)</a></li>
+  </ul>
+  <h2>Persons</h2>
+  <ul>
+    <li><a href="https://www.example.com:443/schooltool/persons/manager/calendar">
+        Manager (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/persons/manager/timetable-calendar">
+        Manager (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/persons/Aiste/calendar">
+        Aiste (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/persons/Aiste/timetable-calendar">
+        Aiste (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/persons/Albert/calendar">
+        Albert (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/persons/Albert/timetable-calendar">
+        Albert (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/persons/Marius/calendar">
+        Marius (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/persons/Marius/timetable-calendar">
+        Marius (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/persons/Mark/calendar">
+        Mark (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/persons/Mark/timetable-calendar">
+        Mark (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/persons/Steve/calendar">
+        Steve (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/persons/Steve/timetable-calendar">
+        Steve (timetable)</a></li>
+  </ul>
+  <h2>Resources</h2>
+  <ul>
+    <li><a href="https://www.example.com:443/schooltool/resources/hall/calendar">
+        Hall (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/resources/hall/timetable-calendar">
+        Hall (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/resources/room1/calendar">
+        Room 1 (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/resources/room1/timetable-calendar">
+        Room 1 (timetable)</a></li>
+    <li><a href="https://www.example.com:443/schooltool/resources/room2/calendar">
+        Room 2 (private calendar)</a>,
+        <a href="https://www.example.com:443/schooltool/resources/room2/timetable-calendar">
+        Room 2 (timetable)</a></li>
+  </ul>
+</body>
+</html>
+%% END XML
+
+
 SchoolTool> get /groups
 200 OK
 Content-Type: text/xml; charset=UTF-8

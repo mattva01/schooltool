@@ -72,6 +72,13 @@ class TestHelpers(unittest.TestCase):
         self.assertEquals(getURL(request, obj, 'baz/123'),
                           "http://localhost:7001/foo/bar/baz/123")
 
+        request.virtualpath = '/schooltool'
+        request.getHost = lambda: ('SSL', 'www.example.com', 443)
+
+        self.assertEquals(
+            getURL(request, obj, 'baz/123'),
+            "https://www.example.com:443/schooltool/foo/bar/baz/123")
+
 
 class TestTemplate(unittest.TestCase):
 

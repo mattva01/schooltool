@@ -42,10 +42,13 @@ moduleProvides(IModuleSetup)
 
 def getURL(request, obj, suffix='', absolute=True):
     """Returns the URL of an object."""
-    scheme = 'http'
+    if request.getHost()[0] == 'SSL':
+        scheme = 'https'
+    else:
+        scheme = 'http'
     hostname = request.getRequestHostname()
     port = request.getHost()[2]
-    url = getPath(obj)
+    url = request.virtualpath + getPath(obj)
     if suffix:
         if not url.endswith('/'):
             url += '/'

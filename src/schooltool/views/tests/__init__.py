@@ -39,6 +39,7 @@ class RequestStub:
         self.uri = uri
         self.method = method
         self.path = ''
+        self.virtualpath = ''
         self.content = StringIO(body)
         self.authenticated_user = authenticated_user
         self.headers = {}
@@ -59,10 +60,10 @@ class RequestStub:
         self.accept = []
 
     def getRequestHostname(self):
-        return self._hostname
+        return self.getHost()[1]
 
     def getHost(self):
-        return ('INET', self._host, self._port)
+        return ('INET', self._hostname, self._port)
 
     def getHeader(self, header):
         # Twisted's getHeader returns None when the header does not exist
