@@ -921,6 +921,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
     page_title = None # overridden by subclasses
     tt_event = False
+    date = None
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -1054,7 +1055,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.process(start, duration, self.title_widget.value, location,
                      self.privacy_widget.value)
 
-        return self._redirectToDailyView(date=start.date())
+        if self.date is not None and self.tt_event:
+            dt = self.date
+        else:
+            dt = start.date()
+        return self._redirectToDailyView(date=dt)
 
     def process(self, dtstart, duration, title, location, privacy):
         raise NotImplementedError("override this method in subclasses")
@@ -1186,10 +1191,17 @@ class EventEditView(EventViewBase):
 
     page_title = _("Edit event")
 
+    composite_event = None
+
     def update(self):
         self.event_id = to_unicode(self.request.args['event_id'][0])
+        date = to_unicode(self.request.args['date'][0])
+        self.date = parse_date(date)
 
         event = self._findOrdinaryEvent(self.event_id)
+        if event is None:
+            event = self._findInheritedEvent(self.event_id, self.date)
+            self.composite_event = (event is not None)
         if event is None:
             event = self._findTimetableEvent(self.event_id)
             self.tt_event = (event is not None)
@@ -1199,7 +1211,7 @@ class EventEditView(EventViewBase):
             # then we would be able to simply display a standard 404 page.
             self.error = _("This event does not exist.")
             return
-        if self.tt_event and not self.isManager():
+        if (self.tt_event or self.composite_event) and not self.isManager():
             # Only managers may add timetable exceptions
             raise Unauthorized
 
@@ -1252,15 +1264,25 @@ class EventEditView(EventViewBase):
 
     def process(self, dtstart, duration, title, location, privacy):
         uid = self.event.unique_id
+        if self.composite_event:
+            # XXX Ugly scoping
+            orig_calendar = self.event.calendar
+            self.event = self.event.calendar.find(uid)
         ev = self.event.replace(dtstart=dtstart, duration=duration,
                                 title=title, location=location, unique_id=uid,
                                 recurrence=self.getRecurrenceRule(),
                                 privacy=privacy)
-        if self.tt_event:
-            if not self.isManager():
-                # XXX embedding security policy decisions in the middle of view
-                # code is not nice.
-                raise Unauthorized
+        if (self.tt_event or self.composite_event) and not self.isManager():
+            # XXX embedding security policy decisions in the middle of view
+            # code is not nice.
+            raise Unauthorized
+        if self.composite_event:
+            if ev.recurrence is not None:
+                raise NotImplementedError( # TODO XXX
+                            "Can't deal with external recurring events yet")
+            orig_calendar.removeEvent(self.event)
+            orig_calendar.addEvent(ev)
+        elif self.tt_event:
             self._addTimetableException(self.event, replacement=ev)
         else:
             self.context.removeEvent(self.event)
@@ -1421,7 +1443,7 @@ class EventDeleteView(View, EventViewHelpers):
             # code is not nice.
             raise Unauthorized
         if event.recurrence is not None:
-            raise NotImplementedError(
+            raise NotImplementedError( # TODO XXX
                             "Can't deal with external recurring events yet")
         event.calendar.removeEvent(event)
         return self._redirectToDailyView(date)

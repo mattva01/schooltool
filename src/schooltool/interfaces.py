@@ -996,6 +996,11 @@ class ISchooldayModelWrite(Interface):
 class ICalendar(Interface):
     """A calendar, containing days which in turn contain events."""
 
+    # TODO: It would be really great to have an ImmutableCalendar or
+    #       something similar, so that we would never be modifying
+    #       functionally created calendars instead of the source ones
+    #       by accident.
+
     def __iter__():
         """Return an iterator over the events in this calendar."""
 

@@ -215,6 +215,9 @@
   </div>
 </tal:block>
 
+    <input type="hidden" name="date"
+           tal:attributes="value view/date" />
+
     <div class="buttons">
       <input class="button" name="SUBMIT" type="submit" value="Save"
              i18n:attributes="value" />

@@ -1364,7 +1364,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
 
     def test_render(self):
         view = self.createView()
-        request = RequestStub(args={'event_id': "pick me"})
+        request = RequestStub(args={'event_id': "pick me",
+                                    'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
@@ -1398,7 +1399,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.person.calendar.addEvent(event)
 
         view = self.createView()
-        request = RequestStub(args={'event_id': "123"})
+        request = RequestStub(args={'event_id': "123", 'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
@@ -1413,14 +1414,13 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.person.calendar.addEvent(event)
 
         view = self.createView()
-        request = RequestStub(args={'event_id': "123"})
+        request = RequestStub(args={'event_id': "123", 'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
 
         assertField(doc, 'range', 'count', 'and @checked="checked"')
         assertField(doc, 'count', '3')
-
 
     def test_render_range_until(self):
         from schooltool.cal import DailyRecurrenceRule
@@ -1430,7 +1430,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.person.calendar.addEvent(event)
 
         view = self.createView()
-        request = RequestStub(args={'event_id': "123"})
+        request = RequestStub(args={'event_id': "123", 'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
@@ -1446,7 +1446,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.person.calendar.addEvent(event)
 
         view = self.createView()
-        request = RequestStub(args={'event_id': "123"})
+        request = RequestStub(args={'event_id': "123", 'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
@@ -1463,7 +1463,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.person.calendar.addEvent(event)
 
         view = self.createView()
-        request = RequestStub(args={'event_id': "123"})
+        request = RequestStub(args={'event_id': "123", 'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
@@ -1472,7 +1472,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
 
     def test_render_norecur(self):
         view = self.createView()
-        request = RequestStub(args={'event_id': "other"})
+        request = RequestStub(args={'event_id': "other", 'date': '2004-11-05'})
         content = view.render(request)
 
         doc = HTMLDocument(content)
@@ -1498,14 +1498,15 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.person.calendar.addEvent(event)
 
         view = self.createView()
-        request = RequestStub(args={'event_id': "123"})
+        request = RequestStub(args={'event_id': "123", 'date': '2004-11-05'})
         content = view.render(request)
 
         assert '2004-10-22\n2004-12-12</textarea' in content
 
     def test_render_nonexistent(self):
         view = self.createView()
-        request = RequestStub(args={'event_id': "nonexistent"})
+        request = RequestStub(args={'event_id': "nonexistent",
+                                    'date': '2004-11-05'})
         content = view.render(request)
 
         self.assert_("This event does not exist." in content)
@@ -1523,6 +1524,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'recurrence_type': 'weekly',
                                     'interval':'2',
                                     'exceptions': '2004-01-01\n2004-02-02',
+                                    'date': '2004-11-05',
                                     'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
@@ -1562,6 +1564,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'recurrence': 'on',
                                     'recurrence_type': 'weekly',
                                     'interval':'2',
+                                    'date': '2004-11-05',
                                     'exceptions': '2004-01-01\n2004-02-02'},
                               method='POST')
         content = view.render(request)
@@ -1572,7 +1575,6 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assert_(self.ev2 in events)
 
     def test_norecur(self):
-        from schooltool.cal import WeeklyRecurrenceRule
         view = self.createView()
         request = RequestStub(args={'event_id': "pick me",
                                     'title': 'Changed',
@@ -1583,6 +1585,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'recurrence_shown': 'yes',
                                     'recurrence_type': 'weekly',
                                     'interval':'2',
+                                    'date': '2004-11-05',
                                     'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
@@ -1605,7 +1608,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         view = self.createView()
         ttcal = self.initTTCalendar(view.context)
 
-        request = RequestStub(args={'event_id': "uniq"})
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': '2004-11-05'})
         content = view.render(request)
 
         self.assert_('timetable event' in content)
@@ -1621,7 +1625,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         request = RequestStub(args={'event_id': "uniq",
                                     'recurrence': 'on',
                                     'recurrence_shown': 'yes',
-                                    'recurrence_type': 'daily'})
+                                    'recurrence_type': 'daily',
+                                    'date': '2004-11-05'})
         view.request = request
         view.update()
         self.assertEqual(view.getRecurrenceRule(), None)
@@ -1636,6 +1641,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'start_date': '2004-08-16',
                                     'start_time': '13:30',
                                     'duration': '70',
+                                    'date': '2004-11-05',
                                     'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
@@ -1643,7 +1649,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/johndoe/calendar/'
-                          'daily.html?date=2004-08-16')
+                          'daily.html?date=2004-11-05')
 
         event = ttcal.find('uniq')
         exceptions = event.activity.timetable.exceptions
@@ -1686,6 +1692,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'start_date': '2004-08-16',
                                     'start_time': '13:30',
                                     'duration': '70',
+                                    'date': '2004-11-05',
                                     'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
@@ -1693,7 +1700,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/johndoe/calendar/'
-                          'daily.html?date=2004-08-16')
+                          'daily.html?date=2004-11-05')
 
         self.assert_(exc.replacement is not exc_ev)
         self.assert_(exc.replacement.exception is exc)
@@ -1707,7 +1714,9 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
     def test_update_timetable_event_permission_checking(self):
         from schooltool.browser import Unauthorized
         view = self.createView()
-        view.request = RequestStub(args={'event_id': '123'})
+        view.request = RequestStub(args={'event_id': '123',
+                                         'date': '2004-11-05'})
+
         event = createEvent('2004-08-16 13:45', '5 min', 'Anything',
                             unique_id='123')
         view._findOrdinaryEvent = lambda uid: None
@@ -1750,6 +1759,65 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         if not called:
             self.fail("view.isManager returns True so"
                       " _addTimetableException should get called")
+
+    def test_edit_inherited_event(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.cal import InheritedCalendarEvent
+        from schooltool.browser import Unauthorized
+        from schooltool.model import Group
+
+        group = Group("A group")
+        group.__name__ = 'other'
+        ev = createEvent('2004-08-16 13:45', '5 min', 'Die', unique_id='uniq')
+        group.calendar.addEvent(ev)
+        comp_cal = createCalendar()
+        comp_cal.addEvent(InheritedCalendarEvent(ev, group.calendar))
+        view = self.createView()
+        self.person.makeCompositeCalendar = lambda start, end: comp_cal
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'title': 'Changed',
+                                    'location': 'Inbetween',
+                                    'start_date': '2004-08-16',
+                                    'start_time': '13:30',
+                                    'duration': '70',
+                                    'recurrence_shown': 'yes',
+                                    'recurrence_type': 'weekly',
+                                    'interval':'2',
+                                    'date': '2004-11-05',
+                                    'SUBMIT': 'Save'},
+                              method='POST')
+        content = view.render(request)
+
+        events = list(group.calendar)
+        self.assertEquals(len(events), 1)
+
+        # Check that the event has been touched.
+        event = events[0]
+        self.assertEquals(event.location, "Inbetween")
+        self.assertEquals(event.unique_id, ev.unique_id)
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/johndoe/calendar/'
+                          'daily.html?date=2004-08-16')
+
+        # Make sure that people without permissions can't cause harm.
+        view.isManager = lambda: False
+        view.request = RequestStub(args={'event_id': "uniq",
+                                         'title': 'Changed',
+                                         'location': 'Inbetween',
+                                         'start_date': '2004-08-16',
+                                         'start_time': '13:30',
+                                         'duration': '70',
+                                         'recurrence_shown': 'yes',
+                                         'recurrence_type': 'weekly',
+                                         'interval':'2',
+                                         'date': '2004-11-05',
+                                         'SUBMIT': 'Save'},
+                                   method='POST')
+        self.assertRaises(Unauthorized, view.do_GET, request)
+        self.assertEquals(list(group.calendar), [event])
 
 
 class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):

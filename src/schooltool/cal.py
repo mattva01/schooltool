@@ -267,7 +267,7 @@ class CalendarEvent(Persistent):
     replace_kw = ('dtstart', 'duration', 'title','owner', 'context',
                   'location', 'unique_id', 'recurrence', 'privacy')
 
-    def replace(self,  **kw):
+    def replace(self, **kw):
         """Returns a copy of the event with some attrs changed.
 
         replace_kw is a list of keywords that are passed to the constructor.
