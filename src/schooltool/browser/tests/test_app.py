@@ -53,13 +53,14 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Person, Group, Resource, Note
+        from schooltool.model import Person, Group, Resource, Note, Address
         from schooltool.browser.app import RootView
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
         app['groups'] = ApplicationObjectContainer(Group)
         app['resources'] = ApplicationObjectContainer(Resource)
         app['notes'] = ApplicationObjectContainer(Note)
+        app['addresses'] = ApplicationObjectContainer(Address)
         view = RootView(app)
         return view
 
@@ -722,6 +723,46 @@ class TestNoteContainerView(TestObjectContainerView):
         self.assert_('add.html' not in view.render(request))
 
 
+class TestAddressContainerView(TestObjectContainerView):
+
+    def setUp(self):
+        from schooltool.browser.app import AddressContainerView
+        from schooltool.browser.app import AddressAddView
+        from schooltool.browser.model import AddressView
+        TestObjectContainerView.setUp(self)
+        self.view = AddressContainerView
+        self.add_view = AddressAddView
+        self.obj_view = AddressView
+
+    def createView(self):
+        from schooltool.app import Application
+        from schooltool.app import ApplicationObjectContainer
+        from schooltool.model import Address
+        app = Application()
+        app['addresses'] = ApplicationObjectContainer(Address)
+        app['addresses'].new('obj', title='Test Address', country='US')
+        self.obj = app['addresses']['obj']
+
+        view = self.view(app['addresses'])
+        view.add_view = self.add_view
+        view.obj_view = self.obj_view
+        return view
+
+    def test_render_index(self):
+        view = self.createView()
+        view.isManager = lambda: True
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        for s in ['href="http://localhost:7001/addresses/obj"',
+                  'Test Address',
+                  view.index_title]:
+            self.assert_(s in result, s)
+
+        view.isManager = lambda: False
+        self.assert_('add.html' not in view.render(request))
+
+
 class TestObjectAddView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
@@ -987,6 +1028,18 @@ class TestNoteAddView(AppSetupMixin, unittest.TestCase):
     def test(self):
         view = self.createView()
         self.assertEquals(view.title, "Add note")
+
+
+class TestAddressAddView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import AddressAddView
+        view = AddressAddView(self.app['addresses'])
+        return view
+
+    def test(self):
+        view = self.createView()
+        self.assertEquals(view.title, "Add address")
 
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
@@ -1580,10 +1633,12 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     suite.addTest(unittest.makeSuite(TestResourceContainerView))
     suite.addTest(unittest.makeSuite(TestNoteContainerView))
+    suite.addTest(unittest.makeSuite(TestAddressContainerView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     suite.addTest(unittest.makeSuite(TestResourceAddView))
     suite.addTest(unittest.makeSuite(TestNoteAddView))
+    suite.addTest(unittest.makeSuite(TestAddressAddView))
     suite.addTest(unittest.makeSuite(TestBusySearchView))
     suite.addTest(unittest.makeSuite(TestDatabaseResetView))
     suite.addTest(unittest.makeSuite(TestOptionsView))
