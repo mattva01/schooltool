@@ -29,7 +29,8 @@ from schooltool.browser import View, Template, ToplevelBreadcrumbsMixin
 from schooltool.browser.auth import ManagerAccess
 from schooltool.csvimport import CSVImporterBase, DataError
 from schooltool.common import parse_date
-from schooltool.component import FacetManager, getFacetFactory, relate
+from schooltool.component import FacetManager, getFacetFactory
+from schooltool.component import getRelatedObjects, relate
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership, memberOf
 from schooltool.teaching import Teaching
@@ -539,7 +540,7 @@ class TimetableCSVImporter:
             group = self.groups.new(title=group_name)
             Membership(group=subject, member=group)
 
-            # TODO: Do this conditionally even if the group was found
+        if not teacher in getRelatedObjects(group, uris.URITeacher):
             relate(uris.URITeaching,
                    (teacher, uris.URITeacher), (group, uris.URITaught))
 

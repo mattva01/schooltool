@@ -641,6 +641,12 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
             self.assertEquals(list(activity.resources), [self.location])
             self.assert_(activity.timetable is tt)
 
+        new_group = self.app['groups'].new(title='Math 101 - Lorch')
+        imp.scheduleClass('A', 'Math 101', 'Lorch',
+                          day_ids=['day1', 'day2'], location='Inside')
+        self.assertIsRelated(new_group, self.app['persons']['lorch'],
+                             rel=uris.URITaught)
+
     def test_scheduleClass_errors(self):
         from schooltool.timetable import Timetable, TimetableDay
 
