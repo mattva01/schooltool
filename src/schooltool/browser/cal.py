@@ -38,21 +38,6 @@ from schooltool.common import parse_date
 __metaclass__ = type
 
 
-def parse_datetime(date_str, time_str):
-    # XXX unit tests
-    try:
-        arg = 'start_date'
-        year, month, day = map(int, date_str.split('-'))
-        date(year, month, day) # validation
-        arg = 'start_time'
-        hours, minutes = map(int, time_str.split(':'))
-        time(hours, minutes)   # validation
-    except TypeError, e:
-        raise ValueError(str(e))
-    return datetime(year, month, day, hours, minutes)
-
-
-
 class BookingView(View):
 
     __used_for__ = IResource
@@ -109,7 +94,8 @@ class BookingView(View):
             self.owner_name = owner.__name__
 
         try:
-            start = parse_datetime(start_date_str, start_time_str)
+            start = parse_datetime('%s %s:00' % (start_date_str,
+                                                 start_time_str))
         except ValueError:
             self.error = _("Invalid date/time")
             return
@@ -493,7 +479,8 @@ class EventAddView(View):
             return self.do_GET(request)
 
         try:
-            start = parse_datetime(self.start_date, self.start_time)
+            start = parse_datetime('%s %s:00' % (self.start_date,
+                                                 self.start_time))
         except ValueError:
             self.error = _("Invalid date/time")
             return self.do_GET(request)
