@@ -245,6 +245,8 @@ class IRemovableLink(ILink):
         """Register an object that is called after the link is unlinked.
 
         The callback must conform to IUnlinkHook and be pickleable.
+
+        All callbacks will be unregistered when unlink is called.
         """
 
 

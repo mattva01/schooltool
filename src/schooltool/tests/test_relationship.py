@@ -88,6 +88,7 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
     def test(self):
         from schooltool.relationship import Link
         from schooltool.interfaces import IRelationshipRemovedEvent
+
         self.assertEquals(self.rel.title, "Tutor of a class")
         self.assertEquals(self.lklass.title, "Tutor of a class")
         self.assertEquals(self.ltutor.title, "Tutor of a class")
@@ -97,13 +98,32 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assert_(self.lklass.traverse() is self.tutor)
         self.assertEquals(list(self.klass.__links__), [self.lklass])
         self.assertEquals(list(self.tutor.__links__), [self.ltutor])
+
+        class Callback:
+            link = None
+            def notifyUnlinked(self, link):
+                self.link = link
+
+        tutor_callback = Callback()
+        self.ltutor.registerUnlinkCallback(tutor_callback)
+        klass_callback = Callback()
+        self.lklass.registerUnlinkCallback(klass_callback)
+
         self.ltutor.unlink()
+
         self.assertEquals(list(self.klass.__links__), [])
         self.assertEquals(list(self.tutor.__links__), [])
         self.assert_(self.ltutor.traverse() is self.klass)
         self.assert_(self.lklass.traverse() is self.tutor)
         self.assert_(self.ltutor.__parent__ is self.tutor)
         self.assert_(self.lklass.__parent__ is self.klass)
+
+        self.assert_(tutor_callback.link is self.ltutor)
+        self.assertEquals(len(self.ltutor.callbacks), 0)
+
+        self.assert_(klass_callback.link is self.lklass)
+        self.assertEquals(len(self.lklass.callbacks), 0)
+
         self.assertEquals(len(self.eventService.events), 1)
         e = self.eventService.events[0]
         self.assert_(IRelationshipRemovedEvent.isImplementedBy(e))
@@ -112,10 +132,6 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assert_(self.lklass in e.links)
         self.assertEquals(self.klass.events, [e])
         self.assertEquals(self.tutor.events, [e])
-
-    def test_registerUnlinkCallback(self):
-        self.assertRaises(NotImplementedError,
-                          self.ltutor.registerUnlinkCallback, None)
 
 
 class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):

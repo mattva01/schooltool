@@ -58,6 +58,7 @@ class Link(Persistent):
             raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent
         self.role = role
+        self.callbacks = []
         # self.relationship is set when this link becomes part of a
         # Relationship
 
@@ -85,9 +86,18 @@ class Link(Persistent):
         directlyProvides(event, self.reltype)
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
+        self._notifyCallbacks()
+        otherlink._notifyCallbacks()
+
+    def _notifyCallbacks(self):
+        for callback in self.callbacks:
+            callback.notifyUnlinked(self)
+        self.callbacks = []
 
     def registerUnlinkCallback(self, callback):
-        raise NotImplementedError
+        # this also has the nice side effect of notifying persistence that
+        # self has changed
+        self.callbacks += [callback]
 
 
 class _LinkRelationship(Persistent):

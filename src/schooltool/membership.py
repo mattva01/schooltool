@@ -185,14 +185,12 @@ class GroupMixin(Persistent):
         """See IGroup"""
         if not IGroupMember.isImplementedBy(member):
             raise TypeError("Members must implement IGroupMember")
-        ## XXX can we remove this?
-        ##if self._p_jar is not None:
-        ##    self._p_jar.add(member)
         key = self._next_key
         self._next_key += 1
         self._members[key] = member
         self._addhook(member)
         member.notifyAdded(self, key)
+        # XXX this should send events as well
         return key
 
     def __delitem__(self, key):
@@ -201,6 +199,7 @@ class GroupMixin(Persistent):
         self._deletehook(member)
         del self._members[key]
         member.notifyRemoved(self)
+        # XXX this should send event and call unlink notifications as well
 
     def listLinks(self, role=ISpecificURI):
         """See IQueryLinks"""
