@@ -198,8 +198,27 @@ class CalendarViewBase(View):
         Returns a list of CalendarDay objects."""
         # XXX Hardcoded Monday-based weeks.
         start = dt - timedelta(dt.weekday())
-        end = start + timedelta(6)
+        end = start + timedelta(7)
         return self.getDays(start, end)
+
+    def getMonth(self, dt):
+        """Return a nested list of days in the month that contains dt.
+
+        Returns a list of lists of date objects.  Days in neighbouring
+        months are included if they fall into a week that contains days in
+        the current month.
+        """
+        day = (date(dt.year, dt.month, 1))
+        prev_month = (dt.month == 1 and 12) or dt.month - 1
+
+        weeks = []
+        while True:
+            week = self.getWeek(day)
+            if week[0].date.month not in (dt.month, prev_month):
+                break
+            weeks.append(week)
+            day += timedelta(days=7)
+        return weeks
 
 
 class DailyCalendarView(CalendarViewBase):
@@ -314,7 +333,7 @@ class Slots(dict):
     >>> s
     {0: 'first'}
 
-    Add second value, it gets and index 1.
+    Add second value, it gets the index 1.
 
     >>> s.add("second")
     >>> s
@@ -372,30 +391,9 @@ class MonthlyCalendarView(CalendarViewBase):
                         + timedelta(7))
         return date(next_someday.year, next_someday.month, 1)
 
-    def getMonth(self):
-        """Return a nested list of days in a month.
-
-        Returns a list of lists of date objects.  Days in neighbouring
-        months are included if they fall into a week that contains days in
-        the current month.
-        """
-        # XXX Monday-based weeks.
-        cursor = self.cursor
-        prev_lastday = (date(cursor.year, cursor.month, 1) - timedelta(days=1))
-        weekday = prev_lastday.weekday()
-        if weekday != 6:
-            start = prev_lastday - timedelta(days=weekday)
-        else:
-            start = date(cursor.year, cursor.month, 1)
-        weeks = []
-
-        last = start
-        while last.month in [start.month, cursor.month]:
-            end = last + timedelta(days=7)
-            week = self.getDays(last, end)
-            weeks.append(week)
-            last = end
-        return weeks
+    def getCurrentMonth(self):
+        """Return the current month as a nested list of CalendarDays."""
+        return self.getMonth(self.cursor)
 
 
 class CalendarView(View):

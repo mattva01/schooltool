@@ -11,14 +11,14 @@
     <h2 tal:content="python:view.cursor.strftime('%B, %Y')" />
     <div class="calnav">
       <a tal:attributes="href python:view.calURL('monthly', view.prevMonth())"
-	 i18n:translate="">Previous month</a>
+         i18n:translate="">Previous month</a>
       <a tal:attributes="href request/path"
-	 i18n:translate="">Current month</a>
+         i18n:translate="">Current month</a>
       <a tal:attributes="href python:view.calURL('monthly', view.nextMonth())"
-	 i18n:translate="">Next month</a>
+         i18n:translate="">Next month</a>
     </div>
     <table class="cal_monthly"
-           tal:define="weeks view/getMonth">
+           tal:define="weeks view/getCurrentMonth">
     <tr>
       <th>&nbsp;</th>
       <th class="cal_monthly_weekday"
