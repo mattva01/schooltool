@@ -8,14 +8,16 @@
   </title>
 </head>
 <body>
-  <h1 metal:fill-slot="content-header" i18n:translate="">
-    Deleting a repeating event (<span tal:replace="event/title"
-                                      i18n:name="event_title" />)
-  </h1>
   <metal:block metal:fill-slot="body">
 
-  <form method="POST" tal:attributes="action request/URL">
+  <form method="POST" tal:attributes="action request/URL" class="standalone">
 
+    <h3 i18n:translate="">
+      Deleting a repeating event (<span tal:replace="event/title"
+                                        i18n:name="event_title" />)
+    </h3>
+
+    <fieldset>
     <p i18n:translate="">
     You are trying to delete a repeating event.
     </p>
@@ -35,7 +37,9 @@
     <input type="hidden" name="date"
            tal:attributes="value request/date" />
 
-    <div class="buttons">
+    </fieldset>
+
+    <div class="controls">
       <input class="button" type="submit" name="CURRENT" value="Current"
              i18n:attributes="value" />
       <input class="button" type="submit" name="FUTURE" value="Future"
@@ -45,7 +49,6 @@
       <input class="button" type="submit" name="CANCEL" value="Cancel"
              i18n:attributes="value" />
     </div>
-
   </form>
   </metal:block>
 
