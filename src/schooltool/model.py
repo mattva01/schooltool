@@ -25,8 +25,9 @@ $Id$
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup
 from schooltool.interfaces import URIMembership, URIMember, URIGroup
-from schooltool.relationship import RelationshipValenciesMixin
+from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
+from schooltool.membership import Membership
 
 __metaclass__ = type
 
@@ -41,7 +42,8 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
         self.title = title
         self.__name__ = None
         self.__parent__ = None
-        self._valencies.append((URIMembership, URIMember))
+        self._valencies[(URIMembership, URIMember)] = \
+                               Valency(Membership, 'member', 'group')
 
 
 class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
@@ -54,4 +56,5 @@ class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
         self.title = title
         self.__name__ = None
         self.__parent__ = None
-        self._valencies.append((URIMembership, URIGroup))
+        self._valencies[(URIMembership, URIGroup)] = \
+                               Valency(Membership, 'group', 'member')

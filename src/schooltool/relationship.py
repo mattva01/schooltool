@@ -22,7 +22,7 @@ The schooltool relationships.
 $Id$
 """
 from persistence import Persistent
-from persistence.list import PersistentList
+from persistence.dict import PersistentDict
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
 from schooltool.db import PersistentPairKeysDict
@@ -35,7 +35,7 @@ from schooltool.interfaces import IRelationshipEvent
 from schooltool.interfaces import IRelationshipAddedEvent
 from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import IRelationshipValencies
-from schooltool.interfaces import ISpecificURI, IFaceted
+from schooltool.interfaces import ISpecificURI, IFaceted, IValency
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IUnlinkHook
 from schooltool.component import inspectSpecificURI, registerRelationship
@@ -349,17 +349,26 @@ class RelationshipValenciesMixin(RelatableMixin):
 
     def __init__(self):
         RelatableMixin.__init__(self)
-        self._valencies = PersistentList()
+        self._valencies = PersistentDict()
 
     def getValencies(self):
-        result = []
-        result += self._valencies
+        result = {}
+        result.update(self._valencies)
         if IFaceted.isImplementedBy(self):
             for facet in component.FacetManager(self).iterFacets():
                 if (IRelationshipValencies.isImplementedBy(facet)
                     and facet.active):
-                    result += facet.getValencies()
+                    result.update(facet.getValencies())
         return result
+
+class Valency:
+
+    implements(IValency)
+
+    def __init__(self, schema, this, other):
+        self.schema = schema
+        self.this = this
+        self.other = other
 
 
 def setUp():

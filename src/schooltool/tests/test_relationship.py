@@ -424,19 +424,27 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.interfaces import URIMembership, URIMember
+        from schooltool.relationship import Valency
+        from schooltool.interfaces import URIMembership, URIMember, IValency
+
         rvm = RelationshipValenciesMixin()
         self.assertEquals(len(rvm.getValencies()), 0)
 
-        rvm._valencies.append((URIMembership, URIMember))
-
-        self.assertEquals(list(rvm.getValencies()),
-                          [(URIMembership, URIMember)])
+        schema = object()
+        rvm._valencies[URIMembership, URIMember] = Valency(schema, 'a', 'b')
+        result = rvm.getValencies()
+        self.assertEquals(list(result), [(URIMembership, URIMember)])
+        valency = result[URIMembership, URIMember]
+        verifyObject(IValency, valency)
+        self.assertEquals(valency.this, 'a')
+        self.assertEquals(valency.other, 'b')
+        self.assertEquals(valency.schema, schema)
 
     def test_getValencies_faceted(self):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.interfaces import ISpecificURI
         from schooltool.interfaces import URIMembership, URIMember, IFacet
+        from schooltool.relationship import Valency
         from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
 
@@ -463,10 +471,12 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         # A facet with valencies
         rvm = MyValent()
         facet = Facet()
-        facet._valencies.append((URIA, URIB))
+        schema = object()
+        facet._valencies[(URIA, URIB)] = Valency(schema, 'a', 'b')
         FacetManager(rvm).setFacet(facet, self)
 
-        rvm._valencies.append((URIMembership, URIMember))
+        schema1, this, other = object(), 'c', 'd'
+        rvm._valencies[URIMembership, URIMember] = Valency(schema1, 'c', 'd')
 
         self.assertEqualsSorted(list(rvm.getValencies()),
                                 [(URIMembership, URIMember), (URIA, URIB)])

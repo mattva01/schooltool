@@ -333,10 +333,21 @@ class IRelationshipValencies(Interface):
     """
 
     def getValencies():
-        """Returns a sequence of tuples of relationship type URI and role
-        URI of the role this object takes in that relationship.
+        """Returns a dictionary with tuples (relationship type URI,
+        URI of a role of this object) as keys and IValency objects as
+        values.
         """
 
+class IValency(Interface):
+    """An object describing a single valency"""
+
+    schema = Attribute("""A relationship schema (IRelationshipSchema)""")
+
+    this = Attribute(
+        """A keyword argument the schema takes for this object""")
+
+    other = Attribute(
+        """A keyword argument the schema takes for the other object""")
 
 class IRelationshipSchemaFactory(Interface):
 
