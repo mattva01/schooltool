@@ -425,10 +425,6 @@ class Request(http.Request):
 
         This is called in a separate thread.
         """
-        # Get a persistent application object from ZODB
-        root = self.zodb_conn.root()
-        app = root[self.site.rootName]
-
         # Find out the authenticated user
         self.authenticated_user = None
         try:
@@ -441,9 +437,20 @@ class Request(http.Request):
             return body
 
         # Traverse and render the resource
+        app = self.getApplication()
         resrc = self.traverse(app)
         body = self.render(resrc)
         return body
+
+    def getApplication(self):
+        """Return the persistent application object from the ZODB.
+
+        Should be called only during request processing.
+        """
+        assert self.zodb_conn is not None, \
+               "Request.getApplication is only available during request" \
+               " processing"
+        return self.zodb_conn.root()[self.site.rootName]
 
     def maybeAuthenticate(self):
         """Try to authenticate.
@@ -469,8 +476,7 @@ class Request(http.Request):
         Logs a message into the application log and raises AuthenticationError
         if the authentication is not successful.
         """
-        root = self.zodb_conn.root()
-        app = root[self.site.rootName]
+        app = self.getApplication()
         try:
             self.authenticated_user = self.site.authenticate(app, username,
                                                              password)

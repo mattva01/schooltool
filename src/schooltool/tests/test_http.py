@@ -729,6 +729,12 @@ class TestRequest(unittest.TestCase):
                   [(logging.WARNING, "Failed login, username: 'fred'"),
                    (logging.WARNING, "Failed login, username: 'freq'")])
 
+    def test_getApplication(self):
+        rq = self.newRequest('/')
+        rq.zodb_conn = ConnectionStub()
+        app = rq.getApplication()
+        self.assert_(app is ConnectionStub.app)
+
     def test_maybeAuthenticate(self):
         rq = self.newRequest('/')
         rq.applogger = AppLoggerStub()

@@ -25,9 +25,19 @@ $Id$
 import unittest
 
 from twisted.python.failure import Failure
-
+from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import AppSetupMixin
+
+__metaclass__ = type
+
+
+class ApplicationStub:
+
+    def __init__(self, ticketService):
+        from schooltool.interfaces import IServiceManager
+        directlyProvides(self, IServiceManager) # avoid global imports
+        self.ticketService = ticketService
 
 
 class TestBrowserRequest(unittest.TestCase):
@@ -40,7 +50,8 @@ class TestBrowserRequest(unittest.TestCase):
         from schooltool.interfaces import AuthenticationError
         request = self.createRequest()
         request._ts = ts
-        request._getTicketService = lambda: request._ts
+        app = ApplicationStub(ts)
+        request.getApplication = lambda: app
         def authenticate(username, password):
             if username == 'username' and password == 'password':
                 request.authenticated_user = user

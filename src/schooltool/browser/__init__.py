@@ -60,18 +60,12 @@ class BrowserRequest(Request):
 
     error_template = Template('www/error.pt')
 
-    def _getTicketService(self):
-        """Return the ticket service."""
-        root = self.zodb_conn.root()
-        app = root[self.site.rootName]
-        return getTicketService(app)
-
     def maybeAuthenticate(self):
         """Try to authenticate if the authentication cookie is there."""
         auth_cookie = self.getCookie('auth')
         if auth_cookie:
             try:
-                ticketService = self._getTicketService()
+                ticketService = getTicketService(self.getApplication())
                 credentials = ticketService.verifyTicket(auth_cookie,
                                                          session_time_limit)
                 self.authenticate(*credentials)
