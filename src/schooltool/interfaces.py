@@ -83,6 +83,7 @@ class IServiceManager(Interface):
 
     eventService = Attribute("""Event service for this application""")
 
+
 #
 # Facets
 #
@@ -126,6 +127,7 @@ class IFacetAPI(Interface):
     def getFacetItems(ob):
         """Returns a sequence of (key, facet) for all facets of an object."""
 
+
 #
 # URIs
 #
@@ -147,6 +149,7 @@ class ISpecificURI(Interface):
     interface names with 'URI'.
     """
 
+
 class IURIAPI(Interface):
 
     def inspectSpecificURI(uri):
@@ -163,17 +166,20 @@ class IURIAPI(Interface):
         We're only approximating to the spec.
         """
 
+
 class URIGroup(ISpecificURI):
     """http://schooltool.org/ns/membership/group
 
     A role of a containing group.
     """
 
+
 class URIMember(ISpecificURI):
     """http://schooltool.org/ns/membership/member
 
     A group member role.
     """
+
 
 #
 # Relationships
@@ -210,8 +216,8 @@ class IRelatable(Interface):
     """An object which can take part in relationships."""
 
     __links__ = Attribute(
-        """A set of links of relationships indexed by serial numbers."""
-        )
+        """A set of links of relationships.""")
+
 
 class IQueryLinks(Interface):
     """An interface for querying a collection of links for those that
@@ -224,6 +230,7 @@ class IQueryLinks(Interface):
         argument of ISpecificURI therefore means 'all roles'.
         """
 
+
 class IRelationshipAPI(Interface):
 
     def relate(title, a, role_a, b, role_b):
@@ -232,20 +239,22 @@ class IRelationshipAPI(Interface):
         Returns a tuple of links attached to a and b respectively.
 
         Example::
-                 my report
-             /---------------->
-          officer 'command'  soldier
-            <-----------------/
-                 my superior
+                   my report
+              /----------------->
+          officer  'command'  soldier
+              <-----------------/
+                   my superior
 
         relate('command',
-                 officer, IMySuperiorURI,
-                 soldier, IMyReportURI)
+                 officer, URIMySuperior,
+                 soldier, URIMyReport)
 
         Returns a two-tuple of:
-          * The link traversable from the officer, role is IMyReportURI
-          * The link traversable from the soldier, role is IMySuperiorURI
+          * The link traversable from the officer, role is URIMyReport
+          * The link traversable from the soldier, role is URIMySuperior
         """
+
+
 #
 # Groups and membership
 #

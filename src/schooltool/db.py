@@ -28,6 +28,7 @@ from persistence.dict import PersistentDict
 
 __metaclass__ = type
 
+
 class PersistentListSet(Persistent):
     """A set implemented with a PersistentList as a backend storage.
 
@@ -214,9 +215,11 @@ class PersistentTuplesDict(PersistentKeysDict):
             if key[idx]._p_oid is None:
                 self._p_jar.add(key[idx])
 
+
 class HookablePJar:
     """A descriptor that proxies Persistent._p_jar with a callback on __set__.
     """
+
     def __init__(self, afterSet=None):
         self._afterSet = afterSet
 
@@ -234,8 +237,9 @@ class HookablePJar:
     def __doc__(self, inst):
         return Persistent._p_jar.__doc__(inst)
 
+
 class PersistentKeysSet(Persistent):
-    """A set for persistent objects that uses PersistentKeysSet as a
+    """A set for persistent objects that uses PersistentKeysDict as a
     backend.
     """
 
@@ -259,3 +263,4 @@ class PersistentKeysSet(Persistent):
         datamanager.add(self._data)
 
     _p_jar = HookablePJar(setDataManager)
+

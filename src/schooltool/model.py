@@ -37,6 +37,7 @@ __metaclass__ = type
 # A hook for tests
 _setFactory = PersistentKeysSet
 
+
 class GroupLink:
     __slots__ = '_group'
 
@@ -49,6 +50,7 @@ class GroupLink:
     role = URIGroup
     title = "Membership"
 
+
 class MemberLink:
     __slots__ = '_member'
 
@@ -60,6 +62,7 @@ class MemberLink:
 
     role = URIMember
     title = "Membership"
+
 
 class GroupMember:
     """A mixin providing the IGroupMember interface.
@@ -99,6 +102,7 @@ class GroupMember:
             return [GroupLink(group) for group in self.groups()]
         else:
             return []
+
 
 class FacetedMixin:
 
@@ -188,13 +192,15 @@ class Group(Persistent, GroupMember, FacetedEventTargetMixin):
         del self._members[key]
 
     def listLinks(self, role=ISpecificURI):
-        l = GroupMember.listLinks(self, role)
+        links = GroupMember.listLinks(self, role)
         if URIMember.extends(role, False):
-            l += [MemberLink(member) for member in self.values()]
-        return l
+            links += [MemberLink(member) for member in self.values()]
+        return links
+
 
 class RootGroup(Group):
     """A persistent application root object"""
+
     implements(IRootGroup)
 
     def __init__(self, name, facetFactory=None):

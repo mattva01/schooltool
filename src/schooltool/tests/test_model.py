@@ -95,6 +95,7 @@ class TestURIs(unittest.TestCase):
         from schooltool.component import inspectSpecificURI
         inspectSpecificURI(URIMember)
 
+
 class TestGroupMember(MemberSetup, unittest.TestCase):
 
     def test_notifyAdd(self):
@@ -150,7 +151,6 @@ class TestGroupMember(MemberSetup, unittest.TestCase):
         for role in (URIMember, URIFoo):
             links = member.listLinks(role)
             self.assertEqual(links, [], str(role))
-
 
 
 class TestGroup(MemberSetup, unittest.TestCase):
@@ -263,6 +263,7 @@ class TestGroup(MemberSetup, unittest.TestCase):
         self.assertEqual([link.traverse() for link in links], [root])
         self.assertEqual([link.role for link in links], [URIGroup])
         self.assertEqual([link.title for link in links], ["Membership"])
+
 
 class TestRootGroup(unittest.TestCase):
 

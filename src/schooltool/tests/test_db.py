@@ -137,6 +137,7 @@ class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(TypeError, d.__contains__, object())
         self.assert_(P() not in d)
 
+
 class TestPersistentTuplesDict(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
@@ -276,6 +277,7 @@ class TestPersistentTuplesDict(unittest.TestCase, EqualsSortedMixin):
         self.assertRaises(TypeError, d.__contains__, (ob, p, ob))
         self.assertRaises(ValueError, d.__contains__, (ob, ob, p, p))
         self.assert_((object(), ob2, p) not in d)
+
 
 class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
 

@@ -59,6 +59,7 @@ class Link(Persistent):
     def traverse(self):
         return self.relationship.traverse(self).__parent__
 
+
 class Relationship(Persistent):
     """A central part of a relationship.
 

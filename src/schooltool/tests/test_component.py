@@ -245,6 +245,7 @@ class TestSpecificURI(unittest.TestCase):
         for string in bad:
             self.assert_(not isURI(string), string)
 
+
 class Relatable:
     implements(IRelatable)
     def __init__(self):
@@ -254,6 +255,7 @@ class URISuperior(ISpecificURI): """http://army.gov/ns/superior"""
 class URIReport(ISpecificURI): """http://army.gov/ns/report"""
 
 class TestRelate(unittest.TestCase):
+
     def test_relate(self):
         from schooltool.component import relate
         officer = Relatable()
