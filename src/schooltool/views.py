@@ -543,6 +543,7 @@ class RelationshipsView(View, XMLPseudoParser):
             request.setResponseCode(400, 'Bad request')
             request.setHeader('Content-Type', 'text/plain')
             return "Valency does not exist"
+
         kw = {val.this: self.context, val.other: other}
         links = val.schema(**kw)
         link = links[val.this]
@@ -550,7 +551,8 @@ class RelationshipsView(View, XMLPseudoParser):
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
-        return "Relationship created"
+        return "Relationship created: %s" % location
+
 
 class LinkView(View):
 
@@ -566,6 +568,7 @@ class LinkView(View):
         self.context.unlink()
         request.setHeader('Content-Type', 'text/plain')
         return "Link removed"
+
 
 def setUp():
     registerView(IPerson, PersonView)

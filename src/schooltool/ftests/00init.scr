@@ -29,7 +29,7 @@ POST> href="/groups/teachers"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/groups/teachers/relationships/0001
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -38,7 +38,7 @@ POST> href="/groups/students"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/groups/students/relationships/0001
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -47,7 +47,7 @@ POST> href="/groups/cleaners"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/groups/cleaners/relationships/0001
 
 SchoolTool> put /persons/Mark
 PUT> title="Mark"
@@ -91,7 +91,7 @@ POST> href="/persons/Mark"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/persons/Mark/relationships/0001
 
 SchoolTool> post /groups/teachers/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -100,7 +100,7 @@ POST> href="/persons/Steve"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/persons/Steve/relationships/0001
 
 SchoolTool> post /groups/students/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -109,7 +109,7 @@ POST> href="/persons/Aiste"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/persons/Aiste/relationships/0001
 
 SchoolTool> post /groups/cleaners/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -118,7 +118,7 @@ POST> href="/persons/Albert"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/persons/Albert/relationships/0001
 
 SchoolTool> post /groups/cleaners/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -127,7 +127,7 @@ POST> href="/persons/Marius"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created
+Relationship created: http://localhost/persons/Marius/relationships/0001
 
 SchoolTool> post /persons/Marius/facets
 POST> factory="eventlog"

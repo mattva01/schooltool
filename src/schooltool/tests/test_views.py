@@ -851,8 +851,9 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                      [l.traverse() for l in self.sub.listLinks()])
         self.assertEquals(request.headers['Content-Type'],
                           "text/plain")
-        self.assertEquals(request.headers['Location'],
-                          "http://localhost/groups/new/relationships/0001")
+        location = "http://localhost/groups/new/relationships/0001"
+        self.assertEquals(request.headers['Location'], location)
+        self.assert_(location in result)
 
     def testBadPOSTs(self):
         bad_requests = (
