@@ -24,6 +24,7 @@ $Id$
 
 import os
 import sys
+import errno
 import getopt
 import libxml2
 import logging
@@ -339,7 +340,7 @@ class Server:
             self.db = db_configuration.open()
         except IOError, e:
             msg = _("Could not initialize the database:\n  ") + unicode(e)
-            if e[0] == 11: # Resource temporarily unavailable
+            if e.errno == errno.EAGAIN: # Resource temporarily unavailable
                 msg += "\n"
                 msg += _("Perhaps another SchoolTool instance is using it?")
             raise SchoolToolError(msg)
