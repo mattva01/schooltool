@@ -77,4 +77,4 @@ mkdir -p $DUMPDIR/calendars
 
 export PYTHONPATH
 
-${PYTHON} schoolbell-export.py $OLDDB $OUTFILE ${DUMPDIR}/calendars
+${PYTHON} schoolbell-export.py $OLDDB ${DUMPDIR}/$OUTFILE ${DUMPDIR}/calendars
