@@ -106,7 +106,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             UID:school-period-/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
-            DTEND;VALUE=DATE:20040930
+            DTEND;VALUE=DATE:20041001
             END:VEVENT
             BEGIN:VEVENT
             UID:random@example.com
@@ -213,7 +213,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             UID:random2@example.com
             SUMMARY:Schoolday
             DTSTART;VALUE=DATE:20040912
-            DTEND;VALUE=DATE:20040913
+            DTEND;VALUE=DATE:20040914
             END:VEVENT
             END:VCALENDAR
         """)
@@ -256,7 +256,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             UID:school-period-/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20040901
-            DTEND;VALUE=DATE:20040930
+            DTEND;VALUE=DATE:20041001
             END:VEVENT
             BEGIN:VEVENT
             UID:random@example.com

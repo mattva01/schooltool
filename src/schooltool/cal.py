@@ -396,8 +396,7 @@ class VEvent:
         Also sets the following attributes:
           all_day_event     True if this is an all-day event
           dtstart           start of the event (inclusive)
-          dtend             end of the event (inclusive for all-day events,
-                            not inclusive for other events)
+          dtend             end of the event (not inclusive)
           duration          length of the event
           rdates            a list of recurrence dates or periods
           exdates           a list of exception dates
@@ -424,15 +423,17 @@ class VEvent:
         if self.hasProp('DURATION'):
             self.duration = self.getOne('DURATION')
             self.dtend = self.dtstart + self.duration
-            if self.all_day_event:
-                self.dtend -= datetime.date.resolution
         else:
-            self.dtend = self.getOne('DTEND', self.dtstart)
+            self.dtend = self.getOne('DTEND', None)
+            if self.dtend is None:
+                self.dtend = self.dtstart
+                if self.all_day_event:
+                    self.dtend += datetime.date.resolution
             self.duration = self.dtend - self.dtstart
-            if self.all_day_event:
-                self.duration += datetime.date.resolution
 
         if self.dtstart > self.dtend:
+            raise ICalParseError("Event start time should precede end time")
+        if self.all_day_event and self.dtstart == self.dtend:
             raise ICalParseError("Event start time should precede end time")
 
         self.rdates = self._extractListOfDates('RDATE', self.rdate_types,

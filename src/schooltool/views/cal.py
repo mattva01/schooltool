@@ -109,7 +109,7 @@ class SchooldayModelCalendarView(View):
                     else:
                         first, last = event.dtstart, event.dtend
                 elif summary == 'schoolday':
-                    if event.dtend != event.dtstart:
+                    if event.duration != datetime.date.resolution:
                         return textErrorPage(request,
                                     "Schoolday longer than one day")
                     days.append(event.dtstart)
@@ -119,10 +119,10 @@ class SchooldayModelCalendarView(View):
             if first is None:
                 return textErrorPage(request, "School period not defined")
             for day in days:
-                if not first <= day <= last:
+                if not first <= day < last:
                     return textErrorPage(request,
                                          "Schoolday outside school period")
-            self.context.reset(first, last)
+            self.context.reset(first, last - datetime.date.resolution)
             for day in days:
                 self.context.add(day)
         request.setHeader('Content-Type', 'text/plain')

@@ -236,7 +236,7 @@ class TestVEvent(unittest.TestCase):
         vevent = VEvent()
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 2)
-        vevent.dtend = date(2003, 1, 4)
+        vevent.dtend = date(2003, 1, 5)
         vevent.duration = timedelta(days=3)
         vevent.rdates = []
         vevent.exdates = []
@@ -251,7 +251,7 @@ class TestVEvent(unittest.TestCase):
         vevent = VEvent()
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 5)
-        vevent.dtend = date(2003, 1, 5)
+        vevent.dtend = date(2003, 1, 6)
         vevent.duration = timedelta(days=1)
         vevent.rdates = [date(2003, 1, 2), date(2003, 1, 8), date(2003, 1, 8)]
         vevent.exdates = []
@@ -270,7 +270,7 @@ class TestVEvent(unittest.TestCase):
         expected = [date(2003, 1, 2), date(2003, 1, 8)]
         self.assertEquals(list(vevent.iterDates()), expected)
 
-        vevent.dtend = date(2003, 1, 6)
+        vevent.dtend = date(2003, 1, 7)
         vevent.duration = timedelta(days=2)
         vevent.exdates = [date(2003, 1, 5), date(2003, 1, 3)]
         expected = [date(2003, 1, 2), date(2003, 1, 3),
@@ -311,16 +311,16 @@ class TestVEvent(unittest.TestCase):
         vevent.validate()
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
-        self.assertEquals(vevent.dtend, date(2001, 2, 3))
+        self.assertEquals(vevent.dtend, date(2001, 2, 4))
         self.assertEquals(vevent.duration, timedelta(days=1))
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
-        vevent.add('dtend', '20010204', {'VALUE': 'DATE'})
+        vevent.add('dtend', '20010205', {'VALUE': 'DATE'})
         vevent.validate()
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
-        self.assertEquals(vevent.dtend, date(2001, 2, 4))
+        self.assertEquals(vevent.dtend, date(2001, 2, 5))
         self.assertEquals(vevent.duration, timedelta(days=2))
 
         vevent = VEvent()
@@ -329,12 +329,17 @@ class TestVEvent(unittest.TestCase):
         vevent.validate()
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
-        self.assertEquals(vevent.dtend, date(2001, 2, 4))
+        self.assertEquals(vevent.dtend, date(2001, 2, 5))
         self.assertEquals(vevent.duration, timedelta(days=2))
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('dtend', '20010201', {'VALUE': 'DATE'})
+        self.assertRaises(ICalParseError, vevent.validate)
+
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
+        vevent.add('dtend', '20010203', {'VALUE': 'DATE'})
         self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_not_all_day_events(self):
@@ -513,7 +518,7 @@ class TestICalReader(unittest.TestCase):
         markNonSchooldays(reader, cal)
         self.assert_(cal.isSchoolday(date(2003, 12, 24)))
         self.assert_(not cal.isSchoolday(date(2003, 12, 25)))
-        self.assert_(not cal.isSchoolday(date(2003, 12, 26)))
+        self.assert_(cal.isSchoolday(date(2003, 12, 26)))
 
         reader = ICalReader(StringIO(dedent("""
                     BEGIN:VCALENDAR
