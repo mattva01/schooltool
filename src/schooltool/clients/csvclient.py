@@ -115,7 +115,7 @@ import sys
 import base64
 import httplib
 from schooltool.translation import ugettext as _
-from schooltool.csvimport import CSVImporterBase
+from schooltool.csvimport import CSVImporterBase, DataError
 
 
 class HTTPClient:

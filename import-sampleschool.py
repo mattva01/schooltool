@@ -36,7 +36,7 @@ class SampleSchoolImporter:
     ssl = False
     interactive = False
 
-    expected_version = 'SchoolTool/0.6'
+    expected_version = 'SchoolTool/0.7'
 
     datadir = datadir
     ttconfig_filename = datadir + '/ttconfig.data'
@@ -51,7 +51,6 @@ class SampleSchoolImporter:
             if self.interactive:
                 self.input_settings()
             self.check_server_running()
-            self.check_server_empty()
             self.import_csv_files()
             self.import_timetable_data()
         except Error, e:
@@ -147,21 +146,6 @@ class SampleSchoolImporter:
             if version != self.expected_version:
                 raise Error(_("Server version is %s, expected %s")
                             % (version, self.expected_version))
-
-    def check_server_empty(self):
-        """Check that the server is running, and it is the correct version."""
-        for path in '/groups/teachers', '/ttschemas/default':
-            try:
-                # urllib.urlopen uses FancyURLopener which is too fancy
-                f = urllib.URLopener().open("http://%s:%s%s"
-                                            % (self.host, self.port, path))
-            except IOError:
-                # good, we got a 404
-                return
-            else:
-                raise Error(_("SchoolTool server already has data imported."
-                              " Remove your Data.fs if necessary,\n"
-                              "restart the server and try again."))
 
     def import_csv_files(self):
         """Import data from CSV files."""
