@@ -13,7 +13,7 @@
 ##############################################################################
 """Utility classes or functions
 
-$Id: util.py,v 1.1.2.2 2004/02/13 15:05:02 fdrake Exp $
+$Id: util.py,v 1.2 2004/02/20 16:56:56 fdrake Exp $
 """
 
 from transaction.interfaces import IRollback

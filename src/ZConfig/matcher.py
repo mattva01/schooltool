@@ -265,6 +265,7 @@ class SectionValue:
         self.__dict__.update(values)
         self._name = name
         self._matcher = matcher
+        self._attributes = tuple(values.keys())
 
     def __repr__(self):
         if self._name:
@@ -296,3 +297,6 @@ class SectionValue:
 
     def getSectionMatcher(self):
         return self._matcher
+
+    def getSectionAttributes(self):
+        return self._attributes

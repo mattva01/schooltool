@@ -34,6 +34,12 @@ class MySection:
         self.conf = value
 
 
+def get_section_attributes(section):
+    L = list(section.getSectionAttributes())
+    L.sort()
+    return L
+
+
 class SchemaTestCase(TestBase):
     """Tests of the basic schema support itself."""
 
@@ -92,6 +98,8 @@ class SchemaTestCase(TestBase):
         eq(conf.b, 'ABC')
         eq(conf.c, ['UPP', 'ER', 'CASE'])
         eq(conf.d, ['NOT', 'LOWER', 'CASE'])
+        eq(get_section_attributes(conf),
+           ["a", "b", "c", "d"])
 
     def test_app_sectiontype(self):
         schema = self.load_schema_text("""\
@@ -127,6 +135,8 @@ class SchemaTestCase(TestBase):
                                      """)
         self.assert_(conf.s1 is not None)
         self.assert_(conf.s2 is not None)
+        self.assertEqual(get_section_attributes(conf),
+                         ["s1", "s2"])
 
     def test_deeply_nested_sections(self):
         schema = self.load_schema_text("""\
@@ -158,6 +168,14 @@ class SchemaTestCase(TestBase):
         eq(conf.sect.sect.sect.key, "type1-value")
         eq(conf.sect.sect.key, "sect2-value")
         eq(conf.sect.key, "sect3-value")
+        eq(get_section_attributes(conf),
+           ["sect"])
+        eq(get_section_attributes(conf.sect),
+           ["key", "sect"])
+        eq(get_section_attributes(conf.sect.sect),
+           ["key", "sect"])
+        eq(get_section_attributes(conf.sect.sect.sect),
+           ["key"])
 
     def test_multivalued_keys(self):
         schema = self.load_schema_text("""\
@@ -194,6 +212,8 @@ class SchemaTestCase(TestBase):
         self.assertEqual(conf.b, [1, 2])
         self.assertEqual(conf.c, [41, 42, 43])
         self.assertEqual(conf.d, [])
+        self.assertEqual(get_section_attributes(conf),
+                         ["a", "b", "c", "d"])
 
     def test_multikey_required(self):
         schema = self.load_schema_text("""\
@@ -254,6 +274,8 @@ class SchemaTestCase(TestBase):
                                      a foo
                                      b bar
                                      """, num_handlers=2)
+        self.assertEqual(get_section_attributes(conf),
+                         ["a", "b"])
         self.assertRaises(ZConfig.ConfigurationError,
                           self.handlers, {'abc': id, 'ABC': id, 'def': id})
         self.assertRaises(ZConfig.ConfigurationError,
@@ -354,6 +376,7 @@ class SchemaTestCase(TestBase):
                                      </t2>
                                      """)
         eq = self.assertEqual
+        eq(get_section_attributes(conf), ["g"])
         eq(len(conf.g), 4)
         eq(conf.g[0].k1, "default1")
         eq(conf.g[1].k1, "value1")
@@ -380,6 +403,8 @@ class SchemaTestCase(TestBase):
         # make sure we can use the extension in a config:
         conf = self.load_config_text(schema, "<extra thing/>")
         self.assertEqual(conf.thing.getSectionType(), "extra")
+        self.assertEqual(get_section_attributes(conf), ["thing"])
+        self.assertEqual(get_section_attributes(conf.thing), [])
 
     def test_abstracttype_extension_errors(self):
         # specifying a non-existant abstracttype
@@ -405,6 +430,7 @@ class SchemaTestCase(TestBase):
             """)
         conf = self.load_config_text(schema, "some-key 42")
         self.assertEqual(conf.keymap, {'some-key': 42})
+        self.assertEqual(get_section_attributes(conf), ["keymap"])
 
     def test_arbitrary_multikey_required(self):
         schema = self.load_schema_text("""\
@@ -435,6 +461,7 @@ class SchemaTestCase(TestBase):
                                      </sect>
                                      """)
         self.assertEqual(conf.stuff.keymap, {'some-key': ['42', '43']})
+        self.assertEqual(get_section_attributes(conf), ["stuff"])
 
     def test_arbitrary_multikey_optional_empty(self):
         schema = self.load_schema_text("""\
@@ -510,6 +537,8 @@ class SchemaTestCase(TestBase):
         self.assertEqual(conf.k1, 'v1')
         self.assertEqual(conf.k2, 3)
         self.assertEqual(conf.keymap, {'some-key': 42})
+        self.assertEqual(get_section_attributes(conf),
+                         ["k1", "k2", "keymap"])
 
     def test_arbitrary_key_missing(self):
         schema = self.load_schema_text("""\
@@ -648,6 +677,8 @@ class SchemaTestCase(TestBase):
         conf = self.load_config_text(t, "<s/>")
         self.assertEqual(conf.tkey, "tkey-default")
         self.assertEqual(conf.section.skey, "skey-default")
+        self.assertEqual(get_section_attributes(conf), ["section", "tkey"])
+        self.assertEqual(get_section_attributes(conf.section), ["skey"])
 
     def test_datatype_conversion_error(self):
         schema_url = "file:///tmp/fake-url-1.xml"
@@ -706,8 +737,11 @@ class SchemaTestCase(TestBase):
                                        k2 k2-value
                                      </t2>
                                      """)
-        self.assertEqual(conf.s.k1, "k1-value")
-        self.assertEqual(conf.s.k2, "k2-value")
+        eq = self.assertEqual
+        eq(conf.s.k1, "k1-value")
+        eq(conf.s.k2, "k2-value")
+        eq(get_section_attributes(conf), ["s"])
+        eq(get_section_attributes(conf.s), ["k1", "k2"])
 
     def test_sectiontype_extension_errors(self):
         # cannot override key from base
@@ -756,6 +790,7 @@ class SchemaTestCase(TestBase):
             """)
         self.assertEqual(conf.foo.foo, "bar")
         self.assertEqual(conf.foo.Foo, "BAR")
+        self.assertEqual(get_section_attributes(conf.foo), ["Foo", "foo"])
 
     def test_sectiontype_override_keytype(self):
         schema = self.load_schema_text("""\
@@ -784,6 +819,7 @@ class SchemaTestCase(TestBase):
         L = conf.derived.map.items()
         L.sort()
         self.assertEqual(L, [("example.com", "foo")])
+        self.assertEqual(get_section_attributes(conf), ["base", "derived"])
 
     def test_sectiontype_inherited_datatype(self):
         schema = self.load_schema_text("""\
@@ -833,6 +869,7 @@ class SchemaTestCase(TestBase):
                                      "foo foo-value\n")
         self.assertEqual(conf.foo, "foo-value")
         self.assertEqual(conf.Foo, "Foo-value")
+        self.assertEqual(get_section_attributes(conf), ["Foo", "foo"])
         # key mis-match based on case:
         self.assertRaises(ZConfig.ConfigurationError,
                           self.load_config_text, schema, "FOO frob\n")

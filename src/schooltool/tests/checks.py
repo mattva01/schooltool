@@ -62,14 +62,14 @@ class TransactionChecks:
     def startTest(self, test):
         from transaction import get_transaction
         txn = get_transaction()
-        self.had_resources = bool(txn._objects)
+        self.had_resources = bool(txn._resources)
 
     def stopTest(self, test):
         if self.had_resources:
             return
         from transaction import get_transaction
         txn = get_transaction()
-        if txn._objects:
+        if txn._resources:
             warn("%s left an unclean transaction" % test)
 
 
