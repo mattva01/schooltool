@@ -24,33 +24,7 @@ import difflib
 import cgi
 import libxml2
 
-
-def dedent(text):
-    """Remove leading indentation from tripple quoted strings.
-
-    Example:
-       foo = dedent('''\
-                some text
-                is here
-                   with maybe some indents
-                ''')
-    foo now contains 'some text\nis here\n   with maybe some indents\n'.
-
-    Corner cases (mixing tabs and spaces, lines that are indented less than
-    the first line) are not
-    handled yet.
-    """
-    lines = text.splitlines()
-    first, limit = 0, len(lines)
-    while first < limit and not lines[first]:
-        first += 1
-    if first >= limit:
-        return ''
-    firstline = lines[first]
-    indent, limit = 0, len(firstline)
-    while indent < limit and firstline[indent] in (' ', '\t'):
-        indent += 1
-    return '\n'.join([line[indent:] for line in lines[first:]])
+from schooltool.common import dedent  # it used to live here
 
 
 def unidiff(old, new, oldlabel="expected output", newlabel="actual output"):

@@ -29,24 +29,27 @@ __metaclass__ = type
 def parse_date(value):
     """Parse a ISO-8601 YYYY-MM-DD date value.
 
-    >>> parse_date('2003-09-01')
-    datetime.date(2003, 9, 1)
-    >>> parse_date('20030901')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '20030901'
-    >>> parse_date('2003-IX-01')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '2003-IX-01'
-    >>> parse_date('2003-09-31')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '2003-09-31'
-    >>> parse_date('2003-09-30-15-42')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid date: '2003-09-30-15-42'
+    Examples:
+
+        >>> parse_date('2003-09-01')
+        datetime.date(2003, 9, 1)
+        >>> parse_date('20030901')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '20030901'
+        >>> parse_date('2003-IX-01')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '2003-IX-01'
+        >>> parse_date('2003-09-31')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '2003-09-31'
+        >>> parse_date('2003-09-30-15-42')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid date: '2003-09-30-15-42'
+
     """
     try:
         y, m, d = map(int, value.split('-'))
@@ -58,24 +61,27 @@ def parse_date(value):
 def parse_time(value):
     """Parse a ISO 8601 HH:MM time value.
 
-    >>> parse_time('01:25')
-    datetime.time(1, 25)
-    >>> parse_time('9:15')
-    datetime.time(9, 15)
-    >>> parse_time('12:1')
-    datetime.time(12, 1)
-    >>> parse_time('00:00')
-    datetime.time(0, 0)
-    >>> parse_time('23:59')
-    datetime.time(23, 59)
-    >>> parse_time('24:00')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid time: '24:00'
-    >>> parse_time('06:30PM')
-    Traceback (most recent call last):
-      ...
-    ValueError: Invalid time: '06:30PM'
+    Examples:
+
+        >>> parse_time('01:25')
+        datetime.time(1, 25)
+        >>> parse_time('9:15')
+        datetime.time(9, 15)
+        >>> parse_time('12:1')
+        datetime.time(12, 1)
+        >>> parse_time('00:00')
+        datetime.time(0, 0)
+        >>> parse_time('23:59')
+        datetime.time(23, 59)
+        >>> parse_time('24:00')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid time: '24:00'
+        >>> parse_time('06:30PM')
+        Traceback (most recent call last):
+          ...
+        ValueError: Invalid time: '06:30PM'
+
     """
     try:
         h, m = map(int, value.split(':'))
@@ -95,6 +101,23 @@ def parse_datetime(s):
       YYYY-MM-DDTHH:MM:SS.ssssss
 
     Returns a datetime.datetime object without a time zone.
+
+    Examples:
+
+        >>> parse_datetime('2003-04-05 11:22:33.456789')
+        datetime.datetime(2003, 4, 5, 11, 22, 33, 456789)
+
+        >>> parse_datetime('2003-04-05 11:22:33.456')
+        datetime.datetime(2003, 4, 5, 11, 22, 33, 456000)
+
+        >>> parse_datetime('2003-04-05 11:22:33.45678999')
+        datetime.datetime(2003, 4, 5, 11, 22, 33, 456789)
+
+        >>> parse_datetime('01/02/03')
+        Traceback (most recent call last):
+          ...
+        ValueError: Bad datetime: 01/02/03
+
     """
     m = re.match("(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
     if not m:
@@ -106,3 +129,32 @@ def parse_datetime(s):
         ssssss = 0
     y, m, d, hh, mm, ss = map(int, m.groups()[:6])
     return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
+
+
+def dedent(text):
+    r"""Remove leading indentation from tripple quoted strings.
+
+    Example:
+
+        >>> dedent('''
+        ...     some text
+        ...     is here
+        ...        with maybe some indents
+        ...     ''')
+        ...
+        'some text\nis here\n   with maybe some indents\n'
+
+    Corner cases (mixing tabs and spaces, lines that are indented less than
+    the first line) are not handled yet.
+    """
+    lines = text.splitlines()
+    first, limit = 0, len(lines)
+    while first < limit and not lines[first]:
+        first += 1
+    if first >= limit:
+        return ''
+    firstline = lines[first]
+    indent, limit = 0, len(firstline)
+    while indent < limit and firstline[indent] in (' ', '\t'):
+        indent += 1
+    return '\n'.join([line[indent:] for line in lines[first:]])
