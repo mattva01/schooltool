@@ -17,15 +17,18 @@ style (see http://conveyor.com/RESTwiki/moin.cgi).
 System requirements
 -------------------
 
-- Python 2.3 (www.python.org)
+- Python 2.3 (http://www.python.org/)
   Note for Debian users: you need both python2.3 and python2.3-xml packages
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
-- Twisted 1.1.0 or newer (www.twistedmatrix.com)
+- Twisted 1.1.0 or newer (http://www.twistedmatrix.com/)
   It is needed for the server only
 
-- wxPython 2.4 (www.wxpython.org)
+- Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
+  It is needed for the server only
+
+- wxPython 2.4 (http://www.wxpython.org/)
   It is needed for the wxWindows client only
 
 - Development environment and a C compiler
@@ -49,6 +52,7 @@ scripts:
   schooltool-server.py      starts the SchoolTool server
   schooltool-client.py      starts the command line client
   wxschooltool.py           starts the wxWindows GUI client
+  generate-sampleschool.py  generates sample school data
   import-sampleschool.py    imports sample data into the server
 
 The Makefile also contains several shortcuts, which are kept mainly for

@@ -22,7 +22,8 @@ Random sample data generation script.
 
 Accepts a random seed as an optional argument.
 
-Generates three CSV files: groups.csv, pupils.csv and teacher.csv
+Generates four CSV files: groups.csv, pupils.csv, teachers.csv and
+resources.csv
 
 $Id$
 """

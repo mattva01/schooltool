@@ -38,6 +38,7 @@ class SampleSchoolImporter:
         """Generate and import sample school data."""
         try:
             self.process_args(argv)
+            self.check_data_files()
             self.check_server_running()
             self.check_server_empty()
             self.import_csv_files()
@@ -63,6 +64,14 @@ class SampleSchoolImporter:
                     self.port = int(v)
                 except ValueError, e:
                     raise Error("Invalid port number: %s" % v)
+
+    def check_data_files(self):
+        """Check that the data files exist."""
+        for filename in ('groups.csv', 'pupils.csv', 'teachers.csv',
+                         'resources.csv'):
+            if not os.path.exists(os.path.join(self.datadir, filename)):
+                raise Error("%s does not exist.  "
+                            "Please run generate-sampleschool.py" % filename)
 
     def check_server_running(self):
         """Check that the server is running, and it is the correct version."""
