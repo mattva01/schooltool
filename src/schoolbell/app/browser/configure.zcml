@@ -276,6 +276,14 @@
       permission="zope.Public"
       />
 
+  <zope:view
+      for="schoolbell.calendar.interfaces.ICalendar"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".cal.CalendarTraverser"
+      permission="zope.Public"
+      />
+
   <menuItem
       menu="schoolbell_actions"
       title="View calendar"
@@ -283,10 +291,6 @@
       permission="zope.Public"
       action="calendar"
       />
-
-  <defaultView
-      for="schoolbell.calendar.interfaces.ICalendar"
-      name="weekly.html" />
 
   <page
       name="plain.html"

@@ -33,7 +33,7 @@ from zope.app.traversing.interfaces import IContainmentRoot
 
 
 def doctest_CalendarOwnerTraverser():
-    """Tests for CalendarOwnerTraverse.
+    """Tests for CalendarOwnerTraverser.
 
     CalendarOwnerTraverser allows you to traverse directly to the calendar
     of a calendar owner.
@@ -86,6 +86,88 @@ def doctest_CalendarOwnerTraverser():
         Traceback (most recent call last):
         ...
         NotFound: Object: <...Person object at ...>, name: 'nonexistent.html'
+
+    """
+
+
+def doctest_CalendarTraverser():
+    """Tests for CalendarTraverser.
+
+    CalendarTraverser allows you to traverse directly various calendar views:
+
+        >>> from schoolbell.app.browser.cal import CalendarTraverser
+        >>> from schoolbell.app.cal import Calendar
+        >>> cal = Calendar()
+        >>> request = TestRequest()
+        >>> traverser = CalendarTraverser(cal, request)
+        >>> traverser.context is cal
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IBrowserPublisher:
+
+        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+        >>> verifyObject(IBrowserPublisher, traverser)
+        True
+
+    Let's check that browserDefault suggests 'daily.html':
+
+        >>> context, path = traverser.browserDefault(request)
+        >>> context is cal
+        True
+        >>> path
+        ('daily.html',)
+
+    The traverser is smart enough to parse date-like URLs.  It will choose
+    the right view and add the 'date' argument to the request.
+
+        >>> def queryViewStub(context, name, request):
+        ...     print name
+        >>> traverser.queryView = queryViewStub
+
+        >>> view = traverser.publishTraverse(request, '2003')
+        yearly.html
+        >>> request['date']
+        '2003-01-01'
+
+    The getViewByDate() method is responsible for recognizing dates.  It
+    may return a view if it recognizes a date, or None.
+
+    The yearly view is returned when only a year is provided:
+
+        >>> traverser.getViewByDate(request, '2002')
+        'yearly.html'
+        >>> request['date']
+        '2002-01-01'
+
+    The monthly view is supported too:
+
+        >>> traverser.getViewByDate(request, '2002-07')
+        'monthly.html'
+        >>> request['date']
+        '2002-07-01'
+
+    The daily view is supported too:
+
+        >>> traverser.getViewByDate(request, '2002-07-03')
+        'daily.html'
+        >>> request['date']
+        '2002-07-03'
+
+    Invalid dates are not touched:
+
+        >>> for name in ['', 'abc', 'index.html', '', '200a', '2004-1a',
+        ...              '2001-02-03-04', '2001/02/03']:
+        ...     assert traverser.getViewByDate(request, name) is None
+
+    If we try to look up a nonexistent view, we should get a NotFound error:
+
+        >>> traverser.publishTraverse(request,
+        ...                           'nonexistent.html') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        NotFound: Object: <...Calendar object at ...>, name: 'nonexistent.html'
 
     """
 

@@ -65,6 +65,54 @@ class CalendarOwnerTraverser(object):
         return self.context, ('index.html', )
 
 
+class CalendarTraverser(object):
+    """A traverser that allows to traverse to a calendar owner's calendar."""
+
+    adapts(ICalendarOwner)
+    implements(IBrowserPublisher)
+
+    queryView = queryView
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        view_name = self.getViewByDate(request, name)
+        if view_name:
+            return self.queryView(self.context, view_name, request)
+
+        view = queryView(self.context, name, request)
+        if view is not None:
+            return view
+
+        raise NotFound(self.context, name, request)
+
+    def getViewByDate(self, request, name):
+        parts = name.split('-')
+        try:
+            parts = [int(part) for part in parts]
+        except ValueError:
+            return
+        if not parts:
+            return
+        parts = tuple(parts)
+
+        if len(parts) == 1:
+            request.form['date'] = "%d-01-01" % parts
+            return 'yearly.html'
+        elif len(parts) == 2:
+            request.form['date'] = "%d-%02d-01" % parts
+            return 'monthly.html'
+        elif len(parts) == 3:
+            request.form['date'] = "%d-%02d-%02d" % parts
+            return 'daily.html'
+        # TODO: weekly
+
+    def browserDefault(self, request):
+        return self.context, ('daily.html', )
+
+
 class CalendarDay(object):
     """A single day in a calendar.
 
