@@ -3,8 +3,8 @@
 <metal:block fill-slot="calendar-body">
 <div id="calendar-view-day"
      tal:define="height python:4;
-                 dayheight python: view.visiblehours * height;
-                 hours python:list(view.getHours())"
+                 hours python:list(view.getHours());
+                 dayheight python: len(hours) * height;"
      tal:attributes="style string:height: ${dayheight}em">
 
 <!-- Day grid -->
