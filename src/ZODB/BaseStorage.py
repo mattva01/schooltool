@@ -13,7 +13,7 @@
 ##############################################################################
 """Handy standard storage machinery
 
-$Id: BaseStorage.py,v 1.49 2004/04/19 21:19:05 tim_one Exp $
+$Id: BaseStorage.py,v 1.51 2004/04/23 17:30:40 gintautasm Exp $
 """
 import cPickle
 import threading
@@ -27,10 +27,10 @@ from persistent.TimeStamp import TimeStamp
 from ZODB import POSException, utils
 from ZODB.UndoLogCompatible import UndoLogCompatible
 
-log = logging.getLogger("zodb.BaseStorage")
+log = logging.getLogger("ZODB.BaseStorage")
 
 class BaseStorage(UndoLogCompatible):
-    """Abstract base class that support storage implementations.
+    """Abstract base class that supports storage implementations.
 
     A subclass must define the following methods:
     load()
