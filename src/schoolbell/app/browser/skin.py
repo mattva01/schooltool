@@ -23,10 +23,11 @@ $Id$
 """
 from zope.app.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
+from zope.publisher.interfaces.browser import IBrowserRequest
 from schoolbell.app.interfaces import ISchoolBellApplication
 
 
-class ISchoolBellLayer(ILayer):
+class ISchoolBellLayer(ILayer, IBrowserRequest):
     """SchoolBell layer"""
 
 
