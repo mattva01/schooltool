@@ -25,18 +25,30 @@ $Id$
 import cgi
 
 from schooltool.browser import View, Template
-from schooltool.component import FacetManager
+from schooltool.interfaces import IPerson, IGroup
+from schooltool.component import getRelatedObjects, FacetManager
+from schooltool.uris import URIMember, URIGroup
+from schooltool.views import absoluteURL
 from schooltool.interfaces import IPerson
 from schooltool.views import absolutePath
 
 __metaclass__ = type
 
 
-class PersonView(View):
+class GetParentsMixin:
+    """A helper for Person and Group views"""
+    def getParentGroups(self, request):
+        """Return groups that context is a member of"""
+        return [{'url': absoluteURL(request, g), 'title': g.title}
+                for g in getRelatedObjects(self.context, URIGroup)]
+
+
+class PersonView(View, GetParentsMixin):
 
     __used_for__ = IPerson
 
     template = Template("www/person.pt")
+
 
     def _traverse(self, name, request):
         if name == 'photo.jpg':
@@ -52,6 +64,25 @@ class PersonView(View):
         else:
             path = absolutePath(self.request, self.context)
             return '<img src="%s/photo.jpg" />' % cgi.escape(path)
+
+
+class GroupView(View, GetParentsMixin):
+
+    __used_for__ = IGroup
+
+    template = Template("www/group.pt")
+
+    def getOtherMembers(self, request):
+        """Return members that are not groups"""
+        return [{'url': absoluteURL(request, g), 'title': g.title}
+                for g in getRelatedObjects(self.context, URIMember)
+                if not IGroup.providedBy(g)]
+
+    def getSubGroups(self, request):
+        """Return members that are groups"""
+        return [{'url': absoluteURL(request, g), 'title': g.title}
+                for g in getRelatedObjects(self.context, URIMember)
+                if IGroup.providedBy(g)]
 
 
 class PhotoView(View):

@@ -25,18 +25,32 @@ $Id$
 import unittest
 
 from schooltool.browser.tests import RequestStub, setPath
+from schooltool.tests.utils import RegistriesSetupMixin
 
 __metaclass__ = type
 
 
-class TestPersonInfo(unittest.TestCase):
+class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views.relationship import RelationshipsView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.root = app['groups'].new("root", title="root")
+        self.person = app['persons'].new("johndoe", title="John Doe")
+
+        Membership(group=self.root, member=self.person)
 
     def test(self):
-        from schooltool.model import Person
         from schooltool.browser.app import PersonView
-        person = Person(title="John Doe")
-        person.__name__ = 'johndoe'
-        view = PersonView(person)
+        view = PersonView(self.person)
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
@@ -45,23 +59,27 @@ class TestPersonInfo(unittest.TestCase):
         self.assert_('John Doe' in result)
 
     def test_traverse(self):
-        from schooltool.model import Person
         from schooltool.browser.model import PersonView, PhotoView
-        person = Person(title="John Doe")
-        view = PersonView(person)
+        view = PersonView(self.person)
         photoview = view._traverse('photo.jpg', RequestStub())
-        self.assert_(photoview.context is person)
+        self.assert_(photoview.context is self.person)
         self.assert_(isinstance(photoview, PhotoView))
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
     def test_info(self):
-        from schooltool.model import Person
         from schooltool.browser.model import PersonView
         from schooltool.component import FacetManager
-        person = Person()
-        facet = FacetManager(person).facetByName('person_info')
-        view = PersonView(person)
+        facet = FacetManager(self.person).facetByName('person_info')
+        view = PersonView(self.person)
         self.assert_(view.info() is facet)
+
+    def test_getParentGroups(self):
+        from schooltool.browser.model import PersonView
+        request = RequestStub()
+        view = PersonView(self.person)
+        self.assertEquals(view.getParentGroups(request),
+                          [{'url': 'http://localhost:7001/groups/root',
+                            'title': 'root'}])
 
     def test_photo(self):
         from schooltool.model import Person
@@ -78,6 +96,62 @@ class TestPersonInfo(unittest.TestCase):
         facet.photo = None
         markup = view.photo()
         self.assertEquals(markup, '<i>N/A</i>')
+
+
+class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views.relationship import RelationshipsView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.root = app['groups'].new("root", title="root")
+        self.group = app['groups'].new("new", title="Teachers")
+        self.sub = app['groups'].new("sub", title="subgroup")
+        self.per = app['persons'].new("p", title="Pete")
+
+        Membership(group=self.root, member=self.group)
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
+
+    def test(self):
+        from schooltool.browser.model import GroupView
+        view = GroupView(self.group)
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_('Teachers' in result)
+
+    def test_getOtherMembers(self):
+        from schooltool.browser.model import GroupView
+        request = RequestStub()
+        view = GroupView(self.group)
+        self.assertEquals(view.getOtherMembers(request),
+                          [{'url': 'http://localhost:7001/persons/p',
+                            'title': 'Pete'}])
+
+    def test_getSubGroups(self):
+        from schooltool.browser.model import GroupView
+        request = RequestStub()
+        view = GroupView(self.group)
+        self.assertEquals(view.getSubGroups(request),
+                          [{'url': 'http://localhost:7001/groups/sub',
+                            'title': 'subgroup'}])
+
+    def test_getParentGroups(self):
+        from schooltool.browser.model import GroupView
+        request = RequestStub()
+        view = GroupView(self.group)
+        self.assertEquals(view.getParentGroups(request),
+                          [{'url': 'http://localhost:7001/groups/root',
+                            'title': 'root'}])
 
 
 class TestPhotoView(unittest.TestCase):
@@ -107,6 +181,7 @@ class TestPhotoView(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersonInfo))
+    suite.addTest(unittest.makeSuite(TestMembershipViewMixin))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     return suite
 

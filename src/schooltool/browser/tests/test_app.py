@@ -52,10 +52,11 @@ class TestAppView(unittest.TestCase):
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Person
+        from schooltool.model import Person, Group
         from schooltool.browser.app import RootView
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
+        app['groups'] = ApplicationObjectContainer(Group)
         view = RootView(app)
         return view
 
@@ -95,6 +96,7 @@ class TestAppView(unittest.TestCase):
     def test_traversal(self):
         from schooltool.browser import StaticFile
         from schooltool.browser.app import PersonContainerView
+        from schooltool.browser.app import GroupContainerView
         view = self.createView()
         app = view.context
         request = RequestStub()
@@ -106,6 +108,7 @@ class TestAppView(unittest.TestCase):
             return destination
 
         assertTraverses('persons', PersonContainerView, app['persons'])
+        assertTraverses('groups', GroupContainerView, app['groups'])
         css = assertTraverses('schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
         self.assertRaises(KeyError, view._traverse, 'nosuchpage', request)
@@ -124,10 +127,22 @@ class TestPersonContainerView(unittest.TestCase):
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
+class TestGroupContainerView(unittest.TestCase):
+
+    def test_container(self):
+        from schooltool.model import Group
+        from schooltool.browser.app import GroupContainerView
+        container = {'foo': Group('foo')}
+        view = GroupContainerView(container)
+        view2 = view._traverse('foo', RequestStub())
+        self.assertEquals(view2.__class__.__name__, 'GroupView')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
+    suite.addTest(unittest.makeSuite(TestGroupContainerView))
     return suite
 
 

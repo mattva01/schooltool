@@ -24,7 +24,7 @@ $Id$
 
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
-from schooltool.browser.model import PersonView
+from schooltool.browser.model import PersonView, GroupView
 from schooltool.interfaces import IApplication
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import AuthenticationError
@@ -61,6 +61,8 @@ class RootView(View):
     def _traverse(self, name, request):
         if name == 'persons':
             return PersonContainerView(self.context['persons'])
+        if name == 'groups':
+            return GroupContainerView(self.context['groups'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         raise KeyError(name)
@@ -72,4 +74,12 @@ class PersonContainerView(View):
 
     def _traverse(self, name, request):
         return PersonView(self.context[name])
+
+
+class GroupContainerView(View):
+
+    __used_for__ = IApplicationObjectContainer
+
+    def _traverse(self, name, request):
+        return GroupView(self.context[name])
 

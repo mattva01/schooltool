@@ -7,7 +7,7 @@ h1 {
 form {
   padding: 1ex;
   background: #ffffd3;
-  border: 1px solid #eeeeb2;
+  border: 1px solid #adab54;
   float: left;
 }
 
@@ -41,5 +41,30 @@ input.button {
 }
 
 input.button:hover {
-  background: #ddddc2;
+  background: white;
+  color: black;
+}
+
+div.subgroups {
+  background: #aee5ac;
+  border: 1px solid #036d00;
+  padding: 1ex;
+  margin: 1ex 1em;
+  float: left;
+}
+
+div.members {
+  background: #acb8e5;
+  border: 1px solid #052082;
+  padding: 1ex;
+  margin: 1ex 1em;
+  float: left;
+}
+
+div.parentgroups {
+  background: #ffc5c4;
+  border: 1px solid #af0200;
+  padding: 1ex;
+  margin: 1ex 1em;
+  float: left;
 }

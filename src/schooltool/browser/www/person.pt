@@ -3,8 +3,16 @@
   <title metal:fill-slot="title">Person info</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">Person info</h1>
+  <h1 metal:fill-slot="h1">
+    Person info for <span tal:replace="context/title"/>
+  </h1>
   <metal:block metal:fill-slot="content" tal:define="info view/info">
+    <div class="parentgroups">
+      <h3 i18n:translate="">Parent groups</h3>
+      <p tal:repeat="sub python: view.getParentGroups(request)">
+       <a tal:attributes="href sub/url" tal:content="sub/title"/>
+      </p>
+    </div>
     <div class="row"><b>Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>
