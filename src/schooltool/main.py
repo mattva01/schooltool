@@ -48,6 +48,9 @@ SERVER_VERSION = "SchoolTool/0.1"
 class Request(server.Request):
     """Threaded request processor, integrated with ZODB"""
 
+    reactor_hook = reactor
+    get_transaction_hook = get_transaction
+
     def process(self):
         """Process the request"""
 
@@ -60,7 +63,7 @@ class Request(server.Request):
         self.postpath = map(urllib.unquote, self.path[1:].split('/'))
 
         # But perform traversal and rendering in a separate worker thread
-        reactor.callInThread(self._process)
+        self.reactor_hook.callInThread(self._process)
 
     def _process(self):
         """Process the request in a separate thread.
@@ -77,7 +80,7 @@ class Request(server.Request):
                         self.zodb_conn = self.site.db.open()
                         resrc = self.traverse()
                         body = self.render(resrc)
-                        txn = get_transaction()
+                        txn = self.get_transaction_hook()
                         txn.note(self.path)
                         txn.setUser(self.getUser()) # anonymous is ""
                         txn.commit()
@@ -85,18 +88,18 @@ class Request(server.Request):
                         if retries <= 0:
                             raise
                         retries -= 1
-                        get_transaction().abort()
+                        self.get_transaction_hook().abort()
                         self.zodb_conn.close()
                         self.reset()
                     else:
                         break
             except:
-                get_transaction().abort()
-                reactor.callFromThread(self.processingFailed,
-                                       failure.Failure())
+                self.get_transaction_hook().abort()
+                self.reactor_hook.callFromThread(self.processingFailed,
+                                                 failure.Failure())
             else:
-                reactor.callFromThread(self.write, body)
-                reactor.callFromThread(self.finish)
+                self.reactor_hook.callFromThread(self.write, body)
+                self.reactor_hook.callFromThread(self.finish)
         finally:
             if self.zodb_conn:
                 self.zodb_conn.close()
@@ -147,8 +150,7 @@ class Request(server.Request):
         """
         body = resrc.render(self)
 
-        if not isinstance(body, str):
-            body = errorPage(self, 500, "render did not return a string")
+        assert isinstance(body, str), "render did not return a string"
 
         if self.method == "HEAD":
             if len(body) > 0:
