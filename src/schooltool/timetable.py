@@ -29,11 +29,12 @@ from zope.interface import implements
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
-from schooltool.interfaces import ITimetableActivity
+from schooltool.interfaces import ITimetableActivity, ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
-from schooltool.interfaces import ITimetableSchemaService, ISchooldayPeriod
+from schooltool.interfaces import ITimetableSchemaService
+from schooltool.interfaces import ITimePeriodService
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.uris import URIGroup
@@ -405,4 +406,26 @@ class TimetableSchemaService(Persistent):
 
     def __delitem__(self, schema_id):
         del self.timetables[schema_id]
+
+
+class TimePeriodService(Persistent):
+    implements(ITimePeriodService)
+
+    __parent__ = None
+    __name__ = None
+
+    def __init__(self):
+        self.periods = PersistentDict()
+
+    def keys(self):
+        return self.periods.keys()
+
+    def __contains__(self, period_id):
+        return period_id in self.periods
+
+    def register(self, period_id):
+        self.periods[period_id] = None
+
+    def __delitem__(self, period_id):
+        del self.periods[period_id]
 

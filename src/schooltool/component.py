@@ -237,6 +237,11 @@ def getTimetableSchemaService(context):
     return _getServiceManager(context).timetableSchemaService
 
 
+def getTimePeriodService(context):
+    """See IServiceAPI"""
+    return _getServiceManager(context).timePeriodService
+
+
 #
 # Relationships
 #

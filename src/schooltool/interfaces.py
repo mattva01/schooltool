@@ -131,6 +131,9 @@ class IServiceAPI(Interface):
     def getTimetableSchemaService(context):
         """Return the global timetable schema service."""
 
+    def getTimePeriodService(context):
+        """Return the global time period service."""
+
 
 class IServiceManager(Interface):
     """Container of services"""
@@ -139,7 +142,9 @@ class IServiceManager(Interface):
 
     utilityService = Attribute("""Utility service for this application""")
 
-    timetableSchemaService = Attribute("""A timetable schema service""")
+    timetableSchemaService = Attribute("""Timetable schema service""")
+
+    timePeriodService = Attribute("""Time period service""")
 
 
 #
@@ -1326,7 +1331,7 @@ class ITimetableModel(Interface):
 
 
 class ITimetableSchemaService(ILocation):
-    """A service for creating timetables of a certain schema.
+    """Service for creating timetables of a certain schema.
 
     This service stores timetable prototypes (empty timetables) and
     can return a new timetable of a certain schema on request.
@@ -1343,6 +1348,27 @@ class ITimetableSchemaService(ILocation):
 
     def __delitem__(schema_id):
         """Remove a stored schema with a given id."""
+
+
+class ITimePeriodService(ILocation):
+    """Service for registering time periods.
+
+    It stores only a list of registered time period IDs.  In the future
+    it might store IDateRange or ISchooldayModel instances, and the register
+    method might be changed to __setitem__.
+    """
+
+    def keys():
+        """Return a sequence of all time period ids."""
+
+    def __contains__(period_id):
+        """Return True iff period with this id is defined."""
+
+    def register(period_id):
+        """Adds the specified period."""
+
+    def __delitem__(period_id):
+        """Removes the specified period."""
 
 
 #

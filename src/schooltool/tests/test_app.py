@@ -26,8 +26,6 @@ import unittest
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IApplication, IEventService, IUtilityService
-from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import ILocation
 from schooltool.tests.utils import EqualsSortedMixin
 
@@ -51,15 +49,28 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
 
     def test(self):
         from schooltool.app import Application
+        from schooltool.interfaces import IApplication
+        from schooltool.interfaces import IEventService, IUtilityService
+        from schooltool.interfaces import ITimetableSchemaService
+        from schooltool.interfaces import ITimePeriodService
+
         a = Application()
         verifyObject(IApplication, a)
+
         verifyObject(IEventService, a.eventService)
+
         verifyObject(IUtilityService, a.utilityService)
         self.assert_(a.utilityService.__parent__ is a,
                      "__parent__ of utility service should be the application")
         self.assertEqual(a.utilityService.__name__, 'utils')
+
+        verifyObject(ITimetableSchemaService, a.timetableSchemaService)
         self.assert_(a.timetableSchemaService.__parent__ is a)
         self.assertEqual(a.timetableSchemaService.__name__, 'ttschemas')
+
+        verifyObject(ITimePeriodService, a.timePeriodService)
+        self.assert_(a.timePeriodService.__parent__ is a)
+        self.assertEqual(a.timePeriodService.__name__, 'time-periods')
 
     def testTraversal(self):
         from schooltool.app import Application
@@ -102,7 +113,8 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
     def test(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = lambda: None
+        from schooltool.interfaces import IApplicationObjectContainer
+        factory = Location
         a = ApplicationObjectContainer(factory)
         verifyObject(IApplicationObjectContainer, a)
 
@@ -138,7 +150,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
     def testNameCollision(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = lambda: Location()
+        factory = Location
         a = ApplicationObjectContainer(factory)
         a.new('foo')
         self.assertRaises(KeyError, a.new, 'foo')
@@ -148,7 +160,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
     def testAnotherContainerTakesResponsibility(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = lambda: Location()
+        factory = Location
         a = ApplicationObjectContainer(factory)
         obj = a.new()
         name = obj.__name__

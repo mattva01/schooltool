@@ -28,7 +28,7 @@ from schooltool.interfaces import ILocation
 from schooltool.event import EventService
 from schooltool.component import UtilityService
 from schooltool.db import PersistentKeysSet
-from schooltool.timetable import TimetableSchemaService
+from schooltool.timetable import TimetableSchemaService, TimePeriodService
 
 __metaclass__ = type
 
@@ -53,6 +53,9 @@ class Application(Persistent):
         self.timetableSchemaService = TimetableSchemaService()
         self.timetableSchemaService.__parent__ = self
         self.timetableSchemaService.__name__ = 'ttschemas'
+        self.timePeriodService = TimePeriodService()
+        self.timePeriodService.__parent__ = self
+        self.timePeriodService.__name__ = 'time-periods'
         self._roots = PersistentKeysSet()
         self._appObjects = PersistentDict()
 

@@ -309,6 +309,7 @@ class TestServiceAPI(unittest.TestCase):
             eventService = object()
             utilityService = object()
             timetableSchemaService = object()
+            timePeriodService = object()
 
         class ObjectStub:
             implements(ILocation)
@@ -349,6 +350,11 @@ class TestServiceAPI(unittest.TestCase):
         self.setUpTree()
         self.doTestService(getTimetableSchemaService,
                            self.root.timetableSchemaService)
+
+    def test_getTimePeriodService(self):
+        from schooltool.component import getTimePeriodService
+        self.setUpTree()
+        self.doTestService(getTimePeriodService, self.root.timePeriodService)
 
 
 class Relatable(LocatableEventTargetMixin):

@@ -30,7 +30,7 @@ from persistence import Persistent
 
 from zope.interface.verify import verifyObject
 from zope.interface import implements
-from schooltool.tests.helpers import diff
+from schooltool.tests.helpers import diff, sorted
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
@@ -853,6 +853,43 @@ class TestTimetableSchemaService(unittest.TestCase):
         self.assertEqual(service.keys(), [])
 
 
+class TestTimePeriodService(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.timetable import TimePeriodService
+        from schooltool.interfaces import ITimePeriodService
+
+        service = TimePeriodService()
+        verifyObject(ITimePeriodService, service)
+
+    def test(self):
+        from schooltool.timetable import TimePeriodService
+        service = TimePeriodService()
+        self.assertEqual(service.keys(), [])
+
+        service.register('2003 fall')
+        self.assertEqual(service.keys(), ['2003 fall'])
+        self.assert_('2003 fall' in service)
+        self.assert_('2004 spring' not in service)
+
+        # duplicate registration
+        service.register('2003 fall')
+        self.assertEqual(service.keys(), ['2003 fall'])
+        self.assert_('2003 fall' in service)
+
+        service.register('2004 spring')
+        self.assertEqual(sorted(service.keys()), ['2003 fall', '2004 spring'])
+        self.assert_('2004 spring' in service)
+
+        del service['2003 fall']
+        self.assertEqual(service.keys(), ['2004 spring'])
+        self.assert_('2003 fall' not in service)
+        self.assert_('2004 spring' in service)
+
+        # duplicate deletion
+        self.assertRaises(KeyError, service.__delitem__, '2003 fall')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetable))
@@ -865,4 +902,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
     suite.addTest(unittest.makeSuite(TestTimetabledFacet))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
+    suite.addTest(unittest.makeSuite(TestTimePeriodService))
     return suite
