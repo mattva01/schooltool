@@ -73,8 +73,8 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
 
         Teaching(teacher=teacher, taught=student)
 
-        self.assert_(teacher.listLinks(URITaught)[0].traverse() is student)
-        self.assert_(student.listLinks(URITeacher)[0].traverse() is teacher)
+        self.assert_(teacher.listLinks(URITaught)[0].target is student)
+        self.assert_(student.listLinks(URITeacher)[0].target is teacher)
 
     def testModuleSetup(self):
         from schooltool import teaching

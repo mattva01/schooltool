@@ -241,7 +241,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
 
         def assertChecked(doc, group, expected):
             links = view.context.listLinks(URICalendarProvider)
-            self.assertEquals(group in [link.traverse() for link in links],
+            self.assertEquals(group in [link.target for link in links],
                               expected,
                               group)
             checked = doc.query('//input[@name="group.%s"'
@@ -755,12 +755,10 @@ def doctest_RelationshipViewMixin():
         >>> class LinkStub:
         ...     def __init__(self, this, other, role):
         ...         self.this = this
-        ...         self.other = other
+        ...         self.target = other
         ...         self.role = role
-        ...     def traverse(self):
-        ...         return self.other
         ...     def unlink(self):
-        ...         print "Unlinking %s and %s" % (self.this, self.other)
+        ...         print "Unlinking %s and %s" % (self.this, self.target)
         ...         self.this.links.remove(self)
 
     We also need to be able to get object paths and traverse to objects

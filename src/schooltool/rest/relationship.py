@@ -55,7 +55,7 @@ class RelationshipsView(View):
     # ModifyPermission to add members to groups.
 
     def listLinks(self):
-        return [{'traverse': absolutePath(self.request, link.traverse()),
+        return [{'traverse': absolutePath(self.request, link.target),
                  'title': link.title,
                  'type': link.reltype.uri,
                  'role': link.role.uri,
@@ -141,13 +141,13 @@ class LinkView(View):
         return {'role': self.context.role.uri,
                 'arcrole': self.context.reltype.uri,
                 'title': self.context.title,
-                'href': absolutePath(self.request, self.context.traverse())}
+                'href': absolutePath(self.request, self.context.target)}
 
     def do_DELETE(self, request):
         msg = (_("Relationship '%s' between %s and %s removed") %
                (self.context.reltype.name,
                 getPath(self.context.source),
-                getPath(self.context.traverse())))
+                getPath(self.context.target)))
         self.context.unlink()
         request.appLog(msg)
         request.setHeader('Content-Type', 'text/plain')

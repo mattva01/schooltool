@@ -89,6 +89,22 @@ class ILink(ILocation):
 
     """
 
+    __parent__ = Object(
+        title=u"The container that this link resides in.",
+        schema=IRelatable)
+
+    __name__ = TextLine(
+        title=u"Unique name within the link container.")
+
+    source = Object(
+        title=u"The object that this link points from.",
+        schema=IRelatable)
+
+    target = Object(
+        title=u"The object at the other end of the relationship",
+        readonly=True,
+        schema=IRelatable)
+
     reltype = Object(
         title=u"The SpecificURI of the relationship type.",
         schema=IURIObject)
@@ -100,25 +116,8 @@ class ILink(ILocation):
         title=u"The role implied by traversing this link.",
         schema=IURIObject,
         description=u"""
-        This is how the object got by traverse() relates to my __parent__.
+        This is how the target relates to this link's source.
         """)
-
-    source = Object(
-        title=u"The object that this link points from.",
-        schema=IRelatable)
-
-    __parent__ = Object(
-        title=u"The object at this end of the relationship.",
-        schema=IRelatable)
-
-    __name__ = TextLine(
-        title=u"Unique name within the parent's links.")
-
-    def traverse():
-        """Return the object at the other end of the relationship.
-
-        The object returned by traversing a link is known as the link's target.
-        """
 
 
 class IRemovableLink(ILink):
@@ -300,7 +299,7 @@ class IRelationshipAPI(Interface):
         Calling getRelatedObjects(obj, role) is equivalent to the following
         list comprehension::
 
-            [link.traverse() for link in obj.listLinks(role)]
+            [link.target for link in obj.listLinks(role)]
         """
 
     def registerRelationship(relationship_type, factory):

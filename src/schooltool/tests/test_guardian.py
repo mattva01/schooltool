@@ -73,8 +73,8 @@ class TestGuardian(RegistriesSetupMixin, EventServiceTestMixin,
 
         Guardian(custodian=teacher, ward=student)
 
-        self.assert_(teacher.listLinks(URIWard)[0].traverse() is student)
-        self.assert_(student.listLinks(URICustodian)[0].traverse() is teacher)
+        self.assert_(teacher.listLinks(URIWard)[0].target is student)
+        self.assert_(student.listLinks(URICustodian)[0].target is teacher)
 
     def testModuleSetup(self):
         from schooltool import guardian

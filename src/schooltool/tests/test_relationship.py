@@ -65,12 +65,9 @@ class LinkStub(Persistent):
     def __init__(self, reltype=None, role=None, target=None, title=None):
         self.reltype = reltype
         self.role = role
-        self._target = target
+        self.target = target
         self.title = title
         self.__name__ = None
-
-    def traverse(self):
-        return self._target
 
 
 class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
@@ -116,8 +113,8 @@ class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
         self.assertEquals(self.ltutor.title, "5C")
         self.assertEquals(self.lklass.role, URITutor)
         self.assertEquals(self.ltutor.role, URIRegClass)
-        self.assert_(self.ltutor.traverse() is self.klass)
-        self.assert_(self.lklass.traverse() is self.tutor)
+        self.assert_(self.ltutor.target is self.klass)
+        self.assert_(self.lklass.target is self.tutor)
         self.assertEquals(list(self.klass.__links__), [self.lklass])
         self.assertEquals(list(self.tutor.__links__), [self.ltutor])
 
@@ -144,8 +141,8 @@ class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
 
         self.assertEquals(list(self.klass.__links__), [])
         self.assertEquals(list(self.tutor.__links__), [])
-        self.assert_(self.ltutor.traverse() is self.klass)
-        self.assert_(self.lklass.traverse() is self.tutor)
+        self.assert_(self.ltutor.target is self.klass)
+        self.assert_(self.lklass.target is self.tutor)
         self.assert_(self.ltutor.source is self.tutor)
         self.assert_(self.lklass.source is self.klass)
         self.assert_(self.ltutor.__parent__ is None)
@@ -250,12 +247,12 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
         verifyObject(ILink, link_to_superior)
         self.assert_(link_to_superior.role is URISuperior)
         self.assert_(link_to_superior.source is report)
-        self.assert_(link_to_superior.traverse() is superior)
+        self.assert_(link_to_superior.target is superior)
 
         verifyObject(ILink, link_to_report)
         self.assert_(link_to_report.role is URIReport)
         self.assert_(link_to_report.source is superior)
-        self.assert_(link_to_report.traverse() is report)
+        self.assert_(link_to_report.target is report)
 
 
 class TestEvents(unittest.TestCase):
@@ -303,7 +300,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         links = relate(URICommand, (a, role_a), (b, role_b))
 
         self.assertEqual(len(links), 2)
-        self.assertEquals(Set([l.traverse() for l in links]), Set([a, b]))
+        self.assertEquals(Set([l.target for l in links]), Set([a, b]))
         self.assertEquals(Set([l.role for l in links]), Set([role_a, role_b]))
         self.assertEquals(links[0].reltype, URICommand)
         self.assertEquals(links[1].reltype, URICommand)
@@ -313,8 +310,8 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(len(list(b.__links__)), 1)
         self.assertEqual(list(a.__links__)[0], linka)
         self.assertEqual(list(b.__links__)[0], linkb)
-        self.assertEqual(list(a.__links__)[0].traverse(), b)
-        self.assertEqual(list(b.__links__)[0].traverse(), a)
+        self.assertEqual(list(a.__links__)[0].target, b)
+        self.assertEqual(list(b.__links__)[0].target, a)
         self.assertEqual(list(a.__links__)[0].role, role_b)
         self.assertEqual(list(b.__links__)[0].role, role_a)
 
@@ -341,8 +338,8 @@ class TestRelatableMixin(unittest.TestCase):
         self.assertRaises(ValueError,
             relate, URIClassTutor, (b, URIRegClass), (a, URIClassTutor))
 
-        self.assert_(a.listLinks(URIRegClass)[0].traverse() is b)
-        self.assert_(b.listLinks(URIClassTutor)[0].traverse() is a)
+        self.assert_(a.listLinks(URIRegClass)[0].target is b)
+        self.assert_(b.listLinks(URIClassTutor)[0].target is a)
 
         self.assert_(a.getLink(la.__name__) is la)
         self.assert_(b.getLink(lb.__name__) is lb)

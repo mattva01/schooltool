@@ -384,11 +384,8 @@ class TimezoneTestMixin:
 
 class LinkStub:
 
-    def __init__(self, friend):
-        self._friend = friend
-
-    def traverse(self):
-        return self._friend
+    def __init__(self, target):
+        self.target = target
 
 
 class SchoolToolSetup(RegistriesSetupMixin, unittest.TestCase):

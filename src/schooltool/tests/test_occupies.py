@@ -75,10 +75,10 @@ class TestOccupies(RegistriesSetupMixin, EventServiceTestMixin,
 
         Occupies(resides=address, residence=student)
 
-        self.assert_(address.listLinks(URICurrentResidence)[0].traverse()
-                        is student)
-        self.assert_(student.listLinks(URICurrentlyResides)[0].traverse()
-                        is address)
+        link = address.listLinks(URICurrentResidence)[0]
+        self.assert_(link.target is student)
+        link = student.listLinks(URICurrentlyResides)[0]
+        self.assert_(link.target is address)
 
     def testResidenceFacet(self):
         from schooltool.occupies import ResidenceFacet

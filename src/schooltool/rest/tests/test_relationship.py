@@ -125,7 +125,7 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
                       xlink:href="/groups/new"/>''')
         self.assertEquals(len(self.sub.listLinks()), 2)
         self.assert_(self.new not in
-                     [l.traverse() for l in self.sub.listLinks()])
+                     [l.target for l in self.sub.listLinks()])
         result = self.view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.applog,
@@ -135,7 +135,7 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
                   INFO)])
         self.assertEquals(len(self.sub.listLinks()), 3)
         self.assert_(self.new in
-                     [l.traverse() for l in self.sub.listLinks()])
+                     [l.target for l in self.sub.listLinks()])
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         location = "http://localhost:7001/groups/sub/relationships/0003"

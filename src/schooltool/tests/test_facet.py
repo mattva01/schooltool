@@ -149,9 +149,6 @@ class LinkStub:
         self.callbacks = Set()
         self.__name__ = None
 
-    def traverse(self):
-        return self.target
-
     def registerUnlinkCallback(self, callback):
         self.callbacks.add(callback)
 
@@ -198,8 +195,8 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assertEqual(list(FacetManager(child).iterFacets()), [])
         links = f(parent=parent, child=child)
         self.assertEqual(len(links), 2)
-        self.assertEqual(links['parent'].traverse(), parent)
-        self.assertEqual(links['child'].traverse(), child)
+        self.assertEqual(links['parent'].target, parent)
+        self.assertEqual(links['child'].target, child)
         # Next, need to check a facet was added to child.
         facet_list = list(FacetManager(child).iterFacets())
         self.assertEqual(len(facet_list), 1)
@@ -250,8 +247,8 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
 
         links = f(parent=parent, child=child)
         self.assertEqual(len(links), 2)
-        self.assertEqual(links['parent'].traverse(), parent)
-        self.assertEqual(links['child'].traverse(), child)
+        self.assertEqual(links['parent'].target, parent)
+        self.assertEqual(links['child'].target, child)
         # Next, need to check the existing facet on child was reused
         facet_list = list(FacetManager(child).iterFacets())
         self.assertEqual(len(facet_list), 1)

@@ -229,7 +229,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         group = self.groups['gr0wl']
         self.assertEquals(group.title, 'A tiny group')
 
-        objs = [link.traverse() for link in group.listLinks()]
+        objs = [link.target for link in group.listLinks()]
         self.assertEquals(len(objs), 2)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
@@ -252,7 +252,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         person = self.persons[name]
         self.assertEquals(person.title, 'Joe Smith')
 
-        objs = [link.traverse() for link in person.listLinks()]
+        objs = [link.target for link in person.listLinks()]
         self.assertEquals(len(objs), 3)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
@@ -273,7 +273,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         resource = self.resources[name]
         self.assertEquals(resource.title, 'Stool')
 
-        objs = [link.traverse() for link in resource.listLinks()]
+        objs = [link.target for link in resource.listLinks()]
         self.assertEquals(len(objs), 2)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)

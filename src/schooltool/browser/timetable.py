@@ -398,7 +398,7 @@ class TimetableSetupView(View, AppObjectBreadcrumbsMixin):
         No exception is raised if self.context is not a member of `group`.
         """
         for link in self.context.listLinks(URIGroup):
-            if link.traverse() is group:
+            if link.target is group:
                 link.unlink()
                 request = self.request
                 request.appLog(_("Relationship '%s' between %s and %s"

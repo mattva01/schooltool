@@ -465,11 +465,11 @@ class RelationshipViewMixin:
         if "DELETE" in request.args:
             paths = sets.Set(request.args.get("CHECK", []))
             for link in self.context.listLinks(self.linkrole):
-                if getPath(link.traverse()) in paths:
+                if getPath(link.target) in paths:
                     link.unlink()
                     request.appLog(_("Relationship '%s' between %s and %s"
                                      " removed")
-                                   % (self.relname, getPath(link.traverse()),
+                                   % (self.relname, getPath(link.target),
                                       getPath(self.context)))
         if "FINISH_ADD" in request.args:
             paths = filter(None, request.args.get("toadd", []))
@@ -963,7 +963,7 @@ class ResidenceMoveView(View, RelationshipViewMixin,
             try:
                 Occupies(residence=obj, resides=pobj)
                 for link in self.context.listLinks():
-                    if getPath(link.traverse()) == path:
+                    if getPath(link.target) == path:
                         link.unlink()
                         request.appLog(_("Relationship '%s' between %s and %s "
                         "removed") % (self.relname, getPath(self.context),

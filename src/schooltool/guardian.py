@@ -54,12 +54,12 @@ class GuardianEvent(RelationshipEvent):
                 if self.custodian is not None:
                     raise TypeError("only one URICustodian must be"
                                     " present among links", links)
-                self.custodian = link.traverse()
+                self.custodian = link.target
             if link.role == URIWard:
                 if self.ward is not None:
                     raise TypeError("only one URIWard must be"
                                     " present among links", links)
-                self.ward = link.traverse()
+                self.ward = link.target
         if self.ward is None or self.resides is None:
             raise TypeError("both URICustodian and URIWard"
                             "must be present among links", links)

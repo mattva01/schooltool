@@ -109,8 +109,8 @@ class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
         checkForPotentialCycles(g1, g2)
         checkForPotentialCycles(g2, g1)
         links = Membership(group=g1, member=g2)
-        self.assertEquals(links['member'].traverse(), g2)
-        self.assertEquals(links['group'].traverse(), g1)
+        self.assertEquals(links['member'].target, g2)
+        self.assertEquals(links['group'].target, g1)
         self.assertRaises(ValueError, checkForPotentialCycles, g2, g1)
         checkForPotentialCycles(g1, g2)
 
@@ -139,11 +139,10 @@ class TestEvents(unittest.TestCase):
         URIUnrelated = URIObject("http://ns.example.org/role/unrelated")
 
         class LinkStub:
-            def __init__(self, friend, role):
-                self._friend = friend
+
+            def __init__(self, target, role):
+                self.target = target
                 self.role = role
-            def traverse(self):
-                return self._friend
 
         group, member = object(), object()
         links = (LinkStub(group, URIGroup), LinkStub(member, URIMember))
@@ -204,8 +203,8 @@ class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
         g1 = Relatable()
         g2 = Relatable()
         links = membership.Membership(group=g1, member=g2)
-        self.assertEquals(links['member'].traverse(), g2)
-        self.assertEquals(links['group'].traverse(), g1)
+        self.assertEquals(links['member'].target, g2)
+        self.assertEquals(links['group'].target, g1)
         for events in g1.events, g2.events:
             self.assertEquals(len(events), 2)
             self.assertEquals(type(events[0]),

@@ -353,7 +353,7 @@ def relate(relationship_type, (a, role_a), (b, role_b)):
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""
-    return [link.traverse() for link in obj.listLinks(role)]
+    return [link.target for link in obj.listLinks(role)]
 
 
 #

@@ -65,7 +65,7 @@ def checkForPotentialCycles(group, potential_member):
         for obj in last:
             if IQueryLinks.providedBy(obj):
                 links = obj.listLinks(URIGroup)
-                new_last |= Set([link.traverse() for link in links])
+                new_last |= Set([link.target for link in links])
         new_last.difference_update(seen)
         last = new_last
 
@@ -100,12 +100,12 @@ class MembershipEvent(RelationshipEvent):
                 if self.member is not None:
                     raise TypeError("only one URIMember must be present"
                                     " among links", links)
-                self.member = link.traverse()
+                self.member = link.target
             if link.role == URIGroup:
                 if self.group is not None:
                     raise TypeError("only one URIGroup must be present"
                                     " among links", links)
-                self.group = link.traverse()
+                self.group = link.target
         if self.member is None or self.group is None:
             raise TypeError("both URIGroup and URIMember must be present"
                             " among links", links)

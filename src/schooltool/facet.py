@@ -121,9 +121,8 @@ class FacetedRelationshipSchema:
         for role_name, factory in self._factories.iteritems():
             if role_name in links:
                 link = links[role_name]
-                target = link.traverse()
-                if IFaceted.providedBy(target):
-                    fm = FacetManager(target)
+                if IFaceted.providedBy(link.target):
+                    fm = FacetManager(link.target)
                     my_facets = fm.facetsByOwner(link)
                     if my_facets:
                         # Check my facets are active.
@@ -141,7 +140,7 @@ class FacetedRelationshipSchema:
                     link.registerUnlinkCallback(facetDeactivator)
                 else:
                     raise TypeError('Target of link "%s" must be IFaceted: %r'
-                                    % (role_name, target))
+                                    % (role_name, link.target))
         return links
 
 
@@ -169,14 +168,13 @@ def facetDeactivator(link):
     """
     placeholder = FacetOwnershipSetter()
     facets = []
-    target = link.traverse()
-    for facet in FacetManager(target).facetsByOwner(link):
+    for facet in FacetManager(link.target).facetsByOwner(link):
         facets.append(facet)
         facet.active = False
         facet.owner = placeholder
     if facets:
         placeholder.facets = facets
-        target.__links__.addPlaceholder(link, placeholder)
+        link.target.__links__.addPlaceholder(link, placeholder)
 
 
 def membersGetFacet(facet_class, facet_name=None, factory_name=None):

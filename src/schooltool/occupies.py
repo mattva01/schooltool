@@ -63,12 +63,12 @@ class OccupiesEvent(RelationshipEvent):
                 if self.resides is not None:
                     raise TypeError("only one URICurrentlyResides must be"
                                     " present among links", links)
-                self.resides = link.traverse()
+                self.resides = link.target
             if link.role == URICurrentResidence:
                 if self.residence is not None:
                     raise TypeError("only one URICurrentResidence must be"
                                     " present among links", links)
-                self.residence = link.traverse()
+                self.residence = link.target
         if self.residence is None or self.resides is None:
             raise TypeError("both URICurrentlyResides and URICurrentResidence"
                             "must be present among links", links)

@@ -72,10 +72,15 @@ class Link(Persistent):
         # self.relationship is set when this link becomes part of a
         # Relationship
 
+    def _getTarget(self):
+        return self.relationship.traverse(self).source
+
+    target = property(_getTarget)
+
     def _getTitle(self):
-        # XXX this is an ad-hoc bogosity (who said a link's target has a
+        # XXX This is an ad-hoc bogosity (who said a link's target has a
         #     title?) that will need to be rethought later.
-        return self.traverse().title
+        return self.target.title
 
     title = property(_getTitle)
 
@@ -84,16 +89,13 @@ class Link(Persistent):
 
     reltype = property(_getReltype)
 
-    def traverse(self):
-        return self.relationship.traverse(self).source
-
     def unlink(self):
         self.__parent__.remove(self)
         otherlink = self.relationship.traverse(self)
-        self.traverse().__links__.remove(otherlink)
+        self.target.__links__.remove(otherlink)
         event = RelationshipRemovedEvent((self, otherlink))
-        event.dispatch(self.traverse())
-        event.dispatch(otherlink.traverse())
+        event.dispatch(self.target)
+        event.dispatch(otherlink.target)
         self._notifyCallbacks()
         otherlink._notifyCallbacks()
 
@@ -202,13 +204,14 @@ class RelationshipEvent(EventMixin):
             s.append("title=%r" % title)
         for link in self.links:
             try:
-                path = getPath(link.traverse())
+                path = getPath(link.target)
             except TypeError:
-                path = str(link.traverse())
+                path = str(link.target)
             s.append("link=%r, %r" % (link.role.uri, path))
         return "\n    ".join(s) + '\n'
 
     def __unicode__(self):
+        # XXX This is very similar to __str__.
         event = self.__class__.__name__
         s = [u"%s" % event]
         reltype = self.links[0].reltype
@@ -219,9 +222,9 @@ class RelationshipEvent(EventMixin):
             s.append(u"title='%s'" % title.replace("'", "''"))
         for link in self.links:
             try:
-                path = getPath(link.traverse())
+                path = getPath(link.target)
             except TypeError:
-                path = str(link.traverse())
+                path = str(link.target)
             s.append(u"link='%s', '%s'" % (link.role.uri, path))
         return u"\n    ".join(s) + u'\n'
 
@@ -266,7 +269,7 @@ class LinkSet:
         if not ILink.providedBy(link):
             raise TypeError('link must provide ILink', link)
 
-        key = (link.traverse(), (link.reltype, link.role))
+        key = (link.target, (link.reltype, link.role))
         value = self._data.get(key)
         if value is None:
             self._data[key] = link
@@ -279,7 +282,7 @@ class LinkSet:
         link.__parent__ = self
 
     def _removeLink(self, link):
-        key = (link.traverse(), (link.reltype, link.role))
+        key = (link.target, (link.reltype, link.role))
         try:
             value = self._data[key]
         except KeyError:
@@ -322,7 +325,7 @@ class LinkSet:
         """
         if (ILink.providedBy(for_link) and
             IPlaceholder.providedBy(placeholder)):
-            key = (for_link.traverse(), (for_link.reltype, for_link.role))
+            key = (for_link.target, (for_link.reltype, for_link.role))
             if key in self._data:
                 raise ValueError(
                     'Tried to add placeholder as duplicate for link',
