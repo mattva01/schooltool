@@ -23,6 +23,7 @@ $Id$
 """
 
 import cgi
+import datetime
 
 from zope.interface import Interface, Attribute, implements
 from schooltool.common import to_unicode
@@ -86,11 +87,13 @@ class IWidget(Interface):
         """
 
     def update(request):
-        """Update the value from the request.
+        """Update the value from the request, if it is available.
 
-        Updates raw_value, value and error attributes.
+        May update raw_value, value and error attributes.
 
-        Extracts raw value from the request and calls self.setRawValue.
+        Extracts raw value from the request and calls self.setRawValue, but
+        only if the raw value is present in the request (i.e.
+        self.getRawValue() is not None).
         """
 
     def getRawValue(request):
@@ -189,6 +192,37 @@ def dateParser(raw_date):
         raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
 
 
+def timeParser(raw_value):
+    """Parser for times.
+
+      >>> timeParser(None)
+      >>> timeParser(' ')
+      >>> timeParser('23:59')
+      datetime.time(23, 59)
+      >>> timeParser('0:00')
+      datetime.time(0, 0)
+      >>> timeParser('24:00')
+      Traceback (most recent call last):
+        ...
+      ValueError: Time must be between 00:00 and 24:00.
+      >>> timeParser('xyz')
+      Traceback (most recent call last):
+        ...
+      ValueError: Invalid time.  Please specify HH:MM.
+
+    """
+    if raw_value is None or not raw_value.strip():
+        return None
+    try:
+        h, m = map(int, raw_value.split(':'))
+    except ValueError:
+        raise ValueError(_("Invalid time.  Please specify HH:MM."))
+    try:
+        return datetime.time(h, m)
+    except ValueError:
+        raise ValueError(_("Time must be between 00:00 and 24:00."))
+
+
 def intParser(raw_value):
     """Parser for intefers.
 
@@ -248,7 +282,9 @@ class Widget:
                                   % self.__class__.__name__)
 
     def update(self, request):
-        self.setRawValue(self.getRawValue(request))
+        raw_value = self.getRawValue(request)
+        if raw_value is not None:
+            self.setRawValue(raw_value)
 
     def getRawValue(self, request):
         if self.name in request.args:
@@ -388,9 +424,9 @@ class SelectionWidget(Widget):
     implements(IWidget)
 
     def __init__(self, name, label, choices, parser=None, validator=None,
-                 formatter=None):
+                 formatter=None, value=None):
         Widget.__init__(self, name, label, parser=parser, validator=validator,
-                        formatter=formatter)
+                        formatter=formatter, value=value)
         self.choices = choices
 
     def __call__(self, tabindex=None):

@@ -73,6 +73,11 @@ class TestWidget(unittest.TestCase):
         self.assertEquals(widget.value, u'\u263B')
         self.assertEquals(widget.error, None)
 
+        widget.update(RequestStub())
+        self.assertEquals(widget.raw_value, u'\u263B')
+        self.assertEquals(widget.value, u'\u263B')
+        self.assertEquals(widget.error, None)
+
     def test_setRawValue(self):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')
@@ -102,6 +107,9 @@ class TestWidget(unittest.TestCase):
     def test_require(self):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')
+        widget.require()
+        self.assertEquals(widget.error, 'This field is required.')
+
         widget.setRawValue('foo')
         widget.require()
         self.assert_(widget.error is None)
