@@ -409,7 +409,7 @@ class NewTimePeriodView(TimePeriodViewBase):
     Can be accessed at /newtimeperiod.
     """
 
-    template = Template("www/new-time-period.pt")
+    template = Template("www/time-period.pt")
 
     def __init__(self, service):
         TimePeriodViewBase.__init__(self, None)
@@ -439,6 +439,7 @@ class NewTimePeriodView(TimePeriodViewBase):
         return _("New time period")
 
     def do_GET(self, request):
+        self.status = None
         self.name_widget.update(request)
         self.start_widget.update(request)
         self.end_widget.update(request)

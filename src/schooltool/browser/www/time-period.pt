@@ -38,37 +38,57 @@
 </head>
 <body>
   <h1 metal:fill-slot="h1" tal:content="view/title">Time period</h1>
+<metal:block metal:fill-slot="navigation">
+  <a href="/time-periods" i18n:translate="">Back to time periods</a>
+</metal:block>
 <metal:block metal:fill-slot="content">
 
-<form class="invisible" method="POST" tal:attributes="action request/uri">
+<form class="invisible" method="POST" tal:attributes="action request/uri"
+      tal:define="calendar view/calendar">
 
 <div class="info" tal:condition="view/status" tal:content="view/status">
   [Status message]
 </div>
 
-<p i18n:translate="">
+<p i18n:translate="" tal:condition="not:view/context">
+First, please name and define the time period itself.  The name should be short
+and contain no spaces (e.g. 2004-fall).  The date range is inclusive (e.g.
+2004-09-01 to 2004-12-31).  Please use ISO 8601 date format (YYYY-MM-DD).
+</p>
+
+<p i18n:translate="" tal:condition="view/context">
 The date range is inclusive (e.g.  2004-09-01 to 2004-12-31).  Please use ISO
 8601 date format (YYYY-MM-DD).
 </p>
 
 <div class="form">
+  <div class="row" tal:condition="not:view/context"
+                   tal:replace="structure view/name_widget">[Name]</div>
   <div class="row" tal:replace="structure view/start_widget">[Start]</div>
   <div class="row" tal:replace="structure view/end_widget">[End]</div>
+  <div class="buttons" tal:condition="not:calendar">
+    <input type="submit" class="button" name="NEXT"
+           value="Next"
+           i18n:attributes="value" />
+  </div>
+  <div class="buttons" tal:condition="calendar">
+    <input type="submit" class="button" name="REFRESH"
+           value="Refresh"
+           i18n:attributes="value" />
+  </div>
 </div>
 
-<tal:block define="calendar view/calendar">
+<tal:if condition="calendar">
 
-<div class="buttons" tal:condition="not:calendar">
-  <input type="submit" class="button" name="NEXT"
-         value="Next"
-         i18n:attributes="value" />
-</div>
+<p i18n:translate="" tal:condition="not:view/context">
+Second, please specify which days are school days, and which days are holidays.
+</p>
 
-<p i18n:translate="" tal:condition="calendar">
+<p i18n:translate="" tal:condition="view/context">
 Please specify which days are school days, and which days are holidays.
 </p>
 
-<div class="form" tal:condition="calendar">
+<div class="form">
   <table id="legend" class="schooldaymodel">
     <tr class="legend">
       <td class="legend" i18n:translate="">Legend:</td>
@@ -132,18 +152,28 @@ Please specify which days are school days, and which days are holidays.
       </td>
     </tr>
   </table>
+
+  <div class="buttons" tal:condition="not:view/context">
+    <input type="submit" class="button" name="REFRESH"
+           value="Refresh"
+           i18n:attributes="value" />
+    <input type="submit" class="button" name="CREATE"
+           value="Create time period"
+           i18n:attributes="value" />
+  </div>
+
+  <div class="buttons" tal:condition="view/context">
+    <input type="submit" class="button" name="REFRESH"
+           value="Refresh"
+           i18n:attributes="value" />
+    <input type="submit" class="button" name="UPDATE"
+           value="Save changes"
+           i18n:attributes="value" />
+  </div>
+
 </div>
 
-<div class="buttons" tal:condition="calendar">
-  <input type="submit" class="button" name="REFRESH"
-         value="Refresh"
-         i18n:attributes="value" />
-  <input type="submit" class="button" name="UPDATE"
-         value="Save changes"
-         i18n:attributes="value" />
-</div>
-
-</tal:block>
+</tal:if>
 
 </form>
 

@@ -27,10 +27,12 @@
       <a href="/logout" i18n:translate=""
          tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
     </div>
+    <metal:block metal:define-slot="navigation">
     <a tal:attributes="href context/@@absolute_url"
        tal:content="string:Back to ${context/title}"
        tal:condition="python:getattr(view, 'back', False)"
        i18n:translate="" /> &nbsp;
+    </metal:block>
   </div>
   <div class="content">
 
