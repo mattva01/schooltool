@@ -125,3 +125,60 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
         if key._p_oid is None:
             self._p_jar.add(key)
 
+
+class PersistentTuplesDict(PersistentKeysDict):
+
+    def __init__(self, pattern):
+        """Create a new PersistentTuplesDict.
+
+        Pattern is a tuple that illustrates which elements of the tuple
+        are persistent objects.
+
+        For example,
+
+          ('o', 'o', 'p', 'o', 'p')
+
+        or
+
+          'oopop'
+
+        means a five-tuple with a persistent object in the third or fifth
+        positions, and any objects in the other positions.
+        """
+        if not isinstance(pattern, (tuple, basestring)):
+            raise TypeError('pattern must be a tuple or string, not %r'
+                            % (pattern,))
+        self._patternlen = len(pattern)
+        self._pindexes = [count
+                          for count, item in enumerate(pattern)
+                          if item.lower() == 'p']
+        PersistentKeysDict.__init__(self)
+
+    def checkKey(self, key):
+        if not isinstance(key, tuple):
+            raise TypeError('key must be a tuple, but it is %r' % (key,))
+        if not len(key) == self._patternlen:
+            raise ValueError('key must be tuple of length %s, not %s' %
+                             (self._patternlen, len(key)))
+
+        for idx in self._pindexes:
+            k = key[idx]
+            if not hasattr(k, '_p_oid'):
+                raise TypeError("item %s of the tuple must be persistent"
+                                " (got %r)" % (idx, k))
+
+    def _toExternalKey(self, key):
+        get = self._p_jar.get
+        pindexes = self._pindexes
+        return tuple([idx in pindexes and get(K) or K
+                      for idx, K in enumerate(key)])
+
+    def _toInternalKey(self, key):
+        pindexes = self._pindexes
+        return tuple([idx in pindexes and K._p_oid or K
+                      for idx, K in enumerate(key)])
+
+    def _prepareExternalKey(self, key):
+        for idx in self._pindexes:
+            if key[idx]._p_oid is None:
+                self._p_jar.add(key[idx])
