@@ -170,25 +170,43 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
 
 class TestPersonContainerView(unittest.TestCase, TraversalTestMixin):
 
-    def test_traverse(self):
+    def createView(self):
         from schooltool.model import Person
         from schooltool.browser.app import PersonContainerView
+        return PersonContainerView({'person': Person()})
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+
+    def test_traverse(self):
         from schooltool.browser.model import PersonView
-        person = Person()
-        view = PersonContainerView({'person': person})
+        view = self.createView()
+        person = view.context['person']
         self.assertTraverses(view, 'person', PersonView, person)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
 class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
 
-    def test_traverse(self):
+    def createView(self):
         from schooltool.model import Group
         from schooltool.browser.app import GroupContainerView
+        return GroupContainerView({'group': Group()})
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+
+    def test_traverse(self):
         from schooltool.browser.model import GroupView
-        group = Group('foo')
-        view = GroupContainerView({'foo': group})
-        self.assertTraverses(view, 'foo', GroupView, group)
+        view = self.createView()
+        group = view.context['group']
+        self.assertTraverses(view, 'group', GroupView, group)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 

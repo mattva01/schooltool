@@ -26,6 +26,7 @@ from schooltool.interfaces import AuthenticationError
 from schooltool.views import View as _View
 from schooltool.views import Template, read_file        # reexport
 from schooltool.views import absoluteURL, absolutePath  # reexport
+from schooltool.views import notFoundPage               # XXX temporary
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import globalTicketService
 

@@ -25,7 +25,8 @@ $Id$
 import datetime
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
-from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
+from schooltool.browser import notFoundPage
+from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import globalTicketService
 from schooltool.browser.model import PersonView, GroupView
 from schooltool.interfaces import IApplication
@@ -88,7 +89,9 @@ class PersonContainerView(View):
 
     __used_for__ = IApplicationObjectContainer
 
-    authorization = AuthenticatedAccess
+    authorization = PublicAccess
+
+    do_GET = staticmethod(notFoundPage)
 
     def _traverse(self, name, request):
         return PersonView(self.context[name])
@@ -98,7 +101,9 @@ class GroupContainerView(View):
 
     __used_for__ = IApplicationObjectContainer
 
-    authorization = AuthenticatedAccess
+    authorization = PublicAccess
+
+    do_GET = staticmethod(notFoundPage)
 
     def _traverse(self, name, request):
         return GroupView(self.context[name])
