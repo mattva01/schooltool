@@ -333,7 +333,7 @@ class Request(http.Request):
             self.accept = parseAccept(self.getHeader('Accept'))
         except ValueError, e:
             self.accept = []
-            body = textErrorPage(self, e)
+            body = self.formatError(e)
             self.setHeader('Content-Length', len(body))
             self.write(body)
             self.finish()
@@ -342,6 +342,10 @@ class Request(http.Request):
 
         # But perform traversal and rendering in a separate worker thread
         self.reactor_hook.callInThread(self._process)
+
+    def formatError(self, exception):
+        """Format an error page for an exception."""
+        return textErrorPage(self, exception)
 
     def _handleVh(self):
         """Handle the virtual hosting directive in the path.
@@ -542,14 +546,17 @@ class Site(http.HTTPFactory):
 
     conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
 
-    def __init__(self, db, rootName, viewFactory, authenticate, applog_path):
+    def __init__(self, db, rootName, viewFactory, authenticate, applog_path,
+                 requestFactory=Request):
         """Create a site.
 
         Arguments:
-          db               ZODB database
-          rootName         name of the application object in the database
-          viewFactory      factory for the application object views
-          authenticate     authentication function (see IAuthenticator)
+          db                ZODB database
+          rootName          name of the application object in the database
+          viewFactory       factory for the application object views
+          authenticate      authentication function (see IAuthenticator)
+          applog_path       application audit log filename
+          requestFactory    factory for requests
         """
         self.__super___init__(None)
         self.db = db
@@ -558,10 +565,11 @@ class Site(http.HTTPFactory):
         self.authenticate = authenticate
         self.applog_path = applog_path
         self.logger = logging.getLogger('schooltool.error')
+        self.requestFactory = requestFactory
 
     def buildProtocol(self, addr):
         channel = self.__super_buildProtocol(addr)
-        channel.requestFactory = Request
+        channel.requestFactory = self.requestFactory
         channel.site = self
         return channel
 

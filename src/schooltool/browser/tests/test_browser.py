@@ -27,6 +27,13 @@ import unittest
 from schooltool.browser.tests import RequestStub
 
 
+class TestRequest(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser import BrowserRequest
+        rq = BrowserRequest(None, True)
+
+
 class TestView(unittest.TestCase):
 
     def createView(self):
@@ -202,10 +209,12 @@ class TestNotFound(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestRequest))
     suite.addTest(unittest.makeSuite(TestView))
     suite.addTest(unittest.makeSuite(TestStaticFile))
     suite.addTest(unittest.makeSuite(TestNotFound))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

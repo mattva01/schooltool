@@ -270,7 +270,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         get_transaction().abort()
 
         from schooltool.main import Server
+        from schooltool.http import Request
         from schooltool.component import getView
+        from schooltool.browser import BrowserRequest
+        from schooltool.browser.app import RootView
 
         class ThreadableStub:
             def init(self):
@@ -315,10 +318,11 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         site = reactor._tcp_listeners[0][1]
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is getView)
+        self.assert_(site.requestFactory is Request)
         site = reactor._tcp_listeners[2][1]
         self.assertEquals(site.rootName, 'schooltool')
-        from schooltool.browser.app import RootView
         self.assert_(site.viewFactory is RootView)
+        self.assert_(site.requestFactory is BrowserRequest)
 
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.uris import ISpecificURI, URIMembership

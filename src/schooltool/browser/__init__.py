@@ -26,11 +26,20 @@ from schooltool.interfaces import AuthenticationError
 from schooltool.rest import View as _View
 from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
+from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import globalTicketService
 
 
 __metaclass__ = type
+
+
+class BrowserRequest(Request):
+    """Browser request.
+
+    Customizes the schooltool.http.Request class by adding cookie-based
+    authentication and HTML error messages.
+    """
 
 
 class View(_View):

@@ -202,6 +202,23 @@ class TestSite(unittest.TestCase):
         self.assert_(channel.requestFactory is Request)
         self.assert_(channel.site is site)
 
+    def test_buildProtocol_custom_request(self):
+        from schooltool.http import Site, Request
+
+        class MyRequest(Request):
+            pass
+
+        db = object()
+        rootName = 'foo'
+        viewFactory = object()
+        authenticator = lambda c, u, p: None
+        site = Site(db, rootName, viewFactory, authenticator, None,
+                    requestFactory=MyRequest)
+        addr = None
+        channel = site.buildProtocol(addr)
+        self.assert_(channel.requestFactory is MyRequest)
+        self.assert_(channel.site is site)
+
 
 class TestAcceptParsing(unittest.TestCase):
 

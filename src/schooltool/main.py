@@ -45,6 +45,7 @@ from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
 from schooltool.translation import ugettext as _
+from schooltool.browser import BrowserRequest
 from schooltool.browser.app import RootView
 from schooltool.http import Site
 
@@ -330,7 +331,7 @@ class Server:
             self.notifyServerStarted(interface, port)
 
         site = Site(self.db, self.appname, RootView, self.authenticate,
-                    self.getApplicationLogPath())
+                    self.getApplicationLogPath(), BrowserRequest)
         for interface, port in self.config.web:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyWebServerStarted(interface, port)
