@@ -649,14 +649,14 @@ class AbsenceCommentParser(XMLPseudoParser):
                 raise ValueError("Object not found: %s" % reporter_path)
 
         try:
-            resolution = self.extractKeyword(body, 'resolution')
+            ended = self.extractKeyword(body, 'ended')
         except KeyError:
-            resolution = Unchanged
+            ended = Unchanged
         else:
-            d = {'resolved': True, 'unresolved': False}
-            if resolution not in d:
-                raise ValueError("Bad value for resolution", resolution)
-            resolution = d[resolution]
+            d = {'ended': True, 'unended': False}
+            if ended not in d:
+                raise ValueError("Bad value for ended", ended)
+            ended = d[ended]
 
         try:
             expected_presence = self.extractKeyword(body, 'expected_presence')
@@ -666,7 +666,7 @@ class AbsenceCommentParser(XMLPseudoParser):
             expected_presence = parse_datetime(expected_presence)
 
         comment = AbsenceComment(reporter, text, absent_from=absent_from,
-                                 dt=dt, resolution=resolution,
+                                 dt=dt, ended=ended,
                                  expected_presence=expected_presence)
 
         return comment
@@ -681,10 +681,10 @@ class AbsenceManagementView(View, AbsenceCommentParser):
         return AbsenceView(absence)
 
     def listAbsences(self):
-        resolvedness = {False: 'unresolved', True: 'resolved'}
+        endedness = {False: 'unended', True: 'ended'}
         return [{'title': item.__name__,
                  'path': getPath(item),
-                 'resolved': resolvedness[item.resolved]}
+                 'ended': endedness[item.ended]}
                 for item in self.context.iterAbsences()]
 
     def do_POST(self, request):
@@ -710,11 +710,11 @@ class AbsenceView(View, AbsenceCommentParser):
 
     template = Template('www/absence.pt', content_type="text/xml")
 
-    def resolved(self):
-        if self.context.resolved:
-            return "resolved"
+    def ended(self):
+        if self.context.ended:
+            return "ended"
         else:
-            return "unresolved"
+            return "unended"
 
     def expected_presence(self):
         if self.context.expected_presence:
@@ -726,7 +726,7 @@ class AbsenceView(View, AbsenceCommentParser):
         return getPath(self.context.person)
 
     def listComments(self):
-        resolvedness = {Unchanged: None, False: 'unresolved', True: 'resolved'}
+        endedness = {Unchanged: None, False: 'unended', True: 'ended'}
         def format_presence(pr):
             if pr is not Unchanged:
                 return comment.expected_presence.isoformat(' ')
@@ -737,7 +737,7 @@ class AbsenceView(View, AbsenceCommentParser):
              'text': comment.text,
              'absent_from': (comment.absent_from is not None
                              and getPath(comment.absent_from) or None),
-             'resolved': resolvedness[comment.resolution],
+             'ended': endedness[comment.ended],
              'expected_presence': format_presence(comment.expected_presence),
              'reporter_href': getPath(comment.reporter)}
             for comment in self.context.comments]
@@ -754,7 +754,7 @@ class AbsenceView(View, AbsenceCommentParser):
         except ValueError:
             request.setResponseCode(400, 'Bad request')
             request.setHeader('Content-Type', 'text/plain')
-            return "Cannot reopen an absence when another one is not resolved"
+            return "Cannot reopen an absence when another one is not ended"
         request.setHeader('Content-Type', 'text/plain')
         return "Comment added"
 
@@ -872,7 +872,7 @@ class RollcallView(View):
             if present and person.getCurrentAbsence() is not None:
                 person.reportAbsence(AbsenceComment(reporter, text, dt=dt,
                                                     absent_from=self.context,
-                                                    resolution=True))
+                                                    ended=True))
                 npresences += 1
         return "%d absences and %d presences reported" % (nabsences, npresences)
 

@@ -3,14 +3,14 @@
          xlink:type="simple"
          xlink:title="person"
          tal:attributes="xlink:href view/getPathOfPerson;
-                         resolved view/resolved;
+                         ended view/ended;
                          expected_presence view/expected_presence">
   <comment tal:repeat="comment view/listComments"
            xlink:type="simple"
            xlink:title="reporter"
            tal:attributes="datetime comment/datetime;
                            absentfrom comment/absent_from;
-                           resolved comment/resolved;
+                           ended comment/ended;
                            expected_presence comment/expected_presence;
                            xlink:href comment/reporter_href"
            tal:content="comment/text">

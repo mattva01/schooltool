@@ -795,7 +795,11 @@ class IPerson(IFaceted, ILocation, IMultiContainer):
         """Return the absence with a given key."""
 
     def getCurrentAbsence():
-        """Return the currently unresolved absence or None."""
+        """Return the current absence or None.
+
+        At any given time a person can have at most one absence that is not
+        ended.  It is called the current absence.
+        """
 
     def reportAbsence(comment):
         """Report that this person is absent, still absent, or no
@@ -818,7 +822,7 @@ class IAbsence(ILocation):
 
     person = Attribute("""Person that was absent""")
     comments = Attribute("""Comments (a sequence of IAbsenceComment)""")
-    resolved = Attribute("""Has this absence been resolved?""")
+    ended = Attribute("""Has this absence been ended?""")
     expected_presence = Attribute(
         """Date and time after which the person is expected to be present""")
 
@@ -871,8 +875,8 @@ class IAbsenceComment(Interface):
     absent_from = Attribute(
         """Application object (group or whatever) the person was absent
         from (can be None)""")
-    resolution = Attribute(
-        """New value of resolution (True, False or Unchanged)""")
+    ended = Attribute(
+        """New value of ended (True, False or Unchanged)""")
     expected_presence = Attribute(
         """New value of expected_presence (datetime, None, or Unchanged)""")
 
@@ -888,16 +892,16 @@ class IAbsenceEvent(IAttendanceEvent):
     """An event that gets sent when a person is found absent."""
 
 
-class IResolvedAbsenceEvent(IAttendanceEvent):
-    """An event that gets sent when an absence is resolved."""
+class IAbsenceEndedEvent(IAttendanceEvent):
+    """An event that gets sent when an absence is ended."""
 
 
 class IAbsenceTracker(IEventTarget):
     """An object which listens to the AttendanceEvents and keeps a set
-    of unresolved absences."""
+    of unended absences."""
 
     absences = Attribute(
-        """A set of unresolved absences this object has been notified
+        """A set of unended absences this object has been notified
         of.""")
 
 

@@ -28,7 +28,7 @@ from persistence import Persistent
 from schooltool.interfaces import IPerson, IGroup, Unchanged
 from schooltool.interfaces import IAbsence, IAbsenceComment
 from schooltool.interfaces import IEventTarget
-from schooltool.interfaces import IAbsenceEvent, IResolvedAbsenceEvent
+from schooltool.interfaces import IAbsenceEvent, IAbsenceEndedEvent
 from schooltool.interfaces import IAbsenceTracker, IAbsenceTrackerUtility
 from schooltool.interfaces import IAbsenceTrackerFacet
 from schooltool.relationship import RelationshipValenciesMixin, Valency
@@ -105,10 +105,10 @@ class Absence(Persistent):
 
     implements(IAbsence)
 
-    def __init__(self, person, expected_presence=None, resolved=False):
+    def __init__(self, person, expected_presence=None, ended=False):
         self.person = person
         self.expected_presence = expected_presence
-        self.resolved = resolved
+        self.ended = ended
         self.comments = []
         self.__name__ = None
         self.__parent__ = None
@@ -117,16 +117,16 @@ class Absence(Persistent):
         if not IAbsenceComment.isImplementedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
         event = AbsenceEvent(self, comment)
-        if comment.resolution is not Unchanged:
-            if self.resolved and not comment.resolution:
+        if comment.ended is not Unchanged:
+            if self.ended and not comment.ended:
                 if self.person.getCurrentAbsence() is not None:
                     raise ValueError("Cannot reopen an absence when another"
-                                     " one is not resolved", self, comment)
+                                     " one is not ended", self, comment)
                 self.person._current_absence = self
-            elif not self.resolved and comment.resolution:
+            elif not self.ended and comment.ended:
                 self.person._current_absence = None
-                event = ResolvedAbsenceEvent(self, comment)
-            self.resolved = comment.resolution
+                event = AbsenceEndedEvent(self, comment)
+            self.ended = comment.ended
         if comment.expected_presence is not Unchanged:
             self.expected_presence = comment.expected_presence
         self.comments.append(comment)
@@ -135,7 +135,7 @@ class Absence(Persistent):
             event.dispatch(self.person)
             if IEventTarget.isImplementedBy(comment.absent_from):
                 event.dispatch(comment.absent_from)
-            if IResolvedAbsenceEvent.isImplementedBy(event):
+            if IAbsenceEndedEvent.isImplementedBy(event):
                 for comment in self.comments:
                     if IEventTarget.isImplementedBy(comment.absent_from):
                         event.dispatch(comment.absent_from)
@@ -146,7 +146,7 @@ class AbsenceComment:
     implements(IAbsenceComment)
 
     def __init__(self, reporter, text, dt=None, absent_from=None,
-                 expected_presence=Unchanged, resolution=Unchanged):
+                 expected_presence=Unchanged, ended=Unchanged):
         if dt is None:
             dt = datetime.utcnow()
         self.reporter = reporter
@@ -154,7 +154,7 @@ class AbsenceComment:
         self.datetime = dt
         self.absent_from = absent_from
         self.expected_presence = expected_presence
-        self.resolution = resolution
+        self.ended = ended
 
 
 class AttendanceEvent(EventMixin):
@@ -174,8 +174,8 @@ class AbsenceEvent(AttendanceEvent):
     implements(IAbsenceEvent)
 
 
-class ResolvedAbsenceEvent(AttendanceEvent):
-    implements(IResolvedAbsenceEvent)
+class AbsenceEndedEvent(AttendanceEvent):
+    implements(IAbsenceEndedEvent)
 
 
 class AbsenceTrackerMixin:
@@ -189,7 +189,7 @@ class AbsenceTrackerMixin:
         """See IEventTarget"""
         if IAbsenceEvent.isImplementedBy(event):
             self.absences.add(event.absence)
-        if IResolvedAbsenceEvent.isImplementedBy(event):
+        if IAbsenceEndedEvent.isImplementedBy(event):
             if event.absence in self.absences:
                 self.absences.remove(event.absence)
 

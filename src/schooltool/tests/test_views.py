@@ -1218,7 +1218,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
         self.assertEquals(comment.reporter, john)
         self.assert_(lower_limit <= comment.datetime <= upper_limit)
         self.assert_(comment.absent_from is None)
-        self.assert_(comment.resolution is Unchanged)
+        self.assert_(comment.ended is Unchanged)
         self.assert_(comment.expected_presence is Unchanged)
 
         # Everything
@@ -1226,7 +1226,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
                         text="Foo"
                         reporter="/persons/john"
                         absent_from="/groups/aa"
-                        resolution="resolved"
+                        ended="ended"
                         datetime="2004-04-04 04:04:04"
                         expected_presence="2005-05-05 05:05:05"
                     """)
@@ -1234,7 +1234,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
         self.assertEquals(comment.text, "Foo")
         self.assertEquals(comment.reporter, john)
         self.assertEquals(comment.absent_from, group)
-        self.assert_(comment.resolution)
+        self.assert_(comment.ended)
         self.assertEquals(comment.datetime,
                           datetime.datetime(2004, 4, 4, 4, 4, 4))
         self.assertEquals(comment.expected_presence,
@@ -1251,7 +1251,7 @@ class TestAbsenceCommentParser(unittest.TestCase):
             'text="" reporter="/does/not/exist"',
             'text="" reporter="/obj" datetime="now"',
             'text="" reporter="/obj" absent_from="/does/not/exist"',
-            'text="" reporter="/obj" resolution="mu"',
+            'text="" reporter="/obj" ended="mu"',
             'text="" reporter="/obj" expected_presence="dunno"',
         )
         for body in bad_requests:
@@ -1285,7 +1285,7 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        context.reportAbsence(AbsenceComment(None, '', resolution=True))
+        context.reportAbsence(AbsenceComment(None, '', ended=True))
         context.reportAbsence(AbsenceComment(None, ''))
         self.assertEquals(len(list(context.iterAbsences())), 2)
         view = AbsenceManagementView(context)
@@ -1295,12 +1295,12 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
             ---8<---
               <absence xlink:type="simple"
-                       xlink:href="/person/absences/001"
-                       resolved="resolved" xlink:title="001"/>
+                       xlink:href="/person/absences/001" ended="ended"
+                       xlink:title="001"/>
             ---8<---
               <absence xlink:type="simple"
-                       xlink:href="/person/absences/002"
-                       resolved="unresolved" xlink:title="002"/>
+                       xlink:href="/person/absences/002" ended="unended"
+                       xlink:title="002"/>
             ---8<---
             </absences>
             """)
@@ -1401,7 +1401,7 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         person.reportAbsence(AbsenceComment(reporter2, 'More text',
                 absent_from=group1, dt=datetime.datetime(2002, 2, 2),
                 expected_presence=datetime.datetime(2003, 03, 03),
-                resolution=True))
+                ended=True))
         return absence
 
     def test_get(self):
@@ -1413,13 +1413,13 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         expected = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink"
                      xlink:type="simple" xlink:title="person"
-                     resolved="resolved" xlink:href="/person"
+                     ended="ended" xlink:href="/person"
                      expected_presence="2003-03-03 00:00:00">
               <comment xlink:type="simple" xlink:title="reporter"
                        xlink:href="/reporter1"
                        datetime="2001-01-01 00:00:00">Some text</comment>
               <comment xlink:type="simple" xlink:title="reporter"
-                       resolved="resolved"
+                       ended="ended"
                        expected_presence="2003-03-03 00:00:00"
                        xlink:href="/reporter2" absentfrom="/group1"
                        datetime="2002-02-02 00:00:00">More text</comment>
@@ -1472,14 +1472,14 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         setPath(absence, basepath[:-1])
         baseurl = "http://localhost" + basepath
         request = RequestStub(baseurl[:-1], method="POST",
-                    body='text="Foo" reporter="." resolution="unresolved"')
+                    body='text="Foo" reporter="." ended="unended"')
         view = AbsenceView(absence)
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad request")
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(result,
-            "Cannot reopen an absence when another one is not resolved")
+            "Cannot reopen an absence when another one is not ended")
         self.assertEquals(len(absence.comments), 2)
 
 
@@ -1599,7 +1599,7 @@ class TestRollcallView(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(comment.absent_from is self.group)
         self.assert_(comment.reporter is self.persona)
         self.assertEquals(comment.text, text)
-        self.assertEquals(comment.resolution, True)
+        self.assertEquals(comment.ended, True)
         self.assertEquals(comment.datetime,
                           datetime.datetime(2001, 2, 3, 4, 5, 6))
 
