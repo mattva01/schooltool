@@ -117,7 +117,7 @@ def createPupils(nr=nr_pupils):
 
         names.add(name)
         groups_str = " ".join(("year%d" % year, subject1, subject2))
-        print >> f, '"%s","%s","%s",""' % (name, groups_str, birthday)
+        print >> f, '"%s","%s","%s","",""' % (name, groups_str, birthday)
     f.close()
 
 
@@ -150,8 +150,8 @@ def createTeachers():
     for groups in teachers:
         birthday = random_date(datetime.date(teacher_age_start, 1, 1),
                                datetime.date(teacher_age_end, 1, 1))
-        print >> f, '"%s","%s","%s",""' % (random_name(),  " ".join(groups),
-                                           birthday)
+        print >> f, '"%s","","%s","","%s"' % (random_name(),birthday,
+                                              " ".join(groups))
     f.close()
 
 
