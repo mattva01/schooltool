@@ -128,6 +128,342 @@ We can traverse to the resource index too
     <BLANKLINE>
     <!DOCTYPE html ...
 
+There is a menu item for persons in person list
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    <h4>Add:</h4>
+    ...
+    <a href="http://localhost/frogpond/persons/@@+/action.html?type_name=addSchoolBellPerson.html"
+       class="">SchoolBell Person</a>
+    ...
+
+We can click on it and get a form:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/@@+/action.html?type_name=addSchoolBellPerson.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/persons/@@contents.html
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: 4
+    Content-Type: text/plain;charset=utf-8
+    Location: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
+    <BLANKLINE>
+    None
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/+/addSchoolBellPerson.html= HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/persons/@@contents.html
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+      <form action="http://localhost/frogpond/persons/+/addSchoolBellPerson.html%3D"
+            method="post" enctype="multipart/form-data">
+    ...
+        <div class="field"><input class="textType" id="field.display_name" name="field.display_name" size="20" type="text" value=""  /></div>
+    ...
+            <div class="field"><input class="textType" id="field.first_name" name="field.first_name" size="20" type="text" value=""  /></div>
+    ...
+            <div class="field"><input class="textType" id="field.last_name" name="field.last_name" size="20" type="text" value=""  /></div>
+    ...
+            <div class="field"><input class="textType" id="field.date_of_birth" name="field.date_of_birth" size="20" type="text" value=""  /></div>
+    ...
+            <div class="field"><input class="fileType" id="field.photo" name="field.photo" size="20" type="file"  /></div>
+    ...
+            <div class="field"><input class="textType" id="field.username" name="field.username" size="20" type="text" value=""  /></div>
+    ...
+      </form>
+    ...
+
+After submiting the form
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/+/addSchoolBellPerson.html%3D HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 1244
+    ... Content-Type: multipart/form-data; boundary=---------------------------13349368961835220053680304979
+    ... Referer: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
+    ... 
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.display_name"
+    ... 
+    ... Frog
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.first_name"
+    ... 
+    ... Tadpole
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.last_name"
+    ... 
+    ... Frogsworth
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.date_of_birth"
+    ... 
+    ... 
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.comment"
+    ... 
+    ... A very famous frog!
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.photo"; filename=""
+    ... Content-Type: application/octet-stream
+    ... 
+    ... 
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="field.username"
+    ... 
+    ... frog
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ... 
+    ... Add
+    ... -----------------------------13349368961835220053680304979
+    ... Content-Disposition: form-data; name="add_input_name"
+    ... 
+    ... frog
+    ... -----------------------------13349368961835220053680304979--
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We should see a new user in the user table:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/persons/+/addSchoolBellPerson.html=
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+                <input type="checkbox" class="noborder"
+                       name="ids:list" id="frog" value="frog" />
+    ...
+              <td><a href="frog/@@SelectedManagementView.html"></a><span>
+                    <a href="frog/@@SelectedManagementView.html">frog</a><a
+      href="http://localhost/frogpond/persons/@@contents.html?rename_ids:list=frog">&nbsp;&nbsp;</a></span></td>
+              <td>
+    ...
+
+There is a menu item for groups in group list
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    <h4>Add:</h4>
+    ...
+    <a href="http://localhost/frogpond/groups/@@+/action.html?type_name=addSchoolBellGroup.html"
+       class="">SchoolBell Group</a>
+    ...
+
+We can click on it and get a form:
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/@@+/action.html?type_name=addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/groups/@@contents.html
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: 4
+    Content-Type: text/plain;charset=utf-8
+    Location: http://localhost/frogpond/groups/+/addSchoolBellGroup.html=
+    <BLANKLINE>
+    None
+
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/+/addSchoolBellGroup.html= HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/groups/@@contents.html
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+      <form action="http://localhost/frogpond/groups/+/addSchoolBellGroup.html%3D"
+              method="post" enctype="multipart/form-data">
+    ...
+           <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  /></div>
+    ...
+      </form>
+    ...
+
+After submiting the form
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html%3D HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 423
+    ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
+    ... Referer: http://localhost/frogpond/groups/+/addSchoolBellGroup.html=
+    ...
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="field.title"
+    ... 
+    ... group
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ... 
+    ... Add
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="add_input_name"
+    ... 
+    ... 
+    ... -----------------------------68355286210571712431437723486--
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We should see a new group in the group table:
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/groups/+/addSchoolBellGroup.html=
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+                <input type="checkbox" class="noborder"
+                       name="ids:list" id="Group" value="Group" />
+    ...
+              <td><a href="Group/@@SelectedManagementView.html"></a><span>
+                    <a href="Group/@@SelectedManagementView.html">Group</a><a
+      href="http://localhost/frogpond/groups/@@contents.html?rename_ids:list=Group">&nbsp;&nbsp;</a></span></td>
+              <td>
+    ...
+
+There is a menu item for resources in resource list
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+    <h4>Add:</h4>
+    ...
+    <a href="http://localhost/frogpond/resources/@@+/action.html?type_name=addSchoolBellResource.html"
+       class="">SchoolBell Resource</a>
+    ...
+
+We can click on it and get a form:
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/@@+/action.html?type_name=addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/resources/@@contents.html
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: 4
+    Content-Type: text/plain;charset=utf-8
+    Location: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
+    <BLANKLINE>
+    None
+
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/+/addSchoolBellResource.html= HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/resources/@@contents.html
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+      <form action="http://localhost/frogpond/resources/+/addSchoolBellResource.html%3D"
+              method="post" enctype="multipart/form-data">
+    ...
+           <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  /></div>
+    ...
+      </form>
+    ...
+
+
+
+After submiting the form
+
+    >>> print http(r"""
+    ... POST /frogpond/resources/+/addSchoolBellResource.html%3D HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 423
+    ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
+    ... Referer: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
+    ...
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="field.title"
+    ... 
+    ... resource
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ... 
+    ... Add
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="add_input_name"
+    ... 
+    ... 
+    ... -----------------------------68355286210571712431437723486--
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We should see a new resource in the resource table:
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Referer: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <!DOCTYPE html ...
+    ...
+                <input type="checkbox" class="noborder"
+                       name="ids:list" id="Resource" value="Resource" />
+    ...
+              <td><a href="Resource/@@SelectedManagementView.html"></a><span>
+                    <a href="Resource/@@SelectedManagementView.html">Resource</a><a
+      href="http://localhost/frogpond/resources/@@contents.html?rename_ids:list=Resource">&nbsp;&nbsp;</a></span></td>
+              <td>
+    ...
+
 
 Appendix: Tips and tricks for writing functional doctests
 ---------------------------------------------------------
@@ -137,7 +473,7 @@ Appendix: Tips and tricks for writing functional doctests
 
 - Replace "Content-Length: (a number)" with "Content-Length: ..." in the output
   (but not in the input!)
-  
+
 - Remove all port numbers after 'localhost' (e.g., if you used tcpwatch and
   went to http://localhost:9080/, then in your .txt file replace all instances
   of "localhost:9080" with just "localhost").
