@@ -1189,6 +1189,15 @@ class ICalendarEvent(Interface):
         A value providing IRecurrenceRule.  None if the event is not
         recurrent.
         """)
+    privacy = Attribute(
+        """One of "public", "private", or "hidden".
+
+        Event that are "private" will be rendered as busy blocks to
+        other users, and events that are "hidden" will not be shown to
+        other users at all.
+
+        "public" is the default.
+        """)
 
     replace_kw = Attribute(
         """A sequence of keywords that can be passed to replace()""")

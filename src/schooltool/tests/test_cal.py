@@ -619,6 +619,28 @@ class TestCalendarEvent(unittest.TestCase):
                                                 date(2004, 11, 27)]))
         assert not ce.hasOccurrences()
 
+    def test_privacy(self):
+        ce1 = self.createEvent(datetime(2004, 11, 25, 12, 0),
+			       timedelta(minutes=10), "whatever",
+			       unique_id="123")
+        ce2 = self.createEvent(datetime(2004, 11, 25, 12, 0),
+			       timedelta(minutes=10), "whatever",
+			       privacy="hidden", unique_id="123")
+	self.assertNotEqual(ce1, ce2)
+	self.assertNotEqual(hash(ce1), hash(ce2))
+
+	self.assertRaises(ValueError, self.createEvent,
+			  datetime(2004, 11, 25, 12, 0),
+			  timedelta(minutes=10), "whatever",
+			  privacy="other", unique_id="123")
+
+	for p in ('private', 'public', 'hidden'):
+	    self.createEvent(datetime(2004, 11, 25, 12, 0),
+			       timedelta(minutes=10), "whatever",
+			       privacy=p, unique_id="123")
+	self.assertEqual(ce1.replace(privacy="hidden"), ce2)
+	self.assertEqual(ce2, ce2.replace())
+
 
 class TestExpandedCalendarEvent(TestCalendarEvent):
 

@@ -230,9 +230,12 @@ class CalendarEvent(Persistent):
     context = property(lambda self: self._context)
     location = property(lambda self: self._location)
     recurrence = property(lambda self: self._recurrence)
+    privacy = property(lambda self: self._privacy)
+    _privacy = "public"
 
     def __init__(self, dtstart, duration, title, owner=None, context=None,
-                 location=None, unique_id=None, recurrence=None):
+                 location=None, unique_id=None, recurrence=None,
+		 privacy="public"):
         self._dtstart = dtstart
         self._duration = duration
         self._title = title
@@ -240,6 +243,10 @@ class CalendarEvent(Persistent):
         self._context = context
         self._location = location
         self._recurrence = recurrence
+	if not privacy in ('private', 'public', 'hidden'):
+	    raise ValueError("privacy must be one of 'private',"
+			     " 'public', or 'hidden', got %r" % (privacy, ))
+	self._privacy = privacy
 
         if unique_id is None:
             # & 0x7ffffff to avoid FutureWarnings with negative numbers
@@ -253,7 +260,7 @@ class CalendarEvent(Persistent):
         self._unique_id = unique_id
 
     replace_kw = ('dtstart', 'duration', 'title','owner', 'context',
-                  'location', 'unique_id', 'recurrence')
+                  'location', 'unique_id', 'recurrence', 'privacy')
 
     def replace(self,  **kw):
         """Returns a copy of the event with some attrs changed.
@@ -273,7 +280,7 @@ class CalendarEvent(Persistent):
     def _tupleForComparison(self):
         return (self.dtstart, self.title, self.duration, self.owner,
                 self.context, self.location, self.unique_id,
-                self.recurrence)
+                self.recurrence, self.privacy)
 
     def __eq__(self, other):
         if not isinstance(other, CalendarEvent):
@@ -308,14 +315,15 @@ class CalendarEvent(Persistent):
         #    return hash(self.unique_id)
         # should be enough, if the ID is really unique.
         return hash((self.dtstart, self.title, self.duration, self.owner,
-                     self.context, self.location, self.unique_id))
+                     self.context, self.location, self.unique_id,
+                     self.recurrence, self.privacy))
 
     def __repr__(self):
         return ("%s%r"
                 % (self.__class__.__name__,
                    (self.dtstart, self.duration, self.title, self.owner,
                     self.context, self.location, self.unique_id,
-                    self.recurrence), ))
+                    self.recurrence, self.privacy), ))
 
     def hasOccurrences(self):
         if self.recurrence is None:
