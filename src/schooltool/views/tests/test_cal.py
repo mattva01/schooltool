@@ -39,12 +39,12 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
                                  datetime.date(2003, 10, 1))
         setPath(self.sm, '/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
-        self.request = RequestStub("http://localhost/calendar")
 
     def do_test(self, expected):
-        result = self.view.render(self.request)
+        request = RequestStub("http://localhost/calendar")
+        result = self.view.render(request)
         expected = "\r\n".join(expected.splitlines()) # normalize line endings
-        self.assertEquals(self.request.headers['Content-Type'],
+        self.assertEquals(request.headers['Content-Type'],
                           "text/calendar; charset=UTF-8")
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
@@ -87,6 +87,59 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
                     END:VEVENT
                 """ % (s, s))
         self.do_test(expected + "END:VCALENDAR")
+
+    def test_put(self):
+        from schooltool.cal import daterange
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040930
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        request = RequestStub("http://localhost/calendar", method="PUT",
+                              headers={"Content-Type": "text/calendar"},
+                              body=calendar)
+        result = self.view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Calendar imported")
+        self.assertEquals(self.sm.start, datetime.date(2004, 9, 1))
+        self.assertEquals(self.sm.end, datetime.date(2004, 10, 1))
+        for date in daterange(self.sm.start, self.sm.end):
+            if date == datetime.date(2004, 9, 12):
+                self.assert_(self.sm.isSchoolday(date))
+            else:
+                self.assert_(not self.sm.isSchoolday(date))
+
+    def test_put_not_a_calendar(self):
+        self.sm.add(datetime.date(2003, 9, 15))
+        request = RequestStub("http://localhost/calendar", method="PUT",
+                              headers={"Content-Type": "text/plain"},
+                              body="Hi, Mom!")
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Unsupported content type: text/plain")
+        self.assertEquals(self.sm.start, datetime.date(2003, 9, 1))
+        self.assertEquals(self.sm.end, datetime.date(2003, 10, 1))
+        self.assert_(self.sm.isSchoolday(datetime.date(2003, 9, 15)))
 
 
 def test_suite():

@@ -25,8 +25,8 @@ $Id$
 import datetime
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
-from schooltool.views import View
-from schooltool.cal import daterange
+from schooltool.views import View, textErrorPage
+from schooltool.cal import daterange, ICalReader
 from schooltool.component import getPath
 
 __metaclass__ = type
@@ -66,6 +66,24 @@ class SchooldayModelCalendarView(View):
                 ]
         result.append("END:VCALENDAR")
         return "\r\n".join(result)
+
+    def do_PUT(self, request):
+        ctype = request.getHeader('Content-Type')
+        if ';' in ctype:
+            ctype = ctype[:ctype.index(';')]
+        if ctype != 'text/calendar':
+            return textErrorPage(request,
+                                 "Unsupported content type: %s" % ctype)
+        self.context.clear()
+        reader = ICalReader(request.content)
+        for event in reader.read():
+            if event.get('summary', '').lower() == 'school period':
+                self.context.start = event.dtstart
+                self.context.end = event.dtend + datetime.date.resolution
+            elif event.get('summary', '').lower() == 'schoolday':
+                self.context.add(event.dtstart)
+        request.setHeader('Content-Type', 'text/plain')
+        return "Calendar imported"
 
 
 def setUp():
