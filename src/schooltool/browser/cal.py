@@ -22,6 +22,7 @@ Browser views for calendaring.
 $Id$
 """
 
+import itertools
 import urllib
 from datetime import datetime, date, time, timedelta
 
@@ -881,19 +882,12 @@ class EventDeleteView(View):
 
 
 class CalendarComboMixin(View):
-    """Mixin for views over the combined calendar of a person.
-
-    The calendar events are decorated with a 'source' attribute, which
-    is a name of the calendar the event is from.
-    """
+    """Mixin for views over the combined calendar of a person."""
 
     def iterEvents(self):
-        """Iterate over the events of the calendars displayed"""
-
-        for event in self.context:
-            yield event
-        for event in self.context.__parent__.makeCalendar():
-            yield event
+        """Iterate over the events of the calendars displayed."""
+        return itertools.chain(self.context,
+                               self.context.__parent__.makeCalendar())
 
 
 class ComboDailyCalendarView(CalendarComboMixin, DailyCalendarView):
