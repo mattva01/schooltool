@@ -477,7 +477,7 @@ class TestResourceContainerView(TestObjectContainerView):
         self.obj_view = ResourceView
 
 
-class TestObjectAddView(unittest.TestCase):
+class TestObjectAddView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
         from schooltool.browser.app import ObjectAddView
@@ -530,6 +530,26 @@ class TestObjectAddView(unittest.TestCase):
         obj = self.container.objs[0]
         self.assertEquals(obj.__name__, 'newobj')
         self.assertEquals(obj.title, u'New \u0105 stuff')
+
+    def test_POST_with_parent(self):
+        from schooltool.browser.app import ObjectAddView
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIMember
+        view = ObjectAddView(self.app['resources'])
+        teachers = self.teachers
+        view.parent = teachers
+        request = RequestStub(args={'name': 'newobj',
+                                    'title': 'New \xc4\x85 stuff'})
+        view.request = request
+        content = view.do_POST(request)
+        obj = self.app['resources']['newobj']
+        assert obj in getRelatedObjects(teachers, URIMember)
+        self.assertEquals(view.request.applog,
+                [(None, u"Object /resources/newobj of type"
+                         " Resource created", INFO),
+                 (None, u"Relationship 'Membership' between "
+                         "/resources/newobj and /groups/teachers created",
+                  INFO)])
 
     def test_POST_cancel(self):
         view = self.createView()
@@ -684,26 +704,6 @@ class TestGroupAddView(AppSetupMixin, unittest.TestCase):
         view._extractParentFromRequest(request)
         assert view.parent is None
         self.assertEquals(view.title, "Add group")
-
-    def test_afterCreationHook_no_parent(self):
-        view = self.createView()
-        view.parent = None
-        view.request = RequestStub()
-        view._afterCreationHook(self.pupils)
-        self.assertEquals(view.request.applog, [])
-
-    def test_afterCreationHook_with_parent(self):
-        from schooltool.component import getRelatedObjects
-        from schooltool.uris import URIMember
-        view = self.createView()
-        view.parent = self.teachers
-        view.request = RequestStub()
-        view._afterCreationHook(self.pupils)
-        assert self.pupils in getRelatedObjects(self.teachers, URIMember)
-        self.assertEquals(view.request.applog,
-                [(None,
-                  "Relationship 'Membership' between "
-                  "/groups/pupils and /groups/teachers created", INFO)])
 
 
 class TestResourceAddView(unittest.TestCase):

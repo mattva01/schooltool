@@ -249,6 +249,7 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
     duplicate_warning = False
 
     title = _("Add object") # should be overridden by subclasses
+    parent = None           # can be set by subclasses
 
     def do_POST(self, request):
         if 'CANCEL' in self.request.args:
@@ -289,7 +290,11 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
-        self._afterCreationHook(obj)
+        if self.parent is not None:
+            Membership(group=self.parent, member=obj)
+            self.request.appLog(
+                    _("Relationship 'Membership' between %s and %s created")
+                    % (getPath(obj), getPath(self.parent)))
 
         url = absoluteURL(request, obj)
         return self.redirect(url, request)
@@ -301,21 +306,11 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
                 return True
         return False
 
-    def _afterCreationHook(self, obj):
-        """This method is called once when obj is created.
-
-        Subclasses can override it and do any custom steps necessary (e.g. add
-        obj to a parent group).
-        """
-        pass
-
 
 class GroupAddView(ObjectAddView):
     """View for adding groups (/groups/add.html)."""
 
     title = _("Add group")
-
-    template = Template('www/group_add.pt')
 
     def _extractParentFromRequest(self, request):
         self.parent = None
@@ -336,14 +331,6 @@ class GroupAddView(ObjectAddView):
     def do_POST(self, request):
         self._extractParentFromRequest(request)
         return ObjectAddView.do_POST(self, request)
-
-    def _afterCreationHook(self, obj):
-        """Add object to self.parent group if it is not None."""
-        if self.parent is not None:
-            Membership(group=self.parent, member=obj)
-            self.request.appLog(
-                    _("Relationship 'Membership' between %s and %s created")
-                    % (getPath(obj), getPath(self.parent)))
 
 
 class ResourceAddView(ObjectAddView):

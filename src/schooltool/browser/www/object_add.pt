@@ -9,6 +9,8 @@
 <metal:block metal:fill-slot="content">
 
   <form method="POST" tal:attributes="action request/path">
+    <input tal:condition="view/parent" type="hidden" name="parentgroup"
+           tal:attributes="value view/parent/__name__" />
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row">
       <label class="wide" for="title" i18n:translate="">Title</label>
