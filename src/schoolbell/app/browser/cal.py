@@ -1290,6 +1290,8 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     __used_for__ = ISchoolBellCalendar
     schema = ICalendarEventAddForm
 
+    title = _("Add event")
+
     error = None
 
     def create(self, **kwargs):
@@ -1333,11 +1335,14 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
 class ICalendarEventEditForm(ICalendarEventAddForm):
     pass
 
+
 class CalendarEventEditView(CalendarEventViewMixin, EditView):
     """A view for editing an event."""
 
     error = None
     _redirectToDate = None
+
+    title = _("Edit event")
 
     def keyword_arguments(self):
         """Wraps fieldNames under another name.

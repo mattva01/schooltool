@@ -33,15 +33,7 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/clear_photo_widget">
-        <div class="field">
-          <input type="text" tal:replace="structure widget" />
-          <label tal:attributes="for widget/name"
-                 tal:content="widget/label">Label</label>
-          <div class="error" tal:define="error widget/error"
-               tal:condition="error" tal:content="structure error">
-            Error message.
-          </div>
-        </div>
+        <div metal:use-macro="context/@@standard_macros/checkbox_widget " />
       </div>
     </fieldset>
 

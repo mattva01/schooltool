@@ -1,7 +1,8 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" i18n:translate="">Add event</title>
+  <title metal:fill-slot="title" i18n:translate=""
+         tal:content="view/title">Add/edit event</title>
   <script type="text/javascript" metal:fill-slot="extrahead">
     function recurrence_changed() {
         var recurrence = document.getElementById('field.recurrence');
@@ -16,11 +17,8 @@
         }
     }
     function recurrence_type_changed() {
-        /* XXX can't access recurrence_type element by ID because of a bug in Zope 3
-               change this back to var recurrence = document.getElementById('field.recurrence_type')
-               when zope3 is fixed */
         form = document.getElementById('form');
-        var recurrence = form['field.recurrence_type'];
+        var recurrence = document.getElementById('field.recurrence_type');
         var weekly_row = document.getElementById('weekly_row');
         var monthly_box = document.getElementById('monthly_box');
         if (recurrence.value == 'weekly') {
@@ -103,14 +101,16 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/duration_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
+        <div metal:use-macro="context/@@standard_macros/widget_row_with_extra">
+          <metal:block fill-slot="extra" i18n:translate="">minutes</metal:block>
+        </div>
       </div>
       <div class="row" tal:define="widget nocall:view/location_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
 
       <div class="row" tal:define="widget nocall:view/recurrence_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
+        <div metal:use-macro="context/@@standard_macros/checkbox_widget " />
       </div>
 
       <div id="recurrence_box">
@@ -121,27 +121,22 @@
         <!-- Repeat every [count] [freq [v]] -->
         <div class="row">
           <div class="row" tal:define="widget nocall:view/interval_widget">
-            <div class="label">
-              <label for="field.name" title="The widget's hint"
-                     tal:attributes="for widget/name; title widget/hint"
-                     tal:content="widget/label">The Label</label>
-            </div>
-            <div class="field" tal:content="structure widget">
-              <input tal:attributes="class widget/css_class; name widget/name;
-                                     id widget/name; type widget/input_type;
-                                     tabindex widget/tabindex; value widget/_getFormInput"
-                     size="3" />
-            </div>
-          </div>
-
-          <div class="row" tal:define="widget nocall:view/recurrence_type_widget">
-            <div metal:use-macro="context/@@form_macros/widget_row" />
-          </div>
-
-          <div class="row" tal:define="widget nocall:view/interval_widget">
-            <div class="error" tal:define="error widget/error"
-                 tal:condition="error" tal:content="structure error">
-              The Error
+            <div metal:use-macro="context/@@standard_macros/widget_row_with_extra">
+              <metal:block fill-slot="extra">
+              <tal:comment condition="nothing">
+              Sadly, the Zope 3 SelectWidget is brain-dead:
+                - no "id" attribute on the select element
+                - renders two divs for no reason
+              TODO: follow it up in Zope 3.
+              </tal:comment>
+              <select name="field.recurrence_type" size="1"
+                      id="field.recurrence_type">
+              <option selected="selected" value="daily">day</option>
+              <option value="weekly">week</option>
+              <option value="monthly">month</option>
+              <option value="yearly">year</option>
+              </select>
+              </metal:block>
             </div>
           </div>
         </div>

@@ -95,11 +95,16 @@ form.standalone .controls input {
     background: #fff;
 }
 
+form.standalone div.label {
+    float: left;
+    clear: left;
+    width: 10em;
+    padding-top: 0.5ex;
+}
+
 input[type=text],
 input[type=password],
 input[type=submit],
-input[type=checkbox],
-input[type=radio],
 select,
 textarea {
     padding: 2px;

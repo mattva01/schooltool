@@ -336,3 +336,29 @@
 
 <!-- END CALENDAR MACROS -->
 
+<!-- FORM MACROS -->
+<div class="field" metal:define-macro="checkbox_widget">
+  <input type="text" tal:replace="structure widget" />
+  <label tal:attributes="for widget/name"
+         tal:content="widget/label">Label</label>
+  <div class="error" tal:define="error widget/error"
+       tal:condition="error" tal:content="structure error">
+    Error message.
+  </div>
+</div>
+
+<metal:block define-macro="widget_row_with_extra">
+<div class="label">
+  <label for="field.name" title="The widget's hint"
+    tal:attributes="for widget/name; title widget/hint"
+    tal:content="widget/label">The Label</label>
+</div>
+<div class="field">
+  <input type="text" style="width:100%" tal:replace="structure widget" />
+  <metal:block define-slot="extra" />
+</div>
+<div class="error" tal:define="error widget/error"
+  tal:condition="error" tal:content="structure error">
+  The Error
+</div>
+</metal:block>
