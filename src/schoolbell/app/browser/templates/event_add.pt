@@ -161,12 +161,6 @@
                    disabled python:view.weekdayDisabled(term.token);
                    checked python:view.weekdayChecked(term.token)"
                    />
-            <input type="hidden" name="field.weekdays:list"
-                   tal:attributes="
-                       id string:weekday_${term/token}_hidden;
-                       value term/token"
-                   tal:condition="python:view.weekdayDisabled(term.token)"
-                   />
             <label tal:attributes="for string:weekday_${term/token}"
                tal:content="python:view.weekdays_widget.textForValue(term)" class="plain" />
           </span>

@@ -276,10 +276,12 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         return date + date.resolution
 
     def _iCalArgs(self, dtstart):
-        """Return iCalendar parameters specific to monthly reccurence."""
-        if self.weekdays:
+        """Return iCalendar parameters specific to weekly reccurence."""
+        if dtstart is not None:
+            weekdays = Set(self.weekdays)
+            weekdays.add(dtstart.weekday())
             return 'BYDAY=' + ','.join([ical_weekdays[weekday]
-                                        for weekday in self.weekdays])
+                                        for weekday in weekdays])
 
 
 class MonthlyRecurrenceRule(RecurrenceRule):
