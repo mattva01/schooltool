@@ -428,9 +428,9 @@ def main(argv):
             pass
 
     # Option processing
-    opts, args = getopt.getopt(argv[1:], 'hvpufw',
-                               ['list-files', 'list-tests', 'list-hooks',
-                                'level=', 'all-levels', 'coverage'])
+    opts, args = getopt.gnu_getopt(argv[1:], 'hvpufw',
+                                   ['list-files', 'list-tests', 'list-hooks',
+                                    'level=', 'all-levels', 'coverage'])
     for k, v in opts:
         if k == '-h':
             print __doc__
