@@ -1201,6 +1201,15 @@ class ICalendarEvent(Interface):
         return the same value.
         """
 
+    def hasOccurrences():
+        """Does the event have any occurrences?
+
+        Normally all events have at least one occurrence.  However if you have
+        a repeating event that repeats a finite number of times, and all those
+        repetitions are listed as exceptions, then hasOccurrences() will return
+        False.
+        """
+
 
 class IExpandedCalendarEvent(ICalendarEvent):
     """A calendar event that may be a recurrence of a recurrent event."""

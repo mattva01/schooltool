@@ -591,6 +591,34 @@ class TestCalendarEvent(unittest.TestCase):
         assert ce4.dtstart > ce.dtstart
         self.assert_(ce4 > ce) # dtstart is more important
 
+    def testHasOccurrences(self):
+        from schooltool.cal import DailyRecurrenceRule
+        ce = self.createEvent(datetime(2004, 11, 25, 12, 0),
+                              timedelta(minutes=10), "whatever")
+        assert ce.hasOccurrences()
+
+        ce = self.createEvent(datetime(2004, 11, 25, 12, 0),
+                              timedelta(minutes=10), "whatever",
+                              recurrence=DailyRecurrenceRule())
+        assert ce.hasOccurrences()
+
+        ce = self.createEvent(datetime(2004, 11, 25, 12, 0),
+                              timedelta(minutes=10), "whatever",
+                              recurrence=DailyRecurrenceRule(
+                                    count=3,
+                                    exceptions=[date(2004, 11, 25),
+                                                date(2004, 11, 27)]))
+        assert ce.hasOccurrences()
+
+        ce = self.createEvent(datetime(2004, 11, 25, 12, 0),
+                              timedelta(minutes=10), "whatever",
+                              recurrence=DailyRecurrenceRule(
+                                    count=3,
+                                    exceptions=[date(2004, 11, 25),
+                                                date(2004, 11, 26),
+                                                date(2004, 11, 27)]))
+        assert not ce.hasOccurrences()
+
 
 class TestExpandedCalendarEvent(TestCalendarEvent):
 

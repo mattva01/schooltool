@@ -315,6 +315,23 @@ class CalendarEvent(Persistent):
                     self.context, self.location, self.unique_id,
                     self.recurrence), ))
 
+    def hasOccurrences(self):
+        if self.recurrence is None:
+            # No recurrence rule implies one and only one occurrence
+            return True
+        if self.recurrence.until is None and self.recurrence.count is None:
+            # Events that repeat forever always have occurrences because
+            # there is a finite number of exceptions.
+            return True
+        try:
+            self.recurrence.apply(self).next()
+        except StopIteration:
+            # No occurrences
+            return False
+        else:
+            # At least ne occurrence exists
+            return True
+
 
 class ExpandedCalendarEvent(CalendarEvent):
     """Event in an expanded calendar
