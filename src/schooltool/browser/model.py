@@ -87,11 +87,14 @@ class PersonEditView(View):
         first_name = request.args['first_name'][0]
         last_name = request.args['last_name'][0]
         comment = request.args['comment'][0]
+        photo = request.args['photo'][0]
 
         infofacet = self.info()
         infofacet.first_name = first_name
         infofacet.last_name = last_name
         infofacet.comment = comment
+        if photo:
+            infofacet.photo = photo
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)

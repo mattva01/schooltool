@@ -8,7 +8,8 @@
   </h1>
   <metal:block metal:fill-slot="content" tal:define="info view/info">
 
-  <form action="." method="POST" tal:attributes="action request/path">
+  <form action="." method="POST" enctype="multipart/form-data"
+        tal:attributes="action request/path">
     <div class="row"><b>Username:</b>
       <span tal:replace="python:context.__name__">not_doe</span>
     </div>
@@ -30,11 +31,12 @@
     </div>
     <div class="row">
       <label for="comment">Comment</label>
-      <input id="comment" name="comment" type="text" value="foo"
-             tal:attributes="value info/comment" />
+      <textarea id="comment" name="comment" type="text" value="foo"
+                tal:content="info/comment">Comment...</textarea>
     </div>
     <div class="row">
       <b>Photo:</b>
+      <input type="file" name="photo" />
       <!-- <tal:block replace="structure view/photo" /> -->
     </div>
   <div class="buttons">

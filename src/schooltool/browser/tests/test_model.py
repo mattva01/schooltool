@@ -120,16 +120,26 @@ class TestPersonEditView(unittest.TestCase):
         view = self.createView()
         request = RequestStub(args={'first_name': u'I Changed',
                                     'last_name': u'My Name Recently',
-                                    'comment': u'For various reasons.'})
+                                    'comment': u'For various reasons.',
+                                    'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
         view.do_POST(request)
 
         self.assertEquals(self.info.first_name, u'I Changed')
         self.assertEquals(self.info.last_name, u'My Name Recently')
         self.assertEquals(self.info.comment, u'For various reasons.')
+        self.assertEquals(self.info.photo, 'P6\n1 1\n255\n\xff\xff\xff')
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody')
+
+        # Check that the photo isn't removed.
+        request = RequestStub(args={'first_name': u'I Changed',
+                                    'last_name': u'My Name Recently',
+                                    'comment': u'For various reasons.',
+                                    'photo': ''})
+        view.do_POST(request)
+        self.assertEquals(self.info.photo, 'P6\n1 1\n255\n\xff\xff\xff')
 
 
 class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):

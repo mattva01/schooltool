@@ -127,7 +127,7 @@ class TestPersonEdit(unittest.TestCase):
 
         browser.post('http://localhost:8814/persons/manager/edit.html',
                      {'first_name': 'xyzzy', 'last_name': 'foobar',
-                      'comment': 'I can write!'})
+                      'comment': 'I can write!', 'photo': ''})
         self.assertEquals(browser.url, 'http://localhost:8814/persons/manager')
         self.assert_('xyzzy' in browser.content)
         self.assert_('foobar' in browser.content)
@@ -140,7 +140,8 @@ class TestPersonEdit(unittest.TestCase):
 
         # Restore original person info
         browser.post('http://localhost:8814/persons/manager/edit.html',
-                     {'first_name': 'Manager', 'last_name': '', 'comment': ''})
+                     {'first_name': 'Manager', 'last_name': '',
+                      'comment': '', 'photo': ''})
 
 
 def test_suite():
