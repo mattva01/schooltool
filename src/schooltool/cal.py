@@ -493,6 +493,11 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         self.weekdays = weekdays
         self._validate()
 
+    def __repr__(self):
+        return '%s(%r, %r, %r, %r, %r)' % (
+            self.__class__.__name__, self.interval,
+            self.count, self.until, self.exceptions, self.weekdays)
+
     def _validate(self):
         RecurrenceRule._validate(self)
         for dow in self.weekdays:
