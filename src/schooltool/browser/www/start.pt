@@ -49,10 +49,6 @@
           class="action"  i18n:translate=""
           >Use your calendar</a>
 
-    <p><a tal:attributes="href
-          string:${context/@@absolute_url}/timetable-calendar"
-          class="action" i18n:translate=""
-          >Use your timetable calendar (read only)</a>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
           class="action"  i18n:translate=""
           >Use your calendar in an iCal client</a>

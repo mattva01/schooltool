@@ -137,6 +137,7 @@ div.error {
 
 div.row {
   margin: 1ex 0ex;
+  clear: both;
 }
 
 div.buttons {
