@@ -325,10 +325,7 @@ class GroupEditView(View, RelationshipViewMixin):
     back = True
 
     def addList(self):
-        """Return a list of objects available for addition
-
-        (type, title, path, URL)
-        """
+        """Return a list of objects available for addition"""
         result = []
 
         searchstr = self.request.args['SEARCH'][0].lower()
