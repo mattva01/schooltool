@@ -319,9 +319,7 @@ class RelationshipViewMixin:
                                    % (self.relname, getPath(link.traverse()),
                                       getPath(self.context)))
         if "FINISH_ADD" in request.args:
-            paths = []
-            if "toadd" in request.args:
-                paths += request.args["toadd"]
+            paths = filter(None, request.args.get("toadd", []))
             for path in paths:
                 obj = traverse(self.context, path)
                 self.createRelationship(obj)

@@ -49,7 +49,7 @@
   <form method="POST"
         tal:attributes="action request/uri">
   <select name="toadd">
-    <option i18n:translate="">Select...</option>
+    <option i18n:translate="" value="">Select...</option>
     <option tal:repeat="teacher view/addList"
             tal:attributes="value teacher/@@path"
             tal:content="teacher/title"/>

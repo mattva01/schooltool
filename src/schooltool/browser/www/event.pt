@@ -1,6 +1,6 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Add event</title>
+  <title metal:fill-slot="title" tal:content="view/page_title">title</title>
 </head>
 <body>
 

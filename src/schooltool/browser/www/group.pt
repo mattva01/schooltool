@@ -23,17 +23,21 @@
   </div>
 
   <div class="members">
-    <div tal:define="subgroups view/getSubGroups" tal:condition="subgroups">
+    <div tal:define="subgroups view/getSubGroups">
       <h3 i18n:translate="">Sub-groups</h3>
       <p tal:repeat="sub subgroups">
        <a tal:attributes="href sub/@@absolute_url" tal:content="sub/title"/>
       </p>
+      <p tal:condition="not:subgroups" i18n:translate="">
+      This group has no sub-groups.</p>
     </div>
-    <div tal:define="members view/getOtherMembers" tal:condition="members">
+    <div tal:define="members view/getOtherMembers">
       <h3 i18n:translate="">Members</h3>
       <p tal:repeat="obj members">
        <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title"/>
       </p>
+      <p tal:condition="not:members" i18n:translate="">
+      This group has no members.</p>
     </div>
     <div class="actions" tal:condition="view/canEdit">
       <a class="action"

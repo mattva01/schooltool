@@ -692,6 +692,14 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
                   "Relationship 'Teaching' between "
                   "/persons/josh and /groups/new created", INFO)])
 
+    def test_update_ADD_nothing_is_selected(self):
+        from schooltool.browser.model import GroupTeachersView
+        view = GroupTeachersView(self.group)
+        view.request = RequestStub(args={"FINISH_ADD":"Add selected",
+                                         "toadd": ''})
+        view.update()
+        self.assertEquals(view.request.applog, [])
+
 
 class TestResourceView(unittest.TestCase, TraversalTestMixin,):
 
