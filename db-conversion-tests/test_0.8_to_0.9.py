@@ -22,6 +22,7 @@ Functional test for migrating from v. 0.8 to 0.9
 $Id$
 """
 
+import os
 import tempfile
 tempdir = tempfile.mkdtemp()
 
@@ -29,4 +30,4 @@ import shutil
 shutil.copy('Data.fs-0.8', tempdir)
 
 os.chdir(tempdir)
-os.system('python ../../schooltool-server.py')
+os.system('python ../schooltool-server.py')
