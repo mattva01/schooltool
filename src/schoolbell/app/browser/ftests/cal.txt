@@ -14,7 +14,7 @@ We will obviously need a SchoolBell instance.
     HTTP/1.1 303 See Other
     ...
 
-Let's create a person so can fool around with his calendar:
+Let's create a person so that we can fool around with his calendar:
 
     >>> print http(r"""
     ... POST /frogpond/persons/add.html HTTP/1.1
