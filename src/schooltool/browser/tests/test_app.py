@@ -140,6 +140,8 @@ class TestAppView(SchoolToolSetup, TraversalTestMixin):
                           'http://localhost:7001/login')
 
     def test_render_already_logged_in(self):
+        # If manager is already logged in the proper (or at least intentional)
+        # behavior is to redirect to the managers calendar.
         view = self.createView()
         request = RequestStub(authenticated_user=PersonStub())
         result = view.render(request)
@@ -240,7 +242,7 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
         from schooltool.interfaces import AuthenticationError
         from schooltool.model import Person
         person = Person()
-
+        person.__name__ = 'manager'
         request = RequestStub(*args, **kw)
         def authenticate(username, password):
             if username == 'manager' and password == 'schooltool':
@@ -304,7 +306,7 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
         result = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/start')
+                          'http://localhost:7001/persons/manager/calendar')
 
     def test_post(self):
         from schooltool.component import getTicketService
@@ -315,11 +317,10 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
         result = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/start')
+                          'http://localhost:7001/persons/manager/calendar')
         self.assertEquals(request._outgoing_cookies['auth']['path'], '/')
         ticket = request._outgoing_cookies['auth']['value']
-        username, password = \
-                  getTicketService(view.context).verifyTicket(ticket)
+        username, password = getTicketService(view.context).verifyTicket(ticket)
         self.assertEquals(username, 'manager')
         self.assertEquals(password, 'schooltool')
 
@@ -352,63 +353,6 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
         self.assert_('manager' in result)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
-
-    def test_traversal(self):
-        from schooltool.browser import StaticFile
-        from schooltool.browser.app import LogoutView
-        from schooltool.browser.app import DatabaseResetView
-        from schooltool.browser.app import StartView
-        from schooltool.browser.app import PersonContainerView
-        from schooltool.browser.app import GroupContainerView
-        from schooltool.browser.app import ResourceContainerView
-        from schooltool.browser.app import NoteContainerView
-        from schooltool.browser.app import BusySearchView
-        from schooltool.browser.app import OptionsView
-        from schooltool.browser.app import DeleteView
-        from schooltool.browser.applog import ApplicationLogView
-        from schooltool.browser.timetable import TimetableSchemaWizard
-        from schooltool.browser.timetable import TimetableSchemaServiceView
-        from schooltool.browser.timetable import TimePeriodServiceView
-        from schooltool.browser.timetable import NewTimePeriodView
-        from schooltool.browser.csvimport import CSVImportView
-        from schooltool.browser.csvimport import TimetableCSVImportView
-
-        view = self.createView()
-        app = view.context
-        self.assertTraverses(view, 'logout', LogoutView, app)
-        self.assertTraverses(view, 'reset_db.html', DatabaseResetView, app)
-        self.assertTraverses(view, 'options.html', OptionsView, app)
-        self.assertTraverses(view, 'applog', ApplicationLogView, app)
-        self.assertTraverses(view, 'persons', PersonContainerView,
-                             app['persons'])
-        self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
-        self.assertTraverses(view, 'resources', ResourceContainerView,
-                             app['resources'])
-        self.assertTraverses(view, 'notes', NoteContainerView,
-                             app['notes'])
-        self.assertTraverses(view, 'delete.html', DeleteView, app)
-        self.assertTraverses(view, 'csvimport.html', CSVImportView, app)
-        self.assertTraverses(view, 'tt_csvimport.html',
-                             TimetableCSVImportView, app)
-        self.assertTraverses(view, 'busysearch', BusySearchView, app)
-        self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
-                             app.timetableSchemaService)
-        self.assertTraverses(view, 'newttschema', TimetableSchemaWizard,
-                             app.timetableSchemaService)
-        self.assertTraverses(view, 'time-periods', TimePeriodServiceView,
-                             app.timePeriodService)
-        view2 = self.assertTraverses(view, 'newtimeperiod', NewTimePeriodView,
-                                    None)
-        self.assert_(view2.service is app.timePeriodService)
-        css = self.assertTraverses(view, 'schooltool.css', StaticFile)
-        self.assertEquals(css.content_type, 'text/css')
-        for picture in ('logo.png', 'group.png', 'person.png', 'resource.png'):
-            image = self.assertTraverses(view, picture, StaticFile)
-            self.assertEquals(image.content_type, 'image/png')
-        user = object()
-        request = RequestStub(authenticated_user=user)
-        self.assertTraverses(view, 'start', StartView, user, request=request)
-        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
 class TestLogoutView(unittest.TestCase):
@@ -1838,6 +1782,7 @@ class TestDeleteView(AppSetupMixin, unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
+    suite.addTest(unittest.makeSuite(TestLoginView))
     suite.addTest(unittest.makeSuite(TestLogoutView))
     suite.addTest(unittest.makeSuite(TestStartView))
     suite.addTest(unittest.makeSuite(TestPersonAddView))
