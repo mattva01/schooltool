@@ -406,13 +406,45 @@ calendar, you will see a new portlet on the left:
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
+      <div id="portlet-calendar-overlay" class="portlet">
     <BLANKLINE>
-    ...
-    <div id="portlet-calendar-overlay" class="portlet">
       <h4>Calendars</h4>
-      ...
-      <form ...>
+    <BLANKLINE>
+      <form method="POST"
+            action="http://localhost/frogpond/persons/frog/calendar/daily.html">
+    ...
+            <input type="checkbox" checked="checked" disabled="disabled" />
+            My Calendar
+    ...
+          <input name="OVERLAY_APPLY" type="submit"
+                 value="Apply" />
+          <input name="OVERLAY_MORE" type="submit"
+                 value="More..." />
+    ...
       </form>
     </div>
     ...
 
+Initially it contains only your own calendar.  You can click on "More..."
+and add other calendars to this list.
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/daily.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... OVERLAY_MORE=More...
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar_selection.html?nexturl=...
+    ...
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar_selection.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+
+TODO: finish this test

@@ -51,6 +51,7 @@ from zope.security.checker import canWrite, canAccess
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.interfaces import IPerson
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
@@ -65,6 +66,10 @@ from schoolbell.calendar.utils import parse_time, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell import SchoolBellMessageID as _
 
+
+#
+# Traversal
+#
 
 class CalendarOwnerTraverser(object):
     """A traverser that allows to traverse to a calendar owner's calendar."""
@@ -176,6 +181,34 @@ class CalendarTraverser(object):
         return weeknum_bounds(year, week)[0]
 
 
+#
+# Calendar displaying backend
+#
+
+class EventForDisplay(object):
+    """A single calendar event.
+
+    This is a wrapper around an ICalendarEvent object.  It adds view-specific
+    attributes:
+
+        dtend -- timestamp when the event ends
+        color1, color2 -- colors used for display
+
+    """
+
+    def __init__(self, event, color1, color2):
+        self.context = event
+        self.dtend = event.dtstart + event.duration
+        self.color1 = color1
+        self.color2 = color2
+
+    def __cmp__(self, other):
+        return cmp(self.context.dtstart, other.context.dtstart)
+
+    def __getattr__(self, name):
+        return getattr(self.context, name)
+
+
 class CalendarDay(object):
     """A single day in a calendar.
 
@@ -186,18 +219,23 @@ class CalendarDay(object):
     """
 
     def __init__(self, date, events=None):
-        self.date = date
         if events is None:
-            self.events = []
-        else:
-            self.events = events
+            events = []
+        self.date = date
+        self.events = events
 
     def __cmp__(self, other):
         return cmp(self.date, other.date)
 
 
+#
+# Temporary debug stuff, will go away soon
+#
+
 class PlainCalendarView(BrowserView):
     """A calendar view purely for testing purposes."""
+
+    # XXX remove this view before the release -- mg
 
     __used_for__ = ISchoolBellCalendar
 
@@ -235,6 +273,10 @@ class PlainCalendarView(BrowserView):
                 self.context.addEvent(event)
 
 
+#
+# Calendar display views
+#
+
 class CalendarViewBase(BrowserView):
     """A base class for the calendar views.
 
@@ -243,7 +285,6 @@ class CalendarViewBase(BrowserView):
 
     __used_for__ = ISchoolBellCalendar
 
-    # XXX I'd rather these constants would go somewhere in schoolbell.calendar.
     month_names = {
         1: _("January"), 2: _("February"), 3: _("March"),
         4: _("April"), 5: _("May"), 6: _("June"),
@@ -287,7 +328,7 @@ class CalendarViewBase(BrowserView):
         else:
             raise ValueError(cal_type)
 
-        return  '%s/%s' % (self.__url, dt)
+        return '%s/%s' % (self.__url, dt)
 
     def ellipsizeTitle(self, title):
         """For labels with limited space replace the tail with '...'."""
@@ -363,11 +404,28 @@ class CalendarViewBase(BrowserView):
     def eventShort(self, event):
         return self._eventView(event).short(self.request)
 
-    def eventHidden(self, event):
-        return False # TODO We don't have hidden events yet.
-
     def eventColors(self, event):
         return ('#9db8d2', '#7590ae') # XXX TODO
+
+    def getCalendars(self):
+        """Get a list of calendars to display.
+        
+        Yields tuples (calendar, color1, color2)"""
+        yield (self.context, '#9db8d2', '#7590ae')
+        user = IPerson(self.request.principal, None)
+        if user and removeSecurityProxy(self.context) is user.calendar:
+            for item in user.overlaid_calendars:
+                yield (item.calendar, item.color1, item.color2)
+
+    def getEvents(self, start_dt, end_dt):
+        """Get a list of EventForDisplay objects for a selected time interval.
+
+        `start_dt` and `end_dt` (datetime objects) are bounds (half-open) for
+        the result.
+        """
+        for calendar, color1, color2 in self.getCalendars():
+            for event in calendar.expand(start_dt, end_dt):
+                yield EventForDisplay(event, color1, color2)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -386,9 +444,7 @@ class CalendarViewBase(BrowserView):
         # We have date objects, but ICalendar.expand needs datetime objects
         start_dt = datetime.combine(start, time())
         end_dt = datetime.combine(end, time())
-        for event in self.context.expand(start_dt, end_dt):
-            if self.eventHidden(event):
-                continue
+        for event in self.getEvents(start_dt, end_dt):
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
             # |     |  [-- event --)  |     |
@@ -404,7 +460,7 @@ class CalendarViewBase(BrowserView):
             #   last_day == dtend.date() - 1 day   when dtend.time() is 00:00
             #                                      and duration > 0
             #               dtend.date()           otherwise
-            dtend = event.dtstart + event.duration
+            dtend = event.dtend
             first_day = event.dtstart.date()
             last_day = max(first_day, (dtend - dtend.resolution).date())
             # Loop through the intersection of two day ranges:
@@ -621,8 +677,8 @@ class CalendarEventView(object):
         dtstart = self.context.dtstart
         dtend = dtstart + self.context.duration
         if dtstart.date() == dtend.date():
-            span =  "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
-                                     dtend.strftime('%H:%M'))
+            span = "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
+                                    dtend.strftime('%H:%M'))
         else:
             span = "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
                                     dtend.strftime('%Y-%m-%d %H:%M'))
@@ -877,6 +933,10 @@ class DailyCalendarView(CalendarViewBase):
         # The number of hours displayed in the day view
         self.visiblehours = self.endhour - self.starthour
 
+
+#
+# Calendar modification views
+#
 
 class EventDeleteView(BrowserView):
     """A view for deleting events."""

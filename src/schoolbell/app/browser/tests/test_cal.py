@@ -36,7 +36,7 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from schoolbell.app.browser.cal import CalendarEventAddView
 from schoolbell.app.browser.cal import ICalendarEventAddForm
 from schoolbell.app.cal import CalendarEvent
-from schoolbell.app.app import Calendar
+from schoolbell.app.cal import Calendar
 
 # Used in defining CalendarEventEditTestView
 from schoolbell.app.browser.cal import CalendarEventEditView
@@ -215,7 +215,7 @@ def doctest_PlainCalendarView():
     """Tests for PlainCalendarView.
 
         >>> from schoolbell.app.browser.cal import PlainCalendarView
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> request = TestRequest()
         >>> view = PlainCalendarView(calendar, request)
@@ -228,6 +228,39 @@ def doctest_PlainCalendarView():
         >>> view = PlainCalendarView(calendar, request)
         >>> view.update()
         >>> len(calendar) > 0
+        True
+
+    """
+
+
+def doctest_EventForDisplay():
+    """A wrapper for calendar events.
+
+        >>> from schoolbell.app.browser.cal import EventForDisplay
+        >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
+        >>> e1 = EventForDisplay(e1, 'red', 'green')
+
+    EventForDisplay lets us access all the usual attributes
+
+        >>> e1.dtstart
+        datetime.datetime(2004, 1, 2, 14, 45, 50)
+        >>> e1.title
+        'yawn'
+
+    It adds some additional attributes
+
+        >>> e1.dtend
+        datetime.datetime(2004, 1, 2, 14, 50, 50)
+        >>> e1.color1
+        'red'
+        >>> e1.color2
+        'green'
+
+    Lists of EventForDisplay objects can be sorted by start time
+
+        >>> e2 = createEvent('2004-01-02 12:00:00', '15min', 'zzz')
+        >>> e2 = EventForDisplay(e2, 'blue', 'yellow')
+        >>> e1 > e2
         True
 
     """
@@ -330,7 +363,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getWeek(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
-        from schoolbell.app.app import Calendar
+        from schoolbell.app.cal import Calendar
 
         cal = Calendar()
         view = CalendarViewBase(cal, None)
@@ -354,7 +387,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getWeek_first_day_of_week(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
-        from schoolbell.app.app import Calendar
+        from schoolbell.app.cal import Calendar
 
         cal = Calendar()
         view = CalendarViewBase(cal, None)
@@ -385,7 +418,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getMonth(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
-        from schoolbell.app.app import Calendar
+        from schoolbell.app.cal import Calendar
 
         cal = Calendar()
         view = CalendarViewBase(cal, None)
@@ -420,7 +453,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_getYear(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
-        from schoolbell.app.app import Calendar
+        from schoolbell.app.cal import Calendar
 
         cal = Calendar()
         view = CalendarViewBase(cal, None)
@@ -443,9 +476,89 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
 
+    def doctest_getCalendars(self):
+        """Test for CalendarViewBase.getCalendars
+
+        CalendarViewBase.getCalendars returns a list of calendars that
+        should be displayed.  This list always includes the context of
+        the view, but it may also include other calendars as well.
+
+            >>> from schoolbell.app.browser.cal import CalendarViewBase
+            >>> class CalendarStub:
+            ...     def __init__(self, title):
+            ...         self.title = title
+            >>> calendar = CalendarStub('My Calendar') 
+            >>> request = TestRequest()
+            >>> view = CalendarViewBase(calendar, request)
+            >>> for c, col1, col2 in view.getCalendars():
+            ...     print '%s (%s, %s)' % (c.title, col1, col2)
+            My Calendar (#9db8d2, #7590ae)
+
+        If the authenticated user is looking at his own calendar, then
+        a list of overlayd calendars is taken into consideration
+
+            >>> class OverlayInfoStub:
+            ...     calendar = CalendarStub('Other Calendar')
+            ...     color1 = 'red'
+            ...     color2 = 'blue'
+            >>> class PersonStub:
+            ...     calendar = calendar
+            ...     overlaid_calendars = [OverlayInfoStub()]
+            >>> from schoolbell.app.interfaces import IPerson
+            >>> class PrincipalStub:
+            ...     def __conform__(self, interface):
+            ...         if interface is IPerson:
+            ...             return PersonStub()
+            >>> request.setPrincipal(PrincipalStub())
+            >>> for c, col1, col2 in view.getCalendars():
+            ...     print '%s (%s, %s)' % (c.title, col1, col2)
+            My Calendar (#9db8d2, #7590ae)
+            Other Calendar (red, blue)
+
+        No calendars are overlaid if the user is looking at a different
+        calendar
+
+            >>> view = CalendarViewBase(CalendarStub('Some Calendar'),
+            ...                         request)
+            >>> for c, col1, col2 in view.getCalendars():
+            ...     print '%s (%s, %s)' % (c.title, col1, col2)
+            Some Calendar (#9db8d2, #7590ae)
+
+        """
+
+    def test_getEvents(self):
+        """Test for CalendarViewBase.getEvents
+
+        CalendarViewBase.getEvents returns a list of wrapped calendar
+        events.
+
+            >>> from schoolbell.app.browser.cal import CalendarViewBase
+            >>> from schoolbell.app.cal import Calendar
+            >>> cal1 = Calendar()
+            >>> cal1.addEvent(createEvent('2005-02-26 19:39', '1h', 'code'))
+            >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
+            >>> view = CalendarViewBase(cal1, TestRequest())
+            >>> for e in view.getEvents(datetime(2005, 2, 21),
+            ...                         datetime(2005, 3, 1)):
+            ...     print e.title
+            code
+
+        We will stub view.getCalendars to simulate overlayed calendars
+
+            >>> cal2 = Calendar()
+            >>> cal2.addEvent(createEvent('2005-02-27 12:00', '1h', 'rest'))
+            >>> view.getCalendars = lambda:[(cal1, 'r', 'g'), (cal2, 'b', 'y')]
+            >>> for e in view.getEvents(datetime(2005, 2, 21),
+            ...                         datetime(2005, 3, 1)):
+            ...     print e.title, '(%s)' % e.color1
+            code (r)
+            rest (b)
+
+        """
+
     def test_getDays(self):
         from schoolbell.app.browser.cal import CalendarViewBase
-        from schoolbell.app.app import Calendar
+        from schoolbell.app.cal import Calendar
 
         e0 = createEvent('2004-08-10 11:00', '1h', "e0")
         #e1 = createEvent('2004-08-11 12:00', '1h', "e1", privacy="hidden")
@@ -2310,7 +2423,7 @@ def doctest_CalendarViewBase():
 
         >>> from schoolbell.app.browser.cal import CalendarViewBase
 
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
 
@@ -2384,9 +2497,6 @@ def doctest_CalendarViewBase():
         >>> view.eventShort(event)
         'Coding session (16:42&ndash;16:57)'
 
-        >>> view.eventHidden(event)
-        False
-
     """
 
 
@@ -2395,7 +2505,7 @@ def doctest_DailyCalendarView():
 
         >>> from schoolbell.app.browser.cal import DailyCalendarView
 
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = DailyCalendarView(calendar, TestRequest())
@@ -2418,7 +2528,7 @@ def doctest_WeeklyCalendarView():
 
         >>> from schoolbell.app.browser.cal import WeeklyCalendarView
 
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = WeeklyCalendarView(calendar, TestRequest())
@@ -2455,7 +2565,7 @@ def doctest_MonthlyCalendarView():
 
         >>> from schoolbell.app.browser.cal import MonthlyCalendarView
 
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = MonthlyCalendarView(calendar, TestRequest())
@@ -2500,7 +2610,7 @@ def doctest_YearlyCalendarView():
 
         >>> from schoolbell.app.browser.cal import YearlyCalendarView
 
-        >>> from schoolbell.app.app import Calendar
+        >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = YearlyCalendarView(calendar, TestRequest())
