@@ -302,8 +302,11 @@ class Connection(ExportImport, object):
                             "to a connection" % (obj, ))
         if obj._p_jar is not None and obj._p_jar is not self:
             raise InvalidObjectReference(obj, obj._p_jar)
-        obj._p_jar = self
-        obj._p_oid = self.newObjectId()
+        if obj._p_jar is None:
+            obj._p_jar = self
+            obj._p_oid = self.newObjectId()
+            obj._p_changed = True
+
 
     ######################################################################
     # transaction.interfaces.IDataManager requires the next four methods

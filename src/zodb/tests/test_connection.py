@@ -165,12 +165,25 @@ class ConnectionTests(IDataManagerTests):
         self.assertRaises(TypeError, self.datamgr.add, object())
 
         # Adding to the same connection does not fail
+        oid = self.obj._p_oid
         self.datamgr.add(self.obj)
+        self.assertEqual(self.obj._p_oid, oid)
 
         # Cannot add an object from a diffrerent connection
         self.obj._p_jar = object()
         self.assertRaises(InvalidObjectReference, self.datamgr.add, self.obj)
 
+    def testAdd(self):
+        self.datamgr.add(self.obj)
+        oid = self.obj._p_oid
+        self.datamgr.root()["obj"] = self.obj
+        get_transaction().commit()
+
+        cn2 = self.db.open()
+        r2 = cn2.root()
+        obj2 = r2["obj"]
+        self.assertEqual(obj2._p_oid, oid)
+        self.assertEqual(cn2.get(oid), obj2)
 
     def tearDown(self):
         get_transaction().abort()

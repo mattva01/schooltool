@@ -349,7 +349,8 @@ class IConnection(Interface):
 
         Essentially, set _p_jar and assign _p_oid on the object.
 
-        Raises a TypeError if obj is not persistent.
+        Raises a TypeError if obj is not persistent. Does nothing if
+        obj is already added to this connection.
         """
 
 class ITransaction(_ITransaction):
