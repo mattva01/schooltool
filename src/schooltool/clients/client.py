@@ -23,6 +23,8 @@ Schooltool command line client.
 $Id$
 """
 
+import sys
+import getopt
 import socket
 import httplib
 from cmd import Cmd
@@ -215,7 +217,8 @@ welcome to change it and/or distribute copies of it under certain conditions.
                     self.emit("=" * 50)
                     self.emit("Could not extract links: %s" % e)
         except socket.error:
-            self.emit('Error: could not connect to %s' % self.server)
+            self.emit('Error: could not connect to %s:%s'
+                      % (self.server, self.port))
 
     def do_get(self, line):
         """Get and display a resource from the server.
@@ -396,7 +399,24 @@ def http_join(path, rel):
 
 
 def main():
-    Client().cmdloop()
+    c = Client()
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'hp:', ['host', 'port='])
+    except getopt.error, e:
+        print >> sys.stderr, "%s: %s" % (sys.argv[0], e)
+        sys.exit(1)
+
+    for k, v in opts:
+        if k in ('-h', '--host'):
+            c.server = v
+        if k in ('-p', '--port'):
+            try:
+                c.port = int(v)
+            except ValueError, e:
+                print >> sys.stderr, "%s: invalid port: %s" % (sys.argv[0], v)
+                sys.exit(1)
+
+    c.cmdloop()
 
 
 if __name__ == '__main__':

@@ -228,23 +228,23 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.do_server("server.example.com")
         self.assertEqual(self.client.server, "server.example.com")
-        self.assertEmitted("Error: could not connect to server.example.com")
+        self.assertEmitted("Error: could not connect to server.example.com:80")
 
         self.emitted = ""
-        self.client.do_server("server2.example.com  \t")
-        self.assertEqual(self.client.server, "server2.example.com")
-        self.assertEmitted("Error: could not connect to server2.example.com")
+        self.client.do_server("srvr2.example.com  \t")
+        self.assertEqual(self.client.server, "srvr2.example.com")
+        self.assertEmitted("Error: could not connect to srvr2.example.com:80")
 
         self.emitted = ""
         self.client.do_server("")
-        self.assertEqual(self.client.server, "server2.example.com")
-        self.assertEmitted("server2.example.com")
+        self.assertEqual(self.client.server, "srvr2.example.com")
+        self.assertEmitted("srvr2.example.com")
 
         self.emitted = ""
         self.client.do_server("server 31337")
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 31337)
-        self.assertEmitted("Error: could not connect to server")
+        self.assertEmitted("Error: could not connect to server:31337")
 
         self.client.do_server("server")
         self.assertEqual(self.client.server, "server")
@@ -298,7 +298,7 @@ class TestClient(unittest.TestCase):
     def test_get_error(self):
         self.client.server = 'badhost'
         self.client.do_get("/")
-        self.assertEmitted("Error: could not connect to badhost")
+        self.assertEmitted("Error: could not connect to badhost:8080")
         self.assert_(self.client.last_data is None)
 
     def test_save_no_get(self):

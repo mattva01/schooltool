@@ -55,6 +55,7 @@ class Reader(Thread):
 class ScriptTestCase(unittest.TestCase):
 
     prefix = re.compile('^SchoolTool> |^PUT> |^POST> ')
+    client_args = '-p 8813'
 
     def __init__(self, script):
         unittest.TestCase.__init__(self)
@@ -71,7 +72,7 @@ class ScriptTestCase(unittest.TestCase):
         return 'script %s' % self.script
 
     def runTest(self):
-        cmd = "python2.3 %s" % self.client
+        cmd = "python2.3 %s %s" % (self.client, self.client_args)
         child = Popen4(cmd)
         reader = Reader(child.fromchild)
         reader.start()

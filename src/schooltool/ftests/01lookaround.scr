@@ -161,63 +161,63 @@ Content-Type: text/html; charset=UTF-8
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li><a href="http://localhost:8080/groups/root/calendar">
+    <li><a href="http://localhost:8813/groups/root/calendar">
         Root Group (private calendar)</a>,
-        <a href="http://localhost:8080/groups/root/timetable-calendar">
+        <a href="http://localhost:8813/groups/root/timetable-calendar">
         Root Group (timetable)</a></li>
-    <li><a href="http://localhost:8080/groups/cleaners/calendar">
+    <li><a href="http://localhost:8813/groups/cleaners/calendar">
         Cleaners (private calendar)</a>,
-        <a href="http://localhost:8080/groups/cleaners/timetable-calendar">
+        <a href="http://localhost:8813/groups/cleaners/timetable-calendar">
         Cleaners (timetable)</a></li>
-    <li><a href="http://localhost:8080/groups/students/calendar">
+    <li><a href="http://localhost:8813/groups/students/calendar">
         Students (private calendar)</a>,
-        <a href="http://localhost:8080/groups/students/timetable-calendar">
+        <a href="http://localhost:8813/groups/students/timetable-calendar">
         Students (timetable)</a></li>
-    <li><a href="http://localhost:8080/groups/teachers/calendar">
+    <li><a href="http://localhost:8813/groups/teachers/calendar">
         Teachers (private calendar)</a>,
-        <a href="http://localhost:8080/groups/teachers/timetable-calendar">
+        <a href="http://localhost:8813/groups/teachers/timetable-calendar">
         Teachers (timetable)</a></li>
   </ul>
   <h2>Persons</h2>
   <ul>
-    <li><a href="http://localhost:8080/persons/anonymous/calendar">
+    <li><a href="http://localhost:8813/persons/anonymous/calendar">
         Anonymous (private calendar)</a>,
-        <a href="http://localhost:8080/persons/anonymous/timetable-calendar">
+        <a href="http://localhost:8813/persons/anonymous/timetable-calendar">
         Anonymous (timetable)</a></li>
-    <li><a href="http://localhost:8080/persons/Aiste/calendar">
+    <li><a href="http://localhost:8813/persons/Aiste/calendar">
         Aiste (private calendar)</a>,
-        <a href="http://localhost:8080/persons/Aiste/timetable-calendar">
+        <a href="http://localhost:8813/persons/Aiste/timetable-calendar">
         Aiste (timetable)</a></li>
-    <li><a href="http://localhost:8080/persons/Albert/calendar">
+    <li><a href="http://localhost:8813/persons/Albert/calendar">
         Albert (private calendar)</a>,
-        <a href="http://localhost:8080/persons/Albert/timetable-calendar">
+        <a href="http://localhost:8813/persons/Albert/timetable-calendar">
         Albert (timetable)</a></li>
-    <li><a href="http://localhost:8080/persons/Marius/calendar">
+    <li><a href="http://localhost:8813/persons/Marius/calendar">
         Marius (private calendar)</a>,
-        <a href="http://localhost:8080/persons/Marius/timetable-calendar">
+        <a href="http://localhost:8813/persons/Marius/timetable-calendar">
         Marius (timetable)</a></li>
-    <li><a href="http://localhost:8080/persons/Mark/calendar">
+    <li><a href="http://localhost:8813/persons/Mark/calendar">
         Mark (private calendar)</a>,
-        <a href="http://localhost:8080/persons/Mark/timetable-calendar">
+        <a href="http://localhost:8813/persons/Mark/timetable-calendar">
         Mark (timetable)</a></li>
-    <li><a href="http://localhost:8080/persons/Steve/calendar">
+    <li><a href="http://localhost:8813/persons/Steve/calendar">
         Steve (private calendar)</a>,
-        <a href="http://localhost:8080/persons/Steve/timetable-calendar">
+        <a href="http://localhost:8813/persons/Steve/timetable-calendar">
         Steve (timetable)</a></li>
   </ul>
   <h2>Resources</h2>
   <ul>
-    <li><a href="http://localhost:8080/resources/hall/calendar">
+    <li><a href="http://localhost:8813/resources/hall/calendar">
         Hall (private calendar)</a>,
-        <a href="http://localhost:8080/resources/hall/timetable-calendar">
+        <a href="http://localhost:8813/resources/hall/timetable-calendar">
         Hall (timetable)</a></li>
-    <li><a href="http://localhost:8080/resources/room1/calendar">
+    <li><a href="http://localhost:8813/resources/room1/calendar">
         Room 1 (private calendar)</a>,
-        <a href="http://localhost:8080/resources/room1/timetable-calendar">
+        <a href="http://localhost:8813/resources/room1/timetable-calendar">
         Room 1 (timetable)</a></li>
-    <li><a href="http://localhost:8080/resources/room2/calendar">
+    <li><a href="http://localhost:8813/resources/room2/calendar">
         Room 2 (private calendar)</a>,
-        <a href="http://localhost:8080/resources/room2/timetable-calendar">
+        <a href="http://localhost:8813/resources/room2/timetable-calendar">
         Room 2 (timetable)</a></li>
   </ul>
 </body>
