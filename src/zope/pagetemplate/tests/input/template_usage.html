@@ -1,0 +1,15 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <head><title>Test of documentation templates</title></head>
+  <body>
+      <span tal:content="usage"> blah </span>
+      <p tal:condition="usage">
+      usage is defined.
+      </p>
+      <p tal:condition="usage/test">
+      This is test.
+      </p>
+      <p tal:condition="usage/retest">
+      This is retest.
+      </p>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+<p i18n:translate="verify">Your contact email address is recorded as
+<a href="user@host.com"
+   tal:attributes="href string:mailto:${request/submitter}"
+   tal:content="request/submitter"
+   i18n:name="email">user@host.com</a>
+</p>
