@@ -10,5 +10,10 @@ import sys
 # config begin
 # config end
 
-import schooltool.main
-schooltool.main.main()
+if sys.version_info < (2, 3):
+    print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
+    print >> sys.stderr, 'Your python is %s' % sys.version
+    sys.exit(1)
+
+import schoolbell.app.main
+schoolbell.app.main.main()
