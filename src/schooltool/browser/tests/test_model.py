@@ -27,7 +27,7 @@ import datetime
 from logging import INFO
 
 from schooltool.browser.tests import RequestStub, setPath, TraversalTestMixin
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 
 __metaclass__ = type
 
@@ -60,7 +60,8 @@ class AppSetupMixin(RegistriesSetupMixin):
         Membership(group=self.managers, member=self.manager)
 
 
-class TestPersonView(TraversalTestMixin, AppSetupMixin, unittest.TestCase):
+class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
+                     unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
@@ -132,6 +133,25 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, unittest.TestCase):
         view.request = RequestStub()
         self.assertEquals(view.passwordURL(),
                 'http://localhost:7001/persons/johndoe/password.html')
+
+    def test_timetables(self):
+        from schooltool.browser.model import PersonView
+        from schooltool.timetable import Timetable
+        view = PersonView(self.person)
+        view.request = RequestStub()
+        self.assertEquals(view.timetables(), [])
+
+        view.context.timetables['2004-spring', 'default'] = Timetable([])
+        view.context.timetables['2004-spring', 'another'] = Timetable([])
+        view.context.timetables['2003-fall', 'another'] = Timetable([])
+        pp = 'http://localhost:7001/persons/johndoe'
+        self.assertEquals(view.timetables(),
+                          [{'title': '2003-fall, another',
+                            'href': '%s/timetables/2003-fall/another' % pp},
+                           {'title': '2004-spring, another',
+                            'href': '%s/timetables/2004-spring/another' % pp},
+                           {'title': '2004-spring, default',
+                            'href': '%s/timetables/2004-spring/default' % pp}])
 
 
 class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):

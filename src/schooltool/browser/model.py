@@ -98,6 +98,14 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
     def passwordURL(self):
         return absoluteURL(self.request, self.context) + '/password.html'
 
+    def timetables(self):
+        path = absoluteURL(self.request, self.context)
+        keys = self.context.timetables.keys()
+        keys.sort()
+        return [{'title': '%s, %s' % (period, schema),
+                 'href': '%s/timetables/%s/%s' % (path, period, schema)}
+                for period, schema in keys]
+
 
 class PersonPasswordView(View):
     """Page for changing a person's password (/persons/id/password.html)."""
