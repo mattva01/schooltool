@@ -20,6 +20,9 @@ For bugfixes to a released version which are non-debian specific.
 
     c.  Write a new Changelog entry in debian/changelog.
 
+    d.  Check that the database is compatible with the previous version, if not
+        update db_version in debian/school{bell,tool}.{pre,post}inst
+
 3.  Check release notes in RELEASE.
 
 4.  Branch and tag releases.
@@ -76,6 +79,9 @@ This is the release procedure used for release 0.8.
     b.  Update the version number in setup.py.
 
     c.  Write a new Changelog entry in debian/changelog.
+
+    d.  Make sure that db_version in debian/school{bell,tool}.{pre,post}inst are
+        correct and the same.
 
 3.  Check release notes in RELEASE.
 

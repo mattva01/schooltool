@@ -1,4 +1,4 @@
-schooltool (0.8-2) unstable; urgency=low
+schooltool (0.8-1) unstable; urgency=low
 
   * Moved configuration file template to /usr/share (Policy 10.7.3).
   * Try to remove configuration file on purge (10.7.3).
@@ -15,6 +15,8 @@ schooltool (0.8-2) unstable; urgency=low
   * On log rotation, only restart the server once and do not produce any
     output on success.
   * Changed dependency on python-tcpwrap from suggests to recommends.
+  * Added database versioning code. If the database is thought to be
+    incompatible, the user is asked in the preinst if it can be deleted.
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 

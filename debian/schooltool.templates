@@ -51,3 +51,14 @@ Template: schooltool/import-cert
 Type: string
 Default: /
 _Description: Enter the filename of the SSL certificate (in PEM format) to import.
+
+Template: schooltool/incompatible_database
+Type: boolean
+Default: true
+_Description: Should the previous database be removed?
+ A possibly incompatible pre-existing database was detected. Since this is a
+ testing/beta version, it is not able to automatically convert existing
+ databases to the new format.
+ .
+ Therefore the new version cannot be installed unless the existing database
+ is removed first. All data in the existing database will be deleted.
