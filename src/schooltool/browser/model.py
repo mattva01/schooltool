@@ -346,15 +346,14 @@ class GroupTeachersView(View):
     template = Template('www/group_teachers.pt')
 
     def teachersList(self):
-        """Lists teachers of this group"""
+        """List teachers of this group."""
         result = [(obj.title, getPath(obj), absoluteURL(self.request, obj))
                   for obj in getRelatedObjects(self.context, URITeacher)]
         result.sort()
         return result
 
     def allTeachers(self):
-        """Lists all members of the Teachers group except current teachers.
-        """
+        """List all members of the Teachers group except current teachers."""
         result = []
         request = self.request
         current_teachers = getRelatedObjects(self.context, URITeacher)
