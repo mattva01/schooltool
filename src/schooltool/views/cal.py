@@ -48,7 +48,7 @@ class SchooldayModelCalendarView(View):
     datetime_hook = datetime.datetime
 
     def do_GET(self, request):
-        end_date = self.context.last
+        end_date = self.context.last + datetime.date.resolution
         uid_suffix = "%s@%s" % (getPath(self.context),
                                 request.getRequestHostname())
         dtstamp = self.datetime_hook.utcnow().strftime("%Y%m%dT%H%M%SZ")

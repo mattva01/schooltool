@@ -948,24 +948,31 @@ class TestTimePeriodService(unittest.TestCase):
         service = TimePeriodService()
         self.assertEqual(service.keys(), [])
 
-        service.register('2003 fall')
+        schooldays = SchooldayModelStub()
+        service['2003 fall'] = schooldays
         self.assertEqual(service.keys(), ['2003 fall'])
         self.assert_('2003 fall' in service)
         self.assert_('2004 spring' not in service)
+        self.assert_(service['2003 fall'] is schooldays)
 
         # duplicate registration
-        service.register('2003 fall')
+        schooldays2 = SchooldayModelStub()
+        service['2003 fall'] = schooldays2
         self.assertEqual(service.keys(), ['2003 fall'])
         self.assert_('2003 fall' in service)
+        self.assert_(service['2003 fall'] is schooldays2)
 
-        service.register('2004 spring')
+        schooldays3 = SchooldayModelStub()
+        service['2004 spring'] = schooldays3
         self.assertEqual(sorted(service.keys()), ['2003 fall', '2004 spring'])
         self.assert_('2004 spring' in service)
+        self.assert_(service['2004 spring'] is schooldays3)
 
         del service['2003 fall']
         self.assertEqual(service.keys(), ['2004 spring'])
         self.assert_('2003 fall' not in service)
         self.assert_('2004 spring' in service)
+        self.assertRaises(KeyError, lambda: service['2003 fall'])
 
         # duplicate deletion
         self.assertRaises(KeyError, service.__delitem__, '2003 fall')

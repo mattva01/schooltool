@@ -806,7 +806,53 @@ class TestCalendarPersistence(unittest.TestCase):
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
 
-    def test(self):
+    def test_SchooldayModel(self):
+        from schooltool.cal import SchooldayModel
+        from transaction import get_transaction
+        sm = SchooldayModel(date(2003, 9, 1), date(2003, 9, 30))
+        self.datamgr.root()['sm'] = sm
+        get_transaction().commit()
+
+        d1 = date(2003, 9, 15)
+        d2 = date(2003, 9, 16)
+        sm.add(d1)
+        sm.add(d2)
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            sm2 = datamgr.root()['sm']
+            self.assert_(sm2.isSchoolday(d1))
+            self.assert_(sm2.isSchoolday(d2))
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
+        sm.remove(d1)
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            sm2 = datamgr.root()['sm']
+            self.assert_(not sm2.isSchoolday(d1))
+            self.assert_(sm2.isSchoolday(d2))
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
+        sm.reset(date(2003, 9, 1), date(2003, 9, 30))
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            sm2 = datamgr.root()['sm']
+            self.assert_(not sm2.isSchoolday(d1))
+            self.assert_(not sm2.isSchoolday(d2))
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
+    def test_Calendar(self):
         from schooltool.cal import Calendar, CalendarEvent
         from transaction import get_transaction
         cal = Calendar()

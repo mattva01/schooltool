@@ -471,8 +471,11 @@ class TimePeriodService(Persistent):
     def __contains__(self, period_id):
         return period_id in self.periods
 
-    def register(self, period_id):
-        self.periods[period_id] = None
+    def __getitem__(self, period_id):
+        return self.periods[period_id]
+
+    def __setitem__(self, period_id, schoolday_model):
+        self.periods[period_id] = schoolday_model
 
     def __delitem__(self, period_id):
         del self.periods[period_id]

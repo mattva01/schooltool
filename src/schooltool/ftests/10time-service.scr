@@ -23,11 +23,18 @@ Content-Type: text/html; charset=UTF-8
 </html>
 
 
-SchoolTool> put /time-periods/2003-fall
+SchoolTool> put /time-periods/2003-fall text/calendar
+PUT> BEGIN:VCALENDAR
+PUT> BEGIN:VEVENT
+PUT> SUMMARY:School period
+PUT> DTSTART;VALUE=DATE:20030901
+PUT> DTEND;VALUE=DATE:20031231
+PUT> END:VEVENT
+PUT> END:VCALENDAR
 PUT> .
 200 OK
 Content-Type: text/plain
-OK
+Calendar imported
 
 SchoolTool> get /time-periods
 200 OK
@@ -39,11 +46,33 @@ Content-Type: text/xml; charset=UTF-8
 </timePeriods>
 
 
-SchoolTool> put /time-periods/x
+SchoolTool> get /time-periods/2003-fall
+200 OK
+Content-Type: text/calendar; charset=UTF-8
+BEGIN:VCALENDAR
+PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:school-period-/time-periods/2003-fall@localhost
+SUMMARY:School Period
+DTSTART;VALUE=DATE:20030901
+DTEND;VALUE=DATE:20031231
+DTSTAMP:*
+END:VEVENT
+END:VCALENDAR
+
+SchoolTool> put /time-periods/x text/calendar
+PUT> BEGIN:VCALENDAR
+PUT> BEGIN:VEVENT
+PUT> SUMMARY:School period
+PUT> DTSTART;VALUE=DATE:20030901
+PUT> DTEND;VALUE=DATE:20031231
+PUT> END:VEVENT
+PUT> END:VCALENDAR
 PUT> .
 200 OK
 Content-Type: text/plain
-OK
+Calendar imported
 
 SchoolTool> get /time-periods
 200 OK

@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+import datetime
 import libxml2
 from sets import Set
 from zope.interface import implements
@@ -66,6 +67,22 @@ class TimetabledStub:
         return Set(self.timetables.keys() + self.overlay.keys())
 
 
+class SchooldayModelStub:
+    implements(ILocation)
+
+    __parent__ = None
+    __name__ = None
+
+    first = datetime.date(2003, 9, 1)
+    last = datetime.date(2003, 9, 30)
+
+    def __iter__(self):
+        return iter([])
+
+    def isSchoolday(day):
+        return False
+
+
 class ServiceManagerStub:
     implements(IServiceManager, IContainmentRoot)
 
@@ -75,7 +92,7 @@ class ServiceManagerStub:
         self.timetableSchemaService = TimetableSchemaService()
         self.timetableSchemaService['weekly'] = weekly_tt
         self.timePeriodService = TimePeriodService()
-        self.timePeriodService.register('2003 fall')
+        self.timePeriodService['2003 fall'] = SchooldayModelStub()
 
 
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
@@ -1086,8 +1103,8 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
             </timePeriods>
             """)
 
-        context.register('2003 fall')
-        context.register('2004 spring')
+        context['2003 fall'] = SchooldayModelStub()
+        context['2004 spring'] = SchooldayModelStub()
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -1107,7 +1124,7 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.timetable import TimePeriodServiceView
         from schooltool.views.timetable import TimePeriodCreatorView
         context = TimePeriodService()
-        context.register('2003 fall')
+        context['2003 fall'] = SchooldayModelStub()
         view = TimePeriodServiceView(context)
         request = RequestStub()
 
@@ -1134,24 +1151,47 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 404)
 
+        sm = service[key] = SchooldayModelStub()
+        setPath(sm, '/time-periods/%s' % key)
+        view = TimePeriodCreatorView(service, key)
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/calendar; charset=UTF-8")
+
     def test_put(self):
         from schooltool.timetable import TimePeriodService
         from schooltool.views.timetable import TimePeriodCreatorView
+        from schooltool.component import getPath
         service = TimePeriodService()
+        setPath(service, '/time-periods')
         key = '2003 fall'
         view = TimePeriodCreatorView(service, key)
-        request = RequestStub(method='PUT')
+        body = dedent("""
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20041001
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        request = RequestStub(method='PUT', body=body,
+                              headers={"Content-Type": "text/calendar"})
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assert_(key in service)
+        self.assertEquals(service[key].first, datetime.date(2004, 9, 1))
+        self.assertEquals(getPath(service[key]), '/time-periods/%s' % key)
 
     def test_delete(self):
         from schooltool.timetable import TimePeriodService
         from schooltool.views.timetable import TimePeriodCreatorView
         service = TimePeriodService()
         key = '2003 fall'
-        service.register(key)
+        service[key] = SchooldayModelStub()
         view = TimePeriodCreatorView(service, key)
         request = RequestStub(method='DELETE')
         result = view.render(request)

@@ -31,6 +31,7 @@ from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
 from schooltool.views import absoluteURL
+from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
@@ -38,6 +39,7 @@ from schooltool.component import registerView, getPath, traverse
 from schooltool.component import getRelatedObjects
 from schooltool.schema.rng import validate_against_schema
 from schooltool.uris import URIMember, URITaught
+from schooltool.cal import SchooldayModel
 
 __metaclass__ = type
 
@@ -540,20 +542,30 @@ class TimePeriodServiceView(View):
         return TimePeriodCreatorView(self.context, key)
 
 
-class TimePeriodCreatorView(View):
+class TimePeriodCreatorView(SchooldayModelCalendarView):
     """View for the time period service items"""
 
     def __init__(self, service, key):
-        View.__init__(self, None)
+        if key in service:
+            context = service[key]
+        else:
+            context = None
+        View.__init__(self, context)
         self.service = service
         self.key = key
 
-    do_GET = staticmethod(notFoundPage)
+    def do_GET(self, request):
+        if self.context is None:
+            return notFoundPage(request)
+        else:
+            return SchooldayModelCalendarView.do_GET(self, request)
 
     def do_PUT(self, request):
-        self.service.register(self.key)
-        request.setHeader('Content-Type', 'text/plain')
-        return "OK"
+        if self.context is None:
+            self.context = self.service[self.key] = SchooldayModel(None, None)
+            self.context.__parent__ = self.service
+            self.context.__name__ = self.key
+        return SchooldayModelCalendarView.do_PUT(self, request)
 
     def do_DELETE(self, request):
         try:

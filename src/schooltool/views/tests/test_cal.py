@@ -90,7 +90,7 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
             UID:school-period-/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20030901
-            DTEND;VALUE=DATE:20030930
+            DTEND;VALUE=DATE:20031001
             DTSTAMP:20040102T030405Z
             END:VEVENT
             END:VCALENDAR
@@ -106,7 +106,7 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
             UID:school-period-/calendar@localhost
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20030901
-            DTEND;VALUE=DATE:20030930
+            DTEND;VALUE=DATE:20031001
             DTSTAMP:20040102T030405Z
             END:VEVENT
         """)

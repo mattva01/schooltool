@@ -63,7 +63,7 @@ class DateRange:
         return self.first <= date <= self.last
 
 
-class SchooldayModel(DateRange):
+class SchooldayModel(DateRange, Persistent):
 
     implements(ISchooldayModel, ISchooldayModelWrite, ILocation)
 
@@ -87,10 +87,12 @@ class SchooldayModel(DateRange):
     def add(self, date):
         self._validate(date)
         self._schooldays.add(date)
+        self._schooldays = self._schooldays  # persistence
 
     def remove(self, date):
         self._validate(date)
         self._schooldays.remove(date)
+        self._schooldays = self._schooldays  # persistence
 
     def addWeekdays(self, *weekdays):
         for date in self:

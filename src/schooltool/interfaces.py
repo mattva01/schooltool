@@ -1164,9 +1164,7 @@ class ITimetableSchemaService(ILocation):
 class ITimePeriodService(ILocation):
     """Service for registering time periods.
 
-    It stores only a list of registered time period IDs.  In the future
-    it might store IDateRange or ISchooldayModel instances, and the register
-    method might be changed to __setitem__.
+    It stores schoolday models for registered time period IDs.
     """
 
     def keys():
@@ -1175,11 +1173,14 @@ class ITimePeriodService(ILocation):
     def __contains__(period_id):
         """Return True iff period with this id is defined."""
 
-    def register(period_id):
-        """Adds the specified period."""
+    def __getitem__(period_id):
+        """Return the schoolday model for this time period."""
+
+    def __setitem__(schema_id, schoolday_model):
+        """Store a schoolday model for this time period."""
 
     def __delitem__(period_id):
-        """Removes the specified period."""
+        """Removes the specified time period."""
 
 
 #
