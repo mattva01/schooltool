@@ -5,6 +5,13 @@ SchoolTool - common information systems platform for school administration.
 
 Website: http://www.schooltool.org/
 
+
+System requirements
+-------------------
+
+At the moment the only requirement is Python 2.3.
+
+
 Project structure
 -----------------
 
@@ -13,7 +20,34 @@ Project structure
   test.py       unit test runner
 
   schooltool/   Python module 'schooltool'
+    ftests/     functional tests for the schooltool module
     tests/      unit tests for the schooltool module
+
+
+Testing
+-------
+
+There are two sets of automated tests: unit tests and functional tests.
+Unit tests (sometimes also called programmer tests) test individual components
+of the system.  Functional tests (also called customer or acceptance tests)
+test only externaly visible behavior of the whole system.
+
+Tests themselves are scattered through the whole source tree.  Subdirectories
+named 'tests' contain unit tests, while subdirectories named 'ftests' contain
+functional tests.
+
+To run all unit tests, do
+
+  python2.3 test.py -pv
+
+To run all functional tests, do
+
+  python2.3 test.py -fpv
+
+The test runner has more options and features.  To find out about them, do
+
+  python2.3 test.py -h
+
 
 Copyright information
 ---------------------
