@@ -2442,33 +2442,6 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(view.rowspan(
                             createEvent('2004-08-12 09:00', '3h', "")), 2)
 
-    def test_eventTop(self):
-        from schoolbell.app.browser.cal import DailyCalendarView
-        view = DailyCalendarView(None, TestRequest())
-        view.starthour = 8
-        view.endhour = 18
-        view.cursor = date(2004, 8, 12)
-        view.request = TestRequest()
-
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 08:00', '1h', "")), 0)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 09:00', '1h', "")), 4)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 10:00', '1h', "")), 8)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 10:15', '1h', "")), 9)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 10:30', '1h', "")), 10)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 10:45', '1h', "")), 11)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 10:46', '1h', "")), 11)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-12 10:44', '1h', "")), 11)
-        self.assertEquals(view.eventTop(
-                            createEvent('2004-08-11 10:00', '24h', "")), 0)
-
     def doctest_snapToGrid(self):
         """Tests for DailyCalendarView.snapToGrid
 
@@ -2482,38 +2455,36 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> view.endhour = 18
             >>> view.cursor = date(2004, 8, 1)
 
-        snapToGrid returns the number of the gridline.  Topmost
+        snapToGrid returns a (floating point) postition in the grid.  Topmost
         gridline is number 0 and it corresponds to starthour.
 
             >>> view.snapToGrid(datetime(2004, 8, 1, 8, 0))
-            0
-
-        Timestamps are rounded to the nearest gridline
+            0.0
 
             >>> view.snapToGrid(datetime(2004, 8, 1, 8, 1))
-            0
+            0.066...
             >>> view.snapToGrid(datetime(2004, 8, 1, 8, 7))
-            0
+            0.466...
             >>> view.snapToGrid(datetime(2004, 8, 1, 8, 8))
-            1
+            0.533...
             >>> view.snapToGrid(datetime(2004, 8, 1, 8, 15))
-            1
+            1.0
 
         Timestamps before starthour are clipped to 0
 
             >>> view.snapToGrid(datetime(2004, 8, 1, 7, 30))
-            0
+            0.0
             >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30))
-            0
+            0.0
 
         Timestamps after endhour are clipped to the bottom
 
             >>> view.snapToGrid(datetime(2004, 8, 1, 18, 0))
-            40
+            40.0
             >>> view.snapToGrid(datetime(2004, 8, 1, 18, 20))
-            40
+            40.0
             >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40))
-            40
+            40.0
 
         Corner case: starthour == 0, endhour == 24
 
@@ -2521,27 +2492,40 @@ class TestDailyCalendarView(unittest.TestCase):
             >>> view.endhour = 24
 
             >>> view.snapToGrid(datetime(2004, 8, 1, 0, 0))
-            0
+            0.0
             >>> view.snapToGrid(datetime(2004, 8, 1, 2, 0))
-            8
+            8.0
             >>> view.snapToGrid(datetime(2004, 7, 30, 16, 30))
-            0
+            0.0
             >>> view.snapToGrid(datetime(2004, 8, 1, 23, 55))
-            96
+            95.666...
             >>> view.snapToGrid(datetime(2004, 8, 2, 10, 40))
-            96
+            96.0
 
         """
-    def test_snapToGrid(self):
+
+    def test_eventTop(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         view = DailyCalendarView(None, TestRequest())
         view.starthour = 8
         view.endhour = 18
         view.cursor = date(2004, 8, 12)
+        view.request = TestRequest()
 
-        self.assertEquals(view.snapToGrid(datetime(2004, 8, 12, 8, 0)), 0)
-        self.assertEquals(view.snapToGrid(datetime(2004, 8, 12, 8, 0)), 0)
-        self.assertEquals(view.snapToGrid(datetime(2004, 8, 12, 8, 0)), 0)
+        def check(dt, duration, expected):
+            top = view.eventTop(createEvent(dt, duration, ""))
+            self.assert_(abs(top - expected) < 0.001,
+                         "%s != %s" % (top, expected))
+
+        check('2004-08-12 08:00', '1h', 0)
+        check('2004-08-12 09:00', '1h', 4)
+        check('2004-08-12 10:00', '1h', 8)
+        check('2004-08-12 10:15', '1h', 9)
+        check('2004-08-12 10:30', '1h', 10)
+        check('2004-08-12 10:45', '1h', 11)
+        check('2004-08-12 10:46', '1h', 11+1/15.)
+        check('2004-08-12 10:44', '1h', 11-1/15.)
+        check('2004-08-11 10:00', '24h', 0)
 
     def test_eventHeight(self):
         from schoolbell.app.browser.cal import DailyCalendarView
@@ -2552,8 +2536,10 @@ class TestDailyCalendarView(unittest.TestCase):
         view.request = TestRequest()
 
         def check(dt, duration, expected):
-            height = view.eventHeight(createEvent(dt, duration, ""))
-            self.assertEquals(height, expected)
+            height = view.eventHeight(createEvent(dt, duration, ""),
+                                      minheight=1)
+            self.assert_(abs(height - expected) < 0.001,
+                         "%s != %s" % (height, expected))
 
         check('2004-08-12 09:00', '0', 1)
         check('2004-08-12 09:00', '14m', 1)
@@ -2562,9 +2548,9 @@ class TestDailyCalendarView(unittest.TestCase):
         check('2004-08-12 10:00', '2h+15m', 9)
         check('2004-08-12 10:00', '2h+30m', 10)
         check('2004-08-12 10:00', '2h+45m', 11)
-        check('2004-08-12 10:00', '2h+46m', 11)
-        check('2004-08-12 10:00', '2h+44m', 11)
-        check('2004-08-12 10:02', '2h+44m', 11)
+        check('2004-08-12 10:00', '2h+46m', 11 + 1/15.)
+        check('2004-08-12 10:00', '2h+44m', 11 - 1/15.)
+        check('2004-08-12 10:02', '2h+44m', 11 - 1/15.)
         check('2004-08-12 10:00', '24h+44m', 32)
         check('2004-08-11 10:00', '48h+44m', 40)
         check('2004-08-11 10:00', '24h', 8)
@@ -3028,7 +3014,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestGetRecurrenceRule))
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                       optionflags=doctest.ELLIPSIS))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.cal'))
     return suite
 

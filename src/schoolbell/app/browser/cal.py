@@ -817,11 +817,11 @@ class DailyCalendarView(CalendarViewBase):
         return count
 
     def snapToGrid(self, dt):
-        """Snap a datetime to the nearest position in the grid.
+        """Calculate the position of a datetime on the display grid.
 
-        Returns the grid line index where 0 corresponds to the top of
-        the display box (self.starthour), and each subsequent line represents
-        a 15 minute increment.
+        The daily view uses a grid where a unit (currently 'em', but that
+        can be changed in the page template) corresponds to 15 minutes, and
+        0 represents self.starthour.
 
         Clips dt so that it is never outside today's box.
         """
@@ -831,27 +831,25 @@ class DailyCalendarView(CalendarViewBase):
         clipped_dt = max(display_start, min(dt, display_end))
         td = clipped_dt - display_start
         offset_in_minutes = td.seconds / 60 + td.days * 24 * 60
-        return (offset_in_minutes + 7) / 15 # round to nearest quarter
+        return offset_in_minutes / 15.
 
     def eventTop(self, event):
         """Calculate the position of the top of the event block in the display.
 
-        Each hour is made up of 4 units ('em' currently). If an event starts at
-        10:15, and the day starts at 8:00 we get a top value of:
-
-          (2 * 4) + (15 / 15) = 9
-
+        See `snapToGrid`.
         """
         return self.snapToGrid(event.dtstart)
 
-    def eventHeight(self, event):
+    def eventHeight(self, event, minheight=3):
         """Calculate the height of the event block in the display.
 
-        Each hour is made up of 4 units ('em' currently).  Need to round 1 -
-        14 minute intervals up to 1 display unit.
+        Rounds the height up to a minimum of minheight.
+
+        See `snapToGrid`.
         """
         dtend = event.dtstart + event.duration
-        return max(1, self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
+        return max(minheight,
+                   self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
 
 
 #
