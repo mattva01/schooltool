@@ -1,15 +1,18 @@
-<html>
+<html metal:use-macro="view/macros/page">
 <head>
-<title>Person info</title>
+  <title metal:fill-slot="title">Person info</title>
 </head>
 <body>
-<p>
-  <b>Username:</b>
-  <span tal:replace="python:context.__name__">not_doe</span>
-</p>
-<p>
-  <b>Title:</b>
-  <span tal:replace="context/title">John, but not Doe</span>
-</p>
+  <h1 metal:fill-slot="h1">Person info</h1>
+  <metal:block metal:fill-slot="content">
+    <div class="row">
+      <b>Username:</b>
+      <span tal:replace="python:context.__name__">not_doe</span>
+    </div>
+    <div class="row">
+      <b>Title:</b>
+      <span tal:replace="context/title">John, but not Doe</span>
+    </div>
+  </metal:block>
 </body>
 </html>
