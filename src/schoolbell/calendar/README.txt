@@ -58,6 +58,28 @@ You can easily construct a SchoolBell calendar from an iCalendar file
     >>> len(calendar)
     3
 
+You can create an iCalendar file from a SchoolBell calendar.
+
+    >>> from schoolbell.calendar.icalendar import convert_calendar_to_ical
+    >>> lines = convert_calendar_to_ical(calendar)
+    >>> print "\n".join(lines)                          # doctest: +ELLIPSIS
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    BEGIN:VEVENT
+    UID:20050211T140836Z-19135-1013-8968-3@muskatas
+    ...
+    DTSTART:20050209T203000
+    DURATION:PT3H
+    DTSTAMP:...
+    END:VEVENT
+    END:VCALENDAR
+
+iCalendar spec mandates lines (including the last one) are terminated by CR LF
+characters, so you should use something like
+
+    >>> output_as_string = "\r\n".join(lines + [''])
+
 iCalendar is a large specification, and schoolbell.calendar supports only a
 subset of it.  This subset should be enough to interoperate with most open
 source calendaring software, but you should keep in mind that reading an
