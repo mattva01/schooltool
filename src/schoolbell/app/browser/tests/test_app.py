@@ -1050,7 +1050,7 @@ def doctest_ACLView():
                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html>
         ...
-        <form method="POST" action="http://127.0.0.1">
+        <form method="post" action="http://127.0.0.1">
           <h3>
               Access control
           </h3>
