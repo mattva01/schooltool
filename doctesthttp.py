@@ -10,6 +10,7 @@ import rfc822
 import re
 import urllib
 import readline
+import Cookie
 from StringIO import StringIO
 
 sys.path.insert(0, 'Zope3/src')
@@ -18,19 +19,23 @@ from zope.testing import doctest
 from zope.app.tests.functional import CookieHandler
 
 
-class HTTPCaller(CookieHandler):
+class HTTPCaller(object):
     """Execute an HTTP request directly."""
 
     host = 'localhost'
     port = 8080
 
+    def __init__(self):
+        self.cookies = Cookie.SimpleCookie()
+
     def __call__(self, request_string, handle_errors=True):
-        stdout = sys.stdout
-        try:
-            sys.stdout = sys.stderr
-            return make_http_request(self.host, self.port, request_string)
-        finally:
-            sys.stdout = stdout
+        response = make_http_request(self.host, self.port, request_string,
+                                     self.cookies)
+        for header in response.response.msg.headers:
+            h, v = split_header(header)
+            if h.lower() == 'set-cookie':
+                self.cookies.load(v)
+        return response
 
 
 headerre = re.compile(r'(\S+): (.+)$')
@@ -38,7 +43,7 @@ def split_header(header):
     return headerre.match(header).group(1, 2)
 
 
-def make_http_request(host, port, request_string):
+def make_http_request(host, port, request_string, cookies):
     """Make a HTTP request and return the response as a string."""
     # Discard leading white space to make call layout simpler
     request_string = request_string.lstrip()
@@ -51,20 +56,29 @@ def make_http_request(host, port, request_string):
     path = urllib.unquote(path)
 
     instream = StringIO(request_string)
-    headers = {}
+    headers = []
     for header in rfc822.Message(instream).headers:
         h, v = split_header(header)
         if h.lower() == 'content-length':
             continue
         if h.lower() == 'authorization' and v.startswith('Basic '):
             v = 'Basic ' + v[len('Basic '):].encode('base64').strip()
-        headers[h] = v
-    headers['Host'] = 'localhost'
+        headers.append((h, v))
+    for header in cookies.output(header="Cookie:").splitlines():
+        h, v = split_header(header)
+        headers.append((h, v))
     body = instream.read().rstrip()
+    if body:
+        headers.append(('Content-Length', str(len(body))))
 
     connection = httplib.HTTPConnection(host, port)
-##  connection.set_debuglevel(1)
-    connection.request(method, path, body, headers)
+    connection.putrequest(method, path, skip_host=1)
+    connection.putheader('Host', 'localhost')
+    for h, v in headers:
+        connection.putheader(h, v)
+    connection.endheaders()
+    if body:
+        connection.send(body)
     response = connection.getresponse()
     body = response.read()
     return ResponseWrapper(response, body)
@@ -72,7 +86,8 @@ def make_http_request(host, port, request_string):
 
 class ResponseWrapper(object):
 
-    omit_headers = ('x-content-type-warning', 'x-powered-by', 'date', 'server')
+    omit_headers = ('x-content-type-warning', 'x-powered-by', 'date', 'server',
+                    'set-cookie')
 
     def __init__(self, response, body):
         self.response = response
@@ -83,6 +98,9 @@ class ResponseWrapper(object):
 
     def getBody(self):
         return self.body
+
+    def getHeader(self, name, default=None):
+        return self.response.getheader(name, default)
 
     def __str__(self):
         version = {9: 'HTTP/0.9', 10: 'HTTP/1.0', 11: 'HTTP/1.1'}[self.response.version]
