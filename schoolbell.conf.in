@@ -1,67 +1,18 @@
-# Sample SchoolTool HTTP server configuration file
+# Sample SchoolBell configuration file
 
 #
-# path /path/to/add
-# path /another/path/to/add
-#
-#  Specifies a path to add to the beginning of Python's module search path
-#  There can be zero or more 'path' directives
-#
-
-#
-# module dotted.module.name
-# module another.dotted.module.name
-#
-#  Lists modules to be set up when the server is started. The modules must
-#  provide IModuleSetup. The module 'schooltool.main' is implicitly listed
-#  first.
-#
-# Example:
-#   module school.example
-#
-
-#
-# listen[_ssl] port
-# listen[_ssl] interface:port
+# web port
+# web interface:port
 #
 #   Specifies the port number and optionaly a network interface for
-#   the RESTive server to listen on. There can be one or more 'listen'
-#   directives. If _ssl is used the server will accept only SSL connctions
-#   on that port and a ssl_certificate configuration line is required.
-#
-# Examples:
-#   listen 7001
-#   listen 127.0.0.1:80
-#   listen_ssl 7002
-
-listen 7001
-
-#
-# web[_ssl] port
-# web[_ssl] interface:port
-#
-#   Specifies the port number and optionaly a network interface for
-#   the web application server to listen on. There can be one or more
-#   'listen' directives. If _ssl is used the server will accept only
-#   SSL connctions on that port and a ssl_certificate configuration
-#   line is required.
+#   the web application server to listen on
 #
 # Examples:
 #   web 8080
 #   web 127.0.0.1:80
-#   web_ssl 8443
 #
 
 web 7080
-
-#
-#
-# ssl_certificate certificate
-#
-#   Specifies a certificate in PEM format which contains a certificate and
-#   private key for use in SSL connections.
-#   This is required to use listen_ssl
-#
 
 #
 # thread-pool-size n
@@ -70,15 +21,6 @@ web 7080
 #
 # Default:
 #   thread-pool-size 10
-#
-
-#
-# event-logging on|off
-#
-#   Enables or disables global event logging to /utils/eventlog
-#
-# Default:
-#   event-logging off
 #
 
 #
@@ -109,25 +51,6 @@ pid-file schoolbell.pid
 #
 error-log-file schoolbell.log
 error-log-file STDERR
-
-#
-# rest-access-log-file
-#
-#   Specifies the path of a file used for an Apache combined format
-#   access log for the RESTive API server.  Special values STDERR and
-#   STDOUT mean standard error and standard output respectively.
-#
-#   You can specify more than one log file.  All messages will be duplicated
-#   to all the log files.
-#
-# Default:
-#    rest-access-log-file STDOUT
-#
-# Examples:
-#    rest-access-log-file /var/log/schooltool/access.log
-#    rest-access-log-file STDOUT
-#
-rest-access-log-file rest-access.log
 
 #
 # web-access-log-file
