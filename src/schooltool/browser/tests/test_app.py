@@ -506,7 +506,7 @@ class TestObjectAddView(unittest.TestCase):
     def test_POST_noname(self):
         view = self.createView()
         request = RequestStub(args={'name': '',
-                                    'title': ''})
+                                    'title': 'something'})
         view.request = request
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
@@ -519,7 +519,18 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(len(self.container.objs), 1)
         obj = self.container.objs[0]
         self.assertEquals(obj.__name__, 'auto')
-        self.assertEquals(obj.title, u'')
+        self.assertEquals(obj.title, u'something')
+
+    def test_POST_notitle(self):
+        view = self.createView()
+        request = RequestStub(args={'name': '',
+                                    'title': ''})
+        view.request = request
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.applog, [])
+        self.assert_('Add object' in content)
+        self.assert_('Title should not be empty' in content)
 
     def test_POST_errors(self):
         view = self.createView()
@@ -529,7 +540,7 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])
         self.assert_('Add object' in content)
-        self.assert_('Invalid name' in content)
+        self.assert_('Invalid identifier' in content)
 
     def test_POST_conflict(self):
         view = self.createView()
@@ -539,7 +550,7 @@ class TestObjectAddView(unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])
         self.assert_('Add object' in content)
-        self.assert_('Name already taken' in content)
+        self.assert_('Identifier already taken' in content)
         self.assert_('conflict' in content)
         self.assert_('foofoobar' in content)
 

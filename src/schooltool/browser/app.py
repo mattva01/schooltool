@@ -256,7 +256,7 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
             name = None
         else:
             if not valid_name(name):
-                self.error = _("Invalid name")
+                self.error = _("Invalid identifier")
                 return self.do_GET(request)
             self.prev_name = name
 
@@ -265,12 +265,16 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
         except UnicodeError:
             self.error = _("Invalid UTF-8 data.")
             return self.do_GET(request)
+        else:
+            if not title:
+                self.error = _("Title should not be empty.")
+                return self.do_GET(request)
         self.prev_title = title
 
         try:
             obj = self.context.new(name, title=title)
         except KeyError:
-            self.error = _('Name already taken')
+            self.error = _('Identifier already taken')
             return self.do_GET(request)
 
         request.appLog(_("Object %s of type %s created") %
