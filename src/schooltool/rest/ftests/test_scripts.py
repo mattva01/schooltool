@@ -35,6 +35,8 @@ import os
 import re
 import sys
 from threading import Thread
+
+import schooltool
 from schooltool.tests.helpers import unidiff, normalize_xml
 
 __metaclass__ = type
@@ -79,14 +81,18 @@ class ScriptTestCase(unittest.TestCase):
         self.script = script
         dirname = os.path.dirname(__file__)
         self.filename = os.path.join(dirname, script)
-        self.client = os.path.abspath(
-            os.path.join(dirname, '..', '..', '..', 'schooltool-client.py'))
+        basedir = os.path.dirname(os.path.dirname(schooltool.__file__))
+        baselen = len(os.path.abspath(basedir)) + 1
+        full_filename = os.path.abspath(self.filename)[baselen:]
+        self.test_id = full_filename.replace(os.path.sep, '.')
+        self.client = os.path.abspath(os.path.join(os.path.dirname(basedir),
+                                                   'schooltool-client.py'))
 
     def __str__(self):
-        return 'script %s' % self.script
+        return self.id()
 
     def id(self):
-        return 'script %s' % self.script
+        return self.test_id
 
     def runTest(self):
         cmd = "%s %s %s" % (sys.executable, self.client, self.client_args)
