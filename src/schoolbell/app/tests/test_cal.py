@@ -242,7 +242,8 @@ def doctest_WriteCalendar():
         >>> cal.find('e2').title
         'Event II'
 
-    TODO: modify old events instead of clearing them and overwriting.
+    TODO: modify existing events instead of clearing the calendar and
+    creating all events anew.
 
     """
 
