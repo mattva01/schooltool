@@ -29,8 +29,71 @@ if sys.version_info < (2, 3):
 
 from distutils.core import setup, Extension
 
-ext_modules = [Extension("zope.interface._zope_interface_ospec",
-                         ["src/zope/interface/_zope_interface_ospec.c"])]
+
+base_btrees_depends = [
+    "src/persistence/persistence.h",
+    "src/persistence/persistenceAPI.h",
+    "src/zodb/btrees/BTreeItemsTemplate.c",
+    "src/zodb/btrees/BTreeModuleTemplate.c",
+    "src/zodb/btrees/BTreeTemplate.c",
+    "src/zodb/btrees/BucketTemplate.c",
+    "src/zodb/btrees/MergeTemplate.c",
+    "src/zodb/btrees/SetOpTemplate.c",
+    "src/zodb/btrees/SetTemplate.c",
+    "src/zodb/btrees/TreeSetTemplate.c",
+    "src/zodb/btrees/sorters.c",
+]
+
+ext_modules = [
+
+    # zope.interface
+
+    Extension("zope.interface._zope_interface_ospec",
+              ["src/zope/interface/_zope_interface_ospec.c"]),
+
+    # persistence
+
+    Extension("persistence._persistence",
+              ["src/persistence/persistence.c"],
+              depends=["src/persistence/persistence.h",
+                       "src/persistence/persistenceAPI.h"]),
+
+    # zodb
+
+    Extension("zodb._timestamp",
+              ["src/zodb/_timestamp.c"]),
+    Extension("zodb.storage._helper",
+              ["src/zodb/storage/_helper.c"]),
+    Extension("zodb.btrees._zodb_btrees_fsBTree",
+              ["src/zodb/btrees/_zodb_btrees_fsBTree.c"],
+              include_dirs=["src"],
+              depends=base_btrees_depends),
+    Extension("zodb.btrees._zodb_btrees_OOBTree",
+              ["src/zodb/btrees/_zodb_btrees_OOBTree.c"],
+              include_dirs=["src"],
+              depends=base_btrees_depends + ["src/zodb/btrees/objectkeymacros.h",
+                                             "src/zodb/btrees/objectvaluemacros.h"]),
+    Extension("zodb.btrees._zodb_btrees_OIBTree",
+              ["src/zodb/btrees/_zodb_btrees_OIBTree.c"],
+              include_dirs=["src"],
+              depends=base_btrees_depends + ["src/zodb/btrees/objectkeymacros.h",
+                                             "src/zodb/btrees/intvaluemacros.h"]),
+    Extension("zodb.btrees._zodb_btrees_IOBTree",
+              ["src/zodb/btrees/_zodb_btrees_IOBTree.c"],
+              include_dirs=["src"],
+              depends=base_btrees_depends + ["src/zodb/btrees/intkeymacros.h",
+                                             "src/zodb/btrees/objectvaluemacros.h"]),
+    Extension("zodb.btrees._zodb_btrees_IIBTree",
+              ["src/zodb/btrees/_zodb_btrees_IIBTree.c"],
+              include_dirs=["src"],
+              depends=base_btrees_depends + ["src/zodb/btrees/intkeymacros.h",
+                                             "src/zodb/btrees/intvaluemacros.h"]),
+
+]
+
+if sys.platform == "win32":
+    ext_modules.append(Extension("zodb.winlock", ["src/zodb/winlock.c"]))
+
 
 setup(name="schooltool",
       version="0.0.1pre",

@@ -1,2 +1,6 @@
 D/ZConfig////
 D/zope////
+D/persistence////
+D/transaction////
+D/zdaemon////
+D/zodb////

@@ -12,11 +12,11 @@ build:
 	$(PYTHON) setup.py build_ext -i
 
 clean:
-	find . -name '*.o' -o -name '*.py[co]' -exec rm -f {} \;
+	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 
 realclean: clean
-	find . -name '*.so' -o -name '*.dll' -exec rm -f {} \;
+	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
 
 test: build
 	$(PYTHON) test.py $(TESTFLAGS)
