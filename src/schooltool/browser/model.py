@@ -129,6 +129,8 @@ class PersonPasswordView(View):
 
     message = None
 
+    back = True
+
     def do_POST(self, request):
         old_password = request.args['old_password'][0]
         user = request.authenticated_user
@@ -165,6 +167,8 @@ class PersonEditView(View, PersonInfoMixin):
     error = None
 
     canonical_photo_size = (240, 240)
+
+    back = True
 
     def do_POST(self, request):
         first_name = unicode(request.args['first_name'][0], 'utf-8')
@@ -318,6 +322,8 @@ class GroupEditView(View, RelationshipViewMixin):
 
     relname = _('Membership')
 
+    back = True
+
     def addList(self):
         """Return a list of objects available for addition
 
@@ -351,6 +357,8 @@ class GroupTeachersView(View, RelationshipViewMixin):
     linkrole = URITeacher
 
     relname = _('Teaching')
+
+    back = True
 
     def addList(self):
         """List all members of the Teachers group except current teachers."""
@@ -398,6 +406,8 @@ class ResourceEditView(View):
     authorization = ManagerAccess
 
     template = Template("www/resource_edit.pt")
+
+    back = True
 
     def do_POST(self, request):
         title = unicode(request.args['title'][0], 'utf-8')

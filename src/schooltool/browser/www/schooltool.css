@@ -15,6 +15,18 @@ div.header {
   border-bottom: 1px solid brown;
 }
 
+div.navigation {
+  color: brown;
+  border-bottom: 1px solid brown;
+  padding: 0em 0.5em;
+}
+
+div.navigation a {
+  color: brown;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 div.logo {
   float: left;
   margin: 1ex;
@@ -22,9 +34,11 @@ div.logo {
 }
 
 div.login {
-  position: absolute;
-  right: 1ex;
-  top: 1ex;
+  float: right;
+  /* position: absolute;
+   * right: 1ex;
+   * top: 1ex;
+   */
   color: #888888;
 }
 
