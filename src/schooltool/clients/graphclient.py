@@ -43,14 +43,13 @@ class GraphGenerator(SchoolToolClient):
   rankdir=LR;
 """]
 
-    def complete(self):
+    def complete(self, filename='graph.png'):
         self.DOT.append('}')
         cr = '\n'
         DOTstring = cr.join(self.DOT)
-        results = open("schooltool.dot", "w")
+        results = os.popen('dot -Tpng -o %s' % filename, 'w')
         results.write(DOTstring)
-        results.close()
-        draw = os.system('dot -Tpng -o graph.png schooltool.dot')
+        draw = results.close()
         if draw:
             raise DOT_Error
 
