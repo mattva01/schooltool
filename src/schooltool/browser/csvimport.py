@@ -266,12 +266,14 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
 
     template = Template("www/timetable-csvupload.pt")
 
-    error = None
+    errors = None
     success = None
 
     def __init__(self, context):
         View.__init__(self, context)
         CharsetMixin.__init__(self, context)
+        self.errors = []
+        self.success = []
 
     def do_POST(self, request):
         try:
@@ -283,7 +285,7 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
         roster_txt = request.args['roster.txt'][0]
 
         if not (timetable_csv or roster_txt):
-            self.error = _('No data provided.')
+            self.errors.append(_('No data provided.'))
             return self.do_GET(request)
 
         try:
@@ -291,23 +293,63 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             unicode(timetable_csv, charset)
             roster_txt = unicode(roster_txt, charset)
         except UnicodeError:
-            self.error = _('Could not convert data to Unicode'
-                           ' (incorrect charset?).')
+            self.errors.append(_('Could not convert data to Unicode'
+                                 ' (incorrect charset?).'))
             return self.do_GET(request)
 
+        ok = True
         importer = TimetableCSVImporter(self.context)
         if timetable_csv:
-            importer.importTimetable(timetable_csv)
-        if roster_txt:
-            importer.importRoster(roster_txt)
-
-        # TODO: show errors if there were any
-        #self.error = _("Import failed: %s") % e
-        #return self.do_GET(request)
+            ok = importer.importTimetable(timetable_csv)
+            if ok:
+                self.success.append(_("timetable.csv imported successfully."))
+            else:
+                self.errors.append(_("Failed to import timetable.csv"))
+                self._presentErrors(importer.errors)
+        if ok and roster_txt:
+            ok = importer.importRoster(roster_txt)
+            if ok:
+                self.success.append(_("roster.txt imported successfully."))
+            else:
+                self.errors.append(("Failed to import roster.txt"))
+                self._presentErrors(importer.errors)
 
         # TODO: log import
-        self.success = _("School timetable imported successfully.")
         return self.do_GET(request)
+
+    def _presentErrors(self, err):
+        if err.generic:
+            self.errors.extend(err.generic)
+
+
+        for key, msg in [
+            ('day_ids', _("Day ids not defined in selected schema: %s.")),
+            ('periods', _("Periods not defined in selected days: %s.")),
+            ('persons', _("Persons not found: %s.")),
+            ('groups', _("Groups not found: %s.")),
+            ('locations', _("Locations not found: %s.")),
+            ('records', _("Invalid records: %s."))]:
+            v = getattr(err, key)
+            if v:
+                values = ', '.join([repr(st) for st in v])
+                self.errors.append(msg % values)
+
+
+class ImportErrorCollection:
+
+    def __init__(self):
+        self.generic = []
+        self.day_ids = []
+        self.periods = []
+        self.persons = []
+        self.groups = []
+        self.locations = []
+        self.records = []
+
+    def anyErrors(self):
+        return bool(self.generic or self.day_ids or self.periods
+                    or self.persons or self.groups
+                    or self.locations or self.records)
 
 
 class TimetableCSVImporter:
@@ -321,38 +363,14 @@ class TimetableCSVImporter:
         self.app = app
         self.groups = self.app['groups']
         self.persons = self.app['persons']
-        self.invalid_day_ids = []
-        self.invalid_periods = []
-        self.invalid_persons = []
-        self.invalid_groups = []
-        self.invalid_locations = []
-        self.invalid_records = []
-        self.errors = []
-
-    def convertRowsToCSV(self, rows, error_format):
-        """Convert rows (a list of strings) in CSV format to a list of lists.
-
-        If the provided data is invalid, self.error will be updated with
-        `error_format % line`, and None will be returned.
-        """
-        result = []
-        reader = csv.reader(rows)
-        line = 0
-        try:
-            while True:
-                line += 1
-                result.append(reader.next())
-        except StopIteration:
-            return result
-        except csv.Error:
-            self.errors.append(error_format % line)
+        self.errors = ImportErrorCollection()
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data.
 
         Should not throw exceptions, but will set self.*error attributes.
         Returns True on success.  If False is returned, it means that at least
-        one of self.*error attributes have been set, and no changes to the
+        one of attributes of self.errors have been set, and no changes to the
         database have been applied.
         """
         rows = self.convertRowsToCSV(timetable_csv.splitlines(),
@@ -361,18 +379,19 @@ class TimetableCSVImporter:
             return False
 
         if len(rows[0]) != 2:
-            self.errors.append(_("The first row of the CSV file should"
-                                 " contain the period id and the schema"
-                                 " of the timetable."))
+            self.errors.generic.append(
+                    _("The first row of the CSV file should"
+                      " contain the period id and the schema"
+                      " of the timetable."))
             return False
 
         self.period_id, self.ttschema = rows[0]
         if self.ttschema not in self.app.timetableSchemaService.keys():
-            self.errors.append(_("The timetable schema %r does not exist."
-                                 % self.ttschema))
+            self.errors.generic.append(
+                _("The timetable schema %r does not exist." % self.ttschema))
             return False
 
-        for dry_run in [False, True]:
+        for dry_run in [True, False]:
             state = 'day_ids'
             for row_no, row in enumerate(rows[2:]):
                 if len(row) == 1 and row[0] == '':
@@ -390,9 +409,10 @@ class TimetableCSVImporter:
 
                 location, records = row[0], self.parseRecordRow(row[1:])
                 if len(records) != len(periods):
-                    self.errors = [_("The number of cells %r (line %d) does"
-                                     " not match the number of periods %r."
-                                     % (row[1:], row_no + 3, periods))]
+                    self.errors.generic.append(
+                            _("The number of cells %r (line %d) does"
+                              " not match the number of periods %r."
+                              % (row[1:], row_no + 3, periods)))
                     continue
 
                 for period, record in zip(periods, records):
@@ -400,16 +420,29 @@ class TimetableCSVImporter:
                         subject, teacher = record
                         self.scheduleClass(period, subject, teacher,
                                            day_ids, location, dry_run=dry_run)
-            if self.anyErrors():
-                assert not dry_run, ("Something bad happened,"
+            if self.errors.anyErrors():
+                assert dry_run, ("Something bad happened,"
                                      " aborting transaction.")
                 return False
         return True
 
-    def anyErrors(self):
-        return bool(self.errors or self.invalid_day_ids or self.invalid_periods
-                    or self.invalid_persons or self.invalid_groups
-                    or self.invalid_locations or self.invalid_records)
+    def convertRowsToCSV(self, rows, error_format):
+        """Convert rows (a list of strings) in CSV format to a list of lists.
+
+        If the provided data is invalid, self.errors.generic will be updated
+        with `error_format % line`, and None will be returned.
+        """
+        result = []
+        reader = csv.reader(rows)
+        line = 0
+        try:
+            while True:
+                line += 1
+                result.append(reader.next())
+        except StopIteration:
+            return result
+        except csv.Error:
+            self.errors.generic.append(error_format % line)
 
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).
@@ -417,7 +450,7 @@ class TimetableCSVImporter:
         records is a list of strings.  If a string is empty, the result list
         contains None instead of a tuple in the corresponding place.
 
-        If invalid entries are encountered, self.invalid_records is modified
+        If invalid entries are encountered, self.errors.records is modified
         and None is put in place of the malformed record.
         """
         result = []
@@ -425,8 +458,8 @@ class TimetableCSVImporter:
             if record.strip():
                 parts = record.split("|", 1)
                 if len(parts) != 2:
-                    if record not in self.invalid_records:
-                        self.invalid_records.append(record)
+                    if record not in self.errors.records:
+                        self.errors.records.append(record)
                     result.append(None)
                     continue
                 subject, teacher = parts[0].strip(), parts[1].strip()
@@ -440,14 +473,14 @@ class TimetableCSVImporter:
         tt = self.app.timetableSchemaService[self.ttschema]
         for day_id in day_ids:
             if day_id not in tt.keys():
-                if day_id not in self.invalid_day_ids:
-                    self.invalid_day_ids.append(day_id)
+                if day_id not in self.errors.day_ids:
+                    self.errors.day_ids.append(day_id)
             else:
                 valid_periods = tt[day_id].keys()
                 for period in periods:
                     if (period not in valid_periods
-                        and period not in self.invalid_periods):
-                        self.invalid_periods.append(period)
+                        and period not in self.errors.periods):
+                        self.errors.periods.append(period)
 
     def findByTitle(self, container, title, error_list=None):
         """Find an object with provided title in a container.
@@ -480,10 +513,10 @@ class TimetableCSVImporter:
         If dry_run is set, no objects are changed.
         """
         errors = False
-        subject = self.findByTitle(self.groups, subject, self.invalid_groups)
-        teacher = self.findByTitle(self.persons, teacher, self.invalid_persons)
+        subject = self.findByTitle(self.groups, subject, self.errors.groups)
+        teacher = self.findByTitle(self.persons, teacher, self.errors.persons)
         location = self.findByTitle(self.app['resources'], location,
-                                    self.invalid_locations)
+                                    self.errors.locations)
         if dry_run or not (subject and teacher and location):
             return # some objects were not found; do not process
 
@@ -513,7 +546,7 @@ class TimetableCSVImporter:
 
     def importRoster(self, roster_txt):
         """Import timetables from provided unicode data."""
-        # TODO: error handling
+        # TODO XXX: error handling
         group = None
         for line in roster_txt.splitlines():
             line = line.strip()
