@@ -40,6 +40,7 @@ recursive-include Zope3/src/zodbcode *
 
 include Zope3/src/zope/__init__.py
 recursive-include Zope3/src/zope/app *
+include Zope3/package-includes/zope.app.session-configure.zcml
 recursive-include Zope3/src/zope/cachedescriptors *
 recursive-include Zope3/src/zope/configuration *
 recursive-include Zope3/src/zope/component *
@@ -63,5 +64,5 @@ recursive-include Zope3/src/zope/tal *
 recursive-include Zope3/src/zope/testing *
 recursive-include Zope3/src/zope/thread *
 
-recursive-include Zope3/src/zope/ThreadedAsync *
-recursive-include Zope3/src/zope/zdaemon *
+recursive-include Zope3/src/ThreadedAsync *
+recursive-include Zope3/src/zdaemon *
