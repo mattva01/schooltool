@@ -248,6 +248,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         cal = Calendar()
         view = CalendarViewBase(cal)
+        self.assertEquals(view.first_day_of_week, 0) # Monday by default
 
         def getDaysStub(start, end):
             return [CalendarDay(start), CalendarDay(end)]
@@ -256,7 +257,7 @@ class TestCalendarViewBase(unittest.TestCase):
         for dt in (date(2004, 8, 9), date(2004, 8, 11), date(2004, 8, 15)):
             week = view.getWeek(dt)
             self.assertEquals(week,
-                              [CalendarDay(date(2004, 8, 9)), # ...
+                              [CalendarDay(date(2004, 8, 9)),
                                CalendarDay(date(2004, 8, 16))])
 
         dt = date(2004, 8, 16)
@@ -264,6 +265,37 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(week,
                           [CalendarDay(date(2004, 8, 16)),
                            CalendarDay(date(2004, 8, 23))])
+
+    def test_getWeek_first_day_of_week(self):
+        from schooltool.browser.cal import CalendarViewBase, CalendarDay
+        from schooltool.cal import Calendar
+
+        cal = Calendar()
+        view = CalendarViewBase(cal)
+        view.first_day_of_week = 2 # Wednesday
+
+        def getDaysStub(start, end):
+            return [CalendarDay(start), CalendarDay(end)]
+        view.getDays = getDaysStub
+
+        for dt in (date(2004, 8, 11), date(2004, 8, 14), date(2004, 8, 17)):
+            week = view.getWeek(dt)
+            self.assertEquals(week,
+                              [CalendarDay(date(2004, 8, 11)),
+                               CalendarDay(date(2004, 8, 18))],
+                              "%s: %s -- %s" % (dt, week[0].date, week[1].date))
+
+        dt = date(2004, 8, 10)
+        week = view.getWeek(dt)
+        self.assertEquals(week,
+                          [CalendarDay(date(2004, 8, 4)),
+                           CalendarDay(date(2004, 8, 11))])
+
+        dt = date(2004, 8, 18)
+        week = view.getWeek(dt)
+        self.assertEquals(week,
+                          [CalendarDay(date(2004, 8, 18)),
+                           CalendarDay(date(2004, 8, 25))])
 
     def test_getMonth(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay

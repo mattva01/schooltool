@@ -154,6 +154,8 @@ class CalendarViewBase(View):
 
     authorization = PrivateAccess
 
+    first_day_of_week = 0
+
     def renderEvent(self, event):
         view = CalendarEventView(event)
         return view.render(self.request)
@@ -209,8 +211,10 @@ class CalendarViewBase(View):
         """Return the week that contains the day dt.
 
         Returns a list of CalendarDay objects."""
-        # XXX Hardcoded Monday-based weeks.
-        start = dt - timedelta(dt.weekday())
+        delta = dt.weekday() - self.first_day_of_week
+        if delta < 0:
+            delta += 7
+        start = dt - timedelta(delta)
         end = start + timedelta(7)
         return self.getDays(start, end)
 
