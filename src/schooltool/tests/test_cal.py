@@ -769,6 +769,11 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         self.assertEqual(result, [date(2004, 10, 13), date(2004, 10, 14),
                                   date(2004, 10, 15)])
 
+    def test_iCalRepresentation(self):
+        rule = self.createRule(count=2)
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=DAILY;INTERVAL=2'])
+
 
 class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 

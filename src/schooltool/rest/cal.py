@@ -234,6 +234,9 @@ class CalendarReadView(View):
                 "SUMMARY:%s" % ical_text(event.title or "")]
             if event.location is not None:
                 result.append("LOCATION:%s" % ical_text(event.location))
+            if event.recurrence is not None:
+                start = event.dtstart
+                result.extend(event.recurrence.iCalRepresentation(start))
             result += [
                 "DTSTART:%s" % event.dtstart.strftime('%Y%m%dT%H%M%S'),
                 "DURATION:%s" % ical_duration(event.duration),

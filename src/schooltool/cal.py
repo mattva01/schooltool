@@ -37,6 +37,7 @@ from schooltool.interfaces import IACLCalendar
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
 from schooltool.interfaces import Unchanged
+from schooltool.interfaces import IRecurrenceRule
 from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
 from schooltool.interfaces import IWeeklyRecurrenceRule, IMonthlyRecurrenceRule
 
@@ -380,6 +381,8 @@ class CalendarOwnerMixin(Persistent):
 
 class RecurrenceRule:
 
+    implements(IRecurrenceRule)
+
     def __init__(self, interval=1, count=None, until=None, exceptions=()):
         self.interval = interval
         self.count = count
@@ -458,6 +461,9 @@ class RecurrenceRule:
         """Adds the basic step of recurrence to the date"""
         return date + self.interval * date.resolution
 
+    def iCalRepresentation(self, dtstart):
+        raise NotImplementedError()
+
 
 class DailyRecurrenceRule(RecurrenceRule):
     """Daily recurrence rule.
@@ -465,6 +471,11 @@ class DailyRecurrenceRule(RecurrenceRule):
     Immutable hashable object.
     """
     implements(IDailyRecurrenceRule)
+
+    def iCalRepresentation(self, dtstart):
+        """See IRecurrenceRule"""
+        return ['RRULE:FREQ=DAILY;INTERVAL=%d' % self.interval]
+        # TODO: exceptions
 
 
 class YearlyRecurrenceRule(RecurrenceRule):

@@ -451,6 +451,29 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
             END:VCALENDAR
         """))
 
+    def test_get_recurrent_events(self):
+        from schooltool.cal import CalendarEvent, DailyRecurrenceRule
+        rule = DailyRecurrenceRule(interval=2)
+        cal = self._create()
+        cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                                   datetime.timedelta(minutes=20),
+                                   "Quick Lunch", unique_id="-474248539",
+                                   recurrence=rule))
+        self.do_test_get(dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:-474248539
+            SUMMARY:Quick Lunch
+            RRULE:FREQ=DAILY;INTERVAL=2
+            DTSTART:20030902T154000
+            DURATION:PT20M
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """))
+
 
 class TestCalendarView(TestCalendarReadView):
 
