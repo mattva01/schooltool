@@ -32,6 +32,7 @@ the Free Software Foundation; either version 2 of the License, or
 """
 
 from wxPython.wx import *
+from wxPython.html import wxHtmlWindow
 import httplib
 import socket
 from htmllib import HTMLParser
@@ -89,6 +90,11 @@ class SchoolToolClient:
                 if '/' not in person:
                     people.append(person)
         return people
+
+    def getPersonInfo(self, person_id):
+        person = self.get('/people/%s' % person_id)
+        return person
+
 
 class ServerSettingsDlg(wxDialog):
 
@@ -168,6 +174,7 @@ class ServerSettingsDlg(wxDialog):
 
 ID_EXIT = wxNewId()
 ID_SERVER = wxNewId()
+ID_PEOPLE_LIST = wxNewId()
 
 
 class MainFrame(wxFrame):
@@ -225,10 +232,12 @@ class MainFrame(wxFrame):
 
         # client area
         splitter = wxSplitterWindow(self, -1)
-        self.peopleListBox = wxListBox(splitter, -1)
-        p2 = wxWindow(splitter, -1)
+        self.peopleListBox = wxListBox(splitter, ID_PEOPLE_LIST)
+        self.personInfoText = wxHtmlWindow(splitter, -1)
         splitter.SetMinimumPaneSize(20)
-        splitter.SplitVertically(self.peopleListBox, p2, 100)
+        splitter.SplitVertically(self.peopleListBox, self.personInfoText, 100)
+
+        EVT_LISTBOX(self, ID_PEOPLE_LIST, self.DoSelectPerson)
 
         self.SetSizeHints(minW=100, minH=100)
         self.refresh()
@@ -250,11 +259,17 @@ class MainFrame(wxFrame):
         dlg.ShowModal()
         dlg.Destroy()
 
+    def DoSelectPerson(self, event):
+        person_id = event.GetString()
+        info = self.client.getPersonInfo(person_id)
+        self.personInfoText.SetPage(info)
+
     def refresh(self):
         self.client.tryToConnect()
         self.SetStatusText(self.client.status)
         self.client.getListOfPersons()
         self.peopleListBox.Set(list(self.client.persons))
+        self.personInfoText.SetPage('')
 
 
 class SchoolToolApp(wxApp):
