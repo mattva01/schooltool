@@ -19,7 +19,7 @@ SchoolTool> get /schooltt/2003-fall/weekly
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=schooltt
-<schooltt xmlns="http://schooltool.org/ns/timetable/0.1">
+<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
   <teacher path="/persons/Mark">
   </teacher>
   <teacher path="/persons/Steve">

@@ -230,7 +230,8 @@ class TimetableSchemaView(TimetableReadView):
                 period_ids = [period.nsProp('id', None)
                               for period in xpathctx.xpathEval('tt:period')]
                 if len(sets.Set(period_ids)) != len(period_ids):
-                    return textErrorPage(request, "Duplicate periods in schema")
+                    return textErrorPage(request,
+                                         "Duplicate periods in schema")
                 timetable[day_id] = TimetableDay(period_ids)
             self.service[self.key] = timetable
             request.setHeader('Content-Type', 'text/plain')
@@ -238,7 +239,6 @@ class TimetableSchemaView(TimetableReadView):
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
-
 
 
 class BaseTimetableTraverseView(View):
