@@ -103,6 +103,10 @@ welcome to change it and/or distribute copies of it under certain conditions.
             self.emit("")   # make sure there's an empty line between commands
         return stop
 
+    def emptyline(self):
+        """Called when an empty line is entered in response to the prompt."""
+        pass
+
     def default(self, line):
         """This is called when a nonexistent command is invoked."""
         if line == "EOF":

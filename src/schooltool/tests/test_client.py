@@ -497,6 +497,11 @@ class TestClient(unittest.TestCase):
         self.assert_(not self.client.default("somethingelse"))
         self.assertEmitted("I beg your pardon?")
 
+    def test_emptyline(self):
+        self.client.lastcmd = "quit"
+        self.assert_(not self.client.emptyline())
+        self.assertEmitted("")
+
     def assertEmitted(self, what):
         self.assertEqual(self.emitted, what, "\n" + diff(what, self.emitted))
 
