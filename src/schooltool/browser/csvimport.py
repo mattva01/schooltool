@@ -23,6 +23,8 @@ Web-application views for managing SchoolTool data in CSV format.
 $Id$
 """
 
+import csv
+
 from schooltool.browser import View, Template, ToplevelBreadcrumbsMixin
 from schooltool.browser.auth import ManagerAccess
 from schooltool.csvimport import CSVImporterBase, DataError
@@ -33,6 +35,8 @@ from schooltool.membership import Membership
 from schooltool.teaching import Teaching
 from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
+
+__metaclass__ = type
 
 
 class CharsetMixin:
@@ -81,6 +85,7 @@ class CharsetMixin:
 
 
 class CSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
+    """A view for importing SchoolTool objects in CSV format."""
 
     __used_for__ = IApplication
 
@@ -275,26 +280,27 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             return self.do_GET(request)
 
         timetable_csv = request.args['timetable.csv'][0]
-        roster_csv = request.args['roster.csv'][0]
+        roster_txt = request.args['roster.txt'][0]
 
-        if not (timetable_csv or roster_csv):
+        if not (timetable_csv or roster_txt):
             self.error = _('No data provided.')
             return self.do_GET(request)
 
         try:
             # TODO timetable_csv = unicode(timetable_csv, charset) ?
             unicode(timetable_csv, charset)
-            unicode(roster_csv, charset)
+            unicode(roster_txt, charset)
         except UnicodeError:
             self.error = _('Could not convert data to Unicode'
                            ' (incorrect charset?).')
             return self.do_GET(request)
 
+        importer = TimetableCSVImporter()
         try:
             if timetable_csv:
                 self.importTimetable(timetable_csv)
-            if roster:
-                self.importRoster(resources_csv)
+            if roster_txt:
+                self.importRoster(roster_txt)
         except DataError, e:
             self.error = _("Import failed: %s") % e
             return self.do_GET(request)
@@ -302,8 +308,25 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
         # TODO: log import
         return self.do_GET(request)
 
+
+class TimetableCSVImporter:
+    """A timetable CSV parser and importer."""
+
     def importTimetable(self, timetable_csv):
-        pass # TODO
+        lines = timetable_csv.splitlines()
+        reader = csv.reader(lines)
+        periods = reader.next()[1:]
+        for period in periods:
+            pass # TODO: add timetable period
+
+        for row in reader:
+            location, row = row[0], row[1:]
+            # TODO: create location
+            subjects = [record.split(" ", 1)[0] for record in row]
+            teachers = [record.split(" ", 1)[1] for record in row]
+
+            for period, subject, teacher in zip(periods, subjects, teachers):
+                pass # TODO: register
 
     def importRoster(self, timetable_csv):
         pass # TODO

@@ -34,7 +34,7 @@ __metaclass__ = type
 class TestCharsetMixin(unittest.TestCase):
 
     def createMixin(self):
-        from schooltool.browser.csv import CharsetMixin
+        from schooltool.browser.csvimport import CharsetMixin
         return CharsetMixin(None)
 
     def test_getCharset(self):
@@ -59,7 +59,7 @@ class TestCharsetMixin(unittest.TestCase):
 class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.browser.csv import CSVImportView
+        from schooltool.browser.csvimport import CSVImportView
         from schooltool import teaching
         self.setUpSampleApp()
         teaching.setUp()
@@ -210,7 +210,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.browser.csv import CSVImporterZODB
+        from schooltool.browser.csvimport import CSVImporterZODB
         from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool import membership, teaching, relationship
@@ -262,7 +262,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(SubjectGroupFacet in classes)
 
     def test_importGroup_errors(self):
-        from schooltool.browser.csv import DataError
+        from schooltool.browser.csvimport import DataError
         self.assertRaises(DataError, self.im.importGroup,
                           'gr1', 'A tiny group', 'group1 group2', 'b0rk')
         self.assertEquals(self.im.logs, [])
@@ -291,7 +291,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.group2 in objs)
 
     def test_importPerson_errors(self):
-        from schooltool.browser.csv import DataError
+        from schooltool.browser.csvimport import DataError
         self.assertRaises(DataError, self.im.importPerson,
                           'Smith', 'invalid_group', 'group2')
         self.assertRaises(DataError, self.im.importPerson,
@@ -314,7 +314,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.group2 in objs)
 
     def test_importResource_errors(self):
-        from schooltool.browser.csv import DataError
+        from schooltool.browser.csvimport import DataError
         self.assertRaises(DataError, self.im.importResource,
                           'Resource', 'group1 invalid_group group2')
         self.assertEquals(self.im.logs, [])
@@ -346,7 +346,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
 
     def createView(self):
-        from schooltool.browser.csv import TimetableCSVImportView
+        from schooltool.browser.csvimport import TimetableCSVImportView
         return TimetableCSVImportView(self.app)
 
     def test_render(self):
@@ -355,16 +355,24 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
 
+    def test_access(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 302, result)
+        self.assert_('forbidden' in result)
+
     def test_post(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager)
+        # TODO
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
 
     def test_POST_empty(self):
         view = self.createView()
         view.request = RequestStub(args={'timetable.csv': '',
-                                         'roster.csv': '',
+                                         'roster.txt': '',
                                          'charset': 'UTF-8'})
         content = view.do_POST(view.request)
         self.assert_('No data provided' in content)
@@ -374,11 +382,26 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
     def test_POST_wrong_charset(self):
         view = self.createView()
         view.request = RequestStub(args={'timetable.csv':'"A","\xff","C","D"',
-                                         'roster.csv': '',
+                                         'roster.txt': '',
                                          'charset': 'UTF-8'})
         content = view.do_POST(view.request)
         self.assert_('incorrect charset' in content)
         self.assertEquals(view.request.applog, [])
+
+
+class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
+
+    def createImporter(self):
+        from schooltool.browser.csvimport import TimetableCSVImporter
+        return TimetableCSVImporter()
+
+    def test_timetable(self):
+        imp = self.createImporter()
+        imp.importTimetable(
+                '"","A","B","C"\n'
+                '"105","Math1 Curtin","Math2 Guzman","Math3 Curtin"\n'
+                '"129","English1 Lorch","English2 Lorch","English3 Lorch"\n')
+        # TODO
 
 
 def test_suite():
@@ -387,6 +410,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCSVImportView))
     suite.addTest(unittest.makeSuite(TestCSVImporterZODB))
     suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
+    suite.addTest(unittest.makeSuite(TestTimetableCSVImporter))
     return suite
 
 

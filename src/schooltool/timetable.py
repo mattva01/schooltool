@@ -897,7 +897,7 @@ class TimetableSchemaService(Persistent):
     def _set_default_id(self, new_id):
         if new_id is not None and new_id not in self.timetables:
             raise ValueError("Timetable schema %r does not exist" % new_id)
-        self._default_id =  new_id
+        self._default_id = new_id
 
     default_id = property(lambda self: self._default_id, _set_default_id)
 

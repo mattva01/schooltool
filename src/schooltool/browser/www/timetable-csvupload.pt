@@ -20,12 +20,12 @@
 
     <div class="row">
       <label for="timetable_csv" i18n:translate="">timetable.csv</label>
-      <input id="timtable_csv" type="file" name="roster.csv" />
+      <input id="timtable_csv" type="file" name="roster.txt" />
     </div>
 
     <div class="row">
-      <label for="roster_csv" i18n:translate="">roster.csv</label>
-      <input id="roster_csv" type="file" name="roster.csv" />
+      <label for="roster_txt" i18n:translate="">roster.txt</label>
+      <input id="roster_txt" type="file" name="roster.txt" />
     </div>
 
     <div class="row" tal:replace="structure view/charset_widget">

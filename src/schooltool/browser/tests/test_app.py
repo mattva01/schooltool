@@ -193,8 +193,8 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.timetable import TimetableSchemaServiceView
         from schooltool.browser.timetable import TimePeriodServiceView
         from schooltool.browser.timetable import NewTimePeriodView
-        from schooltool.browser.csv import CSVImportView
-        from schooltool.browser.csv import TimetableCSVImportView
+        from schooltool.browser.csvimport import CSVImportView
+        from schooltool.browser.csvimport import TimetableCSVImportView
 
         view = self.createView()
         app = view.context

@@ -1401,7 +1401,7 @@ class ITimetableDayWrite(Interface):
         """Remove all the activities for a certain period id."""
 
     def add(period, activity):
-        """Adds a single activity to the set of activities planned for
+        """Add a single activity to the set of activities planned for
         a given period.
         """
 
