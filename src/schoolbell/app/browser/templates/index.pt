@@ -2,11 +2,11 @@
       i18n:domain="schoolbell">
 <body>
 <div metal:fill-slot="body">
-<h2 i18n:translate="">Welcome to SchoolBell</h2>
+<h1 i18n:translate="">Welcome to SchoolBell</h1>
 
-<p><a href="persons">Persons</a></p>
-<p><a href="groups">Groups</a></p>
-<p><a href="resources">Resources</a></p>
+<p><a href="persons" i18n:translate="">Persons</a></p>
+<p><a href="groups" i18n:translate="">Groups</a></p>
+<p><a href="resources" i18n:translate="">Resources</a></p>
 </div>
 </body>
 
