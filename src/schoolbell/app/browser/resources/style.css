@@ -375,7 +375,7 @@ input.button-cancel {
     background: #eae3eb;
     border: 1px #aaa solid;
     margin: 1em;
-    vertical-align: center;
+    vertical-align: middle;
 }
 
 #calendar-navigation-context-previous,
