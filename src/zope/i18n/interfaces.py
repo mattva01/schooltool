@@ -14,13 +14,13 @@
 """Internationalization of content objects.
 
 This is just a subset of zope.i18n.interfaces.  Original version was:
-  $Id: interfaces.py,v 1.17 2003/08/12 19:11:11 srichter Exp $
+  $Id: __init__.py,v 1.5 2004/03/08 23:36:00 srichter Exp $
 """
-from zope.interface import Interface
+from zope.interface import Interface, Attribute
 
 
-class ITranslationService(Interface):
-    """The Translation Service
+class ITranslationDomain(Interface):
+    """The Translation Domain utility
 
     This interface provides methods for translating text, including text with
     interpolation.
@@ -28,16 +28,15 @@ class ITranslationService(Interface):
     When we refer to text here, we mean text that follows the standard Zope 3
     text representation.
 
+    The domain is used to specify which translation to use.  Different
+    products will often use a specific domain naming translations supplied
+    with the product.
+    
+    A favorite example is: How do you translate 'Sun'? Is it our star, the
+    abbreviation of Sunday or the company?  Specifying the domain, such as
+    'Stars' or 'DaysOfWeek' will solve this problem for us.
+
     Standard arguments in the methods described below:
-
-        domain -- The domain is used to specify which translation to use.
-                  Different products will often use a specific domain naming
-                  translations supplied with the product.
-
-                  A favorite example is: How do you translate "Sun"?  Is it
-                  our star, the abbreviation of Sunday or the company?
-                  Specifying the domain, such as "Stars" or "DaysOfWeek" will
-                  solve this problem for us.
 
         msgid -- The id of the message that should be translated.  This may be
                  an implicit or an explicit message id.
@@ -55,8 +54,9 @@ class ITranslationService(Interface):
         Also note that language tags are defined by RFC 1766.
     """
 
-    def translate(msgid, domain=None, mapping=None,
-                  context=None, target_language=None,
+    domain = Attribute("The name of the domain this object represents.")
+
+    def translate(msgid, mapping=None, context=None, target_language=None,
                   default=None):
         """Return the translation for the message referred to by msgid.
 
@@ -67,7 +67,7 @@ class ITranslationService(Interface):
         After a translation it also replaces any $name variable variables
         inside the post-translation string.
 
-        Note: The TranslationService interface does not support simplified
+        Note: The TranslationDomain interface does not support simplified
         translation methods, since it is totally hidden by ZPT and in
         Python you should use a Domain object, since it supports all
         the simplifications.
