@@ -42,31 +42,28 @@ class TestEventLog(unittest.TestCase):
         self.assertEquals(event_log.received, [])
 
 
+class TestEventLogUtility(unittest.TestCase):
+
+    def test(self):
+        from schooltool.debug import EventLogUtility, IEventLogUtility
+        event_log = EventLogUtility()
+        verifyObject(IEventLogUtility, event_log)
+
+
 class TestEventLogFacet(unittest.TestCase):
 
     def test(self):
-        from schooltool.debug import EventLogFacet, IEventLog
-        from schooltool.interfaces import IEventConfigurable, IFacet
+        from schooltool.debug import EventLogFacet, IEventLogFacet
         from schooltool.interfaces import IEvent, ICallAction
 
         event_log = EventLogFacet()
-        verifyObject(IEventConfigurable, event_log)
-        verifyObject(IEventLog, event_log)
-        verifyObject(IFacet, event_log)
+        verifyObject(IEventLogFacet, event_log)
 
         self.assertEquals(len(event_log.eventTable), 1)
         ea = event_log.eventTable[0]
         self.assert_(ICallAction.isImplementedBy(ea))
         self.assertEquals(ea.eventType, IEvent)
         self.assertEquals(ea.callback, event_log.notify)
-
-        event1, event2 = object(), object()
-        event_log.notify(event1)
-        event_log.notify(event2)
-        self.assertEquals(event_log.received, [event1, event2])
-
-        event_log.clear()
-        self.assertEquals(event_log.received, [])
 
 
 class TestEventLogger(unittest.TestCase):
@@ -118,6 +115,7 @@ class TestEventLogger(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestEventLog))
+    suite.addTest(unittest.makeSuite(TestEventLogUtility))
     suite.addTest(unittest.makeSuite(TestEventLogFacet))
     suite.addTest(unittest.makeSuite(TestEventLogger))
     return suite

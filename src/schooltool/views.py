@@ -32,7 +32,7 @@ from schooltool.interfaces import IModuleSetup, IUtilityService, IUtility
 from schooltool.component import getPath, getRelatedObjects
 from schooltool.component import ComponentLookupError
 from schooltool.component import getView, registerView
-from schooltool.debug import IEventLog
+from schooltool.debug import IEventLog, IEventLogUtility
 
 __metaclass__ = type
 
@@ -283,3 +283,5 @@ def setUp():
     registerView(IUtilityService, UtilityServiceView)
     registerView(IUtility, UtilityView)
     registerView(IEventLog, EventLogView)
+    registerView(IEventLogUtility, EventLogView)
+

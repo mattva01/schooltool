@@ -24,7 +24,7 @@ import logging
 from persistence import Persistent
 from persistence.list import PersistentList
 from zope.interface import implements, Attribute
-from schooltool.interfaces import IEventTarget, ILocation
+from schooltool.interfaces import IEventTarget, ILocation, IUtility
 from schooltool.interfaces import IEventConfigurable, IFacet
 from schooltool.event import CallAction
 
@@ -32,23 +32,27 @@ __metaclass__ = type
 
 
 class IEventLog(IEventTarget):
-    """Event log that stores all received events persistently"""
+    """Event log that stores all received events persistently."""
 
     received = Attribute("""List of received events""")
 
     def clear():
         """Clear the list of received events."""
 
+class IEventLogUtility(IEventLog, IUtility):
+    """Event log that is a utility."""
+
+class IEventLogFacet(IEventLog, IEventConfigurable, IFacet):
+    """Event log that is a facet."""
+
 
 class EventLog(Persistent):
-    """Locatable event log.  See IEventLog."""
+    """Base class for event logs.  See IEventLog."""
 
-    implements(IEventLog, ILocation)
+    implements(IEventLog)
 
     def __init__(self):
         self.received = PersistentList()
-        self.__parent__ = None
-        self.__name__ = None
 
     def notify(self, event):
         self.received.append(event)
@@ -57,23 +61,29 @@ class EventLog(Persistent):
         del self.received[:]
 
 
-class EventLogFacet(Persistent):
-    """Event log that can be attached to an object as a facet."""
+class EventLogUtility(EventLog):
+    """Event log as a utility.  See IEventLogUtility."""
 
-    implements(IEventLog, IEventConfigurable, IFacet)
+    implements(IEventLogUtility)
 
     def __init__(self):
-        self.received = PersistentList()
+        EventLog.__init__(self)
+        self.__parent__ = None
+        self.__name__ = None
+        self.title = "Event Log"
+
+
+class EventLogFacet(EventLog):
+    """Event log that can be attached to an object as a facet."""
+
+    implements(IEventLogFacet)
+
+    def __init__(self):
+        EventLog.__init__(self)
         self.__parent__ = None
         self.active = False
         self.owner = None
         self.eventTable = (CallAction(self.notify), )
-
-    def notify(self, event):
-        self.received.append(event)
-
-    def clear(self):
-        del self.received[:]
 
 
 class EventLogger(Persistent):
