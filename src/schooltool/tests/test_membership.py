@@ -26,9 +26,8 @@ import unittest
 
 from persistent import Persistent
 from zope.interface.verify import verifyObject
-from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.tests.utils import EventServiceTestMixin
-from schooltool.tests.utils import AppSetupMixin
+from schooltool.tests.utils import AppSetupMixin, RegistriesSetupMixin
+from schooltool.tests.utils import EventServiceTestMixin, LinkStub
 from schooltool.tests.test_relationship import Relatable
 from schooltool.relationship import RelatableMixin
 
@@ -137,12 +136,6 @@ class TestEvents(unittest.TestCase):
         from schooltool.uris import URIGroup, URIMember, URIObject
 
         URIUnrelated = URIObject("http://ns.example.org/role/unrelated")
-
-        class LinkStub:
-
-            def __init__(self, target, role):
-                self.target = target
-                self.role = role
 
         group, member = object(), object()
         links = (LinkStub(group, URIGroup), LinkStub(member, URIMember))

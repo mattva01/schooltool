@@ -38,7 +38,7 @@ from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
 from schooltool.tests.utils import RegistriesSetupMixin, TraversableRoot
-from schooltool.tests.utils import LocationStub
+from schooltool.tests.utils import LocationStub, LinkStub
 
 
 URITutor = URIObject("http://schooltool.org/ns/tutor")
@@ -54,20 +54,9 @@ class Relatable(LocatableEventTargetMixin, Persistent):
 
     def __init__(self, parent=None, name='does not matter'):
         from schooltool.relationship import LinkSet
-        LocatableEventTargetMixin.__init__(self, parent, name)
         Persistent.__init__(self)
+        LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = LinkSet(self)
-
-
-class LinkStub(Persistent):
-    implements(ILink)
-
-    def __init__(self, reltype=None, role=None, target=None, title=None):
-        self.reltype = reltype
-        self.role = role
-        self.target = target
-        self.title = title
-        self.__name__ = None
 
 
 class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
@@ -172,8 +161,7 @@ class TestRelationship(EventServiceTestMixin, RegistriesSetupMixin,
         parent.__name__ = 'obj'
         parent.__parent__ = root
 
-        link = LinkStub(role=URISuperior, reltype=URICommand,
-                        target=LinkStub())
+        link = LinkStub(Persistent(), URISuperior)
         parent.__links__.add(link)
         self.assertEqual(getPath(link), '/obj/relationships/0001')
 
@@ -262,8 +250,9 @@ class TestEvents(unittest.TestCase):
         from schooltool.relationship import RelationshipRemovedEvent
         from schooltool.interfaces import IRelationshipAddedEvent
         from schooltool.interfaces import IRelationshipRemovedEvent
-        links = (LinkStub(role=URIReport, target=object()),
-                 LinkStub(role=URISuperior, target=object()))
+        links = (LinkStub(object(), URIReport),
+                 LinkStub(object(), URISuperior))
+
         e = RelationshipAddedEvent(links)
         verifyObject(IRelationshipAddedEvent, e)
         self.assert_(e.links is links)
@@ -352,8 +341,8 @@ class TestRelatableMixin(unittest.TestCase):
         URIJanitor = URIObject("foo:janitor")
         URIWindowWasher = URIObject("foo:windowman")
 
-        j = LinkStub(role=URIJanitor)
-        e = LinkStub(role=URIEmployee)
+        j = LinkStub(object(), URIJanitor)
+        e = LinkStub(object(), URIEmployee)
 
         a.__links__ = [e, j]
 
@@ -387,9 +376,12 @@ class TestLinkSet(unittest.TestCase):
         reltype_a = object()
         role_a = object()
         target_a = Persistent()
-        a = LinkStub(reltype_a, role_a, target_a)
-        equivalent_to_a = LinkStub(reltype_a, role_a, target_a)
-        b = LinkStub(object(), object(), Persistent())
+        a = LinkStub(target_a, role_a)
+        a.reltype = reltype_a
+        equivalent_to_a = LinkStub(target_a, role_a)
+        equivalent_to_a.reltype = reltype_a
+        b = LinkStub(Persistent(), object())
+        b.reltype = object()
         self.assertRaises(TypeError, s.add, object())
         s.add(a)
         s.add(b)
@@ -410,7 +402,7 @@ class TestLinkSet(unittest.TestCase):
     def testPlaceholders(self):
         from schooltool.relationship import LinkSet
         s = LinkSet()
-        link = LinkStub(object(), object(), Persistent())
+        link = LinkStub(Persistent(), object())
         placeholder = SimplePlaceholder()
         self.assertRaises(TypeError, s.addPlaceholder, link, object())
         self.assertRaises(TypeError, s.addPlaceholder, object(), placeholder)

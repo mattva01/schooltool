@@ -32,7 +32,7 @@ from schooltool.interfaces import IFacetFactory
 from schooltool.interfaces import IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
 from schooltool.uris import URIObject
-from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.tests.utils import EqualsSortedMixin, LinkStub
 
 __metaclass__ = type
 
@@ -137,20 +137,6 @@ class DummyRelationshipSchema:
 
 URIDummy = URIObject("http://example.com/ns/dummy")
 URIDummy2 = URIObject("http://example.com/ns/dummy2")
-
-
-class LinkStub:
-    implements(ILink)
-
-    def __init__(self, target, reltype=URIDummy, role=URIDummy):
-        self.target = target
-        self.reltype = reltype
-        self.role = role
-        self.callbacks = Set()
-        self.__name__ = None
-
-    def registerUnlinkCallback(self, callback):
-        self.callbacks.add(callback)
 
 
 class TestFacetedRelationshipSchema(unittest.TestCase):

@@ -114,7 +114,7 @@ class Link(Persistent):
             self.callbacks.add(callback)
         else:
             raise TypeError("Callback must provide IUnlinkHook or be"
-                            " callable. Got %r." % (callback,))
+                            " callable. Got %r." % (callback, ))
 
 
 class _LinkRelationship(Persistent):

@@ -35,7 +35,7 @@ from zope.app.traversing.interfaces import ITraversable, TraversalError
 from zope.testing.cleanup import CleanUp
 
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
-from schooltool.interfaces import IServiceManager, IEventTarget
+from schooltool.interfaces import IServiceManager, IEventTarget, ILink
 from schooltool.tests.helpers import normalize_xml, diff
 
 __metaclass__ = type
@@ -384,8 +384,20 @@ class TimezoneTestMixin:
 
 class LinkStub:
 
-    def __init__(self, target):
+    implements(ILink)
+
+    __name__ = None
+    __parent__ = None
+    title = u"Some stub"
+
+    def __init__(self, target, role=None):
         self.target = target
+        self.role = role
+        self.reltype = None
+        self.callbacks = sets.Set()
+
+    def registerUnlinkCallback(self, callback):
+        self.callbacks.add(callback)
 
 
 class SchoolToolSetup(RegistriesSetupMixin, unittest.TestCase):

@@ -24,29 +24,15 @@ $Id$
 
 import unittest
 from datetime import datetime, time, date, timedelta
-
 from persistent import Persistent
 from zope.testing.doctest import DocTestSuite
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-
-from schooltool.tests.utils import EventServiceTestMixin
-from schooltool.tests.utils import EqualsSortedMixin, NiceDiffsMixin
+from schooltool.tests.utils import EventServiceTestMixin, NiceDiffsMixin
+from schooltool.tests.utils import EqualsSortedMixin, LinkStub
 from schooltool.interfaces import ILink, IFacet
 
 __metaclass__ = type
-
-
-class LinkStub:
-    implements(ILink)
-    __name__ = None
-    __parent__ = None
-    reltype = None
-    role = None
-    target = Persistent()
-
-    def traverse(self):
-        return self.target
 
 
 class FacetStub(Persistent):

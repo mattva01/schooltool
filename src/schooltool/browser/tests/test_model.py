@@ -741,6 +741,7 @@ def doctest_RelationshipViewMixin():
 
         >>> from schooltool.interfaces import IQueryLinks
         >>> from zope.interface import implements
+
         >>> class Frog(object):
         ...     implements(IQueryLinks)
         ...     def __init__(self):
@@ -752,6 +753,7 @@ def doctest_RelationshipViewMixin():
         ...         self.links.append(LinkStub(self, teacher, URITeacher))
         ...     def listLinks(self, role=None):
         ...         return [link for link in self.links if link.role == role]
+
         >>> class LinkStub:
         ...     def __init__(self, this, other, role):
         ...         self.this = this
