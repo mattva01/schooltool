@@ -72,7 +72,7 @@ class HTTPStub:
         return ResponseStub(self)
 
     def send(self, s):
-        if s == "":
+        if not s:
             raise AssertionError("send('') breaks when SSL is used")
         self.sent_data += s
 

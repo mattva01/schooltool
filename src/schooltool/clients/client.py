@@ -217,16 +217,14 @@ welcome to change it and/or distribute copies of it under certain conditions.
                 factory = self.connectionFactory
             conn = factory(self.server, self.port)
             self.lastconn = conn # Test hook
-            conn.putrequest(method, resource)
-            for header, value in headers:
-                conn.putheader(header, value)
+            hdrdict = {}
             if self.user is not None:
                 data = "%s:%s" % (self.user, self.password)
                 basic = "Basic %s" % base64.encodestring(data).strip()
-                conn.putheader('Authorization', basic)
-            conn.endheaders()
-            if body:
-                conn.send(body)
+                hdrdict['Authorization'] = basic
+            for k, v in headers:
+                hdrdict[k] = v
+            conn.request(method, resource, body, hdrdict)
             response = conn.getresponse()
             self.emit("%s %s" % (response.status, response.reason))
             if ignore_data:

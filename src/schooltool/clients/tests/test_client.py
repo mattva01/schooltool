@@ -45,6 +45,16 @@ class HTTPStub:
         if port != 7001:
             raise socket.error(111, 'Connection refused')
 
+    def request(self, method, url, body=None, headers={}):
+        self.putrequest(method, url)
+        if body:
+            self.putheader('Content-Length', str(len(body)))
+        for k, v in headers.items():
+            self.putheader(k, v)
+        self.endheaders()
+        if body:
+            self.send(body)
+
     def putrequest(self, method, resource, *args, **kw):
         self.method = method
         self.resource = resource
@@ -59,7 +69,8 @@ class HTTPStub:
         return ResponseStub(self)
 
     def send(self, s):
-        assert s, "Sending empty strings breaks when SSL is used"
+        if not s:
+            raise AssertionError("send('') breaks when SSL is used")
         self.sent_data += s
 
 
