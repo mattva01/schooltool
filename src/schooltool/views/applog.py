@@ -38,14 +38,29 @@ class ApplicationLogView(View):
         request.setHeader('Content-Type', 'text/plain')
         path = request.site.applog_path
         if path is not None:
-            return self.file_contents(path)
+            file = self.openLog(path)
+            try:
+                if 'filter' in request.args:
+                    filter = request.args['filter']
+                    result = [line for line in file.readlines()
+                              if filter in line]
+                    # set the size of result in some header
+                    if 'page' in request.args and 'pagesize' in request.args:
+                        page = int(request.args['page'])
+                        pagesize = int(request.args['pagesize'])
+                        if page < 0:
+                            end = len(result)
+                            i = end + page*pagesize
+                            j =  end + (page+1)*pagesize
+                            result = result[i:j]
+                    return "".join(result)
+                else:
+                    return file.read()
+            finally:
+                file.close()
         else:
             return textErrorPage(request, _("Application log not configured"))
 
-    def file_contents(self, name):
-        f = open(name)
-        try:
-            return f.read()
-        finally:
-            f.close()
 
+    def openLog(self, filename):
+        return file(filename)

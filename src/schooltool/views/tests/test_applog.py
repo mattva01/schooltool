@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from StringIO import StringIO
 from schooltool.views.tests import RequestStub
 
 __metaclass__ = type
@@ -30,24 +31,46 @@ __metaclass__ = type
 
 class TestApplicationLogView(unittest.TestCase):
 
-    def test(self):
+    def setUp(self):
         from schooltool.views.applog import ApplicationLogView
-        view = ApplicationLogView(None)
-        view.authorization = lambda ctx, rq: True
-        view.file_contents = lambda f: 'y00 h4v3 b33n 0wn3d'
-        request = RequestStub()
-        class SiteStub: applog_path = 'whatever'
-        request.site = SiteStub()
-        result = view.render(request)
+        self.view = ApplicationLogView(None)
+        self.view.authorization = lambda ctx, rq: True
+        self.view.openLog = lambda f: StringIO('y00 h4v3 b33n 0wn3d')
+        self.request = RequestStub()
+        class SiteStub:
+            applog_path = 'whatever'
+        self.request.site = SiteStub()
 
-        self.assertEquals(request.code, 200)
-        self.assertEquals(request.headers['content-type'], "text/plain")
+    def test(self):
+        result = self.view.render(self.request)
+
+        self.assertEquals(self.request.code, 200)
+        self.assertEquals(self.request.headers['content-type'], "text/plain")
         self.assertEquals(result, 'y00 h4v3 b33n 0wn3d')
 
-        request.site.applog_path = None
-        result = view.render(request)
-        self.assertEquals(request.code, 400)
+        self.request.site.applog_path = None
+        result = self.view.render(self.request)
+        self.assertEquals(self.request.code, 400)
 
+    def testFilter(self):
+        self.view.openLog = lambda f: StringIO("cut\nfit\ndog\nbit\nkite")
+        self.request.args.update({'filter': 'i'})
+
+        result = self.view.render(self.request)
+
+        self.assertEquals(self.request.code, 200)
+        self.assertEquals(self.request.headers['content-type'], "text/plain")
+        self.assertEquals(result, 'fit\nbit\nkite')
+
+    def testLastPage(self):
+        self.view.openLog = lambda f: StringIO("cut\nfit\ndog\nbit\nkite\n")
+        self.request.args.update({'filter': '', 'pagesize': "2", 'page': "-1"})
+
+        result = self.view.render(self.request)
+
+        self.assertEquals(self.request.code, 200)
+        self.assertEquals(self.request.headers['content-type'], "text/plain")
+        self.assertEquals(result, 'bit\nkite\n')
 
 def test_suite():
     suite = unittest.TestSuite()
