@@ -140,6 +140,30 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
                          [(datetime(2004, 1, 1, 14), five_hours),
                          ])
 
+    def test_getFreeIntervals_recurring_events(self):
+        from schooltool.cal import Calendar, CalendarEvent, RecurrenceRule
+        obj = self.newObject()
+        cal = Calendar()
+        obj.makeCalendar = lambda: []
+
+        # some convenience definitions
+        day = timedelta(days=1)
+        half_day = timedelta(hours=12)
+        whole_day = [(time(0), day)]
+        first = date(2004, 1, 1)
+        last = date(2004, 1, 5)
+
+        recurrence = RecurrenceRule(interval=2)
+        obj.calendar.addEvent(CalendarEvent(datetime(2004, 1, 2, 12, 0),
+                                            half_day, "Busy",
+                                            recurrence=recurrence))
+
+        self.assertEqual(obj.getFreeIntervals(first, last, whole_day,
+                                              half_day),
+                         [(first, day + half_day),
+                          (first + day*2 + half_day, day + half_day),
+                          (first + day*4 + half_day, day)])
+
     def test_getRelativePath(self):
         from schooltool.component import FacetManager
         obj = self.newObject()

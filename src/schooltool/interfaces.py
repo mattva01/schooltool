@@ -1769,7 +1769,7 @@ class IAvailabilitySearch(Interface):
     """An interface for querying the availability of resources."""
 
     def getFreeIntervals(first, last, time_periods, duration):
-        """Returns all intervals of time not shorter than duration
+        """Return all intervals of time not shorter than duration
         when the object is free within a range of dates [first, last]
         during the times of day specified by time_periods.
 
@@ -1777,7 +1777,7 @@ class IAvailabilitySearch(Interface):
                        dates.
 
         time_periods   a sequence of tuples (start_time, duration)
-                       specifying a the time of day.  These are
+                       specifying the time of day.  These are
                        respectively datetime.time and
                        datetime.timedelta objects
 

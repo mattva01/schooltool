@@ -86,7 +86,7 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
                 intset.remove(date + a, date + b)
                 date += one_day
 
-        for event in self.calendar:
+        for event in self.calendar.expand(first, last):
             intset.remove(event.dtstart, event.dtstart + event.duration)
 
         for event in self.makeCalendar():

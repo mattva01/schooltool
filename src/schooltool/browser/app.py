@@ -587,7 +587,7 @@ class NoteContainerView(ObjectContainerView):
 class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
     """View for resource search (/busysearch)."""
 
-    # Only one methods from AvailabilityQueryView is used:
+    # Only one method from AvailabilityQueryView is used:
     #   update
 
     __used_for__ = IApplication
@@ -654,7 +654,7 @@ class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
         return str(datetime.date.today())
 
     def allResources(self):
-        """Return a list of resources"""
+        """Return a list of resources."""
         resources = traverse(self.context, '/resources')
         result = [(obj.title, obj) for obj in resources.itervalues()]
         result.sort()
