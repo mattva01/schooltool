@@ -1180,11 +1180,11 @@ class BrowserFrame(wxDialog):
         self.CenterOnScreen(wxBOTH)
 
     def OnBack(self, event=None):
-        """Go back in histrory."""
+        """Go back in history."""
         self.htmlwin.HistoryBack()
 
     def OnForward(self, event=None):
-        """Go forward in histrory."""
+        """Go forward in history."""
         self.htmlwin.HistoryForward()
 
     def OnClose(self, event=None):
@@ -1696,18 +1696,46 @@ class AppLogFrame(wxDialog):
                           style=RESIZABLE_WIN_STYLE)
 
         main_sizer = wxBoxSizer(wxVERTICAL)
+
+        top_bar = wxBoxSizer(wxHORIZONTAL)
+        label = wxStaticText(self, -1, _("Show only lines containing"))
+        top_bar.Add(label, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 16)
+        filter_ctrl = wxTextCtrl(self, -1, '')
+        top_bar.Add(filter_ctrl, 1, wxEXPAND)
+        filter_btn = wxButton(self, -1, _("&Filter"))
+        filter_btn.SetDefault()
+        top_bar.Add(filter_btn, 0, wxLEFT, 16)
+        main_sizer.Add(top_bar, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 16)
+
         self.text_ctrl = wxTextCtrl(self, -1,
                                     style=wxTE_MULTILINE | wxTE_READONLY)
         self.text_ctrl.SetValue(to_wx(log_data))
-        main_sizer.Add(self.text_ctrl, 1, wxEXPAND|wxALL, 8)
+        main_sizer.Add(self.text_ctrl, 1, wxEXPAND|wxALL, 12)
 
         static_line = wxStaticLine(self, -1)
         main_sizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
+        prev_btn = wxButton(self, -1, _("&Previous"))
+        EVT_BUTTON(self, prev_btn.GetId(), self.OnPrev)
+        page_ctrl = wxTextCtrl(self, -1, "1", # XXX
+                               style=wxTE_CENTER)
+        size = page_ctrl.GetSize()
+        size.width /= 2
+        page_ctrl.SetSize(size)
+        sep_label = wxStaticText(self, -1, _("of"))
+        total_pages_ctrl = wxTextCtrl(self, -1, "99", # XXX
+                                      style=wxTE_READONLY|wxTE_CENTER)
+        total_pages_ctrl.SetSize(size)
+        next_btn = wxButton(self, -1, _("&Next"))
+        EVT_BUTTON(self, next_btn.GetId(), self.OnNext)
         close_btn = wxButton(self, wxID_CLOSE, _("Close"))
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
-        close_btn.SetDefault()
+        button_bar.Add(prev_btn)
+        button_bar.Add(page_ctrl, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16)
+        button_bar.Add(sep_label, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
+        button_bar.Add(total_pages_ctrl, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
+        button_bar.Add(next_btn, 0, wxLEFT, 16)
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
         button_bar.Add(close_btn, 0, wxLEFT, 16)
         main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
@@ -1722,6 +1750,14 @@ class AppLogFrame(wxDialog):
     def OnClose(self, event=None):
         """Close the window."""
         self.Close(True)
+
+    def OnPrev(self, event=None):
+        """Show the previous page."""
+        raise NotImplementedError, 'XXX'
+
+    def OnNext(self, event=None):
+        """Show the next page."""
+        raise NotImplementedError, 'XXX'
 
 
 #
