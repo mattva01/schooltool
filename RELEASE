@@ -1,0 +1,95 @@
+Release Notes - SchoolTool/SchoolBell 0.8
+=========================================
+
+
+Upgrade Issues
+~~~~~~~~~~~~~~
+
+Database Incompatibilities
+--------------------------
+
+The schooltool database in 0.8 is incompatible with earlier databases and the
+server will not be able to start with an old database. Currently there is no
+way to upgrade a database, so the only possibility is to delete the old one and
+re-create it.
+
+
+New Features in 0.8
+~~~~~~~~~~~~~~~~~~~
+
+Community Contributed Features
+------------------------------
+
+* Server Side SSL support and suggestions on SSL Certificate generation.
+  - Matthew Good
+
+* TCP wrapper support for the server. - Eugene Coetzee
+
+* Debconf configuration for Debian packages including SSL certificate
+  generation and server ports. - Brian Sutherland
+
+* TODO - missed anything?
+
+
+Second SchoolBell Milestone (Programmers of Vilnius)
+----------------------------------------------------
+
+Support for a calendering server for groups and organizations to coordinate
+schedules and timetables.
+
+TODO - get stories for Second SchoolBell Milestone when the webpage is fixed.
+
+
+Student Information, Address and Relationship Tracking - (Etria)
+----------------------------------------------------------------
+
+* Users will be able to attach personal notes to application objects via the
+  Atom publishing REST API.
+
+* The notes will be viewable through the web interface ONLY by the author of
+  the note.
+
+* The comments should be integrated into the author's view of the object.
+
+* In order to make schooltool applicable across diverse school districts and
+  educational systems, the personal information stored for each person
+  (Student, Teacher, Administrator, Staff, Parents, etc.) has to be fully
+  flexible. Starting from the example of the SIF data standard we see how
+  complex this data can be, rather than shoe horn every school into the SIF
+  model, schooltool will provide layers of extensibility for what information
+  it stores about people. In order to do this effectively Schooltool
+  administrators will be able to create custom schema through the web for
+  storing Person information.
+
+* Personal info facets will be viewable and editable through the
+  browser interface. The separate facets should be displayed on the
+  main page for the person and a page for each facet. Likewise there should be
+  a single form where all the info facets can be edited as well as separate
+  form for each facet.
+
+* Client applications should be able to fetch the data schemas from an object
+  via the REST API and PUT data into the personal info facet.
+
+* The user needs to be able to add a residence for a person. The residences
+  will be application objects with address facets. As above, this should appear
+  more or less seamless on the main page for a person, but the residence
+  objects will also have their own info pages.
+
+* Catching duplicate addresses is extremely important, so when an address is
+  entered the system should first check for similar addresses and return any
+  possible matches. Users should also be able to start by searching for
+  existing residences.
+
+* When people move, the old residence object is retained (we'll clean 'em up
+  later, maybe) and a new one is created. If multiple people live at the same
+  residence, the system will ask if the user wants to move all of them.
+
+* When creating/editing a student, there should be a create/edit
+  parent/guardian link. Guardians are regular person objects, connected by a
+  link.
+
+* The main view for a person should include links to their relatives.
+
+* Both an example extended schema product and documentation to create a custom
+  schema should be written. A default personal info schema will also be created
+  for inclusion in the standard SchoolTool distribution
