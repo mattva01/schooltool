@@ -805,7 +805,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         from schooltool.model import Resource
         from schooltool.browser.model import ResourceView, ResourceEditView
         from schooltool.browser.cal import BookingView
-        resource = Resource()
+        resource = self.resource
         view = ResourceView(resource)
         self.assertTraverses(view, 'edit.html', ResourceEditView, resource)
         self.assertTraverses(view, 'book', BookingView, resource)
