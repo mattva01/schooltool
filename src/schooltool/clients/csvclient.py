@@ -151,7 +151,71 @@ class HTTPClient:
         return conn.getresponse()
 
 
-class CSVImporter:
+class CSVImporterBase:
+
+    def importGroupsCsv(self, csvdata):
+        lineno = 0
+        self.importGroup("teachers", _("Teachers"), "root", 'teacher_group')
+        self.importGroup("pupils", _("Pupils"), "root", '')
+
+        try:
+            for lineno, row in enumerate(csv.reader(csvdata)):
+                if len(row) != 4:
+                    raise DataError(_("Error in group data, line %d:"
+                                      " expected 4 columns, got %d") %
+                                    (lineno + 1, len(row)))
+                name, title, parents, facets = map(from_locale, row)
+                self.importGroup(name, title, parents, facets)
+        except csv.Error, e:
+            raise DataError(_("Error in group data line %d: %s")
+                            % (lineno + 1, e))
+
+    def importPeopleCsv(self, csvdata, parent_group, relation):
+        lineno = 0
+        try:
+            for lineno, row in enumerate(csv.reader(csvdata)):
+                if len(row) != 4:
+                    raise DataError(_("Error in %s data line %d:"
+                                      " expected 4 columns, got %d") %
+                                    (parent_group, lineno + 1, len(row)))
+                title, groups, dob, comment = map(from_locale, row)
+                name = self.importPerson(title, parent_group, groups,
+                                         relation=relation)
+                self.importPersonInfo(name, title, dob, comment)
+        except csv.Error, e:
+            raise DataError(_("Error in %s parent_group data line %d: %s")
+                            % (parent_group, lineno + 1, e))
+
+    def importResourcesCsv(self, csvdata):
+        lineno = 0
+        try:
+            for lineno, row in enumerate(csv.reader(csvdata)):
+                if len(row) != 2:
+                    raise DataError(_("Error in resource data line %d:"
+                                      " expected 2 columns, got %d") %
+                                    (lineno + 1, len(row)))
+                title, groups = map(from_locale, row)
+                self.importResource(title, groups)
+        except csv.Error, e:
+            raise DataError(_("Error in resource data line %d: %s")
+                            % (lineno + 1, e))
+
+    # The methods below must be overridden by subclasses.
+
+    def importGroup(self, name, title, parents, facets):
+        raise NotImplementedError()
+
+    def importPerson(self, title, parent, groups, relation):
+        raise NotImplementedError()
+
+    def importResource(self, title, groups):
+        raise NotImplementedError()
+
+    def importPersonInfo(self, name, title, dob, comment):
+        raise NotImplementedError()
+
+
+class CSVImporterHTTP(CSVImporterBase):
 
     fopen = open
     verbose = True
@@ -160,6 +224,32 @@ class CSVImporter:
 
     def  __init__(self,  host='localhost', port=7001, ssl=False):
         self.server = HTTPClient(host, port, ssl)
+
+    def run(self):
+        """Run the batch import.
+
+        Used by the command-line client.
+        """
+        try:
+            self.blather(_("Creating groups... "))
+            self.importGroupsCsv(self.fopen('groups.csv'))
+            self.blather(_("Creating teachers... "))
+            self.importPeopleCsv(self.fopen('teachers.csv'), 'teachers',
+                                 self.teaching)
+            self.blather(_("Creating pupils... "))
+            self.importPeopleCsv(self.fopen('pupils.csv'), 'pupils',
+                                 self.membership)
+            self.blather(_("Creating resources... "))
+            self.importResourcesCsv(self.fopen('resources.csv'))
+            self.blather(_("Import finished successfully"))
+        except DataError:
+            raise
+
+    def blather(self, message):
+        """Print message to stdandard output if self.verbose is True."""
+        if self.verbose:
+            print
+            print message
 
     def membership(self, group, member_path):
         """Return a tuple (method, path, body) to add a member to a group."""
@@ -281,79 +371,6 @@ class CSVImporter:
             print response.read()
             sys.exit(1)
         return response
-
-    def importGroupsCsv(self, csvdata):
-        lineno = 0
-        self.importGroup("teachers", _("Teachers"), "root", 'teacher_group')
-        self.importGroup("pupils", _("Pupils"), "root", '')
-
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 4:
-                    raise DataError(_("Error in group data, line %d:"
-                                      " expected 4 columns, got %d") %
-                                    (lineno + 1, len(row)))
-                name, title, parents, facets = map(from_locale, row)
-                self.importGroup(name, title, parents, facets)
-        except csv.Error, e:
-            raise DataError(_("Error in group data line %d: %s")
-                            % (lineno + 1, e))
-
-    def importPeopleCsv(self, csvdata, parent_group, relation):
-        lineno = 0
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 4:
-                    raise DataError(_("Error in %s data line %d:"
-                                      " expected 4 columns, got %d") %
-                                    (parent_group, lineno + 1, len(row)))
-                title, groups, dob, comment = map(from_locale, row)
-                name = self.importPerson(title, parent_group, groups,
-                                         relation=relation)
-                self.importPersonInfo(name, title, dob, comment)
-        except csv.Error, e:
-            raise DataError(_("Error in %s parent_group data line %d: %s")
-                            % (parent_group, lineno + 1, e))
-
-    def importResourcesCsv(self, csvdata):
-        lineno = 0
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 2:
-                    raise DataError(_("Error in resource data line %d:"
-                                      " expected 2 columns, got %d") %
-                                    (lineno + 1, len(row)))
-                title, groups = map(from_locale, row)
-                self.importResource(title, groups)
-        except csv.Error, e:
-            raise DataError(_("Error in resource data line %d: %s")
-                            % (lineno + 1, e))
-
-    def blather(self, message):
-        """Print message to stdandard output if self.verbose is True."""
-        if self.verbose:
-            print
-            print message
-
-    def run(self):
-        """Run the batch import.
-
-        Used by the command-line client.
-        """
-        try:
-            self.blather(_("Creating groups... "))
-            self.importGroupsCsv(self.fopen('groups.csv'))
-            self.blather(_("Creating teachers... "))
-            self.importPeopleCsv(self.fopen('teachers.csv'), 'teachers',
-                                 self.teaching)
-            self.blather(_("Creating pupils... "))
-            self.importPeopleCsv(self.fopen('pupils.csv'), 'pupils',
-                                 self.membership)
-            self.blather(_("Creating resources... "))
-            self.importResourcesCsv(self.fopen('resources.csv'))
-            self.blather(_("Import finished successfully"))
-        except DataError:
-            raise
 
 
 def to_xml(s):

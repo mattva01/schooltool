@@ -144,12 +144,97 @@ class processStub:
         self.requests.append((method, path, body))
 
 
-class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
+class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
+
+    def test_importGroupsCsv(self):
+        from schooltool.clients.csvclient import CSVImporterBase
+        im = CSVImporterBase()
+
+        groups = []
+        def importGroupStub(name, title, parents, facets):
+            groups.append((name, title, parents, facets))
+        im.importGroup = importGroupStub
+
+        im.importGroupsCsv(['"year1","Year 1","root",'])
+        self.assertEquals(groups,
+                          [('teachers', u'Teachers', 'root', 'teacher_group'),
+                           ('pupils', u'Pupils', 'root', ''),
+                           (u'year1', u'Year 1', u'root', u'')])
+
+    def test_importResourcesCsv(self):
+        from schooltool.clients.csvclient import CSVImporterBase
+        im = CSVImporterBase()
+
+        resources = []
+        def importResourceStub(title, groups):
+            resources.append((title, groups))
+        im.importResource = importResourceStub
+
+        im.importResourcesCsv(['"Hall","locations"'])
+        self.assertEquals(resources, [(u'Hall', u'locations')])
+
+    def test_importPeopleCsv(self):
+        from schooltool.clients.csvclient import CSVImporterBase
+        im = CSVImporterBase()
+
+        persons = []
+        def importPersonStub(title, parent, groups, relation):
+            persons.append((title, parent, groups, relation))
+            return title
+        im.importPerson = importPersonStub
+
+        personinfo = []
+        def importPersonInfoStub(name, title, dob, comment):
+            personinfo.append((name, title, dob, comment))
+        im.importPersonInfo = importPersonInfoStub
+
+        im.importPeopleCsv(['"Jay Hacker","group1 group2","1998-01-01",""'],
+                           'teachers', '<rel>')
+        self.assertEquals(persons, [(u'Jay Hacker', 'teachers',
+                                     u'group1 group2', '<rel>')])
+        self.assertEquals(personinfo, [(u'Jay Hacker', u'Jay Hacker',
+                                        u'1998-01-01', u'')])
+
+    def test_import_badData(self):
+        from schooltool.clients.csvclient import CSVImporterBase
+        from schooltool.clients.csvclient import DataError
+        im = CSVImporterBase()
+        im.verbose = False
+
+        class ResponseStub:
+            def getheader(self, header):
+                return 'foo://bar/baz/quux'
+
+        im.process = lambda x, y, body=None: ResponseStub()
+
+        im.importGroup = lambda name, title, parents, facets: None
+        im.importPerson = lambda title, parent, groups, relation: None
+        im.importResource = lambda title, groups: None
+
+        def raisesDataError(method, *args):
+            im.fopen = lambda fn: StringIO('"invalid","csv')
+            self.assertRaises(DataError, method, "fn")
+
+        self.assertRaises(DataError, im.importGroupsCsv,
+                          ['"year1","Year 1","root"'])
+        self.assertRaises(DataError, im.importResourcesCsv,
+                          ['"year1","Year 1","root"'])
+        self.assertRaises(DataError, im.importPeopleCsv,
+                          ['"Foo","bar","baz"'], 'pupils',
+                          lambda group, member_path: None)
+
+        self.assertRaises(DataError, im.importGroupsCsv, ['"invalid","csv'])
+        self.assertRaises(DataError, im.importResourcesCsv, ['"b0rk","b0rk'])
+        self.assertRaises(DataError, im.importPeopleCsv, ['"invalid","csv'],
+                          'pupils', lambda group, member_path: None)
+
+
+class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
 
     def test_importGroup(self):
-        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporterHTTP
 
-        im = CSVImporter()
+        im = CSVImporterHTTP()
         im.process = processStub()
 
         im.importGroup('Name', 'Title', 'root foo', '')
@@ -189,9 +274,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                           ])
 
     def test_importPerson(self):
-        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporterHTTP
 
-        im = CSVImporter()
+        im = CSVImporterHTTP()
         im.getName = lambda response: 'quux'
 
         im.process = processStub()
@@ -208,9 +293,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                            membership_pattern % "/persons/quux")])
 
     def test_importResource(self):
-        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporterHTTP
 
-        im = CSVImporter()
+        im = CSVImporterHTTP()
         im.process = processStub()
         im.getName = lambda response: 'r123'
 
@@ -225,9 +310,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
              membership_pattern % "/resources/r123")])
 
     def test_importPersonInfo(self):
-        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporterHTTP
 
-        im = CSVImporter()
+        im = CSVImporterHTTP()
         im.process = processStub()
 
         im.importPersonInfo('123','Joe Hacker', '1978-01-02', 'comment')
@@ -242,9 +327,9 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
              '</person_info>'))])
 
     def test_getName(self):
-        from schooltool.clients.csvclient import CSVImporter
+        from schooltool.clients.csvclient import CSVImporterHTTP
 
-        im = CSVImporter()
+        im = CSVImporterHTTP()
 
         class FakeResponse:
             def getheader(self, header, default=None):
@@ -256,8 +341,8 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
         self.assertEqual(name, '123')
 
     def test_run(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter()
+        from schooltool.clients.csvclient import CSVImporterHTTP
+        im = CSVImporterHTTP()
         im.verbose = True
         im.fopen = lambda f: f
 
@@ -287,95 +372,17 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
                                   'people: pupils.csv pupils <membership>',
                                   'resources: resources.csv'])
 
-    def test_importGroupsCsv(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter()
-
-        groups = []
-        def importGroupStub(name, title, parents, facets):
-            groups.append((name, title, parents, facets))
-        im.importGroup = importGroupStub
-
-        im.importGroupsCsv(['"year1","Year 1","root",'])
-        self.assertEquals(groups,
-                          [('teachers', u'Teachers', 'root', 'teacher_group'),
-                           ('pupils', u'Pupils', 'root', ''),
-                           (u'year1', u'Year 1', u'root', u'')])
-
-    def test_importResourcesCsv(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter()
-
-        resources = []
-        def importResourceStub(title, groups):
-            resources.append((title, groups))
-        im.importResource = importResourceStub
-
-        im.importResourcesCsv(['"Hall","locations"'])
-        self.assertEquals(resources, [(u'Hall', u'locations')])
-
-    def test_importPeopleCsv(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter()
-
-        persons = []
-        def importPersonStub(title, parent, groups, relation):
-            persons.append((title, parent, groups, relation))
-            return title
-        im.importPerson = importPersonStub
-
-        personinfo = []
-        def importPersonInfoStub(name, title, dob, comment):
-            personinfo.append((name, title, dob, comment))
-        im.importPersonInfo = importPersonInfoStub
-
-        im.importPeopleCsv(['"Jay Hacker","group1 group2","1998-01-01",""'],
-                           'teachers', '<rel>')
-        self.assertEquals(persons, [(u'Jay Hacker', 'teachers',
-                                     u'group1 group2', '<rel>')])
-        self.assertEquals(personinfo, [(u'Jay Hacker', u'Jay Hacker',
-                                        u'1998-01-01', u'')])
-
-    def test_import_badData(self):
-        from schooltool.clients.csvclient import CSVImporter
-        from schooltool.clients.csvclient import DataError
-        im = CSVImporter()
-        im.verbose = False
-
-        class ResponseStub:
-            def getheader(self, header):
-                return 'foo://bar/baz/quux'
-
-        im.process = lambda x, y, body=None: ResponseStub()
-
-        def raisesDataError(method, *args):
-            im.fopen = lambda fn: StringIO('"invalid","csv')
-            self.assertRaises(DataError, method, "fn")
-
-        self.assertRaises(DataError, im.importGroupsCsv,
-                          ['"year1","Year 1","root"'])
-        self.assertRaises(DataError, im.importResourcesCsv,
-                          ['"year1","Year 1","root"'])
-        self.assertRaises(DataError, im.importPeopleCsv,
-                          ['"Foo","bar","baz"'], 'pupils', im.membership)
-
-        self.assertRaises(DataError, im.importGroupsCsv, ['"invalid","csv'])
-        self.assertRaises(DataError, im.importResourcesCsv, ['"b0rk","b0rk'])
-        self.assertRaises(DataError, im.importPeopleCsv, ['"invalid","csv'],
-                          'pupils', im.membership)
-
-
     def test_process(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter()
+        from schooltool.clients.csvclient import CSVImporterHTTP
+        im = CSVImporterHTTP()
         im.server.connectionFactory = HTTPStub
         im.process("POST", "/people/001/password", "foo")
         self.assertEqual(im.server.lastconn.sent_headers['authorization'],
                          'Basic bWFuYWdlcjpzY2hvb2x0b29s')
 
     def test_ssl(self):
-        from schooltool.clients.csvclient import CSVImporter
-        im = CSVImporter(ssl=True)
+        from schooltool.clients.csvclient import CSVImporterHTTP
+        im = CSVImporterHTTP(ssl=True)
         self.assert_(im.server.ssl)
 
 
@@ -383,7 +390,8 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.clients.csvclient'))
     suite.addTest(unittest.makeSuite(TestHTTPClient))
-    suite.addTest(unittest.makeSuite(TestCSVImporter))
+    suite.addTest(unittest.makeSuite(TestCSVImporterBase))
+    suite.addTest(unittest.makeSuite(TestCSVImporterHTTP))
     return suite
 
 if __name__ == '__main__':
