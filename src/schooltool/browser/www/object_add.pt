@@ -8,8 +8,9 @@
 
 <metal:block metal:fill-slot="content">
 
-  <form method="POST" tal:attributes="action request/path"
+  <form class="standalone" method="POST" tal:attributes="action request/path"
         metal:define-macro="object_add_form">
+    <fieldset>
     <input tal:condition="view/parent" type="hidden" name="parentgroup"
            tal:attributes="value view/parent/__name__" />
     <div class="error" tal:condition="view/error" tal:content="view/error" />
@@ -24,14 +25,15 @@
              tal:attributes="value view/prev_name">
     </div>
     <metal:block define-slot="extra_fields" />
-    <div class="buttons" tal:condition="view/duplicate_warning">
-      <input class="button" type="submit" name="CONFIRM" value="Add anyway"
+    </fieldset>
+    <div class="controls" tal:condition="view/duplicate_warning">
+      <input class="button-ok" type="submit" name="CONFIRM" value="Add anyway"
              i18n:attributes="value" />
-      <input class="button" type="submit" name="CANCEL" value="Cancel"
+      <input class="button-cancel" type="submit" name="CANCEL" value="Cancel"
              i18n:attributes="value" />
     </div>
-    <div class="buttons" tal:condition="not: view/duplicate_warning">
-      <input class="button" type="submit" name="ADD" value="Add"
+    <div class="controls" tal:condition="not: view/duplicate_warning">
+      <input class="button-ok" type="submit" name="ADD" value="Add"
              i18n:attributes="value" />
     </div>
   </form>
