@@ -26,7 +26,7 @@ from zope.interface import moduleProvides, implements
 from zope.component import getService
 from schooltool.common import looks_like_a_uri
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IURIObject
+from schooltool.interfaces import IURIObject, IURIAPI
 from schooltool.translation import TranslatableString as _
 
 __metaclass__ = type
@@ -208,4 +208,4 @@ def setUp():
     registerURI(URIWard)
 
 
-moduleProvides(IModuleSetup)
+moduleProvides(IModuleSetup, IURIAPI)

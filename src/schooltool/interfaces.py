@@ -130,6 +130,12 @@ class IURIObject(Interface):
         title=u"Human-readable description.")
 
 
+class IURIAPI(Interface):
+
+    def registerURI(uri):
+        """Add a URI to the registry so it can be queried by the URI string."""
+
+
 #
 # Relationships
 #

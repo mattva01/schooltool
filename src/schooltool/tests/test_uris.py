@@ -32,6 +32,11 @@ __metaclass__ = type
 
 class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
 
+    def test_api(self):
+        import schooltool.uris
+        from schooltool.interfaces import IURIAPI
+        verifyObject(IURIAPI, schooltool.uris)
+
     def test_URIObject(self):
         from schooltool.uris import URIObject
         from schooltool.interfaces import IURIObject
