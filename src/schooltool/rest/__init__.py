@@ -441,6 +441,7 @@ class View(Resource):
         except AttributeError:
             return []
 
+
 class NotFoundView(View):
     """View that always returns a 404 error page."""
 

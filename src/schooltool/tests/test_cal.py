@@ -164,7 +164,6 @@ class TestImmutableCalendar(unittest.TestCase, EqualsSortedMixin):
         verifyObject(ICalendar, cal)
 
     def test_find(self):
-        from schooltool.cal import ImmutableCalendar
         from schooltool.cal import CalendarEvent
 
         ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),

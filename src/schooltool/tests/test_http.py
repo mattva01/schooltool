@@ -1005,6 +1005,7 @@ class TestRequest(unittest.TestCase):
                    if c.startswith('chocolate=; Expires=')]
         self.assert_(cookies)
 
+
 class TestTimeFormatting(TimezoneTestMixin, unittest.TestCase):
 
     def test_with_regex(self):

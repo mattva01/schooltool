@@ -186,7 +186,7 @@ class View(_View):
         To be used from page templates (e.g. tal:condition="view/isTeacher").
         """
         return isTeacher(self.request.authenticated_user)
-     
+
     def isRelatable(self):
         """Return True/False if the current context is relatable.
 

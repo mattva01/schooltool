@@ -40,8 +40,7 @@ from schooltool.rest.cal import AllCalendarsView
 from schooltool.rest.csvexport import CSVExporter
 from schooltool.rest.auth import PublicAccess
 from schooltool.rest.applog import ApplicationLogView
-from schooltool.common import parse_date, to_unicode
-from schooltool.schema.rng import validate_against_schema
+from schooltool.common import parse_date
 from schooltool.translation import ugettext as _
 from schooltool.uris import listURIs
 from schooltool.rest.xmlparsing import XMLDocument

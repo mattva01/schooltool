@@ -681,7 +681,6 @@ class TestResourceContainerView(TestObjectContainerView):
 
 class TestNoteContainerView(TestObjectContainerView):
 
-
     def setUp(self):
         from schooltool.browser.app import NoteContainerView
         from schooltool.browser.app import NoteAddView

@@ -35,6 +35,7 @@ __metaclass__ = type
 
 
 class TimetableStub:
+
     def cloneEmpty(self):
         return self
 

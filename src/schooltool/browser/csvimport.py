@@ -33,7 +33,7 @@ from schooltool.component import FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
 from schooltool.teaching import Teaching
-from schooltool.timetable import Timetable, TimetableActivity
+from schooltool.timetable import TimetableActivity
 from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
 

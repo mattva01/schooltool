@@ -74,7 +74,6 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
 
         self.assert_('Upload CSV' in content)
 
-
     def test_POST_empty(self):
         request = RequestStub(args={'groups.csv': '',
                                     'resources.csv': '',

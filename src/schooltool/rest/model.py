@@ -194,6 +194,7 @@ class NotesView(ApplicationObjectTraverserView):
 
     template = Template("www/notes.pt", content_type="text/xml")
 
+
 #
 # Helpers
 #

@@ -42,8 +42,6 @@ from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.component import getOptions
-from schooltool.component import getTimePeriodService
-from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent

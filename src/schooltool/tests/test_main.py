@@ -43,6 +43,7 @@ def setUp():
 
 
 class ThreadableStub:
+
     def init(self):
         self._initialized = True
 

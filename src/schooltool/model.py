@@ -44,7 +44,7 @@ from schooltool.absence import Absence
 from schooltool.component import FacetManager, getRelatedObjects
 from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
 from schooltool.auth import ACL
-from schooltool.uris import URINotandum, URINotation
+from schooltool.uris import URINotandum
 
 __metaclass__ = type
 

@@ -579,8 +579,8 @@ class NoteView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
 
     template = Template("www/note.pt")
 
-    # Right now we only want to be editible by the owner
     def canEdit(self):
+        # Right now we only want to be editible by the owner
         user = request.authenticated_user
         return user == context.owner
 
@@ -614,7 +614,8 @@ class NoteEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     def __init__(self, context):
         View.__init__(self, context)
-        self.title_widget = TextWidget('title', _('Title'), value=context.title)
+        self.title_widget = TextWidget('title', _('Title'),
+                                       value=context.title)
         self.body_widget = TextAreaWidget('body', _('Note'), value=info.body)
 
     def do_POST(self, request):
@@ -622,25 +623,25 @@ class NoteEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
             return self.do_GET(request)
 
         widgets = [self.title_widget, self.body_widget]
-        
+
         for widget in widgets:
             widget.update(request)
-            
+
         # This is how to require a field.  Do we want any required here?
         #self.country_widget.require()
-        
+
         allow_duplicates = 'CONFIRM' in request.args
-        
+
         for widget in widgets:
             if widget.error:
                 return self.do_GET(request)
-            
+
         title = self.title_widget.value
         body = self.body_widget.value
-                
+
         request.appLog(_("Note info updated on %s (%s)") %
                        (self.context.title, getPath(self.context)))
-        
+
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
 

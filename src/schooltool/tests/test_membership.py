@@ -250,7 +250,6 @@ class TestRestictedMembershipPolicy(AppSetupMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.membership import RestrictedMembershipPolicy
-        from schooltool.membership import BeforeMembershipEvent
         from schooltool.membership import Membership
         from schooltool.interfaces import IBeforeMembershipEvent
         policy = RestrictedMembershipPolicy()

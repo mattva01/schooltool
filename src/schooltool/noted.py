@@ -27,8 +27,6 @@ from schooltool.interfaces import INotedEvent
 from schooltool.interfaces import INotedAddedEvent
 from schooltool.interfaces import INotedRemovedEvent
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
-from schooltool.relationship import RelationshipValenciesMixin
-from schooltool.relationship import Valency
 from schooltool.uris import URINoted
 from schooltool.uris import URINotation
 from schooltool.uris import URINotandum
@@ -40,6 +38,7 @@ __metaclass__ = type
 Noted = RelationshipSchema(URINoted,
                               notation=URINotation,
                               notandum=URINotandum)
+
 
 class NotedEvent(RelationshipEvent):
 
