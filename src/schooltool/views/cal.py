@@ -241,14 +241,22 @@ class CalendarReadView(View):
                 "DTSTAMP:%s" % dtstamp,
                 "END:VEVENT",
             ]
-        result.append("END:VCALENDAR")
         if uid_hash is None:
-            # There were no events.  Mozilla Calendar produces a 0-length
-            # file when publishing empty calendars.  Sadly it does not then
-            # accept them (http://bugzilla.mozilla.org/show_bug.cgi?id=229266).
-            # XXX I'm not sure if a 0-length file is a valid text/calendar
-            # object according to RFC 2445.
-            result = []
+            # There were no events.  iCalendar spec (RFC 2445) requires
+            # VCALENDAR to have at least one subcomponent.  Let's create
+            # a fake event.
+            # NB Mozilla Calendar produces a 0-length file when publishing
+            # empty calendars.  Sadly it does not then accept them
+            # (http://bugzilla.mozilla.org/show_bug.cgi?id=229266).
+            result += [
+                "BEGIN:VEVENT",
+                "UID:placeholder-%s" % uid_suffix,
+                "SUMMARY:%s" % ical_text("Empty calendar"),
+                "DTSTART;VALUE=DATE:%s" % dtstamp[:8],
+                "DTSTAMP:%s" % dtstamp,
+                "END:VEVENT",
+            ]
+        result.append("END:VCALENDAR")
         request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
         return "\r\n".join(result)
 
@@ -267,6 +275,9 @@ class CalendarView(CalendarReadView):
         reader = ICalReader(request.content)
         try:
             for event in reader.iterEvents():
+                if (event.summary == 'Empty calendar'
+                    and event.getOne('UID').startswith('placeholder')):
+                    continue
                 has_complex_props = reduce(operator.or_,
                                       map(event.hasProp, complex_prop_names))
                 if has_complex_props:

@@ -377,9 +377,20 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
 
     def test_get_empty(self):
         self._create()
-        self.do_test_get("")
+        self.do_test_get(dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:placeholder-/calendar@localhost
+            SUMMARY:Empty calendar
+            DTSTART;VALUE=DATE:20040102
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """))
 
-    def test_get_empty(self):
+    def test_get(self):
         from schooltool.cal import CalendarEvent
         cal = self._create()
         cal.addEvent(CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
@@ -416,11 +427,11 @@ class TestCalendarView(TestCalendarReadView):
         from schooltool.views.cal import CalendarView
         return CalendarView(context)
 
-    def test_put_empty(self):
+    def test_put_empty(self, body=""):
         from schooltool.cal import CalendarEvent
         request = RequestStub("http://localhost/calendar", method="PUT",
                               headers={"Content-Type": "text/calendar"},
-                              body="")
+                              body=body)
         cal = self._create()
         cal.addEvent(CalendarEvent(datetime.date(2003, 9, 1),
                                    datetime.timedelta(1),
@@ -432,6 +443,22 @@ class TestCalendarView(TestCalendarReadView):
         events = list(cal)
         expected = []
         self.assertEquals(sorted(events), sorted(expected))
+
+    def test_put_placeholder(self):
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:placeholder-/calendar@localhost
+            SUMMARY:Empty calendar
+            DTSTART;VALUE=DATE:20040103
+            DTSTAMP:20040103T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        self.test_put_empty(calendar)
 
     def test_put(self):
         from schooltool.cal import CalendarEvent
