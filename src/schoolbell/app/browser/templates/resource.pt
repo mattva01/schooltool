@@ -16,13 +16,13 @@
          i18n:translate="">View calendar XXX NOT IMPLEMENTED</a>
     </div>
 
-    <div class="groups">
+    <div class="groups" tal:define="groups context/groups/sortby:title">
       <h3 i18n:translate="">Groups</h3>
-      <div tal:repeat="group context/groups"> <!-- TODO: ordering -->
+      <div tal:repeat="group groups">
         <a tal:attributes="href group/@@absolute_url"
            tal:content="group/title"></a>
       </div>
-      <div tal:condition="not:context/groups">
+      <div tal:condition="not:groups">
         This resource does not belong to any groups.
       </div>
       <p>
