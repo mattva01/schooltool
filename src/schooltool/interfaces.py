@@ -1020,9 +1020,68 @@ class ICalendarEvent(Interface):
     title = Attribute("""The title of the event""")
 
 
+class ITimetable(Interface):
+    """A timetable is a collection of timetable days that contain
+    periods. Each period either contains a class, or is empty.
+
+    A timetable represents the repeating lesson schedule for just one
+    pupil, or one teacher, or one bookable resource.
+    """
+    def keys():
+        """Returns a sequence of identifiers for days within the timetable"""
+
+    def items():
+        """Returns a sequence of tuples of (day_id, ITimetableDay)."""
+
+    def __getitem__(key):
+        """Returns an ITimetableDay for a given day id"""
+
+    def __setitem__(key, value):
+        """Sets an ITimetableDay for a given day id.
+
+        Throws a TypeError if the value does not implement ITimetableDay.
+        Throws a ValueError if the key is not a day id.
+        """
+
+
+class ITimetableDay(Interface):
+    """A model of a day with a mapping of periods to ITimetableEvents"""
+
+    def keys():
+        """Returns a sequence of period_ids within this day"""
+
+    def items():
+        """Returns a sequence of tuples (period_id, ITimetableActivity).
+
+        If there is no activity for a certain period, the timetable
+        activity is None.
+        """
+
+    def __getitem__(key):
+        """Get the ITimetableActivity for a given period identifier.
+
+        If there is no activity for the period, returns None.
+        """
+
+    def __setitem__(key, value):
+        """Sets an ITimetableActivity for a given period.
+
+        Throws a TypeError if the value does not implement ITimetableActivity.
+        Throws a ValueError if the key is not a period id.
+        """
+
+    def __delitem__(key):
+        """Remove the activity planned for a given period"""
+        
+
+
+class ITimetableActivity(Interface):
+    """An event in a timetable"""
+
+    title = Attribute("""The title of the event""")
+
+
 # Exceptions
 
 class ComponentLookupError(Exception):
     """An exception for component architecture."""
-
-

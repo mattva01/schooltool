@@ -24,6 +24,7 @@ $Id$
 from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import ISchooldayModel
+from schooltool.interfaces import ITimetable, ITimetableDay, ITimetableActivity
 import datetime
 
 
@@ -160,3 +161,70 @@ class ICalReader:
                 obj[key] = value
         return result
 
+
+class Timetable:
+
+    implements(ITimetable)
+
+    def __init__(self, day_ids=()):
+        """day_ids is a sequence of the day ids of this timetable.
+        """
+        self.day_ids = day_ids
+        self.days = {}
+
+    def keys(self):
+        return list(self.day_ids)
+
+    def items(self):
+        return [(day, self.days.get(day, None)) for day in self.day_ids]
+
+    def __getitem__(self, key):
+        return self.days[key]
+
+    def __setitem__(self, key, value):
+        if not ITimetableDay.isImplementedBy(value):
+            raise TypeError("Timetable cannot set a non-ITimetableDay "
+                            "(got %r)" % (value,))
+        if key not in self.day_ids:
+            raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
+        self.days[key] = value
+
+
+class TimetableDay:
+
+    implements(ITimetableDay)
+
+    def __init__(self, periods=()):
+        self.periods = periods
+        self.activities = {}
+
+    def keys(self):
+        return list(self.periods)
+
+    def items(self):
+        return [(period, self.activities.get(period, None))
+                for period in self.periods]
+
+    def __getitem__(self, key):
+        if key in self.periods and not key in self.activities:
+            return None
+        return self.activities[key]
+
+    def __setitem__(self, key, value):
+        if not ITimetableActivity.isImplementedBy(value):
+            raise TypeError("TimetableDay cannot set a non-ITimetableActivity "
+                            "(got %r)" % (value,))
+        if key not in self.periods:
+            raise ValueError("Key %r not in periods %r" % (key, self.periods))
+        self.activities[key] = value
+
+    def __delitem__(self, key):
+        del self.activities[key]
+
+
+class TimetableActivity:
+
+    implements(ITimetableActivity)
+
+    def __init__(self, title=None):
+        self.title = title

@@ -24,6 +24,7 @@ $Id$
 import unittest
 import calendar
 from zope.interface.verify import verifyObject
+from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
 from datetime import date
 from StringIO import StringIO
@@ -202,10 +203,139 @@ class TestICalReader(unittest.TestCase):
                           ('key3', 'value3', 'bar')])
 
 
+class TestTimetable(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.cal import Timetable
+        from schooltool.interfaces import ITimetable
+
+        t = Timetable()
+        verifyObject(ITimetable, t)
+
+    def test_keys(self):
+        from schooltool.cal import Timetable
+        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        t = Timetable(days)
+        self.assertEqual(t.keys(), list(days))
+
+    def test_getitem_setitem(self):
+        from schooltool.cal import Timetable
+        from schooltool.interfaces import ITimetableDay
+
+        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        t = Timetable(days)
+        self.assertRaises(KeyError, t.__getitem__, "Mo")
+        self.assertRaises(KeyError, t.__getitem__, "What!?")
+
+        class DayStub:
+            implements(ITimetableDay)
+
+        self.assertRaises(TypeError, t.__setitem__, "Mo", object())
+        self.assertRaises(ValueError, t.__setitem__, "Mon", DayStub())
+        monday = DayStub()
+        t["Mo"] = monday
+        self.assertEqual(t["Mo"], monday)
+
+    def test_items(self):
+        from schooltool.cal import Timetable
+        from schooltool.interfaces import ITimetableDay
+
+        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        t = Timetable(days)
+
+        class DayStub:
+            implements(ITimetableDay)
+
+        monday = DayStub()
+        t["Mo"] = monday
+        self.assertEqual(t.items(),
+                         [("Mo", monday), ("Tu", None), ("We", None),
+                          ("Th", None), ("Fr", None)])
+        tuesday = DayStub()
+        t["Tu"] = tuesday
+        self.assertEqual(t.items(),
+                         [("Mo", monday), ("Tu", tuesday), ("We", None),
+                          ("Th", None), ("Fr", None)])
+
+class TestTimetableDay(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.cal import TimetableDay
+        from schooltool.interfaces import ITimetableDay
+
+        td = TimetableDay()
+        verifyObject(ITimetableDay, td)
+
+    def test_keys(self):
+        from schooltool.cal import TimetableDay
+        periods = ('1', '2', '3', '4', '5')
+        td = TimetableDay(periods)
+        self.assertEqual(td.keys(), list(periods))
+
+    def test_getitem_setitem_items_delitem(self):
+        from schooltool.cal import TimetableDay
+        from schooltool.interfaces import ITimetableActivity
+
+        periods = ('1', '2', '3', '4')
+        td = TimetableDay(periods)
+        self.assertEqual(td["1"], None)
+        self.assertRaises(KeyError, td.__getitem__, "Mo")
+
+        class ActivityStub:
+            implements(ITimetableActivity)
+
+        self.assertRaises(TypeError, td.__setitem__, "1", object())
+        self.assertRaises(ValueError, td.__setitem__, "0", ActivityStub())
+        math = ActivityStub()
+        td["1"] = math
+        self.assertEqual(td["1"], math)
+
+        self.assertEqual(td.items(), [('1', math), ('2', None), ('3', None),
+                                      ('4', None)])
+        english = ActivityStub()
+        td["2"] = english
+        self.assertEqual(td.items(), [('1', math), ('2', english), ('3', None),
+                                      ('4', None)])
+
+        self.assertEqual(td["2"], english)
+        del td["2"]
+        self.assertEqual(td["2"], None)
+
+
+class TestTimetableActivity(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import TimetableActivity
+        from schooltool.interfaces import ITimetableActivity
+
+        ta = TimetableActivity("Dancing")
+        verifyObject(ITimetableActivity, ta)
+        self.assertEqual(ta.title, "Dancing")
+
+
+class TestTimetabling(unittest.TestCase):
+    """A functional test for timetables"""
+
+    def test(self):
+        from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+        tt = Timetable(('A', 'B'))
+        periods = ('Green', 'Blue')
+        tt["A"] = TimetableDay(periods)
+        tt["B"] = TimetableDay(periods)
+        tt["A"]["Green"] = TimetableActivity("English")
+        tt["A"]["Blue"] = TimetableActivity("Math")
+        tt["B"]["Green"] = TimetableActivity("Biology")
+        tt["B"]["Blue"] = TimetableActivity("Geography")
+
+
 def test_suite():
     import schooltool.cal
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchooldayModel))
     suite.addTest(unittest.makeSuite(TestICalReader))
+    suite.addTest(unittest.makeSuite(TestTimetable))
+    suite.addTest(unittest.makeSuite(TestTimetableDay))
+    suite.addTest(unittest.makeSuite(TestTimetableActivity))
+    suite.addTest(unittest.makeSuite(TestTimetabling))
     suite.addTest(DocTestSuite(schooltool.cal))
     return suite
