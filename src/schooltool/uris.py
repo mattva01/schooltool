@@ -26,7 +26,7 @@ from zope.interface import moduleProvides, implements
 from schooltool.common import looks_like_a_uri
 from schooltool.interfaces import IModuleSetup, ComponentLookupError
 from schooltool.interfaces import IURIAPI, IURIObject
-from schooltool.translation import ugettext as _
+from schooltool.translation import TranslatableString as _
 
 __metaclass__ = type
 
@@ -45,11 +45,20 @@ class URIObject:
     implements(IURIObject)
 
     def __init__(self, uri, name=None, description=''):
-        self.uri = uri
-        self.name = name
-        self.description = description
         if not looks_like_a_uri(uri):
             raise ValueError("This does not look like a URI: %r" % uri)
+        self._uri = uri
+        self._name = name
+        self._description = description
+        # `name` and `description` may be TranslatableStrings, so the
+        # properties have to explicitly convert them to unicode to avoid
+        # problems.  Do not convert them to unicode in the constructor,
+        # because that could be too early.
+
+    uri = property(lambda self: self._uri)
+    name = property(lambda self: self._name and unicode(self._name))
+    description = property(lambda self: self._description and
+                           unicode(self._description))
 
     def __eq__(self, other):
         return self.uri == other.uri
