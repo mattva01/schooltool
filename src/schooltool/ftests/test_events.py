@@ -98,7 +98,7 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.event import RouteToRelationshipsAction
         from schooltool.uris import URIGroup, URIMember
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.debug import EventLogFacet
+        from schooltool.eventlog import EventLogFacet
         from schooltool.component import FacetManager
         from schooltool.membership import Membership
         import schooltool.membership

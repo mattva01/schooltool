@@ -40,7 +40,7 @@ class DateTimeStub:
 class TestEventLog(unittest.TestCase):
 
     def test(self):
-        from schooltool.debug import EventLog, IEventLog
+        from schooltool.eventlog import EventLog, IEventLog
         from schooltool.interfaces import IEventTarget
         event_log = EventLog()
         event_log.datetime_hook = DateTimeStub()
@@ -59,7 +59,7 @@ class TestEventLog(unittest.TestCase):
 class TestEventLogUtility(unittest.TestCase):
 
     def test(self):
-        from schooltool.debug import EventLogUtility, IEventLogUtility
+        from schooltool.eventlog import EventLogUtility, IEventLogUtility
         event_log = EventLogUtility()
         verifyObject(IEventLogUtility, event_log)
 
@@ -67,7 +67,7 @@ class TestEventLogUtility(unittest.TestCase):
 class TestEventLogFacet(unittest.TestCase):
 
     def test(self):
-        from schooltool.debug import EventLogFacet, IEventLogFacet
+        from schooltool.eventlog import EventLogFacet, IEventLogFacet
         from schooltool.interfaces import IEvent, ICallAction
 
         event_log = EventLogFacet()
@@ -83,7 +83,7 @@ class TestEventLogFacet(unittest.TestCase):
 class TestEventLogFacetFactory(unittest.TestCase):
 
     def test(self):
-        from schooltool.debug import EventLogFacetFactory
+        from schooltool.eventlog import EventLogFacetFactory
         from schooltool.interfaces import IFacetFactory
         factory = EventLogFacetFactory()
         verifyObject(IFacetFactory, factory)
@@ -114,7 +114,7 @@ class TestEventLogger(unittest.TestCase):
         logging.root.setLevel(self.old_level)
 
     def test(self):
-        from schooltool.debug import EventLogger
+        from schooltool.eventlog import EventLogger
         from schooltool.interfaces import IEventTarget
         event_logger = EventLogger()
         verifyObject(IEventTarget, event_logger)

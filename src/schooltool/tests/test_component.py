@@ -448,8 +448,9 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getView, ComponentLookupError
         from schooltool.model import Person, Group
         from schooltool.app import ApplicationObjectContainer, Application
-        from schooltool.views import GroupView, PersonView, ApplicationView
-        from schooltool.views import ApplicationObjectContainerView
+        from schooltool.views.model import GroupView, PersonView
+        from schooltool.views.app import ApplicationView
+        from schooltool.views.app import ApplicationObjectContainerView
 
         self.assert_(getView(Person(":)")).__class__ is PersonView)
         self.assert_(getView(Group(":)")).__class__ is GroupView)

@@ -49,7 +49,7 @@ from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model
 from schooltool.views import errorPage
 from schooltool.component import getView
-from schooltool.debug import EventLogUtility
+from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 
 __metaclass__ = type
@@ -649,7 +649,7 @@ def setUp():
         'schooltool.membership',
         'schooltool.model',
         'schooltool.views',
-        'schooltool.debug',
+        'schooltool.eventlog',
         'schooltool.uris',
         'schooltool.teaching'
         ])

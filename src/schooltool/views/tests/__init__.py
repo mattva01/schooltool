@@ -1,0 +1,187 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2003 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+"""
+Unit tests for the schooltool.views package.
+"""
+
+from StringIO import StringIO
+from zope.interface import implements
+from schooltool.interfaces import ITraversable, IContainmentRoot, IUtility
+
+__metaclass__ = type
+
+
+class RequestStub:
+
+    code = 200
+    reason = 'OK'
+
+    def __init__(self, uri='', method='GET', body=''):
+        self.headers = {}
+        self.uri = uri
+        self.method = method
+        self.path = ''
+        self.content = StringIO(body)
+        start = uri.find('/', uri.find('://')+3)
+        if start >= 0:
+            self.path = uri[start:]
+        self._hostname = 'localhost'
+        self.accept = []
+
+    def getRequestHostname(self):
+        return self._hostname
+
+    def setHeader(self, header, value):
+        self.headers[header] = value
+
+    def setResponseCode(self, code, reason):
+        self.code = code
+        self.reason = reason
+
+    def chooseMediaType(self, supported_types):
+        from schooltool.main import chooseMediaType
+        return chooseMediaType(supported_types, self.accept)
+
+
+class TraversableStub:
+
+    implements(ITraversable)
+
+    def __init__(self, **kw):
+        self.children = kw
+
+    def traverse(self, name):
+        return self.children[name]
+
+
+class TraversableRoot(TraversableStub):
+
+    implements(IContainmentRoot)
+
+
+def setPath(obj, path, root=None):
+    """Trick getPath(obj) into returning path."""
+    assert path.startswith('/')
+    obj.__name__ = path[1:]
+    if root is None:
+        obj.__parent__ = TraversableRoot()
+    else:
+        assert IContainmentRoot.isImplementedBy(root)
+        obj.__parent__ = root
+
+
+class Libxml2ErrorLogger:
+
+    def __init__(self):
+        self.log = []
+
+    def __call__(self, ctx, error):
+        self.log.append(error)
+
+
+class XPathTestContext:
+    """XPath context for use in tests that check rendered xml.
+
+    You must call the free() method at the end of the test.
+
+    XXX add option for validating result against a schema
+    """
+
+    namespaces = {'xlink': 'http://www.w3.org/1999/xlink'}
+
+    def __init__(self, test, result):
+        """Create an XPath test context.
+
+        test is the unit test TestCase, used for assertions.
+        result is a string containing XML>
+        """
+        import libxml2  # import here so we only import if we need it
+        self.errorlogger = Libxml2ErrorLogger()
+        libxml2.registerErrorHandler(self.errorlogger, None)
+        self.test = test
+        self.doc = libxml2.parseDoc(result)
+        self.context = self.doc.xpathNewContext()
+        for nsname, ns in self.namespaces.iteritems():
+            self.context.xpathRegisterNs(nsname, ns)
+
+    def free(self):
+        """Free C level objects.
+
+        Call this at the end of a test to prevent memory leaks.
+        """
+        self.doc.freeDoc()
+        self.context.xpathFreeContext()
+
+    def query(self, expression):
+        """Perform an XPath query.
+
+        Returns a sequence of DOM nodes.
+        """
+        return self.context.xpathEval(expression)
+
+    def oneNode(self, expression):
+        """Perform an XPath query.
+
+        Asserts that the query matches exactly one DOM node.  Returns it.
+        """
+        nodes = self.context.xpathEval(expression)
+        self.test.assertEquals(len(nodes), 1,
+                               "%s matched %d nodes"
+                               % (expression, len(nodes)))
+        return nodes[0]
+
+    def assertNumNodes(self, num, expression):
+        """Assert that an XPath expression matches exactly num nodes."""
+        nodes = self.context.xpathEval(expression)
+        self.test.assertEquals(num, len(nodes),
+                               "%s matched %d nodes instead of %d"
+                               % (expression, len(nodes), num))
+
+    def assertAttrEquals(self, node, name, value):
+        """Assert that an attribute of an element node has a given value.
+
+        Attribute name may contain a namespace (e.g. 'xlink:href').  The
+        dict of recongized namespaces is kept in the namespaces attribute.
+        """
+        name_parts = name.split(':')
+        if len(name_parts) > 2:
+            raise ValueError('max one colon in attribute name', name)
+        elif len(name_parts) == 1:
+            localname = name_parts[0]
+            ns = None
+        else:
+            nsname, localname = name_parts
+            ns = self.namespaces[nsname]
+        self.test.assertEquals(node.nsProp(localname, ns), value)
+
+    def assertNoErrors(self):
+        """Assert that no errors were found while parsing the document."""
+        self.test.assertEquals(self.errorlogger.log, [])
+
+
+class UtilityStub:
+
+    implements(IUtility)
+
+    __parent__ = None
+    __name__ = None
+
+    def __init__(self, title):
+        self.title = title
+
