@@ -170,6 +170,15 @@ def get_test_files(cfg):
         test_names.append('ftests')
     baselen = len(cfg.basedir) + 1
     def visit(ignored, dir, files):
+        # Do not not descend into subdirs starting with a dot
+        remove = []
+        for idx, file in enumerate(files):
+            if file.startswith('.'):
+                remove.append(idx)
+        remove.reverse()
+        for idx in remove:
+            del files[idx]
+        # Look for tests.py and/or ftests.py
         if os.path.basename(dir) not in test_names:
             for name in test_names:
                 if name + '.py' in files:
