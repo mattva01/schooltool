@@ -10,6 +10,7 @@ System requirements
 -------------------
 
 - Python 2.3
+- libxml2 Python bindings
 - Twisted 1.1.0 (www.twistedmatrix.com)
 - wxPython 2.4
 
