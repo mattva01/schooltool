@@ -1260,6 +1260,21 @@ class TestDailyRecurrenceRule(unittest.TestCase):
         verifyObject(IDailyRecurrenceRule, d)
 
 
+class TestTimetableException(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import TimetableException
+        from schooltool.interfaces import ITimetableException
+        activity = object()
+        replacement = None
+        e = TimetableException(date(2004, 10, 12), 123, activity, replacement)
+        verifyObject(ITimetableException, e)
+        self.assertEquals(e.date, date(2004, 10, 12))
+        self.assertEquals(e.period_id, 123)
+        assert e.activity is activity
+        assert e.replacement is replacement
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.cal'))
@@ -1274,4 +1289,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestACLCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
+    suite.addTest(unittest.makeSuite(TestTimetableException))
     return suite
