@@ -11,7 +11,7 @@ Set up a working installation of SchoolTool (you will need to compile the
 extension modules as described in building-with-mingw.txt).  The NSIS script
 later assumes that SchoolTool is installed in C:\schooltool, so you might as
 well start with this location.  You may want to run the tests to make sure that
-everything is okay.
+everything is OK.
 
 Next, apply *this* file (it has a diff section at the end) as a patch in the
 main SchoolTool directory.  (You can use 'patch' from cygwin or apply the patch

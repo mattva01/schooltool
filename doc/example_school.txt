@@ -64,6 +64,3 @@ as 'absent without reason', and updates this list if pupils are late.
 
 An administrator can check this list at any time.
 
-
-
-

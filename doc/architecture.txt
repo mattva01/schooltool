@@ -17,7 +17,7 @@ There are several clients produced:
    * a GUI client using the wxPython library
    * a scriptable command line client for debugging and functional
      testing
-   * an auxillary client to import initial data from CSV files.
+   * an auxiliary client to import initial data from CSV files.
 
 
 2. Server Architecture
@@ -29,7 +29,7 @@ introduction of such concepts as facets, relationships, and events.
 The overview of these APIs can be found in the schooltool.interfaces
 module.
 
-Most important global halper functions (including pseudo adapters) can
+Most important global helper functions (including pseudo-adapters) can
 be found in the schooltool.component module.
 
 
@@ -51,16 +51,16 @@ organized into a tree of groups.
 Paths
 -----
 
-All object that need to be traversible through the HTTP interface need
+All object that need to be traversable through the HTTP interface need
 to have a path.  That is, they need to implement the ILocation
 interface.  That interface just specifies two attributes: a __name__
-and a __parent__.  Parent must also have a path.
+and a __parent__.  The parent must also have a path.
 
 
 Views
 -----
 
-All objects accessable over HTTP have auxillary objects called views,
+All objects accessible over HTTP have auxiliary objects called views,
 which take care of publishing objects in XML and parsing the put or
 posted XML representations and applying the changes to the objects.
 
@@ -79,10 +79,10 @@ Or, more commonly, a teacher might periodically become an
 administrator.
 
 There might be some data pertinent to a teacher, which is not relevant
-when a person is not a teacher.  In order to  accomodate these cases,
-a concept of a facet is introduced.
+when a person is not a teacher.  In order to accomodate these cases,
+the concept of a facet is introduced.
 
-A facet is a persistent auxillary object that is stored in the
+A facet is a persistent auxiliary object that is stored in the
 __facets__ attribute of an object and implies certain semantics.
 
 The facets are accessed using the schooltool.component.FacetManager
@@ -128,7 +128,7 @@ between objects.  The relationships are stored in the __links__
 attributes of objects, but are accessed using the API defined in
 schooltool.interface.
 
-The relationships are implemented as three auxillary objects:
+The relationships are implemented as three auxiliary objects:
 
   +---+	   +---------+   +---------------+    +--------+   +---+
   | A |----| Link A  |---| Relationship  |----| Link B |---| B |
@@ -277,13 +277,13 @@ owner, and an ImmutableSet of resources.
 So, a Timetable is just a table in which each cell has a day id, a
 period id and some activities associated with them.
 
-Now, converting a Timetable to a Calendar involves several auxillary
+Now, converting a Timetable to a Calendar involves several auxiliary
 objects which keep different parts of the data neeeded for the
 process.
 
 SchooldayModel is a calendar for a range of dates which can tell
 whether each date within the range is a schoolday or not.  A
-SchooldayTemplate is conceptually a mapping between period id and a
+SchooldayTemplate is conceptually a mapping between period id and
 (start time, duration) of an event.
 
 A TimetableModel puts it all together. It knows the algorithm of
@@ -311,3 +311,4 @@ The core calendaring code is located in the schooltool.cal module.  A
 Calendar has a set of CalendarEvents and can be either iterated, or
 queried for the events that happened on a certain date.  A calendar
 can be merged with another calendar.
+

@@ -18,7 +18,7 @@ Glossary
 Abstract model
 --------------
 
-Abstractly, a capabilities based system works like this:
+A capabilities based system works like this:
 
 1. A request comes into the system
 2. The system inspects the request, and chooses a root capability.
@@ -103,8 +103,8 @@ A capability can be looked for
   - on the returned value itself
   - looked up by the returned value's type in a registry
 
-Let the capability that was accessed by client code, and is responsible for
-ensuring that a returned value is wrapped, the "mediating capability".
+Let's call the capability that was accessed by client code (and is responsible
+for ensuring that a returned value is wrapped) the "mediating capability".
 
 The mediating capability can influence which of returned object's capabilities
 is chosen, through a table on the mediating capability:
@@ -220,5 +220,5 @@ Now, let's say we have an object f and a capability cf.
 When I call cf.bar(), I need to have cf provide a special kind of proxy for
 the bound method that f.bar returns. This special proxy needs to remember
 that it came from cf so that cf's nextobject tags table can still be used.
-To avoid holding onto to many references, the special proxy should just take
+To avoid holding onto too many references, the special proxy should just take
 cf's tags table.

@@ -17,12 +17,11 @@ Overview
 * URIs don't have a strong concept of implication / extension like interfaces
   do, so we'll agree not to use that for now.
 
-* Relationships can imply a facet. For example, a person who is the Tutor
+* Relationships may imply a facet. For example, a person who is the Tutor
   of a registration class will receive a RegistratonClassTutor facet.
 
 * Events are issued on making and breaking a relationship. These events are
-  used for the management of facets, but can be used for other things, of
-  course.
+  used for the management of facets, but can be used for other things.
 
 (Idea: make event interfaces be SpecificURIs also perhaps.)
 

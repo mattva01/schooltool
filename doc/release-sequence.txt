@@ -47,6 +47,8 @@ and start again.
     Upload the Packages.gz together with the Debian package to make it
     installable with apt-get.
 
+4b. Build a win32 package.  See doc/win32installer.txt.
+
 5. Go into the export and make sure it's OK:
 
      cd schooltool-m4

@@ -7,7 +7,7 @@ System metaphor
 
 * when working on the framework, we need a different kind of metaphor
   to help communicate the design and its decisions to other programmers.
-  this metaphor is "the Internet", or rather, certain parts of and aspects
+  this metaphor is "the Internet", or rather, certain parts and aspects
   of it.
 
   We're interested in the smart "ends" and the generic "middle".
