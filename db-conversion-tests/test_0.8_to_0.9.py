@@ -22,12 +22,20 @@ Functional test for migrating from v. 0.8 to 0.9
 $Id$
 """
 import os
+import sys
+import shutil
 import tempfile
+
 tempdir = tempfile.mkdtemp()
 
-import shutil
-shutil.copy('Data.fs-0.8', os.path.join(tempdir, 'Data.fs'))
+mydir = os.path.dirname(sys.argv[0])
+shutil.copy(os.path.join(mydir, 'Data.fs-0.8'),
+            os.path.join(tempdir, 'Data.fs'))
+
+basedir = os.path.abspath(os.path.dirname(os.path.dirname(sys.argv[0])))
+sys.path.insert(0, os.path.join(basedir, 'src'))
+sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
 os.chdir(tempdir)
-
-import schooltool.main; schooltool.main.main()
+import schooltool.main
+schooltool.main.main()
