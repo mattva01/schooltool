@@ -49,10 +49,8 @@ from schooltool import mockup
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model
 from schooltool.views import errorPage
-from schooltool.membership import Membership
 from schooltool.component import getView
-from schooltool.component import FacetManager
-from schooltool.debug import EventLogUtility, EventLogFacet
+from schooltool.debug import EventLogUtility
 from schooltool.interfaces import IEvent, IModuleSetup
 
 __metaclass__ = type
@@ -65,6 +63,7 @@ moduleProvides(IModuleSetup)
 #
 
 SERVER_VERSION = "SchoolTool/0.1"
+
 
 class Request(server.Request):
     """Threaded request processor, integrated with ZODB.
@@ -335,6 +334,7 @@ class Site(server.Site):
         channel.requestFactory = Request
         return channel
 
+
 #
 # Main loop
 #
@@ -509,6 +509,7 @@ class Server:
         print >> self.stdout, ("Started HTTP server on %s:%s"
                                % (network_interface or "*", port))
 
+
 def setUpModules(module_names):
     """Set up the modules named in the given list."""
     for name in module_names:
@@ -523,6 +524,7 @@ def setUpModules(module_names):
             raise TypeError('Cannot set up module because it does not'
                             ' provide IModuleSetup', module)
 
+
 def setUp():
     """Set up the schooltool application."""
     setUpModules([
@@ -532,6 +534,7 @@ def setUp():
         'schooltool.debug',
         'schooltool.interfaces'
         ])
+
 
 def main():
     """Starts the SchoolTool HTTP server."""

@@ -286,6 +286,7 @@ def resetURIRegistry():
     global _uri_registry
     _uri_registry = {}
 
+
 def registerURI(uri):
     """Adds an ISpecificURI to the registry so it can be queried by
     the URI string."""
@@ -298,6 +299,7 @@ def registerURI(uri):
             return
     else:
         _uri_registry[str_uri] = uri
+
 
 def getURI(str):
     """Returns and ISpecificURI with a given URI string."""

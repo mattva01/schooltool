@@ -94,6 +94,7 @@ class MemberAddedEvent(MembershipEvent):
 class MemberRemovedEvent(MembershipEvent):
     implements(IMemberRemovedEvent)
 
+
 def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
     """See IRelationshipFactory"""
 

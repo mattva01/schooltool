@@ -147,6 +147,7 @@ class TestPersistentKeysDictBare(BaseTestPersistentKeysDict):
     def setUp(self):
         self.datamgr = None
 
+
 class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
 
     def newInstance(self):

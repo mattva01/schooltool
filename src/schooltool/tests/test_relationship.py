@@ -436,7 +436,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.relationship import SchemaInvocation, Valency
+        from schooltool.relationship import Valency
         from schooltool.interfaces import URIMembership, URIMember, URIGroup
         from schooltool.interfaces import ISchemaInvocation
 

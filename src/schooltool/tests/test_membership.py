@@ -80,6 +80,7 @@ class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,
         from schooltool.interfaces import IRelationshipSchema
         verifyObject(IRelationshipSchema, Membership)
 
+
 class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
                            unittest.TestCase):
 
@@ -187,6 +188,7 @@ class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
             self.assertEquals(type(events[0]), membership.MemberAddedEvent)
         self.assertRaises(ValueError, membership.Membership,
                           group=g2, member=g1)
+
 
 def test_suite():
     suite = unittest.TestSuite()
