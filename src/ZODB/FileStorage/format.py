@@ -28,6 +28,15 @@
 #   - 8-byte transaction record length - 8.
 #
 #   - 1-byte status code
+#     ' '  (a blank) completed transaction that hasn't been packed
+#     'p'  completed transaction that has been packed
+#     'c'  checkpoint -- a transaction in progress, at the end of the file;
+#          it's been thru vote() but not finish(); if finish() completes
+#          normally, it will be overwritten with a blank; if finish() dies
+#          (e.g., out of disk space), cleanup code will try to truncate
+#          the file to chop off this incomplete transaction
+#     'u'  uncertain; no longer used; was previously used to record something
+#          about non-transactional undo
 #
 #   - 2-byte length of user name
 #
@@ -117,9 +126,8 @@
 import struct
 
 from ZODB.POSException import POSKeyError
-from ZODB.referencesf import referencesf
-from ZODB.utils import p64, u64, z64, oid_repr, t32
-from zLOG import LOG, BLATHER, WARNING, ERROR, PANIC
+from ZODB.utils import u64, oid_repr, t32
+from zLOG import LOG, ERROR
 
 class CorruptedError(Exception):
     pass
@@ -337,7 +345,7 @@ class TxnHeader(object):
     def asString(self):
         s = struct.pack(TRANS_HDR, self.tid, self.tlen, self.status,
                         self.ulen, self.dlen, self.elen)
-        return "".join([s, self.user, self.descr, self.ext])
+        return "".join(map(str, [s, self.user, self.descr, self.ext]))
 
     def headerlen(self):
         return TRANS_HDR_LEN + self.ulen + self.dlen + self.elen

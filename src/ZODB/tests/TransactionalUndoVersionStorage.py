@@ -11,13 +11,12 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-# Check interactions between transactionalUndo() and versions.  Any storage
-# that supports both transactionalUndo() and versions must pass these tests.
+# Check interactions between undo() and versions.  Any storage that
+# supports both undo() and versions must pass these tests.
 
 import time
 
-from ZODB import POSException
-from ZODB.referencesf import referencesf
+from ZODB.serialize import referencesf
 from ZODB.Transaction import Transaction
 from ZODB.tests.MinPO import MinPO
 from ZODB.tests.StorageTestBase import zodb_unpickle

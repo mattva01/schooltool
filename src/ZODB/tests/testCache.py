@@ -18,14 +18,12 @@ purposes. It acts like a memo for unpickling.  It also keeps recent
 objects in memory under the assumption that they may be used again.
 """
 
-import time
-import types
-import unittest
 import gc
+import time
+import unittest
 
 import ZODB
 import ZODB.MappingStorage
-from ZODB.POSException import ConflictError
 from persistent.cPickleCache import PickleCache
 from persistent.mapping import PersistentMapping
 from ZODB.tests.MinPO import MinPO
@@ -82,8 +80,8 @@ class DBMethods(CacheTestBase):
 
     def checkCacheDetail(self):
         for name, count in self.db.cacheDetail():
-            self.assert_(isinstance(name, types.StringType))
-            self.assert_(isinstance(count, types.IntType))
+            self.assert_(isinstance(name, str))
+            self.assert_(isinstance(count, int))
 
     def checkCacheExtremeDetail(self):
         expected = ['conn_no', 'id', 'oid', 'rc', 'klass', 'state']
@@ -252,7 +250,7 @@ class CacheErrors(unittest.TestCase):
         self.cache = PickleCache(self.jar)
 
     def checkGetBogusKey(self):
-        self.assertRaises(KeyError, self.cache.get, p64(0))
+        self.assertEqual(self.cache.get(p64(0)), None)
         try:
             self.cache[12]
         except KeyError:

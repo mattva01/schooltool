@@ -13,7 +13,7 @@
 ##############################################################################
 """Sample objects for use in tests
 
-$Id: sampledm.py,v 1.1.2.1 2004/02/12 21:41:46 jeremy Exp $
+$Id: sampledm.py,v 1.2 2004/02/19 02:59:10 jeremy Exp $
 """
 
 class DataManager(object):

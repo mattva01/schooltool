@@ -1,17 +1,19 @@
-D/doc////
-D/tests////
-D/scripts////
-/BRANCHES.txt/1.3/Tue Mar 30 17:56:08 2004//
+/BRANCHES.txt/1.3/Fri Jan  3 21:35:21 2003//
 /PUBLICATION.txt/1.1/Fri Mar 12 20:06:03 2004//
+/__init__.py/1.17/Thu Mar 25 21:28:22 2004//
+/cfgparser.py/1.10/Tue Oct  7 17:53:43 2003//
+/cmdline.py/1.3/Thu Mar 25 21:33:50 2004//
+/datatypes.py/1.26/Fri Mar 19 16:08:00 2004//
+/info.py/1.21/Tue Mar 16 20:47:24 2004//
+/loader.py/1.32/Wed Feb 11 21:31:46 2004//
+/matcher.py/1.14/Tue Mar 16 20:47:24 2004//
 /package.conf/1.1/Wed Mar 17 15:45:43 2004//
+/schema.py/1.33/Tue Mar 16 22:02:08 2004//
+/substitution.py/1.4/Sat Aug  2 05:03:57 2003//
+/url.py/1.7/Thu Mar 13 18:48:54 2003//
 D/components////
-/__init__.py/1.17/Wed Mar 31 10:03:47 2004//
-/cfgparser.py/1.10/Wed Mar 31 10:03:47 2004//
-/cmdline.py/1.3/Wed Mar 31 10:03:47 2004//
-/datatypes.py/1.26/Wed Mar 31 10:03:47 2004//
-/info.py/1.21/Wed Mar 31 10:03:47 2004//
-/loader.py/1.32/Wed Mar 31 10:03:47 2004//
-/matcher.py/1.14/Wed Mar 31 10:03:47 2004//
-/schema.py/1.33/Wed Mar 31 10:44:25 2004//
-/substitution.py/1.4/Wed Mar 31 10:03:47 2004//
-/url.py/1.7/Wed Mar 31 10:03:47 2004//
+D/doc////
+D/resources////
+D/scripts////
+D/tests////
+D/xml////

@@ -13,7 +13,7 @@
 ##############################################################################
 """Storage implementation using a log written to a single file.
 
-$Revision: 1.3 $
+$Revision: 1.12 $
 """
 
 import base64
@@ -38,8 +38,7 @@ from ZODB.utils import p64, u64, cp, z64
 from ZODB.FileStorage.fspack import FileStoragePacker
 from ZODB.FileStorage.format \
      import FileStorageFormatter, DataHeader, TxnHeader, DATA_HDR, \
-     DATA_HDR_LEN, TRANS_HDR, TRANS_HDR_LEN, CorruptedDataError, \
-     DATA_VERSION_HDR_LEN
+     DATA_HDR_LEN, TRANS_HDR, TRANS_HDR_LEN, CorruptedDataError
 
 try:
     from ZODB.fsIndex import fsIndex
@@ -47,7 +46,7 @@ except ImportError:
     def fsIndex():
         return {}
 
-from zLOG import LOG, BLATHER, WARNING, ERROR, PANIC
+from zLOG import LOG, BLATHER, INFO, WARNING, ERROR, PANIC
 
 t32 = 1L << 32
 
@@ -56,6 +55,9 @@ packed_version = "FS21"
 def blather(message, *data):
     LOG('ZODB FS', BLATHER, "%s blather: %s\n" % (packed_version,
                                                   message % data))
+def info(message, *data):
+    LOG('ZODB FS', INFO, "%s  info: %s\n" % (packed_version,
+                                             message % data))
 
 def warn(message, *data):
     LOG('ZODB FS', WARNING, "%s  warn: %s\n" % (packed_version,
@@ -97,6 +99,10 @@ class FileStorageQuotaError(FileStorageError,
                             POSException.StorageSystemError):
     """File storage quota exceeded."""
 
+# Intended to be raised only in fspack.py, and ignored here.
+class RedundantPackWarning(FileStorageError):
+    pass
+
 class TempFormatter(FileStorageFormatter):
     """Helper class used to read formatted FileStorage data."""
 
@@ -107,8 +113,8 @@ class FileStorage(BaseStorage.BaseStorage,
                   ConflictResolution.ConflictResolvingStorage,
                   FileStorageFormatter):
 
-    # default pack time is 0
-    _packt = z64
+    # Set True while a pack is in progress; undo is blocked for the duration.
+    _pack_is_in_progress = False
 
     _records_before_save = 10000
 
@@ -116,7 +122,7 @@ class FileStorage(BaseStorage.BaseStorage,
                  quota=None):
 
         if read_only:
-            self._is_read_only = 1
+            self._is_read_only = True
             if create:
                 raise ValueError("can't create a read-only file")
         elif stop is not None:
@@ -589,35 +595,40 @@ class FileStorage(BaseStorage.BaseStorage,
             self._lock_release()
 
     def loadBefore(self, oid, tid):
-        pos = self._lookup_pos(oid)
-        end_tid = None
-        while True:
-            h = self._read_data_header(pos, oid)
-            if h.version:
-                # Just follow the pnv pointer to the previous
-                # non-version data.
-                if not h.pnv:
-                    # Object was created in version.  There is no
-                    # before data to find.
+        self._lock_acquire()
+        try:
+            pos = self._lookup_pos(oid)
+            end_tid = None
+            while True:
+                h = self._read_data_header(pos, oid)
+                if h.version:
+                    # Just follow the pnv pointer to the previous
+                    # non-version data.
+                    if not h.pnv:
+                        # Object was created in version.  There is no
+                        # before data to find.
+                        return None
+                    pos = h.pnv
+                    # The end_tid for the non-version data is not affected
+                    # by versioned data records.
+                    continue
+
+                if h.tid < tid:
+                    break
+
+                pos = h.prev
+                end_tid = h.tid
+                if not pos:
                     return None
-                pos = h.pnv
-                # The end_tid for the non-version data is not affected
-                # by versioned data records.
-                continue
 
-            if h.tid < tid:
-                break
+            if h.back:
+                data, _, _, _ = self._loadBack_impl(oid, h.back)
+                return data, h.tid, end_tid
+            else:
+                return self._file.read(h.plen), h.tid, end_tid
 
-            pos = h.prev
-            end_tid = h.tid
-            if not pos:
-                return None
-
-        if h.back:
-            data, _, _, _ = self._loadBack_impl(oid, h.back)
-            return data, h.tid, end_tid
-        else:
-            return self._file.read(h.plen), h.tid, end_tid
+        finally:
+            self._lock_release()
 
     def modifiedInVersion(self, oid):
         self._lock_acquire()
@@ -1056,11 +1067,10 @@ class FileStorage(BaseStorage.BaseStorage,
             last = first - last + 1
         self._lock_acquire()
         try:
-            if self._packt is None:
+            if self._pack_is_in_progress:
                 raise UndoError(
                     'Undo is currently disabled for database maintenance.<p>')
-            us = UndoSearch(self._file, self._pos, self._packt,
-                            first, last, filter)
+            us = UndoSearch(self._file, self._pos, first, last, filter)
             while not us.finished():
                 # Hold lock for batches of 20 searches, so default search
                 # parameters will finish without letting another thread run.
@@ -1076,7 +1086,7 @@ class FileStorage(BaseStorage.BaseStorage,
         finally:
             self._lock_release()
 
-    def transactionalUndo(self, transaction_id, transaction):
+    def undo(self, transaction_id, transaction):
         """Undo a transaction, given by transaction_id.
 
         Do so by writing new data that reverses the action taken by
@@ -1124,7 +1134,7 @@ class FileStorage(BaseStorage.BaseStorage,
                 return pos
             if stop_at_pack:
                 # check the status field of the transaction header
-                if h[16] == 'p' or _tid < self._packt:
+                if h[16] == 'p':
                     break
         raise UndoError("Invalid transaction id")
 
@@ -1311,22 +1321,26 @@ class FileStorage(BaseStorage.BaseStorage,
         if not self._index:
             return
 
-        # Record pack time so we don't undo while packing
         self._lock_acquire()
         try:
-            if self._packt != z64:
-                # Already packing.
+            if self._pack_is_in_progress:
                 raise FileStorageError, 'Already packing'
-            self._packt = None
+            self._pack_is_in_progress = True
+            current_size = self.getSize()
         finally:
             self._lock_release()
 
         p = FileStoragePacker(self._file_name, stop,
                               self._lock_acquire, self._lock_release,
                               self._commit_lock_acquire,
-                              self._commit_lock_release)
+                              self._commit_lock_release,
+                              current_size)
         try:
-            opos = p.pack()
+            opos = None
+            try:
+                opos = p.pack()
+            except RedundantPackWarning, detail:
+                info(str(detail))
             if opos is None:
                 return
             oldpath = self._file_name + ".old"
@@ -1355,7 +1369,7 @@ class FileStorage(BaseStorage.BaseStorage,
             if p.locked:
                 self._commit_lock_release()
             self._lock_acquire()
-            self._packt = z64
+            self._pack_is_in_progress = False
             self._lock_release()
 
     def iterator(self, start=None, stop=None):
@@ -1969,10 +1983,9 @@ class Record(BaseStorage.DataRecord):
 
 class UndoSearch:
 
-    def __init__(self, file, pos, packt, first, last, filter=None):
+    def __init__(self, file, pos, first, last, filter=None):
         self.file = file
         self.pos = pos
-        self.packt = packt
         self.first = first
         self.last = last
         self.filter = filter
@@ -2000,7 +2013,7 @@ class UndoSearch:
         self.file.seek(self.pos)
         h = self.file.read(TRANS_HDR_LEN)
         tid, tl, status, ul, dl, el = struct.unpack(TRANS_HDR, h)
-        if tid < self.packt or status == 'p':
+        if status == 'p':
             self.stop = 1
             return None
         if status != ' ':

@@ -13,7 +13,7 @@
 ##############################################################################
 """Basic pickling tests
 
-$Id: test_pickle.py,v 1.3.2.2 2004/02/18 23:09:54 fdrake Exp $
+$Id: test_pickle.py,v 1.5 2004/02/19 18:13:34 jeremy Exp $
 """
 
 from persistent import Persistent

@@ -25,15 +25,17 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-import threading
 import time
 
 from ZODB import DB
 from persistent import Persistent
-from ZODB.referencesf import referencesf
+from persistent.mapping import PersistentMapping
+from ZODB.serialize import referencesf
 from ZODB.tests.MinPO import MinPO
 from ZODB.tests.StorageTestBase import snooze
-from ZODB.POSException import ConflictError
+from ZODB.POSException import ConflictError, StorageError
+
+from ZODB.tests.MTStorage import TestThread
 
 ZERO = '\0'*8
 
@@ -125,11 +127,10 @@ class PackableStorageBase:
         try:
             self._storage.load(ZERO, '')
         except KeyError:
-            from persistent import mapping
             from ZODB.Transaction import Transaction
             file = StringIO()
             p = cPickle.Pickler(file, 1)
-            p.dump((mapping.PersistentMapping, None))
+            p.dump((PersistentMapping, None))
             p.dump({'_container': {}})
             t=Transaction()
             t.description='initial database creation'
@@ -151,7 +152,7 @@ class PackableStorage(PackableStorageBase):
         self._initroot()
         self._storage.pack(time.time() - 10000, referencesf)
 
-    def _PackWhileWriting(self, pack_now=0):
+    def _PackWhileWriting(self, pack_now):
         # A storage should allow some reading and writing during
         # a pack.  This test attempts to exercise locking code
         # in the storage to test that it is safe.  It generates
@@ -174,7 +175,20 @@ class PackableStorage(PackableStorageBase):
                 root[i].value = MinPO(i)
                 get_transaction().commit()
 
-        threads = [ClientThread(db, choices) for i in range(4)]
+        # How many client threads should we run, and how long should we
+        # wait for them to finish?  Hard to say.  Running 4 threads and
+        # waiting 30 seconds too often left a thread still alive on Tim's
+        # Win98SE box, during ZEO flavors of this test.  Those tend to
+        # run one thread at a time to completion, and take about 10 seconds
+        # per thread.  There doesn't appear to be a compelling reason to
+        # run that many threads.  Running 3 threads and waiting up to a
+        # minute seems to work well in practice.  The ZEO tests normally
+        # finish faster than that, and the non-ZEO tests very much faster
+        # than that.
+        NUM_LOOP_TRIP = 50
+        timer = ElapsedTimer(time.time())
+        threads = [ClientThread(db, choices, NUM_LOOP_TRIP, timer, i)
+                   for i in range(3)]
         for t in threads:
             t.start()
 
@@ -184,27 +198,110 @@ class PackableStorage(PackableStorageBase):
             db.pack(packt)
 
         for t in threads:
-            t.join(30)
-        for t in threads:
-            t.join(1)
-            self.assert_(not t.isAlive())
+            t.join(60)
+        liveness = [t.isAlive() for t in threads]
+        if True in liveness:
+            # They should have finished by now.
+            print 'Liveness:', liveness
+            # Combine the outcomes, and sort by start time.
+            outcomes = []
+            for t in threads:
+                outcomes.extend(t.outcomes)
+            # each outcome list has as many of these as a loop trip got thru:
+            #     thread_id
+            #     elapsed millis at loop top
+            #     elapsed millis at attempt to assign to self.root[index]
+            #     index into self.root getting replaced
+            #     elapsed millis when outcome known
+            #     'OK' or 'Conflict'
+            #     True if we got beyond this line, False if it raised an
+            #         exception (one possible Conflict cause):
+            #             self.root[index].value = MinPO(j)
+            def cmp_by_time(a, b):
+                return cmp((a[1], a[0]), (b[1], b[0]))
+            outcomes.sort(cmp_by_time)
+            counts = [0] * 4
+            for outcome in outcomes:
+                n = len(outcome)
+                assert n >= 2
+                tid = outcome[0]
+                print 'tid:%d top:%5d' % (tid, outcome[1]),
+                if n > 2:
+                    print 'commit:%5d' % outcome[2],
+                    if n > 3:
+                        print 'index:%2d' % outcome[3],
+                        if n > 4:
+                            print 'known:%5d' % outcome[4],
+                            if n > 5:
+                                print '%8s' % outcome[5],
+                                if n > 6:
+                                    print 'assigned:%5s' % outcome[6],
+                counts[tid] += 1
+                if counts[tid] == NUM_LOOP_TRIP:
+                    print 'thread %d done' % tid,
+                print
+
+            self.fail('a thread is still alive')
 
         # Iterate over the storage to make sure it's sane, but not every
         # storage supports iterators.
         if not hasattr(self._storage, "iterator"):
             return
 
-        iter = self._storage.iterator()
-        for txn in iter:
+        it = self._storage.iterator()
+        for txn in it:
             for data in txn:
                 pass
-        iter.close()
+        it.close()
 
     def checkPackWhileWriting(self):
-        self._PackWhileWriting(pack_now=0)
+        self._PackWhileWriting(pack_now=False)
 
     def checkPackNowWhileWriting(self):
-        self._PackWhileWriting(pack_now=1)
+        self._PackWhileWriting(pack_now=True)
+
+    def checkPackLotsWhileWriting(self):
+        # This is like the other pack-while-writing tests, except it packs
+        # repeatedly until the client thread is done.  At the time it was
+        # introduced, it reliably provoked
+        #     CorruptedError:  ... transaction with checkpoint flag set
+        # in the ZEO flavor of the FileStorage tests.
+
+        db = DB(self._storage)
+        conn = db.open()
+        root = conn.root()
+
+        choices = range(10)
+        for i in choices:
+            root[i] = MinPO(i)
+        get_transaction().commit()
+
+        snooze()
+        packt = time.time()
+
+        for dummy in choices:
+           for i in choices:
+               root[i].value = MinPO(i)
+               get_transaction().commit()
+
+        NUM_LOOP_TRIP = 100
+        timer = ElapsedTimer(time.time())
+        thread = ClientThread(db, choices, NUM_LOOP_TRIP, timer, 0)
+        thread.start()
+        while thread.isAlive():
+            db.pack(packt)
+            snooze()
+            packt = time.time()
+        thread.join()
+
+        # Iterate over the storage to make sure it's sane.
+        if not hasattr(self._storage, "iterator"):
+            return
+        it = self._storage.iterator()
+        for txn in it:
+            for data in txn:
+                pass
+        it.close()
 
 class PackableUndoStorage(PackableStorageBase):
 
@@ -437,6 +534,50 @@ class PackableUndoStorage(PackableStorageBase):
 
         eq(root['obj'].value, 7)
 
+    def checkRedundantPack(self):
+        # It is an error to perform a pack with a packtime earlier
+        # than a previous packtime.  The storage can't do a full
+        # traversal as of the packtime, because the previous pack may
+        # have removed revisions necessary for a full traversal.
+
+        # It should be simple to test that a storage error is raised,
+        # but this test case goes to the trouble of constructing a
+        # scenario that would lose data if the earlier packtime was
+        # honored.
+
+        self._initroot()
+
+        db = DB(self._storage)
+        conn = db.open()
+        root = conn.root()
+
+        root["d"] = d = PersistentMapping()
+        get_transaction().commit()
+        snooze()
+
+        obj = d["obj"] = C()
+        obj.value = 1
+        get_transaction().commit()
+        snooze()
+        packt1 = time.time()
+        lost_oid = obj._p_oid
+
+        obj = d["anotherobj"] = C()
+        obj.value = 2
+        get_transaction().commit()
+        snooze()
+        packt2 = time.time()
+
+        db.pack(packt2)
+        # BDBStorage allows the second pack, but doesn't lose data.
+        try:
+            db.pack(packt1)
+        except StorageError:
+            pass
+        # This object would be removed by the second pack, even though
+        # it is reachable.
+        self._storage.load(lost_oid, "")
+
     def checkPackUndoLog(self):
         self._initroot()
         # Create a `persistent' object
@@ -505,19 +646,54 @@ class PackableUndoStorage(PackableStorageBase):
         # what can we assert about that?
 
 
-class ClientThread(threading.Thread):
+# A number of these threads are kicked off by _PackWhileWriting().  Their
+# purpose is to abuse the database passed to the constructor with lots of
+# random write activity while the main thread is packing it.
+class ClientThread(TestThread):
 
-    def __init__(self, db, choices):
-        threading.Thread.__init__(self)
+    def __init__(self, db, choices, loop_trip, timer, thread_id):
+        TestThread.__init__(self)
         self.root = db.open().root()
         self.choices = choices
+        self.loop_trip = loop_trip
+        self.millis = timer.elapsed_millis
+        self.thread_id = thread_id
+        # list of lists; each list has as many of these as a loop trip
+        # got thru:
+        #     thread_id
+        #     elapsed millis at loop top
+        #     elapsed millis at attempt
+        #     index into self.root getting replaced
+        #     elapsed millis when outcome known
+        #     'OK' or 'Conflict'
+        #     True if we got beyond this line, False if it raised an exception:
+        #          self.root[index].value = MinPO(j)
+        self.outcomes = []
 
-    def run(self):
+    def runtest(self):
         from random import choice
 
-        for j in range(50):
+        for j in range(self.loop_trip):
+            assign_worked = False
+            alist = [self.thread_id, self.millis()]
+            self.outcomes.append(alist)
             try:
-                self.root[choice(self.choices)].value = MinPO(j)
+                index = choice(self.choices)
+                alist.extend([self.millis(), index])
+                self.root[index].value = MinPO(j)
+                assign_worked = True
                 get_transaction().commit()
+                alist.append(self.millis())
+                alist.append('OK')
             except ConflictError:
+                alist.append(self.millis())
+                alist.append('Conflict')
                 get_transaction().abort()
+            alist.append(assign_worked)
+
+class ElapsedTimer:
+    def __init__(self, start_time):
+        self.start_time = start_time
+
+    def elapsed_millis(self):
+        return int((time.time() - self.start_time) * 1000)

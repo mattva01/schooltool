@@ -25,17 +25,44 @@ Pickle format
 -------------
 
 ZODB stores serialized objects using a custom format based on pickle.
-Each serialized object has two parts: the class metadata and the
+Each serialized object has two parts: the class description and the
 object state.  The class description must provide enough information
 to call the class's ``__new__`` and create an empty object.  Once the
 object exists as a ghost, its state is passed to ``__setstate__``.
 
-The class metadata can be represented in two different ways, in order
-to provide backwards compatibility with many earlier versions of ZODB.
-The class metadata is always a two-tuple.  The first element may also
-be a tuple, containing two string elements: name of a module and the
-name of a class.  The second element of the class metadata tuple is a
-tuple of arguments to pass to the class's ``__new__``.
+The class description can be in a variety of formats, in part to
+provide backwards compatibility with earlier versions of Zope.  The
+two current formats for class description are:
+
+    - type(obj)
+    - type(obj), obj.__getnewargs__()
+
+The second of these options is used if the object has a
+__getnewargs__() method.  It is intended to support objects like
+persistent classes that have custom C layouts that are determined by
+arguments to __new__().
+
+The type object is usually stored using the standard pickle mechanism,
+which uses a string containing the class's module and name.  The type
+may itself be a persistent object, in which case a persistent
+reference (see below) is used.
+
+Earlier versions of Zope supported several other kinds of class
+descriptions.  The current serialization code reads these
+descriptions, but does not write them.
+
+The four formats are:
+
+    1. (module name, class name), None
+    2. (module name, class name), __getinitargs__()
+    3. class, None
+    4. class, __getinitargs__()
+
+Formats 2 and 4 are used only if the class defines an
+__getinitargs__() method.  Formats 3 and 4 are used if the class does
+not have an __module__ attribute.  (I'm not sure when this applies,
+but I think it occurs for some but not all ZClasses.)
+
 
 Persistent references
 ---------------------
@@ -57,14 +84,17 @@ old class.
 
 import cPickle
 import cStringIO
+import logging
+
 
 from persistent import Persistent
 from persistent.wref import WeakRefMarker, WeakRef
+from ZODB import broken
+from ZODB.broken import Broken
 from ZODB.POSException import InvalidObjectReference
 
-# Might to update or redo to reflect weakrefs
+# Might to update or redo coptimizations to reflect weakrefs:
 # from ZODB.coptimizations import new_persistent_id
-
 
 def myhasattr(obj, name, _marker=object()):
     """Make sure we don't mask exceptions like hasattr().
@@ -93,7 +123,6 @@ class BaseObjectWriter:
         if jar is not None:
             assert myhasattr(jar, "new_oid")
         self._jar = jar
-
 
     def persistent_id(self, obj):
         """Return the persistent id for obj.
@@ -342,18 +371,30 @@ class BaseObjectReader:
             if isinstance(klass, tuple):
                 # Old module_name, class_name tuple
                 klass = self._get_class(*klass)
+
             if args is None:
-                return klass.__new__(klass)
-            else:
-                return klass.__new__(klass, *args)
+                args = ()
         else:
             # Definately new style direct class reference
-            return klass.__new__(klass)
+            args = ()
+
+        if issubclass(klass, Broken):
+            # We got a broken class. We might need to make it
+            # PersistentBroken
+            if not issubclass(klass, broken.PersistentBroken):
+                klass = broken.persistentBroken(klass)
+
+        return klass.__new__(klass, *args)
 
     def getState(self, pickle):
         unpickler = self._get_unpickler(pickle)
-        unpickler.load() # skip the class metadata
-        return unpickler.load()
+        try:
+            unpickler.load() # skip the class metadata
+            return unpickler.load()
+        except EOFError, msg:
+            log = logging.getLogger("zodb.serialize")
+            log.exception("Unpickling error: %r", pickle)
+            raise
 
     def setGhostState(self, obj, pickle):
         state = self.getState(pickle)
@@ -388,22 +429,43 @@ class ConnectionObjectReader(BaseObjectReader):
     def _get_class(self, module, name):
         return self._factory(self._conn, module, name)
 
+    def _get_unpickler(self, pickle):
+        unpickler = BaseObjectReader._get_unpickler(self, pickle)
+        factory = self._factory
+        conn = self._conn
+
+        def find_global(modulename, name):
+            return factory(conn, modulename, name)
+
+        unpickler.find_global = find_global
+
+        return unpickler
+
     def _persistent_load(self, oid):
         if isinstance(oid, tuple):
             # Quick instance reference.  We know all we need to know
             # to create the instance w/o hitting the db, so go for it!
             oid, klass = oid
+
             obj = self._cache.get(oid, None) # XXX it's not a dict
             if obj is not None:
                 return obj
+
             if isinstance(klass, tuple):
                 klass = self._get_class(*klass)
+
+            if issubclass(klass, Broken):
+                # We got a broken class. We might need to make it
+                # PersistentBroken
+                if not issubclass(klass, broken.PersistentBroken):
+                    klass = broken.persistentBroken(klass)
+
             try:
                 obj = klass.__new__(klass)
             except TypeError:
                 # Couldn't create the instance.  Maybe there's more
                 # current data in the object's actual record!
-                return self._conn[oid]
+                return self._conn.get(oid)
 
             # XXX should be done by connection
             obj._p_oid = oid
@@ -427,4 +489,56 @@ class ConnectionObjectReader(BaseObjectReader):
         obj = self._cache.get(oid, None)
         if obj is not None:
             return obj
-        return self._conn[oid]
+        return self._conn.get(oid)
+
+def referencesf(p, rootl=None):
+
+    if rootl is None:
+        rootl = []
+
+    u = cPickle.Unpickler(cStringIO.StringIO(p))
+    l = len(rootl)
+    u.persistent_load = rootl
+    u.noload()
+    try:
+        u.noload()
+    except:
+        # Hm.  We failed to do second load.  Maybe there wasn't a
+        # second pickle.  Let's check:
+        f = cStringIO.StringIO(p)
+        u = cPickle.Unpickler(f)
+        u.persistent_load = []
+        u.noload()
+        if len(p) > f.tell():
+            raise ValueError, 'Error unpickling, %s' % p
+
+
+    # References may be:
+    #
+    # - A tuple, in which case they are an oid and class.
+    #   In this case, just extract the first element, which is
+    #   the oid
+    #
+    # - A list, which is a weak reference. We skip those.
+    #
+    # - Anything else must be an oid. This means that an oid
+    #   may not be a list or a tuple. This is a bit lame.
+    #   We could avoid this lamosity by allowing single-element
+    #   tuples, so that we wrap oids that are lists or tuples in
+    #   tuples.
+    #
+    # - oids may *not* be false.  I'm not sure why. 
+
+    out = []
+    for v in rootl:
+        assert v # Let's see if we ever get empty ones
+        if type(v) is list:
+            # skip wekrefs
+            continue
+        if type(v) is tuple:
+            v = v[0]
+        out.append(v)
+
+    rootl[:] = out
+
+    return rootl

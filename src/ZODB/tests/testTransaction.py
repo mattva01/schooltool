@@ -14,7 +14,7 @@
 
 """
 Revision information:
-$Id: testTransaction.py,v 1.17.2.3 2004/02/13 04:06:46 jeremy Exp $
+$Id: testTransaction.py,v 1.19 2004/02/27 00:31:55 faassen Exp $
 """
 
 """
@@ -44,7 +44,6 @@ TODO
 
 """
 
-import random
 from types import TupleType
 import unittest
 

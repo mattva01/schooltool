@@ -19,11 +19,6 @@ from persistent import Persistent
 
 from ZODB.tests.StorageTestBase import zodb_unpickle, zodb_pickle
 
-import sys
-import types
-from cPickle import Pickler, Unpickler
-from cStringIO import StringIO
-
 class PCounter(Persistent):
 
     _value = 0
@@ -162,7 +157,7 @@ class ConflictResolvingTransUndoStorage:
         tid = info[1]['id']
         t = Transaction()
         self._storage.tpc_begin(t)
-        self._storage.transactionalUndo(tid, t)
+        self._storage.undo(tid, t)
         self._storage.tpc_finish(t)
 
     def checkUndoUnresolvable(self):
@@ -183,6 +178,6 @@ class ConflictResolvingTransUndoStorage:
         tid = info[1]['id']
         t = Transaction()
         self._storage.tpc_begin(t)
-        self.assertRaises(UndoError, self._storage.transactionalUndo,
+        self.assertRaises(UndoError, self._storage.undo,
                           tid, t)
         self._storage.tpc_abort(t)

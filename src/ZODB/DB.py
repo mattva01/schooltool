@@ -13,66 +13,106 @@
 ##############################################################################
 """Database objects
 
-$Id: DB.py,v 1.59.2.1 2004/01/23 20:44:25 jim Exp $"""
-__version__='$Revision: 1.59.2.1 $'[11:-2]
+$Id: DB.py,v 1.71 2004/03/16 16:28:19 jeremy Exp $"""
 
-import cPickle, cStringIO, sys, POSException, UndoLogCompatible
-from Connection import Connection
+import cPickle, cStringIO, sys
 from thread import allocate_lock
-from Transaction import Transaction, get_transaction
-from referencesf import referencesf
 from time import time, ctime
+import warnings
+
+from ZODB.broken import find_global
+from ZODB.Connection import Connection
+from ZODB.serialize import referencesf
+from ZODB.Transaction import Transaction, get_transaction
 from zLOG import LOG, ERROR
 
-from types import StringType
-
-def list2dict(L):
-    d = {}
-    for elt in L:
-        d[elt] = 1
-    return d
-
-class DB(UndoLogCompatible.UndoLogCompatible, object):
+class DB(object):
     """The Object Database
+    -------------------
 
-    The Object database coordinates access to and interaction of one
-    or more connections, which manage object spaces.  Most of the actual work
-    of managing objects is done by the connections.
+    The DB class coordinates the activities of multiple database
+    Connection instances.  Most of the work is done by the
+    Connections created via the open method.
+
+    The DB instance manages a pool of connections.  If a connection is
+    closed, it is returned to the pool and its object cache is
+    preserved.  A subsequent call to open() will reuse the connection.
+    There is a limit to the pool size; if all its connections are in
+    use, calls to open() will block until one of the open connections
+    is closed.
+
+    The class variable 'klass' is used by open() to create database
+    connections.  It is set to Connection, but a subclass could override
+    it to provide a different connection implementation.
+
+    The database provides a few methods intended for application code
+    -- open, close, undo, and pack -- and a large collection of
+    methods for inspecting the database and its connections' caches.
+
+    :Cvariables:
+      - `klass`: Class used by L{open} to create database connections
+
+    :Groups:
+      - `User Methods`: __init__, open, close, undo, pack, classFactory
+      - `Inspection Methods`: getName, getSize, objectCount,
+        getActivityMonitor, setActivityMonitor
+      - `Connection Pool Methods`: getPoolSize, getVersionPoolSize,
+        removeVersionPool, setPoolSize, setVersionPoolSize
+      - `Transaction Methods`: invalidate
+      - `Other Methods`: lastTransaction, connectionDebugInfo
+      - `Version Methods`: modifiedInVersion, abortVersion, commitVersion,
+        versionEmpty
+      - `Cache Inspection Methods`: cacheDetail, cacheExtremeDetail,
+        cacheFullSweep, cacheLastGCTime, cacheMinimize, cacheMeanAge,
+        cacheMeanDeac, cacheMeanDeal, cacheSize, cacheDetailSize,
+        getCacheSize, getVersionCacheSize, setCacheSize, setVersionCacheSize,
+        cacheStatistics
+      - `Deprecated Methods`: getCacheDeactivateAfter,
+        setCacheDeactivateAfter,
+        getVersionCacheDeactivateAfter, setVersionCacheDeactivateAfter
     """
+    
     klass = Connection  # Class to use for connections
     _activity_monitor = None
 
     def __init__(self, storage,
                  pool_size=7,
                  cache_size=400,
-                 cache_deactivate_after=60,
+                 cache_deactivate_after=None,
                  version_pool_size=3,
                  version_cache_size=100,
-                 version_cache_deactivate_after=10,
+                 version_cache_deactivate_after=None,
                  ):
         """Create an object database.
 
-        The storage for the object database must be passed in.
-        Optional arguments are:
-
-        pool_size -- The size of the pool of object spaces.
-
+        :Parameters:
+          - `storage`: the storage used by the database, e.g. FileStorage
+          - `pool_size`: maximum number of open connections
+          - `cache_size`: target size of Connection object cache
+          - `cache_deactivate_after`: ignored
+          - `version_pool_size`: maximum number of connections (per version)
+          - `version_cache_size`: target size of Connection object cache for
+            version connections
+          - `version_cache_deactivate_after`: ignored
         """
-
         # Allocate locks:
         l=allocate_lock()
         self._a=l.acquire
         self._r=l.release
 
         # Setup connection pools and cache info
-        self._pools={},[]
-        self._temps=[]
-        self._pool_size=pool_size
-        self._cache_size=cache_size
-        self._cache_deactivate_after = cache_deactivate_after
-        self._version_pool_size=version_pool_size
-        self._version_cache_size=version_cache_size
-        self._version_cache_deactivate_after = version_cache_deactivate_after
+        self._pools = {},[]
+        self._temps = []
+        self._pool_size = pool_size
+        self._cache_size = cache_size
+        self._version_pool_size = version_pool_size
+        self._version_cache_size = version_cache_size
+
+        # warn about use of deprecated arguments
+        if (cache_deactivate_after is not None or
+            version_cache_deactivate_after is not None):
+            warnings.warn("cache_deactivate_after has no effect",
+                          DeprecationWarning)
 
         self._miv_cache = {}
 
@@ -121,11 +161,6 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
         if m[1]: m=m[0]/m[1]
         else: m=None
         return m
-
-    def _classFactory(self, connection, location, name,
-                      _silly=('__doc__',), _globals={}):
-        return getattr(__import__(location, _globals, _globals, _silly),
-                       name)
 
     def _closeConnection(self, connection):
         """Return a connection to the pool"""
@@ -179,7 +214,8 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
     def cacheDetail(self):
         """Return information on objects in the various caches
 
-        Organized by class."""
+        Organized by class.
+        """
 
         detail = {}
         def f(con, detail=detail, have_detail=detail.has_key):
@@ -266,18 +302,24 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
         return m
 
     def close(self):
+        """Close the database and its underlying storage.
+
+        It is important to close the database, because the storage may
+        flush in-memory data structures to disk when it is closed.
+        Leaving the storage open with the process exits can cause the
+        next open to be slow.
+
+        What effect does closing the database have on existing
+        connections?  Technically, they remain open, but their storage
+        is closed, so they stop behaving usefully.  Perhaps close()
+        should also close all the Connections.
+        """
         self._storage.close()
 
     def commitVersion(self, source, destination='', transaction=None):
         if transaction is None:
             transaction = get_transaction()
         transaction.register(CommitVersion(self, source, destination))
-
-    def exportFile(self, oid, file=None):
-        raise NotImplementedError
-
-    def getCacheDeactivateAfter(self):
-        return self._cache_deactivate_after
 
     def getCacheSize(self):
         return self._cache_size
@@ -291,17 +333,11 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
 
     def getSize(self): return self._storage.getSize()
 
-    def getVersionCacheDeactivateAfter(self):
-        return self._version_cache_deactivate_after
-
     def getVersionCacheSize(self):
         return self._version_cache_size
 
     def getVersionPoolSize(self):
         return self._version_pool_size
-
-    def importFile(self, file):
-        raise NotImplementedError
 
     def invalidate(self, tid, oids, connection=None, version=''):
         """Invalidate references to a given oid.
@@ -356,7 +392,7 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
 
     def open(self, version='', transaction=None, temporary=0, force=None,
              waitflag=1, mvcc=True):
-        """Return a object space (AKA connection) to work in
+        """Return a database Connection for use by application code.
 
         The optional version argument can be used to specify that a
         version connection is desired.
@@ -366,8 +402,9 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
         terminated.  In addition, connections per transaction are
         reused, if possible.
 
-        Note that the connection pool is managed as a stack, to increate the
-        likelihood that the connection's stack will include useful objects.
+        Note that the connection pool is managed as a stack, to
+        increate the likelihood that the connection's stack will
+        include useful objects.
         """
         self._a()
         try:
@@ -477,7 +514,7 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
             c._setDB(self)
             for pool, allocated in pooll:
                 for cc in pool:
-                    cc._incrgc()
+                    cc.cacheGC()
 
             if transaction is not None:
                 transaction[version] = c
@@ -523,20 +560,28 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
         return self._activity_monitor
 
     def pack(self, t=None, days=0):
-        if t is None: t=time()
-        t=t-(days*86400)
-        try: self._storage.pack(t,referencesf)
+        """Pack the storage, deleting unused object revisions.
+
+        A pack is always performed relative to a particular time, by
+        default the current time.  All object revisions that are not
+        reachable as of the pack time are deleted from the storage.
+
+        The cost of this operation varies by storage, but it is
+        usually an expensive operation.
+
+        There are two optional arguments that can be used to set the
+        pack time: t, pack time in seconds since the epcoh, and days,
+        the number of days to substract from t or from the current
+        time if t is not specified.
+        """
+        if t is None:
+            t = time()
+        t -= days * 86400
+        try:
+            self._storage.pack(t, referencesf)
         except:
             LOG("ZODB", ERROR, "packing", error=sys.exc_info())
             raise
-
-    def setCacheDeactivateAfter(self, v):
-        self._cache_deactivate_after = v
-        d = self._pools[0]
-        pool_info = d.get('')
-        if pool_info is not None:
-            for c in pool_info[1]:
-                c._cache.cache_age = v
 
     def setCacheSize(self, v):
         self._cache_size = v
@@ -546,21 +591,14 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
             for c in pool_info[1]:
                 c._cache.cache_size = v
 
-    def setClassFactory(self, factory):
-        self._classFactory = factory
+    def classFactory(self, connection, modulename, globalname):
+        return find_global(modulename, globalname)
 
     def setPoolSize(self, v):
         self._pool_size=v
 
     def setActivityMonitor(self, am):
         self._activity_monitor = am
-
-    def setVersionCacheDeactivateAfter(self, v):
-        self._version_cache_deactivate_after=v
-        for ver in self._pools[0].keys():
-            if ver:
-                for c in self._pools[0][ver][1]:
-                    c._cache.cache_age=v
 
     def setVersionCacheSize(self, v):
         self._version_cache_size=v
@@ -574,82 +612,108 @@ class DB(UndoLogCompatible.UndoLogCompatible, object):
     def cacheStatistics(self): return () # :(
 
     def undo(self, id, transaction=None):
-        storage=self._storage
-        try: supportsTransactionalUndo = storage.supportsTransactionalUndo
-        except AttributeError:
-            supportsTransactionalUndo=0
-        else:
-            supportsTransactionalUndo=supportsTransactionalUndo()
+        """Undo a transaction identified by id.
 
-        if supportsTransactionalUndo:
-            # new style undo
-            if transaction is None:
-                transaction = get_transaction()
-            transaction.register(TransactionalUndo(self, id))
-        else:
-            # fall back to old undo
-            d = {}
-            for oid in storage.undo(id):
-                d[oid] = 1
-            # XXX I think we need to remove old undo to use mvcc
-            self.invalidate(None, d)
+        A transaction can be undone if all of the objects involved in
+        the transaction were not modified subsequently, if any
+        modifications can be resolved by conflict resolution, or if
+        subsequent changes resulted in the same object state.
+
+        The value of id should be generated by calling undoLog()
+        or undoInfo().  The value of id is not the same as a
+        transaction id used by other methods; it is unique to undo().
+
+        :Parameters:
+          - `id`: a storage-specific transaction identifier
+          - `transaction`: transaction context to use for undo().
+            By default, uses the current transaction.
+        """
+        if transaction is None:
+            transaction = get_transaction()
+        transaction.register(TransactionalUndo(self, id))
 
     def versionEmpty(self, version):
         return self._storage.versionEmpty(version)
 
-class CommitVersion:
-    """An object that will see to version commit
+    # The following methods are deprecated and have no effect
 
-    in cooperation with a transaction manager.
-    """
-    def __init__(self, db, version, dest=''):
-        self._db=db
-        s=db._storage
-        self._version=version
-        self._dest=dest
-        self.tpc_abort=s.tpc_abort
-        self.tpc_begin=s.tpc_begin
-        self.tpc_vote=s.tpc_vote
-        self.tpc_finish=s.tpc_finish
-        self._sortKey=s.sortKey
+    def getCacheDeactivateAfter(self):
+        """Deprecated"""
+        warnings.warn("cache_deactivate_after has no effect",
+                      DeprecationWarning)
+
+    def getVersionCacheDeactivateAfter(self):
+        """Deprecated"""
+        warnings.warn("cache_deactivate_after has no effect",
+                      DeprecationWarning)
+
+    def setCacheDeactivateAfter(self, v):
+        """Deprecated"""
+        warnings.warn("cache_deactivate_after has no effect",
+                      DeprecationWarning)
+
+    def setVersionCacheDeactivateAfter(self, v):
+        """Deprecated"""
+        warnings.warn("cache_deactivate_after has no effect",
+                      DeprecationWarning)
+
+class ResourceManager(object):
+    """Transaction participation for a version or undo resource."""
+
+    def __init__(self, db):
+        self._db = db
+        # Delegate the actual 2PC methods to the storage
+        self.tpc_begin = self._db._storage.tpc_begin
+        self.tpc_vote = self._db._storage.tpc_vote
+        self.tpc_finish = self._db._storage.tpc_finish
+        self.tpc_abort = self._db._storage.tpc_abort
 
     def sortKey(self):
-        return "%s:%s" % (self._sortKey(), id(self))
+        return "%s:%s" % (self._db._storage.sortKey(), id(self))
 
-    def abort(self, reallyme, t): pass
+    # The object registers itself with the txn manager, so the ob
+    # argument to the methods below is self.
 
-    def commit(self, reallyme, t):
+    def abort(self, ob, t):
+        pass
+
+    def commit(self, ob, t):
+        pass
+
+class CommitVersion(ResourceManager):
+
+    def __init__(self, db, version, dest=''):
+        super(CommitVersion, self).__init__(db)
+        self._version = version
+        self._dest = dest
+
+    def commit(self, ob, t):
         dest=self._dest
-        tid, oids = self._db._storage.commitVersion(self._version, dest, t)
-        oids = list2dict(oids)
-        self._db.invalidate(tid, oids, version=dest)
-        if dest:
+        tid, oids = self._db._storage.commitVersion(self._version, self._dest,
+                                                    t)
+        oids = dict.fromkeys(oids, 1)
+        self._db.invalidate(tid, oids, version=self._dest)
+        if self._dest:
             # the code above just invalidated the dest version.
             # now we need to invalidate the source!
             self._db.invalidate(tid, oids, version=self._version)
 
-class AbortVersion(CommitVersion):
-    """An object that will see to version abortion
+class AbortVersion(ResourceManager):
 
-    in cooperation with a transaction manager.
-    """
+    def __init__(self, db, version):
+        super(AbortVersion, self).__init__(db)
+        self._version = version
+        
+    def commit(self, ob, t):
+        tid, oids = self._db._storage.abortVersion(self._version, t)
+        self._db.invalidate(tid, dict.fromkeys(oids, 1), version=self._version)
 
-    def commit(self, reallyme, t):
-        version = self._version
-        tid, oids = self._db._storage.abortVersion(version, t)
-        self._db.invalidate(tid, list2dict(oids), version=version)
+class TransactionalUndo(ResourceManager):
 
+    def __init__(self, db, tid):
+        super(TransactionalUndo, self).__init__(db)
+        self._tid = tid
 
-class TransactionalUndo(CommitVersion):
-    """An object that will see to transactional undo
-
-    in cooperation with a transaction manager.
-    """
-
-    # I (Jim) am lazy.  I'm reusing __init__ and abort and reusing the
-    # version attr for the transaction id.  There's such a strong
-    # similarity of rhythm that I think it's justified.
-
-    def commit(self, reallyme, t):
-        tid, oids = self._db._storage.transactionalUndo(self._version, t)
-        self._db.invalidate(tid, list2dict(oids))
+    def commit(self, ob, t):
+        tid, oids = self._db._storage.undo(self._tid, t)
+        self._db.invalidate(tid, dict.fromkeys(oids, 1))

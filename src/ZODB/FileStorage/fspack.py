@@ -24,17 +24,10 @@ from the revision of the root at that time or if it is reachable from
 a backpointer after that time.
 """
 
-# This module contains code backported from ZODB4 from the
-# zodb.storage.file package.  It's been edited heavily to work with
-# ZODB3 code and storage layout.
-
 import os
-import struct
-from types import StringType
 
-from ZODB.referencesf import referencesf
-from ZODB.utils import p64, u64, z64, oid_repr
-from zLOG import LOG, BLATHER, WARNING, ERROR, PANIC
+from ZODB.serialize import referencesf
+from ZODB.utils import p64, u64, z64
 
 from ZODB.fsIndex import fsIndex
 from ZODB.FileStorage.format \
@@ -54,7 +47,6 @@ class DataCopier(FileStorageFormatter):
 
     _file -- file with earlier destination data
     _tfile -- destination file for copied data
-    _packt -- p64() representation of latest pack time
     _pos -- file pos of destination transaction
     _tindex -- maps oid to data record file pos
     _tvindex -- maps version name to data record file pos
@@ -232,11 +224,19 @@ class GC(FileStorageFormatter):
 
     def buildPackIndex(self):
         pos = 4L
+        # We make the initial assumption that the database has been
+        # packed before and set unpacked to True only after seeing the
+        # first record with a status == " ".  If we get to the packtime
+        # and unpacked is still False, we need to watch for a redundant
+        # pack.
+        unpacked = False
         while pos < self.eof:
             th = self._read_txn_header(pos)
             if th.tid > self.packtime:
                 break
             self.checkTxn(th, pos)
+            if th.status != "p":
+                unpacked = True
 
             tpos = pos
             end = pos + th.tlen
@@ -259,6 +259,24 @@ class GC(FileStorageFormatter):
             pos += 8
 
         self.packpos = pos
+
+        if unpacked:
+            return
+        # check for a redundant pack.  If the first record following
+        # the newly computed packpos has status 'p', then it was
+        # packed earlier and the current pack is redudant.
+        try:
+            th = self._read_txn_header(pos)
+        except CorruptedDataError, err:
+            if err.buf != "":
+                raise
+        if th.status == 'p':
+            # Delay import to cope with circular imports.
+            # XXX put exceptions in a separate module
+            from ZODB.FileStorage.FileStorage import RedundantPackWarning
+            raise RedundantPackWarning(
+                "The database has already been packed to a later time"
+                " or no changes have been made since the last pack")
 
     def findReachableAtPacktime(self, roots):
         """Mark all objects reachable from the oids in roots as reachable."""
@@ -389,15 +407,24 @@ class PackCopier(DataCopier):
 
 class FileStoragePacker(FileStorageFormatter):
 
-    def __init__(self, path, stop, la, lr, cla, clr):
+    # path is the storage file path.
+    # stop is the pack time, as a TimeStamp.
+    # la and lr are the acquire() and release() methods of the storage's lock.
+    # cla and clr similarly, for the storage's commit lock.
+    # current_size is the storage's _pos.  All valid data at the start
+    # lives before that offset (there may be a checkpoint transaction in
+    # progress after it).
+    def __init__(self, path, stop, la, lr, cla, clr, current_size):
         self._name = path
+        # We open our own handle on the storage so that much of pack can
+        # proceed in parallel.  It's important to close this file at every
+        # return point, else on Windows the caller won't be able to rename
+        # or remove the storage file.
         self._file = open(path, "rb")
+        self._path = path
         self._stop = stop
-        self._packt = None
         self.locked = 0
-        self._file.seek(0, 2)
-        self.file_end = self._file.tell()
-        self._file.seek(0)
+        self.file_end = current_size
 
         self.gc = GC(self._file, self.file_end, self._stop)
 
@@ -458,12 +485,27 @@ class FileStoragePacker(FileStorageFormatter):
         if ipos == opos:
             # pack didn't free any data.  there's no point in continuing.
             self._tfile.close()
+            self._file.close()
             os.remove(self._name + ".pack")
             return None
         self._commit_lock_acquire()
         self.locked = 1
         self._lock_acquire()
         try:
+            # Re-open the file in unbuffered mode.
+
+            # The main thread may write new transactions to the file,
+            # which creates the possibility that we will read a status
+            # 'c' transaction into the pack thread's stdio buffer even
+            # though we're acquiring the commit lock.  Transactions
+            # can still be in progress throughout much of packing, and
+            # are written to the same physical file but via a distinct
+            # Python file object.  The code used to leave off the
+            # trailing 0 argument, and then on every platform except
+            # native Windows it was observed that we could read stale
+            # data from the tail end of the file.
+            self._file.close()  # else self.gc keeps the original alive & open
+            self._file = open(self._path, "rb", 0)
             self._file.seek(0, 2)
             self.file_end = self._file.tell()
         finally:
@@ -645,3 +687,4 @@ class FileStoragePacker(FileStorageFormatter):
         if self._lock_counter % 20 == 0:
             self._commit_lock_acquire()
         return ipos
+

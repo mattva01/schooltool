@@ -1,14 +1,16 @@
-/README.txt/1.1.2.1/Wed Jan 28 12:16:18 2004//Tzope3-zodb3-devel-branch
-/TimeStamp.c/1.4/Fri Nov 28 16:44:55 2003//Tzope3-zodb3-devel-branch
-/cPersistence.h/1.27.10.2/Fri Jan 16 15:43:28 2004//Tzope3-zodb3-devel-branch
-/cPickleCache.c/1.87.10.5/Fri Jan 30 16:16:48 2004//Tzope3-zodb3-devel-branch
-/ring.c/1.2/Fri Nov 28 16:44:55 2003//Tzope3-zodb3-devel-branch
-/ring.h/1.2/Fri Nov 28 16:44:55 2003//Tzope3-zodb3-devel-branch
+/README.txt/1.3/Mon Feb 23 16:48:51 2004//
+/TimeStamp.c/1.4/Fri Nov 28 16:44:55 2003//
+/__init__.py/1.8/Tue Feb 24 13:54:05 2004//
+/cPersistence.c/1.80/Sat Mar 13 07:42:06 2004//
+/cPersistence.h/1.29/Thu Feb 19 02:59:30 2004//
+/cPickleCache.c/1.92/Sat Mar 13 07:48:12 2004//
+/dict.py/1.2/Thu Feb 19 02:59:30 2004//
+/interfaces.py/1.3/Tue Feb 24 13:54:05 2004//
+/list.py/1.7/Thu Feb 19 18:13:35 2004//
+/mapping.py/1.22/Fri Nov 28 16:44:55 2003//
+/ring.c/1.2/Fri Nov 28 16:44:55 2003//
+/ring.h/1.2/Fri Nov 28 16:44:55 2003//
+/wref.py/1.2/Thu Feb 19 02:59:30 2004//
+D/BTrees////
+D/pickle////
 D/tests////
-/cPersistence.c/1.75.2.7/Thu Feb 19 15:00:21 2004//Tzope3-zodb3-devel-branch
-/__init__.py/1.6.8.3/Wed Mar 31 10:03:47 2004//Tzope3-zodb3-devel-branch
-/dict.py/1.1.2.1/Wed Mar 31 10:03:47 2004//Tzope3-zodb3-devel-branch
-/interfaces.py/1.1.2.2/Wed Mar 31 10:03:47 2004//Tzope3-zodb3-devel-branch
-/list.py/1.5.10.1/Wed Mar 31 10:03:47 2004//Tzope3-zodb3-devel-branch
-/mapping.py/1.22/Wed Mar 31 10:03:47 2004//Tzope3-zodb3-devel-branch
-/wref.py/1.1.2.5/Wed Mar 31 10:03:47 2004//Tzope3-zodb3-devel-branch

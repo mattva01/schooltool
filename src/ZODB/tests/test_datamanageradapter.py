@@ -13,7 +13,7 @@
 ##############################################################################
 """XXX short summary goes here.
 
-$Id: test_datamanageradapter.py,v 1.1.2.4 2004/02/12 21:41:40 jeremy Exp $
+$Id: test_datamanageradapter.py,v 1.3 2004/03/11 15:57:57 jeremy Exp $
 """
 import unittest
 from doctest import DocTestSuite
@@ -803,8 +803,7 @@ def test_tpc_abort_w_subtransactions_featuring_subtransaction_abort():
     """
 
 def test_suite():
-    return unittest.TestSuite((
-        DocTestSuite(),
-        ))
+    return DocTestSuite()
 
-if __name__ == '__main__': unittest.main()
+if __name__ == '__main__':
+    unittest.main()
