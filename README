@@ -11,9 +11,8 @@ Overview
 
 SchoolTool is a distributed client/server system.  Clients communicate with
 the server by using an HTTP based protocol adhering to the REST architectural
-style (see http://conveyor.com/RESTwiki/moin.cgi).  There is also a more
-traditional web application interface that people can use with an ordinary
-browser.
+style (see http://rest.blueoxen.net/).  There is also a more traditional web
+application interface that people can use with an ordinary browser.
 
 
 System requirements
