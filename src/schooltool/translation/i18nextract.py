@@ -231,7 +231,7 @@ def uri_strings(module):
         if obj.__module__ != module:
             continue # ignore things that were imported from other modules
         try:
-            uri, title, doc = inspectSpecificURI(obj)
+            uri, title, doc = inspectSpecificURI(obj, translate=False)
         except TypeError:
             pass # not a URI
         except:

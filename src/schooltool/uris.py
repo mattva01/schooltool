@@ -27,6 +27,7 @@ from zope.interface import Interface, moduleProvides
 from zope.interface.interfaces import IInterface
 from schooltool.interfaces import IModuleSetup, ComponentLookupError
 from schooltool.common import dedent
+from schooltool.translation import gettext
 
 __metaclass__ = type
 
@@ -65,8 +66,12 @@ class ISpecificURI(Interface):
 
 class IURIAPI(Interface):
 
-    def inspectSpecificURI(uri):
-        """Return a tuple of a URI, title and the docstring of a ISpecificURI.
+    def inspectSpecificURI(uri, translate=True):
+        """Return a tuple of a URI, title and the description of an
+        ISpecificURI.
+
+        If translate is True, the title and the description are 
+        returned translated.
 
         Raises a TypeError if the argument is not ISpecificURI.
         Raises a ValueError if the URI's docstring does not conform.
@@ -99,7 +104,7 @@ class IURIAPI(Interface):
 # URI API
 #
 
-def inspectSpecificURI(uri):
+def inspectSpecificURI(uri, translate=True):
     """See IURIAPI."""
     if not IInterface.providedBy(uri):
         raise TypeError("URI must be an interface (got %r)" % (uri,))
@@ -122,6 +127,9 @@ def inspectSpecificURI(uri):
         doc = dedent(segments[2]).strip()
     else:
         doc = ""
+
+    if translate:
+        title, doc = gettext(title), gettext(doc)
 
     return uri, title, doc
 
