@@ -34,7 +34,7 @@ from schooltool.interfaces import IRelationshipRemovedEvent
 from schooltool.interfaces import ISpecificURI
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import inspectSpecificURI, registerRelationship
-from schooltool.component import relate
+from schooltool import component
 from schooltool.event import EventMixin
 
 moduleProvides(IModuleSetup)
@@ -130,7 +130,7 @@ class _LinkRelationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
-def _relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
+def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
     """Sets up a relationship between two IRelatables with
     Link-_LinkRelationship-Link structure.
 
@@ -176,7 +176,7 @@ class RelationshipSchema:
                                 " Got %r" % (name, parties))
             L.append((party, uri))
             N.append(name)
-        links = relate(self.type, L[0], L[1], title=self.title)
+        links = component.relate(self.type, L[0], L[1], title=self.title)
         return {N[1]: links[0], N[0]: links[1]}
 
 
@@ -199,7 +199,7 @@ class RelationshipRemovedEvent(RelationshipEvent):
 
 def defaultRelate(reltype, (a, role_of_a), (b, role_of_b), title=None):
     """See IRelationshipFactory"""
-    links = _relate(reltype, (a, role_of_a), (b, role_of_b), title)
+    links = relate(reltype, (a, role_of_a), (b, role_of_b), title)
     event = RelationshipAddedEvent(links)
     directlyProvides(event, reltype)
     event.dispatch(a)

@@ -33,6 +33,7 @@ class LocatableEventTargetMixin:
 
     All received events are stored in the events attribute.
     """
+    __metaclass__ = type
 
     implements(ILocation, IEventTarget)
 

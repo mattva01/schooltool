@@ -35,6 +35,7 @@ from schooltool.interfaces import IMemberRemovedEvent
 from schooltool.interfaces import IModuleSetup
 from schooltool.db import PersistentKeysDict
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
+from schooltool import relationship
 from schooltool.component import registerRelationship
 
 moduleProvides(IModuleSetup)
@@ -277,45 +278,12 @@ class MemberAddedEvent(MembershipEvent):
 class MemberRemovedEvent(MembershipEvent):
     implements(IMemberRemovedEvent)
 
-
 def membershipRelate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipFactory"""
 
-    if relationship_type is not URIMembership:
-        raise TypeError("Membership relationship must be of type"
-                        " URIMembership.", relationship_type)
-    if title is not None and title != "Membership":
-        raise TypeError(
-            "A relationship of type URIMembership must have roles"
-            " URIMember and URIGroup, and the title (if any) must be"
-            " 'Membership'.")
+    links = relationship.relate(relationship_type,
+                                (a, role_a), (b, role_b), title)
 
-    r = Set((role_a, role_b))
-    try:
-        r.remove(URIMember)
-        r.remove(URIGroup)
-    except KeyError:
-        raise TypeError(
-            "A relationship of type URIMembership must have roles"
-            " URIMember and URIGroup, and the title (if any) must be"
-            " 'Membership'.")
-
-    if r:
-        raise TypeError(
-            "A relationship of type URIMembership must have roles"
-            " URIMember and URIGroup, and the title (if any) must be"
-            " 'Membership'.")
-
-    if role_a is URIGroup:
-        group, member = a, b
-        name = group.add(member)
-        links = (MemberLink(group, member, name),
-                 GroupLink(member, group, name))
-    else:
-        group, member = b, a
-        name = group.add(member)
-        links = (GroupLink(member, group, name),
-                 MemberLink(group, member, name))
     event = MemberAddedEvent(links)
     event.dispatch(a)
     event.dispatch(b)

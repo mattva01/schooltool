@@ -39,11 +39,14 @@ __metaclass__ = type
 class P(Persistent):
     pass
 
-class MemberStub(LocatableEventTargetMixin):
+class BasicRelatable(Relatable, RelatableMixin):
+    pass
+
+class MemberStub(BasicRelatable):
     implements(IGroupMember, IFaceted)
 
     def __init__(self, parent=None, name='does not matter'):
-        LocatableEventTargetMixin.__init__(self, parent, name)
+        BasicRelatable.__init__(self, parent, name)
         self.__facets__ = {}
         self.added = None
         self.removed = None
@@ -59,7 +62,7 @@ class MemberStub(LocatableEventTargetMixin):
             raise AssertionError("notifyRemoved called too early")
 
 
-class GroupStub(LocatableEventTargetMixin):
+class GroupStub(BasicRelatable):
     deleted = None
 
     def __delitem__(self, key):
@@ -68,9 +71,6 @@ class GroupStub(LocatableEventTargetMixin):
     def add(self, value):
         return "name"
 
-
-class RelatableWithQueryableLinks(Relatable, RelatableMixin):
-    pass
 
 
 class TestURIs(unittest.TestCase):
@@ -247,7 +247,7 @@ class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
         from schooltool.interfaces import ISpecificURI
         from schooltool.relationship import RelatableMixin, defaultRelate
         registerRelationship(ISpecificURI, defaultRelate)
-        Relatable = lambda: RelatableWithQueryableLinks(self.serviceManager)
+        Relatable = lambda: BasicRelatable(self.serviceManager)
         g = Relatable()
 
         # Test a cycle of a group with itself.
@@ -261,85 +261,6 @@ class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
         self.assertEquals(links['group'].traverse(), g1)
         self.assertRaises(ValueError, Membership, group=g2, member=g1)
 
-
-class TestMemberLink(EventServiceTestMixin, unittest.TestCase):
-
-    def test(self):
-        from schooltool.membership import MemberLink
-        from schooltool.interfaces import URIMember, IRemovableLink
-
-        member = object()
-        parent = object()
-        link = MemberLink(parent, member, 'name')
-        self.assertEqual(link.title, 'Membership')
-        self.assertEqual(link.name, 'name')
-        self.assert_(link.traverse() is member)
-        self.assert_(link.role is URIMember)
-        self.assert_(link.__parent__ is parent)
-        verifyObject(IRemovableLink, link)
-
-    def test_unlink(self):
-        from schooltool.membership import MemberLink
-        from schooltool.interfaces import IMemberRemovedEvent, URIMembership
-        member = MemberStub(self.serviceManager)
-        group = GroupStub(self.serviceManager)
-        link = MemberLink(group, member, 'foo')
-        link.unlink()
-        self.assertEqual(group.deleted, 'foo')
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        self.assert_(group.events, [e])
-        self.assert_(member.events, [e])
-        self.assert_(IMemberRemovedEvent.isImplementedBy(e))
-        self.assert_(URIMembership.isImplementedBy(e))
-        self.assert_(e.member is member)
-        self.assert_(e.group is group)
-
-    def test_registerUnlinkCallback(self):
-        from schooltool.membership import MemberLink
-        link = MemberLink(None, None, 'name')
-        self.assertRaises(NotImplementedError,
-                          link.registerUnlinkCallback, None)
-
-
-class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
-
-    def test(self):
-        from schooltool.membership import GroupLink
-        from schooltool.interfaces import URIGroup, IRemovableLink
-
-        group = object()
-        parent = object()
-        link = GroupLink(parent, group, 'name')
-        self.assertEqual(link.title, 'Membership')
-        self.assertEqual(link.name, 'name')
-        self.assert_(link.traverse() is group)
-        self.assert_(link.role is URIGroup)
-        self.assert_(link.__parent__ is parent)
-        verifyObject(IRemovableLink, link)
-
-    def test_unlink(self):
-        from schooltool.membership import GroupLink
-        from schooltool.interfaces import IMemberRemovedEvent, URIMembership
-        member = MemberStub(self.serviceManager)
-        group = GroupStub(self.serviceManager)
-        link = GroupLink(member, group, 'foo')
-        link.unlink()
-        self.assertEqual(group.deleted, 'foo')
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        self.assert_(group.events, [e])
-        self.assert_(member.events, [e])
-        self.assert_(IMemberRemovedEvent.isImplementedBy(e))
-        self.assert_(URIMembership.isImplementedBy(e))
-        self.assert_(e.member is member)
-        self.assert_(e.group is group)
-
-    def test_registerUnlinkCallback(self):
-        from schooltool.membership import GroupLink
-        link = GroupLink(None, None, 'name')
-        self.assertRaises(NotImplementedError,
-                          link.registerUnlinkCallback, None)
 
 
 class TestEvents(unittest.TestCase):
@@ -393,112 +314,6 @@ class TestEvents(unittest.TestCase):
         self.assertRaises(TypeError, MemberAddedEvent, links)
 
 
-class TestRelate(EventServiceTestMixin, unittest.TestCase):
-
-    def check_one_event_received(self, receivers):
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        for target in receivers:
-            self.assertEquals(len(target.events), 1)
-            self.assert_(target.events[0] is e)
-        return e
-
-    def test_relate_membership(self):
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
-        from schooltool.membership import membershipRelate
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        links = membershipRelate(URIMembership, (g, URIGroup), (m, URIMember))
-
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), MemberLink)
-        self.assertEqual(type(links[1]), GroupLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(URIMembership.isImplementedBy(e))
-        self.assert_(e.links is links)
-        self.assert_(e.member is m)
-        self.assert_(e.group is g)
-
-    def test_relate_membership_with_title(self):
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
-        from schooltool.membership import membershipRelate
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        links = membershipRelate(URIMembership, (g, URIGroup), (m, URIMember),
-                       title="Membership")
-
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), MemberLink)
-        self.assertEqual(type(links[1]), GroupLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(URIMembership.isImplementedBy(e))
-        self.assert_(e.links is links)
-        self.assert_(e.member is m)
-        self.assert_(e.group is g)
-
-    def test_relate_membership_reverse_order(self):
-        from schooltool.interfaces import URIGroup, URIMember, URIMembership
-        from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.membership import GroupLink, MemberLink
-        from schooltool.membership import membershipRelate
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        links = membershipRelate(URIMembership,
-                                 (m, URIMember), (g, URIGroup))
-
-        self.assertEqual(len(links), 2)
-        self.assertEqual(type(links[0]), GroupLink)
-        self.assertEqual(type(links[1]), MemberLink)
-        e = self.check_one_event_received([m, g])
-        self.assert_(IMemberAddedEvent.isImplementedBy(e))
-        self.assert_(URIMembership.isImplementedBy(e))
-        self.assert_(e.links is links)
-        self.assert_(e.member is m)
-        self.assert_(e.group is g)
-
-    def test_relate_membership_not(self):
-        from schooltool.interfaces import URIMember, URIMembership
-        from schooltool.interfaces import ISpecificURI
-        from schooltool.membership import membershipRelate
-
-        class URIUnrelated(ISpecificURI):
-            """http://ns.example.org/role/unrelated"""
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        self.assertRaises(TypeError, membershipRelate,
-                          URIMembership,  (m, URIMember), (g, URIUnrelated))
-
-        self.assertRaises(TypeError, membershipRelate,
-                          URIMembership,  (m, URIMember), (g, URIUnrelated),
-                          title="foo")
-
-    def test_relate_membership_subtype(self):
-        from schooltool.interfaces import URIMember, URIGroup, URIMembership
-        from schooltool.membership import membershipRelate
-
-        class URIBetterMembership(URIMembership):
-            """http://ns.example.org/cult"""
-
-        m = MemberStub(self.serviceManager)
-        g = GroupStub(self.serviceManager)
-
-        self.assertRaises(TypeError, membershipRelate,
-                          URIBetterMembership, (m, URIMember), (g, URIGroup))
-
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -506,10 +321,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestMembershipRelationship))
     suite.addTest(unittest.makeSuite(TestMemberMixin))
     suite.addTest(unittest.makeSuite(TestURIs))
-    suite.addTest(unittest.makeSuite(TestMemberLink))
-    suite.addTest(unittest.makeSuite(TestGroupLink))
     suite.addTest(unittest.makeSuite(TestEvents))
-    suite.addTest(unittest.makeSuite(TestRelate))
     return suite
 
 if __name__ == '__main__':

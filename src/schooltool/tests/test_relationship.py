@@ -232,9 +232,9 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
             self.assert_(target.events[0] is e)
         return e
 
-    def test__relate(self):
-        from schooltool.relationship import _relate
-        self.doChecks(_relate)
+    def test_relate(self):
+        from schooltool.relationship import relate
+        self.doChecks(relate)
 
     def test_defaultRelate(self):
         from schooltool.relationship import defaultRelate
@@ -279,7 +279,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
 class TestRelatableMixin(unittest.TestCase):
 
     def test(self):
-        from schooltool.relationship import RelatableMixin, _relate
+        from schooltool.relationship import RelatableMixin, relate
         from schooltool.interfaces import IRelatable, IQueryLinks
 
         a = RelatableMixin()
@@ -288,13 +288,13 @@ class TestRelatableMixin(unittest.TestCase):
         verifyObject(IQueryLinks, a)
         verifyObject(IRelatable, a)
 
-        _relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
+        relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
 
         # no duplicate relationships
         self.assertRaises(ValueError,
-            _relate, URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
+            relate, URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
         self.assertRaises(ValueError,
-            _relate, URIClassTutor, (b, URIRegClass), (a, URIClassTutor))
+            relate, URIClassTutor, (b, URIRegClass), (a, URIClassTutor))
 
         self.assert_(a.listLinks(URIRegClass)[0].traverse() is b)
         self.assert_(b.listLinks(URIClassTutor)[0].traverse() is a)
