@@ -29,7 +29,7 @@
 #   directives.
 #
 # Examples:
-#   listen 8080
+#   listen 7001
 #   listen 127.0.0.1:80
 #
 
