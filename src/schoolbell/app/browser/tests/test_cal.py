@@ -830,7 +830,7 @@ class TestCalendarEventAddView(CalendarEventAddView):
     _arguments = []
     _keyword_arguments = ['title', 'start_date', 'start_time', 'duration',
                           'recurrence', 'location', 'recurrence_type',
-                          'interval', 'range', 'until', 'count']
+                          'interval', 'range', 'until', 'count', 'exceptions']
     _set_before_add = []
     _set_after_add = []
 
@@ -1122,6 +1122,77 @@ def doctest_CalendarEventAddView_add_recurrence():
         datetime.timedelta(0, 3000)
         >>> event.recurrence
         DailyRecurrenceRule(2, None, None, ())
+
+    """
+
+def doctest_CalendarEventAddView_recurrence_exceptions():
+    r"""Tests for CalendarEventAddView adding of new event.
+
+    Lets add a simple even with some exceptions:
+
+        >>> request = TestRequest(form={'field.title': 'Hacking',
+        ...               'field.start_date': '2004-08-13',
+        ...               'field.start_time': '15:30',
+        ...               'field.location': 'Kitchen',
+        ...               'field.duration': '50',
+        ...               'field.recurrence': 'on',
+        ...               'field.recurrence.used': '',
+        ...               'field.recurrence_type': 'daily',
+        ...               'field.interval': '1',
+        ...               'field.range': 'forever',
+        ...               'field.exceptions': '2004-08-14\n2004-08-19\n2004-08-20',
+        ...               'UPDATE_SUBMIT': 'Add'})
+
+
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.recurrence
+        DailyRecurrenceRule(1, None, None, (datetime.date(2004, 8, 14), datetime.date(2004, 8, 19), datetime.date(2004, 8, 20)))
+
+    We should skip additional newlines when parsing the input:
+
+        >>> request.form['field.exceptions'] = '2004-08-14\n\n2004-08-19\n\n\n2004-08-20'
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.recurrence
+        DailyRecurrenceRule(1, None, None, (datetime.date(2004, 8, 14), datetime.date(2004, 8, 19), datetime.date(2004, 8, 20)))
+
+   If the any of the lines contains an invalid date - ConversionError
+   is signaled:
+
+        >>> request.form['field.exceptions'] = '2004-08-14\n2004'
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view.update()
+        u'An error occured.'
+
+        >>> view.errors
+        ConversionError: (u'Invalid date.  Please specify YYYY-MM-DD, one per line.', None)
+        >>> len(calendar)
+        0
 
     """
 

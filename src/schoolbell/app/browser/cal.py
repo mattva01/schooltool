@@ -1110,6 +1110,15 @@ class CalendarEventAddView(AddView):
                                     "End date is earlier than start date")))
                         errors.append(self.until_widget._error)
 
+        exceptions = kwargs.pop("exceptions", None)
+        if exceptions:
+            try:
+                kwargs["exceptions"] = datesParser(exceptions)
+            except:
+                self._setError("exceptions", ConversionError(_(
+                    "Invalid date.  Please specify YYYY-MM-DD, one per line.")))
+                errors.append(self.exceptions_widget._error)
+
         if errors:
             raise WidgetsError(errors)
 
@@ -1271,3 +1280,26 @@ def makeRecurrenceRule(interval=None, until=None,
         return YearlyRecurrenceRule(**kwargs)
     else:
         raise NotImplementedError()
+
+
+def datesParser(raw_dates):
+    r"""Parse dates on separate lines into a tuple of date objects.
+
+    Incorrect lines are ignored.
+
+    >>> datesParser('2004-05-17\n\n\n2004-01-29')
+    (datetime.date(2004, 5, 17), datetime.date(2004, 1, 29))
+
+    >>> datesParser('2004-05-17\n123\n\nNone\n2004-01-29')
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid date: '123'
+
+    """
+    results = []
+    for dstr in raw_dates.splitlines():
+        if dstr:
+            d = parse_date(dstr)
+            if isinstance(d, date):
+                results.append(d)
+    return tuple(results)
