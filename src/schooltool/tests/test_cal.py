@@ -722,9 +722,10 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
 
     def test(self):
         from schooltool.cal import Calendar
-        from schooltool.interfaces import ICalendar
+        from schooltool.interfaces import ICalendar, ILocation
         cal = Calendar()
         verifyObject(ICalendar, cal)
+        verifyObject(ILocation, cal)
 
     def test_iter(self):
         from schooltool.cal import Calendar
@@ -864,6 +865,8 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         from schooltool.interfaces import ICalendarOwner
         com = CalendarOwnerMixin()
         verifyObject(ICalendarOwner, com)
+        self.assert_(com.calendar.__parent__ is com)
+        self.assertEquals(com.calendar.__name__, 'calendar')
 
 
 def test_suite():

@@ -43,6 +43,7 @@ from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetView, FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
+from schooltool.views.cal import CalendarView
 from schooltool.common import parse_datetime
 
 __metaclass__ = type
@@ -52,13 +53,19 @@ moduleProvides(IModuleSetup)
 
 
 class ApplicationObjectTraverserView(View):
-    """A view that supports traversing to facets and relationships."""
+    """A view that supports traversing to facets and relationships etc."""
 
     def _traverse(self, name, request):
         if name == 'facets':
             return FacetManagementView(FacetManager(self.context))
-        if name == 'relationships':
+        elif name == 'relationships':
             return RelationshipsView(self.context)
+        elif name == 'calendar':
+            return CalendarView(self.context.calendar)
+        elif name == 'timetables':
+            return TimetableTraverseView(self.context)
+        elif name == 'composite-timetables':
+            return CompositeTimetableTraverseView(self.context)
         raise KeyError(name)
 
 
@@ -76,10 +83,6 @@ class GroupView(ApplicationObjectTraverserView):
             return RollcallView(self.context)
         elif name == 'tree':
             return TreeView(self.context)
-        elif name == 'timetables':
-            return TimetableTraverseView(self.context)
-        elif name == 'composite-timetables':
-            return CompositeTimetableTraverseView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def listItems(self):
@@ -239,10 +242,6 @@ class PersonView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'absences':
             return AbsenceManagementView(self.context)
-        elif name == 'timetables':
-            return TimetableTraverseView(self.context)
-        elif name == 'composite-timetables':
-            return CompositeTimetableTraverseView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def getGroups(self):

@@ -851,10 +851,13 @@ def markNonSchooldays(ical_reader, schoolday_model):
 #
 
 class Calendar(Persistent):
-    implements(ICalendar)
+
+    implements(ICalendar, ILocation)
 
     def __init__(self):
         self.events = Set()
+        self.__name__ = None
+        self.__parent__ = None
 
     def __iter__(self):
         return iter(self.events)
@@ -874,6 +877,7 @@ class Calendar(Persistent):
 
 
 class CalendarEvent(Persistent):
+
     implements(ICalendarEvent)
 
     dtstart = property(lambda self: self._dtstart)
@@ -905,4 +909,6 @@ class CalendarOwnerMixin:
 
     def __init__(self):
         self.calendar = Calendar()
+        self.calendar.__parent__ = self
+        self.calendar.__name__ = 'calendar'
 

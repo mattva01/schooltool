@@ -59,6 +59,9 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
     def test_traverse(self):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
+        from schooltool.views.cal import CalendarView
+        from schooltool.views.timetable import TimetableTraverseView
+        from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.interfaces import IFacetManager
 
         request = RequestStub("http://localhost/people/p")
@@ -69,6 +72,18 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
         self.assert_(IFacetManager.isImplementedBy(result.context))
+
+        result = self.view._traverse('calendar', request)
+        self.assert_(isinstance(result, CalendarView))
+        self.assert_(result.context is self.view.context.calendar)
+
+        result = self.view._traverse('timetables', request)
+        self.assert_(isinstance(result, TimetableTraverseView))
+        self.assert_(result.context is self.view.context)
+
+        result = self.view._traverse('composite-timetables', request)
+        self.assert_(isinstance(result, CompositeTimetableTraverseView))
+        self.assert_(result.context is self.view.context)
 
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
 
@@ -100,8 +115,6 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.model import AbsenceManagementView
-        from schooltool.views.timetable import TimetableTraverseView
-        from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/person")
 
@@ -115,14 +128,6 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         result = self.view._traverse('absences', request)
         self.assert_(isinstance(result, AbsenceManagementView))
-        self.assert_(result.context is self.per)
-
-        result = self.view._traverse('timetables', request)
-        self.assert_(isinstance(result, TimetableTraverseView))
-        self.assert_(result.context is self.per)
-
-        result = self.view._traverse('composite-timetables', request)
-        self.assert_(isinstance(result, CompositeTimetableTraverseView))
         self.assert_(result.context is self.per)
 
     def test_render(self):
@@ -210,8 +215,6 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.model import RollcallView, TreeView
-        from schooltool.views.timetable import TimetableTraverseView
-        from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/group")
 
@@ -229,14 +232,6 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         result = self.view._traverse("tree", request)
         self.assert_(isinstance(result, TreeView))
-        self.assert_(result.context is self.group)
-
-        result = self.view._traverse('timetables', request)
-        self.assert_(isinstance(result, TimetableTraverseView))
-        self.assert_(result.context is self.group)
-
-        result = self.view._traverse('composite-timetables', request)
-        self.assert_(isinstance(result, CompositeTimetableTraverseView))
         self.assert_(result.context is self.group)
 
         self.assertRaises(KeyError, self.view._traverse, "otherthings",
