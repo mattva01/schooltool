@@ -104,7 +104,7 @@ Filters, may be repeated multiple times:
 PRAGMA_NOCOVER = "#pragma NO COVER"
 
 # Simple rx to find lines with no code.
-rx_blank = re.compile(r'^\s*(#.*)?$')
+rx_blank = re.compile(r'^\s*(finally:\s*)?(#.*)?$')
 
 class Ignore:
     def __init__(self, modules = None, dirs = None):
