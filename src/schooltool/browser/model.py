@@ -131,6 +131,8 @@ class PersonPasswordView(View):
             if 'DISABLE' in request.args:
                 self.message = _('Account disabled.')
                 self.context.setPassword(None)
+                request.appLog(_("Account disabled for %s (%s)") %
+                               (self.context.title, getPath(self.context)))
             elif 'CHANGE' in request.args:
                 new_password = request.args['new_password'][0]
                 verify_password = request.args['verify_password'][0]
@@ -139,6 +141,8 @@ class PersonPasswordView(View):
                 else:
                     self.message = _('Password changed.')
                     self.context.setPassword(new_password)
+                    request.appLog(_("Password changed for %s (%s)") %
+                                   (self.context.title, getPath(self.context)))
         return self.do_GET(request)
 
     def contextURL(self):

@@ -197,6 +197,10 @@ class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assert_('Password changed' in result)
         self.assert_(self.person.checkPassword('newpw'))
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            "Password changed for John Doe (/persons/johndoe)",
+                            INFO)])
 
     def test_POST_as_user(self):
         from schooltool.browser.model import PersonPasswordView
@@ -211,6 +215,10 @@ class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assert_('Password changed' in result)
         self.assert_(self.person.checkPassword('newpw'))
+        self.assertEquals(request.applog,
+                          [(self.person,
+                            "Password changed for John Doe (/persons/johndoe)",
+                            INFO)])
 
     def test_POST_passwords_do_not_match(self):
         from schooltool.browser.model import PersonPasswordView
@@ -254,6 +262,10 @@ class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assert_('Account disabled' in result)
         self.assert_(not self.person.hasPassword())
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            "Account disabled for John Doe (/persons/johndoe)",
+                            INFO)])
 
 
 class TestPersonEditView(unittest.TestCase):
