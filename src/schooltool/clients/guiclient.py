@@ -1086,7 +1086,8 @@ def _parseURIList(body):
         try:
             for node in res:
                 uri = node.prop('uri')
-                # TODO: validate URI
+                if not looks_like_a_uri(uri):
+                    raise SchoolToolError(_("Invalid URI: %r") % uri)
                 name = to_unicode(node.xpathEval('name')[0].content)
                 desc_node = node.xpathEval('description')[0]
                 description = to_unicode(desc_node.content)

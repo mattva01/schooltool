@@ -1869,6 +1869,27 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         self.assertEquals(result[1].name, u"Name \u2730")
         self.assertEquals(result[1].description, u"Desc \u2730")
 
+    def test__parseURIList_errors(self):
+        from schooltool.clients.guiclient import _parseURIList
+        from schooltool.clients.guiclient import SchoolToolError
+        body = dedent("""
+                      <uriobjects>
+                        <uriobject uri="invalid">
+                          <name>No description</name>
+                        </uriobject>
+                      </uriobjects>
+                      """)
+        self.assertRaises(SchoolToolError, _parseURIList, body)
+
+        body = dedent("""
+                      <uriobjects>
+                        <uriobject uri="invalid">
+                          <name>N</name>
+                          <description>Foo</description>
+                        </uriobject>
+                      </uriobjects>
+                      """)
+        self.assertRaises(SchoolToolError, _parseURIList, body)
 
 class InfoClassTestMixin:
     """Mixin for testing classes that are tuple replacements."""
