@@ -58,7 +58,7 @@ from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import IPersonPreferences
+from schoolbell.app.interfaces import IPersonPreferences, IResource
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
@@ -225,7 +225,10 @@ class EventForDisplay(object):
 
     cssClass = 'event'  # at the moment no other classes are used
 
-    def __init__(self, event, color1, color2):
+    def __init__(self, event, color1, color2, source_calendar):
+        self.source_calendar = source_calendar
+        if canAccess(source_calendar, '__iter__'):
+            event = removeSecurityProxy(event)
         self.context = event
         self.dtend = event.dtstart + event.duration
         self.color1 = color1
@@ -239,6 +242,27 @@ class EventForDisplay(object):
 
     def __getattr__(self, name):
         return getattr(self.context, name)
+
+    def getBooker(self):
+        """If context event comes from a resource calendar - return the booker.
+
+        Checking whether the source calendar of the event is the same
+        as the parent calendar is enough, because only booked
+        resources can have events with non matching parent and source.
+        """
+        if self.source_calendar != self.context.__parent__:
+            #                    Calendar    Person
+            return self.context.__parent__.__parent__
+        return None
+
+    def getBookedResources(self):
+        """Return the list of booked resources.
+
+        Only if the source calendar does not belong to a resource booked.
+        """
+        if self.source_calendar == self.context.__parent__:
+            return self.context.resources
+        return ()
 
     def renderShort(self):
         """Short representation of the event for the monthly view."""
@@ -431,9 +455,15 @@ class CalendarViewBase(BrowserView):
         `start_dt` and `end_dt` (datetime objects) are bounds (half-open) for
         the result.
         """
+        my_events = []
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
-                yield EventForDisplay(event, color1, color2)
+                if event.__parent__ == self.context:
+                    if not event.unique_id in my_events:
+                        my_events.append(event.unique_id)
+                        yield EventForDisplay(event, color1, color2, calendar)
+                else:
+                    yield EventForDisplay(event, color1, color2, calendar)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -847,6 +877,11 @@ class DailyCalendarView(CalendarViewBase):
         dtend = event.dtstart + event.duration
         return max(minheight,
                    self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
+
+    def isResourceCalendar(self):
+        """Are we showing a calendar of some resource."""
+
+        return IResource.providedBy(self.context.__parent__)
 
 
 #
@@ -1537,6 +1572,27 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         url = absoluteURL(self.context, self.request)
         return '%s/booking.html?date=%s' % (url, date)
 
+class EventForBookingDisplay(object):
+    """Event wraper for display in booking view.
+
+    This is a wrapper around an ICalendarEvent object.  It adds view-specific
+    attributes:
+
+        dtend -- timestamp when the event ends
+        shortTitle -- title truncated to ~15 characters
+
+    """
+
+    def __init__(self, event):
+        # The event came from resource calendar yet it's parent might
+        # be a calendar we don't have permission to view.
+        self.context = removeSecurityProxy(event)
+        self.dtstart = self.context.dtstart
+        self.dtend = self.context.dtstart + self.context.duration
+        self.title = self.context.title
+        self.shortTitle = self.title
+        if len(self.title) > 16:
+            self.shortTitle = self.title[:15] + '...'
 
 class CalendarEventBookingView(BrowserView):
     """A view for booking resources."""
@@ -1592,6 +1648,19 @@ class CalendarEventBookingView(BrowserView):
         """Return the URL to be displayed after the add operation."""
         url = absoluteURL(self.context.__parent__, self.request)
         return '%s/%s' % (url, self._redirectToDate)
+
+    def getConflictingEvents(self, resource):
+        """Return a list of events that would conflict when booking resource."""
+        events = []
+        if not canAccess(resource.calendar, "expand"):
+            return events
+
+        for event in resource.calendar.expand(
+            self.context.dtstart,
+            self.context.dtstart + self.context.duration):
+            if event != self.context:
+                events.append(EventForBookingDisplay(event))
+        return events
 
 
 def makeRecurrenceRule(interval=None, until=None,

@@ -64,6 +64,26 @@
               tal:condition="python: ev.title != ev.shortTitle" />
             <div class="description" tal:content="ev/description" />
           </div>
+          <div class="booked-resources"
+               tal:define="resources ev/getBookedResources"
+               tal:condition="resources">
+            <h6 class="booked-resource-header" tal:attributes="style string:background: ${ev/color2}">
+              <a style="color: #000;"
+                 tal:attributes="href string:${ev/@@absolute_url}/booking.html?date=${evdate};">Booked resources</a></h6>
+            <tal:block tal:repeat="resource resources">
+              <a tal:attributes="href string:${resource/@@absolute_url}"
+                 tal:content="resource/title">A Pond</a>
+            </tal:block>
+          </div>
+          <div class="booked-resources"
+               tal:define="booker ev/getBooker"
+               tal:condition="booker">
+            <h6 class="booked-resource-header" tal:attributes="style string:background: ${ev/color2}">
+              <a style="color: #000;"
+                 tal:attributes="href string:${ev/@@absolute_url}/booking.html?date=${evdate};">Booked by</a></h6>
+            <a tal:attributes="href string:${booker/@@absolute_url}"
+               tal:content="booker/title">A Dude</a>
+          </div>
         </div>
       </tal:if>
     </tal:block>

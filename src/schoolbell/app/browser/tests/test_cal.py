@@ -218,8 +218,11 @@ def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
         >>> from schoolbell.app.browser.cal import EventForDisplay
+        >>> from schoolbell.app.app import Resource, Person
+        >>> person = Person("p1")
         >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
-        >>> e1 = EventForDisplay(e1, 'red', 'green')
+        >>> person.calendar.addEvent(e1)
+        >>> e1 = EventForDisplay(e1, 'red', 'green', person.calendar)
 
     EventForDisplay lets us access all the usual attributes
 
@@ -227,6 +230,8 @@ def doctest_EventForDisplay():
         datetime.datetime(2004, 1, 2, 14, 45, 50)
         >>> e1.title
         'yawn'
+        >>> e1.source_calendar is person.calendar
+        True
 
     It adds some additional attributes
 
@@ -238,12 +243,14 @@ def doctest_EventForDisplay():
         'green'
         >>> e1.shortTitle
         'yawn'
+        >>> e1.getBooker() is None
+        True
 
     shortTitle is ellipsized if the title is long
 
         >>> e2 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e2 = EventForDisplay(e2, 'blue', 'yellow')
+        >>> e2 = EventForDisplay(e2, 'blue', 'yellow', person.calendar)
         >>> e2.shortTitle
         'sleeping for a ...'
 
@@ -257,6 +264,59 @@ def doctest_EventForDisplay():
 
         >>> print e2.renderShort().replace('&ndash;', '--')
         sleeping for a ... (12:00--12:15)
+
+    If the event is a booking event and the source calendar is a calendar of the
+    resource we should get the booker of the event:
+
+       >>> resource = Resource("r1")
+       >>> e1.bookResource(resource)
+       >>> e1.source_calendar = resource.calendar
+       >>> e1.getBooker() is person
+       True
+
+    We should not see booked resources though:
+
+       >>> e1.getBookedResources()
+       ()
+
+    But if we are looking at the persons calendar we should get the
+    list of them:
+
+       >>> e1.source_calendar = person.calendar
+       >>> [resource.title for resource in  e1.getBookedResources()]
+       ['r1']
+
+    """
+
+
+def doctest_EventForBookingDisplay():
+    """A wrapper for calendar events.
+
+        >>> from schoolbell.app.browser.cal import EventForBookingDisplay
+        >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
+        >>> e1 = EventForBookingDisplay(e1)
+
+    EventForBookingDisplay lets us access all the usual attributes
+
+        >>> e1.dtstart
+        datetime.datetime(2004, 1, 2, 14, 45, 50)
+        >>> e1.title
+        'yawn'
+
+    It adds some additional attributes
+
+        >>> e1.dtend
+        datetime.datetime(2004, 1, 2, 14, 50, 50)
+        >>> e1.shortTitle
+        'yawn'
+
+    shortTitle is ellipsized if the title is long
+
+        >>> e2 = createEvent('2004-01-02 12:00:00', '15min',
+        ...                  'sleeping for a little while because I was tired')
+        >>> e2 = EventForBookingDisplay(e2)
+        >>> e2.shortTitle
+        'sleeping for a ...'
 
     """
 
@@ -2226,6 +2286,57 @@ def doctest_TestCalendarEventBookingView():
         >>> [resource.title for resource in view.availableResources
         ...                 if view.hasBooked(resource)]
         ['res3', 'res4']
+
+    """
+
+def doctest_getEvents_booking():
+    """Test for CalendarViewBase.getEvents when booking is involved
+
+    CalendarViewBase.getEvents returns a list of wrapped calendar
+    events.
+
+        >>> from schoolbell.app.browser.cal import CalendarViewBase
+        >>> from schoolbell.app.cal import Calendar
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.app import Resource
+
+        >>> person = Person(u"frog")
+        >>> resource = Resource(u"mud")
+
+        >>> event = createEvent('2005-02-26 19:39', '1h', 'code')
+        >>> person.calendar.addEvent(event)
+        >>> event.bookResource(resource)
+
+    We will stub view.getCalendars to simulate overlayed calendars
+
+    We can see only one instance of the event:
+
+        >>> view = CalendarViewBase(person.calendar, TestRequest())
+        >>> view.getCalendars = lambda:[(person.calendar, 'r', 'g'),
+        ...                             (resource.calendar, 'b', 'y')]
+        >>> for e in view.getEvents(datetime(2005, 2, 21),
+        ...                         datetime(2005, 3, 1)):
+        ...     print e.title, '(%s)' % e.color1
+        code (r)
+
+    Let toad book the same resource:
+
+        >>> toad = Person(u"toad")
+        >>> event = createEvent('2005-02-26 9:39', '1h', 'swim')
+        >>> toad.calendar.addEvent(event)
+        >>> event.bookResource(resource)
+
+    We should see only one box for code, yet we should see swim twice:
+
+        >>> view.getCalendars = lambda:[(person.calendar, 'r', 'g'),
+        ...                             (resource.calendar, 'b', 'y'),
+        ...                             (toad.calendar, 'm', 'c')]
+        >>> for e in view.getEvents(datetime(2005, 2, 21),
+        ...                         datetime(2005, 3, 1)):
+        ...     print e.title, '(%s)' % e.color1
+        code (r)
+        swim (b)
+        swim (m)
 
     """
 

@@ -717,6 +717,22 @@ h2.calendar-view-title {
     padding: 0.5ex;
 }
 
+#calendar-view-day .event .booked-resources {
+    border: 1px;
+    padding: 0.5ex;
+    font-size: 80%;
+}
+
+#calendar-view-day .event .booked-resources-header a {
+    color: #000;
+    text-decoration: none;
+    display: block;
+}
+
+#calendar-view-day .event .booked-resources a {
+    display: block;
+}
+
 #calendar-view-day .event .body .title {
     font-style: italic;
 }
