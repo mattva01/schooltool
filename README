@@ -60,6 +60,7 @@ The top-level project directory contains the following executable Python
 scripts:
 
   schooltool-server.py      starts the SchoolTool server
+  schoolbell-server.py      starts the SchoolBell server
   schooltool-client.py      starts the command line client
   wxschooltool.py           starts the wxWindows GUI client
   generate-sampleschool.py  generates sample school data

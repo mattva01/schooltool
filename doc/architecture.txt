@@ -51,7 +51,7 @@ organized into a tree of groups.
 Paths
 -----
 
-All object that need to be traversable through the HTTP interface need
+All objects that need to be traversable through the HTTP interface need
 to have a path.  That is, they need to implement the ILocation
 interface.  That interface just specifies two attributes: a __name__
 and a __parent__.  The parent must also have a path.
@@ -273,7 +273,7 @@ So, a Timetable is just a table in which each cell has a day id, a
 period id and some activities associated with them.
 
 Now, converting a Timetable to a Calendar involves several auxiliary
-objects which keep different parts of the data neeeded for the
+objects which keep different parts of the data needed for the
 process.
 
 SchooldayModel is a calendar for a range of dates which can tell
