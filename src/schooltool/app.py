@@ -56,6 +56,7 @@ class Application(Persistent):
     # Attributes from IOptions
     new_event_privacy = "public"
     timetable_privacy = "public"
+    restrict_membership = False
 
     def __init__(self):
         self.eventService = EventService()

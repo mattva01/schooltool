@@ -1989,6 +1989,11 @@ class IOptions(Interface):
     timetable_privacy = Attribute(
         """The value of the privacy attribute for the timetable events.""")
 
+    restrict_membership = Attribute(
+        """A boolean value signifying whether the membership in every group
+        is restricted to the members of immediate parent groups.
+        """)
+
 
 class IApplication(IContainmentRoot, IServiceManager, ITraversable, IOptions):
     """The application object.
