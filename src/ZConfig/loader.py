@@ -75,7 +75,10 @@ class BaseLoader:
         if not url:
             url = _url_from_file(file)
         r = self.createResource(file, url)
-        return self.loadResource(r)
+        try:
+            return self.loadResource(r)
+        finally:
+            r.close()
 
     # utilities
 
@@ -196,7 +199,10 @@ class ConfigLoader(BaseLoader):
     def includeConfiguration(self, section, url, defines):
         url = self.normalizeURL(url)
         r = self.openResource(url)
-        self._parse_resource(section, r, defines)
+        try:
+            self._parse_resource(section, r, defines)
+        finally:
+            r.close()
 
     # internal helper
 
