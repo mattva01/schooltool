@@ -73,8 +73,8 @@ class CalendarOwnerTraverser(object):
         elif name == 'calendar.ics':
             calendar = self.context.calendar
             view = queryMultiAdapter((calendar, request), name=name)
-            assert view, 'Could not find iCalendar view for calendar!'
-            return view
+            if view is not None:
+                return view
 
         view = queryMultiAdapter((self.context, request), name=name)
         if view is not None:
