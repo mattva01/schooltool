@@ -127,14 +127,16 @@ class TestLogin(setup.TestCase):
     def do_test(self, site):
         browser = Browser()
         browser.go(site)
-        self.assert_('Welcome' in browser.content)
-        self.assert_('Username' in browser.content)
+        self.assert_('Login' in browser.content)
+        self.assert_('Community' in browser.content)
 
-        browser.post(site, {'username': 'manager', 'password': 'schooltool'})
-        self.assertEquals(browser.url, site + '/start')
-        self.assert_('Start' in browser.content)
-        link_to_password_form = site + '/persons/manager/password.html'
-        self.assert_(link_to_password_form in browser.content)
+        browser.post(site + '/login',
+                    {'username': 'manager', 'password': 'schooltool'})
+        self.assertEquals(browser.url, site +
+                '/persons/manager/calendar/daily.html')
+        self.assert_('Manager' in browser.content)
+        link_to_person = site + '/persons/manager'
+        self.assert_(link_to_person in browser.content)
 
 
 class TestPersonCreate(setup.TestCase):
