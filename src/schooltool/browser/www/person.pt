@@ -20,8 +20,8 @@
     </div>
 
     <div tal:condition="view/canChooseCalendars" class="groups">
-      <!-- XXX The double frame looks ugly -->
-      <form method="POST" tal:attributes="action request/path">
+      <form method="POST" class="plain"
+            tal:attributes="action request/path">
         <h3 i18n:translate="">Groups</h3>
 
         <p>Merge calendars:</p>
