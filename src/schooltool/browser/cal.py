@@ -132,10 +132,7 @@ class CalendarDay:
     The attribute `date` is the day as a date() object,
     `events` is list of events that took place that day, sorted by start time.
 
-    Oppositely from Calendar.byDate(), events that span several days are
-    included in the first one only.
     """
-    # XXX I'm not sure whether we should repeat events spanning several days.
 
     def __init__(self, date, events=None):
         self.date = date
@@ -192,8 +189,9 @@ class CalendarViewBase(View):
         """Get a list of CalendarDay objects for a selected period of time.
 
         `start` and `end` (date objects) are bounds (half-open) for the result.
+
+        Events spanning more than one day get included in all days they overlap.
         """
-        # XXX Multiple-day events (see the XXX above)
         events = {}
         dt = start
         while dt < end:
