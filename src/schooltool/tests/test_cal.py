@@ -26,19 +26,19 @@ import calendar
 from zope.interface.verify import verifyObject
 from zope.testing.doctestunit import DocTestSuite
 from datetime import date
-import schooltool.calendar
+import schooltool.cal
 
 class TestSchooldayCalendar(unittest.TestCase):
 
     def test_interface(self):
-        from schooltool.calendar import SchooldayCalendar
+        from schooltool.cal import SchooldayCalendar
         from schooltool.interfaces import ISchooldayCalendar
 
         cal = SchooldayCalendar(date(2003, 9, 1), date(2003, 12, 24))
         verifyObject(ISchooldayCalendar, cal)
 
     def testAddRemoveContains(self):
-        from schooltool.calendar import SchooldayCalendar
+        from schooltool.cal import SchooldayCalendar
         from schooltool.interfaces import ISchooldayCalendar
 
         cal = SchooldayCalendar(date(2003, 9, 1), date(2003, 9, 15))
@@ -55,7 +55,7 @@ class TestSchooldayCalendar(unittest.TestCase):
         self.assertRaises(ValueError, cal.remove, date(2003, 9, 15))
 
     def testMarkWeekday(self):
-        from schooltool.calendar import SchooldayCalendar
+        from schooltool.cal import SchooldayCalendar
         from schooltool.interfaces import ISchooldayCalendar
         cal = SchooldayCalendar(date(2003, 9, 1), date(2003, 9, 17))
         for day in 1, 8, 15:
@@ -80,5 +80,5 @@ class TestSchooldayCalendar(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchooldayCalendar))
-    suite.addTest(DocTestSuite(schooltool.calendar))
+    suite.addTest(DocTestSuite(schooltool.cal))
     return suite
