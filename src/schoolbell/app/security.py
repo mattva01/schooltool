@@ -157,8 +157,6 @@ def setUpLocalAuth(site, auth=None):
 
     if not ISite.providedBy(site):
         site.setSiteManager(LocalSiteManager(site))
-        #provided = directlyProvidedBy(site)
-        #directlyProvides(site, provided + ISite)
 
     default = zapi.traverse(site, '++etc++site/default')
     reg_manager = default.registrationManager
