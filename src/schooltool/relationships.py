@@ -24,7 +24,7 @@ $Id$
 from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements
-from schooltool.interfaces import ILink, IRelatable
+from schooltool.interfaces import IRemovableLink, IRelatable
 from schooltool.component import inspectSpecificURI
 
 __metaclass__ = type
@@ -37,7 +37,7 @@ class Link(Persistent):
     to a Relationship's constructor.
     """
 
-    implements(ILink)
+    implements(IRemovableLink)
 
     def __init__(self, parent, role):
         inspectSpecificURI(role)
@@ -59,11 +59,16 @@ class Link(Persistent):
     def traverse(self):
         return self.relationship.traverse(self).__parent__
 
+    def unlink(self):
+        self.__parent__.__links__.remove(self)
+        otherlink = self.relationship.traverse(self)
+        self.traverse().__links__.remove(otherlink)
 
-class Relationship(Persistent):
+class _Relationship(Persistent):
     """A central part of a relationship.
 
-    Basically, it holds references to two links and its name.
+    This an internal API for links.  Basically, it holds references to
+    two links and its name.
     """
 
     def __init__(self, title, a, b):
@@ -86,4 +91,11 @@ class Relationship(Persistent):
             return self.a
         else:
             raise ValueError("Not one of my links: %r" % (link,))
+
+def relate(title, a, role_a, b, role_b):
+    """See IRelationshipAPI"""
+    link_a = Link(a, role_b)
+    link_b = Link(b, role_a)
+    _Relationship(title, link_a, link_b)
+    return link_a, link_b
 

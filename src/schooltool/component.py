@@ -28,8 +28,6 @@ from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
-# The following is imported at the end of the module to avoid an import loop:
-# from schooltool.relationships import Link, Relationship
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
 
@@ -182,18 +180,8 @@ def isURI(uri):
 # Relationships
 #
 
-def relate(title, a, role_a, b, role_b):
-    """See IRelationshipAPI"""
-    link_a = Link(a, role_b)
-    link_b = Link(b, role_a)
-    Relationship(title, link_a, link_b)
-    return link_a, link_b
-
+from schooltool.relationships import relate
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""
     return [link.traverse() for link in obj.listLinks(role)]
-
-
-# This is imported here to avoid circular import dependencies
-from schooltool.relationships import Link, Relationship
