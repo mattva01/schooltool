@@ -28,12 +28,11 @@ from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource
 from schooltool.component import getPath, traverse
 from schooltool.component import registerView
-from schooltool.common import parse_date
 from schooltool.views import View, Template
 from schooltool.views import TraversableView, XMLPseudoParser
 from schooltool.views import absoluteURL, notFoundPage, textErrorPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
-from schooltool.views.cal import AllCalendarsView
+from schooltool.views.cal import AllCalendarsView, parse_date
 
 __metaclass__ = type
 

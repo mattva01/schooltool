@@ -48,15 +48,3 @@ def parse_datetime(s):
         ssssss = 0
     y, m, d, hh, mm, ss = map(int, m.groups()[:6])
     return datetime.datetime(y, m, d, hh, mm, ss, ssssss)
-
-
-def parse_date(s):
-    """Parses the YYYY-MM-DD date, returns a datetime.date object.
-
-    Raises a ValueError if the argument is invalid.
-    """
-    segs = s.split('-')
-    if len(segs) != 3:
-        raise ValueError('Invalid date: %r' % (s, ))
-    y, m, d = map(int, segs)
-    return datetime.date(y, m, d)
