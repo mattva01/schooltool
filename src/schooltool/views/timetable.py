@@ -52,7 +52,9 @@ moduleProvides(IModuleSetup)
 
 
 class ViewError(Exception):
-    pass
+
+    def __unicode__(self):
+        return u" ".join(self.args)
 
 
 class TimetableContentNegotiation:
@@ -555,7 +557,7 @@ class SchoolTimetableView(View):
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
-                                     _("Timetable not valid according to schema"))
+                                _("Timetable not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, _("Timetable not valid XML"))
 
