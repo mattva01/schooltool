@@ -54,10 +54,13 @@ welcome to change it and/or distribute copies of it under certain conditions.
     port = 7001
     user = None
     password = ""
+    ssl = False
     accept = 'text/xml'
     links = True
 
-    http = httplib.HTTPConnection
+    # Hooks for unit tests.
+    connectionFactory = httplib.HTTPConnection
+    secureConnectionFactory = httplib.HTTPSConnection
 
     file_hook = file
     input_hook = raw_input
@@ -131,13 +134,17 @@ welcome to change it and/or distribute copies of it under certain conditions.
     def do_server(self, line):
         """Set the server to talk to.
 
-        server [server [port]]
+        server [server [port [ssl]]]
         """
         args = line.split()
         if args:
-            if len(args) > 2:
+            if len(args) > 3:
                 self.emit("Extra arguments provided")
                 return
+            ssl = False
+            if len(args) > 2:
+                if args[2].upper() == 'SSL':
+                    ssl = True
             if len(args) > 1:
                 try:
                     port = int(args[1])
@@ -148,6 +155,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
                 port = 80
             self.server = args[0]
             self.port = port
+            self.ssl = ssl
             self.do_get("/")
         else:
             self.emit(self.server)
@@ -195,7 +203,11 @@ welcome to change it and/or distribute copies of it under certain conditions.
         self.last_data = None
         self.resources = []
         try:
-            conn = self.http(self.server, self.port)
+            if self.ssl:
+                factory = self.secureConnectionFactory
+            else:
+                factory = self.connectionFactory
+            conn = factory(self.server, self.port)
             self.lastconn = conn # Test hook
             conn.putrequest(method, resource)
             for header, value in headers:
@@ -432,7 +444,8 @@ def http_join(path, rel):
 def main():
     c = Client()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'h:p:', ['host=', 'port='])
+        opts, args = getopt.getopt(sys.argv[1:], 'h:p:s', ['host=', 'port=',
+                                                           'ssl'])
     except getopt.error, e:
         print >> sys.stderr, "%s: %s" % (sys.argv[0], e)
         sys.exit(1)
@@ -446,6 +459,8 @@ def main():
             except ValueError, e:
                 print >> sys.stderr, "%s: invalid port: %s" % (sys.argv[0], v)
                 sys.exit(1)
+        elif k in ('-s', '--ssl'):
+            c.ssl = True
 
     c.cmdloop()
 

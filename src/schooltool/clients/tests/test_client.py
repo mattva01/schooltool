@@ -127,7 +127,34 @@ class TestClient(unittest.TestCase):
             else:
                 self.emitted = ' '.join(args)
         self.client.emit = emit
-        self.client.http = HTTPStub
+        # self.client.ssl = False -- implied
+        self.client.connectionFactory = HTTPStub
+        self.client.secureConnectionFactory = HTTPStub
+
+    def test_ssl(self):
+        self.client.ssl = True
+        self.client.connectionFactory = None
+        self.client.secureConnectionFactory = HTTPStub
+        self.emitted = ""
+        self.client.server = 'localhost'
+        self.client.links = False
+        self.client.do_get("/")
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/plain
+            Welcome"""))
+        self.assertEqual(self.client.last_data, "Welcome")
+
+        self.emitted = ""
+        self.client.ssl = False
+        self.client.connectionFactory = HTTPStub
+        self.client.do_get("/")
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/plain
+            Welcome"""))
+        self.assertEqual(self.client.last_data, "Welcome")
+        self.client.secureConnectionFactory = None
 
     def test_setupPrompt_noninteractive(self):
         class StdinStub:
@@ -245,17 +272,30 @@ class TestClient(unittest.TestCase):
         self.client.do_server("server 31337")
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 31337)
+        self.assertEqual(self.client.ssl, False)
         self.assertEmitted("Error: could not connect to server:31337")
 
-        self.client.do_server("server")
+        self.emitted = ""
+        self.client.do_server("server 443 ssl")
         self.assertEqual(self.client.server, "server")
-        self.assertEqual(self.client.port, 80)
+        self.assertEqual(self.client.port, 443)
+        self.assertEqual(self.client.ssl, True)
+        self.assertEmitted("Error: could not connect to server:443")
 
         self.emitted = ""
         self.client.do_server("other www")
         self.assertEqual(self.client.server, "server")
-        self.assertEqual(self.client.port, 80)
+        self.assertEqual(self.client.port, 443)
+        self.assertEqual(self.client.ssl, True)
         self.assertEmitted("Invalid port number")
+
+        self.emitted = ""
+        self.client.do_server("server 31337")
+        self.assertEqual(self.client.server, "server")
+        self.assertEqual(self.client.port, 31337)
+        # Make sure the SSL option has been reset.
+        self.assertEqual(self.client.ssl, False)
+        self.assertEmitted("Error: could not connect to server:31337")
 
     def test_accept(self):
         self.client.do_accept(" ")
