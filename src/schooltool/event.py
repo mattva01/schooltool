@@ -29,7 +29,9 @@ from zope.interface import implements
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
+from schooltool.interfaces import IRouteToRelationshipsAction
 from schooltool.component import getEventService
+from schooltool.component import getRelationships, inspectSpecificURI
 
 __metaclass__ = type
 
@@ -112,6 +114,20 @@ class RouteToGroupsAction(EventActionMixin):
     def handle(self, event, target):
         for group in target.groups():
             event.dispatch(group)
+
+
+class RouteToRelationshipsAction(EventActionMixin):
+
+    implements(IRouteToRelationshipsAction)
+
+    def __init__(self, role=None, eventType=IEvent):
+        EventActionMixin.__init__(self, eventType)
+        inspectSpecificURI(role)
+        self.role = role
+
+    def handle(self, event, target):
+        for obj in getRelationships(target, self.role):
+            event.dispatch(obj)
 
 
 class EventService(Persistent):

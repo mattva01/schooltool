@@ -189,5 +189,11 @@ def relate(title, a, role_a, b, role_b):
     Relationship(title, link_a, link_b)
     return link_a, link_b
 
+
+def getRelationships(obj, role):
+    """See IRelationshipAPI"""
+    return [link.traverse() for link in obj.listLinks(role)]
+
+
 # This is imported here to avoid circular import dependencies
 from schooltool.relationships import Link, Relationship

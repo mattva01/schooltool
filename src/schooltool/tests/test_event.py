@@ -193,6 +193,42 @@ class TestEventActionMixins(unittest.TestCase):
         dispatched_to.sort()
         self.assertEquals(dispatched_to, groups)
 
+    def testRouteToRelationshipsAction(self):
+        from schooltool.event import RouteToRelationshipsAction
+        from schooltool.interfaces import IRouteToRelationshipsAction
+        from schooltool.interfaces import ISpecificURI
+
+        class URIFriend(ISpecificURI):
+            """http://ns.example.org/role/friend"""
+
+        class LinkStub:
+            def __init__(self, friend):
+                self._friend = friend
+            def traverse(self):
+                return self._friend
+
+        class RelatableStub:
+            def __init__(self, role, friend):
+                self._role = role
+                self._friend = friend
+            def listLinks(self, role):
+                if role == self._role:
+                    return [LinkStub(self._friend)]
+                else:
+                    return []
+
+        action = RouteToRelationshipsAction(URIFriend, IEventA)
+        verifyObject(IRouteToRelationshipsAction, action)
+        self.assertEquals(action.role, URIFriend)
+        self.assertRaises(TypeError,
+                          RouteToRelationshipsAction, IEventA, URIFriend)
+
+        event = EventAStub()
+        friend = object()
+        target = RelatableStub(URIFriend, friend)
+        action.handle(event, target)
+        self.assertEquals(event.dispatched_to, [friend])
+
 
 class TestEventService(unittest.TestCase):
 

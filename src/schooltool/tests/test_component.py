@@ -26,7 +26,7 @@ import unittest
 from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import ISpecificURI, IRelatable
+from schooltool.interfaces import ISpecificURI, IRelatable, IQueryLinks
 
 __metaclass__ = type
 
@@ -247,9 +247,14 @@ class TestSpecificURI(unittest.TestCase):
 
 
 class Relatable:
-    implements(IRelatable)
+    implements(IRelatable, IQueryLinks)
+
     def __init__(self):
         self.__links__ = Set()
+
+    def listLinks(self, role):
+        return [link for link in self.__links__
+                     if link.role.extends(role, False)]
 
 class URISuperior(ISpecificURI): """http://army.gov/ns/superior"""
 class URIReport(ISpecificURI): """http://army.gov/ns/report"""
@@ -274,6 +279,16 @@ class TestRelate(unittest.TestCase):
             self.assert_(link.traverse() is b)
             self.assert_(link.role is role)
             self.assertEqual(link.title, "Command")
+
+    def test_getRelationships(self):
+        from schooltool.component import getRelationships, relate
+        officer = Relatable()
+        soldier = Relatable()
+        self.assertEqual(list(getRelationships(officer, URIReport)), [])
+
+        relate("Command", officer, URISuperior, soldier, URIReport)
+        self.assertEqual(list(getRelationships(officer, URIReport)), [soldier])
+        self.assertEqual(list(getRelationships(officer, URISuperior)), [])
 
 
 def test_suite():

@@ -223,6 +223,7 @@ class IQueryLinks(Interface):
     """An interface for querying a collection of links for those that
     meet certain conditions.
     """
+
     def listLinks(role=ISpecificURI):
         """Return all the links matching a specified role.
 
@@ -252,6 +253,15 @@ class IRelationshipAPI(Interface):
         Returns a two-tuple of:
           * The link traversable from the officer, role is URIMyReport
           * The link traversable from the soldier, role is URIMySuperior
+        """
+
+    def getRelationships(obj, role):
+        """Return a sequence of object's relationships with a given role.
+
+        Calling getRelationships(obj, role) is equivalent to the following
+        list comprehension::
+
+            [link.traverse() for link in obj.listLinks(role)]
         """
 
 
@@ -431,12 +441,24 @@ class ILookupAction(IEventAction):
         """Sequence of event table rows, each implementing IEventAction""")
 
 
+class IRouteToRelationshipsAction(IEventAction):
+    """Event action that routes this event to relationships of this object."""
+
+    role = Attribute("""Role of the relationship""")
+
+
 class IRouteToMembersAction(IEventAction):
-    """Event action that routes this event to members of this object."""
+    """Event action that routes this event to members of this object.
+
+    This is equivalent to IRouteToRelationshipsAction with role URIMember.
+    """
 
 
 class IRouteToGroupsAction(IEventAction):
-    """Event action that routes this event to groups of this object."""
+    """Event action that routes this event to groups of this object.
+
+    This is equivalent to IRouteToRelationshipsAction with role URIGroup.
+    """
 
 
 #
