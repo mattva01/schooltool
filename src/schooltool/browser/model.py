@@ -173,13 +173,10 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
 
     def _allObjects(self, path):
         """Return a sorted list of application objects."""
-        try:
-            objects = traverse(self.context, path)
-            result = [(obj.title, obj) for obj in objects.itervalues()]
-            result.sort()
-            return objects.itervalues()
-        except KeyError:
-            return None
+        objects = traverse(self.context, path)
+        result = [(obj.title, obj) for obj in objects.itervalues()]
+        result.sort()
+        return objects.itervalues()
 
     def allGroups(self):
         return self._allObjects('/groups')
@@ -191,7 +188,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
         return self._allObjects('/resources')
 
     def listedResource(self, obj):
-        if obj in getRelatedObjects(self.request.authenticated_user, 
+        if obj in getRelatedObjects(self.request.authenticated_user,
                                     URICalendarListed):
             return 'selected'
         return False
@@ -199,7 +196,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
     def disabledResource(self, obj):
         """Users' own calendar and parent groups are always available.
 
-        Use this to disable they're selection.
+        Use this to disable their selection.
         """
 
         if obj in self.getParentGroups() or obj == self.context:
@@ -216,24 +213,27 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
             # Create Listing relationships between the objects and user
             if 'people' in request.args:
                 for person in request.args['people']:
-                    object = traverse(self.context, 
-                                      '/persons/' + person)
+                    # XXX may raise TraversalError or UnicodeError
+                    object = traverse(self.context,
+                                      '/persons/' + to_unicode(person))
                     relate(URICalendarListing,
                             (self.context, URICalendarListor),
                             (object, URICalendarListed))
 
             if 'groups' in request.args:
                 for group in request.args['groups']:
-                    object = traverse(self.context, 
-                                      '/groups/' + group)
+                    # XXX may raise TraversalError or UnicodeError
+                    object = traverse(self.context,
+                                      '/groups/' + to_unicode(group))
                     relate(URICalendarListing,
                             (self.context, URICalendarListor),
                             (object, URICalendarListed))
 
             if 'resources' in request.args:
                 for resource in request.args['resources']:
-                    object = traverse(self.context, 
-                                      '/resources/' + resource)
+                    # XXX may raise TraversalError or UnicodeError
+                    object = traverse(self.context,
+                                      '/resources/' + to_unicode(resource))
                     relate(URICalendarListing,
                             (self.context, URICalendarListor),
                             (object, URICalendarListed))
@@ -244,8 +244,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
                                            URICalendarProvider):
             if group is providing:
                 return "checked"
-        else:
-            return None
+        return None
 
     def getDynamicFacets(self):
         service = getDynamicFacetSchemaService(self.context)
