@@ -517,11 +517,17 @@ class CheckboxWidget(Widget):
 
     implements(IWidget)
 
+    def _checked_html(self):
+        if self.value:
+            return ' checked="checked"'
+        else:
+            return ''
+
     def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <input %(css_class)s type="checkbox" name="%(name)s"'
-                ' id="%(name)s" %(tabindex)s/>\n'
+                ' id="%(name)s" %(tabindex)s %(checked)s/>\n'
                 '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
@@ -530,4 +536,5 @@ class CheckboxWidget(Widget):
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'unit': self._unit_html(),
-                            'error': self._error_html()})
+                            'error': self._error_html(),
+                            'checked': self._checked_html()})

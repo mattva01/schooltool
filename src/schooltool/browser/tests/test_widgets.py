@@ -437,7 +437,7 @@ class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
 
     def test_call(self):
         widget = self.createWidget()
-        widget.setValue(u'a')
+        widget.setValue(False)
         expected = """
             <div class="row">
               <label for="field">Label</label>
@@ -448,15 +448,16 @@ class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
 
     def test_call_with_everything(self):
         widget = self.createWidget()
-        widget.error = u"An error!"
         widget.unit = u"(blah blah blah)"
         widget.css_class = u"extra"
         widget.tabindex = 11
+        widget.setValue(True)
+        widget.error = u"An error!"
         expected = """
             <div class="row row_error">
               <label for="field">Label</label>
               <input type="checkbox" class="extra"
-                     id="field" name="field" tabindex="11" />
+                     id="field" name="field" tabindex="11" checked="checked" />
               <span class="unit">(blah blah blah)</span>
               <div class="error">An error!</div>
             </div>
