@@ -24,7 +24,7 @@ Overview
   used for the management of facets, but can be used for other things, of
   course.
 
-(Idea: make event interfaces be SpecificURIs perhaps.)
+(Idea: make event interfaces be SpecificURIs also perhaps.)
 
 Glossary
 --------
