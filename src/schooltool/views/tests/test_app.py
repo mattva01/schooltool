@@ -32,6 +32,16 @@ from schooltool.views.tests import RequestStub, UtilityStub, XPathTestContext
 __metaclass__ = type
 
 
+class LogStub:
+
+    message = None
+    level = None
+
+    def __call__(self, message, level='LOG'):
+        self.message = message
+        self.level = level
+
+
 class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
@@ -190,12 +200,19 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
                   body="<object xmlns='http://schooltool.org/ns/model/0.1'/>"):
         if view is None:
             view = self.view
+
+        view.log = LogStub()
+
         request = RequestStub("http://localhost:7001/groups" + suffix,
                               method=method, body=body)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
+        if suffix:
+            self.assertEquals(view.obj_path, '/groups' + suffix)
+        self.assertEquals(view.log.message,
+                          "Object created: " + view.obj_path)
         location = request.headers['location']
         base = "http://localhost:7001/groups/"
         self.assert_(location.startswith(base),
@@ -217,8 +234,10 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub("http://localhost:7001/groups", method="POST",
                               body='<element title="New Group">')
         self.view.authorization = lambda ctx, rq: True
+        self.view.log = LogStub()
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
+        self.assertEquals(self.view.log.message, None)
 
     def test_get_child(self, method="GET"):
         from schooltool.views.app import ApplicationObjectCreatorView

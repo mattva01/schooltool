@@ -130,6 +130,7 @@ class ApplicationObjectCreator:
             xpathctx.xpathFreeContext()
         obj = container.new(**kw)
         location = absoluteURL(request, obj)
+        self.obj_path = absolutePath(request, obj)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)
@@ -159,7 +160,10 @@ class ApplicationObjectContainerView(TraversableView,
             return ApplicationObjectCreatorView(self.context, name)
 
     def do_POST(self, request):
-        return self.create(request, self.context)
+        msg = self.create(request, self.context)
+        if request.code == 201:
+            self.log('Object created: %s' % self.obj_path)
+        return msg
 
 
 class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
@@ -175,7 +179,10 @@ class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
     do_DELETE = staticmethod(notFoundPage)
 
     def do_PUT(self, request):
-        return self.create(request, self.context, self.name)
+        msg = self.create(request, self.context, self.name)
+        if request.code == 201:
+            self.log('Object created: %s' % self.obj_path)
+        return msg
 
 
 class AvailabilityQueryView(View):
