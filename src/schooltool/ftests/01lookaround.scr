@@ -159,28 +159,28 @@ Content-Type: text/html; charset=UTF-8
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li><a href="webcal://localhost:8080/groups/cleaners/calendar">
+    <li><a href="http://localhost:8080/groups/cleaners/calendar">
         Cleaners</a></li>
-    <li><a href="webcal://localhost:8080/groups/root/calendar">
+    <li><a href="http://localhost:8080/groups/root/calendar">
         Root Group</a></li>
-    <li><a href="webcal://localhost:8080/groups/students/calendar">
+    <li><a href="http://localhost:8080/groups/students/calendar">
         Students</a></li>
-    <li><a href="webcal://localhost:8080/groups/teachers/calendar">
+    <li><a href="http://localhost:8080/groups/teachers/calendar">
         Teachers</a></li>
   </ul>
   <h2>Persons</h2>
   <ul>
-    <li><a href="webcal://localhost:8080/persons/Aiste/calendar">
+    <li><a href="http://localhost:8080/persons/Aiste/calendar">
         Aiste</a></li>
-    <li><a href="webcal://localhost:8080/persons/Albert/calendar">
+    <li><a href="http://localhost:8080/persons/Albert/calendar">
         Albert</a></li>
-    <li><a href="webcal://localhost:8080/persons/anonymous/calendar">
+    <li><a href="http://localhost:8080/persons/anonymous/calendar">
         Anonymous</a></li>
-    <li><a href="webcal://localhost:8080/persons/Marius/calendar">
+    <li><a href="http://localhost:8080/persons/Marius/calendar">
         Marius</a></li>
-    <li><a href="webcal://localhost:8080/persons/Mark/calendar">
+    <li><a href="http://localhost:8080/persons/Mark/calendar">
         Mark</a></li>
-    <li><a href="webcal://localhost:8080/persons/Steve/calendar">
+    <li><a href="http://localhost:8080/persons/Steve/calendar">
         Steve</a></li>
   </ul>
 </body>
@@ -222,13 +222,15 @@ Content-Type: text/xml; charset=UTF-8
         xlink:href="/groups/cleaners"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
-                 xlink:href="root/relationships"/>
+                 xlink:href="/groups/root/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="root/facets"/>
-  <timetables xlink:href="root/timetables" xlink:title="Own timetables"
+          xlink:href="/groups/root/facets"/>
+  <timetables xlink:href="/groups/root/timetables" xlink:title="Own timetables"
               xlink:type="simple"/>
-  <compositeTimetables xlink:href="root/composite-timetables"
+  <compositeTimetables xlink:href="/groups/root/composite-timetables"
                        xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/groups/root/calendar" xlink:title="Calendar"
+            xlink:type="simple"/>
 </group>
 %% END XML
 
@@ -245,13 +247,15 @@ Content-Type: text/xml; charset=UTF-8
         xlink:href="/persons/Albert"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
-                 xlink:href="cleaners/relationships"/>
+                 xlink:href="/groups/cleaners/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="cleaners/facets"/>
-  <timetables xlink:href="cleaners/timetables" xlink:title="Own timetables"
-              xlink:type="simple"/>
-  <compositeTimetables xlink:href="cleaners/composite-timetables"
+          xlink:href="/groups/cleaners/facets"/>
+  <timetables xlink:href="/groups/cleaners/timetables"
+              xlink:title="Own timetables" xlink:type="simple"/>
+  <compositeTimetables xlink:href="/groups/cleaners/composite-timetables"
                        xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/groups/cleaners/calendar" xlink:title="Calendar"
+            xlink:type="simple"/>
 </group>
 %% END XML
 
@@ -381,13 +385,16 @@ Content-Type: text/xml; charset=UTF-8
   </groups>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
-                 xlink:href="Albert/relationships"/>
+                 xlink:href="/persons/Albert/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="Albert/facets"/>
-  <timetables xlink:href="Albert/timetables" xlink:title="Own timetables"
+          xlink:href="/persons/Albert/facets"/>
+  <timetables xlink:href="/persons/Albert/timetables"
+              xlink:title="Own timetables"
               xlink:type="simple"/>
-  <compositeTimetables xlink:href="Albert/composite-timetables"
+  <compositeTimetables xlink:href="/persons/Albert/composite-timetables"
                        xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/persons/Albert/calendar" xlink:title="Calendar"
+            xlink:type="simple"/>
 </person>
 %% END XML
 
@@ -442,13 +449,16 @@ Content-Type: text/xml; charset=UTF-8
   </groups>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
-                 xlink:href="Marius/relationships"/>
+                 xlink:href="/persons/Marius/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="Marius/facets"/>
-  <timetables xlink:href="Marius/timetables" xlink:title="Own timetables"
+          xlink:href="/persons/Marius/facets"/>
+  <timetables xlink:href="/persons/Marius/timetables"
+              xlink:title="Own timetables"
               xlink:type="simple"/>
-  <compositeTimetables xlink:href="Marius/composite-timetables"
+  <compositeTimetables xlink:href="/persons/Marius/composite-timetables"
                        xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/persons/Marius/calendar" xlink:title="Calendar"
+            xlink:type="simple"/>
 </person>
 %% END XML
 

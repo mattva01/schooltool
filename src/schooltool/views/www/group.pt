@@ -1,22 +1,16 @@
 <group xmlns:xlink="http://www.w3.org/1999/xlink"
        xmlns:tal="http://xml.zope.org/namespaces/tal">
   <name tal:content="context/title">group</name>
-  <item tal:repeat="item view/listItems"
-      xlink:type="simple"
-      tal:attributes="xlink:href item/path;
-                      xlink:title item/title"
-    />
+  <item tal:repeat="item view/listItems" xlink:type="simple"
+      tal:attributes="xlink:href item/path; xlink:title item/title" />
   <relationships xlink:type="simple" xlink:title="Relationships"
-      tal:attributes="xlink:href string:${view/context/__name__}/relationships"
-      />
+      tal:attributes="xlink:href string:${view/path}/relationships" />
   <facets xlink:type="simple" xlink:title="Facets"
-      tal:attributes="xlink:href string:${view/context/__name__}/facets"
-      />
+      tal:attributes="xlink:href string:${view/path}/facets" />
   <timetables xlink:type="simple" xlink:title="Own timetables"
-      tal:attributes="xlink:href string:${view/context/__name__}/timetables"
-      />
+      tal:attributes="xlink:href string:${view/path}/timetables" />
   <compositeTimetables xlink:type="simple" xlink:title="Composite timetables"
-      tal:attributes="xlink:href
-                          string:${view/context/__name__}/composite-timetables"
-      />
+      tal:attributes="xlink:href string:${view/path}/composite-timetables" />
+  <calendar xlink:type="simple" xlink:title="Calendar"
+      tal:attributes="xlink:href string:${view/path}/calendar" />
 </group>

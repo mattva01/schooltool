@@ -40,19 +40,6 @@ SchoolTool server RESTive interface
   POST /persons/person_id/absences/id
     add a comment to an absence
 
-  GET /persons/person_id/timetables
-    shows the list of existing timetables
-  GET /persons/person_id/timetables/time_period/schema
-    shows the specific timetable
-  PUT /persons/person_id/timetables/time_period/schema
-    creates or replaces the specific timetable
-  DELETE /persons/person_id/timetables/time_period/schema
-    removes the specific timetable
-  GET /persons/person_id/composite-timetables
-    shows the list of existing composite timetables
-  GET /persons/person_id/composite-timetables/time_period/schema
-    shows the specific composite timetable
-
   GET ...object/facets
     lists all facets for an object and all available facet factories
   POST ...object/facets
@@ -79,6 +66,24 @@ SchoolTool server RESTive interface
   DELETE ...object/relationships/link_id
     remove the relationship
 
+  GET ...object/timetables
+    shows the list of existing timetables
+  GET ...object/timetables/time_period/schema
+    shows the specific timetable
+  PUT ...object/timetables/time_period/schema
+    creates or replaces the specific timetable
+  DELETE ...object/timetables/time_period/schema
+    removes the specific timetable
+  GET ...object/composite-timetables
+    shows the list of existing composite timetables
+  GET ...object/composite-timetables/time_period/schema
+    shows the specific composite timetable
+
+  GET ...object/calendar
+    shows the person's or group's calendar (in iCalendar format)
+  PUT ...object/calendar
+    uploads the person's or group's calendar (in iCalendar format)
+
   GET /utils
     lists all utilities
 
@@ -101,8 +106,10 @@ SchoolTool server RESTive interface
 
   GET /time-periods
     lists all defined time periods
+  GET /time-periods/period_name
+    shows the schooldays model for a given time period
   PUT /time-periods/period_name
-    creates or updates time period named 'period_name'
+    creates or updates the schooldays model for a given time period
   DELETE /time-periods/period_name
     deletes the time period named 'period_name'
 
@@ -112,6 +119,8 @@ SchoolTool server RESTive interface
     shows the specific school timetable
   PUT /schooltt/timetables/time_period/schema
     creates or replaces the specific school timetable
+  DELETE /schooltt/timetables/time_period/schema
+    deletes the timetable schema
 
 In the above '...object' stands for a full path to an application object (i.e.
 a group or a person), for example '/persons/some_person_id'.

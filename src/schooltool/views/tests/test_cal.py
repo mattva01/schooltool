@@ -475,16 +475,16 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
               <h1>Calendars</h1>
               <h2>Groups</h2>
               <ul>
-                <li><a href="webcal://localhost:8080/groups/students/calendar">
+                <li><a href="http://localhost:8080/groups/students/calendar">
                     Students</a></li>
-                <li><a href="webcal://localhost:8080/groups/teachers/calendar">
+                <li><a href="http://localhost:8080/groups/teachers/calendar">
                     Teachers</a></li>
               </ul>
               <h2>Persons</h2>
               <ul>
-                <li><a href="webcal://localhost:8080/persons/john/calendar">
+                <li><a href="http://localhost:8080/persons/john/calendar">
                     John</a></li>
-                <li><a href="webcal://localhost:8080/persons/smith/calendar">
+                <li><a href="http://localhost:8080/persons/smith/calendar">
                     Smith</a></li>
               </ul>
             </body>

@@ -55,6 +55,9 @@ moduleProvides(IModuleSetup)
 class ApplicationObjectTraverserView(View):
     """A view that supports traversing to facets and relationships etc."""
 
+    def path(self):
+        return getPath(self.context)
+
     def _traverse(self, name, request):
         if name == 'facets':
             return FacetManagementView(FacetManager(self.context))

@@ -209,7 +209,7 @@ class AllCalendarsView(View):
                  for item in self.context[name].itervalues()]
         items.sort()
         return [{'title': title,
-                 'href': absoluteURL(self.request, path, 'webcal'),
+                 'href': absoluteURL(self.request, path),
                 } for title, path in items]
 
 

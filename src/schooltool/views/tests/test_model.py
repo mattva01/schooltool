@@ -146,15 +146,17 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               </groups>
               <relationships xlink:type="simple"
                              xlink:title="Relationships"
-                             xlink:href="p/relationships"/>
+                             xlink:href="/persons/p/relationships"/>
               <facets xlink:type="simple" xlink:title="Facets"
-                      xlink:href="p/facets"/>
-              <timetables xlink:href="p/timetables"
+                      xlink:href="/persons/p/facets"/>
+              <timetables xlink:href="/persons/p/timetables"
                           xlink:title="Own timetables"
                           xlink:type="simple"/>
-              <compositeTimetables xlink:href="p/composite-timetables"
+              <compositeTimetables xlink:href="/persons/p/composite-timetables"
                                    xlink:title="Composite timetables"
                                    xlink:type="simple"/>
+              <calendar xlink:type="simple" xlink:title="Calendar"
+                        xlink:href="/persons/p/calendar"/>
             </person>
             """, recursively_sort=['groups'])
 
@@ -198,15 +200,18 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               <item xlink:type="simple" xlink:title="subgroup"
                     xlink:href="%s"/>
               <facets xlink:type="simple" xlink:title="Facets"
-                      xlink:href="root/facets"/>
+                      xlink:href="/groups/root/facets"/>
               <relationships xlink:type="simple" xlink:title="Relationships"
-                             xlink:href="root/relationships"/>
-              <timetables xlink:href="root/timetables"
+                             xlink:href="/groups/root/relationships"/>
+              <timetables xlink:href="/groups/root/timetables"
                           xlink:title="Own timetables"
                           xlink:type="simple"/>
-              <compositeTimetables xlink:href="root/composite-timetables"
-                                   xlink:title="Composite timetables"
-                                   xlink:type="simple"/>
+              <compositeTimetables
+                    xlink:href="/groups/root/composite-timetables"
+                    xlink:title="Composite timetables"
+                    xlink:type="simple"/>
+              <calendar xlink:type="simple" xlink:title="Calendar"
+                        xlink:href="/groups/root/calendar"/>
             </group>
             """ % (getPath(self.per), getPath(self.sub)),
             recursively_sort=['group'])
