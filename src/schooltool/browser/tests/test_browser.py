@@ -286,6 +286,15 @@ class TestView(AppSetupMixin, unittest.TestCase):
         view.request = RequestStub(authenticated_user=self.manager)
         self.assert_(view.isTeacher())
 
+    def test_getBodyId(self):
+        view = self.createView()
+        view.request = RequestStub('/some/path')
+        self.assert_(view.getBodyId() == 'path-some-path')
+        view.request = RequestStub('/some/other/path?arg=val&arg2=val2')
+        self.assert_(view.getBodyId() == 'path-some-other-path')
+        view.request = RequestStub('/')
+        self.assert_(view.getBodyId() == 'path-login')
+
 
 class TestStaticFile(unittest.TestCase):
 
