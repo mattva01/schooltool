@@ -551,7 +551,10 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return getPath(obj)
 
     def _subscribeToCalendarProviders(self, providers):
-        """Link user to selected calendar."""
+        """Link user to CalendarProvider objects.
+
+        Providers are passed as a list of paths.
+        """
 
         # Unlink old calendar subscriptions.
         for link in \
@@ -569,7 +572,6 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         Fall back to the standard blue.
         """
         if IInheritedCalendarEvent.providedBy(event):
-##          raise NotImplementedError('XXX this code branch is not unit tested')
             path = getPath(event.calendar.__parent__)
             user = self.request.authenticated_user
             if user and path in user.cal_colors:
