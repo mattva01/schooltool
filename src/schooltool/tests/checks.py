@@ -57,22 +57,20 @@ class ComponentChecks:
             warn("%s changed timetable model registry" % test)
 
 
-# XXX doesn't work with ZODB 3.3
-# class TransactionChecks:
-# 
-#     def startTest(self, test):
-#         import zodb.ztransaction # calls transaction.set_factory
-#         from transaction import get_transaction
-#         txn = get_transaction()
-#         self.had_resources = bool(txn._resources)
-# 
-#     def stopTest(self, test):
-#         if self.had_resources:
-#             return
-#         from transaction import get_transaction
-#         txn = get_transaction()
-#         if txn._resources:
-#             warn("%s left an unclean transaction" % test)
+class TransactionChecks:
+
+    def startTest(self, test):
+        from transaction import get_transaction
+        txn = get_transaction()
+        self.had_resources = bool(txn._objects)
+
+    def stopTest(self, test):
+        if self.had_resources:
+            return
+        from transaction import get_transaction
+        txn = get_transaction()
+        if txn._objects:
+            warn("%s left an unclean transaction" % test)
 
 
 class StdoutWrapper:
@@ -156,6 +154,6 @@ def test_hooks():
     return [
         StdoutChecks(),     # should be the first one
         ComponentChecks(),
-        #TransactionChecks(), # XXX doesn't work with ZODB 3.3
+        TransactionChecks(),
         LibxmlChecks(),
     ]
