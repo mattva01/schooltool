@@ -273,9 +273,12 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.assertEqual(result, expected)
 
     def test_iCalRepresentation_weekly(self):
-        rule = self.createRule(weekdays=(0, 3, 5, 6))
-        self.assertEquals(rule.iCalRepresentation(None),
+        rule = self.createRule(weekdays=(0, 3, 6))
+        dtstart = datetime(2005, 01, 01, 12, 0) # saturday
+        self.assertEquals(rule.iCalRepresentation(dtstart),
                           ['RRULE:FREQ=WEEKLY;BYDAY=MO,TH,SA,SU;INTERVAL=1'])
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=WEEKLY;INTERVAL=1'])
 
 
 class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):

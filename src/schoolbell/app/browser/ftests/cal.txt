@@ -738,7 +738,8 @@ recurs on.  So, in the recurrence editing form, we must always
 consider the weekday of the first recurrence of the event to be on, by
 adding a hidden input field beside a disabled checkbox:
 
-Let's add an event on 2005-01-01 (Saturday):
+Let's add an event on 2005-01-01 (Saturday) that recurs on Tuesdays,
+too.  Notice we don't mark Saturday in the BYDAY list:
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -756,6 +757,7 @@ Let's add an event on 2005-01-01 (Saturday):
     ... DTSTART:20050101T100000
     ... DURATION:PT1H
     ... DTSTAMP:20050203T150000
+    ... RRULE:FREQ=WEEKLY;BYDAY=TU;INTERVAL=1
     ... END:VEVENT
     ... END:VCALENDAR
     ... """, handle_errors=False)
@@ -764,29 +766,15 @@ Let's add an event on 2005-01-01 (Saturday):
     Set-Cookie: ...
     <BLANKLINE>
 
-Now, let's see the edit form for it:
+Now, let's get this event and see its RRULE:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/important@event/edit.html HTTP/1.1
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
-             <!-- weekly box -->
-             <fieldset id="weekly_row">
-               <legend>Weekly</legend>
-               <p id="weekly_par">
-                 This section only applies when weekly recurrence is selected.
-               </p>
+    SUMMARY:Important event
+    RRULE:FREQ=WEEKLY;BYDAY=TU,SA;INTERVAL=1
     ...
-              <span>
-                <input type="checkbox"
-                       name="field.weekdays:list"
-                       disabled="disabled" checked="checked"
-                       id="weekday_5" value="5" />
-                <input type="hidden" name="field.weekdays:list"
-                       id="weekday_5_hidden" value="5" />
-                <label class="plain" for="weekday_5">Sat</label>
-              </span>
-    ...
-
