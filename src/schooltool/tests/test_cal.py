@@ -287,9 +287,18 @@ class TestTimetableDay(unittest.TestCase):
 
     def test_keys(self):
         from schooltool.cal import TimetableDay
+        from schooltool.interfaces import ITimetableActivity
+
         periods = ('1', '2', '3', '4', '5')
         td = TimetableDay(periods)
-        self.assertEqual(td.keys(), list(periods))
+        self.assertEqual(td.keys(), [])
+        class ActivityStub:
+            implements(ITimetableActivity)
+        td["5"] = ActivityStub()
+        td["1"] = ActivityStub()
+        td["3"] = ActivityStub()
+        td["2"] = ActivityStub()
+        self.assertEqual(td.keys(), ['1', '2', '3', '5'])
 
     def test_getitem_setitem_items_delitem(self):
         from schooltool.cal import TimetableDay
@@ -297,8 +306,8 @@ class TestTimetableDay(unittest.TestCase):
 
         periods = ('1', '2', '3', '4')
         td = TimetableDay(periods)
-        self.assertEqual(td["1"], None)
         self.assertRaises(KeyError, td.__getitem__, "Mo")
+        self.assertRaises(KeyError, td.__getitem__, "1")
 
         class ActivityStub:
             implements(ITimetableActivity)
@@ -318,7 +327,7 @@ class TestTimetableDay(unittest.TestCase):
 
         self.assertEqual(td["2"], english)
         del td["2"]
-        self.assertEqual(td["2"], None)
+        self.assertRaises(KeyError, td.__getitem__, "2")
 
 
 class TestTimetableActivity(unittest.TestCase):

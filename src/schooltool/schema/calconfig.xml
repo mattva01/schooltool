@@ -1,23 +1,29 @@
 <ttconfig xmlns="http://schooltool.org/ns/ttconfig/0.1">
   <timetablemodel class="schooltool.cal.SequentialDaysTimetableModel" />
-  <!-- days>1A 2E 3A 4E</days -->
-  <!-- periods>P1 P2 P3 P4</periods -->
   <timetable>
     <day id="1A">
       <period id="P1">Science</period>
       <period id="P2">Mathematics</period>
+      <period id="P3">Beginning Spanish</period>
+      <period id="P4">English</period>
     </day>
     <day id="2E">
-      <period id="P1">Science</period>
-      <period id="P2">Mathematics</period>
+      <period id="P1">English</period>
+      <period id="P2">Social studies</period>
+      <period id="P3">Science</period>
+      <period id="P4">Music</period>
     </day>
     <day id="3A">
       <period id="P1">Science</period>
       <period id="P2">Mathematics</period>
+      <period id="P3">Beginning Spanish</period>
+      <period id="P4">Social studies</period>
     </day>
     <day id="4E">
-      <period id="P1">Science</period>
-      <period id="P2">Mathematics</period>
+      <period id="P1">English</period>
+      <period id="P2">Social studies</period>
+      <period id="P3">Mathematics</period>
+      <period id="P4">Music</period>
     </day>
   </timetable>
   <daytemplate id="Long">
@@ -30,7 +36,7 @@
     <period id="P4" tstart="12:45" duration="60" />
   </daytemplate>
   <daytemplate id="Short">
-    <used when="Wednesday Thursday" />
+    <used when="Wednesday"/>
     <!-- 24 h clock notation for tstart
          number of minutes for duration  -->
     <period id="P1" tstart="9:00" duration="50" />

@@ -1,0 +1,56 @@
+<ttconfig xmlns="http://schooltool.org/ns/ttconfig/0.1">
+  <timetablemodel class="schooltool.cal.WeeklyTimetableModel" />
+  <timetable>
+    <day id="Monday">
+      <period id="1">Science</period>
+      <period id="2">Mathematics</period>
+      <period id="3">Beginning Spanish</period>
+      <period id="4">English</period>
+      <period id="5">Physics</period>
+    </day>
+    <day id="Tuesday">
+      <period id="1">English</period>
+      <period id="2">History</period>
+      <period id="3">Chemistry</period>
+      <period id="4">Music</period>
+      <period id="5">History</period>
+    </day>
+    <day id="Wednesday">
+      <period id="1">Science</period>
+      <period id="2">Mathematics</period>
+      <period id="3">Russian</period>
+      <period id="4">History</period>
+    </day>
+    <day id="Thursday">
+      <period id="0">Ethics</period>
+      <period id="1">English</period>
+      <period id="2">Biology</period>
+      <period id="3">Mathematics</period>
+      <period id="4">Music</period>
+    </day>
+    <day id="Friday">
+      <period id="1">English</period>
+      <period id="2">Social studies</period>
+      <period id="3">Mathematics</period>
+      <period id="4">Lithuanian</period>
+      <period id="5">Lithuanian</period>
+    </day>
+  </timetable>
+  <daytemplate id="Normal">
+    <used when="default" />
+    <!-- 24 h clock notation for tstart
+         number of minutes for duration  -->
+    <period id="0" tstart="8:10" duration="45" />
+    <period id="1" tstart="9:00" duration="45" />
+    <period id="2" tstart="9:50" duration="45" />
+    <period id="3" tstart="10:45" duration="45" />
+    <period id="4" tstart="11:50" duration="45" />
+    <period id="5" tstart="12:50" duration="45" />
+    <period id="5" tstart="13:45" duration="45" />
+    <period id="5" tstart="14:35" duration="45" />
+  </daytemplate>
+  <schooldays first="2003-09-01" last="2003-11-30">
+    <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    <holiday date="2003-11-1">All saints</holiday>
+  </schooldays>
+</ttconfig>
