@@ -85,6 +85,12 @@ a.action:active {
   text-decoration: none
 }
 
+div.family-relationships a.action:link,
+div.family-relationships a.action:visited {
+  background: #b0b0b0;
+  font-size:smaller;
+}
+
 a.sitemap {
   display: block;
   padding: 6px 6px;
@@ -251,6 +257,7 @@ span.accountdisabled {
   color: red;
 }
 
+div.family-relationships,
 div.groups {
   background: #e2e2e2;
   border: 1px solid #b34848;
@@ -261,12 +268,18 @@ div.timetables {
   border: 1px solid #b34848;
 }
 
+div.family-relationships {
+  width:15em;
+}
+
+div.family-relationships,
 div.groups,
 div.timetables {
   padding: 1ex;
   margin: 1ex 1em;
 }
 
+div.family-relationships,
 div.groups,
 div.timetables {
   float: right;
@@ -274,6 +287,7 @@ div.timetables {
 
 form h3,
 div.form h3,
+div.family-relationships h3,
 div.groups h3,
 div.timetables h3 {
   color: black;
@@ -282,6 +296,7 @@ div.timetables h3 {
 }
 
 div.members p,
+div.family-relationships p,
 div.groups p,
 div.parentgroups p,
 div.timetables p,
