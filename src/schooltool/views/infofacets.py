@@ -96,7 +96,7 @@ class PersonInfoFacetView(FacetView):
                 return textErrorPage(request,
                             _("XML not valid according to schema"))
         except libxml2.parserError:
-            return textErrorPage(request, "Invalid XML")
+            return textErrorPage(request, _("Invalid XML"))
         doc = libxml2.parseDoc(xml)
         xpathctx = doc.xpathNewContext()
         try:

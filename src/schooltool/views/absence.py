@@ -379,8 +379,8 @@ class AbsenceView(View, AbsenceCommentParser):
         try:
             self.context.addComment(comment)
         except ValueError:
-            return textErrorPage(request,
-                    "Cannot reopen an absence when another one is not ended")
+            return textErrorPage(request, _("Cannot reopen an absence"
+                                            " when another one is not ended"))
         request.setHeader('Content-Type', 'text/plain')
         return _("Comment added")
 

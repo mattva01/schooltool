@@ -164,9 +164,8 @@ class TimetableReadWriteView(TimetableReadView):
         xml = request.content.read()
         try:
             if not validate_against_schema(self.schema, xml):
-                return textErrorPage(
-                    request,
-                    _("Timetable not valid according to schema"))
+                return textErrorPage( request,
+                            _("Timetable not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, _("Timetable not valid XML"))
         doc = libxml2.parseDoc(xml)
@@ -179,14 +178,13 @@ class TimetableReadWriteView(TimetableReadView):
 
             time_period_id, schema_id = self.key
             if time_period_id not in getTimePeriodService(self.timetabled):
-                return textErrorPage(request, _("Time period not defined: %s")
-                                     % time_period_id)
+                return textErrorPage(request,
+                            _("Time period not defined: %s") % time_period_id)
             try:
                 tt = getTimetableSchemaService(self.timetabled)[schema_id]
             except KeyError:
                 return textErrorPage(request,
-                                     _("Timetable schema not defined: %s")
-                                     % schema_id)
+                             _("Timetable schema not defined: %s") % schema_id)
             for day in xpathctx.xpathEval('/tt:timetable/tt:day'):
                 day_id = day.nsProp('id', None)
                 if day_id not in tt.keys():
@@ -198,8 +196,7 @@ class TimetableReadWriteView(TimetableReadView):
                     period_id = period.nsProp('id', None)
                     if period_id not in ttday.periods:
                         return textErrorPage(request,
-                                             _("Unknown period id: %r")
-                                             % period_id)
+                                     _("Unknown period id: %r") % period_id)
                     xpathctx.setContextNode(period)
                     for activity in xpathctx.xpathEval('tt:activity'):
                         title = activity.nsProp('title', None)
@@ -210,9 +207,8 @@ class TimetableReadWriteView(TimetableReadView):
                             try:
                                 res = traverse(self.timetabled, path)
                             except KeyError:
-                                return textErrorPage(
-                                    request,
-                                    _("Invalid path: %s") % path)
+                                return textErrorPage(request,
+                                            _("Invalid path: %s") % path)
                             resources.append(res)
                         ttday.add(period_id,
                                   TimetableActivity(title, self.timetabled,
@@ -321,7 +317,7 @@ class TimetableSchemaView(TimetableReadView):
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
-                                 _("Timetable not valid according to schema"))
+                             _("Timetable not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, _("Not valid XML"))
         doc = libxml2.parseDoc(xml)
@@ -366,9 +362,8 @@ class TimetableSchemaView(TimetableReadView):
                         try:
                             template_dict[self.dows.index(dow)] = day
                         except ValueError:
-                            return textErrorPage(
-                                request,
-                                _("Unrecognised day of week %r") % (dow,))
+                            return textErrorPage(request,
+                                        _("Unrecognised day of week %r") % dow)
             model = factory(day_ids, template_dict)
 
             if len(sets.Set(day_ids)) != len(day_ids):

@@ -70,9 +70,8 @@ class RelationshipsView(View):
 
         try:
             if not validate_against_schema(self.schema, body):
-                return textErrorPage(
-                    request,
-                    _("Document not valid according to schema"))
+                return textErrorPage(request,
+                            _("Document not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, _("Document not valid XML"))
 

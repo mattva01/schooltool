@@ -107,9 +107,9 @@ class ApplicationObjectCreator:
         try:
             if not validate_against_schema(self.schema, body):
                 return textErrorPage(request,
-                                     "Document not valid according to schema")
+                                 _("Document not valid according to schema"))
         except libxml2.parserError:
-            return textErrorPage(request, "Document not valid XML")
+            return textErrorPage(request, _("Document not valid XML"))
 
         doc = libxml2.parseDoc(body)
         xpathctx = doc.xpathNewContext()
