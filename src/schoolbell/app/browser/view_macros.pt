@@ -19,7 +19,7 @@
       <div class="logo">
         <img src="/@@/logo.png" alt="SchoolTool" i18n:attributes="alt" />
          <div metal:define-macro="logged_user" style="float: right">
-           <p i18n:translate="">User: 
+           <p i18n:translate="">User:
              <span tal:replace="request/principal/title">User</span>
            </p>
          </div>
@@ -48,10 +48,10 @@
     <div id="footer" i18n:translate="">
       <p>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
-        Supporting Social Innovation. 
+        Supporting Social Innovation.
       </p>
       <p>
-        SchoolTool&trade; is a Trademark 
+        SchoolTool&trade; is a Trademark
         of The Shuttleworth Foundation.
       </p>
     </div>
