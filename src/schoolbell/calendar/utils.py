@@ -266,20 +266,36 @@ def parse_timetz(s, tz=utc):
 
     If no timezone preference is given, default to UTC.
 
-        >>> parse_timetz('11:22:33')
-        datetime.time(11, 22, 33, tzinfo=<StaticTzInfo 'UTC'>)
+        >>> t1 = parse_timetz('11:22:33')
+        >>> t1.hour
+        11
+        >>> t1.minute
+        22
+        >>> t1.second
+        33
+        >>> t1.tzname()
+        'UTC'
 
-        >>> parse_timetz('11:22')
-        datetime.time(11, 22, tzinfo=<StaticTzInfo 'UTC'>)
+        >>> t2 = parse_timetz('11:22')
+        >>> t2.hour
+        11
+        >>> t2.minute
+        22
+        >>> t2.second
+        0
+        >>> t2.tzname()
+        'UTC'
+
+        >>> eastern = timezone('US/Eastern')
+        >>> teastern = parse_timetz('11:22', tz=eastern)
+        >>> teastern.tzname()
+        'EST'
 
         >>> parse_timetz('11:66')
         Traceback (most recent call last):
           ...
         ValueError: minute must be in 0..59
 
-        >>> d = parse_timetz('11:22', tz=utc)
-        >>> d.tzname()
-        'UTC'
 
     """
 
