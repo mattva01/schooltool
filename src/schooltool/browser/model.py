@@ -447,6 +447,8 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin,
             return ACLView(self.context.acl)
         elif name == 'calendar':
             return CalendarView(self.context.calendar)
+        elif name == 'calendar.ics':
+            return RestCalendarView(self.context.calendar)
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         raise KeyError(name)
@@ -728,6 +730,8 @@ class ResourceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
             return ACLView(self.context.acl)
         elif name == 'calendar':
             return CalendarView(self.context.calendar)
+        elif name == 'calendar.ics':
+            return RestCalendarView(self.context.calendar)
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         else:

@@ -687,6 +687,7 @@ class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
         from schooltool.browser.timetable import TimetableTraverseView
         from schooltool.browser.cal import CalendarView
         from schooltool.browser.acl import ACLView
+        from schooltool.rest.cal import CalendarView as RestCalendarView
         request = RequestStub()
         view = GroupView(self.group)
         self.assertTraverses(view, 'edit.html', GroupEditView, self.group)
@@ -698,6 +699,8 @@ class TestGroupView(SchoolToolSetup, TraversalTestMixin, NiceDiffsMixin):
                              ACLView, self.group.acl)
         self.assertTraverses(view, 'calendar',
                              CalendarView, self.group.calendar)
+        self.assertTraverses(view, 'calendar.ics',
+                             RestCalendarView, self.group.calendar)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.group)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
@@ -1322,6 +1325,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.timetable import TimetableTraverseView
         from schooltool.browser.cal import CalendarView
         from schooltool.browser.acl import ACLView
+        from schooltool.rest.cal import CalendarView as RestCalendarView
         resource = self.resource
         view = ResourceView(resource)
         self.assertTraverses(view, 'edit.html', ResourceEditView, resource)
@@ -1329,6 +1333,8 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'acl.html', ACLView, self.resource.acl)
         self.assertTraverses(view, 'calendar',
                              CalendarView, self.resource.calendar)
+        self.assertTraverses(view, 'calendar.ics',
+                             RestCalendarView, self.resource.calendar)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.resource)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
