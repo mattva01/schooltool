@@ -25,11 +25,12 @@ $Id$
 import unittest
 import datetime
 import sets
-from zope.interface import Interface, implements, directlyProvides
+from zope.interface import Interface, implements
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.interfaces import IUtility, IFacet, IContainmentRoot
+from schooltool.interfaces import ITraversable
 
 __metaclass__ = type
 
@@ -90,7 +91,17 @@ class FacetStub:
         self.owner = owner
 
 
-class ContainmentRoot:
+class TraversableStub:
+    implements(ITraversable)
+
+    def __init__(self, **kw):
+        self.children = kw
+
+    def traverse(self, name):
+        return self.children[name]
+
+
+class TraversableRoot(TraversableStub):
     implements(IContainmentRoot)
 
 
@@ -99,7 +110,7 @@ def setPath(obj, path, root=None):
     assert path.startswith('/')
     obj.__name__ = path[1:]
     if root is None:
-        obj.__parent__ = ContainmentRoot()
+        obj.__parent__ = TraversableRoot()
     else:
         assert IContainmentRoot.isImplementedBy(root)
         obj.__parent__ = root
@@ -113,6 +124,32 @@ class TestHelpers(unittest.TestCase):
         self.assertEquals(absoluteURL(request, '/moo/spoo'),
                           "http://localhost/moo/spoo")
         self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
+
+    def test_parse_datetime(self):
+        from schooltool.views import parse_datetime
+        dt = datetime.datetime
+        valid_dates = (
+            ("2000-01-01 00:00:00", dt(2000, 1, 1, 0, 0, 0, 0)),
+            ("2000-01-01T00:00:00", dt(2000, 1, 1, 0, 0, 0, 0)),
+            ("2005-12-23 11:22:33", dt(2005, 12, 23, 11, 22, 33)),
+            ("2005-12-23T11:22:33", dt(2005, 12, 23, 11, 22, 33)),
+        )
+        for s, d in valid_dates:
+            result = parse_datetime(s)
+            self.assertEquals(result, d,
+                              "parse_datetime(%r) returned %r" % (s, result))
+        invalid_dates = (
+            "2000/01/01",
+            "2100-02-29 00:00:00",
+            "2005-12-23 11:22:33 "
+        )
+        for s in invalid_dates:
+            try:
+                result = parse_datetime(s)
+            except ValueError:
+                pass
+            else:
+                self.fail("parse_datetime(%r) did not raise" % s)
 
 
 class TestTemplate(unittest.TestCase):
@@ -992,7 +1029,6 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import FacetManager
         from schooltool.model import Person
         from schooltool.debug import EventLogFacet, setUp
-        from schooltool.interfaces import IContainmentRoot
         setUp() # register a facet factory
 
         request = RequestStub("http://localhost/person/facets")
@@ -1135,6 +1171,77 @@ class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEqual(len(self.sub.listLinks()), 0)
 
 
+class TestAbsenceCommentParser(unittest.TestCase):
+
+    def test_parseComment(self):
+        from schooltool.interfaces import Unchanged
+        from schooltool.views import AbsenceCommentParser
+        john = object()
+        group = object()
+        persons = TraversableStub(john=john)
+        groups = TraversableStub(aa=group)
+        root = TraversableRoot(persons=persons, groups=groups)
+        parser = AbsenceCommentParser()
+        parser.context = root
+
+        # The very minimum
+        request = RequestStub(body="""
+                        text="Foo"
+                        reporter="/persons/john"
+                    """)
+        lower_limit = datetime.datetime.utcnow()
+        comment = parser.parseComment(request)
+        upper_limit = datetime.datetime.utcnow()
+        self.assertEquals(comment.text, "Foo")
+        self.assertEquals(comment.reporter, john)
+        self.assert_(lower_limit <= comment.datetime <= upper_limit)
+        self.assert_(comment.absent_from is None)
+        self.assert_(comment.resolution is Unchanged)
+        self.assert_(comment.expected_presence is Unchanged)
+
+        # Everything
+        request = RequestStub(body="""
+                        text="Foo"
+                        reporter="/persons/john"
+                        absent_from="/groups/aa"
+                        resolution="resolved"
+                        datetime="2004-04-04 04:04:04"
+                        expected_presence="2005-05-05 05:05:05"
+                    """)
+        comment = parser.parseComment(request)
+        self.assertEquals(comment.text, "Foo")
+        self.assertEquals(comment.reporter, john)
+        self.assertEquals(comment.absent_from, group)
+        self.assert_(comment.resolution)
+        self.assertEquals(comment.datetime,
+                          datetime.datetime(2004, 4, 4, 4, 4, 4))
+        self.assertEquals(comment.expected_presence,
+                          datetime.datetime(2005, 5, 5, 5, 5, 5))
+
+    def test_parseComment_errors(self):
+        from schooltool.views import AbsenceCommentParser
+        parser = AbsenceCommentParser()
+        parser.context = TraversableRoot(obj=object())
+        bad_requests = (
+            '',
+            'reporter="/obj"',
+            'text=""',
+            'text="" reporter="/does/not/exist"',
+            'text="" reporter="/obj" datetime="now"',
+            'text="" reporter="/obj" absent_from="/does/not/exist"',
+            'text="" reporter="/obj" resolution="mu"',
+            'text="" reporter="/obj" expected_presence="dunno"',
+        )
+        for body in bad_requests:
+            request = RequestStub(body=body)
+            try:
+                parser.parseComment(request)
+            except ValueError:
+                pass
+            else:
+                self.fail("did not raise ValueError for\n\t%s" % body)
+
+
 class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
 
     def test_traverse(self):
@@ -1181,30 +1288,55 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
 
-    def XXX_test_post(self):
+    def test_post(self):
         from schooltool.views import AbsenceManagementView
         from schooltool.model import Person
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
+        basepath = "/person/absences/"
+        baseurl = "http://localhost%s" % basepath
         view = AbsenceManagementView(context)
-        request = RequestStub("http://localhost/person/absences",
-                              method="POST")
+        request = RequestStub(baseurl[:-1], method="POST",
+                    body='text="Foo" reporter="."')
+
         result = view.render(request)
+
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        self.assertEquals(request.headers['Location'],
-                          "http://localhost/group/facets/001")
+        location = request.headers['Location']
+        self.assert_(location.startswith(baseurl),
+                     "%r.startswith(%r) failed" % (location, baseurl))
+        name = location[len(baseurl):]
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assert_("http://localhost/group/facets/001" in result)
-        self.assertEquals(len(list(context.iterFacets())), 1)
-        facet = context.facetByName('001')
-        self.assert_(facet.__class__ is EventLogFacet)
+        path = '%s%s' % (basepath, name)
+        self.assert_(path in result, '%r not in %r' % (path, result))
+        self.assertEquals(len(list(context.iterAbsences())), 1)
+        absence = context.getAbsence(name)
+        comment = absence.comments[0]
+        self.assertEquals(comment.text, "Foo")
+
+    def test_post_errors(self):
+        from schooltool.views import AbsenceManagementView
+        from schooltool.model import Person
+        context = Person()
+        setPath(context, '/person', root=self.serviceManager)
+        basepath = "/person/absences/"
+        baseurl = "http://localhost%s" % basepath
+        view = AbsenceManagementView(context)
+        request = RequestStub(baseurl[:-1], method="POST",
+                    body='')
+
+        result = view.render(request)
+
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Text attribute missing")
 
 
 class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
 
-    def test_get(self):
-        from schooltool.views import AbsenceView
+    def createAbsence(self):
         from schooltool.model import Person, Group, AbsenceComment
         reporter1 = Person()
         setPath(reporter1, '/reporter1')
@@ -1220,6 +1352,11 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
                 absent_from=group1, dt=datetime.datetime(2002, 2, 2),
                 expected_presence=datetime.datetime(2003, 03, 03),
                 resolution=True))
+        return absence
+
+    def test_get(self):
+        from schooltool.views import AbsenceView
+        absence = self.createAbsence()
         view = AbsenceView(absence)
         request = RequestStub("http://localhost/person/absences/001")
         result = view.render(request)
@@ -1241,6 +1378,59 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(result, expected, "\n" + diff(expected, result))
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
+
+    def test_post(self):
+        from schooltool.views import AbsenceView
+        absence = self.createAbsence()
+        view = AbsenceView(absence)
+        basepath = "/person/absences/001/"
+        baseurl = "http://localhost" + basepath
+        request = RequestStub(baseurl[:-1], method="POST",
+                    body='text="Foo" reporter="."')
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.reason, "OK")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Comment added")
+        comment = absence.comments[-1]
+        self.assertEquals(comment.text, "Foo")
+
+    def test_post_errors(self):
+        from schooltool.views import AbsenceView
+        absence = self.createAbsence()
+        self.assertEquals(len(absence.comments), 2)
+        basepath = "/person/absences/001/"
+        setPath(absence, basepath[:-1])
+        baseurl = "http://localhost" + basepath
+        request = RequestStub(baseurl[:-1], method="POST",
+                    body='text="Foo" reporter="/does/not/exist"')
+        view = AbsenceView(absence)
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Reporter not found: /does/not/exist")
+        self.assertEquals(len(absence.comments), 2)
+
+    def test_post_duplicate(self):
+        from schooltool.views import AbsenceView
+        from schooltool.model import AbsenceComment
+        absence = self.createAbsence()
+        absence.person.reportAbsence(AbsenceComment(None, ""))
+        self.assertEquals(len(absence.comments), 2)
+        basepath = "/person/absences/001/"
+        setPath(absence, basepath[:-1])
+        baseurl = "http://localhost" + basepath
+        request = RequestStub(baseurl[:-1], method="POST",
+                    body='text="Foo" reporter="." resolution="unresolved"')
+        view = AbsenceView(absence)
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.reason, "Bad request")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result,
+            "Cannot reopen an absence when another one is not resolved")
+        self.assertEquals(len(absence.comments), 2)
 
 
 def test_suite():
@@ -1264,6 +1454,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestLinkView))
     suite.addTest(unittest.makeSuite(TestAbsenceManagementView))
     suite.addTest(unittest.makeSuite(TestAbsenceView))
+    suite.addTest(unittest.makeSuite(TestAbsenceCommentParser))
     return suite
 
 if __name__ == '__main__':

@@ -23,6 +23,7 @@ $Id$
 """
 
 import re
+import datetime
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
@@ -36,6 +37,7 @@ from schooltool.component import getView, registerView, strURI, getURI
 from schooltool.component import FacetManager, iterFacetFactories
 from schooltool.component import getFacetFactory
 from schooltool.debug import IEventLog, IEventLogUtility, IEventLogFacet
+from schooltool.model import AbsenceComment
 
 __metaclass__ = type
 
@@ -51,6 +53,23 @@ def absoluteURL(request, path):
     if not path.startswith('/'):
         raise ValueError("Path must be absolute")
     return 'http://%s%s' % (request.getRequestHostname(), path)
+
+
+def parse_datetime(s):
+    """Parses ISO 8601 date/time values.
+
+    Only a small subset of ISO 8601 is accepted:
+
+      YYYY-MM-DD HH:MM:SS
+      YYYY-MM-DDTHH:MM:SS
+
+    Returns a datetime.datetime object without a time zone.
+    """
+    m = re.match("(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)$", s)
+    if not m:
+        raise ValueError("bad date/time value", s)
+    y, m, d, hh, mm, ss = map(int, m.groups())
+    return datetime.datetime(y, m, d, hh, mm, ss)
 
 
 #
@@ -584,7 +603,69 @@ class LinkView(View):
         return "Link removed"
 
 
-class AbsenceManagementView(View):
+class AbsenceCommentParser(XMLPseudoParser):
+
+    def parseComment(self, request):
+        """Parse and create an AbsenceComment from a given request body"""
+        body = request.content.read()
+
+        try:
+            text = self.extractKeyword(body, 'text')
+        except KeyError:
+            raise ValueError("Text attribute missing")
+
+        try:
+            reporter_path = self.extractKeyword(body, 'reporter')
+        except KeyError:
+            raise ValueError("Reporter attribute missing")
+        else:
+            try:
+                reporter = traverse(self.context, reporter_path)
+            except KeyError:
+                raise ValueError("Reporter not found: %s" % reporter_path)
+
+        try:
+            dt = self.extractKeyword(body, 'datetime')
+        except KeyError:
+            dt = None
+        else:
+            dt = parse_datetime(dt)
+
+        try:
+            absent_from_path = self.extractKeyword(body, 'absent_from')
+        except KeyError:
+            absent_from = None
+        else:
+            try:
+                absent_from = traverse(self.context, absent_from_path)
+            except KeyError:
+                raise ValueError("Object not found: %s" % reporter_path)
+
+        try:
+            resolution = self.extractKeyword(body, 'resolution')
+        except KeyError:
+            resolution = Unchanged
+        else:
+            d = {'resolved': True, 'unresolved': False}
+            if resolution not in d:
+                raise ValueError("Bad value for resolution", resolution)
+            resolution = d[resolution]
+
+        try:
+            expected_presence = self.extractKeyword(body, 'expected_presence')
+        except KeyError:
+            expected_presence = Unchanged
+        else:
+            expected_presence = parse_datetime(expected_presence)
+
+        comment = AbsenceComment(reporter, text, absent_from=absent_from,
+                                 dt=dt, resolution=resolution,
+                                 expected_presence=expected_presence)
+
+        return comment
+
+
+class AbsenceManagementView(View, AbsenceCommentParser):
 
     template = Template('www/absences.pt', content_type="text/xml")
 
@@ -600,10 +681,21 @@ class AbsenceManagementView(View):
                 for item in self.context.iterAbsences()]
 
     def do_POST(self, request):
-        pass
+        try:
+            comment = self.parseComment(request)
+        except ValueError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return str(e)
+        absence = self.context.reportAbsence(comment)
+        location = absoluteURL(request, getPath(absence))
+        request.setResponseCode(201, 'Created')
+        request.setHeader('Location', location)
+        request.setHeader('Content-Type', 'text/plain')
+        return "Absence created: %s" % getPath(absence)
 
 
-class AbsenceView(View):
+class AbsenceView(View, AbsenceCommentParser):
 
     template = Template('www/absence.pt', content_type="text/xml")
 
@@ -638,6 +730,22 @@ class AbsenceView(View):
              'expected_presence': format_presence(comment.expected_presence),
              'reporter_href': getPath(comment.reporter)}
             for comment in self.context.comments]
+
+    def do_POST(self, request):
+        try:
+            comment = self.parseComment(request)
+        except ValueError, e:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return str(e)
+        try:
+            self.context.addComment(comment)
+        except ValueError:
+            request.setResponseCode(400, 'Bad request')
+            request.setHeader('Content-Type', 'text/plain')
+            return "Cannot reopen an absence when another one is not resolved"
+        request.setHeader('Content-Type', 'text/plain')
+        return "Comment added"
 
 
 def setUp():
