@@ -39,9 +39,6 @@
     <p><a class="action" tal:attributes="href view/person_url"
           i18n:translate="">View your information page</a></p>
     <p><a class="action" i18n:translate=""
-          tal:attributes="href string:${view/person_url}/calendar.html"
-          >View your calendar</a></p>
-    <p><a class="action" i18n:translate=""
           tal:attributes="href string:${view/person_url}/password.html"
           >Change your password</a></p>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
@@ -58,10 +55,6 @@
     <p><a tal:attributes="href
                      string:${context/@@absolute_url}/timetable-calendar.ics"
           class="action" i18n:translate=""
-          >See your timetable calendar in an iCal client</a>
-    <p><a tal:attributes="href
-                     string:${context/@@absolute_url}/timetable-calendar.ics"
-          class="action"  i18n:translate=""
           >See your timetable calendar in an iCal client</a>
     <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
   </div>
