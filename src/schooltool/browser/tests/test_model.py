@@ -30,7 +30,7 @@ from schooltool.tests.utils import RegistriesSetupMixin
 __metaclass__ = type
 
 
-class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
+class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -59,11 +59,15 @@ class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.browser.model import PersonView, PhotoView
+        from schooltool.browser.model import PersonEditView
         view = PersonView(self.person)
+        # TODO: refactor to use assertTraverses
         photoview = view._traverse('photo.jpg', RequestStub())
         self.assert_(photoview.context is self.person)
         self.assert_(isinstance(photoview, PhotoView))
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+        editview = view._traverse('edit.html', RequestStub())
+        self.assert_(isinstance(editview, PersonEditView))
 
     def test_info(self):
         from schooltool.browser.model import PersonView
@@ -97,6 +101,42 @@ class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
         facet.photo = None
         markup = view.photo()
         self.assertEquals(markup, '<i>N/A</i>')
+
+
+class TestPersonEditView(unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.model import PersonEditView
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+
+        self.person = Person()
+        setPath(self.person, '/persons/somebody')
+        self.info = FacetManager(self.person).facetByName('person_info')
+        return PersonEditView(self.person)
+
+    def test_info(self):
+        from schooltool.browser.model import PersonEditView
+        from schooltool.model import Person
+        view = self.createView()
+        self.assert_(view.info() is self.info)
+
+    def test_post(self):
+        view = self.createView()
+        request = RequestStub(args={'first_name': u'I Changed',
+                                    'last_name': u'My Name Recently',
+                                    'comment': u'For various reasons.'})
+        view.do_POST(request)
+
+        self.assertEquals(self.info.first_name, u'I Changed')
+        self.assertEquals(self.info.last_name, u'My Name Recently')
+        self.assertEquals(self.info.comment, u'For various reasons.')
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/somebody')
+
+
 
 
 class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
@@ -180,7 +220,8 @@ class TestPhotoView(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestPersonInfo))
+    suite.addTest(unittest.makeSuite(TestPersonView))
+    suite.addTest(unittest.makeSuite(TestPersonEditView))
     suite.addTest(unittest.makeSuite(TestMembershipViewMixin))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     return suite

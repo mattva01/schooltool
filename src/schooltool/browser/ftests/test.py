@@ -94,7 +94,7 @@ class Browser(object):
             self._open(location)
 
 
-class TestWeb(unittest.TestCase):
+class TestLogin(unittest.TestCase):
 
     def test(self):
         browser = Browser()
@@ -108,9 +108,37 @@ class TestWeb(unittest.TestCase):
         self.assert_('Person info' in browser.content)
 
 
+class TestPersonEdit(unittest.TestCase):
+
+    def test(self):
+        browser = Browser()
+        browser.post('http://localhost:8814/',
+                     {'username': 'manager', 'password': 'schooltool'})
+        browser.go('http://localhost:8814/persons/manager/edit.html')
+        self.assert_('Edit person info' in browser.content)
+
+        browser.post('http://localhost:8814/persons/manager/edit.html',
+                     {'first_name': 'xyzzy', 'last_name': 'foobar',
+                      'comment': 'I can write!'})
+        self.assertEquals(browser.url, 'http://localhost:8814/persons/manager')
+        self.assert_('xyzzy' in browser.content)
+        self.assert_('foobar' in browser.content)
+        self.assert_('I can write!' in browser.content)
+
+        browser.go('http://localhost:8814/persons/manager/edit.html')
+        self.assert_('xyzzy' in browser.content)
+        self.assert_('foobar' in browser.content)
+        self.assert_('I can write!' in browser.content)
+
+        # Restore original person info
+        browser.post('http://localhost:8814/persons/manager/edit.html',
+                     {'first_name': 'Manager', 'last_name': '', 'comment': ''})
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestWeb))
+    suite.addTest(unittest.makeSuite(TestLogin))
+    suite.addTest(unittest.makeSuite(TestPersonEdit))
     return suite
 
 

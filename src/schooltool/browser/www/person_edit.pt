@@ -1,0 +1,47 @@
+<html metal:use-macro="view/macros/page">
+<head>
+  <title metal:fill-slot="title">Edit person info</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1">
+    Edit person info for <span tal:replace="context/title"/>
+  </h1>
+  <metal:block metal:fill-slot="content" tal:define="info view/info">
+
+  <form action="." method="POST" tal:attributes="action request/path">
+    <div class="row"><b>Username:</b>
+      <span tal:replace="python:context.__name__">not_doe</span>
+    </div>
+    <div class="row"><b>Title:</b>
+      <span tal:replace="context/title">John, but not Doe</span>
+    </div>
+    <div class="row">
+      <label for="first_name">First name</label>
+      <input id="first_name" name="first_name" type="text"
+             tal:attributes="value info/first_name" />
+    </div>
+    <div class="row">
+      <label for="last_name">Last name</label>
+      <input id="last_name" name="last_name" type="text"
+             tal:attributes="value info/last_name" />
+    </div>
+    <div class="row"><b>Date of birth:</b>
+      <span tal:replace="info/date_of_birth"></span>
+    </div>
+    <div class="row">
+      <label for="comment">Comment</label>
+      <input id="comment" name="comment" type="text" value="foo"
+             tal:attributes="value info/comment" />
+    </div>
+    <div class="row">
+      <b>Photo:</b>
+      <!-- <tal:block replace="structure view/photo" /> -->
+    </div>
+  <div class="buttons">
+    <input class="button" type="submit" value="Submit" />
+  </div>
+
+  </form>
+  </metal:block>
+</body>
+</html>
