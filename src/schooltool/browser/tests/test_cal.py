@@ -31,7 +31,6 @@ from datetime import datetime, date, time, timedelta
 
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
-from schooltool.tests.utils import NiceDiffsMixin
 from schooltool.tests.helpers import diff
 
 __metaclass__ = type
@@ -645,7 +644,7 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
-class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
+class TestMonthlyCalendarView(unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import MonthlyCalendarView
@@ -1021,10 +1020,14 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
 
         content = view.render(request)
         expected = ('<div class="calevent">\n'
-                    '  <h3>\n'
-                    '    <a href="delete_event.html?event_id=id">[X]</a>\n'
-                    '    <a href="edit_event.html?event_id=id">Main event</a>\n'
-                    '  </h3>\n'
+                    '  \n'
+                    '    <div class="dellink">\n'
+                    '      <a href="delete_event.html?event_id=id">[delete]</a>\n'
+                    '    </div>\n'
+                    '    <h3>\n'
+                    '      <a href="edit_event.html?event_id=id">Main event</a>\n'
+                    '    </h3>\n'
+                    '  \n'
                     '  \n'
                     '  12:01&ndash;13:01\n'
                     '</div>\n')
