@@ -26,24 +26,43 @@
       Hold down Ctrl or Shift to select multiple calendars.
     </p>
 
-    <fieldset>
+    <fieldset tal:define="persons view/persons">
       <legend i18n:translate="">People</legend>
-      <select multiple="multiple" id="people" name="people:list">
-        <option tal:repeat="person view/persons/sortby:title"
+      <p tal:condition="not:persons"
+         i18n:translate="">There are no persons in the system</p>
+      <select multiple="multiple" id="people" name="persons:list"
+              tal:condition="persons">
+        <option tal:repeat="person persons/sortby:title"
                 tal:attributes="value person/id;
                                 selected person/selected"
                 tal:content="person/title">Person</option>
       </select>
     </fieldset>
 
-    <fieldset>
+    <fieldset tal:define="groups view/groups">
       <legend i18n:translate="">Groups</legend>
-      TODO
+      <p tal:condition="not:groups"
+         i18n:translate="">There are no groups in the system</p>
+      <select multiple="multiple" id="groups" name="groups:list"
+              tal:condition="groups">
+        <option tal:repeat="group groups/sortby:title"
+                tal:attributes="value group/id;
+                                selected group/selected"
+                tal:content="group/title">Group</option>
+      </select>
     </fieldset>
 
-    <fieldset>
+    <fieldset tal:define="resources view/resources">
       <legend i18n:translate="">Resources</legend>
-      TODO
+      <p tal:condition="not:resources"
+         i18n:translate="">There are no resources in the system</p>
+      <select multiple="multiple" id="resources" name="resources:list"
+              tal:condition="resources">
+        <option tal:repeat="resource resources/sortby:title"
+                tal:attributes="value resource/id;
+                                selected resource/selected"
+                tal:content="resource/title">Resource</option>
+      </select>
     </fieldset>
 
     <div class="controls">

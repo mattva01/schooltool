@@ -166,13 +166,17 @@ def doctest_CalendarSelectionView():
 
     CalendarSelectionView is a view on IPerson
 
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.app import Person, Group, Resource
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolBellSite()
         >>> persons = app['persons']
+        >>> groups = app['groups']
+        >>> resources = app['resources']
         >>> fred = persons['fred'] = Person('fred', 'Fred F.')
         >>> eric = persons['eric'] = Person('eric', 'Eric Bjornsen')
         >>> igor = persons['igor'] = Person('igor', 'Igor')
+        >>> admins = groups['admins'] = Group('Administrators')
+        >>> car = resources['car'] = Resource('Company car')
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('fred', '', fred))
         >>> view = View(fred, request)
@@ -186,9 +190,23 @@ def doctest_CalendarSelectionView():
         ...
         <fieldset>
           <legend>People</legend>
-          <select multiple="multiple" id="people" name="people:list">
+          <select multiple="multiple" id="people" name="persons:list">
             <option value="eric">Eric Bjornsen</option>
             <option value="igor">Igor</option>
+          </select>
+        </fieldset>
+        <BLANKLINE>
+        <fieldset>
+          <legend>Groups</legend>
+          <select multiple="multiple" id="groups" name="groups:list">
+            <option value="admins">Administrators</option>
+          </select>
+        </fieldset>
+        <BLANKLINE>
+        <fieldset>
+          <legend>Resources</legend>
+          <select multiple="multiple" id="resources" name="resources:list">
+            <option value="car">Company car</option>
           </select>
         </fieldset>
         ...
@@ -201,7 +219,7 @@ def doctest_CalendarSelectionView():
         >>> print view()
         <BLANKLINE>
         ...
-          <select multiple="multiple" id="people" name="people:list">
+          <select multiple="multiple" id="people" name="persons:list">
             <option selected="selected" value="eric">Eric Bjornsen</option>
             <option value="igor">Igor</option>
           </select>
@@ -214,30 +232,36 @@ def doctest_CalendarSelectionView():
 
     We can submit that form
 
-        >>> request.form["people"] = [u"eric", u"igor"]
+        >>> request.form["persons"] = [u"eric", u"igor"]
+        >>> request.form["groups"] = [u"admins"]
+        >>> request.form["resources"] = [u"car"]
         >>> request.form["UPDATE_SUBMIT"] = u"Apply"
         >>> print view()
         <BLANKLINE>
         ...
-          <select multiple="multiple" id="people" name="people:list">
+          <select multiple="multiple" id="people" name="persons:list">
             <option selected="selected" value="eric">Eric Bjornsen</option>
             <option selected="selected" value="igor">Igor</option>
           </select>
         ...
 
-    We can see that igor's calendar was added to the list
+    We can see that the calendars we selected were added to the list
 
         >>> igor.calendar in fred.overlaid_calendars
+        True
+        >>> admins.calendar in fred.overlaid_calendars
+        True
+        >>> car.calendar in fred.overlaid_calendars
         True
 
     We can also remove calendars
 
-        >>> request.form["people"] = [u"igor"]
+        >>> request.form["persons"] = [u"igor"]
         >>> request.form["UPDATE_SUBMIT"] = u"Apply"
         >>> print view()
         <BLANKLINE>
         ...
-          <select multiple="multiple" id="people" name="people:list">
+          <select multiple="multiple" id="people" name="persons:list">
             <option value="eric">Eric Bjornsen</option>
             <option selected="selected" value="igor">Igor</option>
           </select>

@@ -39,6 +39,9 @@ from schoolbell.app.app import getSchoolBellApplication
 class CalendarOverlayView(BrowserView):
     """View for the calendar overlay portlet.
 
+    This view can be used with any context, but it gets rendered to an empty
+    string unless context is the calendar of the authenticated user.
+
     Note that this view contains a self-posting form and handles submits that
     contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
     """
@@ -129,29 +132,30 @@ class CalendarOverlayView(BrowserView):
 class CalendarSelectionView(BrowserView):
     """A view for calendar selection.
 
-    The context of this view is always the currently authenticated user
-    (otherwise we cannot check permissions).
+    This view can be used with any context, but always operates on the
+    currently authenticated user's list of overlayed calendars.
     """
-
-    __used_for__ = IPerson  # TODO: make this a view on ISchoolBellApplication
 
     error = None
     message = None
 
-    def persons(self):
-        """List all persons."""
+    def getCalendars(self, container):
+        """List all calendars from a given container."""
         user = IPerson(self.request.principal, None)
         if user is None:
             return []
         app = getSchoolBellApplication()
         # TODO: only show calendars that we can access
-        return [{'id': p.__name__,
-                 'title': p.title,
-                 'selected': p.calendar in user.overlaid_calendars,
-                 'person': p}
-                for p in app['persons'].values()
-                if p is not user]
-    persons = property(persons)
+        return [{'id': o.__name__,
+                 'title': o.title,
+                 'selected': o.calendar in user.overlaid_calendars,
+                 'calendar': o.calendar}
+                for o in app[container].values()
+                if o is not user]
+
+    persons = property(lambda self: self.getCalendars('persons'))
+    groups = property(lambda self: self.getCalendars('groups'))
+    resources = property(lambda self: self.getCalendars('resources'))
 
     def update(self):
         """Process forms."""
@@ -164,12 +168,13 @@ class CalendarSelectionView(BrowserView):
         if user is None:
             return
         if 'UPDATE_SUBMIT' in self.request:
-            selected = Set(self.request.form.get('people', []))
-            for person in self.persons:
-                if person['id'] in selected and not person['selected']:
-                    user.overlaid_calendars.add(person['person'].calendar)
-                elif person['id'] not in selected and person['selected']:
-                    user.overlaid_calendars.remove(person['person'].calendar)
+            for container in 'persons', 'groups', 'resources':
+                selected = Set(self.request.form.get(container, []))
+                for item in self.getCalendars(container):
+                    if item['id'] in selected and not item['selected']:
+                        user.overlaid_calendars.add(item['calendar'])
+                    elif item['id'] not in selected and item['selected']:
+                        user.overlaid_calendars.remove(item['calendar'])
             self.message = _('Saved changes.')
             nexturl = self.request.form.get('nexturl')
             if nexturl:
