@@ -351,101 +351,87 @@ def _parse_recurrence_monthly(args):
     return MonthlyRecurrenceRule(monthly=monthly)
 
 
-def parse_recurrence_rule(args, exdate=None):
-    """Parse iCalendar RRULE and EXDATE entries.
+def parse_recurrence_rule(value):
+    """Parse iCalendar RRULE entry.
 
     Returns the corresponding subclass of RecurrenceRule.
 
-    args is a mapping from attribute names in RRULE to their string values,
-    exdate is a string value of EXDATE, or None if EXDATE was not provided.
+    params is a mapping from attribute names in RRULE to their string values,
 
     A trivial example of a daily recurrence:
 
-    >>> parse_recurrence_rule({'FREQ': 'DAILY'})
+    >>> parse_recurrence_rule('FREQ=DAILY')
     DailyRecurrenceRule(1, None, None, ())
 
-    A slightly more complex example with an exception:
+    A slightly more complex example:
 
-    >>> parse_recurrence_rule({'FREQ': 'DAILY', 'INTERVAL': '5', 'COUNT': '7'},
-    ...                       '20041006T000000Z')
-    DailyRecurrenceRule(5, 7, None, (datetime.date(2004, 10, 6),))
+    >>> parse_recurrence_rule('FREQ=DAILY;INTERVAL=5;COUNT=7')
+    DailyRecurrenceRule(5, 7, None, ())
 
     An example that includes use of UNTIL:
 
-    >>> parse_recurrence_rule({'FREQ': 'DAILY', 'UNTIL': '20041008T000000Z'})
+    >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000Z')
     DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
-
-    You may specify multiple exceptions:
-    >>> rule = parse_recurrence_rule({'FREQ': 'DAILY'},
-    ...              '20041006T000000Z,20041008T000000Z,20041010T000000Z')
-    >>> len(rule.exceptions)
-    3
-    >>> rule.exceptions[0]
-    datetime.date(2004, 10, 6)
-    >>> rule.exceptions[1]
-    datetime.date(2004, 10, 8)
-    >>> rule.exceptions[2]
-    datetime.date(2004, 10, 10)
 
     Of course, other recurrence frequencies may be used:
 
-    >>> parse_recurrence_rule({'FREQ': 'WEEKLY', 'BYDAY': 'MO,WE,SU'})
+    >>> parse_recurrence_rule('FREQ=WEEKLY;BYDAY=MO,WE,SU')
     WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
-    >>> parse_recurrence_rule({'FREQ': 'MONTHLY'})
+    >>> parse_recurrence_rule('FREQ=MONTHLY')
     MonthlyRecurrenceRule(1, None, None, (), 'monthday')
-    >>> parse_recurrence_rule({'FREQ': 'YEARLY'})
+    >>> parse_recurrence_rule('FREQ=YEARLY')
     YearlyRecurrenceRule(1, None, None, ())
 
     You have to provide a valid recurrence frequency, or you will get an error:
 
-    >>> parse_recurrence_rule({})
+    >>> parse_recurrence_rule('')
     Traceback (most recent call last):
       ...
     ValueError: Invalid frequency of recurrence: None
-    >>> parse_recurrence_rule({'FREQ': 'bogus'})
+    >>> parse_recurrence_rule('FREQ=bogus')
     Traceback (most recent call last):
       ...
     ValueError: Invalid frequency of recurrence: 'bogus'
 
-    Unknown keys in args are ignored silently:
+    Unknown keys in params are ignored silently:
 
-    >>> parse_recurrence_rule({'FREQ': 'DAILY', 'WHATEVER': 'IGNORED'})
+    >>> parse_recurrence_rule('FREQ=DAILY;WHATEVER=IGNORED')
     DailyRecurrenceRule(1, None, None, ())
 
     """
     # XXX Circular import!
     from schooltool.cal import DailyRecurrenceRule, YearlyRecurrenceRule
 
-    # parse the list of exceptions
-    exceptions = []
-    if exdate is not None:
-        for dt in exdate.split(','):
-            exceptions.append(parse_date_time(dt).date())
+    # split up the given value into parameters
+    params = {}
+    if value:
+        for pair in value.split(';'):
+            k, v = pair.split('=', 1)
+            params[k] = v
 
     # parse common recurrency attributes
-    interval = int(args.pop('INTERVAL', '1'))
-    count = args.pop('COUNT', None)
+    interval = int(params.pop('INTERVAL', '1'))
+    count = params.pop('COUNT', None)
     if count is not None:
         count = int(count)
-    until = args.pop('UNTIL', None)
+    until = params.pop('UNTIL', None)
     if until is not None:
         until = parse_date_time(until)
 
     # instantiate the corresponding recurrence rule
-    freq = args.pop('FREQ', None)
+    freq = params.pop('FREQ', None)
     if freq == 'DAILY':
         rule = DailyRecurrenceRule()
     elif freq == 'WEEKLY':
-        rule = _parse_recurrence_weekly(args)
+        rule = _parse_recurrence_weekly(params)
     elif freq == 'MONTHLY':
-        rule = _parse_recurrence_monthly(args)
+        rule = _parse_recurrence_monthly(params)
     elif freq == 'YEARLY':
         rule = YearlyRecurrenceRule()
     else:
         raise ValueError('Invalid frequency of recurrence: %r' % freq)
 
-    return rule.replace(interval=interval, count=count, until=until,
-                        exceptions=exceptions)
+    return rule.replace(interval=interval, count=count, until=until)
 
 
 class Period:
@@ -529,6 +515,7 @@ class VEvent:
         'DURATION': parse_duration,
         'PERIOD': parse_period,
         'TEXT': parse_text,
+        'RECUR': parse_recurrence_rule,
     }
 
     singleton_properties = Set([
@@ -591,6 +578,7 @@ class VEvent:
           dtend             end of the event (not inclusive)
           duration          length of the event
           location          location of the event
+          rrule             recurrency rule
           rdates            a list of recurrence dates or periods
           exdates           a list of exception dates
         """
@@ -633,13 +621,18 @@ class VEvent:
 
         if self.dtstart > self.dtend:
             raise ICalParseError("Event start time should precede end time")
-        if self.all_day_event and self.dtstart == self.dtend:
+        elif self.all_day_event and self.dtstart == self.dtend:
             raise ICalParseError("Event start time should precede end time")
 
         self.rdates = self._extractListOfDates('RDATE', self.rdate_types,
                                                self.all_day_event)
         self.exdates = self._extractListOfDates('EXDATE', self.exdate_types,
                                                 self.all_day_event)
+
+        self.rrule = self.getOne('RRULE', None)
+        if self.rrule is not None and self.exdates is not None:
+            exceptions = [dt.date() for dt in self.exdates]
+            self.rrule = self.rrule.replace(exceptions=exceptions)
 
     def _extractListOfDates(self, key, accepted_types, all_day_event):
         """Parse a comma separated list of values.
@@ -725,7 +718,7 @@ class VEvent:
 
 
 class ICalReader:
-    """An object which reads in an iCal of public holidays and marks
+    """An object which reads in an iCalendar file of public holidays and marks
     them off the schoolday calendar.
 
     Short grammar of iCalendar files (RFC 2445 is the full spec):
