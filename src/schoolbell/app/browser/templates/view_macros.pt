@@ -1,13 +1,15 @@
 <metal:block define-macro="page" i18n:domain="schooltool">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
   <head>
-    <meta http-equiv="Content-Type"
-      content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="/@@/layout.css"/>
-    <link rel="stylesheet" type="text/css" href="/@@/style.css"/>
-    <script type="text/javascript" src="/@@/schoolbell.js">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="layout.css"
+          tal:attributes="href ++resource++layout.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"
+          tal:attributes="href ++resource++style.css"/>
+    <script type="text/javascript" href="schoolbell.js"
+            tal:attributes="href ++resource++schoolbell.js"/>
     </script>
     <metal:block define-slot="title">
       <title i18n:translate="">SchoolBell</title>
@@ -17,28 +19,32 @@
   <body>
     <div id="header">
       <div class="logo">
-        <img src="/@@/logo.png" alt="SchoolTool" i18n:attributes="alt" />
-         <div metal:define-macro="logged_user" style="float: right">
-           <p i18n:translate="">User:
-             <span tal:replace="request/principal/title">User</span>
-           </p>
-         </div>
+        <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
+             tal:attributes="src ++resource++logo.png"/>
+        <div metal:define-macro="logged_user" style="float: right">
+          <p i18n:translate="">User:
+            <span tal:replace="request/principal/title">User</span>
+          </p>
+        </div>
       </div>
       <div class="tools">
-        <table metal:define-macro="zmi_tabs"><tr>
+        <table metal:define-macro="zmi_tabs">
+        <tr>
           <td tal:repeat="view context/@@view_get_menu/zmi_views">
-          <a href="" tal:attributes="href view/action" tal:content="view/title"
-             i18n:translate="">label</a>
-          <tal:block condition="not: repeat/view/end">|</tal:block>
+            <a tal:attributes="href view/action"
+               tal:content="view/title" i18n:translate="">label</a>
+            <tal:block condition="not: repeat/view/end">|</tal:block>
           </td>
-         </tr></table>
+        </tr>
+        </table>
       </div>
     </div>
     <div id="columns">
       <metal:block define-slot="column-left">
         <div id="column-left">
           <div tal:replace="structure context/@@schoolbell_navigation" />
-          <div class="portlet" tal:condition="context/@@view_get_menu/schoolbell_actions">
+          <div class="portlet"
+               tal:condition="context/@@view_get_menu/schoolbell_actions">
             <h4>Actions</h4>
             <ul>
               <li tal:repeat="view context/@@view_get_menu/schoolbell_actions">
@@ -62,8 +68,7 @@
         Supporting Social Innovation.
       </p>
       <p>
-        SchoolTool&trade; is a Trademark
-        of The Shuttleworth Foundation.
+        SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
       </p>
     </div>
   </body>

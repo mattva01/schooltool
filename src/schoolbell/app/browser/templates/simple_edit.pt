@@ -1,33 +1,33 @@
 <tal:tag condition="view/update"/>
 <html metal:use-macro="context/@@standard_macros/view">
-  <body>
-  <div metal:fill-slot="body">
+<body>
+<div metal:fill-slot="body">
 
-  <div metal:define-macro="body">
+<div metal:define-macro="body">
 
-    <form action="." tal:attributes="action request/URL" method="post"
-          enctype="multipart/form-data" class="standalone">
+  <form action="." tal:attributes="action request/URL" method="post"
+        enctype="multipart/form-data" class="standalone">
 
-      <div metal:define-macro="formbody">
+    <div metal:define-macro="formbody">
 
-        <h3 tal:condition="view/label"
-            tal:content="view/label"
-            metal:define-slot="heading"
-            >Edit something</h3>
+      <h3 tal:condition="view/label"
+          tal:content="view/label"
+          metal:define-slot="heading"
+          >Edit something</h3>
 
-        <p tal:define="status view/update"
-           tal:condition="status"
-           tal:content="status" />
+      <p tal:define="status view/update"
+         tal:condition="status"
+         tal:content="status" />
 
-        <p tal:condition="view/errors" i18n:translate="">
-          There are <strong tal:content="python:len(view.errors)"
-                            i18n:name="num_errors">6</strong> input errors.
-        </p>
+      <p tal:condition="view/errors" i18n:translate="">
+        There are <strong tal:content="python:len(view.errors)"
+                          i18n:name="num_errors">6</strong> input errors.
+      </p>
 
-        <div metal:define-slot="extra_info" tal:replace="nothing">
-        </div>
+      <div metal:define-slot="extra_info" tal:replace="nothing">
+      </div>
 
-        <fieldset>
+      <fieldset>
         <div class="row"
              metal:define-slot="extra_top" tal:replace="nothing">
           <div class="label">Extra top</div>
@@ -44,25 +44,25 @@
           <div class="field"><input type="text" style="width:100%" /></div>
         </div>
         <div class="separator"></div>
-        </fieldset>
-      </div>
+      </fieldset>
+    </div>
 
-      <div class="controls">
-        <input type="submit" name="UPDATE_SUBMIT" value="Apply"
-            i18n:attributes="value submit-button" class="button-ok"/>
-        <input type="submit" name="CANCEL" value="Cancel"
-            i18n:attributes="value submit-button" class="button-cancel"/>
-      </div>
-      <div class="row" metal:define-slot="extra_buttons" tal:replace="nothing">
-      </div>
+    <div class="controls">
+      <input type="submit" name="UPDATE_SUBMIT" value="Apply"
+             i18n:attributes="value submit-button" class="button-ok"/>
+      <input type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value submit-button" class="button-cancel"/>
+    </div>
 
-      <div class="separator"></div>
+    <div class="row" metal:define-slot="extra_buttons" tal:replace="nothing">
+    </div>
 
-    </form>
+    <div class="separator"></div>
 
-  </div>
+  </form>
 
-  </div>
-  </body>
+</div>
 
+</div>
+</body>
 </html>

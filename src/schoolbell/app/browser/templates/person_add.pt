@@ -1,61 +1,58 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-  <head>
-    <title metal:fill-slot="title" i18n:translate="">Add person</title>
-  </head>
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Add person</title>
+</head>
+<body>
+<metal:nothing metal:fill-slot="h1" />
 
-  <body>
+<metal:block metal:fill-slot="body">
 
-    <metal:nothing metal:fill-slot="h1" />
+  <form class="standalone" method="POST" enctype="multipart/form-data"
+        tal:attributes="action request/URL">
+    <h3 i18n:translate="">Person Information</h3>
 
-    <metal:block metal:fill-slot="body">
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
 
-    <form class="standalone" method="POST" enctype="multipart/form-data"
-          tal:attributes="action request/URL">
-      <h3 i18n:translate="">Person Information</h3>
-      <div class="error"
-           tal:condition="view/error"
-           tal:content="view/error" />
-
-      <fieldset>
-        <div class="row" tal:define="widget nocall:view/title_widget">
-          <div metal:use-macro="context/@@form_macros/widget_row" />
-        </div>
-
-        <div class="row" tal:define="widget nocall:view/username_widget">
-          <div metal:use-macro="context/@@form_macros/widget_row" />
-        </div>
-
-        <div class="row" tal:define="widget nocall:view/password_widget">
-          <div metal:use-macro="context/@@form_macros/widget_row" />
-        </div>
-
-        <div class="row" tal:define="widget nocall:view/verify_password_widget">
-          <div metal:use-macro="context/@@form_macros/widget_row" />
-        </div>
-
-        <div class="row" tal:define="widget nocall:view/photo_widget">
-          <div metal:use-macro="context/@@form_macros/widget_row" />
-        </div>
-      </fieldset>
-
-      <fieldset tal:define="groups view/getGroupList">
-        <legend i18n:translate="">Add to groups</legend>
-        <div tal:repeat="group groups/sortby:title">
-          <label>
-            <input type="checkbox"
-                   tal:attributes="name string:group.${group/__name__};
-                      checked python:('group.' + group.__name__) in request" />
-            <span tal:replace="group/title" />
-          </label>
-        </div>
-      </fieldset>
-
-      <div class="controls">
-        <input class="button-ok" type="submit" name="UPDATE_SUBMIT" value="Add"
-               i18n:attributes="value" />
+    <fieldset>
+      <div class="row" tal:define="widget nocall:view/title_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
-    </form>
-    </metal:block>
-  </body>
+
+      <div class="row" tal:define="widget nocall:view/username_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/password_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/verify_password_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+      <div class="row" tal:define="widget nocall:view/photo_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+    </fieldset>
+
+    <fieldset tal:define="groups view/getGroupList" tal:condition="groups">
+      <legend i18n:translate="">Add to groups</legend>
+      <div tal:repeat="group groups/sortby:title">
+        <label>
+          <input type="checkbox"
+                 tal:define="name  string:group.${group/__name__}"
+                 tal:attributes="name name; checked python: name in request" />
+          <span tal:replace="group/title">Title</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="controls">
+      <input class="button-ok" type="submit" name="UPDATE_SUBMIT" value="Add"
+             i18n:attributes="value" />
+    </div>
+  </form>
+</metal:block>
+</body>
 </html>

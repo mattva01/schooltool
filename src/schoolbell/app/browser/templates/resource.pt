@@ -3,30 +3,31 @@
   <title metal:fill-slot="title" i18n:translate="">Resource info</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="">
-    Resource info
-  </h1>
-  <metal:block metal:fill-slot="body">
+<h1 metal:fill-slot="h1" i18n:translate="">Resource info</h1>
+<metal:block metal:fill-slot="body">
 
-    <div class="row"><b i18n:translate="">Identifier:</b>
-      <span tal:replace="python:context.__name__">res123</span>
-    </div>
-    <div class="row"><b i18n:translate="">Title:</b>
-      <span tal:replace="context/title">Resource title</span>
-    </div>
+  <div class="row">
+    <strong i18n:translate="">Identifier:</strong>
+    <span tal:replace="context/zope:name">res123</span>
+  </div>
+  <div class="row">
+    <strong i18n:translate="">Title:</strong>
+    <span tal:replace="context/title">Resource title</span>
+  </div>
 
-    <div class="groups" tal:define="groups context/groups/sortby:title">
-      <h3 i18n:translate="">Groups</h3>
-      <ul>
-        <li tal:repeat="group groups">
-          <a tal:attributes="href group/@@absolute_url"
-             tal:content="group/title"></a>
-        </li>
-      </ul>
-      <div tal:condition="not:groups">
-        This resource does not belong to any groups.
-      </div>
+  <div class="groups" tal:define="groups context/groups">
+    <h3 i18n:translate="">Groups</h3>
+    <ul>
+      <li tal:repeat="group groups/sortby:title">
+        <a tal:attributes="href group/@@absolute_url"
+           tal:content="group/title">Title</a>
+      </li>
+    </ul>
+    <div tal:condition="not:groups" i18n:translate="">
+      This resource does not belong to any groups.
     </div>
-  </metal:block>
+  </div>
+
+</metal:block>
 </body>
 </html>
