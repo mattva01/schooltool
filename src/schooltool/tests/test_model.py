@@ -96,20 +96,42 @@ class TestPerson(unittest.TestCase):
         self.assert_(absence in person.iterAbsences())
         self.assert_(person.getCurrentAbsence() is absence)
 
-        comment2 = AbsenceComment(object(), "some text")
+        dt = datetime(2003, 10, 28)
+        comment2 = AbsenceComment(object(), "some text",
+                                  expected_presence_change=dt)
         absence2 = person.addAbsence(comment2)
         self.assert_(absence2 is absence)
         self.assertEquals(absence.comments, [comment1, comment2])
+        self.assertEquals(absence.expected_presence, dt)
         self.assert_(person.getCurrentAbsence() is absence)
 
-        absence.resolved = True
+        comment3 = AbsenceComment(None, "resolved", resolution_change=True)
+        absence3 = person.addAbsence(comment3)
+        self.assert_(absence3 is absence)
+        self.assert_(absence.resolved)
         self.assert_(person.getCurrentAbsence() is None)
 
-        comment3 = AbsenceComment(object(), "some text")
-        absence3 = person.addAbsence(comment3)
-        self.assert_(absence3 is not absence)
-        self.assertEquals(absence3.comments, [comment3])
-        self.assert_(person.getCurrentAbsence() is absence3)
+        comment4 = AbsenceComment(object(), "some text")
+        absence4 = person.addAbsence(comment4)
+        self.assert_(absence4 is not absence)
+        self.assertEquals(absence4.comments, [comment4])
+        self.assert_(person.getCurrentAbsence() is absence4)
+
+        absence4.addComment(AbsenceComment(None, "", resolution_change=True))
+        self.assert_(person.getCurrentAbsence() is None)
+        absence4.addComment(AbsenceComment(None, "", resolution_change=True))
+        self.assert_(person.getCurrentAbsence() is None)
+        absence.addComment(AbsenceComment(None, "", resolution_change=False))
+        self.assert_(person.getCurrentAbsence() is absence)
+        absence.addComment(AbsenceComment(None, "", resolution_change=False))
+        self.assert_(person.getCurrentAbsence() is absence)
+        old_len = len(absence4.comments)
+        self.assertRaises(ValueError, absence4.addComment,
+                          AbsenceComment(None, "", resolution_change=False,
+                                         expected_presence_change=dt))
+        self.assertEquals(len(absence4.comments), old_len)
+        self.assert_(absence4.resolved)
+        self.assert_(absence4.expected_presence is None)
 
 
 class TestGroup(unittest.TestCase):
@@ -161,16 +183,23 @@ class TestAbsenteeism(unittest.TestCase):
         verifyObject(IAbsenceComment, comment1)
         self.assertEquals(comment1.reporter, reporter)
         self.assertEquals(comment1.text, text)
-        self.assertEquals(comment1.group, None)
+        self.assertEquals(comment1.absent_from, None)
         self.assert_(lower_limit <= comment1.datetime <= upper_limit)
+        self.assert_(comment1.resolution_change is None)
+        self.assert_(comment1.expected_presence_change is None)
 
         dt = datetime(2003, 10, 28)
+        dt2 = datetime(2003, 10, 29, 9, 0)
         group = object()
-        comment2 = AbsenceComment(reporter, text, dt=dt, group=group)
+        comment2 = AbsenceComment(reporter, text, dt=dt, absent_from=group,
+                                  resolution_change=True,
+                                  expected_presence_change=dt2)
         self.assertEquals(comment2.reporter, reporter)
         self.assertEquals(comment2.text, text)
-        self.assertEquals(comment2.group, group)
+        self.assertEquals(comment2.absent_from, group)
         self.assertEquals(comment2.datetime, dt)
+        self.assertEquals(comment2.resolution_change, True)
+        self.assertEquals(comment2.expected_presence_change, dt2)
 
         absence.addComment(comment1)
         self.assertEquals(absence.comments, [comment1])
@@ -183,9 +212,10 @@ class TestAbsenteeism(unittest.TestCase):
         self.assertEquals(absence.comments, [comment1, comment2])
         self.assert_(absence._p_changed)
 
-        event = AbsenteeismEvent(absence)
+        event = AbsenteeismEvent(absence, comment1)
         verifyObject(IAbsenteeismEvent, event)
         self.assert_(event.absence is absence)
+        self.assert_(event.comment is comment1)
 
 
 def test_suite():

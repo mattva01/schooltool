@@ -781,8 +781,8 @@ class IAbsence(ILocation):
     The __parent__ of an absence is its person.  The absence can be
     located in IPersons.absences by its __name__.
 
-    You can assign True to the resolved attribute, but once it is done,
-    you must not assign False to it.
+    All attributes are read-only.  They can be changed by adding new
+    comments, therefore the list of comments also double as an audit log.
     """
 
     person = Attribute("""Person that was absent""")
@@ -792,7 +792,12 @@ class IAbsence(ILocation):
         """Date and time after which the person is expected to be present""")
 
     def addComment(comment):
-        """Add a comment."""
+        """Add a comment.
+
+        Sends out an IAbsenteeismEvent after the comment has been added.  The
+        event is sent to the person and all application objects that the person
+        was absent from.
+        """
 
 
 class IAbsenceComment(Interface):
@@ -800,13 +805,20 @@ class IAbsenceComment(Interface):
     datetime = Attribute("""Date and time of the comment""")
     reporter = Attribute("""Person that made this comment""")
     text = Attribute("""Text of the comment""")
-    group = Attribute("""Group the person was absent from (can be None)""")
+    absent_from = Attribute(
+        """Application object (group or whatever) the person was absent
+        from (can be None)""")
+    resolution_change = Attribute(
+        """New value of resolution (True, False or None)""")
+    expected_presence_change = Attribute(
+        """New value of expected_presence (datetime or None)""")
 
 
 class IAbsenteeismEvent(IEvent):
-    """Event that gets sent out when an absence is recorded."""
+    """Event that gets sent out when an absence is recorded or updated."""
 
     absence = Attribute("""IAbsence""")
+    comment = Attribute("""IAbsenceComment that describes the change""")
 
 
 class IApplication(IContainmentRoot, IServiceManager, ITraversable):

@@ -107,6 +107,15 @@ class Absence(Persistent):
     def addComment(self, comment):
         if not IAbsenceComment.isImplementedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
+        if comment.resolution_change is not None:
+            if self.resolved and not comment.resolution_change:
+                if self.person.getCurrentAbsence() is not None:
+                    raise ValueError("Cannot reopen an absence when another"
+                                     " one is not resolved", self, comment)
+                self.person._current_absence = self
+            self.resolved = comment.resolution_change
+        if comment.expected_presence_change is not None:
+            self.expected_presence = comment.expected_presence_change
         self.comments.append(comment)
         self.comments = self.comments
 
@@ -115,22 +124,26 @@ class AbsenceComment:
 
     implements(IAbsenceComment)
 
-    def __init__(self, reporter, text, dt=None, group=None):
+    def __init__(self, reporter, text, dt=None, absent_from=None,
+                 expected_presence_change=None, resolution_change=None):
         if dt is None:
             dt = datetime.utcnow()
         self.reporter = reporter
         self.text = text
         self.datetime = dt
-        self.group = group
+        self.absent_from = absent_from
+        self.expected_presence_change = expected_presence_change
+        self.resolution_change = resolution_change
 
 
 class AbsenteeismEvent(EventMixin):
 
     implements(IAbsenteeismEvent)
 
-    def __init__(self, absence):
+    def __init__(self, absence, comment):
         EventMixin.__init__(self)
         self.absence = absence
+        self.comment = comment
 
     def __str__(self):
         return "AbsenceEvent for %s" % self.absence
