@@ -467,10 +467,14 @@ class CalendarViewBase(BrowserView):
         my_events = []
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
-                if event.__parent__ is self.context and calendar is not self.context:
+                if (removeSecurityProxy(event.__parent__) is removeSecurityProxy(self.context) and
+                    calendar is not self.context):
                     # Skip resource booking events (coming from
                     # overlayed calendars) if they were booked by The
                     # person whose calendar we are viewing.
+                    # removeSecurityProxy(event.__parent__) and
+                    # removeSecurityProxy(self.context), needed so we
+                    # could compare them.
                     continue
                 yield EventForDisplay(event, color1, color2, calendar)
 
