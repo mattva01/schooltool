@@ -210,6 +210,7 @@ class CalendarTraverser(object):
         """
         return weeknum_bounds(year, week)[0]
 
+
 class CalendarOwnerHTTPTraverser(object):
     """A traverser that allows to traverse to a calendar owner's calendar.
 
