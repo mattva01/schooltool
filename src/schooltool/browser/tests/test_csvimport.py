@@ -442,7 +442,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 ""
                 "Monday","Tuesday"
                 "","A","B","C"
-                "Inside","Math1 Curtin","","Math1 Curtin"
+                "Inside","Math1|Curtin","","Math1|Curtin"
                 """)
         imp.importTimetable(csv)
         group = imp.findByTitle(self.app['groups'], 'Math1 - Curtin')
@@ -460,13 +460,13 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 ""
                 "Monday","Tuesday"
                 "","A","B","C"
-                "Inside","Math1 Curtin","Math2 Guzman","Math3 Curtin"
-                "Outside","English1 Lorch","English2 Lorch","English3 Lorch"
+                "Inside","Math1|Curtin","Math2|Guzman","Math3|Curtin"
+                "Outside","English1|Lorch","English2|Lorch","English3|Lorch"
 
                 "Wednesday"
                 "","A","B","C"
-                "Outside","Math1 Curtin","Math3 Guzman","Math2 Curtin"
-                "Inside","English3 Lorch","English2 Lorch","English1 Lorch"
+                "Outside","Math1|Curtin","Math3|Guzman","Math2|Curtin"
+                "Inside","English3|Lorch","English2|Lorch","English1|Lorch"
                 """)
         imp.importTimetable(csv)
 
@@ -548,9 +548,11 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
         for row, expected in [
                  ([], []),
-                 (["Math Whiz", "Comp Geek"],
+                 (["Math|Whiz", "Comp|Geek"],
                   [("Math", "Whiz"), ("Comp", "Geek")]),
-                 (["Biology Nut", "", "Chemistry Nerd"],
+                 (["Math |  Long  Name  ", " Comp|Geek "],
+                  [("Math", "Long  Name"), ("Comp", "Geek")]),
+                 ([" Biology|Nut", "", "Chemistry|Nerd"],
                   [("Biology", "Nut"), None, ("Chemistry", "Nerd")])]:
             self.assertEquals(imp.parseRecordRow(row), expected)
 

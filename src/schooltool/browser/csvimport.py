@@ -366,14 +366,16 @@ class TimetableCSVImporter:
         records is a list of strings.  If a string is empty, the result list
         contains None instead of a tuple in the corresponding place.
 
-        TODO: error handling
+        Raises ValueError if an invalid record is encountered.
         """
         result = []
         for record in records:
             if record:
-                # TODO: introduce a better separator than a space
-                record = record.split(" ", 1)
-                result.append(tuple(record))
+                parts = record.split("|", 1)
+                if len(parts) != 2:
+                    raise ValueError("Invalid record: %r" % record)
+                subject, teacher = parts[0].strip(), parts[1].strip()
+                result.append((subject, teacher))
             else:
                 result.append(None)
         return result
