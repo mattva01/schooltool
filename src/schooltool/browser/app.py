@@ -200,6 +200,7 @@ class ObjectAddView(View):
     error = u""
 
     title = _("Add object") # should be overridden by subclasses
+    redirect_to_edit = True
 
     def do_POST(self, request):
         name = request.args['name'][0]
@@ -214,7 +215,9 @@ class ObjectAddView(View):
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
-        url = absoluteURL(request, obj) + '/edit.html'
+        url = absoluteURL(request, obj)
+        if self.redirect_to_edit:
+            url += '/edit.html'
         return self.redirect(url, request)
 
 
@@ -226,7 +229,7 @@ class GroupAddView(ObjectAddView):
 class ResourceAddView(ObjectAddView):
 
     title = _("Add resource")
-    # XXX The user will be redirected to the nonexistent edit.html.
+    redirect_to_edit = False
 
 
 class ObjectContainerView(View):
