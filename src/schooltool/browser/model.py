@@ -592,6 +592,9 @@ class GuardianEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         # XXX This relationship should probably be created like the
         # member relationship (GroupEditView.createRelationship),
         # by calling SchemaInvocation.
+        # bs: looked at this tonight, unless I was doing something wrong
+        # there's a deeper issue with schooltool.guardian, this works but
+        # should be fixed after 0.9
         Guardian(custodian=self.context, ward=other)
 
 
@@ -1019,8 +1022,12 @@ class ResidenceMoveView(View, RelationshipViewMixin,
         ids = filter(None, request.args.get("tomove", []))
         for id in ids:
             path = "/persons/%s" % id
-            pobj = traverse(self.context, path)
-            # XXX traverse might raise TraversalError
+            try:
+                pobj = traverse(self.context, path)
+            except TraversalError:
+                # XXX: not sure what the correct response is
+                raise ValueError(_('No person %s' % id))
+
             try:
                 Occupies(residence=obj, resides=pobj)
                 for link in self.context.listLinks():
