@@ -380,9 +380,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
             </tr>
             <tr>
               <th>A</th>
-              <td>Maths</td>
+              <td>Maths (Room 1)</td>
               <th>C</th>
-              <td>CompSci</td>
+              <td>CompSci (CS Lab 1, CS Lab 2)</td>
             </tr>
             <tr>
               <th>B</th>

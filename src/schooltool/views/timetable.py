@@ -108,7 +108,15 @@ class TimetableReadView(View, TimetableContentNegotiation):
         rows = []
         for ncol, (id, day) in enumerate(self.context.items()):
             for nrow, (period, actiter) in enumerate(day.items()):
-                activities = [a.title for a in actiter]
+                activities = []
+                for a in actiter:
+                    resources = [r.title for r in a.resources]
+                    if resources:
+                        resources.sort()
+                        activities.append('%s (%s)'
+                                          % (a.title, ', '.join(resources)))
+                    else:
+                        activities.append(a.title)
                 activities.sort()
                 if nrow >= len(rows):
                     rows.append([{'period': '', 'activity': ''}] * ncol)
