@@ -102,9 +102,10 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/duration_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row">
-          <metal:block fill-slot="extra" i18n:translate="">minutes</metal:block>
-        </div>
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+      <div class="row" tal:define="widget nocall:view/duration_type_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/location_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />

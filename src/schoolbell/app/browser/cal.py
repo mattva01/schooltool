@@ -1013,6 +1013,14 @@ class ICalendarEventAddForm(Interface):
         required=False,
         default=60)
 
+    duration_type = Choice(
+        title=_("Duration Type"),
+        required=False,
+        default="minutes",
+        vocabulary=vocabulary([("minutes", _("Minutes")),
+                               ("hours", _("Hours")),
+                               ("days", _("Days"))]))
+
     location = TextLine(
         title=_("Location"),
         required=False)
@@ -1239,6 +1247,7 @@ class CalendarEventViewMixin(object):
                             "Invalid time")))
                 errors.append(self.start_time_widget._error)
         duration = kwargs.pop('duration', None)
+        duration_type = kwargs.pop('duration_type', 'minutes')
         location = kwargs.pop('location', None)
         description = kwargs.pop('description', None)
         recurrence = kwargs.pop('recurrence', None)
@@ -1272,7 +1281,8 @@ class CalendarEventViewMixin(object):
             raise WidgetsError(errors)
 
         start = datetime.combine(start_date, start_time)
-        duration = timedelta(minutes=duration)
+        dargs = {duration_type : duration}
+        duration = timedelta(**dargs)
 
         rrule = recurrence and makeRecurrenceRule(**kwargs) or None
         return {

@@ -317,9 +317,8 @@ Let's enter some invalid values:
     <div class="error"><span class="error">Invalid datetime data</span></div>
     ...
     <input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500h"  />
-       minutes
     </div>
-    <div class="error"><span class="error">Invalid integer data</span></div>
+      <div class="error"><span class="error">Invalid integer data</span></div>
     ...
 
 If we cancel the form - we should be redirected to the day "date" tells us:

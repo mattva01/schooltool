@@ -59,13 +59,13 @@ We should see the note now:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-              <div id="notes">
-      <h5>Notes</h5>
+    ...<div id="notes">
+    ...<h5>Notes</h5>
     <BLANKLINE>
-        <div class="note">
-          <h6>My Note</h6>
-          <p>This is the note</p>
-        </div>
+    ...<div class="note">
+    ...<h6>My Note</h6>
+    ...<p>This is the note</p>
+    ...</div>
     <BLANKLINE>
     </div>
     ...
