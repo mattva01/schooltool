@@ -1181,9 +1181,10 @@ class ICalendarEvent(Interface):
         recurrent.
         """)
 
-    def replace(dtstart=Unchanged, duration=Unchanged, title=Unchanged,
-                owner=Unchanged, context=Unchanged, location=Unchanged,
-                unique_id=Unchanged, recurrence=Unchanged):
+    replace_kw = Attribute(
+        """A sequence of keywords that can be passed to replace()""")
+
+    def replace(**kw):
         """Return a calendar event with new specified fields."""
 
     def __eq__(other): """See if self == other."""
@@ -1209,11 +1210,6 @@ class IExpandedCalendarEvent(ICalendarEvent):
 
         None if this event is not a recurrence of another event.
         """)
-
-    def replace(dtstart=Unchanged, duration=Unchanged, title=Unchanged,
-                owner=Unchanged, context=Unchanged, location=Unchanged,
-                unique_id=Unchanged, recurrence=Unchanged, original=Unchanged):
-        """Return a calendar event with new specified fields."""
 
 
 class ICalendarOwner(Interface):

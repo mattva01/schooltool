@@ -253,19 +253,23 @@ class CalendarEvent(Persistent):
             unique_id = email.Utils.make_msgid(more_uniqueness)[1:-1]
         self._unique_id = unique_id
 
-    def replace(self, dtstart=Unchanged, duration=Unchanged, title=Unchanged,
-                owner=Unchanged, context=Unchanged, location=Unchanged,
-                unique_id=Unchanged, recurrence=Unchanged):
-        if dtstart is Unchanged: dtstart = self.dtstart
-        if duration is Unchanged: duration = self.duration
-        if title is Unchanged: title = self.title
-        if owner is Unchanged: owner = self.owner
-        if context is Unchanged: context = self.context
-        if location is Unchanged: location = self.location
-        if unique_id is Unchanged: unique_id = self.unique_id
-        if recurrence is Unchanged: recurrence = self.recurrence
-        return self.__class__(dtstart, duration, title, owner, context,
-                              location, unique_id, recurrence)
+    replace_kw = ('dtstart', 'duration', 'title','owner', 'context',
+                  'location', 'unique_id', 'recurrence')
+
+    def replace(self,  **kw):
+        """Returns a copy of the event with some attrs changed.
+
+        replace_kw is a list of keywords that are passed to the constructor.
+        """
+
+        for k in self.replace_kw:
+            if k not in kw:
+                kw[k] = getattr(self, k)
+
+        dtstart = kw.pop('dtstart')
+        duration = kw.pop('duration')
+        title = kw.pop('title')
+        return self.__class__(dtstart, duration, title, **kw)
 
     def __tupleForComparison(self):
         return (self.dtstart, self.title, self.duration, self.owner,
@@ -340,21 +344,7 @@ class ExpandedCalendarEvent(CalendarEvent):
 
     duplicate = classmethod(duplicate)
 
-    def replace(self, dtstart=Unchanged, duration=Unchanged, title=Unchanged,
-                owner=Unchanged, context=Unchanged, location=Unchanged,
-                unique_id=Unchanged, recurrence=Unchanged, original=Unchanged):
-        result = CalendarEvent.replace(self, dtstart, duration, title,
-                                       owner, context, location, unique_id,
-                                       recurrence)
-        if original is Unchanged:
-            original = self.original
-
-        # Expanded events are not supposed to be persisted, and
-        # 'original' is not used in comparison, so I consider this
-        # acceptable -- alga
-
-        result.original = original
-        return result
+    replace_kw = CalendarEvent.replace_kw + ('original', )
 
 
 class ACLCalendar(Calendar):

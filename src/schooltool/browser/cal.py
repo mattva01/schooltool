@@ -897,9 +897,8 @@ class EventEditView(EventViewBase):
     def process(self, dtstart, duration, title, location):
         # TODO: check permissions -- only managers can edit timetable events
         uid = self.event.unique_id
-        ev = CalendarEvent(dtstart, duration, title,
-                           self.context.__parent__, self.context.__parent__,
-                           location=location, unique_id=uid)
+        ev = self.event.replace(dtstart=dtstart, duration=duration,
+                                title=title, location=location, unique_id=uid)
         if self.tt_event:
             self._addTimetableException(self.event, replacement=ev)
         else:

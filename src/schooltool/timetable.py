@@ -304,8 +304,7 @@ class TimetableCalendarEvent(CalendarEvent):
         self._activity = kwargs.pop('activity')
         CalendarEvent.__init__(self, *args, **kwargs)
 
-    def replace(self, *args, **kwargs):
-        raise NotImplementedError()
+    replace_kw = CalendarEvent.replace_kw + ('period_id', 'activity')
 
 
 class ExceptionalTTCalendarEvent(CalendarEvent):
@@ -322,9 +321,7 @@ class ExceptionalTTCalendarEvent(CalendarEvent):
 
         CalendarEvent.__init__(self, *args, **kwargs)
 
-    def replace(self, *args, **kwargs):
-        raise NotImplementedError()
-
+    replace_kw = CalendarEvent.replace_kw + ('exception', )
 
 class SchooldayPeriod:
 

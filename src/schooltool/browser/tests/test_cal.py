@@ -978,7 +978,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.ev1 = createEvent('2004-08-15 12:00', '1h', "ev1",
                                location="Hell")
         self.ev2 = createEvent('2004-08-12 13:00', '2h', "ev2",
-                               unique_id="pick me", location="Heaven")
+                               unique_id="pick me", location="Heaven",
+                               recurrence="often")
         self.person.calendar.addEvent(self.ev1)
         self.person.calendar.addEvent(self.ev2)
 
@@ -1032,6 +1033,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertEquals(new_ev.dtstart, datetime(2004, 8, 16, 13, 30))
         self.assertEquals(new_ev.duration, timedelta(minutes=70))
         self.assertEquals(new_ev.unique_id, "pick me")
+        self.assertEquals(new_ev.recurrence, "often")
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
