@@ -60,26 +60,17 @@ build-stamp: $(scripts)
 # Cleaning Rules
 #
 
-debdirclean:
-	#This rule is only meant to be called from the top level makefile
-	for i in $(libpkg) $(package) $(packageclients) $(libpkgclients) $(bellpackage);do\
-	    rm -rf debian/$$i;\
-	done
-	rm -f debian/*.substvars
-	rm -f debian/*.debhelper
+clean::
+	dh_testdir
+	dh_testroot
+	-$(MAKE) realclean
 	rm -f debian/import-sampleschool.py
 	rm -f debian/schooltool.py
 	rm -f debian/schoolbell.py
 	rm -f debian/schooltool-client.py
 	rm -f debian/import-sampleschool.py.template
-	rm -f debian/files
-	rm -f debian/po/templates.pot
-	rm -f build-stamp install-arch-stamp install-indep-stamp
-
-clean::
-	dh_testdir
-	dh_testroot
-	-$(MAKE) realclean
+	rm -f install-arch-stamp
+	rm -f install-indep-stamp
 	dh_clean
 	debconf-updatepo
 
@@ -90,7 +81,7 @@ clean::
 install: install-arch install-indep
 
 install-indep: install-indep-stamp
-install-indep-stamp:
+install-indep-stamp: $(scripts)
 	dh_testdir
 	dh_testroot
 	dh_clean -k -i
@@ -172,14 +163,14 @@ install-indep-stamp:
 	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
 	     $(clientfiles) \
 	     -exec install -m 644 -D -p {} \
-		../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
+		../debian/$(packageclients)/usr/lib/$(packageclients)/{} \;
 	cd Zope3/src && \
 	find \( -name 'tests' -o -name 'ftests' \) -prune -o \
 	     \( -name '*.py' -o -name '*.pt' -o -name '*.xml'\
 	        -o -name '*.rng' -o -name '*.png' -o -name '*.xpm' \) \
 	     $(clientfiles) \
 	     -exec install -m 644 -D -p {} \
-		../../debian/$(libpkgclients)/usr/lib/$(packageclients)/{} \;
+		../../debian/$(packageclients)/usr/lib/$(packageclients)/{} \;
 	# executables
 	for p in schooltool-client import-sampleschool; do \
 	    install -m 755 -D -p debian/$$p.py \
@@ -266,4 +257,4 @@ binary-arch: build install-arch
 
 binary: binary-arch binary-indep
 
-.PHONY: build clean binary-indep binary-arch binary install debdirclean
+.PHONY: build clean binary-indep binary-arch binary install

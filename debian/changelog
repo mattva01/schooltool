@@ -7,7 +7,7 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
   * Change password in debian readme back to schooltool. (Closes: Bug#283430)
   * Stop postinst scripts from adding blank lines to config files.
   * Remove un-needed build dependency on python2.3.
-  * Make debconf questions for interface setup more clear.
+  * Make debconf questions for interface setup clearer.
     (Closes: Bug#280698)
   * On first installation, set default locale from default system locale.
   * Change the section of libschooltool and libschooltool-clients to libs.
@@ -31,7 +31,10 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
     to one line. Thanks to a suggestion from Matthias Klose.
   * Temporarily patch rules to install zope modules from the zope tree because
     no zope3 package exists yet. Sigh! more lintian warnings, but it's
-    temporary and way too much effort to fix this.
+    temporary and way too much effort to fix these.
+  * General cleanup:
+    - Removed debdirclean makefile target called from top level directory.
+    - Removed dependency references to old schooltool-server package.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

@@ -43,7 +43,6 @@ clean:
 	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
-	[ ! -d debian ] || debian/rules debdirclean
 
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
@@ -96,7 +95,4 @@ edit-coverage-reports:
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
-deb:
-	dpkg-buildpackage -uc -b -rfakeroot
-
-.PHONY: all build clean test ftest run coverage sampleschool deb
+.PHONY: all build clean test ftest run coverage sampleschool
