@@ -633,6 +633,14 @@ class IMembershipEvent(IRelationshipEvent):
     member = Attribute("""The member""")
 
 
+class IBeforeMembershipEvent(IMembershipEvent):
+    """Event that gets sent out before the member is added to the group.
+
+    This event allows listeners to veto this relationship by raising
+    ValueError with an error message.
+    """
+
+
 class IMemberAddedEvent(IRelationshipAddedEvent, IMembershipEvent):
     """Event that gets sent out after a member has been added to a group."""
 

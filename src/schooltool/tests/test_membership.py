@@ -129,7 +129,7 @@ class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
 
 class TestEvents(unittest.TestCase):
 
-    def test_membership_events(self):
+    def testMembershipEvents(self):
         from schooltool.membership import MemberAddedEvent
         from schooltool.membership import MemberRemovedEvent
         from schooltool.interfaces import IMemberAddedEvent
@@ -175,6 +175,15 @@ class TestEvents(unittest.TestCase):
                  LinkStub(object(), URIGroup))
         self.assertRaises(TypeError, MemberAddedEvent, links)
 
+    def testBeforeMembershipEvent(self):
+        from schooltool.membership import BeforeMembershipEvent
+        from schooltool.interfaces import IBeforeMembershipEvent
+        group = Relatable()
+        member = Relatable()
+
+        event = BeforeMembershipEvent(group, member)
+        verifyObject(IBeforeMembershipEvent, event)
+
 
 class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
                            unittest.TestCase):
@@ -198,8 +207,10 @@ class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEquals(links['member'].traverse(), g2)
         self.assertEquals(links['group'].traverse(), g1)
         for events in g1.events, g2.events:
-            self.assertEquals(len(events), 1)
-            self.assertEquals(type(events[0]), membership.MemberAddedEvent)
+            self.assertEquals(len(events), 2)
+            self.assertEquals(type(events[0]),
+                              membership.BeforeMembershipEvent)
+            self.assertEquals(type(events[1]), membership.MemberAddedEvent)
 
         # g2 is already a member of g1
         self.assertRaises(ValueError, membership.Membership,
@@ -214,6 +225,18 @@ class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertRaises(ValueError, membership.Membership,
                           group=g3, member=g1)
 
+        # Check that event listeners can veto the membership by
+        # responding to IBeforeMembershipEvent
+        from schooltool.interfaces import IBeforeMembershipEvent
+        class VetoCaster(BasicRelatable):
+            def notify(self, event):
+                if IBeforeMembershipEvent.providedBy(event):
+                    raise ValueError("Veto!")
+
+        vetoer = VetoCaster(self.serviceManager)
+        self.assertRaises(ValueError, membership.Membership,
+                          group=vetoer, member=g1)
+
 
 class TestHelpers(AppSetupMixin, unittest.TestCase):
 
@@ -221,6 +244,60 @@ class TestHelpers(AppSetupMixin, unittest.TestCase):
         from schooltool.browser.timetable import memberOf
         self.assert_(memberOf(self.person, self.root))
         self.assert_(not memberOf(self.person, self.teachers))
+
+
+class TestRestictedMembershipPolicy(AppSetupMixin, unittest.TestCase):
+
+    def test(self):
+        from schooltool.membership import RestrictedMembershipPolicy
+        from schooltool.membership import BeforeMembershipEvent
+        from schooltool.membership import Membership
+        from schooltool.interfaces import IBeforeMembershipEvent
+        policy = RestrictedMembershipPolicy()
+        self.app.eventService.subscribe(policy, IBeforeMembershipEvent)
+
+        self.app.restrict_membership = True
+
+        Group = self.app['groups'].new
+        Person = self.app['persons'].new
+        Resource = self.app['resources'].new
+
+        parent2 = Group()
+        group = Group()
+        member1 = Person('member1')
+        member2 = Person('member2')
+        member3 = Person('member3')
+        resource = Resource('rrr')
+
+        # Can add groups with no worries
+        Membership(group=self.root, member=group)
+        Membership(group=self.root, member=parent2)
+        Membership(group=parent2, member=group)
+        Membership(group=parent2, member=Group())
+
+        # Can add persons to root
+        Membership(group=self.root, member=member1)
+        Membership(group=self.root, member=member3)
+        Membership(group=parent2, member=member3)
+
+        # member1 is in root
+        Membership(group=group, member=member1)
+
+        # member3 is in parent2
+        Membership(group=group, member=member3)
+
+        # member2 is not in root or parent2
+        self.assertRaises(ValueError, Membership, group=group, member=member2)
+
+        Membership(group=self.root, member=member2)
+        Membership(group=group, member=member2)
+
+        # can add resources
+        Membership(group=group, member=resource)
+
+        # if the option if off, I can add whatever I may well please
+        self.app.restrict_membership = False
+        Membership(group=group, member=Person())
 
 
 def test_suite():
@@ -231,6 +308,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEvents))
     suite.addTest(unittest.makeSuite(TestMembershipRelate))
     suite.addTest(unittest.makeSuite(TestHelpers))
+    suite.addTest(unittest.makeSuite(TestRestictedMembershipPolicy))
     return suite
 
 if __name__ == '__main__':

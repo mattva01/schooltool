@@ -31,7 +31,9 @@ from schooltool.event import EventService
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
+from schooltool.interfaces import IBeforeMembershipEvent
 from schooltool.membership import Membership
+from schooltool.membership import RestrictedMembershipPolicy
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
 from schooltool.translation import ugettext as _
 from schooltool.booking import TimetableResourceSynchronizer
@@ -169,6 +171,10 @@ def create_application():
                                ITimetableReplacedEvent)
     app.eventService.subscribe(timetable_resource_synchronizer,
                                ITimetableExceptionEvent)
+
+    restricted_membership_policy = RestrictedMembershipPolicy()
+    app.eventService.subscribe(restricted_membership_policy,
+                               IBeforeMembershipEvent)
 
     event_log = EventLogUtility()
     app.utilityService['eventlog'] = event_log

@@ -28,12 +28,17 @@ from schooltool.interfaces import IQueryLinks
 from schooltool.interfaces import IMembershipEvent
 from schooltool.interfaces import IMemberAddedEvent
 from schooltool.interfaces import IMemberRemovedEvent
+from schooltool.interfaces import IBeforeMembershipEvent
 from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import IEventTarget
+from schooltool.interfaces import IPerson
 from schooltool.uris import URIMembership, URIGroup, URIMember
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool import relationship
 from schooltool.component import registerRelationship
-from schooltool.component import getRelatedObjects
+from schooltool.component import getRelatedObjects, getOptions
+from schooltool.event import EventMixin
+from schooltool.translation import ugettext as _
 
 moduleProvides(IModuleSetup)
 
@@ -53,8 +58,7 @@ def checkForPotentialCycles(group, potential_member):
     last.add(group)
     while last:
         if potential_member in last:
-            raise ValueError('Group %r is a transitive member of %r' %
-                             (group, potential_member))
+            raise ValueError(_('Circular membership is not allowed.'))
         seen |= last
         new_last = Set()
         for obj in last:
@@ -97,6 +101,17 @@ class MemberRemovedEvent(MembershipEvent):
     implements(IMemberRemovedEvent)
 
 
+class BeforeMembershipEvent(EventMixin):
+
+    implements(IBeforeMembershipEvent)
+
+    def __init__(self, group, member):
+        EventMixin.__init__(self)
+        self.group = group
+        self.member = member
+        self.links = ()
+
+
 def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
     """See IRelationshipFactory"""
 
@@ -105,9 +120,11 @@ def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
     else:
         group, potential_member = b, a
     checkForPotentialCycles(group, potential_member)
+    before_event = BeforeMembershipEvent(group, potential_member)
+    before_event.dispatch(group)
+    before_event.dispatch(potential_member)
     if memberOf(potential_member, group):
-        raise ValueError('%r is already a member of %r'
-                         % (potential_member, group))
+        raise ValueError(_('Already a member'))
     links = relationship.relate(relationship_type,
                                 (a, role_a), (b, role_b))
     event = MemberAddedEvent(links)
@@ -119,6 +136,26 @@ def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
 def memberOf(member, group):
     """Is `member` a member of `group`?"""
     return group in getRelatedObjects(member, URIGroup)
+
+
+class RestrictedMembershipPolicy:
+    """Restricted membership policy"""
+
+    implements(IEventTarget)
+
+    def notify(self, event):
+        if (IBeforeMembershipEvent.providedBy(event) and
+            IPerson.providedBy(event.member) and
+            getOptions(event.group).restrict_membership):
+            parents =  getRelatedObjects(event.group, URIGroup)
+            if parents:
+                possible_members = Set()
+                for parent in parents:
+                    members = getRelatedObjects(parent, URIMember)
+                    possible_members.update(members)
+                if event.member not in possible_members:
+                    raise ValueError(_('Only immediate members of parent'
+                                       ' groups can be members'))
 
 
 def setUp():
