@@ -327,6 +327,11 @@ td.cal_monthly {
   border: 1px solid blue;
 }
 
+th.cal_monthly_weekday {
+  text-size: larger;
+  font-weight: bold;
+}
+
 p.event_weekly {
   font-size: smaller;
 }

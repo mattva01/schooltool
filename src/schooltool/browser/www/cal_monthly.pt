@@ -15,9 +15,12 @@
     <a tal:attributes="href string:${request/path}?date=${view/next}"
        i18n:translate="">Next month</a>
 
-    <table class="cal_monthly">
-    <!-- TODO: <th></th> weekday names -->
-    <tr tal:repeat="week view/getWeeks">
+    <table class="cal_monthly"
+           tal:define="weeks view/getWeeks">
+    <tr><th class="cal_monthly_weekday"
+            tal:repeat="weekday python:weeks[0]"
+            tal:content="python:weekday.strftime('%A')" /></tr>
+    <tr tal:repeat="week weeks">
       <!-- XXX not translatable -->
       <td class="cal_monthly"
           tal:content="python:'Week ' + week[0].strftime('%V')" />
