@@ -75,6 +75,7 @@ import types
 import getopt
 import unittest
 import traceback
+import linecache
 import pdb
 from sets import Set
 
@@ -325,6 +326,72 @@ def get_test_hooks(test_files, cfg, tracer=None):
     return results
 
 
+def extract_tb(tb, limit=None):
+    """Improved version of traceback.extract_tb.
+
+    Includes a dict with locals in every stack frame instead of the line.
+    """
+    list = []
+    while tb is not None and (limit is None or len(list) < limit):
+        frame = tb.tb_frame
+        code = frame.f_code
+        name = code.co_name
+        filename = code.co_filename
+        lineno = tb.tb_lineno
+        locals = frame.f_locals
+        list.append((filename, lineno, name, locals))
+        tb = tb.tb_next
+    return list
+
+def format_exception(etype, value, tb, limit=None, basedir=None):
+    """Improved version of traceback.format_exception.
+
+    Includes Zope-specific extra information in tracebacks.
+    """
+    list = []
+    if tb:
+        list = ['Traceback (most recent call last):\n']
+        w = list.append
+
+        def fn(filename):
+            if basedir and filename.startswith(basedir):
+                filename = filename[len(basedir)+1:]
+            return filename
+
+        for filename, lineno, name, locals in extract_tb(tb, limit):
+            w('  File "%s", line %s, in %s\n' % (fn(filename), lineno, name))
+            line = linecache.getline(filename, lineno)
+            if line:
+                w('    %s\n' % line.strip())
+            tb_info = locals.get('__traceback_info__')
+            if tb_info is not None:
+                w('  Extra information: %s\n' % repr(tb_info))
+            tb_supplement = locals.get('__traceback_supplement__')
+            if tb_supplement is not None:
+                tb_supplement = tb_supplement[0](*tb_supplement[1:])
+                # XXX these should be hookable
+                from zope.tales.tales import TALESTracebackSupplement
+                from zope.pagetemplate.pagetemplate \
+                        import PageTemplateTracebackSupplement
+                if isinstance(tb_supplement, PageTemplateTracebackSupplement):
+                    template = tb_supplement.manageable_object.pt_source_file()
+                    if template:
+                        w('  Template "%s"\n' % fn(template))
+                elif isinstance(tb_supplement, TALESTracebackSupplement):
+                    w('  Template "%s", line %s, column %s\n'
+                      % (fn(tb_supplement.source_url), tb_supplement.line,
+                         tb_supplement.column))
+                    line = linecache.getline(tb_supplement.source_url,
+                                             tb_supplement.line)
+                    if line:
+                        w('    %s\n' % line.strip())
+                    w('  Expression: %s\n' % tb_supplement.expression)
+                else:
+                    w('  __traceback_supplement__ = %r\n' % (tb_supplement, ))
+    list += traceback.format_exception_only(etype, value)
+    return list
+
+
 class CustomTestResult(unittest._TextTestResult):
     """Customised TestResult.
 
@@ -402,7 +469,7 @@ class CustomTestResult(unittest._TextTestResult):
         self.__super_printErrors()
 
     def formatError(self, err):
-        return "".join(traceback.format_exception(*err))
+        return "".join(format_exception(basedir=self.cfg.basedir, *err))
 
     def printTraceback(self, kind, test, err):
         self.stream.writeln()
