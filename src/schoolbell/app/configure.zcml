@@ -63,9 +63,7 @@
              set_schema="schoolbell.app.interfaces.IResource" />
   </content>
 
-  <!-- XXX This should probably live in schoolbell.calendar's
-           configure.zcml, and the permissions are too lax. -->
-  <content class="schoolbell.calendar.simple.SimpleCalendarEvent">
+  <content class="schoolbell.app.cal.CalendarEvent">
     <require permission="zope.View"
              interface="schoolbell.calendar.interfaces.ICalendarEvent" />
   </content>

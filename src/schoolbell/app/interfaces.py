@@ -43,7 +43,11 @@ from zope.schema import TextLine, Bytes, Object
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
-from schoolbell.calendar.interfaces import ICalendar
+from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
+
+
+class IContainedCalendarEvent(ICalendarEvent, IContained):
+    """An event that is contained in a calendar."""
 
 
 class ICalendarOwner(Interface):

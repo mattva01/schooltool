@@ -136,28 +136,28 @@ def doctest_CalendarDay():
 
 
 def createEvent(dtstart, duration, title, **kw):
-    """Create a SimpleCalendarEvent.
+    """Create a CalendarEvent.
 
-      >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+      >>> from schoolbell.app.cal import CalendarEvent
       >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'title')
-      >>> e1 == SimpleCalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
+      >>> e1 == CalendarEvent(datetime(2004, 1, 2, 14, 45, 50),
       ...                timedelta(minutes=5), 'title', unique_id=e1.unique_id)
       True
 
       >>> e2 = createEvent('2004-01-02 14:45', '3h', 'title')
-      >>> e2 == SimpleCalendarEvent(datetime(2004, 1, 2, 14, 45),
+      >>> e2 == CalendarEvent(datetime(2004, 1, 2, 14, 45),
       ...                timedelta(hours=3), 'title', unique_id=e2.unique_id)
       True
 
       >>> e3 = createEvent('2004-01-02', '2d', 'title')
-      >>> e3 == SimpleCalendarEvent(datetime(2004, 1, 2),
+      >>> e3 == CalendarEvent(datetime(2004, 1, 2),
       ...                timedelta(days=2), 'title', unique_id=e3.unique_id)
       True
 
     createEvent is very strict about the format of it arguments, and terse in
     error reporting, but it's OK, as it is only used in unit tests.
     """
-    from schoolbell.calendar.simple import SimpleCalendarEvent
+    from schoolbell.app.cal import CalendarEvent
     from schoolbell.calendar.utils import parse_datetime
     if dtstart.count(':') == 0:         # YYYY-MM-DD
         dtstart = parse_datetime(dtstart+' 00:00:00') # add hh:mm:ss
@@ -176,7 +176,7 @@ def createEvent(dtstart, duration, title, **kw):
             dur += timedelta(seconds=int(part.rstrip('sec')))
         else:
             dur += timedelta(minutes=int(part.rstrip('min')))
-    return SimpleCalendarEvent(dtstart, dur, title, **kw)
+    return CalendarEvent(dtstart, dur, title, **kw)
 
 
 class TestCalendarViewBase(unittest.TestCase):

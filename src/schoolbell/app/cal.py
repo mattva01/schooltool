@@ -25,9 +25,23 @@ from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.app.location.interfaces import ILocation
+from zope.app.container.contained import Contained
 
 from schoolbell.calendar.interfaces import IEditCalendar
 from schoolbell.calendar.mixins import CalendarMixin
+from schoolbell.calendar.simple import SimpleCalendarEvent
+from schoolbell.app.interfaces import IContainedCalendarEvent
+
+
+class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
+
+    implements(IContainedCalendarEvent)
+
+    __parent__ = None
+
+    def __init__(self, *args, **kwargs):
+        SimpleCalendarEvent.__init__(self, *args, **kwargs)
+        self.__name__ = self.unique_id
 
 
 class Calendar(Persistent, CalendarMixin):
@@ -51,9 +65,12 @@ class Calendar(Persistent, CalendarMixin):
         return len(self.events)
 
     def addEvent(self, event):
+        assert IContainedCalendarEvent.providedBy(event)
+        assert event.__parent__ is None, "Event already belongs to a calendar"
         if event.unique_id in self.events:
             raise ValueError('an event with this unique_id already exists')
         self.events[event.unique_id] = event
+        event.__parent__ = self
 
     def removeEvent(self, event):
         del self.events[event.unique_id]

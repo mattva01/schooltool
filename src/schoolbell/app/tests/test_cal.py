@@ -28,6 +28,45 @@ from zope.testing import doctest
 from zope.interface.verify import verifyObject
 
 
+def doctest_CalendarEvent():
+    r"""Tests for CalendarEvent.
+
+    CalendarEvents are almost like SimpleCalendarEvents, the main difference
+    is that CalendarEvents are mutable and IContained.
+
+        >>> from schoolbell.app.cal import CalendarEvent, Calendar
+        >>> from datetime import datetime, timedelta
+
+        >>> event = CalendarEvent(datetime(2005, 2, 7, 16, 24),
+        ...                       timedelta(hours=3),
+        ...                       "A sample event",
+        ...                       unique_id="*the* event")
+
+    The event implements IContainedCalendarEvent:
+
+        >>> from schoolbell.app.interfaces import IContainedCalendarEvent
+        >>> verifyObject(IContainedCalendarEvent, event)
+        True
+
+    It has a name, which is equal to its unique id, and can have a parent:
+
+        >>> event.__name__
+        '*the* event'
+        >>> event.__parent__ is None
+        True
+
+    As CalendarEvents are mutable, you can modify attributes at will:
+
+        >>> event.dtend = timedelta(hours=1)
+        >>> event.dtend
+        datetime.timedelta(0, 3600)
+
+    It is not wise to touch the __name__ or unique_id of events.
+    TODO: enforce this restriction.
+
+    """
+
+
 def doctest_Calendar():
     r"""Tests for Calendar.
 
@@ -56,8 +95,8 @@ def doctest_Calendar():
 
     We can add events by using addEvent():
 
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-        >>> event = SimpleCalendarEvent(None, None, 'Example 1')
+        >>> from schoolbell.app.cal import CalendarEvent
+        >>> event = CalendarEvent(None, None, 'Example 1')
 
         >>> cal.addEvent(event)
         >>> len(cal)
@@ -65,17 +104,33 @@ def doctest_Calendar():
         >>> list(cal) == [event]
         True
 
+        >>> event.__parent__ is cal
+        True
+
+    Added events acquire a parent:
+
+        >>> event.__parent__ is cal
+        True
+
+    You should not try to add the same event to a different calendar:
+
+        >>> cal2 = Calendar()
+        >>> cal2.addEvent(event)
+        Traceback (most recent call last):
+        ...
+        AssertionError: Event already belongs to a calendar
+
     Let's add a few more events:
 
-        >>> event2 = SimpleCalendarEvent(None, None, 'Example 2')
+        >>> event2 = CalendarEvent(None, None, 'Example 2')
         >>> cal.addEvent(event2)
-        >>> event3 = SimpleCalendarEvent(None, None, 'Example 3')
+        >>> event3 = CalendarEvent(None, None, 'Example 3')
         >>> cal.addEvent(event3)
 
     You can't, however, add multiple events with the same unique_id
 
-        >>> event3a = SimpleCalendarEvent(None, None, 'Example 3',
-        ...                               unique_id=event3.unique_id)
+        >>> event3a = CalendarEvent(None, None, 'Example 3',
+        ...                         unique_id=event3.unique_id)
         >>> cal.addEvent(event3a)
         Traceback (most recent call last):
           ...

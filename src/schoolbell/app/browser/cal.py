@@ -34,8 +34,8 @@ from zope.app.traversing.browser.absoluteurl import absoluteURL
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schoolbell import SchoolBellMessageID as _
+from schoolbell.app.cal import CalendarEvent
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
-from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.utils import parse_date
 from schoolbell.app.interfaces import ICalendarOwner
@@ -106,7 +106,7 @@ class PlainCalendarView(BrowserView):
                 dtstart = datetime.now() + timedelta(minutes=delta)
                 length = timedelta(minutes=random.randint(1, 60*12))
                 title = 'Event %d' % random.randint(1, 999)
-                event = SimpleCalendarEvent(dtstart, length, title)
+                event = CalendarEvent(dtstart, length, title)
                 self.context.addEvent(event)
 
 
