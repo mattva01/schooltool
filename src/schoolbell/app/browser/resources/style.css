@@ -87,6 +87,10 @@ form.standalone fieldset {
     padding: 0.35em 0.625em 0.75em 0.625em;
 }
 
+form.standalone p {
+    margin: 0.5em;
+}
+
 form.standalone .controls input {
     background: #fff;
 }
@@ -125,6 +129,12 @@ input[type=radio]:focus,
 select:focus,
 textarea:focus  {
     border: 1px #565248 solid;
+}
+
+div.info {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #009900;
 }
 
 p.error {
@@ -761,7 +771,7 @@ body#path-login form.standalone {
 
 #portlet-navigation-information:hover {
     padding-left: 3em !important;
-    background: #748fad url("/information.png") left no-repeat !important;
+    background: #748fad url(".png") left no-repeat !important;
 }
 
 #portlet-calendar-view-month {
@@ -779,8 +789,23 @@ body#path-login form.standalone {
     margin: auto;
 }
 
+#portlet-calendar-overlay form {
+    margin: 2px;
+}
 #portlet-calendar-overlay input {
     margin-left: 0.5em;
+}
+
+#portlet-calendar-overlay label {
+    display: block;
+}
+
+#portlet-calendar-overlay label:hover {
+    color: #888888;
+}
+
+#portlet-calendar-overlay label.disabled {
+    color: #888888;
 }
 
 /** Specific Page Styling **/

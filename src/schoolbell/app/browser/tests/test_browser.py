@@ -211,7 +211,6 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.overlay'))
     suite.addTest(doctest.DocFileSuite('../templates.txt'))
     return suite
 

@@ -67,9 +67,12 @@
                 <a id="tools-calendar" i18n:translate=""
                   tal:attributes="href person/calendar/@@absolute_url"
                   >My Calendar</a> |
+                <tal:disable condition="nothing">
+                  XXX Preferences view is not implemented yet
                 <a id="tools-preferences" i18n:translate=""
                   tal:attributes="href string:${person/@@absolute_url}/preferences.html"
                   >My Preferences</a> |
+                </tal:disable>
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"
                   >Log out</a>
@@ -109,6 +112,7 @@
         </div>
       </div>
     </div>
+    <div style="clear: both"></div>
     <div id="footer" i18n:translate="">
       <p>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
@@ -228,12 +232,14 @@
       <input type="hidden" name="url" tal:attributes="value request/URL" />
 
       <div class="row" style="background: #9db8d2">
-        <input type="checkbox" checked="checked" disabled="disabled" />
-            <label i18n:translate="">My Calendar</label>
+        <label class="disabled">
+          <input type="checkbox" checked="checked" disabled="disabled" />
+          <tal:translate i18n:translate="">My Calendar</tal:translate>
+        </label>
       </div>
 
       <div class="row" tal:repeat="item overlay/items"
-           tal:attributes="style string:background: ${item/color}">
+           tal:attributes="style string:background: ${item/color1}">
         <label>
           <input type="checkbox" name="overlay"
                  tal:attributes="value item/id; checked item/checked" />

@@ -22,12 +22,17 @@ Calendar overlay views for the SchoolBell application.
 $Id$
 """
 
+from sets import Set
+
 from zope.interface import Interface, implements
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.api import getPath
+from zope.app.traversing.browser.absoluteurl import absoluteURL
 from zope.security.proxy import removeSecurityProxy
 
+from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
+from schoolbell.app.app import getSchoolBellApplication
 
 
 class ICalendarOverlayView(Interface):
@@ -176,4 +181,60 @@ class CalendarOverlayView(BrowserView):
 
     def __call__(self):
         """Process form submission."""
+        if 'MORE' in self.request:
+            # TODO: unit test
+            person = IPerson(self.request.principal)
+            url = absoluteURL(person)
+            self.request.response.redirect(url + '/calendar_selection.html')
         raise NotImplementedError("TODO")
+
+
+class CalendarSelectionView(BrowserView):
+    """A view for calendar selection.
+
+    The context of this view is always the currently authenticated user
+    (otherwise we cannot check permissions).
+    """
+
+    __used_for__ = IPerson  # TODO: make this a view on ISchoolBellApplication
+
+    error = None
+    message = None
+
+    def persons(self):
+        """List all persons."""
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return []
+        app = getSchoolBellApplication()
+        # TODO: only show calendars that we can access
+        return [{'id': p.__name__,
+                 'title': p.title,
+                 'selected': p.calendar in user.overlaid_calendars,
+                 'person': p}
+                for p in app['persons'].values()
+                if p is not user]
+    persons = property(persons)
+
+    def update(self):
+        """Process forms."""
+        if 'CANCEL' in self.request:
+            nexturl = self.request.form.get('nexturl')
+            if nexturl:
+                self.request.response.redirect(nexturl)
+            return
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return
+        if 'UPDATE_SUBMIT' in self.request:
+            selected = Set(self.request.form.get('people', []))
+            for person in self.persons:
+                if person['id'] in selected and not person['selected']:
+                    user.overlaid_calendars.add(person['person'].calendar)
+                elif person['id'] not in selected and person['selected']:
+                    user.overlaid_calendars.remove(person['person'].calendar)
+            self.message = _('Saved changes.')
+            nexturl = self.request.form.get('nexturl')
+            if nexturl:
+                self.request.response.redirect(nexturl)
+

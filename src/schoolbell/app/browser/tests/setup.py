@@ -25,6 +25,7 @@ from zope.app.form.browser import \
 from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.browser.interfaces import IWidgetInputErrorView
 from zope.app.form.browser.exception import WidgetInputErrorView
+from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.traversing.interfaces import ITraversable
 from zope.app.traversing.namespace import view, resource
 from zope.app.traversing.interfaces import IPathAdapter
@@ -32,6 +33,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.publisher.browser.menu import MenuAccessView
 from zope.app.publisher.interfaces.browser import IMenuItemType
+from zope.app.component.hooks import setSite
 
 from schoolbell.relationship.tests import setUpRelationships
 from schoolbell.app.browser import SchoolBellAPI, SortBy
@@ -48,6 +50,20 @@ def setUpSessions():
     ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
     sdc = PersistentSessionDataContainer()
     ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
+
+
+def setUpSchoolBellSite():
+    """Set up a schoolbell site.
+
+    Do this after placelessSetup().
+    """
+    from schoolbell.app.app import SchoolBellApplication
+    from schoolbell.app.security import setUpLocalAuth
+    app = SchoolBellApplication()
+    directlyProvides(app, IContainmentRoot)
+    setUpLocalAuth(app)
+    setSite(app)
+    return app
 
 
 def setUp(test=None):
@@ -117,6 +133,8 @@ def setUp(test=None):
     ztapi.browserView(None, 'schoolbell_navigation',
                       SimpleViewClass("../templates/navigation.pt",
                                       bases=(NavigationView,)))
+
+    # resources
     class ResourceStub:
         def __init__(self, request):
             pass
@@ -128,8 +146,10 @@ def setUp(test=None):
     ztapi.browserResource('schoolbell.js', ResourceStub)
     ztapi.browserResource('logo.png', ResourceStub)
 
+    # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
-    class ZMIMenu(IMenuItemType): pass
+    class ZMIMenu(object):
+        pass
     directlyProvides(ZMIMenu, IMenuItemType)
     ztapi.provideUtility(IMenuItemType, ZMIMenu, 'zmi_views')
     ztapi.provideUtility(IMenuItemType, ZMIMenu, 'schoolbell_actions')

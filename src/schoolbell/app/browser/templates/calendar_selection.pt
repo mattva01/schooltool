@@ -1,0 +1,60 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Select calendars to display
+  </title>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+  <form action="." method="POST" tal:attributes="action request/URL"
+        class="standalone" enctype="multipart/form-data">
+
+    <h3 i18n:translate="">
+      Select additional calendars to display
+    </h3>
+
+    <div class="info" tal:condition="view/message" tal:content="view/message" />
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+
+    <input type="hidden" name="nexturl"
+           tal:attributes="value request/nexturl|nothing" />
+
+    <p i18n:translate="">
+      Hold down Ctrl or Shift to select multiple calendars.
+    </p>
+
+    <fieldset>
+      <legend i18n:translate="">People</legend>
+      <select multiple="multiple" id="people" name="people:list">
+        <option tal:repeat="person view/persons/sortby:title"
+                tal:attributes="value person/id;
+                                selected person/selected"
+                tal:content="person/title">Person</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend i18n:translate="">Groups</legend>
+      TODO
+    </fieldset>
+
+    <fieldset>
+      <legend i18n:translate="">Resources</legend>
+      TODO
+    </fieldset>
+
+    <div class="controls">
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value submit-button; accesskey" />
+        <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+               i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+
+</metal:block>
+</body>
+</html>
