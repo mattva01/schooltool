@@ -10,6 +10,8 @@ SchoolTool server RESTive interface
     creates a new person in the system
   PUT /persons/new_person_id
     creates a new person in the system
+  DELETE /persons/person_id
+    permanently delete a person from the system
 
   GET /resources
     lists all resources in the system
@@ -19,6 +21,8 @@ SchoolTool server RESTive interface
     creates a new resource in the system
   GET /resources/resource_id
     shows the information for a resource
+  DELETE /resources/resource_id
+    permanently delete a resource from the system
 
   GET /groups
     lists all groups in the system
@@ -28,6 +32,8 @@ SchoolTool server RESTive interface
     creates a new group in the system
   GET /groups/group_id
     shows the information for a group
+  DELETE /groups/group_id
+    permanently delete a group from the system
 
   GET /groups/group_id/tree
     shows the tree of members rooted at this group

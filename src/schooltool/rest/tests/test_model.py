@@ -22,8 +22,9 @@ Unit tests for schooltool.rest.model
 $Id$
 """
 
-from logging import INFO
 import unittest
+import datetime
+from logging import INFO
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
@@ -88,6 +89,70 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.assert_(result.context is self.view.context)
 
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
+
+
+class TestApplicationObjectDeleteMixin(RegistriesSetupMixin,
+                                       unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.app import create_application
+        from schooltool.membership import Membership
+        from schooltool.teaching import Teaching
+        from schooltool import membership, relationship, teaching
+        self.setUpRegistries()
+        relationship.setUp()
+        membership.setUp()
+        teaching.setUp()
+        app = self.app = create_application()
+        self.persons = app['persons']
+        self.groups = app['groups']
+        self.resources = app['resources']
+        self.person = self.persons.new('id', title='Person Title')
+        self.group = self.groups.new('sample', title='Sample Group')
+        self.resource = self.resources.new('book1', title='A Book')
+        Membership(group=self.group, member=self.person)
+        # Special case: a loop
+        Teaching(teacher=self.person, taught=self.person)
+
+    def test(self):
+        from schooltool.rest.model import ApplicationObjectDeleteMixin
+        from schooltool.membership import memberOf
+        view = ApplicationObjectDeleteMixin()
+        view.context = self.person
+        request = RequestStub()
+        result = view.do_DELETE(request)
+        self.assertEquals(request.headers['content-type'], 'text/plain')
+        self.assertEquals(result, 'Object deleted.')
+        self.assertRaises(KeyError, self.persons.__getitem__, 'id')
+        self.assertEquals(request.applog,
+                [(None,  "Object deleted: /persons/id (Person Title)", INFO)])
+        self.assert_(not memberOf(self.person, self.group))
+
+    def test_resource_booking(self):
+        from schooltool.cal import CalendarEvent
+        ev = CalendarEvent(datetime.date(2004, 10, 29),
+                           datetime.timedelta(minutes=15), 'Reading a book',
+                           owner=self.person, context=self.resource)
+        self.person.calendar.addEvent(ev)
+        self.resource.calendar.addEvent(ev)
+        self.test()
+        self.assertEquals(list(self.resource.calendar), [])
+
+    def test_resource_timetables(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableActivity
+        key = ('2004', 'whatever')
+        tt = Timetable(['Day 1'])
+        tt['Day 1'] = TimetableDay(['P1'])
+        act = TimetableActivity('Reading club', self.person, [self.resource])
+        tt['Day 1'].add('P1', act)
+        self.person.timetables[key] = tt
+        tt = tt.cloneEmpty()
+        tt['Day 1'].add('P1', act)
+        self.resource.timetables[key] = tt
+        self.test()
+        self.assertEquals(list(self.resource.timetables[key].itercontent()),
+                          [])
 
 
 class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
@@ -456,6 +521,7 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestApplicationObjectTraverserView))
+    suite.addTest(unittest.makeSuite(TestApplicationObjectDeleteMixin))
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestTreeView))
     suite.addTest(unittest.makeSuite(TestPersonView))

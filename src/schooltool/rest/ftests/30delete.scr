@@ -1,0 +1,55 @@
+Delete application objects.
+
+SchoolTool> links off
+
+SchoolTool> load_snapshot objects-created
+200 OK
+
+SchoolTool> delete /persons/Marius
+200 OK
+Content-Type: text/plain; charset=UTF-8
+Object deleted.
+
+SchoolTool> get /persons/Marius
+404 Not Found
+Content-Type: text/plain; charset=UTF-8
+Not found: /persons/Marius
+
+SchoolTool> get /groups/cleaners
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=group
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Cleaners</name>
+  <item xlink:type="simple" xlink:title="Albert"
+        xlink:href="/persons/Albert"/>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="/groups/cleaners/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="/groups/cleaners/facets"/>
+  <timetables xlink:href="/groups/cleaners/timetables"
+              xlink:title="Own timetables" xlink:type="simple"/>
+  <timetables xlink:href="/groups/cleaners/composite-timetables"
+              xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/groups/cleaners/calendar"
+            xlink:title="Private calendar"
+            xlink:type="simple"/>
+  <calendar xlink:href="/groups/cleaners/timetable-calendar"
+            xlink:title="Calendar derived from timetables"
+            xlink:type="simple"/>
+</group>
+%% END XML
+
+
+SchoolTool> delete /groups/cleaners
+200 OK
+Content-Type: text/plain; charset=UTF-8
+Object deleted.
+
+SchoolTool> delete /resources/hall
+200 OK
+Content-Type: text/plain; charset=UTF-8
+Object deleted.
+
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

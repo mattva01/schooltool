@@ -71,7 +71,44 @@ class ApplicationObjectTraverserView(View):
         raise KeyError(name)
 
 
-class GroupView(ApplicationObjectTraverserView):
+class ApplicationObjectDeleteMixin:
+    """A mixin that implements HTTP DELETE for application objects."""
+
+    def do_DELETE(self, request):
+        """Deletes self.context from the system.
+
+        Removes self.context from the application object container that it
+        resides in.  Breaks all relationships that self.context participates
+        in.  Unbooks any resources that were booked by self.context.  Adds
+        a note to the application audit log.
+        """
+        # Remove all relationships
+        while self.context.listLinks():
+            # If you have a loop (i.e. self.context is in a relationship with
+            # itself), unlink() will remove two links.  That's why a simple
+            #     for link in self.context.listLinks():
+            #         link.unlink()
+            # won't work.
+            self.context.listLinks()[0].unlink()
+        # Remove calendar events that book resources
+        events_to_remove = [e for e in self.context.calendar
+                            if e.context is not None]
+        for e in events_to_remove:
+            self.context.calendar.removeEvent(e)
+        # Remove all timetables (to unbook resources)
+        self.context.timetables.clear()
+        # Remove the object from its container
+        path = getPath(self.context)
+        container = self.context.__parent__
+        del container[self.context.__name__]
+        # Tell the world what we've done
+        request.appLog(_("Object deleted: %s (%s)") %
+                       (path, self.context.title))
+        request.setHeader('Content-Type', 'text/plain')
+        return _("Object deleted.")
+
+
+class GroupView(ApplicationObjectTraverserView, ApplicationObjectDeleteMixin):
     """A view for a group."""
 
     template = Template("www/group.pt", content_type="text/xml")
@@ -109,7 +146,7 @@ class TreeView(View):
         return res.strip().replace('\n', '\n  ')
 
 
-class PersonView(ApplicationObjectTraverserView):
+class PersonView(ApplicationObjectTraverserView, ApplicationObjectDeleteMixin):
     """A view for a Person."""
 
     template = Template("www/person.pt", content_type="text/xml")
@@ -151,7 +188,8 @@ class PersonPasswordView(View):
         return _("Account disabled")
 
 
-class ResourceView(ApplicationObjectTraverserView):
+class ResourceView(ApplicationObjectTraverserView,
+                   ApplicationObjectDeleteMixin):
     """A view on a resource."""
 
     template = Template("www/resource.pt", content_type="text/xml")
