@@ -428,9 +428,13 @@ class DailyCalendarView(CalendarViewBase):
         width = [0] * 24
         daystart = datetime.combine(self.cursor, time())
         for event in self.dayEvents(self.cursor):
-            t = max(event.dtstart.replace(minute=0), daystart)
-            dtend = min(event.dtstart + event.duration,
-                        daystart + timedelta(1))
+            t = daystart
+            dtend = daystart + timedelta(1)
+            for title, start, duration in self.calendarRows():
+                if start <= event.dtstart < start + duration:
+                    t = start
+                if start < event.dtstart + event.duration <= start + duration:
+                    dtend = start + duration
             while True:
                 width[t.hour] += 1
                 t += timedelta(hours=1)
@@ -462,6 +466,15 @@ class DailyCalendarView(CalendarViewBase):
                 if self.endhour == 0:
                     self.endhour = 24
 
+    def calendarRows(self):
+        """Iterates over (title, start, duration) of time slots that make up
+        the daily calendar.
+        """
+        for hour in range(self.starthour, self.endhour):
+            start = datetime.combine(self.cursor, time(hour, 0))
+            duration = timedelta(hours=1)
+            yield ("%d:00" % start.hour, start, duration)
+
     def getHours(self):
         """Return an iterator over the rows of the table.
 
@@ -480,9 +493,9 @@ class DailyCalendarView(CalendarViewBase):
         events = self.dayEvents(self.cursor)
         self._setRange(events)
         slots = Slots()
-        for hour in range(self.starthour, self.endhour):
-            start = datetime.combine(self.cursor, time(hour, 0))
-            end = start + timedelta(hours=1)
+        for title, start, duration in self.calendarRows():
+            end = start + duration
+            hour = start.hour
 
             # Remove the events that have already ended
             for i in range(nr_cols):
@@ -508,20 +521,16 @@ class DailyCalendarView(CalendarViewBase):
                     # Either None, or new event
                     cols.append(ev)
 
-            yield {'time': "%d:00" % hour, 'cols': tuple(cols)}
+            yield {'time': title, 'cols': tuple(cols)}
 
     def rowspan(self, event):
-        """Calculate how many hours the event will take today."""
-        start = datetime.combine(self.cursor, time(self.starthour))
-        end = (datetime.combine(self.cursor, time()) +
-               timedelta(hours=self.endhour)) # endhour may be 24
-
-        event_start = max(start, event.dtstart)
-        event_end = min(end, event.dtstart + event.duration)
-
-        duration = event_end - event_start
-        seconds = duration.days * 24 * 3600 + duration.seconds
-        return (seconds + 3600 - 1) // 3600 # round up
+        """Calculate how many calendar rows the event will take today."""
+        count  = 0
+        for title, start, duration in self.calendarRows():
+            if (start < event.dtstart + event.duration and
+                event.dtstart < start + duration):
+                count += 1
+        return count
 
 
 class Slots(dict):

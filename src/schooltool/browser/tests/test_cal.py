@@ -669,6 +669,28 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         cal.addEvent(createEvent('2004-08-12 12:00', '0min', "c"))
         self.assertEquals(view.getColumns(), 3)
 
+    def test_getColumns_periods(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.model import Person
+        from schooltool.common import parse_datetime
+
+        cal = createCalendar()
+        cal.__parent__ = Person(title="Da Boss")
+        cal.__parent__.makeTimetableCalendar = lambda: createCalendar()
+        view = DailyCalendarView(cal)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 12)
+        view.calendarRows = lambda: iter([
+            ("B", parse_datetime('2004-08-12 10:00:00'), timedelta(hours=3)),
+            ("C", parse_datetime('2004-08-12 13:00:00'), timedelta(hours=2)),
+             ])
+        cal.addEvent(createEvent('2004-08-12 09:00', '2h', "Whatever"))
+        cal.addEvent(createEvent('2004-08-12 11:00', '2m', "Phone call"))
+        cal.addEvent(createEvent('2004-08-12 11:10', '2m', "Phone call"))
+        cal.addEvent(createEvent('2004-08-12 12:00', '2m', "Phone call"))
+        cal.addEvent(createEvent('2004-08-12 12:30', '3h', "Nap"))
+        self.assertEquals(view.getColumns(), 5)
+
     def test_getHours(self):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.model import Person
@@ -768,6 +790,36 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
                             createEvent('2004-08-12 12:00', '10min', "")), 1)
         self.assertEquals(view.rowspan(
                             createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 09:00', '3h', "")), 2)
+
+    def test_rowspan_periods(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.common import parse_datetime
+        view = DailyCalendarView(None)
+        view.calendarRows = lambda: iter([
+            ("8", parse_datetime('2004-08-12 08:00:00'), timedelta(hours=1)),
+            ("A", parse_datetime('2004-08-12 09:00:00'), timedelta(hours=1)),
+            ("B", parse_datetime('2004-08-12 10:00:00'), timedelta(hours=3)),
+            ("C", parse_datetime('2004-08-12 13:00:00'), timedelta(hours=2)),
+            ("D", parse_datetime('2004-08-12 15:00:00'), timedelta(hours=1)),
+            ("16", parse_datetime('2004-08-12 16:00:00'), timedelta(hours=1)),
+            ("17", parse_datetime('2004-08-12 17:00:00'), timedelta(hours=1)),
+             ])
+        view.cursor = date(2004, 8, 12)
+        view.starthour = 8
+        view.endhour = 18
+
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1d', "Long")), 5)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-11 12:00', '3d', "Very")), 7)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '10min', "")), 1)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
+        self.assertEquals(view.rowspan(
+                            createEvent('2004-08-12 13:00', '2h', "")), 1)
         self.assertEquals(view.rowspan(
                             createEvent('2004-08-12 09:00', '3h', "")), 2)
 
