@@ -166,8 +166,7 @@
         </fieldset>
         <!-- monthly box -->
         <fieldset id="monthly_box" class=""
-                  tal:define="monthly_value
-                  python:view.monthly_widget.hasInput() and view.monthly_widget.getInputValue()">
+                  tal:define="monthly_value python:view.monthly_widget._getFormValue()">
           <legend i18n:translate="">Monthly</legend>
           <p id="monthly_par" i18n:translate="">
             This section only applies when the monthly recurrence is selected.
@@ -196,7 +195,7 @@
         </fieldset>
         <!-- Range selection -->
         <fieldset tal:define="range_value
-                  python:view.range_widget.hasInput() and view.range_widget.getInputValue()">
+                  python:view.range_widget.hasInput() and view.range_widget.getInputValue() or 'forever'">
           <div class="row">
             <input type="radio" name="field.range" value="count" id="field.range_c"
                    tal:attributes="checked python:range_value == 'count'"/>

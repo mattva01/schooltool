@@ -32,12 +32,15 @@ from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
 
-# Used in defining TestCalendarEventView
+# Used in defining CalendarEventAddTestView
 from schoolbell.app.browser.cal import CalendarEventAddView
 from schoolbell.app.browser.cal import ICalendarEventAddForm
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.app import Calendar
 
+# Used in defining CalendarEventEditTestView
+from schoolbell.app.browser.cal import CalendarEventEditView
+from schoolbell.app.browser.cal import ICalendarEventEditForm
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
 
@@ -826,7 +829,7 @@ class TestCalendarEventView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(view.editLink(), 'edit_event.html?' + params)
 
 
-class TestCalendarEventAddView(CalendarEventAddView):
+class CalendarEventAddTestView(CalendarEventAddView):
     """Class for testing CalendarEventAddView.
 
     We extend CalendarEventAddView so we could supply arguments normaly
@@ -846,9 +849,9 @@ class TestCalendarEventAddView(CalendarEventAddView):
 def doctest_CalendarEventAddView_add():
     r"""Tests for CalendarEventAddView adding of new event.
 
-    Let's create a TestCalendarEventAddView
+    Let's create a CalendarEventAddTestView
 
-        >>> view = TestCalendarEventAddView(Calendar(), TestRequest())
+        >>> view = CalendarEventAddTestView(Calendar(), TestRequest())
         >>> view.update()
 
     Let's try to add an event:
@@ -863,7 +866,7 @@ def doctest_CalendarEventAddView_add():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -905,7 +908,7 @@ def doctest_CalendarEventAddView_add():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -926,7 +929,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.location': 'Kitchen',
         ...                             'field.duration': '50',
         ...                             'field.recurrence_type': 'daily',})
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.title_widget.getInputValue()
         u'Hacking'
         >>> view.location_widget.getInputValue()
@@ -953,7 +956,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
 
@@ -972,7 +975,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'field.duration': '50',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors
@@ -988,7 +991,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'field.duration': '50',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors                                # doctest: +ELLIPSIS
@@ -1004,7 +1007,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'field.duration': '100h',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors                                # doctest: +ELLIPSIS
@@ -1019,7 +1022,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'field.duration': '60',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors
@@ -1048,7 +1051,7 @@ def doctest_CalendarEventAddView_add_recurrence():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -1072,7 +1075,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -1110,7 +1113,7 @@ def doctest_CalendarEventAddView_add_recurrence():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -1155,7 +1158,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
 
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -1174,7 +1177,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         >>> request.form['field.exceptions'] = '2004-08-14\n\n2004-08-19\n\n\n2004-08-20'
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         ''
 
@@ -1194,7 +1197,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         >>> request.form['field.exceptions'] = '2004-08-14\n2004'
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
 
@@ -1210,7 +1213,7 @@ def doctest_CalendarEventAddView_getMonthDay():
 
         >>> calendar = Calendar()
         >>> request = TestRequest()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getMonthDay()
         '??'
         >>> request.form['field.start_date'] = u'2005-02-21'
@@ -1228,7 +1231,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
 
         >>> calendar = Calendar()
         >>> request = TestRequest()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
 
     When the form is empty, no days are checked.
 
@@ -1236,7 +1239,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
         []
 
         >>> request.form['field.start_date'] = u''
-        >>> [day for day in range(7) if view.weekdayChecked(str(day))]
+        >>> [day for day in range(7) if view.weekdayChecked(str(str(day)))]
         []
 
     February 21, 2005 is a Monday.
@@ -1253,13 +1256,12 @@ def doctest_CalendarEventAddView_weekdayChecked():
 
     """
 
-
 def doctest_CalendarEventAddView_weekdayDisabled():
     r"""Tests for CalendarEventAddView.weekdayDisabled().
 
         >>> calendar = Calendar()
         >>> request = TestRequest()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
 
     When the form is empty, no days are disabled.
 
@@ -1299,7 +1301,7 @@ def doctest_CalendarEventAddView_getWeekDay():
         ...                             'field.interval': '2',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
 
         >>> request.form['field.start_date'] = "2004-10-01"
         >>> view.getWeekDay()
@@ -1355,22 +1357,22 @@ def doctest_CalendarEventAddView_getLastWeekDay():
         >>> calendar = Calendar()
 
         >>> request.form['field.start_date'] = ""
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getLastWeekDay()
         u'last weekday'
 
         >>> request.form['field.start_date'] = "2004-10-24"
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getLastWeekDay() is None
         True
 
         >>> request.form['field.start_date'] = "2004-10-25"
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getLastWeekDay()
         u'Last Monday'
 
         >>> request.form['field.start_date'] = "2004-10-31"
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getLastWeekDay()
         u'Last Sunday'
 
@@ -1393,7 +1395,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.until': '2004-01-01',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors
@@ -1413,7 +1415,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.until': '2002-01-01',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors
@@ -1432,7 +1434,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.count': '23',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
-        >>> view = TestCalendarEventAddView(calendar, request)
+        >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
         >>> view.errors
@@ -1440,6 +1442,324 @@ def doctest_CalendarEventAddView_cross_validation():
         MissingInputError: ('field.until', 'Repeat until', None)
         >>> view.error is None
         True
+
+    """
+
+class CalendarEventEditTestView(CalendarEventEditView):
+    """Class for testing CalendarEventEditView.
+
+    We extend CalendarEventEditView so we could supply arguments normaly
+    provided in ZCML.
+    """
+
+    schema = ICalendarEventEditForm
+    _factory = CalendarEvent
+    _arguments = []
+    _keyword_arguments = ['title', 'start_date', 'start_time', 'duration',
+                          'recurrence', 'location', 'recurrence_type',
+                          'interval', 'range', 'until', 'count', 'exceptions']
+    _set_before_add = []
+    _set_after_add = []
+
+
+def doctest_CalendarEventEditView_edit():
+    r"""Tests for CalendarEventEditView editing of new event.
+
+    Let's create an event:
+
+        >>> import datetime
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=60))
+
+    Let's try to edit the event:
+
+        >>> request = TestRequest(form={'field.title': 'NonHackig',
+        ...                             'field.start_date': '2004-09-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'UPDATE_SUBMIT': 'Edit'})
+
+        >>> directlyProvides(event, IContainmentRoot)
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+
+        #>>> event.title
+        #u'NonHacking'
+        #>>> event.dtstart
+        #datetime.datetime(2004, 9, 13, 15, 30)
+        #>>> event.duration
+        #datetime.timedelta(0, 3000)
+        #>>> event.location is None
+        #True
+
+   """
+
+def doctest_CalendarEventEditView_getInitialData():
+    """Tests for CalendarEventEditView editing of new event.
+
+    Let's create an event:
+
+        >>> import datetime
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=61),
+        ...                       location="Kitchen")
+
+    And a view for the event:
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventEditTestView(event, request)
+
+        >>> def normalize(s):
+        ...   return '\\n  '.join(filter(None, s.split(' ')))
+
+    Let's check whether the default values are set properly:
+
+        >>> print normalize(view.title_widget())
+        <input
+          class="textType"
+          id="field.title"
+          name="field.title"
+          size="20"
+          type="text"
+          value="Hacking"
+          />
+
+        >>> print normalize(view.start_date_widget())
+        <input
+          class="textType"
+          id="field.start_date"
+          name="field.start_date"
+          size="20"
+          type="text"
+          value="2004-08-13"
+          />
+
+        >>> print normalize(view.start_time_widget())
+        <input
+          class="textType"
+          id="field.start_time"
+          name="field.start_time"
+          size="20"
+          type="text"
+          value="20:00"
+          />
+
+        >>> print normalize(view.duration_widget())
+        <input
+          class="textType"
+          id="field.duration"
+          name="field.duration"
+          size="10"
+          type="text"
+          value="61"
+          />
+
+        >>> print normalize(view.location_widget())
+        <input
+          class="textType"
+          id="field.location"
+          name="field.location"
+          size="20"
+          type="text"
+          value="Kitchen"
+          />
+
+        >>> print normalize(view.recurrence_widget())
+        <input
+          class="hiddenType"
+          id="field.recurrence.used"
+          name="field.recurrence.used"
+          type="hidden"
+          value=""
+          />
+          <input
+          class="checkboxType"
+          id="field.recurrence"
+          name="field.recurrence"
+          type="checkbox"
+          value="on"
+          />
+
+    Let's create a recurrent event:
+
+        >>> from schoolbell.app.browser.cal import makeRecurrenceRule
+        >>> rule = makeRecurrenceRule(recurrence_type='yearly', interval=2,
+        ...                           range='until', until='2004-01-02')
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=61),
+        ...                       location="Kitchen", recurrence=rule)
+
+    And a view for the event:
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventEditTestView(event, request)
+
+    Let's check whether the default values are set properly:
+
+        >>> print normalize(view.recurrence_widget())
+        <input
+          class="hiddenType"
+          id="field.recurrence.used"
+          name="field.recurrence.used"
+          type="hidden"
+          value=""
+          />
+          <input
+          class="checkboxType"
+          checked="checked"
+          id="field.recurrence"
+          name="field.recurrence"
+          type="checkbox"
+          value="on"
+          />
+
+        >>> print normalize(view.interval_widget())
+        <input
+          class="textType"
+          id="field.interval"
+          name="field.interval"
+          size="10"
+          type="text"
+          value="2"
+          />
+
+        >>> print view.recurrence_type_widget()
+        <div>
+        <div class="value">
+        <select name="field.recurrence_type" size="1" >
+        <option value="daily">Day</option>
+        <option value="weekly">Week</option>
+        <option value="monthly">Month</option>
+        <option selected="selected" value="yearly">Year</option>
+        </select>
+        </div>
+        <input name="field.recurrence_type-empty-marker" type="hidden" value="1" />
+        </div>
+
+        >>> print view.range_widget()
+        <div>
+        <div class="value">
+        <select name="field.range" size="1" >
+        <option value="">(no value)</option>
+        <option value="count">Count</option>
+        <option selected="selected" value="until">Until</option>
+        <option value="forever">forever</option>
+        </select>
+        </div>
+        <input name="field.range-empty-marker" type="hidden" value="1" />
+        </div>
+
+        >>> print normalize(view.until_widget())
+        <input
+          class="textType"
+          id="field.until"
+          name="field.until"
+          size="20"
+          type="text"
+          value="2004-01-02"
+          />
+
+    Let's create a weekly recurrent event with exceptions:
+
+        >>> from schoolbell.app.browser.cal import makeRecurrenceRule
+        >>> exceptions = (date(2004, 8, 14), date(2004, 8, 15))
+        >>> rule = makeRecurrenceRule(recurrence_type='weekly', interval=1,
+        ...                           weekdays=[1, 2, 3, 4, 5, 6],
+        ...                           exceptions=exceptions,
+        ...                           range="count",
+        ...                           count=20)
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=61),
+        ...                       location="Kitchen", recurrence=rule)
+
+    And a view for the event:
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventEditTestView(event, request)
+
+    Let's check whether the default values are set properly:
+
+        >>> print normalize(view.recurrence_widget())
+        <input
+          class="hiddenType"
+          id="field.recurrence.used"
+          name="field.recurrence.used"
+          type="hidden"
+          value=""
+          />
+          <input
+          class="checkboxType"
+          checked="checked"
+          id="field.recurrence"
+          name="field.recurrence"
+          type="checkbox"
+          value="on"
+          />
+
+        >>> print normalize(view.interval_widget())
+        <input
+          class="textType"
+          id="field.interval"
+          name="field.interval"
+          size="10"
+          type="text"
+          value="1"
+          />
+
+        >>> print view.recurrence_type_widget()
+        <div>
+        <div class="value">
+        <select name="field.recurrence_type" size="1" >
+        <option value="daily">Day</option>
+        <option selected="selected" value="weekly">Week</option>
+        <option value="monthly">Month</option>
+        <option value="yearly">Year</option>
+        </select>
+        </div>
+        <input name="field.recurrence_type-empty-marker" type="hidden" value="1" />
+        </div>
+
+        >>> print view.range_widget()
+        <div>
+        <div class="value">
+        <select name="field.range" size="1" >
+        <option value="">(no value)</option>
+        <option selected="selected" value="count">Count</option>
+        <option value="until">Until</option>
+        <option value="forever">forever</option>
+        </select>
+        </div>
+        <input name="field.range-empty-marker" type="hidden" value="1" />
+        </div>
+
+        >>> print view.count_widget() # doctest: +ELLIPSIS
+        <input...value="20"...
+
+        >>> print view.exceptions_widget().replace("\\r\\n", "\\n")
+        <textarea cols="60" id="field.exceptions" name="field.exceptions" rows="15" >2004-08-14
+        2004-08-15</textarea>
+
+        #XXX OrderedMultiSelectWidget bug - it just ignores set rendered value!
+        #>>> print view.weekdays_widget() # doctest: +ELLIPSIS
+        #<script type="text/javascript">
+        #...
+        #      <select id="field.weekdays.to"
+        #              name="field.weekdays.to" size="5" multiple="">
+        #      </select>
+        #...
 
     """
 

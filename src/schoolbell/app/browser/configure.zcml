@@ -448,6 +448,21 @@
     <widget field="exceptions" width="20" height="5" />
   </addform>
 
+  <editform
+      for="schoolbell.app.interfaces.IContainedCalendarEvent"
+      name="edit.html"
+      label="Edit Event"
+      schema=".cal.ICalendarEventEditForm"
+      fields="title start_date start_time duration
+              recurrence location recurrence_type interval
+              range until count monthly exceptions weekdays"
+      class=".cal.CalendarEventEditView"
+      permission="zope.ManageContent"
+      template="templates/event_add.pt">
+
+    <widget field="exceptions" width="20" height="5" />
+  </editform>
+
 <!-- Skin and resources -->
 
   <zope:subscriber

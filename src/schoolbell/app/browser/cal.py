@@ -28,8 +28,10 @@ import calendar
 import sys
 
 from zope.app.form.browser.add import AddView
+from zope.app.form.browser.editview import EditView
+from zope.app.form.utility import setUpWidgets
 from zope.app.form.interfaces import ConversionError
-from zope.app.form.interfaces import IWidgetInputError
+from zope.app.form.interfaces import IWidgetInputError, IInputWidget
 from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -50,10 +52,13 @@ from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
-from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
 from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
 from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+from schoolbell.calendar.interfaces import IDailyRecurrenceRule
+from schoolbell.calendar.interfaces import IYearlyRecurrenceRule
+from schoolbell.calendar.interfaces import IMonthlyRecurrenceRule
+from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import parse_time, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
@@ -1054,13 +1059,13 @@ class ICalendarEventAddForm(Interface):
         required=False,
         value_type=Choice(
             title=_("Weekday"),
-            vocabulary=vocabulary([("0", _("Mon")),
-                                   ("1", _("Tue")),
-                                   ("2", _("Wed")),
-                                   ("3", _("Thu")),
-                                   ("4", _("Fri")),
-                                   ("5", _("Sat")),
-                                   ("6", _("Sun"))])))
+            vocabulary=vocabulary([(0, _("Mon")),
+                                   (1, _("Tue")),
+                                   (2, _("Wed")),
+                                   (3, _("Thu")),
+                                   (4, _("Fri")),
+                                   (5, _("Sat")),
+                                   (6, _("Sun"))])))
 
     monthly = Choice(
         title=_("Monthly"),
@@ -1075,13 +1080,8 @@ class ICalendarEventAddForm(Interface):
         required=False)
 
 
-class CalendarEventAddView(AddView):
-    """A view for adding an event."""
-
-    __used_for__ = ICalendar
-    schema = ICalendarEventAddForm
-
-    error = None
+class CalendarEventViewMixin(object):
+    """A mixin that holds the code common to CalendarEventAdd and Edit Views."""
 
     def _setError(self, name, error=RequiredMissing()):
         """Set an error on a widget."""
@@ -1110,6 +1110,100 @@ class CalendarEventAddView(AddView):
         except WidgetInputError, e:
             # getInputValue might raise an exception on invalid input
             errors.append(e)
+
+    def weekdayChecked(self, weekday):
+        """Return True if the given weekday should be checked.
+
+        The weekday of start_date is always checked, others can be selected by
+        the user.
+
+        Used to format checkboxes for weekly recurrences.
+        """
+        return (int(weekday) in self.weekdays_widget._getFormValue() or
+                self.weekdayDisabled(weekday))
+
+    def weekdayDisabled(self, weekday):
+        """Return True if the given weekday should be disabled.
+
+        The weekday of start_date is always disabled, all others are always
+        enabled.
+
+        Used to format checkboxes for weekly recurrences.
+        """
+        try:
+            day = self.start_date_widget.getInputValue()
+        except WidgetInputError:
+            day = None
+        return bool(day and day.weekday() == int(weekday))
+
+    def getMonthDay(self):
+        """Return the day number in a month, according to start_date.
+
+        Used by the page template to format monthly recurrence rules.
+        """
+        try:
+            evdate = self.start_date_widget.getInputValue()
+        except WidgetInputError:
+            evdate = None
+        if evdate is None:
+            return '??'
+        else:
+            return str(evdate.day)
+
+    def getWeekDay(self):
+        """Return the week and weekday in a month, according to start_date.
+
+        The output looks like '4th Tuesday'
+
+        Used by the page template to format monthly recurrence rules.
+        """
+        try:
+            evdate = self.start_date_widget.getInputValue()
+        except WidgetInputError:
+            evdate = None
+        if evdate is None:
+            return _("same weekday")
+
+        weekday = evdate.weekday()
+        index = (evdate.day + 6) // 7
+
+        indexes = {1: _('1st'), 2: _('2nd'), 3: _('3rd'), 4: _('4th'),
+                   5: _('5th')}
+        day_of_week = CalendarViewBase.day_of_week_names[weekday]
+        return "%s %s" % (indexes[index], day_of_week)
+
+    def getLastWeekDay(self):
+        """Return the week and weekday in a month, counting from the end.
+
+        The output looks like 'Last Friday'
+
+        Used by the page template to format monthly recurrence rules.
+        """
+        try:
+            evdate = self.start_date_widget.getInputValue()
+        except WidgetInputError:
+            evdate = None
+
+        if evdate is None:
+            return _("last weekday")
+
+        lastday = calendar.monthrange(evdate.year, evdate.month)[1]
+
+        if lastday - evdate.day >= 7:
+            return None
+        else:
+            weekday = evdate.weekday()
+            day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
+            return _("Last %(weekday)s") % {'weekday': day_of_week}
+
+
+class CalendarEventAddView(CalendarEventViewMixin, AddView):
+    """A view for adding an event."""
+
+    __used_for__ = ICalendar
+    schema = ICalendarEventAddForm
+
+    error = None
 
     def create(self, **kwargs):
         """Create an event.
@@ -1207,90 +1301,82 @@ class CalendarEventAddView(AddView):
         """Return the URL to be displayed after the add operation."""
         return absoluteURL(self.context, self.request)
 
-    def getMonthDay(self):
-        """Return the day number in a month, according to start_date.
 
-        Used by the page template to format monthly recurrence rules.
-        """
-        try:
-            evdate = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            evdate = None
-        if evdate is None:
-            return '??'
-        else:
-            return str(evdate.day)
+class ICalendarEventEditForm(ICalendarEventAddForm):
+    pass
 
-    def getWeekDay(self):
-        """Return the week and weekday in a month, according to start_date.
+class CalendarEventEditView(CalendarEventViewMixin, EditView):
+    """A view for editing an event."""
 
-        The output looks like '4th Tuesday'
+    error = None
 
-        Used by the page template to format monthly recurrence rules.
-        """
-        try:
-            evdate = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            evdate = None
-        if evdate is None:
-            return _("same weekday")
+    def _setUpWidgets(self):
+        setUpWidgets(self, self.schema, IInputWidget, names=self.fieldNames,
+                     initial=self._getInitialData(self.context))
 
-        weekday = evdate.weekday()
-        index = (evdate.day + 6) // 7
+    def _getInitialData(self, context):
+        """Extracts initial widgets data from context."""
 
-        indexes = {1: _('1st'), 2: _('2nd'), 3: _('3rd'), 4: _('4th'),
-                   5: _('5th')}
-        day_of_week = CalendarViewBase.day_of_week_names[weekday]
-        return "%s %s" % (indexes[index], day_of_week)
+        initial = {}
+        initial["title"] = context.title
+        initial["start_date"] = context.dtstart.date()
+        initial["start_time"] = context.dtstart.strftime("%H:%M")
+        initial["duration"] = context.duration.seconds / 60
+        initial["location"] = context.location
+        recurrence = context.recurrence
+        initial["recurrence"] = recurrence is not None
+        if recurrence:
+            initial["interval"] = recurrence.interval
+            recurrence_type = (
+                IDailyRecurrenceRule.providedBy(recurrence) and "daily" or
+                IWeeklyRecurrenceRule.providedBy(recurrence) and "weekly" or
+                IMonthlyRecurrenceRule.providedBy(recurrence) and "monthly" or
+                IYearlyRecurrenceRule.providedBy(recurrence) and "yearly")
 
-    def getLastWeekDay(self):
-        """Return the week and weekday in a month, counting from the end.
+            initial["recurrence_type"] = recurrence_type
+            if recurrence.until:
+                initial["until"] = recurrence.until
+                initial["range"] = "until"
+            elif recurrence.count:
+                initial["count"] = recurrence.count
+                initial["range"] = "count"
+            else:
+                initial["range"] = "forever"
 
-        The output looks like 'Last Friday'
+            if recurrence.exceptions:
+                initial["exceptions"] = "\n".join(map(str,
+                                                      recurrence.exceptions))
 
-        Used by the page template to format monthly recurrence rules.
-        """
-        try:
-            evdate = self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            evdate = None
+            if recurrence_type == "weekly":
+                if recurrence.weekdays:
+                    initial["weekdays"] = list(recurrence.weekdays)
 
-        if evdate is None:
-            return _("last weekday")
+            if recurrence_type == "monthly":
+                if recurrence.weekdays:
+                    initial["monthly"] = recurrence.monthly
 
-        lastday = calendar.monthrange(evdate.year, evdate.month)[1]
-
-        if lastday - evdate.day >= 7:
-            return None
-        else:
-            weekday = evdate.weekday()
-            day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
-            return _("Last %(weekday)s") % {'weekday': day_of_week}
-
-    def weekdayChecked(self, weekday):
-        """Return True if the given weekday should be checked.
-
-        The weekday of start_date is always checked, others can be selected by
-        the user.
-
-        Used to format checkboxes for weekly recurrences.
-        """
-        return (weekday in self.weekdays_widget._getFormValue() or
-                self.weekdayDisabled(weekday))
+        return initial
 
     def weekdayDisabled(self, weekday):
         """Return True if the given weekday should be disabled.
 
         The weekday of start_date is always disabled, all others are always
-        enabled.
+        enabled. If a value of start_date is given in request use it insead of
+        using one from self.context.
 
         Used to format checkboxes for weekly recurrences.
         """
         try:
             day = self.start_date_widget.getInputValue()
         except WidgetInputError:
-            day = None
-        return bool(day and str(day.weekday()) == weekday)
+            if "field.start_date" in self.request:
+                day = None
+            else:
+                day = self.context.dtstart
+        return bool(day and day.weekday() == int(weekday))
+
+    def update(self):
+        return ''
 
 
 def makeRecurrenceRule(interval=None, until=None,

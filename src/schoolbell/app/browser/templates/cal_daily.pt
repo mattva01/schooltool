@@ -19,7 +19,7 @@
 
             <a class="event-new" title="Create new event"
                 i18n:attributes="title"
-                tal:attributes="href string:${context/@@absolute_url}/add_event.html?start_date=${view/cursor}&amp;start_time=${hour/time}&amp;duration=${hour/duration}">New Event</a>
+                tal:attributes="href string:${context/@@absolute_url}/add.html?field.start_date=${view/cursor}&amp;field.start_time=${hour/time}&amp;field.duration=${hour/duration}">New Event</a>
 
           </div>
         </metal:block>
@@ -47,7 +47,7 @@
                               something compress">
                   <h6 tal:define="dtend python:ev.dtstart + ev.duration"
                       tal:attributes="style python:'background: %s;;' % colors[1]">
-                  <a tal:attributes="href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${ev/unique_id};
+                  <a tal:attributes="href string:${context/@@absolute_url}/${ev/unique_id}/edit.html?date=${evdate};
                                      title ev/title">
                   <span tal:replace="python:view.ellipsizeTitle(ev.title)" />
                   <span class="start-end">
