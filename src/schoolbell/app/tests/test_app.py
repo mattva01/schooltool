@@ -367,8 +367,6 @@ def test_suite():
                 doctest.DocTestSuite('schoolbell.app.app'),
                 doctest.DocTestSuite('schoolbell.app.membership'),
                 doctest.DocTestSuite('schoolbell.app.overlay'),
-                doctest.DocFileSuite('../security.txt',
-                                     optionflags=doctest.ELLIPSIS)
            ])
 
 if __name__ == '__main__':

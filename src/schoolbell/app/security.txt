@@ -8,7 +8,7 @@ General design
 The security system of SchoolBell consists of:
 
  * SchoolBellAuthenticationUtility
- * views for login/logout (not done yet)
+ * views for login/logout
  * a view for editing the ACL
 
 The login/logout views store/reset the authentication data in the
@@ -215,11 +215,13 @@ authentication (by trying to adapt the request to ILoginPassword):
     >>> class Adapter:
     ...     implements(ILoginPassword)
     ...     def __init__(self, context):
-    ...         pass
+    ...         self.context = context
     ...     def getLogin(self):
     ...         return "frog"
     ...     def getPassword(self):
     ...         return "pond"
+    ...     def needLogin(self, realm):
+    ...         self.context.unauthorized("basic realm=%s" % realm)
     ...
     >>> class IFrogMarker(Interface): pass
     >>> ztapi.provideAdapter(IFrogMarker, ILoginPassword, Adapter)
@@ -236,7 +238,6 @@ unauthorized
 Our view issues the authorization challenge by redirecting to the
 login page:
 
-
     >>> request = TestRequest()
     >>> auth.unauthorized(None, request)
     >>> request.response.getStatus()
@@ -244,7 +245,27 @@ login page:
     >>> request.response.getHeader('Location')
     'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=http://127.0.0.1'
 
+However it does that only for regular browser requests.  Other kinds of
+requests issue the default challenge by setting the response code to 401
+(Unauthorized).
+
+    >>> from zope.publisher.tests import httprequest
+    >>> request = httprequest.TestRequest()
+    >>> directlyProvides(request, IFrogMarker)
+    >>> auth.unauthorized(None, request)
+    >>> request.response.getStatus()
+    401
+
+HTTP PUT, does so likewise, even though it uses a real BrowserRequest.
+
+    >>> request = TestRequest()
+    >>> request.method = 'PUT'
+    >>> directlyProvides(request, IFrogMarker)
+    >>> auth.unauthorized(None, request)
+    >>> request.response.getStatus()
+    401
+
 
 Clean up:
 
-    >>> root = setup.placefulTearDown()
+    >>> setup.placefulTearDown()

@@ -39,6 +39,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.component.servicenames import Utilities
 from zope.interface import implements, directlyProvides, directlyProvidedBy
 from zope.security.interfaces import IGroupAwarePrincipal
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -106,6 +107,9 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
+        if not IBrowserRequest.providedBy(request) or request.method == 'PUT':
+            next = getNextUtility(self, IAuthentication)
+            return next.unauthorized(id, request)
         app = getSchoolBellApplication()
         url = zapi.absoluteURL(app, request)
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"

@@ -82,7 +82,6 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         # are fired when the object is copied and pasted.
         authSetUpSubscriber(event)
 
-
     def test_other_object(self):
         from schoolbell.app.security import authSetUpSubscriber
         event = ObjectAddedEvent(self.root)
@@ -205,7 +204,8 @@ def doctest_personPermissionsSubscriber():
 def test_suite():
     return unittest.TestSuite([
         unittest.makeSuite(TestAuthSetUpSubscriber),
-        doctest.DocTestSuite()
+        doctest.DocTestSuite(),
+        doctest.DocFileSuite('../security.txt', optionflags=doctest.ELLIPSIS),
         ])
 
 

@@ -1,5 +1,8 @@
-Functional doctest for schoolbell.app.cal
-=========================================
+Functional doctest for calendaring
+==================================
+
+Set up
+------
 
 We will obviously need a SchoolBell instance.
 
@@ -26,6 +29,9 @@ Let's create a person so that we can fool around with his calendar:
     ... """)
     HTTP/1.1 303 See Other
     ...
+
+Calendar views
+--------------
 
 First, let's have a look at the person's empty calendar in iCalendar format.
 We should find just a placeholder there.
@@ -141,6 +147,9 @@ You can also use nice URLs for the calendar views:
     ...calendar-view-month...
 
 
+Adding new events
+-----------------
+
 Let's add an ordinary event that takes place on 3rd February, 2005:
 
     >>> print http(r"""
@@ -192,6 +201,10 @@ let's use an aliased URL (directly on the person rather than on the calendar):
     END:VCALENDAR
     <BLANKLINE>
 
+
+Uploading iCalendar files
+-------------------------
+
 We can try and put an updated calendar:
 
     >>> print http(r"""
@@ -225,6 +238,29 @@ This should have cleared the calendar.
     ... Authorization: Basic frog:pwd
     ... """))
     True
+
+Random anonymous persons cannot overwrite someone's calendar
+
+    >>> print http(r"""
+    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... Host: localhost:7080
+    ... Content-Length: 244
+    ... Content-Type: text/calendar
+    ...
+    ... BEGIN:VCALENDAR
+    ... VERSION:2.0
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... BEGIN:VEVENT
+    ... UID:empty-calendar-placeholder@schooltool.org
+    ... SUMMARY:Empty calendar
+    ... DTSTART:20050204T100000
+    ... DURATION:PT1H
+    ... DTSTAMP:20050203T150000
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """, handle_errors=True)
+    HTTP/1.1 401 Unauthorized
+    ...
 
 
 Calendar overlaying
