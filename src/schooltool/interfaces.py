@@ -283,6 +283,19 @@ class IRelationshipSchema(Interface):
         """
 
 
+class IRelationshipFactory:
+    """Factory that establishes relationships of a certain type."""
+
+    def __call__(relationship_type, (a, role_a), (b, role_b), title=None):
+        """Relate a and b via the roles and the relationship type.
+
+        Returns a tuple of links.
+
+        Sends a IRelationshipAddedEvent to both a and b after the
+        relationship has been established.
+        """
+
+
 class IRelationshipAPI(Interface):
 
     def relate(relationship_type, (a, role_a), (b, role_b), title=None):
@@ -292,6 +305,9 @@ class IRelationshipAPI(Interface):
 
         Sends a IRelationshipAddedEvent to both participants of the
         relationship after the relationship has been established.
+
+        This function is implemented by looking up a relation factory
+        by the relationship_type.
 
         Example::
                         my report
@@ -321,11 +337,11 @@ class IRelationshipAPI(Interface):
             [link.traverse() for link in obj.listLinks(role)]
         """
 
-    def registerRelationshipType(relationship_type, handler):
+    def registerRelationshipType(relationship_type, factory):
         """Register a relationship type.
 
         relationship_type is an ISpecificURI.
-        handler is a function whose signature mathes IRelationshipAPI.relate.
+        factory is an IRelationshipFactory.
 
         When IRelationshipAPI.relate is called, it will find the handler for
         the most specific relationship type and defer to that.

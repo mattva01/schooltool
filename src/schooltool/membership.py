@@ -151,6 +151,7 @@ class MemberMixin(Persistent):
 
 
 class GroupMixin(Persistent):
+    """This class is a mixin which makes things a group"""
 
     implements(IQueryLinks)
 
@@ -248,8 +249,8 @@ class MemberRemovedEvent(MembershipEvent):
     implements(IMemberRemovedEvent)
 
 
-def relate_membership(relationship_type, (a, role_a), (b, role_b), title=None):
-    """See IRelationshipAPI.relate"""
+def membershipRelate(relationship_type, (a, role_a), (b, role_b), title=None):
+    """See IRelationshipFactory"""
 
     if relationship_type is not URIMembership:
         raise TypeError("Membership relationship must be of type"
@@ -294,5 +295,5 @@ def relate_membership(relationship_type, (a, role_a), (b, role_b), title=None):
 
 def setUp():
     """Register the URIMembership relationship handler."""
-    registerRelationship(URIMembership, relate_membership)
+    registerRelationship(URIMembership, membershipRelate)
 

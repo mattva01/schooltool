@@ -30,6 +30,7 @@ from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 from schooltool.membership import MemberMixin, GroupMixin
+from schooltool.relationships import RelatableMixin
 
 __metaclass__ = type
 
@@ -56,17 +57,23 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
         return sum(tables, [])
 
 
-class Person(MemberMixin, FacetedEventTargetMixin):
+class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
     implements(IPerson)
 
     def __init__(self, name):
         MemberMixin.__init__(self)
         FacetedEventTargetMixin.__init__(self)
+        RelatableMixin.__init__(self)
         self.name = name
 
+    def listLinks(self, role=ISpecificURI):
+        links = MemberMixin.listLinks(self, role)
+        links += RelatableMixin.listLinks(self, role)
+        return links
 
-class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin):
+
+class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
     implements(IGroup)
 
@@ -74,6 +81,7 @@ class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin):
         GroupMixin.__init__(self)
         MemberMixin.__init__(self)
         FacetedEventTargetMixin.__init__(self)
+        RelatableMixin.__init__(self)
         self.name = name
         self.facetFactory = facetFactory
 
@@ -93,6 +101,7 @@ class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin):
     def listLinks(self, role=ISpecificURI):
         links = MemberMixin.listLinks(self, role)
         links += GroupMixin.listLinks(self, role)
+        links += RelatableMixin.listLinks(self, role)
         return links
 
 

@@ -24,7 +24,8 @@ $Id$
 from persistence import Persistent
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
-from schooltool.interfaces import IRemovableLink, IRelatable
+from schooltool.db import PersistentKeysSet
+from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
 from schooltool.interfaces import IRelationshipEvent
@@ -116,6 +117,21 @@ class _LinkRelationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
+def _relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
+    """Sets up a relationship between two IRelatables with
+    Link-_LinkRelationship-Link structure.
+
+    Returns links attached to objects a and b respectively.
+    """
+
+    if title is None:
+        title, doc = inspectSpecificURI(reltype)
+    link_a = Link(a, role_of_b)
+    link_b = Link(b, role_of_a)
+    _LinkRelationship(reltype, title, link_a, link_b)
+    return link_a, link_b
+
+
 class RelationshipSchema:
     classProvides(IRelationshipSchemaFactory)
     implements(IRelationshipSchema)
@@ -166,14 +182,9 @@ class RelationshipRemovedEvent(RelationshipEvent):
     implements(IRelationshipRemovedEvent)
 
 
-def relate_default(reltype, (a, role_of_a), (b, role_of_b), title=None):
-    """See IRelationshipAPI.relate"""
-    if title is None:
-        title, doc = inspectSpecificURI(reltype)
-    link_a = Link(a, role_of_b)
-    link_b = Link(b, role_of_a)
-    _LinkRelationship(reltype, title, link_a, link_b)
-    links = link_a, link_b
+def defaultRelate(reltype, (a, role_of_a), (b, role_of_b), title=None):
+    """See IRelationshipFactory"""
+    links = _relate(reltype, (a, role_of_a), (b, role_of_b), title)
     event = RelationshipAddedEvent(links)
     directlyProvides(event, reltype)
     event.dispatch(a)
@@ -181,7 +192,22 @@ def relate_default(reltype, (a, role_of_a), (b, role_of_b), title=None):
     return links
 
 
+class RelatableMixin:
+
+    implements(IRelatable, IQueryLinks)
+
+    def __init__(self):
+        self.__links__ = PersistentKeysSet()
+
+    def listLinks(self, role=ISpecificURI):
+        result = []
+        for link in self.__links__:
+            if link.role.extends(role, False):
+                result.append(link)
+        return result
+
+
 def setUp():
     """Register the default relationship handler."""
-    registerRelationship(ISpecificURI, relate_default)
+    registerRelationship(ISpecificURI, defaultRelate)
 

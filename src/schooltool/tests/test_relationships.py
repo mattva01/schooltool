@@ -218,10 +218,22 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
             self.assert_(target.events[0] is e)
         return e
 
-    def test_relate(self):
-        from schooltool.interfaces import IRelationshipAddedEvent
-        from schooltool.relationships import relate_default as relate
+    def test__relate(self):
+        from schooltool.relationships import _relate
+        self.doChecks(_relate)
 
+    def test_defaultRelate(self):
+        from schooltool.relationships import defaultRelate
+        from schooltool.interfaces import IRelationshipAddedEvent
+
+        a, b, links  = self.doChecks(defaultRelate)
+
+        e = self.check_one_event_received([a, b])
+        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
+        self.assert_(URICommand.isImplementedBy(e))
+        self.assert_(e.links is links)
+
+    def doChecks(self, relate):
         title = 'a title'
         a, role_a = Relatable(self.serviceManager), URISuperior
         b, role_b = Relatable(self.serviceManager), URIReport
@@ -247,11 +259,46 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         self.assertEqual(list(a.__links__)[0].title, title)
         self.assertEqual(list(b.__links__)[0].title, title)
 
-        e = self.check_one_event_received([a, b])
-        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
-        self.assert_(URICommand.isImplementedBy(e))
-        self.assert_(e.links is links)
+        return a, b, links
 
+class TestRelatableMixin(unittest.TestCase):
+
+    def test(self):
+        from schooltool.relationships import RelatableMixin, _relate
+        from schooltool.interfaces import IRelatable, IQueryLinks
+
+        a = RelatableMixin()
+        b = RelatableMixin()
+
+        verifyObject(IQueryLinks, a)
+        verifyObject(IRelatable, a)
+
+        _relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
+
+        self.assert_(a.listLinks(URIRegClass)[0].traverse() is b)
+        self.assert_(b.listLinks(URIClassTutor)[0].traverse() is a)
+
+    def test_listLinks(self):
+        from schooltool.relationships import RelatableMixin
+        a = RelatableMixin()
+
+        class URIEmployee(ISpecificURI): "foo:employee"
+        class URIJanitor(URIEmployee): "foo:janitor"
+        class URIWindowWasher(URIJanitor): "foo:windowman"
+
+        class LinkStub:
+            def __init__(self, role):
+                self.role = role
+
+        j = LinkStub(URIJanitor)
+        e = LinkStub(URIEmployee)
+
+        a.__links__ = [e, j]
+
+        self.assertEqual(a.listLinks(), [e, j])
+        self.assertEqual(a.listLinks(URIEmployee), [e, j])
+        self.assertEqual(a.listLinks(URIJanitor), [j])
+        self.assertEqual(a.listLinks(URIWindowWasher), [])
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -259,4 +306,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRelationshipSchema))
     suite.addTest(unittest.makeSuite(TestEvents))
     suite.addTest(unittest.makeSuite(TestRelate))
+    suite.addTest(unittest.makeSuite(TestRelatableMixin))
     return suite

@@ -353,12 +353,12 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IMemberAddedEvent
         from schooltool.membership import GroupLink, MemberLink
-        from schooltool.membership import relate_membership as relate
+        from schooltool.membership import membershipRelate
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
 
-        links = relate(URIMembership, (g, URIGroup), (m, URIMember))
+        links = membershipRelate(URIMembership, (g, URIGroup), (m, URIMember))
 
         self.assertEqual(len(links), 2)
         self.assertEqual(type(links[0]), MemberLink)
@@ -374,12 +374,12 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IMemberAddedEvent
         from schooltool.membership import GroupLink, MemberLink
-        from schooltool.membership import relate_membership as relate
+        from schooltool.membership import membershipRelate
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
 
-        links = relate(URIMembership, (g, URIGroup), (m, URIMember),
+        links = membershipRelate(URIMembership, (g, URIGroup), (m, URIMember),
                        title="Membership")
 
         self.assertEqual(len(links), 2)
@@ -396,12 +396,13 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IMemberAddedEvent
         from schooltool.membership import GroupLink, MemberLink
-        from schooltool.membership import relate_membership as relate
+        from schooltool.membership import membershipRelate
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
 
-        links = relate(URIMembership,  (m, URIMember), (g, URIGroup))
+        links = membershipRelate(URIMembership,
+                                 (m, URIMember), (g, URIGroup))
 
         self.assertEqual(len(links), 2)
         self.assertEqual(type(links[0]), GroupLink)
@@ -416,7 +417,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
     def test_relate_membership_not(self):
         from schooltool.interfaces import URIMember, URIMembership
         from schooltool.interfaces import ISpecificURI
-        from schooltool.membership import relate_membership as relate
+        from schooltool.membership import membershipRelate
 
         class URIUnrelated(ISpecificURI):
             """http://ns.example.org/role/unrelated"""
@@ -424,16 +425,16 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
 
-        self.assertRaises(TypeError, relate,
+        self.assertRaises(TypeError, membershipRelate,
                           URIMembership,  (m, URIMember), (g, URIUnrelated))
 
-        self.assertRaises(TypeError, relate,
+        self.assertRaises(TypeError, membershipRelate,
                           URIMembership,  (m, URIMember), (g, URIUnrelated),
                           title="foo")
 
     def test_relate_membership_subtype(self):
         from schooltool.interfaces import URIMember, URIGroup, URIMembership
-        from schooltool.membership import relate_membership as relate
+        from schooltool.membership import membershipRelate
 
         class URIBetterMembership(URIMembership):
             """http://ns.example.org/cult"""
@@ -441,7 +442,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
 
-        self.assertRaises(TypeError, relate,
+        self.assertRaises(TypeError, membershipRelate,
                           URIBetterMembership, (m, URIMember), (g, URIGroup))
 
 
