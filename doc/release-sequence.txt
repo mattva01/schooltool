@@ -14,6 +14,7 @@ executing the following command:
 and start again.
 
 1. Make sure the SERVER_VERSION in schooltool.main is updated.
+   Update the version number in setup.py.
 
 1a. Write a new Changelog entry in debian/changelog.
 
