@@ -12,11 +12,7 @@
     <div class="row"><strong i18n:translate="">Name:</strong>
       <span tal:replace="python:context.__name__">name</span>
     </div>
-    <div class="row">
-      <label for="title" i18n:translate="">Title</label>
-      <input id="title" name="title" type="text"
-             tal:attributes="value context/title" />
-    </div>
+    <div class="row" tal:replace="structure view/title_widget" />
     <div class="buttons">
       <input class="button" type="submit" value="Submit"
              i18n:attributes="value" />

@@ -399,7 +399,10 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectViewMixin):
 
     def addList(self):
         """Return a list of objects available for addition"""
-        searchstr = to_unicode(self.request.args['SEARCH'][0]).lower()
+        try:
+            searchstr = to_unicode(self.request.args['SEARCH'][0]).lower()
+        except UnicodeError:
+            return []
         members = sets.Set(getRelatedObjects(self.context, URIMember))
         addable = []
         for path in ('/groups', '/persons', '/resources'):
@@ -477,10 +480,19 @@ class ResourceEditView(View, AppObjectViewMixin):
 
     back = True
 
-    def do_POST(self, request):
-        title = to_unicode(request.args['title'][0])
-        self.context.title = title
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.title_widget = TextWidget('title', _('Title'),
+                                       value=context.title)
 
+    def do_POST(self, request):
+        self.title_widget.update(request)
+        if self.title_widget.raw_value == '':
+            self.title_widget.setRawValue(None)
+        self.title_widget.require()
+        if self.title_widget.error:
+            return self.do_GET(request)
+        self.context.title = self.title_widget.value
         request.appLog(_("Resource %s modified") % getPath(self.context))
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
