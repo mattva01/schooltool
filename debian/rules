@@ -13,10 +13,6 @@ dummy=schooltool-server
 packageclients=schooltool-clients
 libpkgclients=libschooltool-clients
 
-# database version - change the one in schooltool.preinst if this changes
-db_version=0.8     # TODO - delete this when schooltool can upgrade it's own database
-
-
 # list of files/directories which have arch-dep files in them
 archdep=\( 							\
 	   -path './persistent*'				\
@@ -106,12 +102,6 @@ install-indep-stamp:
 	    debian/$(package)/etc/$(package)/ssl-cert.cnf
 	install -m 644 -D -p debian/$(package).conf.default \
 	    debian/$(package)/usr/share/$(package)/$(package).conf.default
-	# Set the database version.
-	# This is depended on and depends on code in preinst
-	# TODO - delete this when schooltool can upgrade it's own database
-	install -m 644 -D -p README \
-		debian/$(package)/var/lib/$(package)/database_ver
-	echo $(db_version) > debian/$(package)/var/lib/$(package)/database_ver
 
 	# Make client package
 	# arch-indep files
