@@ -149,6 +149,7 @@ def load_options(argv):
 
 def setup(options):
     """Configure SchoolBell."""
+    setUpLogger(None, options.config.error_log_file) # XXX unit test this line
     setUpLogger('accesslog', options.config.web_access_log_file)
 
     # Process ZCML

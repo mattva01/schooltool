@@ -215,27 +215,38 @@ def doctest_setup():
         ...     database = DatabaseConfigStub()
         ...     pid_file = ''
         ...     path = []
+        ...     error_log_file = ['STDERR']
         ...     web_access_log_file = ['STDOUT']
         >>> options.config = ConfigStub()
 
         >>> setup(options)
         <ZODB.DB.DB object at ...>
 
-    Let's see that a web access logger has been set up:
+    A web access logger has been set up:
 
         >>> import logging
-        >>> logger = logging.getLogger('accesslog')
-        >>> logger.propagate
+        >>> logger1 = logging.getLogger('accesslog')
+        >>> logger1.propagate
         False
-        >>> logger.handlers
+        >>> logger1.handlers
+        [<logging.StreamHandler instance at 0x...>]
+
+    A generic access logger has been set up too:
+
+        >>> logger2 = logging.getLogger(None)
+        >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
     Let's clean up logging:
 
-        >>> del logger.handlers[:]
-        >>> logger.propagate = True
-        >>> logger.disabled = False
-        >>> logger.setLevel(0)
+        >>> del logger1.handlers[:]
+        >>> logger1.propagate = True
+        >>> logger1.disabled = False
+        >>> logger1.setLevel(0)
+        >>> del logger2.handlers[:]
+        >>> logger2.propagate = True
+        >>> logger2.disabled = False
+        >>> logger2.setLevel(0)
 
     TODO: perform checks!
     TODO: clean up everything!
