@@ -79,6 +79,15 @@ class TestEventLogFacet(unittest.TestCase):
         self.assertEquals(ea.callback, event_log.notify)
 
 
+class TestEventLogFacetFactory(unittest.TestCase):
+
+    def test(self):
+        from schooltool.debug import EventLogFacetFactory
+        from schooltool.interfaces import IFacetFactory
+        factory = EventLogFacetFactory()
+        verifyObject(IFacetFactory, factory)
+
+
 class TestEventLogger(unittest.TestCase):
 
     def setUp(self):
@@ -130,6 +139,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventLog))
     suite.addTest(unittest.makeSuite(TestEventLogUtility))
     suite.addTest(unittest.makeSuite(TestEventLogFacet))
+    suite.addTest(unittest.makeSuite(TestEventLogFacetFactory))
     suite.addTest(unittest.makeSuite(TestEventLogger))
     return suite
 

@@ -443,10 +443,12 @@ class Server:
         import schooltool.relationship
         import schooltool.membership
         import schooltool.views
+        import schooltool.debug
 
         schooltool.relationship.setUp()
         schooltool.membership.setUp()
         schooltool.views.setUp()
+        schooltool.debug.setUp()
 
         db_configuration = self.config.database
         self.db = db_configuration.open()

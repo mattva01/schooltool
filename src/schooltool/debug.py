@@ -24,10 +24,14 @@ import logging
 import datetime
 from persistence import Persistent
 from persistence.list import PersistentList
-from zope.interface import implements, Attribute
+from zope.interface import implements, moduleProvides, Attribute
 from schooltool.interfaces import IEventTarget, ILocation, IUtility
 from schooltool.interfaces import IEventConfigurable, IFacet
+from schooltool.interfaces import IModuleSetup, IFacetFactory
 from schooltool.event import CallAction
+from schooltool.component import registerFacetFactory
+
+moduleProvides(IModuleSetup)
 
 __metaclass__ = type
 
@@ -94,6 +98,16 @@ class EventLogFacet(EventLog):
         self.eventTable = (CallAction(self.notify), )
 
 
+class EventLogFacetFactory:
+    """Free-floating facet factory for event log facets."""
+
+    implements(IFacetFactory)
+
+    name = "Event Log Factory"
+    title = "Event Log Factory"
+    __call__ = EventLogFacet
+
+
 class EventLogger(Persistent):
     """Locatable event logger."""
 
@@ -105,4 +119,9 @@ class EventLogger(Persistent):
 
     def notify(self, event):
         logging.debug('Event: %r' % event)
+
+
+def setUp():
+    """Register the EventLogFacetFactory."""
+    registerFacetFactory(EventLogFacetFactory())
 
