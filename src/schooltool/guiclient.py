@@ -34,6 +34,7 @@ the Free Software Foundation; either version 2 of the License, or
 import httplib
 import socket
 import libxml2
+import datetime
 import cgi
 # XXX: parse_datetime should be split into a separate common module shared by
 # both the client and the server
@@ -576,6 +577,8 @@ class GroupInfo:
 class AbsenceInfo:
     """Information about an absence."""
 
+    now = datetime.datetime.utcnow       # Hook for unit tests
+
     uri = None                  # URI of this absence
     datetime = None             # Date and time of first report
     person_title = None         # Person (title)
@@ -594,6 +597,11 @@ class AbsenceInfo:
         self.resolved = resolved
         self.expected_presence = expected_presence
 
+    def expected(self):
+        """Is this absence expected?"""
+        return (self.expected_presence is not None and
+                self.expected_presence >= self.now())
+
     def __cmp__(self, other):
         if not isinstance(other, AbsenceInfo):
             raise NotImplementedError("cannot compare %r with %r"
@@ -604,6 +612,61 @@ class AbsenceInfo:
                    (other.datetime, other.uri, other.person_title,
                     other.person_href, other.ended, other.resolved,
                     other.expected_presence))
+
+    def __str__(self):
+        if self.expected_presence:
+            return ("%s expected %s, at %s %s"
+                    % (self.person_title,
+                       self.format_age(self.now() - self.expected_presence,
+                                       '%s ago', 'in %s'),
+                       self.expected_presence.strftime("%I:%M%P"),
+                       self.format_date(self.expected_presence)))
+        else:
+            return ("%s absent for %s, since %s %s"
+                    % (self.person_title,
+                       self.format_age(self.now() - self.datetime),
+                       self.datetime.strftime("%I:%M%P"),
+                       self.format_date(self.datetime)))
+
+    def format_age(self, age, fmt_positive='%s', fmt_negative='-%s'):
+        """Format a time interval.
+
+        >>> from datetime import timedelta
+        >>> format_age(timedelta(minutes=5))
+        '0h5m'
+        >>> format_age(timedelta(hours=2, minutes=15))
+        '2h15m'
+        >>> format_age(timedelta(0))
+        '0h0m'
+        >>> format_age(-timedelta(minutes=5))
+        '-0h5m'
+        >>> format_age(-timedelta(hours=2, minutes=15))
+        '-2h15m'
+        >>> format_age(timedelta(hours=2, minutes=15), 'in %s', '%s ago')
+        'in 2h15m'
+        >>> format_age(-timedelta(hours=2, minutes=15), 'in %s', '%s ago')
+        '2h15m ago'
+        """
+        fmt = fmt_positive
+        age = age.days * 86400 + age.seconds
+        if age < 0:
+            age = -age
+            fmt = fmt_negative
+        return fmt % '%dh%dm' % divmod(age / 60, 60)
+
+    def format_date(self, date):
+        """Format the date part of a datetime.
+
+        >>> from datetime import date
+        >>> format_date(date(2001, 2, 3))
+        '2001-02-03'
+        >>> format_date(date.utcnow())
+        'today'
+        """
+        if date.date() == self.now().date():
+            return 'today'
+        else:
+            return date.strftime('%Y-%m-%d')
 
     def __repr__(self):
         return "%s(%r, %r, %r, %r, %r, %r, %r)" % (self.__class__.__name__,

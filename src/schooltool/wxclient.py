@@ -145,8 +145,8 @@ class RollCallDlg(wxDialog):
             abutton0 = wxRadioButton(scrolled_panel, -1, "Unset",
                                      style=wxRB_GROUP)
             abutton0.Hide()
-            abutton1 = wxRadioButton(scrolled_panel, -1, "Absent")
             abutton2 = wxRadioButton(scrolled_panel, -1, "Present")
+            abutton1 = wxRadioButton(scrolled_panel, -1, "Absent")
             if was_absent:
                 EVT_RADIOBUTTON(self, abutton1.GetId(), self.OnPresenceChanged)
                 EVT_RADIOBUTTON(self, abutton2.GetId(), self.OnPresenceChanged)
@@ -237,26 +237,40 @@ class AbsenceFrame(wxFrame):
     """Window showing the list of person's absences."""
 
     def __init__(self, client, person_id, title, parent=None, id=-1,
-                 persons=True):
-        """Create an absence list window."""
-        wxFrame.__init__(self, parent, id, title, size=wxSize(400, 300))
+                 detailed=True, persons=True):
+        """Create an absence list window.
+
+        Two arguments influence the contents of the absence list:
+        - if detailed is False, only a single column containing an
+          overview of an absence is shown (John Doe absent for 2h15m)
+        - if detailed is True, the absence list has a number columns
+          showing its exact state
+        - person specifies whether the person name should be shown in
+          a column in detailed mode (it makes sense to disable it when
+          viewing absences for a single person)
+        """
+        wxFrame.__init__(self, parent, id, title, size=wxSize(600, 400))
         self.client = client
         self.title = title
         self.person_id = person_id
         self.absence_data = []
         self.persons = persons
+        self.detailed = detailed
 
         main_sizer = wxBoxSizer(wxVERTICAL)
         splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
         ID_ABSENCE_LIST = wxNewId()
         self.absence_list = wxListCtrl(splitter, ID_ABSENCE_LIST,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
-        self.absence_list.InsertColumn(0, "Date", width=110)
-        self.absence_list.InsertColumn(1, "Ended?", width=110)
-        self.absence_list.InsertColumn(2, "Resolved?", width=110)
-        self.absence_list.InsertColumn(3, "Expected Presence", width=150)
-        if self.persons:
-            self.absence_list.InsertColumn(1, "Person", width=110)
+        if self.detailed:
+            self.absence_list.InsertColumn(0, "Date", width=110)
+            self.absence_list.InsertColumn(1, "Ended?", width=110)
+            self.absence_list.InsertColumn(2, "Resolved?", width=110)
+            self.absence_list.InsertColumn(3, "Expected Presence", width=150)
+            if self.persons:
+                self.absence_list.InsertColumn(1, "Person", width=110)
+        else:
+            self.absence_list.InsertColumn(0, "Absence", width=580)
         EVT_LIST_ITEM_SELECTED(self, ID_ABSENCE_LIST, self.DoSelectAbsence)
         self.comment_list = wxListCtrl(splitter, -1,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
@@ -268,7 +282,7 @@ class AbsenceFrame(wxFrame):
         self.comment_list.InsertColumn(5, "Expected Presence", width=150)
         self.comment_list.InsertColumn(6, "Comment", width=200)
         splitter.SetMinimumPaneSize(50)
-        splitter.SplitHorizontally(self.absence_list, self.comment_list, 100)
+        splitter.SplitHorizontally(self.absence_list, self.comment_list, 200)
         main_sizer.Add(splitter, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
@@ -300,33 +314,52 @@ class AbsenceFrame(wxFrame):
             wxMessageBox("Could not get list of absences: %s" % e, self.title,
                          wxICON_ERROR|wxOK)
             return
-        # sort newest absences first
-        self.absence_data.sort()
-        self.absence_data.reverse()
-        for idx, absence in enumerate(self.absence_data):
-            self.absence_list.InsertStringItem(idx,
-                    absence.datetime.isoformat(' '))
-            self.absence_list.SetItemData(idx, idx)
-            if self.persons:
-                self.absence_list.SetStringItem(idx, 1, absence.person_title)
-                n = 1
-            else:
-                n = 0
-            self.absence_list.SetStringItem(idx, n+1,
-                    absence.ended and "Yes" or "No")
-            self.absence_list.SetStringItem(idx, n+2,
-                    absence.resolved and "Yes" or "No")
-            if absence.expected_presence is not None:
-                self.absence_list.SetStringItem(idx, n+3,
-                        absence.expected_presence.isoformat(' '))
-            if not absence.ended:
-                item = self.absence_list.GetItem(idx)
-                item.SetTextColour(wxRED)
-                self.absence_list.SetItem(item)
-            elif not absence.resolved:
-                item = self.absence_list.GetItem(idx)
-                item.SetTextColour(wxBLUE)
-                self.absence_list.SetItem(item)
+        if self.detailed:
+            # sort newest absences first
+            self.absence_data.sort()
+            self.absence_data.reverse()
+            for idx, absence in enumerate(self.absence_data):
+                self.absence_list.InsertStringItem(idx,
+                        absence.datetime.isoformat(' '))
+                self.absence_list.SetItemData(idx, idx)
+                self.absence_list.InsertStringItem(idx,
+                        absence.datetime.isoformat(' '))
+                self.absence_list.SetItemData(idx, idx)
+                if self.persons:
+                    self.absence_list.SetStringItem(idx, 1,
+                                                    absence.person_title)
+                    n = 1
+                else:
+                    n = 0
+                self.absence_list.SetStringItem(idx, n+1,
+                        absence.ended and "Yes" or "No")
+                self.absence_list.SetStringItem(idx, n+2,
+                        absence.resolved and "Yes" or "No")
+                if absence.expected_presence is not None:
+                    self.absence_list.SetStringItem(idx, n+3,
+                            absence.expected_presence.isoformat(' '))
+                if not absence.ended:
+                    item = self.absence_list.GetItem(idx)
+                    item.SetTextColour(wxRED)
+                    self.absence_list.SetItem(item)
+                elif not absence.resolved:
+                    item = self.absence_list.GetItem(idx)
+                    item.SetTextColour(wxBLUE)
+                    self.absence_list.SetItem(item)
+        else:
+            # sort unexpected absences first, then sort by date (oldest first)
+            absences = [(absence.expected(),
+                         absence.expected_presence or absence.datetime,
+                         absence) for absence in self.absence_data]
+            absences.sort()
+            self.absence_data = [row[-1] for row in absences]
+            for idx, absence in enumerate(self.absence_data):
+                self.absence_list.InsertStringItem(idx, str(absence))
+                self.absence_list.SetItemData(idx, idx)
+                if not absence.expected():
+                    item = self.absence_list.GetItem(idx)
+                    item.SetTextColour(wxRED)
+                    self.absence_list.SetItem(item)
 
     def DoSelectAbsence(self, event):
         """Refresh the absence comment list."""
@@ -734,7 +767,7 @@ class MainFrame(wxFrame):
         Accessible via View|All Absences.
         """
         window = AbsenceFrame(self.client, "/utils/absences", parent=self,
-                              title="All absences", persons=True)
+                              title="All absences", detailed=False)
         window.Show()
 
 

@@ -953,9 +953,93 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
 
 
+class TestAbsenceInfo(unittest.TestCase):
+
+    def test_cmp(self):
+        from schooltool.guiclient import AbsenceInfo
+        nargs = 7 # number of constructor arguments
+        ai = AbsenceInfo(*range(nargs))
+        self.assertEquals(ai, ai)
+        for i in range(nargs):
+            args = range(nargs)
+            args[i] = -1
+            self.assertNotEquals(ai, AbsenceInfo(*args))
+
+        a1 = AbsenceInfo(*([1] * nargs))
+        a2 = AbsenceInfo(*([2] * nargs))
+        self.assert_(a1 < a2)
+        a1.datetime = 2
+        a2.datetime = 1
+        self.assert_(a1 > a2)
+
+    def test_expected(self):
+        from schooltool.guiclient import AbsenceInfo
+        dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
+        ai = AbsenceInfo(None, dt, None, None, None, None, None)
+        self.assert_(not ai.expected())
+
+        et = datetime.datetime(2002, 3, 4, 5, 6, 7)
+        ai = AbsenceInfo(None, dt, None, None, None, None, et)
+        ai.now = lambda: datetime.datetime(2002, 3, 4, 5, 6, 6)
+        self.assert_(ai.expected())
+        ai.now = lambda: datetime.datetime(2002, 3, 4, 5, 6, 7)
+        self.assert_(ai.expected())
+        ai.now = lambda: datetime.datetime(2002, 3, 4, 5, 6, 8)
+        self.assert_(not ai.expected())
+
+    def test_str(self):
+        from schooltool.guiclient import AbsenceInfo
+        dt = datetime.datetime(2001, 2, 3, 15, 44, 57)
+        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, None)
+        ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
+        self.assertEquals(str(ai), "John Smith absent for 2h15m,"
+                                   " since 03:44pm today")
+
+        et = datetime.datetime(2001, 2, 3, 18, 30, 00)
+        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et)
+        ai.now = lambda: datetime.datetime(2001, 2, 3, 17, 59, 58)
+        self.assertEquals(str(ai), "John Smith expected in 0h30m,"
+                                   " at 06:30pm today")
+
+        et = datetime.datetime(2001, 2, 3, 18, 30, 00)
+        ai = AbsenceInfo(None, dt, 'John Smith', None, None, None, et)
+        ai.now = lambda: datetime.datetime(2001, 2, 4, 12, 14, 17)
+        self.assertEquals(str(ai), "John Smith expected 17h44m ago,"
+                                   " at 06:30pm 2001-02-03")
+
+    def test_format_date(self):
+        from schooltool.guiclient import AbsenceInfo
+        ai = AbsenceInfo(None, None, None, None, None, None, None)
+        dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
+        ai.now = lambda: datetime.datetime(2001, 2, 3, 6, 5, 4)
+        self.assertEquals(ai.format_date(dt), 'today')
+        ai.now = lambda: datetime.datetime(2001, 2, 4, 6, 5, 4)
+        self.assertEquals(ai.format_date(dt), '2001-02-03')
+
+    def test_format_age(self):
+        from schooltool.guiclient import AbsenceInfo
+        ai = AbsenceInfo(None, None, None, None, None, None, None)
+        format_age = ai.format_age
+        self.assertEquals(format_age(datetime.timedelta(minutes=5)), '0h5m')
+        self.assertEquals(format_age(datetime.timedelta(hours=2, minutes=15)),
+                          '2h15m')
+        self.assertEquals(format_age(datetime.timedelta(days=2, hours=2,
+                                                    minutes=15, seconds=3)),
+                          '50h15m')
+        self.assertEquals(format_age(datetime.timedelta(0)), '0h0m')
+        self.assertEquals(format_age(-datetime.timedelta(minutes=5)), '-0h5m')
+        self.assertEquals(format_age(-datetime.timedelta(hours=2, minutes=15)),
+                          '-2h15m')
+        self.assertEquals(format_age(datetime.timedelta(hours=2, minutes=15),
+                          'in %s', '%s ago'), 'in 2h15m')
+        self.assertEquals(format_age(-datetime.timedelta(hours=2, minutes=15),
+                          'in %s', '%s ago'), '2h15m ago')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
+    suite.addTest(unittest.makeSuite(TestAbsenceInfo))
     return suite
 
 if __name__ == '__main__':

@@ -1051,6 +1051,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
         return self._listAbsences(self.context.absences, True)
 
     def do_GET(self, request):
+        # XXX this is bogus as it ignores priority levels
         if 'text/plain' in [row[1] for row in request.accept]:
             return self.text_template(request)
         else:
