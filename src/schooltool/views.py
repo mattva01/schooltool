@@ -174,7 +174,7 @@ class GroupView(View):
 
     def listItems(self):
         for item in self.context.values():
-            yield {'name': item.name, 'path': getPath(item)}
+            yield {'title': item.title, 'path': getPath(item)}
 
 
 class PersonView(View):
@@ -183,5 +183,5 @@ class PersonView(View):
     template = Template("www/person1.pt", content_type="text/xml")
 
     def getGroups(self):
-        return [{'name': group.name, 'path': getPath(group)}
+        return [{'title': group.title, 'path': getPath(group)}
                 for group in self.context.groups()]

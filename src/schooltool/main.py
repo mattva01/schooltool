@@ -45,7 +45,8 @@ from twisted.python import threadable
 from twisted.python import failure
 
 from schooltool import mockup
-from schooltool.model import RootGroup, Group, Person
+from schooltool.app import Application, ApplicationObjectContainer
+from schooltool import model
 from schooltool.views import GroupView, errorPage
 
 __metaclass__ = type
@@ -474,18 +475,24 @@ class Server:
 
     def createApplication(self, datamgr):
         """Instantiate a new application"""
-        root = RootGroup("root")
-        teachers = Group("teachers")
-        students = Group("students")
-        cleaners = Group("cleaners")
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(model.Group)
+        app['persons'] = ApplicationObjectContainer(model.Person)
+        Person = app['persons'].new
+        Group = app['groups'].new
+
+        root = Group(title="root")
+        teachers = Group(title="teachers")
+        students = Group(title="students")
+        cleaners = Group(title="cleaners")
         root.add(teachers)
         root.add(students)
         root.add(cleaners)
-        teachers.add(Person("Mark"))
-        teachers.add(Person("Steve"))
-        students.add(Person("Aiste"))
-        cleaners.add(Person("Albertas"))
-        cleaners.add(Person("Marius"))
+        teachers.add(Person(title="Mark"))
+        teachers.add(Person(title="Steve"))
+        students.add(Person(title="Aiste"))
+        cleaners.add(Person(title="Albertas"))
+        cleaners.add(Person(title="Marius"))
         return root
 
     def notifyConfigFile(self, config_file):

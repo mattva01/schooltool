@@ -194,11 +194,15 @@ class TestGroupView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import GroupView
-        from schooltool.model import RootGroup, Group, Person
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.group = app['groups'].new("root", title="group")
+        self.sub = app['groups'].new("subgroup", title="subgroup")
+        self.per = app['persons'].new("p", title="p")
 
-        self.group = RootGroup("group")
-        self.sub = Group("subgroup")
-        self.per = Person("p")
         self.subkey = self.group.add(self.sub)
         self.perkey = self.group.add(self.per)
 
@@ -225,6 +229,7 @@ class TestGroupView(unittest.TestCase):
                           trash, RequestStub())
 
     def test_render(self):
+        from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
         request.method = "GET"
         request.path = '/group'
@@ -233,10 +238,11 @@ class TestGroupView(unittest.TestCase):
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>group</name>
               <item xlink:type="simple" xlink:title="subgroup"
-                    xlink:href="/%s"/>
-              <item xlink:type="simple" xlink:title="p" xlink:href="/%s"/>
+                    xlink:href="%s"/>
+              <item xlink:type="simple" xlink:title="p"
+                    xlink:href="%s"/>
             </group>
-            """ % (self.subkey, self.perkey))
+            """ % (getPath(self.sub), getPath(self.per)))
         self.assertEqual(result, expected,
                          'expected != actual\n%s' % diff(expected, result))
         self.assertEquals(request.headers['Content-Type'],
@@ -248,33 +254,35 @@ class TestPersonView(unittest.TestCase):
     def setUp(self):
         from schooltool.views import PersonView
         from schooltool.model import Group, Person
-        from schooltool.interfaces import IContainmentRoot
-        from zope.interface import directlyProvides
+        from schooltool.app import Application, ApplicationObjectContainer
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.group = app['groups'].new("root", title="group")
+        self.sub = app['groups'].new("subgroup", title="subgroup")
+        self.per = app['persons'].new("p", title="Pete")
 
-        self.group = Group("group")
-        directlyProvides(self.group, IContainmentRoot)
-        self.sub = Group("subgroup")
-        self.per = Person("Pete")
-        self.subkey = self.group.add(self.sub)
-        self.perkey = self.group.add(self.per)
+        self.group.add(self.sub)
+        self.group.add(self.per)
         self.sub.add(self.per)
 
         self.view = PersonView(self.per)
 
     def test_render(self):
+        from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
         request.method = "GET"
-        request.path = '/group/%s' % self.perkey
+        request.path = getPath(self.per)
         result = self.view.render(request)
         segments = dedent("""
             <person xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>Pete</name>
               <groups>
             ---8<---
-                <item xlink:type="simple" xlink:href="/"
+                <item xlink:type="simple" xlink:href="/groups/root"
                       xlink:title="group"/>
             ---8<---
-                <item xlink:type="simple" xlink:href="/0"
+                <item xlink:type="simple" xlink:href="/groups/subgroup"
                       xlink:title="subgroup"/>
             ---8<---
               </groups>

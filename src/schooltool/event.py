@@ -30,6 +30,7 @@ from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 from schooltool.interfaces import IRouteToRelationshipsAction
+from schooltool.interfaces import URIMember, URIGroup
 from schooltool.component import getEventService
 from schooltool.component import getRelatedObjects, inspectSpecificURI
 
@@ -98,12 +99,28 @@ class LookupAction(EventActionMixin):
                 action.handle(event, target)
 
 
+class DefinitelyAnAttributeDescriptor:
+
+    def __init__(self, attr):
+        self.attr = attr
+
+    def __get__(self, inst, cls=None):
+        if inst is None:
+            return self
+        else:
+            return self.attr
+
+    def __set__(self, inst, value):
+        self.attr = value
+
 class RouteToMembersAction(EventActionMixin):
 
     implements(IRouteToMembersAction)
 
+    getRelatedObjects = DefinitelyAnAttributeDescriptor(getRelatedObjects)
+
     def handle(self, event, target):
-        for member in target.values():
+        for member in self.getRelatedObjects(target, URIMember):
             event.dispatch(member)
 
 
@@ -111,8 +128,10 @@ class RouteToGroupsAction(EventActionMixin):
 
     implements(IRouteToGroupsAction)
 
+    getRelatedObjects = DefinitelyAnAttributeDescriptor(getRelatedObjects)
+
     def handle(self, event, target):
-        for group in target.groups():
+        for group in self.getRelatedObjects(target, URIGroup):
             event.dispatch(group)
 
 

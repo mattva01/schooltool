@@ -21,8 +21,9 @@ Functional tests for SchoolTool event system
 """
 
 import unittest
+from sets import Set
 from zope.interface import implements, Attribute
-from schooltool.interfaces import IEvent, IEventTarget
+from schooltool.interfaces import IEvent, IEventTarget, IRelatable
 from schooltool.event import EventMixin
 from schooltool.membership import MemberMixin
 from transaction import get_transaction
@@ -54,11 +55,12 @@ class ArbitraryEvent(ContextEvent):
 
 
 class EventCatcher(MemberMixin):
-    implements(IEventTarget)
+    implements(IEventTarget, IRelatable)
 
     def __init__(self):
         MemberMixin.__init__(self)
         self.received = []
+        self.__links__ = Set()
 
     def notify(self, event):
         self.received.append(event)
@@ -79,36 +81,53 @@ class TestEventSystem(unittest.TestCase):
         #   | `-- Fred person (routes all events to its parent)
         #   `-- another_listener (stores all received events)
         #
-        from schooltool.model import RootGroup, Group, Person
+        from schooltool import model
         from schooltool.event import RouteToGroupsAction, RouteToMembersAction
         from schooltool.event import RouteToRelationshipsAction
         from schooltool.interfaces import URIGroup, URIMember
-        root = RootGroup("root")
-        datamgr.root()['root'] = root
-        datamgr.add(root)
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        import schooltool.membership
+
+        schooltool.membership.setUp()
+
+        app = Application()
+
+        app['groups'] = ApplicationObjectContainer(model.Group)
+        app['persons'] = ApplicationObjectContainer(model.Person)
+        app['stubs'] = ApplicationObjectContainer(EventCatcher)
+        Person = app['persons'].new
+        Group = app['groups'].new
+        EventCatcherFactory = app['stubs'].new
+
+        root = Group(title="root")
+        datamgr.root()['root'] = app
         root.eventTable.append(RouteToMembersAction(IStudentEvent))
 
-        students = Group("students")
+        students = Group(title="students")
         students.eventTable.append(RouteToRelationshipsAction(URIGroup, IEvent))
-        root.add(students)
+        Membership(group=root, member=students)
 
-        student1 = Person("Fred")
+        student1 = Person(title="Fred")
         student1.eventTable.append(RouteToGroupsAction(IEvent))
-        students.add(student1)
+        Membership(group=students, member=student1)
 
-        misc_group = Group("misc")
+        misc_group = Group(title="misc")
         misc_group.eventTable.append(
             RouteToRelationshipsAction(URIMember, IEvent))
-        root.add(misc_group)
+        Membership(group=root, member=misc_group)
 
-        another_listener = EventCatcher()
-        misc_group.add(another_listener)
+        another_listener = EventCatcherFactory()
+        Membership(group=misc_group, member=another_listener)
+
+        # We want to forget the event of our addition
+        another_listener.received = []
 
         # Create another event listener, not attached to the containment
         # hierarchy, and subscribe it to the global event service
         from schooltool.component import getEventService
-        event_log = EventCatcher()
-        getEventService(root).subscribe(event_log, IEvent)
+        event_log = EventCatcherFactory()
+        getEventService(app).subscribe(event_log, IEvent)
 
         get_transaction().commit()
 

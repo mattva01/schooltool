@@ -5,7 +5,7 @@
 <ul>
   <li tal:repeat="member view/context/keys"
     ><a tal:attributes="href string:/people/$member"
-        tal:content="python: view.context[member].name">person_name</a></li>
+        tal:content="python: view.context[member].title">person_title</a></li>
 </ul>
 </body>
 </html>

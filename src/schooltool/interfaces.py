@@ -566,17 +566,6 @@ class IGroupRead(Interface):
     None, they also must implement IFaceted.
     """
 
-    facetFactory = Attribute(
-        """Factory for facets set on new members.
-
-        Can be None.  Factory gets called with a single argument that is
-        the member the facet will be set on.
-
-        Note that if you change facetFactory once some members have
-        been added (and possibly removed), those members will keep their
-        old facets.
-        """)
-
     def __getitem__(key):
         """Returns a member with the given key.
 
@@ -622,7 +611,7 @@ class IGroup(IGroupWrite, IGroupRead, IFaceted):
 
 class IGroupMember(ILocation):
 
-    name = Attribute("A human readable name of this member.")
+    title = Attribute("A human readable name of this member.")
 
     def groups():
         """Returns a set for all groups this object is a member of."""
@@ -640,12 +629,8 @@ class IGroupMember(ILocation):
 
 class IPerson(IGroupMember, IFaceted):
 
-    name = Attribute("Person's name")
+    title = Attribute("Person's name")
 
-
-# XXX The IRootGroup needs to be refactored out.
-class IRootGroup(IGroup, IContainmentRoot, IServiceManager):
-    """An interface for the application root group."""
 
 class IApplication(IContainmentRoot, IServiceManager):
     """The application object.
@@ -674,11 +659,13 @@ class IApplicationObjectContainer(ILocation):
     def __getitem__(name):
         """Returns the contained object that has the given name."""
 
-    def new(name=None):
+    def new(__name__=None, **kw):
         """Creates and returns a new contained object.
 
-        If name is None, a name is chosen for the object. Otherwise,
-        name is a unicode or seven bit safe string.
+        If __name__ is None, a name is chosen for the object.
+        Otherwise, __name__ is a unicode or seven bit safe string.
+        The rest of the keyword arguments are passed to the object's
+        constructor.
 
         If the given name is already taken, raises a KeyError.
 

@@ -23,7 +23,7 @@ $Id$
 """
 
 from zope.interface import implements
-from schooltool.interfaces import IPerson, IGroup, IRootGroup
+from schooltool.interfaces import IPerson, IGroup
 from schooltool.event import EventService
 from schooltool.membership import MemberMixin, GroupMixin
 from schooltool.relationship import RelatableMixin
@@ -36,31 +36,20 @@ class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
     implements(IPerson)
 
-    def __init__(self, name):
+    def __init__(self, title=None):
         MemberMixin.__init__(self)
         FacetedEventTargetMixin.__init__(self)
         RelatableMixin.__init__(self)
-        self.name = name
+        self.title = title
 
 
 class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
     implements(IGroup)
 
-    def __init__(self, name, facetFactory=None):
+    def __init__(self, title=None):
         GroupMixin.__init__(self)
         MemberMixin.__init__(self)
         FacetedEventTargetMixin.__init__(self)
         RelatableMixin.__init__(self)
-        self.name = name
-        self.facetFactory = facetFactory
-
-
-class RootGroup(Group):
-    """A persistent application root object"""
-
-    implements(IRootGroup)
-
-    def __init__(self, name, facetFactory=None):
-        Group.__init__(self, name, facetFactory)
-        self.eventService = EventService()
+        self.title = title

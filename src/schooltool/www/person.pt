@@ -1,8 +1,8 @@
 <html>
-<head><title tal:content="context/name">Person Name</title></head>
+<head><title tal:content="context/title">Person Name</title></head>
 <body>
-<h1 tal:content="context/name">Person Name</h1>
-<p>Information page for <span tal:replace="context/name">Person Name</span></p>
+<h1 tal:content="context/title">Person Name</h1>
+<p>Information page for <span tal:replace="context/title">Person Name</span></p>
 <p>
 <img src="photo" tal:attributes="src string:${request/path}/photo"
      alt="photo" />

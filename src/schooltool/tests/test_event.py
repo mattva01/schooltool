@@ -155,14 +155,22 @@ class TestEventActionMixins(unittest.TestCase):
 
     def testRouteToMembersAction(self):
         from schooltool.event import RouteToMembersAction
-        from schooltool.interfaces import IRouteToMembersAction
+        from schooltool.interfaces import IRouteToMembersAction, URIMember
         action = RouteToMembersAction(IEventA)
         verifyObject(IRouteToMembersAction, action)
         self.assertEquals(action.eventType, IEventA)
 
         event = EventAStub()
         child1, child2 = object(), object()
-        target = {1: child1, 2: child2}
+        target = object()
+
+        def getRelatedObjectsStub(ob, uri):
+            if target == ob and uri == URIMember:
+                return [child1, child2]
+            return []
+
+        action.getRelatedObjects = getRelatedObjectsStub
+
         action.handle(event, target)
         dispatched_to = event.dispatched_to
         members = [child1, child2]
@@ -172,20 +180,21 @@ class TestEventActionMixins(unittest.TestCase):
 
     def testRouteToGroupsAction(self):
         from schooltool.event import RouteToGroupsAction
-        from schooltool.interfaces import IRouteToGroupsAction
+        from schooltool.interfaces import IRouteToGroupsAction, URIGroup
         action = RouteToGroupsAction(IEventA)
         verifyObject(IRouteToGroupsAction, action)
         self.assertEquals(action.eventType, IEventA)
 
-        class MemberStub:
-            def __init__(self, groups):
-                self._groups = groups
-            def groups(self):
-                return self._groups
-
         event = EventAStub()
         group1, group2 = object(), object()
-        target = MemberStub(groups=[group1, group2])
+        target = object()
+
+        def getRelatedObjectsStub(ob, uri):
+            if target == ob and uri == URIGroup:
+                return [group1, group2]
+            return []
+
+        action.getRelatedObjects = getRelatedObjectsStub
         action.handle(event, target)
         dispatched_to = event.dispatched_to
         groups = [group1, group2]

@@ -95,14 +95,15 @@ class ApplicationObjectContainer(Persistent):
         self._nextid += 1
         return '%06i' % thisid
 
-    def new(self, name=None):
+    def new(self, __name__=None, **kw):
+        name = __name__
         if name is None:
             name = self._newName()
             while name in self._contents:
                 name = self._newName()
         elif name in self._contents:
             raise KeyError, name
-        obj = self._factory()
+        obj = self._factory(**kw)
         self._contents[name] = obj
         obj.__name__ = name
         obj.__parent__ = self

@@ -104,20 +104,10 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(list(member.groups()), [group])
 
 
-class TestRootGroup(unittest.TestCase):
-
-    def test_interfaces(self):
-        from schooltool.interfaces import IRootGroup
-        from schooltool.model import RootGroup
-        group = RootGroup("root")
-        verifyObject(IRootGroup, group)
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
-    suite.addTest(unittest.makeSuite(TestRootGroup))
     return suite
 
 if __name__ == '__main__':

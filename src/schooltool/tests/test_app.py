@@ -35,12 +35,13 @@ class P(Persistent):
     pass
 
 class Location(Persistent):
-    __slots__ = '__parent__', '__name__'
+    __slots__ = '__parent__', '__name__', 'optional'
     implements(ILocation)
 
-    def __init__(self):
+    def __init__(self, optional=None):
         self.__parent__ = None
         self.__name__ = None
+        self.optional = optional
 
 class TestApplication(unittest.TestCase, EqualsSortedMixin):
     def test(self):
@@ -83,19 +84,23 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
     def testDoingStuffToContents(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = lambda: Location()
+        factory = Location
         a = ApplicationObjectContainer(factory)
         def case1():
-            return None, a.new()
+            return None, a.new(), None
         def case2():
             name = 'whatever something'
-            return name, a.new(name)
+            return name, a.new(name), None
+        def case3():
+            name = 'whatever something 2'
+            return name, a.new(name, optional='yes'), 'yes'
 
-        for case in case1, case2:
-            desiredname, obj = case()
+        for case in case1, case2, case3:
+            desiredname, obj, optional = case()
             name = obj.__name__
             if desiredname:
                 self.assertEqual(name, desiredname)
+            self.assertEqual(obj.optional, optional)
             self.assert_(obj.__parent__ is a, 'obj.__parent__ is a')
             self.assert_(a[name] is obj, 'a[name] is obj')
             self.assertEqual(a.keys(), [name])
@@ -112,7 +117,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
         self.assertRaises(KeyError, a.new, 'foo')
 
         for count in 1, 2, 3, 4, 5, 6, 7, 8:
-          a.new()
+            a.new()
 
     def testAnotherContainerTakesResponsibility(self):
         from schooltool.app import ApplicationObjectContainer
