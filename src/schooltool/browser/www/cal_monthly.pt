@@ -13,11 +13,11 @@
            string:${context/__parent__/@@absolute_url}/calendar_weekly.html"
          >Weekly calendar</a>
     </div>
-    <a tal:attributes="href string:${request/path}?date=${view/prev}"
+    <a tal:attributes="href string:${request/path}?date=${view/prevMonth}"
        i18n:translate="">Previous month</a> |
     <a tal:attributes="href request/path"
        i18n:translate="">Current month</a> |
-    <a tal:attributes="href string:${request/path}?date=${view/next}"
+    <a tal:attributes="href string:${request/path}?date=${view/nextMonth}"
        i18n:translate="">Next month</a>
 
     <table class="cal_monthly"

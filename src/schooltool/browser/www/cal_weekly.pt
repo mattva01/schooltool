@@ -14,11 +14,11 @@
          >Monthly calendar</a>
     </div>
 
-    <a tal:attributes="href string:${request/path}?date=${view/prev}">
+    <a tal:attributes="href string:${request/path}?date=${view/prevWeek}">
        Previous week</a> |
     <a tal:attributes="href request/path">
        Current week</a> |
-    <a tal:attributes="href string:${request/path}?date=${view/next}">
+    <a tal:attributes="href string:${request/path}?date=${view/nextWeek}">
         Next week</a>
 
     <div class="day"

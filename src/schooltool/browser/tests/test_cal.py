@@ -153,7 +153,29 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.error, "The resource is busy at specified time")
 
 
+class TestCalendarViewBase(unittest.TestCase):
+
+    def test_update(self):
+        from schooltool.browser.cal import CalendarViewBase
+
+        view = CalendarViewBase(None)
+        view.request = RequestStub()
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+        view.request = RequestStub(args={'date': '2004-08-18'})
+        view.update()
+        self.assertEquals(view.cursor, date(2004, 8, 18))
+
+
 class TestWeeklyCalendarView(unittest.TestCase):
+
+    def test_prev_next(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+        view = WeeklyCalendarView(None)
+        view.cursor = date(2004, 8, 18)
+        self.assertEquals(view.prevWeek(), date(2004, 8, 11))
+        self.assertEquals(view.nextWeek(), date(2004, 8, 25))
 
     def test_render(self):
         from schooltool.browser.cal import WeeklyCalendarView
@@ -175,18 +197,6 @@ class TestWeeklyCalendarView(unittest.TestCase):
         content = view.render(request)
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
-
-    def test_update(self):
-        from schooltool.browser.cal import WeeklyCalendarView
-
-        view = WeeklyCalendarView(None)
-        view.request = RequestStub()
-        view.update()
-        self.assertEquals(view.cursor, date.today())
-
-        view.request = RequestStub(args={'date': '2004-08-18'})
-        view.update()
-        self.assertEquals(view.cursor, date(2004, 8, 18))
 
     def test_getDays(self):
         from schooltool.browser.cal import WeeklyCalendarView
@@ -242,19 +252,12 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
-    def test_update(self):
+    def test_prev_next(self):
         from schooltool.browser.cal import MonthlyCalendarView
-
         view = MonthlyCalendarView(None)
-        view.request = RequestStub()
-        view.update()
-        self.assertEquals(view.cursor, date.today())
-
-        view.request = RequestStub(args={'date': '2004-08-18'})
-        view.update()
-        self.assertEquals(view.cursor, date(2004, 8, 18))
-        self.assertEquals(view.prev, date(2004, 7, 1))
-        self.assertEquals(view.next, date(2004, 9, 1))
+        view.cursor = date(2004, 8, 18)
+        self.assertEquals(view.prevMonth(), date(2004, 7, 1))
+        self.assertEquals(view.nextMonth(), date(2004, 9, 1))
 
     def test_getWeeks(self):
         from schooltool.browser.cal import MonthlyCalendarView
@@ -290,6 +293,7 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
+    suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
     return suite

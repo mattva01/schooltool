@@ -124,13 +124,11 @@ class BookingView(View):
         return True
 
 
-class WeeklyCalendarView(View):
+class CalendarViewBase(View):
 
     __used_for__ = ICalendar
 
     authorization = PrivateAccess
-
-    template = Template("www/cal_weekly.pt")
 
     def update(self):
         if 'date' not in self.request.args:
@@ -138,8 +136,19 @@ class WeeklyCalendarView(View):
         else:
             self.cursor = parse_date(self.request.args['date'][0])
 
-        self.prev = self.cursor - timedelta(7)
-        self.next = self.cursor + timedelta(7)
+
+
+class WeeklyCalendarView(CalendarViewBase):
+
+    template = Template("www/cal_weekly.pt")
+
+    def prevWeek(self):
+        """Return the day a week before."""
+        return self.cursor - timedelta(7)
+
+    def nextWeek(self):
+        """Return the day a week after."""
+        return self.cursor + timedelta(7)
 
     def getDays(self):
         # For now, we're Monday based
@@ -155,26 +164,21 @@ class WeeklyCalendarView(View):
         return [e for start, e in events]
 
 
-class MonthlyCalendarView(View):
-
-    __used_for__ = ICalendar
-
-    authorization = PrivateAccess
+class MonthlyCalendarView(CalendarViewBase):
 
     template = Template("www/cal_monthly.pt")
 
-    def update(self):
-        if 'date' not in self.request.args:
-            cursor = date.today()
-        else:
-            cursor = parse_date(self.request.args['date'][0])
-        self.cursor = cursor
+    def prevMonth(self):
+        """Return the first day of the previous month."""
+        prev_lastday = (date(self.cursor.year, self.cursor.month, 1)
+                        - timedelta(days=1))
+        return date(prev_lastday.year, prev_lastday.month, 1)
 
-        prev_lastday = (date(cursor.year, cursor.month, 1) - timedelta(days=1))
-        self.prev = date(prev_lastday.year, prev_lastday.month, 1)
-
-        next_someday = (date(cursor.year, cursor.month, 28) + timedelta(7))
-        self.next = date(next_someday.year, next_someday.month, 1)
+    def nextMonth(self):
+        """Return the first day of the next month."""
+        next_someday = (date(self.cursor.year, self.cursor.month, 28)
+                        + timedelta(7))
+        return date(next_someday.year, next_someday.month, 1)
 
     def getWeeks(self):
         """Return a nested list of days in a month.
@@ -199,4 +203,3 @@ class MonthlyCalendarView(View):
             weeks.append(week)
             last = last + timedelta(days=7)
         return weeks
-
