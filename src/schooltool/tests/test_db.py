@@ -595,12 +595,13 @@ class TestPersistentKeysSetContainer(unittest.TestCase):
         c = PersistentKeysSetContainer('box', parent)
         self.assertEquals(c.__name__, 'box')
         self.assert_(c.__parent__ is parent)
-        p = P()
-        p2 = P()
-        p.__name__ = p.__parent__ = None
-        p2.__name__ = p2.__parent__ = None
 
+        p = P()
+        p.__name__ = p.__parent__ = None
         c.add(p)
+
+        p2 = P()
+        p2.__name__ = p2.__parent__ = None
         c.add(p2, name='another_one')
 
         self.assert_(c.valueForName('001') is p)
@@ -610,6 +611,10 @@ class TestPersistentKeysSetContainer(unittest.TestCase):
         self.assert_(c.valueForName('another_one') is p2)
         self.assertEquals(p2.__name__, 'another_one')
         self.assert_(p2.__parent__ is c)
+
+        c.remove(p2)
+        self.assertRaises(KeyError, c.valueForName, 'another_one')
+        self.assert_(p2.__parent__ is None)
 
     def test_check_interface(self):
         from schooltool.db import PersistentKeysSetContainer

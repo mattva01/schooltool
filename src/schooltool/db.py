@@ -346,4 +346,6 @@ class PersistentKeysSetContainer(PersistentKeysSetWithNames):
         #       or maybe IContained? (That's what Zope 3 containers check)
         obj.__parent__ = self
 
-    # TODO: override remove() to set obj.__parent__ = None?
+    def remove(self, obj):
+        PersistentKeysSetWithNames.remove(self, obj)
+        obj.__parent__ = None
