@@ -45,18 +45,18 @@ from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.widgets import TextWidget, PasswordWidget
 from schooltool.browser.widgets import TextAreaWidget, SelectionWidget
-from schooltool.browser.widgets import CheckboxWidget
+from schooltool.browser.widgets import CheckboxWidget, MultiselectionWidget
 from schooltool.browser.widgets import dateParser, intParser
+from schooltool.browser.widgets import sequenceParser, sequenceFormatter
 from schooltool.common import to_unicode
 from schooltool.component import FacetManager
 from schooltool.component import getPath, traverse
 from schooltool.component import getTicketService, getTimetableSchemaService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IPerson, AuthenticationError
+from schooltool.interfaces import IPerson, IResource, AuthenticationError
 from schooltool.interfaces import IApplicationObject
 from schooltool.membership import Membership
 from schooltool.noted import Noted
-from schooltool.rest.app import AvailabilityQueryView
 from schooltool.rest.model import delete_app_object
 from schooltool.rest.infofacets import resize_photo, canonical_photo_size
 from schooltool.translation import ugettext as _
@@ -634,11 +634,8 @@ class NoteContainerView(ObjectContainerView):
     add_title = _("Add a new note")
 
 
-class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
+class BusySearchView(View, ToplevelBreadcrumbsMixin):
     """View for resource search (/busysearch)."""
-
-    # Only one method from AvailabilityQueryView is used:
-    #   update
 
     __used_for__ = IApplication
 
@@ -646,78 +643,91 @@ class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
 
     template = Template("www/busysearch.pt")
 
-    defaultDur = 30
+    default_duration = 30 # minutes
 
     def __init__(self, context):
         View.__init__(self, context)
+        self.resources_widget = MultiselectionWidget('resources',
+                                    _('Resource'),
+                                    self._allResources(),
+                                    parser=self._parseResources,
+                                    formatter=sequenceFormatter(getPath))
+        self.hours_widget = MultiselectionWidget('hours', _('Hours'),
+                                    [(hour, '%02d:00' % hour)
+                                    for hour in range(24)],
+                                    parser=sequenceParser(intParser))
         self.first_widget = TextWidget('first', _('First'), parser=dateParser,
-                                       value=datetime.date.today())
+                                    value=datetime.date.today())
         self.last_widget = TextWidget('last', _('Last'), parser=dateParser,
-                                      value=datetime.date.today())
+                                    value=datetime.date.today())
         self.duration_widget = TextWidget('duration', _('Duration'),
-                                          unit=_('min.'), parser=intParser,
-                                          validator=self.duration_validator,
-                                          value=self.defaultDur)
+                                    unit=_('min.'), parser=intParser,
+                                    validator=duration_validator,
+                                    value=self.default_duration)
 
-    def duration_validator(value):
-        """Check if duration is acceptable.
-
-          >>> duration_validator = BusySearchView.duration_validator
-          >>> duration_validator(None)
-          >>> duration_validator(42)
-          >>> duration_validator(0)
-          Traceback (most recent call last):
-            ...
-          ValueError: Duration cannot be zero.
-          >>> duration_validator(-1)
-          Traceback (most recent call last):
-            ...
-          ValueError: Duration cannot be negative.
-
-        """
-        if value is None:
-            return
-        if value < 0:
-            raise ValueError(_("Duration cannot be negative."))
-        if value == 0:
-            raise ValueError(_("Duration cannot be zero."))
-    duration_validator = staticmethod(duration_validator)
-
-    def do_GET(self, request):
-        self.status = None
-        self.can_search = False
-        if 'SUBMIT' in request.args:
-            self.first_widget.update(request)
-            self.last_widget.update(request)
-            self.duration_widget.update(request)
-            self.first_widget.require()
-            self.last_widget.require()
-            self.duration_widget.require()
-            error = (self.first_widget.error or self.last_widget.error or
-                     self.duration_widget.error)
-            if not error:
-                self.status = self.update()
-                self.can_search = self.status is None
-        return View.do_GET(self, request)
-
-    def today(self):
-        return str(datetime.date.today())
-
-    def allResources(self):
-        """Return a list of resources."""
+    def _allResources(self):
+        """Return a sorted list of all resources."""
         resources = traverse(self.context, '/resources')
         result = [(obj.title, obj) for obj in resources.itervalues()]
         result.sort()
-        return [obj for title, obj in result]
+        return [(obj, title) for title, obj in result]
 
-    def listResources(self):
-        """Return sorted results of the availability query."""
-        resources = [(r.title, r) for r in self.resources]
+    def _parseResources(self, raw_value):
+        """Parse a list of paths and return a list of resources."""
+        resource_container = traverse(self.context, 'resources')
+        resources = []
+        for path in raw_value:
+            try:
+                resource = traverse(resource_container, path)
+            except (KeyError, UnicodeError):
+                pass
+            else:
+                if IResource.providedBy(resource):
+                    resources.append(resource)
+        return resources
+
+    def do_GET(self, request):
+        """Process the request."""
+        self.searching = False
+        widgets = [self.resources_widget, self.hours_widget,
+                   self.first_widget, self.last_widget, self.duration_widget]
+        for widget in widgets:
+            widget.update(request)
+        if 'SEARCH' in request.args:
+            self.first_widget.require()
+            self.last_widget.require()
+            self.duration_widget.require()
+            errors = False
+            for widget in widgets:
+                if widget.error:
+                    errors = True
+            if not errors:
+                self._doSearch()
+        return View.do_GET(self, request)
+
+    def _doSearch(self):
+        """Perform resource busy search."""
+        self.searching = True
+        resources = self.resources_widget.value
+        if not resources:
+            resource_container = traverse(self.context, 'resources')
+            resources = list(resource_container.itervalues())
+        if not self.hours_widget.value:
+            hours = [(datetime.time(0), datetime.timedelta(hours=24))]
+        else:
+            hours = [(datetime.time(h), datetime.timedelta(hours=1))
+                     for h in self.hours_widget.value]
+        duration = datetime.timedelta(minutes=self.duration_widget.value)
+        self.results = self._query(resources, hours, self.first_widget.value,
+                                   self.last_widget.value, duration)
+
+    def _query(self, resources, hours, first, last, duration):
+        """Perform resource busy search."""
+        resources = [(r.title, r) for r in resources]
         resources.sort()
         results = []
         for title, resource in resources:
-            slots = resource.getFreeIntervals(self.first, self.last,
-                                              self.hours, self.duration)
+            slots = resource.getFreeIntervals(first, last, hours, duration)
             if not slots:
                 continue
             res_slots = []
@@ -735,6 +745,29 @@ class BusySearchView(View, AvailabilityQueryView, ToplevelBreadcrumbsMixin):
                             'href': absoluteURL(self.request, resource),
                             'slots': res_slots})
         return results
+
+
+def duration_validator(value):
+    """Check if duration is acceptable.
+
+      >>> duration_validator(None)
+      >>> duration_validator(42)
+      >>> duration_validator(0)
+      Traceback (most recent call last):
+        ...
+      ValueError: Duration cannot be zero.
+      >>> duration_validator(-1)
+      Traceback (most recent call last):
+        ...
+      ValueError: Duration cannot be negative.
+
+    """
+    if value is None:
+        return
+    if value < 0:
+        raise ValueError(_("Duration cannot be negative."))
+    if value == 0:
+        raise ValueError(_("Duration cannot be zero."))
 
 
 class DatabaseResetView(View, ToplevelBreadcrumbsMixin):

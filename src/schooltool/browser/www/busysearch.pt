@@ -10,31 +10,22 @@
 
 <form tal:attributes="action request/uri" method="POST" class="busysearch">
 
-<div class="error" tal:content="view/status" tal:condition="view/status" />
-
 <table class="busysearch">
 <tr>
 <td>
   <h3 i18n:translate="">Resource</h3>
-  <select multiple="yes" name="resources"
-          tal:define="selected python:request.args.get('resources', [])">
-    <tal:block repeat="resource view/allResources">
-    <option tal:define="path resource/@@path"
-            tal:content="resource/title"
-            tal:attributes="value path;
-                            selected python:path in selected" />
-    </tal:block>
-  </select>
+  <tal:block define="widget nocall:view/resources_widget">
+    <div metal:use-macro="widget/template/macros/select" />
+    <div metal:use-macro="widget/template/macros/error" />
+  </tal:block>
 </td>
 
 <td>
   <h3 i18n:translate="">Hours</h3>
-  <select multiple="yes" name="hours"
-          tal:define="selected python:request.args.get('hours', [])">
-    <option tal:repeat="hr python:range(24)"
-            tal:attributes="value hr; selected python:str(hr) in selected"
-            tal:content="python:'%02d:00' % hr" />
-  </select>
+  <tal:block define="widget nocall:view/hours_widget">
+    <div metal:use-macro="widget/template/macros/select" />
+    <div metal:use-macro="widget/template/macros/error" />
+  </tal:block>
 </td>
 
 <td>
@@ -46,7 +37,7 @@
   <div class="row" tal:replace="structure view/duration_widget" />
 
   <div class="buttons">
-    <input type="submit" name="SUBMIT" value="Search" class="button"
+    <input type="submit" name="SEARCH" value="Search" class="button"
            i18n:attributes="value" />
   </div>
 </td>
@@ -54,8 +45,8 @@
 </table>
 </form>
 
-<div tal:condition="view/can_search" class="available">
-<tal:block define="results view/listResources">
+<div tal:condition="view/searching" class="available">
+<tal:block define="results view/results">
 <h3 i18n:translate="">Available time slots</h3>
 <p tal:condition="not:results" i18n:translate="">
   No available time slots found.

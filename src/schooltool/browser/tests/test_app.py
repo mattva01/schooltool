@@ -1001,32 +1001,38 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
         self.view = BusySearchView(app)
 
     def test_allResources(self):
-        self.assertEqual(self.view.allResources(), [self.r1, self.r2])
+        self.assertEqual(self.view._allResources(),
+                         [(self.r1, 'Resource 1'),
+                          (self.r2, 'Resource 2')])
 
-    def test_update(self):
-        self.view.request = RequestStub(args={'first': '2004-08-11',
-                                              'last': '2004-08-11',
-                                              'duration': '30',
-                                              'hours': [13, 14]})
-        result = self.view.update()
-        assert result is None, result
+    def test_doSearch(self):
+        self.view.resources_widget.setValue([])
+        self.view.hours_widget.setValue([13, 14])
+        self.view.first_widget.setValue(date(2004, 8, 11))
+        self.view.last_widget.setValue(date(2004, 8, 11))
+        self.view.duration_widget.setValue(30)
+        self.view.request = RequestStub()
+        self.view._query = lambda *args: ('_query', args)
+        self.view.searhcing = False
+        self.view._doSearch()
+        self.assert_(self.view.searching)
+        self.assertEquals(self.view.results[0], '_query')
+        resources, hours, first, last, duration = self.view.results[1]
+        self.assertEquals(first, date(2004, 8, 11))
+        self.assertEquals(last, date(2004, 8, 11))
+        self.assertEquals(duration, timedelta(minutes=30))
+        self.assertEquals(hours, [(time(13, 0), timedelta(hours=1)),
+                                  (time(14, 0), timedelta(hours=1))])
+        self.assertEqualsSorted(resources, [self.r1, self.r2])
 
-        self.assertEquals(self.view.first, date(2004, 8, 11))
-        self.assertEquals(self.view.last, date(2004, 8, 11))
-        self.assertEquals(self.view.duration, timedelta(minutes=30))
-        self.assertEquals(self.view.hours, [(time(13, 0), timedelta(hours=2))])
-        self.assertEqualsSorted(self.view.resources, [self.r1, self.r2])
-
-    def test_listResources(self):
-        self.view.request = RequestStub(args={'first': '2004-08-11',
-                                              'last': '2004-08-11',
-                                              'duration': '30',
-                                              'hours': [13, 14]})
-        result = self.view.update()
-        assert result is None, result
-
-        results = self.view.listResources()
-
+    def test_query(self):
+        resources = [self.r1, self.r2]
+        hours = [(time(13, 0), timedelta(hours=2))]
+        first = date(2004, 8, 11)
+        last = date(2004, 8, 11)
+        duration = timedelta(minutes=30)
+        self.view.request = RequestStub()
+        results = self.view._query(resources, hours, first, last, duration)
         self.assertEquals(results,
                           [{'title': 'Resource 1',
                             'href': 'http://localhost:7001/resources/r1',
@@ -1046,21 +1052,39 @@ class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):
     def test_render(self):
         request = RequestStub(args={}, authenticated_user=self.r1)
         result = self.view.render(request)
-        assert 'Resource 1' in result, result
-        assert 'Search' in result
+        self.assert_(not self.view.searching)
+        self.assert_('Resource 1' in result, result)
+        self.assert_('Search' in result)
+        self.assert_('Available time slots' not in result)
 
         request = RequestStub(args={'first': '2004-08-11',
                                     'last': '2004-08-11',
                                     'duration': '30',
-                                    'hours': [13, 14],
-                                    'SUBMIT': 'Submit'},
+                                    'hours': ['13', '14'],
+                                    'SEARCH': 'Submit'},
                               authenticated_user=self.r1)
         result = self.view.render(request)
-        assert 'Resource 1' in result, result
-        assert 'Search' in result
-        assert 'Book' in result
-        assert '2004-08-11 13:00' in result
-        assert '2004-08-11 15:00' in result
+        self.assert_(self.view.searching)
+        self.assert_(self.view.results)
+        self.assert_('Resource 1' in result, result)
+        self.assert_('Search' in result)
+        self.assert_('Available time slots' in result)
+        self.assert_('Book' in result)
+        self.assert_('2004-08-11 13:00' in result)
+        self.assert_('2004-08-11 15:00' in result)
+
+        request = RequestStub(args={'first': '2004-08-11',
+                                    'last': '2004-28-11',
+                                    'duration': '30',
+                                    'hours': ['13', '14'],
+                                    'SEARCH': 'Submit'},
+                              authenticated_user=self.r1)
+        result = self.view.render(request)
+        self.assert_(not self.view.searching)
+        self.assert_('Resource 1' in result, result)
+        self.assert_('Search' in result)
+        self.assert_('Available time slots' not in result)
+        self.assert_('Invalid' in result)
 
 
 class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):
