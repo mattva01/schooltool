@@ -46,7 +46,7 @@ Testing
 There are two sets of automated tests: unit tests and functional tests.
 Unit tests (sometimes also called programmer tests) test individual components
 of the system.  Functional tests (also called customer or acceptance tests)
-test only externaly visible behavior of the whole system.
+test only externally visible behavior of the whole system.
 
 Tests themselves are scattered through the whole source tree.  Subdirectories
 named 'tests' contain unit tests, while subdirectories named 'ftests' contain
