@@ -66,6 +66,16 @@
       />
 
   <page
+      name="groups.html"
+      for="schoolbell.app.interfaces.IPerson"
+      class="schoolbell.app.browser.app.GroupListView"
+      template="templates/groups.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Groups"
+      />
+
+  <page
       name="password.html"
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonChangePasswordView"

@@ -117,6 +117,40 @@ def doctest_PersonPhotoView():
     """
 
 
+def doctest_GroupListView():
+    r"""Test for GroupListView
+
+    We will need a volunteer for this test:
+
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+
+    One requirement: the person has to know where he is.
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> app['persons']['mg'] = person
+
+    We will be testing the person's awareness of the world, so we will
+    create some (empty) groups.
+
+        >>> from schoolbell.app.app import Group
+        >>> world = app['groups']['the_world'] = Group("Others")
+        >>> etria = app['groups']['etria'] = Group("Etria")
+        >>> pov = app['groups']['pov'] = Group("PoV")
+
+    Let's create a view for a person:
+
+        >>> from schoolbell.app.browser.app import GroupListView
+        >>> request = TestRequest()
+        >>> view = GroupListView(person, request)
+
+        >>> [g.title for g in view.getGroupList()]
+        ['Etria', 'Others', 'PoV']
+
+    """
+
+
 def doctest_GroupView():
     r"""Test for GroupView
 

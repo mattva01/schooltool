@@ -1,0 +1,31 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="h1">
+  Parent groups of <span tal:replace="context/title" />
+</h1>
+<metal:block metal:fill-slot="body">
+
+<div class="group_list"> <!-- TODO: nice CSS -->
+  <div tal:repeat="group view/getGroupList">
+    <label>
+      <input tal:attributes="name group/__name__" type="checkbox" />
+      <!-- todo: check some boxes -->
+      <span tal:replace="group/title" />
+    </label>
+  </div>
+</div>
+
+<div class="controls">
+  <input class="button-ok" type="submit" name="APPLY"
+         value="Apply" title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value; title; accesskey" />
+  <input class="button-cancel" type="submit" name="CANCEL"
+         value="Cancel" i18n:attributes="value" />
+</div>
+
+</metal:block>
+</body>
+</html>

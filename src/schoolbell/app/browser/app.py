@@ -24,12 +24,15 @@ $Id$
 
 from zope.interface import Interface
 from zope.schema import Password, getFieldNamesInOrder
+from zope.app import zapi
 from zope.app.form.utility import setUpWidgets, getWidgetsData
 from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
-from schoolbell import SchoolBellMessageID as _
 from zope.security import checkPermission
+
+from schoolbell import SchoolBellMessageID as _
+from schoolbell.app.interfaces import IGroupMember
 
 
 class ContainerView(BrowserView):
@@ -97,15 +100,24 @@ class PersonPhotoView(BrowserView):
         return photo
 
 
+class GroupListView(BrowserView):
+    """View for adding / removing parent groups."""
+
+    __used_for__ = IGroupMember
+
+    def getGroupList(self):
+        """Return a sorted list of all groups in the system."""
+        groups = self.context.__parent__.__parent__['groups'] # XXX Ugly.
+        items = [(group.title, group) for group in groups.values()]
+        items.sort()
+        return [row[-1] for row in items]
+
+
 class GroupView(BrowserView):
     """A Group info view."""
 
     def canEdit(self):
         return True # TODO: implement permission checking
-
-    def getMembers(self):
-        # TODO: implement this
-        pass
 
 
 class ResourceView(BrowserView):
