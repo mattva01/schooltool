@@ -78,47 +78,6 @@ class TestTemplate(unittest.TestCase):
 
 class TestErrorViews(unittest.TestCase):
 
-    def test_ErrorView(self):
-        from schooltool.views import ErrorView
-        view = ErrorView(747, "Not ready to take off")
-        request = RequestStub()
-        result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/html; charset=UTF-8")
-        self.assertEquals(request.code, 747)
-        self.assertEquals(request.reason, "Not ready to take off")
-        self.assert_('<title>747 - Not ready to take off</title>' in result)
-        self.assert_('<h1>747 - Not ready to take off</h1>' in result)
-
-    def test_NotFoundView(self):
-        from schooltool.views import NotFoundView
-        view = NotFoundView(404, "No Boeing found")
-        request = RequestStub(uri='/hangar')
-        result = view.render(request)
-        self.assertEquals(request.headers['Content-Type'],
-                          "text/html; charset=UTF-8")
-        self.assertEquals(request.code, 404)
-        self.assertEquals(request.reason, "No Boeing found")
-        self.assert_('<title>404 - No Boeing found</title>' in result)
-        self.assert_('<h1>404 - No Boeing found</h1>' in result)
-        self.assert_('/hangar' in result)
-
-    def test_errorPage(self):
-        from schooltool.views import errorPage
-        request = RequestStub()
-        result = errorPage(request, 747, "Not ready to take off")
-        self.assertEquals(request.code, 747)
-        self.assertEquals(request.reason, "Not ready to take off")
-        self.assert_('<title>747 - Not ready to take off</title>' in result)
-        self.assert_('<h1>747 - Not ready to take off</h1>' in result)
-
-    def test_notFoundPage(self):
-        from schooltool.views import notFoundPage
-        request = RequestStub()
-        result = notFoundPage(request)
-        self.assertEquals(request.code, 404)
-        self.assertEquals(request.reason, "Not Found")
-
     def test_textErrorPage(self):
         from schooltool.views import textErrorPage
         request = RequestStub()
@@ -133,6 +92,25 @@ class TestErrorViews(unittest.TestCase):
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(result, "42")
 
+    def test_notFoundPage(self):
+        from schooltool.views import notFoundPage
+        request = RequestStub(uri='/path')
+        result = notFoundPage(request)
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.reason, "Not Found")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Not found: /path")
+
+    def test_NotFoundView(self):
+        from schooltool.views import NotFoundView
+        view = NotFoundView()
+        request = RequestStub(uri='/path')
+        result = view.render(request)
+        self.assertEquals(request.code, 404)
+        self.assertEquals(request.reason, "Not Found")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(result, "Not found: /path")
+
 
 class TestView(unittest.TestCase):
 
@@ -144,12 +122,10 @@ class TestView(unittest.TestCase):
         self.assert_(view.getChild('', request) is view)
         result = view.getChild('anything', request)
         self.assert_(result.__class__ is NotFoundView)
-        self.assert_(result.code == 404)
 
         request = RequestStub(uri='http://foo/x')
         result = view.getChild('', request)
         self.assert_(result.__class__ is NotFoundView)
-        self.assert_(result.code == 404)
 
     def test_getChild_with_traverse(self):
         from schooltool.views import View, NotFoundView
@@ -167,7 +143,6 @@ class TestView(unittest.TestCase):
         self.assert_(view.getChild('frob', request) is frob)
         result = view.getChild('not frob', request)
         self.assert_(result.__class__ is NotFoundView)
-        self.assert_(result.code == 404)
 
     def test_getChild_with_exceptions(self):
         from schooltool.views import View

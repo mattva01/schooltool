@@ -100,59 +100,16 @@ class Template(PageTemplateFile):
 # HTTP view infrastructure
 #
 
-class ErrorView(Resource):
-    """View for an error.
-
-    Rendering this view will set the appropriate HTTP status code and reason.
-    """
-
-    __super = Resource
-    __super_init = __super.__init__
-
-    isLeaf = True
-
-    template = Template('www/error.pt')
-
-    def __init__(self, code, reason):
-        self.__super_init()
-        self.code = code
-        self.reason = reason
-
-    def render(self, request):
-        request.setResponseCode(self.code, self.reason)
-        return self.template(request, code=self.code, reason=self.reason)
-
-
-class NotFoundView(ErrorView):
-    """View for a not found error.
-
-    This view should be used for HTTP status code 404.
-    """
-
-    __super = ErrorView
-    __super_init = __super.__init__
-
-    template = Template('www/notfound.pt')
-
-    def __init__(self, code=404, reason='Not Found'):
-        self.__super_init(code, reason)
-
-
-def errorPage(request, code, reason):
-    """Renders a simple error page and sets the HTTP status code and reason."""
-    return ErrorView(code, reason).render(request)
-
-
-def notFoundPage(request):
-    """Renders a simple 'not found' error page."""
-    return NotFoundView().render(request)
-
-
 def textErrorPage(request, message, code=400, reason=None):
     """Renders a simple error page and sets the HTTP status code and reason."""
     request.setResponseCode(code, reason)
     request.setHeader('Content-Type', 'text/plain')
     return str(message)
+
+
+def notFoundPage(request):
+    """Renders a simple 'not found' error page."""
+    return textErrorPage(request, 'Not found: %s' % request.uri, code=404)
 
 
 class View(Resource):
@@ -235,6 +192,18 @@ class View(Resource):
         body = self.do_GET(request)
         request.setHeader('Content-Length', len(body))
         return ""
+
+
+class NotFoundView(View):
+    """View that always returns a 404 error page."""
+
+    def __init__(self):
+        View.__init__(self, None)
+
+    do_GET = staticmethod(notFoundPage)
+
+    def authorization(self, context, request):
+        return True
 
 
 class ItemTraverseView(View):

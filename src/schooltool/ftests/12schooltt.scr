@@ -7,15 +7,8 @@ SchoolTool> links off
 
 SchoolTool> get /schooltt/2003-fall/wekly
 404 Not Found
-Content-Type: text/html; charset=UTF-8
-<html>
-<head><title>404 - Not Found</title></head>
-<body>
-  <h1>404 - Not Found</h1>
-  <p>The following resource does not exist: /schooltt/2003-fall/wekly</p>
-</body>
-</html>
-
+Content-Type: text/plain
+Not found: /schooltt/2003-fall/wekly
 
 SchoolTool> get /schooltt/2003-fall/weekly
 200 OK

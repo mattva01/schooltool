@@ -105,7 +105,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         request.content.seek(0)
         result = view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.reason,
+        self.assertEquals(result,
                 "Only PUT with an empty body is defined for event logs")
 
 

@@ -13,15 +13,8 @@ Content-Type: text/xml; charset=UTF-8
 
 SchoolTool> get /ttschemas/x
 404 Not Found
-Content-Type: text/html; charset=UTF-8
-<html>
-<head><title>404 - Not Found</title></head>
-<body>
-  <h1>404 - Not Found</h1>
-  <p>The following resource does not exist: /ttschemas/x</p>
-</body>
-</html>
-
+Content-Type: text/plain
+Not found: /ttschemas/x
 
 SchoolTool> put /ttschemas/weekly text/xml
 PUT> <timetable xmlns="http://schooltool.org/ns/timetable/0.1">

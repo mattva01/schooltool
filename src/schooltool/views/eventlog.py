@@ -25,7 +25,7 @@ $Id$
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import registerView
-from schooltool.views import View, Template, errorPage
+from schooltool.views import View, Template, textErrorPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import SystemAccess
 from schooltool.eventlog import IEventLog, IEventLogUtility, IEventLogFacet
@@ -52,8 +52,8 @@ class EventLogView(View):
         #   Content-Range) headers that it does not understand or implement
         #   and MUST return a 501 (Not Implemented) response in such cases.
         if request.content.read(1):
-            return errorPage(request, 400, "Only PUT with an empty body"
-                                           " is defined for event logs")
+            return textErrorPage(request, "Only PUT with an empty body"
+                                          " is defined for event logs")
         n = len(self.context.getReceived())
         self.context.clear()
         request.setHeader('Content-Type', 'text/plain')
