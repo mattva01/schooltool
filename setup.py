@@ -162,7 +162,7 @@ class install_lib(_install_lib):
             path_file = open(pathconfig, 'w')
             print self.datafile_dir
             path_file.write(pathconfig_str.replace('os.path.dirname(__file__)',
-                "\"%s\"" % self.datafile_dir))
+                "\"%s\"" % self.datafile_dir + self.package))
         finally:
             path_file.close()
 
