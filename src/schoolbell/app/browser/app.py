@@ -36,7 +36,6 @@ from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.app.security.interfaces import IAuthentication
 
-
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
