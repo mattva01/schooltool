@@ -12,7 +12,7 @@
   <form method="POST" tal:attributes="action request/path">
     <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row">
-      <label class="wide" for="username">User name</label>
+      <label class="wide" for="username">Username</label>
       <input id="username" name="username" type="text"
              tal:attributes="value view/prev_username">
     </div>
