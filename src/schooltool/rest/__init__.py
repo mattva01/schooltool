@@ -212,7 +212,8 @@ class Template(PageTemplateFile):
     in the output charset, a UnicodeError will be raised when rendering.
     """
 
-    ugettext_hook = _
+    # Hook for unit tests.
+    ugettext_hook = staticmethod(_)
 
     def __init__(self, filename, content_type='text/html', charset='UTF-8',
                        _prefix=None):

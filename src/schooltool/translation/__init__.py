@@ -59,6 +59,11 @@ localedir = os.path.dirname(__file__)
 catalog = gettext.translation('schooltool', localedir, fallback=True)
 ugettext = catalog.ugettext
 
+# Uncomment this function to debug i18n
+
+# def ugettext(msgid):
+#     """Debugging version of ugettext that decorates all translated strings."""
+#     return u'\u00AB%s\u00BB' % catalog.ugettext(msgid)
 
 def gettext(msgid):
     return to_locale(ugettext(msgid))
