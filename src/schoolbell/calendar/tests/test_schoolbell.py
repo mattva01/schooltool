@@ -130,6 +130,45 @@ def doctest_CalendarMixin_expand():
     """
 
 
+def doctest_CalendarMixin_expand_at_midnight():
+    """Regression tests for CalendarMixin.expand.
+
+    Bug: an event that occurs at midnight and is 0 minutes long gets lost.
+
+        >>> from datetime import datetime, timedelta
+        >>> from schoolbell.calendar.mixins import CalendarMixin
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> e1 = SimpleCalendarEvent(datetime(2005, 3, 2, 0, 0), timedelta(0),
+        ...                          "Corner case")
+        >>> e2 = SimpleCalendarEvent(datetime(2005, 3, 4, 0, 0), timedelta(0),
+        ...                          "Recurring case",
+        ...                          recurrence=DailyRecurrenceRule())
+
+        >>> class MyCalendar(CalendarMixin):
+        ...     def __iter__(self):
+        ...         return iter([e1, e2])
+        >>> cal = MyCalendar()
+
+        >>> [e.title
+        ...  for e in cal.expand(datetime(2005, 3, 2), datetime(2005, 3, 3))]
+        ['Corner case']
+
+        >>> [e.title
+        ...  for e in cal.expand(datetime(2005, 3, 1), datetime(2005, 3, 2))]
+        []
+
+        >>> [e.title
+        ...  for e in cal.expand(datetime(2005, 3, 4), datetime(2005, 3, 5))]
+        ['Recurring case']
+
+        >>> [e.title
+        ...  for e in cal.expand(datetime(2005, 3, 3), datetime(2005, 3, 4))]
+        []
+
+    """
+
+
 def doctest_CalendarEventMixin_hasOccurrences():
     """Tests for CalendarEventMixin.hasOccurrences.
 

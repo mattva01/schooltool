@@ -103,17 +103,23 @@ class CalendarMixin(object):
 
         See ICalendar for more details.
         """
+        zero = datetime.timedelta(0)
+        epsilon = datetime.timedelta.resolution
         for event in self:
             if event.recurrence is not None:
                 starttime = event.dtstart.time()
                 for recdate in event.recurrence.apply(event, last.date()):
                     dtstart = datetime.datetime.combine(recdate, starttime)
                     dtend = dtstart + event.duration
+                    if event.duration == zero: # corner case: zero-length event
+                        dtend += epsilon       # treat it as a very short event
                     if dtend > first and dtstart < last:
                         yield ExpandedCalendarEvent(event, dtstart=dtstart)
             else:
                 dtstart = event.dtstart
                 dtend = dtstart + event.duration
+                if event.duration == zero: # corner case: zero-length event
+                    dtend += epsilon       # treat it as a very short event
                 if dtend > first and dtstart < last:
                     yield event
 
