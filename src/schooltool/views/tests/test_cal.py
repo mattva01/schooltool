@@ -362,14 +362,17 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
             """, content_type="text/xml")
 
 
-class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
+class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
+
+    def _newView(self, context):
+        from schooltool.views.cal import CalendarReadView
+        return CalendarReadView(context)
 
     def _create(self):
-        from schooltool.views.cal import CalendarView
         from schooltool.cal import Calendar
         context = Calendar()
         setPath(context, '/calendar')
-        self.view = CalendarView(context)
+        self.view = self._newView(context)
         self.view.datetime_hook = DatetimeStub()
         return context
 
@@ -406,6 +409,13 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
             END:VEVENT
             END:VCALENDAR
         """))
+
+
+class TestCalendarView(TestCalendarReadView):
+
+    def _newView(self, context):
+        from schooltool.views.cal import CalendarView
+        return CalendarView(context)
 
     def test_put_empty(self):
         from schooltool.cal import CalendarEvent
@@ -598,6 +608,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite(schooltool.views.cal))
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
+    suite.addTest(unittest.makeSuite(TestCalendarReadView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
     suite.addTest(unittest.makeSuite(TestAllCalendarsView))
     suite.addTest(unittest.makeSuite(TestModuleSetup))

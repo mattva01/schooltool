@@ -59,7 +59,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
     def test_traverse(self):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
-        from schooltool.views.cal import CalendarView
+        from schooltool.views.cal import CalendarView, CalendarReadView
         from schooltool.views.timetable import TimetableTraverseView
         from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.interfaces import IFacetManager
@@ -76,6 +76,9 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         result = self.view._traverse('calendar', request)
         self.assert_(isinstance(result, CalendarView))
         self.assert_(result.context is self.view.context.calendar)
+
+        result = self.view._traverse('timetable-calendar', request)
+        self.assert_(isinstance(result, CalendarReadView))
 
         result = self.view._traverse('timetables', request)
         self.assert_(isinstance(result, TimetableTraverseView))
@@ -152,11 +155,14 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               <timetables xlink:href="/persons/p/timetables"
                           xlink:title="Own timetables"
                           xlink:type="simple"/>
-              <compositeTimetables xlink:href="/persons/p/composite-timetables"
-                                   xlink:title="Composite timetables"
-                                   xlink:type="simple"/>
-              <calendar xlink:type="simple" xlink:title="Calendar"
+              <timetables xlink:href="/persons/p/composite-timetables"
+                          xlink:title="Composite timetables"
+                          xlink:type="simple"/>
+              <calendar xlink:type="simple" xlink:title="Private calendar"
                         xlink:href="/persons/p/calendar"/>
+              <calendar xlink:type="simple"
+                        xlink:title="Calendar derived from timetables"
+                        xlink:href="/persons/p/timetable-calendar"/>
             </person>
             """, recursively_sort=['groups'])
 
@@ -206,12 +212,15 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               <timetables xlink:href="/groups/root/timetables"
                           xlink:title="Own timetables"
                           xlink:type="simple"/>
-              <compositeTimetables
+              <timetables
                     xlink:href="/groups/root/composite-timetables"
                     xlink:title="Composite timetables"
                     xlink:type="simple"/>
-              <calendar xlink:type="simple" xlink:title="Calendar"
+              <calendar xlink:type="simple" xlink:title="Private calendar"
                         xlink:href="/groups/root/calendar"/>
+              <calendar xlink:type="simple"
+                        xlink:title="Calendar derived from timetables"
+                        xlink:href="/groups/root/timetable-calendar"/>
             </group>
             """ % (getPath(self.per), getPath(self.sub)),
             recursively_sort=['group'])

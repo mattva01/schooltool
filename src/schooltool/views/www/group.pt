@@ -9,8 +9,10 @@
       tal:attributes="xlink:href string:${view/path}/facets" />
   <timetables xlink:type="simple" xlink:title="Own timetables"
       tal:attributes="xlink:href string:${view/path}/timetables" />
-  <compositeTimetables xlink:type="simple" xlink:title="Composite timetables"
+  <timetables xlink:type="simple" xlink:title="Composite timetables"
       tal:attributes="xlink:href string:${view/path}/composite-timetables" />
-  <calendar xlink:type="simple" xlink:title="Calendar"
+  <calendar xlink:type="simple" xlink:title="Private calendar"
       tal:attributes="xlink:href string:${view/path}/calendar" />
+  <calendar xlink:type="simple" xlink:title="Calendar derived from timetables"
+      tal:attributes="xlink:href string:${view/path}/timetable-calendar" />
 </group>

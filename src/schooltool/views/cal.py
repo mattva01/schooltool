@@ -215,8 +215,8 @@ class SchooldayModelCalendarView(View):
         return "Calendar imported"
 
 
-class CalendarView(View):
-    """iCalendar view for ICalendar."""
+class CalendarReadView(View):
+    """iCalendar read only view for ICalendar."""
 
     datetime_hook = datetime.datetime
 
@@ -251,6 +251,10 @@ class CalendarView(View):
             result = []
         request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
         return "\r\n".join(result)
+
+
+class CalendarView(CalendarReadView):
+    """iCalendar r/w view for ICalendar."""
 
     def do_PUT(self, request):
         ctype = request.getHeader('Content-Type')

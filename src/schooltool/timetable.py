@@ -460,14 +460,16 @@ class TimetabledMixin:
                     keys.update(related.timetables.keys())
         return keys
 
-    def makeCalendar(self, period_id):
-        schoolday_model = getTimePeriodService(self)[period_id]
+    def makeCalendar(self):
         result = Calendar()
-        for schema_id in getTimetableSchemaService(self).keys():
+        result.__parent__ = self
+        result.__name__ = 'timetable-calendar'
+        timePeriodService = getTimePeriodService(self)
+        for period_id, schema_id in self.listCompositeTimetables():
+            schoolday_model = timePeriodService[period_id]
             tt = self.getCompositeTimetable(period_id, schema_id)
-            if tt is not None:
-                cal = tt.model.createCalendar(schoolday_model, tt)
-                result.update(cal)
+            cal = tt.model.createCalendar(schoolday_model, tt)
+            result.update(cal)
         return result
 
 

@@ -84,6 +84,10 @@ SchoolTool server RESTive interface
   PUT ...object/calendar
     uploads the person's or group's calendar (in iCalendar format)
 
+  GET ...object/timetable-calendar
+    shows the person's or group's calendar generated from all
+    composite timetables (in iCalendar format)
+
   GET /utils
     lists all utilities
 

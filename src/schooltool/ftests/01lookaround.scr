@@ -227,9 +227,12 @@ Content-Type: text/xml; charset=UTF-8
           xlink:href="/groups/root/facets"/>
   <timetables xlink:href="/groups/root/timetables" xlink:title="Own timetables"
               xlink:type="simple"/>
-  <compositeTimetables xlink:href="/groups/root/composite-timetables"
-                       xlink:title="Composite timetables" xlink:type="simple"/>
-  <calendar xlink:href="/groups/root/calendar" xlink:title="Calendar"
+  <timetables xlink:href="/groups/root/composite-timetables"
+              xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/groups/root/calendar" xlink:title="Private calendar"
+            xlink:type="simple"/>
+  <calendar xlink:href="/groups/root/timetable-calendar"
+            xlink:title="Calendar derived from timetables"
             xlink:type="simple"/>
 </group>
 %% END XML
@@ -252,9 +255,13 @@ Content-Type: text/xml; charset=UTF-8
           xlink:href="/groups/cleaners/facets"/>
   <timetables xlink:href="/groups/cleaners/timetables"
               xlink:title="Own timetables" xlink:type="simple"/>
-  <compositeTimetables xlink:href="/groups/cleaners/composite-timetables"
-                       xlink:title="Composite timetables" xlink:type="simple"/>
-  <calendar xlink:href="/groups/cleaners/calendar" xlink:title="Calendar"
+  <timetables xlink:href="/groups/cleaners/composite-timetables"
+              xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/groups/cleaners/calendar"
+            xlink:title="Private calendar"
+            xlink:type="simple"/>
+  <calendar xlink:href="/groups/cleaners/timetable-calendar"
+            xlink:title="Calendar derived from timetables"
             xlink:type="simple"/>
 </group>
 %% END XML
@@ -391,9 +398,13 @@ Content-Type: text/xml; charset=UTF-8
   <timetables xlink:href="/persons/Albert/timetables"
               xlink:title="Own timetables"
               xlink:type="simple"/>
-  <compositeTimetables xlink:href="/persons/Albert/composite-timetables"
-                       xlink:title="Composite timetables" xlink:type="simple"/>
-  <calendar xlink:href="/persons/Albert/calendar" xlink:title="Calendar"
+  <timetables xlink:href="/persons/Albert/composite-timetables"
+              xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/persons/Albert/calendar"
+            xlink:title="Private calendar"
+            xlink:type="simple"/>
+  <calendar xlink:href="/persons/Albert/timetable-calendar"
+            xlink:title="Calendar derived from timetables"
             xlink:type="simple"/>
 </person>
 %% END XML
@@ -455,9 +466,12 @@ Content-Type: text/xml; charset=UTF-8
   <timetables xlink:href="/persons/Marius/timetables"
               xlink:title="Own timetables"
               xlink:type="simple"/>
-  <compositeTimetables xlink:href="/persons/Marius/composite-timetables"
-                       xlink:title="Composite timetables" xlink:type="simple"/>
-  <calendar xlink:href="/persons/Marius/calendar" xlink:title="Calendar"
+  <timetables xlink:href="/persons/Marius/composite-timetables"
+              xlink:title="Composite timetables" xlink:type="simple"/>
+  <calendar xlink:href="/persons/Marius/calendar"
+            xlink:title="Private calendar" xlink:type="simple"/>
+  <calendar xlink:href="/persons/Marius/timetable-calendar"
+            xlink:title="Calendar derived from timetables"
             xlink:type="simple"/>
 </person>
 %% END XML

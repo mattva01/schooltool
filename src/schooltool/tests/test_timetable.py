@@ -946,15 +946,10 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
                             timedelta(minutes=30), "AB")
         cal2.addEvent(ev2)
 
-        def newComposite(period_id, schema_id):
-            if (period_id, schema_id) == ("2003 fall", "sequential"):
-                return tt1
-            elif (period_id, schema_id) == ("2003 fall", "other"):
-                return tt2
-            else:
-                return None
-
-        tm.getCompositeTimetable = newComposite
+        ttdict = {("2003 fall", "sequential"): tt1,
+                  ("2003 fall", "other"): tt2}
+        tm.getCompositeTimetable = lambda p, s: ttdict.get((p, s))
+        tm.listCompositeTimetables = ttdict.keys
 
         class TimetableModelStub:
             def createCalendar(this_self, schoolday_model, tt):
@@ -968,8 +963,10 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
 
         tt1.model = TimetableModelStub()
         tt2.model = TimetableModelStub()
-        cal = tm.makeCalendar("2003 fall")
+        cal = tm.makeCalendar()
         self.assertEquals(cal.events, cal1.events | cal2.events)
+        self.assert_(cal.__parent__ is tm)
+        self.assertEquals(cal.__name__, 'timetable-calendar')
 
 
 class TestTimetableSchemaService(unittest.TestCase):

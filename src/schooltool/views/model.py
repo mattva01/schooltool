@@ -43,7 +43,7 @@ from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetView, FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
-from schooltool.views.cal import CalendarView
+from schooltool.views.cal import CalendarView, CalendarReadView
 from schooltool.common import parse_datetime
 
 __metaclass__ = type
@@ -65,6 +65,8 @@ class ApplicationObjectTraverserView(View):
             return RelationshipsView(self.context)
         elif name == 'calendar':
             return CalendarView(self.context.calendar)
+        elif name == 'timetable-calendar':
+            return CalendarReadView(self.context.makeCalendar())
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         elif name == 'composite-timetables':

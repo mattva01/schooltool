@@ -1027,12 +1027,8 @@ class ITimetabled(Interface):
         available composite timetables.
         """
 
-    def makeCalendar(period_id):
-        """Generate and return a calendar for a given period of time.
-
-        The generated calendar contains activities from all object's composite
-        timetables valid for a given period of time.
-        """
+    def makeCalendar():
+        """Generate and return a calendar from all composite timetables."""
 
 
 class ISchooldayTemplate(Interface):

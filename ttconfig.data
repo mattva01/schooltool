@@ -1,6 +1,6 @@
 put /ttschemas/default text/xml
 <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-  <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+  <model factory="SequentialDaysTimetableModel">
     <daytemplate>
       <used when="default" />
       <period id="A" tstart="9:00" duration="60" />
