@@ -47,6 +47,8 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
         SimpleCalendarEvent.__init__(self, *args, **kwargs)
         self.__name__ = self.unique_id
 
+    # TODO: add a __conform__ to ICalendar
+
 
 class Calendar(Persistent, CalendarMixin):
     """A persistent calendar."""

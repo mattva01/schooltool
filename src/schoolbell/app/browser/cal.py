@@ -39,7 +39,7 @@ from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.utils import parse_date
-from schoolbell.app.interfaces import ICalendarOwner
+from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
 
 
 class CalendarOwnerTraverser(object):
@@ -826,6 +826,15 @@ class DailyCalendarView(CalendarViewBase):
 
         # The number of hours displayed in the day view
         self.visiblehours = self.endhour - self.starthour
+
+
+class EventDeleteView(BrowserView):
+
+    __used_for__ = IContainedCalendarEvent
+
+    def delete(self):
+        calendar = self.context.__parent__
+        calendar.removeEvent(self.context)
 
 
 class Slots(dict):

@@ -1467,6 +1467,34 @@ def doctest_YearlyCalendarView():
     """
 
 
+def doctest_EventDeleteView():
+    r"""Tests for EventDeleteView.
+
+    We'll need a little context here:
+
+        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> cal = Calendar()
+        >>> dtstart = datetime(2005, 2, 3, 12, 15)
+        >>> martyr = CalendarEvent(dtstart, timedelta(hours=3), "Martyr")
+        >>> cal.addEvent(martyr)
+
+        >>> innocent = CalendarEvent(dtstart, timedelta(hours=3), "Innocent")
+        >>> cal.addEvent(innocent)
+
+    EventDeleteView can get rid of events for you.  Just ask:
+
+        >>> from schoolbell.app.browser.cal import EventDeleteView
+        >>> view = EventDeleteView(martyr, TestRequest())
+        >>> view.delete()
+
+        >>> martyr in cal
+        False
+        >>> innocent in cal
+        True
+
+    """
+
+
 def setUp(test):
     setup.placelessSetUp()
     setup.setUpTraversal()
