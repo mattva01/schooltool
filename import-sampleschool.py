@@ -131,5 +131,4 @@ class SampleSchoolImporter:
 
 
 if __name__ == '__main__':
-    schooltool.translation.setUp()
     sys.exit(SampleSchoolImporter().main(sys.argv))
