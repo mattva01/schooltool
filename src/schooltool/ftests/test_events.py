@@ -78,7 +78,7 @@ class TestEventSystem(unittest.TestCase):
         #
         #   root group (routes IStudentEvents to its members)
         #   `-- students group (routes all events to its parent)
-        #   | `-- Fred person (routes all events to its parent)
+        #   | `-- student1 "Fred" (routes all events to its parent)
         #   `-- another_listener (stores all received events)
         #
         from schooltool import model
@@ -86,6 +86,8 @@ class TestEventSystem(unittest.TestCase):
         from schooltool.event import RouteToRelationshipsAction
         from schooltool.interfaces import URIGroup, URIMember
         from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.debug import EventLogFacet
+        from schooltool.component import setFacet
         from schooltool.membership import Membership
         import schooltool.membership
 
@@ -111,6 +113,8 @@ class TestEventSystem(unittest.TestCase):
         student1 = Person(title="Fred")
         student1.eventTable.append(RouteToGroupsAction(IEvent))
         Membership(group=students, member=student1)
+        event_log_facet = EventLogFacet()
+        setFacet(student1, event_log_facet)
 
         misc_group = Group(title="misc")
         misc_group.eventTable.append(
@@ -134,6 +138,7 @@ class TestEventSystem(unittest.TestCase):
         # Dispatch two events on student1 and watch their progress
         event1 = StudentEvent(student1)
         event1.dispatch(event1.context)
+        event_log_facet.active = False
         event2 = ArbitraryEvent(student1)
         event2.dispatch(event2.context)
 
@@ -143,6 +148,9 @@ class TestEventSystem(unittest.TestCase):
         # another_listener only receives IStudentEvents routed through the
         # root group
         self.assertEquals(another_listener.received, [event1])
+
+        # facets should receive events too (when they're active)
+        self.assertEquals(event_log_facet.received, [event1])
 
 
 def test_suite():

@@ -29,7 +29,7 @@ from zope.interface import implements
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
-from schooltool.interfaces import IRouteToRelationshipsAction
+from schooltool.interfaces import IRouteToRelationshipsAction, ICallAction
 from schooltool.interfaces import URIMember, URIGroup
 from schooltool.component import getEventService
 from schooltool.component import getRelatedObjects, inspectSpecificURI
@@ -81,6 +81,18 @@ class EventActionMixin:
 
     def handle(self, event, target):
         raise NotImplementedError('Subclasses must override this method')
+
+
+class CallAction(EventActionMixin):
+
+    implements(ICallAction)
+
+    def __init__(self, callback, eventType=IEvent):
+        EventActionMixin.__init__(self, eventType)
+        self.callback = callback
+
+    def handle(self, event, target):
+        self.callback(event)
 
 
 class LookupAction(EventActionMixin):

@@ -25,6 +25,8 @@ from persistence import Persistent
 from persistence.list import PersistentList
 from zope.interface import implements, Attribute
 from schooltool.interfaces import IEventTarget, ILocation
+from schooltool.interfaces import IEventConfigurable, IFacet
+from schooltool.event import CallAction
 
 __metaclass__ = type
 
@@ -35,10 +37,11 @@ class IEventLog(IEventTarget):
     received = Attribute("""List of received events""")
 
     def clear():
-        """Clear received events list"""
+        """Clear the list of received events."""
 
 
 class EventLog(Persistent):
+    """Locatable event log.  See IEventLog."""
 
     implements(IEventLog, ILocation)
 
@@ -54,7 +57,27 @@ class EventLog(Persistent):
         del self.received[:]
 
 
+class EventLogFacet(Persistent):
+    """Event log that can be attached to an object as a facet."""
+
+    implements(IEventLog, IEventConfigurable, IFacet)
+
+    def __init__(self):
+        self.received = PersistentList()
+        self.__parent__ = None
+        self.active = False
+        self.owner = None
+        self.eventTable = (CallAction(self.notify), )
+
+    def notify(self, event):
+        self.received.append(event)
+
+    def clear(self):
+        del self.received[:]
+
+
 class EventLogger(Persistent):
+    """Locatable event logger."""
 
     implements(IEventTarget, ILocation)
 

@@ -135,6 +135,26 @@ class TestEventActionMixins(unittest.TestCase):
         self.assertEquals(ea.eventType, marker)
         self.assertRaises(NotImplementedError, ea.handle, None, None)
 
+    def testCallAction(self):
+        from schooltool.event import CallAction
+        from schooltool.interfaces import ICallAction, IEventAction
+
+        honeypot = TargetStub()
+        callback = honeypot.notify
+        ca = CallAction(callback)
+        # XXX cannot use verifyObject here due to incorrect assumtions it makes
+        #     verifyObject(ICallAction, ca)
+        verifyObject(IEventAction, ca)
+        self.assert_(IEventAction.isImplementedBy(ca))
+
+        self.assertEquals(ca.eventType, IEvent)
+        self.assertEquals(ca.callback, callback)
+
+        event = EventAStub()
+        target = object()
+        ca.handle(event, target)
+        self.assertEquals(honeypot.events, (event, ))
+
     def testLookupAction(self):
         from schooltool.event import LookupAction
         from schooltool.interfaces import ILookupAction

@@ -505,6 +505,13 @@ class IEventAction(Interface):
         """
 
 
+class ICallAction(IEventAction):
+    """Event action that calls a callable."""
+
+    callback = Attribute(
+        """Callback that will be called with an event as its argument.""")
+
+
 class ILookupAction(IEventAction):
     """Event action that looks up actions to be performed in another event
     table.
