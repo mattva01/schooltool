@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # postinst script for $package
 
 set -e
@@ -28,18 +28,18 @@ set -e
 # called with the argument purge (see Details of removal and/or 
 # configuration purging, Section 6.7).
 
-sourcesourcepackage=schooltool
+package=schooltool
 
-case "$1" i
+case "$1" in
     purge)
         for i in error rest-access web-access app;do
-            [ -e /var/log/$sourcepackage/$i.log ] && rm -f /var/log/$sourcepackage/$i.log*
+            [ -e /var/log/$package/$i.log ] && rm -f /var/log/$package/$i.log* || true
         done
-        rmdir /var/log/$sourcepackage || echo /var/log/$sourcepackage not empty - not removed
-        rmdir /var/lib/$sourcepackage || echo /var/lib/$sourcepackage not empty - not removed
-        [ -e /var/run/$sourcepackage/$sourcepackage.pid ] && \
-            rm -f /var/run/$sourcepackage/$sourcepackage.pid
-        rmdir /var/run/$sourcepackage || echo /var/run/$sourcepackage not empty - not removed
+        rmdir /var/log/$package || true
+        rmdir /var/lib/$package || true
+        [ -e /var/run/$package/$package.pid ] && \
+            rm -f /var/run/$package/$package.pid || true
+        rmdir /var/run/$package || true
         ;;
 
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)

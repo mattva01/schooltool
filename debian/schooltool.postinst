@@ -21,26 +21,26 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
-sourcepackage=schooltool
+package=schooltool
 case "$1" in
-    configure)
-	# Create a system user
-	if ! getent group $sourcepackage > /dev/null 2>&1 ; then
-	    addgroup --system --quiet $sourcepackage
-	fi
-	if ! getent passwd $sourcepackage > /dev/null 2>&1 ; then
-	    adduser --quiet \
-		    --system --disabled-login --ingroup $sourcepackage \
-		    --home /var/lib/$sourcepackage --no-create-home \
-		    $sourcepackage
-	fi
-	# Create files and directories
-	mkdir -p /var/lib/$sourcepackage
-	mkdir -p /var/run/$sourcepackage
-	mkdir -p /var/log/$sourcepackage
-	chown $sourcepackage:$sourcepackage /var/lib/$sourcepackage
-	chown $sourcepackage:$sourcepackage /var/run/$sourcepackage
-	chown $sourcepackage:$sourcepackage /var/log/$sourcepackage
+    configure|reconfigure)
+    # Create a system user
+    if ! getent group $package > /dev/null 2>&1 ; then
+        addgroup --system --quiet $package
+    fi
+    if ! getent passwd $package > /dev/null 2>&1 ; then
+        adduser --quiet \
+        --system --disabled-login --ingroup $package \
+        --home /var/lib/$package --no-create-home \
+        $package
+    fi
+    # Create files and directories
+    [ -d /var/lib/$package ] || mkdir -p /var/lib/$package
+    [ -d /var/run/$package ] || mkdir -p /var/run/$package
+    [ -d /var/log/$package ] || mkdir -p /var/log/$package
+    chown $package:$package /var/lib/$package
+    chown $package:$package /var/run/$package
+    chown $package:$package /var/log/$package
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -51,6 +51,7 @@ case "$1" in
         echo "postinst called with unknown argument \`$1'" >&2
         exit 1
     ;;
+    
 esac
 
 # dh_installdeb will replace this with shell code automatically

@@ -3,9 +3,12 @@
 # If you change the seed, you will have to recreate ttconfig.data as well.
 datagen_seed = schooltool-m4
 
-libpkg=libschooltool-server
-package=schooltool-server
-common=$(package)
+# Server Packages
+sourcepackage=schooltool
+package=schooltool
+libpkg=libschooltool
+
+# Client Packages
 packageclients=schooltool-clients
 libpkgclients=libschooltool-clients
 
@@ -23,7 +26,7 @@ build-stamp:
 
 debdirclean:
 	#This rule is only meant to be called from the top level makefile
-	for i in $(libpkg) $(package) $(common) $(packageclients) $(libpkgclients);do\
+	for i in $(libpkg) $(package) $(packageclients) $(libpkgclients);do\
 	    rm -rf debian/$$i;\
 	done
 	rm -f debian/*.substvars
@@ -45,44 +48,66 @@ install-stamp: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	#make server libary
+	
 	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
+
+
+	###### Server Packages ######
+
+	# make server library package
+	# arch-dep files
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.so' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkg)/usr/lib/$(libpkg)/{} \;
-	#make common
-	# move directories with architecture independent files into usr/share
+	
+	# make server package
+	# arch-indep files
 	cd src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt' -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
 		-name '*.xpm' -o -name '*.css' \) \
 	     -exec install -m 644 -D -p {} \
-		../debian/$(common)/usr/share/$(common)/{} \;
-	
-	# make symlinks from .so files to /usr/share
+		../debian/$(package)/usr/share/$(package)/{} \;
+	rm -f debian/$(package)/usr/share/$(package)/trace.py
+	# make symlinks from arch-dep to arch indep
 	cd debian/$(libpkg)/usr && \
 	find lib -iname '*.so' | \
 	    while read w; do\
-		tmp=`echo $$w | sed s/$(libpkg)/$(common)/`;\
-		tmp2=`dirname ../../$(common)/usr/share$${tmp:3}`;\
+		tmp=`echo $$w | sed s/$(libpkg)/$(package)/`;\
+		tmp2=`dirname ../../$(package)/usr/share$${tmp:3}`;\
 		install -m 755 -d $$tmp2;\
 		cd $$tmp2;\
 		ln -s `echo $${w:4}|sed s/[^/]*/../g`/$$w;\
 		cd - ;\
 	    done
+	# executables
+	install -m 755 -D -p debian/$(package).py \
+		debian/$(package)/usr/bin/$(package); \
+	# configuration
+	install -m 644 -D -p debian/$(package).logrotate \
+		debian/$(package)/etc/logrotate.d/$(package)
+	install -m 644 -D -p debian/ssl-cert.cnf \
+	    debian/$(package)/etc/$(package)/ssl-cert.cnf	
+	install -m 644 -D -p debian/$(package).conf \
+	    debian/$(package)/etc/$(package)/$(package).conf
+
 	
-	rm -f debian/$(common)/usr/share/$(common)/trace.py
-	# Make client libary
+	###### Client Packages ######
+
+	# Make client library
+	# arch-dep files
 	cd src && \
 	find zope/interface schooltool/clients \
 	    \( -name tests -o -name ftests \) -prune -o \
 	     \( -name '*.so' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(libpkgclients)/usr/lib/$(libpkgclients)/{} \;
-	
+
+	# Make client package
+	# arch-indep files
 	cd src && \
 	find zope/interface schooltool/clients \
 	     \( -name 'tests' -o -name 'ftests' \) -prune -o\
@@ -100,10 +125,9 @@ install-stamp: build
 	          zope/__init__.py; \
 	do \
 	    install -m 644 -D -p src/$$fn \
-		debian/schooltool-clients/usr/share/schooltool-clients/$$fn; \
+		debian/$(packageclients)/usr/share/$(packageclients)/$$fn; \
 	done
-
-	# make symlinks from .so files to /usr/share for clients
+	# make symlinks from arch-dep to arch indep
 	cd debian/$(libpkgclients)/usr && \
 	find lib -iname '*.so' | \
 	    while read w; do\
@@ -114,25 +138,16 @@ install-stamp: build
 		ln -s `echo $${w:4}|sed s/[^/]*/../g`/$$w;\
 		cd - ;\
 	    done
-	
-	install -m 755 -D -p debian/schooltool-server.py \
-		debian/$(common)/usr/bin/schooltool-server; \
-	install -m 644 -D -p debian/schooltool.logrotate \
-		debian/$(common)/etc/logrotate.d/schooltool
-	
+	# executables
 	for p in schooltool-client wxschooltool import-sampleschool; do \
 	    install -m 755 -D -p debian/$$p \
-		    debian/schooltool-clients/usr/bin/$$p; \
+		    debian/$(packageclients)/usr/bin/$$p; \
 	done
-
-	install -m 644 -D -p debian/schooltool.conf \
-	    debian/schooltool-server/etc/schooltool.conf
-
+	# Setup sample school for clients
 	install -m 644 -D -p ttconfig.data \
-	    debian/schooltool-clients/usr/share/schooltool-clients/sampleschool/ttconfig.data
-
+	    debian/$(packageclients)/usr/share/$(packageclients)/sampleschool/ttconfig.data
 	dir=$$PWD \
-	    && cd debian/schooltool-clients/usr/share/schooltool-clients/sampleschool/ \
+	    && cd debian/$(packageclients)/usr/share/$(packageclients)/sampleschool/ \
 	    && PYTHONPATH=$$dir/src \
 	       python $$dir/src/schooltool/clients/datagen.py $(datagen_seed)
 
@@ -144,7 +159,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installdocs
-	dh_installinit --name=schooltool
+	dh_installinit
 	dh_installexamples
 	dh_installman
 	dh_installchangelogs
