@@ -434,10 +434,19 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
                       xlink:title="CS Lab 2"/>
           </activity>
         </exception>
+        <exception date="2004-11-04" period="A">
+          <activity title="Maths">
+            <resource xlink:type="simple" xlink:href="/resources/room1"
+                      xlink:title="Room 1"/>
+          </activity>
+          <replacement time="08:30" duration="45" uid="rpl-ev-uid1">
+            Geometry
+          </replacement>
+        </exception>
         <exception date="2004-11-25" period="B">
           <activity title="English" />
-          <replacement date="2004-11-25" time="12:45" duration="30"
-                       uid="rpl-ev-uid">
+          <replacement date="2004-11-26" time="12:45" duration="30"
+                       uid="rpl-ev-uid2">
             English (short)
           </replacement>
         </exception>
@@ -474,12 +483,26 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
               <td></td>
             </tr>
           </table>
+          %(exceptions)s
         </body>
         </html>
         """
 
+    exceptions_html = """
+        <h2>Timetable exceptions</h2>
+        <ul>
+          <li>On 2004-10-24, period C, CompSci is canceled.</li>
+          <li>On 2004-11-04, period A, Maths is replaced with Geometry
+              from 08:30 to 09:15.</li>
+          <li>On 2004-11-25, period B, English is replaced with English (short)
+              from 12:45 to 13:15 on 2004-11-26.</li>
+        </ul>
+        """
+
     empty_html = empty_html_template % {'tt_type': "complete"}
-    full_html = full_html_template % {'tt_type': "complete"}
+    full_html = full_html_template % {'tt_type': "complete", 'exceptions': ""}
+    full_html_with_exceptions = full_html_template % {'tt_type': "complete",
+                                    'exceptions': exceptions_html}
 
     def setUp(self):
         self.root = ServiceManagerStub()
@@ -515,16 +538,25 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         from schooltool.timetable import TimetableException
         from schooltool.timetable import ExceptionalTTCalendarEvent
         tt = self.createFull(owner)
+        maths = list(tt['Day 1']['A'])[0]
         english = list(tt['Day 1']['B'])[0]
         compsci = list(tt['Day 2']['C'])[0]
         tt.exceptions.append(TimetableException(datetime.date(2004, 10, 24),
                                                 'C', compsci))
+        exc = TimetableException(datetime.date(2004, 11, 4), 'A', maths)
+        exc.replacement = ExceptionalTTCalendarEvent(
+                                       datetime.datetime(2004, 11, 4, 8, 30),
+                                       datetime.timedelta(minutes=45),
+                                       "Geometry",
+                                       unique_id="rpl-ev-uid1",
+                                       exception=exc)
+        tt.exceptions.append(exc)
         exc = TimetableException(datetime.date(2004, 11, 25), 'B', english)
         exc.replacement = ExceptionalTTCalendarEvent(
-                                       datetime.datetime(2004, 11, 25, 12, 45),
+                                       datetime.datetime(2004, 11, 26, 12, 45),
                                        datetime.timedelta(minutes=30),
                                        "English (short)",
-                                       unique_id="rpl-ev-uid",
+                                       unique_id="rpl-ev-uid2",
                                        exception=exc)
         tt.exceptions.append(exc)
         return tt
@@ -554,6 +586,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
                          accept=[('1', 'text/html', {}, {})],
                          ctype='text/html')
         self.do_test_get(self.createFull(), self.full_html,
+                         accept=[('1', 'text/html', {}, {})],
+                         ctype='text/html')
+        self.do_test_get(self.createFullWithExceptions(),
+                         self.full_html_with_exceptions,
                          accept=[('1', 'text/html', {}, {})],
                          ctype='text/html')
 
@@ -621,7 +657,10 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         """
 
     empty_html = TestTimetableReadView.empty_html_template % {'tt_type': "own"}
-    full_html = TestTimetableReadView.full_html_template % {'tt_type': "own"}
+    full_html = TestTimetableReadView.full_html_template % {'tt_type': "own",
+                                                            'exceptions': ''}
+    full_html_with_exceptions = TestTimetableReadView.full_html_template % {
+        'tt_type': "own", 'exceptions': TestTimetableReadView.exceptions_html}
 
     def setUp(self):
         TestTimetableReadView.setUp(self)
