@@ -413,7 +413,31 @@ class AbsenceFrame(wxFrame):
 
 
 class MainFrame(wxFrame):
-    """Main frame."""
+    """Main frame.
+
+    The following attributes are defined:
+      client                The SchoolToolClient instance that encapsulates
+                            communication with the server.
+
+      refresh_lock          A Lock to protect against reentrancy of _refresh.
+
+      groupTreeCtrl         Group tree control.  The PyData object of every
+                            tree item is a tuple (group_href, id) where
+                            id is a unique identifier of this tree item that
+                            is invariant to tree changes.  The id of an item is
+                            actually a tuple of group_hrefs of itself and all
+                            its parents.
+      treePopupMenu         Popup menu for the group tree.
+
+      personListCtrl        Person (member) list control.  The item data of
+                            every item is an integer index to personListData.
+      personListData        A list of tuples (title, person_href).
+      personPopupMenu       Popup menu for the person list control.
+
+      relationshipListCtrl  Relationship tree control.  The item data of every
+                            item is an integer index to relationshipListData.
+      relationshipListData  A list of tuples (arcrole, role, title, href).
+    """
 
     def __init__(self, client, parent=None, id=-1, title="SchoolTool"):
         """Create the main application window."""
@@ -593,11 +617,11 @@ class MainFrame(wxFrame):
             self.personListCtrl.Thaw()
             self.relationshipListCtrl.Thaw()
             return
-        group_id = self.groupTreeCtrl.GetPyData(item)
+        group_href = self.groupTreeCtrl.GetPyData(item)[0]
 
         # Fill in group member list
         try:
-            info = self.client.getGroupInfo(group_id)
+            info = self.client.getGroupInfo(group_href)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
             self.personListCtrl.Thaw()
@@ -618,7 +642,7 @@ class MainFrame(wxFrame):
         # Fill in group relationship list
         try:
             self.relationshipListData = self.client.getObjectRelationships(
-                                                                    group_id)
+                                                                    group_href)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
             self.relationshipListCtrl.Thaw()
@@ -700,41 +724,31 @@ class MainFrame(wxFrame):
 
         # Remember current selection
         old_selection = None
-        old_selection_full_id = None
-        root = self.groupTreeCtrl.GetRootItem()
         item = self.groupTreeCtrl.GetSelection()
         if item.IsOk():
-            old_selection = self.groupTreeCtrl.GetPyData(item)
-            old_selection_full_id = []
-            while item != root:
-                id = self.groupTreeCtrl.GetPyData(item)
-                old_selection_full_id.append(id)
-                item = self.groupTreeCtrl.GetItemParent(item)
-            old_selection_full_id.reverse()
-            old_selection_full_id = tuple(old_selection_full_id)
+            old_selection = self.groupTreeCtrl.GetPyData(item)[1]
 
         # Remember which items were expanded
+        root = self.groupTreeCtrl.GetRootItem()
         expanded = sets.Set()
-        stack = []
         stack = [root]
         while stack:
             item = stack.pop()
             if item is not root and self.groupTreeCtrl.IsExpanded(item):
-                # XXX the group href set in GetPyData is not unique
-                expanded.add(self.groupTreeCtrl.GetPyData(item))
+                expanded.add(self.groupTreeCtrl.GetPyData(item)[1])
             next, cookie = self.groupTreeCtrl.GetFirstChild(item, 0)
-            if next.IsOk():
+            while next.IsOk():
                 stack.append(next)
-            next = self.groupTreeCtrl.GetNextSibling(item)
-            if next.IsOk():
-                stack.append(next)
+                next, cookie = self.groupTreeCtrl.GetNextChild(item, cookie)
 
         # Reload tree
         self.groupTreeCtrl.Freeze()
         self.groupTreeCtrl.DeleteAllItems()
         root = self.groupTreeCtrl.AddRoot("Roots")
-        stack = [(root, None)]  # (item, href)
-        selected_item = None
+        self.groupTreeCtrl.SetPyData(root, (None, None))
+
+        stack = [(root, None)]  # (item, id)
+        item_to_select = None
         for level, title, href in group_tree:
             while len(stack) > level + 1:
                 last = stack.pop()[0]
@@ -743,23 +757,21 @@ class MainFrame(wxFrame):
             item = self.groupTreeCtrl.AppendItem(stack[-1][0], title)
             if level == 1 or stack[-1][1] in expanded:
                 self.groupTreeCtrl.Expand(stack[-1][0])
-            self.groupTreeCtrl.SetPyData(item, href)
-            if selected_item is None and href == old_selection:
-                full_id = [h for i, h in stack[1:]]
-                full_id = tuple(full_id + [href])
-                if old_selection_full_id == full_id:
-                    selected_item = item
-            stack.append((item, href))
+            id = tuple([parent[1] for parent in stack[1:]] + [href])
+            self.groupTreeCtrl.SetPyData(item, (href, id))
+            if id == old_selection:
+                item_to_select = item
+            stack.append((item, id))
         while stack:
             last = stack.pop()[0]
             self.groupTreeCtrl.SortChildren(last)
 
-        if selected_item is None:
+        if item_to_select is None:
             self.groupTreeCtrl.Unselect()
             self.DoSelectGroup(None)
         else:
-            self.groupTreeCtrl.SelectItem(selected_item)
-            self.groupTreeCtrl.EnsureVisible(selected_item)
+            self.groupTreeCtrl.SelectItem(item_to_select)
+            self.groupTreeCtrl.EnsureVisible(item_to_select)
         self.groupTreeCtrl.Thaw()
 
     def DoRollCall(self, event=None):
@@ -771,10 +783,10 @@ class MainFrame(wxFrame):
         if not item.IsOk():
             self.SetStatusText("No group selected")
             return
-        group_id = self.groupTreeCtrl.GetPyData(item)
+        group_href = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
         try:
-            rollcall = self.client.getRollCall(group_id)
+            rollcall = self.client.getRollCall(group_href)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
             return
@@ -783,7 +795,7 @@ class MainFrame(wxFrame):
         if dlg.ShowModal() == wxID_OK:
             rollcall = dlg.getRollCall()
             try:
-                self.client.submitRollCall(group_id, rollcall)
+                self.client.submitRollCall(group_href, rollcall)
             except SchoolToolError, e:
                 self.SetStatusText(str(e))
             else:
@@ -824,7 +836,8 @@ class MainFrame(wxFrame):
         if not item.IsOk():
             self.SetStatusText("No group selected")
             return
-        group_id = self.groupTreeCtrl.GetPyData(item)
+        group_href = self.groupTreeCtrl.GetPyData(item)[0]
+        # XXX: TODO
 
 
 class SchoolToolApp(wxApp):
