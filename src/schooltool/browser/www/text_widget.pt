@@ -1,0 +1,11 @@
+<div tal:attributes="class widget/row_class">
+  <label tal:attributes="class widget/label_class; for widget/name"
+         tal:content="widget/label">[label]</label>
+  <input tal:attributes="class widget/css_class; name widget/name;
+                         id widget/name; type widget/input_type;
+                         tabindex widget/tabindex; value widget/raw_value" />
+  <span class="unit" tal:condition="widget/unit"
+        tal:content="widget/unit">[unit]</span>
+  <div class="error" tal:condition="widget/error"
+       tal:content="widget/error">[error message]</div>
+</div>

@@ -301,14 +301,26 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEqualsXML(widget().encode('UTF-8'),
                              expected.encode('UTF-8'))
 
+    def test_call_with_formatter(self):
+        widget = self.createWidget(formatter=hex)
+        widget.setValue(42)
+        expected = u"""
+            <div class="row">
+              <label for="field">Label</label>
+              <input class="text" type="text" name="field" id="field"
+                     value="0x2a" />
+            </div>
+            """
+        self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
     def test_call_with_error(self):
         widget = self.createWidget()
         widget.error = u"An error! \u2639"
         expected = u"""
             <div class="row row_error">
               <label for="field">Label</label>
-              <input class="text" type="text" name="field" id="field"
-                     value="" />
+              <input class="text" type="text" name="field" id="field" />
               <div class="error">An error! \u2639</div>
             </div>
             """
@@ -319,12 +331,13 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
         widget = self.createWidget(label="Length", unit="mm, > 0")
         widget.error = "Error"
         widget.css_class = "extra"
+        widget.label_class = "big"
         widget.tabindex = 16
         expected = u"""
             <div class="row row_error">
-              <label for="field">Length</label>
+              <label class="big" for="field">Length</label>
               <input class="extra" type="text" name="field" id="field"
-                     tabindex="16" value="" />
+                     tabindex="16" />
               <span class="unit">mm, &gt; 0</span>
               <div class="error">Error</div>
             </div>
@@ -339,7 +352,7 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
             <div class="row">
               <label for="field">Label</label>
               <input class="text" type="text" name="field" id="field"
-                     tabindex="42" value="" />
+                     tabindex="42" />
             </div>
             """
         self.assertEqualsXML(widget(tabindex=42).encode('UTF-8'),

@@ -26,6 +26,7 @@ import cgi
 import datetime
 
 from zope.interface import Interface, Attribute, implements
+from schooltool.browser import Template
 from schooltool.common import to_unicode
 from schooltool.common import parse_date
 from schooltool.translation import ugettext as _
@@ -307,6 +308,7 @@ class Widget:
     implements(IWidget)
 
     css_class = None
+    label_class = None
 
     def __init__(self, name, label, parser=None, validator=None,
                  formatter=None, unit=None, value=None, tabindex=None,
@@ -389,12 +391,16 @@ class Widget:
         else:
             return ''
 
+    def row_class(self):
+        """Return the CSS class for the row."""
+        if self.error:
+            return 'row row_error'
+        else:
+            return 'row'
+
     def _row_class(self):
         """Helper for subclasses."""
-        if self.error:
-            return ' class="row row_error"'
-        else:
-            return ' class="row"'
+        return ' class="%s"' % self.row_class()
 
     def _error_html(self):
         """Helper for subclasses."""
@@ -460,22 +466,12 @@ class TextWidget(Widget):
 
     input_type = 'text'
 
+    template = Template('www/text_widget.pt', charset=None)
+
     def __call__(self, tabindex=None):
-        return ('<div%(row_class)s>\n'
-                '  <label for="%(name)s">%(label)s</label>\n'
-                '  <input%(css_class)s type="%(input_type)s" name="%(name)s"'
-                        ' id="%(name)s"%(tabindex)s value="%(value)s" />\n'
-                '%(unit)s'
-                '%(error)s'
-                '</div>' % {'name': cgi.escape(self.name, True),
-                            'label': cgi.escape(self.label, True),
-                            'input_type': cgi.escape(self.input_type, True),
-                            'css_class': self._css_class(),
-                            'row_class': self._row_class(),
-                            'value': cgi.escape(self.raw_value or '', True),
-                            'unit': self._unit_html(),
-                            'tabindex': self._tabindex_html(tabindex),
-                            'error': self._error_html()})
+        if tabindex is not None:
+            self.tabindex = tabindex
+        return self.template(None, widget=self)
 
 
 class PasswordWidget(TextWidget):
