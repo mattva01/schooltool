@@ -32,7 +32,7 @@ from zope.app.traversing.interfaces import IPhysicallyLocatable
 from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.app.location.interfaces import ILocation
 from zope.component import serviceManager, getService, provideAdapter
-from zope.component import getUtility, queryUtility, getUtilitiesFor
+from zope.component import getUtility, queryUtility
 from zope.component.adapter import IGlobalAdapterService, GlobalAdapterService
 from zope.component.utility import IGlobalUtilityService, GlobalUtilityService
 from zope.component.exceptions import ComponentLookupError

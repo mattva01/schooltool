@@ -27,9 +27,8 @@ import datetime
 from StringIO import StringIO
 from logging import INFO
 import PIL.Image
-from zope.interface import directlyProvides
+
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.interfaces import ILocation
 from schooltool.rest.tests import RequestStub
 from schooltool.rest.tests import setPath
 from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup

@@ -33,15 +33,11 @@ from schooltool.event import EventService
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
-from schooltool.interfaces import IBeforeMembershipEvent
 from schooltool.interfaces import IFacetFactory
 from schooltool.membership import Membership
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
 from schooltool.infofacets import DynamicFacetSchemaService, DynamicFacet
 from schooltool.translation import ugettext as _
-from schooltool.interfaces import ITimetableReplacedEvent
-from schooltool.interfaces import ITimetableExceptionEvent
-from schooltool.interfaces import ITimetableActivityEvent
 
 
 __metaclass__ = type

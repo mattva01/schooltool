@@ -32,13 +32,11 @@ from schooltool.rest import absoluteURL
 from schooltool.translation import ugettext as _
 from schooltool.browser import valid_name
 from schooltool.browser import AppObjectBreadcrumbsMixin
-from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import View, Template
-from schooltool.browser.auth import ManagerAccess, PrivateAccess, PublicAccess
+from schooltool.browser.auth import ManagerAccess, PrivateAccess
 from schooltool.browser.timetable import ContainerServiceViewBase
-from schooltool.browser.widgets import TextWidget, PasswordWidget
-from schooltool.browser.widgets import TextAreaWidget, SelectionWidget
-from schooltool.browser.widgets import CheckboxWidget, MultiselectionWidget
+from schooltool.browser.widgets import TextWidget
+from schooltool.browser.widgets import SelectionWidget
 
 
 class DynamicFacetView(View, AppObjectBreadcrumbsMixin):

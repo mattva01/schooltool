@@ -87,9 +87,8 @@ $Id$
 """
 
 from zope.component import getService
-from zope.interface import implements, moduleProvides
+from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import ITimetableActivityAddedEvent
 from schooltool.interfaces import ITimetableActivityRemovedEvent
 from schooltool.interfaces import ITimetableReplacedEvent

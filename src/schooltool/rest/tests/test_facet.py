@@ -22,7 +22,6 @@ Unit tests for schooltool.rest.facet
 $Id$
 """
 
-import sets
 from logging import INFO
 import unittest
 from zope.interface import implements

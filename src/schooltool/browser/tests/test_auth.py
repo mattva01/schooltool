@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import LocationStub
 from schooltool.tests.utils import AppSetupMixin
@@ -92,7 +91,6 @@ class TestBrowserAuthPolicies(AuthPolicyTestMixin, AppSetupMixin,
         self.assertAllows(ManagerAccess, [self.manager])
 
     def test_PrivateAccess(self):
-        from schooltool.interfaces import ILocation
         from schooltool.browser.auth import PrivateAccess
         context = LocationStub(None, self.person)
         self.assertDenies(PrivateAccess,

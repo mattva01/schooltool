@@ -66,7 +66,7 @@ class TestGuardian(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testRelationshipSchema(self):
         from schooltool.guardian import Guardian
-        from schooltool.uris import URIGuardian, URICustodian, URIWard
+        from schooltool.uris import URICustodian, URIWard
 
         teacher = Relatable(self.serviceManager)
         student = Relatable(self.serviceManager)

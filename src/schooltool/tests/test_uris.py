@@ -69,7 +69,6 @@ class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
     def testURIRegistry(self):
         from schooltool.interfaces import IURIObject
         from schooltool.uris import URIObject
-        from zope.component.exceptions import ComponentLookupError
         from schooltool.uris import registerURI
         from zope.component import getUtility
 

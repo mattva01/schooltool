@@ -1240,7 +1240,7 @@ class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 class TestResidenceMoveView(SchoolToolSetup):
 
     def setUp(self):
-        from schooltool.model import Residence, Person, Resource
+        from schooltool.model import Residence, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.occupies import Occupies
         from schooltool import occupies

@@ -39,7 +39,7 @@ from schooltool.browser.tests import assertRedirectedTo
 from schooltool.browser.tests import assertHasHiddenField
 from schooltool.browser.tests import assertHasSubmitButton
 from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
-from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup, Anything
+from schooltool.tests.utils import XMLCompareMixin, SchoolToolSetup
 from schooltool.tests.helpers import diff
 
 __metaclass__ = type

@@ -23,13 +23,11 @@ $Id$
 """
 
 from persistent import Persistent
-from persistent.dict import PersistentDict
-from persistent.list import PersistentList
 from zope.interface import implements
 from schooltool.interfaces import IDynamicFacet, IPersonInfoFacet
 from schooltool.interfaces import IAddressFacet
 from schooltool.interfaces import IPersonInfoFacet, IDynamicFacetSchemaService
-from schooltool.component import DynamicSchemaField, DynamicSchema
+from schooltool.component import DynamicSchema
 from schooltool.component import DynamicSchemaService
 
 

@@ -44,7 +44,6 @@ from schooltool.absence import Absence
 from schooltool.component import FacetManager, getRelatedObjects
 from schooltool.component import getDynamicFacetSchemaService
 from schooltool.infofacets import PersonInfoFacet, AddressFacet
-from schooltool.infofacets import DynamicFacet
 from schooltool.auth import ACL
 from schooltool.uris import URICurrentlyResides, URICurrentResidence
 from schooltool.uris import URIWard, URICustodian

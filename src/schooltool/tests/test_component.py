@@ -33,13 +33,12 @@ from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService, IViewAPI
 from schooltool.interfaces import IServiceAPI, IServiceManager
-from schooltool.interfaces import IContainmentRoot, ILocation, ITraversable
+from schooltool.interfaces import ILocation, ITraversable
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin, RegistriesCleanupMixin
 from schooltool.tests.utils import EqualsSortedMixin
-from schooltool.db import PersistentKeysSetWithNames
 
 __metaclass__ = type
 

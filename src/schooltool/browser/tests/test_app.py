@@ -29,7 +29,7 @@ from datetime import date, time, timedelta
 from zope.testing.doctest import DocTestSuite
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
 from schooltool.browser.tests import HTMLDocument
-from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup, Anything
+from schooltool.tests.utils import AppSetupMixin, SchoolToolSetup
 from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type

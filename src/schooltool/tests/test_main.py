@@ -30,7 +30,7 @@ from StringIO import StringIO
 
 from zope.interface import moduleProvides
 from zope.interface import directlyProvides, directlyProvidedBy
-from schooltool.tests.utils import RegistriesSetupMixin, RegistriesCleanupMixin
+from schooltool.tests.utils import RegistriesCleanupMixin
 from schooltool.interfaces import IModuleSetup, AuthenticationError
 
 __metaclass__ = type

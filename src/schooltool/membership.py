@@ -31,7 +31,6 @@ from schooltool.interfaces import IMemberAddedEvent
 from schooltool.interfaces import IMemberRemovedEvent
 from schooltool.interfaces import IBeforeMembershipEvent
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import IPerson
 from schooltool.uris import URIMembership, URIGroup, URIMember
 from schooltool.relationship import RelationshipSchema, RelationshipEvent

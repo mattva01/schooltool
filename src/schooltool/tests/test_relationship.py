@@ -28,7 +28,7 @@ from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
-from schooltool.interfaces import ILinkSet, IPlaceholder, IContainmentRoot
+from schooltool.interfaces import ILinkSet, IPlaceholder
 from schooltool.interfaces import IURIObject
 from schooltool.uris import URIObject
 from schooltool.tests.helpers import sorted

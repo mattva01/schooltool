@@ -53,7 +53,6 @@ class TestResourceSynchronization(AppSetupMixin, unittest.TestCase):
 
     def test_activity_added_then_removed(self):
         from schooltool.timetable import TimetableActivity
-        from schooltool.interfaces import IEvent
 
         activity = TimetableActivity(title="New", owner=self.person,
                                      resources=(self.location, ))
@@ -76,7 +75,6 @@ class TestResourceSynchronization(AppSetupMixin, unittest.TestCase):
     def test_exception_added_then_removed(self):
         from schooltool.timetable import TimetableException
         from schooltool.timetable import ExceptionalTTCalendarEvent
-        from schooltool.interfaces import IEvent
 
         # Prepare test fixture
         tt = self.person.timetables['2004-fall', 'simple']
@@ -115,7 +113,6 @@ class TestResourceSynchronization(AppSetupMixin, unittest.TestCase):
     def test_timetable_replaced(self):
         from schooltool.timetable import TimetableActivity
         from schooltool.timetable import TimetableException
-        from schooltool.interfaces import IEvent
 
         # Prepare test fixture
         tt = self.person.timetables['2004-fall', 'simple']

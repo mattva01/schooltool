@@ -46,7 +46,7 @@ def adapter_registry_contents(ar):
 class ComponentChecks:
 
     def startTest(self, test):
-        from schooltool import component, uris
+        from schooltool import component
         self.view_registry = adapter_registry_contents(component.view_registry)
         self.class_view_registry = dict(component.class_view_registry)
 

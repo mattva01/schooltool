@@ -34,7 +34,6 @@ from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, relate
 from schooltool.interfaces import IApplication, IFacetFactory
 from schooltool.membership import Membership, memberOf, belongsToParentGroup
-from schooltool.teaching import Teaching
 from schooltool.timetable import TimetableActivity
 from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
