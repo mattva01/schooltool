@@ -100,6 +100,8 @@ class SchooldayModelCalendarView(View):
         return "\r\n".join(result)
 
     def do_PUT(self, request):
+        # TODO: try to autodetect from content, some iCalendar clients do not
+        # specify a content type when uploading.
         ctype = request.getContentType()
         if ctype == 'text/calendar':
             return self.do_PUT_text_calendar(request)
@@ -303,6 +305,7 @@ class CalendarView(CalendarReadView):
             return 'public'
 
     def do_PUT(self, request):
+        # TODO: remove this check
         ctype = request.getContentType()
         if ctype != 'text/calendar':
             return textErrorPage(request,

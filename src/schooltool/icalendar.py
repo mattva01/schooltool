@@ -790,8 +790,9 @@ class ICalReader:
       HTAB               = %x09
     """
 
-    def __init__(self, file):
+    def __init__(self, file, charset='UTF-8'):
         self.file = file
+        self.charset = charset
 
     def _parseRow(record_str):
         """Parse a single content line.
@@ -894,7 +895,8 @@ class ICalReader:
             if line[0] in '\t ':
                 line = line[1:]
             elif record:
-                yield self._parseRow("".join(record))
+                row = "".join(record).decode(self.charset)
+                yield self._parseRow(row)
                 record = []
             if line.endswith('\r\n'):
                 record.append(line[:-2])
@@ -905,7 +907,8 @@ class ICalReader:
                 # strictly speaking this is a violation of RFC 2445
                 record.append(line)
         if record:
-            yield self._parseRow("".join(record))
+            row = "".join(record).decode(self.charset)
+            yield self._parseRow(row)
 
     def iterEvents(self):
         """Iterate over all VEVENT objects in an ICalendar file."""

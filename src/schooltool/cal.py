@@ -263,6 +263,9 @@ class CalendarEvent(Persistent):
     def __init__(self, dtstart, duration, title, owner=None, context=None,
                  location=None, unique_id=None, recurrence=None,
                  privacy="public"):
+        # Catch UnicodeErrors early
+        if title is not None: unicode(title)
+        if location is not None: unicode(location)
         self._dtstart = dtstart
         self._duration = duration
         self._title = title

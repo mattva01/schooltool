@@ -706,6 +706,11 @@ class TestICalReader(unittest.TestCase):
         self.assertEqual(list(reader._iterRow()),
                          [('KEY1', 'value 1 .', {})])
 
+        reader = ICalReader(StringIO("key;param=\xe2\x98\xbb:\r\n"
+                                     " value \xe2\x98\xbb\r\n"))
+        self.assertEqual(list(reader._iterRow()),
+                         [("KEY", u"value \u263B", {'PARAM': u'\u263B'})])
+
     def test_parseRow(self):
         from schooltool.icalendar import ICalReader, ICalParseError
         parseRow = ICalReader._parseRow

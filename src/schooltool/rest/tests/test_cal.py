@@ -669,6 +669,32 @@ class TestCalendarView(TestCalendarReadView):
         recurrence = list(cal)[0].recurrence
         self.assertEquals(recurrence.interval, 3)
 
+    def test_put_utf8(self):
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:uid1
+            SUMMARY:Smile \xe2\x98\xbb
+            DURATION:PT20M
+            DTSTART:20040102T030405Z
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
+                              headers={"Content-Type": "text/calendar"},
+                              body=calendar, authenticated_user=self.manager)
+        cal = self._create()
+        result = self.view.render(request)
+        self.assertEquals(result, "Calendar imported")
+        self.assertEquals(request.code, 200)
+
+        event = list(cal)[0]
+        self.assertEquals(event.title, u'Smile \u263B')
+
     def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
         request = RequestStub("http://localhost/calendar", method="PUT",
                               headers={"Content-Type": content_type},
