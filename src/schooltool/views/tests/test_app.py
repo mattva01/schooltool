@@ -32,14 +32,13 @@ from schooltool.views.tests import RequestStub, UtilityStub, XPathTestContext
 __metaclass__ = type
 
 
-class LogStub:
+class SiteStub:
 
-    message = None
-    level = None
+    def __init__(self):
+        self.applog = []
 
-    def __call__(self, message, level='LOG'):
-        self.message = message
-        self.level = level
+    def logAppEvent(self, user, message, level='INFO'):
+        self.applog.append((user, message, level))
 
 
 class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
@@ -201,18 +200,17 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         if view is None:
             view = self.view
 
-        view.log = LogStub()
-
         request = RequestStub("http://localhost:7001/groups" + suffix,
                               method=method, body=body)
+        request.site = SiteStub()
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         if suffix:
             self.assertEquals(view.obj_path, '/groups' + suffix)
-        self.assertEquals(view.log.message,
-                          "Object created: " + view.obj_path)
+        self.assertEquals(request.site.applog,
+                          [(None, "Object created: " + view.obj_path, 'INFO')])
         location = request.headers['location']
         base = "http://localhost:7001/groups/"
         self.assert_(location.startswith(base),
@@ -234,10 +232,10 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub("http://localhost:7001/groups", method="POST",
                               body='<element title="New Group">')
         self.view.authorization = lambda ctx, rq: True
-        self.view.log = LogStub()
+        request.site = SiteStub()
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(self.view.log.message, None)
+        self.assertEquals(request.site.applog, [])
 
     def test_get_child(self, method="GET"):
         from schooltool.views.app import ApplicationObjectCreatorView

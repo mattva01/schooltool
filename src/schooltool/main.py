@@ -548,12 +548,21 @@ class Site(http.HTTPFactory):
         self.authenticate = authenticate
         self.applog_path = applog_path
         self.logger = logging.getLogger('schooltool.error')
+        self.applogger = logging.getLogger('schooltool.app')
 
     def buildProtocol(self, addr):
         channel = self.__super_buildProtocol(addr)
         channel.requestFactory = Request
         channel.site = self
         return channel
+
+    def logAppEvent(self, user, message, level='INFO'):
+        """Add a log entry to the application log."""
+        if user is None:
+            username = 'UNKNOWN'
+        else:
+            username = user.username
+        self.applogger.log(level, "%s (%s) %s" % (level, username, message))
 
 
 #

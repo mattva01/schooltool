@@ -263,8 +263,6 @@ class View(Resource):
     __super = Resource
     __super_init = __super.__init__
 
-    logger = logging.getLogger('schooltool.app')
-
     def __init__(self, context):
         self.__super_init()
         self.context = context
@@ -340,14 +338,6 @@ class View(Resource):
         body = self.do_GET(request)
         request.setHeader('Content-Length', len(body))
         return ""
-
-    def log(self, message, level='LOG'):
-        """Add a log entry to the application log."""
-        if self.request is None or self.request.authenticated_user is None:
-            username = 'UNKNOWN'
-        else:
-            username = self.request.authenticated_user.username
-        self.logger.log(level, "%s (%s) %s" % (level, username, message))
 
 
 class NotFoundView(View):

@@ -241,32 +241,6 @@ class TestView(unittest.TestCase):
                           'text/plain; charset=UTF-8')
         self.assert_(view.request is None)
 
-    def test_log(self):
-        from schooltool.views import View
-
-        class LoggerStub:
-            def log(self, level, msg):
-                self.msg = msg
-
-        context = object()
-        view = View(context)
-
-        view.request = None
-        view.logger = LoggerStub()
-        view.log('Hello')
-        self.assertEquals(view.logger.msg, "LOG (UNKNOWN) Hello")
-
-        view.request = RequestStub()
-        view.log('Hello2')
-        self.assertEquals(view.logger.msg, "LOG (UNKNOWN) Hello2")
-
-        class PersonStub:
-            username = 'me'
-
-        view.request = RequestStub(authenticated_user=PersonStub())
-        view.log('Hello3')
-        self.assertEquals(view.logger.msg, "LOG (me) Hello3")
-
 
 def test_suite():
     suite = unittest.TestSuite()

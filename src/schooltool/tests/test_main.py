@@ -196,6 +196,33 @@ class TestSite(unittest.TestCase):
         self.assert_(channel.requestFactory is Request)
         self.assert_(channel.site is site)
 
+    def test_applog(self):
+        from schooltool.main import Site
+        db = object()
+        rootName = 'foo'
+        viewFactory = object()
+        authenticator = lambda c, u, p: None
+        site = Site(db, rootName, viewFactory, authenticator, 'filename')
+
+        class AppLoggerStub:
+
+            def __init__(self):
+                self.applog = []
+
+            def log(self, level, msg):
+                self.applog.append((level, msg))
+
+        class UserStub:
+            def __init__(self, username):
+                self.username = username
+
+        site.applogger = AppLoggerStub()
+        site.logAppEvent(None, 'Hello')
+        site.logAppEvent(UserStub('me'), 'Bye', level="WARNING")
+        self.assertEquals(site.applogger.applog,
+                          [("INFO", "INFO (UNKNOWN) Hello"),
+                           ("WARNING", "WARNING (me) Bye")])
+
 
 class TestAcceptParsing(unittest.TestCase):
 

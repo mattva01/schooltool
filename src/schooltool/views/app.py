@@ -162,7 +162,8 @@ class ApplicationObjectContainerView(TraversableView,
     def do_POST(self, request):
         msg = self.create(request, self.context)
         if request.code == 201:
-            self.log('Object created: %s' % self.obj_path)
+            request.site.logAppEvent(request.authenticated_user,
+                                     'Object created: %s' % self.obj_path)
         return msg
 
 
@@ -181,7 +182,8 @@ class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
     def do_PUT(self, request):
         msg = self.create(request, self.context, self.name)
         if request.code == 201:
-            self.log('Object created: %s' % self.obj_path)
+            request.site.logAppEvent(request.authenticated_user,
+                                     'Object created: %s' % self.obj_path)
         return msg
 
 
