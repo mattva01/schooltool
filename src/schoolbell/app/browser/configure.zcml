@@ -466,6 +466,15 @@
     <widget field="exceptions" width="20" height="5" />
   </editform>
 
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      name="event_resource_booking.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".cal.CalendarEventBookingView"
+      template="templates/event_booking.pt"
+      permission="schoolbell.edit"
+      />
+
 <!-- Skin and resources -->
 
   <zope:subscriber

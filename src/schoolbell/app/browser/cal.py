@@ -50,10 +50,11 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canWrite, canAccess
 
+from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
-from schoolbell.app.interfaces import IPerson
+from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
@@ -1290,7 +1291,6 @@ class CalendarEventViewMixin(object):
             }
 
 
-
 class CalendarEventAddView(CalendarEventViewMixin, AddView):
     """A view for adding an event."""
 
@@ -1301,6 +1301,11 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     submit_button_title = _("Add")
 
     error = None
+
+    def __init__(self, context, request):
+        if "field.start_date" not in request:
+            request.form["field.start_date"] = date.today().strftime("%Y-%m-%d")
+        super(AddView, self).__init__(context, request)
 
     def create(self, **kwargs):
         """Create an event."""
@@ -1492,6 +1497,30 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         return '%s/%s' % (url, date)
 
 
+class CalendarEventBookingView(BrowserView):
+    """A view for booking resources."""
+
+    errors = ()
+
+    def update(self):
+        return ''
+
+    def resources(self):
+        """Gives us a list of all booked resources."""
+        return []
+
+    def _availableResources(self):
+        """Gives us a list of all bookable resources."""
+        sb = getSchoolBellApplication()
+        return sb["resources"].values()
+
+    availableResources = property(_availableResources)
+
+    def hasBooked(self, resource):
+        """Checks whether a resource is booked by this event."""
+        return resource in self.resources()
+
+
 def makeRecurrenceRule(interval=None, until=None,
                        count=None, range=None,
                        exceptions=None, recurrence_type=None,
@@ -1523,7 +1552,6 @@ def makeRecurrenceRule(interval=None, until=None,
         return YearlyRecurrenceRule(**kwargs)
     else:
         raise NotImplementedError()
-
 
 def datesParser(raw_dates):
     r"""Parse dates on separate lines into a tuple of date objects.

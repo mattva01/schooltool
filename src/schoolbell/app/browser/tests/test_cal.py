@@ -867,24 +867,23 @@ def doctest_CalendarEventAddView_add_validation():
     Let's try to add an event without a required field:
 
         >>> request = TestRequest(form={'field.title': 'Hacking',
-        ...                             'field.start_time': '15:30',
         ...                             'field.duration': '50',
         ...                             'field.recurrence.used': '',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
 
         >>> print view.errors
-        MissingInputError: ('field.start_date', 'Date', None)
+        MissingInputError: ('field.start_time', 'Time', None)
         >>> print view.error
         None
         >>> len(calendar)
         0
-
 
         >>> request = TestRequest(form={'field.title': '',
         ...                             'field.start_date': '2004-08-13',
@@ -1151,6 +1150,7 @@ def doctest_CalendarEventAddView_getMonthDay():
 
         >>> calendar = Calendar()
         >>> request = TestRequest()
+        >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.getMonthDay()
         '??'
@@ -1169,6 +1169,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
 
         >>> calendar = Calendar()
         >>> request = TestRequest()
+        >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
 
     When the form is empty, no days are checked.
@@ -1200,6 +1201,7 @@ def doctest_CalendarEventAddView_weekdayDisabled():
 
         >>> calendar = Calendar()
         >>> request = TestRequest()
+        >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
 
     When the form is empty, no days are disabled.
@@ -2042,6 +2044,60 @@ class TestGetRecurrenceRule(unittest.TestCase):
         self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
                                                       monthly="lastweekday"))
 
+
+def doctest_TestCalendarEventBookingView():
+    r"""A test for the resource booking view.
+
+    We must have a schoolbell application with some resources, a
+    person and his calendar with an event:
+
+        >>> from schoolbell.app.browser.cal import CalendarEventBookingView
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.app import Resource, Person
+        >>> from schoolbell.app.cal import CalendarEvent
+        >>> from zope.app.component.hooks import setSite
+
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> setUpLocalAuth(app)
+        >>> setSite(app)
+
+        >>> person = Person(u'ignas')
+        >>> app['persons']['ignas'] = person
+
+        >>> for i in range(10):
+        ...     app['resources']['res' + str(i)] = Resource('res' + str(i))
+
+        >>> event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
+        ...                       timedelta(hours=2), "Some event",
+        ...                       unique_id="ev1")
+        >>> person.calendar.addEvent(event)
+
+    Now let's create a view for the event:
+
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventBookingView(event, request)
+
+        >>> view.update()
+        ''
+
+        >>> view.errors
+        ()
+
+    We should see all the resources in the form:
+
+        >>> [resource.title for resource in view.availableResources]
+        ['res0', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'res8', 'res9']
+
+    All the resources should be unbooked:
+
+        >>> [resource.title for resource in view.availableResources
+        ...                 if not view.hasBooked(resource)]
+        ['res0', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'res8', 'res9']
+
+    """
 
 class TestDailyCalendarView(unittest.TestCase):
 
