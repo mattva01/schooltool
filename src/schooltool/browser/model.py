@@ -353,6 +353,10 @@ class GroupTeachersView(View):
             for link in self.context.listLinks(URITeacher):
                 if getPath(link.traverse()) in paths:
                     link.unlink()
+                    request.appLog(_("Relationship '%s' between %s and %s"
+                                     " removed")
+                                   % ('Teaching', getPath(link.traverse()),
+                                      getPath(self.context)))
         if "FINISH_ADD" in request.args:
             paths = []
             if "teacher" in request.args:
@@ -360,6 +364,10 @@ class GroupTeachersView(View):
             for path in paths:
                 obj = traverse(self.context, path)
                 Teaching(taught=self.context, teacher=obj)
+                request.appLog(_("Relationship '%s' between %s and %s created")
+                               % ('Teaching', getPath(obj),
+                                  getPath(self.context)))
+
 
 class PhotoView(View):
     """View for displaying a person's photo (/persons/id/photo.jpg)."""

@@ -29,6 +29,7 @@ from logging import INFO
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin, AppSetupMixin
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
+from schooltool.tests.helpers import sorted
 
 __metaclass__ = type
 
@@ -536,7 +537,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view.update(request)
         self.assertEquals(getRelatedObjects(self.group, URIMember),
                           [self.per2])
-        self.assertEquals(request.applog,
+        self.assertEquals(sorted(request.applog),
                 [(None,
                   "Relationship 'Membership' between "
                   "/groups/sub and /groups/new removed", INFO),
@@ -556,7 +557,7 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         members = getRelatedObjects(self.group, URIMember)
         assert self.group2 in members
         assert self.per3 in members
-        self.assertEquals(request.applog,
+        self.assertEquals(sorted(request.applog),
                 [(None,
                   "Relationship 'Membership' between "
                   "/groups/group2 and /groups/new created", INFO),
@@ -633,6 +634,10 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
         view.update()
         self.assertEquals(getRelatedObjects(self.group, URITeacher),
                           [])
+        self.assertEquals(view.request.applog,
+                [(None,
+                  "Relationship 'Teaching' between "
+                  "/persons/lj and /groups/new removed", INFO)])
 
     def test_update_ADD(self):
         from schooltool.browser.model import GroupTeachersView
@@ -645,6 +650,10 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
         teachers = getRelatedObjects(self.group, URITeacher)
         assert self.teacher in teachers, teachers
         assert self.per3 in teachers, teachers
+        self.assertEquals(view.request.applog,
+                [(None,
+                  "Relationship 'Teaching' between "
+                  "/persons/josh and /groups/new created", INFO)])
 
 
 class TestPhotoView(unittest.TestCase):
