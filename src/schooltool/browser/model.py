@@ -375,8 +375,8 @@ class RelationshipViewMixin:
                                'when the relationship creation fails'
     """
 
-    errormessage = _("Cannot create relationship between"
-                     " %(other)s and %(this)s")
+    errormessage = property(lambda self: _("Cannot create relationship between"
+                                           " %(other)s and %(this)s"))
 
     def list(self):
         """Return a list of related objects"""
@@ -431,11 +431,11 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     linkrole = URIMember
 
-    relname = _('Membership')
+    relname = property(lambda self: _('Membership'))
 
     back = True
 
-    errormessage = _("Cannot add %(other)s to %(this)s")
+    errormessage = property(lambda self: _("Cannot add %(other)s to %(this)s"))
 
     def addList(self):
         """Return a list of objects available for addition"""
@@ -480,11 +480,12 @@ class GroupTeachersView(View, RelationshipViewMixin,
 
     linkrole = URITeacher
 
-    relname = _('Teaching')
+    relname = property(lambda self: _('Teaching'))
 
     back = True
 
-    errormessage = _("Cannot add teacher %(other)s to %(this)s")
+    errormessage = property(lambda self: _("Cannot add teacher"
+                                           " %(other)s to %(this)s"))
 
     def addList(self):
         """List all members of the Teachers group except current teachers."""
@@ -603,11 +604,11 @@ class NoteEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     linkrole = URINotation
 
-    relname = _('Noted')
+    relname = property(lambda self: _('Noted'))
 
     back = True
 
-    errormessage = _("Cannot edit %(note)s to %(this)s")
+    errormessage = property(lambda self: _("Cannot edit %(note)s to %(this)s"))
 
     def createRelationship(self, other):
         Noted(notation=self.context, notandum=other)
