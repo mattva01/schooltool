@@ -23,6 +23,7 @@ $Id$
 """
 
 from schooltool.browser import View, Template
+from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser.auth import PrivateAccess
 from schooltool.component import traverse, getPath, traverse
 from schooltool.translation import ugettext as _
@@ -35,7 +36,7 @@ from schooltool.browser import absoluteURL
 __metaclass__ = type
 
 
-class ACLView(View):
+class ACLView(View, AppObjectBreadcrumbsMixin):
     """Calendar access list view."""
 
     __used_for__ = IACL
@@ -45,21 +46,19 @@ class ACLView(View):
     template = Template("www/acl.pt")
 
     def breadcrumbs(self):
-        # TODO: show Persons
-        result = []
-        app = traverse(self.context, '/')
-        result.append((_('Start'), absoluteURL(self.request, app, 'start')))
         if ICalendar.providedBy(self.context.__parent__):
             owner = self.context.__parent__.__parent__
-            result.append((owner.title, absoluteURL(self.request, owner)))
-            result.append((_('Calendar'),
-                           absoluteURL(self.request, owner.calendar)))
+            breadcrumbs = AppObjectBreadcrumbsMixin.breadcrumbs(self,
+                                                                context=owner)
+            breadcrumbs.append((_('Calendar'),
+                                absoluteURL(self.request, owner.calendar)))
         else:
             owner = self.context.__parent__
-            result.append((owner.title, absoluteURL(self.request, owner)))
+            breadcrumbs = AppObjectBreadcrumbsMixin.breadcrumbs(self,
+                                                                context=owner)
 
-        result.append((_('ACL'), self.request.uri))
-        return result
+        breadcrumbs.append((_('ACL'), self.request.uri))
+        return breadcrumbs
 
     def __init__(self, context):
         View.__init__(self, context)
