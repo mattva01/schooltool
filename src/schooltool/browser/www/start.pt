@@ -38,6 +38,8 @@
           i18n:translate="">Manage time periods</a></p>
     <p><a class="sitemap" href="/csvimport.html"
           i18n:translate="">Import CSV data</a></p>
+    <p><a class="sitemap" href="/tt_csvimport.html"
+          i18n:translate="">Import school timetable as CSV</a></p>
     <p><a class="sitemap" href="/delete.html"
           i18n:translate="">Delete persons, groups or resources</a></p>
     <p><a class="sitemap" href="/reset_db.html"
@@ -61,14 +63,14 @@
           >Change your password</a></p>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
           class="sitemap"  i18n:translate=""
-          >Browse your calendar</a>
+          >Browse your calendar</a></p>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
           class="sitemap"  i18n:translate=""
-          >Open your calendar in an iCal client</a>
+          >Open your calendar in an iCal client</a></p>
     <p><a tal:attributes="href
                      string:${context/@@absolute_url}/timetable-calendar.ics"
           class="sitemap" i18n:translate=""
-          >Open your timetable calendar in an iCal client</a>
+          >Open your timetable calendar in an iCal client</a></p>
     <p><a class="sitemap" href="/logout" i18n:translate="">Log out</a></p>
   </div>
 </div>
