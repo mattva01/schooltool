@@ -343,7 +343,7 @@ class PersistentKeysSetContainer(PersistentKeysSetWithNames):
                              % (obj, self.value_interface))
         PersistentKeysSetWithNames.add(self, obj, name=name)
         # TODO: check if obj implements ILocation?
-        #       or maybe IContainer? (That's what Zope 3 containers check)
+        #       or maybe IContained? (That's what Zope 3 containers check)
         obj.__parent__ = self
 
     # TODO: override remove() to set obj.__parent__ = None?
