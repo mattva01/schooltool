@@ -27,6 +27,7 @@ from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import ISpecificURI, IRelatable, IQueryLinks
+from schooltool.interfaces import IFacet
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RelationshipTestMixin
@@ -108,8 +109,14 @@ class TestFacetFunctions(unittest.TestCase):
             implements(IFaceted)
             __facets__ = Set()
 
+        class FacetStub:
+            implements(IFacet)
+            active = False
+            owner = None
+            __parent__ = None
+
         self.ob = Stub()
-        self.facet = object()
+        self.facet = FacetStub()
 
     def test_api(self):
         from schooltool import component
@@ -118,11 +125,21 @@ class TestFacetFunctions(unittest.TestCase):
 
     def test_setFacet_removeFacet(self):
         from schooltool.component import setFacet, removeFacet
+        owner_marker = object()
+        self.facet.owner = owner_marker
+        self.assertRaises(TypeError, setFacet, self.ob, object())
         setFacet(self.ob, self.facet)
+        self.assert_(self.facet.owner is owner_marker)
+        self.assert_(self.facet.__parent__ is self.ob)
+        self.assert_(self.facet.active)
         self.assert_(self.facet in self.ob.__facets__)
         self.assertRaises(TypeError, setFacet, object(), self.facet)
         removeFacet(self.ob, self.facet)
         self.assert_(self.facet not in self.ob.__facets__)
+
+        owner = object()
+        setFacet(self.ob, self.facet, owner=owner)
+        self.assert_(self.facet.owner is owner)
 
     def test_iterFacets(self):
         from schooltool.component import iterFacets

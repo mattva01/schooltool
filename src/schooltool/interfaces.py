@@ -513,21 +513,15 @@ class IFacet(Interface):
     """
 
     active = Attribute("""The facet is active""")
-
-
-class IFacetFactory(Interface):
-    """Facet factories must conform to this interface but need not
-    actually provide it.
-    """
-
-    def __call__():
-        """Returns a new facet."""
+    __parent__ = Attribute("""The object this facet is augmenting""")
+    owner = Attribute(
+        """The agent responsible for adding this facet to its __parent__""")
 
 
 class IFacetedRelationshipSchemaFactory(Interface):
 
-    def __call__(relationsip_schema_factory, **facet_factories):
-        pass
+    def __call__(relationship_schema, **facet_factories):
+        """Returns a faceted relationship schema."""
 
 
 class IFacetedRelationshipSchema(IRelationshipSchema):
@@ -539,14 +533,18 @@ class IFaceted(Interface):
     """Denotes that the object can have facets.
     """
 
-    __facets__ = Attribute("""A dictionary of facets.""")
+    __facets__ = Attribute("""A set of facets.""")
 
 
 class IFacetAPI(Interface):
     """Facet API"""
 
-    def setFacet(ob, facet):
-        """Set the facet on the object."""
+    def setFacet(ob, facet, owner=None):
+        """Set the facet on the object.
+
+        Owner is the agent responsible for adding the facet.
+        If owner is None, the ownership of the facet is not changed.
+        """
 
     def removeFacet(ob, facet):
         """Set the facet on the object."""

@@ -27,10 +27,12 @@ Facets depend on events.
 $Id$
 """
 
-from zope.interface import implements
+from zope.interface import implements, classProvides
 from schooltool.interfaces import IFaceted, IEventConfigurable
+from schooltool.interfaces import IFacetedRelationshipSchemaFactory
+from schooltool.interfaces import IFacetedRelationshipSchema
 from schooltool.event import EventTargetMixin
-from schooltool.component import iterFacets
+from schooltool.component import setFacet, iterFacets
 from schooltool.db import PersistentKeysSet
 
 __metaclass__ = type
@@ -57,4 +59,34 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
                 tables.append(facet.eventTable)
         return sum(tables, [])
 
+
+class FacetedRelationshipSchema:
+
+    classProvides(IFacetedRelationshipSchemaFactory)
+    implements(IFacetedRelationshipSchema)
+
+    def __init__(self, relationship_schema, **facet_factories):
+        """Returns a faceted relationship schema."""
+        self._schema = relationship_schema
+        self._factories = facet_factories
+        self.type = relationship_schema.type
+        self.title = relationship_schema.title
+
+    def __call__(self, **parties):
+        """See IRelationshipSchema"""
+        links = self._schema(**parties)
+
+        # No need to check that all facet factories are accounted for.
+        # It it is ok with the schema to make such a relationship, it is ok
+        # to only apply some of the facets.
+        for role_name, factory in self._factories.iteritems():
+            if role_name in links:
+                link = links[role_name]
+                target = link.traverse()
+                if IFaceted.isImplementedBy(target):
+                    setFacet(target, factory(), owner=link)
+                else:
+                    raise TypeError('Target of link "%s" must be IFaceted: %r'
+                                    % (role_name, target))
+        return links
 

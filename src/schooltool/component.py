@@ -28,7 +28,8 @@ from zope.interface import moduleProvides, InterfaceSpecification
 from zope.interface.interfaces import IInterface
 from zope.interface.type import TypeRegistry
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
-from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
+from schooltool.interfaces import ILocation, IContainmentRoot
+from schooltool.interfaces import IFacet, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
 
@@ -90,11 +91,17 @@ def getPath(obj):
 # IFacetAPI
 #
 
-def setFacet(ob, facet):
+def setFacet(ob, facet, owner=None):
     """Set a facet on a faceted object."""
     if not IFaceted.isImplementedBy(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
+    if not IFacet.isImplementedBy(facet):
+        raise TypeError("%r does not implement IFacet" % facet)
     ob.__facets__.add(facet)
+    facet.__parent__ = ob
+    if owner is not None:
+        facet.owner = owner
+    facet.active = True
 
 def removeFacet(ob, facet):
     """Set a facet on a faceted object."""
