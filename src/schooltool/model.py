@@ -26,7 +26,7 @@ import datetime
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.interfaces import IAbsenceComment
-from schooltool.interfaces import IAvailabilitySearch
+from schooltool.interfaces import IApplicationObject
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
@@ -34,6 +34,7 @@ from schooltool.db import PersistentKeysSetWithNames
 from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.absence import Absence
+from schooltool.component import getPath
 
 __metaclass__ = type
 
@@ -116,7 +117,7 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
                              RelationshipValenciesMixin,
                              CalendarOwnerMixin, TimetabledMixin):
 
-    implements(IAvailabilitySearch)
+    implements(IApplicationObject)
 
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
@@ -168,6 +169,12 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
         return "<%s object %s at 0x%x>" % (self.__class__.__name__,
                                            self.title, id(self))
 
+    def __hash__(self):
+        try:
+            return hash((self.__class__.__name__, getPath(self)))
+        except (ValueError, TypeError), e:
+            raise TypeError("%r cannot be hashed because it doesn't "
+                            "have a path: %s" % (self, e))
 
 class Person(ApplicationObjectMixin):
 

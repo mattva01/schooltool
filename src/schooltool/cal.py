@@ -907,25 +907,33 @@ class CalendarEvent(Persistent):
     dtstart = property(lambda self: self._dtstart)
     duration = property(lambda self: self._duration)
     title = property(lambda self: self._title)
+    owner = property(lambda self: self._owner)
+    context = property(lambda self: self._context)
 
-    def __init__(self, dt, duration, title):
+    def __init__(self, dt, duration, title, owner=None, context=None):
         self._dtstart = dt
         self._duration = duration
         self._title = title
+        self._owner = owner
+        self._context = context
 
     def __cmp__(self, other):
         if not isinstance(other, CalendarEvent):
             raise NotImplementedError('Cannot compare CalendarEvent with %r'
                                       % other)
-        return cmp((self.dtstart, self.title, self.duration),
-                   (other.dtstart, other.title, other.duration))
+        return cmp((self.dtstart, self.title, self.duration,
+                    hash(self.owner), hash(self.context)),
+                   (other.dtstart, other.title, other.duration,
+                    hash(other.owner), hash(other.context)))
 
     def __hash__(self):
-        return hash((self.dtstart, self.title, self.duration))
+        return hash((self.dtstart, self.title, self.duration,
+                     self.owner, self.context))
 
     def __repr__(self):
         return ("CalendarEvent%r"
-                % ((self.dtstart, self.duration, self.title), ))
+                % ((self.dtstart, self.duration, self.title,
+                    self.owner, self.context), ))
 
 
 class CalendarOwnerMixin:

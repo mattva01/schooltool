@@ -42,8 +42,6 @@ from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
 
-class PersistentStub(Persistent):
-    pass
 
 
 class TestTimetable(unittest.TestCase):
@@ -438,9 +436,9 @@ class TestTimetablingPersistence(unittest.TestCase):
         get_transaction().commit()
 
         ## TimetableActivities are not persistent
-        # geo = tt["B"]["Blue"].next()
-        # geo.title = "Advanced geography"
-        # get_transaction().commit()
+        #geo = tt["B"]["Blue"].next()
+        #geo.title = "Advanced geography"
+        #get_transaction().commit()
 
         self.assertEqual(len(list(tt["A"]["Green"])), 1)
         self.assertEqual(len(list(tt["A"]["Blue"])), 1)
@@ -463,11 +461,21 @@ class TestTimetablingPersistence(unittest.TestCase):
 
     def testTimetableActivity(self):
         from schooltool.timetable import TimetableActivity
+        from schooltool.interfaces import IContainmentRoot
         from transaction import get_transaction
+        from schooltool.model import Person, Resource
 
-        owner = PersistentStub()
-        res1 = PersistentStub()
-        res2 = PersistentStub()
+        parent = LocatableStub()
+        directlyProvides(parent, IContainmentRoot)
+        owner = Person()
+        owner.__parent__ = parent
+        owner.__name__ = 'parent'
+        res1 = Resource()
+        res1.__parent__ = parent
+        res1.__name__ = 'res1'
+        res2 = Resource()
+        res2.__parent__ = parent
+        res2.__name__ = 'res2'
         ta = TimetableActivity("Pickling", owner, [res1, res2])
         tb = TimetableActivity("Pickling", owner, [res2, res1])
         tseta = Set([ta, tb])
@@ -489,9 +497,9 @@ class TestTimetablingPersistence(unittest.TestCase):
             self.assertEqual(tseta2, tsetb2)
             ## Activities unpersisted in different DB connections are not
             ## supposed to be compared
-            # self.assertEqual(ta, ta2)
-            # self.assertEqual(hash(ta), hash(ta2))
-            # self.assertEqual(tset, tset2)
+            #self.assertEqual(ta, ta2)
+            self.assertEqual(hash(ta), hash(ta2))
+            #self.assertEqual(tset, tset2)
         finally:
             get_transaction().abort()
             datamgr.close()
@@ -794,7 +802,7 @@ class TimetabledStub(TimetabledMixin, RelatableMixin,
         FacetedMixin.__init__(self)
 
 
-class LocatableStub:
+class LocatableStub(Persistent):
     implements(ILocation)
     __name__ = None
     __parent__ = None

@@ -153,6 +153,21 @@ class ApplicationObjectsTestMixin(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(obj.getRelativePath(facet),
                           'facets/%s' % facet.__name__)
 
+    def test_hash(self):
+        from schooltool.interfaces import IContainmentRoot
+        class C:
+            implements(IContainmentRoot)
+        parent = C()
+        ob = self.newObject()
+        ob.__name__ = 'foo'
+        ob.__parent__ = parent
+        self.assertEquals(hash(ob), hash((ob.__class__.__name__, '/foo')))
+        ob2 = self.newObject()
+        ob2.__name__ = 'foo'
+        ob2.__parent__ = parent
+        self.assertEquals(hash(ob), hash(ob2))
+
+
 
 class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
                  EqualsSortedMixin):
@@ -171,6 +186,7 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         from schooltool.component import FacetManager
         person = Person('John Smith')
         person.__parent__ = self.eventService
+        person.__name__ = 'foo'
         absence = person.reportAbsence(AbsenceComment())
         link = LinkStub()
         person.__links__.add(link)
@@ -190,6 +206,7 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         from schooltool.absence import AbsenceComment
         person = Person('John Smith')
         person.__parent__ = self.eventService
+        person.__name__ = 'foo'
 
         # A new person has no absences
         self.assert_(person.getCurrentAbsence() is None)
@@ -270,6 +287,7 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         from schooltool.absence import AbsenceComment
         person = Person('John Smith')
         person.__parent__ = self.eventService
+        person.__name__ = 'foo'
 
         comment = AbsenceComment(object(), "some text", ended=True,
                                  resolved=True)

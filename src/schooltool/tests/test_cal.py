@@ -956,6 +956,9 @@ class TestCalendarEvent(unittest.TestCase):
         from schooltool.cal import CalendarEvent
         from schooltool.interfaces import ICalendarEvent
 
+        owner = object()
+        context = object()
+
         ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                            timedelta(minutes=10),
                            "reality check")
@@ -973,10 +976,19 @@ class TestCalendarEvent(unittest.TestCase):
         ce4 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                             timedelta(minutes=11),
                             "reality check")
+        ce5 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "reality check", owner=owner)
+        ce6 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "reality check", owner=owner,
+                            context=context)
         self.assertEquals(ce, ce1)
         self.assertNotEquals(ce, ce2)
         self.assertNotEquals(ce, ce3)
         self.assertNotEquals(ce, ce4)
+        self.assertNotEquals(ce, ce5)
+        self.assertNotEquals(ce5, ce6)
         self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')

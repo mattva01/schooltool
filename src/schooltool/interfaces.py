@@ -832,6 +832,14 @@ class ICalendarEvent(Interface):
     dtstart = Attribute("""The datetime.datetime of the start of the event.""")
     duration = Attribute("""The duration of the event (datetime.timedelta)""")
     title = Attribute("""The title of the event""")
+    owner = Attribute("""The object that created this event""")
+    context = Attribute(
+        """The object in whose calendar this event lives.
+
+        For example, when booking resources, the person who's booking
+        will be the owner of the booking event, and the resource will
+        be the context.
+        """)
 
     def __cmp__(other):
         """Compare calendar events in chronological order.
