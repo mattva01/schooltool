@@ -414,6 +414,8 @@
   <resource name="month.png" file="resources/month.png" />
   <resource name="year.png" file="resources/year.png" />
 
+  <resource name="delete.png" file="resources/delete.png" />
+
 <!-- Navigation -->
 
   <page

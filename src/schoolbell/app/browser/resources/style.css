@@ -640,10 +640,12 @@ h2.calendar-view-title {
 #calendar-view-day .event h6 a {
     color: #fff;
     text-decoration: none;
+    display: block;
 }
 
 #calendar-view-day .event h6 .start-end {
     font-weight: bold;
+    color: #000;
 }
 
 #calendar-view-day .event a.delete {
@@ -654,14 +656,8 @@ h2.calendar-view-title {
     text-decoration: none;
     overflow: hidden;
     border: 0;
-    margin: 2px;
     padding: 0;
-    padding-top: 10px;
-    height: 0px !important;
-    height /**/: 10px;
-    width: 10px;
     cursor: pointer;
-    background: url(/delete.png) no-repeat top left;
 }
 
 #calendar-view-day .event .privacy {

@@ -46,22 +46,22 @@
                               class python:mine and 'event' or 'event other';
                               something compress">
                   <h6 tal:define="dtend python:ev.dtstart + ev.duration"
-                                  tal:attributes="style python:'background: %s;;' % colors[1]">
-                  <a href="" title=""
-                      tal:attributes="href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${ev/unique_id};
-                                      title ev/title"
-                      tal:content="python:view.ellipsizeTitle(ev.title)"/>
+                      tal:attributes="style python:'background: %s;;' % colors[1]">
+                  <a tal:attributes="href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${ev/unique_id};
+                                     title ev/title">
+                  <span tal:replace="python:view.ellipsizeTitle(ev.title)" />
                   <span class="start-end">
                     (<span tal:content="python:ev.dtstart.strftime('%H:%M')"/>
                     -
                     <span tal:content="python:dtend.strftime('%H:%M')"/>)
                     <span>
+                    </a>
                 </h6>
-                <a title="Delete this event" i18n:attributes="title"
-                    class="delete"
-                    tal:attributes="href string:${context/@@absolute_url}/delete_event.html?date=${evdate}&amp;event_id=${ev/unique_id}" >
-                  delete
-                </a>
+                <a title="Delete this event"
+                   i18n:attributes="title" class="delete"
+                   tal:attributes="href string:${context/@@absolute_url}/delete_event.html?date=${evdate}&amp;event_id=${ev/unique_id}"
+                   ><img alt="[X]" border="0"
+                       tal:attributes="src context/++resource++delete.png"/></a>
 <!--            <span class="privacy" tal:content="ev/privacy"></span> -->
               </div>
             </tal:if>
