@@ -169,6 +169,7 @@ class SampleSchoolImporter:
         c.input_hook = lambda prompt: ttconfig.readline()[:-1]
         c.server = self.host
         c.port = self.port
+        c.ssl = self.ssl
         c.cmdloop()
 
 
