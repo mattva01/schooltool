@@ -24,10 +24,12 @@ $Id$
 
 import unittest
 
+from twisted.python.failure import Failure
+
 from schooltool.browser.tests import RequestStub
 
 
-class TestRequest(unittest.TestCase):
+class TestBrowserRequest(unittest.TestCase):
 
     def createRequest(self):
         from schooltool.browser import BrowserRequest
@@ -72,6 +74,17 @@ class TestRequest(unittest.TestCase):
         request = self.createRequestWithStubbedAuth('faketicket', user)
         request.maybeAuthenticate()
         self.assert_(request.authenticated_user is None)
+
+    def test_renderInternalError(self):
+        rq = self.createRequest()
+        # Request does this before calling renderInternalError:
+        rq.setResponseCode(500)
+        failure = Failure(AttributeError('foo'))
+        result = rq.renderInternalError(failure)
+        self.assert_(isinstance(result, str))
+        self.assert_(rq.code, 500)
+        self.assertEqual(rq.headers['content-type'],
+                         'text/html; charset=UTF-8')
 
 
 class TestView(unittest.TestCase):
@@ -193,7 +206,7 @@ class TestNotFound(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestRequest))
+    suite.addTest(unittest.makeSuite(TestBrowserRequest))
     suite.addTest(unittest.makeSuite(TestView))
     suite.addTest(unittest.makeSuite(TestStaticFile))
     suite.addTest(unittest.makeSuite(TestNotFound))

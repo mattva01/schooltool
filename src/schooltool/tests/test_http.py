@@ -878,7 +878,7 @@ class TestRequest(unittest.TestCase):
     def test_renderInternalError(self):
         from schooltool.http import Request
         rq = Request(None, True)
-        # Request does this before calling renderRequestError:
+        # Request does this before calling renderInternalError:
         rq.setResponseCode(500)
         failure = Failure(AttributeError('foo'))
         result = rq.renderInternalError(failure)

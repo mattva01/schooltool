@@ -41,6 +41,8 @@ class BrowserRequest(Request):
     authentication and HTML error messages.
     """
 
+    error_template = Template('www/error.pt')
+
     def maybeAuthenticate(self):
         """Try to authenticate if the authentication cookie is there."""
         auth_cookie = self.getCookie('auth')
@@ -54,6 +56,14 @@ class BrowserRequest(Request):
                 # will redirect him to a login page and say that her session
                 # has expired.
                 pass
+
+    # We do not need to override renderAuthError here since maybeAuthenticate
+    # never raises AuthenticationError.
+
+    def renderInternalError(self, failure):
+        return InternalErrorView(failure).do_GET(self)
+
+    # TODO: override renderRequestError
 
 
 class View(_View):
@@ -131,6 +141,18 @@ class StaticFile(View):
         return read_file(self.filename, os.path.dirname(__file__))
 
 
+class InternalErrorView(View):
+    """View that always returns a 500 error page."""
+
+    template = Template("www/error.pt")
+
+    authorization = PublicAccess
+
+    def do_GET(self, request):
+        request.setResponseCode(500)
+        return View.do_GET(self, request)
+
+
 class NotFoundView(View):
     """View that always returns a 404 error page."""
 
@@ -149,4 +171,3 @@ class NotFoundView(View):
 def notFoundPage(request):
     """Render a simple 'not found' error page."""
     return NotFoundView().render(request)
-

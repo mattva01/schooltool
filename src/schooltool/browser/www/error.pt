@@ -1,0 +1,15 @@
+<html metal:use-macro="view/macros/page">
+<head>
+  <title metal:fill-slot="title">Server Error</title>
+</head>
+<body>
+<h1 metal:fill-slot="h1">Server Error</h1>
+<metal:block metal:fill-slot="content">
+
+<p>An internal server error has occurred.  This most likely means that you have
+found a bug in SchoolTool.  Please report it on <a
+href="http://issues.schooltool.org">the issue tracker</a>.</p>
+
+</metal:block>
+</body>
+</html>
