@@ -72,3 +72,4 @@ Content-Type: text/xml; charset=UTF-8
 </timePeriods>
 
 
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

@@ -79,6 +79,7 @@ class ScriptTestCase(unittest.TestCase):
         f = open(self.filename)
         skipping_intro = True
         magic = False
+        in_ical = False
         for lineno, line in enumerate(f):
             if skipping_intro:
                 if not line.strip():
@@ -88,8 +89,16 @@ class ScriptTestCase(unittest.TestCase):
             if m is not None:
                 child.tochild.write(line[m.end():])
             else:
+                if line.startswith('##'): # comments
+                    continue
                 if '*' in line or line.startswith('%% XML'):
                     magic = True
+                elif line.startswith('BEGIN:VCALENDAR'):
+                    in_ical = True
+                elif line.startswith('END:VCALENDAR'):
+                    in_ical = False
+                if in_ical and '\r' not in line:
+                    line = line.replace('\n', '\r\n')
                 expected.append(line)
                 orig_lineno.append(lineno + 1)
         child.tochild.close()

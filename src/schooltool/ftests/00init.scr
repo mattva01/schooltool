@@ -152,3 +152,4 @@ POST> .
 Content-Type: text/plain
 Relationship created: http://localhost:8080/persons/Steve/relationships/0002
 
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:

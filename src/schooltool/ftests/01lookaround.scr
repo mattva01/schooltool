@@ -426,6 +426,14 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /persons/Marius/calendar
+200 OK
+Content-Type: text/calendar; charset=UTF-8
+BEGIN:VCALENDAR
+PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+VERSION:2.0
+END:VCALENDAR
+
 SchoolTool> get /persons/Marius/timetables
 200 OK
 Content-Type: text/xml; charset=UTF-8
@@ -472,3 +480,4 @@ Content-Type: text/xml; charset=UTF-8
 
 
 SchoolTool> quit
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:
