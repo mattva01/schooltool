@@ -1,0 +1,10 @@
+#!/usr/bin/python2.3
+"""
+A script to start the schooltool GUI client in a Debian system.
+"""
+
+import sys
+sys.path.insert(0, '/usr/lib/schooltool')
+
+import schooltool.clients.wxclient
+schooltool.clients.wxclient.main()

@@ -1,0 +1,64 @@
+#!/usr/bin/make -f
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	$(MAKE)
+	touch build-stamp
+
+clean::
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp install-stamp
+	-$(MAKE) realclean
+	dh_clean
+
+install: install-stamp
+
+install-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
+	cd src && find \( -name 'tests' -o -name 'ftests' \) -prune -o \
+		       \( -name '*.py' -o -name '*.so' -o -name '*.pt' -o \
+			  -name '*.xml' -o -name '*.rng' -o \
+			  -name '*.png' -o -name '*.xpm' \) \
+		       -exec install -m 644 -D -p {} \
+				 ../debian/schooltool/usr/lib/schooltool/{} \;
+
+	rm -f debian/schooltool/usr/lib/schooltool/trace.py
+
+	install -m 755 -p debian/schooltool-server debian/schooltool/usr/bin/
+	install -m 755 -p debian/schooltool-client debian/schooltool/usr/bin/
+	install -m 755 -p debian/wxschooltool debian/schooltool/usr/bin/
+
+	install -m 644 -p debian/schooltool.conf debian/schooltool/etc/
+	install -m 644 -D -p debian/example.conf \
+	    debian/schooltool/usr/share/doc/schooltool/examples/schooltool.conf
+
+	touch install-stamp
+
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installman
+	dh_installchangelogs
+	dh_compress
+	dh_fixperms
+	dh_python
+	dh_installdeb
+
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-arch binary-indep
+
+.PHONY: build clean binary-indep binary-arch binary install

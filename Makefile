@@ -68,5 +68,8 @@ edit-coverage-reports:
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
+deb:
+	dpkg-buildpackage -uc -us -rfakeroot
+
 
 .PHONY: all build clean test ftest run coverage sampleschool

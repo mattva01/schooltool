@@ -1,0 +1,13 @@
+SchoolTool for Debian
+---------------------
+
+This is an early testing version of SchoolTool.  The server does not yet
+have facilities for running in background, using a dedicated user account or
+logging to a file.
+
+The default configuration file (/etc/schooltool.conf) instructs the SchoolTool
+server to use nonpersistent in-memory storage.  Look at the (heavily commented)
+/usr/share/doc/schooltool/examples/schooltool.conf file for more information
+about SchoolTool server configuration.
+
+ -- Marius Gedminas <marius@pov.lt>, Wed, 28 Jan 2004 19:07:03 +0200

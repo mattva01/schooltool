@@ -591,8 +591,12 @@ class Server:
         print >> sys.stdout, "\n".join(message)
 
     def findDefaultConfigFile(self):
-        """Returns the default config file pathname."""
-        # XXX this is not suitable for release
+        """Returns the default config file pathname.
+
+        Looks for a file called 'schooltool.conf' in the directory two levels
+        above the location of this module.  In the extracted source archive
+        this will be the project root.
+        """
         dirname = os.path.dirname(__file__)
         dirname = os.path.normpath(os.path.join(dirname, '..', '..'))
         config_file = os.path.join(dirname, 'schooltool.conf')
