@@ -14,9 +14,8 @@ Here you can choose the server, port to connect to and the user/password to
 use.  The Server Settings dialog can be accessed at any time via the
 Setting->Server menu item.
 
-After logging in you are presented with the main SchoolTool window.  It is
-divided What you see after logging in is the main SchoolTool window it is into
-three panes:
+What you see after logging in is the main SchoolTool window.  It is divided 
+into three panes:
 
 * The group tree, shows you groups, subgroups and their members.
 
@@ -27,7 +26,7 @@ three panes:
 
 In this document, we use the following conventions:
 
-* The "conext menu" is accessed by right-clicking on something.
+* The "context menu" is accessed by right-clicking on something.
 
 * The notation Menu->Submenu->Subsubmenu shows a particular menu item
   to select.
