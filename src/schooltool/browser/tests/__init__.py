@@ -41,3 +41,20 @@ class TraversalTestMixin:
         if context is not None:
             self.assert_(destination.context is context)
         return destination
+
+
+def HTMLDocument(content):
+    """Parse an HTML document and return a schooltool.xmlparsing.XMLDocument.
+
+    Knows how to handle the standard HTML named entities (e.g. &nbsp;).
+    """
+    import re
+    import htmlentitydefs
+    preambule = """
+       <!DOCTYPE html [%s]>
+    """ % "".join(['<!ENTITY %s "&#%d;">' % (name, code)
+                   for name, code in htmlentitydefs.name2codepoint.items()])
+    content = preambule + re.sub(r'<!DOCTYPE[^>]*>', '', content)
+
+    from schooltool.rest.xmlparsing import XMLDocument
+    return XMLDocument(content)

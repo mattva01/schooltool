@@ -914,16 +914,50 @@ class EventEditView(EventViewBase):
 class EventDeleteView(View, EventViewHelpers):
     """A view for deleting events.
 
-    This view is used to either delete ordinary calendar events or add
-    timetable exceptions.
+    The view receives two arguments in the request:
 
-    The event to delete is specified by its unique ID in the request.  If the
-    event is an ordinary calendar event, it is deleted and the user is
-    redirected to the daily calendar view.  If the event is a timetable
-    event, a confirmation/information form is shown, and the user can
-    choose whether to delete the event (i.e. add a timetable exception that
-    removes this specific ocurrence of a timetable event), or cancel the
-    deletion.
+        `event_id` -- the ID of the event.
+
+        `date` -- the date where that event was displayed (this is important
+        for recurring events, because all ocurrences have the same event_id and
+        you can only tell them apart by looking at the date).
+
+    CalendarEventView.deleteLink generates a link for calling this view.
+
+    There are five usage scenarios:
+
+        1. You are trying to delete an ordinary, nonrepeating calendar event.
+           The event is removed from the calendar.
+
+        2. You are trying to delete an instance of a repeating calendar event.
+           A form is shown where you can choose whether you want to remove
+           all repetitions, just this one repetition, or this and future
+           repetitions.  Depending on your choice the event can either be
+           removed from the calendar, or an exception can be added to the
+           recurrence rule, or the end date of the repetition may be changed
+           in the recurrence rule.
+
+           XXX This is not implemented yet in the code, but will be in the near
+           future.
+
+        3. You are trying to delete an event that comes from a timetable: a
+           confirmation form is shown, and if you accept it, a timetable
+           exception is added.  Only managers are allowed to add timetable
+           exceptions.
+
+        4. You are trying to delete an event that comes from a timetable
+           exception: a confirmation form is shown, and if you accept it, a
+           timetable exception is modified to remove the event rather than
+           replace it.  Only managers are allowed to change timetable
+           exceptions.
+
+        5. The event_id does not point to an existing calendar event.  This can
+           happen when someone removes a calendar event, and you click on a
+           delete link in an outdated web page.  The request to delete a
+           nonexisting event is silently ignored.
+
+    After you're done, you're redirected to the daily calendar view for the
+    specified date.
     """
 
     __used_for__ = ICalendar
@@ -935,13 +969,17 @@ class EventDeleteView(View, EventViewHelpers):
     event = None # The event to be removed.  Set before rendering the template.
 
     def do_GET(self, request):
+        # It would be nice to show a meaningful error message if the arguments
+        # are not supplied or invalid, but it is not necessary.
         event_id = to_unicode(request.args['event_id'][0])
+        date = parse_date(to_unicode(request.args['date'][0]))
 
         # If it is an ordinary calendar event, remove it
         event = self._findOrdinaryEvent(event_id)
         if event is not None:
+            # TODO: if event.recurrence is not None: display a form
             self.context.removeEvent(event)
-            return self._redirectToDailyView(event.dtstart)
+            return self._redirectToDailyView(date)
 
         # If it is a timetable event, show a confirmation form,
         # and then add a timetable exception (unless canceled).
@@ -954,10 +992,10 @@ class EventDeleteView(View, EventViewHelpers):
                 self._addTimetableException(event, replacement=None)
             elif 'CANCEL' not in request.args:
                 return self._showConfirmationForm(event)
-            return self._redirectToDailyView(event.dtstart)
+            return self._redirectToDailyView(date)
 
         # Dangling event ID
-        return self._redirectToDailyView()
+        return self._redirectToDailyView(date)
 
 
 class CalendarComboMixin(View):

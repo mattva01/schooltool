@@ -27,6 +27,8 @@
 
     <input type="hidden" name="event_id"
            tal:attributes="value python:request.args['event_id'][0]" />
+    <input type="hidden" name="date"
+           tal:attributes="value python:request.args['date'][0]" />
 
     <div class="buttons">
       <input class="button" type="submit" name="CONFIRM" value="Confirm"

@@ -1207,7 +1207,8 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         cal.addEvent(ev1)
         cal.addEvent(ev2)
 
-        request = RequestStub(args={'event_id': "pick me"})
+        request = RequestStub(args={'event_id': "pick me",
+                                    'date': "2004-08-14"})
         content = view.render(request)
 
         self.assertEquals(list(cal), [ev1])
@@ -1215,23 +1216,25 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
-                          'daily.html?date=2004-08-12')
+                          'daily.html?date=2004-08-14')
 
     def test_no_such_event(self):
         view = self.createView()
         ttcal = self.createTTCal(view.context.__parent__, [])
-        request = RequestStub(args={'event_id': "nosuchid"})
+        request = RequestStub(args={'event_id': "nosuchid",
+                                    'date': "2004-08-14"})
         content = view.render(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
-                          'daily.html')
+                          'daily.html?date=2004-08-14')
 
     def test_tt_event(self):
         view = self.createView()
         ttcal = self.initTTCalendar(view.context)
 
-        request = RequestStub(args={'event_id': "uniq"})
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': "2004-08-14"})
         content = view.render(request)
 
         self.assertEquals(len(list(ttcal)), 3)
@@ -1240,13 +1243,23 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assert_("CONFIRM" in content)
         self.assert_("uniq" in content)
 
+        from schooltool.browser.tests import HTMLDocument
+        doc = HTMLDocument(content)
+        for field, value in [('event_id', 'uniq'), ('date', '2004-08-14')]:
+            q = ('//form/input[@type="hidden" and @name="%s" and @value="%s"]'
+                 % (field, value))
+            errmsg = ('<input type="hidden" name="%s" value="%s"/>'
+                      ' missing in output' % (field, value))
+            self.assertEquals(len(doc.query(q)), 1, errmsg)
+
     def test_tt_event_confirm(self):
         view = self.createView()
         ttcal = self.initTTCalendar(view.context)
         event = ttcal.find('uniq')
         tt = event.activity.timetable
 
-        request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm'})
+        request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm',
+                                    'date': "2004-08-14"})
         content = view.render(request)
 
         self.assertEquals(len(list(ttcal)), 3)
@@ -1261,19 +1274,20 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
-                          'daily.html?date=2004-08-12')
+                          'daily.html?date=2004-08-14')
 
     def test_tt_event_cancel(self):
         view = self.createView()
         ev = self.createTimetableEvent()
         ttcal = self.createTTCal(view.context.__parent__, [ev])
-        request = RequestStub(args={'event_id': "uniq", 'CANCEL': 'Cancel'})
+        request = RequestStub(args={'event_id': "uniq", 'CANCEL': 'Cancel',
+                                    'date': "2004-08-14"})
         content = view.render(request)
         self.assertEquals(ev.activity.timetable.exceptions, [])
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
-                          'daily.html?date=2004-08-12')
+                          'daily.html?date=2004-08-14')
 
     def test_delete_exceptional_event(self):
         from schooltool.timetable import TimetableException
@@ -1295,7 +1309,8 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         calendar.removeEvent(event)
         calendar.addEvent(exc_ev)
 
-        request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm'})
+        request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm',
+                                    'date': "2004-08-14"})
         content = view.render(request)
 
         self.assertEquals(len(list(ttcal)), 3)
@@ -1308,7 +1323,7 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
-                          'daily.html?date=2004-08-12')
+                          'daily.html?date=2004-08-14')
 
 
 class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
@@ -1368,7 +1383,7 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
     def assertCanDelete(self, user, event_id):
         from schooltool.browser import absoluteURL
         result, request = self.tryToDelete(user, event_id)
-        url = absoluteURL(request, self.calendar, 'daily.html?date=2004-08-12')
+        url = absoluteURL(request, self.calendar, 'daily.html?date=2004-08-14')
         self.assertRedirectedTo(request, url)
         # If the event was deleted, calendar.find will raise KeyError
         calendar = self.combinedCalendar()
@@ -1378,7 +1393,8 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         from schooltool.browser import absoluteURL
         result, request = self.tryToDelete(user, event_id)
         delete_url = absoluteURL(request, self.calendar,
-                                 'delete_event.html?event_id=%s' % event_id)
+                                 'delete_event.html?date=%s&event_id=%s'
+                                 % ('2004-08-14', event_id))
         url = 'http://localhost:7001/?forbidden=1&url=%s' % delete_url
         self.assertRedirectedTo(request, url)
         # If the event was not deleted, calendar.find will not raise KeyError
@@ -1390,9 +1406,11 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         from schooltool.browser import absoluteURL
         view = EventDeleteView(self.calendar)
         url = absoluteURL(RequestStub(), self.calendar,
-                          'delete_event.html?event_id=%s' % event_id)
+                          'delete_event.html?date=2004-08-14&event_id=%s'
+                          % event_id)
         request = RequestStub(url, authenticated_user=user,
                               args={'event_id': str(event_id),
+                                    'date': "2004-08-14",
                                     'CONFIRM': 'Yes'})
         result = view.render(request)
         return result, request
