@@ -11,6 +11,14 @@
       factory=".SortBy"
       />
 
+<!-- TALES path expressions -->
+
+  <zope:adapter
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      provides="zope.app.size.interfaces.ISized"
+      factory=".SchoolBellSized"
+      />
+
 <!-- Actions menu -->
 
   <menu id="schoolbell_actions" title="Actions" />

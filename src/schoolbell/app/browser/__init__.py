@@ -28,9 +28,10 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.app.publisher.browser import BrowserView
 from zope.app.location.interfaces import ILocation
-from zope.app.traversing.interfaces import IPathAdapter
-from zope.app.traversing.interfaces import ITraversable
+from zope.app.size.interfaces import ISized
+from zope.app.traversing.interfaces import IPathAdapter, ITraversable
 
+from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
 
 
@@ -107,3 +108,21 @@ class SortBy(object):
         items.sort()
         return [row[-1] for row in items]
 
+
+class SchoolBellSized:
+    """An adapter to provide number of persons in a SchoolBell instance."""
+
+    implements(ISized)
+
+    def __init__(self, app):
+        self._app = app
+
+    def sizeForSorting(self):
+        return len(self._app['persons'])
+
+    def sizeForDisplay(self):
+        num = self.sizeForSorting()
+        if num == 1:
+            return _("1 person")
+        else:
+            return _("%d persons" % num)

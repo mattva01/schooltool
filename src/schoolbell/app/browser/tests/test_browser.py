@@ -161,6 +161,32 @@ def doctest_NavigationView():
 
     """
 
+def doctest_SchoolBellSized():
+    """Unit tests for SchoolBellSized.
+
+      >>> from schoolbell.app.app import SchoolBellApplication
+      >>> from schoolbell.app.browser import SchoolBellSized
+
+      >>> app = SchoolBellApplication()
+      >>> sized = SchoolBellSized(app)
+
+      >>> sized.sizeForSorting(), sized.sizeForDisplay()
+      (0, u'0 persons')
+
+      >>> persons = app['persons']
+      >>> persons['gintas'] = object()
+
+      >>> sized.sizeForSorting(), sized.sizeForDisplay()
+      (1, u'1 person')
+
+      >>> persons['ignas'] = object()
+      >>> persons['mg'] = object()
+
+      >>> sized.sizeForSorting(), sized.sizeForDisplay()
+      (3, u'3 persons')
+
+    """
+
 
 def test_suite():
     suite = unittest.TestSuite()
