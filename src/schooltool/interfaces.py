@@ -887,6 +887,7 @@ class IAttendanceEvent(IEvent):
 class IAbsenceEvent(IAttendanceEvent):
     """An event that gets sent when a person is found absent."""
 
+
 class IResolvedAbsenceEvent(IAttendanceEvent):
     """An event that gets sent when an absence is resolved."""
 
@@ -899,11 +900,14 @@ class IAbsenceTracker(IEventTarget):
         """A set of unresolved absences this object has been notified
         of.""")
 
+
 class IAbsenceTrackerUtility(IUtility, IAbsenceTracker):
     pass
 
+
 class IAbsenceTrackerFacet(IFacet, IEventConfigurable, IAbsenceTracker):
     pass
+
 
 class IApplication(IContainmentRoot, IServiceManager, ITraversable):
     """The application object.
