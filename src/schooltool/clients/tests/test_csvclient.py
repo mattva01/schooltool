@@ -221,7 +221,7 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
         im.getName = lambda response: 'quux'
 
         im.process = processStub()
-        im.importPerson('Joe Hacker', 'pupils', 'foo bar', teaching=False)
+        im.importPerson('Joe Hacker', 'pupils', 'foo bar', '')
         self.assertEqual(im.process.requests,
                          [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -234,7 +234,7 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
                            membership_pattern % "/persons/quux")])
 
         im.process = processStub()
-        im.importPerson('Prof. Whiz', 'teachers', 'group1', teaching=True)
+        im.importPerson('Prof. Whiz', 'teachers', '', 'group1')
         self.assertEqual(im.process.requests,
                          [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'

@@ -226,7 +226,7 @@ class CSVImporterHTTP(CSVImporterBase):
         for method, resource, body in result:
             self.process(method, resource, body=body)
 
-    def importPerson(self, title, parent, groups, teaching=False):
+    def importPerson(self, title, parent, groups, teaches):
         """Import a person.
 
         Returns the name of the created person object.
@@ -244,13 +244,11 @@ class CSVImporterHTTP(CSVImporterBase):
         result = []
         result.append(self.membership(parent, "/persons/%s" % name))
 
-        if not teaching:
-            relation = self.membership
-        else:
-            relation = self.teaching
-
         for group in groups.split():
-            result.append(relation(group, "/persons/%s" % name))
+            result.append(self.membership(group, "/persons/%s" % name))
+
+        for group in teaches.split():
+            result.append(self.teaching(group, "/persons/%s" % name))
 
         for method, resource, body in result:
             self.process(method, resource, body=body)
