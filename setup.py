@@ -136,6 +136,6 @@ ext_modules = [
 ]
 
 setup(name="schooltool",
-      version="0.6",
+      version="0.8",
       package_dir={'': 'src'},
       ext_modules=ext_modules)

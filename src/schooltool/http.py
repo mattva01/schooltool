@@ -62,7 +62,7 @@ __metaclass__ = type
 # HTTP server
 #
 
-SERVER_VERSION = "SchoolTool/0.7"
+SERVER_VERSION = "SchoolTool/0.8"
 
 
 def parseAccept(value):

@@ -36,7 +36,7 @@ class SampleSchoolImporter:
     ssl = False
     interactive = False
 
-    expected_version = 'SchoolTool/0.7'
+    expected_version = 'SchoolTool/0.8'
 
     datadir = datadir
     ttconfig_filename = datadir + '/ttconfig.data'
