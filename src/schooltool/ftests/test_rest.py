@@ -25,7 +25,6 @@ Requirements:
 
 import unittest
 import httplib
-import urllib
 
 __metaclass__ = type
 

@@ -280,15 +280,16 @@ class TestRelate(unittest.TestCase):
             self.assert_(link.role is role)
             self.assertEqual(link.title, "Command")
 
-    def test_getRelationships(self):
-        from schooltool.component import getRelationships, relate
+    def test_getRelatedObjects(self):
+        from schooltool.component import getRelatedObjects, relate
         officer = Relatable()
         soldier = Relatable()
-        self.assertEqual(list(getRelationships(officer, URIReport)), [])
+        self.assertEqual(list(getRelatedObjects(officer, URIReport)), [])
 
         relate("Command", officer, URISuperior, soldier, URIReport)
-        self.assertEqual(list(getRelationships(officer, URIReport)), [soldier])
-        self.assertEqual(list(getRelationships(officer, URISuperior)), [])
+        self.assertEqual(list(getRelatedObjects(officer, URIReport)),
+                         [soldier])
+        self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
 
 
 def test_suite():

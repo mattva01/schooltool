@@ -265,10 +265,10 @@ class IRelationshipAPI(Interface):
           * The link traversable from the soldier, role is URIMySuperior
         """
 
-    def getRelationships(obj, role):
+    def getRelatedObjects(obj, role):
         """Return a sequence of object's relationships with a given role.
 
-        Calling getRelationships(obj, role) is equivalent to the following
+        Calling getRelatedObjects(obj, role) is equivalent to the following
         list comprehension::
 
             [link.traverse() for link in obj.listLinks(role)]

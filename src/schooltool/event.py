@@ -31,7 +31,7 @@ from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 from schooltool.interfaces import IRouteToRelationshipsAction
 from schooltool.component import getEventService
-from schooltool.component import getRelationships, inspectSpecificURI
+from schooltool.component import getRelatedObjects, inspectSpecificURI
 
 __metaclass__ = type
 
@@ -126,7 +126,7 @@ class RouteToRelationshipsAction(EventActionMixin):
         self.role = role
 
     def handle(self, event, target):
-        for obj in getRelationships(target, self.role):
+        for obj in getRelatedObjects(target, self.role):
             event.dispatch(obj)
 
 
