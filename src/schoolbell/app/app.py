@@ -30,6 +30,7 @@ from zope.interface import implements
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
 from zope.app.container.contained import Contained
+from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.site.servicecontainer import ServiceManagerContainer
@@ -101,20 +102,61 @@ class ResourceContainer(BTreeContainer):
         if protocol is ISchoolBellApplication:
             return self.__parent__
 
-class SimpleNameChooser(object):
-    """An adapter to set the name of an object same as objects title attribute.
+
+class SimpleNameChooser(NameChooser):
+    """A name chooser that uses object titles as names.
+
+    SimpleNameChooser is an adapter for containers
+
+        >>> container = {}
+        >>> chooser = SimpleNameChooser(container)
+
+    It expects objects to have a `title` attribute, so only register it
+    as an adapter for containers that limit their contents to objects
+    with such attribute.
+
+    `chooseName` uses the title of the object to be added, converts it to
+    lowercase, strips punctuation, and replaces spaces with hyphens:
+
+        >>> obj = Person(title='Mr. Smith')
+        >>> chooser.chooseName('', obj)
+        u'mr-smith'
+
+    If the name is already taken, SimpleNameChooser adds a number at the end
+
+        >>> container['mr-smith'] = 42
+        >>> chooser.chooseName('', obj)
+        u'mr-smith-2'
+
+    If you provide a suggested name, it uses that one.
+
+        >>> chooser.chooseName('suggested-name', obj)
+        'suggested-name'
+
+    Bad names cause errors
+
+        >>> chooser.chooseName('@notallowed', obj)
+        Traceback (most recent call last):
+          ...
+        UserError: Names cannot begin with '+' or '@' or contain '/'
+
     """
 
     implements(INameChooser)
 
-    def __init__(self, context):
-        self.context = context
-
-    def chooseName(self, name, object):
-        return object.title
-
-    def checkName(self, name, container):
-        return name not in container
+    def chooseName(self, name, obj):
+        """See INameChooser."""
+        if not name:
+            name = u''.join([c for c in obj.title.lower()
+                             if c.isalnum() or c == ' ']).replace(' ', '-')
+        n = name
+        i = 1
+        while n in self.context:
+            i += 1
+            n = name + u'-' + unicode(i)
+        # Make sure the name is valid
+        self.checkName(n, obj)
+        return n
 
 
 class Person(Persistent, Contained):

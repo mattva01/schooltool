@@ -54,7 +54,8 @@ def test_suite():
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
-    filenames = ['app.txt', 'deletion.txt', 'copypaste.txt', 'cal.txt']
+    dir = os.path.dirname(__file__)
+    filenames = [fn for fn in os.listdir(dir) if fn.endswith('.txt')]
     suites = [FunctionalDocFileSuite(filename, optionflags=optionflags)
               for filename in filenames]
     return unittest.TestSuite(suites)

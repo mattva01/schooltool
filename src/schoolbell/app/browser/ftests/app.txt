@@ -4,6 +4,7 @@ Functional doctest for schoolbell.app
 This is a functional doctest for schoolbell.app.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
+
 SchoolBell as a Zope 3 content object
 -------------------------------------
 
@@ -32,7 +33,6 @@ Let's add one!
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
     ... 
     ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond""")
     HTTP/1.1 303 See Other
@@ -46,7 +46,6 @@ Ok, it is there:
     >>> print http(r"""
     ... GET /@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -89,6 +88,8 @@ We can traverse to the person index
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
+    <h1>Person index</h1>
+    ...
 
 We can traverse to the group index too
 
@@ -101,6 +102,8 @@ We can traverse to the group index too
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
+    <h1>Group index</h1>
+    ...
 
 We can traverse to the resource index too
 
@@ -112,6 +115,27 @@ We can traverse to the resource index too
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
+    ...
+    <h1>Resource index</h1>
+    ...
+
+
+Persons
+-------
+
+When you are logged in as a manager, you can see the "new person" action in the
+person index:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <a href="@@add.html">New person</a>
     ...
 
 We can click on it and get a form:
@@ -149,7 +173,6 @@ After submiting the form:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 1318
     ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
-    ... Referer: http://localhost/frogpond/persons/add.html
     ... 
     ... -----------------------------705046721187019535891597004
     ... Content-Disposition: form-data; name="field.title"
@@ -197,13 +220,11 @@ We should see a new user in the user table:
                   <a href="http://localhost/frogpond/persons/frog">Frog</a>
     ...
 
-
 We should have a view for that person as well:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/persons/
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -229,7 +250,6 @@ If we try to create a person with the same login name, we get a nice error:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 1342
     ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
-    ... Referer: http://localhost/frogpond/persons/add.html
     ... 
     ... -----------------------------705046721187019535891597004
     ... Content-Disposition: form-data; name="field.title"
@@ -268,7 +288,6 @@ We should have a view for editing him as well:
     >>> print http(r"""
     ... GET /frogpond/persons/frog/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/persons/frog/
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -308,7 +327,6 @@ You can create a person without providing a password:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 1314
     ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
-    ... Referer: http://localhost/frogpond/persons/add.html
     ... 
     ... -----------------------------705046721187019535891597004
     ... Content-Disposition: form-data; name="field.title"
@@ -342,10 +360,15 @@ You can create a person without providing a password:
     Location: http://localhost/frogpond/persons
     ...
 
-There is an action item for creating new groups in the group list
+
+Groups
+------
+
+When you are logged in as a manager, you can see the "new group" action in the
+group index:
 
     >>> print http(r"""
-    ... GET /frogpond/groups/@@contents.html HTTP/1.1
+    ... GET /frogpond/groups/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -353,7 +376,7 @@ There is an action item for creating new groups in the group list
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...<a href="+/addSchoolBellGroup.html">New group</a>...
+    <a href="+/addSchoolBellGroup.html">New group</a>
     ...
 
 We can click on it and get a form:
@@ -361,7 +384,6 @@ We can click on it and get a form:
     >>> print http(r"""
     ... GET /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/groups/@@contents.html
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -380,16 +402,15 @@ We can click on it and get a form:
 After submiting the form
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html%3D HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 423
+    ... Content-Length: 433
     ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
-    ... Referer: http://localhost/frogpond/groups/+/addSchoolBellGroup.html=
     ...
     ... -----------------------------68355286210571712431437723486
     ... Content-Disposition: form-data; name="field.title"
     ... 
-    ... Group
+    ... Venerable Frogs
     ... -----------------------------68355286210571712431437723486
     ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
     ... 
@@ -405,58 +426,35 @@ After submiting the form
     Location: http://localhost/frogpond/groups
     ...
 
-We should see a new group in the group table:
+We should see a new group in the group index:
 
     >>> print http(r"""
-    ... GET /frogpond/groups/@@contents.html HTTP/1.1
+    ... GET /frogpond/groups HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/groups/+/addSchoolBellGroup.html=
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-                <input type="checkbox" class="noborder"
-                       name="ids:list" id="Group" value="Group" />
-    ...
-              <td><a href="Group/@@SelectedManagementView.html"></a><span>
-                    <a href="Group/@@SelectedManagementView.html">Group</a><a
-      href="http://localhost/frogpond/groups/@@contents.html?rename_ids:list=Group">&nbsp;&nbsp;</a></span></td>
-              <td>
-    ...
-
-The group should appear in the group list too:
-
-    >>> print http(r"""
-    ... GET /frogpond/groups/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/groups/+/addSchoolBellGroup.html=
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-                  <a href="http://localhost/frogpond/groups/Group">Group</a>
+    <a href="...venerable-frogs">Venerable Frogs</a>
     ...
 
 We should have a view for that group as well:
 
     >>> print http(r"""
-    ... GET /frogpond/groups/Group HTTP/1.1
+    ... GET /frogpond/groups/venerable-frogs HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/groups/
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...Group...
+    ...Venerable Frogs...
     ...
 
-We should see the group in this person's possible super group list.
+We should see the group in this person's possible group list.
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/groups.html HTTP/1.1
@@ -466,18 +464,20 @@ We should see the group in this person's possible super group list.
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <input type="checkbox" name="group.Group" />
-    Group
+    <input type="checkbox" name="group.venerable-frogs" />
+    Venerable Frogs
     ...
 
 Let's add the person to the group.
 
     >>> print http(r"""
-    ... GET /frogpond/persons/frog/groups.html?UPDATE_SUBMIT=Apply&group.Group=on HTTP/1.1
+    ... POST /frogpond/persons/frog/groups.html HTTP/1.1
+    ... Content-Length: 44
+    ... Content-Type: application/x-www-form-urlencoded
+    ... UPDATE_SUBMIT=Apply&group.venerable-frogs=on
     ... """)
     HTTP/1.1 303 See Other
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
+    ...
     Location: http://localhost/frogpond/persons/frog
     ...
 
@@ -490,7 +490,7 @@ The person's info view should show the group:
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     ...
-    <a href=".../groups/Group">Group</a>
+    <a href=".../groups/venerable-frogs">Venerable Frogs</a>
     ...
 
 And the groups page shows the checkbox checked.
@@ -504,14 +504,14 @@ And the groups page shows the checkbox checked.
     <BLANKLINE>
     ...
     <input type="checkbox" checked="checked"
-           name="group.Group" />
-    Group
+           name="group.venerable-frogs" />
+    Venerable Frogs
     ...
 
 The group members view reflects the change that we have done:
 
     >>> print http(r"""
-    ... GET /frogpond/groups/Group/members_persons.html HTTP/1.1
+    ... GET /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -523,29 +523,15 @@ The group members view reflects the change that we have done:
     Frog
     ...
 
-Let's remove the person (this bit duplicates the test done in deletion.txt):
+
+Resources
+---------
+
+When you are logged in as a manager, you can see the "new resource" action in
+the resource index:
 
     >>> print http(r"""
-    ... GET /frogpond/persons/@@contents.html?ids%3Alist=frog&container_delete_button=Delete HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    ...
-
-We can't see him in the group list anymore:
-
-    >>> group_response = http(r"""
-    ... GET /frogpond/groups/Group/members_persons.html HTTP/1.1
-    ... """)
-    >>> '"member.frog"' not in str(group_response)
-    True
-
-There is an action item for creating new resources in the resource list
-
-    >>> print http(r"""
-    ... GET /frogpond/resources/@@contents.html HTTP/1.1
+    ... GET /frogpond/resources/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -553,23 +539,10 @@ There is an action item for creating new resources in the resource list
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...<a href="+/addSchoolBellResource.html">New resource</a>...
+    <a href="+/addSchoolBellResource.html">New resource</a>
     ...
 
 We can click on it and get a form:
-
-    >>> print http(r"""
-    ... GET /frogpond/resources/@@+/action.html?type_name=addSchoolBellResource.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/resources/@@contents.html
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: 4
-    Content-Type: text/plain;charset=utf-8
-    Location: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
-    <BLANKLINE>
-    None
-
 
     >>> print http(r"""
     ... GET /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
@@ -589,274 +562,244 @@ We can click on it and get a form:
       </form>
     ...
 
-
 After submiting the form
 
     >>> print http(r"""
-    ... GET /frogpond/resources/+/addSchoolBellResource.html?field.title=Resource&UPDATE_SUBMIT=Add&add_input_name= HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 50
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Lily&UPDATE_SUBMIT=Add&add_input_name=
     ... """)
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/frogpond/resources
     ...
 
-We should see a new resource in the resource table:
-
-    >>> print http(r"""
-    ... GET /frogpond/resources/@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-                <input type="checkbox" class="noborder"
-                       name="ids:list" id="Resource" value="Resource" />
-    ...
-              <td><a href="Resource/@@SelectedManagementView.html"></a><span>
-                    <a href="Resource/@@SelectedManagementView.html">Resource</a><a
-      href="http://localhost/frogpond/resources/@@contents.html?rename_ids:list=Resource">&nbsp;&nbsp;</a></span></td>
-              <td>
-    ...
-
-The resource should appear in the resource list too:
+We should see a new resource in the resource index:
 
     >>> print http(r"""
     ... GET /frogpond/resources/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-                  <a href="http://localhost/frogpond/resources/Resource">Resource</a>
+    <a href="http://localhost/frogpond/resources/lily">Lily</a>
     ...
 
 We should have a view for that resource as well:
 
     >>> print http(r"""
-    ... GET /frogpond/resources/Resource HTTP/1.1
+    ... GET /frogpond/resources/lily HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/resources/
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    ...Identifier:...
-    ...Resource...
-    ...
-    ...Title:...
-    ...resource...
+    ...Identifier:...lily...
+    ...Title:...Lily...
     ...
 
 The supergroup list works for resources too:
 
     >>> print http(r"""
-    ... GET /frogpond/resources/Resource/groups.html HTTP/1.1
+    ... GET /frogpond/resources/lily/groups.html HTTP/1.1
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <input type="checkbox" name="group.Group" />
-    Group
+    <input type="checkbox" name="group.venerable-frogs" />
+    Venerable Frogs
     ...
 
 Cancelling the resource addition redirects us to the resource index:
 
     >>> print http(r"""
-    ... GET /frogpond/resources/+/addSchoolBellResource.html?field.title=resource&CANCEL=Cancel&add_input_name= HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 46
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Rose&CANCEL=Cancel&add_input_name=
     ... """)
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/frogpond/resources
     ...
 
+    >>> r = http("GET /frogpond/resources HTTP/1.1")
+    >>> 'Rose' not in str(r)
+    True
 
-Group Edit view
----------------
+
+Group editing
+-------------
+
+Groups have an edit page
+
+    >>> print http("""
+    ... GET /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+       <form action="http://localhost/frogpond/groups/venerable-frogs/edit.html"
+             method="post" enctype="multipart/form-data"
+             class="standalone">
+    ...
+           <h3>Edit Group Information</h3>
+    ...
+    ...<input class="textType" id="field.title" name="field.title" size="20" type="text" value="Venerable Frogs"  />...
+    ...
+           <input type="submit" class="button-ok"
+                  name="UPDATE_SUBMIT" value="Apply"
+                  title="Shortcut: Alt-A" accesskey="A" />
+           <input type="submit" class="button-cancel"
+                  name="CANCEL" value="Cancel" />
+    ...
 
 If the Cancel button is hit, we get redirected to the group info view:
 
     >>> print http("""
-    ... GET /frogpond/groups/Group/edit.html?\
-    ... field.title=Foo&CANCEL=Please HTTP/1.1
+    ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 29
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Foo&CANCEL=Cancel
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/groups/Group
+    Location: http://localhost/frogpond/groups/venerable-frogs
     ...
 
-But the context is unchanged:
+and the context is unchanged:
 
     >>> print http("""
-    ... GET /frogpond/groups/Group/edit.html HTTP/1.1
+    ... GET /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     ...
-    ...<input ... name="field.title" size="20" type="text" value="Group"  />...
+    ...<input ... name="field.title" size="20" type="text" value="Venerable Frogs"  />...
     ...
 
-When the form is successfully submitted, we also get
-redirected to the info view:
+When the form is successfully submitted, we also get redirected to the info
+view:
 
     >>> print http("""
-    ... GET /frogpond/groups/Group/edit.html?\
-    ... field.title=Foo&UPDATE_SUBMIT=Please HTTP/1.1
+    ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 52
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Very+Venerable+Frogs&UPDATE_SUBMIT=Apply
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/groups/Group
-    ...
-    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    Location: http://localhost/frogpond/groups/venerable-frogs
     ...
 
 Now the group info is indeed updated:
 
     >>> print http("""
-    ... GET /frogpond/groups/Group/edit.html HTTP/1.1
+    ... GET /frogpond/groups/venerable-frogs HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     ...
-    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    ...Very Venerable Frogs...
+
+
+Resource editing
+----------------
+
+Resources have an edit page
+
+    >>> print http("""
+    ... GET /frogpond/resources/lily/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
     ...
-
-
-Resource Edit view
-------------------
+       <form action="http://localhost/frogpond/resources/lily/edit.html"
+             method="post" enctype="multipart/form-data"
+             class="standalone">
+    ...
+           <h3>Edit Resource Information</h3>
+    ...
+    ...<input class="textType" id="field.title" name="field.title" size="20" type="text" value="Lily"  />...
+    ...
+           <input type="submit" class="button-ok"
+                  name="UPDATE_SUBMIT" value="Apply"
+                  title="Shortcut: Alt-A" accesskey="A" />
+           <input type="submit" class="button-cancel"
+                  name="CANCEL" value="Cancel" />
+    ...
 
 If the Cancel button is hit, we get redirected to the resource info view:
 
     >>> print http("""
-    ... GET /frogpond/resources/Resource/edit.html?\
-    ... field.title=Foo&CANCEL=Please HTTP/1.1
+    ... POST /frogpond/resources/lily/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 29
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Foo&CANCEL=Cancel
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/resources/Resource
+    Location: http://localhost/frogpond/resources/lily
     ...
 
-But the context is unchanged:
+and the context is unchanged:
 
     >>> print http("""
-    ... GET /frogpond/resources/Resource/edit.html HTTP/1.1
+    ... GET /frogpond/resources/lily/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     ...
-    ...<input ... name="field.title" size="20" type="text" value="Resource"  />...
+    ...<input ... name="field.title" size="20" type="text" value="Lily"  />...
     ...
 
-When the form is successfully submitted, we also get
-redirected to the info view:
+When the form is successfully submitted, we also get redirected to the info
+view:
 
     >>> print http("""
-    ... GET /frogpond/resources/Resource/edit.html?\
-    ... field.title=Foo&UPDATE_SUBMIT=Please HTTP/1.1
+    ... POST /frogpond/resources/lily/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 43
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Pretty+Lily&UPDATE_SUBMIT=Apply
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/resources/Resource
-    ...
-    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    Location: http://localhost/frogpond/resources/lily
     ...
 
-Now the group info is indeed updated:
+Now the resource info is indeed updated:
 
     >>> print http("""
-    ... GET /frogpond/resources/Resource/edit.html HTTP/1.1
+    ... GET /frogpond/resources/lily HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
     ...
-    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
-    ...
+    ...Pretty Lily...
 
-
-Navigation view
----------------
-
-The schoolbell_navigation view is registered for "*".  It will present
-a portlet with the navigation links depending on the authorized user.
-
-    >>> print http(r"""
-    ... GET /frogpond/schoolbell_navigation HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    <div class="portlet">
-    <h4>Navigation</h4>
-    <ul>
-       <li><a href="http://localhost/frogpond">Top</a></li>
-    </ul>
-    </div>
-
-The main technical challenge in this view is finding the nearest
-ISchoolBellApplication instance, and providing the links relative to
-it.
-
-    >>> print http(r"""
-    ... GET /frogpond/resources/Resource/schoolbell_navigation HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    <div class="portlet">
-    <h4>Navigation</h4>
-    <ul>
-       <li><a href="http://localhost/frogpond">Top</a></li>
-    </ul>
-    </div>
-
-This view will break, though, if the context is not a descendant of
-ISchoolBellApplication:
-
-    >>> print http(r"""
-    ... GET /schoolbell_navigation HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 500 Internal Server Error
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-
-Appendix: Tips and tricks for writing functional doctests
----------------------------------------------------------
-
-- Replace "Authorization: Basic (whatever goes here)" with
-  "Authorization: Basic mgr:mgrpw"
-
-- Replace "Content-Length: (a number)" with "Content-Length: ..." in the output
-  (but not in the input!)
-
-- Remove all port numbers after 'localhost' (e.g., if you used tcpwatch and
-  went to http://localhost:9080/, then in your .txt file replace all instances
-  of "localhost:9080" with just "localhost").
-
-- Replace a number of long boring lines with a single ellipsis (...).
-
-- When you get a huge diff, look for lines that start with a question mark (?),
-  they are most informative.
-
-TODO: move this section somewhere else
