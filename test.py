@@ -454,6 +454,7 @@ def colorize_zope_doctest_output(lines):
         return lines
     result.append(colorize('doctest_title', lines[1]))
     remaining = lines[2:]
+    # XXX It can say 'Expected nothing' too.
     while remaining and remaining[0] not in ('Expected:', 'Exception raised:'):
         line = remaining.pop(0)
         result.append(colorize('doctest_code', line))
@@ -757,7 +758,8 @@ class CustomTestRunner(unittest.TextTestRunner):
                 self.stream.write(" (failures=%s" % c('count', str(failed)))
             if errored:
                 if failed: self.stream.write(", ")
-                self.stream.write(" (errors=%s" % c('count', str(errored)))
+                else: self.stream.write("(")
+                self.stream.write("errors=%s" % c('count', str(errored)))
             self.stream.writeln(")")
         elif not self.cfg.quiet:
             self.stream.writeln(c('pass', "OK"))
