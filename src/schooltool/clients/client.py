@@ -225,7 +225,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
                 basic = "Basic %s" % base64.encodestring(data).strip()
                 conn.putheader('Authorization', basic)
             conn.endheaders()
-            if body is not None:
+            if body:
                 conn.send(body)
             response = conn.getresponse()
             self.emit("%s %s" % (response.status, response.reason))

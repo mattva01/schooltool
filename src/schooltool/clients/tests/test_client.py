@@ -59,6 +59,7 @@ class HTTPStub:
         return ResponseStub(self)
 
     def send(self, s):
+        assert s, "Sending empty strings breaks when SSL is used"
         self.sent_data += s
 
 
