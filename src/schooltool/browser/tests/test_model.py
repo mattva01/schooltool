@@ -821,7 +821,8 @@ class TestResourceEditView(unittest.TestCase):
 
         app = Application()
         resources = app['resources'] = ApplicationObjectContainer(Resource)
-        self.resource = resources.new('foo', title=u"Foo resource bar")
+        resources.new(title=u"Already Used")
+        self.resource = resources.new('foo', title=u"Foo Title")
         view = ResourceEditView(self.resource)
         view.authorization = lambda x, y: True
         return view
@@ -830,7 +831,8 @@ class TestResourceEditView(unittest.TestCase):
         view = self.createView()
         request = RequestStub()
         content = view.render(request)
-        self.assert_("Foo resource bar" in content)
+        assert "Foo Title" in content
+        assert "CONFIRM" not in content
 
     def test_post(self):
         view = self.createView()
@@ -843,6 +845,39 @@ class TestResourceEditView(unittest.TestCase):
                           'http://localhost:7001/resources/foo')
         self.assertEquals(request.applog,
                           [(None, 'Resource /resources/foo modified', INFO)])
+
+    def test_post_duplicate_title(self):
+        view = self.createView()
+        request = RequestStub(args={'title': 'Already Used'})
+        view.request = request
+        result = view.do_POST(request)
+        assert "This title is already used for another resource." in result
+        assert "CONFIRM" in result
+        self.assertEquals(request.applog, [])
+        self.assertEquals(request.applog, [])
+
+    def test_post_duplicate_title_confirmed(self):
+        view = self.createView()
+        request = RequestStub(args={'title': 'Already Used',
+                                    'CONFIRM': 'Save anyway'})
+        view.request = request
+        result = view.do_POST(request)
+        self.assertEquals(self.resource.title, u'Already Used')
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/resources/foo')
+        self.assertEquals(request.applog,
+                          [(None, 'Resource /resources/foo modified', INFO)])
+
+    def test_post_duplicate_title_cancel(self):
+        view = self.createView()
+        request = RequestStub(args={'title': 'Already Used',
+                                    'CANCEL': 'Cancel'})
+        view.request = request
+        result = view.do_POST(request)
+        self.assertEquals(request.applog, [])
+        assert "Foo Title" in result
+        assert "CONFIRM" not in result
 
 
 class TestPhotoView(unittest.TestCase):

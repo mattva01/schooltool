@@ -468,6 +468,8 @@ class ResourceEditView(View, AppObjectBreadcrumbsMixin):
 
     template = Template("www/resource_edit.pt")
 
+    duplicate_warning = False
+
     back = True
 
     def __init__(self, context):
@@ -476,14 +478,25 @@ class ResourceEditView(View, AppObjectBreadcrumbsMixin):
                                        value=context.title)
 
     def do_POST(self, request):
+        if 'CANCEL' in request.args:
+            return self.do_GET(request)
         self.title_widget.update(request)
         if self.title_widget.raw_value == '':
             self.title_widget.setRawValue(None)
         self.title_widget.require()
         if self.title_widget.error:
             return self.do_GET(request)
-        self.context.title = self.title_widget.value
-        request.appLog(_("Resource %s modified") % getPath(self.context))
+        new_title = self.title_widget.value
+        if new_title != self.context.title:
+            if 'CONFIRM' not in request.args:
+                for other in self.context.__parent__.itervalues():
+                    if new_title == other.title:
+                        self.duplicate_warning = True
+                        self.title_widget.error = ("This title is already used"
+                                                   " for another resource.")
+                        return self.do_GET(request)
+            self.context.title = self.title_widget.value
+            request.appLog(_("Resource %s modified") % getPath(self.context))
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
 

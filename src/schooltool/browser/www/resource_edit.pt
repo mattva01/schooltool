@@ -13,8 +13,14 @@
       <span tal:replace="python:context.__name__">name</span>
     </div>
     <div class="row" tal:replace="structure view/title_widget" />
-    <div class="buttons">
-      <input class="button" type="submit" value="Submit"
+    <div class="buttons" tal:condition="view/duplicate_warning">
+      <input class="button" type="submit" name="CONFIRM" value="Save Anyway"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+    <div class="buttons" tal:condition="not:view/duplicate_warning">
+      <input class="button" type="submit" name="SAVE" value="Save"
              i18n:attributes="value" />
     </div>
 
