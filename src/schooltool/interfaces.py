@@ -110,16 +110,6 @@ class IMultiContainer(Interface):
     def getRelativePath(child):
         """Returns the path of child relative to self."""
 
-class IMultiContained(Interface):
-    """Objects which rely on IMultiContainer parents to know their
-    path.
-    """
-
-    __parent__ = Attribute(
-        """The parent of an object.
-
-        Must implement IMultiContainer.
-        """)
 #
 # Services
 #
@@ -214,7 +204,7 @@ class URIMembership(ISpecificURI):
 # Relationships
 #
 
-class ILink(Interface):
+class ILink(ILocation):
     """A link is a 'view' of a relationship the relating objects have.
 
              A<--->Link<---->Relationship<---->Link<--->B

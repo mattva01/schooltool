@@ -31,8 +31,7 @@ from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
-from schooltool.interfaces import ITraversable
-from schooltool.interfaces import IMultiContainer, IMultiContained
+from schooltool.interfaces import ITraversable, IMultiContainer
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.interfaces import IViewAPI
 from schooltool.interfaces import ComponentLookupError
@@ -76,13 +75,6 @@ class MulticontainerStub(LocationStub):
     def getRelativePath(self, obj):
         return 'magic/' + obj.__name__
 
-class MulticontainedStub:
-    implements(IMultiContained)
-
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
-
 class TraversableStub:
     implements(ITraversable)
 
@@ -105,7 +97,7 @@ class TestCanonicalPath(unittest.TestCase):
         b = LocationStub(a, 'foo')
         c = LocationStub(b, 'bar')
         d = MulticontainerStub(b, 'baz')
-        e = MulticontainedStub(d, 'quux')
+        e = LocationStub(d, 'quux')
         return a, b, c, d, e
 
     def test_getPath(self):
@@ -114,9 +106,6 @@ class TestCanonicalPath(unittest.TestCase):
         x = LocationStub(None, 'root')
         self.assertRaises(TypeError, getPath, x)
         self.assertRaises(TypeError, getPath, object())
-        self.assertRaises(TypeError, getPath, MulticontainedStub(None, 'n'))
-        self.assertRaises(TypeError, getPath,
-                          MulticontainedStub(LocationStub(None, 'a'), 'n'))
 
         a, b, c, d, e = self.buildTree()
         self.assertEqual(getPath(a), '/')
