@@ -21,6 +21,19 @@ Content-Type: text/xml; charset=UTF-8
     <name>Member</name>
     <description>A group member role.</description>
   </uriobject>
+  <uriobject uri="http://schooltool.org/ns/noted">
+    <description>The notation relationship</description>
+    <name>Noted</name>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/noted/notandum">
+    <description>The role of a object in Noted</description>
+    <name>Notandum</name>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/noted/notation">
+    <description>The role of a note in Noted</description>
+    <name>Notation</name>
+  </uriobject>
+
   <uriobject uri="http://schooltool.org/ns/membership">
     <name>Membership</name>
     <description>The membership relationship.</description>

@@ -610,6 +610,9 @@ Content-Type: text/xml; charset=UTF-8
     <item xlink:type="simple" xlink:href="/groups/cleaners"
           xlink:title="Cleaners"/>
   </groups>
+  <notes xlink:type="simple"
+         xlink:title="Notes"
+         xlink:href="/persons/Albert/notes"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
                  xlink:href="/persons/Albert/relationships"/>
@@ -678,6 +681,9 @@ Content-Type: text/xml; charset=UTF-8
     <item xlink:type="simple" xlink:href="/groups/cleaners"
           xlink:title="Cleaners"/>
   </groups>
+  <notes xlink:type="simple"
+         xlink:title="Notes"
+         xlink:href="/persons/Marius/notes"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
                  xlink:href="/persons/Marius/relationships"/>
