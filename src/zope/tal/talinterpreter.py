@@ -11,8 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Interpreter for a pre-compiled TAL program.
+"""Interpreter for a pre-compiled TAL program.
+
+$Id: talinterpreter.py,v 1.31 2004/03/23 19:18:10 srichter Exp $
 """
 import sys
 
@@ -664,12 +665,19 @@ class TALInterpreter:
                 raise METALError("macro %s has incompatible mode %s" %
                                  (`macroName`, `mode`), self.position)
         self.pushMacro(macroName, compiledSlots)
+        
+        # We want 'macroname' name to be always available as a variable 
+        outer = self.engine.getValue('macroname')
+        self.engine.setLocal('macroname', macroName.split('/')[-1])
+
         prev_source = self.sourceFile
         self.interpret(macro)
         if self.sourceFile != prev_source:
             self.engine.setSourceFile(prev_source)
             self.sourceFile = prev_source
         self.popMacro()
+        # Push the outer macroname again.
+        self.engine.setLocal('macroname', outer)
     bytecode_handlers["useMacro"] = do_useMacro
 
     def do_fillSlot(self, (slotName, block)):

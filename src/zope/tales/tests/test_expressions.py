@@ -11,9 +11,15 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+"""Default TALES expression implementations tests.
+
+$Id: test_expressions.py,v 1.5 2003/09/19 10:27:11 srichter Exp $
+"""
 import unittest
 
 from zope.tales.engine import Engine
+from zope.tales.interfaces import ITALESFunctionNamespace
+from zope.interface import implements
 
 class Data:
 
@@ -127,9 +133,16 @@ class FunctionTests(ExpressionTestBase):
 
         # a test namespace
         class TestNameSpace:
+            implements(ITALESFunctionNamespace)
 
             def __init__(self, context):
                 self.context = context
+
+            def setEngine(self, engine):
+                self._engine = engine
+
+            def engine(self):
+                return self._engine
 
             def upper(self):
                 return str(self.context).upper()
@@ -140,10 +153,14 @@ class FunctionTests(ExpressionTestBase):
                 raise KeyError,key
             
         self.TestNameSpace = TestNameSpace
-        self.engine.registerFunctionNamespace('namespace',self.TestNameSpace)
+        self.engine.registerFunctionNamespace('namespace', self.TestNameSpace)
 
     ## framework-ish tests
-        
+
+    def testSetEngine(self):
+        expr = self.engine.compile('adapterTest/namespace:engine')
+        self.assertEqual(expr(self.context), self.context)
+                
     def testGetFunctionNamespace(self):
         self.assertEqual(
             self.engine.getFunctionNamespace('namespace'),

@@ -17,14 +17,17 @@ import os
 import re
 import sys
 
-# types.StringTypes was added in Python 2.2
+# types.StringTypes was added in Python 2.2; basestring in 2.3
 try:
     unicode
 except NameError:
-    StringTypes = type(''), type(unicode(''))
-else:
+    UnicodeType = None
     StringTypes = type(''),
+else:
+    UnicodeType = type(unicode(''))
+    StringTypes = type(''), UnicodeType
 
+# True, False were added in Python 2.2.1
 try:
     True
 except NameError:
@@ -68,6 +71,8 @@ class RangeCheckedConversion:
 
 
 class RegularExpressionConversion:
+    reason = "value did not match regular expression"
+
     def __init__(self, regex):
         self._rx = re.compile(regex)
 
@@ -76,8 +81,7 @@ class RegularExpressionConversion:
         if m and m.group() == value:
             return value
         else:
-            raise ValueError("value did not match regular expression: "
-                             + `value`)
+            raise ValueError("%s: %s" % (self.reason, repr(value)))
 
 
 def check_locale(value):
@@ -106,9 +110,38 @@ class BasicKeyConversion(RegularExpressionConversion):
         return RegularExpressionConversion.__call__(self, value).lower()
 
 
-class IdentifierConversion(RegularExpressionConversion):
+class ASCIIConversion(RegularExpressionConversion):
+    def __call__(self, value):
+        value = RegularExpressionConversion.__call__(self, value)
+        if UnicodeType is not None and isinstance(value, UnicodeType):
+            value = value.encode("ascii")
+        return value
+
+
+_ident_re = "[_a-zA-Z][_a-zA-Z0-9]*"
+
+class IdentifierConversion(ASCIIConversion):
+    reason = "not a valid Python identifier"
+
     def __init__(self):
-        RegularExpressionConversion.__init__(self, "[_a-zA-Z][_a-zA-Z0-9]*")
+        ASCIIConversion.__init__(self, _ident_re)
+
+
+class DottedNameConversion(ASCIIConversion):
+    reason = "not a valid dotted name"
+
+    def __init__(self):
+        ASCIIConversion.__init__(self,
+                                 r"%s(?:\.%s)*" % (_ident_re, _ident_re))
+
+
+class DottedNameSuffixConversion(ASCIIConversion):
+    reason = "not a valid dotted name or suffix"
+
+    def __init__(self):
+        ASCIIConversion.__init__(self,
+                                 r"(?:%s)(?:\.%s)*|(?:\.%s)+"
+                                 % (_ident_re, _ident_re, _ident_re))
 
 
 def integer(value):
@@ -143,6 +176,11 @@ def string_list(s):
 port_number = RangeCheckedConversion(integer, min=1, max=0xffff).__call__
 
 
+if sys.platform[:3] == "win":
+    DEFAULT_HOST = "localhost"
+else:
+    DEFAULT_HOST = ""
+
 def inet_address(s):
     # returns (host, port) tuple
     host = ''
@@ -156,7 +194,11 @@ def inet_address(s):
         try:
             port = port_number(s)
         except ValueError:
+            if len(s.split()) != 1:
+                raise ValueError("not a valid host name: " + repr(s))
             host = s.lower()
+    if not host:
+        host = DEFAULT_HOST
     return host, port
 
 
@@ -193,27 +235,31 @@ class IpaddrOrHostname(RegularExpressionConversion):
         return RegularExpressionConversion.__call__(self, value).lower()
 
 def existing_directory(v):
-    if os.path.isdir(v):
-        return v
+    nv = os.path.expanduser(v)
+    if os.path.isdir(nv):
+        return nv
     raise ValueError, '%s is not an existing directory' % v
 
 def existing_path(v):
-    if os.path.exists(v):
-        return v
+    nv = os.path.expanduser(v)
+    if os.path.exists(nv):
+        return nv
     raise ValueError, '%s is not an existing path' % v
 
 def existing_file(v):
-    if os.path.exists(v):
-        return v
+    nv = os.path.expanduser(v)
+    if os.path.exists(nv):
+        return nv
     raise ValueError, '%s is not an existing file' % v
 
 def existing_dirpath(v):
-    dir = os.path.dirname(v)
+    nv = os.path.expanduser(v)
+    dir = os.path.dirname(nv)
     if not dir:
         # relative pathname with no directory component
-        return v
+        return nv
     if os.path.isdir(dir):
-        return v
+        return nv
     raise ValueError, ('The directory named as part of the path %s '
                        'does not exist.' % v)
 
@@ -242,6 +288,8 @@ class SuffixMultiplier:
 
 stock_datatypes = {
     "boolean":           asBoolean,
+    "dotted-name":       DottedNameConversion(),
+    "dotted-suffix":     DottedNameSuffixConversion(),
     "identifier":        IdentifierConversion(),
     "integer":           integer,
     "float":             float_conversion,
@@ -270,8 +318,6 @@ stock_datatypes = {
     }
 
 class Registry:
-    __metatype__ = type
-    __slots__ = '_stock', '_other', '_basic_key'
 
     def __init__(self, stock=None):
         if stock is None:
@@ -301,7 +347,7 @@ class Registry:
             raise ValueError("datatype name conflicts with built-in type: "
                              + `name`)
         if self._other.has_key(name):
-            raise ValueError("datatype name already registered:" + `name`)
+            raise ValueError("datatype name already registered: " + `name`)
         self._other[name] = conversion
 
     def search(self, name):
@@ -309,7 +355,7 @@ class Registry:
             raise ValueError("unloadable datatype name: " + `name`)
         components = name.split('.')
         start = components[0]
-        g = globals()
+        g = {}
         package = __import__(start, g, g)
         modulenames = [start]
         for component in components[1:]:

@@ -156,7 +156,11 @@ class BaseMatcher:
                     v = values[attr] = default[:]
             if ci.ismulti():
                 if not v:
-                    v[:] = ci.getdefault()
+                    default = ci.getdefault()
+                    if isinstance(default, dict):
+                        v.update(default)
+                    else:
+                        v[:] = default
                 if len(v) < ci.minOccurs:
                     raise ZConfig.ConfigurationError(
                         "not enough values for %s; %d found, %d required"
@@ -204,8 +208,12 @@ class BaseMatcher:
                     v = None
             elif name == '+':
                 v = values[attr]
-                for key, val in v.items():
-                    v[key] = val.convert(ci.datatype)
+                if not v:
+                    for key, val in ci.getdefault().items():
+                        v[key] = val.convert(ci.datatype)
+                else:
+                    for key, val in v.items():
+                        v[key] = val.convert(ci.datatype)
             else:
                 v = values[attr]
                 if v is not None:

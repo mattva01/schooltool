@@ -13,14 +13,14 @@
 ##############################################################################
 """Dummy TAL expression engine so that I can test out the TAL implementation.
 
-$Id: dummyengine.py,v 1.14 2003/08/21 14:19:29 srichter Exp $
+$Id: dummyengine.py,v 1.16 2004/03/23 19:18:17 srichter Exp $
 """
 import re
 
 from zope.interface import implements
 from zope.tal.taldefs import NAME_RE, TALExpressionError, ErrorInfo
 from zope.tal.interfaces import ITALExpressionCompiler, ITALExpressionEngine
-from zope.i18n.interfaces import ITranslationService
+from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.messageid import MessageID
 
 Default = object()
@@ -44,7 +44,7 @@ class DummyEngine:
         dict = {'nothing': None, 'default': Default}
         self.locals = self.globals = dict
         self.stack = [dict]
-        self.translationService = DummyTranslationService()
+        self.translationDomain = DummyTranslationDomain()
         self.useEngineAttrDicts = False
 
     def getCompilerError(self):
@@ -79,6 +79,12 @@ class DummyEngine:
 
     def setGlobal(self, name, value):
         self.globals[name] = value
+
+    def getValue(self, name, default=None):
+        value = self.globals.get(name, default)
+        if value is default:
+            value = self.locals.get(name, default)
+        return value
 
     def evaluate(self, expression):
         assert (expression.startswith("$") and expression.endswith("$"),
@@ -195,8 +201,9 @@ class DummyEngine:
         return Default
 
     def translate(self, msgid, domain=None, mapping=None, default=None):
-        return self.translationService.translate(
-            msgid, domain, mapping, default=default)
+        self.translationDomain.domain = domain
+        return self.translationDomain.translate(
+            msgid, mapping, default=default)
 
     def evaluateCode(self, lang, code):
         # We probably implement too much, but I use the dummy engine to test
@@ -259,11 +266,15 @@ class Iterator:
         return 1
 
 
-class DummyTranslationService:
-    implements(ITranslationService)
+class DummyTranslationDomain:
+    implements(ITranslationDomain)
 
-    def translate(self, msgid, domain=None, mapping=None, context=None,
+    domain = ''
+
+    def translate(self, msgid, mapping=None, context=None,
                   target_language=None, default=None):
+
+        domain = self.domain
         # This is a fake translation service which simply uppercases non
         # ${name} placeholder text in the message id.
         #

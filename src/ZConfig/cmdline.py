@@ -16,7 +16,7 @@
 
 This module provides an extension of the ConfigLoader class which adds
 a way to add configuration settings from an alternate source.  Each
-setting is described by a string of the form
+setting is described by a string of the form::
 
     some/path/to/key=value
 """
@@ -76,7 +76,6 @@ class OptionBag:
         for item in options:
             optpath, val, pos = item
             name = sectiontype.keytype(optpath[0])
-            key = None, name # section type, name
             if len(optpath) == 1:
                 self.add_value(name, val, pos)
             else:

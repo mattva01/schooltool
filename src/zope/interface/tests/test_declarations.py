@@ -14,7 +14,7 @@
 """Test the new API for making and checking interface declarations
 
 
-$Id: test_declarations.py,v 1.9 2003/09/23 19:12:36 jim Exp $
+$Id: test_declarations.py,v 1.11 2004/03/05 22:09:30 jim Exp $
 """
 
 import unittest
@@ -44,46 +44,35 @@ class COnly_old(A, B):
 class D(COnly):
     implements(I5)
     
+def test_ObjectSpecification_Simple():
+    """
+    >>> c = C()
+    >>> directlyProvides(c, I4)
+    >>> [i.__name__ for i in providedBy(c)]
+    ['I4', 'I3', 'I1', 'I2']
+    """
+
+def test_ObjectSpecification_Simple_w_only():
+    """
+    >>> c = COnly()
+    >>> directlyProvides(c, I4)
+    >>> [i.__name__ for i in providedBy(c)]
+    ['I4', 'I3']
+    """
+
+def test_ObjectSpecification_Simple_old_style():
+    """
+    >>> c = COnly_old()
+    >>> directlyProvides(c, I4)
+    >>> [i.__name__ for i in providedBy(c)]
+    ['I4', 'I3']
+    """
+
 
 class Test(unittest.TestCase):
 
     # Note that most of the tests are in the doc strings of the
     # declarations module.
-
-    def test_ObjectSpecification_Simple(self):
-        c = C()
-        directlyProvides(c, I4)
-        spec = providedBy(c)
-        sig = spec.__signature__
-        expect = ('zope.interface.tests.test_declarations.I4\t'
-                  'zope.interface.Interface',
-                  'zope.interface.tests.test_declarations.I3\t'
-                  'zope.interface.tests.test_declarations.I1\t'
-                  'zope.interface.tests.test_declarations.I2\t'
-                  'zope.interface.Interface')
-        self.assertEqual(sig, expect)
-
-    def test_ObjectSpecification_Simple_w_only(self):
-        c = COnly()
-        directlyProvides(c, I4)
-        spec = providedBy(c)
-        sig = spec.__signature__
-        expect = ('zope.interface.tests.test_declarations.I4\t'
-                  'zope.interface.Interface',
-                  'zope.interface.tests.test_declarations.I3\t'
-                  'zope.interface.Interface')
-        self.assertEqual(sig, expect)
-
-    def test_ObjectSpecification_Simple_old_style(self):
-        c = COnly_old()
-        directlyProvides(c, I4)
-        spec = providedBy(c)
-        sig = spec.__signature__
-        expect = ('zope.interface.tests.test_declarations.I4\t'
-                  'zope.interface.Interface',
-                  'zope.interface.tests.test_declarations.I3\t'
-                  'zope.interface.Interface')
-        self.assertEqual(sig, expect)
 
     def test_backward_compat(self):
 
@@ -131,12 +120,10 @@ class Test(unittest.TestCase):
 
     def test_builtins(self):
         # Setup
-        from zope.interface.declarations import _implements_reg
-        oldint = _implements_reg.get(int)
-        if oldint:
-            del _implements_reg[int]
-        
-        
+
+        intspec = implementedBy(int)
+        olddeclared = intspec.declared
+                
         classImplements(int, I1)
         class myint(int):
             implements(I2)
@@ -151,15 +138,12 @@ class Test(unittest.TestCase):
                          ['I3', 'I2', 'I1'])
 
         # cleanup
-        del _implements_reg[int]
+        intspec.declared = olddeclared
+        classImplements(int)
 
         x = 42
         self.assertEqual([i.getName() for i in providedBy(x)],
                          [])
-
-        # cleanup
-        if oldint is not None:
-            _implements_reg[int] = oldint
         
 
 def test_signature_w_no_class_interfaces():
@@ -168,14 +152,13 @@ def test_signature_w_no_class_interfaces():
     >>> class C:
     ...     pass
     >>> c = C()
-    >>> providedBy(c).__signature__
-    ''
+    >>> list(providedBy(c))
+    []
     
     >>> class I(Interface):
     ...    pass
     >>> directlyProvides(c, I)
-    >>> int(providedBy(c).__signature__
-    ...     == directlyProvidedBy(c).__signature__)
+    >>> list(providedBy(c))  == list(directlyProvidedBy(c))
     1
     """
 
@@ -200,99 +183,102 @@ def test_classImplement_on_deeply_nested_classes():
 
     """
 
-def test_computeSignature():
-    """Compute a specification signature
-
-    For example::
-
-      >>> from zope.interface import Interface
-      >>> class I1(Interface): pass
-      ...
-      >>> class I2(I1): pass
-      ...
-      >>> spec = InterfaceSpecification(I2)
-      >>> int(spec.__signature__ == "%s\\t%s\\t%s" % (
-      ...    I2.__identifier__, I1.__identifier__,
-      ...    Interface.__identifier__))
-      1
-
-    """
-
-def test_cant_pickle_plain_specs():
-    """
-    >>> from pickle import dumps
-    >>> dumps(InterfaceSpecification())
-    Traceback (most recent call last):
-    ...
-    TypeError: can't pickle InterfaceSpecification objects
-    >>> dumps(InterfaceSpecification(), 2)
-    Traceback (most recent call last):
-    ...
-    TypeError: can't pickle InterfaceSpecification objects
-    
-    """
-
 def test_pickle_provides_specs():
     """
     >>> from pickle import dumps, loads
     >>> a = A()
-    >>> int(I2.isImplementedBy(a))
+    >>> I2.providedBy(a)
     0
     >>> directlyProvides(a, I2)
-    >>> int(I2.isImplementedBy(a))
+    >>> I2.providedBy(a)
     1
     >>> a2 = loads(dumps(a))
-    >>> int(I2.isImplementedBy(a2))
+    >>> I2.providedBy(a2)
     1
     
     """
 
-def test_pickle_implements_specs():
+def test_that_we_dont_inherit_class_provides():
     """
-    >>> from pickle import dumps, loads
-    >>> class A:
-    ...   implements(I1)
-    >>> class B(A):
-    ...   implements(I2)
-    >>> names =  [i.getName() for i in implementedBy(B)]
-    >>> names
-    ['I2', 'I1']
-    >>> old = B.__dict__['__implements__']
-    >>> new = loads(dumps(old))
-    >>> names =  [i.getName() for i in new]
-    >>> names
-    ['I2']
-    >>> classImplements(A, I3)
-    >>> B.__implements__ = new
-    >>> names =  [i.getName() for i in implementedBy(B)]
-    >>> names
-    ['I2', 'I1', 'I3']
+    >>> class X:
+    ...     classProvides(I1)
+    >>> class Y(X):
+    ...     pass
+    >>> [i.__name__ for i in X.__provides__]
+    ['I1']
+    >>> Y.__provides__
+    Traceback (most recent call last):
+    ...
+    AttributeError: __provides__
     
     """
 
-def test_pickle_only_specs():
+def test_that_we_dont_inherit_provides_optimizations():
     """
-    >>> from pickle import dumps, loads
+
+    When we make a declaration for a class, we install a __provides__
+    descriptors that provides a default for instances that don't have
+    instance-specific declarations:
+    
     >>> class A:
-    ...   implements(I1)
-    >>> class B(A):
-    ...   implementsOnly(I2)
-    >>> names =  [i.getName() for i in implementedBy(B)]
-    >>> names
+    ...     implements(I1)
+
+    >>> class B:
+    ...     implements(I2)
+
+    >>> [i.__name__ for i in A().__provides__]
+    ['I1']
+    >>> [i.__name__ for i in B().__provides__]
     ['I2']
-    >>> old = B.__dict__['__implements__']
-    >>> new = loads(dumps(old))
-    >>> names =  [i.getName() for i in new]
-    >>> names
-    ['I2']
-    >>> classImplements(A, I3)
-    >>> B.__implements__ = new
-    >>> names =  [i.getName() for i in implementedBy(B)]
-    >>> names
-    ['I2']
+
+    But it's important that we don't use this for subclasses without
+    declarations.  This would cause incorrect results:
+
+    >>> class X(A, B):
+    ...     pass
+
+    >>> X().__provides__
+    Traceback (most recent call last):
+    ...
+    AttributeError: __provides__
+
+    However, if we "induce" a declaration, by calling implementedBy
+    (even indirectly through providedBy):
+
+    >>> [i.__name__ for i in providedBy(X())]
+    ['I1', 'I2']
+
+
+    then the optimization will work:
+    
+    >>> [i.__name__ for i in X().__provides__]
+    ['I1', 'I2']
     
     """
 
+def test_classProvides_before_implements():
+    """Special descriptor for class __provides__
+
+    The descriptor caches the implementedBy info, so that
+    we can get declarations for objects without instance-specific
+    interfaces a bit quicker.
+
+        For example::
+
+          >>> from zope.interface import Interface
+          >>> class IFooFactory(Interface):
+          ...     pass
+          >>> class IFoo(Interface):
+          ...     pass
+          >>> class C:
+          ...     classProvides(IFooFactory)
+          ...     implements(IFoo)
+          >>> [i.getName() for i in C.__provides__]
+          ['IFooFactory']
+
+          >>> [i.getName() for i in C().__provides__]
+          ['IFoo']
+    """
 
 def test_suite():
     suite = unittest.TestSuite()

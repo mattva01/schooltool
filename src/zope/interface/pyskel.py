@@ -20,12 +20,12 @@ Usage: python pyskel.py dotted_name
 Example:
 
     cd lib/python
-    python zope/interface/pyskel.py zope.app.interfaces..security.IRoleService
+    python zope/interface/pyskel.py zope.app.interfaces.pigs.IPigService
 
 The dotted name is the module name and interface object name connected
 with a dot.
 
-Revision information: $Id: pyskel.py,v 1.4 2003/08/16 00:44:44 srichter Exp $
+Revision information: $Id: pyskel.py,v 1.5 2004/01/14 22:55:30 chrism Exp $
 """
 
 import sys, os, re

@@ -11,8 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Generic expat-based XML parser base class.
+"""Generic Expat-based XML parser base class.
+
+This creates a parser with namespace processing enabled.
 """
 
 import logging
@@ -46,7 +47,7 @@ class XMLParser:
         ]
 
     def __init__(self, encoding=None):
-        self.parser = p = self.createParser()
+        self.parser = p = self.createParser(encoding)
         if self.ordered_attributes:
             try:
                 self.parser.ordered_attributes = self.ordered_attributes

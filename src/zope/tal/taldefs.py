@@ -15,6 +15,7 @@
 Common definitions used by TAL and METAL compilation an transformation.
 """
 
+import re
 from zope.tal.interfaces import ITALExpressionErrorInfo
 from zope.interface import implements
 
@@ -107,10 +108,8 @@ class ErrorInfo:
         self.offset = position[1]
 
 
-import re
 _attr_re = re.compile(r"\s*([^\s]+)\s+([^\s].*)\Z", re.S)
 _subst_re = re.compile(r"\s*(?:(text|structure)\s+)?(.*)\Z", re.S)
-del re
 
 def parseAttributeReplacements(arg, xml):
     dict = {}
@@ -166,13 +165,11 @@ def getProgramVersion(program):
             return version
     return None
 
-import re
 _ent1_re = re.compile('&(?![A-Z#])', re.I)
 _entch_re = re.compile('&([A-Z][A-Z0-9]*)(?![A-Z0-9;])', re.I)
 _entn1_re = re.compile('&#(?![0-9X])', re.I)
 _entnx_re = re.compile('&(#X[A-F0-9]*)(?![A-F0-9;])', re.I)
 _entnd_re = re.compile('&(#[0-9][0-9]*)(?![0-9;])')
-del re
 
 def attrEscape(s):
     """Replace special characters '&<>' by character entities,

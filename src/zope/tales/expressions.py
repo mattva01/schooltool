@@ -13,15 +13,17 @@
 ##############################################################################
 """Basic Page Template expression types.
 
-$Id: expressions.py,v 1.5 2003/06/20 06:41:28 stevea Exp $
+$Id: expressions.py,v 1.9 2004/03/05 22:09:42 jim Exp $
 """
-__metaclass__ = type # All classes are new style when run with Python 2.2+
-
 import re
 from types import StringTypes, TupleType
 
+from zope.interface import implements
 from zope.tales.tales import CompilerError
 from zope.tales.tales import _valid_name, _parse_expr, NAME_RE, Undefined 
+from zope.tales.interfaces import ITALESExpression, ITALESFunctionNamespace
+
+__metaclass__ = type
 
 Undefs = (Undefined, AttributeError, KeyError, TypeError, IndexError)
 
@@ -44,6 +46,7 @@ def simpleTraverse(object, path_items, econtext):
 
 
 class SubPathExpr:
+
     def __init__(self, path, traverser, engine):
         self._traverser = traverser
         self._engine = engine
@@ -98,7 +101,7 @@ class SubPathExpr:
             raise CompilerError(
                 'Dynamic name specified in first subpath element')
 
-        if not _valid_name(base):
+        if base and not _valid_name(base):
             raise CompilerError, 'Invalid variable name "%s"' % element
         self._base = base
         compiledpath[0]=first[1:]
@@ -111,7 +114,7 @@ class SubPathExpr:
         compiled_path = self._compiled_path
 
         base = self._base
-        if base == 'CONTEXTS':  # Special base name
+        if base == 'CONTEXTS' or not base:  # Special base name
             ob = econtext.contexts
         else:
             ob = vars[base]
@@ -130,6 +133,9 @@ class SubPathExpr:
                 ob = self._traverser(ob, val, econtext)
             elif callable(element):
                 ob = element(ob)
+                # XXX: Once we have n-ary adapters, use them.
+                if ITALESFunctionNamespace.providedBy(ob):
+                    ob.setEngine(econtext)
             else:
                 raise "Waagh!"
         return ob
@@ -137,8 +143,8 @@ class SubPathExpr:
 
 
 class PathExpr:
-    """One or more subpath expressions, separated by '|'.
-    """
+    """One or more subpath expressions, separated by '|'."""
+    implements(ITALESExpression)
 
     # _default_type_names contains the expression type names this
     # class is usually registered for.
@@ -211,6 +217,8 @@ class PathExpr:
 _interp = re.compile(r'\$(%(n)s)|\${(%(n)s(?:/[^}]*)*)}' % {'n': NAME_RE})
 
 class StringExpr:
+    implements(ITALESExpression)
+
     def __init__(self, name, expr, engine):
         self._s = expr
         if '%' in expr:
@@ -252,6 +260,8 @@ class StringExpr:
 
 
 class NotExpr:
+    implements(ITALESExpression)
+
     def __init__(self, name, expr, engine):
         self._s = expr = expr.lstrip()
         self._c = engine.compile(expr)
@@ -276,6 +286,8 @@ class DeferWrapper:
 
 
 class DeferExpr:
+    implements(ITALESExpression)
+
     def __init__(self, name, expr, compiler):
         self._s = expr = expr.lstrip()
         self._c = compiler.compile(expr)
@@ -289,6 +301,7 @@ class DeferExpr:
 
 class SimpleModuleImporter:
     """Minimal module importer with no security."""
+
     def __getitem__(self, module):
         mod = __import__(module)
         path = module.split('.')

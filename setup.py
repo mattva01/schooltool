@@ -66,70 +66,73 @@ else:
 
 from distutils.core import setup, Extension
 
+# Set up dependencies for the BTrees package
 base_btrees_depends = [
-    "src/persistence/persistence.h",
-    "src/persistence/persistenceAPI.h",
-    "src/zodb/btrees/BTreeItemsTemplate.c",
-    "src/zodb/btrees/BTreeModuleTemplate.c",
-    "src/zodb/btrees/BTreeTemplate.c",
-    "src/zodb/btrees/BucketTemplate.c",
-    "src/zodb/btrees/MergeTemplate.c",
-    "src/zodb/btrees/SetOpTemplate.c",
-    "src/zodb/btrees/SetTemplate.c",
-    "src/zodb/btrees/TreeSetTemplate.c",
-    "src/zodb/btrees/sorters.c",
-]
+    "src/persistent/cPersistence.h",
+    "src/BTrees/BTreeItemsTemplate.c",
+    "src/BTrees/BTreeModuleTemplate.c",
+    "src/BTrees/BTreeTemplate.c",
+    "src/BTrees/BucketTemplate.c",
+    "src/BTrees/MergeTemplate.c",
+    "src/BTrees/SetOpTemplate.c",
+    "src/BTrees/SetTemplate.c",
+    "src/BTrees/TreeSetTemplate.c",
+    "src/BTrees/sorters.c",
+    ]
+
+_flavors = {"O": "object", "I": "int"}
+
+KEY_H = "src/BTrees/%skeymacros.h"
+VALUE_H = "src/BTrees/%svaluemacros.h"
+
+include_dirs = ['src']
+
+
+def BTreeExtension(flavor):
+    key = flavor[0]
+    value = flavor[1]
+    name = "BTrees._%sBTree" % flavor
+    sources = ["src/BTrees/_%sBTree.c" % flavor]
+    kwargs = {"include_dirs": ['src/persistent']}
+    if flavor != "fs":
+        kwargs["depends"] = (base_btrees_depends + [KEY_H % _flavors[key],
+                                                    VALUE_H % _flavors[value]])
+    return Extension(name, sources, **kwargs)
+
 
 ext_modules = [
-
-    # zope.interface
-
-    Extension("zope.interface._zope_interface_ospec",
-              ["src/zope/interface/_zope_interface_ospec.c"]),
-
-    # persistence
-
-    Extension("persistence._persistence",
-              ["src/persistence/persistence.c"],
-              depends=["src/persistence/persistence.h",
-                       "src/persistence/persistenceAPI.h"]),
-
-    # zodb
-
-    Extension("zodb._timestamp",
-              ["src/zodb/_timestamp.c"]),
-    Extension("zodb.storage._helper",
-              ["src/zodb/storage/_helper.c"]),
-    Extension("zodb.btrees._zodb_btrees_fsBTree",
-              ["src/zodb/btrees/_zodb_btrees_fsBTree.c"],
-              include_dirs=["src"],
-              depends=base_btrees_depends),
-    Extension("zodb.btrees._zodb_btrees_OOBTree",
-              ["src/zodb/btrees/_zodb_btrees_OOBTree.c"],
-              include_dirs=["src"],
-              depends=base_btrees_depends + ["src/zodb/btrees/objectkeymacros.h",
-                                             "src/zodb/btrees/objectvaluemacros.h"]),
-    Extension("zodb.btrees._zodb_btrees_OIBTree",
-              ["src/zodb/btrees/_zodb_btrees_OIBTree.c"],
-              include_dirs=["src"],
-              depends=base_btrees_depends + ["src/zodb/btrees/objectkeymacros.h",
-                                             "src/zodb/btrees/intvaluemacros.h"]),
-    Extension("zodb.btrees._zodb_btrees_IOBTree",
-              ["src/zodb/btrees/_zodb_btrees_IOBTree.c"],
-              include_dirs=["src"],
-              depends=base_btrees_depends + ["src/zodb/btrees/intkeymacros.h",
-                                             "src/zodb/btrees/objectvaluemacros.h"]),
-    Extension("zodb.btrees._zodb_btrees_IIBTree",
-              ["src/zodb/btrees/_zodb_btrees_IIBTree.c"],
-              include_dirs=["src"],
-              depends=base_btrees_depends + ["src/zodb/btrees/intkeymacros.h",
-                                             "src/zodb/btrees/intvaluemacros.h"]),
-
+    BTreeExtension("OO"),
+    BTreeExtension("IO"),
+    BTreeExtension("OI"),
+    BTreeExtension("II"),
+    BTreeExtension("fs"),
+    Extension(name = 'persistent.cPersistence',
+              include_dirs = ['src/persistent'],
+              sources= ['src/persistent/cPersistence.c',
+                        'src/persistent/ring.c'],
+              depends = ['src/persistent/cPersistence.h',
+                         'src/persistent/ring.h',
+                         'src/persistent/ring.c']
+              ),
+    Extension(name = 'persistent.cPickleCache',
+              include_dirs = ['src/persistent'],
+              sources= ['src/persistent/cPickleCache.c',
+                        'src/persistent/ring.c'],
+               depends = ['src/persistent/cPersistence.h',
+                         'src/persistent/ring.h',
+                         'src/persistent/ring.c']
+              ),
+    Extension(name = 'persistent.TimeStamp',
+              include_dirs = ['src/persistent'],
+              sources= ['src/persistent/TimeStamp.c']
+              ),
+    Extension(name = 'ZODB.winlock',
+              include_dirs = ['src/persistent'],
+              sources = ['src/ZODB/winlock.c']
+              ),
+    Extension("zope.interface._zope_interface_coptimizations",
+              ["src/zope/interface/_zope_interface_coptimizations.c"]),
 ]
-
-if sys.platform == "win32":
-    ext_modules.append(Extension("zodb.winlock", ["src/zodb/winlock.c"]))
-
 
 setup(name="schooltool",
       version="0.0.1pre",

@@ -13,9 +13,8 @@
 ##############################################################################
 """Code generator for TALInterpreter intermediate code.
 
-$Id: talgenerator.py,v 1.12 2003/08/21 14:19:29 srichter Exp $
+$Id: talgenerator.py,v 1.14 2004/03/08 23:33:58 srichter Exp $
 """
-
 import cgi
 import re
 
@@ -340,7 +339,7 @@ class TALGenerator:
         m = _name_rx.match(varname)
         if m is None or m.group() != varname:
             raise TALError("illegal i18n:name: %r" % varname, self.position)
-        key = cexpr = None
+        cexpr = None
         program = self.popProgram()
         if action == I18N_REPLACE:
             # This is a tag with an i18n:name and a tal:replace (implicit or

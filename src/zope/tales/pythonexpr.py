@@ -11,9 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Generic Python Expression Handler"""
+"""Generic Python Expression Handler
 
-__version__ = '$Revision: 1.1 $'[11:-2]
+$Id: pythonexpr.py,v 1.2 2004/03/21 16:55:50 philikon Exp $
+"""
 
 class PythonExpr:
     def __init__(self, name, expr, engine):

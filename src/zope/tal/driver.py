@@ -47,12 +47,12 @@ if __name__ == "__main__":
 # Import local classes
 import zope.tal.taldefs
 from zope.tal.dummyengine import DummyEngine
-from zope.tal.dummyengine import DummyTranslationService
+from zope.tal.dummyengine import DummyTranslationDomain
 
 FILE = "tests/input/test01.xml"
 
-class TestTranslations(DummyTranslationService):
-    def translate(self, msgid, domain=None, mapping=None, context=None,
+class TestTranslations(DummyTranslationDomain):
+    def translate(self, msgid, mapping=None, context=None,
                   target_language=None, default=None):
         if msgid == 'timefmt':
             return '%(minutes)s minutes after %(hours)s %(ampm)s' % mapping
@@ -65,15 +65,15 @@ class TestTranslations(DummyTranslationService):
             return 'mailto:bperson@dom.ain'
         elif msgid == 'origin':
             return '%(name)s was born in %(country)s' % mapping
-        return DummyTranslationService.translate(
-            self, msgid, domain, mapping, context,
+        return DummyTranslationDomain.translate(
+            self, msgid, mapping, context,
             target_language, default=default)
 
 
 class TestEngine(DummyEngine):
     def __init__(self, macros=None):
         DummyEngine.__init__(self, macros)
-        self.translationService = TestTranslations()
+        self.translationDomain = TestTranslations()
 
     def evaluatePathOrVar(self, expr):
         if expr == 'here/currentTime':
@@ -103,7 +103,6 @@ ENGINES = {'test23.html': TestEngine,
            }
 
 def usage(code, msg=''):
-    # Python 2.1 required
     print >> sys.stderr, __doc__
     if msg:
         print >> sys.stderr, msg

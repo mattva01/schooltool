@@ -21,6 +21,7 @@ import urllib2
 import ZConfig
 import ZConfig.cfgparser
 import ZConfig.datatypes
+import ZConfig.info
 import ZConfig.matcher
 import ZConfig.schema
 import ZConfig.url
@@ -83,10 +84,13 @@ class BaseLoader:
     # utilities
 
     def loadResource(self, resource):
-        raise NotImpementedError(
+        raise NotImplementedError(
             "BaseLoader.loadResource() must be overridden by a subclass")
 
     def openResource(self, url):
+        # ConfigurationError exceptions raised here should be
+        # str()able to generate a message for an end user.
+        #
         # XXX This should be replaced to use a local cache for remote
         # resources.  The policy needs to support both re-retrieve on
         # change and provide the cached resource when the remote
@@ -94,23 +98,48 @@ class BaseLoader:
         url = str(url)
         try:
             file = urllib2.urlopen(url)
+        except urllib2.URLError, e:
+            # urllib2.URLError has a particularly hostile str(), so we
+            # generally don't want to pass it along to the user.
+            self._raise_open_error(url, e.reason)
         except (IOError, OSError), e:
             # Python 2.1 raises a different error from Python 2.2+,
             # so we catch both to make sure we detect the situation.
-            error = ZConfig.ConfigurationError("error opening resource %s: %s"
-                                               % (url, str(e)))
-            error.url = url
-            raise error
+            self._raise_open_error(url, str(e))
         return self.createResource(file, url)
 
+    def _raise_open_error(self, url, message):
+        if url[:7].lower() == "file://":
+            what = "file"
+            ident = urllib.url2pathname(url[7:])
+        else:
+            what = "URL"
+            ident = url
+        raise ZConfig.ConfigurationError(
+            "error opening %s %s: %s" % (what, ident, message),
+            url)
+
     def normalizeURL(self, url):
-        if os.path.exists(url) or ":" not in url:
+        if self.isPath(url):
             url = "file://" + urllib.pathname2url(os.path.abspath(url))
-        url, fragment = ZConfig.url.urldefrag(url)
+        newurl, fragment = ZConfig.url.urldefrag(url)
         if fragment:
             raise ZConfig.ConfigurationError(
-                "fragment identifiers are not supported")
-        return url
+                "fragment identifiers are not supported",
+                url)
+        return newurl
+
+    def isPath(self, s):
+        """Return True iff 's' should be handled as a filesystem path."""
+        if ":" in s:
+            # XXX This assumes that one-character scheme identifiers
+            # are always Windows drive letters; I don't know of any
+            # one-character scheme identifiers.
+            scheme, rest = urllib.splittype(s)
+            return len(scheme) == 1
+        else:
+            return True
+
 
 
 def _url_from_file(file):
@@ -133,8 +162,7 @@ class SchemaLoader(BaseLoader):
         if resource.url and self._cache.has_key(resource.url):
             schema = self._cache[resource.url]
         else:
-            schema = ZConfig.schema.parseResource(resource,
-                                                  self.registry, self)
+            schema = ZConfig.schema.parseResource(resource, self)
             self._cache[resource.url] = schema
         return schema
 
@@ -145,20 +173,33 @@ class SchemaLoader(BaseLoader):
         if not parts:
             raise ZConfig.SchemaError(
                 "illegal schema component name: " + `package`)
-        if len(filter(None, parts)) != len(parts):
+        if "" in parts:
             # '' somewhere in the package spec; still illegal
             raise ZConfig.SchemaError(
                 "illegal schema component name: " + `package`)
         file = file or "component.xml"
-        for dir in sys.path:
-            dirname = os.path.join(os.path.abspath(dir), *parts)
+        try:
+            __import__(package)
+        except ImportError, e:
+            raise ZConfig.SchemaResourceError(
+                "could not load package %s: %s" % (package, str(e)),
+                filename=file,
+                package=package)
+        pkg = sys.modules[package]
+        if not hasattr(pkg, "__path__"):
+            raise ZConfig.SchemaResourceError(
+                "import name does not refer to a package",
+                filename=file, package=package)
+        for dir in pkg.__path__:
+            dirname = os.path.abspath(dir)
             fn = os.path.join(dirname, file)
             if os.path.exists(fn):
-                break
+                return "file://" + urllib.pathname2url(fn)
         else:
-            raise ZConfig.SchemaError(
-                "schema component not found: " + `package`)
-        return "file://" + urllib.pathname2url(fn)
+            raise ZConfig.SchemaResourceError("schema component not found",
+                                              filename=file,
+                                              package=package,
+                                              path=pkg.__path__)
 
 
 class ConfigLoader(BaseLoader):
@@ -168,6 +209,7 @@ class ConfigLoader(BaseLoader):
                 "cannot check a configuration an abstract type")
         BaseLoader.__init__(self)
         self.schema = schema
+        self._private_schema = False
 
     def loadResource(self, resource):
         sm = self.createSchemaMatcher()
@@ -180,10 +222,7 @@ class ConfigLoader(BaseLoader):
 
     # config parser support API
 
-    def startSection(self, parent, type, name, delegatename):
-        if delegatename:
-            raise NotImpementedError(
-                "section delegation is not yet supported")
+    def startSection(self, parent, type, name):
         t = self.schema.gettype(type)
         if t.isabstract():
             raise ZConfig.ConfigurationError(
@@ -191,10 +230,27 @@ class ConfigLoader(BaseLoader):
                 " found abstract type " + `type`)
         return parent.createChildMatcher(t, name)
 
-    def endSection(self, parent, type, name, delegatename, matcher):
-        assert not delegatename
+    def endSection(self, parent, type, name, matcher):
         sectvalue = matcher.finish()
         parent.addSection(type, name, sectvalue)
+
+    def importSchemaComponent(self, pkgname):
+        schema = self.schema
+        if not self._private_schema:
+            # replace the schema with an extended schema on the first %import
+            self._loader = SchemaLoader(self.schema.registry)
+            schema = ZConfig.info.createDerivedSchema(self.schema)
+            self._private_schema = True
+            self.schema = schema
+        url = self._loader.schemaComponentSource(pkgname, '')
+        if schema.hasComponent(url):
+            return
+        resource = self.openResource(url)
+        schema.addComponent(url)
+        try:
+            ZConfig.schema.parseComponent(resource, self._loader, schema)
+        finally:
+            resource.close()
 
     def includeConfiguration(self, section, url, defines):
         url = self.normalizeURL(url)
@@ -212,8 +268,6 @@ class ConfigLoader(BaseLoader):
 
 
 class CompositeHandler:
-    __metatype__ = type
-    __slots__ = '_handlers', '_convert'
 
     def __init__(self, handlers, schema):
         self._handlers = handlers

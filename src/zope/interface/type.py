@@ -15,10 +15,12 @@
 
 See Adapter class.
 
-$Id: type.py,v 1.10 2003/06/07 06:37:29 stevea Exp $
+$Id: type.py,v 1.12 2004/03/05 22:09:29 jim Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
+import zope.interface
+import types
 from zope.interface import providedBy, implements
 from zope.interface.interfaces import IInterface
 from zope.interface.interfaces import ITypeRegistry
@@ -33,8 +35,7 @@ class TypeRegistry:
 
     # The implementation uses a mapping:
     #
-    #  { (required_interface, provided_interface) ->
-    #                             (registered_provides, component) }
+    #  { (required, provided) -> (registered_provided, component) }
     #
     # Where the registered provides is what was registered and
     # provided may be some base interface
@@ -46,14 +47,17 @@ class TypeRegistry:
         self._reg = data
 
     def register(self, interface, object):
-        if interface is None or IInterface.isImplementedBy(interface):
-            self._reg[interface] = object
-        else:
-            raise TypeError(
-                "The interface argument must be an interface (or None)")
-
+        if not (interface is None or IInterface.providedBy(interface)):
+            if isinstance(interface, (type, types.ClassType)):
+                interface = zope.interface.implementedBy(interface)
+            else:
+                raise TypeError(
+                    "The interface argument must be an interface (or None)")
+        
+        self._reg[interface] = object
+        
     def unregister(self, interface):
-        if interface is None or IInterface.isImplementedBy(interface):
+        if interface is None or IInterface.providedBy(interface):
             if interface in self._reg:
                 del self._reg[interface]
         else:
@@ -96,7 +100,7 @@ class TypeRegistry:
 
         result = []
         for k in self._reg:
-            if k is None or k.extends(interface, strict=False):
+            if k is None or k.extends(interface, False):
                 result.append(k)
         return result
 

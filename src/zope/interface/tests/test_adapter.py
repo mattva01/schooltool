@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001, 2002 Zope Corporation and Contributors.
+# Copyright (c) 2003 Zope Corporation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -11,23 +11,221 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+"""XXX short summary goes here.
+
+$Id: test_adapter.py,v 1.4 2004/03/15 20:41:55 jim Exp $
 """
+import unittest, doctest
+import zope.interface
+from zope.interface.adapter import AdapterRegistry
+import zope.interface
 
-Revision information:
-$Id: test_adapter.py,v 1.2 2002/12/25 14:15:12 jim Exp $
-"""
+class IF0(zope.interface.Interface):
+    pass
+class IF1(IF0):
+    pass
 
-from unittest import TestCase, main, makeSuite
-from zope.interface.tests.iadapter import TestIAdapterRegistry
+class IB0(zope.interface.Interface):
+    pass
+class IB1(IB0):
+    pass
 
-class Test(TestIAdapterRegistry, TestCase):
+class IR0(zope.interface.Interface):
+    pass
+class IR1(IR0):
+    pass
 
-    def _new(self):
-        from zope.interface.adapter import AdapterRegistry
-        return AdapterRegistry()
+def test_multi_adapter_w_default():
+    """
+    >>> registry = AdapterRegistry()
+    
+    >>> registry.register([None, IR0], IB1, 'bob', 'A1')
+
+    >>> registry.lookup((IF1, IR1), IB0, 'bob')
+    'A1'
+    
+    >>> registry.lookup((IF1, IR1), IB0, 'bruce')
+
+    >>> registry.register([None, IR1], IB1, 'bob', 'A2')
+    >>> registry.lookup((IF1, IR1), IB0, 'bob')
+    'A2'
+    """
+
+def test_multi_adapter_w_inherited_and_multiple_registrations():
+    """
+    >>> registry = AdapterRegistry()
+
+    >>> class IX(zope.interface.Interface):
+    ...    pass
+
+    >>> registry.register([IF0, IR0], IB1, 'bob', 'A1')
+    >>> registry.register([IF1, IX], IB1, 'bob', 'AX')
+
+    >>> registry.lookup((IF1, IR1), IB0, 'bob')
+    'A1'
+    """
+
+def test_named_adapter_with_default():
+    """Query a named simple adapter
+
+    >>> registry = AdapterRegistry()
+
+    If we ask for a named adapter, we won't get a result unless there
+    is a named adapter, even if the object implements the interface:
+
+    >>> registry.lookup([IF1], IF0, 'bob')
+
+    >>> registry.register([None], IB1, 'bob', 'A1')
+    >>> registry.lookup([IF1], IB0, 'bob')
+    'A1'
+
+    >>> registry.lookup([IF1], IB0, 'bruce')
+
+    >>> registry.register([None], IB0, 'bob', 'A2')
+    >>> registry.lookup([IF1], IB0, 'bob')
+    'A2'
+    """
+
+def test_multi_adapter_gets_closest_provided():
+    """
+    >>> registry = AdapterRegistry()
+    >>> registry.register([IF1, IR0], IB0, 'bob', 'A1')
+    >>> registry.register((IF1, IR0), IB1, 'bob', 'A2')
+    >>> registry.lookup((IF1, IR1), IB0, 'bob')
+    'A1'
+
+    >>> registry = AdapterRegistry()
+    >>> registry.register([IF1, IR0], IB1, 'bob', 'A2')
+    >>> registry.register([IF1, IR0], IB0, 'bob', 'A1')
+    >>> registry.lookup([IF1, IR0], IB0, 'bob')
+    'A1'
+
+    >>> registry = AdapterRegistry()
+    >>> registry.register([IF1, IR0], IB0, 'bob', 'A1')
+    >>> registry.register([IF1, IR1], IB1, 'bob', 'A2')
+    >>> registry.lookup([IF1, IR1], IB0, 'bob')
+    'A2'
+
+    >>> registry = AdapterRegistry()
+    >>> registry.register([IF1, IR1], IB1, 'bob', 2)
+    >>> registry.register([IF1, IR0], IB0, 'bob', 1)
+    >>> registry.lookup([IF1, IR1], IB0, 'bob')
+    2
+    """
+
+def test_multi_adapter_check_non_default_dont_hide_default():
+    """
+    >>> registry = AdapterRegistry()
+
+    >>> class IX(zope.interface.Interface):
+    ...     pass
+
+    
+    >>> registry.register([None, IR0], IB0, 'bob', 1)
+    >>> registry.register([IF1,   IX], IB0, 'bob', 2)
+    >>> registry.lookup([IF1, IR1], IB0, 'bob')
+    1
+    """
+
+
+def test_getRegisteredMatching_with_with():
+    """
+    >>> registry = AdapterRegistry()
+    >>> registry.register([None], IB0, '', '_0')
+    >>> registry.register([IF0], IB0, '', '00')
+    >>> registry.register([IF1], IB0, '', '10')
+    >>> registry.register([IF1], IB1, '', '11')
+    >>> registry.register((IF0, IR0), IB0, '', '000')
+    >>> registry.register((IF1, IR0), IB0, '', '100')
+    >>> registry.register((IF1, IR0), IB1, '', '110')
+    >>> registry.register((IF0, IR1), IB0, '', '001')
+    >>> registry.register((IF1, IR1), IB0, '', '101')
+    >>> registry.register((IF1, IR1), IB1, '', '111')
+
+    >>> from pprint import PrettyPrinter
+    >>> pprint = PrettyPrinter(width=60).pprint
+    >>> def sorted(x):
+    ...    x = [(getattr(r, '__name__', None), p.__name__,
+    ...          [w.__name__ for w in rwith], n, f)
+    ...         for (r, p, rwith, n, f) in x]
+    ...    x.sort()
+    ...    pprint(x)
+
+    >>> sorted(registry.getRegisteredMatching())
+    [(None, 'IB0', [], u'', '_0'),
+     ('IF0', 'IB0', [], u'', '00'),
+     ('IF0', 'IB0', ['IR0'], u'', '000'),
+     ('IF0', 'IB0', ['IR1'], u'', '001'),
+     ('IF1', 'IB0', [], u'', '10'),
+     ('IF1', 'IB0', ['IR0'], u'', '100'),
+     ('IF1', 'IB0', ['IR1'], u'', '101'),
+     ('IF1', 'IB1', [], u'', '11'),
+     ('IF1', 'IB1', ['IR0'], u'', '110'),
+     ('IF1', 'IB1', ['IR1'], u'', '111')]
+    >>> sorted(registry.getRegisteredMatching(required=[IF0]))
+    [(None, 'IB0', [], u'', '_0'),
+     ('IF0', 'IB0', [], u'', '00'),
+     ('IF0', 'IB0', ['IR0'], u'', '000'),
+     ('IF0', 'IB0', ['IR1'], u'', '001')]
+    >>> sorted(registry.getRegisteredMatching(required=[IF1],
+    ...                                       provided=[IB0]))
+    [(None, 'IB0', [], u'', '_0'),
+     ('IF0', 'IB0', [], u'', '00'),
+     ('IF0', 'IB0', ['IR0'], u'', '000'),
+     ('IF0', 'IB0', ['IR1'], u'', '001'),
+     ('IF1', 'IB0', [], u'', '10'),
+     ('IF1', 'IB0', ['IR0'], u'', '100'),
+     ('IF1', 'IB0', ['IR1'], u'', '101'),
+     ('IF1', 'IB1', [], u'', '11'),
+     ('IF1', 'IB1', ['IR0'], u'', '110'),
+     ('IF1', 'IB1', ['IR1'], u'', '111')]
+    >>> sorted(registry.getRegisteredMatching(required=[IF1],
+    ...                                       provided=[IB0],
+    ...                                       with=[IR0]))
+    [('IF0', 'IB0', ['IR0'], u'', '000'),
+     ('IF1', 'IB0', ['IR0'], u'', '100'),
+     ('IF1', 'IB1', ['IR0'], u'', '110')]
+    >>> sorted(registry.getRegisteredMatching(required=[IF1],
+    ...                                       provided=[IB0],
+    ...                                       with=[IR1]))
+    [('IF0', 'IB0', ['IR0'], u'', '000'),
+     ('IF0', 'IB0', ['IR1'], u'', '001'),
+     ('IF1', 'IB0', ['IR0'], u'', '100'),
+     ('IF1', 'IB0', ['IR1'], u'', '101'),
+     ('IF1', 'IB1', ['IR0'], u'', '110'),
+     ('IF1', 'IB1', ['IR1'], u'', '111')]
+    """
+
+
+
+def DocFileSuite(*paths):
+    # It's not entirely obvious how to connection this single string
+    # with unittest.  For now, re-use the _utest() function that comes
+    # standard with doctest in Python 2.3.  One problem is that the
+    # error indicator doesn't point to the line of the doctest file
+    # that failed.
+    import os, doctest, new
+    t = doctest.Tester(globs={})
+    suite = unittest.TestSuite()
+    dir = os.path.split(__file__)[0]
+    for path in paths:
+        path = os.path.join(dir, path)
+        source = open(path).read()
+        def runit(path=path, source=source):
+            doctest._utest(t, path, source, path, 0)
+        runit = new.function(runit.func_code, runit.func_globals, path,
+                             runit.func_defaults, runit.func_closure)
+        f = unittest.FunctionTestCase(runit,
+                                      description="doctest from %s" % path)
+        suite.addTest(f)
+    return suite
+
 
 def test_suite():
-    return makeSuite(Test)
+    return unittest.TestSuite((
+        DocFileSuite('../adapter.txt', 'foodforthought.txt'),
+        doctest.DocTestSuite('zope.interface.adapter'),
+        doctest.DocTestSuite(),
+        ))
 
-if __name__=='__main__':
-    main(defaultTest='test_suite')
+if __name__ == '__main__': unittest.main()

@@ -38,10 +38,15 @@ except NameError:
         return d
 
 
-def parseResource(resource, registry, loader):
-    parser = SchemaParser(registry, loader, resource.url)
+def parseResource(resource, loader):
+    parser = SchemaParser(loader, resource.url)
     xml.sax.parse(resource.file, parser)
     return parser._schema
+
+
+def parseComponent(resource, loader, schema):
+    parser = ComponentParser(loader, resource.url, schema)
+    xml.sax.parse(resource.file, parser)
 
 
 def _srepr(ob):
@@ -64,7 +69,7 @@ class BaseParser(xml.sax.ContentHandler):
                         "schema", "component", "extension"],
         "example": ["key", "section", "multikey", "multisection"],
         "metadefault": ["key", "section", "multikey", "multisection"],
-        "default": ["multikey"],
+        "default": ["key", "multikey"],
         "import": ["schema", "component", "extension"],
         "abstracttype": ["schema", "component", "extension"],
         "sectiontype": ["schema", "component", "extension"],
@@ -74,18 +79,17 @@ class BaseParser(xml.sax.ContentHandler):
         "multisection": ["schema", "sectiontype"],
         }
 
-    def __init__(self, registry, loader, url):
-        self._registry = registry
+    def __init__(self, loader, url):
+        self._registry = loader.registry
         self._loader = loader
-        self._basic_key = registry.get("basic-key")
-        self._identifier = registry.get("identifier")
+        self._basic_key = self._registry.get("basic-key")
+        self._identifier = self._registry.get("identifier")
         self._cdata = None
         self._locator = None
         self._prefixes = []
         self._schema = None
         self._stack = []
         self._url = url
-        self._components = {}
         self._elem_stack = []
 
     # SAX 2 ContentHandler methods
@@ -120,6 +124,7 @@ class BaseParser(xml.sax.ContentHandler):
                 self.error(name + " element improperly nested")
             self._cdata = []
             self._position = None
+            self._attrs = attrs
 
     def characters(self, data):
         if self._cdata is not None:
@@ -163,11 +168,17 @@ class BaseParser(xml.sax.ContentHandler):
     def push_prefix(self, attrs):
         name = attrs.get("prefix")
         if name:
-            name = str(name)
-            if name.startswith(".") and self._prefixes:
+            if self._prefixes:
+                convert = self._registry.get("dotted-suffix")
+            else:
+                convert = self._registry.get("dotted-name")
+            try:
+                name = convert(name)
+            except ValueError, err:
+                self.error("not a valid prefix: %s (%s)"
+                           % (_srepr(name), str(err)))
+            if name[0] == ".":
                 prefix = self._prefixes[-1] + name
-            elif name.startswith("."):
-                self.error("prefix may not begin with '.'")
             else:
                 prefix = name
         elif self._prefixes:
@@ -186,10 +197,13 @@ class BaseParser(xml.sax.ContentHandler):
         else:
             return name
 
-    def get_datatype(self, attrs, attrkey, default):
+    def get_datatype(self, attrs, attrkey, default, base=None):
         if attrs.has_key(attrkey):
             dtname = self.get_classname(attrs[attrkey])
         else:
+            convert = getattr(base, attrkey, None)
+            if convert is not None:
+                return convert
             dtname = default
 
         try:
@@ -197,10 +211,10 @@ class BaseParser(xml.sax.ContentHandler):
         except ValueError, e:
             self.error(e[0])
 
-    def get_sect_typeinfo(self, attrs):
-        keytype = self.get_datatype(attrs, "keytype", "basic-key")
+    def get_sect_typeinfo(self, attrs, base=None):
+        keytype = self.get_datatype(attrs, "keytype", "basic-key", base)
         valuetype = self.get_datatype(attrs, "valuetype", "string")
-        datatype = self.get_datatype(attrs, "datatype", "null")
+        datatype = self.get_datatype(attrs, "datatype", "null", base)
         return keytype, valuetype, datatype
 
     def get_required(self, attrs):
@@ -266,9 +280,13 @@ class BaseParser(xml.sax.ContentHandler):
     # schema loading logic
 
     def characters_default(self, data):
-        self._stack[-1].adddefault(data, self._position)
+        key = self._attrs.get("key")
+        self._stack[-1].adddefault(data, self._position, key)
 
     def characters_description(self, data):
+        if self._stack[-1].description is not None:
+            self.error(
+                "at most one <description> may be used for each element")
         self._stack[-1].description = data
 
     def characters_example(self, data):
@@ -299,16 +317,15 @@ class BaseParser(xml.sax.ContentHandler):
         else:
             if os.path.dirname(file):
                 self.error("file may not include a directory part")
+            pkg = self.get_classname(pkg)
             src = self._loader.schemaComponentSource(pkg, file)
-            if not self._components.has_key(src):
-                self._components[pkg] = src
+            if not self._schema.hasComponent(src):
+                self._schema.addComponent(src)
                 self.loadComponent(src)
 
     def loadComponent(self, src):
         r = self._loader.openResource(src)
-        parser = ComponentParser(self._registry, self._loader, src,
-                                 self._schema)
-        parser._components = self._components
+        parser = ComponentParser(self._loader, src, self._schema)
         try:
             xml.sax.parse(r.file, parser)
         finally:
@@ -323,22 +340,18 @@ class BaseParser(xml.sax.ContentHandler):
             self.error("sectiontype name must not be omitted or empty")
         name = self.basic_key(name)
         self.push_prefix(attrs)
-        keytype, valuetype, datatype = self.get_sect_typeinfo(attrs)
         if attrs.has_key("extends"):
             basename = self.basic_key(attrs["extends"])
             base = self._schema.gettype(basename)
-            if not self._localtypes.has_key(basename):
-                self.error("cannot extend type derived outside component")
             if base.isabstract():
                 self.error("sectiontype cannot extend an abstract type")
-            if attrs.has_key("keytype"):
-                self.error("derived sectiontype may not specify a keytype")
+            keytype, valuetype, datatype = self.get_sect_typeinfo(attrs, base)
             sectinfo = self._schema.deriveSectionType(
-                base, name, valuetype, datatype)
+                base, name, keytype, valuetype, datatype)
         else:
+            keytype, valuetype, datatype = self.get_sect_typeinfo(attrs)
             sectinfo = self._schema.createSectionType(
                 name, keytype, valuetype, datatype)
-        self._localtypes[name] = sectinfo
         if attrs.has_key("implements"):
             ifname = self.basic_key(attrs["implements"])
             interface = self._schema.gettype(ifname)
@@ -404,12 +417,15 @@ class BaseParser(xml.sax.ContentHandler):
                 self.error("required key cannot have a default value")
             key.adddefault(str(attrs["default"]).strip(),
                            self.get_position())
-        key.finish()
+        if name != "+":
+            key.finish()
         self._stack[-1].addkey(key)
         self._stack.append(key)
 
     def end_key(self):
-        self._stack.pop()
+        key = self._stack.pop()
+        if key.name == "+":
+            key.finish()
 
     def start_multikey(self, attrs):
         if attrs.has_key("default"):
@@ -458,14 +474,75 @@ class SchemaParser(BaseParser):
     _handled_tags = BaseParser._handled_tags + ("schema",)
     _top_level = "schema"
 
+    def __init__(self, loader, url, extending_parser=None):
+        BaseParser.__init__(self, loader, url)
+        self._extending_parser = extending_parser
+        self._base_keytypes = []
+        self._base_datatypes = []
+
     def start_schema(self, attrs):
         self.push_prefix(attrs)
         handler = self.get_handler(attrs)
         keytype, valuetype, datatype = self.get_sect_typeinfo(attrs)
-        self._schema = info.SchemaType(keytype, valuetype, datatype,
-                                       handler, self._url, self._registry)
-        self._localtypes = self._schema._types
+
+        if self._extending_parser is None:
+            # We're not being inherited, so we need to create the schema
+            self._schema = info.SchemaType(keytype, valuetype, datatype,
+                                           handler, self._url, self._registry)
+        else:
+            # Parse into the extending ("subclass") parser's schema
+            self._schema = self._extending_parser._schema
+
         self._stack = [self._schema]
+
+        if attrs.has_key("extends"):
+            sources = attrs["extends"].split()
+            sources.reverse()
+
+            for src in sources:
+                src = url.urljoin(self._url, src)
+                src, fragment = url.urldefrag(src)
+                if fragment:
+                    self.error("schema extends many not include"
+                               " a fragment identifier")
+                self.extendSchema(src)
+
+            # Inherit keytype from bases, if unspecified and not conflicting
+            if self._base_keytypes and not attrs.has_key("keytype"):
+                keytype = self._base_keytypes[0]
+                for kt in self._base_keytypes[1:]:
+                    if kt is not keytype:
+                        self.error("base schemas have conflicting keytypes,"
+                                   " but no keytype was specified in the"
+                                   " extending schema")
+
+            # Inherit datatype from bases, if unspecified and not conflicting
+            if self._base_datatypes and not attrs.has_key("datatype"):
+                datatype = self._base_datatypes[0]
+                for dt in self._base_datatypes[1:]:
+                    if dt is not datatype:
+                        self.error("base schemas have conflicting datatypes,"
+                                   " but no datatype was specified in the"
+                                   " extending schema")
+
+        # Reset the schema types to our own, while we parse the schema body
+        self._schema.keytype = keytype
+        self._schema.valuetype = valuetype
+        self._schema.datatype = datatype
+
+        # Update base key/datatypes for the "extending" parser
+        if self._extending_parser is not None:
+            self._extending_parser._base_keytypes.append(keytype)
+            self._extending_parser._base_datatypes.append(datatype)
+
+
+    def extendSchema(self,src):
+        parser = SchemaParser(self._loader, src, self)
+        r = self._loader.openResource(src)
+        try:
+            xml.sax.parse(r.file, parser)
+        finally:
+            r.close()
 
     def end_schema(self):
         del self._stack[-1]
@@ -474,12 +551,13 @@ class SchemaParser(BaseParser):
         assert not self._prefixes
 
 
+class ComponentParser(BaseParser):
 
-class BaseComponentParser(BaseParser):
+    _handled_tags = BaseParser._handled_tags + ("component",)
+    _top_level = "component"
 
-    def __init__(self, registry, loader, url, schema, localtypes):
-        BaseParser.__init__(self, registry, loader, url)
-        self._localtypes = localtypes
+    def __init__(self, loader, url, schema):
+        BaseParser.__init__(self, loader, url)
         self._parent = schema
 
     def characters_description(self, data):
@@ -502,23 +580,14 @@ class BaseComponentParser(BaseParser):
         self._check_not_toplevel("multisection")
         BaseParser.start_multisection(self, attrs)
 
-    def _check_not_toplevel(self, what):
-        if not self._stack:
-            self.error("cannot define top-level %s in a schema %s"
-                       % (what, self._top_level))
-
-
-class ComponentParser(BaseComponentParser):
-
-    _handled_tags = BaseComponentParser._handled_tags + ("component",)
-    _top_level = "component"
-
-    def __init__(self, registry, loader, url, schema):
-        BaseComponentParser.__init__(self, registry, loader, url, schema, {})
-
     def start_component(self, attrs):
         self._schema = self._parent
         self.push_prefix(attrs)
 
     def end_component(self):
         self.pop_prefix()
+
+    def _check_not_toplevel(self, what):
+        if not self._stack:
+            self.error("cannot define top-level %s in a schema %s"
+                       % (what, self._top_level))

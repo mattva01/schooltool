@@ -28,7 +28,7 @@ try:
 except IOError:
     try:
         # If we can import ZODB, our sys.path is set up well enough already
-        import zodb
+        import ZODB
     except ImportError:
         raise IOError("Can't find ZODB package.  Please edit %s to point to "
                       "your Zope's lib/python directory" % path)
@@ -41,4 +41,4 @@ else:
                 if dir not in sys.path:
                     sys.path.append(dir)
         # Must import this first to initialize Persistence properly
-        import zodb
+        import ZODB

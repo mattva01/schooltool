@@ -17,8 +17,13 @@
   <key name="false-var-2" datatype="boolean" />
   <key name="false-var-3" datatype="boolean" />
 
-  <key name="list-1" />
-  <key name="list-2" />
-  <key name="list-3" />
-  <key name="list-4" />
+  <key name="list-1" datatype="string-list" />
+  <key name="list-2" datatype="string-list" />
+  <key name="list-3" datatype="string-list" />
+  <key name="list-4" datatype="string-list" />
+
+  <!-- added by include.conf -->
+  <key name="var2" />
+  <key name="var3" />
+  <key name="var4" />
 </schema>

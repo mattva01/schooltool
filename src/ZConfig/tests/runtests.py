@@ -23,23 +23,40 @@ if __name__ == "__main__":
 
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
 
-TOPDIR = os.path.dirname(os.path.dirname(TESTDIR))
+PKGDIR = os.path.dirname(TESTDIR) # the ZConfig package directory
+TOPDIR = os.path.dirname(PKGDIR)
 
-if TOPDIR not in sys.path:
-    sys.path.insert(0, TOPDIR)
+COMPONENTS = os.path.join(PKGDIR, "components")
 
-def load_tests(name):
-    name = "ZConfig.tests." + name
+TESTDIRS = {
+    "ZConfig.tests": TESTDIR,
+    "ZConfig.components.basic.tests": os.path.join(COMPONENTS,
+                                                   "basic", "tests"),
+    }
+
+try:
+    import logging
+except ImportError:
+    print >>sys.stderr, \
+          "'logging' not available; skipping logger component tests"
+else:
+    TESTDIRS["ZConfig.components.logger.tests"] = os.path.join(
+        COMPONENTS, "logger", "tests")
+
+
+def load_tests(pkgname, name):
+    name = "%s.%s" % (pkgname, name)
     __import__(name)
     mod = sys.modules[name]
     return mod.test_suite()
 
 def test_suite():
     L = []
-    for fn in os.listdir(TESTDIR):
-        name, ext = os.path.splitext(fn)
-        if name[:4] == "test" and ext == ".py":
-            L.append(load_tests(name))
+    for pkgname, path in TESTDIRS.items():
+        for fn in os.listdir(path):
+            name, ext = os.path.splitext(fn)
+            if name[:4] == "test" and ext == ".py":
+                L.append(load_tests(pkgname, name))
     if len(L) == 1:
         return L[0]
     else:
@@ -49,4 +66,6 @@ def test_suite():
         return suite
 
 if __name__ == "__main__":
+    if TOPDIR not in sys.path:
+        sys.path.insert(0, TOPDIR)
     unittest.main(defaultTest="test_suite")

@@ -40,9 +40,9 @@ def _verify(iface, candidate, tentative=0, vtype=None):
     """
 
     if vtype == 'c':
-        tester = iface.isImplementedByInstancesOf
+        tester = iface.implementedBy
     else:
-        tester = iface.isImplementedBy
+        tester = iface.providedBy
 
     if not tentative and not tester(candidate):
         raise DoesNotImplement(iface)
@@ -73,7 +73,7 @@ def _verify(iface, candidate, tentative=0, vtype=None):
         if mess:
             raise BrokenMethodImplementation(n, mess)
 
-    return 1
+    return True
 
 def verifyClass(iface, candidate, tentative=0):
     return _verify(iface, candidate, tentative, vtype='c')

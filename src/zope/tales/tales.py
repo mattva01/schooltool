@@ -14,10 +14,10 @@
 """TALES
 
 An implementation of a TAL expression engine
+
+$Id: tales.py,v 1.17 2004/03/23 19:18:17 srichter Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
-
-__version__ = '$Revision: 1.13 $'[11:-2]
 
 import re
 
@@ -83,7 +83,18 @@ class Iterator(object):
         An iterator works as well:
 
         >>> it = Iterator('foo', {"apple":1, "pear":1, "orange":1}, context)
+        >>> it.next()
+        True
+        
         >>> it = Iterator('foo', {}, context)
+        >>> it.next()
+        False
+
+        >>> it = Iterator('foo', iter((1, 2, 3)), context)
+        >>> it.next()
+        True
+        >>> it.next()
+        True
 
         """
 
@@ -99,64 +110,64 @@ class Iterator(object):
         try:
             self._next = i.next()
         except StopIteration:
-            self._done = 1
+            self._done = True
         else:
-            self._done = 0
+            self._done = False
 
     def next(self):
         """Advance the iterator, if possible.
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
+        >>> bool(it.next())
+        True
         >>> context.vars['foo']
         'apple'
-        >>> int(bool(it.next()))
-        1
+        >>> bool(it.next())
+        True
         >>> context.vars['foo']
         'pear'
-        >>> int(bool(it.next()))
-        1
+        >>> bool(it.next())
+        True
         >>> context.vars['foo']
         'orange'
-        >>> int(bool(it.next()))
-        0
+        >>> bool(it.next())
+        False
 
         >>> it = Iterator('foo', {"apple":1, "pear":1, "orange":1}, context)
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.next()))
-        0
+        >>> bool(it.next())
+        True
+        >>> bool(it.next())
+        True
+        >>> bool(it.next())
+        True
+        >>> bool(it.next())
+        False
 
         >>> it = Iterator('foo', (), context)
-        >>> int(bool(it.next()))
-        0
+        >>> bool(it.next())
+        False
 
         >>> it = Iterator('foo', {}, context)
-        >>> int(bool(it.next()))
-        0
+        >>> bool(it.next())
+        False
 
 
         If we can advance, set a local variable to the new value.
         """
         # Note that these are *NOT* Python iterators!
         if self._done:
-            return 0
+            return False
         self._item = v = self._next
         try:
             self._next = self._iter.next()
         except StopIteration:
-            self._done = 1
-            self._last = 1
+            self._done = True
+            self._last = True
 
         self._nextIndex += 1
         self._setLocal(self._name, v)
-        return 1
+        return True
 
     def index(self):
         """Get the iterator index
@@ -206,18 +217,18 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.even()))
-        0
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.even()))
-        1
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.even()))
-        0
+        >>> it.next()
+        True
+        >>> it.even()
+        False
+        >>> it.next()
+        True
+        >>> it.even()
+        True
+        >>> it.next()
+        True
+        >>> it.even()
+        False
         """
         return not (self._nextIndex % 2)
 
@@ -226,36 +237,58 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.odd()))
-        1
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.odd()))
-        0
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.odd()))
-        1
+        >>> it.next()
+        True
+        >>> it.odd()
+        True
+        >>> it.next()
+        True
+        >>> it.odd()
+        False
+        >>> it.next()
+        True
+        >>> it.odd()
+        True
         """
-        return self._nextIndex % 2
+        return bool(self._nextIndex % 2)
+
+    def parity(self):
+        """Return 'odd' or 'even' depending on the position's parity
+
+        >>> context = Context(ExpressionEngine(), {})
+        >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
+        >>> it.next()
+        True
+        >>> it.parity()
+        'odd'
+        >>> it.next()
+        True
+        >>> it.parity()
+        'even'
+        >>> it.next()
+        True
+        >>> it.parity()
+        'odd'
+        """
+        if self._nextIndex % 2:
+            return 'odd'
+        return 'even'
 
     def letter(self, base=ord('a'), radix=26):
         """Get the iterator position as a lower-case letter
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.letter()
         'a'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.letter()
         'b'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.letter()
         'c'
         """
@@ -273,16 +306,16 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.Letter()
         'A'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.Letter()
         'B'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.Letter()
         'C'
         """
@@ -296,16 +329,16 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.Roman()
         'I'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.Roman()
         'II'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.Roman()
         'III'
         """
@@ -321,16 +354,16 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.roman()
         'i'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.roman()
         'ii'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.roman()
         'iii'
         """
@@ -341,27 +374,26 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.start()))
-        1
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.start()))
-        0
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.start()))
-        0
+        >>> it.next()
+        True
+        >>> it.start()
+        True
+        >>> it.next()
+        True
+        >>> it.start()
+        False
+        >>> it.next()
+        True
+        >>> it.start()
+        False
 
         >>> it = Iterator('foo', {}, context)
-        >>> int(bool(it.start()))
-        0
-        >>> int(bool(it.next()))
-        0
-        >>> int(bool(it.start()))
-        0
-
+        >>> it.start()
+        False
+        >>> it.next()
+        False
+        >>> it.start()
+        False
         """
         return self._nextIndex == 1
 
@@ -370,26 +402,26 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.end()))
-        0
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.end()))
-        0
-        >>> int(bool(it.next()))
-        1
-        >>> int(bool(it.end()))
-        1
+        >>> it.next()
+        True
+        >>> it.end()
+        False
+        >>> it.next()
+        True
+        >>> it.end()
+        False
+        >>> it.next()
+        True
+        >>> it.end()
+        True
 
         >>> it = Iterator('foo', {}, context)
-        >>> int(bool(it.end()))
-        0
-        >>> int(bool(it.next()))
-        0
-        >>> int(bool(it.end()))
-        0
+        >>> it.end()
+        False
+        >>> it.next()
+        False
+        >>> it.end()
+        False
         """
         return self._last
 
@@ -398,22 +430,22 @@ class Iterator(object):
 
         >>> context = Context(ExpressionEngine(), {})
         >>> it = Iterator('foo', ("apple", "pear", "orange"), context)
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.item()
         'apple'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.item()
         'pear'
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.item()
         'orange'
 
         >>> it = Iterator('foo', {1:2}, context)
-        >>> int(bool(it.next()))
-        1
+        >>> it.next()
+        True
         >>> it.item()
         1
 
@@ -634,6 +666,14 @@ class Context:
     def setGlobal(self, name, value):
         for vars in self._vars_stack:
             vars[name] = value
+
+    def getValue(self, name, default=None):
+        value = default
+        for vars in self._vars_stack:
+            value = vars.get(name, default)
+            if value is not default:
+                break
+        return value
 
     def setRepeat(self, name, expr):
         expr = self.evaluate(expr)

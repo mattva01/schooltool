@@ -12,7 +12,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Tests that run driver.py over input files comparing to output files."""
+"""Tests that run driver.py over input files comparing to output files.
+
+$Id: test_files.py,v 1.3 2004/03/08 23:33:58 srichter Exp $
+"""
 
 import glob
 import os

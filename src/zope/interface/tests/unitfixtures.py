@@ -11,8 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from zope.interface import Interface
+from zope.interface import Interface, invariant
 from zope.interface.interface import Attribute
+from zope.interface.exceptions import Invalid
 
 class mytest(Interface):
     pass
@@ -115,3 +116,26 @@ FunInterface = new('FunInterface')
 BarInterface = new('BarInterface', [FunInterface])
 BobInterface = new('BobInterface')
 BazInterface = new('BazInterface', [BobInterface, BarInterface])
+
+# fixtures for invariant tests
+def ifFooThenBar(obj):
+    if getattr(obj, 'foo', None) and not getattr(obj, 'bar', None):
+        raise Invalid('If Foo, then Bar!')
+class IInvariant(Interface):
+    foo = Attribute('foo')
+    bar = Attribute('bar; must eval to Boolean True if foo does')
+    invariant(ifFooThenBar)
+def BarGreaterThanFoo(obj):
+    foo = getattr(obj, 'foo', None)
+    bar = getattr(obj, 'bar', None)
+    if foo is not None and isinstance(foo, type(bar)):
+        # type checking should be handled elsewhere (like, say, 
+        # schema); these invariants should be intra-interface 
+        # constraints.  This is a hacky way to do it, maybe, but you
+        # get the idea
+        if not bar > foo:
+            raise Invalid('Please, Boo MUST be greater than Foo!')
+class ISubInvariant(IInvariant):
+    invariant(BarGreaterThanFoo)
+class InvariantC(object):
+    pass

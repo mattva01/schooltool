@@ -15,6 +15,7 @@
 
 import os
 import sys
+import shutil
 import socket
 import tempfile
 import unittest
@@ -27,6 +28,16 @@ except NameError:
     here = sys.argv[0]
 
 here = os.path.abspath(here)
+
+StringType = type("")
+
+try:
+    unicode
+except NameError:
+    have_unicode = 0
+else:
+    have_unicode = 1
+
 
 class DatatypeTestCase(unittest.TestCase):
     types = ZConfig.datatypes.Registry()
@@ -87,30 +98,96 @@ class DatatypeTestCase(unittest.TestCase):
         raises(ValueError, convert, "-inf")
         raises(ValueError, convert, "nan")
 
+        if have_unicode:
+            raises(ValueError, convert, unicode("inf"))
+            raises(ValueError, convert, unicode("-inf"))
+            raises(ValueError, convert, unicode("nan"))
+
     def test_datatype_identifier(self):
         convert = self.types.get("identifier")
-        eq = self.assertEqual
         raises = self.assertRaises
+        self.check_names(convert)
+        self.check_never_namelike(convert)
+        raises(ValueError, convert, ".abc")
 
-        eq(convert("AbcDef"), "AbcDef")
-        eq(convert("a________"), "a________")
-        eq(convert("abc_def"), "abc_def")
-        eq(convert("int123"), "int123")
-        eq(convert("_abc"), "_abc")
-        eq(convert("_123"), "_123")
-        eq(convert("__dict__"), "__dict__")
+    def check_names(self, convert):
+        eq = self.assert_ascii_equal
+        eq(convert, "AbcDef")
+        eq(convert, "a________")
+        eq(convert, "abc_def")
+        eq(convert, "int123")
+        eq(convert, "_abc")
+        eq(convert, "_123")
+        eq(convert, "__dict__")
+
+    def assert_ascii_equal(self, convert, value):
+        v = convert(value)
+        self.assertEqual(v, value)
+        self.assert_(isinstance(v, StringType))
+        if have_unicode:
+            unicode_value = unicode(value)
+            v = convert(unicode_value)
+            self.assertEqual(v, value)
+            self.assert_(isinstance(v, StringType))
+
+    def check_never_namelike(self, convert):
+        raises = self.assertRaises
         raises(ValueError, convert, "2345")
+        raises(ValueError, convert, "23.45")
+        raises(ValueError, convert, ".45")
+        raises(ValueError, convert, "23.")
+        raises(ValueError, convert, "abc.")
         raises(ValueError, convert, "-abc")
         raises(ValueError, convert, "-123")
+        raises(ValueError, convert, "abc-")
+        raises(ValueError, convert, "123-")
+        raises(ValueError, convert, "-")
+        raises(ValueError, convert, ".")
+        raises(ValueError, convert, "&%$*()")
         raises(ValueError, convert, "")
+
+    def test_datatype_dotted_name(self):
+        convert = self.types.get("dotted-name")
+        raises = self.assertRaises
+        self.check_names(convert)
+        self.check_dotted_names(convert)
+        self.check_never_namelike(convert)
+        raises(ValueError, convert, "abc.")
+        raises(ValueError, convert, ".abc.")
+        raises(ValueError, convert, "abc.def.")
+        raises(ValueError, convert, ".abc.def.")
+        raises(ValueError, convert, ".abc.def")
+
+    def test_datatype_dotted_suffix(self):
+        convert = self.types.get("dotted-suffix")
+        eq = self.assert_ascii_equal
+        raises = self.assertRaises
+        self.check_names(convert)
+        self.check_dotted_names(convert)
+        self.check_never_namelike(convert)
+        eq(convert, ".a")
+        eq(convert, ".a.b")
+        eq(convert, ".a.b.c.d.e.f.g.h.i.j.k.l.m.n.o")
+        raises(ValueError, convert, "abc.")
+        raises(ValueError, convert, ".abc.")
+        raises(ValueError, convert, "abc.def.")
+        raises(ValueError, convert, ".abc.def.")
+
+    def check_dotted_names(self, convert):
+        eq = self.assert_ascii_equal
+        eq(convert, "abc.def")
+        eq(convert, "abc.def.ghi")
+        eq(convert, "a.d.g.g.g.g.g.g.g")
 
     def test_datatype_inet_address(self):
         convert = self.types.get("inet-address")
         eq = self.assertEqual
+        defhost = ZConfig.datatypes.DEFAULT_HOST
         eq(convert("Host.Example.Com:80"), ("host.example.com", 80))
-        eq(convert(":80"),                 ("", 80))
-        eq(convert("80"),                  ("", 80))
+        eq(convert(":80"),                 (defhost, 80))
+        eq(convert("80"),                  (defhost, 80))
         eq(convert("host.EXAMPLE.com"),    ("host.example.com", None))
+        self.assertRaises(ValueError, convert, "40 # foo")
 
     def test_datatype_integer(self):
         convert = self.types.get("integer")
@@ -162,6 +239,7 @@ class DatatypeTestCase(unittest.TestCase):
         convert = self.types.get("socket-address")
         eq = self.assertEqual
         AF_INET = socket.AF_INET
+        defhost = ZConfig.datatypes.DEFAULT_HOST
 
         def check(value, family, address, self=self, convert=convert):
             a = convert(value)
@@ -169,8 +247,8 @@ class DatatypeTestCase(unittest.TestCase):
             self.assertEqual(a.address, address)
 
         check("Host.Example.Com:80", AF_INET, ("host.example.com", 80))
-        check(":80",                 AF_INET, ("", 80))
-        check("80",                  AF_INET, ("", 80))
+        check(":80",                 AF_INET, (defhost, 80))
+        check("80",                  AF_INET, (defhost, 80))
         check("host.EXAMPLE.com",    AF_INET, ("host.example.com",None))
         a1 = convert("/tmp/var/@345.4")
         a2 = convert("/tmp/var/@345.4:80")
@@ -267,8 +345,37 @@ class DatatypeTestCase(unittest.TestCase):
         raises(ValueError, convert, '120w')
 
 
+class RegistryTestCase(unittest.TestCase):
+
+    def test_registry_does_not_mask_toplevel_imports(self):
+        old_sys_path = sys.path[:]
+        tmpdir = tempfile.mkdtemp(prefix="test_datatypes_")
+        fn = os.path.join(tmpdir, "datatypes.py")
+        f = open(fn, "w")
+        f.write(TEST_DATATYPE_SOURCE)
+        f.close()
+        registry = ZConfig.datatypes.Registry()
+
+        # we really want the temp area to override everything else:
+        sys.path.insert(0, tmpdir)
+        try:
+            datatype = registry.get("datatypes.my_sample_datatype")
+        finally:
+            shutil.rmtree(tmpdir)
+            sys.path[:] = old_sys_path
+        self.assertEqual(datatype, 42)
+
+TEST_DATATYPE_SOURCE = """
+# sample datatypes file
+
+my_sample_datatype = 42
+"""
+
+
 def test_suite():
-    return unittest.makeSuite(DatatypeTestCase)
+    suite = unittest.makeSuite(DatatypeTestCase)
+    suite.addTest(unittest.makeSuite(RegistryTestCase))
+    return suite
 
 
 if __name__ == '__main__':

@@ -13,10 +13,14 @@
 ##############################################################################
 """
 
-$Id: exceptions.py,v 1.2 2002/12/25 14:13:42 jim Exp $
+$Id: exceptions.py,v 1.3 2003/12/01 16:19:30 jim Exp $
 """
 
-class DoesNotImplement(Exception):
+class Invalid(Exception):
+    """An specification is violated
+    """
+
+class DoesNotImplement(Invalid):
     """ This object does not implement """
     def __init__(self, interface):
         self.interface = interface
@@ -26,7 +30,7 @@ class DoesNotImplement(Exception):
 
         """ % self.__dict__
 
-class BrokenImplementation(Exception):
+class BrokenImplementation(Invalid):
     """An attribute is not completely implemented.
     """
 
@@ -40,7 +44,7 @@ class BrokenImplementation(Exception):
         The %(name)s attribute was not provided.
         """ % self.__dict__
 
-class BrokenMethodImplementation(Exception):
+class BrokenMethodImplementation(Invalid):
     """An method is not completely implemented.
     """
 

@@ -11,8 +11,8 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-__allow_access_to_unprotected_subobjects__={'batch': 1}
-__roles__=None
+##__allow_access_to_unprotected_subobjects__={'batch': 1}
+##__roles__=None
 
 
 class batch:

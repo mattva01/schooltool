@@ -25,7 +25,7 @@ import ZConfig
 import ZConfig.loader
 import ZConfig.url
 
-from ZConfig.tests.support import CONFIG_BASE
+from ZConfig.tests.support import CONFIG_BASE, TestBase
 
 
 try:
@@ -37,7 +37,7 @@ myfile = os.path.abspath(myfile)
 LIBRARY_DIR = os.path.join(os.path.dirname(myfile), "library")
 
 
-class LoaderTestCase(unittest.TestCase):
+class LoaderTestCase(TestBase):
 
     def test_schema_caching(self):
         loader = ZConfig.loader.SchemaLoader()
@@ -58,6 +58,13 @@ class LoaderTestCase(unittest.TestCase):
         schema2 = loader.loadFile(sio, url2)
         self.assert_(schema1.gettype("type-a") is schema2.gettype("type-a"))
 
+    def test_simple_import_using_prefix(self):
+        self.load_schema_text("""\
+            <schema prefix='ZConfig.tests.library'>
+              <import package='.thing'/>
+            </schema>
+            """)
+
     def test_import_errors(self):
         # must specify exactly one of package or src
         self.assertRaises(ZConfig.SchemaError, ZConfig.loadSchemaFile,
@@ -67,6 +74,26 @@ class LoaderTestCase(unittest.TestCase):
                                    "  <import src='library.xml'"
                                    "          package='ZConfig'/>"
                                    "</schema>"))
+        # cannot specify src and file
+        self.assertRaises(ZConfig.SchemaError, ZConfig.loadSchemaFile,
+                          StringIO("<schema>"
+                                   "  <import src='library.xml'"
+                                   "          file='other.xml'/>"
+                                   "</schema>"))
+        # cannot specify module as package
+        sio = StringIO("<schema>"
+                       "  <import package='ZConfig.tests.test_loader'/>"
+                       "</schema>")
+        try:
+            ZConfig.loadSchemaFile(sio)
+        except ZConfig.SchemaResourceError, e:
+            self.assertEqual(e.filename, "component.xml")
+            self.assertEqual(e.package, "ZConfig.tests.test_loader")
+            self.assert_(e.path is None)
+            # make sure the str() doesn't raise an unexpected exception
+            str(e)
+        else:
+            self.fail("expected SchemaResourceError")
 
     def test_import_from_package(self):
         loader = ZConfig.loader.SchemaLoader()
@@ -85,13 +112,31 @@ class LoaderTestCase(unittest.TestCase):
         schema = loader.loadFile(sio)
         self.assert_(schema.gettype("extra-type") is not None)
 
+    def test_import_from_package_extra_directory(self):
+        loader = ZConfig.loader.SchemaLoader()
+        sio = StringIO("<schema>"
+                       "  <import package='ZConfig.tests.library.thing'"
+                       "          file='extras.xml' />"
+                       "</schema>")
+        schema = loader.loadFile(sio)
+        self.assert_(schema.gettype("extra-thing") is not None)
+
     def test_import_from_package_with_missing_file(self):
         loader = ZConfig.loader.SchemaLoader()
         sio = StringIO("<schema>"
                        "  <import package='ZConfig.tests.library.widget'"
                        "          file='notthere.xml' />"
                        "</schema>")
-        self.assertRaises(ZConfig.SchemaError, loader.loadFile, sio)
+        try:
+            loader.loadFile(sio)
+        except ZConfig.SchemaResourceError, e:
+            self.assertEqual(e.filename, "notthere.xml")
+            self.assertEqual(e.package, "ZConfig.tests.library.widget")
+            self.assert_(e.path)
+            # make sure the str() doesn't raise an unexpected exception
+            str(e)
+        else:
+            self.fail("expected SchemaResourceError")
 
     def test_import_from_package_with_directory_file(self):
         loader = ZConfig.loader.SchemaLoader()
@@ -100,6 +145,42 @@ class LoaderTestCase(unittest.TestCase):
                        "          file='really/notthere.xml' />"
                        "</schema>")
         self.assertRaises(ZConfig.SchemaError, loader.loadFile, sio)
+
+    def test_import_two_components_one_package(self):
+        loader = ZConfig.loader.SchemaLoader()
+        sio = StringIO("<schema>"
+                       "  <import package='ZConfig.tests.library.widget' />"
+                       "  <import package='ZConfig.tests.library.widget'"
+                       "          file='extra.xml' />"
+                       "</schema>")
+        schema = loader.loadFile(sio)
+        schema.gettype("widget-a")
+        schema.gettype("extra-type")
+
+    def test_import_component_twice_1(self):
+        # Make sure we can import a component twice from a schema.
+        # This is most likely to occur when the component is imported
+        # from each of two other components, or from the top-level
+        # schema and a component.
+        loader = ZConfig.loader.SchemaLoader()
+        sio = StringIO("<schema>"
+                       "  <import package='ZConfig.tests.library.widget' />"
+                       "  <import package='ZConfig.tests.library.widget' />"
+                       "</schema>")
+        schema = loader.loadFile(sio)
+        schema.gettype("widget-a")
+
+    def test_import_component_twice_2(self):
+        # Make sure we can import a component from a config file even
+        # if it has already been imported from the schema.
+        loader = ZConfig.loader.SchemaLoader()
+        sio = StringIO("<schema>"
+                       "  <import package='ZConfig.tests.library.widget' />"
+                       "</schema>")
+        schema = loader.loadFile(sio)
+        loader = ZConfig.loader.ConfigLoader(schema)
+        sio = StringIO("%import ZConfig.tests.library.widget")
+        loader.loadFile(sio)
 
     def test_urlsplit_urlunsplit(self):
         # Extracted from Python's test.test_urlparse module:
@@ -138,6 +219,22 @@ class LoaderTestCase(unittest.TestCase):
         self.assertEqual(
             ZConfig.url.urldefrag("file:/abc/def#frag"),
             ("file:///abc/def", "frag"))
+
+    def test_isPath(self):
+        assert_ = self.assert_
+        isPath = ZConfig.loader.BaseLoader().isPath
+        assert_(isPath("abc"))
+        assert_(isPath("abc/def"))
+        assert_(isPath("/abc"))
+        assert_(isPath("/abc/def"))
+        assert_(isPath(r"\abc"))
+        assert_(isPath(r"\abc\def"))
+        assert_(isPath(r"c:\abc\def"))
+        assert_(not isPath("http://www.example.com/"))
+        assert_(not isPath("http://www.example.com/sample.conf"))
+        assert_(not isPath("file:///etc/zope/zope.conf"))
+        assert_(not isPath("file:///c|/foo/bar.conf"))
+
 
 class TestNonExistentResources(unittest.TestCase):
 

@@ -11,10 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Parse XML and compile to TALInterpreter intermediate code.
-"""
+"""Parse XML and compile to TALInterpreter intermediate code.
 
+$Id: talparser.py,v 1.5 2004/03/19 21:42:04 fdrake Exp $
+"""
 from zope.tal.taldefs import XML_NS, ZOPE_I18N_NS, ZOPE_METAL_NS, ZOPE_TAL_NS
 from zope.tal.talgenerator import TALGenerator
 from zope.tal.xmlparser import XMLParser
@@ -24,8 +24,8 @@ class TALParser(XMLParser):
 
     ordered_attributes = 1
 
-    def __init__(self, gen=None): # Override
-        XMLParser.__init__(self)
+    def __init__(self, gen=None, encoding=None): # Override
+        XMLParser.__init__(self, encoding)
         if gen is None:
             gen = TALGenerator()
         self.gen = gen

@@ -13,14 +13,21 @@
 ##############################################################################
 """Configuration data structures and loader for the ZRS.
 
-$Id: __init__.py,v 1.10 2003/08/01 20:41:59 fdrake Exp $
+$Id: __init__.py,v 1.17 2004/03/25 21:28:22 fdrake Exp $
 """
+version_info = (2, 1)
+__version__ = ".".join([str(n) for n in version_info])
+
 from ZConfig.loader import loadConfig, loadConfigFile
 from ZConfig.loader import loadSchema, loadSchemaFile
 
+
 class ConfigurationError(Exception):
-    def __init__(self, msg):
+    """Base class for ZConfig exceptions."""
+
+    def __init__(self, msg, url=None):
         self.message = msg
+        self.url = url
         Exception.__init__(self, msg)
 
     def __str__(self):
@@ -29,10 +36,9 @@ class ConfigurationError(Exception):
 
 class _ParseError(ConfigurationError):
     def __init__(self, msg, url, lineno, colno=None):
-        self.url = url
         self.lineno = lineno
         self.colno = colno
-        ConfigurationError.__init__(self, msg)
+        ConfigurationError.__init__(self, msg, url)
 
     def __str__(self):
         s = self.message
@@ -60,35 +66,32 @@ class SchemaError(_ParseError):
         _ParseError.__init__(self, msg, url, lineno, colno)
 
 
-class ConfigurationMissingSectionError(ConfigurationError):
-    def __init__(self, type, name=None):
-        self.type = type
-        self.name = name
-        details = 'Missing section (type: %s' % type
-        if name is not None:
-            details += ', name: %s' % name
-        ConfigurationError.__init__(self, details + ')')
+class SchemaResourceError(SchemaError):
+    """Raised when there's an error locating a resource required by the schema.
+    """
 
+    def __init__(self, msg, url=None, lineno=None, colno=None,
+                 path=None, package=None, filename=None):
+        self.filename = filename
+        self.package = package
+        if path is not None:
+            path = path[:]
+        self.path = path
+        SchemaError.__init__(self, msg, url, lineno, colno)
 
-class ConfigurationConflictingSectionError(ConfigurationError):
-    def __init__(self, type, name=None):
-        self.type = type
-        self.name = name
-        details = 'Conflicting sections (type: %s' % type
-        if name is not None:
-            details += ', name: %s' % name
-        ConfigurationError.__init__(self, details + ')')
+    def __str__(self):
+        s = SchemaError.__str__(self)
+        if self.package is not None:
+            s += "\n  Package name: " + repr(self.package)
+        if self.filename is not None:
+            s += "\n  File name: " + repr(self.filename)
+        if self.package is not None:
+            s += "\n  Package path: " + repr(self.path)
+        return s
 
 
 class ConfigurationSyntaxError(_ParseError):
     """Raised when there's a syntax error in a configuration file."""
-
-
-class ConfigurationTypeError(ConfigurationError):
-    def __init__(self, msg, found, expected):
-        self.found = found
-        self.expected = expected
-        ConfigurationError.__init__(self, msg)
 
 
 class DataConversionError(ConfigurationError, ValueError):

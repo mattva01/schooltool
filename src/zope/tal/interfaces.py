@@ -141,6 +141,12 @@ class ITALExpressionEngine(Interface):
         The variable will be named 'name' and have the value 'value'.
         """
 
+    def getValue(name, default=None):
+        """Get a variable by name.
+
+        If the variable does not exist, return default.
+        """
+
     def setRepeat(name, compiled_expression):
         """Start a repetition, returning an ITALIterator.
 

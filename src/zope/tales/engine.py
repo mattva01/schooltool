@@ -15,9 +15,8 @@
 
 Each expression engine can have its own expression types and base names.
 
-$Id: engine.py,v 1.2 2003/05/01 19:35:50 faassen Exp $
+$Id: engine.py,v 1.3 2004/02/24 13:56:07 srichter Exp $
 """
-
 from zope.tales.tales import ExpressionEngine
 from zope.tales.expressions import PathExpr, StringExpr, NotExpr, DeferExpr
 from zope.tales.expressions import SimpleModuleImporter

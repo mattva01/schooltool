@@ -13,6 +13,8 @@
 ##############################################################################
 """Objects that can describe a ZConfig schema."""
 
+import copy
+
 import ZConfig
 
 
@@ -119,16 +121,41 @@ class KeyInfo(BaseInfo):
                 "cannot finish KeyInfo more than once")
         self._finished = True
 
-    def adddefault(self, value, position):
+    def adddefault(self, value, position, key=None):
         if self._finished:
             raise ZConfig.SchemaError(
                 "cannot add default values to finished KeyInfo")
+        # Check that the name/keyed relationship is right:
+        if self.name == "+" and key is None:
+            raise ZConfig.SchemaError(
+                "default values must be keyed for name='+'")
+        elif self.name != "+" and key is not None:
+            raise ZConfig.SchemaError(
+                "unexpected key for default value")
+
         value = ValueInfo(value, position)
         if self.maxOccurs > 1:
-            if self._default is None:
+            if self.name == "+":
+                # This is a keyed value, not a simple value:
+                if self._default is None:
+                    self._default = {key: [value]}
+                else:
+                    if key in self._default:
+                        self._default[key].append(value)
+                    else:
+                        self._default[key] = [value]
+            elif self._default is None:
                 self._default = [value]
             else:
                 self._default.append(value)
+        elif self.name == "+":
+            if self._default is None:
+                self._default = {key: value}
+            else:
+                if self._default.has_key(key):
+                    raise ZConfig.SchemaError(
+                        "duplicate default value for key %s" % `key`)
+                self._default[key] = value
         elif self._default is not None:
             raise ZConfig.SchemaError(
                 "cannot set more than one default to key with maxOccurs == 1")
@@ -140,10 +167,16 @@ class KeyInfo(BaseInfo):
             raise ZConfig.SchemaError(
                 "cannot get default value of key before KeyInfo"
                 " has been completely initialized")
-        if self._default is None and self.maxOccurs > 1:
-            return []
+        if self._default is None:
+            if self.name == "+":
+                return {}
+            elif self.maxOccurs > 1:
+                return []
         else:
-            return self._default
+            # Use copy.copy() to make sure we don't allow polution of
+            # our internal data without having to worry about both the
+            # list and dictionary cases:
+            return copy.copy(self._default)
 
 
 class SectionInfo(BaseInfo):
@@ -368,6 +401,7 @@ class SchemaType(SectionType):
                  registry):
         SectionType.__init__(self, None, keytype, valuetype, datatype,
                              registry, {})
+        self._components = {}
         self.handler = handler
         self.url = url
 
@@ -402,12 +436,32 @@ class SchemaType(SectionType):
         self.addtype(t)
         return t
 
-    def deriveSectionType(self, base, name, valuetype, datatype):
+    def deriveSectionType(self, base, name, keytype, valuetype, datatype):
         if isinstance(base, SchemaType):
             raise ZConfig.SchemaError(
                 "cannot derive sectiontype from top-level schema")
-        t = self.createSectionType(name, base.keytype, valuetype, datatype)
+        t = self.createSectionType(name, keytype, valuetype, datatype)
         t._attrmap.update(base._attrmap)
         t._keymap.update(base._keymap)
         t._children.extend(base._children)
         return t
+
+    def addComponent(self, name):
+        if self._components.has_key(name):
+            raise ZConfig.SchemaError("already have component %s" % name)
+        self._components[name] = name
+
+    def hasComponent(self, name):
+        return self._components.has_key(name)
+
+
+def createDerivedSchema(base):
+    new = SchemaType(base.keytype, base.valuetype, base.datatype,
+                     base.handler, base.url, base.registry)
+    new._components.update(base._components)
+    new.description = base.description
+    new._children[:] = base._children
+    new._attrmap.update(base._attrmap)
+    new._keymap.update(base._keymap)
+    new._types.update(base._types)
+    return new

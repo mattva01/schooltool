@@ -1,0 +1,44 @@
+<component prefix="ZConfig.components.logger.logger">
+  <description>
+  </description>
+
+  <import package="ZConfig.components.logger" file="abstract.xml"/>
+
+  <sectiontype name="ZConfig.logger.base-logger">
+     <key name="level"
+          datatype="ZConfig.components.logger.datatypes.logging_level"
+          default="info"/>
+     <multisection type="ZConfig.logger.handler"
+                   attribute="handlers" name="*"/>
+  </sectiontype>
+
+  <sectiontype name="logger"
+               datatype=".LoggerFactory"
+               extends="ZConfig.logger.base-logger"
+               implements="ZConfig.logger.log">
+    <key name="propagate"
+         datatype="boolean"
+         default="true">
+      <description>
+      </description>
+    </key>
+
+    <key name="name"
+         datatype="dotted-name"
+         required="yes">
+      <description>
+      </description>
+    </key>
+  </sectiontype>
+
+  <sectiontype name="eventlog"
+               datatype=".EventLogFactory"
+               extends="ZConfig.logger.base-logger"
+               implements="ZConfig.logger.log">
+    <description>
+      Logger bound to the name "event".  Propogation of events to the
+      root logger is disabled.
+    </description>
+  </sectiontype>
+
+</component>

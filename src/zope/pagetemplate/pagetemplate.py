@@ -15,7 +15,7 @@
 
 HTML- and XML-based template objects using TAL, TALES, and METAL.
 
-$Id: pagetemplate.py,v 1.9 2003/06/04 09:09:45 stevea Exp $
+$Id: pagetemplate.py,v 1.10 2004/03/19 23:35:03 srichter Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -128,7 +128,11 @@ class PageTemplate:
         return self._v_warnings
 
     def write(self, text):
-        assert isinstance(text, str)
+        # We accept both, since the text can either come from a file (and the
+        # parser will take are of the encoding or from a TTW template, in
+        # which case we have already unicode. 
+        assert isinstance(text, (str, unicode))
+
         if text.startswith(self._error_start):
             errend = text.find('-->')
             if errend >= 0:

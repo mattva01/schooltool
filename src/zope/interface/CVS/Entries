@@ -1,16 +1,18 @@
 D/tests////
-/__init__.py/1.9/Fri Oct 17 08:11:26 2003//
-/_flatten.py/1.6/Fri Oct  3 14:58:38 2003//
-/_zope_interface_ospec.c/1.8/Fri Oct  3 14:58:39 2003//
-/adapter.py/1.6/Fri Oct  3 14:58:39 2003//
-/advice.py/1.1/Fri Oct  3 14:58:38 2003//
-/declarations.py/1.17/Fri Oct  3 14:58:38 2003//
-/document.py/1.4/Fri Oct  3 14:58:39 2003//
-/exceptions.py/1.2/Fri Oct  3 14:58:39 2003//
-/implementor.py/1.6/Fri Oct  3 14:58:38 2003//
-/interface.py/1.13/Fri Oct 17 08:11:26 2003//
-/interfaces.py/1.16/Fri Oct 17 08:11:26 2003//
-/pyskel.py/1.4/Fri Oct  3 14:58:38 2003//
-/type.py/1.10/Fri Oct  3 14:58:39 2003//
-/verify.py/1.6/Fri Oct  3 14:58:38 2003//
 D/common////
+/__init__.py/1.12/Tue Mar 30 18:13:17 2004//
+/_flatten.py/1.7/Tue Mar 30 18:13:17 2004//
+/_zope_interface_coptimizations.c/1.4/Fri Mar  5 22:09:28 2004//
+/adapter.py/1.12/Tue Mar 30 18:13:17 2004//
+/adapter.txt/1.2/Sat Mar 27 14:17:17 2004//
+/advice.py/1.1/Tue Mar 30 17:56:11 2004//
+/declarations.py/1.20/Tue Mar 30 18:13:18 2004//
+/document.py/1.5/Tue Mar 30 18:13:18 2004//
+/exceptions.py/1.3/Tue Mar 30 18:13:18 2004//
+/implementor.py/1.8/Tue Mar 30 18:13:18 2004//
+/interface.py/1.24/Tue Mar 30 18:13:18 2004//
+/interfaces.py/1.23/Tue Mar 30 18:13:18 2004//
+/pyskel.py/1.5/Tue Mar 30 18:13:18 2004//
+/ro.py/1.2/Fri Nov 21 17:11:43 2003//
+/type.py/1.12/Tue Mar 30 18:13:18 2004//
+/verify.py/1.8/Tue Mar 30 18:13:18 2004//

@@ -36,7 +36,7 @@ class ZConfigParser:
         self.file = resource.file
         self.url = resource.url
         self.lineno = 0
-        self.stack = []   # [(type, name, delegatename, prevmatcher), ...]
+        self.stack = []   # [(type, name, prevmatcher), ...]
         if defines is None:
             defines = {}
         self.defs = defines
@@ -89,33 +89,32 @@ class ZConfigParser:
         m = _section_start_rx.match(text)
         if not m:
             self.error("malformed section header")
-        type, name, delegatename = m.group('type', 'name', 'delegatename')
+        type, name = m.group('type', 'name')
         type = type.lower()
         if name:
             name = name.lower()
         try:
-            newsect = self.context.startSection(section, type, name,
-                                                delegatename)
+            newsect = self.context.startSection(section, type, name)
         except ZConfig.ConfigurationError, e:
             self.error(e[0])
 
         if isempty:
-            self.context.endSection(section, type, name, delegatename, newsect)
+            self.context.endSection(section, type, name, newsect)
             return section
         else:
-            self.stack.append((type, name, delegatename, section))
+            self.stack.append((type, name, section))
             return newsect
 
     def end_section(self, section, rest):
         if not self.stack:
             self.error("unexpected section end")
         type = rest.rstrip().lower()
-        opentype, name, delegatename, prevsection = self.stack.pop()
+        opentype, name, prevsection = self.stack.pop()
         if type != opentype:
             self.error("unbalanced section end")
         try:
             self.context.endSection(
-                prevsection, type, name, delegatename, section)
+                prevsection, type, name, section)
         except ZConfig.ConfigurationError, e:
             self.error(e[0])
         return prevsection
@@ -139,7 +138,7 @@ class ZConfigParser:
         if not m:
             self.error("missing or unrecognized directive")
         name, arg = m.group('key', 'value')
-        if name not in ("define", "include"):
+        if name not in ("define", "import", "include"):
             self.error("unknown directive: " + `name`)
         if not arg:
             self.error("missing argument to %%%s directive" % name)
@@ -147,10 +146,17 @@ class ZConfigParser:
             self.handle_include(section, arg)
         elif name == "define":
             self.handle_define(section, arg)
+        elif name == "import":
+            self.handle_import(section, arg)
         else:
             assert 0, "unexpected directive for " + `"%" + rest`
 
+    def handle_import(self, section, rest):
+        pkgname = self.replace(rest.strip())
+        self.context.importSchemaComponent(pkgname)
+
     def handle_include(self, section, rest):
+        rest = self.replace(rest.strip())
         newurl = ZConfig.url.urljoin(self.url, rest)
         self.context.includeConfiguration(section, newurl, self.defs)
 
@@ -179,15 +185,13 @@ class ZConfigParser:
 
 
 import re
-# _name_re cannot allow "(" or ")" since we need to be able to tell if
-# a section has a name or not: <section (name)> would be ambiguous if
-# parentheses were allowed in names.
+# _name_re does not allow "(" or ")" for historical reasons.  Though
+# the restriction could be lifted, there seems no need to do so.
 _name_re = r"[^\s()]+"
 _keyvalue_rx = re.compile(r"(?P<key>%s)\s*(?P<value>[^\s].*)?$"
                           % _name_re)
 _section_start_rx = re.compile(r"(?P<type>%s)"
                                r"(?:\s+(?P<name>%s))?"
-                               r"(?:\s*[(](?P<delegatename>%s)[)])?"
                                r"$"
-                               % (_name_re, _name_re, _name_re))
+                               % (_name_re, _name_re))
 del re

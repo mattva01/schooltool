@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: interfaces.py,v 1.16 2003/10/17 08:05:53 stevea Exp $
+$Id: interfaces.py,v 1.23 2004/03/15 20:41:55 jim Exp $
 """
 
 from zope.interface import Interface
@@ -33,7 +33,16 @@ class IElement(Interface):
         """Returns the documentation for the object."""
 
     def getTaggedValue(tag):
-        """Returns the value associated with 'tag'."""
+        """Returns the value associated with 'tag'.
+
+        Raise a KeyError of the tag isn't set
+        """
+
+    def queryTaggedValue(tag, default=None):
+        """Returns the value associated with 'tag'.
+
+        Return the default value of the tag isn't set.
+        """
 
     def getTaggedValueTags():
         """Returns a list of all tags."""
@@ -55,8 +64,44 @@ class IMethod(IAttribute):
         """Return a signature string suitable for inclusion in documentation.
         """
 
+class ISpecification(Interface):
+    """Object Behavioral specifications
+    """
 
-class IInterface(IElement):
+    def extends(other, strict=True):
+        """Test whether a specification extends another
+
+        The specification extends other if it has other as a base
+        interface or if one of it's bases extends other.
+
+        If strict is false, then the specification extends itself.
+        
+        """
+
+    def isOrExtends(other):
+        """Test whether the specification is or extends another
+        """
+
+    def weakref(callback=None):
+        """Return a weakref to the specification
+
+        This method is, regrettably, needed to allow weakrefs to be
+        computed to security-proxied specifications.  While the
+        zope.interface package does not require zope.security or
+        zope.proxy, it has to be able to coexist with it.
+
+        """
+
+    __bases__ = Attribute("""Base specifications
+
+    A tuple if specifications from which this specification is
+    directly derived.
+
+    """)
+
+
+        
+class IInterface(ISpecification, IElement):
     """Interface objects
 
     Interface objects describe the behavior of an object by containing
@@ -138,7 +183,7 @@ class IInterface(IElement):
 
            classImplements(some_class, some_interface)
 
-         This is approach is useful when it is not an option to modify
+         This approach is useful when it is not an option to modify
          the class source.  Note that this doesn't affect what the
          class itself implements, but only what its instances
          implement.
@@ -148,23 +193,7 @@ class IInterface(IElement):
 
     """
 
-
-    def getBases():
-        """Return a sequence of the base interfaces."""
-
-    def extends(other, strict=True):
-        """Test whether the interface extends another interface
-
-        A true value is returned in the interface extends the other
-        interface, and false otherwise.
-
-        Normally, an interface doesn't extend itself. If a false value
-        is passed as the second argument, or via the 'strict' keyword
-        argument, then a true value will be returned if the interface
-        and the other interface are the same.
-        """
-
-    def isImplementedBy(object):
+    def providedBy(object):
         """Test whether the interface is implemented by the object
 
         Return true of the object asserts that it implements the
@@ -172,7 +201,7 @@ class IInterface(IElement):
         interface.
         """
 
-    def isImplementedByInstancesOf(class_):
+    def implementedBy(class_):
         """Test whether the interface is implemented by instances of the class
 
         Return true of the class asserts that its instances implement the
@@ -217,6 +246,12 @@ class IInterface(IElement):
         If the named attribute is not defined, the default is
         returned.
         """
+    
+    def validateInvariants(obj, errors=None):
+        """validate object to defined invariants.  If errors is None,
+        raises first Invalid error; if errors is a list, appends all errors
+        to list, then raises Invalid with the errors as the first element
+        of the "args" tuple."""
 
     def get(name, default=None):
         """Look up the description for a name
@@ -236,25 +271,6 @@ class IInterface(IElement):
         """
 
     __module__ = Attribute("""The name of the module defining the interface""")
-
-    __bases__ = Attribute("""A tuple of base interfaces""")
-    __iro__ = Attribute(
-        """A tuple of all interfaces extended by the interface
-
-        The first item in the tuple is the interface itself.  The
-        interfaces are listed in order from most specific to most
-        general, preserving the original order of base interfaces
-        where possible.
-
-        """)
-
-    __identifier__ = Attribute("""A unique identifier for the interface
-
-    This identifier should be different for different interfaces.
-
-    The identifier is not allowed to contain tab characters.
-    """)
-
 
 class ITypeRegistry(Interface):
     """Type-specific registry
@@ -308,107 +324,6 @@ class ITypeRegistry(Interface):
         """Returns the number of distinct interfaces registered.
         """
 
-
-class IAdapterRegistry(Interface):
-    """Adapter-style registry
-
-    This registry stores objects registered to convert (or participate
-    in the conversion from) one interface to another. The interface
-    converted is the "required" interface. We say that the interface
-    converted to is the "provided" interface.
-
-    The objects registered here don't need to be adapters. What's
-    important is that they are registered according to a required and
-    a provided interface.
-
-    The provided interface may not be None.
-
-    The required interface may be None. Adapters with a required
-    interface of None adapt non-components. An adapter that adapts all
-    components should specify a required interface of
-    Interface.Interface.
-
-    """
-
-    def register(require, provide, object):
-        """Register an object for a required and provided interface.
-
-        There are no restrictions on what the object might be.
-        Any restrictions (e.g. callability, or interface
-        implementation) must be enforced by higher-level code.
-
-        The require argument may be None.
-
-        """
-
-    def get((implements, provides), default=None, filter=None):
-        """Return a registered object
-
-        The registered object is one that was registered to require an
-        interface that one of the interfaces in the 'implements'
-        specification argument extends or equals and that provides an
-        interface that extends or equals the 'provides' argument.  An
-        attempt will be made to find the component that most closely
-        matches the input arguments.
-
-        The object returned could have been registered to require None.
-
-        Note that the implements may be None, it which case a
-        component will be returned only if it was registered with a
-        require of None.
-
-        An optional filter may be provided. If provided, the returned
-        object must pass the filter. Search will continue until a
-        suitable match can be found. The filter should take a single
-        argument and return a true value if the object passes the
-        filter, or false otherwise.
-
-        """
-
-    def getForObject(object, interface, filter=None):
-        """Get an adapter for object that implements the specified interface
-
-        The filter option has the same meaning as in the get method.
-        """
-
-    def getRegistered(require, provide):
-        """return data registered specifically for the given interfaces
-
-        None is returned if nothing is registered.
-        """
-
-    def getRegisteredMatching(required_interfaces=None,
-                              provided_interfaces=None):
-        """Return information about registered data
-
-        Zero or more required and provided interfaces may be
-        specified. Registration information matching any of the
-        specified interfaces is returned.
-
-        The arguments may be interfaces, or sequences of interfaces.
-
-        The returned value is a sequence of three-element tuples:
-
-        - required interface
-
-        - provided interface
-
-        - the object registered specifically for the required and
-          provided interfaces.
-
-        To understand how the matching works, imagine that we have
-        interfaces R1, R2, P1, and P2. R2 extends R1. P2 extends P1.
-        We've registered C to require R1 and provide P2.  Given this,
-        if we call getRegisteredMatching:
-
-          registry.getRegisteredMatching([R2], [P1])
-
-        the returned value will include:
-
-          (R1, P2, C)
-        """
-
-
 class IImplementorRegistry(Interface):
     """Implementor registry
 
@@ -452,7 +367,13 @@ class IImplementorRegistry(Interface):
 
         """
 
-class IInterfaceSpecification(Interface):
+class IDeclaration(ISpecification):
+    """Interface declaration
+
+    Declarations are used to express the interfaces implemented by
+    classes or provided by objects.
+    
+    """
 
     def __contains__(interface):
         """Test whether an interface is in the specification
@@ -475,14 +396,6 @@ class IInterfaceSpecification(Interface):
         base interfaces are listed after interfaces that extend them
         and, otherwise, interfaces are included in the order that they
         were defined in the specification.
-        """
-
-    def extends(interface):
-        """Test whether an interface specification extends an interface
-
-        An interface specification extends an interface if it contains
-        an interface that extends an interface.
-        
         """
 
     def __sub__(interfaces):
@@ -514,21 +427,6 @@ class IInterfaceSpecification(Interface):
         """Return a true value of the interface specification is non-empty
         """
 
-    __signature__ = Attribute("""A specification signature
-
-    The signature should change if any of the interfaces in the
-    specification change.
-
-    """)
-
-    only = Attribute("""\
-    A flag (boolean) indicating whether a specification extends others
-
-    If only is true, then a class implementing the specification
-    doesn't implement base-class specifications.
-    
-    """)
-
 class IInterfaceDeclaration(Interface):
     """Declare and check the interfaces of objects
 
@@ -559,20 +457,20 @@ class IInterfaceDeclaration(Interface):
         This is the union of the interfaces directly provided by an
         object and interfaces implemented by it's class.
 
-        The value returned is an IInterfaceSpecification.
+        The value returned is an IDeclaration.
         """
 
     def implementedBy(class_):
         """Return the interfaces implemented for a class' instances
 
-        The value returned is an IInterfaceSpecification.
+        The value returned is an IDeclaration.
         """
 
     def classImplements(class_, *interfaces):
         """Declare additional interfaces implemented for instances of a class
 
         The arguments after the class are one or more interfaces or
-        interface specifications (IInterfaceSpecification objects).
+        interface specifications (IDeclaration objects).
 
         The interfaces given (including the interfaces in the
         specifications) are added to any interfaces previously
@@ -594,7 +492,7 @@ class IInterfaceDeclaration(Interface):
         """Declare the only interfaces implemented by instances of a class
 
         The arguments after the class are one or more interfaces or
-        interface specifications (IInterfaceSpecification objects).
+        interface specifications (IDeclaration objects).
 
         The interfaces given (including the interfaces in the
         specifications) replace any previous declarations.
@@ -614,14 +512,14 @@ class IInterfaceDeclaration(Interface):
     def directlyProvidedBy(object):
         """Return the interfaces directly provided by the given object
 
-        The value returned is an IInterfaceSpecification.
+        The value returned is an IDeclaration.
         """
 
     def directlyProvides(object, *interfaces):
         """Declare interfaces declared directly for an object
 
         The arguments after the object are one or more interfaces or
-        interface specifications (IInterfaceSpecification objects).
+        interface specifications (IDeclaration objects).
 
         The interfaces given (including the interfaces in the
         specifications) replace interfaces previously
@@ -662,7 +560,7 @@ class IInterfaceDeclaration(Interface):
         This function is called in a class definition.
 
         The arguments are one or more interfaces or interface
-        specifications (IInterfaceSpecification objects).
+        specifications (IDeclaration objects).
 
         The interfaces given (including the interfaces in the
         specifications) are added to any interfaces previously
@@ -698,7 +596,7 @@ class IInterfaceDeclaration(Interface):
         This function is called in a class definition.
 
         The arguments are one or more interfaces or interface
-        specifications (IInterfaceSpecification objects).
+        specifications (IDeclaration objects).
 
         Previous declarations including declarations for base classes
         are overridden.
@@ -730,7 +628,7 @@ class IInterfaceDeclaration(Interface):
         This function is called in a class definition.
 
         The arguments are one or more interfaces or interface
-        specifications (IInterfaceSpecification objects).
+        specifications (IDeclaration objects).
 
         The given interfaces (including the interfaces in the
         specifications) are used to create the class's direct-object
@@ -760,7 +658,7 @@ class IInterfaceDeclaration(Interface):
         This function is used in a module definition.
 
         The arguments are one or more interfaces or interface
-        specifications (IInterfaceSpecification objects).
+        specifications (IDeclaration objects).
 
         The given interfaces (including the interfaces in the
         specifications) are used to create the module's direct-object
@@ -779,79 +677,61 @@ class IInterfaceDeclaration(Interface):
           directlyProvides(sys.modules[__name__], I1)
         """
 
-    def InterfaceSpecification(*interfaces):
+    def Declaration(*interfaces):
         """Create an interface specification
 
         The arguments are one or more interfaces or interface
-        specifications (IInterfaceSpecification objects).
+        specifications (IDeclaration objects).
 
-        A new interface specification (IInterfaceSpecification) with
+        A new interface specification (IDeclaration) with
         the given interfaces is returned.
         """
 
-class IInterfaceDeclarationYAGNI(Interface):
-    """YAGNI interface declaration API
+class IAdapterRegistry(Interface):
+    """Provide an interface-based registry for adapters
 
-    The functions in this interface are functions that might be
-    provided later, but that introduce difficulties that we choose to
-    avoid now.
+    This registry registers objects that are in some sense "from" a
+    sequence of specification to an interface and a name.
+
+    No specific semantics are assumed for the registered objects,
+    however, the most common application will be to register factories
+    that adapt objects providing required specifications to a provided
+    interface. 
+    
     """
 
-    def unimplements(*interfaces):
-        """Declare interfaces not implemented by instances of a class
+    def register(required, provided, name, value):
+        """Register a value
 
-        This function is called in a class definition.
-
-        The arguments are one or more interfaces or interface
-        specifications (IInterfaceSpecification objects).
-
-        The interfaces given (including the interfaces in the
-        specifications) are removed from any interfaces previously
-        declared.
-
-        Previous declarations include declarations for base classes
-        unless implementsOnly was used.
-
-        This function is provided for convenience. It provides a more
-        convenient way to call classUnimplements. For example::
-
-          unimplements(I1)
-
-        is equivalent to calling::
-
-          classUnimplements(I1)
-
-        after the class has been created.
-
-        Consider the following example::
-
-          class C(A, B):
-            unimplements(I1, I2)
-
-
-        Instances of ``C`` don't implement ``I1``, ``I2``, even if
-        instances of ``A`` and ``B`` do.
+        A value is registered for a *sequence* of required specifications, a
+        provided interface, and a name.
         """
 
-    def classUnimplements(class_, *interfaces):
-        """Declare the interfaces not implemented for instances of a class
+    def lookup(required, provided, name, default=None):
+        """Lookup a value
 
-        The arguments after the class are one or more interfaces or
-        interface specifications (IInterfaceSpecification objects).
-
-        The interfaces given (including the interfaces in the
-        specifications) cancel previous declarations for the same
-        interfaces, including declarations made in base classes.
-
-        Consider the following example::
-
-          class C(A, B):
-             ...
-
-          classImplements(C, I1)
-          classUnimplements(C, I1, I2)
-
-
-        Instances of ``C`` don't provide ``I1`` and ``I2`` even if
-        instances of ``A`` or ``B`` do.
+        A value is looked up based on a *sequence* of required
+        specifications, a provided interface, and a name.
         """
+
+    def names(required, provided):
+        """Return the names for which there are registered objects
+        """
+
+    def subscribe(required, provided, subscriber):
+        """Register a subscriber
+
+        A subscriber is registered for a *sequence* of required
+        specifications, a provided interface, and a name.
+
+        Multiple subscribers may be registered for the same (or
+        equivalent) interfaces.
+        """
+
+    def subscriptions(required, provided):
+        """Get a sequence of subscribers
+
+        Subscribers for a *sequence* of required interfaces, and a provided
+        interface are returned.
+        """
+    

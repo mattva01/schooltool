@@ -12,10 +12,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Helper program to time compilation and interpretation
-"""
+"""Helper program to time compilation and interpretation
 
+$Id: timer.py,v 1.4 2004/02/24 13:58:18 srichter Exp $
+"""
 import getopt
 import sys
 import time

@@ -17,7 +17,7 @@ import unittest
 
 import ZConfig
 
-from ZConfig.tests.support import TestBase
+from ZConfig.tests.support import TestBase, CONFIG_BASE
 
 
 def uppercase(value):
@@ -25,6 +25,9 @@ def uppercase(value):
 
 def appsection(value):
     return MySection(value)
+
+def get_foo(section):
+    return section.foo
 
 class MySection:
     def __init__(self, value):
@@ -44,6 +47,9 @@ class SchemaTestCase(TestBase):
 
     def test_simple(self):
         schema, conf = self.load_both("simple.xml", "simple.conf")
+        self._verifySimpleConf(conf)
+
+    def _verifySimpleConf(self,conf):
         eq = self.assertEqual
         eq(conf.var1, 'abc')
         eq(conf.int_var, 12)
@@ -400,7 +406,7 @@ class SchemaTestCase(TestBase):
         conf = self.load_config_text(schema, "some-key 42")
         self.assertEqual(conf.keymap, {'some-key': 42})
 
-    def test_arbitrary_multikey(self):
+    def test_arbitrary_multikey_required(self):
         schema = self.load_schema_text("""\
             <schema>
               <multikey name='+' required='yes' attribute='keymap'
@@ -412,6 +418,81 @@ class SchemaTestCase(TestBase):
                                      some-key 43
                                      """)
         self.assertEqual(conf.keymap, {'some-key': [42, 43]})
+
+    def test_arbitrary_multikey_optional(self):
+        schema = self.load_schema_text("""\
+            <schema>
+              <sectiontype name='sect'>
+                <multikey name='+' attribute='keymap'/>
+              </sectiontype>
+              <section name='+' type='sect' attribute='stuff'/>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, """\
+                                     <sect foo>
+                                       some-key 42
+                                       some-key 43
+                                     </sect>
+                                     """)
+        self.assertEqual(conf.stuff.keymap, {'some-key': ['42', '43']})
+
+    def test_arbitrary_multikey_optional_empty(self):
+        schema = self.load_schema_text("""\
+            <schema>
+              <sectiontype name='sect'>
+                <multikey name='+' attribute='keymap'/>
+              </sectiontype>
+              <section name='+' type='sect' attribute='stuff'/>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, "<sect foo/>")
+        self.assertEqual(conf.stuff.keymap, {})
+
+    def test_arbitrary_multikey_with_defaults(self):
+        schema = self.load_schema_text("""\
+            <schema>
+              <multikey name='+' attribute='keymap'>
+                <default key='a'>value-a1</default>
+                <default key='a'>value-a2</default>
+                <default key='b'>value-b</default>
+              </multikey>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, "")
+        self.assertEqual(conf.keymap, {'a': ['value-a1', 'value-a2'],
+                                       'b': ['value-b']})
+
+    def test_arbitrary_multikey_with_unkeyed_default(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+                          <schema>
+                            <multikey name='+' attribute='keymap'>
+                              <default>value-a1</default>
+                            </multikey>
+                          </schema>
+                          """)
+
+    def test_arbitrary_key_with_defaults(self):
+        schema = self.load_schema_text("""\
+            <schema>
+              <key name='+' attribute='keymap'>
+                <default key='a'>value-a</default>
+                <default key='b'>value-b</default>
+              </key>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, "")
+        self.assertEqual(conf.keymap, {'a': 'value-a', 'b': 'value-b'})
+
+    def test_arbitrary_key_with_unkeyed_default(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+                          <schema>
+                            <key name='+' attribute='keymap'>
+                              <default>value-a1</default>
+                            </key>
+                          </schema>
+                          """)
 
     def test_arbitrary_keys_with_others(self):
         schema = self.load_schema_text("""\
@@ -653,14 +734,73 @@ class SchemaTestCase(TestBase):
                             <sectiontype name='t2' extends='t1'/>
                           </schema>
                           """)
-        # cannot specify keytype
-        self.assertRaises(ZConfig.SchemaError, self.load_schema_text, """\
-                          <schema>
-                            <sectiontype name='t1' keytype='string'/>
-                            <sectiontype name='t2' extends='t1'
-                                         keytype='integer'/>
-                          </schema>
-                          """)
+
+    def test_sectiontype_derived_keytype(self):
+        # make sure that a derived section type inherits the keytype
+        # of its base
+        schema = self.load_schema_text("""\
+            <schema>
+              <sectiontype name='sect' keytype='identifier'/>
+              <sectiontype name='derived' extends='sect'>
+                <key name='foo' attribute='foo'/>
+                <key name='Foo' attribute='Foo'/>
+              </sectiontype>
+              <section name='foo' type='derived'/>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, """\
+            <derived foo>
+              foo bar
+              Foo BAR
+            </derived>
+            """)
+        self.assertEqual(conf.foo.foo, "bar")
+        self.assertEqual(conf.foo.Foo, "BAR")
+
+    def test_sectiontype_override_keytype(self):
+        schema = self.load_schema_text("""\
+            <schema>
+              <sectiontype name='base' keytype='identifier' >
+                <key name='+' attribute='map' />
+              </sectiontype>
+              <sectiontype name='derived' keytype='ipaddr-or-hostname'
+                           extends='base' />
+              <section name='*' type='base' attribute='base' />
+              <section name='*' type='derived' attribute='derived' />
+            </schema>
+            """)
+        conf = self.load_config_text(schema, """\
+            <base>
+              ident1 foo
+              Ident2 bar
+            </base>
+            <derived>
+              EXAMPLE.COM foo
+            </derived>
+            """)
+        L = conf.base.map.items()
+        L.sort()
+        self.assertEqual(L, [("Ident2", "bar"), ("ident1", "foo")])
+        L = conf.derived.map.items()
+        L.sort()
+        self.assertEqual(L, [("example.com", "foo")])
+
+    def test_sectiontype_inherited_datatype(self):
+        schema = self.load_schema_text("""\
+            <schema prefix='ZConfig.tests.test_schema'>
+              <sectiontype name='base' datatype='.get_foo'>
+                <key name="foo"/>
+              </sectiontype>
+              <sectiontype name='derived' extends='base'/>
+              <section name='*' type='derived' attribute='splat'/>
+            </schema>
+            """)
+        conf = self.load_config_text(schema, """\
+            <derived>
+              foo bar
+            </derived>
+            """)
+        self.assertEqual(conf.splat, "bar")
 
     def test_schema_keytype(self):
         schema = self.load_schema_text("""\
@@ -708,6 +848,66 @@ class SchemaTestCase(TestBase):
 
     def test_datatype_casesensitivity(self):
         self.load_schema_text("<schema datatype='NULL'/>")
+
+    def test_simple_extends(self):
+        schema = self.load_schema_text("""\
+           <schema extends='%s/simple.xml %s/library.xml'>
+             <section name='A' type='type-a' />
+           </schema>
+           """ % (CONFIG_BASE, CONFIG_BASE))
+        self._verifySimpleConf(self.load_config(schema, "simple.conf"))
+
+    def test_extends_fragment_failure(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text,
+            "<schema extends='%s/library.xml#foo'/>" % CONFIG_BASE)
+
+    def test_multi_extends_implicit_OK(self):
+        self.load_schema_text("""\
+           <schema extends='%s/base.xml %s/library.xml'>
+             <section name='A' type='type-a' />
+             <section name='X' type='type-X' />
+           </schema>
+           """ % (CONFIG_BASE, CONFIG_BASE))
+
+    def test_multi_extends_explicit_datatype_OK(self):
+        self.load_schema_text("""\
+           <schema extends='%s/base-datatype1.xml %s/base-datatype2.xml'
+                   datatype='null'>
+             <section name='One' type='type-1' />
+             <section name='Two' type='type-2' />
+           </schema>
+           """ % (CONFIG_BASE, CONFIG_BASE))
+
+    def test_multi_extends_explicit_keytype_OK(self):
+        self.load_schema_text("""\
+           <schema extends='%s/base-keytype1.xml %s/base-keytype2.xml'
+                   keytype='%s.uppercase'>
+             <section name='One' type='type-1' />
+             <section name='Two' type='type-2' />
+           </schema>
+           """ % (CONFIG_BASE, CONFIG_BASE, __name__))
+
+    def test_multi_extends_datatype_conflict(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+            <schema extends='%s/base-datatype1.xml %s/base-datatype2.xml'/>
+            """ % (CONFIG_BASE, CONFIG_BASE))
+
+    def test_multi_extends_keytype_conflict(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+            <schema extends='%s/base-keytype1.xml %s/base-keytype2.xml'/>
+            """ % (CONFIG_BASE, CONFIG_BASE))
+
+    def test_multiple_descriptions_is_error(self):
+        self.assertRaises(ZConfig.SchemaError,
+                          self.load_schema_text, """\
+            <schema>
+              <description>  foo  </description>
+              <description>  bar  </description>
+            </schema>
+            """)
 
 
 def test_suite():

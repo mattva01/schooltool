@@ -193,8 +193,8 @@ text
             ])
 
     def test_attr_funky_names(self):
-        self._run_check("""<a a.b='v' c:d='v' e-f='v'/>""", [
-            ("starttag", "a", ["a.b", "v", "c:d", "v", "e-f", "v"]),
+        self._run_check("""<a a.b='v' e-f='v'/>""", [
+            ("starttag", "a", ["a.b", "v", "e-f", "v"]),
             ("endtag", "a"),
             ])
 
