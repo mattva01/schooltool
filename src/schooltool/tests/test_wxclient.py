@@ -206,7 +206,7 @@ class TestSchoolToolClient(unittest.TestCase):
         result = client.getListOfPersons()
         self.assertEquals(result, [])
 
-    def getPersonInfo(self):
+    def test_getPersonInfo(self):
         from schooltool.wxclient import SchoolToolClient
         body = (
             '<html>\n'
