@@ -12,17 +12,17 @@ div.header {
   /* The top border is here to keep the logo aligned to the top of the header,
      rather than to the top of the title text. */
   border: 1px solid white;
-  border-bottom: 1px solid brown;
+  border-bottom: 1px solid #a52a2a;
 }
 
 div.navigation {
-  color: brown;
-  border-bottom: 1px solid brown;
+  color: #a52a2a;
+  border-bottom: 1px solid #a52a2a;
   padding: 0em 0.5em;
 }
 
 div.navigation a {
-  color: brown;
+  color: #a52a2a;
   text-decoration: none;
   font-weight: bold;
 }
@@ -317,12 +317,12 @@ table.available {
   border-collapse: collapse;
 }
 table.available th {
-  border: 1px solid brown;
+  border: 1px solid #a52a2a;
   background: #cccccc;
 }
 
 table.available td {
-   border: 1px solid brown;
+   border: 1px solid #a52a2a;
    padding: 0 0.5em;
 }
 
