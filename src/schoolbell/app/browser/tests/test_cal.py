@@ -519,12 +519,16 @@ class TestCalendarViewBase(unittest.TestCase):
         a list of overlayd calendars is taken into consideration
 
             >>> class OverlayInfoStub:
-            ...     calendar = CalendarStub('Other Calendar')
-            ...     color1 = 'red'
-            ...     color2 = 'blue'
+            ...     def __init__(self, title, color1, color2, show=True):
+            ...         self.calendar = CalendarStub(title)
+            ...         self.color1 = color1
+            ...         self.color2 = color2
+            ...         self.show = show
             >>> class PersonStub:
             ...     calendar = calendar
-            ...     overlaid_calendars = [OverlayInfoStub()]
+            ...     overlaid_calendars = [
+            ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
+            ...         OverlayInfoStub('Hidden', 'green', 'red', False)]
             >>> from schoolbell.app.interfaces import IPerson
             >>> class PrincipalStub:
             ...     def __conform__(self, interface):

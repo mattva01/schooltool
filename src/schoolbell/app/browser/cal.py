@@ -439,7 +439,8 @@ class CalendarViewBase(BrowserView):
         user = IPerson(self.request.principal, None)
         if user and removeSecurityProxy(self.context) is user.calendar:
             for item in user.overlaid_calendars:
-                yield (item.calendar, item.color1, item.color2)
+                if item.show:
+                    yield (item.calendar, item.color1, item.color2)
 
     def getEvents(self, start_dt, end_dt):
         """Get a list of EventForDisplay objects for a selected time interval.
