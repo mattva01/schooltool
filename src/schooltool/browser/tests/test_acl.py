@@ -122,7 +122,7 @@ class TestACLView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         view = self.createView()
         view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'add',
-                                         'principal': '/persons/johndoe',
+                                         'user': '/persons/johndoe',
                                          'permission': 'View'})
         result = view.update()
         assert view.context.allows(self.person, ViewPermission), result
@@ -139,15 +139,15 @@ class TestACLView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
         view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'grant permission',
-                                         'principal': ''})
+                                         'user': ''})
         result = view.update()
-        self.assertEquals(view.principal_widget.error,
-                          "Please select a principal")
+        self.assertEquals(view.user_widget.error,
+                          "Please select a user")
         self.assertEquals(view.request.applog, [])
 
         view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'grant permission',
-                                         'principal':'foo', 'permission': ''})
+                                         'user':'foo', 'permission': ''})
         result = view.update()
         self.assertEquals(view.permission_widget.error,
                           "Please select a permission")
@@ -157,7 +157,7 @@ class TestACLView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         view = self.createView()
         view.request = RequestStub(authenticated_user=self.manager,
                                    args={'ADD': 'add',
-                                         'principal': 'Everybody',
+                                         'user': 'Everybody',
                                          'permission': 'View'})
         result = view.update()
         assert view.context.allows(Everybody, ViewPermission), result

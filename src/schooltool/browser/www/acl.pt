@@ -46,7 +46,7 @@
   </div>
 </form>
 <form method="POST" tal:attributes="action request/uri">
-  <div tal:replace="structure view/principal_widget" />
+  <div tal:replace="structure view/user_widget" />
   <div tal:replace="structure view/permission_widget" />
   <div class="buttons">
     <input type="submit" class="button" name="ADD"

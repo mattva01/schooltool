@@ -45,16 +45,13 @@ class ACLView(View):
     def __init__(self, context):
         View.__init__(self, context)
 
-        # XXX "principal" is heavy Zope 3 jargon that is guaranteed to be
-        # misunderstood in school contexts.  Rename it to "user"
-
-        self.principal_widget = SelectionWidget(
-            'principal', _('Principal'),
-            [(None, _('Select principal')), (Everybody, _('Everybody'))] +
-            [(obj, obj.title) for obj in self.allPrincipals()],
-            parser=self.principalParser,
-            formatter=self.formatPrincipal,
-            validator=self.principalValidator)
+        self.user_widget = SelectionWidget(
+            'user', _('User'),
+            [(None, _('Select user')), (Everybody, _('Everybody'))] +
+            [(obj, obj.title) for obj in self.allUsers()],
+            parser=self.userParser,
+            formatter=self.formatUser,
+            validator=self.userValidator)
 
         self.permission_widget = SelectionWidget(
             'permission', _('Permission'),
@@ -66,7 +63,7 @@ class ACLView(View):
             formatter=self.formatPermission
             )
 
-    def principalParser(self, value):
+    def userParser(self, value):
         if value in (None, ''):
             return value
         elif value == Everybody:
@@ -76,7 +73,7 @@ class ACLView(View):
         except TypeError:
            return None
 
-    def formatPrincipal(self, value):
+    def formatUser(self, value):
         if value in ('', None):
             return ''
         elif value == Everybody:
@@ -89,10 +86,10 @@ class ACLView(View):
             return ''
         return value
 
-    def principalValidator(self, value):
+    def userValidator(self, value):
         if (not IPerson.providedBy(value) and not IGroup.providedBy(value) and
             value is not None and value != Everybody):
-            raise ValueError(_("Please select a principal"))
+            raise ValueError(_("Please select a user"))
 
     def permissionValidator(self, value):
         if value not in (ViewPermission, AddPermission, ModifyPermission, None):
@@ -120,7 +117,7 @@ class ACLView(View):
         grants.sort()
         return [item for heavy_stone, title, item in grants]
 
-    def allPrincipals(self):
+    def allUsers(self):
         """Return a list of objects available for addition"""
         result = []
 
@@ -133,7 +130,7 @@ class ACLView(View):
 
     def update(self):
         result = []
-        self.principal_widget.update(self.request)
+        self.user_widget.update(self.request)
         self.permission_widget.update(self.request)
         if 'DELETE' in self.request.args:
             for checkbox in self.request.args.get('CHECK', []):
@@ -153,32 +150,32 @@ class ACLView(View):
                     self.request.appLog(
                         _("Revoked permission %s on %s from %s") %
                         (perm, getPath(self.context),
-                         self.printPrincipal(obj)))
+                         self.printUser(obj)))
                     result.append(_("Revoked permission %s from %s") %
-                                  (perm, self.printPrincipal(obj)))
+                                  (perm, self.printUser(obj)))
             return "; ".join(result)
 
         if 'ADD' in self.request.args:
             self.permission_widget.require()
-            self.principal_widget.require()
+            self.user_widget.require()
 
-            if not (self.principal_widget.error or
+            if not (self.user_widget.error or
                     self.permission_widget.error):
-                principal = self.principal_widget.value
+                user = self.user_widget.value
                 permission = self.permission_widget.value
-                if (principal, permission) in self.context:
+                if (user, permission) in self.context:
                     return _("%s already has permission %s") % \
-                           (principal.title, permission)
-                self.context.add((principal, permission))
+                           (user.title, permission)
+                self.context.add((user, permission))
                 self.request.appLog(
                     _("Granted permission %s on %s to %s") %
                     (permission, getPath(self.context),
-                     self.printPrincipal(principal)))
+                     self.printUser(user)))
                 return _("Granted permission %s to %s") % \
-                       (permission, self.printPrincipal(principal))
+                       (permission, self.printUser(user))
 
-    def printPrincipal(self, principal):
-        if principal == Everybody:
+    def printUser(self, user):
+        if user == Everybody:
             return Everybody
         else:
-            return "%s (%s)" % (getPath(principal), principal.title)
+            return "%s (%s)" % (getPath(user), user.title)
