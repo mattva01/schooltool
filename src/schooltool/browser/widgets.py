@@ -561,6 +561,17 @@ class MultiselectionWidget(SequenceWidget):
         SequenceWidget.__init__(self, name, label, **kw)
         self.choices = choices
 
+class MultiCheckboxWidget(MultiselectionWidget):
+    """Multiselection checkboxes widget"""
+
+    implements(IWidget)
+
+    template = Template('www/multicheckboxes_widget.pt', charset=None)
+
+    def __init__(self, name, label, choices, **kw):
+        SequenceWidget.__init__(self, name, label, **kw)
+        self.choices = choices
+
 
 class CheckboxWidget(Widget):
     """Checkbox widget.

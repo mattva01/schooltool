@@ -508,6 +508,77 @@ class TestMultiselectionWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(widget.value, ['a', 'b'])
 
 
+class TestMultiCheckboxWidget(XMLCompareMixin, unittest.TestCase):
+
+    def createWidget(self):
+        from schooltool.browser.widgets import MultiCheckboxWidget
+        widget = MultiCheckboxWidget('field', 'Label',
+                                     [('a', 'Aa'), ('b', 'Bb'), ('c', 'Cc')])
+        return widget
+
+    def test(self):
+        from schooltool.browser.widgets import IWidget
+        verifyObject(IWidget, self.createWidget())
+
+    def test_call(self):
+        widget = self.createWidget()
+        widget.setValue(['a', 'c'])
+        expected = """
+            <div class="row">
+              <label for="field">Label</label>
+              <div>
+                <input checked="checked" id="field_1" name="field"
+                       type="checkbox" value="a"/>
+                <label class="plain" for="field_1">
+                  Aa
+                </label>
+                <input id="field_2" name="field" type="checkbox" value="b"/>
+                <label class="plain" for="field_2">
+                  Bb
+                </label>
+                <input checked="checked" id="field_3" name="field"
+                       type="checkbox" value="c"/>
+                <label class="plain" for="field_3">
+                  Cc
+                </label>
+              </div>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+    def test_call_with_everything(self):
+        widget = self.createWidget()
+        widget.error = u"An error!"
+        widget.unit = u"(blah blah blah)"
+        widget.css_class = u"extra"
+        widget.tabindex = 11
+        expected = """
+            <div class="row row_error">
+              <label for="field">Label</label>
+                 <div>
+                   <input class="extra" id="field_1" name="field" tabindex="11"
+                          type="checkbox" value="a"/>
+                   <label class="plain" for="field_1">
+                     Aa
+                   </label>
+                   <input class="extra" id="field_2" name="field" tabindex="12"
+                          type="checkbox" value="b"/>
+                   <label class="plain" for="field_2">
+                     Bb
+                   </label>
+                   <input class="extra" id="field_3" name="field" tabindex="13"
+                          type="checkbox" value="c"/>
+                   <label class="plain" for="field_3">
+                     Cc
+                   </label>
+                 </div>
+                 <span class="unit">(blah blah blah)</span>
+              <div class="error">An error!</div>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+
 class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
 
     def createWidget(self):
@@ -569,6 +640,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTextAreaWidget))
     suite.addTest(unittest.makeSuite(TestSelectionWidget))
     suite.addTest(unittest.makeSuite(TestMultiselectionWidget))
+    suite.addTest(unittest.makeSuite(TestMultiCheckboxWidget))
     suite.addTest(unittest.makeSuite(TestCheckboxWidget))
     return suite
 

@@ -1,0 +1,27 @@
+<div tal:attributes="class widget/row_class">
+  <label metal:define-macro="label"
+         tal:attributes="class widget/label_class; for widget/name"
+         tal:content="widget/label">[label]</label>
+  <div>
+  <tal:block tal:repeat="choice widget/choices">
+    <input type="checkbox"
+           tal:attributes="class widget/css_class;
+                           name widget/name;
+                           value python:widget.formatter([choice[0]])[0];
+                           checked python:(widget.value and
+                                           choice[0] in widget.value);
+                           id string:${widget/name}_${repeat/choice/number};
+                           tabindex python: widget.tabindex and
+                                    widget.tabindex + repeat['choice'].index()"
+                           />
+    <label tal:attributes="for string:${widget/name}_${repeat/choice/number}"
+           tal:content="python:choice[1]" class="plain">Choice name</label>
+  </tal:block>
+  </div>
+  <span metal:define-macro="unit"
+        class="unit" tal:condition="widget/unit"
+        tal:content="widget/unit">[unit]</span>
+  <div metal:define-macro="error"
+       class="error" tal:condition="widget/error"
+       tal:content="widget/error">[error message]</div>
+</div>
