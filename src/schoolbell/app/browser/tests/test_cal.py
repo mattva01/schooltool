@@ -255,11 +255,19 @@ def doctest_EventForDisplay():
         'red'
         >>> e1.color2
         'green'
+        >>> e1.shortTitle
+        'yawn'
+
+    shortTitle is ellipsized if the title is long
+
+        >>> e2 = createEvent('2004-01-02 12:00:00', '15min',
+        ...                  'sleeping for a little while because I was tired')
+        >>> e2 = EventForDisplay(e2, 'blue', 'yellow')
+        >>> e2.shortTitle
+        'sleeping for a ...'
 
     Lists of EventForDisplay objects can be sorted by start time
 
-        >>> e2 = createEvent('2004-01-02 12:00:00', '15min', 'zzz')
-        >>> e2 = EventForDisplay(e2, 'blue', 'yellow')
         >>> e1 > e2
         True
 
@@ -271,15 +279,22 @@ def doctest_CalendarDay():
 
         >>> from schoolbell.app.browser.cal import CalendarDay
         >>> day1 = CalendarDay(date(2004, 8, 5))
-        >>> day2 = CalendarDay(date(2004, 7, 15), ["abc", "def"])
         >>> day1.date
         datetime.date(2004, 8, 5)
+        >>> day1.title
+        u'Thursday, 2004-08-05'
         >>> day1.events
         []
+
+        >>> day2 = CalendarDay(date(2004, 7, 15), ["abc", "def"])
         >>> day2.date
         datetime.date(2004, 7, 15)
+        >>> day2.title
+        u'Thursday, 2004-07-15'
         >>> day2.events
         ['abc', 'def']
+
+    You can sort a list of CalendarDay objects.
 
         >>> day1 > day2 and not day1 < day2
         True

@@ -66,6 +66,25 @@ from schoolbell.calendar.utils import parse_time, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell import SchoolBellMessageID as _
 
+#
+# Constants
+#
+
+month_names = {
+    1: _("January"), 2: _("February"), 3: _("March"),
+    4: _("April"), 5: _("May"), 6: _("June"),
+    7: _("July"), 8: _("August"), 9: _("September"),
+    10: _("October"), 11: _("November"), 12: _("December")}
+
+day_of_week_names = {
+    0: _("Monday"), 1: _("Tuesday"), 2: _("Wednesday"), 3: _("Thursday"),
+    4: _("Friday"), 5: _("Saturday"), 6: _("Sunday")}
+
+short_day_of_week_names = {
+    0: _("Mon"), 1: _("Tue"), 2: _("Wed"), 3: _("Thu"),
+    4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
+}
+
 
 #
 # Traversal
@@ -201,6 +220,9 @@ class EventForDisplay(object):
         self.dtend = event.dtstart + event.duration
         self.color1 = color1
         self.color2 = color2
+        self.shortTitle = self.title
+        if len(self.title) > 16:
+            self.shortTitle = self.title[:15] + '...'
 
     def __cmp__(self, other):
         return cmp(self.context.dtstart, other.context.dtstart)
@@ -214,6 +236,7 @@ class CalendarDay(object):
 
     Attributes:
        'date'   -- date of the day (a datetime.date instance)
+       'title'  -- day title, including weekday and date.
        'events' -- list of events that took place that day, sorted by start
                    time (in ascending order).
     """
@@ -223,6 +246,8 @@ class CalendarDay(object):
             events = []
         self.date = date
         self.events = events
+        day_of_week = day_of_week_names[date.weekday()]
+        self.title = _('%s, %s') % (day_of_week, date.strftime('%Y-%m-%d'))
 
     def __cmp__(self, other):
         return cmp(self.date, other.date)
@@ -285,27 +310,12 @@ class CalendarViewBase(BrowserView):
 
     __used_for__ = ISchoolBellCalendar
 
-    month_names = {
-        1: _("January"), 2: _("February"), 3: _("March"),
-        4: _("April"), 5: _("May"), 6: _("June"),
-        7: _("July"), 8: _("August"), 9: _("September"),
-        10: _("October"), 11: _("November"), 12: _("December")}
-
-    day_of_week_names = {
-        0: _("Monday"), 1: _("Tuesday"), 2: _("Wednesday"), 3: _("Thursday"),
-        4: _("Friday"), 5: _("Saturday"), 6: _("Sunday")}
-
-    short_day_of_week_names = {
-        0: _("Mon"), 1: _("Tue"), 2: _("Wed"), 3: _("Thu"),
-        4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
-    }
-
     # Which day is considered to be the first day of the week (0 = Monday,
     # 6 = Sunday).  Currently hardcoded.
     first_day_of_week = 0
 
     def dayTitle(self, day):
-        day_of_week = unicode(self.day_of_week_names[day.weekday()])
+        day_of_week = day_of_week_names[day.weekday()]
         return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
 
     __url = None
@@ -505,12 +515,12 @@ class CalendarViewBase(BrowserView):
     def getJumpToMonths(self):
         """Return a list of months for the drop down in the jump portlet."""
         months = []
-        for k, v in self.month_names.items():
-            months.append({'label': unicode(v), 'value': k})
+        for k, v in month_names.items():
+            months.append({'label': v, 'value': k})
         return months
 
     def monthTitle(self, date):
-        return unicode(self.month_names[date.month])
+        return month_names[date.month]
 
     def renderRow(self, week, month):
         """Do some HTML rendering in Python for performance.
@@ -556,7 +566,7 @@ class WeeklyCalendarView(CalendarViewBase):
     prev_title = _("Previous week")
 
     def title(self):
-        month_name = unicode(self.month_names[self.cursor.month])
+        month_name = month_names[self.cursor.month]
         args = {'month': month_name,
                 'year': self.cursor.year,
                 'week': self.cursor.isocalendar()[1]}
@@ -587,7 +597,7 @@ class MonthlyCalendarView(CalendarViewBase):
     prev_title = _("Previous month")
 
     def title(self):
-        month_name = unicode(self.month_names[self.cursor.month])
+        month_name = month_names[self.cursor.month]
         args = {'month': month_name, 'year': self.cursor.year}
         return _('%(month)s, %(year)s') % args
 
@@ -604,7 +614,7 @@ class MonthlyCalendarView(CalendarViewBase):
         return self.calURL('monthly', self.nextMonth())
 
     def dayOfWeek(self, date):
-        return unicode(self.day_of_week_names[date.weekday()])
+        return day_of_week_names[date.weekday()]
 
     def weekTitle(self, date):
         return _('Week %d') % date.isocalendar()[1]
@@ -637,7 +647,7 @@ class YearlyCalendarView(CalendarViewBase):
         return self.calURL('yearly', date(self.cursor.year + 1, 1, 1))
 
     def shortDayOfWeek(self, date):
-        return unicode(self.short_day_of_week_names[date.weekday()])
+        return short_day_of_week_names[date.weekday()]
 
 
 class CalendarEventView(object):
@@ -1230,7 +1240,7 @@ class CalendarEventViewMixin(object):
 
         indexes = {1: _('1st'), 2: _('2nd'), 3: _('3rd'), 4: _('4th'),
                    5: _('5th')}
-        day_of_week = CalendarViewBase.day_of_week_names[weekday]
+        day_of_week = day_of_week_names[weekday]
         return "%s %s" % (indexes[index], day_of_week)
 
     def getLastWeekDay(self):
@@ -1254,7 +1264,7 @@ class CalendarEventViewMixin(object):
             return None
         else:
             weekday = evdate.weekday()
-            day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
+            day_of_week = day_of_week_names[weekday]
             return _("Last %(weekday)s") % {'weekday': day_of_week}
 
 

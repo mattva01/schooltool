@@ -577,7 +577,8 @@ h2.calendar-view-title {
 
 #calendar-view-week td a {
     display: block;
-    border-top: 1px #bab5ab dotted;
+    border: 1px solid;
+    margin: 2px;
     padding: 0.5em;
     text-decoration: none;
     font-weight: normal;
@@ -588,7 +589,6 @@ h2.calendar-view-title {
 }
 
 #calendar-view-week td a.first {
-    border-top: none;
 }
 
 #calendar-view-week td a:hover {

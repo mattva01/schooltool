@@ -9,7 +9,7 @@
             tal:define="start repeat/day/start"
             tal:attributes="class python:start and 'day-title first'
                                                 or 'day-title'">
-          <a tal:content="python:view.dayTitle(day.date)"
+          <a tal:content="day/title"
              tal:attributes="href python:view.calURL('daily', day.date)" />
         </th>
       </tal:loop>
@@ -24,10 +24,11 @@
                            evdate python:event.dtstart.strftime('%Y-%m-%d')"
                tal:attributes="class python:start and 'first' or '';
                                href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${event/unique_id};
-                               style python:'background: %s;; margin: 2px;;' % event.color1;
-                               title event/title"> <!-- XXX style attr is ICK!! -->
-              <span tal:content="python:view.ellipsizeTitle(event.title)"/>
-              (<span tal:content="python:event.dtstart.strftime('%H:%M')"/> - <span tal:content="python:event.dtend.strftime('%H:%M')"/>)
+                               style string:background: ${event/color1};; border-color: ${event/color2};
+                               title event/title">
+              <span tal:content="event/shortTitle"/>
+              (<span tal:content="python:event.dtstart.strftime('%H:%M')"
+               /> - <span tal:content="python:event.dtend.strftime('%H:%M')"/>)
             </a>
           </div>
         </td>
