@@ -127,7 +127,7 @@ class SiteStub:
         else:
             raise AuthenticationError('bad login (%r, %r)' % (user, password))
 
-    def logAppEvent(self, user, message, level='INFO'):
+    def logAppEvent(self, user, message, level=logging.INFO):
         self.applog.append((user, message, level))
 
 
@@ -705,9 +705,8 @@ class TestRequest(unittest.TestCase):
                           'basic realm="SchoolTool"')
 
         self.assertEquals(rq.site.applog,
-                          [(None, "Failed login, username: 'fred'", "WARNING"),
-                           (None, "Failed login, username: 'freq'", "WARNING")]
-                          )
+                [(None, "Failed login, username: 'fred'", logging.WARNING),
+                 (None, "Failed login, username: 'freq'", logging.WARNING)])
 
     # _handle_exception is tested indirectly, in test__process_on_exception
     # and test__process_many_conflict_errors
