@@ -10,12 +10,12 @@
 
 <p>What do you want to do today?</p>
 
-<ul class="actions">
-  <li><a href="/groups/root">Browse groups and persons</a></li>
-  <li><a tal:attributes="href view/person_url">View your information
-      page</a></li>
-  <li><a href="/logout">Log out</a></li>
-</ul>
+<div class="actions">
+  <p><a class="action" href="/groups/root">Browse groups and persons</a></p>
+  <p><a class="action" tal:attributes="href view/person_url">View your
+      information page</a></p>
+  <p><a class="action" href="/logout">Log out</a></p>
+</div>
 
 </metal:block>
 </body>
