@@ -61,19 +61,40 @@ def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
     """Break a relationship between objects `a` and `b`."""
     links_of_a = IRelationshipLinks(a)
     links_of_b = IRelationshipLinks(b)
+    try:
+        link_a_to_b = links_of_a.find(role_of_a, b, role_of_b, rel_type)
+    except ValueError:
+        raise NoSuchRelationship
     zope.event.notify(BeforeRemovingRelationshipEvent(rel_type,
                                                       (a, role_of_a),
                                                       (b, role_of_b)))
-    try:
-        link_a_to_b = links_of_a.find(role_of_a, b, role_of_b, rel_type)
-        link_b_to_a = links_of_b.find(role_of_b, a, role_of_a, rel_type)
-    except ValueError:
-        raise NoSuchRelationship
     links_of_a.remove(link_a_to_b)
+    # If links_of_b.find raises a ValueError, our data structures are out of
+    # sync.
+    link_b_to_a = links_of_b.find(role_of_b, a, role_of_a, rel_type)
     links_of_b.remove(link_b_to_a)
     zope.event.notify(RelationshipRemovedEvent(rel_type,
                                                (a, role_of_a),
                                                (b, role_of_b)))
+
+
+def unrelateAll(obj):
+    """Break all relationships of `obj`.
+
+    Note that this operation is not atomic: if an event subscriber catches
+    a BeforeRemovingRelationshipEvent and vetoes the operation, some
+    relationships may have been removed, while others may still be there.
+    """
+    links_of_a = IRelationshipLinks(obj)
+    relationships = [(link.rel_type, (obj, link.my_role),
+                                     (link.target, link.role))
+                     for link in links_of_a]
+    for args in relationships:
+        try:
+            unrelate(*args)
+        except NoSuchRelationship:
+            pass # it was a loop, so we tried to delete it twice
+    return
 
 
 class RelationshipEvent(object):

@@ -178,6 +178,10 @@ a shortcut for the full unrelate call.
     >>> getRelatedObjects(frogs, URIMember)
     []
 
+There is also an `unrelateAll` function that removes all relationships of
+an object.  It is useful if you want to break all relationships when deleting
+an object.
+
 
 Relationship properties
 -----------------------

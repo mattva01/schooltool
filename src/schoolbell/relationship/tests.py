@@ -348,6 +348,92 @@ def doctest_RelationshipSchema():
     """
 
 
+def doctest_unrelateAll():
+    r"""Tests for unrelateAll.
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+    Let us catch all events and remember them
+
+        >>> events = []
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> zope.event.subscribers.append(events.append)
+
+    Nothing happens if the object has no relationships.
+
+        >>> a = SomeObject('a')
+        >>> from schoolbell.relationship import unrelateAll
+        >>> unrelateAll(a)
+        >>> events
+        []
+
+    Suppose that the object has a number of relationships
+
+        >>> from schoolbell.relationship import relate
+        >>> b, c, d = map(SomeObject, ['b', 'c', 'd'])
+        >>> relationships = [
+        ...       ('example:SomeRelationship', (a, 'example:Foo'),
+        ...                                    (b, 'example:Bar')),
+        ...       ('example:SomeRelationship', (a, 'example:Foo'),
+        ...                                    (c, 'example:Bar')),
+        ...       ('example:OtherRelationship', (a, 'example:Symmetric'),
+        ...                                     (d, 'example:Symmetric')),
+        ...       ('example:Loop', (a, 'example:OneEnd'),
+        ...                        (a, 'example:OtherEnd')),
+        ...       ('example:Loop', (a, 'example:BothEnds'),
+        ...                        (a, 'example:BothEnds')),
+        ... ]
+        >>> for args in relationships:
+        ...     relate(*args)
+
+    We are not interested in relationship events up to this point
+
+        >>> del events[:]
+
+    We call `unrelateAll` and it suddenly has no relationships
+
+        >>> unrelateAll(a)
+
+        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> list(IRelationshipLinks(a))
+        []
+
+    Relationships are broken properly, from both ends
+
+        >>> from schoolbell.relationship import getRelatedObjects
+        >>> getRelatedObjects(b, 'example:Foo')
+        []
+
+    Also, we got a bunch of events
+
+        >>> from sets import Set
+        >>> from schoolbell.relationship.interfaces \
+        ...         import IBeforeRemovingRelationshipEvent
+        >>> from schoolbell.relationship.interfaces \
+        ...         import IRelationshipRemovedEvent
+        >>> before_removal_events = Set([
+        ...         (e.rel_type, (e.participant1, e.role1),
+        ...                      (e.participant2, e.role2))
+        ...         for e in events
+        ...         if IBeforeRemovingRelationshipEvent.providedBy(e)])
+        >>> before_removal_events == Set(relationships)
+        True
+
+        >>> removal_events = Set([(e.rel_type, (e.participant1, e.role1),
+        ...                        (e.participant2, e.role2))
+        ...                       for e in events
+        ...                       if IRelationshipRemovedEvent.providedBy(e)])
+        >>> removal_events == Set(relationships)
+        True
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> tearDown()
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocFileSuite('README.txt'),
