@@ -21,6 +21,9 @@ XXX I'm not sure what this file is about.  Maybe it should be removed.
 -- relationships.rst --
 Some information about relationships in SchoolTool.
 
+-- release-policy.txt --
+The release policy for SchoolTool and SchoolBell.
+
 -- release-sequence.txt --
 The release policy for SchoolTool and SchoolBell.
 
