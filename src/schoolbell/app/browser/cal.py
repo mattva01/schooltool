@@ -28,6 +28,7 @@ import calendar
 import sys
 
 from zope.event import notify
+from zope.app import zapi
 from zope.app.event.objectevent import ObjectModifiedEvent
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
@@ -38,7 +39,7 @@ from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
-from zope.app.traversing.browser.absoluteurl import absoluteURL
+from zope.app.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile
 from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
@@ -1599,3 +1600,17 @@ def enableICalendarUpload(ical_view):
     """
     return IWriteFile(ical_view.context)
 
+
+class CalendarEventAbsoluteURL(AbsoluteURL):
+
+    def breadcrumbs(self):
+        context = self.context
+        request = self.request
+        container = getattr(context, '__parent__', None)
+        base = tuple(zapi.getMultiAdapter((container, request),
+                                          name='absolute_url').breadcrumbs())
+        name = urllib.quote(context.__name__.encode('utf-8'), "@+")
+        return base + ({
+            'name': context.title,
+            'url': "%s/%s/edit.html" % (base[-1]['url'], name)
+            }, )

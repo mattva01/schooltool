@@ -45,6 +45,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
+from zope.app.container.contained import ObjectAddedEvent
 
 from schoolbell.app.app import SchoolBellApplication, Person
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -175,7 +176,8 @@ def load_options(argv):
 
 def setup(options):
     """Configure SchoolBell."""
-    setUpLogger(None, options.config.error_log_file)
+    setUpLogger(None, options.config.error_log_file,
+                "%(asctime)s %(message)s")
     setUpLogger('accesslog', options.config.web_access_log_file)
 
     # Shut up ZODB lock_file, because it logs tracebacks when unable
@@ -333,13 +335,14 @@ class UnicodeFileHandler(logging.StreamHandler):
         self.stream.close()
 
 
-def setUpLogger(name, filenames):
+def setUpLogger(name, filenames, format=None):
     """Set up a named logger.
 
     Sets up a named logger to log into filenames with the given format.
     Two filenames are special: 'STDOUT' means sys.stdout and 'STDERR'
     means sys.stderr.
     """
+    formatter = logging.Formatter(format)
     logger = logging.getLogger(name)
     logger.propagate = False
     logger.setLevel(logging.INFO)
@@ -350,6 +353,7 @@ def setUpLogger(name, filenames):
             handler = logging.StreamHandler(sys.stderr)
         else:
             handler = UnicodeFileHandler(filename)
+        handler.setFormatter(formatter)
         logger.addHandler(handler)
 
 
@@ -387,7 +391,7 @@ def bootstrapSchoolBell(db):
         app = SchoolBellApplication()
         directlyProvides(app, IContainmentRoot)
         root[ZopePublication.root_name] = app
-        setUpLocalAuth(app)
+        notify(ObjectAddedEvent(app))
         manager = Person('manager', 'SchoolBell Manager')
         manager.setPassword('schoolbell')
         app['persons']['manager'] = manager
