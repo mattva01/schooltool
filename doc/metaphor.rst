@@ -21,7 +21,7 @@ Recurring patterns
 Containment / locations
 -----------------------
 
-Using __parent__ and __name__ to express a location.
-Using __getitem__ and keys() and iterkeys() to express containment.
+Using __parent__ and __name__ to express a location
+(see zope.app.interfaces.ILocation).
 
-XXX Mention Zope3 integration?
+Using __getitem__ and keys() and iterkeys() to express containment.

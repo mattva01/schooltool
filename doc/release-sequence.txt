@@ -7,10 +7,11 @@ SchoolBell releases.
 Minor Release
 =============
 
-For bugfixes to a released version which are non-debian specific.
+For bugfixes for a released version which are not Debian-specific.
 
-1.  Receive gpg signed mails from the major contributors specifying a 
-    subversion revision number to release. Make sure everything is co-ordinated.
+1.  Receive gpg signed mails from the major contributors specifying a
+    subversion revision number to release. Make sure everything is
+    co-ordinated.
 
 2.  Set version in 0.8.x branches.
 
@@ -18,10 +19,10 @@ For bugfixes to a released version which are non-debian specific.
 
     b.  Update the version number in setup.py and import-sampleschool.py.
 
-    c.  Write a new Changelog entry in debian/changelog.
+    c.  Add a new Changelog entry in debian/changelog.
 
-    d.  Check that the database is compatible with the previous version, if not
-        update db_version in debian/school{bell,tool}.{pre,post}inst.
+    d.  Check that the database is compatible with the previous version,
+        if not, update db_version in debian/school{bell,tool}.{pre,post}inst.
 
 3.  Check release notes in RELEASE.
 
@@ -35,7 +36,7 @@ For bugfixes to a released version which are non-debian specific.
 New Debian Revision
 ===================
 
-Create a new Debian Revision for Debian specific bugfixes.
+Create a new Debian Revision for Debian-specific bugfixes.
 
 1.  Make sure the necessary changes are in the schooltool-0.8.x branch.  Merge
     them from the trunk if necessary.
@@ -54,8 +55,8 @@ Procedure for a 0.x Release
 
 This is the release procedure used for release 0.8.
 
-1.  Make sure that a mail has been recieved from at least one member of each
-    team (POV and etria) stating that the tree is in a reasonable release
+1.  Make sure that a mail has been received from at least one member of each
+    team (POV and Etria) stating that the tree is in a reasonable release
     condition.
 
 2.  Set version.
@@ -114,7 +115,7 @@ This is the release procedure used for release 0.8.
 
     Note: always leave out the debian revision from the tarball.
 
-7.  Go into the export and make sure they're OK:
+7.  Go into the export and make sure that they are OK:
 
      cd schoolbell-0.8
      make test ftest
@@ -167,15 +168,15 @@ This is the release procedure used for release 0.8.
 
     Update the releases overview page.
 
-11. Write the announcement to the mailing list - include release notes.
+11. Write an announcement to the mailing list - include release notes.
 
-12. Write the news item for the news box on the website.
+12. Write a news item for the news box on the website.
 
 13. Maybe write a new front page headline and short announcement.
 
 14. Send announcement, update news and web pages.
 
-15. Send short announcement to interested outside parties.
+15. Send short announcement to interested outside parties:
 
     - Debian Edu (debian-edu@lists.debian.org)
     - SchoolForge (schoolforge-discuss@schoolforge.net)

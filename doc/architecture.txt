@@ -2,9 +2,8 @@
 SCHOOLTOOL DEVELOPER MANUAL
 ===========================
 
-This document describes Schooltool milestone 4.
+This document describes Schooltool milestone 8.
 
-XXX milestone 9?
 
 1. Application Architecture
 ===========================
@@ -26,9 +25,10 @@ There are several clients produced:
 ======================
 
 The server was designed for high flexibility and configurability by
-introduction of such concepts as facets, relationships, and events.
+use of such concepts as facets, relationships, and events.
 
-The overview of these APIs can be found in the schooltool.interfaces module.
+The overview of these APIs can be found in the schooltool.interfaces
+module.
 
 Most important global helper functions (including pseudo-adapters) can
 be found in the schooltool.component module.
@@ -37,17 +37,15 @@ be found in the schooltool.component module.
 Application objects
 -------------------
 
-There are three kinds of first-class objects (called application
-objects) in SchoolTool: persons, groups, and resources.
-
-XXX Mention notes, residences.
+There are several kinds of first-class objects (called application
+objects) in SchoolTool: persons, groups, and resources.  In addition,
+there are notes and residences.
 
 Application objects live in application object containers, which serve
-as factories and containers for application objects.  When
-initializing the application, three application object containers are
-created: 'persons', 'groups', and 'resources'.
-
-XXX Mention notes, residences
+as factories and containers for application objects.  When initializing
+the application, application object containers for the first-class
+objects are created: 'persons', 'groups', 'resources', 'residences' and
+'notes'.
 
 All people, including pupils, teachers, and administrators, are
 organized into a tree of groups.
@@ -56,26 +54,42 @@ organized into a tree of groups.
 Paths
 -----
 
-All objects that need to be traversable through the HTTP (XXX ReSTive?)
+All objects that need to be traversable through the ReSTive or the web
 interface need to have a path.  That is, they need to implement the
-ILocation interface.  That interface specifies two attributes: a
-__name__ and a __parent__.  The parent must also have a path.
+ILocation interface (a part of the Zope3 location architecture).  That
+interface specifies two attributes: a __name__ and a __parent__.  The
+parent must be an ILocation object.
 
 
 Views
 -----
 
-All objects accessible over the ReSTive interface have auxiliary objects
-called views, which take care of publishing objects in XML and parsing
-the put or posted XML representations and applying the changes to the
-objects.
+Most objects have auxiliary classes called views.  Views are responsible
+for representation of the corresponding objects, and parsing data provided
+by the user and applying changes to the objects.
 
-Usually the view classes take an instance of an object published
-(called context) as the first argument of the constructor.
+There are currently two types of views: ReSTive (see package
+schooltool.rest) and browser views (see package schooltool.browser).  The
+ReSTive views are responsible for publishing and parsing XML
+representations of objects.  Browser views deal with web browsers -- they
+usually render page templates to present data to the user and handle POST
+requests to parse data provided in web page forms.
+
+Usually the view classes take an instance of an object published (called
+context) as the first argument of the constructor.
 
 Views are Resources in terms of twisted.web.
 
-XXX Mention browser views.
+The browser view hierarchy is explicitly created by View._traverse()
+methods.  When a request to render an object is sent, a browser view for
+each component in the given path is invoked, and that view's
+_traverse(key) method is called with the name of the child object.  This
+is repeated until the view for the last component is retrieved, whose
+do_GET or do_POST is invoked.
+
+On the other hand, ReSTive views are also use the view registry which is a
+mapping from interfaces to view classes (e.g., IResource -> ResourceView).
+See schooltool.interfaces.component.IViewAPI for more information.
 
 
 Facets
@@ -107,14 +121,13 @@ schooltool.absence.AbsenceTrackerFacet.
 URIs
 ----
 
-Relationships and roles (and possibly other things in the future) are
-uniquely identified by URIs represented in the application as objects
-providing schooltool.interfaces.IURIObject.  They are represented in XML
-data as simple URIs.  There is a global registry that lets us get a
-corresponding URI object (that has a human-friendly name) from a URI
-string.
+Relationships and roles are uniquely identified by URIs represented in the
+application as objects providing schooltool.interfaces.IURIObject.  They
+are represented in XML data as simple URIs.  There is a global registry
+that lets us get a corresponding URI object (that has a friendly name)
+from a URI string.
 
-Conventionally, the names of URIs have a URI prefix:  URIMembership,
+As a convention, the names of URIs have the prefix 'URI':  URIMembership,
 URITeaching, etc.
 
 A set of "standard" URIs is defined in the schooltool.uris module.
@@ -147,26 +160,27 @@ arguments.  For example::
 
 XXX Mention trouble with SchemaInvocations specific to a relationship.
 
-The relationships are identified by URIs.  Also, both parties in a
-relationship have roles, identified by URIs.  In the case of
-membership, these are:
+Relationship types are identified by URIs.  Also, both parties in a
+relationship have roles, identified by URIs.  In the case of membership,
+these are:
 
     from schooltool.uris import URIMembership, URIMember, URIGroup
 
 Objects that can participate with a certain role in a certain
 relationship can express that fact using hints called valencies.
 For example, the schooltool.model.Group objects have a valency to
-participate in Membership as groups.  This makes it possibly to post
+participate in Membership as groups.  This makes it possible to post
 to the relationships view of a group and create a membership
 relationship to another group, person, or resource from it.
 
 Only relationships advertised as valencies can be created via the
 RESTive interface.
 
+
 Events
 ------
 
-There is an infrastructure for events.
+There is infrastructure for events.
 
 The main idea is that an event is injected where it was originated, is
 being resent to related objects according to the event routing tables
@@ -175,25 +189,26 @@ get sent to the same object twice.
 
 Events are not persistent.
 
-The logic of event propagation is shared among the events and the
-event targets.  The events need to subclass the EventMixin, and the
-event targets need to subclass the EventTargetMixin.  The latter
-implements the IEventConfigurable interface.  Event targets need to
-provide an event table, which is a sequence of IEventActions.   There
-are several EventActions defined that take care of further event
-routing, provide a way to call some method, etc.
+The logic of event propagation is shared among the events and the event
+targets.  Events need to subclass EventMixin, and event targets need to
+subclass EventTargetMixin.  The latter implements the IEventConfigurable
+interface.  Event targets need to provide an event table, which is a
+sequence of IEventActions.   There are several EventActions defined that
+take care of further event routing, provide a way to call some method,
+etc.
 
 The application objects subclass the
-schooltool.facet.FacetedEventTargetMixin, which generates the event
-table of an object by summing up the event tables provided by the
-object itself and all of its facets.  This way, the facets can handle
-certain kinds of events, or define the behaviour for certain kinds of
-events.
+schooltool.facet.FacetedEventTargetMixin, which generates the event table
+of an object by summing up the event tables provided by the object itself
+and all of its facets.  This way, facets can handle certain kinds of
+events, or define behaviour for certain kinds of events.
 
-All the events dispatched pass the global EventService.  It provides
+All the dispatched events reach the global EventService.  It provides
 an API to subscribe to certain kinds of events.
 
-XXX Mention hooking up to Zope3 events and adapter-based subscriptions.
+Events are also propagated into the Zope3 event framework.  You may
+register event handlers by using Zope3 adapters, see schooltool.booking
+for an example.
 
 Currently, events are used for logging modifications of relationships
 and absence tracking.
@@ -207,22 +222,21 @@ and absence tracking.
 Attendance tracking
 -------------------
 
-All persons can be tracked for attendance.  Usually it is done by
-running roll calls on groups.  When some person is not present, an
-absence is created on that person.  An absence has several attributes,
-such as the "resolved" status (whether an excuse has been presented),
-the expected presence date and others (see
-schooltool.interfaces.app.IAbsence).  The absence may contain several
-AbsenceComments.  There can be only one unended absence for one person,
-so if a person is absent from several consecutive roll calls, several
-comments get added to the same Absence object.
+All persons can be tracked for attendance.  Usually it is done by running
+roll calls on groups.  When some person is not present, an absence is
+created on that person.  An absence has several attributes, such as the
+"resolved" status (whether an excuse has been presented), the expected
+presence date and others (see schooltool.interfaces.app.IAbsence).  The
+absence may contain several AbsenceComments.  There can be only one
+unended absence for one person, so if a person is absent from several
+consecutive roll calls, several comments get added to the same Absence
+object.
 
 When the absence is registered (an AbsenceComment is added to the
-Absence), an AbsenceEvent is sent to the system.  This event
-propagates up the membership hierarchy and is registered in all the
-AbsenceTrackers along the way.  Finally, it arrives at the global
-AbsenceTrackerUtility, which can be used to track all absences
-happening in the school.
+Absence), an AbsenceEvent is sent to the system.  This event propagates up
+the membership hierarchy and is registered in all the AbsenceTrackers
+along the way.  Finally, it arrives at the global AbsenceTrackerUtility,
+which can be used to track all absences happening in the school.
 
 Absence trackers can be added to the groups by adding the free floating
 AbsenceTrackerFacet.
@@ -245,9 +259,6 @@ will contain all the lessons they are teaching, and a composite
 timetable of a pupil will contain all the events from the private
 timetables of the groups the're in, in other words -- all the lessons
 they need to attend.
-
-XXX Note that the user can choose which calendars to include in the
-    composite calendar.
 
 Objects that have a timetable should implement ITimetabled.  All of
 the application objects are timetabled.
@@ -301,20 +312,34 @@ model and a timetable, can generate a calendar.
 Calendaring
 -----------
 
-Every application object has two calendars: a private calendar which
-can be edited and a read-only calendar formed out of the group's or
-person's composite timetable.
+Persons, groups and resources (and any other objects that implement
+ICalendarOwner) have a private calendar which can be edited and a
+composite calendar, which is composed from other calendars.  Composite
+calendars are driven by the URICalendarSubscription relationship - that
+is, an object's composite calendar consists of objects who are related to
+it as URICalendarProviders.
 
-The calendar views publish and accept calendars in the iCalendar
-representation (RFC 2445).
+Objects that implement ITimetabled also have a read-only composite
+timetable calendar which is formed by composing the object's timetable
+and all its parent groups' composite timetables.
 
-When a person books a resource, the same booking event gets added to
-the private calendars of that person and the resource.  The owner and
-context attributes of the CalendarEvent are in that case,
-respectively, the person and the resource.
+The personal calendar has an iCalendar view, that can present the calendar
+in the iCalendar format (RFC 2445) for third-party clients, and it can
+parse calendars submitted by those clients and update the calendar.  A
+read-only iCalendar view for the composite timetable calendar is also
+available.
+
+When a person books a resource, the same booking event is added to the
+private calendars of that person and the resource.  The owner and context
+attributes of the CalendarEvent then are, respectively, the person and the
+resource.
 
 The core calendaring code is located in the schooltool.cal module.  A
 Calendar has a set of CalendarEvents and can be either iterated over or
-queried for the events that happened on a certain date.  A calendar can
-also be merged with another calendar.
+queried for events that happened on a certain date.  A calendar may also
+be merged with another calendar.
 
+If you need a functionally defined calendar for internal use, you should
+use ImmutableCalendar, so that you do not accidentally try to modify a
+derived calendar instead of the original one, in which case the changes
+would be lost.

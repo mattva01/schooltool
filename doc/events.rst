@@ -15,14 +15,14 @@ to have absences particularly noted), or collectively on behalf of groups
 of objects. (For example, all teachers who are class tutors need to note
 when pupils are absent for several consecutive registrations.)
 
-XXX: talk about facets, relationships and events.
-
-XXX: Mention Zope3 events, adapter-based subscriptions.
+After the event has been processed by all SchoolTool event subscribers,
+it is forwarded to the Zope3 event system.  You may use Zope3 adapters
+to register event handlers, as in schooltool.booking.
 
 See code
 --------
 
-In src/schooltool/interface.py
+In src/schooltool/interfaces/event.py
   IEvent
   IEventTarget
   IEventService
@@ -31,6 +31,9 @@ In src/schooltool/interface.py
   ILookupAction
   IRouteToMembersAction
   IRouteToGroupsAction
+
+In src/schooltool/booking.py
+  setUp
 
 
 Glossary

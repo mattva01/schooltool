@@ -4,8 +4,6 @@ SchoolTool server RESTive interface
 This is a brief list of all actions accessible through the RESTive interface
 to the SchoolTool server.
 
-XXX Mention guardians, residences
-
   GET /
     lists all application object containers, roots, utilities
 
@@ -64,6 +62,17 @@ XXX Mention guardians, residences
     set a password for a person
   DELETE /persons/person_id/password
     disable the account of a person
+
+  GET /notes
+    list all notes in the system
+  GET /notes/note_id
+    show information about a note
+  POST /notes
+    create a new note
+  PUT /notest/note_id
+    create a new note with a given id
+  DELETE /notest/note_id
+    delete a note
 
   GET ...object/facets
     lists all facets for an object and all available facet factories
@@ -208,12 +217,15 @@ XXX Mention guardians, residences
   PUT /options
     updates global application settings
 
-In the above '...object' stands for a full path to an application object (i.e.
-a group, a person or a resource), for example '/persons/some_person_id'.
+In the above, '...object' stands for a full path to an application object
+(i.e., a group, a person or a resource), for example,
+'/persons/some_person_id'.
+
+Note: residences are not yet available through the ReSTive interface.
 
 This list should be up-to-date (I think) with respect to SchoolTool revision
 1993.  It has not been verified, so it might contain errors or omissions.
 
-Ideally all this should be automatically extracted from source code (e.g.
+Ideally all this should be automatically extracted from source code (e.g.,
 docstrings for views).
 

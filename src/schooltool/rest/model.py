@@ -187,6 +187,8 @@ class NoteView(View):
 
     template = Template("www/note.pt", content_type="text/xml")
 
+    # XXX Unit tests?
+
 
 class NotesView(ApplicationObjectTraverserView):
     """A users view on their notes of a relatable object."""
@@ -194,6 +196,8 @@ class NotesView(ApplicationObjectTraverserView):
     authorization = PublicAccess
 
     template = Template("www/notes.pt", content_type="text/xml")
+
+    # XXX Unit tests?
 
 
 #
