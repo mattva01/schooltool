@@ -27,6 +27,78 @@ At the moment schoolbell.calendar contains building blocks for calendaring
 in your own application.
 
 
+Calendars
+---------
+
+A calendar is a set of events.  A calendar event has a date and time, a
+duration, a title, and a bunch of other (optional) attributes like location
+or description.  Here's a sample calendar event:
+
+    >>> from datetime import datetime, timedelta
+    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+    >>> appointment = SimpleCalendarEvent(datetime(2004, 12, 28, 13, 40),
+    ...                                   timedelta(hours=1),
+    ...                                   'Dentist')
+
+Calendar events are described by the ICalendarEvent interface.
+
+    >>> from schoolbell.calendar.interfaces import ICalendarEvent
+    >>> ICalendarEvent.providedBy(appointment)
+    True
+
+SimpleCalendarEvent is but one of classes that implement ICalendarEvent,
+see the section on calendar storage below.
+
+
+Storage of calendars
+--------------------
+
+SchoolBell was designed to allow flexibility in calendar storage: calendars
+may be stored in the ZODB, in a relational database, as iCalendar files on
+disk, or computed on the fly from some other data source.
+
+To achieve this, schoolbell.calendar defines interfaces for calendars
+(ICalendar and IEditCalendar) and calendar events (ICalendarEvent) and relies
+on objects implementing those interfaces.
+
+You can define your own calendar and calendar event classes.  There are
+mixins (CalendarMixin, EditableCalendarMixin, CalendarEventMixin) defined
+in schoolbell.calendar.mixins that you can use (if you want to) to implement
+some of calendar/calendar event operations.
+
+There are some simple implementations of calendars and calendar events in
+schoolbell.calendar.simple: SimpleCalendarEvent and ImmutableCalendar.
+They are particularly useful for calendars that are generated on the fly.
+For example, suppose we have a list of (fictious) deadlines for a project:
+
+    >>> deadlines = [('2005-02-28', 'Feature freeze'),
+    ...              ('2005-03-05', 'Release candidate 1'),
+    ...              ('2005-03-15', 'Release')]
+
+We can generate a calendar like this
+
+    >>> from schoolbell.calendar.simple import ImmutableCalendar
+    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+    >>> from schoolbell.calendar.utils import parse_datetime
+    >>> from datetime import timedelta
+    >>> deadline_calendar = ImmutableCalendar([
+    ...         SimpleCalendarEvent(parse_datetime(date + ' 00:00:00'),
+    ...                             timedelta(hours=1),
+    ...                             deadline)
+    ...         for date, deadline in deadlines])
+
+(Note that every event will get a new randomly generated unique_id attribute.
+If you want to publish a computed calendar as an iCalendar file, you might
+want to generate deterministic unique IDs and explicitly pass them to
+SimpleCalendarEvent's constructor.)
+
+    >>> for event in deadline_calendar:
+    ...     print event.dtstart.strftime('%Y-%m-%d'), event.title
+    2005-02-28 Feature freeze
+    2005-03-05 Release candidate 1
+    2005-03-15 Release
+
+
 iCalendar
 ---------
 
@@ -85,6 +157,27 @@ subset of it.  This subset should be enough to interoperate with most open
 source calendaring software, but you should keep in mind that reading an
 iCalendar file into SchoolBell objects and writing it back is a lossy
 transformation.
+
+
+Calendar composition
+--------------------
+
+It is often useful to display several calendars at the same time.  Rather
+than iterating over a number of calendars, you may want to construct a single
+calendar that contains all the events from those other calendars:
+
+    >>> from schoolbell.calendar.simple import combine_calendars
+    >>> cal = combine_calendars(deadline_calendar, calendar)
+    >>> len(cal) == len(deadline_calendar) + len(calendar)
+    True
+    >>> for event in cal:
+    ...     print event.dtstart.strftime('%Y-%m-%d'), event.title
+    2005-02-28 Feature freeze
+    2005-03-05 Release candidate 1
+    2005-03-15 Release
+    2005-02-14 #schooltool meeting
+    2005-02-09 SchoollTool 0.9 release
+    2005-02-09 SchoolTool release party!
 
 
 Utilities
