@@ -49,6 +49,17 @@ __metaclass__ = type
 # Client/server communication
 #
 
+
+def make_basic_auth(username, password):
+    """Generate HTTP basic authentication credentials.
+
+    >>> make_basic_auth('myusername', 'secret')
+    'Basic bXl1c2VybmFtZTpzZWNyZXQ='
+    """
+    creds = "%s:%s" % (username, password)
+    return "Basic " + base64.encodestring(creds).strip()
+
+
 class SchoolToolClient:
     """Client for the SchoolTool HTTP server.
 
@@ -98,7 +109,7 @@ class SchoolToolClient:
         except SchoolToolError, e:
             pass
 
-    def get(self, path):
+    def get(self, path, headers=None):
         """Perform an HTTP GET request for a given path.
 
         Returns the response object.
@@ -106,9 +117,9 @@ class SchoolToolClient:
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('GET', path)
+        return self._request('GET', path, headers=headers)
 
-    def post(self, path, body):
+    def post(self, path, body, headers=None):
         """Perform an HTTP POST request for a given path.
 
         Returns the response object.
@@ -116,9 +127,9 @@ class SchoolToolClient:
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('POST', path, body)
+        return self._request('POST', path, body, headers=headers)
 
-    def put(self, path, body):
+    def put(self, path, body, headers=None):
         """Perform an HTTP PUT request for a given path.
 
         Returns the response object.
@@ -126,9 +137,9 @@ class SchoolToolClient:
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('PUT', path, body)
+        return self._request('PUT', path, body, headers=headers)
 
-    def delete(self, path):
+    def delete(self, path, headers=None):
         """Perform an HTTP DELETE request for a given path.
 
         Returns the response object.
@@ -136,7 +147,7 @@ class SchoolToolClient:
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('DELETE', path, '')
+        return self._request('DELETE', path, '', headers=headers)
 
     def _request(self, method, path, body=None, headers=None):
         """Perform an HTTP request for a given path.
@@ -153,9 +164,8 @@ class SchoolToolClient:
                 hdrs['Content-Type'] = 'text/xml'
                 hdrs['Content-Length'] = len(body)
             if self.user is not None:
-                creds = "%s:%s" % (self.user, self.password)
-                data = "Basic " + base64.encodestring(creds).strip()
-                hdrs['Authorization'] = data
+                creds = make_basic_auth(self.user, self.password)
+                hdrs['Authorization'] = creds
             if headers:
                 hdrs.update(headers)
             conn.request(method, path, body, hdrs)
@@ -387,6 +397,13 @@ class SchoolToolClient:
             if response.status != 200:
                 raise ResponseStatusError(response)
         return path
+
+    def changePassword(self, username, new_password):
+        """Change the password for a persons."""
+        response = self.put('/persons/%s/password' % username, new_password,
+                            headers={'Content-Type': 'text/plain'})
+        if response.status != 200:
+            raise ResponseStatusError(response)
 
     def createGroup(self, group_title):
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -1054,24 +1071,7 @@ class AbsenceInfo:
                        self.format_date(self.datetime)))
 
     def format_age(self, age, fmt_positive='%s', fmt_negative='-%s'):
-        """Format a time interval.
-
-        >>> from datetime import timedelta
-        >>> format_age(timedelta(minutes=5))
-        '0h5m'
-        >>> format_age(timedelta(hours=2, minutes=15))
-        '2h15m'
-        >>> format_age(timedelta(0))
-        '0h0m'
-        >>> format_age(-timedelta(minutes=5))
-        '-0h5m'
-        >>> format_age(-timedelta(hours=2, minutes=15))
-        '-2h15m'
-        >>> format_age(timedelta(hours=2, minutes=15), 'in %s', '%s ago')
-        'in 2h15m'
-        >>> format_age(-timedelta(hours=2, minutes=15), 'in %s', '%s ago')
-        '2h15m ago'
-        """
+        """Format a time interval."""
         fmt = fmt_positive
         age = age.days * 86400 + age.seconds
         if age < 0:
@@ -1080,14 +1080,7 @@ class AbsenceInfo:
         return fmt % '%dh%dm' % divmod(age / 60, 60)
 
     def format_date(self, date):
-        """Format the date part of a datetime.
-
-        >>> from datetime import date
-        >>> format_date(date(2001, 2, 3))
-        '2001-02-03'
-        >>> format_date(date.utcnow())
-        'today'
-        """
+        """Format the date part of a datetime."""
         if date.date() == self.now().date():
             return 'today'
         else:

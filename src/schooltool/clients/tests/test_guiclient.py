@@ -26,6 +26,7 @@ import datetime
 import libxml2
 import urllib
 import base64
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
@@ -794,6 +795,22 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createPerson, 'John Doe')
+
+    def test_changePassword(self):
+        from schooltool.clients.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(200, 'OK', 'Password set'))
+        client.changePassword('luser1', 'wp')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons/luser1/password')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/plain')
+        self.assertEqualsXML(conn.body, 'wp')
+
+    def test_changePassword_with_errors(self):
+        from schooltool.clients.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        self.assertRaises(SchoolToolError,
+                          client.changePassword, 'luser1', 'wp')
 
     def test_createGroup(self):
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
@@ -1890,6 +1907,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite('schooltool.clients.guiclient'))
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
     suite.addTest(unittest.makeSuite(TestParseFunctions))
     suite.addTest(unittest.makeSuite(TestInfoClasses))

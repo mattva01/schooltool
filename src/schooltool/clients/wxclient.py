@@ -1417,6 +1417,63 @@ class ResourceBookingDlg(wxDialog):
             self.Close(True)
 
 
+class PasswordDlg(wxDialog):
+    """Dialog for changing passwords booking"""
+
+    def __init__(self, parent, client, person):
+        self.title = "Change Password for %s" % person.person_title
+        self.username = person.person_path.split('/')[-1]
+        self.client = client
+        wxDialog.__init__(self, parent, -1, self.title,
+                          style=NONMODAL_DLG_STYLE)
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+        vsizer.Add(wxStaticText(self, -1, person.person_title),
+                   0, wxLEFT|wxTOP|wxRIGHT, 8)
+        vsizer.Add(wxStaticText(self, -1, "Username: %s" % self.username),
+                   0, wxLEFT|wxTOP|wxRIGHT, 8)
+
+        grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
+        grid_sizer.Add(wxStaticText(self, -1, "New password"))
+        self.new_pw_ctrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
+        grid_sizer.Add(self.new_pw_ctrl, 1, wxEXPAND)
+        grid_sizer.Add(wxStaticText(self, -1, "Confirm password"))
+        self.confirm_pw_ctrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
+        grid_sizer.Add(self.confirm_pw_ctrl, 1, wxEXPAND)
+        vsizer.Add(grid_sizer, 0, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        vsizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        ok_btn.SetDefault()
+        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxALIGN_CENTER|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
+
+    def OnOk(self, event=None):
+        if self.new_pw_ctrl.GetValue() != self.confirm_pw_ctrl.GetValue():
+            wxMessageBox("Passwords do not match", self.title,
+                         wxICON_ERROR|wxOK)
+            return
+        try:
+            self.client.changePassword(self.username,
+                                       self.new_pw_ctrl.GetValue())
+        except SchoolToolError, e:
+            wxMessageBox("Could not change password: %s"
+                         % e, self.title, wxICON_ERROR|wxOK)
+        else:
+            self.Close(True)
+
+
 #
 # Main application window
 #
@@ -1526,6 +1583,9 @@ class MainFrame(wxFrame):
                 item("View &Composite Timetables",
                      "View a list of person's composite timetables",
                      self.DoViewPersonCompositeTimetables),
+                item("Change &Password",
+                     "Change the password of a person",
+                     self.DoViewPersonChangePassword),
                 separator(),
                 item("Add &Member", "Add a person to this group",
                      self.DoAddMember),
@@ -2035,6 +2095,20 @@ class MainFrame(wxFrame):
                                   % (self.client.server, self.client.port,
                                      member.person_path),
                               parent=self)
+        window.Show()
+
+    def DoViewPersonChangePassword(self, event=None):
+        """Open the password change dialog.
+
+        Accessible from person list popup menu.
+        """
+        item = self.personListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No person selected")
+            return
+        key = self.personListCtrl.GetItemData(item)
+        member = self.personListData[key]
+        window = PasswordDlg(parent=self, client=self.client, person=member)
         window.Show()
 
     def DoViewAllAbsences(self, event=None):
