@@ -531,6 +531,12 @@ class YearlyRecurrenceRule(RecurrenceRule):
         nextyear = date.year + self.interval
         return date.replace(year=nextyear)
 
+    def _iCalArgs(self, dtstart):
+        """Return iCalendar parameters specific to monthly reccurence."""
+        # XXX KOrganizer wants explicit BYMONTH and BYMONTHDAY arguments.
+        #     Maybe it is a good idea to add them for the sake of explicitness.
+        pass
+
 
 class WeeklyRecurrenceRule(RecurrenceRule):
     """Weekly recurrence rule."""
