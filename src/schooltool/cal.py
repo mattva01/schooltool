@@ -1075,30 +1075,52 @@ class CalendarOwnerMixin(Persistent):
 
 
 class DailyRecurrenceRule:
+    """Daily recurrence rule.
 
+    Immutable hashable object.
+    """
     implements(IDailyRecurrenceRule)
 
-    def __init__(self, interval=None, count=None, until=None, exceptions=None):
+    def __init__(self, interval=None, count=None, until=None, exceptions=[]):
         self.interval = interval
         self.count = count
         self.until = until
         self.exceptions = exceptions
+        self._validate()
+
+    def _validate(self):
+        if self.count is not None and self.until is not None:
+            raise ValueError("count and until cannot be both set (%s, %s)"
+                             % (self.count, self.until))
 
     def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
                 exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
-        pass
+        if interval is Unchanged:
+            interval = self.interval
+        if count is Unchanged:
+            count = self.count
+        if until is Unchanged:
+            until = self.until
+        if exceptions is Unchanged:
+            exceptions = list(self.exceptions)
+        return DailyRecurrenceRule(interval, count, until, exceptions)
+
+    def __tupleForHash(self):
+        return (self.__class__.__name__, self.interval, self.count,
+                self.until, tuple(self.exceptions))
 
     def __eq__(self, other):
         """See if self == other."""
+        return hash(self) == hash(other)
 
     def __ne__(self, other):
         """See if self != other."""
+        return not self == other
 
-    def __hash__():
+    def __hash__(self):
         """Return the hash value of this recurrence rule.
 
         It is guaranteed that if recurrence rules compare equal, hash will
         return the same value.
         """
-        pass
-
+        return hash(self.__tupleForHash())

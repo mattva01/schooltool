@@ -1259,6 +1259,26 @@ class TestDailyRecurrenceRule(unittest.TestCase):
         d = DailyRecurrenceRule()
         verifyObject(IDailyRecurrenceRule, d)
 
+    def test_comparison(self):
+        from schooltool.cal import DailyRecurrenceRule
+        from schooltool.interfaces import IDailyRecurrenceRule
+        d = DailyRecurrenceRule()
+        d2 = d.replace()
+        assert d is not d2
+        assert d == d2
+        assert not d != d2
+        assert hash(d) == hash(d2)
+
+    def test_replace(self):
+        from schooltool.cal import DailyRecurrenceRule
+        from schooltool.interfaces import IDailyRecurrenceRule
+        rule = DailyRecurrenceRule(interval=1, until=date(2005, 1, 1))
+        assert rule == rule.replace()
+        rule2 = rule.replace(until=None, count=20)
+        assert rule != rule2
+
+        self.assertRaises(ValueError, rule.replace, count=20)
+
 
 def test_suite():
     suite = unittest.TestSuite()
