@@ -433,12 +433,6 @@ class SchoolToolClient:
         result.loadData(response.read())
 
         # XXX this could be expensive
-        name_dict = {}
-        for title, path in self.getListOfPersons():
-            name_dict[path] = title
-        result.setTeacherNames(name_dict)
-
-        # XXX and this even more so
         for idx, (teacher_path, title, acts) in enumerate(result.teachers):
             relationships = self.getObjectRelationships(teacher_path)
             result.setTeacherRelationships(idx, relationships)
@@ -1337,7 +1331,8 @@ class SchoolTimetableInfo:
                     self.periods.append((day_id, period_id))
             for teacher_node in teacher_nodes:
                 teacher_path = to_unicode(teacher_node.nsProp('href', xlink))
-                self.teachers.append((teacher_path, None, None))
+                teacher_title = to_unicode(teacher_node.nsProp('title', xlink))
+                self.teachers.append((teacher_path, teacher_title, None))
                 tt_row = []
                 ctx.setContextNode(teacher_node)
                 for day_node in ctx.xpathEval('st:day'):
@@ -1367,14 +1362,6 @@ class SchoolTimetableInfo:
         finally:
             doc.freeDoc()
             ctx.xpathFreeContext()
-
-    def setTeacherNames(self, name_dict):
-        """Set teacher names.
-
-        name_dict is a mapping from paths to names.
-        """
-        for n, (path, old_name, activities) in enumerate(self.teachers):
-            self.teachers[n] = (path, name_dict.get(path), activities)
 
     def setTeacherRelationships(self, idx, relationships):
         """Set teacher activities from relationships.

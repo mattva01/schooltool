@@ -656,7 +656,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         body1 = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher xlink:type="simple" xlink:href="/persons/0013">
+              <teacher xlink:type="simple" xlink:href="/persons/0013"
+                       xlink:title="Fred">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/002" title="French">
@@ -677,7 +678,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                   </period>
                 </day>
               </teacher>
-              <teacher xlink:type="simple" xlink:href="/persons/0014">
+              <teacher xlink:type="simple" xlink:href="/persons/0014"
+                       xlink:title="Barney">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/006" title="Geography"/>
@@ -698,14 +700,6 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             </schooltt>
             """)
         body2 = dedent("""
-            <container xmlns:xlink="http://www.w3.org/1999/xlink">
-              <items>
-                <item xlink:href="/persons/0013" xlink:title="Fred" />
-                <item xlink:href="/persons/0014" xlink:title="Barney"/>
-              </items>
-            </container>
-        """)
-        body3 = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
                 <relationship xlink:title="Maths" xlink:href="/groups/maths"
@@ -716,7 +710,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
               </existing>
             </relationships>
         """)
-        body4 = dedent("""
+        body3 = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
               </existing>
@@ -742,11 +736,9 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
 
         client = self.newClientMulti([ResponseStub(200, 'OK', body1),
                                       ResponseStub(200, 'OK', body2),
-                                      ResponseStub(200, 'OK', body3),
-                                      ResponseStub(200, 'OK', body4)])
+                                      ResponseStub(200, 'OK', body3)])
         results = client.getSchoolTimetable('2003-fall', 'weekly')
         self.checkConnPaths(client, ['/schooltt/2003-fall/weekly',
-                                     '/persons',
                                      '/persons/0013/relationships',
                                      '/persons/0014/relationships'])
         self.assertEquals(results, expected)
@@ -1903,7 +1895,8 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
         data = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
                       xmlns:xlink="http://www.w3.org/1999/xlink">
-              <teacher xlink:type="simple" xlink:href="/persons/0013">
+              <teacher xlink:type="simple" xlink:href="/persons/0013"
+                       xlink:title="A Teacher \xe2\x9c\xb0">
                 <day id="A \xe2\x9c\xb0">
                   <period id="Green \xe2\x9c\xb0">
                     <activity group="/groups/002" title="French \xe2\x9c\xb0">
@@ -1950,23 +1943,33 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
             """)
         st.loadData(data)
 
-        self.assertEquals(st.teachers, [('/persons/0013', None, None),
-                                        ('/persons/0014', None, None)])
-        self.assertEquals(st.periods, [(u"A \u2730", u"Green \u2730"),
-                                       (u"A \u2730", u"Blue"),
-                                       (u"B", u"Green"),
-                                       (u"B", u"Blue")])
-        self.assertEquals(st.tt, [[[(u'French \u2730', u'/groups/002',
-                                     [(u'101 \u2730',
-                                       u'/resources/room101')])],
-                                   [(u'Math \u2730', u'/groups/003', [])],
-                                   [(u'English', u'/groups/004', []),
-                                    (u'English', u'/groups/005', [])],
-                                   [(u'Biology', u'/groups/005', [])]],
-                                  [[(u'Geography', u'/groups/006', [])],
-                                   [(u'History', u'/groups/007', [])],
-                                   [(u'Physics', u'/groups/008', [])],
-                                   [(u'Chemistry', u'/groups/009', [])]]])
+        self.assertEquals(st.teachers,
+                          [('/persons/0013', u'A Teacher \u2730', None),
+                           ('/persons/0014', None, None)])
+        self.assertEquals(st.periods,
+                          [(u"A \u2730", u"Green \u2730"),
+                           (u"A \u2730", u"Blue"),
+                           (u"B", u"Green"),
+                           (u"B", u"Blue")])
+        self.assertEquals(st.tt,
+                          [
+                            # Day A
+                            [
+                              [(u'French \u2730', u'/groups/002',
+                                [(u'101 \u2730', u'/resources/room101')])],
+                              [(u'Math \u2730', u'/groups/003', [])],
+                              [(u'English', u'/groups/004', []),
+                               (u'English', u'/groups/005', [])],
+                              [(u'Biology', u'/groups/005', [])]
+                            ],
+                            # Day B
+                            [
+                              [(u'Geography', u'/groups/006', [])],
+                              [(u'History',   u'/groups/007', [])],
+                              [(u'Physics',   u'/groups/008', [])],
+                              [(u'Chemistry', u'/groups/009', [])]
+                            ]
+                          ])
 
     def test_loadData_breakage(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
@@ -2031,15 +2034,6 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
             </schooltt>
             """)
         self.assertEquals(result, expected, "\n" + diff(expected, result))
-
-    def test_setTeacherNames(self):
-        from schooltool.clients.guiclient import SchoolTimetableInfo
-        from schooltool.clients.guiclient import RelationshipInfo
-        st = SchoolTimetableInfo([('/path1', None, None),
-                                  ('/path2', None, None)])
-        st.setTeacherNames({'/path1': 'John', '/path3': 'Smith'})
-        self.assertEquals(st.teachers, [('/path1', 'John', None),
-                                        ('/path2', None, None)])
 
     def test_setTeacherRelationships(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
