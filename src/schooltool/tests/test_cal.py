@@ -677,7 +677,7 @@ class TestInheritedCalendarEvent(TestCalendarEvent):
                            "reality check", unique_id='uid',
                            privacy="hidden")
         iev = InheritedCalendarEvent(ev)
-        verifyObject(IInheritedCalendarEvent, ev)
+        verifyObject(IInheritedCalendarEvent, iev)
         self.assertEquals(ev, iev)
         self.assertEquals(ev.dtstart, iev.dtstart)
 
@@ -1289,6 +1289,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarPersistence))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
     suite.addTest(unittest.makeSuite(TestExpandedCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestInheritedCalendarEvent))
     suite.addTest(unittest.makeSuite(TestACLCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
