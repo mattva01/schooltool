@@ -189,8 +189,3 @@ class TimetableResourceSynchronizer:
                 # recursion.
                 tt.exceptions.remove(exception)
 
-
-# TODO: Synchronize timetable activites via event handlers when they are
-#       added/removed one-by-one.  Move synchronization code from
-#       SchoolTimetableView to this module.
-
