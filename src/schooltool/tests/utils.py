@@ -152,6 +152,9 @@ class RegistriesSetupMixin:
         component.timetable_model_registry = self.old_timetable_model_registry
         uris._uri_registry = self.old_uri_registry
 
+        from zope.testing.cleanup import CleanUp
+        CleanUp().cleanUp()
+
     setUp = setUpRegistries
     tearDown = tearDownRegistries
 
