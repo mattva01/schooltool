@@ -273,6 +273,111 @@ class TestPersonView(unittest.TestCase):
                           "text/xml; charset=UTF-8")
 
 
+class TestAppView(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import ApplicationView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership, setUp
+        setUp()
+        self.app = Application()
+        self.app['groups'] = ApplicationObjectContainer(Group)
+        self.app['persons'] = ApplicationObjectContainer(Person)
+        self.group = self.app['groups'].new("root", title="Root group")
+        self.app.addRoot(self.group)
+
+        self.view = ApplicationView(self.app)
+
+    def test_render(self):
+        from schooltool.component import getPath
+        request = RequestStub("http://localhost/")
+        request.method = "GET"
+        result = self.view.render(request)
+
+        expected = dedent("""\
+            <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+              <message>Welcome to the SchoolTool server</message>
+              <roots>
+                <root xlink:type="simple" xlink:href="/groups/root"
+                      xlink:title="Root group"/>
+              </roots>
+            </schooltool>
+            """)
+
+        self.assertEquals(result, expected, diff(result, expected))
+
+    def test__traverse(self):
+        from schooltool.views import ApplicationObjectContainerView
+        request = RequestStub("http://localhost/groups")
+        request.method = "GET"
+        view = self.view._traverse('groups', request)
+        self.assert_(view.__class__ is ApplicationObjectContainerView)
+        self.assertRaises(KeyError, view._traverse, 'froups', request)
+
+
+class TestAppObjContainerView(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import ApplicationObjectContainerView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership, setUp
+        setUp()
+        self.app = Application()
+        self.app['groups'] = ApplicationObjectContainer(Group)
+        self.app['persons'] = ApplicationObjectContainer(Person)
+        self.group = self.app['groups'].new("root", title="Root group")
+        self.app.addRoot(self.group)
+
+        self.view = ApplicationObjectContainerView(self.app['groups'])
+
+    def test_render(self):
+        from schooltool.component import getPath
+        request = RequestStub("http://localhost/groups")
+        request.method = "GET"
+        result = self.view.render(request)
+
+        expected = dedent("""\
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>groups</name>
+              <items>
+                <item xlink:type="simple" xlink:href="/groups/root"
+                      xlink:title="Root group"/>
+              </items>
+            </container>
+            """)
+
+        self.assertEquals(result, expected, diff(result, expected))
+
+    def test__traverse(self):
+        from schooltool.views import GroupView
+        request = RequestStub("http://localhost/groups/root")
+        request.method = "GET"
+        view = self.view._traverse('root', request)
+        self.assert_(view.__class__ is GroupView)
+        self.assertRaises(KeyError, view._traverse, 'moot', request)
+
+
+class TestGetView(unittest.TestCase):
+
+    def test(self):
+        from schooltool.views import getView
+        from schooltool.model import Person, Group
+        from schooltool.app import ApplicationObjectContainer, Application
+        from schooltool.views import GroupView, PersonView
+        from schooltool.views import ApplicationObjectContainerView
+        from schooltool.views import ApplicationView
+        from schooltool.component import ComponentLookupError
+
+        self.assert_(getView(Person(":)")).__class__ is PersonView)
+        self.assert_(getView(Group(":)")).__class__ is GroupView)
+        self.assert_(getView(Application()).__class__ is ApplicationView)
+        self.assert_(getView(ApplicationObjectContainer(Group)).__class__ is
+                     ApplicationObjectContainerView)
+
+        self.assertRaises(ComponentLookupError, getView, object())
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
@@ -280,6 +385,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestView))
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestPersonView))
+    suite.addTest(unittest.makeSuite(TestAppView))
+    suite.addTest(unittest.makeSuite(TestAppObjContainerView))
+    suite.addTest(unittest.makeSuite(TestGetView))
     return suite
 
 if __name__ == '__main__':

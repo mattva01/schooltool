@@ -1,0 +1,8 @@
+<schooltool xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <message>Welcome to the SchoolTool server</message>
+  <roots>
+    <root xlink:type="simple" tal:repeat="root view/getRoots"
+          tal:attributes="xlink:title root/title; xlink:href root/path" />
+  </roots>
+</schooltool>

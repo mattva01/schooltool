@@ -25,6 +25,7 @@ $Id$
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
+from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.component import getPath, getRelatedObjects
 from schooltool.component import ComponentLookupError
 
@@ -174,3 +175,50 @@ class PersonView(View):
     def getGroups(self):
         return [{'title': group.title, 'path': getPath(group)}
                 for group in getRelatedObjects(self.context, URIGroup)]
+
+
+class ItemTraverseView(View):
+    def _traverse(self, name, request):
+        return getView(self.context[name])
+
+
+class ApplicationView(ItemTraverseView):
+    """The root view for the application"""
+
+    template = Template("www/app.pt", content_type="text/xml")
+
+    def getRoots(self):
+        return [{'path': getPath(root), 'title': root.title}
+                for root in self.context.getRoots()]
+
+
+class ApplicationObjectContainerView(ItemTraverseView):
+    """The view for the application object containers"""
+
+    template = Template("www/aoc.pt", content_type="text/xml")
+
+    def getName(self):
+        return self.context.__name__
+
+    def items(self):
+        c = self.context
+        return [{'path': getPath(c[key]), 'title': c[key].title}
+                for key in self.context.keys()]
+
+
+def getView(obj):
+    """Selects a view for an object.
+
+    Returns a View object for obj.
+    """
+
+    if IPerson.isImplementedBy(obj):
+        return PersonView(obj)
+    elif IGroup.isImplementedBy(obj):
+        return GroupView(obj)
+    elif IApplication.isImplementedBy(obj):
+        return ApplicationView(obj)
+    elif IApplicationObjectContainer.isImplementedBy(obj):
+        return ApplicationObjectContainerView(obj)
+    else:
+        raise ComponentLookupError("No view found for %r" % (obj,))
