@@ -32,6 +32,7 @@ from schooltool.component import inspectSpecificURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
+from schooltool.tests.utils import RelationshipTestMixin
 
 class URITutor(ISpecificURI):
     """http://schooltool.org/ns/tutor"""
@@ -147,7 +148,15 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(self.tutor.events, [e])
 
 
-class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
+class TestRelationshipSchema(EventServiceTestMixin, RelationshipTestMixin,
+                             unittest.TestCase):
+
+    def setUp(self):
+        self.setUpEventService()
+        self.setUpRelationshipRegistry()
+
+    def tearDown(self):
+        self.tearDownRelationshipRegistry()
 
     def test_interfaces(self):
         from schooltool.relationship import RelationshipSchema
@@ -186,6 +195,8 @@ class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.relationship import RelationshipSchema
+        from schooltool import relationship
+        relationship.setUp()
 
         title1, doc = inspectSpecificURI(URICommand)
         schema1 = RelationshipSchema(URICommand,

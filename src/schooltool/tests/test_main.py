@@ -26,6 +26,7 @@ import unittest
 import re
 import os
 from StringIO import StringIO
+from schooltool.tests.utils import RelationshipTestMixin
 
 __metaclass__ = type
 
@@ -507,7 +508,7 @@ class TestRequest(unittest.TestCase):
         self.assertRaises(AssertionError, rq.render, resource)
 
 
-class TestServer(unittest.TestCase):
+class TestServer(RelationshipTestMixin, unittest.TestCase):
 
     def getConfigFileName(self):
         dirname = os.path.dirname(__file__)
@@ -654,6 +655,9 @@ class TestServer(unittest.TestCase):
 
     def test_createApplication(self):
         from schooltool.main import Server
+        from schooltool import relationship
+        relationship.setUp()
+
         server = Server()
         class DummyDataManager:
                 pass

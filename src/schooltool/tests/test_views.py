@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 from helpers import dedent, diff
+from schooltool.tests.utils import RelationshipTestMixin
 
 __metaclass__ = type
 
@@ -179,14 +180,16 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['Allow'], 'GET, HEAD')
 
 
-class TestGroupView(unittest.TestCase):
+class TestGroupView(RelationshipTestMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import GroupView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership, setUp
-        setUp()
+        from schooltool.membership import Membership
+        from schooltool import membership 
+        self.setUpRelationshipRegistry()
+        membership.setUp()
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
@@ -199,6 +202,8 @@ class TestGroupView(unittest.TestCase):
 
         self.view = GroupView(self.group)
 
+    def tearDown(self):
+        self.tearDownRelationshipRegistry()
 
     def test_render(self):
         from schooltool.component import getPath
@@ -224,14 +229,16 @@ class TestGroupView(unittest.TestCase):
                           "text/xml; charset=UTF-8")
 
 
-class TestPersonView(unittest.TestCase):
+class TestPersonView(RelationshipTestMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import PersonView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership, setUp
-        setUp()
+        from schooltool.membership import Membership
+        from schooltool import membership 
+        self.setUpRelationshipRegistry()
+        membership.setUp()
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
@@ -273,14 +280,16 @@ class TestPersonView(unittest.TestCase):
                           "text/xml; charset=UTF-8")
 
 
-class TestAppView(unittest.TestCase):
+class TestAppView(RelationshipTestMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import ApplicationView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership, setUp
-        setUp()
+        from schooltool.membership import Membership
+        from schooltool import membership 
+        self.setUpRelationshipRegistry()
+        membership.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
@@ -316,14 +325,16 @@ class TestAppView(unittest.TestCase):
         self.assertRaises(KeyError, view._traverse, 'froups', request)
 
 
-class TestAppObjContainerView(unittest.TestCase):
+class TestAppObjContainerView(RelationshipTestMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import ApplicationObjectContainerView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership, setUp
-        setUp()
+        from schooltool.membership import Membership
+        from schooltool import membership 
+        self.setUpRelationshipRegistry()
+        membership.setUp()
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
