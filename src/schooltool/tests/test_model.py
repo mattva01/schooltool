@@ -29,8 +29,8 @@ from zope.testing.doctest import DocTestSuite
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.tests.utils import EventServiceTestMixin, NiceDiffsMixin
-from schooltool.tests.utils import EqualsSortedMixin, LinkStub
-from schooltool.interfaces import ILink, IFacet
+from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.interfaces import IFacet
 
 __metaclass__ = type
 

@@ -24,7 +24,6 @@ $Id$
 
 from zope.interface import Interface
 from zope.schema import Object
-from zope.schema import URI as URIField
 
 
 # Tell i18nextractor that permission names are translatable

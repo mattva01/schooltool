@@ -23,11 +23,10 @@ $Id$
 """
 
 import unittest
-from sets import Set
 from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
-from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink
+from schooltool.interfaces import IFacet, IFaceted, IPlaceholder
 from schooltool.interfaces import IFacetFactory
 from schooltool.interfaces import IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook

@@ -61,7 +61,6 @@ from schooltool.uris import URIGuardian, URICustodian, URIWard
 from schooltool.uris import URICurrentResidence
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
 from schooltool.uris import URICalendarProvider, URINotation
-from schooltool.teaching import Teaching
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
 from schooltool.browser.infofacet import PersonEditFacetView

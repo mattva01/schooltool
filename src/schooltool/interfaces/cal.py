@@ -26,7 +26,7 @@ $Id$
 from schooltool.unchanged import Unchanged  # reexport from here
 from zope.interface import Interface
 from zope.schema import Field, Object, Int, TextLine, List, Set
-from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes, BytesLine
+from zope.schema import Choice, Date, Datetime, BytesLine
 
 from schooltool.interfaces.fields import Timedelta
 from schooltool.interfaces.auth import IACLOwner

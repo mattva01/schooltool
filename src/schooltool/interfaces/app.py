@@ -27,7 +27,7 @@ from zope.interface import Interface
 from zope.app.location.interfaces import ILocation
 from zope.app.traversing.interfaces import ITraversable
 from zope.schema import Field, Object, TextLine, Text, List, Set
-from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes, BytesLine
+from zope.schema import Bool, Choice, Date, Datetime, Bytes, BytesLine
 from schooltool.interfaces.relationship import IRelatable
 from schooltool.interfaces.facet import IFaceted, IFacet
 from schooltool.interfaces.event import IEvent, IEventTarget
