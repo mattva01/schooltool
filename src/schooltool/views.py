@@ -497,6 +497,10 @@ class RelationshipsView(View, XMLPseudoParser):
                  'role': strURI(role)}
                 for type, role in self.context.getValencies()]
 
+    def _traverse(self, name, request):
+        link = self.context.getLink(name)
+        return LinkView(link)
+
     def do_POST(self, request):
         body = request.content.read()
 
@@ -531,7 +535,7 @@ class RelationshipsView(View, XMLPseudoParser):
             request.setHeader('Content-Type', 'text/plain')
             return "Valency does not exist"
         kw = {val.this: self.context, val.other: other}
-        val.schema(**kw)
+        links = val.schema(**kw)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         # XXX HTTP/1.1, section 9.5:
@@ -541,6 +545,20 @@ class RelationshipsView(View, XMLPseudoParser):
         #     Location header (see section 14.30).
         return "Relationship created"
 
+class LinkView(View):
+
+    template = Template("www/link.pt", content_type="text/xml")
+
+    def info(self):
+        return {'role': strURI(self.context.role),
+                'arcrole': strURI(self.context.reltype),
+                'title': self.context.title,
+                'href': getPath(self.context.traverse())}
+
+    def do_DELETE(self, request):
+        self.context.unlink()
+        request.setHeader('Content-Type', 'text/plain')
+        return "Link removed"
 
 def setUp():
     registerView(IPerson, PersonView)

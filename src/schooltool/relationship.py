@@ -324,6 +324,8 @@ class LinkSet:
             if IPlaceholder.isImplementedBy(value):
                 yield value
 
+    def getLink(self, name):
+        return self._data.valueForName(name)
 
 class RelatableMixin(Persistent):
 
@@ -346,6 +348,8 @@ class RelatableMixin(Persistent):
             return 'relationships/%s' % obj.__name__
         return obj.__name__
 
+    def getLink(self, name):
+        return self.__links__.getLink(name)
 
 class RelationshipValenciesMixin(RelatableMixin):
 

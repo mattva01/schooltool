@@ -758,7 +758,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
-        from schooltool import membership 
+        from schooltool import membership
         self.setUpRegistries()
         membership.setUp()
         app = Application()
@@ -801,7 +801,15 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                             'role':'http://schooltool.org/ns/membership/group'
                             }])
 
-    def xtestGET(self):
+    def test_traverse(self):
+        from schooltool.interfaces import ILink
+        from schooltool.views import LinkView
+        request = RequestStub("http://localhost/groups/sub/relationships/0001")
+        result = self.view._traverse('0001', request)
+        self.assert_(isinstance(result, LinkView), "is LinkView")
+        self.assert_(ILink.isImplementedBy(result.context), "is ILink")
+
+    def testGET(self):
         request = RequestStub("http://localhost/groups/sub/relationships/")
         result = self.view.render(request)
         self.assert_('<valencies>' in result)
@@ -1027,6 +1035,49 @@ class TestXMLPseudoParser(unittest.TestCase):
         self.assertRaises(KeyError, extr, text, 'shmoo')
 
 
+class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import LinkView
+        from schooltool.model import Group
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        self.group = app['groups'].new("root", title="group")
+        self.sub = app['groups'].new("subgroup", title="Subordinate Group")
+
+        links = Membership(group=self.group, member=self.sub)
+
+        self.link = links['member']
+        self.view = LinkView(self.link)
+
+    def testGET(self):
+        from schooltool.component import getPath
+        request = RequestStub("http://localhost%s" % getPath(self.link))
+        result = self.view.render(request)
+        expected = dedent("""\
+        <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+                      xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/member"
+                      xlink:title="Subordinate Group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="/groups/subgroup"/>
+        """)
+        self.assertEqual(expected, result, diff (expected, result))
+
+    def testDELETE(self):
+        from schooltool.component import getPath
+        url = "http://localhost%s" % getPath(self.link)
+        request = RequestStub(url, method="DELETE")
+        self.assertEqual(len(self.sub.listLinks()), 1)
+        result = self.view.render(request)
+        self.assertEqual(len(self.sub.listLinks()), 0)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
@@ -1044,6 +1095,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetManagementView))
     suite.addTest(unittest.makeSuite(TestRelationshipsView))
     suite.addTest(unittest.makeSuite(TestXMLPseudoParser))
+    suite.addTest(unittest.makeSuite(TestLinkView))
     return suite
 
 if __name__ == '__main__':

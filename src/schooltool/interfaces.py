@@ -318,6 +318,8 @@ class ILinkSet(Interface):
     def __iter__():
         """Return an iterator over the links in the set."""
 
+    def getLink(name):
+        """Returns a link by a name"""
 
 class IRelatable(Interface):
     """An object which can take part in relationships."""
@@ -325,6 +327,8 @@ class IRelatable(Interface):
     __links__ = Attribute(
         """An object implementing ILinkSet.""")
 
+    def getLink(name):
+        """Returns a link by a name within this relatable"""
 
 class IQueryLinks(Interface):
     """An interface for querying a collection of links for those that

@@ -324,7 +324,7 @@ class TestRelatableMixin(unittest.TestCase):
         verifyObject(IRelatable, a)
         verifyObject(IMultiContainer, a)
 
-        relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
+        la ,lb = relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
 
         # no duplicate relationships
         self.assertRaises(ValueError,
@@ -334,6 +334,9 @@ class TestRelatableMixin(unittest.TestCase):
 
         self.assert_(a.listLinks(URIRegClass)[0].traverse() is b)
         self.assert_(b.listLinks(URIClassTutor)[0].traverse() is a)
+
+        self.assert_(a.getLink(la.__name__) is la)
+        self.assert_(b.getLink(lb.__name__) is lb)
 
     def test_listLinks(self):
         from schooltool.relationship import RelatableMixin
@@ -406,6 +409,8 @@ class TestLinkSet(unittest.TestCase):
         self.assertEquals(sorted([a, b]), sorted(s))
         self.assert_(a.__name__ is not None)
         self.assert_(b.__name__ is not None)
+        self.assert_(s.getLink(a.__name__) is a)
+        self.assert_(s.getLink(b.__name__) is b)
 
         self.assertRaises(ValueError, s.remove, equivalent_to_a)
         s.remove(a)
