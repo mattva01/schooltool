@@ -78,42 +78,29 @@ else:
 
 # Subclass some distutils commands so that we can set up the server on install
 
-from distutils.command.install_data import install_data as _install_data
+from distutils.command.install import install as _install
 from distutils.command.install_lib import install_lib as _install_lib
 from distutils.command.install_scripts import \
         install_scripts as _install_scripts
 
 
-class install_data(_install_data):
-    """Specialized Python installer for schooltool and schoolbell.
+class install(_install):
+    """Specialized install command for schooltool and schoolbell.
 
-    The primary purpose of this sub class it to make sure SchoolTool will
-    know where it's data files are on installation.
+    Make it possilble to pass the --paths and --default-config options to the
+    install_scripts command.
     """
 
-    package = package
+    user_options = _install.user_options + [
+            ('paths=', None, "a semi-colon separated list of paths that should"
+                " be added to the python path on script startup"),
+            ('default-config=', None, "location of the default server config"
+                    " file")]
 
     def initialize_options(self):
-        self.build_base = None
-        return _install_data.initialize_options(self)
-
-    def finalize_options(self):
-        self.set_undefined_options('install',
-                ('build_base', 'build_base'))
-        return _install_data.finalize_options(self)
-
-    def run(self):
-        """Record where we have installed the data files"""
-        # we have to make sure the build directory is around
-        self.run_command('build')
-        # write where we have installed the data files to build/data_base
-        try:
-            data_file = open(os.path.join(self.build_base,
-                self.package + '_data_base'), 'w')
-            data_file.write(os.path.abspath(self.install_dir))
-        finally:
-            data_file.close()
-        return _install_data.run(self)
+        self.paths = None
+        self.default_config = None
+        return _install.initialize_options(self)
 
 
 class install_lib(_install_lib):
@@ -131,29 +118,28 @@ class install_lib(_install_lib):
 
     def initialize_options(self):
         self.datafile_dir = None
-        self.build_base = None
         self.build_lib = None
         return _install_lib.initialize_options(self)
 
     def finalize_options(self):
         self.set_undefined_options('install',
-                ('build_base', 'build_base'),
-                ('build_lib', 'build_lib'))
+                ('build_lib', 'build_lib'),
+                ('install_data', 'datafile_dir'))
         return _install_lib.finalize_options(self)
 
     def update_pathconfig(self):
         # Write the new location to the pathconfig.py file.
         pathconfig = os.path.join(self.build_lib, self.package, 'pathconfig.py')
-        if self.datafile_dir is None:
-            # Make sure that we have installed the data files
-            self.run_command('install_data')
-            # Get the location of the installed data
-            try:
-                data_file = open(os.path.join(self.build_base,
-                            self.package + '_data_base'), 'r')
-                self.datafile_dir = data_file.read()
-            finally:
-                data_file.close()
+        ##### Begin dirty hack
+        # schoolbell does not support installing data files and modules
+        # separately so this hack prevents people from doing so
+        if self.package == 'schoolbell':
+            if os.path.abspath(self.datafile_dir) \
+                    != os.path.abspath(self.install_dir):
+                raise NotImplementedError("You are probably trying to install "
+                        "schoolbell data files and modules in different "
+                        "locations, this is not implemented.")
+        ##### End dirty hack
         try:
             path_file = open(pathconfig, 'r')
             pathconfig_str = path_file.read()
@@ -194,6 +180,12 @@ class install_scripts(_install_scripts):
         self.default_config = None
         return _install_scripts.initialize_options(self)
 
+    def finalize_options(self):
+        self.set_undefined_options('install',
+                ('paths', 'paths'),
+                ('default_config', 'default_config'))
+        return _install_scripts.finalize_options(self)
+
     def update_scripts(self):
         for script in self.get_outputs():
             # Read the installed script
@@ -231,7 +223,7 @@ class install_scripts(_install_scripts):
                 script_file.close()
 
     def run(self):
-        ans =  _install_scripts.run(self)
+        ans = _install_scripts.run(self)
         self.update_scripts()
         return ans
 
@@ -248,7 +240,7 @@ if sys.argv[1] == 'sdist':
             '-m', 'MANIFEST.' + package]
 
 # regex for finding data files
-datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|pot)\Z')
+datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|pot|zcml)\Z')
 
 # TODO: ask distutils to build Zope 3 extension modules somehow
 if package == 'schooltool':
@@ -265,7 +257,7 @@ if package == 'schooltool':
     setup(name="schooltool",
         version="0.10rc1",
         url='http://www.schooltool.org',
-        cmdclass={'install_data': install_data,
+        cmdclass={'install': install,
             'install_scripts': install_scripts,
             'install_lib': install_lib},
         package_dir={'': 'src'},
@@ -292,7 +284,7 @@ elif package == 'schoolbell':
     setup(name="schoolbell",
         version="1.0rc1",
         url='http://www.schooltool.org/schoolbell',
-        cmdclass={'install_data': install_data,
+        cmdclass={'install': install,
             'install_scripts': install_scripts,
             'install_lib': install_lib},
         package_dir={'': 'src'},
