@@ -254,15 +254,18 @@ class TestView(unittest.TestCase):
         view.request = None
         view.logger = LoggerStub()
         view.log('Hello')
-        self.assertEquals(view.logger.msg, "(UNKNOWN) Hello")
+        self.assertEquals(view.logger.msg, "LOG (UNKNOWN) Hello")
 
         view.request = RequestStub()
         view.log('Hello2')
-        self.assertEquals(view.logger.msg, "(UNKNOWN) Hello2")
+        self.assertEquals(view.logger.msg, "LOG (UNKNOWN) Hello2")
 
-        view.request = RequestStub(authenticated_user='me')
+        class PersonStub:
+            username = 'me'
+
+        view.request = RequestStub(authenticated_user=PersonStub())
         view.log('Hello3')
-        self.assertEquals(view.logger.msg, "(me) Hello3")
+        self.assertEquals(view.logger.msg, "LOG (me) Hello3")
 
 
 def test_suite():

@@ -344,10 +344,10 @@ class View(Resource):
     def log(self, message, level='LOG'):
         """Add a log entry to the application log."""
         if self.request is None or self.request.authenticated_user is None:
-            user = 'UNKNOWN'
+            username = 'UNKNOWN'
         else:
-            user = self.request.authenticated_user
-        self.logger.log(level, "(%s) %s" % (user, message))
+            username = self.request.authenticated_user.username
+        self.logger.log(level, "%s (%s) %s" % (level, username, message))
 
 
 class NotFoundView(View):
