@@ -359,6 +359,7 @@ class Request(http.Request):
                         retries -= 1
                         self.get_transaction_hook().abort()
                         self.zodb_conn.close()
+                        self.zodb_conn = None
                         self.reset()
                     else:
                         break
