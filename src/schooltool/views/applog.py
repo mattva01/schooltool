@@ -50,3 +50,4 @@ class ApplicationLogView(View):
         finally:
             f.close()
         return contents
+
