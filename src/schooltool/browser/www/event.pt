@@ -5,7 +5,7 @@
 <body>
 
   <h1 metal:fill-slot="h1" i18n:translate="">
-    Add event
+    Edit event
   </h1>
 
   <metal:block metal:fill-slot="content" tal:define="update view/update">
@@ -30,6 +30,11 @@
       <label for="start_time">Time</label>
       <input id="start_time" name="start_time" type="text"
              tal:attributes="value view/start_time" />
+    </div>
+    <div class="row">
+      <label for="location">Location</label>
+      <input id="location" name="location" type="text"
+             tal:attributes="value view/location" />
     </div>
     <div class="row">
       <label for="duration">Duration</label>

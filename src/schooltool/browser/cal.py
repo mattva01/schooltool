@@ -532,7 +532,7 @@ class EventViewBase(View):
 
     authorization = PrivateAccess
 
-    template = Template('www/event_add.pt')
+    template = Template('www/event.pt')
 
     error = u""
     title = u""
@@ -552,6 +552,8 @@ class EventViewBase(View):
             self.start_time = to_unicode(request.args['start_time'][0])
         if 'duration' in request.args:
             self.duration = to_unicode(request.args['duration'][0])
+        if 'location' in request.args:
+            self.location = to_unicode(request.args['location'][0])
 
     def do_POST(self, request):
         self.update()
@@ -575,22 +577,23 @@ class EventViewBase(View):
 
         duration = timedelta(minutes=duration)
 
-        self.process(start, duration, self.title)
+        self.process(start, duration, self.title, self.location)
 
         suffix = 'daily.html?date=%s' % start.date()
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)
 
-    def process(self, dtstart, duration, title):
+    def process(self, dtstart, duration, title, location):
         raise NotImplementedError()
 
 
 class EventAddView(EventViewBase):
     """A view for adding events."""
 
-    def process(self, dtstart, duration, title):
+    def process(self, dtstart, duration, title, location):
         ev = CalendarEvent(dtstart, duration, title,
-                           self.context.__parent__, self.context.__parent__)
+                           self.context.__parent__, self.context.__parent__,
+                           location=location)
         self.context.addEvent(ev)
 
 
@@ -610,12 +613,14 @@ class EventEditView(EventViewBase):
         self.start_date = str(self.event.dtstart.date())
         self.start_time = str(self.event.dtstart.strftime("%H:%M"))
         self.duration = str(self.event.duration.seconds / 60)
+        self.location = self.event.location
         EventViewBase.update(self)
 
-    def process(self, dtstart, duration, title):
+    def process(self, dtstart, duration, title, location):
         self.context.removeEvent(self.event)
         ev = CalendarEvent(dtstart, duration, title,
-                           self.context.__parent__, self.context.__parent__)
+                           self.context.__parent__, self.context.__parent__,
+                           location=location)
         self.context.addEvent(ev)
 
 
