@@ -231,6 +231,11 @@ class TestCalendarDay(unittest.TestCase):
 
 class TestCalendarViewBase(unittest.TestCase):
 
+    def assertEqualEventLists(self, result, expected):
+        fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
+        self.assertEquals(result, expected,
+                          '%s != %s' % (fmt(result), fmt(expected)))
+
     def test_update(self):
         from schooltool.browser.cal import CalendarViewBase
         from schooltool.model import Person
@@ -267,15 +272,22 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getDays(self):
         from schooltool.browser.cal import CalendarViewBase
 
-        e0 = createEvent('2004-08-10 11:00', '1h', "zeroth")
-        e1 = createEvent('2004-08-11 12:00', '1h', "second")
-        e2 = createEvent('2004-08-11 11:00', '1h', "first")
-        e3 = createEvent('2004-08-12 23:00', '4h', "long")
-        e4 = createEvent('2004-08-15 11:00', '1h', "last")
-        e5 = createEvent('2004-08-10 09:00', '3d', "all over")
+        e0 = createEvent('2004-08-10 11:00', '1h', "e0")
+        e1 = createEvent('2004-08-11 12:00', '1h', "e1")
+        e2 = createEvent('2004-08-11 11:00', '1h', "e2")
+        e3 = createEvent('2004-08-12 23:00', '4h', "e3")
+        e4 = createEvent('2004-08-15 11:00', '1h', "e4")
+        e5 = createEvent('2004-08-10 09:00', '3d', "e5")
+        e6 = createEvent('2004-08-13 00:00', '1d', "e6")
+        e7 = createEvent('2004-08-12 00:00', '1d+1sec', "e7")
+        e8 = createEvent('2004-08-15 00:00', '0sec', "e8")
 
-        cal = createCalendar([e0, e1, e2, e3, e4, e5])
+        cal = createCalendar([e0, e1, e2, e3, e4, e5, e6, e7, e8])
         view = CalendarViewBase(cal)
+
+        start = date(2004, 8, 10)
+        days = view.getDays(start, start)
+        self.assertEquals(len(days), 0)
 
         start = date(2004, 8, 10)
         end = date(2004, 8, 16)
@@ -285,12 +297,19 @@ class TestCalendarViewBase(unittest.TestCase):
         for i, day in enumerate(days):
             self.assertEquals(day.date, date(2004, 8, 10 + i))
 
-        self.assertEquals(days[0].events, [e5, e0])
-        self.assertEquals(days[1].events, [e5, e2, e1])
-        self.assertEquals(days[2].events, [e5, e3])
-        self.assertEquals(days[3].events, [e5, e3])
-        self.assertEquals(days[4].events, [])
-        self.assertEquals(days[5].events, [e4])
+        self.assertEqualEventLists(days[0].events, [e5, e0])            # 10
+        self.assertEqualEventLists(days[1].events, [e5, e2, e1])        # 11
+        self.assertEqualEventLists(days[2].events, [e5, e7, e3])        # 12
+        self.assertEqualEventLists(days[3].events, [e5, e7, e3, e6])    # 13
+        self.assertEqualEventLists(days[4].events, [])                  # 14
+        self.assertEqualEventLists(days[5].events, [e8, e4])            # 15
+
+        start = date(2004, 8, 11)
+        end = date(2004, 8, 12)
+        days = view.getDays(start, end)
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, start)
+        self.assertEqualEventLists(days[0].events, [e5, e2, e1])
 
     def test_getWeek(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay

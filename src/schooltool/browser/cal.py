@@ -205,25 +205,47 @@ class CalendarViewBase(View):
         overlap.
         """
         events = {}
-        dt = start
-        while dt < end:
-            events[dt] = []
-            dt += timedelta(days=1)
+        day = start
+        while day < end:
+            events[day] = []
+            day += timedelta(1)
 
         for event in self.iterEvents():
-            event_day = event.dtstart.date()
-            event_start_date = event.dtstart.date()
-            event_end_date = (event.dtstart + event.duration).date()
-            while (event_start_date <= event_day <= event_end_date
-                   and start <= event_day < end):
-                events[event_day].append(event)
-                event_day += event_day.resolution
+            #  day1  day2  day3  day4  day5
+            # |.....|.....|.....|.....|.....|
+            # |     |  [-- event --)  |     |
+            # |     |  ^  |     |  ^  |     |
+            # |     |  `dtstart |  `dtend   |
+            #        ^^^^^       ^^^^^
+            #      first_day   last_day
+            #
+            # dtstart and dtend are datetime.datetime instances and point to
+            # time instants.  first_day and last_day are datetime.date
+            # instances and point to whole days.  Also note that [dtstart,
+            # dtend) is a half-open interval, therefore
+            #   last_day == dtend.date() - 1 day   when dtend.time() is 00:00
+            #                                      and duration > 0
+            #               dtend.date()           otherwise
+            dtend = event.dtstart + event.duration
+            first_day = event.dtstart.date()
+            last_day = max(first_day, (dtend - dtend.resolution).date())
+            # Loop through the intersection of two day ranges:
+            #    [start, end) intersect [first_day, last_day]
+            # Note that the first interval is half-open, but the second one is
+            # closed.  Since we're dealing with whole days,
+            #    [first_day, last_day] == [first_day, last_day + 1 day)
+            day = max(start, first_day)
+            limit = min(end, last_day + timedelta(1))
+            while day < limit:
+                events[day].append(event)
+                day += timedelta(1)
 
         days = []
-        for day in events.keys():
+        day = start
+        while day < end:
             events[day].sort()
             days.append(CalendarDay(day, events[day]))
-        days.sort()
+            day += timedelta(1)
         return days
 
     def getWeek(self, dt):
@@ -297,21 +319,8 @@ class DailyCalendarView(CalendarViewBase):
         Events spanning several days and overlapping with this day
         are included.
         """
-
-        # The following will be enough when getDays will include
-        # events spanning several days into all CalendarDays.
-        #
-        # XXX mg: I thought getDays does that already, but if I uncomment
-        #     the following two lines, unit tests fail.
-        #
-        #day = self.getDays(date, date + timedelta(1))[0]
-        #return day.events
-
-        cal = Calendar()
-        cal.update(self.iterEvents())
-        events = list(cal.byDate(date))
-        events.sort()
-        return events
+        day = self.getDays(date, date + timedelta(1))[0]
+        return day.events
 
     def getColumns(self):
         """Return the maximum number of events that are overlapping.
