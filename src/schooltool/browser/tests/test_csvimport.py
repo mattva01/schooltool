@@ -28,6 +28,7 @@ from logging import INFO
 from schooltool.browser.tests import RequestStub
 from schooltool.tests.utils import RegistriesSetupMixin, AppSetupMixin
 from schooltool.common import dedent
+from schooltool import uris
 
 __metaclass__ = type
 
@@ -214,6 +215,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool import membership, teaching, relationship
+
         self.setUpRegistries()
         membership.setUp()
         relationship.setUp()
@@ -401,7 +403,10 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.timetable import Timetable, TimetableDay
+        from schooltool import relationship
+
         self.setUpSampleApp()
+        relationship.setUp()
 
         # set a timetable schema
         ttschema = Timetable(self.days)
@@ -526,8 +531,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                           day_ids=['day1', 'day2'], location='Inside')
 
         group = imp.findByTitle(self.app['groups'], 'Math 101 - Prof. Bar')
-        #group.getRelatedObjects(group, URIMember)
-        # TODO: test relationship between group and math101
+        self.assertIsRelated(group, math101)
+        self.assertIsRelated(group, self.teacher, rel=uris.URITaught)
 
         tt = group.timetables['period1', 'two_day']
         activities = list(tt.itercontent())
@@ -540,23 +545,22 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
     def test_parseRecordRow(self):
         imp = self.createImporter()
-        def check(row, expected):
+
+        for row, expected in [
+                 ([], []),
+                 (["Math Whiz", "Comp Geek"],
+                  [("Math", "Whiz"), ("Comp", "Geek")]),
+                 (["Biology Nut", "", "Chemistry Nerd"],
+                  [("Biology", "Nut"), None, ("Chemistry", "Nerd")])]:
             self.assertEquals(imp.parseRecordRow(row), expected)
 
-        check([], [])
-        check(["Math Whiz", "Comp Geek"],
-              [("Math", "Whiz"), ("Comp", "Geek")])
-        check(["Biology Nut", "", "Chemistry Nerd"],
-              [("Biology", "Nut"), None, ("Chemistry", "Nerd")])
 
-    def assertIsMember(self, name, group, expected=True):
-        from schooltool.uris import URIMember
+    def assertIsRelated(self, obj, group, expected=True, rel=uris.URIMember):
         from schooltool.component import getRelatedObjects
-        person = self.app['persons'][name]
-        members = getRelatedObjects(group, URIMember)
-        self.assertEquals(person in members, expected,
-                          "%r %sin %r" % (person, expected and "not " or "",
-                                          members))
+        related = getRelatedObjects(group, rel)
+        self.assertEquals(obj in related, expected,
+                          "%r %sin %r (%r)" % (obj, expected and "not " or "",
+                                               related, rel))
 
     def test_importRoster(self):
         g1 = self.app['groups'].new(title="Math1 - Lorch")
@@ -573,12 +577,13 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         imp = self.createImporter()
         imp.importRoster(roster)
 
-        self.assertIsMember('lorch', g1, False)
-        self.assertIsMember('guzman', g1)
-        self.assertIsMember('curtin', g1)
-        self.assertIsMember('lorch', g2)
-        self.assertIsMember('guzman', g2, False)
-        self.assertIsMember('curtin', g2)
+        for name, group, expected in [('lorch', g1, False),
+                                      ('guzman', g1, True),
+                                      ('curtin', g1, True),
+                                      ('lorch', g2, True),
+                                      ('guzman', g2, False),
+                                      ('curtin', g2, True)]:
+            self.assertIsRelated(self.app['persons'][name], group, expected)
 
 
 def test_suite():

@@ -36,7 +36,7 @@ from schooltool.teaching import Teaching
 from schooltool.timetable import TimetableActivity
 from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
-from schooltool.uris import URIMembership, URIMember, URIGroup
+from schooltool import uris
 
 __metaclass__ = type
 
@@ -415,7 +415,9 @@ class TimetableCSVImporter:
             group = self.findByTitle(self.groups, group_name)
         except KeyError:
             group = self.groups.new(title=group_name)
-            # TODO: set up teaching and membership relationships
+            Membership(group=subject, member=group)
+            relate(uris.URITeaching,
+                   (teacher, uris.URITeacher), (group, uris.URITaught))
 
         # Create the timetable if it does not exist yet.
         if (self.period_id, self.ttschema) not in group.timetables.keys():
@@ -442,4 +444,4 @@ class TimetableCSVImporter:
                 continue
             else:
                 person = self.findByTitle(self.persons, line)
-                relate(URIMembership, (person, URIMember), (group, URIGroup))
+                Membership(group=group, member=person)
