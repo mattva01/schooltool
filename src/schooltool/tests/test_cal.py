@@ -42,6 +42,7 @@ from schooltool.interfaces import ISchooldayModel
 from schooltool.cal import TimetabledMixin
 from schooltool.relationship import RelatableMixin
 
+
 class TestSchooldayModel(unittest.TestCase):
 
     def test_interface(self):
@@ -747,7 +748,6 @@ class TestTimetable(unittest.TestCase):
                          [("Mo", monday), ("Tu", tuesday), ("We", None),
                           ("Th", None), ("Fr", None)])
 
-
     def test_update(self):
         from schooltool.cal import Timetable, TimetableDay, TimetableActivity
 
@@ -1429,8 +1429,6 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         return tt
 
     def test_getCompositeTable_own(self):
-        from schooltool.cal import Timetable, TimetableDay
-
         tm = TimetabledStub(self.eventService)
         self.assertEqual(tm.timetables, {})
         self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
