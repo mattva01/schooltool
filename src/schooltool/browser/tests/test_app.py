@@ -155,7 +155,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(css.content_type, 'text/css')
         user = object()
         request = RequestStub(authenticated_user=user)
-        self.assertTraverses(view, 'start', StartView, None, request=request)
+        self.assertTraverses(view, 'start', StartView, user, request=request)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
@@ -193,13 +193,14 @@ class TestStartView(unittest.TestCase):
 
     def createView(self):
         from schooltool.browser.app import StartView
-        return StartView(None)
+        from schooltool.model import Person
+        user = Person()
+        setPath(user, '/persons/user')
+        return StartView(user)
 
     def test(self):
-        from schooltool.model import Person
-        person = Person()
         view = self.createView()
-        request = RequestStub(authenticated_user=person)
+        request = RequestStub(authenticated_user=view.context)
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")

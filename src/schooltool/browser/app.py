@@ -25,9 +25,10 @@ $Id$
 import datetime
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import notFoundPage
+from schooltool.browser import absoluteURL
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import globalTicketService
-from schooltool.browser.model import PersonView, GroupView
+from schooltool.browser.model import PersonView, GroupView, PersonInfoMixin
 from schooltool.interfaces import IApplication
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import IPerson
@@ -94,7 +95,7 @@ class RootView(View):
         elif name == 'logout':
             return LogoutView(self.context)
         elif name == 'start':
-            return StartView(None)
+            return StartView(request.authenticated_user)
         raise KeyError(name)
 
 
@@ -127,6 +128,9 @@ class StartView(View):
     authorization = AuthenticatedAccess
 
     template = Template("www/start.pt")
+
+    def person_url(self):
+        return absoluteURL(self.request, self.context)
 
 
 class PersonContainerView(View):

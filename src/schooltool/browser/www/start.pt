@@ -4,11 +4,17 @@
 </head>
 <body>
 <h1 metal:fill-slot="h1">
-  Start page for <span tal:replace="request/authenticated_user/title"/>
+  Start page for <span tal:replace="context/title"/>
 </h1>
 <metal:block metal:fill-slot="content">
 
 <p>What do you want to do today?</p>
+
+<ul class="actions">
+  <li><a href="/groups/root">Browse groups and persons</a></li>
+  <li><a tal:attributes="href view/person_url">View your information page</a></li>
+  <li><a href="/logout">Log out</a></li>
+</ul>
 
 </metal:block>
 </body>
