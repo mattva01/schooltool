@@ -454,12 +454,12 @@ class TestVEvent(unittest.TestCase):
         vevent.add('location', 'Somewhere')
         vevent.add('rrule', 'FREQ=DAILY;COUNT=3')
         vevent.validate()
-  
+
         self.assertEquals(vevent.rrule.interval, 1)
         self.assertEquals(vevent.rrule.count, 3)
         self.assertEquals(vevent.rrule.until, None)
         self.assertEquals(vevent.rrule.exceptions, ())
-  
+
     def test_validate_rrule_exceptions(self):
         from schoolbell.calendar.icalendar import VEvent
         vevent = VEvent()
@@ -469,7 +469,7 @@ class TestVEvent(unittest.TestCase):
         vevent.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
         vevent.add('exdate', '19960402T010000,19960404T010000',)
         vevent.validate()
-  
+
         self.assertEquals(vevent.rrule.interval, 1)
         self.assertEquals(vevent.rrule.count, None)
         self.assertEquals(vevent.rrule.until, None)
