@@ -1572,6 +1572,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         url = absoluteURL(self.context, self.request)
         return '%s/booking.html?date=%s' % (url, date)
 
+
 class EventForBookingDisplay(object):
     """Event wraper for display in booking view.
 
@@ -1593,6 +1594,7 @@ class EventForBookingDisplay(object):
         self.shortTitle = self.title
         if len(self.title) > 16:
             self.shortTitle = self.title[:15] + '...'
+
 
 class CalendarEventBookingView(BrowserView):
     """A view for booking resources."""
