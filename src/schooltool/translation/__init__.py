@@ -39,6 +39,7 @@ def setUp():
     Note that this function installs _ into the built-in namespace.
     """
     import os
+    import gettext
     localedir = os.path.dirname(__file__)
     gettext.install('schooltool', localedir)
 
