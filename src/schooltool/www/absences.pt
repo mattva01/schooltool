@@ -1,0 +1,8 @@
+<absences xmlns:tal="http://xml.zope.org/namespaces/tal"
+          xmlns:xlink="http://www.w3.org/1999/xlink">
+  <absence tal:repeat="item view/listAbsences"
+           xlink:type="simple"
+           tal:attributes="xlink:title item/title;
+                           xlink:href item/path;
+                           resolved item/resolved" />
+</absences>

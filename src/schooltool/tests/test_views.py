@@ -28,7 +28,7 @@ import sets
 from zope.interface import Interface, implements, directlyProvides
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.interfaces import IUtility, IFacet, IContainmentRoot
 
 __metaclass__ = type
@@ -94,11 +94,15 @@ class ContainmentRoot:
     implements(IContainmentRoot)
 
 
-def setPath(obj, path):
+def setPath(obj, path, root=None):
     """Trick getPath(obj) into returning path"""
     assert path.startswith('/')
     obj.__name__ = path[1:]
-    obj.__parent__ = ContainmentRoot()
+    if root is None:
+        obj.__parent__ = ContainmentRoot()
+    else:
+        assert IContainmentRoot.isImplementedBy(root)
+        obj.__parent__ = root
 
 
 class TestHelpers(unittest.TestCase):
@@ -350,8 +354,26 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
 
         self.view = PersonView(self.per)
 
+    def test_traverse(self):
+        from schooltool.views import RelationshipsView, FacetManagementView
+        from schooltool.views import AbsenceManagementView
+        from schooltool.interfaces import IFacetManager
+        request = RequestStub("http://localhost/person")
+
+        result = self.view._traverse('relationships', request)
+        self.assert_(isinstance(result, RelationshipsView))
+        self.assert_(result.context is self.per)
+
+        result = self.view._traverse('facets', request)
+        self.assert_(isinstance(result, FacetManagementView))
+        self.assert_(IFacetManager.isImplementedBy(result.context))
+
+        result = self.view._traverse('absences', request)
+        self.assert_(isinstance(result, AbsenceManagementView))
+        self.assert_(result.context is self.per)
+
     def test_render(self):
-        request = RequestStub("http://localhost/group/")
+        request = RequestStub("http://localhost/person")
         result = self.view.render(request)
         segments = dedent("""
             <person xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -403,6 +425,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         request = RequestStub("http://localhost/people/p")
         result = self.view._traverse('relationships', request)
         self.assert_(isinstance(result, RelationshipsView))
+        self.assert_(result.context is self.per)
 
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
@@ -1112,6 +1135,114 @@ class TestLinkView(RegistriesSetupMixin, unittest.TestCase):
         self.assertEqual(len(self.sub.listLinks()), 0)
 
 
+class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
+
+    def test_traverse(self):
+        from schooltool.views import AbsenceManagementView, AbsenceView
+        from schooltool.model import Person, AbsenceComment
+        context = Person()
+        setPath(context, '/person', root=self.serviceManager)
+        absence = context.addAbsence(AbsenceComment(None, ''))
+        view = AbsenceManagementView(context)
+        request = RequestStub("http://localhost/person/absences")
+        result = view._traverse(absence.__name__, request)
+        self.assert_(isinstance(result, AbsenceView))
+        self.assert_(result.context is absence)
+        self.assertRaises(KeyError,
+                          view._traverse, absence.__name__ + 'X', request)
+
+    def test_get(self):
+        from schooltool.views import AbsenceManagementView
+        from schooltool.model import Person, AbsenceComment
+        context = Person()
+        setPath(context, '/person', root=self.serviceManager)
+        context.addAbsence(AbsenceComment(None, '', resolution_change=True))
+        context.addAbsence(AbsenceComment(None, ''))
+        self.assertEquals(len(list(context.iterAbsences())), 2)
+        view = AbsenceManagementView(context)
+        request = RequestStub("http://localhost/person/absences")
+        result = view.render(request)
+        expected = dedent("""
+            <absences xmlns:xlink="http://www.w3.org/1999/xlink">
+            ---8<---
+              <absence xlink:type="simple"
+                       xlink:href="/person/absences/001"
+                       resolved="resolved" xlink:title="001"/>
+            ---8<---
+              <absence xlink:type="simple"
+                       xlink:href="/person/absences/002"
+                       resolved="unresolved" xlink:title="002"/>
+            ---8<---
+            </absences>
+            """)
+        for segment in expected.split("---8<---\n"):
+            self.assert_(segment in result,
+                         "\n-- segment\n%s\n-- not in\n%s" % (segment, result))
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+
+    def XXX_test_post(self):
+        from schooltool.views import AbsenceManagementView
+        from schooltool.model import Person
+        context = Person()
+        setPath(context, '/person', root=self.serviceManager)
+        view = AbsenceManagementView(context)
+        request = RequestStub("http://localhost/person/absences",
+                              method="POST")
+        result = view.render(request)
+        self.assertEquals(request.code, 201)
+        self.assertEquals(request.reason, "Created")
+        self.assertEquals(request.headers['Location'],
+                          "http://localhost/group/facets/001")
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assert_("http://localhost/group/facets/001" in result)
+        self.assertEquals(len(list(context.iterFacets())), 1)
+        facet = context.facetByName('001')
+        self.assert_(facet.__class__ is EventLogFacet)
+
+
+class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
+
+    def test_get(self):
+        from schooltool.views import AbsenceView
+        from schooltool.model import Person, Group, AbsenceComment
+        reporter1 = Person()
+        setPath(reporter1, '/reporter1')
+        reporter2 = Person()
+        setPath(reporter2, '/reporter2')
+        group1 = Group()
+        setPath(group1, '/group1')
+        person = Person()
+        setPath(person, '/person', root=self.serviceManager)
+        absence = person.addAbsence(AbsenceComment(reporter1, 'Some text',
+                dt=datetime.datetime(2001, 1, 1)))
+        person.addAbsence(AbsenceComment(reporter2, 'More text',
+                absent_from=group1, dt=datetime.datetime(2002, 2, 2),
+                expected_presence_change=datetime.datetime(2003, 03, 03),
+                resolution_change=True))
+        view = AbsenceView(absence)
+        request = RequestStub("http://localhost/person/absences/001")
+        result = view.render(request)
+        expected = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:type="simple" xlink:title="person"
+                     resolved="resolved" xlink:href="/person"
+                     expected_presence="2003-03-03 00:00:00">
+              <comment xlink:type="simple" xlink:title="reporter"
+                       xlink:href="/reporter1"
+                       datetime="2001-01-01 00:00:00">Some text</comment>
+              <comment xlink:type="simple" xlink:title="reporter"
+                       resolved="resolved"
+                       expected_presence="2003-03-03 00:00:00"
+                       xlink:href="/reporter2" absentfrom="/group1"
+                       datetime="2002-02-02 00:00:00">More text</comment>
+            </absence>
+            """)
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestHelpers))
@@ -1131,6 +1262,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRelationshipsView))
     suite.addTest(unittest.makeSuite(TestXMLPseudoParser))
     suite.addTest(unittest.makeSuite(TestLinkView))
+    suite.addTest(unittest.makeSuite(TestAbsenceManagementView))
+    suite.addTest(unittest.makeSuite(TestAbsenceView))
     return suite
 
 if __name__ == '__main__':

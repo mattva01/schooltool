@@ -61,9 +61,10 @@ class EventServiceTestMixin:
         'events' attribute.
         """
         from schooltool.interfaces import IServiceManager, IEventTarget
+        from schooltool.interfaces import IContainmentRoot
 
         class ServiceManager:
-            implements(IServiceManager, IEventTarget)
+            implements(IContainmentRoot, IServiceManager, IEventTarget)
             def __init__(self):
                 self.eventService = self
                 self.events = []

@@ -60,15 +60,15 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
         return self._current_absence
 
     def addAbsence(self, comment):
+        if not IAbsenceComment.isImplementedBy(comment):
+            raise TypeError("comment is not IAbsenceComment", comment)
         absence = self.getCurrentAbsence()
         if absence is None:
             absence = Absence(self)
             absence.__parent__ = self
-            absence.addComment(comment)
             self._absences.add(absence)
             self._current_absence = absence
-        else:
-            absence.addComment(comment)
+        absence.addComment(comment)
         return absence
 
     def getRelativePath(self, obj):

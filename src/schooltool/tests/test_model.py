@@ -150,6 +150,18 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         self.assert_(absence4.resolved)
         self.assert_(absence4.expected_presence is None)
 
+    def test_absence_resolved_initially(self):
+        from schooltool.interfaces import IAbsence
+        from schooltool.model import Person, AbsenceComment
+        person = Person('John Smith')
+        person.__parent__ = self.eventService
+
+        comment = AbsenceComment(object(), "some text", resolution_change=True)
+        absence = person.addAbsence(comment)
+        self.assert_(absence.resolved)
+        self.assert_(absence in person.iterAbsences())
+        self.assert_(person.getCurrentAbsence() is None)
+
 
 class TestGroup(unittest.TestCase):
 

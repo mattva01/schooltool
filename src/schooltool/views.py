@@ -261,6 +261,11 @@ class PersonView(ApplicationObjectTraverserView):
 
     template = Template("www/person.pt", content_type="text/xml")
 
+    def _traverse(self, name, request):
+        if name == 'absences':
+            return AbsenceManagementView(self.context)
+        return ApplicationObjectTraverserView._traverse(self, name, request)
+
     def getGroups(self):
         return [{'title': group.title, 'path': getPath(group)}
                 for group in getRelatedObjects(self.context, URIGroup)]
@@ -574,6 +579,58 @@ class LinkView(View):
         self.context.unlink()
         request.setHeader('Content-Type', 'text/plain')
         return "Link removed"
+
+
+class AbsenceManagementView(View):
+
+    template = Template('www/absences.pt', content_type="text/xml")
+
+    def _traverse(self, name, request):
+        absence = self.context.getAbsence(name)
+        return AbsenceView(absence)
+
+    def listAbsences(self):
+        resolvedness = {False: 'unresolved', True: 'resolved'}
+        return [{'title': item.__name__,
+                 'path': getPath(item),
+                 'resolved': resolvedness[item.resolved]}
+                for item in self.context.iterAbsences()]
+
+    def do_POST(self, request):
+        pass
+
+
+class AbsenceView(View):
+
+    template = Template('www/absence.pt', content_type="text/xml")
+
+    def resolved(self):
+        if self.context.resolved:
+            return "resolved"
+        else:
+            return "unresolved"
+
+    def expected_presence(self):
+        if self.context.expected_presence:
+            return self.context.expected_presence.isoformat(' ')
+        else:
+            return None
+
+    def getPathOfPerson(self):
+        return getPath(self.context.person)
+
+    def listComments(self):
+        resolvedness = {None: None, False: 'unresolved', True: 'resolved'}
+        return [{'datetime': comment.datetime.isoformat(' '),
+                 'text': comment.text,
+                 'absent_from': (comment.absent_from is not None
+                        and getPath(comment.absent_from) or None),
+                 'resolved': resolvedness[comment.resolution_change],
+                 'expected_presence': (comment.expected_presence_change
+                        and comment.expected_presence_change.isoformat(' ')
+                        or None),
+                 'reporter_href': getPath(comment.reporter)}
+                for comment in self.context.comments]
 
 
 def setUp():
