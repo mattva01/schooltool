@@ -18,21 +18,21 @@ System requirements
 -------------------
 
 - Python 2.3 (http://www.python.org/)
-  (Note for Debian users: you need both python2.3 and python2.3-xml packages)
+  (Debian users will need both python2.3 and python2.3-xml packages)
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
 - Twisted 1.1.0 or newer (http://www.twistedmatrix.com/)
-  (Needed for the server only)
+  (needed for the server only)
 
 - Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
-  (Needed for the server only)
+  (needed for the server only)
 
 - wxPython 2.4 (http://www.wxpython.org/)
-  (Needed for the wxWindows client only)
+  (needed for the wxWindows client only)
 
 - Development environment and a C compiler
-  (Precompiled binaries  are available for Windows users)
+  (precompiled binaries are available for Windows users)
 
 
 Building SchoolTool
