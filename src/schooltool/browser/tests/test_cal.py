@@ -2371,6 +2371,41 @@ class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
         assert not canEdit(self.person2)
         assert canEdit(self.manager)
 
+    def test_canEdit_special_events(self):
+        from schooltool.browser.cal import CalendarEventView
+        from schooltool.timetable import TimetableCalendarEvent
+        from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
+        from schooltool.cal import InheritedCalendarEvent
+
+        tt_ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                       timedelta(minutes=1), "A",
+                                       period_id="foo", activity=object())
+
+        exc = TimetableException(date=date(2003, 11, 26), period_id='Green',
+                                 activity=object())
+        exc_ev = ExceptionalTTCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                            timedelta(minutes=1), "A",
+                                            exception=exc)
+
+        comp_ev = InheritedCalendarEvent(createEvent('2004-11-03 14:32',
+                                                     '1h', 'Whatever'))
+
+        # convenience function
+        anonymous = None
+        def canEdit(user):
+            view.request = RequestStub(authenticated_user=user)
+            return view.canEdit()
+
+        cal = self.person.calendar
+        for ev in [tt_ev, exc_ev, comp_ev]:
+            cal.addEvent(ev)
+            view = CalendarEventView(ev, cal)
+
+            assert not canEdit(anonymous)
+            assert not canEdit(self.person)
+            assert canEdit(self.manager)
+
     def test_canView(self):
         from schooltool.interfaces import ViewPermission
         from schooltool.browser.cal import CalendarEventView

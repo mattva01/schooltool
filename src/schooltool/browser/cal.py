@@ -1457,11 +1457,20 @@ class CalendarEventView(View):
 
         Users can edit normal calendar events only if the ACL allows it.
 
-        Only managers can "edit" (that is, create exceptions to) timetable
-        events.
+        Only managers can edit special events: timetable events, exceptional
+        events and inherited events.
         """
+        if self.isManager():
+            return True
+
+        for iface in [IInheritedCalendarEvent,
+                      IExceptionalTTCalendarEvent,
+                      ITimetableCalendarEvent]:
+            if iface.providedBy(self.context):
+                return False
+
         user = self.request.authenticated_user
-        return self.isManager() or self.acl.allows(user, ModifyPermission)
+        return self.acl.allows(user, ModifyPermission)
 
     def canView(self):
         """Can the current user view this calendar event?"""
