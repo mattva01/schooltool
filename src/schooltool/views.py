@@ -142,8 +142,11 @@ class View(Resource):
         self.context = context
 
     def getChild(self, name, request):
-        if name == '': # trailing slash in the URL?
-            return self
+        if name == '': # trailing slash in the URL
+            if request.path == '/':
+                return self
+            else:
+                return NotFoundView(404, "Not Found")
         try:
             return self._traverse(name, request)
         except KeyError:

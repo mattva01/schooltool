@@ -50,6 +50,10 @@ class RequestStub:
         self.headers = {}
         self.uri = uri
         self.method = method
+        self.path = ''
+        start = uri.find('/', uri.find('://')+3)
+        if start >= 0:
+            self.path = uri[start:]
 
     def setHeader(self, header, value):
         self.headers[header] = value
@@ -143,10 +147,15 @@ class TestView(unittest.TestCase):
     def test_getChild(self):
         from schooltool.views import View, NotFoundView
         context = None
-        request = RequestStub()
+        request = RequestStub(uri='http://foo/')
         view = View(context)
         self.assert_(view.getChild('', request) is view)
         result = view.getChild('anything', request)
+        self.assert_(result.__class__ is NotFoundView)
+        self.assert_(result.code == 404)
+
+        request = RequestStub(uri='http://foo/x')
+        result = view.getChild('', request)
         self.assert_(result.__class__ is NotFoundView)
         self.assert_(result.code == 404)
 
