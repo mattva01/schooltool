@@ -19,6 +19,15 @@
 
 <div class="form">
   <div class="row" tal:replace="structure view/name_widget">[Name]</div>
+
+  <div class="buttons">
+    <!-- The first button in the form must be a harmelss one, because
+         Mozilla uses it when you press Enter in a text field -->
+    <input type="submit" class="button" name="UPDATE" value="Update"
+           tal:attributes="tabindex view/next_tabindex"
+           i18n:attributes="value" />
+  </div>
+
 </div>
 
 <p i18n:translate="">
@@ -28,50 +37,51 @@ First, please define the days and periods of the timetable.
 <div class="form">
 
   <table class="timetable"
-         tal:define="col_width python:'%d%%' % (100 / ncols);
-                     tabindex python:ncols*3">
+         tal:define="col_width python:'%d%%' % (100 / ncols)">
     <tr><tal:block repeat="day tt/day_ids">
       <th class="day">
         <input class="text" type="text" tal:define="n repeat/day/number"
                tal:attributes="name string:day$n; value day;
-                               tabindex python:n*3-2" />
+                               tabindex view/next_tabindex" />
       </th>
-      <th class="day" width="1%">
-        <input class="button" type="submit" tal:define="n repeat/day/number"
+      <th class="day" width="1%" tal:condition="not:repeat/day/start">
+        <input class="button" type="submit" tal:define="n repeat/day/index"
                tal:attributes="name string:COPY_DAY_$n;
-                               tabindex python:n*3-1"
+                               tabindex view/next_tabindex"
                value="C" title="Copy periods from previous day"
                i18n:attributes="value; title" />
       </th>
       <th class="day" width="1%">
         <input class="button" type="submit" tal:define="n repeat/day/number"
                tal:attributes="name string:DELETE_DAY_$n;
-                               tabindex python:n*3"
+                               tabindex view/next_tabindex"
                value="X" title="Remove this day"
                i18n:attributes="value; title" />
       </th>
     </tal:block></tr>
-    <tr tal:repeat="row rows"><tal:block define="row_n repeat/row/number"
+    <tr tal:define="dummy python:view.tabindex_matrix(nrows, ncols)"
+        tal:repeat="row rows"><tal:block define="row_n repeat/row/number"
                                          repeat="col row">
-      <td class="period" tal:define="col_n repeat/col/number" colspan="3"
-          tal:attributes="width col_width">
+      <td class="period" tal:define="col_n repeat/col/number"
+          tal:attributes="width col_width;
+                          colspan python: repeat['col'].start() and 2 or 3">
         <input type="text" class="text"
                tal:attributes="name string:day${col_n}.period${row_n};
-                               tabindex python:tabindex+(col_n-1)*nrows+row_n;
+                               tabindex view/next_tabindex;
                                value col/period" />
       </td>
     </tal:block></tr>
   </table>
 
-  <div class="buttons" tal:define="tabindex python:ncols*(nrows+3)">
+  <div class="buttons">
     <input type="submit" class="button" name="UPDATE" value="Update"
-           tal:attributes="tabindex python:tabindex+1"
+           tal:attributes="tabindex view/next_tabindex"
            i18n:attributes="value" />
     <input type="submit" class="button" name="ADD_DAY" value="Add day"
-           tal:attributes="tabindex python:tabindex+2"
+           tal:attributes="tabindex view/next_tabindex"
            i18n:attributes="value" />
     <input type="submit" class="button" name="ADD_PERIOD" value="Add period"
-           tal:attributes="tabindex python:tabindex+3"
+           tal:attributes="tabindex view/next_tabindex"
            i18n:attributes="value" />
   </div>
 
@@ -81,7 +91,7 @@ First, please define the days and periods of the timetable.
 Second, select the way timetable days are aligned with calendar days.
 </p>
 
-<div class="form" tal:define="tabindex python:ncols*(nrows+3)+10">
+<div class="form">
   <div class="error" tal:condition="view/model_error"
        tal:content="view/model_error">
     Error.
@@ -92,7 +102,7 @@ Second, select the way timetable days are aligned with calendar days.
         <input id="weekly_model" type="radio" name="model"
                tal:attributes="checked
                       python:view.model_name == 'WeeklyTimetableModel';
-                      tabindex python:tabindex+1"
+                      tabindex view/next_tabindex"
                value="WeeklyTimetableModel" />
       </td>
       <td>
@@ -107,7 +117,7 @@ Second, select the way timetable days are aligned with calendar days.
         <input id="sequential_model" type="radio" name="model"
                tal:attributes="checked
                       python:view.model_name == 'SequentialDaysTimetableModel';
-                      tabindex python:tabindex+1"
+                      tabindex view/next_tabindex"
                value="SequentialDaysTimetableModel" />
       </td>
       <td>
@@ -127,40 +137,45 @@ that day of week.  If the list of periods is not up to date with the changes
 you made in the table above, use the Update button to refresh the form.
 </p>
 
-<div class="form" tal:define="tabindex python:ncols*(nrows+3)+20">
+<div class="form">
   <table class="timetable">
-    <tr>
+    <tr tal:define="dummy python:view.tabindex_matrix(nperiods + 1, 7);
+                    skip view/next_tabindex">
       <th class="day"></th>
-      <th class="day" width="12%" i18n:translate="">Monday</th>
-      <th class="day" width="12%" i18n:translate="">Tuesday</th>
-      <th class="day" width="12%" i18n:translate="">Wednesday</th>
-      <th class="day" width="12%" i18n:translate="">Thursday</th>
-      <th class="day" width="12%" i18n:translate="">Friday</th>
-      <th class="day" width="12%" i18n:translate="">Saturday</th>
-      <th class="day" width="12%" i18n:translate="">Sunday</th>
+      <tal:block repeat="day view/days_of_week">
+      <th class="day" tal:content="day">Monday</th>
+      <th class="day" width="1%"
+          tal:condition="not: repeat/day/start">
+        <input class="button" type="submit" tal:define="n repeat/day/index"
+               tal:attributes="name string:COPY_PERIODS_$n;
+                               tabindex view/next_tabindex"
+               value="C" title="Copy periods from previous day"
+               i18n:attributes="value; title" />
+      </th>
+      </tal:block>
     </tr>
     <tr tal:repeat="period period_times"><tal:block
-        define="n repeat/period/number">
+                                          define="n repeat/period/number">
       <th class="period" nowrap="">
         <span tal:replace="period/title">Period 1</span>
         <input type="hidden"
                tal:attributes="name string:time$n.period;
                                value period/title" />
       </th>
-      <td class="time" tal:repeat="time period/times">
+      <td class="time" width="12%" tal:repeat="time period/times"
+          tal:attributes="colspan python: repeat['time'].start() and 1 or 2">
         <input class="text" type="text"
                tal:define="day repeat/time/index"
-               tal:attributes="tabindex python:tabindex+day*nperiods+n;
+               tal:attributes="tabindex view/next_tabindex;
                                name string:time$n.day$day;
                                value time" />
       </td>
     </tal:block></tr>
   </table>
 
-  <div class="buttons"
-       tal:define="tabindex python:ncols*(nrows+3)+7*nperiods+30">
+  <div class="buttons">
     <input type="submit" class="button" name="UPDATE" value="Update"
-           tal:attributes="tabindex python:tabindex"
+           tal:attributes="tabindex view/next_tabindex"
            i18n:attributes="value" />
   </div>
 </div>
@@ -170,11 +185,10 @@ Finally, make sure the information in this form is correct, because the only
 way to correct it will be to remove this timetable schema and recreate it.
 </p>
 
-<div class="buttons"
-     tal:define="tabindex python:ncols*(nrows+3)+7*nperiods+40">
+<div class="buttons">
   <input type="submit" class="button" name="CREATE"
          value="Create timetable schema"
-         tal:attributes="tabindex python:tabindex"
+         tal:attributes="tabindex view/next_tabindex"
          i18n:attributes="value" />
 </div>
 

@@ -121,7 +121,65 @@ class TimetableSchemaView(TimetableView):
         return "Timetable schema %s" % self.context.__name__
 
 
-class TimetableSchemaWizard(View):
+class TabindexMixin(object):
+    """Tab index calculator mixin for views."""
+
+    def __init__(self):
+        self.__tabindex = 0
+        self.__tabindex_matrix = []
+
+    def next_tabindex(self):
+        """Return the next tabindex.
+
+          >>> view = TabindexMixin()
+          >>> [view.next_tabindex() for n in range(5)]
+          [1, 2, 3, 4, 5]
+
+        See the docstring for tabindex_matrix for an example where
+        next_tabindex() returns values out of order
+        """
+        if self.__tabindex_matrix:
+            return self.__tabindex_matrix.pop(0)
+        else:
+            self.__tabindex += 1
+            return self.__tabindex
+
+    def tabindex_matrix(self, nrows, ncols):
+        """Ask next_tabindex to return transposed tab indices for a matrix.
+
+        For example, suppose that you have a 3 x 5 matrix like this:
+
+               col1 col2 col3 col4 col5
+          row1   1    4    7   10   13
+          row2   2    5    8   11   14
+          row3   3    6    9   12   15
+
+        Then you do
+
+          >>> view = TabindexMixin()
+          >>> view.tabindex_matrix(3, 5)
+          >>> [view.next_tabindex() for n in range(5)]
+          [1, 4, 7, 10, 13]
+          >>> [view.next_tabindex() for n in range(5)]
+          [2, 5, 8, 11, 14]
+          >>> [view.next_tabindex() for n in range(5)]
+          [3, 6, 9, 12, 15]
+
+        After the matrix is finished, next_tabindex reverts back to linear
+        allocation:
+
+          >>> [view.next_tabindex() for n in range(5)]
+          [16, 17, 18, 19, 20]
+
+        """
+        first = self.__tabindex + 1
+        self.__tabindex_matrix += [first + col * nrows + row
+                                     for row in range(nrows)
+                                       for col in range(ncols)]
+        self.__tabindex += nrows * ncols
+
+
+class TimetableSchemaWizard(View, TabindexMixin):
     """View for defining a new timetable schema.
 
     Can be accessed at /newttschema.
@@ -133,10 +191,21 @@ class TimetableSchemaWizard(View):
 
     template = Template("www/ttwizard.pt")
 
+    days_of_week = (_("Monday"),
+                    _("Tuesday"),
+                    _("Wednesday"),
+                    _("Thursday"),
+                    _("Friday"),
+                    _("Saturday"),
+                    _("Sunday"),
+                   )
+
     def __init__(self, context):
         View.__init__(self, context)
+        TabindexMixin.__init__(self)
         self.name_widget = TextWidget('name', _('Name'), self.name_parser,
-                                      self.name_validator)
+                                      self.name_validator,
+                                      tabindex=self.next_tabindex())
 
     def name_parser(self, name):
         if name is None:
@@ -212,7 +281,7 @@ class TimetableSchemaWizard(View):
         previous_day = None
         for idx, day in zip(day_idxs, day_ids):
             n = 1
-            if ('COPY_DAY_%d' % idx in self.request.args
+            if ('COPY_DAY_%d' % (idx - 1) in self.request.args
                 and previous_day is not None):
                 periods = list(previous_day)
             else:
@@ -266,6 +335,12 @@ class TimetableSchemaWizard(View):
                     result[day] = SchooldayTemplate()
                 result[day].add(SchooldayPeriod(period, start, duration))
             n += 1
+        for day in range(1, 7):
+            if 'COPY_PERIODS_%d' % day in self.request.args:
+                if (day - 1) in result:
+                    result[day] = result[day - 1]
+                elif day in result:
+                    del result[day]
         return result
 
     def all_periods(self):

@@ -300,6 +300,68 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
                                                  ('Period 2', 10, 0, 45)]),
                            6: createDayTemplate([('Period 2', 10, 30, 40)])})
 
+    def test_buildDayTemplates_copy_day(self):
+        view = self.createView()
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['time1.day1'] = ['13:00-13:45']
+        view.request.args['time2.period'] = ['Period 2']
+        view.request.args['time2.day0'] = ['10:00-10:45']
+        view.request.args['time2.day6'] = ['10:30-11:10']
+        view.request.args['COPY_PERIODS_1'] = ['C']
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt,
+                          {None: createDayTemplate([]),
+                           0: createDayTemplate([('Period 1', 9, 0, 45),
+                                                 ('Period 2', 10, 0, 45)]),
+                           1: createDayTemplate([('Period 1', 9, 0, 45),
+                                                 ('Period 2', 10, 0, 45)]),
+                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+
+    def test_buildDayTemplates_copy_empty_day(self):
+        view = self.createView()
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['time2.period'] = ['Period 2']
+        view.request.args['time2.day0'] = ['10:00-10:45']
+        view.request.args['time2.day6'] = ['10:30-11:10']
+        view.request.args['COPY_PERIODS_6'] = ['C']
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt,
+                          {None: createDayTemplate([]),
+                           0: createDayTemplate([('Period 1', 9, 0, 45),
+                                                 ('Period 2', 10, 0, 45)])})
+
+    def test_buildDayTemplates_copy_empty_day_over_empty_day(self):
+        view = self.createView()
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['time2.period'] = ['Period 2']
+        view.request.args['time2.day0'] = ['10:00-10:45']
+        view.request.args['time2.day6'] = ['10:30-11:10']
+        view.request.args['COPY_PERIODS_4'] = ['C']
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt,
+                          {None: createDayTemplate([]),
+                           0: createDayTemplate([('Period 1', 9, 0, 45),
+                                                 ('Period 2', 10, 0, 45)]),
+                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+
+    def test_buildDayTemplates_copy_first_day_ignored(self):
+        view = self.createView()
+        view.request.args['time1.period'] = ['Period 1']
+        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['time2.period'] = ['Period 2']
+        view.request.args['time2.day0'] = ['10:00-10:45']
+        view.request.args['time2.day6'] = ['10:30-11:10']
+        view.request.args['COPY_PERIODS_0'] = ['C']
+        dt = view._buildDayTemplates()
+        self.assertEquals(dt,
+                          {None: createDayTemplate([]),
+                           0: createDayTemplate([('Period 1', 9, 0, 45),
+                                                 ('Period 2', 10, 0, 45)]),
+                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+
     def test_buildDayTemplates_errors(self):
         view = self.createView()
         view.request.args['time1.period'] = ['Period 1']
@@ -409,12 +471,12 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
         view.request.args['day1.period2'] = ['B']
         view.request.args['day2.period1'] = ['C']
         view.request.args['day2.period2'] = ['D']
-        view.request.args['COPY_DAY_2'] = ["Copy"]
+        view.request.args['COPY_DAY_1'] = ["Copy"]
         schema = view._buildSchema()
         self.assertEquals(schema, createSchema(['Day 1', 'Day 2'],
                                                ['A', 'B'], ['A', 'B']))
 
-    def test_buildSchema_copy_day_1(self):
+    def test_buildSchema_copy_first_day_ignored(self):
         view = self.createView()
         view.request.args['day1'] = ['Day 1']
         view.request.args['day2'] = ['Day 2']
@@ -422,7 +484,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
         view.request.args['day1.period2'] = ['B']
         view.request.args['day2.period1'] = ['C']
         view.request.args['day2.period2'] = ['D']
-        view.request.args['COPY_DAY_1'] = ["Copy"]
+        view.request.args['COPY_DAY_0'] = ["Copy"]
         schema = view._buildSchema()
         self.assertEquals(schema, createSchema(['Day 1', 'Day 2'],
                                                ['A', 'B'], ['C', 'D']))
