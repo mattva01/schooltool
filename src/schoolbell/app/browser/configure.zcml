@@ -357,6 +357,8 @@
       title="Calendar (yearly)"
       />
 
+<!-- Calendar event views -->
+
   <page
       name="add.html"
       for="schoolbell.calendar.interfaces.ICalendar"
@@ -366,8 +368,6 @@
       menu="zmi_views"
       title="Add Event"
       />
-
-<!-- Calendar event views -->
 
   <page
       name="delete.html"

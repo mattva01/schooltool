@@ -1,11 +1,24 @@
 <html >
 <!-- metal:use-macro="context/@@standard_macros/page" -->
 <body>
-<div >
+<div>
 <!-- metal:fill-slot="body" -->
-<div metal:define-macro="addform">
+  <p tal:content="view/update"/>
+  <form class="standalone" method="POST" enctype="multipart/form-data"
+        tal:attributes="action request/URL">
+
+    <div metal:define-macro="addform">
       <div metal:use-macro="context/@@form_macros/widget_rows" />
-</div>
+    </div>
+
+    <div class="controls">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
+             title="Shortcut: Alt-A" accesskey="A"
+             i18n:attributes="value add-button; accesskey" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+  </form>
 
 </div>
 </body>

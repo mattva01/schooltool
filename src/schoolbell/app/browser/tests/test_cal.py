@@ -828,9 +828,11 @@ def doctest_CalendarEventAddView():
         ...                             'field.start_date': '2004-08-13',
         ...                             'field.start_time': '15:30',
         ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddView(calendar, request)
         >>> view.update()
         ''
@@ -851,11 +853,20 @@ def doctest_CalendarEventAddView():
         >>> event.location is None
         True
 
+    We should have been redirected to the calendar view:
+    (TODO: redirect to the day when the event occurs)
+
+        >>> view.request.response.getStatus()
+        302
+        >>> view.request.response.getHeaders()['Location']
+        'http://127.0.0.1/calendar'
+
     Let's try to add an event without a required field:
 
         >>> request = TestRequest(form={'field.title': 'Hacking',
         ...                             'field.start_time': '15:30',
         ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()
@@ -876,10 +887,12 @@ def doctest_CalendarEventAddView():
         ...                             'field.start_date': '2004-08-13',
         ...                             'field.start_time': '15:30',
         ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
         ...                             'field.location': 'Moon',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddView(calendar, request)
         >>> view.update()
         ''
@@ -902,11 +915,13 @@ def doctest_CalendarEventAddView():
         ...                             'field.duration': '50',
         ...                             'field.location': 'Moon',
         ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence.used': '',
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.interval': '1',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddView(calendar, request)
         >>> view.update()
         ''
@@ -926,8 +941,10 @@ def doctest_CalendarEventAddView():
         ...                             'field.start_time': '15:30',
         ...                             'field.location': 'Kitchen',
         ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddView(calendar, request)
         >>> view.update()
         ''
@@ -955,13 +972,15 @@ def doctest_CalendarEventAddView():
         ...                             'field.start_time': '15:30',
         ...                             'field.location': 'Kitchen',
         ...                             'field.duration': '50',
-        ...                             'field.recurrence': 'checked',
+        ...                             'field.recurrence': 'on',
+        ...                             'field.recurrence.used': '',
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.interval': '2',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
 
         >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddView(calendar, request)
         >>> view.update()
         ''
@@ -985,6 +1004,8 @@ def doctest_CalendarEventAddView():
         DailyRecurrenceRule(2, None, None, ())
 
         >>> view = CalendarEventAddView(calendar, request)
+
+    TODO?
 
     """
 
