@@ -31,7 +31,7 @@
 
   <menu id="schoolbell_actions" title="Actions" />
 
-<!-- Views -->
+<!-- Views for the application -->
 
   <addMenuItem
       title="SchoolBell"
@@ -45,6 +45,14 @@
       template="templates/index.pt"
       permission="zope.Public"
       />
+
+  <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
+
+  <menuItem
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      menu="zmi_views" title="View" action="index.html" />
+
+<!-- Views for everything -->
 
   <page
       for="*"
@@ -73,12 +81,6 @@
       title="Set up access"
       menu="schoolbell_actions"
       />
-
-  <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
-
-  <menuItem
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
-      menu="zmi_views" title="View" action="index.html" />
 
 <!-- PersonContainer, Person configuration -->
 
@@ -309,7 +311,7 @@
       />
 
   <zope:view
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory=".cal.CalendarTraverser"
@@ -326,7 +328,7 @@
 
   <page
       name="plain.html"
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.PlainCalendarView"
       template="templates/cal_plain.pt"
       permission="schoolbell.view"
@@ -336,7 +338,7 @@
 
   <page
       name="daily.html"
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
       permission="schoolbell.view"
@@ -346,7 +348,7 @@
 
   <page
       name="weekly.html"
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
       permission="schoolbell.view"
@@ -356,7 +358,7 @@
 
   <page
       name="monthly.html"
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
       permission="schoolbell.view"
@@ -366,7 +368,7 @@
 
   <page
       name="yearly.html"
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
       permission="schoolbell.view"
@@ -375,7 +377,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar.ics"
       permission="schoolbell.view"
       class="schoolbell.calendar.browser.CalendarICalendarView"
@@ -385,12 +387,12 @@
       />
 
   <menuItem
-      for="schoolbell.calendar.interfaces.IEditCalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       menu="schoolbell_actions" title="New event"
       action="add.html" permission="schoolbell.view" />
 
   <menuItem
-      for="schoolbell.calendar.interfaces.ICalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       menu="schoolbell_actions" title="Open in iCal"
       action="../calendar.ics" permission="zope.View" />
 
@@ -399,7 +401,7 @@
   <addform
       label="Add Event"
       name="add.html"
-      for="schoolbell.calendar.interfaces.IEditCalendar"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
       schema=".cal.ICalendarEventAddForm"
       arguments=""
       keyword_arguments="title start_date start_time duration

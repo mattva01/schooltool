@@ -43,9 +43,17 @@ from zope.schema import Text, TextLine, Bytes, Object
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
+from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication
-from schoolbell.calendar.interfaces import ICalendar
-from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
+
+from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
+
+
+class ISchoolBellCalendar(IEditCalendar, ILocation):
+    """A SchoolBell calendar.
+
+    Calendars stored within all provide IContainedCalendarEvent.
+    """
 
 
 class IContainedCalendarEvent(ICalendarEvent, IContained):
@@ -91,7 +99,7 @@ class ICalendarOwner(Interface):
 
     calendar = Object(
         title=u"The object's calendar.",
-        schema=ICalendar)
+        schema=ISchoolBellCalendar)
 
 
 class IAdaptableToSchoolBellApplication(Interface):
@@ -119,6 +127,13 @@ class IReadPerson(IGroupMember):
         description=u"""Photo (in JPEG format)""")
 
     username = TextLine(title=u"Username")
+
+    overlaid_calendars = Attribute("""Additional calendars to overlay.
+
+            A user may select a number of calendars that should be displayed in
+            the calendar view, in addition to the user's calendar.
+
+            This is a relationship property.""")
 
     def checkPassword(password):
         """Check if the provided password is the same as the one set

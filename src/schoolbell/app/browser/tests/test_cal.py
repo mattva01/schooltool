@@ -76,8 +76,8 @@ def doctest_CalendarOwnerTraverser():
 
     We can also get the calendar as iCalendar:
 
-        >>> from schoolbell.app.interfaces import ICalendar
-        >>> ztapi.browserView(ICalendar, 'calendar.ics', BrowserView)
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> ztapi.browserView(ISchoolBellCalendar, 'calendar.ics', BrowserView)
         >>> view = traverser.publishTraverse(request, 'calendar.ics')
         >>> view.context is traverser.context.calendar
         True

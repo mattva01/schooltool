@@ -27,12 +27,15 @@ from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.app.location.interfaces import ILocation
 from zope.app.container.contained import Contained
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 
-from schoolbell.calendar.interfaces import ICalendar, IEditCalendar
+from schoolbell.calendar.interfaces import ICalendar
 from schoolbell.calendar.interfaces import IExpandedCalendarEvent
 from schoolbell.calendar.mixins import CalendarMixin, ExpandedCalendarEvent
 from schoolbell.calendar.simple import SimpleCalendarEvent, ImmutableCalendar
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import IContainedCalendarEvent
+
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     """A persistent calendar event contained in a persistent calendar."""
@@ -55,7 +58,7 @@ class Calendar(Persistent, CalendarMixin):
 
     # We use the expand() implementation from CalendarMixin
 
-    implements(IEditCalendar, ILocation)
+    implements(ISchoolBellCalendar, IAttributeAnnotatable)
 
     __name__ = 'calendar'
 
