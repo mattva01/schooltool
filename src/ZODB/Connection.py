@@ -465,8 +465,9 @@ class Connection(ExportImport, object):
         self._debug_info = ()
         # Return the connection to the pool.
         if self._db is not None:
-            self._db._closeConnection(self)
+            db = self._db
             self._db = None
+            db._closeConnection(self)
 
     def commit(self, obj, transaction):
         if obj is self:
