@@ -3,6 +3,10 @@
   <message>Welcome to the SchoolTool server</message>
   <roots>
     <root xlink:type="simple" tal:repeat="root view/getRoots"
-          tal:attributes="xlink:title root/title; xlink:href root/path" />
+          tal:attributes="xlink:title root/title; xlink:href root/path"/>
   </roots>
+  <utilities>
+    <utility xlink:type="simple" tal:repeat="utility view/getUtilities"
+         tal:attributes="xlink:title utility/title; xlink:href utility/path"/>
+  </utilities>
 </schooltool>

@@ -77,11 +77,16 @@ class IServiceAPI(Interface):
     def getEventService(context):
         """Returns the global event service."""
 
+    def getUtilityService(context):
+        """Returns the global utility service."""
+
 
 class IServiceManager(Interface):
     """Container of services"""
 
     eventService = Attribute("""Event service for this application""")
+
+    utilityService = Attribute("""Utility service for this application""")
 
 
 #
@@ -713,6 +718,32 @@ class IViewAPI(Interface):
 
     def registerView(interface, factory):
         """Register a view for an interface."""
+
+#
+# Utilities
+#
+
+class IUtility(ILocation):
+    """Utilities do stuff. They are managed by the utility service."""
+
+    title = Attribute("Short descriptive text")
+
+class IUtilityService(ILocation):
+    """The utility service manages utilities."""
+
+    def __getitem__(name):
+        """Return the named utility."""
+
+    def __setitem__(name, utility):
+        """Add a new utility.
+
+        The utility must provide IUtility, and will have the utility service
+        set as its __parent__, and the name as its __name__.
+        """
+
+    def values():
+        """Returns a list of utilities."""
+
 
 #
 # Exceptions

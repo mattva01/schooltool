@@ -23,10 +23,12 @@ $Id$
 """
 
 import unittest
+from zope.interface import Interface, implements
 from StringIO import StringIO
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import RegistriesSetupMixin
-from zope.interface import Interface, implements
+from schooltool.interfaces import IUtility
+
 
 __metaclass__ = type
 
@@ -53,6 +55,17 @@ class RequestStub:
     def setResponseCode(self, code, reason):
         self.code = code
         self.reason = reason
+
+
+class Utility:
+
+    implements(IUtility)
+
+    __parent__ = None
+    __name__ = None
+
+    def __init__(self, title):
+        self.title = title
 
 
 class TestTemplate(unittest.TestCase):
@@ -336,6 +349,8 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         self.group = self.app['groups'].new("root", title="Root group")
         self.app.addRoot(self.group)
 
+        self.app.utilityService["foo"] = Utility("Foo utility")
+
         self.view = ApplicationView(self.app)
 
     def tearDown(self):
@@ -356,6 +371,10 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
                 <root xlink:type="simple" xlink:href="/groups/root"
                       xlink:title="Root group"/>
               </roots>
+              <utilities>
+                <utility xlink:type="simple" xlink:href="/utils/foo"
+                         xlink:title="Foo utility"/>
+              </utilities>
             </schooltool>
             """)
 
@@ -363,11 +382,15 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
 
     def test__traverse(self):
         from schooltool.views import ApplicationObjectContainerView
+        from schooltool.views import UtilityServiceView
         request = RequestStub("http://localhost/groups")
         request.method = "GET"
         view = self.view._traverse('groups', request)
         self.assert_(view.__class__ is ApplicationObjectContainerView)
         self.assertRaises(KeyError, view._traverse, 'froups', request)
+
+        view = self.view._traverse('utils', request)
+        self.assert_(view.__class__ is UtilityServiceView)
 
 
 class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
@@ -419,6 +442,82 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
         view = self.view._traverse('root', request)
         self.assert_(view.__class__ is GroupView)
         self.assertRaises(KeyError, view._traverse, 'moot', request)
+
+
+class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import UtilityServiceView
+        from schooltool.app import Application
+        from schooltool import views
+        self.setUpRegistries()
+        views.setUp()
+        self.app = Application()
+        self.app.utilityService["foo"] = Utility("Foo utility")
+        self.view = UtilityServiceView(self.app.utilityService)
+
+    def tearDown(self):
+        from schooltool.component import resetViewRegistry
+        resetViewRegistry()
+        RegistriesSetupMixin.tearDown(self)
+
+    def test_render(self):
+        from schooltool.component import getPath
+        request = RequestStub("http://localhost/groups")
+        request.method = "GET"
+        result = self.view.render(request)
+
+        expected = dedent("""\
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>utils</name>
+              <items>
+                <item xlink:type="simple" xlink:href="/utils/foo"
+                      xlink:title="Foo utility"/>
+              </items>
+            </container>
+            """)
+
+        self.assertEquals(result, expected, diff(result, expected))
+
+    def test__traverse(self):
+        from schooltool.views import UtilityView
+        request = RequestStub("http://localhost/utils/foo")
+        request.method = "GET"
+        view = self.view._traverse('foo', request)
+        self.assert_(view.__class__ is UtilityView)
+        self.assertRaises(KeyError, view._traverse, 'moot', request)
+
+
+class TestUtilityView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import UtilityView
+        from schooltool.app import Application
+        from schooltool import views
+        self.setUpRegistries()
+        views.setUp()
+        self.app = Application()
+        self.app.utilityService["foo"] = Utility("Foo utility")
+        self.view = UtilityView(self.app.utilityService['foo'])
+
+    def tearDown(self):
+        from schooltool.component import resetViewRegistry
+        resetViewRegistry()
+        RegistriesSetupMixin.tearDown(self)
+
+    def test_render(self):
+        from schooltool.component import getPath
+        request = RequestStub("http://localhost/groups")
+        request.method = "GET"
+        result = self.view.render(request)
+
+        expected = dedent("""\
+            <utility>
+              <name>foo</name>
+            </utility>
+            """)
+
+        self.assertEquals(result, expected, diff(result, expected))
 
 
 class TestEventLogView(unittest.TestCase):
@@ -504,6 +603,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
+    suite.addTest(unittest.makeSuite(TestUtilityServiceView))
+    suite.addTest(unittest.makeSuite(TestUtilityView))
     suite.addTest(unittest.makeSuite(TestEventLogView))
     return suite
 

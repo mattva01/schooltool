@@ -28,7 +28,7 @@ from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import IModuleSetup, IUtilityService, IUtility
 from schooltool.component import getPath, getRelatedObjects
 from schooltool.component import ComponentLookupError
 from schooltool.component import getView, registerView
@@ -201,14 +201,24 @@ class ItemTraverseView(View):
         return getView(self.context[name])
 
 
-class ApplicationView(ItemTraverseView):
+class ApplicationView(View):
     """The root view for the application"""
 
     template = Template("www/app.pt", content_type="text/xml")
 
+    def _traverse(self, name, request):
+        if name == 'utils':
+            return getView(self.context.utilityService)
+        else:
+            return getView(self.context[name])
+
     def getRoots(self):
         return [{'path': getPath(root), 'title': root.title}
                 for root in self.context.getRoots()]
+
+    def getUtilities(self):
+        return [{'path': getPath(utility), 'title': utility.title}
+                for utility in self.context.utilityService.values()]
 
 
 class ApplicationObjectContainerView(ItemTraverseView):
@@ -223,6 +233,29 @@ class ApplicationObjectContainerView(ItemTraverseView):
         c = self.context
         return [{'path': getPath(c[key]), 'title': c[key].title}
                 for key in self.context.keys()]
+
+
+class UtilityServiceView(ItemTraverseView):
+    """The view for the utility service"""
+
+    template = Template("www/utilservice.pt", content_type="text/xml")
+
+    def getName(self):
+        return self.context.__name__
+
+    def items(self):
+        c = self.context
+        return [{'path': getPath(utility), 'title': utility.title}
+                for utility in self.context.values()]
+
+
+class UtilityView(View):
+    """View for utilities in general.
+
+    Specific utilities should provide more informative views.
+    """
+
+    template = Template('www/utility.pt', content_type="text/xml")
 
 
 class EventLogView(View):
@@ -247,5 +280,6 @@ def setUp():
     registerView(IGroup, GroupView)
     registerView(IApplication, ApplicationView)
     registerView(IApplicationObjectContainer, ApplicationObjectContainerView)
+    registerView(IUtilityService, UtilityServiceView)
+    registerView(IUtility, UtilityView)
     registerView(IEventLog, EventLogView)
-

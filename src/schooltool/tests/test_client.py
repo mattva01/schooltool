@@ -26,7 +26,7 @@ import sys
 from StringIO import StringIO
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
-from helpers import dedent
+from schooltool.tests.helpers import dedent
 
 __metaclass__ = type
 

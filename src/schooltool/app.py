@@ -26,6 +26,7 @@ from zope.interface import implements
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import ILocation
 from schooltool.event import EventService
+from schooltool.component import UtilityService
 from schooltool.db import PersistentKeysSet
 
 __metaclass__ = type
@@ -44,9 +45,13 @@ class Application(Persistent):
     implements(IApplication)
 
     eventService = None
+    utilityService = None
 
     def __init__(self):
         self.eventService = EventService()
+        self.utilityService = UtilityService()
+        self.utilityService.__parent__ = self
+        self.utilityService.__name__ = 'utils'
         self._roots = PersistentKeysSet()
         self._appObjects = PersistentDict()
 

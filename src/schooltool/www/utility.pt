@@ -1,0 +1,3 @@
+<utility xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <name tal:content="context/__name__" />
+</utility>

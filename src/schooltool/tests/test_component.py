@@ -26,8 +26,14 @@ import unittest
 from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import ISpecificURI, IRelatable, IQueryLinks
-from schooltool.interfaces import IFacet
+from schooltool.interfaces import IURIAPI, ISpecificURI
+from schooltool.interfaces import IFacet, IFaceted, IFacetAPI
+from schooltool.interfaces import IUtility, IUtilityService
+from schooltool.interfaces import IServiceAPI, IServiceManager
+from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
+from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
+from schooltool.interfaces import IViewAPI
+from schooltool.interfaces import ComponentLookupError
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -63,7 +69,6 @@ class TestGetAdapter(unittest.TestCase):
 
     def test_getAdapter(self):
         from schooltool.component import getAdapter, provideAdapter
-        from schooltool.interfaces import ComponentLookupError
         provideAdapter(I1, C1)
         self.assertEqual(getAdapter(object(), I1).foo(), "foo")
         self.assertRaises(ComponentLookupError, getAdapter, object(), I2)
@@ -78,12 +83,10 @@ class TestCanonicalPath(unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IContainmentAPI
         verifyObject(IContainmentAPI, component)
 
     def test_path(self):
         from schooltool.component import getPath
-        from schooltool.interfaces import ILocation, IContainmentRoot
 
         class Stub:
             implements(ILocation)
@@ -105,7 +108,6 @@ class TestCanonicalPath(unittest.TestCase):
 class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
-        from schooltool.interfaces import IFaceted
         class Stub:
             implements(IFaceted)
             __facets__ = Set()
@@ -122,7 +124,6 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IFacetAPI
         verifyObject(IFacetAPI, component)
 
     def test_setFacet_removeFacet(self):
@@ -191,17 +192,13 @@ class TestServiceAPI(unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IServiceAPI
         verifyObject(IServiceAPI, component)
 
-    def test_getEventService(self):
-        from schooltool.component import getEventService
-        from schooltool.interfaces import IServiceManager, ILocation
-        from schooltool.interfaces import ComponentLookupError
-
+    def setUpTree(self):
         class RootStub:
             implements(IServiceManager)
             eventService = object()
+            utilityService = object()
 
         class ObjectStub:
             implements(ILocation)
@@ -210,28 +207,42 @@ class TestServiceAPI(unittest.TestCase):
                 self.__parent__ = parent
                 self.__name__ = name
 
-        root = RootStub()
-        a = ObjectStub(root)
-        b = ObjectStub(a)
-        cloud = ObjectStub(None)
+        self.root = RootStub()
+        self.a = ObjectStub(self.root)
+        self.b = ObjectStub(self.a)
+        self.cloud = ObjectStub(None)
 
-        self.assertEquals(getEventService(root), root.eventService)
-        self.assertEquals(getEventService(a), root.eventService)
-        self.assertEquals(getEventService(b), root.eventService)
-        self.assertRaises(ComponentLookupError, getEventService, cloud)
-        self.assertRaises(ComponentLookupError, getEventService, None)
+    def doTestService(self, callable, intended_result):
+        self.assertEquals(callable(self.root), intended_result)
+        self.assertEquals(callable(self.a), intended_result)
+        self.assertEquals(callable(self.b), intended_result)
+        self.assertRaises(ComponentLookupError, callable, self.cloud)
+        self.assertRaises(ComponentLookupError, callable, None)
+
+    def test__getServiceManager(self):
+        from schooltool.component import _getServiceManager
+        self.setUpTree()
+        self.doTestService(_getServiceManager, self.root)
+
+    def test_getEventService(self):
+        from schooltool.component import getEventService
+        self.setUpTree()
+        self.doTestService(getEventService, self.root.eventService)
+
+    def test_getUtilityService(self):
+        from schooltool.component import getUtilityService
+        self.setUpTree()
+        self.doTestService(getUtilityService, self.root.utilityService)
 
 
 class TestSpecificURI(unittest.TestCase):
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IURIAPI
         verifyObject(IURIAPI, component)
 
     def test_inspectSpecificURI(self):
         from schooltool.component import inspectSpecificURI
-        from schooltool.interfaces import ISpecificURI
         self.assertRaises(TypeError, inspectSpecificURI, object())
         self.assertRaises(TypeError, inspectSpecificURI, I1)
         self.assertRaises(TypeError, inspectSpecificURI, ISpecificURI)
@@ -316,7 +327,6 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
 
     def test_api(self):
         from schooltool import component
-        from schooltool.interfaces import IRelationshipAPI
         verifyObject(IRelationshipAPI, component)
 
     def tearDown(self):
@@ -338,7 +348,6 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
         from schooltool.component import resetRelationshipRegistry
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.component import relate
-        from schooltool.interfaces import ISpecificURI, ComponentLookupError
 
         class URISomething(ISpecificURI):
             """http://ns.example.com/something"""
@@ -381,7 +390,6 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
 
     def testApi(self):
         from schooltool import component
-        from schooltool.interfaces import IViewAPI
 
         verifyObject(IViewAPI, component)
 
@@ -421,6 +429,44 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(TypeError, registerView, object(), object())
 
 
+class Utility:
+
+    implements(IUtility)
+
+    __name__ = None
+    __parent__ = None
+
+    def __init__(self, title):
+        self.title = title
+
+
+class TestUtilityService(unittest.TestCase):
+
+    def test(self):
+        from schooltool.component import UtilityService
+        u = UtilityService()
+        verifyObject(IUtilityService, u)
+        foo = Utility('foo utility')
+        self.assertRaises(KeyError, u.__getitem__, 'foo')
+        u['foo'] = foo
+        self.assert_(u['foo'] is foo)
+        self.assert_(foo.__parent__ is u)
+        self.assertEquals(foo.__name__, 'foo')
+        self.assertEqual(u.values(), [foo])
+
+    def testParentAlreadySet(self):
+        from schooltool.component import UtilityService
+        u = UtilityService()
+        foo = Utility('foo utility')
+        parent = object()
+        foo.__parent__ = parent
+        foo.__name__ = None
+        self.assertRaises(ValueError, u.__setitem__, 'foo', foo)
+        self.assertRaises(KeyError, u.__getitem__, 'foo')
+        self.assert_(foo.__parent__ is parent)
+        self.assert_(foo.__name__ is None)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGetAdapter))
@@ -430,6 +476,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSpecificURI))
     suite.addTest(unittest.makeSuite(TestRelationships))
     suite.addTest(unittest.makeSuite(TestViewRegistry))
+    suite.addTest(unittest.makeSuite(TestUtilityService))
     return suite
 
 if __name__ == '__main__':

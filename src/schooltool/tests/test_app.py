@@ -26,7 +26,7 @@ import unittest
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IApplication, IEventService
+from schooltool.interfaces import IApplication, IEventService, IUtilityService
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import ILocation
 from schooltool.tests.utils import EqualsSortedMixin
@@ -49,6 +49,10 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         a = Application()
         verifyObject(IApplication, a)
         verifyObject(IEventService, a.eventService)
+        verifyObject(IUtilityService, a.utilityService)
+        self.assert_(a.utilityService.__parent__ is a,
+                     "__parent__ of utility service should be the application")
+        self.assertEqual(a.utilityService.__name__, 'utils')
 
     def testRoots(self):
         from schooltool.app import Application

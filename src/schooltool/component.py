@@ -23,15 +23,17 @@ $Id$
 """
 
 import re
-from zope.interface import moduleProvides, InterfaceSpecification
+from zope.interface import moduleProvides, InterfaceSpecification, implements
 from zope.interface.interfaces import IInterface
 from zope.interface.type import TypeRegistry
+from persistence.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
+from schooltool.interfaces import IUtilityService
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI,
                IRelationshipAPI, IViewAPI)
@@ -157,10 +159,9 @@ def getFacetFactory(name):
 # IServiceAPI
 #
 
-def getEventService(context):
-    """See IServiceAPI"""
-
-    # The following options for finding the event service are available:
+def _getServiceManager(context):
+    """Internal method used by IServiceAPI functions."""
+    # The following options for finding the service manager are available:
     #   1. Use a thread-global variable
     #      - downside: only one event service per process
     #   2. Use context._p_jar.root()[some_hardcoded_name]
@@ -179,7 +180,15 @@ def getEventService(context):
             raise ComponentLookupError(
                     "Could not find the service manager for ", context)
         place = place.__parent__
-    return place.eventService
+    return place
+
+def getEventService(context):
+    """See IServiceAPI"""
+    return _getServiceManager(context).eventService
+
+def getUtilityService(context):
+    """See IServiceAPI"""
+    return _getServiceManager(context).utilityService
 
 
 #
@@ -290,3 +299,30 @@ def registerView(interface, factory):
     view_registry.register(interface, factory)
 
 
+#
+#  Utillities
+#
+
+class UtilityService:
+    implements(IUtilityService)
+
+    __parent__ = None
+    __name__ = None
+
+    def __init__(self):
+        self._utils = PersistentDict()
+
+    def __getitem__(self, name):
+        return self._utils[name]
+
+    def __setitem__(self, name, utility):
+        if utility.__parent__ is None:
+            self._utils[name] = utility
+            utility.__parent__ = self
+            utility.__name__ = name
+        else:
+            raise ValueError('Utility already has a parent',
+                             utility, utility.__parent__)
+
+    def values(self):
+        return self._utils.values()
