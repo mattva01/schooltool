@@ -20,10 +20,11 @@ r"""
 iCalendar parsing and generating.
 
 iCalendar (RFC 2445) is a big and hard-to-read specification.  This module
-supports only a subset of it: VEVENT components with a limited set of
-attributes and a limited recurrence model.  The subset should be sufficient
-for interoperation with desktop calendaring applications like Apple's iCal,
-Mozilla Calendar, Evolution and KOrganizer.
+supports only a subset of it: VEVENT and FREEBUSY components with a limited
+set of attributes and a limited recurrence model.  The subset should be
+sufficient for interoperation with desktop calendaring applications like
+Apple's iCal, Mozilla Calendar, Evolution and KOrganizer as well as the
+Outlook meeting planner.
 
 If you have a calendar, you can convert it to an iCalendar file like this:
 
