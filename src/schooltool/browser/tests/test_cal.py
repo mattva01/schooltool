@@ -1219,6 +1219,26 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
                                    args={'DELETE': 'revoke'})
         result = view.update()
 
+    def test_update_delete_Everybody(self):
+        from schooltool.interfaces import ViewPermission, Everybody
+        view = self.createView()
+        view.context.add((Everybody, ViewPermission))
+        assert view.context.allows(Everybody, ViewPermission)
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'DELETE': 'revoke',
+                                         'CHECK': 'View:Everybody'})
+        result = view.update()
+        assert not view.context.allows(Everybody, ViewPermission)
+        self.assertEquals(view.request.applog,
+                          [(self.person,
+                           'Revoked permission View on'
+                           ' /persons/johndoe/calendar/acl from'
+                           ' Everybody', INFO)])
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'DELETE': 'revoke'})
+        result = view.update()
+
+
     def test_update_add(self):
         from schooltool.interfaces import ViewPermission
         view = self.createView()
@@ -1233,7 +1253,9 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
                            'Granted permission View on'
                            ' /persons/johndoe/calendar/acl to'
                            ' /persons/johndoe (John Doe)', INFO)])
-        self.assertEquals(result, 'Granted permission View to John Doe')
+        self.assertEquals(result,
+                          'Granted permission View to'
+                          ' /persons/johndoe (John Doe)')
         result = view.update()
         self.assertEquals(result, 'John Doe already has permission View')
 
@@ -1252,6 +1274,15 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(view.permission_widget.error,
                           "Please select a permission")
 
+    def test_update_add_Everybody(self):
+        from schooltool.interfaces import ViewPermission, Everybody
+        view = self.createView()
+        view.request = RequestStub(authenticated_user=self.person,
+                                   args={'ADD': 'add',
+                                         'principal': 'Everybody',
+                                         'permission': 'View'})
+        result = view.update()
+        assert view.context.allows(Everybody, ViewPermission), result
 
 def test_suite():
     suite = unittest.TestSuite()

@@ -30,10 +30,10 @@
                          permission python:item[1]">
       <td><input
               type="checkbox" name="CHECK"
-              tal:attributes="value string:${permission}:${person/@@path}">
+              tal:attributes="value python:view.checkbox(person, permission)">
       </td>
-      <td><a tal:attributes="href person/@@absolute_url"
-             tal:content="person/title"/></td>
+      <td><a tal:attributes="href person/@@absolute_url|nothing"
+             tal:content="person/title|person"/></td>
       <td tal:content="permission" i18n:translate=""/>
       </tal:block>
     </tr>

@@ -33,7 +33,7 @@ from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IContainmentRoot, IPerson, IGroup
 from schooltool.translation import ugettext as _
-from schooltool.interfaces import ViewPermission
+from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import SelectionWidget
@@ -851,7 +851,7 @@ class ACLView(View):
 
         self.principal_widget = SelectionWidget(
             'principal', _('Principal'),
-            [(None, _('Select principal'))] +
+            [(None, _('Select principal')), (Everybody, _('Everybody'))] +
             [(obj, obj.title) for obj in self.allPrincipals()],
             parser=self.principalParser,
             formatter=self.formatPrincipal,
@@ -868,18 +868,22 @@ class ACLView(View):
             )
 
     def principalParser(self, value):
+        if value in (None, ''):
+            return value
+        elif value == Everybody:
+            return Everybody
         try:
-            if value in (None, ''):
-                return value
-            return traverse(self.context, value)
+           return traverse(self.context, value)
         except TypeError:
-            return None
+           return None
 
     def formatPrincipal(self, value):
-        if value not in ('', None):
-            return getPath(value)
-        else:
+        if value in ('', None):
             return ''
+        elif value == Everybody:
+            return Everybody
+        else:
+            return getPath(value)
 
     def formatPermission(self,  value):
         if not value:
@@ -887,13 +891,20 @@ class ACLView(View):
         return value
 
     def principalValidator(self, value):
-        if (not IPerson.providedBy(value) and
-            not IGroup.providedBy(value) and value is not None):
-            raise ValueError("Please select a principal")
+        if (not IPerson.providedBy(value) and not IGroup.providedBy(value) and
+            value is not None and value != Everybody):
+            raise ValueError(_("Please select a principal"))
 
     def permissionValidator(self, value):
         if value not in (ViewPermission, AddPermission, ModifyPermission, None):
-            raise ValueError("Please select a permission")
+            raise ValueError(_("Please select a permission"))
+
+    def checkbox(self, principal, permission):
+        """Format the checkbox id"""
+        if principal is Everybody:
+            return '%s:%s' % (permission, principal)
+        else:
+            return '%s:%s' % (permission, getPath(principal))
 
     def allPrincipals(self):
         """Return a list of objects available for addition"""
@@ -914,16 +925,21 @@ class ACLView(View):
             for checkbox in self.request.args.get('CHECK', []):
                 perm, path = checkbox.split(':', 1)
                 # XXX handle traversal failures!
-                obj = traverse(self.context, path)
+                if path != Everybody:
+                    obj = traverse(self.context, path)
+                else:
+                    obj = Everybody
                 try:
                     self.context.remove((obj, perm))
-                    self.request.appLog(
-                        _("Revoked permission %s on %s from %s (%s)") %
-                        (perm, getPath(self.context), getPath(obj), obj.title))
-                    result.append(_("Revoked permission %s from %s") %
-                                  (perm, obj.title))
                 except KeyError:
                     pass
+                else:
+                    self.request.appLog(
+                        _("Revoked permission %s on %s from %s") %
+                        (perm, getPath(self.context),
+                         self.printPrincipal(obj)))
+                    result.append(_("Revoked permission %s from %s") %
+                                  (perm, self.printPrincipal(obj)))
             return "; ".join(result)
 
         if 'ADD' in self.request.args:
@@ -939,12 +955,17 @@ class ACLView(View):
                            (principal.title, permission)
                 self.context.add((principal, permission))
                 self.request.appLog(
-                    _("Granted permission %s on %s to %s (%s)") %
+                    _("Granted permission %s on %s to %s") %
                     (permission, getPath(self.context),
-                     getPath(principal), principal.title))
-                return _("Granted permission %s to %s") % (permission,
-                                                           principal.title)
+                     self.printPrincipal(principal)))
+                return _("Granted permission %s to %s") % \
+                       (permission, self.printPrincipal(principal))
 
+    def printPrincipal(self, principal):
+        if principal == Everybody:
+            return Everybody
+        else:
+            return "%s (%s)" % (getPath(principal), principal.title)
 
 #
 # Calendaring functions
