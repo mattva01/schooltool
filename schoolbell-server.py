@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.3
 """
-A script to start the schooltool server from the source directory.
+A script to start the schoolbell server from the source directory.
 """
 
 import sys
@@ -25,5 +25,5 @@ basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(basedir, 'src'))
 sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
-import schooltool.main
-schooltool.main.main()
+import schoolbell.app.main
+schoolbell.app.main.main()

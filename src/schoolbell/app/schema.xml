@@ -1,0 +1,211 @@
+<schema>
+  <description>
+    SchoolTool configuration schema.
+
+    This schema describes the configuration options available for SchoolTool
+    HTTP server.
+  </description>
+
+  <import package="ZODB" />
+
+  <section type="zodb.database" name="*" required="yes" attribute="database">
+    <description>
+      The main application database that should be used.
+    </description>
+    <example>
+      &lt;zodb&gt;
+        &lt;filestorage&gt;
+          path Data.fs
+        &lt;/filestorage&gt;
+      &lt;/zodb&gt;
+    </example>
+  </section>
+
+  <multikey name="path" datatype="string">
+    <description>
+      This specifies additional paths directories that are inserted into
+      the beginning of Python's module search path.  The set of directories
+      specified is inserted into the beginning of the module search path in
+      the order which they are specified here.  Note that the processing of
+      this directive may happen too late under some circumstances; it is
+      recommended that you use the PYTHONPATH environment variable if
+      using this directive doesn't work for you.
+    </description>
+  </multikey>
+
+  <multikey name="module" datatype="string">
+    <description>
+      This specifies additional modules to be set up when the server starts.
+      Modules must provide the interface IModuleSetup.
+
+      XXX: The datatype should really be a dotted name.
+    </description>
+    <metadefault>schooltool.main</metadefault>
+  </multikey>
+
+  <multikey name="listen" datatype="inet-address">
+    <description>
+      Network interface and port number the HTTP server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      listen 8080
+      listen 127.0.0.1:80
+    </example>
+  </multikey>
+
+  <multikey name="web" datatype="inet-address">
+    <description>
+      Network interface and port number the web server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      web 80
+      web 127.0.0.1:80
+    </example>
+  </multikey>
+
+  <multikey name="listen_ssl" datatype="inet-address">
+    <description>
+      Network interface and port number the HTTPS server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      listen_ssl 8080
+      listen_ssl 127.0.0.1:80
+    </example>
+  </multikey>
+
+  <multikey name="web_ssl" datatype="inet-address">
+    <description>
+      Network interface and port number the ssl web server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      web_ssl 8080
+      web_ssl 127.0.0.1:80
+    </example>
+  </multikey>
+
+  <key name="ssl_certificate" datatype="string">
+    <description>
+      PEM Certificate
+    </description>
+  </key>
+
+  <key name="thread-pool-size" datatype="integer" default="10">
+    <description>
+      Suggested thread pool size.
+    </description>
+    <example>
+      thread-pool-size 20
+    </example>
+  </key>
+
+  <key name="event-logging" datatype="boolean" default="off">
+    <description>
+      Enables or disables global event logging to /utils/eventlog.
+    </description>
+    <example>
+      event-logging on
+    </example>
+  </key>
+
+  <key name="test-mode" datatype="boolean" default="off">
+    <description>
+      Enables or disables in-memory database snapshots that are used
+      for functional testing.  Do not use for live servers.  This option
+      is not guaranteed to work if you use ZODB storage other than
+      MappingStorage.
+    </description>
+    <example>
+      test-mode off
+    </example>
+  </key>
+
+
+  <key name="pid-file" datatype="string">
+    <description>
+      Specifies the path of a pid file.
+    </description>
+    <example>
+      pid-file /var/run/schooltool.pid
+    </example>
+  </key>
+
+  <multikey name="error-log-file" datatype="string">
+    <description>
+      Specifies the path of a log file used for exceptions. Special
+      values STDERR and STDOUT mean standard error and standard output
+      respectively.
+    </description>
+    <default>STDERR</default>
+    <example>
+      error-log-file /var/log/schooltool/error.log
+      error-log-file STDERR
+    </example>
+  </multikey>
+
+  <multikey name="rest-access-log-file" datatype="string">
+    <description>
+      Specifies the path of a file used for an Apache combined format
+      access log for the RESTive API server.  Special values STDERR
+      and STDOUT mean standard error and standard output respectively.
+    </description>
+    <default>STDOUT</default>
+    <example>
+      access-log-file /var/log/schooltool/rest-access.log
+      access-log-file STDOUT
+    </example>
+  </multikey>
+
+  <multikey name="web-access-log-file" datatype="string">
+    <description>
+      Specifies the path of a file used for an Apache combined format
+      access log for the web application interface.  Special values
+      STDERR and STDOUT mean standard error and standard output
+      respectively.
+    </description>
+    <default>STDOUT</default>
+    <example>
+      access-log-file /var/log/schooltool/web-access.log
+      access-log-file STDOUT
+    </example>
+  </multikey>
+
+  <multikey name="app-log-file" datatype="string">
+    <description>
+      Specifies the path of a file used for the application log.
+      Special values STDERR and STDOUT mean standard error and standard
+      output respectively.
+    </description>
+    <default>STDOUT</default>
+    <example>
+      app-log-file /var/log/schooltool/app.log
+    </example>
+  </multikey>
+
+  <multikey name="lang" datatype="string">
+    <description>
+      Specifies the locale of the messages to be used on the server.
+    </description>
+    <default>en_US</default>
+    <example>
+      lang en_US
+    </example>
+  </multikey>
+
+  <key name="domain" datatype="string" default="schooltool">
+    <description>
+      Specifies the name of the message catalog to be used on the server.
+    </description>
+    <example>
+      domain schoolbell
+    </example>
+  </key>
+
+</schema>
