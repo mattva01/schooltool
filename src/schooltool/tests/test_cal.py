@@ -1251,6 +1251,15 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         assert com.calendar.acl.allows(com, AddPermission)
 
 
+class TestDailyRecurrenceRule(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import DailyRecurrenceRule
+        from schooltool.interfaces import IDailyRecurrenceRule
+        d = DailyRecurrenceRule()
+        verifyObject(IDailyRecurrenceRule, d)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.cal'))
@@ -1264,4 +1273,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
     suite.addTest(unittest.makeSuite(TestACLCalendar))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
+    suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
     return suite

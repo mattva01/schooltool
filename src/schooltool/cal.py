@@ -37,6 +37,7 @@ from schooltool.interfaces import IACLCalendar
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
 from schooltool.interfaces import Unchanged
+from schooltool.interfaces import IDailyRecurrenceRule
 
 __metaclass__ = type
 
@@ -966,15 +967,17 @@ class CalendarEvent(Persistent):
     owner = property(lambda self: self._owner)
     context = property(lambda self: self._context)
     location = property(lambda self: self._location)
+    recurrence = property(lambda self: self._recurrence)
 
     def __init__(self, dtstart, duration, title, owner=None, context=None,
-                 location=None, unique_id=None):
+                 location=None, unique_id=None, recurrence=None):
         self._dtstart = dtstart
         self._duration = duration
         self._title = title
         self._owner = owner
         self._context = context
         self._location = location
+        self._recurrence = recurrence
 
         if unique_id is None:
             # & 0x7ffffff to avoid FutureWarnings with negative numbers
@@ -1069,3 +1072,31 @@ class CalendarOwnerMixin(Persistent):
         self.calendar.acl.add((self, ViewPermission))
         self.calendar.acl.add((self, AddPermission))
         self.calendar.acl.add((self, ModifyPermission))
+
+
+class DailyRecurrenceRule:
+    implements(IDailyRecurrenceRule)
+
+    def __init__(self, interval=None, count=None, until=None, exceptions=None):
+        self.interval = interval
+        self.count = count
+        self.until = until
+        self.exceptions = exceptions
+
+    def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
+        pass
+
+    def __eq__(self, other):
+        """See if self == other."""
+
+    def __ne__(self, other):
+        """See if self != other."""
+
+    def __hash__():
+        """Return the hash value of this recurrence rule
+
+        It is guaranteed that if recurrence rules compare equal, hash will
+        return the same value.
+        """
+        pass
