@@ -29,7 +29,7 @@ from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest import absoluteURL, absolutePath
-from schooltool.rest.auth import PublicAccess
+from schooltool.rest.auth import PublicAccess, PrivateACLAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 from schooltool.common import to_unicode
@@ -47,7 +47,7 @@ class RelationshipsView(View):
 
     template = Template("www/relationships.pt", content_type="text/xml")
     schema = read_file("../schema/relationship.rng")
-    authorization = PublicAccess
+    authorization = PrivateACLAccess
 
     def listLinks(self):
         return [{'traverse': absolutePath(self.request, link.traverse()),
@@ -129,7 +129,7 @@ class LinkView(View):
     """A view on relationship links."""
 
     template = Template("www/link.pt", content_type="text/xml")
-    authorization = PublicAccess
+    authorization = PrivateACLAccess
 
     def info(self):
         return {'role': strURI(self.context.role),

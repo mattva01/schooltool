@@ -1,0 +1,8 @@
+<acl xmlns='http://schooltool.org/ns/model/0.1'
+     xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <allow
+      tal:repeat="perm view/listPerms"
+      tal:attributes="title perm/title;
+                      principal perm/path;
+                      permission perm/perm" />
+</acl>

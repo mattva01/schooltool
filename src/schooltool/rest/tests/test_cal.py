@@ -382,8 +382,8 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
         return CalendarReadView(context)
 
     def _create(self):
-        from schooltool.cal import Calendar
-        context = Calendar()
+        from schooltool.cal import ACLCalendar
+        context = ACLCalendar()
         setPath(context, '/person/calendar')
         context.__parent__.title = "A Person"
         self.view = self._newView(context)
@@ -590,6 +590,14 @@ class TestCalendarView(TestCalendarReadView):
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
         self._test_put_error(calendar,
                      errmsg="Repeating events/exceptions not yet supported")
+
+    def test_traverse(self):
+        from schooltool.rest.acl import ACLView
+        request = RequestStub()
+        cal = self._create()
+        result = self.view._traverse('acl', request)
+        self.assert_(isinstance(result, ACLView))
+        self.assert_(result.context is cal.acl)
 
 
 class TestCalendarViewBookingEvents(NiceDiffsMixin, unittest.TestCase):

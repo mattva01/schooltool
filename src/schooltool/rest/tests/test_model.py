@@ -154,6 +154,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.rest.relationship import RelationshipsView
         from schooltool.rest.model import TreeView
         from schooltool.rest.absence import RollCallView
+        from schooltool.rest.acl import ACLView
         from schooltool.rest.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/group")
@@ -178,6 +179,10 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.assert_(isinstance(result, TimetableTraverseView))
         self.assert_(result.context is self.view.context)
         self.assert_(not result.readonly)
+
+        result = self.view._traverse('acl', request)
+        self.assert_(isinstance(result, ACLView))
+        self.assert_(result.context is self.view.context.acl)
 
         self.assertRaises(KeyError, self.view._traverse, "otherthings",
                           request)

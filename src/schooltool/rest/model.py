@@ -39,6 +39,7 @@ from schooltool.rest.timetable import TimetableTraverseView
 from schooltool.rest.timetable import CompositeTimetableTraverseView
 from schooltool.rest.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.rest.absence import RollCallView, AbsenceManagementView
+from schooltool.rest.acl import ACLView
 from schooltool.rest.auth import PublicAccess, PrivateAccess
 from schooltool.translation import ugettext as _
 
@@ -81,6 +82,8 @@ class GroupView(ApplicationObjectTraverserView):
             return RollCallView(self.context)
         elif name == 'tree':
             return TreeView(self.context)
+        elif name == 'acl':
+            return ACLView(self.context.acl)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def listItems(self):

@@ -32,8 +32,9 @@ from schooltool.interfaces import IApplicationObject
 from schooltool.rest import View, Template, absoluteURL
 from schooltool.rest import textErrorPage, notFoundPage
 from schooltool.rest import read_file
+from schooltool.rest.acl import ACLView
 from schooltool.rest.auth import PublicAccess, PrivateAccess, TeacherAccess
-from schooltool.rest.auth import isManager
+from schooltool.rest.auth import isManager, PrivateACLAccess
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period
 from schooltool.common import parse_date, parse_datetime, to_unicode
@@ -259,7 +260,11 @@ class CalendarReadView(View):
 class CalendarView(CalendarReadView):
     """iCalendar r/w view for ICalendar."""
 
-    authorization = PrivateAccess
+    authorization = PrivateACLAccess
+
+    def _traverse(self, name, request):
+        if name == 'acl':
+            return ACLView(self.context.acl)
 
     def do_PUT(self, request):
         ctype = request.getContentType()

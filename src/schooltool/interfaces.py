@@ -759,6 +759,10 @@ class IACL(Interface):
         principal Everybody has the permission.
         """
 
+    def clear():
+        """Remove all access from all principals"""
+
+
 class IACLOwner(Interface):
     """An object that has an ACL"""
     acl = Attribute("""The ACL for this calendar.""")

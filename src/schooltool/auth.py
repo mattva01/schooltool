@@ -268,6 +268,11 @@ class ACL(Persistent):
                     return True
         return (principal, permission) in self
 
+    def clear(self):
+        """Revoke all access from all principals"""
+        self._data.clear()
+        self._everybody.clear()
+
 
 def getAncestorGroups(person):
     """Returns a set of ancestor groups of a person"""

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for a relationships
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://schooltool.org/ns/model/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <!-- parts of a simple xlink -->
+
+  <define name="simplelinktype">
+    <attribute name="xlink:type">
+      <value>simple</value>
+    </attribute>
+  </define>
+
+  <define name="href">
+    <attribute name="xlink:href">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="title">
+    <attribute name="xlink:title">
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="permattr">
+    <attribute name="permission">
+      <choice>
+        <value>View</value>
+        <value>Add</value>
+        <value>Modify</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="principal">
+    <attribute name="principal">
+      <choice>
+        <text/>
+        <value>Everybody</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <start>
+  <element name="acl">
+    <zeroOrMore>
+      <element name="allow">
+        <ref name="principal"/>
+	<ref name="permattr"/>
+        <optional>
+          <attribute name="title">
+            <text/>
+          </attribute>
+        </optional>
+      </element>
+    </zeroOrMore>
+  </element>
+ </start>
+</grammar>

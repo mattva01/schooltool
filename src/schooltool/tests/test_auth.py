@@ -62,6 +62,16 @@ class TestACL(unittest.TestCase):
         assert (self.person, ViewPermission) in self.acl._data
         self.assertRaises(ValueError, self.acl.add, (self.person, "Delete"))
 
+    def test_clear(self):
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission, Everybody
+        self.acl.add((self.person, ViewPermission))
+        self.acl.add((self.person2, ModifyPermission))
+        self.acl.add((self.person2, AddPermission))
+        self.acl.add((Everybody, AddPermission))
+        self.acl.clear()
+        self.assertEquals(list(self.acl), [])
+
     def test_allows_contains(self):
         from schooltool.interfaces import ViewPermission, AddPermission
         from schooltool.interfaces import ModifyPermission, Everybody
