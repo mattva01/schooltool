@@ -266,23 +266,23 @@ class PersonEditView(BrowserView):
                 return # Errors will be displayed next to widgets
 
             # If any of the password fields is set
-            if (('new_password' in data and data['new_password']) or
-                ('verify_password' in data and data['verify_password'])):
+            if data.get('new_password') or data.get('verify_password'):
                 # We compare them
                 if data['new_password'] != data['verify_password']:
                     self.error = _("Passwords do not match.")
                     return
 
+                # XXX When we have security in place, this place needs an audit
                 self.context.setPassword(data['new_password'])
                 self.message = _("Password was successfully changed!")
 
             self.context.title = data['title']
-            if 'photo' in data and data['photo']:
+            if data.get('photo'):
                 self.context.photo = data['photo']
 
-            if 'clear_photo' in data and data['clear_photo']:
+            if data.get('clear_photo'):
                 self.context.photo = None
-                # Unset the field after clearing the photo
+                # Uncheck the checkbox before rendering the form
                 self.clear_photo_widget.setRenderedValue(False)
 
 
@@ -400,7 +400,6 @@ class GroupAddView(AddView):
 
 class GroupEditView(EditView):
     """A view for adding a group."""
-
 
     def update(self):
         if 'CANCEL' in self.request:

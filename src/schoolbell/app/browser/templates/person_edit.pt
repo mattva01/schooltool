@@ -11,6 +11,7 @@
         enctype="multipart/form-data">
     <h3 i18n:translate="">
       Change info for <span tal:replace="context/title" i18n:name="user" />
+      <!-- XXX i18n alert: shouldn't the span have an i18n:name?  i18n bug alert - verify if it works! -->
       <span tal:condition="not:context/hasPassword" class="accountdisabled" i18n:translate="">(Disabled)</span>
     </h3>
     <div class="info" tal:condition="view/message" tal:content="view/message" />
@@ -23,7 +24,7 @@
       </fieldset>
       <fieldset>
         <p tal:condition="context/photo">
-          <img src="photo"
+          <img src="photo" alt="Photo"
                tal:attributes="src string:${context/@@absolute_url}/photo" />
         </p>
         <div class="row" tal:define="widget nocall:view/photo_widget">
