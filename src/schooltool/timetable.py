@@ -931,7 +931,9 @@ class TimetabledMixin:
             cal = tt.model.createCalendar(schoolday_model, tt)
             events += list(cal)
         result = ImmutableCalendar(events)
-        # Parent is needes so that we can find out the owner of this calendar.
+        # Parent is needed so that we can find out the owner of this calendar.
+        # XXX this does not appear to work, write a functional test:
+        #     http://issues.schooltool.org/issue130
         result.__parent__ = self
         return result
 
