@@ -160,12 +160,14 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             if body is not None:
                 conn.send(body)
             response = conn.getresponse()
-            self.last_data = data = response.read()
+            self.emit("%s %s" % (response.status, response.reason))
             ctype = response.getheader('Content-Type',
                                        'application/octet-stream')
+            self.emit("Content-Type: %s" % ctype)
+            self.last_data = data = response.read()
             if not ctype.startswith('text/'):
-                self.emit("Resource is not text: %s" % ctype)
-                self.emit("use save <filename> to save it")
+                self.emit("Resource is not text, use save <filename>"
+                          " to save it")
                 return
             self.emit(data)
             if self.links and ctype.startswith('text/xml'):

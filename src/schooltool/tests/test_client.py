@@ -63,14 +63,14 @@ class ResponseStub:
 
     def __init__(self, request):
         self.request = request
-
-    def read(self):
+        self.status = 200
+        self.reason = "OK"
         if self.request.resource == "/":
-            return "Welcome"
+            self._data = "Welcome"
         elif self.request.resource == "/binfile":
-            return "(binary data)"
+            self._data = "(binary data)"
         elif self.request.resource == "/doc.xml":
-            return dedent("""
+            self._data = dedent("""
                 <index xmlns:xlink="http://www.w3.org/1999/xlink">
                   <student xlink:type="simple"
                            xlink:href="student1"
@@ -81,15 +81,20 @@ class ResponseStub:
                 </index>
                 """)
         elif self.request.resource == "/place_to_put_things":
-            return ("%s %s %s\n%s"
-                    % (self.request.method,
-                       self.request.sent_headers['content-type'],
-                       self.request.sent_headers['content-length'],
-                       self.request.sent_data))
+            self._data = ("%s %s %s\n%s"
+                          % (self.request.method,
+                             self.request.sent_headers['content-type'],
+                             self.request.sent_headers['content-length'],
+                             self.request.sent_data))
         elif self.request.resource == "/delete_me":
-            return ("%s" % (self.request.method, ))
+            self._data = ("%s" % (self.request.method, ))
         else:
-            return "404 :-)"
+            self.status = 404
+            self.reason = "Not Found"
+            self._data = "404 :-)"
+
+    def read(self):
+        return self._data
 
     def getheader(self, name, default=None):
         if name.lower() == 'content-type':
@@ -203,34 +208,32 @@ class TestClient(unittest.TestCase):
 
     def test_help(self):
         self.client.onecmd("?help")
-        self.assertEqual(self.emitted, "This help.")
+        self.assertEmitted("This help.")
 
     def test_server(self):
         self.client.do_get('x y z')
-        self.assertEqual(self.emitted, "Extra arguments provided")
+        self.assertEmitted("Extra arguments provided")
 
         self.emitted = ""
         self.client.do_server("server.example.com")
         self.assertEqual(self.client.server, "server.example.com")
-        self.assertEqual(self.emitted,
-                         "Error: could not connect to server.example.com")
+        self.assertEmitted("Error: could not connect to server.example.com")
 
         self.emitted = ""
         self.client.do_server("server2.example.com  \t")
         self.assertEqual(self.client.server, "server2.example.com")
-        self.assertEqual(self.emitted,
-                         "Error: could not connect to server2.example.com")
+        self.assertEmitted("Error: could not connect to server2.example.com")
 
         self.emitted = ""
         self.client.do_server("")
         self.assertEqual(self.client.server, "server2.example.com")
-        self.assertEqual(self.emitted, "server2.example.com")
+        self.assertEmitted("server2.example.com")
 
         self.emitted = ""
         self.client.do_server("server 31337")
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 31337)
-        self.assertEqual(self.emitted, "Error: could not connect to server")
+        self.assertEmitted("Error: could not connect to server")
 
         self.client.do_server("server")
         self.assertEqual(self.client.server, "server")
@@ -240,57 +243,61 @@ class TestClient(unittest.TestCase):
         self.client.do_server("other www")
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 80)
-        self.assertEqual(self.emitted, "Invalid port number")
+        self.assertEmitted("Invalid port number")
 
     def test_accept(self):
         self.client.do_accept(" ")
-        self.assertEqual(self.emitted, 'text/xml')
+        self.assertEmitted('text/xml')
 
         self.emitted = ""
         self.client.do_accept("text/plain  ")
-        self.assertEqual(self.emitted, 'text/plain')
+        self.assertEmitted('text/plain')
 
         self.emitted = ""
         self.client.do_accept("text/xml, text/plain,  text/*   ")
-        self.assertEqual(self.emitted, 'text/xml, text/plain, text/*')
+        self.assertEmitted('text/xml, text/plain, text/*')
 
     def test_get(self):
         self.client.do_get('   ')
-        self.assertEqual(self.emitted, "Resource not provided")
+        self.assertEmitted("Resource not provided")
 
         self.emitted = ""
         self.client.do_get('x y')
-        self.assertEqual(self.emitted, "Extra arguments provided")
+        self.assertEmitted("Extra arguments provided")
 
         self.emitted = ""
         self.client.server = 'localhost'
         self.client.links = False
         self.client.do_get("/")
-        self.assertEqual(self.emitted, "Welcome")
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/plain
+            Welcome"""))
         self.assertEqual(self.client.last_data, "Welcome")
 
     def test_get_binary(self):
         self.client.server = 'localhost'
         self.client.do_get("/binfile")
-        self.assertEqual(self.emitted,
-                         "Resource is not text: application/octet-stream\n"
-                         "use save <filename> to save it")
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: application/octet-stream
+            Resource is not text, use save <filename> to save it"""))
         self.assertEqual(self.client.last_data, "(binary data)")
 
     def test_get_error(self):
         self.client.server = 'badhost'
         self.client.do_get("/")
-        self.assertEqual(self.emitted, "Error: could not connect to badhost")
+        self.assertEmitted("Error: could not connect to badhost")
         self.assert_(self.client.last_data is None)
 
     def test_save_no_get(self):
         self.client.do_save("tempfile")
-        self.assertEqual(self.emitted, "Perform a get first")
+        self.assertEmitted("Perform a get first")
 
     def test_save_no_filename(self):
         self.client.last_data = "xyzzy"
         self.client.do_save("")
-        self.assertEqual(self.emitted, "No filename")
+        self.assertEmitted("No filename")
 
     def test_save(self):
         instances = []
@@ -313,8 +320,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual(file.mode, 'wb')
         self.assertEqual(file.getvalue(), data)
         self.assert_(file.closed)
-        self.assertEqual(self.emitted, "Saved %s: %d bytes"
-                         % (filename, len(data)))
+        self.assertEmitted("Saved %s: %d bytes" % (filename, len(data)))
 
     def test_save_failure(self):
         class FileStub:
@@ -325,7 +331,7 @@ class TestClient(unittest.TestCase):
         self.client.last_data = data = "xyzzy"
         self.client.file_hook = FileStub
         self.client.do_save(filename)
-        self.assertEqual(self.emitted, FileStub.msg)
+        self.assertEmitted(FileStub.msg)
 
     def test_put(self):
         self.do_test_put_or_post('put')
@@ -337,19 +343,21 @@ class TestClient(unittest.TestCase):
         doit = getattr(self.client, 'do_%s' % what)
         self.client.input_hook = lambda: '.'
         doit('   ')
-        self.assertEqual(self.emitted, "Resource not provided")
+        self.assertEmitted("Resource not provided")
 
         self.emitted = ""
         doit('x y z')
-        self.assertEqual(self.emitted, "Extra arguments provided")
+        self.assertEmitted("Extra arguments provided")
 
         self.emitted = ""
         self.client.resources = ['x']
         doit('/place_to_put_things')
-        expected = ("End data with a line containing just a single period.\n"
-                    "%s text/plain 0\n" % what.upper())
-        self.assertEqual(self.emitted, expected,
-                         "\n" + diff(expected, self.emitted))
+        self.assertEmitted(dedent("""
+            End data with a line containing just a single period.
+            200 OK
+            Content-Type: text/plain
+            %s text/plain 0
+            """) % what.upper())
         self.assertEqual(self.client.resources, [])
         self.assertEqual(self.client.last_data,
                          '%s text/plain 0\n' % what.upper())
@@ -357,46 +365,50 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.input_hook = ['.', '..', '...', 'foo'].pop
         doit('/place_to_put_things text/x-plain')
-        self.assertEqual(self.emitted,
-                         "End data with a line containing just a single"
-                           " period.\n"
-                         "%s text/x-plain 9\n"
-                         "foo\n"
-                         "..\n"
-                         ".\n" % what.upper())
+        self.assertEmitted(dedent("""
+            End data with a line containing just a single period.
+            200 OK
+            Content-Type: text/plain
+            %s text/x-plain 9
+            foo
+            ..
+            .
+            """) % what.upper())
 
         def raise_eof():
             raise EOFError
         self.emitted = ""
         self.client.input_hook = raise_eof
         doit('/place_to_put_things')
-        self.assertEqual(self.emitted,
-                         "End data with a line containing just a single"
-                           " period.\n"
-                         "Unexpected EOF -- %s aborted" % what.upper())
+        self.assertEmitted(dedent("""
+            End data with a line containing just a single period.
+            Unexpected EOF -- %s aborted""") % what.upper())
 
         self.emitted = ""
         self.client.input_hook = lambda: '.'
         doit('/binfile')
-        self.assertEqual(self.emitted,
-                         "End data with a line containing just a single"
-                           " period.\n"
-                         "Resource is not text: application/octet-stream\n"
-                         "use save <filename> to save it")
+        self.assertEmitted(dedent("""
+            End data with a line containing just a single period.
+            200 OK
+            Content-Type: application/octet-stream
+            Resource is not text, use save <filename> to save it"""))
         self.assertEqual(self.client.last_data, "(binary data)")
 
     def test_delete(self):
         self.client.do_delete('   ')
-        self.assertEqual(self.emitted, "Resource not provided")
+        self.assertEmitted("Resource not provided")
 
         self.emitted = ""
         self.client.do_delete('x y')
-        self.assertEqual(self.emitted, "Extra arguments provided")
+        self.assertEmitted("Extra arguments provided")
 
         self.emitted = ""
         self.client.resources = ['x']
         self.client.do_delete('/delete_me')
-        self.assertEqual(self.emitted, "DELETE")
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/plain
+            DELETE"""))
         self.assertEqual(self.client.resources, [])
         self.assertEqual(self.client.last_data, 'DELETE')
 
@@ -406,19 +418,21 @@ class TestClient(unittest.TestCase):
         for set, result in data:
             self.client.do_links(set)
             self.assertEqual(self.client.links, result)
-        self.assertEqual(self.emitted, "")
+        self.assertEmitted("")
 
         self.client.do_links("")
-        self.assertEqual(self.emitted, "off")
+        self.assertEmitted("off")
         self.client.do_links("on")
         self.emitted = ""
         self.client.do_links("")
-        self.assertEqual(self.emitted, "on")
+        self.assertEmitted("on")
 
     def test_links_get(self):
         self.assertEqual(self.client.links, True)
         self.client.do_get("/doc.xml")
-        self.assertEqual(self.emitted, dedent("""
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/xml; charset=UTF-8
             <index xmlns:xlink="http://www.w3.org/1999/xlink">
               <student xlink:type="simple"
                        xlink:href="student1"
@@ -436,16 +450,21 @@ class TestClient(unittest.TestCase):
 
         self.emitted = ""
         self.client.do_get("/")
-        self.assertEqual(self.emitted, "Welcome")
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/plain
+            Welcome"""))
 
     def test_follow(self):
         self.client.links = False
         self.client.do_follow('1')
-        self.assertEqual(self.emitted, "Wrong link number")
+        self.assertEmitted("Wrong link number")
         self.emitted = ""
         self.client.resources = ['/doc.xml']
         self.client.do_follow('1')
-        self.assertEqual(self.emitted, dedent("""
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/xml; charset=UTF-8
             <index xmlns:xlink="http://www.w3.org/1999/xlink">
               <student xlink:type="simple"
                        xlink:href="student1"
@@ -461,10 +480,13 @@ class TestClient(unittest.TestCase):
 
     def test_default(self):
         self.assert_(self.client.default("EOF"))
-        self.assertEqual(self.emitted, "quit")
+        self.assertEmitted("quit")
         self.emitted = ""
         self.assert_(not self.client.default("somethingelse"))
-        self.assertEqual(self.emitted, "I beg your pardon?")
+        self.assertEmitted("I beg your pardon?")
+
+    def assertEmitted(self, what):
+        self.assertEqual(self.emitted, what, "\n" + diff(what, self.emitted))
 
 
 class TestXLinkHandler(unittest.TestCase):
