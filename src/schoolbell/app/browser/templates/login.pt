@@ -36,13 +36,13 @@
 
       <div class="row">
         <label for="username" i18n:translate="">Username</label>
-        <input id="username" name="username" type="text"
+        <input id="username" name="username" type="text" tabindex="1"
           tal:attributes="value request/username|nothing" />
       </div>
 
       <div class="row">
         <label for="password" i18n:translate="">Password</label>
-        <input id="password" name="password" type="password" />
+        <input id="password" name="password" type="password" tabindex="2" />
       </div>
 
       <!-- div class="row">
@@ -54,8 +54,8 @@
     </fieldset>
 
     <div class="controls">
-      <input class="button-ok" type="submit" value="Log in" accesskey="L"
-        i18n:attributes="value; accesskey" name="LOGIN" />
+      <input class="button-ok" type="submit" value="Log in" accesskey="L" 
+        tabindex="3" i18n:attributes="value; accesskey" name="LOGIN" />
     </div>
   </form>
 
