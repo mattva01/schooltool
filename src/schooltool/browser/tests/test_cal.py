@@ -952,13 +952,15 @@ class TestEventSourceDecorator(unittest.TestCase):
         from zope.interface.verify import verifyObject
 
         event = CalendarEvent(datetime(2004, 8, 12, 12, 0),
-                              timedelta(hours=2), "Event")
+                              timedelta(hours=2), "Event",
+                              location="foo", unique_id="bar")
         decorated = EventSourceDecorator(event, 'src')
         verifyObject(ICalendarEvent, decorated)
 
         self.assertEquals(decorated.source, 'src')
         self.assertEquals(decorated, event)
         self.assertEquals(hash(event), hash(decorated))
+        self.assertEquals(event.unique_id, decorated.unique_id)
 
 
 class TestCalendarComboMixin(unittest.TestCase):

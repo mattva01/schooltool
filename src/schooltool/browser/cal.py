@@ -648,7 +648,8 @@ def EventSourceDecorator(e, source):
 
     Here we rely on the fact that CalendarEvents are immutable.
     """
-    result = CalendarEvent(e.dtstart, e.duration, e.title, e.context, e.owner)
+    result = CalendarEvent(e.dtstart, e.duration, e.title, e.context,
+                           e.owner, location=e.location, unique_id=e.unique_id)
     result.source = source
     return result
 
