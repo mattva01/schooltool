@@ -145,11 +145,11 @@ def test_suite():
     suite = unittest.TestSuite()
     mixin = QuietLibxml2Mixin()
     suite.addTest(DocTestSuite('schooltool.rest.xmlparsing',
-                               setUp=mixin.setUpLibxml2,
-                               tearDown=mixin.tearDownLibxml2))
+                               setUp=lambda *args: mixin.setUpLibxml2(),
+                               tearDown=lambda *args: mixin.tearDownLibxml2()))
     suite.addTest(DocTestSuite('schooltool.rest.tests.test_xmlparsing',
-                               setUp=mixin.setUpLibxml2,
-                               tearDown=mixin.tearDownLibxml2))
+                               setUp=lambda *args: mixin.setUpLibxml2(),
+                               tearDown=lambda *args: mixin.tearDownLibxml2()))
     return suite
 
 if __name__ == '__main__':
