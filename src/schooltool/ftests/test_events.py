@@ -26,8 +26,11 @@ from persistence import Persistent
 from zope.interface import implements, Attribute
 from schooltool.interfaces import IEvent, IEventTarget, IRelatable, ILocation
 from schooltool.event import EventMixin
-from schooltool.mockup import MemberMixin
 from transaction import get_transaction
+# XXX I've got no idea why, but if the following import is removed,
+#     TestEventSystem.test fails with a strange pickling error:
+#       TypeError: can't pickle function objects
+import twisted.web.resource
 
 __metaclass__ = type
 
