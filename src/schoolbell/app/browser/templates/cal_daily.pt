@@ -22,46 +22,46 @@
 
 <!-- Events -->
 <div class="events">
-<tal:loop repeat="hour hours">
-  <tal:block define="num repeat/hour/index; top python:num * height"
-             repeat="ev hour/cols">
-    <tal:if condition="ev">
-      <div class="event"
-           onmouseover="this.style.zIndex=9;"
-           onmouseout="this.style.zIndex=1;"
-           tal:define="num repeat/ev/index;
-                       compress python:view.getColumns() > 2;
-                       unit python:compress and '%' or 'em';
-                       indent python:compress and 15 or 20.5;
-                       left python:num * indent;
-                       top python:view.eventTop(ev);
-                       height python:view.eventHeight(ev);
-                       evdate python:ev.dtstart.strftime('%Y-%m-%d');
-                       mine python:True or ev.owner==request.authenticated_user"
-           tal:attributes="style string:background: ${ev/color1};;
-                                        height: ${height}em !important;;
-                                        margin-left: $left$unit;;
-                                        top: ${top}em;
-                           class python:mine and 'event' or 'event other'">
-        <h6 tal:attributes="style string:background: ${ev/color2}">
-          <a tal:attributes="href string:${context/@@absolute_url}/${ev/unique_id}/edit.html?date=${evdate};
-                             title ev/title">
-            <span tal:replace="ev/shortTitle" />
-            <span class="start-end">
-              (<span tal:content="python:ev.dtstart.strftime('%H:%M')"/> -
-               <span tal:content="python:ev.dtend.strftime('%H:%M')"/>)
-            <span>
-          </a>
-        </h6>
-        <a title="Delete this event" i18n:attributes="title" class="delete"
-           tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate}"
-           ><img alt="[X]" border="0"
-                 tal:attributes="src context/++resource++delete.png"/></a>
-        <div class="description" tal:content="ev/description" />
-      </div>
-    </tal:if>
-  </tal:block>
-</tal:loop>
+  <tal:loop repeat="hour hours">
+    <tal:block define="num repeat/hour/index; top python:num * height"
+               repeat="ev hour/cols">
+      <tal:if condition="ev">
+        <div class="event"
+             onmouseover="this.style.zIndex=9;"
+             onmouseout="this.style.zIndex=1;"
+             tal:define="num repeat/ev/index;
+                         compress python:view.getColumns() > 2;
+                         unit python:compress and '%' or 'em';
+                         indent python:compress and 15 or 20.5;
+                         left python:num * indent;
+                         top python:view.eventTop(ev);
+                         height python:view.eventHeight(ev);
+                         evdate python:ev.dtstart.strftime('%Y-%m-%d');
+                         mine python:True or ev.owner==request.authenticated_user"
+             tal:attributes="style string:background: ${ev/color1};;
+                             height: ${height}em !important;;
+                             margin-left: $left$unit;;
+                             top: ${top}em;
+                             class python:mine and 'event' or 'event other'">
+          <h6 tal:attributes="style string:background: ${ev/color2}">
+            <a tal:attributes="href string:${context/@@absolute_url}/${ev/unique_id}/edit.html?date=${evdate};
+                               title ev/title">
+              <span tal:replace="ev/shortTitle" />
+              <span class="start-end">
+                (<span tal:content="python:ev.dtstart.strftime('%H:%M')"/> -
+                <span tal:content="python:ev.dtend.strftime('%H:%M')"/>)
+              </span>
+            </a>
+          </h6>
+          <a title="Delete this event" i18n:attributes="title" class="delete"
+             tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate}"
+             ><img alt="[X]" border="0"
+                   tal:attributes="src context/++resource++delete.png"/></a>
+          <div class="description" tal:content="ev/description" />
+        </div>
+      </tal:if>
+    </tal:block>
+  </tal:loop>
 </div>
 
 </div>
