@@ -1,17 +1,18 @@
 Release Notes - SchoolBell 1.0
 ==============================
 
-This is the first release of SchoolBell separately from SchoolTool. It also
-marks the completion of the transition of SchoolBell to being a component in
-the Zope3 framework and the start of full forward database compatibility.
+This is the first independent release of SchoolBell, our calendaring server for
+groups and organizations.  For this release, we have managed to move most, but
+not all, of SchoolBell functionality to the Zope3 framework.  Perhaps, most
+importantly, databases will be fully forwards compatible from this point on.
 
-The application was basically re-written and a number of features have not yet
-been ported from SchoolBell 0.9, however, the integration with Zope 3 provides
-a good basis going forward.
+Our priorities going forwards will be to finish off the rough edges such as
+missing time zone support, resource booking etc...
 
-SchoolBell can now be used as a stand alone server as well as a Zope 3
-component integrated with the ZMI.
+We will also still be moving old SchoolBell functionality to the Zope 3 based
+SchoolBell such as SSL support, a ReSTive interface...
 
+You can check it out at http://www.schooltool.org/schoolbell
 
 Major Changes from 0.9
 ----------------------
@@ -30,7 +31,7 @@ Contributions by Brian Sutherland:
 * Distutils build system:
 
   * Installation
-  * Tarball and zipfile generation
+  * Tarball generation
 
 Contributions by `Etria, LLP`_:
 
