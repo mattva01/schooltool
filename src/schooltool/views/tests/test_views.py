@@ -47,9 +47,9 @@ class TestHelpers(unittest.TestCase):
 
     def test_absoluteURL(self):
         from schooltool.views import absoluteURL
-        request = RequestStub("http://locahost/foo/bar")
+        request = RequestStub("http://locahost:8080/foo/bar")
         self.assertEquals(absoluteURL(request, '/moo/spoo'),
-                          "http://localhost/moo/spoo")
+                          "http://localhost:8080/moo/spoo")
         self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
 
 

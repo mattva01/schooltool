@@ -6,28 +6,28 @@ PUT> title="Teachers"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/groups/teachers
+Object created: http://localhost:8080/groups/teachers
 
 SchoolTool> post /groups/teachers/facets
 POST> factory="teacher_group"
 POST> .
 201 Created
 Content-Type: text/plain
-Facet created: http://localhost/groups/teachers/facets/001
+Facet created: http://localhost:8080/groups/teachers/facets/001
 
 SchoolTool> put /groups/students
 PUT> title="Students"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/groups/students
+Object created: http://localhost:8080/groups/students
 
 SchoolTool> put /groups/cleaners
 PUT> title="Cleaners"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/groups/cleaners
+Object created: http://localhost:8080/groups/cleaners
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -36,7 +36,7 @@ POST> href="/groups/teachers"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/root/relationships/0001
+Relationship created: http://localhost:8080/groups/root/relationships/0001
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -45,7 +45,7 @@ POST> href="/groups/students"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/root/relationships/0002
+Relationship created: http://localhost:8080/groups/root/relationships/0002
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -54,42 +54,42 @@ POST> href="/groups/cleaners"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/root/relationships/0003
+Relationship created: http://localhost:8080/groups/root/relationships/0003
 
 SchoolTool> put /persons/Mark
 PUT> title="Mark"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/persons/Mark
+Object created: http://localhost:8080/persons/Mark
 
 SchoolTool> put /persons/Steve
 PUT> title="Steve"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/persons/Steve
+Object created: http://localhost:8080/persons/Steve
 
 SchoolTool> put /persons/Aiste
 PUT> title="Aiste"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/persons/Aiste
+Object created: http://localhost:8080/persons/Aiste
 
 SchoolTool> put /persons/Albert
 PUT> title="Albert"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/persons/Albert
+Object created: http://localhost:8080/persons/Albert
 
 SchoolTool> put /persons/Marius
 PUT> title="Marius"
 PUT> .
 201 Created
 Content-Type: text/plain
-Object created: http://localhost/persons/Marius
+Object created: http://localhost:8080/persons/Marius
 
 SchoolTool> post /groups/teachers/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -98,7 +98,7 @@ POST> href="/persons/Mark"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/teachers/relationships/0002
+Relationship created: http://localhost:8080/groups/teachers/relationships/0002
 
 SchoolTool> post /groups/teachers/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -107,7 +107,7 @@ POST> href="/persons/Steve"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/teachers/relationships/0003
+Relationship created: http://localhost:8080/groups/teachers/relationships/0003
 
 SchoolTool> post /groups/students/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -116,7 +116,7 @@ POST> href="/persons/Aiste"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/students/relationships/0002
+Relationship created: http://localhost:8080/groups/students/relationships/0002
 
 SchoolTool> post /groups/cleaners/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -125,7 +125,7 @@ POST> href="/persons/Albert"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/cleaners/relationships/0002
+Relationship created: http://localhost:8080/groups/cleaners/relationships/0002
 
 SchoolTool> post /groups/cleaners/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -134,14 +134,14 @@ POST> href="/persons/Marius"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/groups/cleaners/relationships/0003
+Relationship created: http://localhost:8080/groups/cleaners/relationships/0003
 
 SchoolTool> post /persons/Marius/facets
 POST> factory="eventlog"
 POST> .
 201 Created
 Content-Type: text/plain
-Facet created: http://localhost/persons/Marius/facets/eventlog
+Facet created: http://localhost:8080/persons/Marius/facets/eventlog
 
 SchoolTool> post /persons/Steve/relationships
 POST> arcrole="http://schooltool.org/ns/teaching"
@@ -150,5 +150,5 @@ POST> href="/groups/students"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost/persons/Steve/relationships/0002
+Relationship created: http://localhost:8080/persons/Steve/relationships/0002
 

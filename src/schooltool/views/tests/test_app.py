@@ -169,14 +169,15 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
     def test_post(self, suffix="", method="POST", body=None, view=None):
         if view is None:
             view = self.view
-        request = RequestStub("http://localhost/groups" + suffix,
+        request = RequestStub("http://localhost:8080/groups" + suffix,
                               method=method, body=body)
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         location = request.headers['Location']
-        base = "http://localhost/groups/"
-        self.assert_(location.startswith(base))
+        base = "http://localhost:8080/groups/"
+        self.assert_(location.startswith(base),
+                     "%r.startswith(%r) failed" % (location, base))
         name = location[len(base):]
         self.assert_(name in self.app['groups'].keys())
         self.assertEquals(request.headers['Content-Type'], "text/plain")

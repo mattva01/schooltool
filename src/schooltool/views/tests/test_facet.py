@@ -189,7 +189,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        baseurl = "http://localhost/group/facets/"
+        baseurl = "http://localhost:8080/group/facets/"
         location = request.headers['Location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))

@@ -51,10 +51,15 @@ class RequestStub:
         if start >= 0:
             self.path = uri[start:]
         self._hostname = 'localhost'
+        self._host = '127.0.0.1'
+        self._port = 8080
         self.accept = []
 
     def getRequestHostname(self):
         return self._hostname
+
+    def getHost(self):
+        return ('INET', self._host, self._port)
 
     def getHeader(self, header):
         # Twisted's getHeader returns None when the header does not exist

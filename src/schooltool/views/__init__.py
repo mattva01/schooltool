@@ -43,7 +43,9 @@ def absoluteURL(request, path):
     """Returns the absulute URL of the object adddressed with path"""
     if not path.startswith('/'):
         raise ValueError("Path must be absolute")
-    return 'http://%s%s' % (request.getRequestHostname(), path)
+    hostname = request.getRequestHostname()
+    port = request.getHost()[2]
+    return 'http://%s:%s%s' % (hostname, port, path)
 
 
 #

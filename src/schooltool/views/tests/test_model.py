@@ -430,7 +430,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
         basepath = "/person/absences/"
-        baseurl = "http://localhost%s" % basepath
+        baseurl = "http://localhost:8080%s" % basepath
         view = AbsenceManagementView(context)
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Foo" reporter="."')
@@ -458,7 +458,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         setPath(context, '/person', root=self.serviceManager)
         absence = context.reportAbsence(AbsenceComment())
         basepath = "/person/absences/"
-        baseurl = "http://localhost%s" % basepath
+        baseurl = "http://localhost:8080%s" % basepath
         view = AbsenceManagementView(context)
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Bar" reporter="."')
