@@ -128,7 +128,7 @@ def doctest_load_options():
     Some come from the config file
 
         >>> o.config.web in ([('', 48080)],          # Unix
-        ...                  ['localhost', 48080])   # Windows
+        ...                  [('localhost', 48080)]) # Windows
         True
         >>> o.config.listen
         [('...', 123), ('10.20.30.40', 9999)]
