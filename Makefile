@@ -39,6 +39,9 @@ run: build
 runmockup: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/main.py -m
 
+runtestserver: build
+	PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf
+
 runclient: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/client.py
 

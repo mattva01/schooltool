@@ -1,0 +1,423 @@
+Generic look-around.
+
+SchoolTool> get /
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+  <message>Welcome to the SchoolTool server</message>
+  <roots>
+    <root xlink:type="simple" xlink:href="/groups/root"
+          xlink:title="Root Group"/>
+  </roots>
+  <containers>
+    <container xlink:type="simple" xlink:href="/persons"
+               xlink:title="persons"/>
+    <container xlink:type="simple" xlink:href="/groups"
+               xlink:title="groups"/>
+  </containers>
+  <utilities>
+    <utility xlink:type="simple"
+             xlink:href="/utils/eventlog"
+             xlink:title="Event Log"/>
+  </utilities>
+</schooltool>
+
+==================================================
+1   Root Group (/groups/root)
+2   persons (/persons)
+3   groups (/groups)
+4   Event Log (/utils/eventlog)
+
+SchoolTool> follow 1
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Root Group</name>
+  <item xlink:type="simple" xlink:title="Cleaners"
+        xlink:href="/groups/cleaners"/>
+  <item xlink:type="simple" xlink:title="Teachers"
+        xlink:href="/groups/teachers"/>
+  <item xlink:type="simple" xlink:title="Students"
+        xlink:href="/groups/students"/>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="root/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="root/facets"/>
+</group>
+
+==================================================
+1   Cleaners (/groups/cleaners)
+2   Teachers (/groups/teachers)
+3   Students (/groups/students)
+4   Relationships (root/relationships)
+5   Facets (root/facets)
+
+SchoolTool> follow 1
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Cleaners</name>
+  <item xlink:type="simple" xlink:title="Marius"
+        xlink:href="/persons/Marius"/>
+  <item xlink:type="simple" xlink:title="Albert"
+        xlink:href="/persons/Albert"/>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="cleaners/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="cleaners/facets"/>
+</group>
+
+==================================================
+1   Marius (/persons/Marius)
+2   Albert (/persons/Albert)
+3   Relationships (cleaners/relationships)
+4   Facets (cleaners/facets)
+
+SchoolTool> follow 1
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<person xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Marius</name>
+  <groups>
+    <item xlink:type="simple" xlink:href="/groups/cleaners"
+          xlink:title="Cleaners"/>
+  </groups>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="Marius/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="Marius/facets"/>
+</person>
+
+==================================================
+1   Cleaners (/groups/cleaners)
+2   Relationships (Marius/relationships)
+3   Facets (Marius/facets)
+
+SchoolTool> follow 3
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<facets xmlns:xlink="http://www.w3.org/1999/xlink">
+  <facet xlink:type="simple" active="active"
+         xlink:title="001" class="EventLogFacet"
+         owned="unowned"
+         xlink:href="/persons/Marius/facets/001"/>
+  <facetFactory name="eventlog" title="Event Log Factory"/>
+</facets>
+
+==================================================
+1   001 (/persons/Marius/facets/001)
+
+SchoolTool> follow 1
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<eventLog>
+</eventLog>
+
+
+SchoolTool> get /
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+  <message>Welcome to the SchoolTool server</message>
+  <roots>
+    <root xlink:type="simple" xlink:href="/groups/root"
+          xlink:title="Root Group"/>
+  </roots>
+  <containers>
+    <container xlink:type="simple" xlink:href="/persons"
+               xlink:title="persons"/>
+    <container xlink:type="simple" xlink:href="/groups"
+               xlink:title="groups"/>
+  </containers>
+  <utilities>
+    <utility xlink:type="simple"
+             xlink:href="/utils/eventlog"
+             xlink:title="Event Log"/>
+  </utilities>
+</schooltool>
+
+==================================================
+1   Root Group (/groups/root)
+2   persons (/persons)
+3   groups (/groups)
+4   Event Log (/utils/eventlog)
+
+SchoolTool> follow 4
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<eventLog>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/teachers'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/students'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/cleaners'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Teachers'
+    link='http://schooltool.org/ns/membership/group', '/groups/teachers'
+    link='http://schooltool.org/ns/membership/member', '/persons/Mark'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Teachers'
+    link='http://schooltool.org/ns/membership/group', '/groups/teachers'
+    link='http://schooltool.org/ns/membership/member', '/persons/Steve'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Students'
+    link='http://schooltool.org/ns/membership/group', '/groups/students'
+    link='http://schooltool.org/ns/membership/member', '/persons/Aiste'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Cleaners'
+    link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
+    link='http://schooltool.org/ns/membership/member', '/persons/Albert'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Cleaners'
+    link='http://schooltool.org/ns/membership/group', '/groups/cleaners'
+    link='http://schooltool.org/ns/membership/member', '/persons/Marius'
+</event>
+</eventLog>
+
+
+SchoolTool> get /
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+  <message>Welcome to the SchoolTool server</message>
+  <roots>
+    <root xlink:type="simple" xlink:href="/groups/root"
+          xlink:title="Root Group"/>
+  </roots>
+  <containers>
+    <container xlink:type="simple" xlink:href="/persons"
+               xlink:title="persons"/>
+    <container xlink:type="simple" xlink:href="/groups"
+               xlink:title="groups"/>
+  </containers>
+  <utilities>
+    <utility xlink:type="simple"
+             xlink:href="/utils/eventlog"
+             xlink:title="Event Log"/>
+  </utilities>
+</schooltool>
+
+==================================================
+1   Root Group (/groups/root)
+2   persons (/persons)
+3   groups (/groups)
+4   Event Log (/utils/eventlog)
+
+SchoolTool> follow 2
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<container xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>persons</name>
+  <items>
+    <item xlink:type="simple" xlink:href="/persons/Steve"
+          xlink:title="Steve"/>
+    <item xlink:type="simple" xlink:href="/persons/Aiste"
+          xlink:title="Aiste"/>
+    <item xlink:type="simple" xlink:href="/persons/Mark"
+          xlink:title="Mark"/>
+    <item xlink:type="simple" xlink:href="/persons/Albert"
+          xlink:title="Albert"/>
+    <item xlink:type="simple" xlink:href="/persons/Marius"
+          xlink:title="Marius"/>
+  </items>
+</container>
+
+==================================================
+1   Steve (/persons/Steve)
+2   Aiste (/persons/Aiste)
+3   Mark (/persons/Mark)
+4   Albert (/persons/Albert)
+5   Marius (/persons/Marius)
+
+SchoolTool> follow 4
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<person xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Albert</name>
+  <groups>
+    <item xlink:type="simple" xlink:href="/groups/cleaners"
+          xlink:title="Cleaners"/>
+  </groups>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="Albert/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="Albert/facets"/>
+</person>
+
+==================================================
+1   Cleaners (/groups/cleaners)
+2   Relationships (Albert/relationships)
+3   Facets (Albert/facets)
+
+SchoolTool> follow 2
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+  <existing>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/group"
+                  xlink:title="Cleaners"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/groups/cleaners">
+      <manage xlink:type="simple"
+              xlink:href="/persons/Albert/relationships/0001"
+              xlink:title="Cleaners"/>
+    </relationship>
+  </existing>
+  <valencies>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/member"
+                  xlink:arcrole="http://schooltool.org/ns/membership"/>
+  </valencies>
+</relationships>
+
+==================================================
+1   Cleaners (/groups/cleaners)
+2   Cleaners (/persons/Albert/relationships/0001)
+3    (no href)
+
+SchoolTool> follow 2
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:type="simple"
+              xlink:role="http://schooltool.org/ns/membership/group"
+              xlink:title="Cleaners"
+              xlink:arcrole="http://schooltool.org/ns/membership"
+              xlink:href="/groups/cleaners"/>
+
+==================================================
+1   Cleaners (/groups/cleaners)
+
+SchoolTool> follow 1
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Cleaners</name>
+  <item xlink:type="simple" xlink:title="Marius"
+        xlink:href="/persons/Marius"/>
+  <item xlink:type="simple" xlink:title="Albert"
+        xlink:href="/persons/Albert"/>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="cleaners/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="cleaners/facets"/>
+</group>
+
+==================================================
+1   Marius (/persons/Marius)
+2   Albert (/persons/Albert)
+3   Relationships (cleaners/relationships)
+4   Facets (cleaners/facets)
+
+SchoolTool> follow 3
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+  <existing>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/member"
+                  xlink:title="Marius"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/persons/Marius">
+      <manage xlink:type="simple"
+              xlink:href="/groups/cleaners/relationships/0003"
+              xlink:title="Marius"/>
+    </relationship>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/member"
+                  xlink:title="Albert"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/persons/Albert">
+      <manage xlink:type="simple"
+              xlink:href="/groups/cleaners/relationships/0002"
+              xlink:title="Albert"/>
+    </relationship>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/group"
+                  xlink:title="Root Group"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/groups/root">
+      <manage xlink:type="simple"
+              xlink:href="/groups/cleaners/relationships/0001"
+              xlink:title="Root Group"/>
+    </relationship>
+  </existing>
+  <valencies>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/group"
+                  xlink:arcrole="http://schooltool.org/ns/membership"/>
+  </valencies>
+</relationships>
+
+==================================================
+1   Marius (/persons/Marius)
+2   Marius (/groups/cleaners/relationships/0003)
+3   Albert (/persons/Albert)
+4   Albert (/groups/cleaners/relationships/0002)
+5   Root Group (/groups/root)
+6   Root Group (/groups/cleaners/relationships/0001)
+7    (no href)
+
+SchoolTool> follow 4
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:type="simple"
+              xlink:role="http://schooltool.org/ns/membership/member"
+              xlink:title="Albert"
+              xlink:arcrole="http://schooltool.org/ns/membership"
+              xlink:href="/persons/Albert"/>
+
+==================================================
+1   Albert (/persons/Albert)
+
+SchoolTool> follow 1
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<person xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Albert</name>
+  <groups>
+    <item xlink:type="simple" xlink:href="/groups/cleaners"
+          xlink:title="Cleaners"/>
+  </groups>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="Albert/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="Albert/facets"/>
+</person>
+
+==================================================
+1   Cleaners (/groups/cleaners)
+2   Relationships (Albert/relationships)
+3   Facets (Albert/facets)
+
+SchoolTool> quit
