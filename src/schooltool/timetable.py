@@ -183,7 +183,8 @@ class TimetableDay(Persistent):
 
     def remove(self, period, value):
         if period not in self.periods:
-            raise ValueError("Key %r not in periods %r" % (period, self.periods))
+            raise ValueError("Key %r not in periods %r"
+                             % (period, self.periods))
         self.activities[period].remove(value)
 
     def __eq__(self, other):

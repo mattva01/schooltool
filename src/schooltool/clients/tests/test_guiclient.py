@@ -1888,6 +1888,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                       """)
         self.assertRaises(SchoolToolError, _parseURIList, body)
 
+
 class InfoClassTestMixin:
     """Mixin for testing classes that are tuple replacements."""
 

@@ -179,14 +179,14 @@ class AppLoggerStub:
 
 
 class TCPWrapStub:
-        
-        def __init__(self, servicename, clientname, clientip):
-            self.ip = clientip
-            
-        def Deny(self):
-            if self.ip == '192.16.4.2':
-                return True
-            return False
+
+    def __init__(self, servicename, clientname, clientip):
+        self.ip = clientip
+
+    def Deny(self):
+        if self.ip == '192.16.4.2':
+            return True
+        return False
 
 
 class TestSite(unittest.TestCase):

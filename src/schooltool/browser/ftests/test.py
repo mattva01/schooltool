@@ -123,7 +123,8 @@ class TestLogin(unittest.TestCase):
                      {'username': 'manager', 'password': 'schooltool'})
         self.assertEquals(browser.url, self.site + '/start')
         self.assert_('Start' in browser.content)
-        self.assert_(self.site + '/persons/manager/password.html' in browser.content)
+        link_to_password_form = self.site + '/persons/manager/password.html'
+        self.assert_(link_to_password_form in browser.content)
 
 
 class TestLoginSSL(TestLogin):

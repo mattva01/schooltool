@@ -807,6 +807,7 @@ class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                          [date(1978, 5, 17), date(1979, 5, 17),
                           date(1981, 5, 17)])
 
+
 class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
     def createRule(self, *args, **kwargs):
@@ -1067,6 +1068,7 @@ class TestWeekSpan(unittest.TestCase):
         # The days span the end of year, two weeks
         self.assertEqual(weekspan(date(2004, 12, 30), date(2005, 01, 14)), 2)
         #                              Thursday, w53       Friday, w2
+
 
 class TestMonthIndex(unittest.TestCase):
 

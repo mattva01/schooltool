@@ -1071,6 +1071,7 @@ def _parsePersonInfo(body):
         doc.freeDoc()
         ctx.xpathFreeContext()
 
+
 def _parseURIList(body):
     """Parse the data provided by the URI list view."""
     try:

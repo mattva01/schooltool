@@ -467,19 +467,17 @@ class Server:
 
     def notifyServerStarted(self, network_interface, port, ssl=False):
         if ssl:
-            self.logger.info(_("Started HTTPS server for RESTive API on %s:%s"),
-                            network_interface or "*", port)
+            msg = _("Started HTTPS server for RESTive API on %s:%s")
         else:
-            self.logger.info(_("Started HTTP server for RESTive API on %s:%s"),
-                            network_interface or "*", port)
+            msg = _("Started HTTP server for RESTive API on %s:%s")
+        self.logger.info(msg, network_interface or "*", port)
 
     def notifyWebServerStarted(self, network_interface, port, ssl=False):
         if ssl:
-            self.logger.info(_("Started HTTPS server for web UI on %s:%s"),
-                            network_interface or "*", port)
+            msg = _("Started HTTPS server for web UI on %s:%s")
         else:
-            self.logger.info(_("Started HTTP server for web UI on %s:%s"),
-                            network_interface or "*", port)
+            msg = _("Started HTTP server for web UI on %s:%s")
+        self.logger.info(msg, network_interface or "*", port)
 
     def notifyDaemonized(self, pid):
         self.logger.info(_("Going to background, daemon pid %d"), pid)

@@ -384,7 +384,8 @@ class TestTimetableActivity(unittest.TestCase):
         res2 = object()
         te = TimetableActivity("Dancing", owner, [res1, res2])
         tf = TimetableActivity("Dancing", owner, [res2, res1])
-        tg = TimetableActivity("Dancing", owner, [res1, res2], timetable=object())
+        tg = TimetableActivity("Dancing", owner, [res1, res2],
+                               timetable=object())
         # XXX Do we really want to ignore timetable when hashing/comparing?
 
         # __eq__

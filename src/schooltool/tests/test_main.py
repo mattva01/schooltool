@@ -286,11 +286,12 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def test_configureSSL(self):
         from schooltool.main import Server, ConfigurationError
         server = Server()
-        server.OpenSSLContextFactory_hook = OpenSSLContextFactoryStub().setup 
+        server.OpenSSLContextFactory_hook = OpenSSLContextFactoryStub().setup
         config_file = self.getConfigFileName('badssl.conf')
         server.findDefaultConfigFile = lambda: config_file
         server.notifyConfigFile = lambda x: None
-        self.assertRaises(ConfigurationError, server.configure, ['-c', config_file])
+        self.assertRaises(ConfigurationError, server.configure,
+                          ['-c', config_file])
 
     def test_main(self):
         from schooltool.main import Server

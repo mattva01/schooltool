@@ -58,21 +58,34 @@ from schooltool.common import to_locale
 localedir = os.path.dirname(__file__)
 catalog = _gettext.translation('schooltool', localedir, fallback=True)
 
-# Uncomment this function to debug i18n
-
-# def ugettext(msgid):
-#     """Debugging version of ugettext that decorates all translated strings."""
-#     return u'\u00AB%s\u00BB' % catalog.ugettext(msgid)
 
 def ugettext(str):
+    """Translate a message.
+
+    Returns a Unicode string.
+    """
     global catalog
+    # Uncomment the following line to decorate all translatable strings -- then
+    # all untranslated strings will stand out:
+    #   return u'\u00AB%s\u00BB' % catalog.ugettext(msgid)
     return catalog.ugettext(str)
 
+
 def gettext(msgid):
+    """Translate a message and convert it to locale encoding."""
     return to_locale(ugettext(msgid))
 
+
 def setCatalog(domain, languages=None):
-    """Sets the domain and languages used for message lookup"""
+    """Set the domain and languages used for message lookup.
+
+    Domain is usually the name of the application ('schooltool' or
+    'schoolbell').
+
+    Languages, if specified, override the default gettext language selection
+    (e.g. the environment variables LANGUAGES, LC_ALL, LC_MESSAGES, LANG on
+    POSIX systems).
+    """
     global catalog
     global ugettext
     catalog = _gettext.translation(domain, localedir, languages,

@@ -655,6 +655,7 @@ def weekspan(first, second):
     secondmonday = second - datetime.timedelta(second.weekday())
     return (secondmonday - firstmonday).days / 7
 
+
 def monthindex(year, month, index, weekday):
     """Returns the index-th weekday of the month in a year.
 

@@ -428,20 +428,26 @@ class XMLNode(object):
 class XMLError(UnicodeAwareException):
     """Base class for XML errors."""
 
+
 class XMLParseError(XMLError):
     """Ill-formed XML document."""
+
 
 class XMLSchemaError(XMLError):
     """Invalid RelaxNG schema."""
 
+
 class XMLValidationError(XMLError):
     """Invalid XML document."""
+
 
 class XMLXPathError(XMLError):
     """Ill-formed XPath query."""
 
+
 class XMLNamespaceError(XMLError):
     """Unregistered XML namespace."""
+
 
 class XMLAttributeError(XMLError):
     """Ill-formed XML attribute name."""

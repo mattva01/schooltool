@@ -1125,7 +1125,6 @@ class IWeeklyRecurrenceRule(IRecurrenceRule):
         """Return a copy of this recurrence rule with new specified fields."""
 
 
-
 class IMonthlyRecurrenceRule(IRecurrenceRule):
 
     monthly = Attribute(
