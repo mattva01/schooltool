@@ -322,6 +322,28 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
         self.assertEqual(results, expected, diff(pformat(results),
                                                  pformat(expected)))
 
+    def test_run_verbose(self):
+        from schooltool.clients.csvclient import CSVImporter
+        im = CSVImporter()
+        im.verbose = True
+
+        messages = []
+        def blatherStub(msg):
+            messages.append(msg)
+        im.blather = blatherStub
+
+        im.importGroupsCsv = lambda fn: None
+        im.importTeachersCsv = lambda fn: None
+        im.importPupilsCsv = lambda fn: None
+        im.importResourcesCsv = lambda fn: None
+
+        im.run()
+        self.assertEquals(messages, [u'Creating groups... ',
+                                     u'Creating teachers... ',
+                                     u'Creating pupils... ',
+                                     u'Creating resources... ',
+                                     u'Import finished successfully'])
+
     def test_run(self):
         from schooltool.clients.csvclient import CSVImporter
         im = CSVImporter()
