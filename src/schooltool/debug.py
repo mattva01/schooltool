@@ -25,7 +25,7 @@ import datetime
 import time
 from persistence import Persistent
 from zodb.btrees.OOBTree import OOBTree
-from zope.interface import implements, moduleProvides, Attribute
+from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IEventTarget, ILocation, IUtility
 from schooltool.interfaces import IEventConfigurable, IFacet
 from schooltool.interfaces import IModuleSetup, IFacetFactory

@@ -307,6 +307,7 @@ class Request(server.Request):
             self.setHeader('Content-Length', len(body))
             return body
 
+
 def profile(fn, extension='prof'):
     """Profiling hook.
 
@@ -314,7 +315,7 @@ def profile(fn, extension='prof'):
     For example, to profile
       self.foo(bar, baz)
     write
-      profile(lambda: self.foo(bar, baz)
+      profile(lambda: self.foo(bar, baz))
 
     The 'extension' argument gives the extension of the filename to use for
     saving the profiling data.

@@ -235,14 +235,15 @@ class CSVImporter:
         except csv.Error, e:
             raise DataError("Error in %s line %d: %s" % (file, line, e))
 
+
 def main():
     importer = CSVImporter(port=8080)
     try:
         importer.run()
-        print
     except DataError, e:
         print
         print e
+
 
 if __name__ == '__main__':
     main()
