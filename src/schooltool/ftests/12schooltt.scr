@@ -21,8 +21,228 @@ Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=schooltt
 <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
   <teacher path="/persons/Mark">
+    <day id="Monday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Tuesday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Wednesday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Thursday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Friday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
   </teacher>
   <teacher path="/persons/Steve">
+    <day id="Monday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Tuesday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Wednesday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Thursday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
+    <day id="Friday">
+      <period id="0">
+      </period>
+      <period id="1">
+      </period>
+      <period id="2">
+      </period>
+      <period id="3">
+      </period>
+      <period id="4">
+      </period>
+      <period id="5">
+      </period>
+      <period id="6">
+      </period>
+      <period id="7">
+      </period>
+      <period id="8">
+      </period>
+      <period id="9">
+      </period>
+    </day>
   </teacher>
 </schooltt>
 %% END XML

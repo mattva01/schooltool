@@ -766,8 +766,32 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         expected = """
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
               <teacher path="/persons/p2">
+                <day id="A">
+                  <period id="Blue">
+                  </period>
+                  <period id="Green">
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Red">
+                  </period>
+                  <period id="Yellow">
+                  </period>
+                </day>
               </teacher>
               <teacher path="/persons/p1">
+                <day id="A">
+                  <period id="Blue">
+                  </period>
+                  <period id="Green">
+                  </period>
+                </day>
+                <day id="B">
+                  <period id="Red">
+                  </period>
+                  <period id="Yellow">
+                  </period>
+                </day>
               </teacher>
             </schooltt>
             """

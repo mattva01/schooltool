@@ -431,6 +431,9 @@ class SchoolTimetableView(View):
         group = traverse(self.context, self.group)
         for teacher in getRelatedObjects(group, URIMember):
             tt = teacher.getCompositeTimetable(*self.key)
+            if tt is None:
+                service = getTimetableSchemaService(self.context)
+                tt = service[self.key[1]]
             result.append((teacher, tt))
         return result
 
