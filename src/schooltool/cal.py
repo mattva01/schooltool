@@ -371,7 +371,15 @@ class ExpandedCalendarEvent(CalendarEvent):
 
 
 class InheritedCalendarEvent(CalendarEvent):
-    """A calendar event that was inherited from a group by composition."""
+    """A calendar event that was inherited from a group by composition.
+
+    This is a copy of the original event with one extra attribute (`calendar`)
+    that lets you find out the original calendar if you want to change the
+    event.  Note that if you do want to change the event, then you should
+    change the original event (use the `calendar` and `unique_id` attributes
+    to find it).  To prevent accidental loss of information, the `replace`
+    method will raise NotImplementedError.
+    """
 
     implements(IInheritedCalendarEvent)
 
@@ -388,9 +396,11 @@ class InheritedCalendarEvent(CalendarEvent):
 
     def replace(self, *args, **kwargs):
         raise NotImplementedError("You should not call this method")
+        # See the docstring for reasons.
 
 
 class ACLCalendar(Calendar):
+    """A calendar that has an access control list (ACL)."""
 
     implements(IACLCalendar)
 
