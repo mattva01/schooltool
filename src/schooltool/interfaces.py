@@ -904,31 +904,6 @@ class IFacetAPI(Interface):
         """Iterate over all registered facet factories."""
 
 
-class IDynamicFacetSchemaService(ILocation):
-    """Service for creating info facets of a certain schema.
-
-    This service stores schema templates for info facets and can return new
-    DynamicFacets of a certain schema on request.
-    """
-
-    default_id = Attribute("""Schema id of the default schema""")
-
-    def getDefault():
-        """Return the default schema for the school"""
-
-    def keys():
-        """Return a sequence of all stored schema ids."""
-
-    def __getitem__(schema_id):
-        """Return a new empty DynamicFacet of a given schema."""
-
-    def __setitem__(schema_id, dynamicfacet):
-        """Store a given DynamicFacet as a schema with a given id."""
-
-    def __delitem__(schema_id):
-        """Remove a stored schema with a given id."""
-
-
 #
 # Access control
 #
@@ -2212,7 +2187,7 @@ class IDynamicSchemaField(Interface):
         pass
 
 
-class IDynamicFacet(IFacet):
+class IDynamicSchema(Interface):
     """General informational attributes for person and address objects"""
 
     fields = Attribute("Dict of field data")
@@ -2237,6 +2212,47 @@ class IDynamicFacet(IFacet):
 
     def __getitem__(key):
         """Return a field from the fields list based on it's name."""
+
+
+class IDynamicSchemaService(ILocation):
+    """Service for creating dynamic schema definitions
+
+    This should be subclassed with DynamicFacetService and 
+    DynamicRelationshipService
+    """
+
+    default_id = Attribute("""Schema id of the default schema""")
+
+    def getDefault():
+        """Return the default schema for the school"""
+
+    def keys():
+        """Return a sequence of all stored schema ids."""
+
+    def __getitem__(schema_id):
+        """Return a new empty DynamicSchema of a given id."""
+
+    def __setitem__(schema_id, dynamicfacet):
+        """Store a given DynamicFacet as a schema with a given id."""
+
+    def __delitem__(schema_id):
+        """Remove a stored schema with a given id."""
+
+
+class IDynamicFacetSchemaService(IDynamicSchemaService):
+    """Dynamic service for Facets"""
+
+
+class IDynamicFacet(IDynamicSchema, IFacet):
+    """Dynamic schema for generating custom facets"""
+
+
+class IDynamicRelationshipSchemaService(IDynamicSchemaService):
+    """Dynamic service for Facets"""
+
+
+class IDynamicRelationship(IDynamicSchema, IRelationshipSchema):
+    """Dynamic schema for generating custom facets"""
 
 
 class IPersonInfoFacet(IFacet):

@@ -26,6 +26,7 @@ from zope.interface import moduleProvides, implements, providedBy, Interface
 from zope.interface.adapter import AdapterRegistry
 from persistent import Persistent
 from persistent.dict import PersistentDict
+from persistent.list import PersistentList
 from schooltool.interfaces import IContainmentAPI, IFacetAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IMultiContainer
@@ -37,7 +38,8 @@ from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import IUtilityService
 from schooltool.interfaces import ITimetableModelRegistry
 from schooltool.interfaces import IOptions
-from schooltool.interfaces import IDynamicSchemaField
+from schooltool.interfaces import IDynamicSchemaField, IDynamicSchema
+from schooltool.interfaces import IDynamicSchemaService
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
                IRelationshipAPI, IViewAPI, ITimetableModelRegistry)
@@ -232,6 +234,99 @@ class DynamicSchemaField(Persistent):
             return False
 
         return True
+
+
+class DynamicSchema(Persistent):
+    """Facet template for dynamic information storage"""
+
+    implements(IDynamicSchema)
+
+    __parent__ = None
+    __name__ = None
+    owner = None
+
+    def __init__(self):
+        self.fields = PersistentList()
+
+    def hasField(self, name):
+        for field in self.fields:
+            if field.name == name:
+                return True
+        return False
+
+    def getField(self, name):
+        for f in self.fields:
+            if f.name == name:
+                return f
+        return None
+
+    def setField(self, name, value):
+        """Set a field value."""
+        if not self.hasField(name):
+            raise ValueError("Key %r not in fieldset")
+
+        field = self.getField(name)
+        field['value'] = value
+
+    def delField(self, name):
+        if self.hasField(name):
+            field = self.getField(name)
+            del field
+
+    def addField(self, name, label, ftype, value=None, vocabulary=[]):
+        """Add a new field"""
+        field = DynamicSchemaField(name, label, ftype, value, vocabulary)
+        self.fields.append(field)
+
+    def cloneEmpty(self):
+        pass
+
+    def __getitem__(self, name):
+        return self.getField(name)
+
+
+class DynamicSchemaService(Persistent):
+
+    implements(IDynamicSchemaService)
+
+    __parent__ = None
+    __name__ = None
+
+    _default_id = None
+
+    def __init__(self):
+        self.schemas = PersistentDict()
+
+    def _set_default_id(self, new_id):
+        if new_id is not None and new_id not in self.schemas:
+            raise ValueError("Dynamic schema %r does not exist" % new_id)
+        self._default_id = new_id
+
+    default_id = property(lambda self: self._default_id, _set_default_id)
+
+    def keys(self):
+        return self.schemas.keys()
+
+    def __getitem__(self, schema_id):
+        schema = self.schemas[schema_id]
+        schema.__parent__ = self
+        schema.__name__ = schema_id
+        return schema
+
+    def __setitem__(self, schema_id, dfacet):
+        prototype = dfacet
+        self.schemas[schema_id] = prototype
+        if self.default_id is None:
+            self.default_id = schema_id
+
+    def __delitem__(self, schema_id):
+        del self.schemas[schema_id]
+        if schema_id == self.default_id:
+            self.default_id = None
+
+    def getDefault(self):
+        return self[self.default_id]
+
 
 
 #

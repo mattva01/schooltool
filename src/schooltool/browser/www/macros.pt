@@ -122,7 +122,7 @@
     <!-- Render dynamicfacet fields:
     
     Parameters:
-        field: a DynamicFacetField
+        field: a DynamicSchemaField
         isSchema: boolean, true if we are creating a schemata.
     -->
     <label tal:content="field/label"></label>

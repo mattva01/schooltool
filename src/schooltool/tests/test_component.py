@@ -307,6 +307,14 @@ class TestDynamicSchemaField(unittest.TestCase):
         verifyObject(IDynamicSchemaField, field)
 
 
+class TestDynamicSchema(unittest.TestCase):
+
+    def test(self):
+        from schooltool.component import DynamicSchema
+        from schooltool.interfaces import IDynamicSchema
+        schema = DynamicSchema()
+        verifyObject(IDynamicSchema, schema)
+
 class TestServiceAPI(unittest.TestCase):
 
     def test_api(self):
@@ -602,6 +610,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestUtilityService))
     suite.addTest(unittest.makeSuite(TestTimetableModelRegistry))
     suite.addTest(unittest.makeSuite(TestDynamicSchemaField))
+    suite.addTest(unittest.makeSuite(TestDynamicSchema))
     return suite
 
 if __name__ == '__main__':

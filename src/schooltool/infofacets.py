@@ -29,59 +29,19 @@ from zope.interface import implements
 from schooltool.interfaces import IDynamicFacet, IPersonInfoFacet
 from schooltool.interfaces import IAddressInfoFacet
 from schooltool.interfaces import IPersonInfoFacet, IDynamicFacetSchemaService
-from schooltool.component import DynamicSchemaField
+from schooltool.component import DynamicSchemaField, DynamicSchema
+from schooltool.component import DynamicSchemaService
 
 
 __metaclass__ = type
 
 
-class DynamicFacetField(DynamicSchemaField):
-    """A display-agnostic field definition"""
-    pass
-
-
-class DynamicFacet(Persistent):
+class DynamicFacet(DynamicSchema):
     """Facet template for dynamic information storage"""
 
     implements(IDynamicFacet)
 
-    __parent__ = None
-    __name__ = None
-    owner = None
     active = True
-
-    def __init__(self):
-        self.fields = PersistentList()
-
-    def hasField(self, name):
-        for field in self.fields:
-            if field.name == name:
-                return True
-        return False
-
-    def getField(self, name):
-        for f in self.fields:
-            if f.name == name:
-                return f
-        return None
-
-    def setField(self, name, value):
-        """Set a field value."""
-        if not self.hasField(name):
-            raise ValueError("Key %r not in fieldset")
-
-        field = self.getField(name)
-        field['value'] = value
-
-    def delField(self, name):
-        if self.hasField(name):
-            field = self.getField(name)
-            del field
-
-    def addField(self, name, label, ftype, value=None, vocabulary=[]):
-        """Add a new field"""
-        field = DynamicFacetField(name, label, ftype, value, vocabulary)
-        self.fields.append(field)
 
     def cloneEmpty(self):
         empty = DynamicFacet()
@@ -90,51 +50,11 @@ class DynamicFacet(Persistent):
                     field.value, field.vocabulary)
         return empty
 
-    def __getitem__(self, name):
-        return self.getField(name)
 
-
-class DynamicFacetSchemaService(Persistent):
+class DynamicFacetSchemaService(DynamicSchemaService):
 
     implements(IDynamicFacetSchemaService)
-
-    __parent__ = None
-    __name__ = None
-
-    _default_id = None
-
-    def __init__(self):
-        self.schemas = PersistentDict()
-
-    def _set_default_id(self, new_id):
-        if new_id is not None and new_id not in self.schemas:
-            raise ValueError("DynamicFacet schema %r does not exist" % new_id)
-        self._default_id = new_id
-
-    default_id = property(lambda self: self._default_id, _set_default_id)
-
-    def keys(self):
-        return self.schemas.keys()
-
-    def __getitem__(self, schema_id):
-        schema = self.schemas[schema_id]
-        schema.__parent__ = self
-        schema.__name__ = schema_id
-        return schema
-
-    def __setitem__(self, schema_id, dfacet):
-        prototype = dfacet
-        self.schemas[schema_id] = prototype
-        if self.default_id is None:
-            self.default_id = schema_id
-
-    def __delitem__(self, schema_id):
-        del self.schemas[schema_id]
-        if schema_id == self.default_id:
-            self.default_id = None
-
-    def getDefault(self):
-        return self[self.default_id]
+    pass
 
 
 class PersonInfoFacet(Persistent):
