@@ -24,13 +24,14 @@ $Id$
 
 import unittest
 
-from schooltool.browser.tests import RequestStub, setPath
+from schooltool.browser.tests import RequestStub, setPath, TraversalTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 
 __metaclass__ = type
 
 
-class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
+class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
+                     unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -61,13 +62,9 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.browser.model import PersonView, PhotoView
         from schooltool.browser.model import PersonEditView
         view = PersonView(self.person)
-        # TODO: refactor to use assertTraverses
-        photoview = view._traverse('photo.jpg', RequestStub())
-        self.assert_(photoview.context is self.person)
-        self.assert_(isinstance(photoview, PhotoView))
+        self.assertTraverses(view, 'photo.jpg', PhotoView, self.person)
+        self.assertTraverses(view, 'edit.html', PersonEditView, self.person)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
-        editview = view._traverse('edit.html', RequestStub())
-        self.assert_(isinstance(editview, PersonEditView))
 
     def test_info(self):
         from schooltool.browser.model import PersonView

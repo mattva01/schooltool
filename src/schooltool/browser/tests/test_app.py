@@ -25,7 +25,7 @@ $Id$
 import unittest
 
 from schooltool.interfaces import AuthenticationError
-from schooltool.browser.tests import RequestStub, setPath
+from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
 
 
 __metaclass__ = type
@@ -45,21 +45,6 @@ class SiteStub:
             return person
         else:
             raise AuthenticationError()
-
-
-class TraversalTestMixin:
-
-    def assertTraverses(self, view, name, viewclass, context=None):
-        """Assert that traversal returns the appropriate view.
-
-        Checks that view._traverse(name, request) returns an instance of
-        viewclass, and that the context attribute of the new view is
-        identical to context.
-        """
-        destination = view._traverse(name, RequestStub())
-        self.assert_(isinstance(destination, viewclass))
-        self.assert_(destination.context is context)
-        return destination
 
 
 class TestAppView(unittest.TestCase, TraversalTestMixin):
