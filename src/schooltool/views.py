@@ -948,7 +948,6 @@ class RollcallView(View):
 class AbsenceTrackerView(View, AbsenceListViewMixin):
 
     template = Template('www/absences.pt', content_type='text/xml')
-    template_html = Template('www/absences_html.pt', content_type='text/html')
 
     utcnow = datetime.datetime.utcnow
 
