@@ -377,15 +377,15 @@ for parsing and manipulating dates.
 
     >>> from calendar import SUNDAY
     >>> from schoolbell.calendar.utils import week_start
-    >>> week_start(date(2004, 2, 11)).strftime('%a, %b %e %Y')
-    'Mon, Feb  9 2004'
-    >>> week_start(date(2004, 2, 11), SUNDAY).strftime('%a, %b %e %Y')
-    'Sun, Feb  8 2004'
+    >>> week_start(date(2004, 2, 11)).strftime('%a, %b %d %Y')
+    'Mon, Feb 09 2004'
+    >>> week_start(date(2004, 2, 11), SUNDAY).strftime('%a, %b %d %Y')
+    'Sun, Feb 08 2004'
 
     >>> from schoolbell.calendar.utils import weeknum_bounds
-    >>> s, e = [d.strftime('%a, %b %e') for d in weeknum_bounds(2005, 1)]
+    >>> s, e = [d.strftime('%a, %b %d') for d in weeknum_bounds(2005, 1)]
     >>> print 'Week 1 of 2005 started on %s and ended on %s.' % (s, e)
-    Week 1 of 2005 started on Mon, Jan  3 and ended on Sun, Jan  9.
+    Week 1 of 2005 started on Mon, Jan 03 and ended on Sun, Jan 09.
 
     >>> from schoolbell.calendar.utils import check_weeknum
     >>> if check_weeknum(2004, 53):
