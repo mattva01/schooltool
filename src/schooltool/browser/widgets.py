@@ -53,6 +53,8 @@ class IWidget(Interface):
 
     label = Attribute("Label")
 
+    label_class = Attribute("CSS class for the label")
+
     unit = Attribute("Text displayed after the widget")
 
     tabindex = Attribute("Index in tab order")
@@ -312,7 +314,7 @@ class Widget:
 
     def __init__(self, name, label, parser=None, validator=None,
                  formatter=None, unit=None, value=None, tabindex=None,
-                 css_class=None):
+                 css_class=None, label_class=None):
         if parser is None:
             parser = defaultParser
         if validator is None:
@@ -331,6 +333,8 @@ class Widget:
         self.error = None
         if css_class is not None: # otherwise inherit class attribute
             self.css_class = css_class
+        if label_class is not None: # otherwise inherit class attribute
+            self.label_class = label_class
         if value is not None:
             self.setValue(value)
 
@@ -458,7 +462,13 @@ class SequenceWidget(Widget):
 
 
 class TextWidget(Widget):
-    """Text field widget."""
+    """Text field widget.
+
+    The default CSS class of TextWidgets is "text".
+
+    You can override the type attribute of the input element by changing
+    `input_type`.  See PasswordWidget.
+    """
 
     implements(IWidget)
 

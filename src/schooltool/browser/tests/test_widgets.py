@@ -149,8 +149,10 @@ class TestWidget(unittest.TestCase):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')
         widget.error = None
+        self.assertEquals(widget.row_class(), 'row')
         self.assertEquals(widget._row_class(), ' class="row"')
         widget.error = 'Error!'
+        self.assertEquals(widget.row_class(), 'row row_error')
         self.assertEquals(widget._row_class(), ' class="row row_error"')
 
     def test_error_html(self):
