@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""
+A script to start the SchoolBell server in a Debian system.
+"""
+
+# Please don't change the following lines unless you look in script.py first
+import sys
+# paths begin
+# paths end
+# config begin
+# config end
+
+if sys.version_info < (2, 3):
+    print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
+    print >> sys.stderr, 'Your python is %s' % sys.version
+    sys.exit(1)
+
+import schoolbell.app.main
+schoolbell.app.main.main()

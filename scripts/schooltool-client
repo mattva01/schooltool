@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""
+A script to start the schooltool client in a Debian system.
+"""
+
+import sys
+# paths begin
+# paths end
+
+import schooltool.clients.client
+schooltool.clients.client.main()
