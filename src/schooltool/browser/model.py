@@ -299,6 +299,10 @@ class GroupEditView(View):
             for link in self.context.listLinks(URIMember):
                 if getPath(link.traverse()) in paths:
                     link.unlink()
+                    request.appLog(_("Relationship '%s' between %s and %s"
+                                     " removed")
+                                   % ('Membership', getPath(link.traverse()),
+                                      getPath(self.context)))
         if "FINISH_ADD" in request.args:
             paths = []
             if "CHECK" in request.args:
@@ -306,6 +310,9 @@ class GroupEditView(View):
             for path in paths:
                 obj = traverse(self.context, path)
                 Membership(group=self.context, member=obj)
+                request.appLog(_("Relationship '%s' between %s and %s created")
+                               % ('Membership', getPath(obj),
+                                  getPath(self.context)))
 
 
 class GroupTeachersView(View):

@@ -536,6 +536,13 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view.update(request)
         self.assertEquals(getRelatedObjects(self.group, URIMember),
                           [self.per2])
+        self.assertEquals(request.applog,
+                [(None,
+                  "Relationship 'Membership' between "
+                  "/groups/sub and /groups/new removed", INFO),
+                 (None,
+                  "Relationship 'Membership' between "
+                  "/persons/p and /groups/new removed", INFO)])
 
     def test_update_ADD(self):
         from schooltool.browser.model import GroupEditView
@@ -549,6 +556,13 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         members = getRelatedObjects(self.group, URIMember)
         assert self.group2 in members
         assert self.per3 in members
+        self.assertEquals(request.applog,
+                [(None,
+                  "Relationship 'Membership' between "
+                  "/groups/group2 and /groups/new created", INFO),
+                 (None,
+                  "Relationship 'Membership' between "
+                  "/persons/lj and /groups/new created", INFO)])
 
 
 class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
