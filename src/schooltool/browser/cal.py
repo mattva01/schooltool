@@ -190,8 +190,8 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     authorization = ACLViewAccess
 
     # Which day is considered to be the first day of the week (0 = Monday,
-    # 6 = Sunday).  Currently hardcoded.  A similair value is also hardcoded
-    # in schooltool.browser.timetable
+    # 6 = Sunday).  Currently hardcoded.  A similar value is also hardcoded
+    # in schooltool.browser.timetable.
     first_day_of_week = 0
 
     month_names = {
