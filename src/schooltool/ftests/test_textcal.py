@@ -45,7 +45,7 @@ class TestTextCal(unittest.TestCase):
 
         dirname = os.path.dirname(__file__)
         script = os.path.join(dirname, '..', 'textcal.py')
-        config = os.path.join(dirname, '..', 'schema', 'calconfig.xml')
+        config = os.path.join(dirname, '..', 'schema', 'tt-us-4day.xml')
 
         expected = file(os.path.join(dirname, 'textcal-output.txt')).read()
 
