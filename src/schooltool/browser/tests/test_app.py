@@ -187,6 +187,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import NoteContainerView
         from schooltool.browser.app import BusySearchView
         from schooltool.browser.app import OptionsView
+        from schooltool.browser.app import DeleteView
         from schooltool.browser.applog import ApplicationLogView
         from schooltool.browser.timetable import TimetableSchemaWizard
         from schooltool.browser.timetable import TimetableSchemaServiceView
@@ -207,6 +208,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
                              app['resources'])
         self.assertTraverses(view, 'notes', NoteContainerView,
                              app['notes'])
+        self.assertTraverses(view, 'delete.html', DeleteView, app)
         self.assertTraverses(view, 'csvimport.html', CSVImportView, app)
         self.assertTraverses(view, 'busysearch', BusySearchView, app)
         self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
@@ -1175,6 +1177,126 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
         self.assertEqual(self.app.timetable_privacy, 'public')
 
 
+class TestDeleteView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import DeleteView
+        return DeleteView(self.app)
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+        self.assert_('Search results' not in result)
+
+    def test_render_search(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'SEARCH': 'Search',
+                                    'q': 'Doe'})
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+        self.assert_('Search results' in result)
+
+        # Searching for "Doe" should find two persons:
+        #   /persons/johndoe (John Doe)
+        #   /persons/notjohn (Not John Doe)
+        doc = HTMLDocument(result)
+        checkboxes = doc.query('//input[@type="checkbox"]')
+        self.assertEquals(len(checkboxes), 2)
+        self.assertEquals([c['value'] for c in checkboxes],
+                          ['/persons/johndoe', '/persons/notjohn'])
+        for c in checkboxes:
+            self.assertEquals(c['name'], 'path')
+
+    def test_render_delete(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'DELETE': 'Delete',
+                                    'path': ['/persons/johndoe',
+                                             '/persons/notjohn']})
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+        self.assert_('Search results' not in result)
+        self.assert_('Confirm' in result)
+
+        doc = HTMLDocument(result)
+        paths = doc.query('//form//input[@name="path"]')
+        self.assertEquals([p['value'] for p in paths],
+                          ['/persons/johndoe', '/persons/notjohn'])
+
+    def test_render_delete_nothing_selected(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'DELETE': 'Delete'})
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+        self.assert_('Search results' not in result)
+        self.assert_('Confirm' not in result)
+        self.assert_('Nothing was selected' in result)
+
+    def test_render_delete_canceled(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'CANCEL': 'Cancel',
+                                    'path': ['/persons/johndoe',
+                                             '/persons/notjohn']})
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+        self.assert_('Search results' not in result)
+        self.assert_('Confirm' not in result)
+        self.assert_('Cancelled' in result)
+
+    def test_render_delete_confirmed(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              args={'CONFIRM': 'Confirm',
+                                    'path': ['/persons/johndoe',
+                                             '/persons/notjohn']})
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+        self.assert_('Search results' not in result)
+        self.assert_('Confirm' not in result)
+        self.assert_('Deleted John Doe (/persons/johndoe)' in result)
+        self.assert_('Deleted Not John Doe (/persons/notjohn)' in result)
+        self.assert_('johndoe' not in self.app['persons'].keys())
+        self.assert_('notjohn' not in self.app['persons'].keys())
+
+    def test_search(self):
+        view = self.createView()
+        results = list(view._search('no such thing really really really'))
+        self.assertEquals(results, [])
+
+        results = list(view._search('hnd')) # matches "johndoe"
+        self.assertEquals(results, [self.person])
+
+        results = list(view._search('dOe'))
+        # matches "johndoe" and "Not John Doe"
+        self.assertEquals(results, [self.person, self.person2])
+
+        results = list(view._search(''))
+        # matches everything
+        everything = (list(self.app['persons'].itervalues()) +
+                      list(self.app['groups'].itervalues()) +
+                      list(self.app['resources'].itervalues()))
+        self.assertEquals(results, everything)
+
+    def test_selectedObjects(self):
+        view = self.createView()
+        # No paths selected
+        view.request = RequestStub()
+        self.assertEquals(view.selectedObjects(), [])
+
+        view.request = RequestStub(args={'path': ['/persons/johndoe',
+                                                  '/persons/nosuchperson',
+                                                  '/',
+                                                  'invalid utf8: \xff']})
+        self.assertEquals(view.selectedObjects(),
+                          [{'obj': self.person, 'title': 'John Doe',
+                            'icon_url': '/person.png', 'icon_text': 'Person'}])
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
@@ -1193,6 +1315,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestBusySearchView))
     suite.addTest(unittest.makeSuite(TestDatabaseResetView))
     suite.addTest(unittest.makeSuite(TestOptionsView))
+    suite.addTest(unittest.makeSuite(TestDeleteView))
     suite.addTest(DocTestSuite('schooltool.browser.app'))
     return suite
 

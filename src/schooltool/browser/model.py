@@ -369,22 +369,16 @@ class RelationshipViewMixin:
 
     def _list(self, objects):
         """Return a list of related objects"""
-        result = [self._icon(obj) + (obj.title, obj) for obj in objects]
-        result.sort()
-        return [{'title': title,
-                 'path': getPath(obj),
-                 'url': absoluteURL(self.request, obj),
-                 'icon_url': icon_url,
-                 'icon_text': icon_text}
-                for icon_url, icon_text, title, obj in result]
-
-    def _icon(self, obj):
-        if IGroup.providedBy(obj):
-            return '/group.png', _('Group')
-        elif IPerson.providedBy(obj):
-            return '/person.png', _('Person')
-        else:
-            return '/resource.png', _('Resource')
+        # TODO: Get rid of this method and instead rewrite page templates to
+        #       use whatever/obj/@@absolute_url instead of whatever/obj/url
+        #       and replace self._list(...) with app_object_list(...)
+        results = app_object_list(objects)
+        for d in results:
+            obj = d['obj']
+            d['path'] = getPath(obj)
+            d['url'] = absoluteURL(self.request, obj)
+            del d['obj']
+        return results
 
     def update(self):
         request = self.request
@@ -587,3 +581,38 @@ class PhotoView(View):
             request.setHeader('Content-Type', 'image/jpeg')
             return facet.photo
 
+
+def app_object_icon(obj):
+    """Select the appropriate icon for an application object.
+
+    Returns (image_url, alt_text).
+    """
+    if IPerson.providedBy(obj):
+        return '/person.png', _('Person')
+    elif IGroup.providedBy(obj):
+        return '/group.png', _('Group')
+    elif IResource.providedBy(obj):
+        return '/resource.png', _('Resource')
+    else:
+        return None, obj.__class__.__name__
+
+
+def app_object_list(objects):
+    """Prepare a list of application objects for presentation.
+
+    Sorts the list first by type, then by group.
+
+    Returns a list of dicts with the following keys
+
+      title      Title of the object.
+      obj        The object itself.
+      icon_url   URL of the icon image.
+      icon_text  Alternative text for the icon.
+    """
+    result = [app_object_icon(obj) + (obj.title, obj) for obj in objects]
+    result.sort()
+    return [{'title': title,
+             'obj': obj,
+             'icon_url': icon_url,
+             'icon_text': icon_text}
+            for icon_url, icon_text, title, obj in result]

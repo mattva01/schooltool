@@ -26,6 +26,8 @@ import unittest
 import datetime
 from logging import INFO
 
+from zope.interface import implements
+from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.browser.tests import HTMLDocument
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
@@ -36,12 +38,39 @@ from schooltool.tests.helpers import sorted
 __metaclass__ = type
 
 
+#
+# Stubs
+#
+
+class UnknownObjectStub:
+
+    def __init__(self, name=None, title=None):
+        self.__name__ = name
+        self.title = title
+
+
+class PersonStub(UnknownObjectStub):
+    implements(IPerson)
+
+
+class GroupStub(UnknownObjectStub):
+    implements(IGroup)
+
+
+class ResourceStub(UnknownObjectStub):
+    implements(IResource)
+
+
 class UserStub:
     title = 'Mango'
 
     def listLinks(self, uri):
         return []
 
+
+#
+# Tests
+#
 
 class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                      unittest.TestCase):
@@ -1041,6 +1070,7 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 404)
 
+
 class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
     def test(self):
@@ -1053,6 +1083,39 @@ class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
         self.assert_("Note 1 Title" in content)
         self.assert_("Note 1 Body" in content)
+
+
+class TestHelpers(unittest.TestCase):
+
+    def test_app_object_icon(self):
+        from schooltool.browser.model import app_object_icon
+        self.assertEquals(app_object_icon(PersonStub()),
+                          ('/person.png', 'Person'))
+        self.assertEquals(app_object_icon(GroupStub()),
+                          ('/group.png', 'Group'))
+        self.assertEquals(app_object_icon(ResourceStub()),
+                          ('/resource.png', 'Resource'))
+        self.assertEquals(app_object_icon(UnknownObjectStub()),
+                          (None, 'UnknownObjectStub'))
+
+    def test_app_object_list(self):
+        from schooltool.browser.model import app_object_list
+        p1 = PersonStub('p1', 'Person A')
+        p2 = PersonStub('p2', 'Person B')
+        r1 = ResourceStub('r1', 'A Resource')
+        self.assertEquals(app_object_list([p2, r1, p1]),
+                          [{'title': 'Person A',
+                            'obj': p1,
+                            'icon_url': '/person.png',
+                            'icon_text': 'Person'},
+                           {'title': 'Person B',
+                            'obj': p2,
+                            'icon_url': '/person.png',
+                            'icon_text': 'Person'},
+                           {'title': 'A Resource',
+                            'obj': r1,
+                            'icon_url': '/resource.png',
+                            'icon_text': 'Resource'}])
 
 
 def test_suite():
@@ -1068,6 +1131,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestResourceEditView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     suite.addTest(unittest.makeSuite(TestNoteView))
+    suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 
 

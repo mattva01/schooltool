@@ -38,6 +38,8 @@
           i18n:translate="">Manage time periods</a></p>
     <p><a class="sitemap" href="/csvimport.html"
           i18n:translate="">Import CSV data</a></p>
+    <p><a class="sitemap" href="/delete.html"
+          i18n:translate="">Delete persons, groups or resources</a></p>
     <p><a class="sitemap" href="/reset_db.html"
           i18n:translate="">Reset the database</a></p>
     <p><a class="sitemap" href="/options.html"

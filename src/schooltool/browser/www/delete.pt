@@ -1,0 +1,113 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Delete persons, groups and resources
+  </title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Delete persons, groups and resources
+  </h1>
+<metal:block metal:fill-slot="content">
+
+<div class="info" tal:content="view/status" tal:condition="view/status">
+[Status message]
+</div>
+
+<p i18n:translate="">
+You can perform a search for a person/group/resource whose title or ID contains
+a substring and then select one or more of the objects for deletion.
+</p>
+
+<p i18n:translate="">
+Deleting application objects is a serious matter that should only be done
+to undo mistakes such as accidentally entering the same person in the
+system twice.  When an object is deleted, all data associated with the
+object (relationships, timetables, calendars, resource bookings etc.) is
+gone forever.
+</p>
+
+<tal:if condition="not:view/show_confirmation_form">
+
+<form action="#" method="POST" tal:attributes="action request/uri">
+  <div class="row" tal:define="widget nocall:view/search_widget">
+    <label tal:attributes="for widget/name" tal:content="widget/label" />
+    <input class="text" type="text"
+           tal:attributes="name widget/name; id widget/name;
+                           value widget/raw_value;" />
+    <input class="button" type="submit" name="SEARCH" value="Search"
+           i18n:attributes="value" />
+    <tal:block tal:replace="structure widget/_error_html" />
+  </div>
+</form>
+
+<div style="clear: both"></div>
+
+<tal:block tal:define="results view/search"
+           tal:condition="python:results is not None">
+<h2 i18n:translate="">Search results</h2>
+
+<p tal:condition="not:results" i18n:translate="">
+There are no persons/groups/resources matching <q i18n:name="query_string"
+tal:content="view/search_widget/value">QUERY STRING</q>.
+</p>
+
+<form action="#" method="POST" tal:attributes="action request/uri"
+      tal:condition="results">
+<div class="buttons">
+  <table>
+    <tr tal:repeat="item results">
+      <td><input type="checkbox" name="path"
+                 tal:attributes="value item/obj/@@absolute_path;
+                                 id string:check.${repeat/item/number}" />
+      </td>
+      <td><label class="plain"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <img tal:attributes="src item/icon_url; alt item/icon_text" />
+          </label>
+      </td>
+      <td><label class="plain"
+                 tal:attributes="for string:check.${repeat/item/number}">
+            <span tal:replace="item/title" />
+            (<a tal:attributes="href item/obj/@@absolute_url"
+                tal:content="item/obj/__name__" />)
+          </label>
+    </tr>
+  </table>
+  <input class="button" type="submit" name="DELETE"
+         value="Delete selected objects" i18n:attributes="value" />
+</div>
+</form>
+</tal:block>
+
+</tal:if>
+<tal:if condition="view/show_confirmation_form">
+<form action="#" method="POST" tal:attributes="action request/uri"
+      class="plain">
+
+<p i18n:translate="">Are you sure that you want to delete the following
+objects?</p>
+
+<ul>
+  <li tal:repeat="item view/selectedObjects">
+    <input type="hidden" name="path"
+           tal:attributes="value item/obj/@@absolute_path" />
+    <img tal:attributes="src item/icon_url; alt item/icon_text" />
+    <span tal:replace="item/title" />
+    (<a tal:attributes="href item/obj/@@absolute_url"
+        tal:content="item/obj/__name__" />)
+  </li>
+</ul>
+
+<div class="buttons">
+  <input class="button" type="submit" name="CONFIRM"
+         value="Confirm" i18n:attributes="value" />
+  <input class="button" type="submit" name="CANCEL"
+         value="Cancel" i18n:attributes="value" />
+</div>
+</form>
+</tal:if>
+
+</metal:block>
+</body>
+</html>

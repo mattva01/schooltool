@@ -36,7 +36,9 @@ from schooltool.browser.applog import ApplicationLogView
 from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.csv import CSVImportView
-from schooltool.browser.model import PersonView, GroupView, ResourceView, NoteView
+from schooltool.browser.model import PersonView, GroupView, ResourceView
+from schooltool.browser.model import NoteView
+from schooltool.browser.model import app_object_list
 from schooltool.browser.timetable import NewTimePeriodView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import TimetableSchemaServiceView
@@ -50,8 +52,10 @@ from schooltool.component import getPath, traverse
 from schooltool.component import getTicketService, getTimetableSchemaService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
+from schooltool.interfaces import IApplicationObject
 from schooltool.membership import Membership
 from schooltool.rest.app import AvailabilityQueryView
+from schooltool.rest.model import delete_app_object
 from schooltool.rest.infofacets import resize_photo, canonical_photo_size
 from schooltool.translation import ugettext as _
 
@@ -64,13 +68,33 @@ class RootView(View):
     Presents a login page.  Redirects to the start page after a successful
     login.
 
-    Sublocations found at / are
+    Sublocations found at / are (see `_traverse` for a full and up-to-date
+    list):
+
+        start               The authenticated user's start page.
+        logout              Logout page (accessing it logs you out).
+
+        persons             Person index.
+        groups              Group index.
+        resources           Resource index.
+        notes               Note index.
+
+        busysearch          Resource busy search and booking.
+
+        ttschemas           List of timetable schemas.
+        newttschema         Form to create a new timetable schema.
+        time-periods        List of time periods.
+        newtimeperiod       Form to create a new time period.
+
+        options.html        Application options form.
+        reset_db.html       Database clearing form.
+        cvsimport.html      CVS import form
+        delete.html         Application object deletion form.
+
+        applog              Application audit log.
 
         schooltool.css      the stylesheet
-        logout              logout page (accessing it logs you out)
-        start               a person's start page
-        persons/id          person information pages
-        groups/id           group information pages
+        *.png               some images
 
     """
 
@@ -132,6 +156,8 @@ class RootView(View):
             return StaticFile('www/resource2.png', 'image/png')
         elif name == 'logout':
             return LogoutView(self.context)
+        elif name == 'delete.html':
+            return DeleteView(self.context)
         elif name == 'reset_db.html':
             return DatabaseResetView(self.context)
         elif name == 'options.html':
@@ -466,7 +492,7 @@ class ResourceAddView(ObjectAddView):
 
 
 class NoteAddView(View):
-    """View for adding notes """
+    """View for adding notes."""
 
     title = _("Add note")
 
@@ -512,6 +538,7 @@ class NoteAddView(View):
         nexturl = absoluteURL(request, obj)
 
         return self.redirect(nexturl, request)
+
 
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):
     """View for an ApplicationObjectContainer.
@@ -778,3 +805,109 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
         service.default_id = self.default_tts_widget.value
 
         return self.redirect('/', request)
+
+
+class DeleteView(View, ToplevelBreadcrumbsMixin):
+    """View for deleting application objects (/delete.html).
+
+    The manager can perform a search for a person/group/resource whose title
+    or ID contains a substring and then select one or more of the objects for
+    deletion.  There is also a confirmation form.
+
+    Deleting application objects is a serious matter that should only be done
+    to undo mistakes such as accidentally entering the same person in the
+    system twice.  When an object is deleted, all data associated with the
+    object (relationships, timetables, calendars, resource bookings etc.) is
+    gone forever.
+    """
+
+    __used_for__ = IApplication
+
+    authorization = ManagerAccess
+
+    template = Template("www/delete.pt")
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.search_widget = TextWidget('q', _('Search string'))
+
+    def do_GET(self, request):
+        """Process the request.
+
+          1. Request is empty: present an empty search form and a SEARCH
+             button.
+
+          2. Request contains 'SEARCH': perform a search and present a list of
+             results as checkboxes and a DELETE button.
+
+          3. Request contains 'DELETE': show a confirmation form with CONFIRM
+             and CANCEL buttons.
+
+          4. Request contains 'CONFIRM': delete the selected objects and
+             present an empty search form with an informational message.
+
+          5. Request contains 'CANCEL': present an empty search form with an
+             informational message.
+
+        """
+        self.status = None
+        self.show_confirmation_form = 'DELETE' in request.args
+        if 'SEARCH' in request.args:
+            self.search_widget.update(request)
+        if 'DELETE' in request.args and not self.selectedObjects():
+            self.show_confirmation_form = False
+            self.status = _('Nothing was selected.')
+        if 'CANCEL' in request.args:
+            self.status = _('Cancelled.')
+        if 'CONFIRM' in request.args:
+            status = []
+            for info in self.selectedObjects():
+                info['path'] = getPath(info['obj'])
+                delete_app_object(info['obj'], request.appLog)
+                status.append(_("Deleted %(title)s (%(path)s).") % info)
+            self.status = "\n".join(status)
+        return View.do_GET(self, request)
+
+    def search(self):
+        """Return application objects that match the search query.
+
+        Returns None if there is no search query in the request.
+
+        Returns a list of dicts (see `app_object_list`) with results if the
+        query is present in the request.
+        """
+        if 'SEARCH' in self.request.args and not self.search_widget.error:
+            return app_object_list(self._search(self.search_widget.value))
+        else:
+            return None
+
+    def _search(self, q):
+        """Find all application objects that match a given substring.
+
+        Returns an iterator.
+
+        Substring matching is case insensitive.  Substrings can match either
+        in titles or in IDs.
+        """
+        q = q.lower()
+        for container in 'persons', 'groups', 'resources':
+            for obj in self.context[container].itervalues():
+                if q in obj.__name__.lower() or q in obj.title.lower():
+                    yield obj
+
+    def selectedObjects(self):
+        """Return application objects that were selected for deletion.
+
+        Returns a list of dicts (see `app_object_list`) with results if the
+        query is present in the request.
+        """
+        objs = []
+        for path in self.request.args.get('path', []):
+            try:
+                obj = traverse(self.context, to_unicode(path))
+                if IApplicationObject.providedBy(obj):
+                    objs.append(obj)
+            except (KeyError, UnicodeError):
+                pass
+        return app_object_list(objs)
+
