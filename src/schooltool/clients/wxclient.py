@@ -36,6 +36,7 @@ import sets
 import libxml2
 import datetime
 import threading
+import gettext
 from cStringIO import StringIO
 from wxPython.wx import *
 from wxPython.grid import *
@@ -251,16 +252,16 @@ class ServerSettingsDlg(wxDialog):
         # begin wxGlade: ServerSettingsDlg.__init__
         kwds["style"] = wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU
         wxDialog.__init__(self, *args, **kwds)
-        self.serverLabel = wxStaticText(self, -1, "Server")
+        self.serverLabel = wxStaticText(self, -1, _("Server"))
         self.serverTextCtrl = wxTextCtrl(self, -1, "localhost")
-        self.portLabel = wxStaticText(self, -1, "Port")
+        self.portLabel = wxStaticText(self, -1, _("Port"))
         self.portTextCtrl = wxTextCtrl(self, -1, "7001")
-        self.userLabel = wxStaticText(self, -1, "Username")
+        self.userLabel = wxStaticText(self, -1, _("Username"))
         self.userTextCtrl = wxTextCtrl(self, -1, "")
-        self.passwordLabel = wxStaticText(self, -1, "Password")
+        self.passwordLabel = wxStaticText(self, -1, _("Password"))
         self.passwordTextCtrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
-        self.okBtn = wxButton(self, wxID_OK, "Ok")
-        self.cancelBtn = wxButton(self, wxID_CANCEL, "Cancel")
+        self.okBtn = wxButton(self, wxID_OK, _("Ok"))
+        self.cancelBtn = wxButton(self, wxID_CANCEL, _("Cancel"))
 
         self.__set_properties()
         self.__do_layout()
@@ -272,7 +273,7 @@ class ServerSettingsDlg(wxDialog):
 
     def __set_properties(self):
         # begin wxGlade: ServerSettingsDlg.__set_properties
-        self.SetTitle("Server Settings")
+        self.SetTitle(_("Server Settings"))
         self.okBtn.SetDefault()
         # end wxGlade
 
@@ -360,15 +361,16 @@ class RollCallInfoDlg(wxDialog):
         hsizer.Add(self.text_ctrl, 1, wxEXPAND)
 
         radio_sizer = wxBoxSizer(wxVERTICAL)
-        self.undecided_btn = wxRadioButton(self, -1, "Unset", style=wxRB_GROUP)
+        self.undecided_btn = wxRadioButton(self, -1, _("Unset"),
+                                           style=wxRB_GROUP)
         self.undecided_btn.Hide()
 
-        self.resolve_btn = wxRadioButton(self, -1, "Resolve")
+        self.resolve_btn = wxRadioButton(self, -1, _("Resolve"))
         if not show_resolved:
             self.resolve_btn.Hide()
         radio_sizer.Add(self.resolve_btn)
 
-        self.dont_resolve_btn = wxRadioButton(self, -1, "Do not resolve")
+        self.dont_resolve_btn = wxRadioButton(self, -1, _("Do not resolve"))
         if not show_resolved:
             self.dont_resolve_btn.Hide()
         radio_sizer.Add(self.dont_resolve_btn)
@@ -382,9 +384,9 @@ class RollCallInfoDlg(wxDialog):
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
         EVT_BUTTON(self, wxID_OK, self.OnOk)
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         ok_btn.SetDefault()
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
         button_bar.Add(cancel_btn, 0, 0, 0)
@@ -434,7 +436,7 @@ class RollCallDlg(wxDialog):
     """Roll call dialog."""
 
     def __init__(self, parent, group_title, group_path, rollcall, client):
-        title = "Roll Call for %s" % group_title
+        title = _("Roll Call for %s") % group_title
         wxDialog.__init__(self, parent, -1, title, style=RESIZABLE_DLG_STYLE)
         self.title = title
         self.group_title = group_title
@@ -456,20 +458,20 @@ class RollCallDlg(wxDialog):
             if item.present:
                 presence = ""
             else:
-                presence = "reported absent"
+                presence = _("reported absent")
             grid.Add(wxStaticText(scrolled_panel, -1, presence),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
 
-            unknown_btn = wxRadioButton(scrolled_panel, -1, "Unset",
+            unknown_btn = wxRadioButton(scrolled_panel, -1, _("Unset"),
                                         style=wxRB_GROUP)
             unknown_btn.Hide()
 
-            present_btn = wxRadioButton(scrolled_panel, -1, "Present")
+            present_btn = wxRadioButton(scrolled_panel, -1, _("Present"))
             self.entries_by_id[present_btn.GetId()] = entry
             EVT_RADIOBUTTON(self, present_btn.GetId(), self.OnPresentSelected)
             grid.Add(present_btn)
 
-            absent_btn = wxRadioButton(scrolled_panel, -1, "Absent")
+            absent_btn = wxRadioButton(scrolled_panel, -1, _("Absent"))
             self.entries_by_id[absent_btn.GetId()] = entry
             EVT_RADIOBUTTON(self, absent_btn.GetId(), self.OnAbsentSelected)
             grid.Add(absent_btn)
@@ -490,8 +492,8 @@ class RollCallDlg(wxDialog):
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         ok_btn.SetDefault()
         EVT_BUTTON(self, wxID_OK, self.OnOk)
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
@@ -550,7 +552,7 @@ class RollCallDlg(wxDialog):
         try:
             self.client.submitRollCall(self.group_path, rollcall)
         except SchoolToolError, e:
-            wxMessageBox("Could not submit the roll call: %s" % e,
+            wxMessageBox(_("Could not submit the roll call: %s") % e,
                          self.title, wxICON_ERROR|wxOK)
         else:
             self.EndModal(wxID_OK)
@@ -585,20 +587,20 @@ class AbsenceFrame(wxDialog):
         splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
 
         panel1 = wxPanel(splitter, -1)
-        label1 = wxStaticText(panel1, -1, "Absences")
+        label1 = wxStaticText(panel1, -1, _("Absences"))
         ID_ABSENCE_LIST = wxNewId()
         self.absence_list = wxListCtrl(panel1, ID_ABSENCE_LIST,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
         if self.detailed:
-            self.absence_list.InsertColumn(0, "Date", width=140)
-            self.absence_list.InsertColumn(1, "Ended?", width=80)
-            self.absence_list.InsertColumn(2, "Resolved?", width=80)
-            self.absence_list.InsertColumn(3, "Expected Presence", width=150)
-            self.absence_list.InsertColumn(4, "Last Comment", width=200)
+            self.absence_list.InsertColumn(0, _("Date"), width=140)
+            self.absence_list.InsertColumn(1, _("Ended?"), width=80)
+            self.absence_list.InsertColumn(2, _("Resolved?"), width=80)
+            self.absence_list.InsertColumn(3, _("Expected Presence"), width=150)
+            self.absence_list.InsertColumn(4, _("Last Comment"), width=200)
             if self.persons:
-                self.absence_list.InsertColumn(1, "Person", width=110)
+                self.absence_list.InsertColumn(1, _("Person"), width=110)
         else:
-            self.absence_list.InsertColumn(0, "Absence", width=580)
+            self.absence_list.InsertColumn(0, _("Absence"), width=580)
         EVT_LIST_ITEM_SELECTED(self, ID_ABSENCE_LIST, self.DoSelectAbsence)
         sizer1 = wxBoxSizer(wxVERTICAL)
         sizer1.Add(label1)
@@ -606,16 +608,16 @@ class AbsenceFrame(wxDialog):
         panel1.SetSizer(sizer1)
 
         panel2 = wxPanel(splitter, -1)
-        label2 = wxStaticText(panel2, -1, "Comments")
+        label2 = wxStaticText(panel2, -1, _("Comments"))
         self.comment_list = wxListCtrl(panel2, -1,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
-        self.comment_list.InsertColumn(0, "Date", width=140)
-        self.comment_list.InsertColumn(1, "Reporter", width=110)
-        self.comment_list.InsertColumn(2, "Absent From", width=110)
-        self.comment_list.InsertColumn(3, "Ended?", width=80)
-        self.comment_list.InsertColumn(4, "Resolved?", width=80)
-        self.comment_list.InsertColumn(5, "Expected Presence", width=150)
-        self.comment_list.InsertColumn(6, "Comment", width=200)
+        self.comment_list.InsertColumn(0, _("Date"), width=140)
+        self.comment_list.InsertColumn(1, _("Reporter"), width=110)
+        self.comment_list.InsertColumn(2, _("Absent From"), width=110)
+        self.comment_list.InsertColumn(3, _("Ended?"), width=80)
+        self.comment_list.InsertColumn(4, _("Resolved?"), width=80)
+        self.comment_list.InsertColumn(5, _("Expected Presence"), width=150)
+        self.comment_list.InsertColumn(6, _("Comment"), width=200)
         sizer2 = wxBoxSizer(wxVERTICAL)
         sizer2.Add(label2)
         sizer2.Add(self.comment_list, 1, wxEXPAND)
@@ -626,7 +628,7 @@ class AbsenceFrame(wxDialog):
         main_sizer.Add(splitter, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        close_btn = wxButton(self, wxID_CLOSE, "Close")
+        close_btn = wxButton(self, wxID_CLOSE, _("Close"))
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
         close_btn.SetDefault()
         button_bar.Add(close_btn)
@@ -655,7 +657,7 @@ class AbsenceFrame(wxDialog):
             try:
                 self.absence_data = self.client.getAbsences(self.path)
             except SchoolToolError, e:
-                wxMessageBox("Could not get the list of absences: %s" % e,
+                wxMessageBox(_("Could not get the list of absences: %s") % e,
                              self.title, wxICON_ERROR|wxOK)
                 return
         if self.detailed:
@@ -673,9 +675,9 @@ class AbsenceFrame(wxDialog):
                 else:
                     n = 0
                 self.absence_list.SetStringItem(idx, n+1,
-                        absence.ended and "Yes" or "No")
+                        absence.ended and _("Yes") or _("No"))
                 self.absence_list.SetStringItem(idx, n+2,
-                        absence.resolved and "Yes" or "No")
+                        absence.resolved and _("Yes") or _("No"))
                 if absence.expected_presence is not None:
                     self.absence_list.SetStringItem(idx, n+3,
                         absence.expected_presence.strftime('%Y-%m-%d %H:%M'))
@@ -726,10 +728,10 @@ class AbsenceFrame(wxDialog):
             self.comment_list.SetStringItem(idx, 2, comment.absent_from_title)
             if comment.ended is not Unchanged:
                 self.comment_list.SetStringItem(idx, 3,
-                        comment.ended and "Yes" or "No")
+                        comment.ended and _("Yes") or _("No"))
             if comment.resolved is not Unchanged:
                 self.comment_list.SetStringItem(idx, 4,
-                        comment.resolved and "Yes" or "No")
+                        comment.resolved and _("Yes") or _("No"))
             if comment.expected_presence is not Unchanged:
                 if comment.expected_presence is not None:
                     self.comment_list.SetStringItem(idx, 5,
@@ -782,7 +784,7 @@ class ResourceSelectionDlg(wxDialog):
 
     def __init__(self, parent, activity_title, teacher_title, period_key,
                  choices):
-        title = "Resource Assignment"
+        title = _("Resource Assignment")
         wxDialog.__init__(self, parent, -1, title, style=DEFAULT_DLG_STYLE)
 
         self.choices = list(choices)
@@ -790,12 +792,12 @@ class ResourceSelectionDlg(wxDialog):
 
         vsizer = wxBoxSizer(wxVERTICAL)
         static_text = wxStaticText(self, -1,
-                            "%s, %s\nTeacher: %s\nActivity: %s" %
+                            _("%s, %s\nTeacher: %s\nActivity: %s") %
                             (period_key[0], period_key[1], teacher_title,
                              activity_title))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
-        static_text = wxStaticText(self, -1, "Resources")
+        static_text = wxStaticText(self, -1, _("Resources"))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
         # wxLB_EXTENDED would be nicer, but then SetSelection stops working
@@ -808,8 +810,8 @@ class ResourceSelectionDlg(wxDialog):
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         ok_btn.SetDefault()
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
         button_bar.Add(cancel_btn, 0, 0, 0)
@@ -838,7 +840,7 @@ class ActivitySelectionDlg(wxDialog):
     """Activity selection popup of the school timetable grid"""
 
     def __init__(self, parent, teacher_title, period_key, choices, resources):
-        title = "Activity Selection"
+        title = _("Activity Selection")
         wxDialog.__init__(self, parent, -1, title, style=DEFAULT_DLG_STYLE)
 
         self.teacher_title = teacher_title
@@ -848,11 +850,11 @@ class ActivitySelectionDlg(wxDialog):
         self.choices.sort()
 
         vsizer = wxBoxSizer(wxVERTICAL)
-        static_text = wxStaticText(self, -1, "%s, %s\nTeacher: %s" %
+        static_text = wxStaticText(self, -1, _("%s, %s\nTeacher: %s") %
                             (period_key[0], period_key[1], teacher_title))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
-        static_text = wxStaticText(self, -1, "Activities")
+        static_text = wxStaticText(self, -1, _("Activities"))
         vsizer.Add(static_text, 0, wxLEFT|wxRIGHT|wxTOP, 8)
 
         self.listbox = wxCheckListBox(self, -1,
@@ -864,10 +866,10 @@ class ActivitySelectionDlg(wxDialog):
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        resource_btn = wxButton(self, -1, "&Assign Resources")
+        resource_btn = wxButton(self, -1, _("&Assign Resources"))
         EVT_BUTTON(self, resource_btn.GetId(), self.OnAssignResources)
-        ok_btn = wxButton(self, wxID_OK, "OK")
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         ok_btn.SetDefault()
         button_bar.Add(resource_btn, 0, 0, 0)
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
@@ -932,15 +934,15 @@ class NewPersonDlg(wxDialog):
     """A dialog to enter the name, login, and password of a new user."""
 
     def __init__(self, parent):
-        self.title = "New Person"
+        self.title = _("New Person")
         wxDialog.__init__(self, parent, -1, self.title,
                           style=wxDIALOG_MODAL|wxCAPTION)
         self.client = parent.client
 
-        nameLabel = wxStaticText(self, -1, "Name")
-        userLabel = wxStaticText(self, -1, "Username")
-        passwdLabel = wxStaticText(self, -1, "Password")
-        passwd2Label = wxStaticText(self, -1, "Password (again)")
+        nameLabel = wxStaticText(self, -1, _("Name"))
+        userLabel = wxStaticText(self, -1, _("Username"))
+        passwdLabel = wxStaticText(self, -1, _("Password"))
+        passwd2Label = wxStaticText(self, -1, _("Password (again)"))
 
         self.nameTextCtrl = wxTextCtrl(self, -1, "")
         self.userTextCtrl = wxTextCtrl(self, -1, "")
@@ -968,9 +970,9 @@ class NewPersonDlg(wxDialog):
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
         EVT_BUTTON(self, wxID_OK, self.OnOk)
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         ok_btn.SetDefault()
         button_bar.Add(ok_btn, 0, wxLEFT|wxRIGHT, 16)
         button_bar.Add(cancel_btn, 0, 0, 0)
@@ -984,7 +986,7 @@ class NewPersonDlg(wxDialog):
     def OnOk(self, event):
         """Verify that all data is entered before closing the dialog."""
         if self.passwdTextCtrl.GetValue() != self.passwd2TextCtrl.GetValue():
-            wxMessageBox("Passwords do not match", self.title,
+            wxMessageBox(_("Passwords do not match"), self.title,
                          wxICON_ERROR|wxOK)
             return
         name = self.nameTextCtrl.GetValue()
@@ -994,7 +996,7 @@ class NewPersonDlg(wxDialog):
         try:
             self.client.createPerson(name, username, password)
         except SchoolToolError, e:
-            wxMessageBox("Could not create a new person: %s" % e,
+            wxMessageBox(_("Could not create a new person: %s") % e,
                          self.title, wxICON_ERROR|wxOK)
         else:
             self.EndModal(wxID_OK)
@@ -1039,7 +1041,7 @@ class SchoolTimetableFrame(wxDialog):
     """Window showing a timetable for the whole school."""
 
     def __init__(self, client, key, tt, resources, parent=None, id=-1):
-        title = "School Timetable (%s, %s)" % key
+        title = _("School Timetable (%s, %s)") % key
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
                           style=RESIZABLE_WIN_STYLE)
         self.title = title
@@ -1056,13 +1058,13 @@ class SchoolTimetableFrame(wxDialog):
         main_sizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        resize_btn = wxButton(self, -1, "&Fit Cells")
+        resize_btn = wxButton(self, -1, _("&Fit Cells"))
         EVT_BUTTON(self, resize_btn.GetId(), self.OnResize)
-        edit_btn = wxButton(self, -1, "&Edit Cell")
+        edit_btn = wxButton(self, -1, _("&Edit Cell"))
         EVT_BUTTON(self, edit_btn.GetId(), grid.OnEdit)
-        ok_btn = wxButton(self, wxID_OK, "OK")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
         EVT_BUTTON(self, wxID_OK, self.OnOk)
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         ok_btn.SetDefault()
         button_bar.Add(resize_btn, 0, 0, 0)
         button_bar.Add(edit_btn, 0, wxLEFT, 16)
@@ -1088,7 +1090,7 @@ class SchoolTimetableFrame(wxDialog):
             period, schema = self.key
             self.client.putSchooltoolTimetable(period, schema, self.tt)
         except SchoolToolError, e:
-            wxMessageBox("Could not submit the roll call: %s" % e,
+            wxMessageBox(_("Could not submit the roll call: %s") % e,
                          self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
@@ -1115,11 +1117,11 @@ class BrowserFrame(wxDialog):
         main_sizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        back_btn = wxButton(self, -1, "&Back")
+        back_btn = wxButton(self, -1, _("&Back"))
         EVT_BUTTON(self, back_btn.GetId(), self.OnBack)
-        forward_btn = wxButton(self, -1, "&Forward")
+        forward_btn = wxButton(self, -1, _("&Forward"))
         EVT_BUTTON(self, forward_btn.GetId(), self.OnForward)
-        close_btn = wxButton(self, wxID_CLOSE, "Close")
+        close_btn = wxButton(self, wxID_CLOSE, _("Close"))
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
         close_btn.SetDefault()
         button_bar.Add(back_btn)
@@ -1155,7 +1157,7 @@ class AvailabilitySearchFrame(wxDialog):
     default_duration = 30
 
     def __init__(self, client, parent=None, id=-1):
-        title = "Search for Available Resources"
+        title = _("Search for Available Resources")
         wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
                           style=RESIZABLE_WIN_STYLE)
         self.client = client
@@ -1165,7 +1167,7 @@ class AvailabilitySearchFrame(wxDialog):
         try:
             self.resources = self.client.getListOfResources()
         except SchoolToolError, e:
-            wxMessageBox("Could not get the list of resources: %s" % e,
+            wxMessageBox(_("Could not get the list of resources: %s") % e,
                          title, wxICON_ERROR|wxOK)
             return
         else:
@@ -1178,14 +1180,14 @@ class AvailabilitySearchFrame(wxDialog):
         sizer1 = wxBoxSizer(wxHORIZONTAL)
 
         sizer1a = wxBoxSizer(wxVERTICAL)
-        label1 = wxStaticText(panel1, -1, "Resources")
+        label1 = wxStaticText(panel1, -1, _("Resources"))
         self.resource_list = wxListBox(panel1, -1, style=wxLB_MULTIPLE,
                                        choices=[r[0] for r in self.resources])
         sizer1a.Add(label1)
         sizer1a.Add(self.resource_list, 1, wxEXPAND)
 
         sizer1b = wxBoxSizer(wxVERTICAL)
-        label2 = wxStaticText(panel1, -1, "Hours")
+        label2 = wxStaticText(panel1, -1, _("Hours"))
         self.hour_list = wxListBox(panel1, -1, style=wxLB_MULTIPLE,
                                    choices=[str(h) for h in range(24)])
         if self.default_hour_selection:
@@ -1200,26 +1202,26 @@ class AvailabilitySearchFrame(wxDialog):
         self.first_date_ctrl = DateCtrl(panel1, -1)
         self.last_date_ctrl = DateCtrl(panel1, -1)
         self.duration_ctrl = wxTextCtrl(panel1, -1, str(self.default_duration))
-        minute_label = wxStaticText(panel1, -1, "min")
+        minute_label = wxStaticText(panel1, -1, _("min"))
         date_size = self.duration_ctrl.GetSize()
         date_size.width += 8 + minute_label.GetSize().GetWidth()
 
         grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
-        grid_sizer.Add(wxStaticText(panel1, -1, "First date"))
+        grid_sizer.Add(wxStaticText(panel1, -1, _("First date")))
         today = datetime.date.today().strftime('%Y-%m-%d')
         self.first_date_ctrl.SetValue(today)
         self.first_date_ctrl.SetSize(date_size)
         grid_sizer.Add(self.first_date_ctrl, 1)
-        grid_sizer.Add(wxStaticText(panel1, -1, "Last date"))
+        grid_sizer.Add(wxStaticText(panel1, -1, _("Last date")))
         self.last_date_ctrl.SetValue(today)
         self.last_date_ctrl.SetSize(date_size)
         grid_sizer.Add(self.last_date_ctrl, 1)
-        grid_sizer.Add(wxStaticText(panel1, -1, "Duration"))
+        grid_sizer.Add(wxStaticText(panel1, -1, _("Duration")))
         hsizer = wxBoxSizer(wxHORIZONTAL)
         hsizer.Add(self.duration_ctrl)
         hsizer.Add(minute_label, 0, wxLEFT, 8)
         grid_sizer.Add(hsizer)
-        find_btn = wxButton(self, -1, "&Find")
+        find_btn = wxButton(self, -1, _("&Find"))
         find_btn.SetDefault()
         EVT_BUTTON(self, find_btn.GetId(), self.OnFind)
         sizer1c.Add(grid_sizer)
@@ -1232,12 +1234,12 @@ class AvailabilitySearchFrame(wxDialog):
         panel1.SetSizer(sizer1)
 
         panel2 = wxPanel(splitter, -1)
-        label2 = wxStaticText(panel2, -1, "Results")
+        label2 = wxStaticText(panel2, -1, _("Results"))
         self.result_list = wxListCtrl(panel2, -1,
                 style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
-        self.result_list.InsertColumn(0, "Resource", width=280)
-        self.result_list.InsertColumn(1, "Available from", width=140)
-        self.result_list.InsertColumn(2, "Available until", width=140)
+        self.result_list.InsertColumn(0, _("Resource"), width=280)
+        self.result_list.InsertColumn(1, _("Available from"), width=140)
+        self.result_list.InsertColumn(2, _("Available until"), width=140)
         sizer2 = wxBoxSizer(wxVERTICAL)
         sizer2.Add(label2)
         sizer2.Add(self.result_list, 1, wxEXPAND)
@@ -1249,13 +1251,13 @@ class AvailabilitySearchFrame(wxDialog):
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
 
-        book_btn = wxButton(self, -1, "Book Resource")
+        book_btn = wxButton(self, -1, _("Book Resource"))
         EVT_BUTTON(self, book_btn.GetId(), self.OnBook)
         button_bar.Add(book_btn, 0, 0, 0)
 
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
 
-        close_btn = wxButton(self, wxID_CLOSE, "Close")
+        close_btn = wxButton(self, wxID_CLOSE, _("Close"))
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
         button_bar.Add(close_btn, 0, wxLEFT, 16)
 
@@ -1295,7 +1297,7 @@ class AvailabilitySearchFrame(wxDialog):
                                 last=last, duration=duration, hours=hours,
                                 resources=resources)
         except SchoolToolError, e:
-            wxMessageBox("Could not get the list of available resources: %s"
+            wxMessageBox(_("Could not get the list of available resources: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
             return
         else:
@@ -1328,7 +1330,7 @@ class ResourceBookingDlg(wxDialog):
     """Dialog for resource booking"""
 
     def __init__(self, parent, client, resources, duration="30"):
-        title = "Resource Booking"
+        title = _("Resource Booking")
         wxDialog.__init__(self, parent, -1, title, style=NONMODAL_DLG_STYLE)
         self.title = title
         self.client = client
@@ -1337,7 +1339,7 @@ class ResourceBookingDlg(wxDialog):
         try:
             self.persons = self.client.getListOfPersons()
         except SchoolToolError, e:
-            wxMessageBox("Could not get a list of persons: %s" % e,
+            wxMessageBox(_("Could not get a list of persons: %s") % e,
                          title, wxICON_ERROR|wxOK)
             return
         else:
@@ -1345,45 +1347,45 @@ class ResourceBookingDlg(wxDialog):
 
         vsizer = wxBoxSizer(wxVERTICAL)
         grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
-        grid_sizer.Add(wxStaticText(self, -1, "Resource"))
+        grid_sizer.Add(wxStaticText(self, -1, _("Resource")))
         self.resource_ctrl = wxComboBox(self, -1, "",
                                         style=wxCB_READONLY|wxCB_DROPDOWN,
                                         choices=[r[0] for r in resources])
         grid_sizer.Add(self.resource_ctrl, 1, wxEXPAND)
-        grid_sizer.Add(wxStaticText(self, -1, "Person"))
+        grid_sizer.Add(wxStaticText(self, -1, _("Person")))
         self.person_ctrl = wxComboBox(self, -1, "",
                                       style=wxCB_READONLY|wxCB_DROPDOWN,
                                       choices=[p[0] for p in self.persons])
         grid_sizer.Add(self.person_ctrl, 1, wxEXPAND)
-        grid_sizer.Add(wxStaticText(self, -1, "Date"))
+        grid_sizer.Add(wxStaticText(self, -1, _("Date")))
         self.date_ctrl = DateCtrl(self, -1)
         today = datetime.date.today().strftime('%Y-%m-%d')
         self.date_ctrl.SetValue(today)
         self.date_ctrl.SetSize(self.person_ctrl.GetSize())
         grid_sizer.Add(self.date_ctrl)
-        grid_sizer.Add(wxStaticText(self, -1, "Time"))
+        grid_sizer.Add(wxStaticText(self, -1, _("Time")))
         now = datetime.datetime.now().strftime('%H:%M')
         self.time_ctrl = wxTextCtrl(self, -1, now)
         grid_sizer.Add(self.time_ctrl)
-        grid_sizer.Add(wxStaticText(self, -1, "Duration"))
+        grid_sizer.Add(wxStaticText(self, -1, _("Duration")))
         hsizer = wxBoxSizer(wxHORIZONTAL)
         self.duration_ctrl = wxTextCtrl(self, -1, str(duration))
         hsizer.Add(self.duration_ctrl)
-        hsizer.Add(wxStaticText(self, -1, "min"), 0, wxLEFT, 8)
+        hsizer.Add(wxStaticText(self, -1, _("min")), 0, wxLEFT, 8)
         grid_sizer.Add(hsizer)
         vsizer.Add(grid_sizer, 0, wxEXPAND|wxALL, 8)
-        self.ignore_ctrl = wxCheckBox(self, -1, "Ignore conflicts")
+        self.ignore_ctrl = wxCheckBox(self, -1, _("Ignore conflicts"))
         vsizer.Add(self.ignore_ctrl, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8)
 
         static_line = wxStaticLine(self, -1)
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
         EVT_BUTTON(self, wxID_OK, self.OnOk)
         ok_btn.SetDefault()
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         button_bar.Add(cancel_btn, 0, 0, 0)
         vsizer.Add(button_bar, 0, wxALIGN_CENTER|wxALL, 16)
 
@@ -1432,7 +1434,7 @@ class ResourceBookingDlg(wxDialog):
             self.client.bookResource(resource_path, person_path, when,
                                      duration, ignore_conflicts)
         except SchoolToolError, e:
-            wxMessageBox("Could not book the resource: %s"
+            wxMessageBox(_("Could not book the resource: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
@@ -1442,7 +1444,7 @@ class PasswordDlg(wxDialog):
     """Dialog for changing passwords booking"""
 
     def __init__(self, parent, client, person):
-        self.title = "Change Password for %s" % person.person_title
+        self.title = _("Change Password for %s") % person.person_title
         self.username = person.person_path.split('/')[-1]
         self.client = client
         wxDialog.__init__(self, parent, -1, self.title,
@@ -1451,14 +1453,14 @@ class PasswordDlg(wxDialog):
         vsizer = wxBoxSizer(wxVERTICAL)
         vsizer.Add(wxStaticText(self, -1, person.person_title),
                    0, wxLEFT|wxTOP|wxRIGHT, 8)
-        vsizer.Add(wxStaticText(self, -1, "Username: %s" % self.username),
+        vsizer.Add(wxStaticText(self, -1, _("Username: %s") % self.username),
                    0, wxLEFT|wxTOP|wxRIGHT, 8)
 
         grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
-        grid_sizer.Add(wxStaticText(self, -1, "New password"))
+        grid_sizer.Add(wxStaticText(self, -1, _("New password")))
         self.new_pw_ctrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
         grid_sizer.Add(self.new_pw_ctrl, 1, wxEXPAND)
-        grid_sizer.Add(wxStaticText(self, -1, "Confirm password"))
+        grid_sizer.Add(wxStaticText(self, -1, _("Confirm password")))
         self.confirm_pw_ctrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
         grid_sizer.Add(self.confirm_pw_ctrl, 1, wxEXPAND)
         vsizer.Add(grid_sizer, 0, wxEXPAND|wxALL, 8)
@@ -1467,11 +1469,11 @@ class PasswordDlg(wxDialog):
         vsizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
         EVT_BUTTON(self, wxID_OK, self.OnOk)
         ok_btn.SetDefault()
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         button_bar.Add(cancel_btn, 0, 0, 0)
         vsizer.Add(button_bar, 0, wxALIGN_CENTER|wxALL, 16)
 
@@ -1482,14 +1484,14 @@ class PasswordDlg(wxDialog):
 
     def OnOk(self, event=None):
         if self.new_pw_ctrl.GetValue() != self.confirm_pw_ctrl.GetValue():
-            wxMessageBox("Passwords do not match", self.title,
+            wxMessageBox(_("Passwords do not match"), self.title,
                          wxICON_ERROR|wxOK)
             return
         try:
             self.client.changePassword(self.username,
                                        self.new_pw_ctrl.GetValue())
         except SchoolToolError, e:
-            wxMessageBox("Could not change password: %s"
+            wxMessageBox(_("Could not change password: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
@@ -1508,14 +1510,14 @@ class PersonInfoDlg(wxDialog):
         try:
             person_info = client.getPersonInfo(person.person_path)
         except SchoolToolError, e:
-            wxMessageBox("Could not get person information: %s" % e,
+            wxMessageBox(_("Could not get person information: %s") % e,
                          self.title, wxICON_ERROR|wxOK)
             return
 
         try:
             photo = self.client.getPersonPhoto(self.person_path)
         except SchoolToolError, e:
-            wxMessageBox("Could not get person photo: %s"
+            wxMessageBox(_("Could not get person photo: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
             return
 
@@ -1530,12 +1532,12 @@ class PersonInfoDlg(wxDialog):
         grid_sizer.AddGrowableCol(1)
 
         self.first_name_ctrl = wxTextCtrl(self, -1, person_info.first_name)
-        grid_sizer.Add(wxStaticText(self, -1, "First Name"), 0,
+        grid_sizer.Add(wxStaticText(self, -1, _("First Name")), 0,
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.first_name_ctrl, 1, wxEXPAND)
 
         self.last_name_ctrl = wxTextCtrl(self, -1, person_info.last_name)
-        grid_sizer.Add(wxStaticText(self, -1, "Last Name"), 0,
+        grid_sizer.Add(wxStaticText(self, -1, _("Last Name")), 0,
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.last_name_ctrl, 1, wxEXPAND)
 
@@ -1544,14 +1546,14 @@ class PersonInfoDlg(wxDialog):
             date_of_birth = person_info.date_of_birth.strftime('%Y-%m-%d')
             self.date_of_birth_ctrl.SetValue(date_of_birth)
         self.date_of_birth_ctrl.SetSize(self.last_name_ctrl.GetSize())
-        grid_sizer.Add(wxStaticText(self, -1, "Date of Birth"), 0,
+        grid_sizer.Add(wxStaticText(self, -1, _("Date of Birth")), 0,
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.date_of_birth_ctrl, 1, wxEXPAND)
 
         self.comments_ctrl = wxTextCtrl(self, -1, person_info.comment,
                                         style=wxTE_MULTILINE,
                                         size=wxSize(200, 100))
-        grid_sizer.Add(wxStaticText(self, -1, "Comments"), 0,
+        grid_sizer.Add(wxStaticText(self, -1, _("Comments")), 0,
                        wxALIGN_TOP)
         grid_sizer.Add(self.comments_ctrl, 1, wxEXPAND)
 
@@ -1572,11 +1574,11 @@ class PersonInfoDlg(wxDialog):
         vsizer.Add(wxStaticLine(self, -1), 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
-        ok_btn = wxButton(self, wxID_OK, "OK")
+        ok_btn = wxButton(self, wxID_OK, _("OK"))
         EVT_BUTTON(self, wxID_OK, self.OnOk)
         ok_btn.SetDefault()
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
-        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        cancel_btn = wxButton(self, wxID_CANCEL, _("Cancel"))
         button_bar.Add(cancel_btn, 0, 0, 0)
         vsizer.Add(button_bar, 0, wxALIGN_CENTER|wxALL, 16)
 
@@ -1595,7 +1597,7 @@ class PersonInfoDlg(wxDialog):
         try:
             self.client.savePersonInfo(self.person_path, person_info)
         except SchoolToolError, e:
-            wxMessageBox("Could not update person information: %s"
+            wxMessageBox(_("Could not update person information: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
         else:
             self.Close(True)
@@ -1603,7 +1605,7 @@ class PersonInfoDlg(wxDialog):
 
     def OnPhoto(self, event=None):
         global previous_photo_dir
-        filename = wxFileSelector("Choose a new photo", wildcard="*.jpg",
+        filename = wxFileSelector(_("Choose a new photo"), wildcard="*.jpg",
                                   default_path=previous_photo_dir,
                                   flags=wxOPEN|wxFILE_MUST_EXIST)
         if not filename:
@@ -1612,19 +1614,19 @@ class PersonInfoDlg(wxDialog):
         try:
             photo = file(filename, 'rb').read()
         except IOError, e:
-            wxMessageBox("Could not read %s" % filename, self.title,
+            wxMessageBox(_("Could not read %s") % filename, self.title,
                          wxICON_ERROR|wxOK)
             return
         try:
             self.client.savePersonPhoto(self.person_path, photo)
         except SchoolToolError, e:
-            wxMessageBox("Could not update person photo: %s"
+            wxMessageBox(_("Could not update person photo: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
             return
         try:
             photo = self.client.getPersonPhoto(self.person_path)
         except SchoolToolError, e:
-            wxMessageBox("Could not get person photo: %s"
+            wxMessageBox(_("Could not get person photo: %s")
                          % e, self.title, wxICON_ERROR|wxOK)
             return
         else:
@@ -1684,31 +1686,35 @@ class MainFrame(wxFrame):
         self.CreateStatusBar()
 
         self.SetMenuBar(menubar(
-            menu("&File",
-                item("New &Person", "Create a new person", self.DoNewPerson),
-                item("New &Group", "Create a new group", self.DoNewGroup),
-                separator(),
-                item("E&xit\tCtrl+Q", "Terminate the program", self.DoExit),
+            menu(_("&File"),
+                 item(_("New &Person"), _("Create a new person"),
+                      self.DoNewPerson),
+                 item(_("New &Group"), _("Create a new group"),
+                      self.DoNewGroup),
+                 separator(),
+                 item(_("E&xit\tCtrl+Q"), _("Terminate the program"),
+                      self.DoExit),
                 ),
-            menu("&View",
-                item("All &Absences", "List all absences in the system",
-                     self.DoViewAllAbsences),
-                item("&School Timetable",
-                     "Edit a timetable for the whole school",
-                     self.DoViewSchoolTimetable),
-                item("Search &for Available Resources",
-                     "Search for available resources",
-                     self.DoAvailabilitySearch),
-                separator(),
-                item("&Refresh\tCtrl+R", "Refresh data from the server",
-                     self.DoRefresh),
-                ),
-            menu("&Settings",
-                item("&Server", "Server settings", self.DoServerSettings),
-                ),
-            menu("&Help",
-                item("&About", "About SchoolTool", self.DoAbout),
-                ),
+            menu(_("&View"),
+                 item(_("All &Absences"), _("List all absences in the system"),
+                      self.DoViewAllAbsences),
+                 item(_("&School Timetable"),
+                      _("Edit a timetable for the whole school"),
+                      self.DoViewSchoolTimetable),
+                 item(_("Search &for Available Resources"),
+                      _("Search for available resources"),
+                      self.DoAvailabilitySearch),
+                 separator(),
+                 item(_("&Refresh\tCtrl+R"), _("Refresh data from the server"),
+                      self.DoRefresh),
+                 ),
+            menu(_("&Settings"),
+                 item(_("&Server"), _("Server settings"),
+                      self.DoServerSettings),
+                 ),
+            menu(_("&Help"),
+                 item(_("&About"), _("About SchoolTool"), self.DoAbout),
+                 ),
             ))
 
         # client area: vertical splitter
@@ -1720,17 +1726,18 @@ class MainFrame(wxFrame):
                 style=wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT|wxSUNKEN_BORDER)
         EVT_TREE_SEL_CHANGED(self, ID_GROUP_TREE, self.DoSelectGroup)
         self.treePopupMenu = popupmenu(
-                item("Roll &Call", "Do a roll call", self.DoRollCall),
-                item("&Absence Tracker",
-                     "Inspect the absence tracker for this group",
+                item(_("Roll &Call"), _("Do a roll call"), self.DoRollCall),
+                item(_("&Absence Tracker"),
+                     _("Inspect the absence tracker for this group"),
                      self.DoGroupAbsenceTracker),
-                item("View &Timetables", "View a list of groups's timetables",
+                item(_("View &Timetables"),
+                     _("View a list of groups's timetables"),
                      self.DoViewGroupTimetables),
-                item("View C&omposite Timetables",
-                     "View a list of group's composite timetables",
+                item(_("View C&omposite Timetables"),
+                     _("View a list of group's composite timetables"),
                      self.DoViewGroupCompositeTimetables),
                 separator(),
-                item("&Refresh", "Refresh", self.DoRefresh)
+                item(_("&Refresh"), _("Refresh"), self.DoRefresh)
             )
         setupPopupMenu(self.groupTreeCtrl, self.treePopupMenu)
 
@@ -1739,28 +1746,30 @@ class MainFrame(wxFrame):
 
         # top pane of the second splitter: member list
         panel2a = wxPanel(splitter2, -1)
-        label2a = wxStaticText(panel2a, -1, "Members")
+        label2a = wxStaticText(panel2a, -1, _("Members"))
         ID_PERSON_LIST = wxNewId()
         self.personListCtrl = wxListCtrl(panel2a, ID_PERSON_LIST,
                 style=wxSUNKEN_BORDER|wxLC_LIST|wxLC_SINGLE_SEL)
         EVT_LIST_ITEM_ACTIVATED(self, ID_PERSON_LIST, self.DoViewPersonInfo)
         self.personPopupMenu = popupmenu(
-                item("View Person &Info",
-                     "View person's information", self.DoViewPersonInfo),
-                item("View &Absences", "View a list of person's absences",
+                item(_("View Person &Info"),
+                     _("View person's information"), self.DoViewPersonInfo),
+                item(_("View &Absences"),
+                     _("View a list of person's absences"),
                      self.DoViewPersonAbsences),
-                item("View &Timetables", "View a list of person's timetables",
+                item(_("View &Timetables"),
+                     _("View a list of person's timetables"),
                      self.DoViewPersonTimetables),
-                item("View &Composite Timetables",
-                     "View a list of person's composite timetables",
+                item(_("View &Composite Timetables"),
+                     _("View a list of person's composite timetables"),
                      self.DoViewPersonCompositeTimetables),
-                item("Change &Password",
-                     "Change the password of a person",
+                item(_("Change &Password"),
+                     _("Change the password of a person"),
                      self.DoViewPersonChangePassword),
                 separator(),
-                item("Add &Member", "Add a person to this group",
+                item(_("Add &Member"), _("Add a person to this group"),
                      self.DoAddMember),
-                item("&Remove Member", "Remove a person from this group",
+                item(_("&Remove Member"), _("Remove a person from this group"),
                      self.DoRemoveMember),
             )
         setupPopupMenu(self.personListCtrl, self.personPopupMenu)
@@ -1771,22 +1780,22 @@ class MainFrame(wxFrame):
 
         # bottom pane of the second splitter: relationship list
         panel2b = wxPanel(splitter2, -1)
-        label2b = wxStaticText(panel2b, -1, "Relationships")
+        label2b = wxStaticText(panel2b, -1, _("Relationships"))
         ID_RELATIONSHIP_LIST = wxNewId()
         self.relationshipListCtrl = wxListCtrl(panel2b, ID_RELATIONSHIP_LIST,
                 style=wxSUNKEN_BORDER|wxLC_REPORT|wxLC_SINGLE_SEL)
-        self.relationshipListCtrl.InsertColumn(0, "Title", width=110)
-        self.relationshipListCtrl.InsertColumn(1, "Role", width=110)
-        self.relationshipListCtrl.InsertColumn(2, "Relationship", width=110)
+        self.relationshipListCtrl.InsertColumn(0, _("Title"), width=110)
+        self.relationshipListCtrl.InsertColumn(1, _("Role"), width=110)
+        self.relationshipListCtrl.InsertColumn(2, _("Relationship"), width=110)
         self.relationshipPopupMenu = popupmenu(
-                item("&Add Member", "Add a person to this group",
-                     self.DoAddMember),
-                item("Add &Teacher", "Add a teacher to this group",
-                     self.DoAddTeacher),
-                item("Add &Subgroup", "Add a group to this group",
-                     self.DoAddSubgroup),
-                item("&Remove Relationship", "Remove selected relationship",
-                     self.DoRemoveRelationship),
+            item(_("&Add Member"), _("Add a person to this group"),
+                 self.DoAddMember),
+            item(_("Add &Teacher"), _("Add a teacher to this group"),
+                 self.DoAddTeacher),
+            item(_("Add &Subgroup"), _("Add a group to this group"),
+                 self.DoAddSubgroup),
+            item(_("&Remove Relationship"), _("Remove selected relationship"),
+                 self.DoRemoveRelationship),
             )
         setupPopupMenu(self.relationshipListCtrl, self.relationshipPopupMenu)
         sizer2b = wxBoxSizer(wxVERTICAL)
@@ -1820,14 +1829,14 @@ class MainFrame(wxFrame):
 
         Accessible from File|New Group.
         """
-        title = wxGetTextFromUser("Title", "New Group")
+        title = wxGetTextFromUser(_("Title"), _("New Group"))
         if title == "":
             return
         try:
             self.client.createGroup(title)
         except SchoolToolError, e:
-            wxMessageBox("Could not create a group: %s" % e,
-                         "New Group", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not create a group: %s") % e,
+                         _("New Group"), wxICON_ERROR|wxOK)
             return
 
     def DoAddMember(self, event):
@@ -1838,7 +1847,7 @@ class MainFrame(wxFrame):
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
             # should not happen
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
@@ -1846,16 +1855,16 @@ class MainFrame(wxFrame):
         try:
             persons = self.client.getListOfPersons()
         except SchoolToolError, e:
-            wxMessageBox("Could not get a list of persons: %s" % e,
-                         "Add Teacher", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get a list of persons: %s") % e,
+                         _("Add Teacher"), wxICON_ERROR|wxOK)
             return
         persons.sort()
 
         # wxGetMultipleChoice is defined in wxWindows API documentation,
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
-                        "Select a person to add to %s" % group_title,
-                        "Add Member", [p[0] for p in persons])
+            _("Select a person to add to %s") % group_title,
+            _("Add Member"), [p[0] for p in persons])
         if choice == -1:
             return
 
@@ -1864,8 +1873,8 @@ class MainFrame(wxFrame):
             self.client.createRelationship(group_path, person_path,
                                            URIMembership, URIGroup)
         except SchoolToolError, e:
-            wxMessageBox("Could not add member: %s" % e,
-                         "Add Member", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not add member: %s") % e,
+                         _("Add Member"), wxICON_ERROR|wxOK)
             return
         else:
             self.DoRefresh()
@@ -1878,7 +1887,7 @@ class MainFrame(wxFrame):
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
             # should not happen
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
@@ -1886,8 +1895,8 @@ class MainFrame(wxFrame):
         try:
             teachers_group = self.client.getGroupInfo('/groups/teachers')
         except SchoolToolError, e:
-            wxMessageBox("Could not get a list of teachers: %s" % e,
-                         "Add Teacher", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get a list of teachers: %s") % e,
+                         _("Add Teacher"), wxICON_ERROR|wxOK)
             return
         persons = teachers_group.members
         persons.sort()
@@ -1895,8 +1904,8 @@ class MainFrame(wxFrame):
         # wxGetMultipleChoice is defined in wxWindows API documentation,
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
-                        "Select a teacher to add to %s" % group_title,
-                        "Add Teacher", [p.person_title for p in persons])
+                        _("Select a teacher to add to %s") % group_title,
+                        _("Add Teacher"), [p.person_title for p in persons])
         if choice == -1:
             return
 
@@ -1905,8 +1914,8 @@ class MainFrame(wxFrame):
             self.client.createRelationship(group_path, person_path,
                                            URITeaching, URITaught)
         except SchoolToolError, e:
-            wxMessageBox("Could not add teacher: %s" % e,
-                         "Add Teacher", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not add teacher: %s") % e,
+                         _("Add Teacher"), wxICON_ERROR|wxOK)
             return
         else:
             self.DoRefresh()
@@ -1919,7 +1928,7 @@ class MainFrame(wxFrame):
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
             # should not happen
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
@@ -1927,16 +1936,16 @@ class MainFrame(wxFrame):
         try:
             groups = self.client.getListOfGroups()
         except SchoolToolError, e:
-            wxMessageBox("Could not get a list of groups: %s" % e,
-                         "Add Subgroup", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get a list of groups: %s") % e,
+                         _("Add Subgroup"), wxICON_ERROR|wxOK)
             return
         groups.sort()
 
         # wxGetMultipleChoice is defined in wxWindows API documentation,
         # but wxPython 2.4.2.4 does NOT have it.
         choice = wxGetSingleChoiceIndex(
-                        "Select a group to add to %s" % group_title,
-                        "Add Subgroup", [g[0] for g in groups])
+            _("Select a group to add to %s") % group_title,
+            _("Add Subgroup"), [g[0] for g in groups])
         if choice == -1:
             return
 
@@ -1945,8 +1954,8 @@ class MainFrame(wxFrame):
             self.client.createRelationship(group_path, subgroup_path,
                                            URIMembership, URIGroup)
         except SchoolToolError, e:
-            wxMessageBox("Could not add subgroup: %s" % e,
-                         "Add Subgroup", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not add subgroup: %s") % e,
+                         _("Add Subgroup"), wxICON_ERROR|wxOK)
             return
         else:
             self.DoRefresh()
@@ -1958,7 +1967,7 @@ class MainFrame(wxFrame):
         """
         item = self.personListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No person selected")
+            self.SetStatusText(_("No person selected"))
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
@@ -1968,27 +1977,28 @@ class MainFrame(wxFrame):
                 break
         else:
             # should not happen
-            self.SetStatusText("Selected person is not a member of this group")
+            self.SetStatusText(
+                _("Selected person is not a member of this group"))
             return
 
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
             # should not happen
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
 
-        if wxMessageBox("Really remove %s from %s?"
+        if wxMessageBox(_("Really remove %s from %s?")
                         % (member.person_title, group_title),
-                        "Remove Person", wxYES_NO) != wxYES:
+                        _("Remove Person"), wxYES_NO) != wxYES:
             return
 
         try:
             self.client.deleteObject(relationship.link_path)
         except SchoolToolError, e:
-            wxMessageBox("Could not remove member: %s" % e,
-                         "Remove Person", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not remove member: %s") % e,
+                         _("Remove Person"), wxICON_ERROR|wxOK)
             return
         else:
             self.DoRefresh()
@@ -2000,7 +2010,7 @@ class MainFrame(wxFrame):
         """
         item = self.relationshipListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No relationship selected")
+            self.SetStatusText(_("No relationship selected"))
             return
         key = self.relationshipListCtrl.GetItemData(item)
         relationship = self.relationshipListData[key]
@@ -2008,22 +2018,22 @@ class MainFrame(wxFrame):
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
             # should not happen
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
 
-        if wxMessageBox("Really remove %s (%s) from %s?"
+        if wxMessageBox(_("Really remove %s (%s) from %s?")
                         % (relationship.target_title, relationship.role,
                            group_title),
-                        "Remove Relationship", wxYES_NO) != wxYES:
+                        _("Remove Relationship"), wxYES_NO) != wxYES:
             return
 
         try:
             self.client.deleteObject(relationship.link_path)
         except SchoolToolError, e:
-            wxMessageBox("Could not remove relationship: %s" % e,
-                         "Remove Relationship", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not remove relationship: %s") % e,
+                         _("Remove Relationship"), wxICON_ERROR|wxOK)
             return
         else:
             self.DoRefresh()
@@ -2054,7 +2064,7 @@ class MainFrame(wxFrame):
 
         Accessible from Help|About.
         """
-        dlg = wxMessageDialog(self, __doc__, "About SchoolTool", wxOK)
+        dlg = wxMessageDialog(self, __doc__, _("About SchoolTool"), wxOK)
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -2162,7 +2172,7 @@ class MainFrame(wxFrame):
         # Reload tree
         self.groupTreeCtrl.Freeze()
         self.groupTreeCtrl.DeleteAllItems()
-        root = self.groupTreeCtrl.AddRoot("Roots")
+        root = self.groupTreeCtrl.AddRoot(_("Roots"))
 
         stack = [(root, None)]  # (item, id)
         item_to_select = None
@@ -2198,7 +2208,7 @@ class MainFrame(wxFrame):
         """
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
@@ -2220,7 +2230,7 @@ class MainFrame(wxFrame):
         """
         item = self.personListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No person selected")
+            self.SetStatusText(_("No person selected"))
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
@@ -2235,13 +2245,13 @@ class MainFrame(wxFrame):
         """
         item = self.personListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No person selected")
+            self.SetStatusText(_("No person selected"))
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
         window = AbsenceFrame(self.client, "%s/absences" % member.person_path,
                               parent=self, persons=False,
-                              title="%s's absences" % member.person_title)
+                              title=_("%s's absences") % member.person_title)
         window.Show()
 
     def DoViewPersonTimetables(self, event=None):
@@ -2251,7 +2261,7 @@ class MainFrame(wxFrame):
         """
         item = self.personListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No person selected")
+            self.SetStatusText(_("No person selected"))
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
@@ -2270,11 +2280,11 @@ class MainFrame(wxFrame):
         """
         item = self.personListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No person selected")
+            self.SetStatusText(_("No person selected"))
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
-        window = BrowserFrame("%s's composite timetables"
+        window = BrowserFrame(_("%s's composite timetables")
                                   % member.person_title,
                               "http://%s:%s%s/composite-timetables"
                                   % (self.client.server, self.client.port,
@@ -2289,7 +2299,7 @@ class MainFrame(wxFrame):
         """
         item = self.personListCtrl.GetFirstSelected()
         if item == -1:
-            self.SetStatusText("No person selected")
+            self.SetStatusText(_("No person selected"))
             return
         key = self.personListCtrl.GetItemData(item)
         member = self.personListData[key]
@@ -2302,7 +2312,7 @@ class MainFrame(wxFrame):
         Accessible via View|All Absences.
         """
         window = AbsenceFrame(self.client, "/utils/absences", parent=self,
-                              title="All absences", detailed=False)
+                              title=_("All absences"), detailed=False)
         window.Show()
 
     def DoGroupAbsenceTracker(self, event=None):
@@ -2312,32 +2322,33 @@ class MainFrame(wxFrame):
         """
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
         path = "%s/facets/absences" % group_path
-        title = "Absences of %s" % group_title
+        title = _("Absences of %s") % group_title
         try:
             try:
                 absence_data = self.client.getAbsences(path)
             except ResponseStatusError, e:
                 if e.status != 404:
                     raise
-                if wxMessageBox("Do you want to create a new absence"
-                                " tracker facet and put it on %s?"
+                if wxMessageBox(_("Do you want to create a new absence"
+                                  " tracker facet and put it on %s?")
                                 % group_title, title, wxYES_NO) != wxYES:
                     return
                 try:
                     self.client.createFacet(group_path, 'absence_tracker')
                 except SchoolToolError, e:
-                    wxMessageBox("Could not create an absence tracker: %s" % e,
+                    wxMessageBox(_("Could not create an absence tracker: %s") %
+                                 e,
                                  title, wxICON_ERROR|wxOK)
                     return
                 else:
                     absence_data = self.client.getAbsences(path)
         except SchoolToolError, e:
-            wxMessageBox("Could not get the list of absences: %s" % e,
+            wxMessageBox(_("Could not get the list of absences: %s") % e,
                          title, wxICON_ERROR|wxOK)
             return
         window = AbsenceFrame(parent=self, title=title, detailed=False,
@@ -2352,11 +2363,11 @@ class MainFrame(wxFrame):
         """
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
-        window = BrowserFrame("%s's timetables" % group_title,
+        window = BrowserFrame(_("%s's timetables") % group_title,
                               "http://%s:%s%s/timetables"
                                   % (self.client.server, self.client.port,
                                      group_path),
@@ -2371,11 +2382,11 @@ class MainFrame(wxFrame):
         """
         item = self.groupTreeCtrl.GetSelection()
         if not item.IsOk():
-            self.SetStatusText("No group selected")
+            self.SetStatusText(_("No group selected"))
             return
         group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
-        window = BrowserFrame("%s's timetables" % group_title,
+        window = BrowserFrame(_("%s's timetables") % group_title,
                               "http://%s:%s%s/composite-timetables"
                                   % (self.client.server, self.client.port,
                                      group_path),
@@ -2390,38 +2401,39 @@ class MainFrame(wxFrame):
         try:
             periods = self.client.getTimePeriods()
         except SchoolToolError, e:
-            wxMessageBox("Could not get the list of time periods: %s" % e,
-                         "School Timetable", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get the list of time periods: %s") % e,
+                         _("School Timetable"), wxICON_ERROR|wxOK)
             return
         else:
             periods.sort()
         try:
             schemas = self.client.getTimetableSchemas()
         except SchoolToolError, e:
-            wxMessageBox("Could not get the list of timetable schemas: %s" % e,
-                         "School Timetable", wxICON_ERROR|wxOK)
+            wxMessageBox(
+                _("Could not get the list of timetable schemas: %s") % e,
+                _("School Timetable"), wxICON_ERROR|wxOK)
             return
         else:
             schemas.sort()
         choices = [(p, s) for p in periods for s in schemas]
         choice = wxGetSingleChoiceIndex(
-                        "Select a timetable to edit",
-                        "School Timetable", ["%s, %s" % c for c in choices])
+                        _("Select a timetable to edit"),
+                        _("School Timetable"), ["%s, %s" % c for c in choices])
         if choice == -1:
             return
         key = choices[choice]
         try:
             tt = self.client.getSchoolTimetable(*key)
         except SchoolToolError, e:
-            wxMessageBox("Could not get the school timetable: %s" % e,
-                         "School Timetable", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get the school timetable: %s") % e,
+                         _("School Timetable"), wxICON_ERROR|wxOK)
             return
 
         try:
             resources = self.client.getListOfResources()
         except SchoolToolError, e:
-            wxMessageBox("Could not get the list of resources: %s" % e,
-                         "School Timetable", wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get the list of resources: %s") % e,
+                         _("School Timetable"), wxICON_ERROR|wxOK)
             return
 
         window = SchoolTimetableFrame(self.client, key, tt, resources,
@@ -2465,6 +2477,7 @@ def main():
     # Do not output XML parsing errors to the terminal
     libxml2.registerErrorHandler(lambda ctx, error: None, None)
     wxInitAllImageHandlers()
+    gettext.install('schooltool')
     client = SchoolToolClient()
     app = SchoolToolApp(client)
     app.MainLoop()
