@@ -76,8 +76,9 @@ class SchoolBellAuthenticationUtility(Persistent):
 
     def unauthorized(self, id, request):
         """Signal an authorization failure."""
-        raise NotImplemented
-        request.redirect("login.html") #XXX
+        app = getSchoolBellApplication(self)
+        url = zapi.absoluteURL(app, request)
+        request.response.redirect("%s/@@login.html" % url)
 
     def getPrincipal(self, id):
         """Get principal meta-data.

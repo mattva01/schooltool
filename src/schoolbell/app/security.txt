@@ -182,6 +182,21 @@ If the password is incorrect, authentication does not work:
     >>> session['password'] = 'pod'
     >>> auth.authenticate(request)
 
+
+unauthorized
+------------
+
+Our view issues the authorization challenge by redirecting to the
+login page:
+
+
+    >>> request = TestRequest()
+    >>> auth.unauthorized(None, request)
+    >>> request.response.getStatus()
+    302
+    >>> request.response.getHeader('Location')
+    'http://127.0.0.1/frogpond/@@login.html'
+
 Clean up:
 
     >>> root = setup.placefulTearDown()
