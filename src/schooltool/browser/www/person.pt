@@ -33,18 +33,19 @@
       <form method="POST" class="plain"
             tal:attributes="action request/path">
         <h3 i18n:translate="">Groups</h3>
-
-        <p i18n:translate="">Merge calendars:</p>
-        <p tal:repeat="group view/getParentGroups">
-          <input type="checkbox"
-                 tal:attributes="name string:group.${group/__name__};
-                                 checked python:view.checked(group)" />
-          <a tal:attributes="href group/@@absolute_url"
-             tal:content="group/title"></a>
-        </p>
-
-        <input class="button" type="submit" name="CHOOSE_CALENDARS"
-               i18n:attributes="value" value="Update" />
+        <tal:block define="parent_groups view/getParentGroups"
+                   condition="parent_groups">
+          <p i18n:translate="">Merge calendars:</p>
+          <p tal:repeat="group parent_groups">
+            <input type="checkbox"
+                   tal:attributes="name string:group.${group/__name__};
+                                   checked python:view.checked(group)" />
+            <a tal:attributes="href group/@@absolute_url"
+               tal:content="group/title"></a>
+          </p>
+          <input class="button" type="submit" name="CHOOSE_CALENDARS"
+                 i18n:attributes="value" value="Update" />
+        </tal:block>
       </form>
     </div>
 
