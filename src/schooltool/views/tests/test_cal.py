@@ -167,7 +167,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, 'Imported calendar: /calendar', 'INFO')])
+                          [(None, 'Calendar updated: /calendar', 'INFO')])
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
         for date in self.sm:
@@ -327,7 +327,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, 'Imported calendar: /calendar', 'INFO')])
+                          [(None, 'Calendar updated: /calendar', 'INFO')])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")

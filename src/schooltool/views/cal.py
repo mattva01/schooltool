@@ -151,9 +151,7 @@ class SchooldayModelCalendarView(View):
             self.context.reset(first, last - datetime.date.resolution)
             for day in days:
                 self.context.add(day)
-        path = absolutePath(request, self.context)
-        request.site.logAppEvent(request.authenticated_user,
-                                 "Imported calendar: %s" % path)
+        self.log_PUT(request)
         request.setHeader('Content-Type', 'text/plain')
         return _("Calendar imported")
 
@@ -197,11 +195,14 @@ class SchooldayModelCalendarView(View):
         for holiday in holidays:
             if holiday in self.context and self.context.isSchoolday(holiday):
                 self.context.remove(holiday)
-        path = absolutePath(request, self.context)
-        request.site.logAppEvent(request.authenticated_user,
-                                 "Imported calendar: %s" % path)
+        self.log_PUT(request)
         request.setHeader('Content-Type', 'text/plain')
         return _("Calendar imported")
+
+    def log_PUT(self, request):
+        path = absolutePath(request, self.context)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Calendar updated: %s" % path)
 
 
 class CalendarReadView(View):

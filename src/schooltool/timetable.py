@@ -529,6 +529,8 @@ class TimePeriodService(Persistent):
 
     def __setitem__(self, period_id, schoolday_model):
         self.periods[period_id] = schoolday_model
+        schoolday_model.__parent__ = self
+        schoolday_model.__name__ = period_id
 
     def __delitem__(self, period_id):
         del self.periods[period_id]

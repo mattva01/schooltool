@@ -1118,6 +1118,8 @@ class TestTimePeriodService(unittest.TestCase):
         self.assert_('2003 fall' in service)
         self.assert_('2004 spring' not in service)
         self.assert_(service['2003 fall'] is schooldays)
+        self.assertEquals(schooldays.__name__, '2003 fall')
+        self.assert_(schooldays.__parent__ is service)
 
         # duplicate registration
         schooldays2 = SchooldayModelStub()
