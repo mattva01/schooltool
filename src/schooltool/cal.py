@@ -381,7 +381,6 @@ class CalendarOwnerMixin(Persistent):
 
 def ical_date(dt):
     """Return a date in iCalendar format."""
-    # TODO: tests?
     return dt.strftime("%Y%m%dT%H%M%SZ")
 
 
@@ -484,9 +483,9 @@ class RecurrenceRule:
             args = 'UNTIL=%s;' % ical_date(self.until)
         else:
             args = ''
-        extra = self._iCalArgs(dtstart)
-        if extra is not None:
-            args += extra + ';'
+        extra_args = self._iCalArgs(dtstart)
+        if extra_args is not None:
+            args += extra_args + ';'
 
         result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
                   % (self.ical_freq, args, self.interval)]
