@@ -64,7 +64,7 @@ sampleschool: build teachers.csv groups.csv pupils.csv
 
 coverage: build
 	rm -rf coverage
-	$(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
+	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
 
 coverage-report:
 	@cd coverage && ls schooltool* | grep -v tests | xargs grep -c '^>>>>>>' | grep -v ':0$$'
