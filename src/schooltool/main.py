@@ -499,6 +499,7 @@ class Server:
                             thread_pool_size
                             listen
                             database
+                            event_logging
         """
         # Defaults
         config_file = self.findDefaultConfigFile()
@@ -570,7 +571,7 @@ class Server:
 
         db_configuration = self.config.database
         self.db = db_configuration.open()
-        self.ensureAppExists(self.db, self.appname)
+        self.prepareDatabase()
 
         self.threadable_hook.init()
 
@@ -585,16 +586,29 @@ class Server:
         self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
         self.reactor_hook.run()
 
-    def ensureAppExists(self, db, appname):
-        """Makes sure the database has an application instance.
+    def prepareDatabase(self):
+        """Prepare the database.
+
+        Makes sure the database has an application instance.
 
         Creates the application if necessary.
+
+        This is the place to perform object schema upgrades, if necessary.
         """
-        conn = db.open()
+        conn = self.db.open()
         root = conn.root()
-        if root.get(appname) is None:
-            root[appname] = self.appFactory()
+
+        # Create the application if it does not yet exist
+        if root.get(self.appname) is None:
+            root[self.appname] = self.appFactory()
             self.get_transaction_hook().commit()
+        app = root[self.appname]
+
+        # Enable or disable global event logging
+        eventlog = app.utilityService['eventlog']
+        eventlog.enabled = self.config.event_logging
+        self.get_transaction_hook().commit()
+
         conn.close()
 
     def createApplication(self):

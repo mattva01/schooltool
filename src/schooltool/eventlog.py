@@ -66,10 +66,13 @@ class EventLog(Persistent):
 
     datetime_hook = datetime.datetime
 
-    def __init__(self):
+    def __init__(self, enabled=True):
         self._received = OOBTree()
+        self.enabled = enabled
 
     def notify(self, event):
+        if not self.enabled:
+            return
         rest = 0.001
         while not self._received.insert(self.datetime_hook.utcnow(), event):
             time.sleep(rest)

@@ -55,6 +55,10 @@ class TestEventLog(unittest.TestCase):
         event_log.clear()
         self.assertEquals(list(event_log.getReceived()), [])
 
+        event_log.enabled = False
+        event_log.notify(event1)
+        self.assertEquals(list(event_log.getReceived()), [])
+
 
 class TestEventLogUtility(unittest.TestCase):
 

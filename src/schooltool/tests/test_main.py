@@ -73,9 +73,18 @@ class ReactorStub:
         self._main_loop_running = True
 
 
-class ConnectionStub:
+class EventLogStub:
+    enabled = False
 
-    app = object()
+
+class AppStub:
+
+    def __init__(self):
+        self.utilityService = {'eventlog': EventLogStub()}
+
+
+class ConnectionStub:
+    app = AppStub()
 
     def __init__(self):
         self._root = {'app': self.app}
@@ -128,6 +137,10 @@ class TransactionStub:
 
     def commit(self):
         self.history += 'C'
+
+
+class ConfigStub:
+    event_logging = False
 
 
 class TestSite(unittest.TestCase):
@@ -744,36 +757,54 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         y = getRelationshipHandlerFor(URIMembership)
         self.assertNotEquals(x, y, "schooltool.membership.setUp not called")
 
-    def test_ensureAppExists(self):
+    def test_prepareDatabase(self):
         from schooltool.main import Server
         server = Server()
         transaction = TransactionStub()
         server.get_transaction_hook = lambda: transaction
-        db = DbStub()
-        appname = 'app'
-        server.ensureAppExists(db, appname)
-        self.assertEquals(len(db._connections), 1)
-        conn = db._connections[0]
+        server.db = DbStub()
+        server.appname = 'app'
+        server.config = ConfigStub()
+        server.prepareDatabase()
+        self.assertEquals(len(server.db._connections), 1)
+        conn = server.db._connections[0]
         self.assert_(conn.closed)
         self.assert_(conn.root()['app'] is ConnectionStub.app)
-        self.assertEquals(transaction.history, '')
+        self.assertEquals(transaction.history, 'C')
 
-    def test_ensureAppExists_creates(self):
+    def test_prepareDatabase_creates(self):
         from schooltool.main import Server
         server = Server()
         transaction = TransactionStub()
         server.get_transaction_hook = lambda: transaction
-        cookie = object()
+        cookie = AppStub()
         server.appFactory = lambda: cookie
-        db = DbStub()
-        appname = 'foo'
-        server.ensureAppExists(db, appname)
-        self.assertEquals(len(db._connections), 1)
-        conn = db._connections[0]
+        server.db = DbStub()
+        server.appname = 'foo'
+        server.config = ConfigStub()
+        server.prepareDatabase()
+        self.assertEquals(len(server.db._connections), 1)
+        conn = server.db._connections[0]
         self.assert_(conn.closed)
         self.assert_(conn.root()['app'] is ConnectionStub.app)
         self.assert_(conn.root()['foo'] is cookie)
-        self.assertEquals(transaction.history, 'C')
+        self.assertEquals(transaction.history, 'CC')
+
+    def test_prepareDatabase_eventlog(self):
+        from schooltool.main import Server
+        server = Server()
+        transaction = TransactionStub()
+        server.get_transaction_hook = lambda: transaction
+        server.db = DbStub()
+        server.appname = 'app'
+        server.config = ConfigStub()
+        server.config.event_logging = True
+        server.prepareDatabase()
+        event_log = ConnectionStub.app.utilityService['eventlog']
+        self.assertEquals(event_log.enabled, True)
+        server.config.event_logging = False
+        server.prepareDatabase()
+        self.assertEquals(event_log.enabled, False)
 
     def test_createApplication(self):
         from schooltool.interfaces import IEvent, IAttendanceEvent

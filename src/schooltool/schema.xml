@@ -66,4 +66,13 @@
       thread-pool-size 20
     </example>
   </key>
+
+  <key name="event-logging" datatype="boolean" default="off">
+    <description>
+      Enables or disables global event logging to /utils/eventlog.
+    </description>
+    <example>
+      event-logging on
+    </example>
+  </key>
 </schema>
