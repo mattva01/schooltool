@@ -53,6 +53,7 @@ def getNotes(context):
         return annotations[key]
     except KeyError:
         annotations[key] = Notes()
+        # TODO: annotations[key].__parent__ = context
         return annotations[key]
 
 
