@@ -151,6 +151,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.model import TreeView
         from schooltool.views.absence import RollcallView
+        from schooltool.views.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/group")
 
@@ -169,6 +170,11 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         result = self.view._traverse("tree", request)
         self.assert_(isinstance(result, TreeView))
         self.assert_(result.context is self.group)
+
+        result = self.view._traverse('timetables', request)
+        self.assert_(isinstance(result, TimetableTraverseView))
+        self.assert_(result.context is self.view.context)
+        self.assert_(not result.readonly)
 
         self.assertRaises(KeyError, self.view._traverse, "otherthings",
                           request)
@@ -256,6 +262,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.absence import AbsenceManagementView
+        from schooltool.views.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/person")
 
@@ -270,6 +277,11 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         result = self.view._traverse('absences', request)
         self.assert_(isinstance(result, AbsenceManagementView))
         self.assert_(result.context is self.per)
+
+        result = self.view._traverse('timetables', request)
+        self.assert_(isinstance(result, TimetableTraverseView))
+        self.assert_(result.context is self.view.context)
+        self.assert_(not result.readonly)
 
     def test_render(self):
         request = RequestStub("http://localhost/person")
@@ -320,6 +332,7 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
     def test_traverse(self):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
+        from schooltool.views.timetable import TimetableTraverseView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/resources/room3")
 
@@ -330,6 +343,11 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
         self.assert_(IFacetManager.isImplementedBy(result.context))
+
+        result = self.view._traverse('timetables', request)
+        self.assert_(isinstance(result, TimetableTraverseView))
+        self.assert_(result.context is self.view.context)
+        self.assert_(result.readonly)
 
     def test_render(self):
         request = RequestStub("http://localhost/resources/room3")

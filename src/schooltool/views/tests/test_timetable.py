@@ -123,12 +123,14 @@ class ServiceManagerStub:
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
     def do_test(self, view_class, tt_view_class, xml=None, html=None,
-                path='/..object'):
+                path='/..object', kwargs=None):
+        if kwargs is None:
+            kwargs = {}
         context = TimetabledStub()
         setPath(context, path, ServiceManagerStub(TimetableStub()))
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
         context.overlay['2003 spring', 'weekly'] = TimetableStub()
-        view = view_class(context)
+        view = view_class(context, **kwargs)
         request = RequestStub()
 
         result = view.render(request)
@@ -165,7 +167,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
         return view, view2, view3, context, tt
 
-    def test_TimetableTraverseView(self):
+    def test_TimetableTraverseView_rw(self):
         from schooltool.views.timetable import TimetableTraverseView
         from schooltool.views.timetable import TimetableReadWriteView
         view1, view2, view3, context, tt = self.do_test(
@@ -200,6 +202,37 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assert_(view.context is None)
         self.assert_(view.timetabled is context)
         self.assertEquals(view.key, ('2003 fall', 'eewkly'))
+
+    def test_TimetableTraverseView_ro(self):
+        from schooltool.views.timetable import TimetableTraverseView
+        from schooltool.views.timetable import TimetableReadView
+        view1, view2, view3, context, tt = self.do_test(
+            TimetableTraverseView, TimetableReadView,
+            """
+            <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+              <timetable period="2003 fall" schema="weekly" xlink:type="simple"
+                         xlink:href="/..object/timetables/2003 fall/weekly" />
+            </timetables>
+            """, dedent("""
+            <html>
+            <head>
+              <title>Timetables for Foo</title>
+            </head>
+            <body>
+              <h1>Timetables for Foo</h1>
+              <ul>
+                <li><a href="http://localhost:8080/..object/timetables/\\
+            2003 fall/weekly"
+                    >2003 fall, weekly</a></li>
+              </ul>
+            </body>
+            </html>
+            """).replace("\\\n", ""),
+            kwargs={'readonly': True})
+        self.assert_(view3.context is tt)
+
+        request = RequestStub()
+        self.assertRaises(KeyError, view2._traverse, 'eewkly', request)
 
     def test_CompositeTimetableTraverseView(self):
         from schooltool.views.timetable import CompositeTimetableTraverseView

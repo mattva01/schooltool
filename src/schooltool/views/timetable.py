@@ -426,6 +426,10 @@ class BaseTimetableTraverseView(View, TimetableContentNegotiation):
 class TimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/timetables."""
 
+    def __init__(self, context, time_period=None, readonly=False):
+        BaseTimetableTraverseView.__init__(self, context, time_period)
+        self.readonly = readonly
+
     def title(self):
         return "Timetables for %s" % self.context.title
 
@@ -442,10 +446,13 @@ class TimetableTraverseView(BaseTimetableTraverseView):
 
     def _traverse(self, name, request):
         if self.time_period is None:
-            return TimetableTraverseView(self.context, name)
+            return TimetableTraverseView(self.context, name, self.readonly)
         else:
             key = (self.time_period, name)
-            return TimetableReadWriteView(self.context, key)
+            if not self.readonly:
+                return TimetableReadWriteView(self.context, key)
+            tt = self.context.timetables[key]
+            return TimetableReadView(tt, key)
 
 
 class CompositeTimetableTraverseView(BaseTimetableTraverseView):

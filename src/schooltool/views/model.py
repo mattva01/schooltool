@@ -116,6 +116,11 @@ class ResourceView(ApplicationObjectTraverserView):
 
     template = Template("www/resource.pt", content_type="text/xml")
 
+    def _traverse(self, name, request):
+        if name == 'timetables':
+            return TimetableTraverseView(self.context, readonly=True)
+        return ApplicationObjectTraverserView._traverse(self, name, request)
+
 
 #
 # Setup
