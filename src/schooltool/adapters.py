@@ -21,7 +21,7 @@ The schooltool adapters.
 
 $Id$
 """
-from schooltool.interfaces import IPath, ILocation
+from schooltool.interfaces import ILocation, IContainmentRoot
 
 adapterRegistry = {}
 
@@ -47,22 +47,20 @@ def getAdapter(object, interface):
 class ComponentLookupError(Exception):
     """An exception for component architecture."""
 
-class PathAdapter:
-    """Adapter from ILocation to IPath."""
+def getPath(obj):
+    """Returns the path of an object implementing ILocation"""
 
-    def __init__(self, context):
-        self.context = context
-
-    def path(self):
-        location = getAdapter(self.context, ILocation)
-        if self.context.__parent__ is None:
-            raise ValueError("Cannot determine the canonical path for %s" %
-                             location)
-        # XXX too many adapters.  Refactor when we've got a clearer idea
-        # of what is a root group.
-        parentPath = getAdapter(location.__parent__, IPath).path()
-        if parentPath == '/':
-            parentPath = ''
-        return '/'.join((parentPath, location.__name__))
-
-provideAdapter(IPath, PathAdapter)
+    if IContainmentRoot.isImplementedBy(obj):
+        return '/'
+    cur = obj
+    segments = []
+    while True:
+        if IContainmentRoot.isImplementedBy(cur):
+            segments.append('')
+            segments.reverse()
+            return '/'.join(segments)
+        elif ILocation.isImplementedBy(cur):
+            segments.append(cur.__name__)
+            cur = cur.__parent__
+        else:
+            raise TypeError("Cannot determine path for %s" % obj)

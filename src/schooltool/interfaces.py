@@ -46,10 +46,6 @@ class ILocation(Interface):
         the child.
         """)
 
-class IPath(Interface):
-    """An object which knows its canonical path."""
-    def path():
-        """Returns a canonical path of this object."""
 
 class IGroupRead(Interface):
     """A set of group members.
@@ -92,6 +88,11 @@ class IGroupWrite(Interface):
 class IGroup(IGroupWrite, IGroupRead):
     __doc__ = IGroupRead.__doc__
 
+class IContainmentRoot(Interface):
+    """A marker interface for the top level application object."""
+
+class IRootGroup(IGroup, IContainmentRoot):
+    """An interface for the application root group."""
 
 class IGroupMember(ILocation):
 

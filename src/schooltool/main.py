@@ -38,7 +38,9 @@ from twisted.protocols import http
 from twisted.python import threadable
 from twisted.python import failure
 
-from schooltool.mockup import FakeApplication, RootView
+from schooltool import mockup
+from schooltool.model import RootGroup, Group, Person
+from schooltool.views import GroupView
 
 __metaclass__ = type
 
@@ -203,6 +205,14 @@ class Server:
     reactor_hook = reactor
     get_transaction_hook = get_transaction
 
+    def main(self, args):
+        """Starts the SchoolTool HTTP server.
+
+        args contains command line arguments, usually it is sys.argv[1:].
+        """
+        self.configure(args)
+        self.run()
+
     def configure(self, args):
         """Process command line arguments and configuration files.
 
@@ -211,6 +221,8 @@ class Server:
         The following attributes define server configuration and are set by
         this method:
           appname       name of the application instance in ZODB
+          viewFactory   root view class
+          appFactory    application object factory
           config        configuration loaded from a config file, contains the
                         following attributes (see schema.xml for the definitive
                         list):
@@ -222,6 +234,8 @@ class Server:
         # Defaults
         config_file = self.findDefaultConfigFile()
         self.appname = 'schooltool'
+        self.viewFactory = GroupView
+        self.appFactory = self.createApplication
 
         # Process command line arguments
         opts, args = getopt.getopt(args, 'c:m', ['config=', 'mockup'])
@@ -237,6 +251,8 @@ class Server:
         for k, v in opts:
             if k in ('-m', '--mockup'):
                 self.appname = 'mockup'
+                self.viewFactory = mockup.RootView
+                self.appFactory = mockup.FakeApplication
 
     def findDefaultConfigFile(self):
         """Returns the default config file pathname."""
@@ -245,6 +261,7 @@ class Server:
         config_file = os.path.join(dirname, 'schooltool.conf')
         if not os.path.exists(config_file):
             config_file = os.path.join(dirname, 'schooltool.conf.in')
+        return config_file
 
     def loadConfig(self, config_file):
         """Loads configuration from a given config file."""
@@ -254,18 +271,18 @@ class Server:
         config, handler = ZConfig.loadConfig(schema, config_file)
         return config
 
-    def run(self, args):
-        """Starts the SchoolTool HTTP server."""
+    def run(self):
+        """Start the HTTP server.
 
-        self.configure(args)
-
+        Must be called after configure.
+        """
         self.threadable_hook.init()
         self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
 
         db = self.config.database.open()
         self.ensureAppExists(db, self.appname)
 
-        site = Site(db, self.appname, RootView)
+        site = Site(db, self.appname, self.viewFactory)
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
@@ -280,9 +297,25 @@ class Server:
         conn = db.open()
         root = conn.root()
         if root.get(appname) is None:
-            root[appname] = FakeApplication()
+            root[appname] = self.appFactory()
             self.get_transaction_hook().commit()
         conn.close()
+
+    def createApplication(self):
+        """Instantiate a new application"""
+        root = RootGroup("root")
+        teachers = Group("teachers")
+        students = Group("students")
+        cleaners = Group("cleaners")
+        root.add(teachers)
+        root.add(students)
+        root.add(cleaners)
+        teachers.add(Person("Mark"))
+        teachers.add(Person("Steve"))
+        students.add(Person("Aiste"))
+        cleaners.add(Person("Albertas"))
+        cleaners.add(Person("Marius"))
+        return root
 
     def notifyConfigFile(self, config_file):
         print "Reading configuration from %s" % config_file
@@ -293,7 +326,7 @@ class Server:
 
 def main():
     """Starts the SchoolTool HTTP server."""
-    Server().run(sys.argv[1:])
+    Server().main(sys.argv[1:])
 
 
 if __name__ == '__main__':

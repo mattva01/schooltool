@@ -5,7 +5,7 @@
 
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
-TESTFLAGS=-pv
+TESTFLAGS=
 
 all: build
 
@@ -26,7 +26,7 @@ testall: build
 	$(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
-	@PYTHONPATH=src $(PYTHON) src/schooltool/main.py -c test.conf & \
+	@PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/main.py -m -c test.conf & \
 	pid=$$! ; \
 	sleep 2 ; \
 	$(PYTHON) test.py -f $(TESTFLAGS) ; \

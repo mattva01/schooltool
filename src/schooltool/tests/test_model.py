@@ -129,6 +129,16 @@ class TestGroup(unittest.TestCase):
         self.assertEquals(list(group.values()), [member])
         self.assertEquals(list(group.items()), [(key, member)])
 
+
+class TestRootGroup(unittest.TestCase):
+
+    def test_interfaces(self):
+        from schooltool.interfaces import IRootGroup
+        from schooltool.model import RootGroup
+        group = RootGroup("root")
+        verifyObject(IRootGroup, group)
+
+
 class TestPersistentListSet(unittest.TestCase):
 
     def test(self):
@@ -150,6 +160,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
+    suite.addTest(unittest.makeSuite(TestRootGroup))
     suite.addTest(unittest.makeSuite(TestGroupMember))
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
     return suite

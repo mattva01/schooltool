@@ -24,7 +24,7 @@ $Id$
 
 from sets import Set
 from zope.interface import implements
-from schooltool.interfaces import IPerson, IGroup, IGroupMember
+from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from persistence import Persistent
 from persistence.list import PersistentList
 from zodb.btrees.OOBTree import OOSet
@@ -115,6 +115,11 @@ class Group(Persistent, GroupMember):
         """See IGroup"""
         self._members[key].notifyRemove(self)
         del self._members[key]
+
+
+class RootGroup(Group):
+
+    implements(IRootGroup)
 
 
 class PersistentListSet(Persistent):

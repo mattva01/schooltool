@@ -68,24 +68,24 @@ class TestGetAdapter(unittest.TestCase):
 class TestCanonicalPath(unittest.TestCase):
 
     def test_path(self):
-        from schooltool.adapters import getAdapter
-        from schooltool.interfaces import ILocation, IPath
+        from schooltool.adapters import getPath
+        from schooltool.interfaces import ILocation, IContainmentRoot
 
         class Stub:
             implements(ILocation)
-            __path__ = None
-            __name__ = None
-            def __init__(self, **kw):
-                for k, v in kw.items():
-                    setattr(self, k, v)
 
-        a = Stub(__parent__=None, __name__='root', path=lambda: '/')
-        directlyProvides(a, IPath)
-        self.assertEqual(getAdapter(a, IPath).path(), '/')
-        b = Stub(__parent__=a, __name__='foo')
-        self.assertEqual(getAdapter(b, IPath).path(), '/foo')
-        c = Stub(__parent__=b, __name__='bar')
-        self.assertEqual(getAdapter(c, IPath).path(), '/foo/bar')
+            def __init__(self, parent, name):
+                self.__parent__ = parent
+                self.__name__ = name
+
+        a = Stub(None, 'root')
+        self.assertRaises(TypeError, getPath, a)
+        directlyProvides(a, IContainmentRoot)
+        self.assertEqual(getPath(a), '/')
+        b = Stub(a, 'foo')
+        self.assertEqual(getPath(b), '/foo')
+        c = Stub(b, 'bar')
+        self.assertEqual(getPath(c), '/foo/bar')
 
 def test_suite():
     suite = unittest.TestSuite()

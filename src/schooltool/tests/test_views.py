@@ -236,12 +236,11 @@ class TestPersonView(unittest.TestCase):
     def setUp(self):
         from schooltool.views import PersonView
         from schooltool.model import Group, Person
-        from schooltool.interfaces import IPath
+        from schooltool.interfaces import IContainmentRoot
         from zope.interface import directlyProvides
 
         self.group = Group("group")
-        directlyProvides(self.group, IPath)
-        self.group.path = lambda: '/group'
+        directlyProvides(self.group, IContainmentRoot)
         self.sub = Group("subgroup")
         self.per = Person("Pete")
         self.subkey = self.group.add(self.sub)
@@ -259,9 +258,9 @@ class TestPersonView(unittest.TestCase):
 <person xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Pete</name>
   <groups>
-    <item xlink:type="simple" xlink:href="/group"
+    <item xlink:type="simple" xlink:href="/"
           xlink:title="group" />
-    <item xlink:type="simple" xlink:href="/group/0"
+    <item xlink:type="simple" xlink:href="/0"
           xlink:title="subgroup" />
   </groups>
 </person>

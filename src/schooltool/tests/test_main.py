@@ -398,8 +398,51 @@ class TestServer(unittest.TestCase):
         self.assertEquals(config.listen, [('', 123), ('10.20.30.40', 9999)])
         self.assert_(config.database is not None)
 
+    def test_findDefaultConfigFile(self):
+        from schooltool.main import Server
+        server = Server()
+        config_file = server.findDefaultConfigFile()
+        self.assert_('schooltool.conf' in config_file)
+
+    def test_configure(self):
+        from schooltool.main import Server
+        from schooltool.views import GroupView
+        server = Server()
+        server.notifyConfigFile = lambda x: None
+        server.findDefaultConfigFile = lambda: self.getConfigFileName()
+        server.configure([])
+        self.assertEquals(server.config.thread_pool_size, 42)
+        self.assertEquals(server.config.listen,
+                          [('', 123), ('10.20.30.40', 9999)])
+        self.assert_(server.config.database is not None)
+        self.assertEquals(server.appname, 'schooltool')
+        self.assertEquals(server.viewFactory, GroupView)
+        self.assertEquals(server.appFactory, server.createApplication)
+
+    def test_configure_with_args(self):
+        from schooltool.main import Server
+        from schooltool.mockup import RootView, FakeApplication
+        server = Server()
+        server.notifyConfigFile = lambda x: None
+        config_file = self.getConfigFileName()
+        server.configure(['-c', config_file, '-m'])
+        self.assertEquals(server.config.thread_pool_size, 42)
+        self.assertEquals(server.config.listen,
+                          [('', 123), ('10.20.30.40', 9999)])
+        self.assert_(server.config.database is not None)
+        self.assertEquals(server.appname, 'mockup')
+        self.assertEquals(server.viewFactory, RootView)
+        self.assertEquals(server.appFactory, FakeApplication)
+
+    def test_configure_bad_args(self):
+        import getopt
+        from schooltool.main import Server
+        server = Server()
+        self.assertRaises(getopt.GetoptError, server.configure, ['-x'])
+
     def test_run(self):
         from schooltool.main import Server
+        from schooltool.views import GroupView
 
         class ThreadableStub:
             def init(self):
@@ -411,7 +454,8 @@ class TestServer(unittest.TestCase):
         server.notifyConfigFile = lambda x: None
         server.notifyServerStarted = lambda x, y: None
         config_file = self.getConfigFileName()
-        server.run(['-c', config_file])
+        server.configure(['-c', config_file])
+        server.run()
 
         self.assert_(threadable._initialized)
         self.assert_(reactor._main_loop_running)
@@ -424,6 +468,7 @@ class TestServer(unittest.TestCase):
         self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
         site = reactor._tcp_listeners[0][1]
         self.assertEquals(site.rootName, 'schooltool')
+        self.assert_(site.viewFactory is GroupView)
 
     def test_ensureAppExists(self):
         from schooltool.main import Server
@@ -440,10 +485,12 @@ class TestServer(unittest.TestCase):
         self.assertEquals(transaction.history, '')
 
     def test_ensureAppExists_creates(self):
-        from schooltool.main import Server, FakeApplication
+        from schooltool.main import Server
         server = Server()
         transaction = TransactionStub()
         server.get_transaction_hook = lambda: transaction
+        cookie = object()
+        server.appFactory = lambda: cookie
         db = DbStub()
         appname = 'foo'
         server.ensureAppExists(db, appname)
@@ -451,10 +498,16 @@ class TestServer(unittest.TestCase):
         conn = db._connections[0]
         self.assert_(conn.closed)
         self.assert_(conn.root()['app'] is ConnectionStub.app)
-        self.assert_(type(conn.root()['foo']) is FakeApplication)
+        self.assert_(conn.root()['foo'] is cookie)
         self.assertEquals(transaction.history, 'C')
 
-    # XXX test configure, findDefaultConfigFile
+    def test_createApplication(self):
+        from schooltool.main import Server
+        server = Server()
+        app = server.createApplication()
+        app[0][0]
+        app[1][0]
+        app[2][0]
 
 
 def test_suite():
