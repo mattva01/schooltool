@@ -425,7 +425,6 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.interfaces import IRelationshipValencies
         from schooltool.interfaces import URIMembership, URIMember
         rvm = RelationshipValenciesMixin()
         self.assertEquals(len(rvm.getValencies()), 0)

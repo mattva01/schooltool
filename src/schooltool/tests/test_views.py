@@ -339,7 +339,6 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views import ApplicationView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership
         from schooltool import membership, views
         self.setUpRegistries()
         membership.setUp()
@@ -360,7 +359,6 @@ class TestAppView(RegistriesSetupMixin, unittest.TestCase):
         RegistriesSetupMixin.tearDown(self)
 
     def test_render(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost/")
         request.method = "GET"
         result = self.view.render(request)
@@ -418,7 +416,6 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
         RegistriesSetupMixin.tearDown(self)
 
     def test_render(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost/groups")
         request.method = "GET"
         result = self.view.render(request)
@@ -462,7 +459,6 @@ class TestUtilityServiceView(RegistriesSetupMixin, unittest.TestCase):
         RegistriesSetupMixin.tearDown(self)
 
     def test_render(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost/groups")
         request.method = "GET"
         result = self.view.render(request)
