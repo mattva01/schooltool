@@ -431,6 +431,13 @@ class Request(http.Request):
             except:
                 self.transaction_hook.abort()
                 body = self._handle_exception(failure.Failure())
+            snapshot = self.getHeader('X-Testing-Save-Snapshot')
+            if snapshot and hasattr(self.site.db, 'makeSnapshot'):
+                if self.zodb_conn:
+                    self.zodb_conn.close()
+                    self.zodb_conn = None
+                self.reactor_hook.callFromThread(self.site.db.makeSnapshot,
+                                                 snapshot)
             self.reactor_hook.callFromThread(self.write, body)
             self.reactor_hook.callFromThread(self.finish)
             self.reactor_hook.callFromThread(self.logHit)
@@ -438,10 +445,6 @@ class Request(http.Request):
             if self.zodb_conn:
                 self.zodb_conn.close()
                 self.zodb_conn = None
-        snapshot = self.getHeader('X-Testing-Save-Snapshot')
-        if snapshot and hasattr(self.site.db, 'makeSnapshot'):
-            self.reactor_hook.callFromThread(self.site.db.makeSnapshot,
-                                             snapshot)
 
     def _generate_response(self):
         """Generate the response.

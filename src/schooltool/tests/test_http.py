@@ -986,7 +986,7 @@ class TestRequest(unittest.TestCase):
         rq.received_headers['x-testing-save-snapshot'] = 'snap'
         rq._process()
         called = rq.reactor_hook._called_from_thread
-        self.assertEquals(called[-1], (rq.site.db.makeSnapshot, 'snap'))
+        self.assertEquals(called[1], (rq.site.db.makeSnapshot, 'snap'))
 
     def test_save_snapshot_when_disabled(self):
         from schooltool.http import Request
