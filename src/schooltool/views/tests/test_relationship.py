@@ -25,12 +25,14 @@ $Id$
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.views.tests import RequestStub
 
 __metaclass__ = type
 
 
-class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
+class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
+                            unittest.TestCase):
 
     def setUp(self):
         from schooltool.views.relationship import RelationshipsView
@@ -54,6 +56,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
 
         self.view = RelationshipsView(self.sub)
         self.view.authorization = lambda ctx, rq: True
+        self.setUpLibxml2()
 
     def test_listLinks(self):
         from pprint import pformat

@@ -787,8 +787,6 @@ def setUp():
 
 def main():
     """Starts the SchoolTool HTTP server."""
-    import schooltool.translation
-    schooltool.translation.setUp()
     sys.exit(Server().main(sys.argv[1:]))
 
 

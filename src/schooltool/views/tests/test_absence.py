@@ -24,9 +24,9 @@ $Id$
 
 import datetime
 import unittest
-import libxml2
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.tests.helpers import diff, dedent
 from schooltool.views.tests import RequestStub
 from schooltool.views.tests import TraversableStub, TraversableRoot, setPath
@@ -40,7 +40,7 @@ class AbsenceTrackerStub:
         self.absences = []
 
 
-class TestAbsenceCommentParser(unittest.TestCase):
+class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
 
     def test_parseComment(self):
         from schooltool.interfaces import Unchanged
@@ -379,13 +379,14 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
 
 
 class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
-                       unittest.TestCase):
+                       QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
         from schooltool import membership
+        self.setUpLibxml2()
         self.setUpRegistries()
         membership.setUp()
         app = Application()
@@ -414,8 +415,6 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         Membership(group=self.sub2, member=self.personb)
 
         Membership(group=self.managers, member=self.manager)
-
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
     def test_get(self):
         from schooltool.views.absence import RollCallView

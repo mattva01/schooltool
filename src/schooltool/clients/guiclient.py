@@ -41,6 +41,7 @@ import cgi
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, nameURI
 from schooltool.common import parse_datetime, parse_date
+from schooltool.translation import _
 
 __metaclass__ = type
 

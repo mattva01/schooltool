@@ -30,6 +30,7 @@ from schooltool.relationship import Valency
 from schooltool.uris import URITeaching, URITeacher, URITaught
 from schooltool.facet import FacetMixin, FacetFactory, membersGetFacet
 from schooltool.component import registerFacetFactory
+from schooltool.translation import _
 
 __metaclass__ = type
 

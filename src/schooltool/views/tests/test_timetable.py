@@ -24,7 +24,6 @@ $Id$
 
 import unittest
 import datetime
-import libxml2
 from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
@@ -33,6 +32,7 @@ from schooltool.views.tests import RequestStub, TraversableRoot, setPath
 from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
@@ -488,7 +488,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
                          ctype='text/html')
 
 
-class TestTimetableReadWriteView(TestTimetableReadView):
+class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
 
     illformed_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -552,7 +552,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
     def setUp(self):
         TestTimetableReadView.setUp(self)
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpLibxml2()
         self.root = ServiceManagerStub(self.createEmpty())
 
     def createTimetabled(self):

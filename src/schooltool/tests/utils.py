@@ -101,7 +101,7 @@ class EventServiceTestMixin:
 
 
 class RegistriesSetupMixin:
-    """Mixin for substituting a temporary relationship and view registry."""
+    """Mixin for substituting temporary global registries."""
 
     def setUpRegistries(self):
         from schooltool import component, views, uris, timetable
@@ -134,6 +134,7 @@ class RegistriesSetupMixin:
 
 
 class EqualsSortedMixin:
+    """Mixin that adds a helper method for comparing lists ignoring order."""
 
     def assertEqualsSorted(self, a, b):
         x = list(a)
@@ -146,6 +147,9 @@ class EqualsSortedMixin:
 
 
 class NiceDiffsMixin:
+    """Mixin that changes assertEquals to show a unified diff of pretty-printed
+    values.
+    """
 
     def assertEquals(self, results, expected, msg=None):
         if msg is None:
@@ -170,3 +174,17 @@ class XMLCompareMixin:
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
     assertEqualXML = assertEqualsXML
+
+
+class QuietLibxml2Mixin:
+    """Text mixin that disables libxml2 error reporting.
+
+    Sadly the API of libxml2 does not allow us to restore the error reporting
+    function in tearDown.  <Insert derogatory comments here>
+    """
+
+    def setUpLibxml2(self):
+        import libxml2
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
+    setUp = setUpLibxml2

@@ -39,6 +39,7 @@ from schooltool.views.timetable import CompositeTimetableTraverseView
 from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.views.absence import RollCallView, AbsenceManagementView
 from schooltool.views.auth import PublicAccess, PrivateAccess
+from schooltool.translation import _
 
 __metaclass__ = type
 

@@ -24,10 +24,10 @@ $Id$
 
 import unittest
 import datetime
-import libxml2
 from schooltool.views.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.tests.helpers import dedent, diff, sorted
 
 __metaclass__ = type
@@ -71,7 +71,7 @@ class CalendarTestBase(unittest.TestCase):
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
 
-class TestSchooldayModelCalendarView(CalendarTestBase):
+class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
 
     def setUp(self):
         from schooltool.cal import SchooldayModel
@@ -82,7 +82,7 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
         self.view = SchooldayModelCalendarView(self.sm)
         self.view.datetime_hook = DatetimeStub()
         self.view.authorization = lambda ctx, rq: True
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpLibxml2()
 
     def test_get_empty(self):
         self.do_test_get(dedent("""

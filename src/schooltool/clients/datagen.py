@@ -31,7 +31,7 @@ import random
 import sys
 import sets
 import datetime
-import schooltool.translation
+from schooltool.translation import _
 
 schooltool.translation.setUp()
 

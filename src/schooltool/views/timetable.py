@@ -43,6 +43,7 @@ from schooltool.component import getTimetableModel
 from schooltool.schema.rng import validate_against_schema
 from schooltool.uris import URIMember, URITaught
 from schooltool.cal import SchooldayModel
+from schooltool.translation import _
 
 __metaclass__ = type
 

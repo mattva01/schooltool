@@ -36,6 +36,7 @@ from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date
 from schooltool.schema.rng import validate_against_schema
+from schooltool.translation import _
 
 __metaclass__ = type
 

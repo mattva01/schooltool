@@ -31,6 +31,7 @@ from schooltool.views import read_file
 from schooltool.views import absoluteURL
 from schooltool.views.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
+from schooltool.translation import _
 
 __metaclass__ = type
 

@@ -32,6 +32,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.event import CallAction
 from schooltool.facet import FacetMixin, FacetFactory
 from schooltool.component import registerFacetFactory
+from schooltool.translation import _
 
 moduleProvides(IModuleSetup)
 

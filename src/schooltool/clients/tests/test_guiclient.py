@@ -23,16 +23,13 @@ Unit tests for guiclient.py
 import unittest
 import socket
 import datetime
-import libxml2
 import urllib
 import base64
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
-import schooltool.translation
-
-schooltool.translation.setUp()
+from schooltool.tests.utils import QuietLibxml2Mixin
 
 __metaclass__ = type
 
@@ -115,11 +112,11 @@ class ResponseStub:
         return self._headers[name.lower()]
 
 
-class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
+class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                            RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpLibxml2()
         self.setUpRegistries()
         import schooltool.uris
         schooltool.uris.setUp()
@@ -1025,10 +1022,10 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
 
 
 class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
-                         unittest.TestCase):
+                         QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpLibxml2()
         self.setUpRegistries()
         import schooltool.uris
         schooltool.uris.setUp()

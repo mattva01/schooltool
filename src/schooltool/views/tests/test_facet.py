@@ -29,6 +29,7 @@ from schooltool.interfaces import IFacet, IFaceted
 from schooltool.tests.helpers import diff
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.views.tests import RequestStub, setPath
 
 __metaclass__ = type
@@ -123,7 +124,11 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
 
 class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
-                              unittest.TestCase):
+                              QuietLibxml2Mixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpRegistries()
+        self.setUpLibxml2()
 
     def test_traverse(self):
         from schooltool.views import View

@@ -10,7 +10,7 @@ import os
 import sys
 import time
 import urllib
-import schooltool.translation
+from schooltool.translation import _
 from schooltool.clients import csvclient
 
 schooltool.translation.setUp()

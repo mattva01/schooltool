@@ -49,6 +49,7 @@ from schooltool.clients.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
 from schooltool.uris import URITeaching, URITaught
 from schooltool.common import parse_date, parse_time
+from schooltool.translation import _
 
 __metaclass__ = type
 

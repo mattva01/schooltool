@@ -40,6 +40,7 @@ from schooltool.common import parse_date, parse_datetime
 from schooltool.component import getPath, traverse
 from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
+from schooltool.translation import _
 
 __metaclass__ = type
 

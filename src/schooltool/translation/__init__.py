@@ -52,9 +52,3 @@ catalog = gettext.translation('schooltool', 'localedir', fallback=True)
 gettext = catalog.gettext
 ugettext = catalog.ugettext
 _ = gettext
-
-
-def setUp():
-    """Install _ into the built-in namespace."""
-    catalog.install()
-

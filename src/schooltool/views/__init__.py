@@ -29,6 +29,7 @@ from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import getView
 from schooltool.translation import ugettext
+from schooltool.translation import _
 
 __metaclass__ = type
 
@@ -256,7 +257,6 @@ def setUp():
     import schooltool.views.timetable
     import schooltool.views.cal
     import schooltool.views.infofacets
-    import schooltool.translation
     schooltool.views.app.setUp()
     schooltool.views.model.setUp()
     schooltool.views.facet.setUp()
@@ -266,5 +266,4 @@ def setUp():
     schooltool.views.timetable.setUp()
     schooltool.views.cal.setUp()
     schooltool.views.infofacets.setUp()
-    schooltool.translation.setUp()
 

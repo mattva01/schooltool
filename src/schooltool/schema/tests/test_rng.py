@@ -24,12 +24,10 @@ $Id: test_cal.py 415 2003-11-28 15:21:45Z alga $
 
 import unittest
 import libxml2
+from schooltool.tests.utils import QuietLibxml2Mixin
 
 
-class TestRelaxNGValidation(unittest.TestCase):
-
-    def setUp(self):
-        libxml2.registerErrorHandler(lambda ctx, msg: None, None)
+class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):
 
     def test_validate_against_schema(self):
         from schooltool.schema.rng import validate_against_schema

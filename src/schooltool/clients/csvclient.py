@@ -115,7 +115,7 @@ import httplib
 import csv
 import sys
 import base64
-import schooltool.translation
+from schooltool.translation import _
 
 
 class DataError(Exception):
@@ -375,6 +375,5 @@ def main():
 
 
 if __name__ == '__main__':
-    schooltool.translation.setUp()
     main()
 

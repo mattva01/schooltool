@@ -23,9 +23,9 @@ $Id$
 """
 
 import unittest
-import libxml2
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.views.tests import RequestStub, viewClass
 
 __metaclass__ = type
@@ -182,7 +182,8 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
                           request)
 
 
-class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
+class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, QuietLibxml2Mixin,
+                   unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -207,7 +208,7 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.group1, member=self.group1b)
         Membership(group=self.group2, member=self.persona)
 
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+        self.setUpLibxml2()
 
     def test(self):
         from schooltool.views.model import TreeView

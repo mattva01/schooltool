@@ -35,6 +35,7 @@ from schooltool.event import EventMixin, CallAction
 from schooltool.component import registerFacetFactory
 from schooltool.facet import FacetMixin, FacetFactory
 from schooltool.db import PersistentKeysSet
+from schooltool.translation import _
 
 
 __metaclass__ = type
