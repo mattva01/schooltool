@@ -28,7 +28,7 @@
       <!-- XXX not translatable -->
       <td class="cal_monthly_weekno">
          <a class="cal_monthly_weekno"
-            tal:content="python:'Week ' + week[0].date.strftime('%V')"
+            tal:content="python:week[0].date.strftime('Week %V')"
             tal:attributes="href python:view.calURL('weekly', week[0].date)" />
       <td class="cal_monthly_day"
           tal:repeat="day week">
