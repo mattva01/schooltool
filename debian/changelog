@@ -1,8 +1,13 @@
-schooltool (0.4+svn20040419-0.1) unstable; urgency=low
+schooltool (0.4+svn20040505-0.1) unstable; urgency=low
 
+  * Packaged subversion snapshot as of 2004-05-05.
   * Split the server and the client parts into separate packages.
+  * A number of files had been renamed for a while (e.g.
+    /etc/init.d/schooltool was renamed to /etc/init.d/schooltool-server).
+    They have now been renamed back.  Hopefully no one used debs built during
+    that period, as we have no migration logic in postinst scripts.
 
- -- Marius Gedminas <mgedmin@b4net.lt>  Mon, 19 Apr 2004 19:17:37 +0300
+ -- Marius Gedminas <mgedmin@b4net.lt>  Wed,  5 May 2004 19:13:04 +0300
 
 schooltool (0.4+svn20040413-0.1) unstable; urgency=low
 
