@@ -48,15 +48,15 @@
            tal:condition="list"
            i18n:attributes="value" />
     <input type="submit" class="button" name="ADD"
-           value="Add"
+           value="Add..."
            i18n:attributes="value" />
   </div>
   </form>
 
-  <p style="clear:both" i18n:translate="">The "Add" button above lets you add
-  already existing groups and persons as sub-groups and members of this group.
-  You can also add a completely new group to the system and make it a sub-group
-  of this group by using the button below:</p>
+  <p style="clear:both" i18n:translate="">The "Add..." button above lets you
+  add already existing groups and persons as sub-groups and members of this
+  group.  You can also add a completely new group to the system and make it a
+  sub-group of this group by using the button below:</p>
 
   <div class="actions">
     <a class="action"
