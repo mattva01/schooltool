@@ -62,7 +62,7 @@ class TestApplicationLogView(unittest.TestCase):
         self.assertEquals(self.request.headers['content-type'], "text/plain")
         self.assertEquals(result, 'fit\nbit\nkite')
 
-    def testLastPage(self):
+    def testPaging(self):
         self.view.openLog = lambda f: StringIO("cut\nfit\ndog\nbit\nkite\n")
         self.request.args.update({'filter': [''],
                                   'pagesize': ["2"], 'page': ["-1"]})
@@ -71,7 +71,35 @@ class TestApplicationLogView(unittest.TestCase):
 
         self.assertEquals(self.request.code, 200)
         self.assertEquals(self.request.headers['content-type'], "text/plain")
-        self.assertEquals(result, 'bit\nkite\n')
+        self.assertEquals(self.request.headers['x-page'], "3")
+        self.assertEquals(self.request.headers['x-total-pages'], "3")
+        self.assertEquals(result, 'kite\n')
+
+    def test_getPageRange(self):
+        self.assertEquals(self.view.getPageRange(1, 10, 100), (0, 10))
+        self.assertEquals(self.view.getPageRange(2, 10, 100), (10, 20))
+
+        # If the last page is incomplete, slice does the right thing
+        self.assertEquals(self.view.getPageRange(2, 10, 12), (10, 20))
+
+        # Negative indices mean counting from the end
+        self.assertEquals(self.view.getPageRange(-1, 10, 12), (10, 20))
+        self.assertEquals(self.view.getPageRange(-2, 10, 12), (0, 10))
+
+        # Out of range gets the last page
+        self.assertEquals(self.view.getPageRange(3, 10, 12), (10, 20))
+        self.assertEquals(self.view.getPageRange(-3, 10, 12), (0, 10))
+
+    def testErrorZero(self):
+        self.request.args.update({'filter': [''],
+                                  'pagesize': ["0"], 'page': ["1"]})
+        result = self.view.render(self.request)
+        self.assertEquals(self.request.code, 400)
+
+    def testErrorNonInt(self):
+        self.request.args.update({'pagesize': ["1"], 'page': ["one"]})
+        result = self.view.render(self.request)
+        self.assertEquals(self.request.code, 400)
 
 def test_suite():
     suite = unittest.TestSuite()

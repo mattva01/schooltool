@@ -37,30 +37,64 @@ class ApplicationLogView(View):
     def do_GET(self, request):
         request.setHeader('Content-Type', 'text/plain')
         path = request.site.applog_path
-        if path is not None:
-            file = self.openLog(path)
-            try:
-                if 'filter' in request.args:
-                    filter_str = request.args['filter'][0]
-                    result = [line for line in file.readlines()
-                              if filter_str in line]
-                    # set the size of result in some header
-                    if 'page' in request.args and 'pagesize' in request.args:
-                        page = int(request.args['page'][0])
-                        pagesize = int(request.args['pagesize'][0])
-                        if page < 0:
-                            end = len(result)
-                            i = end + page*pagesize
-                            j =  end + (page+1)*pagesize
-                            result = result[i:j]
-                    return "".join(result)
-                else:
-                    return file.read()
-            finally:
-                file.close()
-        else:
+        if path is None:
             return textErrorPage(request, _("Application log not configured"))
 
+        filter = page = pagesize = None
+        if 'filter' in request.args:
+            filter = request.args['filter'][0]
+
+        try:
+            if 'page' in request.args and 'pagesize' in request.args:
+                page = int(request.args['page'][0])
+                pagesize = int(request.args['pagesize'][0])
+                if page == 0 or pagesize == 0:
+                    raise ValueError("page and pagesize cannot be zero")
+        except ValueError:
+            return textErrorPage(request, _("'page' or 'pagesize' parameters"
+                                            " are invalid."))
+
+        file = self.openLog(path)
+        result = file.readlines()
+        file.close()
+
+        if filter:
+            filter_str = request.args['filter'][0]
+            result = [line for line in result
+                      if filter_str in line]
+
+        if page is not None:
+            page = int(request.args['page'][0])
+            pagesize = int(request.args['pagesize'][0])
+            i, j = self.getPageRange(page, pagesize, len(result))
+            request.setHeader('X-Page', str(j / pagesize))
+            request.setHeader(
+                'X-Total-Pages',
+                str((len(result) + pagesize - 1) / pagesize))
+            result = result[i:j]
+        return "".join(result)
+
+    def getPageRange(self, page, pagesize, lines):
+        """A helper to cut out a page out of an array of lines.
+
+        For a given page nr, page size in lines, and total length
+        in lines, returns the start and end indexes which can be used
+        for slicing the page out of the range of lines.
+
+        If the client requests a page after the last, he gets the last
+        page.
+        """
+        totalpages = (lines + pagesize - 1) / pagesize
+
+        if page > totalpages:
+            page = totalpages
+
+        if page < 0:
+            page = totalpages + 1 + page
+            if page < 1:
+                page = 1
+
+        return ((page - 1) * pagesize, page * pagesize)
 
     def openLog(self, filename):
         return file(filename)
