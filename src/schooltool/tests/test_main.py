@@ -377,7 +377,6 @@ class TestRequest(unittest.TestCase):
                           1 + rq.site.conflictRetries)
 
     def test__process_some_conflict_errors(self):
-        from twisted.python import failure
         from zodb.interfaces import ConflictError
 
         path = '/foo'
@@ -572,7 +571,6 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(getopt.GetoptError, server.configure, ['xyzzy'])
 
     def test_main(self):
-        import getopt
         from schooltool.main import Server
         stdout = StringIO()
         stderr = StringIO()

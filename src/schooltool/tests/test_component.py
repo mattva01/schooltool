@@ -58,28 +58,6 @@ class C1:
         return "foo"
 
 
-class TestGetAdapter(unittest.TestCase):
-
-    def setUp(self):
-        from schooltool.component import adapterRegistry
-        self.reg = adapterRegistry.copy()
-
-    def tearDown(self):
-        from schooltool.component import adapterRegistry
-        self.adapterRegistry = self.reg
-
-    def test_getAdapter(self):
-        from schooltool.component import getAdapter, provideAdapter
-        provideAdapter(I1, C1)
-        self.assertEqual(getAdapter(object(), I1).foo(), "foo")
-        self.assertRaises(ComponentLookupError, getAdapter, object(), I2)
-
-    def test_getAdapter_provided(self):
-        from schooltool.component import getAdapter, provideAdapter
-        ob = C1(None)
-        self.assertEqual(getAdapter(ob, I1), ob)
-
-
 class TestCanonicalPath(unittest.TestCase):
 
     def test_api(self):
@@ -481,7 +459,6 @@ class TestUtilityService(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestGetAdapter))
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
     suite.addTest(unittest.makeSuite(TestFacetManager))
     suite.addTest(unittest.makeSuite(TestFacetFunctions))

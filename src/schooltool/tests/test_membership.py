@@ -24,10 +24,7 @@ $Id: test_model.py 153 2003-10-16 12:33:50Z mg $
 
 import unittest
 from persistence import Persistent
-from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IFaceted, IQueryLinks
-from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
@@ -81,7 +78,6 @@ class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,
     def testInterfaces(self):
         from schooltool.component import registerRelationship
         from schooltool.membership import Membership
-        from schooltool.interfaces import URIMembership, URIGroup, URIMember
         from schooltool.interfaces import IRelationshipSchema
         verifyObject(IRelationshipSchema, Membership)
 

@@ -137,7 +137,7 @@ class TestEventActionMixins(unittest.TestCase):
 
     def testCallAction(self):
         from schooltool.event import CallAction
-        from schooltool.interfaces import ICallAction, IEventAction
+        from schooltool.interfaces import IEventAction
 
         honeypot = TargetStub()
         callback = honeypot.notify

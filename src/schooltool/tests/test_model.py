@@ -23,10 +23,8 @@ $Id$
 """
 
 import unittest
-from persistence import Persistent
-from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IFacet, IFaceted
+from schooltool.interfaces import IFaceted
 from schooltool.interfaces import IEventConfigurable
 
 __metaclass__ = type

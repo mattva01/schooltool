@@ -156,7 +156,7 @@ class TestView(unittest.TestCase):
         self.assert_(result.code == 404)
 
     def test_getChild_with_exceptions(self):
-        from schooltool.views import View, NotFoundView
+        from schooltool.views import View
         context = None
         request = RequestStub()
         view = View(context)
@@ -400,7 +400,6 @@ class TestAppObjContainerView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.views import ApplicationObjectContainerView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool.membership import Membership
         from schooltool import membership, views
         self.setUpRegistries()
         membership.setUp()
@@ -507,7 +506,6 @@ class TestUtilityView(RegistriesSetupMixin, unittest.TestCase):
         RegistriesSetupMixin.tearDown(self)
 
     def test_render(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost/groups")
         request.method = "GET"
         result = self.view.render(request)

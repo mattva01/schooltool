@@ -24,7 +24,6 @@ $Id$
 
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup
-from schooltool.event import EventService
 from schooltool.relationship import RelatableMixin
 from schooltool.facet import FacetedEventTargetMixin
 

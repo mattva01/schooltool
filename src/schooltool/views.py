@@ -22,15 +22,12 @@ The views for the schooltool content objects.
 $Id$
 """
 
-from zope.interface.interfaces import IInterface
-from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IModuleSetup, IUtilityService, IUtility
+from schooltool.interfaces import IUtilityService, IUtility
 from schooltool.component import getPath, getRelatedObjects
-from schooltool.component import ComponentLookupError
 from schooltool.component import getView, registerView
 from schooltool.debug import IEventLog, IEventLogUtility
 

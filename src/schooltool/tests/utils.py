@@ -86,7 +86,7 @@ class RegistriesSetupMixin:
         views.setUp()
 
     def tearDownRegistries(self):
-        from schooltool import component, views
+        from schooltool import component
         component.relationship_registry = self.old_relationship_registry
         component.view_registry = self.old_view_registry
 

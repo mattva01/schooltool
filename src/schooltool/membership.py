@@ -24,10 +24,7 @@ $Id: model.py 153 2003-10-16 12:33:50Z mg $
 
 from sets import Set
 from zope.interface import implements, moduleProvides
-from persistence import Persistent
-from zodb.btrees.IOBTree import IOBTree
-from schooltool.interfaces import IQueryLinks, IGroup
-from schooltool.interfaces import ISpecificURI, IRemovableLink
+from schooltool.interfaces import IQueryLinks
 from schooltool.interfaces import URIMembership, URIGroup, URIMember
 from schooltool.interfaces import IMembershipEvent
 from schooltool.interfaces import IMemberAddedEvent

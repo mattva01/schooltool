@@ -90,7 +90,6 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertRaises(TypeError, Link, object(), URITutor)
 
     def test(self):
-        from schooltool.relationship import Link
         from schooltool.interfaces import IRelationshipRemovedEvent
 
         self.assertEquals(self.rel.title, "Tutor of a class")
@@ -160,7 +159,6 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
 
     def test_interfaces(self):
         from schooltool.relationship import RelationshipSchema
-        from schooltool.interfaces import IRelationshipSchemaFactory
         from schooltool.interfaces import IRelationshipSchema
         verifyClass(IRelationshipSchema, RelationshipSchema)
         # verifyObject is buggy. It treats a class's __call__ as its __call__
@@ -439,11 +437,10 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies_faceted(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.interfaces import IRelationshipValencies, ISpecificURI
+        from schooltool.interfaces import ISpecificURI
         from schooltool.interfaces import URIMembership, URIMember, IFacet
         from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
-        from zope.interface import directlyProvides
 
         class MyValent(RelationshipValenciesMixin, FacetedMixin):
             def __init__(self):

@@ -43,32 +43,6 @@ __metaclass__ = type
 
 
 #
-# Adapters
-#
-
-adapterRegistry = {}
-
-provideAdapter = adapterRegistry.__setitem__
-
-def getAdapter(object, interface):
-    """Stub adapter lookup.
-
-    Only matches exact resulting interfaces and does not look at the
-    context's interfaces at all.  Will be replaced with PyProtocols
-    when we need more features.
-    """
-
-    if interface.isImplementedBy(object):
-        return object
-    try:
-        factory = adapterRegistry[interface]
-    except KeyError:
-        raise ComponentLookupError("adapter from %s to %s"
-                                   % (object, interface))
-    return factory(object)
-
-
-#
 # IContainmentAPI
 #
 

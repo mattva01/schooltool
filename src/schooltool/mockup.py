@@ -24,11 +24,10 @@ $Id$
 
 import os
 from persistence import Persistent
+from zodb.btrees.IOBTree import IOBTree
 from schooltool.model import Person, Group
 from schooltool.views import View, Template
-from zope.interface import implements
 from schooltool.db import PersistentKeysDict
-from zodb.btrees.IOBTree import IOBTree
 
 
 __metaclass__ = type

@@ -2,7 +2,7 @@ from zope.interface import implements
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.test_relationship import Relatable
 from schooltool.relationship import RelatableMixin
-from schooltool.interfaces import IGroupMember, IFaceted, IQueryLinks
+from schooltool.interfaces import IGroupMember, IFaceted
 
 
 class BasicRelatable(Relatable, RelatableMixin):
