@@ -1,0 +1,45 @@
+<tal:defs define="event view/handleEvent"
+          condition="event">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head >
+  <title metal:fill-slot="title" i18n:translate="">
+    Deleting a repeating event (<span tal:replace="event/title"
+                                      i18n:name="event_title" />)
+  </title>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" i18n:translate="">
+    Deleting a repeating event (<span tal:replace="event/title"
+                                      i18n:name="event_title" />)
+  </h1>
+  <metal:block metal:fill-slot="body">
+
+  <form method="POST" tal:attributes="action request/URL">
+
+    <p i18n:translate="">
+    You are trying to delete a repeating event.  Do you want to delete the
+    current occurrence, this and all future occurrences, or all ocurrences?
+    </p> <!-- TODO: show more information -->
+
+    <input type="hidden" name="event_id"
+           tal:attributes="value request/event_id" />
+    <input type="hidden" name="date"
+           tal:attributes="value request/date" />
+
+    <div class="buttons">
+      <input class="button" type="submit" name="CURRENT" value="Current"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="FUTURE" value="Future"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="ALL" value="All"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+
+  </form>
+  </metal:block>
+
+</body>
+</html>
+</tal:defs>

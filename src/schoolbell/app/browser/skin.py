@@ -28,7 +28,7 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 
 
 class ISchoolBellLayer(ILayer, IBrowserRequest):
-    """SchoolBell layer"""
+    """SchoolBell layer."""
 
 
 class ISchoolBellSkin(ISchoolBellLayer, IDefaultBrowserLayer):

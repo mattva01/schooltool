@@ -56,7 +56,7 @@ class RecurrenceRule(object):
         self._interval = interval
         self._count = count
         self._until = until
-        self._exceptions = tuple(exceptions)
+        self._exceptions = tuple(exceptions) # XXX I'd prefer a set.
         self._validate()
 
     def _validate(self):

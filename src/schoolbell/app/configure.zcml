@@ -97,6 +97,10 @@
   <content class=".cal.CalendarEvent">
     <require permission="schoolbell.view"
              interface="schoolbell.calendar.interfaces.ICalendarEvent" />
+
+    <!-- XXX Temporary hack to make the delete view work. -->
+    <require permission="schoolbell.modifyEvent"
+             set_attributes="recurrence" />
   </content>
 
 <!-- Security declarations for calendaring -->

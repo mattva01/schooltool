@@ -42,6 +42,7 @@ from zope.publisher.interfaces import NotFound
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
@@ -897,18 +898,72 @@ class EventDeleteView(BrowserView):
 
     __used_for__ = ICalendar
 
-    def __call__(self):
+    def handleEvent(self):
+        """Handle a request to delete an event.
+
+        If the event is not recurrent, it is simply deleted, None is returned
+        and the user is redirected to the calendar view.
+
+        If the event being deleted is recurrent event, the request is checked
+        for a command.  If one is found, it is handled, the user again is
+        redirected to the calendar view.  If no commands are found in the
+        request, the recurrent event is returned to be shown in the view.
+        """
         event_id = self.request['event_id']
+        date = parse_date(self.request['date'])
         try:
             event = self.context.find(event_id)
         except KeyError:
-            pass # Somebody else did the job for us, how nice of them.
-        else:
-            self.context.removeEvent(event)
+            # Somebody else did the job for us, how nice of them.
+            return self._redirectBack(date)
+        # TODO: inherited events
 
-        isodate = self.request['date']
+        if event.recurrence is None:
+            # Bah, the event is not recurrent.  Easy!
+            ICalendar(event).removeEvent(event)
+            return self._redirectBack(date)
+        else:
+            # The event is recurrent, we might need to show a form.
+            return self._deleteRepeatingEvent(event, date)
+
+    def _redirectBack(self, date):
+        """Redirect to the current calendar's daily view."""
+        isodate = date.isoformat()
         url = '%s/%s' % (absoluteURL(self.context, self.request), isodate)
         self.request.response.redirect(url)
+
+    def _deleteRepeatingEvent(self, event, date):
+        """Delete a repeating event."""
+        if 'CANCEL' in self.request:
+            pass # Fall through and redirect back to the calendar.
+        elif 'ALL' in self.request:
+            ICalendar(event).removeEvent(event)
+        elif 'FUTURE' in self.request:
+            # XXX We are being a bit rude discarding `count` just like that.
+            self._modifyRecurrenceRule(event, until=(date - timedelta(1)),
+                                       count=None)
+        elif 'CURRENT' in self.request:
+            exceptions = event.recurrence.exceptions + (date, )
+            self._modifyRecurrenceRule(event, exceptions=exceptions)
+        else:
+            return event # We don't know what to do, let's ask the user.
+
+        # We did our job, redirect back to the calendar view.
+        return self._redirectBack(date)
+
+    def _modifyRecurrenceRule(self, event, **kwargs):
+        """Modify the recurrence rule of an event.
+
+        If the event does not have any recurrences afterwards, it is removed
+        from the parent calendar
+        """
+        # XXX This depends on mutable events. Is this OK? -- gintas
+        rrule = event.recurrence
+        new_rrule = rrule.replace(**kwargs)
+        # This view requires the modifyEvent permission.
+        event.recurrence = removeSecurityProxy(new_rrule)
+        if not event.hasOccurrences():
+            ICalendar(event).removeEvent(event)
 
 
 class Slots(dict):

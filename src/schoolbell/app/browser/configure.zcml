@@ -395,7 +395,8 @@
       name="delete.html"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.EventDeleteView"
-      permission="zope.ManageContent"
+      template="templates/recevent_delete.pt"
+      permission="schoolbell.modifyEvent"
       />
 
   <menuItem

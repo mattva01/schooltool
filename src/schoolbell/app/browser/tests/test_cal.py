@@ -2233,6 +2233,7 @@ def doctest_EventDeleteView():
     We'll need a little context here:
 
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
         >>> cal = Calendar()
         >>> directlyProvides(cal, IContainmentRoot)
         >>> dtstart = datetime(2005, 2, 3, 12, 15)
@@ -2250,7 +2251,7 @@ def doctest_EventDeleteView():
         >>> request = TestRequest(form={'event_id': 'killme',
         ...                             'date': '2005-02-03'})
         >>> view = EventDeleteView(cal, request)
-        >>> content = view()
+        >>> view.handleEvent()
 
         >>> martyr in cal
         False
@@ -2259,10 +2260,15 @@ def doctest_EventDeleteView():
 
     As a side effect, you will be shown your way to the calendar view:
 
-        >>> view.request.response.getStatus()
-        302
-        >>> view.request.response.getHeaders()['Location']
-        'http://127.0.0.1/calendar/2005-02-03'
+        >>> def redirected(request, day):
+        ...     if view.request.response.getStatus() != 302:
+        ...         return False
+        ...     location = view.request.response.getHeaders()['Location']
+        ...     expected = 'http://127.0.0.1/calendar/2005-02-%02d' % day
+        ...     assert location == expected, location
+        ...     return True
+        >>> redirected(request, 3)
+        True
 
     Invalid requests to delete events will be ignored, and you will be bounced
     back to where you came from:
@@ -2270,12 +2276,117 @@ def doctest_EventDeleteView():
         >>> request = TestRequest(form={'event_id': 'idontexist',
         ...                             'date': '2005-02-03'})
         >>> view = EventDeleteView(cal, request)
-        >>> content = view()
+        >>> view.handleEvent()
 
-        >>> view.request.response.getStatus()
-        302
-        >>> view.request.response.getHeaders()['Location']
-        'http://127.0.0.1/calendar/2005-02-03'
+        >>> redirected(request, 3)
+        True
+
+    That was easy.  Now the hard part: recurrent events.  Let's create one.
+
+        >>> dtstart = datetime(2005, 2, 3, 12, 15)
+        >>> exceptions = [date(2005, 2, 4), date(2005, 2, 6)]
+        >>> rrule = DailyRecurrenceRule(exceptions=exceptions)
+        >>> recurrer = CalendarEvent(dtstart, timedelta(hours=3), "Recurrer",
+        ...                          unique_id='rec', recurrence=rrule)
+        >>> cal.addEvent(recurrer)
+
+    Now, if we try to delete this event, the view will not know what to do,
+    so it will return an event to be shown for the user.
+
+        >>> request = TestRequest(form={'event_id': 'rec',
+        ...                             'date': '2005-02-05'})
+        >>> view = EventDeleteView(cal, request)
+        >>> event = view.handleEvent()
+        >>> event is recurrer
+        True
+        >>> redirected(request, 5)
+        False
+
+    The event has not been touched, because we did not issue a command.  We'll
+    just check that no exceptions have been added:
+
+        >>> cal.find('rec').recurrence.exceptions
+        (datetime.date(2005, 2, 4), datetime.date(2005, 2, 6))
+
+    We can easily return back to the daily view:
+
+        >>> request.form['CANCEL'] = 'Cancel'
+        >>> view.handleEvent()
+        >>> redirected(request, 5)
+        True
+        >>> del request.form['CANCEL']
+
+    OK.  First, let's try and delete only the current recurrence:
+
+        >>> request.form['CURRENT'] = 'Current'
+        >>> view.handleEvent()
+        >>> redirected(request, 5)
+        True
+
+    As a result, a new exception date should have been added:
+
+        >>> cal.find('rec').recurrence.exceptions[-1]
+        datetime.date(2005, 2, 5)
+
+    Now, if we decide to remove all exceptions in the future, the recurrence
+    rule's until argument will be updated:
+
+        >>> del request.form['CURRENT']
+        >>> request.form['FUTURE'] = 'Future'
+        >>> view.handleEvent()
+        >>> redirected(request, 5)
+        True
+
+        >>> cal.find('rec').recurrence.until
+        datetime.date(2005, 2, 4)
+
+    Finally, let's remove the event altogether.
+
+        >>> del request.form['FUTURE']
+        >>> request.form['ALL'] = 'All'
+        >>> view.handleEvent()
+
+    The event has kicked the bucket:
+
+        >>> cal.find('rec')
+        Traceback (most recent call last):
+        ...
+        KeyError: 'rec'
+
+    We will need one more short-lived event:
+
+        >>> rrule = recurrer.recurrence
+        >>> evt = CalendarEvent(dtstart, timedelta(hours=3), "Butterfly",
+        ...                     unique_id='butterfly', recurrence=rrule)
+        >>> cal.addEvent(evt)
+
+    If we try to modify the event's recurrence rule and the event never
+    occurs as a result, the event is removed from the calendar.  For example,
+    as our event only occurs until Februrary 4th (which is an exception
+    anyway), when we add an exception for the 3rd too, the event should be
+    gone with the wind.
+
+        >>> request.form = {'event_id': 'butterfly', 'date': '2005-02-03',
+        ...                 'CURRENT': 'Current'}
+        >>> view.handleEvent()
+        >>> cal.find('butterfly')
+        Traceback (most recent call last):
+        ...
+        KeyError: 'butterfly'
+
+    There is also a catch with deleting future events -- both `count`
+    and `until` can not be set.
+
+        >>> rrule = DailyRecurrenceRule(count=5)
+        >>> evt = CalendarEvent(dtstart, timedelta(hours=3), "Butterfly",
+        ...                     unique_id='counted', recurrence=rrule)
+        >>> cal.addEvent(evt)
+
+        >>> request.form = {'event_id': 'counted', 'date': '2005-02-08',
+        ...                 'FUTURE': 'Future'}
+        >>> view.handleEvent()
+        >>> cal.find('counted').recurrence
+        DailyRecurrenceRule(1, None, datetime.date(2005, 2, 7), ())
 
     """
 
