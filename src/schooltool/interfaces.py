@@ -1214,7 +1214,7 @@ class ICalendarEvent(Interface):
         be the context.
         """)
     location = Attribute(
-          """The title of the location where this event takes place.""")
+        """The title of the location where this event takes place.""")
     recurrence = Attribute(
         """The recurrence rule.
 
