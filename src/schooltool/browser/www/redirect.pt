@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1 metal:fill-slot="h1" i18n:translate="">Redirecting</h1>
+<metal:block metal:fill-slot="navigation">&nbsp;</metal:block>
 <metal:block metal:fill-slot="content">
 
 <p i18n:translate="">Your browser is now being redirected to <a
