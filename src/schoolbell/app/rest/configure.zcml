@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <view
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      name="GET"
+      factory=".app.ApplicationView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+</configure>

@@ -52,6 +52,7 @@ from zope.app.container.contained import ObjectAddedEvent
 from schoolbell.app.app import SchoolBellApplication, Person
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.security import setUpLocalAuth
+from schoolbell.app.rest import restServerType
 
 
 ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__), 'config-schema.xml')
@@ -219,6 +220,9 @@ def setup(options):
 
     for ip, port in options.config.web:
         http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
+
+    for ip, port in options.config.rest:
+        restServerType.create('REST', task_dispatcher, db, port=port, ip=ip)
 
     notify(ProcessStarting())
 

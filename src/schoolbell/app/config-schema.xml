@@ -69,6 +69,18 @@
     </example>
   </multikey>
 
+  <multikey name="rest" datatype="inet-address">
+    <description>
+      Network interface and port number the RESTive server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      rest 80
+      rest 127.0.0.1:80
+    </example>
+  </multikey>
+
   <multikey name="listen_ssl" datatype="inet-address">
     <description>
       Network interface and port number the HTTPS server should listen on.

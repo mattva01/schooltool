@@ -256,5 +256,6 @@
 <!-- Subpackages -->
 
   <include package=".browser" />
+  <include package=".rest" />
 
 </configure>

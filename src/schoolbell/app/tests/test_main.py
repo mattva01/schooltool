@@ -130,6 +130,9 @@ def doctest_load_options():
         >>> o.config.web in ([('', 48080)],          # Unix
         ...                  [('localhost', 48080)]) # Windows
         True
+        >>> o.config.rest in ([('', 47001)],          # Unix
+        ...                  [('localhost', 47001)])  # Windows
+        True
         >>> o.config.listen
         [('...', 123), ('10.20.30.40', 9999)]
 
@@ -212,6 +215,7 @@ def doctest_setup():
         ...         return DB(MappingStorage())
         >>> class ConfigStub:
         ...     web = []
+        ...     rest = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
         ...     pid_file = ''
