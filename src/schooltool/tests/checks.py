@@ -21,7 +21,6 @@ Checks for the unit tests.
 """
 
 import sys
-import logging
 
 __metaclass__ = type
 

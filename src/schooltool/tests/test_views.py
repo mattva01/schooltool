@@ -328,7 +328,6 @@ class TestPersonView(RegistriesSetupMixin, unittest.TestCase):
         self.view = PersonView(self.per)
 
     def test_render(self):
-        from schooltool.component import getPath
         request = RequestStub("http://localhost/group/")
         result = self.view.render(request)
         segments = dedent("""
