@@ -276,6 +276,9 @@ class CalendarDay(object):
     def __cmp__(self, other):
         return cmp(self.date, other.date)
 
+    def isToday(self):
+        return self.date == datetime.now().date()
+
 
 #
 # Calendar display views

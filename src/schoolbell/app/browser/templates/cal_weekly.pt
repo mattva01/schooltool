@@ -8,7 +8,8 @@
         <th class="day-title"
             tal:define="start repeat/day/start"
             tal:attributes="class python:start and 'day-title first'
-                                                or 'day-title'">
+                                               or 'day-title';
+                            id python:day.isToday() and 'today' or None">
           <a tal:content="day/title"
              tal:attributes="href python:view.calURL('daily', day.date)" />
         </th>

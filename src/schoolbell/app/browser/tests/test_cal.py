@@ -288,6 +288,12 @@ def doctest_CalendarDay():
         >>> day2 == CalendarDay(date(2004, 7, 15))
         True
 
+    You can test a calendar day to see if its date is today
+
+        >>> day3 = CalendarDay(datetime.now().date())
+        >>> day3.isToday()
+        True
+
     """
 
 
