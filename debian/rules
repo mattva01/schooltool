@@ -91,8 +91,8 @@ install-stamp: build
 		debian/$(package)/etc/logrotate.d/$(package)
 	install -m 644 -D -p debian/ssl-cert.cnf \
 	    debian/$(package)/etc/$(package)/ssl-cert.cnf	
-	install -m 644 -D -p debian/$(package).conf \
-	    debian/$(package)/etc/$(package)/$(package).conf
+	install -m 644 -D -p debian/$(package).conf.default \
+	    debian/$(package)/etc/$(package)/$(package).conf.default
 
 	
 	###### Client Packages ######
@@ -162,6 +162,7 @@ binary-arch: build install
 	dh_installinit
 	dh_installexamples
 	dh_installman
+	dh_installdebconf
 	dh_installchangelogs
 	dh_strip
 	dh_compress

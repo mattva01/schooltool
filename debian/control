@@ -10,7 +10,7 @@ Architecture: all
 Depends: schooltool (= ${Source-Version})
 Description: Dummy package for old schooltool-server package
  This is a dummy package which depends on schooltool to help people upgrading.
- If it is installed, you should be able to safely delete it.
+ If it is installed, you should be able to safely uninstall it.
 
 Package: schooltool
 Architecture: all

@@ -22,6 +22,27 @@ The simplest way to start playing with SchoolTool SSL is as follows:
 By default a user 'manager' with password 'schooltool' is created with full
 access and modification privileges.
 
+SSL Certificates
+----------------
+
+If at (re)configuration time, an SSL port is specified, the configuration will
+automatically generate an SSL certificate. You can choose to:
+
+* (default) - Create a self signed certificate. The public certificate is in PEM 
+  format and found at /etc/schooltool/schooltool.cert.pem. It should be 
+  possible to import this file into web browsers as a root certificate. 
+  schoolbell.privkey.pem is, of course, the private key an should never be made 
+  publicly available.
+
+* Import a certificate from a file in PEM format. The file must also include 
+  the private key. Additionally this option is only available if the debconf
+  priority is medium or lower.
+  
+The certificate can be re-generated or re-imported at any time by running 
+(as root):
+
+DEBIAN_FRONTEND=dialog DEBIAN_PRIORITY=low dpkg-reconfigure schooltool
+
 Present and Past Maintainers
 ----------------------------
 
