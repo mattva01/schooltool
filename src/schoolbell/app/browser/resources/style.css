@@ -222,13 +222,13 @@ input.button-cancel {
     text-decoration: none;
     padding: 2px 1ex;
     font-weight: bold;
-    border-left: 1px transparent solid;
-    border-right: 1px transparent solid;
+    margin: 0 1px;
 }
 
 #header .tools a:hover {
     color: #ffffff;
     background: #C40000 url(++resource++toolbar-background-hover.png) top left repeat-x;
+    margin: 0;
     border-left: 1px #800 solid;
     border-right: 1px #800 solid;
 }
