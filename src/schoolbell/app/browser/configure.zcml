@@ -462,7 +462,6 @@
       class=".cal.CalendarEventEditView"
       permission="schoolbell.modifyEvent"
       template="templates/event_add.pt">
-
     <widget field="exceptions" width="20" height="5" />
   </editform>
 
