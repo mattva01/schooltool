@@ -188,6 +188,7 @@ class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
     template = Template('www/person_edit.pt')
 
     error = None
+    duplicate_warning = False
 
     back = True
 
@@ -205,13 +206,33 @@ class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
                                              value=info.comment)
 
     def do_POST(self, request):
-        self.first_name_widget.update(request)
-        self.last_name_widget.update(request)
-        self.dob_widget.update(request)
-        self.comment_widget.update(request)
-
-        if self.dob_widget.error:
+        if 'CANCEL' in request.args:
             return self.do_GET(request)
+        widgets = [self.first_name_widget, self.last_name_widget,
+                   self.dob_widget, self.comment_widget]
+        for widget in widgets:
+            widget.update(request)
+
+        self.first_name_widget.require()
+        self.last_name_widget.require()
+
+        infofacet = self.info()
+        full_name = (self.first_name_widget.value,
+                     self.last_name_widget.value)
+        allow_duplicates = 'CONFIRM' in request.args
+        if ((infofacet.first_name, infofacet.last_name) != full_name
+            and not allow_duplicates):
+            for otheruser in self.context.__parent__.itervalues():
+                other_info = FacetManager(otheruser).facetByName('person_info')
+                if (other_info.first_name, other_info.last_name) == full_name:
+                    self.error = _("Another user with this name already"
+                                   " exists.")
+                    self.duplicate_warning = True
+                    return self.do_GET(request)
+
+        for widget in widgets:
+            if widget.error:
+                return self.do_GET(request)
 
         first_name = self.first_name_widget.value
         last_name = self.last_name_widget.value
@@ -227,7 +248,6 @@ class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
                 self.error = _('Invalid photo')
                 return self.do_GET(request)
 
-        infofacet = self.info()
         infofacet.first_name = first_name
         infofacet.last_name = last_name
         infofacet.date_of_birth = dob

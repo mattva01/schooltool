@@ -33,11 +33,19 @@
       </p>
     </div>
     <div class="buttons">
-      <input class="button" type="submit" name="SUBMIT" value="Submit"
+    <tal:if tal:condition="view/duplicate_warning">
+      <input class="button" type="submit" name="CONFIRM" value="Save anyway"
+             i18n:attributes="value" />
+      <input class="button" type="submit" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </tal:if>
+    <tal:if tal:condition="not:view/duplicate_warning">
+      <input class="button" type="submit" name="SAVE" value="Save"
              i18n:attributes="value" />
       <input tal:condition="view/photoURL" class="button" type="submit"
              name="REMOVE_PHOTO" value="Remove photo"
              i18n:attributes="value" />
+    </tal:if>
     </div>
   </form>
   </metal:block>

@@ -285,7 +285,7 @@ class TestPersonEditView(unittest.TestCase):
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Person
 
-        app = Application()
+        app = self.app = Application()
         persons = app['persons'] = ApplicationObjectContainer(Person)
         self.person = persons.new('somebody', title="Mr. Wise Guy")
         self.info = FacetManager(self.person).facetByName('person_info')
@@ -348,6 +348,61 @@ class TestPersonEditView(unittest.TestCase):
             [(None, u'Person info updated on I Changed'
                     u' My Name Recently (/persons/somebody)', INFO)])
         self.assert_(self.info.date_of_birth is None)
+
+    def test_post_no_full_name(self):
+        view = self.createView()
+        request = RequestStub()
+        view.request = request
+        body = view.do_POST(request)
+        assert 'required' in view.first_name_widget.error
+        assert 'required' in view.last_name_widget.error
+        assert not view.request.applog
+
+    def test_post_full_name_conflict(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        other = self.app['persons'].new()
+        infofacet = FacetManager(other).facetByName('person_info')
+        infofacet.first_name = 'George'
+        infofacet.last_name = 'William'
+        request = RequestStub(args={'first_name': 'George',
+                                    'last_name': 'William'})
+        view.request = request
+        body = view.do_POST(request)
+        assert 'Another user with this name already exists.' in body
+        assert not view.request.applog
+        assert 'CONFIRM' in body
+
+    def test_post_full_name_conflict_overriden_by_user(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        other = self.app['persons'].new()
+        infofacet = FacetManager(other).facetByName('person_info')
+        infofacet.first_name = 'George'
+        infofacet.last_name = 'William'
+        request = RequestStub(args={'first_name': 'George',
+                                    'last_name': 'William',
+                                    'CONFIRM': 'Yes, really do it'})
+        view.request = request
+        body = view.do_POST(request)
+        self.assertEquals(request.applog,
+            [(None, u'Person info updated on George William'
+                    u' (/persons/somebody)', INFO)])
+
+    def test_post_full_name_conflict_canceled(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        other = self.app['persons'].new()
+        infofacet = FacetManager(other).facetByName('person_info')
+        infofacet.first_name = 'George'
+        infofacet.last_name = 'William'
+        request = RequestStub(args={'first_name': 'George',
+                                    'last_name': 'William',
+                                    'CANCEL': 'No, never!'})
+        view.request = request
+        body = view.do_POST(request)
+        self.assertEquals(request.applog, [])
+        assert 'George' not in body
 
     def test_post_errors(self):
         for dob in ['bwahaha', '2004-13-01', '2004-08-05-01']:
