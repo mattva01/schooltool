@@ -315,6 +315,7 @@ class CustomTestResult(unittest._TextTestResult):
     __super_startTest = __super.startTest
     __super_stopTest = __super.stopTest
     __super_printErrors = __super.printErrors
+    __super_printErrorList = __super.printErrorList
 
     def __init__(self, stream, descriptions, verbosity, count, cfg, hooks):
         self.__super_init(stream, descriptions, verbosity)
@@ -372,6 +373,10 @@ class CustomTestResult(unittest._TextTestResult):
     def printErrors(self):
         if self.cfg.progress and not (self.dots or self.showAll):
             self.stream.writeln()
+        if self.cfg.immediate_errors and (self.errors or self.failures):
+            self.stream.writeln(self.separator1)
+            self.stream.writeln("Tests that failed")
+            self.stream.writeln(self.separator2)
         self.__super_printErrors()
 
     def formatError(self, err):
@@ -379,8 +384,9 @@ class CustomTestResult(unittest._TextTestResult):
 
     def printTraceback(self, kind, test, err):
         self.stream.writeln()
-        self.stream.writeln()
+        self.stream.writeln(self.separator1)
         self.stream.writeln("%s: %s" % (kind, test))
+        self.stream.writeln(self.separator2)
         self.stream.writeln(self.formatError(err))
         self.stream.writeln()
 
@@ -393,6 +399,14 @@ class CustomTestResult(unittest._TextTestResult):
         if self.cfg.immediate_errors:
             self.printTraceback("ERROR", test, err)
         self.errors.append((test, self.formatError(err)))
+
+    def printErrorList(self, flavour, errors):
+        if self.cfg.immediate_errors:
+            for test, err in errors:
+                description = self.getDescription(test)
+                self.stream.writeln("%s: %s" % (flavour, description))
+        else:
+            self.__super_printErrorList(flavour, errors)
 
 
 class CustomTestRunner(unittest.TextTestRunner):
