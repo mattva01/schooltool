@@ -22,12 +22,12 @@ The views for the ACL objects.
 $Id$
 """
 
-import libxml2
 from schooltool.interfaces import Everybody
 from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest.auth import SystemAccess
+from schooltool.rest.xmlparsing import XMLDocument, XMLError
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 from schooltool.common import to_unicode
@@ -56,27 +56,21 @@ class ACLView(View):
 
     def do_PUT(self, request):
         body = request.content.read()
-
         try:
-            if not validate_against_schema(self.schema, body):
-                return textErrorPage(request,
-                            _("Document not valid according to schema"))
-        except libxml2.parserError:
-            return textErrorPage(request, _("Document not valid XML"))
-
-        doc = libxml2.parseDoc(body)
-        xpathctx = doc.xpathNewContext()
+            doc = XMLDocument(body, self.schema)
+        except XMLError, e:
+            return textErrorPage(request, e)
         try:
-            ns = 'http://schooltool.org/ns/model/0.1'
-            xpathctx.xpathRegisterNs('m', ns)
-            xlink = 'http://www.w3.org/1999/xlink'
-            xpathctx.xpathRegisterNs('xlink', xlink)
-            perms  = xpathctx.xpathEval('/m:acl/m:allow')
+            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+            doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+            perms = doc.query('/m:acl/m:allow')
 
+            # XXX bug: if a bad path is specified, a partial transaction is
+            #          committed
             self.context.clear()
             for perm in perms:
-                path = to_unicode(perm.nsProp('principal', None))
-                permission = perm.nsProp('permission', None)
+                path = perm['principal']
+                permission = perm['permission']
                 if path == Everybody:
                     principal = path
                 else:
@@ -86,8 +80,7 @@ class ACLView(View):
                         return textErrorPage(request, _("Bad path %r") % path)
                 self.context.add((principal, permission))
         finally:
-            doc.freeDoc()
-            xpathctx.xpathFreeContext()
+            doc.free()
 
         request.setResponseCode(200)
         request.setHeader('Content-Type', 'text/plain')
