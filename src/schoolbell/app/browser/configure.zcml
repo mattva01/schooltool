@@ -89,7 +89,7 @@
       for="schoolbell.app.interfaces.IPersonContainer"
       class="schoolbell.app.browser.app.PersonAddView"
       template="templates/person_add.pt"
-      permission="zope.View"
+      permission="zope.ManageContent"
       menu="schoolbell_actions" title="New person" />
 
   <page
