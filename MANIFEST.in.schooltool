@@ -24,5 +24,4 @@ include debian/*.1 debian/schooltool.* debian/ssl-cert.cnf
 include debian/python*schooltool.*
 include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
 
-recursive-include Zope3 *
 recursive-include src/schooltool/schema/protege *
