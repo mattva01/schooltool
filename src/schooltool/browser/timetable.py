@@ -500,6 +500,7 @@ class TimetableSchemaWizard(View, TabindexMixin):
 
     _ = TranslatableString  # postpone translations
 
+    # Used in the page template
     days_of_week = (_("Monday"),
                     _("Tuesday"),
                     _("Wednesday"),

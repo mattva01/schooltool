@@ -51,7 +51,7 @@ from schooltool.interfaces import IDailyRecurrenceRule, IWeeklyRecurrenceRule
 from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.timetable import getPeriodsForDay
-from schooltool.translation import ugettext as _
+from schooltool.translation import ugettext as _, TranslatableString
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
 from schooltool.browser.widgets import SequenceWidget
@@ -218,6 +218,8 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     # in schooltool.browser.timetable.
     first_day_of_week = 0
 
+    _ = TranslatableString  # postpone translations
+
     month_names = {
         1: _("January"),
         2: _("February"),
@@ -252,6 +254,8 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         5: _("Sat"),
         6: _("Sun"),
     }
+
+    del _ # go back to immediate translations
 
     __url = None
 
@@ -625,14 +629,15 @@ class WeeklyCalendarView(CalendarViewBase):
     template = Template("www/cal_weekly.pt")
 
     def title(self):
+        month_name = unicode(self.month_names[self.cursor.month])
         return _('%(month)s, %(year)s (week %(week)s)') % {
-                                'month': self.month_names[self.cursor.month],
+                                'month': month_name,
                                 'year': self.cursor.year,
                                 'week': self.cursor.isocalendar()[1],
                             }
 
     def dayTitle(self, day):
-        day_of_week = self.day_of_week_names[day.weekday()]
+        day_of_week = unicode(self.day_of_week_names[day.weekday()])
         return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
 
     def prevWeek(self):
@@ -654,13 +659,14 @@ class MonthlyCalendarView(CalendarViewBase):
     template = Template("www/cal_monthly.pt")
 
     def title(self):
+        month_name = unicode(self.month_names[self.cursor.month])
         return _('%(month)s, %(year)s') % {
-                                'month': self.month_names[self.cursor.month],
+                                'month': month_name,
                                 'year': self.cursor.year,
                             }
 
     def dayOfWeek(self, date):
-        return self.day_of_week_names[date.weekday()]
+        return unicode(self.day_of_week_names[date.weekday()])
 
     def weekTitle(self, date):
         return _('Week %d') % date.isocalendar()[1]
@@ -684,10 +690,10 @@ class YearlyCalendarView(CalendarViewBase):
     template = Template('www/cal_yearly.pt')
 
     def monthTitle(self, date):
-        return self.month_names[date.month]
+        return unicode(self.month_names[date.month])
 
     def dayOfWeek(self, date):
-        return self.short_day_of_week_names[date.weekday()]
+        return unicode(self.short_day_of_week_names[date.weekday()])
 
     def prevYear(self):
         """Return the first day of the next year."""
@@ -1220,11 +1226,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         weekday = evdate.weekday()
         index = (evdate.day - 1) / 7 + 1
 
-        weekdays = CalendarViewBase.day_of_week_names
         indexes = {1: _('1st'), 2: _('2nd'), 3: _('3rd'),
                    4: _('4th'), 5: _('5th')}
+        day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
 
-        return "%s %s" % (indexes[index], weekdays[weekday])
+        return "%s %s" % (indexes[index], day_of_week)
 
     def weekdayChecked(self, weekday):
         """Return 'checked' if the given weekday should be checked.
@@ -1257,15 +1263,15 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     def getLastWeekDay(self):
         """Return a description like 'Last Friday' or None."""
         evdate = self.date_widget.value
-        weekdays = CalendarViewBase.day_of_week_names
         if evdate is None:
             return "last weekday"
         lastday = calendar.monthrange(evdate.year, evdate.month)[1]
         if lastday - evdate.day >= 7:
             return None
         else:
-            return _("Last %(weekday)s") % {'weekday':
-                                            weekdays[evdate.weekday()]}
+            weekday = evdate.weekday()
+            day_of_week = unicode(CalendarViewBase.day_of_week_names[weekday])
+            return _("Last %(weekday)s") % {'weekday': day_of_week}
 
     def bookingEvent(self):
         return False
@@ -1274,7 +1280,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 class EventAddView(EventViewBase):
     """A view for adding events."""
 
-    page_title = _("Add event")
+    page_title = property(lambda self: _("Add event"))
 
     authorization = ACLAddAccess
 
@@ -1290,7 +1296,7 @@ class EventAddView(EventViewBase):
 class EventEditView(EventViewBase):
     """A view for editing events."""
 
-    page_title = _("Edit event")
+    page_title = property(lambda self: _("Edit event"))
 
     composite_event = None
     calendar = None
