@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 from zope.testing import doctest
+from zope.app import zapi
 from zope.app.tests import setup, ztapi
 from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
@@ -733,23 +734,8 @@ def doctest_PersonAddView():
 
     """
 
-def doctest_SchoolBellLoginView():
+def doctest_LoginView():
     """
-    Set up the session machinery:
-
-        >>> from zope.app.session.session import ClientId, Session
-        >>> from zope.app.session.session import PersistentSessionDataContainer
-        >>> from zope.publisher.interfaces import IRequest
-        >>> from zope.app.session.http import CookieClientIdManager
-        >>> from zope.app.session.interfaces import ISessionDataContainer
-        >>> from zope.app.session.interfaces import IClientId
-        >>> from zope.app.session.interfaces import IClientIdManager, ISession
-        >>> ztapi.provideAdapter(IRequest, IClientId, ClientId)
-        >>> ztapi.provideAdapter(IRequest, ISession, Session)
-        >>> ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
-        >>> sdc = PersistentSessionDataContainer()
-        >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
-
     Suppose we have a SchoolBell app and a person:
 
         >>> from schoolbell.app.app import SchoolBellApplication
@@ -787,6 +773,7 @@ def doctest_SchoolBellLoginView():
         >>> auth = SchoolBellAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
+        >>> setUpSession()
 
     It does not authenticate our session:
 
@@ -803,6 +790,9 @@ def doctest_SchoolBellLoginView():
         >>> view.error
         >>> request.response.getStatus()
         302
+        >>> url = zapi.absoluteURL(app, request)
+        >>> request.response.getHeader('Location') == url
+        True
         >>> auth.authenticate(request)
         <schoolbell.app.security.Principal object at 0x...>
 
@@ -831,6 +821,80 @@ def doctest_SchoolBellLoginView():
         'sb.person.frog'
 
     """
+
+def doctest_LogoutView():
+    """
+    Suppose we have a SchoolBell app and a person:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+
+        >>> from schoolbell.app.app import Person
+        >>> frog = Person('frog')
+        >>> persons[None] = frog
+        >>> frog.setPassword('pond')
+
+    Also, we have an authentication utility:
+
+        >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+        >>> from zope.app.security.interfaces import IAuthentication
+        >>> auth = SchoolBellAuthenticationUtility()
+        >>> ztapi.provideUtility(IAuthentication, auth)
+        >>> auth.__parent__ = app
+        >>> setUpSession()
+
+    We have a request in an authenticated session:
+
+        >>> request = TestRequest()
+        >>> auth.setCredentials(request, 'frog', 'pond')
+        >>> request.setPrincipal(auth.authenticate(request))
+
+    And we call the logout view:
+
+        >>> from schoolbell.app.browser.app import LogoutView
+        >>> view = LogoutView(app, request)
+        >>> view()
+
+    Now, the session no longer has an authenticated user:
+
+        >>> auth.authenticate(request)
+
+    The user gets redirected to the front page:
+
+        >>> request.response.getStatus()
+        302
+        >>> url = zapi.absoluteURL(app, request)
+        >>> request.response.getHeader('Location') == url
+        True
+
+
+    The view also doesn't fail if the user was not logged in in the
+    first place:
+
+        >>> request = TestRequest()
+        >>> view = LogoutView(app, request)
+        >>> view()
+        >>> auth.authenticate(request)
+
+    """
+
+def setUpSession():
+    """Set up the session machinery."""
+    from zope.app.session.session import ClientId, Session
+    from zope.app.session.session import PersistentSessionDataContainer
+    from zope.publisher.interfaces import IRequest
+    from zope.app.session.http import CookieClientIdManager
+    from zope.app.session.interfaces import ISessionDataContainer
+    from zope.app.session.interfaces import IClientId
+    from zope.app.session.interfaces import IClientIdManager, ISession
+    ztapi.provideAdapter(IRequest, IClientId, ClientId)
+    ztapi.provideAdapter(IRequest, ISession, Session)
+    ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
+    sdc = PersistentSessionDataContainer()
+    ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
+
 
 def setUp(test):
     """Set up the test fixture for doctests in this module.

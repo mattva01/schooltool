@@ -436,3 +436,12 @@ class LoginView(BrowserView):
                 nexturl = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(nexturl)
 
+
+class LogoutView(BrowserView):
+    """Clears the authentication creds from the session"""
+
+    def __call__(self):
+        auth = zapi.getUtility(IAuthentication)
+        auth.clearCredentials(self.request)
+        url = zapi.absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)

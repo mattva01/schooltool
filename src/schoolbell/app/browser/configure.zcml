@@ -54,6 +54,13 @@
       permission="zope.Public"
       />
 
+  <page
+      name="logout.html"
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      class=".app.LogoutView"
+      permission="zope.Public"
+      />
+
   <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
 
   <menuItem
