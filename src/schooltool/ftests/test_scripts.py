@@ -75,10 +75,11 @@ class ScriptTestCase(unittest.TestCase):
         reader = Reader(child.fromchild)
         reader.start()
         expected = []
+        orig_lineno = []
         f = open(self.filename)
         skipping_intro = True
         magic = False
-        for line in f:
+        for lineno, line in enumerate(f):
             if skipping_intro:
                 if not line.strip():
                     skipping_intro = False
@@ -90,6 +91,7 @@ class ScriptTestCase(unittest.TestCase):
                 if '*' in line:
                     magic = True
                 expected.append(line)
+                orig_lineno.append(lineno + 1)
         child.tochild.close()
         f.close()
         reader.join()
@@ -107,10 +109,12 @@ class ScriptTestCase(unittest.TestCase):
                     rx = re.escape(e).replace(r'\*', '.*') + '$'
                     if re.match(rx, r) is not None:
                         continue
-                context = result[max(0, idx-5):idx]
-                diffs = [" " + s for s in context] + ["-" + e, "+" + r]
-                if idx > 5:
-                    diffs = ["...\n"] + diffs
+                context_start = max(0, idx-5)
+                orig_start = orig_lineno[context_start]
+                diffs = ["@@ -%d..%d @@\n"
+                         % (orig_start, orig_lineno[idx])]
+                context = result[context_start:idx]
+                diffs += [" " + s for s in context] + ["-" + e, "+" + r]
                 self.fail("Output does not match expectations\n%s..."
                           % "".join(diffs))
         else:
