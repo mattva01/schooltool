@@ -599,6 +599,17 @@ class TestTimetableModelRegistry(RegistriesSetupMixin, unittest.TestCase):
         self.assertEqual(getTimetableModel("Moo.Spoo"), TMStub)
 
 
+class TestComponentArchitecture(unittest.TestCase):
+
+    def test(self):
+        from zope.component import getService
+        from zope.component.interfaces import IUtilityService
+        from schooltool.component import setUp
+        setUp()
+        s = getService('Utilities')
+        verifyObject(IUtilityService, s)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
@@ -611,6 +622,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableModelRegistry))
     suite.addTest(unittest.makeSuite(TestDynamicSchemaField))
     suite.addTest(unittest.makeSuite(TestDynamicSchema))
+    suite.addTest(unittest.makeSuite(TestComponentArchitecture))
     return suite
 
 if __name__ == '__main__':

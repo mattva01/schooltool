@@ -24,6 +24,9 @@ $Id$
 
 from zope.interface import moduleProvides, implements, providedBy, Interface
 from zope.interface.adapter import AdapterRegistry
+from zope.component import serviceManager
+from zope.component.utility import IGlobalUtilityService
+from zope.component.utility import GlobalUtilityService
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -40,9 +43,11 @@ from schooltool.interfaces import ITimetableModelRegistry
 from schooltool.interfaces import IOptions
 from schooltool.interfaces import IDynamicSchemaField, IDynamicSchema
 from schooltool.interfaces import IDynamicSchemaService
+from schooltool.interfaces import IModuleSetup
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
-               IRelationshipAPI, IViewAPI, ITimetableModelRegistry)
+               IRelationshipAPI, IViewAPI, ITimetableModelRegistry,
+               IModuleSetup)
 
 __metaclass__ = type
 
@@ -545,3 +550,7 @@ def listTimetableModels():
     """Returns a sequence of keys of the timetable models in the
     registry."""
     return timetable_model_registry.keys()
+
+def setUp():
+    serviceManager.defineService('Utilities', IGlobalUtilityService)
+    serviceManager.provideService('Utilities', GlobalUtilityService())

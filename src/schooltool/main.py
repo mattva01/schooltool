@@ -538,6 +538,7 @@ def setUpModules(module_names):
 def setUp():
     """Set up the SchoolTool application."""
     setUpModules([
+        'schooltool.component',
         'schooltool.relationship',
         'schooltool.membership',
         'schooltool.absence',
