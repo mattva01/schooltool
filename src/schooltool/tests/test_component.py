@@ -298,6 +298,15 @@ class TestFacetFunctions(unittest.TestCase):
         self.assertEqual(len(list(iterFacetFactories())), 0)
 
 
+class TestDynamicSchemaField(unittest.TestCase):
+
+    def test(self):
+        from schooltool.component import DynamicSchemaField
+        from schooltool.interfaces import IDynamicSchemaField
+        field = DynamicSchemaField('telephone','Phone')
+        verifyObject(IDynamicSchemaField, field)
+
+
 class TestServiceAPI(unittest.TestCase):
 
     def test_api(self):
@@ -592,6 +601,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestViewRegistry))
     suite.addTest(unittest.makeSuite(TestUtilityService))
     suite.addTest(unittest.makeSuite(TestTimetableModelRegistry))
+    suite.addTest(unittest.makeSuite(TestDynamicSchemaField))
     return suite
 
 if __name__ == '__main__':

@@ -2192,6 +2192,26 @@ class IAuthenticator(Interface):
         """
 
 
+class IDynamicSchemaField(Interface):
+    """A display-agnostic field definition
+
+    Stores custom form fields where browser and rest can access them
+    """
+
+    def __getitem__(key):
+        pass
+
+    def __setitem__(key, value):
+        pass
+
+    def __eq__(other):
+        """Equality test for Field.
+
+        Only compares name and label.
+        """
+        pass
+
+
 class IDynamicFacet(IFacet):
     """General informational attributes for person and address objects"""
 

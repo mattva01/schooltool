@@ -29,46 +29,15 @@ from zope.interface import implements
 from schooltool.interfaces import IDynamicFacet, IPersonInfoFacet
 from schooltool.interfaces import IAddressInfoFacet
 from schooltool.interfaces import IPersonInfoFacet, IDynamicFacetSchemaService
+from schooltool.component import DynamicSchemaField
 
 
 __metaclass__ = type
 
 
-class DynamicFacetField(Persistent):
+class DynamicFacetField(DynamicSchemaField):
     """A display-agnostic field definition"""
-
-    def __init__(self, name, label, ftype=None, value=None, vocabulary=[]):
-        self.name = name
-        self.label = label
-        self.ftype = ftype
-        self.value = value
-        self.vocabulary = vocabulary
-
-    def __getitem__(self, key):
-        if key in ('name', 'label', 'value', 'ftype', 'vocabulary'):
-            return getattr(self, key)
-        else:
-            raise ValueError("Invalid field value request.")
-
-    def __setitem__(self, key, value):
-        if key in ('name', 'label', 'value', 'ftype', 'vocabulary'):
-            field = getattr(self, key)
-        else:
-            raise ValueError("Invalid field value")
-
-        field = value
-
-    def __eq__(self, other):
-        """Equality test for Field.
-
-        Only compares name and label.
-        """
-        if self['name'] != other['name']:
-            return False
-        if self['label'] != other['label']:
-            return False
-
-        return True
+    pass
 
 
 class DynamicFacet(Persistent):

@@ -27,8 +27,10 @@ from zope.interface.verify import verifyObject
 
 class TestDynamicFacetField(unittest.TestCase):
     def test(self):
-        from schooltool.infofacets import PersonInfoFacet
-        pass
+        from schooltool.infofacets import DynamicFacetField
+        from schooltool.interfaces import IDynamicSchemaField
+        field = DynamicFacetField('telephone','Phone')
+        verifyObject(IDynamicSchemaField, field)
 
 
 class TestDynamicFacet(unittest.TestCase):

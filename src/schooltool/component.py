@@ -24,6 +24,7 @@ $Id$
 
 from zope.interface import moduleProvides, implements, providedBy, Interface
 from zope.interface.adapter import AdapterRegistry
+from persistent import Persistent
 from persistent.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
@@ -36,6 +37,7 @@ from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import IUtilityService
 from schooltool.interfaces import ITimetableModelRegistry
 from schooltool.interfaces import IOptions
+from schooltool.interfaces import IDynamicSchemaField
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
                IRelationshipAPI, IViewAPI, ITimetableModelRegistry)
@@ -192,6 +194,44 @@ def iterFacetFactories():
 def getFacetFactory(name):
     """Returns the named facet factory."""
     return facet_factory_registry[name]
+
+
+#
+# Dynamic Schema Service
+#
+
+class DynamicSchemaField(Persistent):
+
+    implements(IDynamicSchemaField)
+
+    def __init__(self, name, label, ftype=None, value=None, vocabulary=[]):
+        self.name = name
+        self.label = label
+        self.ftype = ftype
+        self.value = value
+        self.vocabulary = vocabulary
+
+    def __getitem__(self, key):
+        if key in ('name', 'label', 'value', 'ftype', 'vocabulary'):
+            return getattr(self, key)
+        else:
+            raise ValueError("Invalid field value request.")
+
+    def __setitem__(self, key, value):
+        if key in ('name', 'label', 'value', 'ftype', 'vocabulary'):
+            field = getattr(self, key)
+        else:
+            raise ValueError("Invalid field value")
+
+        field = value
+
+    def __eq__(self, other):
+        if self['name'] != other['name']:
+            return False
+        if self['label'] != other['label']:
+            return False
+
+        return True
 
 
 #
