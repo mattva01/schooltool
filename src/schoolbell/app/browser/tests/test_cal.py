@@ -977,7 +977,9 @@ def doctest_CalendarEventAddView():
 
     """
 
+
 class TestGetRecurrenceRule(unittest.TestCase):
+
     def test_getRecurrenceRule(self):
         from schoolbell.calendar.recurrent import DailyRecurrenceRule
         from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
@@ -985,20 +987,18 @@ class TestGetRecurrenceRule(unittest.TestCase):
         from schoolbell.calendar.recurrent import YearlyRecurrenceRule
         from schoolbell.app.browser.cal import makeRecurrenceRule
 
-
         # Rule is not returned when the checkbox is unchecked
+
         rule = makeRecurrenceRule(recurrence_type='daily', interval=1)
         self.assertEquals(rule, DailyRecurrenceRule(interval=1))
 
         rule = makeRecurrenceRule(recurrence_type='daily', interval=2)
         self.assertEquals(rule, DailyRecurrenceRule(interval=2))
 
-        rule = makeRecurrenceRule(recurrence_type='weekly',
-                                  interval=3)
+        rule = makeRecurrenceRule(recurrence_type='weekly', interval=3)
         self.assertEquals(rule, WeeklyRecurrenceRule(interval=3))
 
-        rule = makeRecurrenceRule(recurrence_type='monthly',
-                                  interval=1)
+        rule = makeRecurrenceRule(recurrence_type='monthly', interval=1)
         self.assertEquals(rule, MonthlyRecurrenceRule(interval=1))
 
         rule = makeRecurrenceRule(recurrence_type='yearly')
@@ -1025,41 +1025,36 @@ class TestGetRecurrenceRule(unittest.TestCase):
         self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
 
         dates = (date(2004, 1, 1), date(2004, 1, 2))
-        rule = makeRecurrenceRule(recurrence_type='daily',
-                                  interval=1,
+        rule = makeRecurrenceRule(recurrence_type='daily', interval=1,
                                   exceptions=dates)
         self.assertEquals(rule, DailyRecurrenceRule(interval=1,
                                                     exceptions=dates))
 
-        rule = makeRecurrenceRule(recurrence_type='weekly',
-                                  interval=1,
+        rule = makeRecurrenceRule(recurrence_type='weekly', interval=1,
                                   weekdays=(2,))
         self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
                                                      weekdays=(2, )))
 
-        rule = makeRecurrenceRule(recurrence_type='weekly',
-                        interval=1,
+        rule = makeRecurrenceRule(recurrence_type='weekly', interval=1,
                         weekdays=[1, 2])
         self.assertEquals(rule, WeeklyRecurrenceRule(interval=1,
                                                      weekdays=(1, 2)))
 
-        rule = makeRecurrenceRule(recurrence_type='monthly',
-                                  interval=1,
+        rule = makeRecurrenceRule(recurrence_type='monthly', interval=1,
                                   monthly="monthday")
         self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
                                                       monthly="monthday"))
 
-        rule = makeRecurrenceRule(recurrence_type='monthly',
-                                  interval=1,
+        rule = makeRecurrenceRule(recurrence_type='monthly', interval=1,
                                   monthly="weekday")
         self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
                                                       monthly="weekday"))
 
-        rule = makeRecurrenceRule(recurrence_type='monthly',
-                                  interval=1,
+        rule = makeRecurrenceRule(recurrence_type='monthly', interval=1,
                                   monthly="lastweekday")
         self.assertEquals(rule, MonthlyRecurrenceRule(interval=1,
                                                       monthly="lastweekday"))
+
 
 class TestDailyCalendarView(unittest.TestCase):
 

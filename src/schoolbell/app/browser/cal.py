@@ -529,6 +529,8 @@ class YearlyCalendarView(CalendarViewBase):
 class CalendarEventView(object):
     """Renders the inside of the event box in various calendar views."""
 
+    # Note: this view is *not* rendered for events in the daily view.
+
     __used_for__ = ICalendarEvent
 
     template = ViewPageTemplateFile('templates/cal_event.pt')
@@ -1027,8 +1029,7 @@ def makeRecurrenceRule(interval=None, until=None,
                        count=None, range=None,
                        exceptions=None, recurrence_type=None,
                        weekdays=None, monthly=None):
-    """Return a recurrence rule according to the argumentsx.
-    """
+    """Return a recurrence rule according to the arguments."""
     if interval is None:
         interval = 1
 
@@ -1054,4 +1055,4 @@ def makeRecurrenceRule(interval=None, until=None,
     elif recurrence_type == 'yearly':
         return YearlyRecurrenceRule(**kwargs)
     else:
-        raise "Non implemented!"
+        raise "Not implemented!"

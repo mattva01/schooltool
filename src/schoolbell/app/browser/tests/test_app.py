@@ -734,6 +734,7 @@ def doctest_PersonAddView():
 
     """
 
+
 def doctest_LoginView():
     """
     Suppose we have a SchoolBell app and a person:
@@ -837,6 +838,7 @@ def doctest_LoginView():
         'http://host/path'
 
     """
+
 
 def doctest_LogoutView():
     """
