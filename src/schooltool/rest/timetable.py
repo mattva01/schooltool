@@ -287,6 +287,7 @@ class TimetableReadWriteView(TimetableReadView):
         except XMLValidationError:
             return textErrorPage(request,
                                  _("Timetable not valid according to schema"))
+
         try:
             doc.registerNs('tt', 'http://schooltool.org/ns/timetable/0.1')
             doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')

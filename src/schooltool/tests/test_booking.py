@@ -28,9 +28,8 @@ import datetime
 from schooltool.tests.utils import AppSetupMixin
 
 
-class TestTimetableResourceSynchronizer(AppSetupMixin,
-                                         unittest.TestCase):
-    """Tests for TimetableResourceSynchronizer."""
+class TestResourceSynchronization(AppSetupMixin, unittest.TestCase):
+    """Tests for event handlers in the booking module."""
 
     def setUp(self):
         from schooltool.timetable import Timetable
@@ -44,18 +43,17 @@ class TestTimetableResourceSynchronizer(AppSetupMixin,
         self.person.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
         self.resource.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
         self.location.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
+
         act = TimetableActivity('Math', owner=self.person,
                                 resources=[self.resource, self.location])
-        # Events are not hooked up at this point
+
         for obj in (self.person, self.resource, self.location):
-            obj.timetables['2004-fall', 'simple']['Day 1'].add('A', act)
+            ttday = obj.timetables['2004-fall', 'simple']['Day 1']
+            ttday.add('A', act, send_events=False)
 
     def test_activity_added_then_removed(self):
-        from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.timetable import TimetableActivity
         from schooltool.interfaces import IEvent
-        ttes = TimetableResourceSynchronizer()
-        self.app.eventService.subscribe(ttes, IEvent)
 
         activity = TimetableActivity(title="New", owner=self.person,
                                      resources=(self.location, ))
@@ -76,14 +74,11 @@ class TestTimetableResourceSynchronizer(AppSetupMixin,
         self.assertEquals(list(ttday['B']), [])
 
     def test_exception_added_then_removed(self):
-        from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.timetable import TimetableException
         from schooltool.timetable import ExceptionalTTCalendarEvent
         from schooltool.interfaces import IEvent
 
         # Prepare test fixture
-        ttes = TimetableResourceSynchronizer()
-        self.app.eventService.subscribe(ttes, IEvent)
         tt = self.person.timetables['2004-fall', 'simple']
         rtt = self.resource.timetables['2004-fall', 'simple']
         ltt = self.location.timetables['2004-fall', 'simple']
@@ -93,10 +88,9 @@ class TestTimetableResourceSynchronizer(AppSetupMixin,
         exc = TimetableException(datetime.date(2004, 11, 02), 'A', act)
         rtt.exceptions.append(exc)       # Sends out an event
 
-        # TimetableResourceSynchronizer notices the event and adds the
-        # exception to the timetables of all resources and persons.  It
-        # takes care not to add the exception to a list if it is already
-        # in the list.
+        # the synchronizer notices the event and adds the exception to the
+        # timetables of all resources and persons.  It takes care not to add
+        # the exception to a list if it is already in the list.
         self.assertEquals(tt.exceptions, [exc])
         self.assertEquals(rtt.exceptions, [exc])
         self.assertEquals(ltt.exceptions, [exc])
@@ -112,21 +106,18 @@ class TestTimetableResourceSynchronizer(AppSetupMixin,
         # Part 2: remove the exception
         ltt.exceptions.remove(exc)      # Sends out the event
 
-        # TimetableResourceSynchronizer notices the event and adds the
-        # exception to the timetables of all resources and persons.
+        # the synchronizer notices the event and adds the exception to the
+        # timetables of all resources and persons.
         self.assertEquals(tt.exceptions, [])
         self.assertEquals(rtt.exceptions, [])
         self.assertEquals(ltt.exceptions, [])
 
     def test_timetable_replaced(self):
-        from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.timetable import TimetableActivity
         from schooltool.timetable import TimetableException
         from schooltool.interfaces import IEvent
 
         # Prepare test fixture
-        ttes = TimetableResourceSynchronizer()
-        self.app.eventService.subscribe(ttes, IEvent)
         tt = self.person.timetables['2004-fall', 'simple']
         act = tt.itercontent().next()[-1]
         exc = TimetableException(datetime.date(2004, 11, 02), 'A', act)
@@ -188,7 +179,7 @@ class TestTimetableResourceSynchronizer(AppSetupMixin,
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestTimetableResourceSynchronizer))
+    suite.addTest(unittest.makeSuite(TestResourceSynchronization))
     return suite
 
 if __name__ == '__main__':

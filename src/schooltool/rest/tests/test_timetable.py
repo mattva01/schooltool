@@ -680,13 +680,11 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         'tt_type': "own", 'exceptions': TestTimetableReadView.exceptions_html}
 
     def setUp(self):
-        from schooltool.booking import TimetableResourceSynchronizer
         TestTimetableReadView.setUp(self)
         self.setUpRegistries()
         self.setUpLibxml2()
-        self.root = ServiceManagerStub(self.createEmpty(),
-                                       eventService=self.eventService)
-        self.eventService.register(TimetableResourceSynchronizer())
+        tt = self.createEmpty()
+        self.root = ServiceManagerStub(tt, eventService=self.eventService)
 
     def tearDown(self):
         self.tearDownRegistries()
@@ -727,14 +725,14 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         expected = self.createFull(ttd)
         self.do_test_put(ttd, key, self.full_xml, expected)
         # Also check that resource timetables were updated
-        self.assertEquals([(d, p, a.title) for d, p, a in
-                                room1.timetables[key].itercontent()],
+        self.assertEquals([(d, p, a.title)
+                           for d, p, a in room1.timetables[key].itercontent()],
                           [('Day 1', 'A', 'Maths')])
-        self.assertEquals([(d, p, a.title) for d, p, a in
-                                lab1.timetables[key].itercontent()],
+        self.assertEquals([(d, p, a.title)
+                           for d, p, a in lab1.timetables[key].itercontent()],
                           [('Day 2', 'C', 'CompSci')])
-        self.assertEquals([(d, p, a.title) for d, p, a in
-                                lab2.timetables[key].itercontent()],
+        self.assertEquals([(d, p, a.title)
+                           for d, p, a in lab2.timetables[key].itercontent()],
                           [('Day 2', 'C', 'CompSci')])
 
         # Now clear the same timetable
@@ -765,10 +763,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.applog,
-                [(None,
-                  "Timetable of John Smith (/john) for"
-                  " 2003 fall, weekly, updated",
-                  INFO)])
+                [(None, "Timetable of John Smith (/john) for"
+                        " 2003 fall, weekly, updated", INFO)])
         tt = timetabled.timetables[key]
         self.assertEquals(tt, expected)
 
@@ -1523,18 +1519,6 @@ class TestSchoolTimetableView(XMLCompareMixin, SchoolToolSetup,
         tt["B"] = TimetableDay(("Red", "Yellow"))
         service[self.key[1]] = tt
 
-        from schooltool.booking import TimetableResourceSynchronizer
-        from schooltool.interfaces import ITimetableReplacedEvent
-        from schooltool.interfaces import ITimetableExceptionEvent
-        from schooltool.interfaces import ITimetableActivityEvent
-        timetable_resource_synchronizer = TimetableResourceSynchronizer()
-        app.eventService.subscribe(timetable_resource_synchronizer,
-                                   ITimetableReplacedEvent)
-        app.eventService.subscribe(timetable_resource_synchronizer,
-                                   ITimetableExceptionEvent)
-        app.eventService.subscribe(timetable_resource_synchronizer,
-                                   ITimetableActivityEvent)
-
     def tearDown(self):
         self.tearDownRegistries()
         self.tearDownLibxml2()
@@ -1598,10 +1582,10 @@ class TestSchoolTimetableView(XMLCompareMixin, SchoolToolSetup,
         tt["B"].add("Red", email_activity)
         self.sg3.timetables[self.key] = tt
 
-        # Strictly speaking the following bit of code is redundant, because
-        # TimetableResourceSynchronizer already copied the activity.  However,
-        # this bit of code exposed a bug in TimetableResourceSynchronizer, so
-        # I'm leaving it as a regression test.
+        # Strictly speaking the following bit of code is redundant, because the
+        # resource synchronization code already copied the activity.  However,
+        # this bit of code exposed a bug in the synchronization code, so I'm
+        # leaving it as a regression test.
         tt = tt.cloneEmpty()
         tt["B"].add("Red", email_activity)
         self.room1.timetables[self.key] = tt

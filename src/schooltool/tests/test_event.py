@@ -23,10 +23,11 @@ $Id$
 """
 
 import unittest
+from zope.component import getService
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IEvent
-from schooltool.tests.utils import LinkStub
+from schooltool.tests.utils import LinkStub, SchoolToolSetup
 
 __metaclass__ = type
 
@@ -262,7 +263,7 @@ class TestEventActionMixins(unittest.TestCase):
         self.assertEquals(event.dispatched_to, [friend])
 
 
-class TestEventService(unittest.TestCase):
+class TestEventService(SchoolToolSetup):
 
     def test(self):
         from schooltool.event import EventService
@@ -313,8 +314,18 @@ class TestEventService(unittest.TestCase):
         es.subscribe(target1, IEventB)
         es.subscribe(target2, IEvent)
         es.subscribe(target2, IEventA)
+
+        # Register a handler in the Zope3 event system to check that events are
+        # propagated properly.
+        adapters = getService('Adapters')
+        log = []
+        def handler(event):
+            log.append(event)
+        adapters.subscribe([IEventA], None, handler)
+
         event = EventAStub()
         es.notify(event)
+        self.assertEquals(log, [event])
         self.assertEquals(event.dispatched_to, [target2, target2])
 
     def test_nonevents(self):

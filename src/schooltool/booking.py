@@ -86,7 +86,9 @@ TODO: Move the special code to this module.
 $Id$
 """
 
-from zope.interface import implements
+from zope.component import getService
+from zope.interface import implements, moduleProvides
+from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IEventTarget
 from schooltool.interfaces import ITimetableActivityAddedEvent
 from schooltool.interfaces import ITimetableActivityRemovedEvent
@@ -94,98 +96,89 @@ from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableExceptionAddedEvent
 from schooltool.interfaces import ITimetableExceptionRemovedEvent
 
+moduleProvides(IModuleSetup)
+
 __metaclass__ = type
 
 
-class TimetableResourceSynchronizer:
-    """Event handler that synchronizes person/group and resource timetables."""
+def notifyActivityAdded(event):
+    _activityAdded(event.activity, event.activity.timetable.__name__,
+                   event.day_id, event.period_id, event.activity.timetable)
 
-    implements(IEventTarget)
+def notifyActivityRemoved(event):
+    _activityRemoved(event.activity, event.activity.timetable.__name__,
+                     event.day_id, event.period_id, event.activity.timetable)
 
-    def notify(self, event):
-        if ITimetableActivityAddedEvent.providedBy(event):
-            self.notifyActivityAdded(event)
-        elif ITimetableActivityRemovedEvent.providedBy(event):
-            self.notifyActivityRemoved(event)
-        elif ITimetableReplacedEvent.providedBy(event):
-            self.notifyTimetableReplaced(event)
-        elif ITimetableExceptionAddedEvent.providedBy(event):
-            self.notifyTimetableExceptionAdded(event)
-        elif ITimetableExceptionRemovedEvent.providedBy(event):
-            self.notifyTimetableExceptionRemoved(event)
-        else:
-            raise TypeError("Unknown event: %r" % event)
+def notifyTimetableReplaced(event):
+    if event.old_timetable is not None:
+        for exception in event.old_timetable.exceptions:
+            _exceptionRemoved(exception, event.key)
+        for day_id, period_id, act in event.old_timetable.itercontent():
+            if act.resources:
+                _activityRemoved(act, event.key, day_id, period_id,
+                                      event.new_timetable)
+    if event.new_timetable is not None:
+        for day_id, period_id, act in event.new_timetable.itercontent():
+            if act.resources:
+                _activityAdded(act, event.key, day_id, period_id,
+                                    event.new_timetable)
+        for exception in event.new_timetable.exceptions:
+            _exceptionAdded(exception, event.key)
 
-    def notifyActivityAdded(self, event):
-        self._activityAdded(event.activity, event.activity.timetable.__name__,
-                            event.day_id, event.period_id,
-                            event.activity.timetable)
+def notifyTimetableExceptionAdded(event):
+    _exceptionAdded(event.exception, event.timetable.__name__)
 
-    def notifyActivityRemoved(self, event):
-        self._activityRemoved(event.activity,
-                              event.activity.timetable.__name__,
-                              event.day_id, event.period_id,
-                              event.activity.timetable)
+def notifyTimetableExceptionRemoved(event):
+    _exceptionRemoved(event.exception, event.timetable.__name__)
 
-    def notifyTimetableReplaced(self, event):
-        if event.old_timetable is not None:
-            for exception in event.old_timetable.exceptions:
-                self._exceptionRemoved(exception, event.key)
-            for day_id, period_id, act in event.old_timetable.itercontent():
-                if act.resources:
-                    self._activityRemoved(act, event.key, day_id, period_id,
-                                          event.new_timetable)
-        if event.new_timetable is not None:
-            for day_id, period_id, act in event.new_timetable.itercontent():
-                if act.resources:
-                    self._activityAdded(act, event.key, day_id, period_id,
-                                        event.new_timetable)
-            for exception in event.new_timetable.exceptions:
-                self._exceptionAdded(exception, event.key)
 
-    def notifyTimetableExceptionAdded(self, event):
-        self._exceptionAdded(event.exception, event.timetable.__name__)
+def _activityAdded(activity, key, day_id, period_id, timetable):
+    if activity.owner is None:
+        return # Make life easier for unit tests.
+    for obj in [activity.owner] + list(activity.resources):
+        if key not in obj.timetables:
+            obj.timetables[key] = timetable.cloneEmpty()
+        tt = obj.timetables[key]
+        if tt is not timetable:
+            tt[day_id].add(period_id, activity, False)
 
-    def notifyTimetableExceptionRemoved(self, event):
-        self._exceptionRemoved(event.exception, event.timetable.__name__)
+def _activityRemoved(activity, key, day_id, period_id, timetable):
+    if activity.owner is None:
+        return # Make life easier for unit tests.
+    for obj in [activity.owner] + list(activity.resources):
+        tt = obj.timetables.get(key)
+        if tt is not timetable:
+            tt[day_id].remove(period_id, activity, False)
 
-    def _activityAdded(self, activity, key, day_id, period_id, timetable):
-        if activity.owner is None:
-            return # Make life easier for unit tests.
-        for obj in [activity.owner] + list(activity.resources):
-            if key not in obj.timetables:
-                obj.timetables[key] = timetable.cloneEmpty()
-            tt = obj.timetables[key]
-            if tt is not timetable:
-                tt[day_id].add(period_id, activity, False)
+def _exceptionAdded(exception, key):
+    activity = exception.activity
+    if activity.owner is None:
+        return # this must be a unit test
+    for obj in [activity.owner] + list(activity.resources):
+        tt = obj.timetables[key]
+        if exception not in tt.exceptions:
+            # Call extend instead of append to reduce the number of events
+            tt.exceptions.extend([exception])
 
-    def _activityRemoved(self, activity, key, day_id, period_id, timetable):
-        if activity.owner is None:
-            # Make life easier for unit tests.
-            return
-        for obj in [activity.owner] + list(activity.resources):
-            tt = obj.timetables.get(key)
-            if tt is not timetable:
-                tt[day_id].remove(period_id, activity, False)
+def _exceptionRemoved(exception, key):
+    activity = exception.activity
+    if activity.owner is None:
+        return # this must be a unit test
+    for obj in [activity.owner] + list(activity.resources):
+        tt = obj.timetables.get(key)
+        if tt is not None and exception in tt.exceptions:
+            # This call causes (unintentional but harmless) recursion.
+            tt.exceptions.remove(exception)
 
-    def _exceptionAdded(self, exception, key):
-        activity = exception.activity
-        if activity.owner is None:
-            return # this must be a unit test
-        for obj in [activity.owner] + list(activity.resources):
-            tt = obj.timetables[key]
-            if exception not in tt.exceptions:
-                # Call extend instead of append to reduce the number of events
-                tt.exceptions.extend([exception])
 
-    def _exceptionRemoved(self, exception, key):
-        activity = exception.activity
-        if activity.owner is None:
-            return # this must be a unit test
-        for obj in [activity.owner] + list(activity.resources):
-            tt = obj.timetables.get(key)
-            if tt is not None and exception in tt.exceptions:
-                # Note that this call causes (unintentional but harmless)
-                # recursion.
-                tt.exceptions.remove(exception)
-
+def setUp():
+    # Register event handlers.
+    adapters = getService('Adapters')
+    for interface, handler in [
+            (ITimetableActivityAddedEvent, notifyActivityAdded),
+            (ITimetableActivityRemovedEvent, notifyActivityRemoved),
+            (ITimetableReplacedEvent, notifyTimetableReplaced),
+            (ITimetableExceptionAddedEvent, notifyTimetableExceptionAdded),
+            (ITimetableExceptionRemovedEvent, notifyTimetableExceptionRemoved),
+            ]:
+        adapters.subscribe([interface], None, handler)

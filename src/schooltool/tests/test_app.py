@@ -205,8 +205,6 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.app import create_application
         from schooltool.model import Person, Group, Resource, Residence
         from schooltool.component import getRelatedObjects
-        from schooltool.booking import TimetableResourceSynchronizer
-        from schooltool.membership import RestrictedMembershipPolicy
 
         app = create_application()
         root = app['groups']['root']
@@ -237,16 +235,6 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
 
         absence_tracker = app.utilityService['absences']
         self.assert_((absence_tracker, IAttendanceEvent) in subscriptions)
-
-        tt_subscriptions = [iface for target, iface in subscriptions
-                if isinstance(target, TimetableResourceSynchronizer)]
-        self.assert_(ITimetableReplacedEvent in tt_subscriptions)
-        self.assert_(ITimetableExceptionEvent in tt_subscriptions)
-        self.assert_(ITimetableActivityEvent in tt_subscriptions)
-
-        restr_subscriptions = [iface for target, iface in subscriptions
-                if isinstance(target, RestrictedMembershipPolicy)]
-        self.assert_(IBeforeMembershipEvent in restr_subscriptions)
 
 
 def test_suite():

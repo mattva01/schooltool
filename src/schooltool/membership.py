@@ -23,6 +23,7 @@ $Id: model.py 153 2003-10-16 12:33:50Z mg $
 """
 
 from sets import Set
+from zope.component import getService
 from zope.interface import implements, moduleProvides
 from schooltool.interfaces import IQueryLinks
 from schooltool.interfaces import IMembershipEvent
@@ -162,20 +163,19 @@ def memberOf(member, group):
     return group in getRelatedObjects(member, URIGroup)
 
 
-class RestrictedMembershipPolicy:
-    """Restricted membership policy"""
-
-    implements(IEventTarget)
-
-    def notify(self, event):
-        if (IBeforeMembershipEvent.providedBy(event) and
-            IPerson.providedBy(event.member) and
-            getOptions(event.group).restrict_membership):
-            if not belongsToParentGroup(event.member, event.group):
-                raise ValueError(_('Only immediate members of parent'
-                                   ' groups can be members'))
+def enforceMembershipPolicy(event):
+    if (IBeforeMembershipEvent.providedBy(event) and
+        IPerson.providedBy(event.member) and
+        getOptions(event.group).restrict_membership):
+        if not belongsToParentGroup(event.member, event.group):
+            raise ValueError(_('Only immediate members of parent'
+                               ' groups can be members'))
 
 
 def setUp():
-    """Register the URIMembership relationship handler."""
+    # Register the URIMembership relationship handler.
     registerRelationship(URIMembership, membershipRelate)
+
+    # Register enforceMembershipPolicy as an event handler 
+    adapters = getService('Adapters')
+    adapters.subscribe([IBeforeMembershipEvent], None, enforceMembershipPolicy)

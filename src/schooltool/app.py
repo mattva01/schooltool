@@ -36,11 +36,9 @@ from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
 from schooltool.interfaces import IBeforeMembershipEvent
 from schooltool.interfaces import IFacetFactory
 from schooltool.membership import Membership
-from schooltool.membership import RestrictedMembershipPolicy
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
 from schooltool.infofacets import DynamicFacetSchemaService, DynamicFacet
 from schooltool.translation import ugettext as _
-from schooltool.booking import TimetableResourceSynchronizer
 from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableExceptionEvent
 from schooltool.interfaces import ITimetableActivityEvent
@@ -184,18 +182,6 @@ class ApplicationObjectContainer(Persistent):
 def create_application():
     """Instantiate a new application."""
     app = Application()
-
-    timetable_resource_synchronizer = TimetableResourceSynchronizer()
-    app.eventService.subscribe(timetable_resource_synchronizer,
-                               ITimetableReplacedEvent)
-    app.eventService.subscribe(timetable_resource_synchronizer,
-                               ITimetableExceptionEvent)
-    app.eventService.subscribe(timetable_resource_synchronizer,
-                               ITimetableActivityEvent)
-
-    restricted_membership_policy = RestrictedMembershipPolicy()
-    app.eventService.subscribe(restricted_membership_policy,
-                               IBeforeMembershipEvent)
 
     event_log = EventLogUtility()
     app.utilityService['eventlog'] = event_log

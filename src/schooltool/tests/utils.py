@@ -27,6 +27,7 @@ import sets
 import sys
 import time
 import unittest
+import zope.event
 from pprint import pformat
 from zope.interface import implements, directlyProvides
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
@@ -120,10 +121,11 @@ class ServiceManager:
     def register(self, target):
         self.targets.append(target)
 
-    def notify(self, e):
-        self.events.append(e)
+    def notify(self, event):
+        zope.event.notify(event)
+        self.events.append(event)
         for target in self.targets:
-            e.dispatch(target)
+            event.dispatch(target)
 
     def clearEvents(self):
         self.events = []
@@ -185,12 +187,13 @@ class RegistriesSetupMixin(RegistriesCleanupMixin):
     """Mixin for substituting temporary global registries."""
 
     def setUpRegistries(self):
-        from schooltool import component, rest, uris, timetable
+        from schooltool import component, rest, uris, timetable, booking
         self.saveRegistries()
         component.setUp()
         uris.setUp()
         rest.setUp()
         timetable.setUp()
+        booking.setUp()
 
     def tearDownRegistries(self):
         self.restoreRegistries()

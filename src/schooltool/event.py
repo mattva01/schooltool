@@ -25,6 +25,7 @@ $Id$
 from sets import Set
 from persistent import Persistent
 from persistent.list import PersistentList
+import zope.event
 from zope.interface import implements
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
@@ -178,7 +179,7 @@ class EventService(Persistent):
 
     def notify(self, event):
         '''See IEventTarget'''
+        zope.event.notify(event)
         for t, e in self._subscriptions:
             if e.providedBy(event):
                 event.dispatch(t)
-

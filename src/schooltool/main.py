@@ -547,12 +547,14 @@ def setUp():
         'schooltool.uris',
         'schooltool.teaching',
         'schooltool.timetable',
+        'schooltool.booking',
         ])
 
 
 def main():
     """Start the SchoolTool HTTP server."""
-    sys.exit(Server().main(sys.argv[1:]))
+    retval = Server().main(sys.argv[1:])
+    sys.exit(retval)
 
 
 if __name__ == '__main__':

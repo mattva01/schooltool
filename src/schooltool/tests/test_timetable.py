@@ -1342,10 +1342,10 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
 
     def newTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableException
         tt = Timetable(("A", "B"))
-        tt.exceptions.extend(['exc1', 'exc2'])
-        tt["A"] = TimetableDay(("Green", "Blue"))
-        tt["B"] = TimetableDay(("Green", "Blue"))
+        tt["A"] = TimetableDay(["Green", "Blue"])
+        tt["B"] = TimetableDay(["Green", "Blue"])
         return tt
 
     def test_composite_table_own(self):
