@@ -683,6 +683,7 @@ class TestCalendarViewBase(unittest.TestCase):
             ...         self.weekstart = "Monday"
             ...         self.timeformat = "%H:%M"
             ...         self.dateformat = "YYYY-MM-DD"
+            ...         self.timezone = utc
             >>> from schoolbell.app.interfaces import IPersonPreferences
             >>> class PersonStub:
             ...     def __conform__(self, interface):

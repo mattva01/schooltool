@@ -387,12 +387,18 @@ class CalendarViewBase(BrowserView):
             else:
                 self.time_fmt = '%H:%M'
 
+            if prefs.timezone is not None:
+                self.timezone = prefs.timezone
+            else:
+                self.timezone = utc
+
             self.dateformat = prefs.dateformat
 
         else:
             self.first_day_of_week = 0
             self.time_fmt = '%H:%M'
             self.dateformat = 'YYYY-MM-DD'
+            self.timezone = utc
 
     def internationalDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
