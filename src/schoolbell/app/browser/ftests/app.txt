@@ -564,7 +564,7 @@ The group members view reflects the change that we have done:
     Frog
     ...
 
-Let's remove the person:
+Let's remove the person (this bit duplicates the test done in deletion.txt):
 
     >>> print http(r"""
     ... GET /frogpond/persons/@@contents.html?ids%3Alist=frog&container_delete_button=Delete HTTP/1.1
@@ -580,7 +580,7 @@ We can't see him in the group list anymore:
     >>> group_response = http(r"""
     ... GET /frogpond/groups/Group/members_persons.html HTTP/1.1
     ... """)
-    >>> print "\"member.frog\"" not in str(group_response)
+    >>> '"member.frog"' not in str(group_response)
     True
 
 There is a menu item for resources in resource list
