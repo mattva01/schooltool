@@ -2473,9 +2473,7 @@ class SchoolToolApp(wxApp):
 
 def main():
     import schooltool.uris
-    import schooltool.translation
     schooltool.uris.setUp()
-    schooltool.translation.setUp()
     # Do not output XML parsing errors to the terminal
     libxml2.registerErrorHandler(lambda ctx, error: None, None)
     wxInitAllImageHandlers()
