@@ -34,7 +34,7 @@ from schooltool.interfaces import IFacetedRelationshipSchemaFactory
 from schooltool.interfaces import IFacetedRelationshipSchema, IFacetFactory
 from schooltool.interfaces import IPlaceholder
 from schooltool.event import EventTargetMixin
-from schooltool.component import setFacet, iterFacets, facetsByOwner
+from schooltool.component import FacetManager
 from schooltool.db import PersistentKeysSet
 
 __metaclass__ = type
@@ -73,7 +73,7 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
 
     def getEventTable(self):
         tables = [self.eventTable]
-        for facet in iterFacets(self):
+        for facet in FacetManager(self).iterFacets():
             if facet.active and IEventConfigurable.isImplementedBy(facet):
                 tables.append(facet.eventTable)
         return sum(tables, [])
@@ -103,7 +103,8 @@ class FacetedRelationshipSchema:
                 link = links[role_name]
                 target = link.traverse()
                 if IFaceted.isImplementedBy(target):
-                    my_facets = facetsByOwner(target, link)
+                    fm = FacetManager(target)
+                    my_facets = fm.facetsByOwner(link)
                     if my_facets:
                         # Check my facets are active.
                         # These facets would have come from a previous
@@ -115,7 +116,7 @@ class FacetedRelationshipSchema:
                             if not facet.active:
                                 facet.active = True
                     else:
-                        setFacet(target, factory(), owner=link)
+                        fm.setFacet(factory(), owner=link)
                     link.registerUnlinkCallback(facetDeactivator)
                 else:
                     raise TypeError('Target of link "%s" must be IFaceted: %r'
@@ -146,7 +147,7 @@ def facetDeactivator(link):
     placeholder = FacetOwnershipSetter()
     facets = []
     target = link.traverse()
-    for facet in facetsByOwner(target, link):
+    for facet in FacetManager(target).facetsByOwner(link):
         facets.append(facet)
         facet.active = False
         facet.owner = placeholder

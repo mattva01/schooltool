@@ -43,7 +43,6 @@ class BasicRelatable(Relatable, RelatableMixin):
     pass
 
 
-
 class TestURIs(unittest.TestCase):
 
     def testURIGroup(self):

@@ -93,18 +93,18 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
 
     def test_getEventTable(self):
         from schooltool.facet import FacetedEventTargetMixin
-        from schooltool.component import setFacet
+        from schooltool.component import FacetManager
         et = FacetedEventTargetMixin()
         et.__facets__ = Set()
         et.eventTable.append(0)
-        setFacet(et, FacetStub())
+        FacetManager(et).setFacet(FacetStub())
         f = FacetStub()
-        setFacet(et, f)
+        FacetManager(et).setFacet(f)
         f.active = False
         f = FacetWithEventsStub(eventTable=[1])
-        setFacet(et, f)
+        FacetManager(et).setFacet(f)
         f.active = False
-        setFacet(et, FacetWithEventsStub(eventTable=[2]))
+        FacetManager(et).setFacet(FacetWithEventsStub(eventTable=[2]))
         self.assertEquals(et.getEventTable(), [0, 2])
 
 
@@ -171,7 +171,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assertRaises(TypeError, f, parent=parent, child=child)
 
         from schooltool.facet import FacetedMixin
-        from schooltool.component import iterFacets
+        from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
         class FacetedRelatable(FacetedMixin, RelatableMixin):
@@ -180,13 +180,13 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
                 RelatableMixin.__init__(self)
 
         child = FacetedRelatable()
-        self.assertEqual(list(iterFacets(child)), [])
+        self.assertEqual(list(FacetManager(child).iterFacets()), [])
         links = f(parent=parent, child=child)
         self.assertEqual(len(links), 2)
         self.assertEqual(links['parent'].traverse(), parent)
         self.assertEqual(links['child'].traverse(), child)
         # Next, need to check a facet was added to child.
-        facet_list = list(iterFacets(child))
+        facet_list = list(FacetManager(child).iterFacets())
         self.assertEqual(len(facet_list), 1)
         facet = facet_list[0]
 
@@ -209,7 +209,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
 
 
         from schooltool.facet import FacetedMixin
-        from schooltool.component import iterFacets, setFacet
+        from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
         class FacetedRelatable(FacetedMixin, RelatableMixin):
@@ -221,7 +221,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         facet = FacetStub()
         parent = Persistent()
         link = LinkStub(child)
-        setFacet(child, facet, owner=link)
+        FacetManager(child).setFacet(facet, owner=link)
         facet.active = False
         schema = DummyRelationshipSchema('foo', URIDummy, child=link)
         # We now have contrived a relationship schema that will return a
@@ -235,7 +235,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assertEqual(links['parent'].traverse(), parent)
         self.assertEqual(links['child'].traverse(), child)
         # Next, need to check the existing facet on child was reused
-        facet_list = list(iterFacets(child))
+        facet_list = list(FacetManager(child).iterFacets())
         self.assertEqual(len(facet_list), 1)
         self.assert_(facet is facet_list[0])
 
@@ -252,7 +252,7 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
         verifyObject(IPlaceholder, f)
 
     def test(self):
-        from schooltool.component import iterFacets, setFacet
+        from schooltool.component import FacetManager
         from schooltool.facet import facetDeactivator
 
         from schooltool.facet import FacetedMixin
@@ -266,9 +266,9 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
         facet = FacetStub()
         another_facet = FacetStub()
         link = LinkStub(target)
-        setFacet(target, facet, owner=link)
-        setFacet(target, another_facet, owner=object())
-        self.assertEqualSorted(list(iterFacets(target)),
+        FacetManager(target).setFacet(facet, owner=link)
+        FacetManager(target).setFacet(another_facet, owner=object())
+        self.assertEqualSorted(list(FacetManager(target).iterFacets()),
                                [facet, another_facet])
         self.assert_(another_facet.active)
         self.assert_(facet.active)

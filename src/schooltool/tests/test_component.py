@@ -127,33 +127,36 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
         verifyObject(IFacetAPI, component)
 
     def test_setFacet_removeFacet(self):
-        from schooltool.component import setFacet, removeFacet
+        from schooltool.component import FacetManager
         owner_marker = object()
         self.facet.owner = owner_marker
-        self.assertRaises(TypeError, setFacet, self.ob, object())
-        setFacet(self.ob, self.facet)
+        self.assertRaises(TypeError, FacetManager, object())
+        fm = FacetManager(self.ob)
+        self.assertRaises(TypeError, fm.setFacet, object())
+        fm.setFacet(self.facet)
         self.assert_(self.facet.owner is owner_marker)
         self.assert_(self.facet.__parent__ is self.ob)
         self.assert_(self.facet.active)
         self.assert_(self.facet in self.ob.__facets__)
-        self.assertRaises(TypeError, setFacet, object(), self.facet)
-        removeFacet(self.ob, self.facet)
+        #self.assertRaises(TypeError, setFacet, object(), self.facet)
+        fm.removeFacet(self.facet)
         self.assert_(self.facet not in self.ob.__facets__)
 
         owner = object()
-        setFacet(self.ob, self.facet, owner=owner)
+        fm.setFacet(self.facet, owner=owner)
         self.assert_(self.facet.owner is owner)
 
     def test_iterFacets(self):
-        from schooltool.component import iterFacets
+        from schooltool.component import FacetManager
         self.ob.__facets__.add(self.facet)
-        self.assertEqual(list(iterFacets(self.ob)), [self.facet])
-        self.assertRaises(TypeError, iterFacets, object())
+        self.assertEqual(list(FacetManager(self.ob).iterFacets()),
+                         [self.facet])
 
     def test_facetsByOwner(self):
-        from schooltool.component import facetsByOwner
+        from schooltool.component import FacetManager
         owner_marker = object()
-        self.assertEqual(list(facetsByOwner(self.ob, owner_marker)), [])
+        fm = FacetManager(self.ob)
+        self.assertEqual(list(fm.facetsByOwner(owner_marker)), [])
         facet1 = self.facetclass()
         facet1.owner = owner_marker
         facet2 = self.facetclass()
@@ -162,7 +165,7 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
         self.ob.__facets__.add(facet1)
         self.ob.__facets__.add(facet2)
         self.ob.__facets__.add(facet3)
-        self.assertEqualSorted(list(facetsByOwner(self.ob, owner_marker)),
+        self.assertEqualSorted(list(fm.facetsByOwner(owner_marker)),
                                [facet1, facet3])
 
     def test_facetFactories(self):

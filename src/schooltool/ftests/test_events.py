@@ -87,7 +87,7 @@ class TestEventSystem(unittest.TestCase):
         from schooltool.interfaces import URIGroup, URIMember
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.debug import EventLogFacet
-        from schooltool.component import setFacet
+        from schooltool.component import FacetManager
         from schooltool.membership import Membership
         import schooltool.membership
 
@@ -114,7 +114,7 @@ class TestEventSystem(unittest.TestCase):
         student1.eventTable.append(RouteToGroupsAction(IEvent))
         Membership(group=students, member=student1)
         event_log_facet = EventLogFacet()
-        setFacet(student1, event_log_facet)
+        FacetManager(student1).setFacet(event_log_facet)
 
         misc_group = Group(title="misc")
         misc_group.eventTable.append(

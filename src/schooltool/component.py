@@ -30,6 +30,7 @@ from persistence.dict import PersistentDict
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
+from schooltool.interfaces import IFacetManager
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
@@ -94,33 +95,47 @@ def getPath(obj):
 # IFacetAPI
 #
 
-def setFacet(ob, facet, owner=None):
-    """Set a facet on a faceted object."""
-    if not IFaceted.isImplementedBy(ob):
-        raise TypeError("%r does not implement IFaceted" % ob)
-    if not IFacet.isImplementedBy(facet):
-        raise TypeError("%r does not implement IFacet" % facet)
-    ob.__facets__.add(facet)
-    facet.__parent__ = ob
-    if owner is not None:
-        facet.owner = owner
-    facet.active = True
+class FacetManager:
+    implements(IFacetManager)
 
-def removeFacet(ob, facet):
-    """Set a facet on a faceted object."""
-    if not IFaceted.isImplementedBy(ob):
-        raise TypeError("%r does not implement IFaceted" % ob)
-    ob.__facets__.remove(facet)
+    def __init__(self, context):
+        if IFaceted.isImplementedBy(context):
+            self.__parent__ = context
+        else:
+            raise TypeError('FacetManager must be IFaceted', context)
 
-def iterFacets(ob):
-    """Returns an iterator all facets of an object."""
-    if not IFaceted.isImplementedBy(ob):
-        raise TypeError("%r does not implement IFaceted" % ob)
-    return iter(ob.__facets__)
+    def setFacet(self, facet, owner=None):
+        """Set a facet on a faceted object."""
+        ob = self.__parent__
+        if not IFaceted.isImplementedBy(ob):
+            raise TypeError("%r does not implement IFaceted" % ob)
+        if not IFacet.isImplementedBy(facet):
+            raise TypeError("%r does not implement IFacet" % facet)
+        ob.__facets__.add(facet)
+        facet.__parent__ = ob
+        if owner is not None:
+            facet.owner = owner
+        facet.active = True
 
-def facetsByOwner(ob, owner):
-    """Returns a sequence of all facets of ob that are owned by owner."""
-    return [facet for facet in iterFacets(ob) if facet.owner is owner]
+    def removeFacet(self, facet):
+        """Set a facet on a faceted object."""
+        ob = self.__parent__
+        if not IFaceted.isImplementedBy(ob):
+            raise TypeError("%r does not implement IFaceted" % ob)
+        ob.__facets__.remove(facet)
+
+    def iterFacets(self):
+        """Returns an iterator all facets of an object."""
+        ob = self.__parent__
+        if not IFaceted.isImplementedBy(ob):
+            raise TypeError("%r does not implement IFaceted" % ob)
+        return iter(ob.__facets__)
+
+    def facetsByOwner(self, owner):
+        """Returns a sequence of all facets of ob that are owned by owner."""
+        ob = self.__parent__
+        return [facet for facet in self.iterFacets() if facet.owner is owner]
+
 
 facet_factory_registry = {}
 

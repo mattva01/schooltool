@@ -441,7 +441,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.interfaces import IRelationshipValencies, ISpecificURI
         from schooltool.interfaces import URIMembership, URIMember, IFacet
-        from schooltool.component import setFacet
+        from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
         from zope.interface import directlyProvides
 
@@ -465,7 +465,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         rvm = MyValent()
         facet = Facet()
         facet._valencies.append((URIA, URIB))
-        setFacet(rvm, facet, self)
+        FacetManager(rvm).setFacet(facet, self)
 
         rvm._valencies.append((URIMembership, URIMember))
 
@@ -474,7 +474,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
         # A facet without valencies
         facet2 = SimpleFacet()
-        setFacet(rvm, facet2, self)
+        FacetManager(rvm).setFacet(facet2, self)
 
         self.assertEqualsSorted(list(rvm.getValencies()),
                                 [(URIMembership, URIMember), (URIA, URIB)])

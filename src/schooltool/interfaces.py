@@ -592,29 +592,33 @@ class IFacetFactory(Interface):
         """Returns a facet."""
 
 
-class IFacetAPI(Interface):
-    """Facet API"""
+class IFacetManager(Interface):
+    """A thing that manages the facets of some object."""
 
-    def setFacet(ob, facet, owner=None):
+    def setFacet(facet, owner=None):
         """Set the facet on the object.
 
         Owner is the agent responsible for adding the facet.
         If owner is None, the ownership of the facet is not changed.
         """
 
-    def removeFacet(ob, facet):
-        """Set the facet on the object."""
+    def removeFacet(facet):
+        """Remove the facet from the object."""
 
-    def iterFacets(ob):
+    def iterFacets():
         """Returns an iterator over facets of an object."""
 
-    def facetsByOwner(ob, owner):
-        """Returns a sequence of all facets of ob that are owned by owner."""
+    def facetsByOwner(owner):
+        """Returns a sequence of all facets that are owned by owner."""
 
-    def facetFactories(ob):
-        """Returns a sequence of facet factories for the given object.
 
-        Each factory will be an IFacetFactory.
+class IFacetAPI(Interface):
+    """Facet API"""
+
+    def FacetManager(obj):
+        """Returns an IFacetManager for the given object.
+
+        Raises TypeError if the object is not IFaceted.
         """
 
     def getFacetFactory(name):

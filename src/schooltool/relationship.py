@@ -39,7 +39,6 @@ from schooltool.interfaces import ISpecificURI, IFaceted
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IUnlinkHook
 from schooltool.component import inspectSpecificURI, registerRelationship
-from schooltool.component import iterFacets
 from schooltool import component
 from schooltool.event import EventMixin
 
@@ -336,7 +335,7 @@ class RelationshipValenciesMixin(Persistent):
         result = []
         result += self._valencies
         if IFaceted.isImplementedBy(self):
-            for facet in iterFacets(self):
+            for facet in component.FacetManager(self).iterFacets():
                 if (IRelationshipValencies.isImplementedBy(facet)
                     and facet.active):
                     result += facet.getValencies()
