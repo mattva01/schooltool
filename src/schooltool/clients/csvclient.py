@@ -17,25 +17,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-The CSV (comma-separated value) import script for SchoolTool.
+The CSV (comma-separated value) importer for SchoolTool.
 
-This script takes no command line arguments.  It expects to find the following
-files in the current directory:
+This is just the back-end part.  See import-sampleschool.py at the project root
+for an executable script.
+
+The importer expects to find the following files in the current directory:
 
   groups.csv
   pupils.csv
   teachers.csv
   resources.csv
 
-There's a script called datagen.py that can generate samples for you.
-
-This script expects the SchoolTool server to be running on localhost port 7001.
-The server should contain an empty database; csvclient is not designed to
-replace or supplement existing data.
-
-You're probably better off using import-sampleschool.py instead of running
-csvclient.py directly.  It does more, has more options, performs more safety
-checks and in general is more polished.
+There's a script called datagen.py (see generate-sampleschool.py at the project
+root) that can generate samples for you.
 
 
 Format of the files
@@ -384,19 +379,4 @@ def to_xml(s):
     """
     return cgi.escape(s.encode('UTF-8'), True)
 
-
-def main():
-    from schooltool.common import StreamWrapper
-    sys.stdout = StreamWrapper(sys.stdout)
-    sys.stderr = StreamWrapper(sys.stderr)
-    importer = CSVImporter()
-    try:
-        importer.run()
-    except DataError, e:
-        print >> sys.stderr
-        print >> sys.stderr, e
-
-
-if __name__ == '__main__':
-    main()
 
