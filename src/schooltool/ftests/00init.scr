@@ -143,3 +143,12 @@ POST> .
 Content-Type: text/plain
 Facet created: http://localhost/persons/Marius/facets/eventlog
 
+SchoolTool> post /persons/Steve/relationships
+POST> arcrole="http://schooltool.org/ns/teaching"
+POST> role="http://schooltool.org/ns/teaching/teacher"
+POST> href="/groups/students"
+POST> .
+201 Created
+Content-Type: text/plain
+Relationship created: http://localhost/persons/Steve/relationships/0002
+

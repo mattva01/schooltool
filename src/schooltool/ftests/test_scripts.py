@@ -155,8 +155,8 @@ class ScriptTestCase(unittest.TestCase):
                             orig_lineno[min(eidx, len(expected)-1)])]
                 context = expected[context_start:eidx]
                 diffs += [" " + s for s in context]
-                diffs += ["-" + s for s in expected[eidx:eidx+2]]
-                diffs += ["+" + s for s in result[ridx:ridx+2]]
+                diffs += ["-" + s for s in expected[eidx:eidx+3]]
+                diffs += ["+" + s for s in result[ridx:ridx+3]]
                 self.fail("Output does not match expectations\n%s..."
                           % "".join(diffs))
         else:
