@@ -387,7 +387,7 @@ class DailyCalendarView(CalendarViewBase):
 
     The challenge here is to present the events as a table, so that
     the overlapping events are displayed side by side, and the size of
-    the boxes illustrates the duration of the events.
+    the boxes illustrate the duration of the events.
     """
 
     __used_for__ = ICalendar
@@ -712,6 +712,7 @@ class CalendarView(View):
             raise KeyError(name)
 
     def do_GET(self, request):
+        """Redirect to the daily calendar view by default."""
         url = absoluteURL(request, self.context, 'daily.html')
         return self.redirect(url, request)
 
@@ -1406,7 +1407,7 @@ class EventDeleteView(View, EventViewHelpers):
 class CalendarComboMixin(View):
     """Mixin for views over the combined calendar of a person.
 
-    Provides iteration over the private and timetable calendar.
+    Provides iteration over the private calendar and the timetable calendar.
     """
 
     def iterEvents(self, first, last):
@@ -1438,6 +1439,51 @@ class ComboCalendarView(CalendarView):
     weekly_view_class = ComboWeeklyCalendarView
     monthly_view_class = ComboMonthlyCalendarView
     yearly_view_class = YearlyCalendarView
+
+
+class CompositeCalendarMixin(View):
+    """Mixin for views over the composite calendar of a person.
+
+    Provides iteration over the private calendar and the calendars
+    of selected groups.
+    """
+
+    def iterEvents(self, first, last):
+        """Iterate over the events of the calendars displayed."""
+        private_cal = self.context
+        composite_cal = self.context.__parent__.makeCompositeCalendar()
+        return itertools.chain(private_cal.expand(first, last),
+                               composite_cal.expand(first, last))
+
+
+class CompositeDailyCalendarView(CompositeCalendarMixin, DailyCalendarView):
+    pass
+
+
+class CompositeWeeklyCalendarView(CompositeCalendarMixin, WeeklyCalendarView):
+    pass
+
+
+class CompositeMonthlyCalendarView(CompositeCalendarMixin,
+                                   MonthlyCalendarView):
+    pass
+
+
+class CompositeCalendarView(CalendarView):
+    """A view combining the personal calendar and the personal calendars of
+    selected groups."""
+
+    daily_view_class = CompositeDailyCalendarView
+    weekly_view_class = CompositeWeeklyCalendarView
+    monthly_view_class = CompositeMonthlyCalendarView
+    yearly_view_class = YearlyCalendarView
+
+    def do_GET(self, request):
+        # XXX A hack to get redirection working right.  This will go away ASAP.
+        #     There are other instances of redirection which I haven't touched.
+        url = absoluteURL(request, self.context.__parent__,
+                          'composite-calendar/daily.html')
+        return self.redirect(url, request)
 
 
 class CalendarEventView(View):
@@ -1657,5 +1703,3 @@ def week_start(date, first_day_of_week=0):
     if delta < 0:
         delta += 7
     return date - timedelta(delta)
-
-

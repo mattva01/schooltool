@@ -2135,6 +2135,38 @@ class TestCalendarComboMixin(unittest.TestCase):
                           diff(pformat(result), pformat(expected)))
 
 
+class TestCompositeCalendarMixin(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.cal import CompositeCalendarMixin
+        from schooltool.model import Person
+
+        class CalendarStub:
+
+            first = None
+            last = None
+
+            def __init__(self, values):
+                self.values = values
+
+            def expand(self, first, last):
+                self.first = first
+                self.last = last
+                return self.values
+
+        person = Person(title="Wise Guy")
+        person.calendar = CalendarStub([0, 1, 2])
+        person.calendar.__parent__ = person
+        composite_calendar = CalendarStub([3, 4, 5])
+        person.makeCompositeCalendar = lambda: composite_calendar
+        view = CompositeCalendarMixin(person.calendar)
+        self.assertEquals(list(view.iterEvents('start', 'end')), range(6))
+        self.assertEquals(person.calendar.first, 'start')
+        self.assertEquals(person.calendar.last, 'end')
+        self.assertEquals(composite_calendar.first, 'start')
+        self.assertEquals(composite_calendar.last, 'end')
+
+
 class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
                             TraversalTestMixin):
 
@@ -2402,6 +2434,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventDeleteViewPermissionChecking))
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))
+    suite.addTest(unittest.makeSuite(TestCompositeCalendarMixin))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
     suite.addTest(unittest.makeSuite(TestCalendarEventPermissionChecking))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))

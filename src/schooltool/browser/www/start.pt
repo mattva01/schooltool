@@ -59,7 +59,11 @@
           >Change your password</a></p>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
           class="sitemap"  i18n:translate=""
-          >Use your calendar</a>
+          >Browse your calendar</a>
+    <p><a tal:attributes="href
+                        string:${context/@@absolute_url}/composite-calendar"
+          class="sitemap"  i18n:translate=""
+          >Browse the composite calendar</a>
 
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
           class="sitemap"  i18n:translate=""
