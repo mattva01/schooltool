@@ -29,7 +29,6 @@ import time
 import urllib
 import getopt
 import libxml2
-import datetime
 import logging
 import ZConfig
 from zope.interface import moduleProvides

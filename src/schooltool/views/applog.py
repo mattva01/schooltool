@@ -22,8 +22,7 @@ View for the SchoolTool application log.
 $Id$
 """
 
-from zope.interface import moduleProvides
-from schooltool.views import View, Template, textErrorPage
+from schooltool.views import View, textErrorPage
 from schooltool.views.auth import SystemAccess
 from schooltool.translation import ugettext as _
 

@@ -23,7 +23,6 @@ $Id$
 """
 
 import os
-import logging
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
