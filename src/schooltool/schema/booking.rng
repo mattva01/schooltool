@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for a resource booking
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         ns="http://schooltool.org/ns/calendar/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+
+    <element name="booking">
+      <element name="resource">
+        <attribute name="path">
+          <text/>
+        </attribute>
+      </element>
+      <element name="owner">
+        <attribute name="path">
+          <text/>
+        </attribute>
+      </element>
+      <element name="slot">
+        <attribute name="start">
+          <text/>
+        </attribute>
+        <attribute name="duration">
+          <text/>
+        </attribute>
+      </element>
+    </element>
+
+  </start>
+</grammar>

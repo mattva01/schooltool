@@ -32,10 +32,10 @@ from schooltool.views import View, Template, textErrorPage, absoluteURL
 from schooltool.views import read_file
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration
-from schooltool.component import getPath
+from schooltool.common import parse_date, parse_datetime
+from schooltool.component import getPath, traverse
 from schooltool.component import registerView
 from schooltool.schema.rng import validate_against_schema
-from schooltool.common import parse_date
 
 __metaclass__ = type
 
@@ -265,6 +265,59 @@ class CalendarView(CalendarReadView):
                 self.context.addEvent(event)
             request.setHeader('Content-Type', 'text/plain')
             return "Calendar imported"
+
+
+class BookingView(View):
+
+    schema = read_file("../schema/booking.rng")
+
+    def do_POST(self, request):
+        xml = request.content.read()
+        try:
+            if not validate_against_schema(self.schema, xml):
+                return textErrorPage(request,
+                                     "Input not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Not valid XML")
+        doc = libxml2.parseDoc(xml)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/calendar/0.1'
+            xpathctx.xpathRegisterNs('cal', ns)
+
+            resource_node = xpathctx.xpathEval('/cal:booking/cal:resource')[0]
+            res_path = resource_node.nsProp('path', None)
+            try:
+                resource = traverse(self.context, res_path)
+            except KeyError:
+                return textErrorPage(request, "Invalid path: %r" % res_path)
+
+            owner_node = xpathctx.xpathEval('/cal:booking/cal:owner')[0]
+            owner_path = owner_node.nsProp('path', None)
+            try:
+                owner = traverse(self.context, owner_path)
+            except KeyError:
+                return textErrorPage(request, "Invalid path: %r" % owner_path)
+
+            resource_node = xpathctx.xpathEval('/cal:booking/cal:slot')[0]
+            start_str = resource_node.nsProp('start', None)
+            dur_str = resource_node.nsProp('duration', None)
+            try:
+                arg = 'start'
+                start = parse_datetime(start_str)
+                arg = 'duration'
+                duration = datetime.timedelta(minutes=int(dur_str))
+            except ValueError:
+                return textErrorPage(request, "%r argument incorrect" % arg)
+            title = '%s booked by %s' % (resource.title, owner.title)
+            ev = CalendarEvent(start, duration, title)
+            resource.calendar.addEvent(ev)
+            owner.calendar.addEvent(ev)
+            request.setHeader('Content-Type', 'text/plain')
+            return "OK"
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
 
 
 class AllCalendarsView(View):

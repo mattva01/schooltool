@@ -557,6 +557,83 @@ class TestCalendarView(TestCalendarReadView):
                      errmsg="Repeating events/exceptions not yet supported")
 
 
+class TestBookingView(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views.cal import BookingView
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.model import Group, Person, Resource
+        app = Application()
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
+        self.person = app['persons'].new("john", title="John")
+        self.resource = app['resources'].new("hall", title="Hall")
+        self.view = BookingView(self.resource.calendar)
+
+    def test(self):
+        xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        self.assertEquals(len(list(self.person.calendar)), 0)
+        self.assertEquals(len(list(self.resource.calendar)), 0)
+        request = RequestStub(method="POST", body=xml)
+        result = self.view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(len(list(self.person.calendar)), 1)
+        self.assertEquals(len(list(self.resource.calendar)), 1)
+        self.assertEquals(iter(self.person.calendar).next(),
+                          iter(self.resource.calendar).next())
+
+    def test_errors(self):
+        nonxml = "Where am I?"
+        bad_xml = "<booking />"
+        bad_path_xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/room1"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        bad_path2_xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/000001"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        bad_date_xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00" duration="90"/>
+            </booking>
+            """
+        bad_dur_xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="1h"/>
+            </booking>
+            """
+        cases = [
+            (nonxml, "Not valid XML"),
+            (bad_xml, "Input not valid according to schema"),
+            (bad_path_xml, "Invalid path: '/resources/room1'"),
+            (bad_path2_xml, "Invalid path: '/persons/000001'"),
+            (bad_date_xml, "'start' argument incorrect"),
+            (bad_dur_xml, "'duration' argument incorrect"),
+            ]
+        for xml, error in cases:
+            request = RequestStub(method="POST", body=xml)
+            result = self.view.render(request)
+            self.assertEquals(request.code, 400)
+            self.assertEquals(result, error)
+
+
 class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
 
     def createApp(self):
@@ -647,6 +724,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarReadView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestBookingView))
     suite.addTest(unittest.makeSuite(TestAllCalendarsView))
     suite.addTest(unittest.makeSuite(TestModuleSetup))
     return suite

@@ -333,6 +333,7 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.facet import FacetManagementView
         from schooltool.views.relationship import RelationshipsView
         from schooltool.views.timetable import TimetableTraverseView
+        from schooltool.views.cal import BookingView
         from schooltool.interfaces import IFacetManager
         request = RequestStub("http://localhost/resources/room3")
 
@@ -348,6 +349,10 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
         self.assert_(isinstance(result, TimetableTraverseView))
         self.assert_(result.context is self.view.context)
         self.assert_(result.readonly)
+
+        result = self.view._traverse('booking', request)
+        self.assert_(isinstance(result, BookingView))
+        self.assert_(result.context is self.view.context.calendar)
 
     def test_render(self):
         request = RequestStub("http://localhost/resources/room3")

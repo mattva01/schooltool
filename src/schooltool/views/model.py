@@ -35,7 +35,7 @@ from schooltool.views.relationship import RelationshipsView
 from schooltool.views.facet import FacetManagementView
 from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
-from schooltool.views.cal import CalendarView, CalendarReadView
+from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.views.absence import RollcallView, AbsenceManagementView
 
 __metaclass__ = type
@@ -119,6 +119,8 @@ class ResourceView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'timetables':
             return TimetableTraverseView(self.context, readonly=True)
+        if name == 'booking':
+            return BookingView(self.context.calendar)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
 
