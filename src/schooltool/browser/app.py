@@ -355,13 +355,10 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
 
     def _allGroups(self):
         """Return a sorted list of all groups."""
-        try:
-            groups = traverse(self.context, '/groups')
-            result = [(obj.title, obj) for obj in groups.itervalues()]
-            result.sort()
-            return [(obj, title) for title, obj in result]
-        except KeyError:
-            return None
+        groups = traverse(self.context, '/groups')
+        result = [(obj.title, obj) for obj in groups.itervalues()]
+        result.sort()
+        return [(obj, title) for title, obj in result]
 
     def _parseGroups(self, raw_value):
         """Parse a list of paths and return a list of groups."""

@@ -804,9 +804,10 @@ class TestObjectContainerView(SchoolToolSetup, TraversalTestMixin):
     def createView(self):
         from schooltool.app import Application
         from schooltool.app import ApplicationObjectContainer
-        from schooltool.model import Person
+        from schooltool.model import Person, Group
         app = Application()
         app['persons'] = ApplicationObjectContainer(Person)
+        app['groups'] = ApplicationObjectContainer(Group)
         app['persons'].new('obj', title='Some Object')
         self.obj = app['persons']['obj']
 
