@@ -19,11 +19,6 @@ recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
 recursive-include doc *.txt *.rst
 recursive-include db-conversion-tests Data.fs-* test_*.py
 
-include debian/rules debian/changelog debian/compat debian/control
-include debian/copyright debian/README.Debian debian/TODO
-include debian/*.1 debian/*schoolbell* debian/ssl-cert.cnf
-include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
-
 include Zope3/setup.py
 include Zope3/test.py
 include Zope3/Makefile
