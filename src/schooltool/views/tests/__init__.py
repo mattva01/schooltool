@@ -51,19 +51,29 @@ class RequestStub:
         if headers:
             for k, v in headers.items():
                 self.request_headers[k.lower()] = v
-        start = uri.find('/', uri.find('://')+3)
-        if start >= 0:
-            self.path = uri[start:]
-        self._hostname = 'localhost'
-        self._host = '127.0.0.1'
-        self._port = 7001
         self.accept = []
+        self.path = uri
+        self._transport = 'INET'
+        self._hostname = 'localhost'
+        self._port = 7001
+        if '://' in uri:
+            start = uri.find('/', uri.find('://')+3)
+            if start < 0:
+                start = len(uri)
+            self.path = uri[start:]
+            if uri.startswith('https://'):
+                self._transport = 'SSL'
+            host_and_port = uri[uri.index('://')+3:start]
+            if ':' not in host_and_port:
+                host_and_port += ':7001'
+            self._hostname, port = host_and_port.split(':')
+            self._port = int(port)
 
     def getRequestHostname(self):
         return self.getHost()[1]
 
     def getHost(self):
-        return ('INET', self._hostname, self._port)
+        return (self._transport, self._hostname, self._port)
 
     def getHeader(self, header):
         # Twisted's getHeader returns None when the header does not exist

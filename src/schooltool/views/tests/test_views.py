@@ -45,34 +45,6 @@ class TemplateStub:
         return self.body
 
 
-class TestHelpers(unittest.TestCase):
-
-    def test_getURL(self):
-        from schooltool.views import getURL
-        root = LocatableStub()
-        setPath(root, '/')
-        obj = LocatableStub()
-        setPath(obj, '/foo/bar')
-        request = RequestStub("http://locahost:7001/foo/bar")
-
-        self.assertEquals(getURL(request, root),
-                          "http://localhost:7001/")
-        self.assertEquals(getURL(request, root, 'baz/123'),
-                          "http://localhost:7001/baz/123")
-
-        self.assertEquals(getURL(request, obj),
-                          "http://localhost:7001/foo/bar")
-        self.assertEquals(getURL(request, obj, 'baz/123'),
-                          "http://localhost:7001/foo/bar/baz/123")
-
-        request.virtualpath = '/schooltool'
-        request.getHost = lambda: ('SSL', 'www.example.com', 443)
-
-        self.assertEquals(
-            getURL(request, obj, 'baz/123'),
-            "https://www.example.com:443/schooltool/foo/bar/baz/123")
-
-
 class TestTemplate(unittest.TestCase):
 
     def test_call(self):
@@ -273,7 +245,6 @@ class TestView(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.views'))
-    suite.addTest(unittest.makeSuite(TestHelpers))
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
     suite.addTest(unittest.makeSuite(TestView))
