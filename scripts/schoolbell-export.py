@@ -155,7 +155,7 @@ def getCalendarText(calendar):
         # (http://bugzilla.mozilla.org/show_bug.cgi?id=229266).
         result += [
             "BEGIN:VEVENT",
-            "UID:placeholder-nobody@localhost",
+            "UID:empty-calendar-placeholder@schooltool.org",
             "SUMMARY:%s" % ical_text("Empty calendar"),
             "DTSTART;VALUE=DATE:%s" % dtstamp[:8],
             "DTSTAMP:%s" % dtstamp,
