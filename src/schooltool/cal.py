@@ -27,10 +27,13 @@ import datetime
 from sets import Set
 from zope.interface import implements
 from persistence import Persistent
+from schooltool.db import PersistentPairKeysDict
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
 from schooltool.interfaces import ICalendarOwner
+from schooltool.interfaces import IACL, View, Modify, Add
+
 
 __metaclass__ = type
 
@@ -971,3 +974,40 @@ class CalendarOwnerMixin:
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
 
+
+class ACL(Persistent):
+    """Access coltrol list"""
+
+    implements(IACL)
+
+    def __init__(self):
+        self._data = PersistentPairKeysDict()
+
+    def __iter__(self):
+        """Iterate over tuples of (principal, permission)"""
+        return iter(self._data)
+
+    def __contains__(self, (principal,  permission)):
+        """Returns true iff the principal has the permission"""
+        if not permission in (View, Modify, Add):
+            raise ValueError("Bad permission: %r" % (permission,))
+        return (principal, permission) in self._data
+
+    def add(self, (principal, permission)):
+        """Grants the permission to a principal"""
+        if not permission in (View, Modify, Add):
+            raise ValueError("Bad permission: %r" % (permission,))
+        self._data[(principal, permission)] = 1
+
+    def remove(self, (principal, permission)):
+        """Revokes the permission from a principal"""
+        if not permission in (View, Modify, Add):
+            raise ValueError("Bad permission: %r" % (permission,))
+        del self._data[(principal, permission)]
+
+    def allows(self, principal, permission):
+        """Return whether the principal has the permission.
+
+        Syntactic sugar.
+        """
+        return (principal, permission) in self

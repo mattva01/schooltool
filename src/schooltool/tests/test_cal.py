@@ -1082,6 +1082,69 @@ class TestCalendarOwnerMixin(unittest.TestCase):
         self.assertEquals(com.calendar.__name__, 'calendar')
 
 
+class TestACL(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import ACL
+        from schooltool.interfaces import IACL
+
+        verifyObject(IACL, ACL())
+
+    def setUp(self):
+        from schooltool.cal import ACL
+        from schooltool.model import Person
+        self.acl = ACL()
+        self.person = Person("Steve")
+        self.person2 = Person("Mark")
+
+    def test_add(self):
+        from schooltool.interfaces import View, Add, Modify
+        self.acl.add((self.person, View))
+        self.assertEquals(self.acl._data[(self.person, View)], 1)
+        self.assertEquals(len(self.acl._data), 1)
+        self.acl.add((self.person2, Modify))
+        self.acl.add((self.person2, Add))
+        self.acl.add((self.person2, Add))
+        self.assertEquals(len(self.acl._data), 3)
+        assert (self.person2, Modify) in self.acl._data
+        assert (self.person2, Add) in self.acl._data
+        assert (self.person, View) in self.acl._data
+        self.assertRaises(ValueError, self.acl.add, (self.person, "Delete"))
+
+    def test_allows_contains(self):
+        from schooltool.interfaces import View, Add, Modify
+        assert (self.person, View) not in self.acl
+        assert not self.acl.allows(self.person, View)
+        self.acl.add((self.person, View))
+        assert (self.person, View) in self.acl
+        assert self.acl.allows(self.person, View)
+
+        self.acl.add((self.person2, Modify))
+        self.acl.add((self.person2, Add))
+
+        assert (self.person2, Modify) in self.acl
+        assert self.acl.allows(self.person2, Modify)
+
+        self.assertRaises(ValueError, self.acl.allows, self.person, "Delete")
+        self.assertRaises(ValueError, self.acl.__contains__,
+                          (self.person, "Delete"))
+
+    def test_iter(self):
+        from schooltool.interfaces import View, Add, Modify
+        self.assertEquals(list(self.acl), [])
+        self.acl.add((self.person, View))
+        self.assertEquals(list(self.acl), [(self.person, View)])
+
+    def test_delitem(self):
+        from schooltool.interfaces import View, Add, Modify
+        self.acl.add((self.person, View))
+        assert (self.person, View) in self.acl._data
+        self.acl.remove((self.person, View))
+        assert (self.person, View) not in self.acl._data
+        self.assertRaises(ValueError, self.acl.remove, (self.person, "Delete"))
+        self.assertRaises(KeyError, self.acl.remove, (self.person, View))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.cal'))
@@ -1094,4 +1157,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarPersistence))
     suite.addTest(unittest.makeSuite(TestCalendarEvent))
     suite.addTest(unittest.makeSuite(TestCalendarOwnerMixin))
+    suite.addTest(unittest.makeSuite(TestACL))
     return suite

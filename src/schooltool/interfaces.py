@@ -719,6 +719,41 @@ class IFacetAPI(Interface):
     def iterFacetFactories():
         """Iterate over all registered facet factories."""
 
+#
+# Access control
+#
+
+View = 'View'
+Add = 'Add'
+Modify = 'Modify'
+
+class IACL(Interface):
+    """Access control list.
+
+    Access control lists store and manage tuples of (principal, permission).
+    Permission can be one of View, Add, and Modify.
+    """
+
+    def __iter__():
+        """Iterate over tuples of (principal, permission)"""
+
+    def __contains__((principal,  permission)):
+        """Returns true iff the principal has the permission"""
+
+    def add((principal, permission)):
+        """Grants the permission to a principal"""
+
+    def remove((principal, permission)):
+        """Revokes the permission from a principal.
+
+        Raises KeyError if the principal does not have the permission.
+        """
+
+    def allows(principal, permission):
+        """Return whether the principal has the permission.
+
+        Syntactic sugar.
+        """
 
 #
 # Calendaring
