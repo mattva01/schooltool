@@ -1,6 +1,6 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" i18n:translate="">New time period</title>
+  <title metal:fill-slot="title" tal:content="view/title">Time period</title>
   <script type="text/javascript" metal:fill-slot="extrahead">
     function update(idx) {
         var checkbox = document.getElementById('c' + idx);
@@ -37,11 +37,10 @@
   </script>
 </head>
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="">New time period</h1>
+  <h1 metal:fill-slot="h1" tal:content="view/title">Time period</h1>
 <metal:block metal:fill-slot="content">
 
 <form class="invisible" method="POST" tal:attributes="action request/uri">
-
 
 <p i18n:translate="">
 First, please name and define the time period itself.  The name should be short

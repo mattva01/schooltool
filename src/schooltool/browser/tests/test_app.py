@@ -194,8 +194,9 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
                              app.timetableSchemaService)
         self.assertTraverses(view, 'time-periods', TimePeriodServiceView,
                              app.timePeriodService)
-        self.assertTraverses(view, 'newtimeperiod', NewTimePeriodView,
-                             app.timePeriodService)
+        view2 = self.assertTraverses(view, 'newtimeperiod', NewTimePeriodView,
+                                    None)
+        self.assert_(view2.service is app.timePeriodService)
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
         logo = self.assertTraverses(view, 'logo.png', StaticFile)

@@ -38,6 +38,7 @@ from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
+from schooltool.interfaces import ISchooldayModel
 from schooltool.translation import ugettext as _
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import SchooldayTemplate
@@ -274,56 +275,20 @@ class TimetableSchemaWizard(View):
         return result
 
 
-class TimePeriodView(View):
-    """This is a stub of a time period (schoolday model) view for use
-    until the real one gets implemented.
-    """
+
+class TimePeriodViewBase(View):
+    """Base class for time period views."""
 
     authorization = ManagerAccess
+
     template = Template("www/time-period.pt")
-
-    def title(self):
-        return _("Time period %s") % self.context.__name__
-
-
-class NewTimePeriodView(View):
-    """View for defining a new time period.
-
-    Can be accessed at /newtimeperiod.
-    """
-
-    __used_for__ = ITimePeriodService
-
-    authorization = ManagerAccess
-
-    template = Template("www/new-time-period.pt")
 
     def __init__(self, context):
         View.__init__(self, context)
-        self.name_widget = TextWidget('name', _('Name'), self.name_parser,
-                                      self.name_validator)
         self.start_widget = TextWidget('start', _('Start date'),
                                        self.date_parser)
         self.end_widget = TextWidget('end', _('End date'),
                                      self.date_parser, self.end_date_validator)
-
-    def name_parser(self, name):
-        if name is None:
-            return None
-        return name.strip()
-
-    def name_validator(self, name):
-        if name is None:
-            return
-        if not name:
-            raise ValueError(_("Time period name must not be empty"))
-        elif not valid_name(name):
-            raise ValueError(_("Time period name can only contain"
-                               " English letters, numbers, and the"
-                               " following punctuation characters:"
-                               " - . , ' ( )"))
-        elif name in self.context.keys():
-            raise ValueError(_("Time period with this name already exists."))
 
     def date_parser(self, date):
         if date is None:
@@ -341,20 +306,8 @@ class NewTimePeriodView(View):
         if date < self.start_widget.value:
             raise ValueError(_("End date cannot be earlier than start date."))
 
-    def do_GET(self, request):
-        self.name_widget.update(request)
-        self.start_widget.update(request)
-        self.end_widget.update(request)
-        self.model = self._buildModel(request)
-        if 'CREATE' in request.args:
-            self.name_widget.require()
-            self.start_widget.require()
-            self.end_widget.require()
-            if not (self.name_widget.error or self.start_widget.error or
-                    self.end_widget.error) and self.model is not None:
-                self.context[self.name_widget.value] = self.model
-                return self.redirect("/time-periods", request)
-        return View.do_GET(self, request)
+    def title(self):
+        raise NotImplementedError('override this in subclasses')
 
     def _buildModel(self, request):
         first = self.start_widget.value
@@ -416,6 +369,91 @@ class NewTimePeriodView(View):
             calendar.append({'title': month_title, 'weeks': weeks})
             start_of_month = start_of_next_month
         return calendar
+
+
+class TimePeriodView(TimePeriodViewBase):
+    """View for editing a time period.
+
+    Can be accessed at /time-periods/$period.
+    """
+
+    __used_for__ = ISchooldayModel
+
+    def title(self):
+        return _("Time period %s") % self.context.__name__
+
+    def do_GET(self, request):
+        self.status = None
+        self.start_widget.update(request)
+        self.end_widget.update(request)
+        self.model = self._buildModel(request)
+        if self.model is None:
+            self.model = self.context
+        if self.start_widget.value is None:
+            self.start_widget.setValue(self.context.first)
+        if self.end_widget.value is None:
+            self.end_widget.setValue(self.context.last)
+        if 'UPDATE' in request.args:
+            self.start_widget.require()
+            self.end_widget.require()
+            if not (self.start_widget.error or self.end_widget.error):
+                service = self.context.__parent__
+                key = self.context.__name__
+                self.context = self.model
+                service[key] = self.context
+                self.status = _("Saved changes.")
+        return View.do_GET(self, request)
+
+
+class NewTimePeriodView(TimePeriodViewBase):
+    """View for defining a new time period.
+
+    Can be accessed at /newtimeperiod.
+    """
+
+    template = Template("www/new-time-period.pt")
+
+    def __init__(self, service):
+        TimePeriodViewBase.__init__(self, None)
+        self.service = service
+        self.name_widget = TextWidget('name', _('Name'), self.name_parser,
+                                      self.name_validator)
+
+    def name_parser(self, name):
+        if name is None:
+            return None
+        return name.strip()
+
+    def name_validator(self, name):
+        if name is None:
+            return
+        if not name:
+            raise ValueError(_("Time period name must not be empty"))
+        elif not valid_name(name):
+            raise ValueError(_("Time period name can only contain"
+                               " English letters, numbers, and the"
+                               " following punctuation characters:"
+                               " - . , ' ( )"))
+        elif name in self.service.keys():
+            raise ValueError(_("Time period with this name already exists."))
+
+    def title(self):
+        return _("New time period")
+
+    def do_GET(self, request):
+        self.name_widget.update(request)
+        self.start_widget.update(request)
+        self.end_widget.update(request)
+        self.model = self._buildModel(request)
+        if 'CREATE' in request.args:
+            self.name_widget.require()
+            self.start_widget.require()
+            self.end_widget.require()
+            if not (self.name_widget.error or self.start_widget.error or
+                    self.end_widget.error) and self.model is not None:
+                self.service[self.name_widget.value] = self.model
+                return self.redirect("/time-periods", request)
+        return View.do_GET(self, request)
 
 
 class ContainerServiceViewBase(View):

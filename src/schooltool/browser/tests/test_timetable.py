@@ -554,7 +554,8 @@ class TestTimePeriodServiceView(AppSetupMixin, unittest.TestCase,
                           'http://localhost:7001/newtimeperiod')
 
 
-class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
+class TestTimePeriodViewBase(AppSetupMixin, NiceDiffsMixin,
+                             unittest.TestCase):
 
     def setUp(self):
         self.setUpSampleApp()
@@ -562,138 +563,13 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
     def createView(self):
         from schooltool.cal import SchooldayModel
         from schooltool.timetable import TimePeriodService
-        from schooltool.browser.timetable import NewTimePeriodView
+        from schooltool.browser.timetable import TimePeriodViewBase
         context = TimePeriodService()
         context['2004-fall'] = SchooldayModel(None, None)
-        view = NewTimePeriodView(context)
+        view = TimePeriodViewBase(context)
+        view.title = lambda: u'title'
         view.request = RequestStub(authenticated_user=self.manager)
         return view
-
-    def test(self):
-        view = self.createView()
-        request = view.request
-        result = view.render(view.request)
-        self.assertEquals(request.code, 200)
-        self.assertEquals(view.name_widget.value, None)
-        self.assertEquals(view.name_widget.error, None)
-        self.assertEquals(view.start_widget.value, None)
-        self.assertEquals(view.start_widget.error, None)
-        self.assertEquals(view.end_widget.value, None)
-        self.assertEquals(view.end_widget.error, None)
-        self.assertEquals(view.model, None)
-
-    def test_create_without_data(self):
-        view = self.createView()
-        request = view.request
-        request.args['CREATE'] = ['Create']
-        result = view.render(view.request)
-        self.assertEquals(request.code, 200)
-        self.assertEquals(view.name_widget.value, None)
-        self.assertNotEquals(view.name_widget.error, None)
-        self.assertEquals(view.start_widget.value, None)
-        self.assertNotEquals(view.start_widget.error, None)
-        self.assertEquals(view.end_widget.value, None)
-        self.assertNotEquals(view.end_widget.error, None)
-        self.assertEquals(view.model, None)
-
-    def test_create(self):
-        view = self.createView()
-        request = view.request
-        request.args['name'] = ['2005-spring']
-        request.args['start'] = ['2005-01-01']
-        request.args['end'] = ['2005-05-31']
-        request.args['holiday'] = ['2005-05-30']
-        request.args['CREATE'] = ['Create']
-        result = view.render(view.request)
-        self.assertEquals(request.code, 302)
-        self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/time-periods')
-        model = view.context['2005-spring']
-        self.assertEquals(model, view.model)
-        self.assertEquals(model.first, datetime.date(2005, 1, 1))
-        self.assertEquals(model.last, datetime.date(2005, 5, 31))
-        self.assert_(model.isSchoolday(datetime.date(2005, 5, 31)))
-        self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
-
-    def test_with_dates(self):
-        view = self.createView()
-        request = view.request
-        request.args['start'] = ['2004-09-01']
-        request.args['end'] = ['2004-09-30']
-        result = view.render(view.request)
-        self.assertEquals(request.code, 200)
-        model = view.model
-        self.assertEquals(model.first, datetime.date(2004, 9, 1))
-        self.assertEquals(model.last, datetime.date(2004, 9, 30))
-
-    def test_name_missing(self):
-        view = self.createView()
-        view.request.args['name'] = ['']
-        view.render(view.request)
-        self.assertEquals(view.name_widget.error,
-                          "Time period name must not be empty")
-
-    def test_name_error(self):
-        view = self.createView()
-        view.request.args['name'] = ['not valid']
-        view.render(view.request)
-        self.assert_(view.name_widget.error.startswith(
-                            "Time period name can only contain "))
-
-    def test_name_duplicate(self):
-        view = self.createView()
-        view.request.args['name'] = ['2004-fall']
-        view.render(view.request)
-        self.assertEquals(view.name_widget.error,
-                          "Time period with this name already exists.")
-
-    def test_start_date_missing(self):
-        view = self.createView()
-        view.request.args['start'] = ['']
-        view.render(view.request)
-        self.assertEquals(view.start_widget.error, "This field is required.")
-
-    def test_start_date_error(self):
-        view = self.createView()
-        view.request.args['start'] = ['xyzzy']
-        view.render(view.request)
-        self.assertEquals(view.start_widget.error,
-                          "Invalid date.  Please specify YYYY-MM-DD.")
-
-    def test_start_date_ok(self):
-        view = self.createView()
-        view.request.args['start'] = ['2004-01-02']
-        view.render(view.request)
-        self.assertEquals(view.start_widget.value, datetime.date(2004, 1, 2))
-        self.assertEquals(view.start_widget.error, None)
-
-    def test_end_date_missing(self):
-        view = self.createView()
-        view.request.args['end'] = ['']
-        view.render(view.request)
-        self.assertEquals(view.end_widget.error, "This field is required.")
-
-    def test_end_date_error(self):
-        view = self.createView()
-        view.request.args['end'] = ['xyzzy']
-        view.render(view.request)
-        self.assertEquals(view.end_widget.error,
-                          "Invalid date.  Please specify YYYY-MM-DD.")
-
-    def test_end_date_early(self):
-        view = self.createView()
-        view.request.args['start'] = ['2004-01-02']
-        view.request.args['end'] = ['2004-01-01']
-        view.render(view.request)
-        self.assertEquals(view.end_widget.error,
-                          "End date cannot be earlier than start date.")
-
-    def test_end_date_ok(self):
-        view = self.createView()
-        view.request.args['end'] = ['2004-01-02']
-        view.render(view.request)
-        self.assertEquals(view.end_widget.value, datetime.date(2004, 1, 2))
-        self.assertEquals(view.end_widget.error, None)
 
     def test_buildModel(self):
         view = self.createView()
@@ -840,6 +716,210 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         return '\n'.join(output)
 
 
+class TestTimePeriodView(AppSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def createView(self):
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import TimePeriodService
+        from schooltool.browser.timetable import TimePeriodView
+        service = TimePeriodService()
+        service['2004-fall'] = SchooldayModel(datetime.date(2004, 2, 1),
+                                              datetime.date(2004, 5, 31))
+        view = TimePeriodView(service['2004-fall'])
+        view._service_for_unit_test = service
+        view.request = RequestStub(authenticated_user=self.manager)
+        return view
+
+    def test(self):
+        view = self.createView()
+        request = view.request
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(view.start_widget.raw_value, '2004-02-01')
+        self.assertEquals(view.start_widget.error, None)
+        self.assertEquals(view.end_widget.raw_value, '2004-05-31')
+        self.assertEquals(view.end_widget.error, None)
+        self.assertEquals(view.model, view.context)
+        self.assertEquals(view.status, None)
+
+    def test_with_dates(self):
+        view = self.createView()
+        request = view.request
+        request.args['start'] = ['2004-09-01']
+        request.args['end'] = ['2004-09-30']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        model = view.model
+        self.assertEquals(model.first, datetime.date(2004, 9, 1))
+        self.assertEquals(model.last, datetime.date(2004, 9, 30))
+        self.assertNotEquals(model, view.context)
+        self.assertEquals(view.status, None)
+
+    def test_save(self):
+        view = self.createView()
+        request = view.request
+        request.args['start'] = ['2005-01-01']
+        request.args['end'] = ['2005-05-31']
+        request.args['holiday'] = ['2005-05-30']
+        request.args['UPDATE'] = ['Save']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        service = view._service_for_unit_test
+        model = view.model
+        self.assertEquals(model, view.context)
+        self.assertEquals(service['2004-fall'], model)
+        self.assertEquals(model.first, datetime.date(2005, 1, 1))
+        self.assertEquals(model.last, datetime.date(2005, 5, 31))
+        self.assert_(model.isSchoolday(datetime.date(2005, 5, 31)))
+        self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
+        self.assertEquals(view.status, "Saved changes.")
+
+
+class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpSampleApp()
+
+    def createView(self):
+        from schooltool.cal import SchooldayModel
+        from schooltool.timetable import TimePeriodService
+        from schooltool.browser.timetable import NewTimePeriodView
+        context = TimePeriodService()
+        context['2004-fall'] = SchooldayModel(None, None)
+        view = NewTimePeriodView(context)
+        view.request = RequestStub(authenticated_user=self.manager)
+        return view
+
+    def test(self):
+        view = self.createView()
+        request = view.request
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(view.name_widget.value, None)
+        self.assertEquals(view.name_widget.error, None)
+        self.assertEquals(view.start_widget.value, None)
+        self.assertEquals(view.start_widget.error, None)
+        self.assertEquals(view.end_widget.value, None)
+        self.assertEquals(view.end_widget.error, None)
+        self.assertEquals(view.model, None)
+
+    def test_create_without_data(self):
+        view = self.createView()
+        request = view.request
+        request.args['CREATE'] = ['Create']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(view.name_widget.value, None)
+        self.assertNotEquals(view.name_widget.error, None)
+        self.assertEquals(view.start_widget.value, None)
+        self.assertNotEquals(view.start_widget.error, None)
+        self.assertEquals(view.end_widget.value, None)
+        self.assertNotEquals(view.end_widget.error, None)
+        self.assertEquals(view.model, None)
+
+    def test_create(self):
+        view = self.createView()
+        request = view.request
+        request.args['name'] = ['2005-spring']
+        request.args['start'] = ['2005-01-01']
+        request.args['end'] = ['2005-05-31']
+        request.args['holiday'] = ['2005-05-30']
+        request.args['CREATE'] = ['Create']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/time-periods')
+        model = view.service['2005-spring']
+        self.assertEquals(model, view.model)
+        self.assertEquals(model.first, datetime.date(2005, 1, 1))
+        self.assertEquals(model.last, datetime.date(2005, 5, 31))
+        self.assert_(model.isSchoolday(datetime.date(2005, 5, 31)))
+        self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
+
+    def test_with_dates(self):
+        view = self.createView()
+        request = view.request
+        request.args['start'] = ['2004-09-01']
+        request.args['end'] = ['2004-09-30']
+        result = view.render(view.request)
+        self.assertEquals(request.code, 200)
+        model = view.model
+        self.assertEquals(model.first, datetime.date(2004, 9, 1))
+        self.assertEquals(model.last, datetime.date(2004, 9, 30))
+
+    def test_name_missing(self):
+        view = self.createView()
+        view.request.args['name'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.name_widget.error,
+                          "Time period name must not be empty")
+
+    def test_name_error(self):
+        view = self.createView()
+        view.request.args['name'] = ['not valid']
+        view.render(view.request)
+        self.assert_(view.name_widget.error.startswith(
+                            "Time period name can only contain "))
+
+    def test_name_duplicate(self):
+        view = self.createView()
+        view.request.args['name'] = ['2004-fall']
+        view.render(view.request)
+        self.assertEquals(view.name_widget.error,
+                          "Time period with this name already exists.")
+
+    def test_start_date_missing(self):
+        view = self.createView()
+        view.request.args['start'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.error, "This field is required.")
+
+    def test_start_date_error(self):
+        view = self.createView()
+        view.request.args['start'] = ['xyzzy']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.error,
+                          "Invalid date.  Please specify YYYY-MM-DD.")
+
+    def test_start_date_ok(self):
+        view = self.createView()
+        view.request.args['start'] = ['2004-01-02']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.value, datetime.date(2004, 1, 2))
+        self.assertEquals(view.start_widget.error, None)
+
+    def test_end_date_missing(self):
+        view = self.createView()
+        view.request.args['end'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error, "This field is required.")
+
+    def test_end_date_error(self):
+        view = self.createView()
+        view.request.args['end'] = ['xyzzy']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error,
+                          "Invalid date.  Please specify YYYY-MM-DD.")
+
+    def test_end_date_early(self):
+        view = self.createView()
+        view.request.args['start'] = ['2004-01-02']
+        view.request.args['end'] = ['2004-01-01']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error,
+                          "End date cannot be earlier than start date.")
+
+    def test_end_date_ok(self):
+        view = self.createView()
+        view.request.args['end'] = ['2004-01-02']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.value, datetime.date(2004, 1, 2))
+        self.assertEquals(view.end_widget.error, None)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.browser.timetable'))
@@ -849,6 +929,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaServiceView))
     suite.addTest(unittest.makeSuite(TestTimePeriodServiceView))
+    suite.addTest(unittest.makeSuite(TestTimePeriodViewBase))
+    suite.addTest(unittest.makeSuite(TestTimePeriodView))
     suite.addTest(unittest.makeSuite(TestNewTimePeriodView))
     return suite
 

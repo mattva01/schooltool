@@ -124,9 +124,18 @@ label.block {
 }
 
 div.info {
-  margin: 0ex 0ex 2ex 0ex;
+  padding: 1ex;
+  background: #e2e2e2;
+  border: 1px solid #b34848;
   font-weight: bold;
   color: green;
+}
+
+div.form div.info {
+  margin: 0ex 0ex 2ex 0ex;
+  padding: 0ex
+  border: none;
+  background: transparent;
 }
 
 div.error {
