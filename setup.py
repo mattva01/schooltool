@@ -351,7 +351,7 @@ elif package == 'schoolbell':
             * Rigourous functional and unit testing.
 
             Enjoy!""",
-        version="1.0rc1",
+        version="1.0",
         url='http://www.schooltool.org/schoolbell',
         license="GPL",
         maintainer="SchoolTool development team",
