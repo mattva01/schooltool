@@ -799,7 +799,7 @@ def main(argv):
 
     # Option processing
     try:
-        opts, args = getopt.gnu_getopt(argv[1:], 'hvpcqufwd1',
+        opts, args = getopt.gnu_getopt(argv[1:], 'hvpcqufwd1s:',
                                ['list-files', 'list-tests', 'list-hooks',
                                 'level=', 'all-levels', 'coverage',
                                 'search-in=', 'immediate-errors',
@@ -854,7 +854,7 @@ def main(argv):
                 return 1
         elif k == '--all-levels':
             cfg.level = None
-        elif k == '--search-in':
+        elif k in ('-s', '--search-in'):
             dir = os.path.abspath(v)
             if not dir.startswith(cfg.basedir):
                 print >> sys.stderr, ('%s: argument to --search-in (%s) must'
