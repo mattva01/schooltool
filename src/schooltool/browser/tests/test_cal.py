@@ -46,7 +46,9 @@ class TimetableStub:
 
 
 class TimetableActivityStub:
-    timetable = None
+
+    def __init__(self, timetable=None):
+        self.timetable = timetable
 
 
 def createEvent(dtstart, duration, title, **kw):
@@ -938,8 +940,7 @@ class EventTimetableTestHelpers:
         from schooltool.timetable import TimetableCalendarEvent
         period = "P1"
         tt = TimetableStub()
-        act = TimetableActivityStub()
-        act.timetable = tt
+        act = TimetableActivityStub(tt)
         ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
                                     timedelta(hours=1), "Math",
                                     unique_id="uniq",
@@ -1142,6 +1143,7 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         cal.__parent__ = person
         view = EventDeleteView(cal)
         view.authorization = lambda x, y: True
+        view.isManager = lambda: True
         return view
 
     def test(self):
@@ -1258,6 +1260,97 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody/calendar/'
                           'daily.html?date=2004-08-12')
+
+
+class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
+
+    def test_ordinary_events(self):
+        self.setUpCalendar(person_to_add_to_acl=self.person)
+        # Only persons who have access to the calendar may remove ordinary
+        # calendar events.  Managers always have access to calendars.
+        self.assertCanDelete(self.person, self.createOrdinaryEvent())
+        self.assertCanDelete(self.manager, self.createOrdinaryEvent())
+        self.assertCannotDelete(self.person2, self.createOrdinaryEvent())
+
+    def test_timetable_events(self):
+        self.setUpCalendar(person_to_add_to_acl=self.person)
+        # Only managers may remove timetable events.
+        self.assertCannotDelete(self.person, self.createTimetableEvent())
+        self.assertCanDelete(self.manager, self.createTimetableEvent())
+        self.assertCannotDelete(self.person2, self.createTimetableEvent())
+
+    def setUpCalendar(self, person_to_add_to_acl):
+        from schooltool.interfaces import ModifyPermission
+        self.calendar = self.person.calendar
+        self.calendar.acl.add((person_to_add_to_acl, ModifyPermission))
+
+    def createOrdinaryEvent(self):
+        event = createEvent('2004-08-12 14:35', '5 min', 'Ordinary')
+        self.calendar.addEvent(event)
+        return event.unique_id
+
+    def createTimetableEvent(self):
+        from schooltool.timetable import TimetableCalendarEvent
+        self.timetable = TimetableStub()
+        act = TimetableActivityStub(self.timetable)
+        self.ttevent = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                              timedelta(hours=1), "Math",
+                                              period_id="P1", activity=act)
+        self.person.makeCalendar = self.makeCalendarStub
+        return self.ttevent.unique_id
+
+    def makeCalendarStub(self):
+        ttevent = self.ttevent
+        id_tup = (ttevent.dtstart.date(), ttevent.period_id, ttevent.activity)
+        for exc in self.timetable.exceptions:
+            if (exc.date, exc.period_id, exc.activity) == id_tup:
+                if exc.replacement is None:
+                    return createCalendar()
+                else:
+                    return createCalendar([exc.replacement])
+        return createCalendar([self.ttevent])
+
+    def combinedCalendar(self):
+        """Combine the ordinary and timetable calendars."""
+        calendar = self.person.makeCalendar()
+        calendar.update(self.calendar)
+        return calendar
+
+    def assertCanDelete(self, user, event_id):
+        from schooltool.browser import absoluteURL
+        result, request = self.tryToDelete(user, event_id)
+        url = absoluteURL(request, self.calendar, 'daily.html?date=2004-08-12')
+        self.assertRedirectedTo(request, url)
+        # If the event was deleted, calendar.find will raise KeyError
+        calendar = self.combinedCalendar()
+        self.assertRaises(KeyError, calendar.find, event_id)
+
+    def assertCannotDelete(self, user, event_id):
+        from schooltool.browser import absoluteURL
+        result, request = self.tryToDelete(user, event_id)
+        delete_url = absoluteURL(request, self.calendar,
+                                 'delete_event.html?event_id=%s' % event_id)
+        url = 'http://localhost:7001/?forbidden=1&url=%s' % delete_url
+        self.assertRedirectedTo(request, url)
+        # If the event was not deleted, calendar.find will not raise KeyError
+        calendar = self.combinedCalendar()
+        calendar.find(event_id)
+
+    def tryToDelete(self, user, event_id):
+        from schooltool.browser.cal import EventDeleteView
+        from schooltool.browser import absoluteURL
+        view = EventDeleteView(self.calendar)
+        url = absoluteURL(RequestStub(), self.calendar,
+                          'delete_event.html?event_id=%s' % event_id)
+        request = RequestStub(url, authenticated_user=user,
+                              args={'event_id': str(event_id),
+                                    'CONFIRM': 'Yes'})
+        result = view.render(request)
+        return result, request
+
+    def assertRedirectedTo(self, request, location):
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'], location)
 
 
 class TestCalendarComboMixin(unittest.TestCase):
@@ -1451,6 +1544,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventAddView))
     suite.addTest(unittest.makeSuite(TestEventEditView))
     suite.addTest(unittest.makeSuite(TestEventDeleteView))
+    suite.addTest(unittest.makeSuite(TestEventDeleteViewPermissionChecking))
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))

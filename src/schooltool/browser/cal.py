@@ -911,6 +911,14 @@ class EventDeleteView(View, EventViewHelpers):
 
     This view is used to either delete ordinary calendar events or add
     timetable exceptions.
+
+    The event to delete is specified by its unique ID in the request.  If the
+    event is an ordinary calendar event, it is deleted and the user is
+    redirected to the daily calendar view.  If the event is a timetable
+    event, a confirmation/information form is shown, and the user can
+    choose whether to delete the event (i.e. add a timetable exception that
+    removes this specific ocurrence of a timetable event), or cancel the
+    deletion.
     """
 
     __used_for__ = ICalendar
@@ -921,9 +929,6 @@ class EventDeleteView(View, EventViewHelpers):
 
     event = None # The event to be removed.  Set before rendering the template.
 
-    def __init__(self, context):
-        View.__init__(self, context)
-
     def do_GET(self, request):
         event_id = to_unicode(request.args['event_id'][0])
 
@@ -933,12 +938,13 @@ class EventDeleteView(View, EventViewHelpers):
             self.context.removeEvent(event)
             return self._redirectToDailyView(event.dtstart)
 
-        # TODO: check permissions -- only managers can edit timetable events
-
         # If it is a timetable event, show a confirmation form,
         # and then add a timetable exception (unless canceled).
         event = self._findTimetableEvent(event_id)
         if event is not None:
+            # Only managers can edit timetable events
+            if not self.isManager():
+                return self.unauthorized(request)
             if 'CONFIRM' in request.args:
                 self._addTimetableException(event, replacement=None)
             elif 'CANCEL' not in request.args:
