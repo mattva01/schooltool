@@ -763,6 +763,37 @@ class EventViewHelpers:
         return self.redirect(url, self.request)
 
 
+def datesFormatter(dates):
+    r"""Format a sequence of dates
+
+    >>> datesFormatter((date(2004, 5, 17),
+    ...                 date(2004, 1, 29)))
+    '2004-05-17\n2004-01-29'
+
+    """
+    return "\n".join([str(d) for d in dates])
+
+
+def datesParser(raw_dates):
+    r"""Parse dates on separate lines into a tuple of date objects.
+
+    Incorrect lines are ignored.
+
+    >>> datesParser('2004-05-17\n123\n\nNone\n2004-01-29')
+    (datetime.date(2004, 5, 17), datetime.date(2004, 1, 29))
+
+    """
+    results = []
+    for dstr in raw_dates.splitlines():
+        try:
+            d = dateParser(dstr)
+        except ValueError:
+            d = None
+        if isinstance(d, date):
+            results.append(d)
+    return tuple(results)
+
+
 class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     """A base class for event adding and editing views."""
 
@@ -822,8 +853,10 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 ##         self.weekdays_widget = TextWidget('weekdays', 'Weekdays')
 ##         self.monthly_widget = TextWidget('monthly', 'Monthly')
 
-##         self.exceptions_widget = TextAreaWidget('exceptions',
-##                                                 'Exception dates')
+        self.exceptions_widget = TextAreaWidget('exceptions',
+                                                'Exception dates',
+                                                parser=datesParser,
+                                                formatter=datesFormatter)
 
         self.error = None
 
@@ -842,6 +875,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.range_widget.update(request)
         self.count_widget.update(request)
         self.until_widget.update(request)
+        self.exceptions_widget.update(request)
 
     def do_GET(self, request):
         self.update()
@@ -888,6 +922,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
           until = self.until_widget.value
           count = self.count_widget.value
           range = self.range_widget.value
+          exceptions = self.exceptions_widget.value
 
           if interval is None:
              interval = 1
@@ -897,18 +932,26 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
           if range != 'count':
               count = None
 
+          if exceptions is None:
+             exceptions = ()
+
           if self.recurrence_type_widget.value == 'daily':
              return DailyRecurrenceRule(interval=interval,
-                                        count=count, until=until)
+                                        count=count, until=until,
+                                        exceptions=exceptions)
           elif self.recurrence_type_widget.value == 'weekly':
              return WeeklyRecurrenceRule(interval=interval,
-                                         count=count, until=until)
+                                         count=count, until=until,
+                                         exceptions=exceptions)
           elif self.recurrence_type_widget.value == 'monthly':
              return MonthlyRecurrenceRule(interval=interval,
-                                          count=count, until=until)
+                                          count=count, until=until,
+                                          exceptions=exceptions)
           elif self.recurrence_type_widget.value == 'yearly':
              return YearlyRecurrenceRule(interval=interval,
-                                         count=count, until=until)
+                                         count=count, until=until,
+                                         exceptions=exceptions)
+
        else:
           return None
 
@@ -992,6 +1035,9 @@ class EventEditView(EventViewBase):
               self.until_widget.setValue(event.recurrence.until)
            else:
               self.range_widget.setValue('forever')
+
+           if event.recurrence.exceptions:
+               self.exceptions_widget.setValue(event.recurrence.exceptions)
 
         else:
            self.recurrence_widget.setValue(False)

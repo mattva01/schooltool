@@ -911,6 +911,13 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
                         until='2004-01-02', count="3")
         self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
 
+        rule = makeRule(recurrence='checked', recurrence_type='daily',
+                        interval="1", recurrence_shown="yes",
+                        exceptions="2004-01-01\n2004-01-02")
+        dates = (date(2004, 1, 1), date(2004, 1, 2))
+        self.assertEquals(rule, DailyRecurrenceRule(interval=1,
+                                                    exceptions=dates))
+
 
 class TestEventAddView(AppSetupMixin, unittest.TestCase):
 
@@ -1203,6 +1210,20 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         ch = doc.query('//input[@name="recurrence" and @checked="checked"]')
         assert len(ch) == 0, 'recurrence checked'
 
+    def test_render_exceptions(self):
+        from schooltool.cal import DailyRecurrenceRule
+        event = createEvent(
+            '2004-10-21 21:00', '2h', "ev3", unique_id="123",
+            recurrence=DailyRecurrenceRule(exceptions=(date(2004, 10, 22),
+                                                       date(2004, 12, 12))))
+        self.person.calendar.addEvent(event)
+
+        view = self.createView()
+        request = RequestStub(args={'event_id': "123"})
+        content = view.render(request)
+
+        assert '2004-10-22\n2004-12-12</textarea' in content
+
     def test_render_nonexistent(self):
         view = self.createView()
         request = RequestStub(args={'event_id': "nonexistent"})
@@ -1221,7 +1242,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'duration': '70',
                                     'recurrence': 'on',
                                     'recurrence_type': 'weekly',
-                                    'interval':'2'},
+                                    'interval':'2',
+                                    'exceptions': '2004-01-01\n2004-02-02'},
                               method='POST')
         content = view.render(request)
 
@@ -1237,7 +1259,11 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertEquals(new_ev.dtstart, datetime(2004, 8, 16, 13, 30))
         self.assertEquals(new_ev.duration, timedelta(minutes=70))
         self.assertEquals(new_ev.unique_id, "pick me")
-        self.assertEquals(new_ev.recurrence, WeeklyRecurrenceRule(interval=2))
+        self.assertEquals(
+            new_ev.recurrence,
+            WeeklyRecurrenceRule(interval=2,
+                                 exceptions=((date(2004, 1, 1),
+                                              date(2004, 2, 2)))))
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],

@@ -60,14 +60,13 @@
       <label for="range_f" class="plain">Repeat forever</label>
     </div>
 
+    <div class="row" tal:replace="structure view/exceptions_widget" />
+
     <!--
-    <div class="row" tal:replace="structure view/count_widget" />
-    <div class="row" tal:replace="structure view/until_widget" />
 
     <div class="row" tal:replace="structure view/weekdays_widget" />
     <div class="row" tal:replace="structure view/monthly_widget" />
 
-    <div class="row" tal:replace="structure view/exceptions_widget" />
     -->
   </div>
 
