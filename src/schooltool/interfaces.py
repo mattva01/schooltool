@@ -1454,6 +1454,23 @@ class IAuthenticator(Interface):
         """
 
 
+
+class IPersonInfoFacet(IFacet):
+    """Some attributes fora person object"""
+
+    first_name = Attribute("First name")
+    last_name = Attribute("Last name")
+    date_of_birth = Attribute("Date of birth")
+    comment = Attribute("A free form text comment")
+
+    photo = Attribute(
+        """Photo.
+
+        A byte string with a small JPEG image of a person.
+        """
+    )
+
+
 #
 # Modules
 #
@@ -1496,4 +1513,3 @@ class ComponentLookupError(Exception):
 
 class AuthenticationError(Exception):
     """Bad username or password."""
-

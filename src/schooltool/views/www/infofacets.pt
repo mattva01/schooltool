@@ -1,0 +1,14 @@
+<facet
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  tal:attributes="active view/active; owned view/owned">
+  <class tal:content="context/__class__/__name__"></class>
+  <name tal:content="context/__name__"></name>
+  <first_name tal:condition="context/first_name"
+              tal:content="context/first_name"/>
+  <last_name tal:condition="context/last_name"
+             tal:content="context/last_name"/>
+  <date_of_birth tal:condition="context/date_of_birth"
+                 tal:content="context/date_of_birth"/>
+  <comment tal:condition="context/comment"
+           tal:content="context/comment"/>
+</facet>

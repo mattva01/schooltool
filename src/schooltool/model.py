@@ -35,7 +35,8 @@ from schooltool.db import PersistentKeysSetWithNames
 from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.absence import Absence
-from schooltool.component import getPath
+from schooltool.component import getPath, FacetManager
+from schooltool.infofacets import PersonInfoFacet
 
 __metaclass__ = type
 
@@ -193,6 +194,9 @@ class Person(ApplicationObjectMixin):
         self._absences = PersistentKeysSetWithNames()
         self._current_absence = None
         self._pwhash = None
+        first_name = last_name = None
+        facet = PersonInfoFacet()
+        FacetManager(self).setFacet(facet, self, "person_info")
 
     def iterAbsences(self):
         return iter(self._absences)

@@ -176,8 +176,12 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         return Person('John Smith')
 
     def test(self):
-        from schooltool.interfaces import IPerson
-        verifyObject(IPerson, self.newObject())
+        from schooltool.interfaces import IPerson, IPersonInfoFacet
+        from schooltool.component import FacetManager
+        p = self.newObject()
+        verifyObject(IPerson, p)
+        facet = FacetManager(p).facetByName("person_info")
+        verifyObject(IPersonInfoFacet, facet)
 
     def test_getRelativePath(self):
         from schooltool.model import Person

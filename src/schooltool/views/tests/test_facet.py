@@ -164,6 +164,10 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <facets xmlns:xlink="http://www.w3.org/1999/xlink">
+              <facet active="active" owned="owned"
+                     xlink:href="/person/facets/person_info"
+                     xlink:title="person_info"
+                     xlink:type="simple"/>
               <facet xlink:type="simple" active="inactive"
                      xlink:title="001"
                      owned="unowned" xlink:href="/person/facets/001"/>
@@ -189,6 +193,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         facetable = Person()
         context = FacetManager(facetable)
         view = FacetManagementView(context)
+        self.assertEquals(len(list(context.iterFacets())), 1)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
@@ -200,7 +205,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         name = location[len(baseurl):]
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assert_(location in result)
-        self.assertEquals(len(list(context.iterFacets())), 1)
+        self.assertEquals(len(list(context.iterFacets())), 2)
         facet = context.facetByName(name)
         self.assert_(facet.__class__ is EventLogFacet)
         self.assertEquals(name, 'eventlog')
