@@ -133,9 +133,6 @@ class PhotoView(View):
 
     authorization = PublicAccess
 
-    # schooltool.browser.model.PersonEditView also defines canonical_photo_size
-    canonical_photo_size = (240, 240)
-
     def do_GET(self, request):
         if self.context.photo is None:
             return notFoundPage(request)
@@ -146,7 +143,7 @@ class PhotoView(View):
     def do_PUT(self, request):
         try:
             self.context.photo = resize_photo(request.content,
-                                              self.canonical_photo_size)
+                                              canonical_photo_size)
         except IOError, e:
             return textErrorPage(request, str(e))
         request.appLog(_("Photo added on %s (%s)") %
@@ -195,7 +192,10 @@ def maxspect(size, limits):
         return (limit_h * orig_w / orig_h, limit_h)
 
 
-def resize_photo(photo_file, requested_size):
+canonical_photo_size = (240, 240)
+
+
+def resize_photo(photo_file, requested_size=canonical_photo_size):
     """Resize a photo to fit in requested_size.
 
     Expects a file-like object in a format that can be processed by PIL.

@@ -23,11 +23,11 @@ $Id$
 """
 
 import sets
-from StringIO import StringIO
+from cStringIO import StringIO
 
 from schooltool.rest.cal import CalendarView as RestCalendarView
 from schooltool.rest.cal import CalendarReadView as RestCalendarReadView
-from schooltool.rest.infofacets import resize_photo
+from schooltool.rest.infofacets import resize_photo, canonical_photo_size
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
@@ -189,9 +189,6 @@ class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
 
     error = None
 
-    # schooltool.rest.infofacets.PhotoView also defines canonical_photo_size
-    canonical_photo_size = (240, 240)
-
     back = True
 
     def __init__(self, context):
@@ -225,8 +222,7 @@ class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
 
         if photo and not remove_photo:
             try:
-                photo = resize_photo(StringIO(photo),
-                                     self.canonical_photo_size)
+                photo = resize_photo(StringIO(photo), canonical_photo_size)
             except IOError:
                 self.error = _('Invalid photo')
                 return self.do_GET(request)
