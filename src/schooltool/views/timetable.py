@@ -53,9 +53,7 @@ moduleProvides(IModuleSetup)
 
 
 class ViewError(UnicodeAwareException):
-
-    def __unicode__(self):
-        return u" ".join(self.args)
+    pass
 
 
 class TimetableContentNegotiation:
