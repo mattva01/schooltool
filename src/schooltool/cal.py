@@ -1109,7 +1109,7 @@ class TimetableException:
     implements(ITimetableException)
 
     def __init__(self, date, period_id, activity, replacement):
-        assert isinstance(datetime.date, date)
+        assert isinstance(date, datetime.date)
         self.date = date
         self.period_id = period_id
         self.activity = activity
