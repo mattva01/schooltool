@@ -98,7 +98,8 @@ def convert_event_to_vfb(event):
     result = []
     # XXX: not handling recurrence yet
     result += [
-        "FREEBUSY:%s/%s00Z" % (ical_datetime(event.dtstart), ical_datetime(dtend)),
+        "FREEBUSY:%s/%s00Z" % (ical_datetime(event.dtstart),
+                               ical_datetime(dtend)),
     ]
     return result
 
