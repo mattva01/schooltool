@@ -29,6 +29,9 @@ from sets import Set
 __metaclass__ = type
 
 
+ical_weekdays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+
+
 class ICalParseError(Exception):
     """Invalid syntax in an iCalendar file."""
 
@@ -250,6 +253,15 @@ def parse_date_time(value):
     y, m, d, hh, mm, ss, utc = match.groups()
     return datetime.datetime(int(y), int(m), int(d),
                              int(hh), int(mm), int(ss))
+
+
+def ical_date_time(dt):
+    """Return a date in iCalendar format as a string.
+
+    >>> ical_date_time(datetime.datetime(2004, 10, 26, 13, 07, 16))
+    '20041026T130716Z'
+    """
+    return dt.strftime("%Y%m%dT%H%M%SZ")
 
 
 def parse_period(value):

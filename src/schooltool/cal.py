@@ -40,6 +40,7 @@ from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IRecurrenceRule
 from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
 from schooltool.interfaces import IWeeklyRecurrenceRule, IMonthlyRecurrenceRule
+from icalendar import ical_weekdays, ical_date_time
 
 __metaclass__ = type
 
@@ -379,14 +380,6 @@ class CalendarOwnerMixin(Persistent):
         self.calendar.acl.add((self, ModifyPermission))
 
 
-def ical_date(dt):
-    """Return a date in iCalendar format."""
-    return dt.strftime("%Y%m%dT%H%M%SZ")
-
-
-ical_weekdays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
-
-
 class RecurrenceRule:
 
     implements(IRecurrenceRule)
@@ -480,7 +473,7 @@ class RecurrenceRule:
         if self.count:
             args = 'COUNT=%d;' % self.count
         elif self.until:
-            args = 'UNTIL=%s;' % ical_date(self.until)
+            args = 'UNTIL=%s;' % ical_date_time(self.until)
         else:
             args = ''
         extra_args = self._iCalArgs(dtstart)
@@ -490,7 +483,8 @@ class RecurrenceRule:
         result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
                   % (self.ical_freq, args, self.interval)]
         if self.exceptions:
-            row = 'EXDATE:' + ','.join([ical_date(d) for d in self.exceptions])
+            row = 'EXDATE:' + ','.join([ical_date_time(d)
+                                        for d in self.exceptions])
             result.append(row)
         return result
 
