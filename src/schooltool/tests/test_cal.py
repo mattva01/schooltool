@@ -27,6 +27,7 @@ import calendar
 from pprint import pformat
 from datetime import date, time, timedelta, datetime
 from StringIO import StringIO
+from zope.testing.doctestunit import DocTestSuite
 from zope.interface.verify import verifyObject
 from zope.interface import implements
 from schooltool.tests.helpers import diff, dedent
@@ -161,6 +162,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.getValue('Foo'), 'bar')
         self.assertEquals(vevent.getValue('baz'), None)
         self.assertEquals(vevent.getValue('baz', 'quux'), 'quux')
+        self.assertEquals(vevent.getValue('dtstart', 'quux'), 'quux')
 
         vevent.add('int-foo', '42', {'VALUE': 'INTEGER'})
         vevent.add('int-bad', 'xyzzy', {'VALUE': 'INTEGER'})
@@ -388,6 +390,18 @@ class TestICalReader(unittest.TestCase):
         self.assert_(cal.isSchoolday(date(2003, 12, 24)))
         self.assert_(not cal.isSchoolday(date(2003, 12, 25)))
         self.assert_(not cal.isSchoolday(date(2003, 12, 26)))
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    BEGIN:VEVENT
+                    DTSTART:20030902T124500
+                    DURATION:PT0H15M
+                    SUMMARY:Nap
+                    END:VEVENT
+                    END:VCALENDAR
+                    """)))
+        markNonSchooldays(reader, cal)
+        self.assert_(cal.isSchoolday(date(2003, 9, 2)))
 
     def test_iterEvents(self):
         from schooltool.cal import ICalReader, ICalParseError
@@ -1058,7 +1072,9 @@ class TestCalendarEvent(unittest.TestCase):
 
 
 def test_suite():
+    import schooltool.cal
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite(schooltool.cal))
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestSchooldayModel))
     suite.addTest(unittest.makeSuite(TestVEvent))

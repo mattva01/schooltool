@@ -125,6 +125,119 @@ class ICalParseError(Exception):
     """Invalid syntax in an iCalendar file."""
 
 
+def parse_duration(value):
+    """Parse iCalendar DURATION value.  Returns a timedelta instance.
+
+    >>> parse_duration('+P11D')
+    datetime.timedelta(11)
+    >>> parse_duration('-P2W')
+    datetime.timedelta(-14)
+    >>> parse_duration('P1DT2H3M4S')
+    datetime.timedelta(1, 7384)
+    >>> parse_duration('P1DT2H3M')
+    datetime.timedelta(1, 7380)
+    >>> parse_duration('P1DT2H')
+    datetime.timedelta(1, 7200)
+    >>> parse_duration('PT2H')
+    datetime.timedelta(0, 7200)
+    >>> parse_duration('PT2H3M4S')
+    datetime.timedelta(0, 7384)
+    >>> parse_duration('')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar duration: ''
+    >>> parse_duration('xyzzy')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar duration: 'xyzzy'
+    >>> parse_duration('P')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar duration: 'P'
+    >>> parse_duration('P1WT2H')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar duration: 'P1WT2H'
+    """
+    date_part = r'(\d+)D'
+    time_part = r'T(\d+)H(?:(\d+)M(?:(\d+)S)?)?'
+    datetime_part = '(?:%s)?(?:%s)?' % (date_part, time_part)
+    weeks_part = r'(\d+)W'
+    duration_rx = re.compile(r'([-+]?)P(?:%s|%s)$'
+                             % (weeks_part, datetime_part))
+    match = duration_rx.match(value)
+    if match is None:
+        raise ValueError('Invalid iCalendar duration: %r' % value)
+    sign, weeks, days, hours, minutes, seconds = match.groups()
+    if weeks:
+        value = datetime.timedelta(weeks=int(weeks))
+    else:
+        if days is None and hours is None:
+            raise ValueError('Invalid iCalendar duration: %r'
+                             % value)
+        value = datetime.timedelta(days=int(days or 0),
+                                   hours=int(hours or 0),
+                                   minutes=int(minutes or 0),
+                                   seconds=int(seconds or 0))
+    if sign == '-':
+        value = -value
+    return value
+
+
+def parse_date(value):
+    """Parse iCalendar DATE value.  Returns a date instance.
+
+    >>> parse_date('20030405')
+    datetime.date(2003, 4, 5)
+    >>> parse_date('20030405T060708')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar date: '20030405T060708'
+    >>> parse_date('')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar date: ''
+    >>> parse_date('yyyymmdd')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar date: 'yyyymmdd'
+    """
+    if len(value) != 8:
+        raise ValueError('Invalid iCalendar date: %r' % value)
+    try:
+        y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
+    except ValueError:
+        raise ValueError('Invalid iCalendar date: %r' % value)
+    else:
+        return datetime.date(y, m, d)
+
+
+def parse_date_time(value):
+    """Parse iCalendar DATE-TIME value.  Returns a datetime instance.
+
+    >>> parse_date_time('20030405T060708')
+    datetime.datetime(2003, 4, 5, 6, 7, 8)
+    >>> parse_date_time('20030405T060708Z')
+    datetime.datetime(2003, 4, 5, 6, 7, 8)
+    >>> parse_date_time('20030405T060708A')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar date-time: '20030405T060708A'
+    >>> parse_date_time('')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar date-time: ''
+    """
+    datetime_rx = re.compile(r'(\d{4})(\d{2})(\d{2})'
+                             r'T(\d{2})(\d{2})(\d{2})(Z?)$')
+    match = datetime_rx.match(value)
+    if match is None:
+        raise ValueError('Invalid iCalendar date-time: %r' % value)
+    y, m, d, hh, mm, ss, utc = match.groups()
+    return datetime.datetime(int(y), int(m), int(d),
+                             int(hh), int(mm), int(ss))
+
+
 class VEvent:
     """iCalendar event.
 
@@ -150,6 +263,13 @@ class VEvent:
         'EXRULE': 'RECUR',
         'RDATE': 'DATE-TIME',
         'RRULE': 'RECUR',
+    }
+
+    converters = {
+        'INTEGER': int,
+        'DATE': parse_date,
+        'DATE-TIME': parse_date_time,
+        'DURATION': parse_duration,
     }
 
     def __init__(self):
@@ -233,47 +353,11 @@ class VEvent:
         except KeyError:
             return default
         else:
-            value_type = self.getType(property)
-            if value_type == 'INTEGER':
-                value = int(value)
-            elif value_type == 'DURATION':
-                date_part = r'(\d+)D'
-                time_part = r'T(\d+)H(?:(\d+)M(?:(\d+)S)?)?'
-                datetime_part = '(?:%s)?(?:%s)?' % (date_part, time_part)
-                weeks_part = r'(\d+)W'
-                duration_rx = re.compile(r'([-+]?)P(?:%s|%s)$'
-                                         % (weeks_part, datetime_part))
-                match = duration_rx.match(value)
-                if match is None:
-                    raise ValueError('Invalid iCalendar duration: %r' % value)
-                sign, weeks, days, hours, minutes, seconds = match.groups()
-                if weeks:
-                    value = datetime.timedelta(weeks=int(weeks))
-                else:
-                    if days is None and hours is None:
-                        raise ValueError('Invalid iCalendar duration: %r'
-                                         % value)
-                    value = datetime.timedelta(days=int(days or 0),
-                                               hours=int(hours or 0),
-                                               minutes=int(minutes or 0),
-                                               seconds=int(seconds or 0))
-                if sign == '-':
-                    value = -value
-            elif value_type == 'DATE':
-                if len(value) != 8:
-                    raise ValueError('Invalid iCalendar date: %r' % value)
-                y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
-                value = datetime.date(y, m, d)
-            elif value_type == 'DATE-TIME':
-                datetime_rx = re.compile(r'(\d{4})(\d{2})(\d{2})'
-                                         r'T(\d{2})(\d{2})(\d{2})(Z?)$')
-                match = datetime_rx.match(value)
-                if match is None:
-                    raise ValueError('Invalid iCalendar date-time: %r' % value)
-                y, m, d, hh, mm, ss, utc = match.groups()
-                value = datetime.datetime(int(y), int(m), int(d),
-                                          int(hh), int(mm), int(ss))
-            return value
+            converter = self.converters.get(self.getType(property))
+            if converter is None:
+                return value
+            else:
+                return converter(value)
 
     def hasProp(self, property):
         """Return True if this VEvent has a named property."""
@@ -492,13 +576,14 @@ def markNonSchooldays(ical_reader, schoolday_model):
     SchooldayModel.
     """
     for event in ical_reader.iterEvents():
-        for day in event.iterDates():
-            try:
-                schoolday_model.remove(day)
-            except (KeyError, ValueError):
-                # They day was already marked as non-schoolday or is
-                # outside the school period.  This is not an error.
-                pass
+        if event.all_day_event:
+            for day in event.iterDates():
+                try:
+                    schoolday_model.remove(day)
+                except (KeyError, ValueError):
+                    # They day was already marked as non-schoolday or is
+                    # outside the school period.  This is not an error.
+                    pass
 
 
 #
