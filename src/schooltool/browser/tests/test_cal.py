@@ -357,7 +357,12 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         tcal.__parent__ = person
         tcal.__name__ = 'timetable-calendar'
 
+        ccal = createCalendar()
+        ccal.__parent__ = person
+        ccal.__name__ = 'composite-calendar'
+
         person.makeTimetableCalendar = lambda: tcal
+        person.makeCompositeCalendar = lambda: ccal
 
         view = CalendarViewBase(cal)
 
@@ -370,44 +375,17 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
                           recurrence=DailyRecurrenceRule(), unique_id="42")
         ev3_1 = ev3.replace(dtstart=datetime(2004, 8, 12, 9, 0))
         ev3_2 = ev3.replace(dtstart=datetime(2004, 8, 13, 9, 0))
+        ev4 = createEvent('2004-08-12 17:00', '1h', 'ev4')
         cal.addEvent(ev1)
         cal.addEvent(ev3)
         tcal.addEvent(ev2)
+        ccal.addEvent(ev4)
 
         result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
         result.sort()
-        expected = [ev3_1, ev1, ev2, ev3_2]
+        expected = [ev3_1, ev1, ev2, ev4, ev3_2]
         self.assertEquals(result, expected,
                           diff(pformat(result), pformat(expected)))
-
-##    def test_iterEvents_composite(self):
-##        from schooltool.browser.cal import CompositeCalendarMixin
-##        from schooltool.model import Person
-##
-##        class CalendarStub:
-##
-##            first = None
-##            last = None
-##
-##            def __init__(self, values):
-##                self.values = values
-##
-##            def expand(self, first, last):
-##                self.first = first
-##                self.last = last
-##                return self.values
-##
-##        person = Person(title="Wise Guy")
-##        person.calendar = CalendarStub([0, 1, 2])
-##        person.calendar.__parent__ = person
-##        composite_calendar = CalendarStub([3, 4, 5])
-##        person.makeCompositeCalendar = lambda: composite_calendar
-##        view = CompositeCalendarMixin(person.calendar)
-##        self.assertEquals(list(view.iterEvents('start', 'end')), range(6))
-##        self.assertEquals(person.calendar.first, 'start')
-##        self.assertEquals(person.calendar.last, 'end')
-##        self.assertEquals(composite_calendar.first, 'start')
-##        self.assertEquals(composite_calendar.last, 'end')
 
     def test_getWeek(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
@@ -636,7 +614,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
         cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
-        cal.__parent__.makeTimetableCalendar = lambda: []
+        cal.__parent__.makeTimetableCalendar = lambda: createCalendar()
         view = DailyCalendarView(cal)
         view.request = RequestStub()
         view.cursor = date(2004, 8, 12)
@@ -697,7 +675,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
         cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
-        cal.__parent__.makeTimetableCalendar = lambda: []
+        cal.__parent__.makeTimetableCalendar = lambda: createCalendar()
         view = DailyCalendarView(cal)
         view.request = RequestStub()
         view.cursor = date(2004, 8, 12)

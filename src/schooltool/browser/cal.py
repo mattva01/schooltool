@@ -279,21 +279,17 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
     def iterEvents(self, first, last):
-        """Iterate over all events of selected calendars.
+        """Iterate over events of selected calendars.
 
-        Currently the personal calendar, the timetable calendar (TODO: the
-        composite calendar) is scanned.
+        Currently the personal calendar, the timetable calendar and the
+        composite calendar is scanned.
         """
-        # TODO: Composite events.
-        return itertools.chain(self.context.expand(first, last),
-                               self.context.__parent__.makeTimetableCalendar())
-
-#    def iterEvents(self, first, last):
-#        """Iterate over the events of the calendars displayed."""
-#        private_cal = self.context
-#        composite_cal = self.context.__parent__.makeCompositeCalendar()
-#        return itertools.chain(private_cal.expand(first, last),
-#                               composite_cal.expand(first, last))
+        private_cal = self.context
+        timetable_cal = self.context.__parent__.makeTimetableCalendar()
+        composite_cal = self.context.__parent__.makeCompositeCalendar()
+        return itertools.chain(private_cal.expand(first, last),
+                               timetable_cal.expand(first, last),
+                               composite_cal.expand(first, last))
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
