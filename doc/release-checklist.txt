@@ -1,62 +1,59 @@
 Release Checklists
 ==================
 
-A list of things to be done every release by the release manager (currently
-Brian Sutherland <jinty@web.de>)
+Main Release
+------------
 
-Tarball Release
----------------
+A list of things to be done every release by the release manager on every
+tarball release.
 
-A list of things the release manager should check on every release:
+(currently Brian Sutherland <jinty@web.de>)
 
 * Version number in files is correct:
-    * SERVER_VERSION in src/schooltool/http.py                      [ ]
-    * version number in setup.py                                    [ ]
+    * SERVER_VERSION in src/schooltool/http.py
+    * version number in setup.py
 
-* RELEASE is up to date                                             [ ]
+* Check that RELEASE is up to date.
 
-* Tag release                                                       [ ]
+* Tag release.
 
-* make and sign tarballs/zipfiles with `make schoolxxxxdist`        [ ]
+* Make and sign tarballs and zipfiles with ``make schoolbelldist`` or
+  ``make schooltooldist``.
 
-* functional and unit tests run without errors from unpacked
-      tarballs.                                                     [ ]
+* Functional and unit tests run without errors from unpacked tarballs.
 
-* Tarballs uploaded to www.schoolbell.org                           [ ]
+* Upload tarballs to www.schoolbell.org
 
-* Send announcement to:                                             [ ]
-        schooltool-announce@schooltool.org
-        schooltool@schooltool.org
-        More???
+* Send announcement to:
+    * schooltool-announce@schooltool.org
+    * schooltool@schooltool.org
 
 Package Release
 ---------------
 
-A list of things the package maintainer should do every package release.
+A list of things the package maintainer should do every package release. The
+current package maintainer is the release manager.
 
-* debian/changelog version number (1.0rc1 => 0.9.99+1.0rc1)         [ ]
+* changelog version number (1.0rc1 => 0.9.99+1.0rc1).
 
-* check/update debian/changelog                                     [ ]
+* Check/update changelog.
 
-* Make sure that db_version in pre/post installation
-  scripts is correct and is the same.                               [ ]
+* Sign the packages with a gpg key.
 
-* Package maintainer has gpg signed the packages                    [ ]
+* Sarge chroot testing
+    * Test package build with only build-deps installed.
+    * Test functional tests against server installed in chroot.
+    * SchoolTool specific: run import smapleshool.
 
-Sarge chroot testing
-    * Test package build with only build-deps installed.            [ ]
-    * Test functional tests against server installed in chroot.     [ ]
-    * SchoolTool specific: run import smapleshool.                  [ ]
+* Hoary chroot testing
+    * Test package build with only build-deps installed.
+    * Test functional tests against server installed in chroot.
+    * SchoolTool specific: run import smapleshool.
 
-Hoary chroot testing
-    * Test package build with only build-deps installed.            [ ]
-    * Test functional tests against server installed in chroot.     [ ]
-    * SchoolTool specific: run import smapleshool.                  [ ]
+* Lintian run on packages. All errors explainable.
 
-* Lintian run on packages. All errors explainable.                  [ ]
+* Linda run on packages. All errors explainable.
 
-* Linda run on packages. All errors explainable.                    [ ]
+* Manual check of .diff.tar.gz
 
-* Manual check of .diff.tar.gz                                      [ ]
-
-* Upload packages to sid and make sure they 
+* Upload packages to sid.
