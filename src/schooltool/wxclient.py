@@ -687,6 +687,7 @@ class SchoolTimetableFrame(wxDialog):
         self.grid.AutoSizeRows()
         self.grid.AutoSizeColumns()
 
+
 class MainFrame(wxFrame):
     """Main frame.
 

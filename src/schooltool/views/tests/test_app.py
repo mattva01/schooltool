@@ -99,11 +99,14 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
                 <utility xlink:type="simple" xlink:href="/utils/foo"
                          xlink:title="Foo utility"/>
               </utilities>
-              <schooltt xlink:href="/schooltt" xlink:title="Whole school timetables"
+              <schooltt xlink:href="/schooltt"
+                        xlink:title="Whole school timetables"
                         xlink:type="simple"/>
-              <time-periods xlink:href="/time-periods" xlink:title="Time periods"
+              <time-periods xlink:href="/time-periods"
+                            xlink:title="Time periods"
                             xlink:type="simple"/>
-              <ttschemas xlink:href="/ttschemas" xlink:title="Timetable schemas"
+              <ttschemas xlink:href="/ttschemas"
+                         xlink:title="Timetable schemas"
                          xlink:type="simple"/>
        </schooltool>
             """, recursively_sort=["schooltool"])

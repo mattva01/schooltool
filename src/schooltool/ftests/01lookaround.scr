@@ -26,6 +26,12 @@ Content-Type: text/xml; charset=UTF-8
              xlink:href="/utils/eventlog"
              xlink:title="Event Log"/>
   </utilities>
+  <schooltt xlink:href="/schooltt" xlink:title="Whole school timetables"
+            xlink:type="simple"/>
+  <time-periods xlink:href="/time-periods" xlink:title="Time periods"
+                xlink:type="simple"/>
+  <ttschemas xlink:href="/ttschemas" xlink:title="Timetable schemas"
+             xlink:type="simple"/>
 </schooltool>
 %% END XML
 
@@ -43,127 +49,6 @@ Content-Type: text/xml; charset=UTF-8
           xlink:title="Event Log"/>
   </items>
 </container>
-%% END XML
-
-
-SchoolTool> get /ttschemas
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=timetableSchemas
-<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
-</timetableSchemas>
-%% END XML
-
-
-SchoolTool> get /groups/root
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=group
-<group xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>Root Group</name>
-  <item xlink:type="simple" xlink:title="Teachers"
-        xlink:href="/groups/teachers"/>
-  <item xlink:type="simple" xlink:title="Students"
-        xlink:href="/groups/students"/>
-  <item xlink:type="simple" xlink:title="Cleaners"
-        xlink:href="/groups/cleaners"/>
-  <relationships xlink:type="simple"
-                 xlink:title="Relationships"
-                 xlink:href="root/relationships"/>
-  <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="root/facets"/>
-</group>
-%% END XML
-
-
-SchoolTool> get /groups/cleaners
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=group
-<group xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>Cleaners</name>
-  <item xlink:type="simple" xlink:title="Marius"
-        xlink:href="/persons/Marius"/>
-  <item xlink:type="simple" xlink:title="Albert"
-        xlink:href="/persons/Albert"/>
-  <relationships xlink:type="simple"
-                 xlink:title="Relationships"
-                 xlink:href="cleaners/relationships"/>
-  <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="cleaners/facets"/>
-</group>
-%% END XML
-
-
-SchoolTool> get /persons/Marius
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=person
-<person xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>Marius</name>
-  <groups>
-    <item xlink:type="simple" xlink:href="/groups/cleaners"
-          xlink:title="Cleaners"/>
-  </groups>
-  <relationships xlink:type="simple"
-                 xlink:title="Relationships"
-                 xlink:href="Marius/relationships"/>
-  <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="Marius/facets"/>
-</person>
-%% END XML
-
-
-SchoolTool> get /persons/Marius/facets
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=facets
-<facets xmlns:xlink="http://www.w3.org/1999/xlink">
-  <facet xlink:type="simple" active="active"
-         xlink:title="eventlog" owned="unowned"
-         xlink:href="/persons/Marius/facets/eventlog"/>
-  <facetFactory name="eventlog" title="Event Log"/>
-  <facetFactory name="absence_tracker" title="Absence Tracker"/>
-  <facetFactory name="subject_group" title="Subject Group"/>
-  <facetFactory name="teacher_group" title="Teacher Group"/>
-</facets>
-%% END XML
-
-
-SchoolTool> get /persons/Marius/facets/eventlog
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML
-<eventLog>
-</eventLog>
-%% END XML
-
-
-SchoolTool> get /
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=schooltool
-<schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
-  <message>Welcome to the SchoolTool server</message>
-  <roots>
-    <root xlink:type="simple" xlink:href="/groups/root"
-          xlink:title="Root Group"/>
-  </roots>
-  <containers>
-    <container xlink:type="simple" xlink:href="/persons"
-               xlink:title="persons"/>
-    <container xlink:type="simple" xlink:href="/groups"
-               xlink:title="groups"/>
-  </containers>
-  <utilities>
-    <utility xlink:type="simple"
-             xlink:href="/utils/eventlog"
-             xlink:title="Event Log"/>
-    <utility xlink:type="simple"
-             xlink:href="/utils/absences"
-             xlink:title="Absence Tracker"/>
-  </utilities>
-</schooltool>
 %% END XML
 
 
@@ -228,112 +113,62 @@ Content-Type: text/xml; charset=UTF-8
 </eventLog>
 
 
-SchoolTool> get /
+SchoolTool> get /utils/absences
 200 OK
 Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=schooltool
-<schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
-  <message>Welcome to the SchoolTool server</message>
-  <roots>
-    <root xlink:type="simple" xlink:href="/groups/root"
-          xlink:title="Root Group"/>
-  </roots>
-  <containers>
-    <container xlink:type="simple" xlink:href="/persons"
-               xlink:title="persons"/>
-    <container xlink:type="simple" xlink:href="/groups"
-               xlink:title="groups"/>
-  </containers>
-  <utilities>
-    <utility xlink:type="simple"
-             xlink:href="/utils/eventlog"
-             xlink:title="Event Log"/>
-    <utility xlink:type="simple"
-             xlink:href="/utils/absences"
-             xlink:title="Absence Tracker"/>
-  </utilities>
-</schooltool>
+<absences xmlns:xlink="http://www.w3.org/1999/xlink">
+</absences>
+
+
+SchoolTool> get /ttschemas
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=timetableSchemas
+<timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+</timetableSchemas>
 %% END XML
 
 
-SchoolTool> get /persons
+SchoolTool> get /time-periods
 200 OK
 Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=container
-<container xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>persons</name>
-  <items>
-    <item xlink:type="simple" xlink:href="/persons/Steve"
-          xlink:title="Steve"/>
-    <item xlink:type="simple" xlink:href="/persons/Aiste"
-          xlink:title="Aiste"/>
-    <item xlink:type="simple" xlink:href="/persons/Mark"
-          xlink:title="Mark"/>
-    <item xlink:type="simple" xlink:href="/persons/Albert"
-          xlink:title="Albert"/>
-    <item xlink:type="simple" xlink:href="/persons/Marius"
-          xlink:title="Marius"/>
-    <item xlink:type="simple" xlink:href="/persons/anonymous"
-          xlink:title="Anonymous"/>
-  </items>
-</container>
+%% XML recursively_sort=timetableSchemas
+<timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+</timePeriods>
 %% END XML
 
 
-SchoolTool> get /persons/Albert
+SchoolTool> get /schooltt
 200 OK
 Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=person
-<person xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>Albert</name>
-  <groups>
-    <item xlink:type="simple" xlink:href="/groups/cleaners"
-          xlink:title="Cleaners"/>
-  </groups>
+%% XML recursively_sort=timetables
+<timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+</timetables>
+%% END XML
+
+
+SchoolTool> get /groups/root
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=group
+<group xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Root Group</name>
+  <item xlink:type="simple" xlink:title="Teachers"
+        xlink:href="/groups/teachers"/>
+  <item xlink:type="simple" xlink:title="Students"
+        xlink:href="/groups/students"/>
+  <item xlink:type="simple" xlink:title="Cleaners"
+        xlink:href="/groups/cleaners"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
-                 xlink:href="Albert/relationships"/>
+                 xlink:href="root/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="Albert/facets"/>
-</person>
-%% END XML
-
-
-SchoolTool> get /persons/Albert/relationships
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML recursively_sort=relationships
-<relationships xmlns:xlink="http://www.w3.org/1999/xlink">
-  <existing>
-    <relationship xlink:type="simple"
-                  xlink:role="http://schooltool.org/ns/membership/group"
-                  xlink:title="Cleaners"
-                  xlink:arcrole="http://schooltool.org/ns/membership"
-                  xlink:href="/groups/cleaners">
-      <manage xlink:type="simple"
-              xlink:href="/persons/Albert/relationships/0001"
-              xlink:title="Cleaners"/>
-    </relationship>
-  </existing>
-  <valencies>
-    <relationship xlink:type="simple"
-                  xlink:role="http://schooltool.org/ns/membership/member"
-                  xlink:arcrole="http://schooltool.org/ns/membership"/>
-  </valencies>
-</relationships>
-%% END XML
-
-
-SchoolTool> get /persons/Albert/relationships/0001
-200 OK
-Content-Type: text/xml; charset=UTF-8
-%% XML
-<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
-              xlink:type="simple"
-              xlink:role="http://schooltool.org/ns/membership/group"
-              xlink:title="Cleaners"
-              xlink:arcrole="http://schooltool.org/ns/membership"
-              xlink:href="/groups/cleaners"/>
+          xlink:href="root/facets"/>
+  <timetables xlink:href="root/timetables" xlink:title="Own timetables"
+              xlink:type="simple"/>
+  <compositeTimetables xlink:href="root/composite-timetables"
+                       xlink:title="Composite timetables" xlink:type="simple"/>
+</group>
 %% END XML
 
 
@@ -352,6 +187,10 @@ Content-Type: text/xml; charset=UTF-8
                  xlink:href="cleaners/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="cleaners/facets"/>
+  <timetables xlink:href="cleaners/timetables" xlink:title="Own timetables"
+              xlink:type="simple"/>
+  <compositeTimetables xlink:href="cleaners/composite-timetables"
+                       xlink:title="Composite timetables" xlink:type="simple"/>
 </group>
 %% END XML
 
@@ -412,6 +251,63 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /groups/root/tree
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=tree
+<tree xmlns:xlink="http://www.w3.org/1999/xlink">
+  <group xlink:href="/groups/root" xlink:title="Root Group"
+         xlink:type="simple">
+    <group xlink:href="/groups/teachers" xlink:title="Teachers"
+           xlink:type="simple">
+    </group>
+    <group xlink:href="/groups/cleaners" xlink:title="Cleaners"
+           xlink:type="simple">
+    </group>
+    <group xlink:href="/groups/students" xlink:title="Students"
+           xlink:type="simple">
+    </group>
+  </group>
+</tree>
+%% END XML
+
+
+SchoolTool> get /groups/students/rollcall
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=rollcall
+<rollcall xlink:href="/groups/students" xlink:title="group"
+          xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <person presence="present" xlink:href="/persons/Aiste" xlink:title="Aiste"
+          xlink:type="simple"/>
+</rollcall>
+%% END XML
+
+
+SchoolTool> get /persons
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=container
+<container xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>persons</name>
+  <items>
+    <item xlink:type="simple" xlink:href="/persons/Steve"
+          xlink:title="Steve"/>
+    <item xlink:type="simple" xlink:href="/persons/Aiste"
+          xlink:title="Aiste"/>
+    <item xlink:type="simple" xlink:href="/persons/Mark"
+          xlink:title="Mark"/>
+    <item xlink:type="simple" xlink:href="/persons/Albert"
+          xlink:title="Albert"/>
+    <item xlink:type="simple" xlink:href="/persons/Marius"
+          xlink:title="Marius"/>
+    <item xlink:type="simple" xlink:href="/persons/anonymous"
+          xlink:title="Anonymous"/>
+  </items>
+</container>
+%% END XML
+
+
 SchoolTool> get /persons/Albert
 200 OK
 Content-Type: text/xml; charset=UTF-8
@@ -427,7 +323,124 @@ Content-Type: text/xml; charset=UTF-8
                  xlink:href="Albert/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="Albert/facets"/>
+  <timetables xlink:href="Albert/timetables" xlink:title="Own timetables"
+              xlink:type="simple"/>
+  <compositeTimetables xlink:href="Albert/composite-timetables"
+                       xlink:title="Composite timetables" xlink:type="simple"/>
 </person>
+%% END XML
+
+
+SchoolTool> get /persons/Albert/relationships
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=relationships
+<relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+  <existing>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/group"
+                  xlink:title="Cleaners"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/groups/cleaners">
+      <manage xlink:type="simple"
+              xlink:href="/persons/Albert/relationships/0001"
+              xlink:title="Cleaners"/>
+    </relationship>
+  </existing>
+  <valencies>
+    <relationship xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/member"
+                  xlink:arcrole="http://schooltool.org/ns/membership"/>
+  </valencies>
+</relationships>
+%% END XML
+
+
+SchoolTool> get /persons/Albert/relationships/0001
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML
+<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+              xlink:type="simple"
+              xlink:role="http://schooltool.org/ns/membership/group"
+              xlink:title="Cleaners"
+              xlink:arcrole="http://schooltool.org/ns/membership"
+              xlink:href="/groups/cleaners"/>
+%% END XML
+
+
+SchoolTool> get /persons/Marius
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=person
+<person xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Marius</name>
+  <groups>
+    <item xlink:type="simple" xlink:href="/groups/cleaners"
+          xlink:title="Cleaners"/>
+  </groups>
+  <relationships xlink:type="simple"
+                 xlink:title="Relationships"
+                 xlink:href="Marius/relationships"/>
+  <facets xlink:type="simple" xlink:title="Facets"
+          xlink:href="Marius/facets"/>
+  <timetables xlink:href="Marius/timetables" xlink:title="Own timetables"
+              xlink:type="simple"/>
+  <compositeTimetables xlink:href="Marius/composite-timetables"
+                       xlink:title="Composite timetables" xlink:type="simple"/>
+</person>
+%% END XML
+
+
+SchoolTool> get /persons/Marius/facets
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=facets
+<facets xmlns:xlink="http://www.w3.org/1999/xlink">
+  <facet xlink:type="simple" active="active"
+         xlink:title="eventlog" owned="unowned"
+         xlink:href="/persons/Marius/facets/eventlog"/>
+  <facetFactory name="eventlog" title="Event Log"/>
+  <facetFactory name="absence_tracker" title="Absence Tracker"/>
+  <facetFactory name="subject_group" title="Subject Group"/>
+  <facetFactory name="teacher_group" title="Teacher Group"/>
+</facets>
+%% END XML
+
+
+SchoolTool> get /persons/Marius/facets/eventlog
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML
+<eventLog>
+</eventLog>
+%% END XML
+
+
+SchoolTool> get /persons/Marius/absences
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=absences
+<absences xmlns:xlink="http://www.w3.org/1999/xlink">
+</absences>
+%% END XML
+
+
+SchoolTool> get /persons/Marius/timetables
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=timetables
+<timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+</timetables>
+%% END XML
+
+
+SchoolTool> get /persons/Marius/composite-timetables
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=timetables
+<timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+</timetables>
 %% END XML
 
 

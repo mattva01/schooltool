@@ -57,23 +57,32 @@ def read_file(fn):
         f.close()
 
 
-class TimetableReadView(View):
+class TimetableContentNegotiation:
+    """Mixin for figguring out the representation of timetables."""
+
+    def chooseRepresentation(self, request):
+        """Choose the appropriate timetable representation.
+
+        Looks at user-provided Accept and User-Agent headers.  Returns a
+        MIME content type string.
+        """
+        mtype = request.chooseMediaType(['text/xml', 'text/html'])
+        user_agent = request.getHeader('User-Agent') or ''
+        if 'Mozilla' in user_agent:
+            # A hack to override content negotiation for Mozilla, IE and
+            # other common browsers that won't know what to do with XML
+            mtype = 'text/html'
+        return mtype
+
+
+class TimetableReadView(View, TimetableContentNegotiation):
     """Read-only view for ITimetable."""
 
     template = Template("www/timetable.pt", content_type="text/xml")
     html_template = Template("www/timetable_html.pt")
 
     def do_GET(self, request):
-        mtype = request.chooseMediaType(['text/xml', 'text/html'])
-        try:
-            user_agent = request.getHeader('User-Agent')
-        except KeyError:
-            pass
-        else:
-            if 'Mozilla' in user_agent:
-                # A hack to override content negotiation for Mozilla, IE and
-                # other common browsers that won't know what to do with XML
-                mtype = 'text/html'
+        mtype = self.chooseRepresentation(request)
         if mtype == 'text/html':
             return self.html_template(request, view=self, context=self.context)
         else:
@@ -250,7 +259,7 @@ class TimetableSchemaView(TimetableReadView):
             xpathctx.xpathFreeContext()
 
 
-class BaseTimetableTraverseView(View):
+class BaseTimetableTraverseView(View, TimetableContentNegotiation):
     """Base class for timetable traversal views.
 
     context is usually an ITimetabled.
@@ -281,17 +290,7 @@ class BaseTimetableTraverseView(View):
         if self.time_period is not None:
             return notFoundPage(request)
         else:
-            mtype = request.chooseMediaType(['text/xml', 'text/html'])
-            try:
-                user_agent = request.getHeader('User-Agent')
-            except KeyError:
-                pass
-            else:
-                if 'Mozilla' in user_agent:
-                    # A hack to override content negotiation for Mozilla, IE
-                    # and other common browsers that won't know what to do with
-                    # XML
-                    mtype = 'text/html'
+            mtype = self.chooseRepresentation(request)
             if mtype == 'text/html':
                 return self.html_template(request, view=self,
                                           context=self.context)

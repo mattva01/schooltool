@@ -57,7 +57,8 @@ class RequestStub:
         return self._hostname
 
     def getHeader(self, header):
-        return self.request_headers[header.lower()]
+        # Twisted's getHeader returns None when the header does not exist
+        return self.request_headers.get(header.lower())
 
     def setHeader(self, header, value):
         self.headers[header] = value

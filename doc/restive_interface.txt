@@ -101,8 +101,6 @@ SchoolTool server RESTive interface
 
   GET /time-periods
     lists all defined time periods
-  GET /time-periods/period_name
-    shows the time period named 'period_name'
   PUT /time-periods/period_name
     creates or updates time period named 'period_name'
   DELETE /time-periods/period_name

@@ -144,10 +144,12 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
                              xlink:href="p/relationships"/>
               <facets xlink:type="simple" xlink:title="Facets"
                       xlink:href="p/facets"/>
-              <timetables xlink:href="p/timetables" xlink:title="Own timetables"
+              <timetables xlink:href="p/timetables"
+                          xlink:title="Own timetables"
                           xlink:type="simple"/>
-              <composite xlink:href="p/composite-timetables"
-                         xlink:title="Composite timetables" xlink:type="simple"/>
+              <compositeTimetables xlink:href="p/composite-timetables"
+                                   xlink:title="Composite timetables"
+                                   xlink:type="simple"/>
             </person>
             """, recursively_sort=['groups'])
 
@@ -194,10 +196,12 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
                       xlink:href="root/facets"/>
               <relationships xlink:type="simple" xlink:title="Relationships"
                              xlink:href="root/relationships"/>
-              <timetables xlink:href="root/timetables" xlink:title="Own timetables"
+              <timetables xlink:href="root/timetables"
+                          xlink:title="Own timetables"
                           xlink:type="simple"/>
-              <composite xlink:href="root/composite-timetables"
-                         xlink:title="Composite timetables" xlink:type="simple"/>
+              <compositeTimetables xlink:href="root/composite-timetables"
+                                   xlink:title="Composite timetables"
+                                   xlink:type="simple"/>
             </group>
             """ % (getPath(self.per), getPath(self.sub)),
             recursively_sort=['group'])

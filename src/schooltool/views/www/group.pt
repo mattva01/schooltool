@@ -15,7 +15,8 @@
   <timetables xlink:type="simple" xlink:title="Own timetables"
       tal:attributes="xlink:href string:${view/context/__name__}/timetables"
       />
-  <composite xlink:type="simple" xlink:title="Composite timetables"
-      tal:attributes="xlink:href string:${view/context/__name__}/composite-timetables"
+  <compositeTimetables xlink:type="simple" xlink:title="Composite timetables"
+      tal:attributes="xlink:href
+                          string:${view/context/__name__}/composite-timetables"
       />
 </group>
