@@ -68,8 +68,13 @@ class IGroup(IGroupWrite, IGroupRead):
 class IGroupMember(Interface):
 
     def groups():
-        """Returns a sequence for all groups this object is a member of."""
+        """Returns a set for all groups this object is a member of."""
 
+    def notifyAdd(group):
+        """Notifies a member that it's added to a group."""
+
+    def notifyRemove(group):
+        """Notifies a member that it's removed from a group."""
 
 class IPerson(IGroupMember):
 

@@ -21,6 +21,7 @@ Unit tests for schooltool.model
 """
 
 import unittest
+from sets import Set
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember
@@ -28,7 +29,13 @@ from schooltool.interfaces import IGroupMember
 __metaclass__ = type
 
 class MemberStub:
+    added = None
+    removed = None
     implements(IGroupMember)
+    def notifyAdd(self, group):
+        self.added = group
+    def notifyRemove(self, group):
+        self.removed = group
 
 class TestPerson(unittest.TestCase):
 
@@ -38,6 +45,23 @@ class TestPerson(unittest.TestCase):
         person = Person('John Smith')
         verifyObject(IPerson, person)
 
+class TestGroupMember(unittest.TestCase):
+
+    def test_notifyAdd(self):
+        from schooltool.model import GroupMember
+        member = GroupMember()
+        group = object()
+        member.notifyAdd(group)
+        self.assertEqual(member.groups(), Set([group]))
+
+    def test_notifyRemove(self):
+        from schooltool.model import GroupMember
+        member = GroupMember()
+        group = object()
+        member._groups = Set([group])
+        member.notifyRemove(group)
+        self.assertEqual(member.groups(), Set([]))
+        self.assertRaises(KeyError, member.notifyRemove, group)
 
 class TestGroup(unittest.TestCase):
 
@@ -46,6 +70,7 @@ class TestGroup(unittest.TestCase):
         from schooltool.model import Group
         group = Group()
         verifyObject(IGroup, group)
+        verifyObject(IGroupMember, group)
 
     def test_add(self):
         from schooltool.model import Group
@@ -53,7 +78,16 @@ class TestGroup(unittest.TestCase):
         member = MemberStub()
         key = group.add(member)
         self.assertEqual(member, group[key])
+        self.assertEqual(member.added, group)
         self.assertRaises(TypeError, group.add, "not a member")
+
+    def test_add_group(self):
+        from schooltool.model import Group
+        group = Group()
+        member = Group()
+        key = group.add(member)
+        self.assertEqual(member, group[key])
+        self.assertEqual(member.groups(), Set([group]))
 
     def test_remove(self):
         from schooltool.model import Group
@@ -63,6 +97,7 @@ class TestGroup(unittest.TestCase):
         del group[key]
         self.assertRaises(KeyError, group.__getitem__, key)
         self.assertRaises(KeyError, group.__delitem__, key)
+        self.assertEqual(member.removed, group)
 
     def test_items(self):
         from schooltool.model import Group
@@ -81,6 +116,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
+    suite.addTest(unittest.makeSuite(TestGroupMember))
     return suite
 
 if __name__ == '__main__':
