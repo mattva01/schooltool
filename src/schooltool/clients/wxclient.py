@@ -2230,7 +2230,7 @@ class MainFrame(wxFrame):
 
         if wxMessageBox(_("Really remove %s (%s) from %s?")
                         % (to_wx(relationship.target_title),
-                           to_wx(nameURI(relationship.role)),
+                           to_wx(relationship.role.name),
                            group_title),
                         _("Remove Relationship"), wxYES_NO) != wxYES:
             return

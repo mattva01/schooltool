@@ -33,8 +33,6 @@ import base64
 import cgi
 
 from schooltool.interfaces import ComponentLookupError
-# TODO: Remove dependency on schooltool.uris.
-from schooltool.uris import URITeaching, URITaught
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
 from schooltool.common import looks_like_a_uri
@@ -1119,6 +1117,10 @@ class URIObject:
         # TODO: validation?
 
 
+URITeaching_uri = 'http://schooltool.org/ns/teaching'
+URITaught_uri = 'http://schooltool.org/ns/teaching/taught'
+
+
 class PersonInfo:
     """An object containing the data for a person"""
 
@@ -1451,7 +1453,8 @@ class SchoolTimetableInfo:
         """
         activities = []
         for rel in relationships:
-            if rel.arcrole == URITeaching and rel.role == URITaught:
+            if (rel.arcrole.uri == URITeaching_uri
+                and rel.role.uri == URITaught_uri):
                 activities.append((rel.target_title, rel.target_path))
         (path, title, old_activities) = self.teachers[idx]
         self.teachers[idx] = (path, title, activities)

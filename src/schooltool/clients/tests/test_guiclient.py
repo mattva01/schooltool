@@ -2178,8 +2178,7 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
     def test_setTeacherRelationships(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo
         from schooltool.clients.guiclient import RelationshipInfo
-        from schooltool.clients.guiclient import URITeaching, URITaught
-        from schooltool.uris import URITeacher
+        from schooltool.uris import URITeaching, URITaught, URITeacher
         st = SchoolTimetableInfo([('/path1', None, None),
                                   ('/path2', None, None)])
         st.setTeacherRelationships(0, [
