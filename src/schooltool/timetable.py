@@ -889,10 +889,17 @@ class TimetableSchemaService(Persistent):
     __parent__ = None
     __name__ = None
 
-    default_id = None
+    _default_id = None
 
     def __init__(self):
         self.timetables = PersistentDict()
+
+    def _set_default_id(self, new_id):
+        if new_id is not None and new_id not in self.timetables:
+            raise ValueError("Timetable schema %r does not exist" % new_id)
+        self._default_id =  new_id
+
+    default_id = property(lambda self: self._default_id, _set_default_id)
 
     def keys(self):
         return self.timetables.keys()

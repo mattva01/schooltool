@@ -33,6 +33,7 @@ from zope.i18n import interpolate
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
 from schooltool.component import getView, getPath
+from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
@@ -451,6 +452,14 @@ class TraversableView(View):
 
     def _traverse(self, name, request):
         return getView(self.context.traverse(name))
+
+
+class ViewError(UnicodeAwareException):
+    """User error.
+
+    Used internally by some views to pass an error message until it can be
+    rendered.
+    """
 
 
 def setUp():

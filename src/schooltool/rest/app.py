@@ -34,6 +34,7 @@ from schooltool.rest import TraversableView
 from schooltool.rest import notFoundPage, textErrorPage
 from schooltool.rest import absoluteURL, absolutePath
 from schooltool.rest import read_file
+from schooltool.rest import ViewError
 from schooltool.rest.timetable import SchoolTimetableTraverseView
 from schooltool.rest.cal import AllCalendarsView
 from schooltool.rest.csvexport import CSVExporter
@@ -322,7 +323,7 @@ class OptionsView(View):
             return textErrorPage(request, _("Ill-formed XML document"))
         except XMLValidationError:
             return textErrorPage(request, _("Invalid XML document"))
-        else:
+        try:
             options = doc.query('options')[0]
 
             def extract(key):
@@ -334,8 +335,11 @@ class OptionsView(View):
 
             defaultTimetableSchema = extract('defaultTimetableSchema')
             if defaultTimetableSchema is not None:
-                # XXX what if there is no such timetable schema?
                 ttservice = self.context.timetableSchemaService
+                if defaultTimetableSchema == "":
+                    defaultTimetableSchema = None
+                elif defaultTimetableSchema not in ttservice.keys():
+                    raise ViewError(_("Undefined timetable schema"))
                 ttservice.default_id = defaultTimetableSchema
 
             value = extract('newEventPrivacy')
@@ -351,6 +355,9 @@ class OptionsView(View):
                 self.context.restrictMembership = (value.lower() == 'true')
 
             doc.free()
+        except ViewError, e:
+            doc.free()
+            return textErrorPage(request, e)
         request.setResponseCode(204)
         return ""
 

@@ -30,6 +30,7 @@ from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.rest import View, Template, textErrorPage, notFoundPage
 from schooltool.rest import absoluteURL, absolutePath, read_file
+from schooltool.rest import ViewError
 from schooltool.rest.cal import SchooldayModelCalendarView
 from schooltool.rest.auth import PublicAccess
 from schooltool.rest.xmlparsing import XMLDocument
@@ -37,7 +38,6 @@ from schooltool.rest.xmlparsing import XMLParseError, XMLValidationError
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
-from schooltool.common import UnicodeAwareException
 from schooltool.common import parse_date, parse_time
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
@@ -52,10 +52,6 @@ __metaclass__ = type
 
 
 moduleProvides(IModuleSetup)
-
-
-class ViewError(UnicodeAwareException):
-    pass
 
 
 def parseDate(date_str):

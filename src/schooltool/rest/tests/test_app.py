@@ -34,6 +34,11 @@ from schooltool.rest.tests import XPathTestContext
 __metaclass__ = type
 
 
+class TimetableStub:
+    def cloneEmpty(self):
+        return self
+
+
 class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
@@ -471,7 +476,6 @@ class TestOptionsView(QuietLibxml2Mixin, XMLCompareMixin, unittest.TestCase):
         from schooltool.app import Application
         from schooltool.rest.app import OptionsView
         app = Application()
-        app.timetableSchemaService.default_id = 'default'
         view = OptionsView(app)
         return view
 
@@ -481,7 +485,7 @@ class TestOptionsView(QuietLibxml2Mixin, XMLCompareMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEqualsXML(result, """
             <options>
-              <defaultTimetableSchema>default</defaultTimetableSchema>
+              <defaultTimetableSchema></defaultTimetableSchema>
               <newEventPrivacy>public</newEventPrivacy>
               <timetablePrivacy>public</timetablePrivacy>
               <restrictMembership>False</restrictMembership>
@@ -491,6 +495,7 @@ class TestOptionsView(QuietLibxml2Mixin, XMLCompareMixin, unittest.TestCase):
     def test_put(self):
         view = self.createView()
         view.authorization = lambda *args: True
+        view.context.timetableSchemaService['other'] = TimetableStub()
         request = RequestStub(method="PUT", body="""
             <options>
               <defaultTimetableSchema>other</defaultTimetableSchema>
@@ -519,6 +524,33 @@ class TestOptionsView(QuietLibxml2Mixin, XMLCompareMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(result, 'Invalid XML document')
+
+    def test_no_timetable(self):
+        view = self.createView()
+        view.authorization = lambda *args: True
+        request = RequestStub(method="PUT", body="""
+            <options>
+              <defaultTimetableSchema>
+              </defaultTimetableSchema>
+            </options>
+            """)
+        result = view.render(request)
+        self.assertEquals(request.code, 204)
+        self.assertEquals(result, '')
+        self.assertEquals(view.context.timetableSchemaService.default_id,
+                          None)
+
+    def test_bad_timetable(self):
+        view = self.createView()
+        view.authorization = lambda *args: True
+        request = RequestStub(method="PUT", body="""
+            <options>
+              <defaultTimetableSchema>nonexistent</defaultTimetableSchema>
+            </options>
+            """)
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(result, 'Undefined timetable schema')
 
 
 def test_suite():

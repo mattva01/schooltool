@@ -1506,6 +1506,8 @@ class TestTimetableSchemaService(unittest.TestCase):
         self.assertEqual(service.keys(), [])
         self.assertEqual(service.default_id, None)
 
+        self.assertRaises(ValueError, setattr, service, 'default_id', 'nosuch')
+
 
 class TestTimePeriodService(unittest.TestCase):
 
