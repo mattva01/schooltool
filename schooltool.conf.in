@@ -21,34 +21,47 @@
 #
 
 #
-# listen port
-# listen interface:port
+# listen[_ssl] port
+# listen[_ssl] interface:port
 #
 #   Specifies the port number and optionaly a network interface for
 #   the RESTive server to listen on. There can be one or more 'listen'
-#   directives.
+#   directives. If _ssl is used the server will accept only SSL connctions
+#   on that port and a ssl_certificate configuration line is required.
 #
 # Examples:
 #   listen 7001
 #   listen 127.0.0.1:80
-#
+#   listen_ssl 7002
 
 listen 7001
 
 #
-# web port
-# web interface:port
+# web[_ssl] port
+# web[_ssl] interface:port
 #
 #   Specifies the port number and optionaly a network interface for
 #   the web application server to listen on. There can be one or more
-#   'listen' directives.
+#   'listen' directives. If _ssl is used the server will accept only 
+#   SSL connctions on that port and a ssl_certificate configuration 
+#   line is required.
 #
 # Examples:
 #   web 8080
 #   web 127.0.0.1:80
+#   web_ssl 8443
 #
 
 web 7080
+
+#
+# 
+# ssl_certificate certificate
+#
+#   Specifies a certificate in PEM format which contains a certificate and
+#   private key for use in SSL connections.
+#   This is required to use listen_ssl
+#
 
 #
 # thread-pool-size n

@@ -33,6 +33,7 @@ import ZConfig
 from zope.interface import moduleProvides
 from transaction import get_transaction
 from twisted.internet import reactor
+from twisted.internet.ssl import DefaultOpenSSLContextFactory
 from twisted.python import threadable
 import twisted.python.runtime
 
@@ -121,6 +122,7 @@ class Server:
     threadable_hook = threadable
     reactor_hook = reactor
     setCatalog_hook = staticmethod(setCatalog)
+    OpenSSLContextFactory_hook = DefaultOpenSSLContextFactory
 
     def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
         self.stdout = StreamWrapper(stdout)
@@ -202,6 +204,12 @@ class Server:
                 config_file = v
         self.config_file = config_file
         self.config = self.loadConfig(config_file)
+
+        # Check for missing ssl_certificate
+        if self.config.ssl_certificate is None and (
+                self.config.listen_ssl != [] or self.config.web_ssl != []):
+            raise ConfigurationError("ssl_certificate must be specified"
+                    " when web_ssl or listen_ssl is used")
 
         db_configuration = self.config.database
         if db_configuration.config.storage is None:
@@ -333,17 +341,36 @@ class Server:
 
         self.threadable_hook.init()
 
+        # Setup RESTive interfaces
         site = Site(self.db, self.appname, self.viewFactory, self.authenticate,
                     self.getApplicationLogPath())
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
+        for interface, port in self.config.listen_ssl:
+            self.reactor_hook.listenSSL(port, site,
+                                        self.OpenSSLContextFactory_hook(
+                                            self.config.ssl_certificate,
+                                            self.config.ssl_certificate
+                                        ),
+                                        interface=interface)
+            self.notifyServerStarted(interface, port, ssl=True)
 
+        # Setup web interfaces
         site = Site(self.db, self.appname, RootView, self.authenticate,
                     self.getApplicationLogPath(), BrowserRequest)
         for interface, port in self.config.web:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyWebServerStarted(interface, port)
+        for interface, port in self.config.web_ssl:
+            self.reactor_hook.listenSSL(port, site,
+                                        self.OpenSSLContextFactory_hook(
+                                            self.config.ssl_certificate,
+                                            self.config.ssl_certificate
+                                        ),
+                                        interface=interface)
+            self.notifyWebServerStarted(interface, port, ssl=True)
+
 
         if self.daemon:
             self.daemonize()
@@ -437,13 +464,21 @@ class Server:
     def notifyConfigFile(self, config_file):
         self.logger.info(_("Reading configuration from %s"), config_file)
 
-    def notifyServerStarted(self, network_interface, port):
-        self.logger.info(_("Started HTTP server for RESTive API on %s:%s"),
-                         network_interface or "*", port)
+    def notifyServerStarted(self, network_interface, port, ssl=False):
+        if ssl:
+            self.logger.info(_("Started HTTPS server for RESTive API on %s:%s"),
+                            network_interface or "*", port)
+        else:
+            self.logger.info(_("Started HTTP server for RESTive API on %s:%s"),
+                            network_interface or "*", port)
 
-    def notifyWebServerStarted(self, network_interface, port):
-        self.logger.info(_("Started HTTP server for web UI on %s:%s"),
-                         network_interface or "*", port)
+    def notifyWebServerStarted(self, network_interface, port, ssl=False):
+        if ssl:
+            self.logger.info(_("Started HTTPS server for web UI on %s:%s"),
+                            network_interface or "*", port)
+        else:
+            self.logger.info(_("Started HTTP server for web UI on %s:%s"),
+                            network_interface or "*", port)
 
     def notifyDaemonized(self, pid):
         self.logger.info(_("Going to background, daemon pid %d"), pid)

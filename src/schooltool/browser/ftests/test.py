@@ -44,7 +44,14 @@ class URLOpener(urllib.URLopener):
             fp.message = 'OK'
         return fp
 
+    def open_https(self, url, data=None):
+        fp = urllib.URLopener.open_https(self, url, data)
+        if not hasattr(fp, 'status'):
+            fp.status = 200
+            fp.message = 'OK'
+        return fp
 
+ 
 class Browser(object):
     """Class emulating a web browser.
 
@@ -104,16 +111,23 @@ class Browser(object):
 
 class TestLogin(unittest.TestCase):
 
+    site = 'http://localhost:8814'
+
     def test(self):
         browser = Browser()
-        browser.go('http://localhost:8814/')
+        browser.go(self.site + '/')
         self.assert_('Welcome' in browser.content)
         self.assert_('Username' in browser.content)
 
-        browser.post('http://localhost:8814/',
+        browser.post(self.site + '/',
                      {'username': 'manager', 'password': 'schooltool'})
-        self.assertEquals(browser.url, 'http://localhost:8814/start')
+        self.assertEquals(browser.url, self.site + '/start')
         self.assert_('Start' in browser.content)
+
+
+class TestLoginSSL(TestLogin):
+
+    site = 'https://localhost:8816'
 
 
 class TestPersonEdit(unittest.TestCase):
@@ -150,6 +164,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestLogin))
     suite.addTest(unittest.makeSuite(TestPersonEdit))
+    suite.addTest(unittest.makeSuite(TestLoginSSL))
     return suite
 
 

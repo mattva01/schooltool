@@ -67,6 +67,36 @@
     </example>
   </multikey>
 
+  <multikey name="listen_ssl" datatype="inet-address">
+    <description>
+      Network interface and port number the HTTPS server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      listen_ssl 8080
+      listen_ssl 127.0.0.1:80
+    </example>
+  </multikey>
+
+  <multikey name="web_ssl" datatype="inet-address">
+    <description>
+      Network interface and port number the ssl web server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      web_ssl 8080
+      web_ssl 127.0.0.1:80
+    </example>
+  </multikey>
+
+  <key name="ssl_certificate" datatype="string">
+    <description>
+      PEM Certificate
+    </description>
+  </key>
+
   <key name="thread-pool-size" datatype="integer" default="10">
     <description>
       Suggested thread pool size.

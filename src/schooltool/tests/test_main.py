@@ -63,6 +63,9 @@ class ReactorStub:
     def listenTCP(self, port, site, interface=None):
         self._tcp_listeners.append((port, site, interface))
 
+    def listenSSL(self, port, site, SSLContextFactory, interface=None):
+        self._tcp_listeners.append((port, site, interface))
+
     def run(self):
         self._main_loop_running = True
 
@@ -133,6 +136,13 @@ class TransactionStub:
 
 class ConfigStub:
     event_logging = False
+
+
+class OpenSSLContextFactoryStub:
+    
+    def setup(self, key, cert):
+        self.key = key
+        self.cert = cert
 
 
 class TestServer(RegistriesSetupMixin, unittest.TestCase):
@@ -270,6 +280,15 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.notifyConfigFile = lambda x: None
         self.assertRaises(SystemExit, server.configure, ['-c', config_file])
 
+    def test_configureSSL(self):
+        from schooltool.main import Server, ConfigurationError
+        server = Server()
+        server.OpenSSLContextFactory_hook = OpenSSLContextFactoryStub().setup 
+        config_file = self.getConfigFileName('badssl.conf')
+        server.findDefaultConfigFile = lambda: config_file
+        server.notifyConfigFile = lambda x: None
+        self.assertRaises(ConfigurationError, server.configure, ['-c', config_file])
+
     def test_main(self):
         from schooltool.main import Server
         stdout = StringIO()
@@ -314,9 +333,11 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server = Server()
         server.threadable_hook = threadable = ThreadableStub()
         server.reactor_hook = reactor = ReactorStub()
+        contextfactory = OpenSSLContextFactoryStub()
+        server.OpenSSLContextFactory_hook = contextfactory.setup
         server.notifyConfigFile = lambda x: None
-        server.notifyServerStarted = lambda x, y: None
-        server.notifyWebServerStarted = lambda x, y: None
+        server.notifyServerStarted = lambda x, y, ssl=False: None
+        server.notifyWebServerStarted = lambda x, y, ssl=False: None
         server.notifyShutdown = lambda: None
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
@@ -340,18 +361,31 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(sys.path,
                           ['/xxxxx', '/yyyyy/zzzzz'] + self.original_path)
         self.assert_(reactor._suggested_thread_pool_size, 42)
-        self.assertEqual(len(reactor._tcp_listeners), 3)
+        self.assertEqual(len(reactor._tcp_listeners), 5)
         self.assertEquals(reactor._tcp_listeners[0][0], 123)
+        self.assertEquals(contextfactory.cert, 'moon.pem')
         self.assertEquals(reactor._tcp_listeners[0][2], self.defaulthost)
         self.assertEquals(reactor._tcp_listeners[1][0], 9999)
         self.assertEquals(reactor._tcp_listeners[1][2], '10.20.30.40')
-        self.assertEquals(reactor._tcp_listeners[2][0], 48080)
-        self.assertEquals(reactor._tcp_listeners[2][2], self.defaulthost)
+        self.assertEquals(reactor._tcp_listeners[2][0], 10000)
+        self.assertEquals(reactor._tcp_listeners[2][2], '10.20.30.41')
+        self.assertEquals(reactor._tcp_listeners[3][0], 48080)
+        self.assertEquals(reactor._tcp_listeners[3][2], self.defaulthost)
+        self.assertEquals(reactor._tcp_listeners[4][0], 48081)
+        self.assertEquals(reactor._tcp_listeners[4][2], self.defaulthost)
         site = reactor._tcp_listeners[0][1]
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is getView)
         self.assert_(site.requestFactory is Request)
         site = reactor._tcp_listeners[2][1]
+        self.assertEquals(site.rootName, 'schooltool')
+        self.assert_(site.viewFactory is getView)
+        self.assert_(site.requestFactory is Request)
+        site = reactor._tcp_listeners[3][1]
+        self.assertEquals(site.rootName, 'schooltool')
+        self.assert_(site.viewFactory is RootView)
+        self.assert_(site.requestFactory is BrowserRequest)
+        site = reactor._tcp_listeners[4][1]
         self.assertEquals(site.rootName, 'schooltool')
         self.assert_(site.viewFactory is RootView)
         self.assert_(site.requestFactory is BrowserRequest)

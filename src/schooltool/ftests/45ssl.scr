@@ -1,0 +1,134 @@
+Basic tests for SSL.
+This probably needs to be fixed and added to (See issue25)
+
+SchoolTool> links off                
+
+SchoolTool> server localhost 8815 ssl
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=schooltool
+<schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+  <message>Welcome to the SchoolTool server</message>
+  <roots>
+    <root xlink:type="simple" xlink:href="/groups/root"
+          xlink:title="Root Group"/>
+  </roots>
+  <containers>
+    <container xlink:type="simple" xlink:href="/persons"
+               xlink:title="persons"/>
+    <container xlink:type="simple" xlink:href="/resources"
+               xlink:title="resources"/>
+    <container xlink:type="simple" xlink:href="/groups"
+               xlink:title="groups"/>
+  </containers>
+  <utilities>
+    <utility xlink:type="simple"
+             xlink:href="/utils/absences"
+             xlink:title="Absence Tracker"/>
+    <utility xlink:type="simple"
+             xlink:href="/utils/eventlog"
+             xlink:title="Event Log"/>
+  </utilities>
+  <schooltt xlink:type="simple"
+            xlink:title="Whole school timetables"
+            xlink:href="/schooltt"/>
+  <ttschemas xlink:type="simple"
+             xlink:title="Timetable schemas"
+             xlink:href="/ttschemas"/>
+  <time-periods xlink:type="simple"
+                xlink:title="Time periods"
+                xlink:href="/time-periods"/>
+</schooltool>
+%% END XML
+
+
+SchoolTool> get /calendars.html
+200 OK
+Content-Type: text/html; charset=UTF-8
+%% XML recursively_sort=ul
+<html>
+<head>
+  <title>Calendars</title>
+</head>
+<body>
+  <h1>Calendars</h1>
+  <h2>Groups</h2>
+  <ul>
+    <li><a href="https://localhost:8815/groups/root/calendar">
+        Root Group (private calendar)</a>,
+        <a href="https://localhost:8815/groups/root/timetable-calendar">
+        Root Group (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/cleaners/calendar">
+        Cleaners (private calendar)</a>,
+        <a href="https://localhost:8815/groups/cleaners/timetable-calendar">
+        Cleaners (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/locations/calendar">
+        Locations (private calendar)</a>,
+        <a href="https://localhost:8815/groups/locations/timetable-calendar">
+        Locations (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/students/calendar">
+        Students (private calendar)</a>,
+        <a href="https://localhost:8815/groups/students/timetable-calendar">
+        Students (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/teachers/calendar">
+        Teachers (private calendar)</a>,
+        <a href="https://localhost:8815/groups/teachers/timetable-calendar">
+        Teachers (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/pupils/calendar">
+        Pupils (private calendar)</a>,
+        <a href="https://localhost:8815/groups/pupils/timetable-calendar">
+        Pupils (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/managers/calendar">
+        System Managers (private calendar)</a>,
+        <a href="https://localhost:8815/groups/managers/timetable-calendar">
+        System Managers (timetable)</a></li>
+  </ul>
+  <h2>Persons</h2>
+  <ul>
+    <li><a href="https://localhost:8815/persons/manager/calendar">
+        Manager (private calendar)</a>,
+        <a href="https://localhost:8815/persons/manager/timetable-calendar">
+        Manager (timetable)</a></li>
+    <li><a href="https://localhost:8815/persons/Aiste/calendar">
+        Aiste Kesminaite (private calendar)</a>,
+        <a href="https://localhost:8815/persons/Aiste/timetable-calendar">
+        Aiste Kesminaite (timetable)</a></li>
+    <li><a href="https://localhost:8815/persons/Albert/calendar">
+        Albert (private calendar)</a>,
+        <a href="https://localhost:8815/persons/Albert/timetable-calendar">
+        Albert (timetable)</a></li>
+    <li><a href="https://localhost:8815/persons/Marius/calendar">
+        Marius (private calendar)</a>,
+        <a href="https://localhost:8815/persons/Marius/timetable-calendar">
+        Marius (timetable)</a></li>
+    <li><a href="https://localhost:8815/persons/Mark/calendar">
+        Mark (private calendar)</a>,
+        <a href="https://localhost:8815/persons/Mark/timetable-calendar">
+        Mark (timetable)</a></li>
+    <li><a href="https://localhost:8815/persons/Steve/calendar">
+        Steve (private calendar)</a>,
+        <a href="https://localhost:8815/persons/Steve/timetable-calendar">
+        Steve (timetable)</a></li>
+  </ul>
+  <h2>Resources</h2>
+  <ul>
+    <li><a href="https://localhost:8815/resources/hall/calendar">
+        Hall (private calendar)</a>,
+        <a href="https://localhost:8815/resources/hall/timetable-calendar">
+        Hall (timetable)</a></li>
+    <li><a href="https://localhost:8815/resources/room1/calendar">
+        Room 1 (private calendar)</a>,
+        <a href="https://localhost:8815/resources/room1/timetable-calendar">
+        Room 1 (timetable)</a></li>
+    <li><a href="https://localhost:8815/resources/room2/calendar">
+        Room 2 (private calendar)</a>,
+        <a href="https://localhost:8815/resources/room2/timetable-calendar">
+        Room 2 (timetable)</a></li>
+  </ul>
+</body>
+</html>
+%% END XML
+
+
+SchoolTool> quit
+## vim:fde=getline(v\:lnum)=~'^SchoolTool>'?'>1'\:getline(v\:lnum)=~'^##'?0\:1:
