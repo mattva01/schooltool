@@ -1085,7 +1085,8 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
         result = self.view.render(request)
         self.assertEquals(request.code, 404)
 
-    def test_no_auth(self):
+    def test_security(self):
+        from schooltool.interfaces import AddPermission
         xml = """
             <booking xmlns="http://schooltool.org/ns/calendar/0.1">
               <owner path="/persons/manager"/>
@@ -1097,7 +1098,21 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.applog, [])
-        self.assertEquals(result, "You can only book resources for yourself")
+        self.assertEquals(result, "You cannot book this resource")
+
+        # Add the person to the ACLs and try again
+        self.manager.calendar.acl.add((self.person, AddPermission))
+        self.view.context.calendar.acl.add((self.person, AddPermission))
+
+        request = RequestStub(method="POST", body=xml,
+                              authenticated_user=self.person)
+        result = self.view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.applog,
+                          [(self.person,
+                            "/resources/hall (Hall) booked by /persons/manager"
+                            " (Manager) at 2004-01-01 10:00:00 for 1:30:00",
+                            INFO)])
 
 
 class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):

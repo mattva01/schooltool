@@ -41,6 +41,13 @@ from schooltool.security import isManager, isTeacher, getOwner
 __metaclass__ = type
 
 
+def OpenAccess(context, request):
+    """Alllows access to all methods, the view must do the checking itself."""
+    return True
+
+OpenAccess = staticmethod(OpenAccess)
+
+
 def PublicAccess(context, request):
     """Allows read-only access for anyone, changes for managers only."""
     if request.method in ('GET', 'HEAD'):

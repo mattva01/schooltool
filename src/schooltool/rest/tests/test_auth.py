@@ -82,6 +82,17 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
                                  'access for %s denied for %s'
                                  % (method, username))
 
+    def test_OpenAccess(self):
+        from schooltool.rest.auth import OpenAccess
+        access = """
+                    GET     HEAD    PUT     POST    DELETE  OTHER
+        anonymous    +       +       +       +        +       +
+        simpleuser   +       +       +       +        +       +
+        teacher      +       +       +       +        +       +
+        manager      +       +       +       +        +       +
+        """
+        self.do_test_access(OpenAccess, access)
+
     def test_PublicAccess(self):
         from schooltool.rest.auth import PublicAccess
         access = """

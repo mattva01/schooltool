@@ -36,7 +36,7 @@ from schooltool.rest import View, Template, absoluteURL
 from schooltool.rest import textErrorPage, notFoundPage
 from schooltool.rest import read_file
 from schooltool.rest.acl import ACLView
-from schooltool.rest.auth import PublicAccess, TeacherAccess
+from schooltool.rest.auth import PublicAccess, OpenAccess
 from schooltool.rest.auth import isManager, CalendarACLAccess
 from schooltool.icalendar import ICalReader, ICalParseError, Period
 from schooltool.icalendar import ical_text, ical_duration
@@ -400,7 +400,7 @@ class BookingView(View):
     """Resource booking (...object/booking)"""
 
     schema = read_file("../schema/booking.rng")
-    authorization = TeacherAccess
+    authorization = OpenAccess
 
     do_GET = staticmethod(notFoundPage)
 
@@ -429,10 +429,9 @@ class BookingView(View):
             if not IApplicationObject.providedBy(owner):
                 return textErrorPage(request,
                                      _("'owner' in not an ApplicationObject."))
-            if (owner is not request.authenticated_user
-                    and not isManager(request.authenticated_user)):
-                return textErrorPage(request, _("You can only book resources "
-                                                "for yourself"))
+            if not request.security.canBook(owner, self.context):
+                return textErrorPage(request,
+                                     _("You cannot book this resource"))
 
             resource_node = xpathctx.xpathEval('/cal:booking/cal:slot')[0]
             start_str = to_unicode(resource_node.nsProp('start', None))
