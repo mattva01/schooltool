@@ -56,7 +56,7 @@ tal:content="view/search_widget/value">QUERY STRING</q>.
   <table>
     <tr tal:repeat="item results">
       <td><input type="checkbox" name="path"
-                 tal:attributes="value item/obj/@@absolute_path;
+                 tal:attributes="value item/obj/@@path;
                                  id string:check.${repeat/item/number}" />
       </td>
       <td><label class="plain"
@@ -89,7 +89,7 @@ objects?</p>
 <ul>
   <li tal:repeat="item view/selectedObjects">
     <input type="hidden" name="path"
-           tal:attributes="value item/obj/@@absolute_path" />
+           tal:attributes="value item/obj/@@path" />
     <img tal:attributes="src item/icon_url; alt item/icon_text" />
     <span tal:replace="item/title" />
     (<a tal:attributes="href item/obj/@@absolute_url"
