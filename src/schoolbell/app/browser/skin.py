@@ -41,5 +41,6 @@ def schoolBellTraverseSubscriber(event):
     Sets the SchoolBell skin if the object traversed is a SchoolBell
     application instance.
     """
-    if ISchoolBellApplication.providedBy(event.object):
+    if (ISchoolBellApplication.providedBy(event.object) and
+        IBrowserRequest.providedBy(event.request)):
         applySkin(event.request, ISchoolBellSkin)
