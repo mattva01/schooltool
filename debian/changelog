@@ -1,5 +1,6 @@
-schooltool (0.4-0.1) unstable; urgency=low
+schooltool (0.3.99rc1-0.1) unstable; urgency=low
 
-  * Unofficial package.
+  * Initial release of SchoolTool Milestone 4 Release Candidate 1.
+  * Note that this is an unofficial package, that is not part of Debian.
 
- -- Marius Gedminas <marius@pov.lt>  Thu, 29 Jan 2004 15:17:07 +0200
+ -- Marius Gedminas <marius@pov.lt>  Fri, 30 Jan 2004 17:09:47 +0200
