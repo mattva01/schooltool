@@ -33,6 +33,7 @@ from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
+from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.session.interfaces import ISession
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.component.servicenames import Utilities
@@ -185,6 +186,13 @@ def authSetUpSubscriber(event):
     if IObjectAddedEvent.providedBy(event):
         if ISchoolBellApplication.providedBy(event.object):
             setUpLocalAuth(event.object)
+
+            # Grant schoolbell.view to all authenticated users
+            allusers = zapi.queryUtility(IAuthenticatedGroup)
+            if allusers is not None:
+                perms = IPrincipalPermissionManager(event.object)
+                perms.grantPermissionToPrincipal('schoolbell.view',
+                                                 allusers.id)
 
 def personPermissionsSubscriber(event):
     """Grant default permissions to all new persons"""

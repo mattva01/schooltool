@@ -42,6 +42,23 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         self.app = SchoolBellApplication()
         self.root['frogpond'] = self.app
 
+        # Authenticated group
+        from zope.app.security.interfaces import IAuthenticatedGroup
+        from zope.app.security.principalregistry import AuthenticatedGroup
+        ztapi.provideUtility(IAuthenticatedGroup,
+                             AuthenticatedGroup('zope.authenticated',
+                                                'Authenticated users',
+                                                ''))
+        # Local permission grants for principals
+        from zope.app.annotation.interfaces import IAnnotatable
+        from zope.app.securitypolicy.interfaces import \
+             IPrincipalPermissionManager
+        from zope.app.securitypolicy.principalpermission import \
+             AnnotationPrincipalPermissionManager
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+                             AnnotationPrincipalPermissionManager)
+
     def tearDown(self):
         setup.placefulTearDown()
 
@@ -53,6 +70,13 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         auth = zapi.traverse(self.app, '++etc++site/default/SchoolBellAuth')
         auth1 = zapi.getUtility(IAuthentication, context=self.app)
         self.assert_(auth is auth1)
+
+        from zope.app.securitypolicy.interfaces import \
+             IPrincipalPermissionManager
+        from zope.app.security.settings import Allow
+        perms = IPrincipalPermissionManager(self.app)
+        self.assert_(('schoolbell.view', Allow) in
+                     perms.getPermissionsForPrincipal('zope.authenticated'))
 
         # If we fire the event again, it does not fail.  Such events
         # are fired when the object is copied and pasted.
