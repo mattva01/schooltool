@@ -27,6 +27,7 @@ from zope.interface import Interface
 from zope.schema import Field, Object, TextLine, Set, Bool
 from schooltool.interfaces.relationship import IRelationshipSchema
 
+
 #
 # Facets
 #

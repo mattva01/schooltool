@@ -203,7 +203,7 @@ class TestAppView(SchoolToolSetup, TraversalTestMixin):
             self.assertEquals(cssfile.content_type, 'text/css')
         for picture in ('logo.png', 'group.png', 'person.png', 'resource.png',
                 'meeting.png', 'booking.png', 'calendar.png', 'information.png',
-                'delete.png', 'day.png', 'week.png', 'month.png', 'year.png', 
+                'delete.png', 'day.png', 'week.png', 'month.png', 'year.png',
                 'previous.png', 'current.png', 'next.png'):
             image = self.assertTraverses(view, picture, StaticFile)
             self.assertEquals(image.content_type, 'image/png')
@@ -639,7 +639,8 @@ class TestPersonAddView(SchoolToolSetup):
 
         view._setUserGroups(person, groups)
         self.assertEquals(view.request.applog, [(None,
-                u"Relationship 'Membership' between /persons/person and /groups/new created", 20)])
+                u"Relationship 'Membership' between /persons/person"
+                 " and /groups/new created", 20)])
 
     def test_POST_no_data(self):
         view = self.createView()

@@ -480,8 +480,8 @@ class TestMultiselectionWidget(XMLCompareMixin, unittest.TestCase):
         expected = """
             <div class="row row_error">
               <label for="field">Label</label>
-              <select class="extra" name="field" size="5" id="field" tabindex="11"
-                      multiple="multiple">
+              <select class="extra" name="field" size="5" id="field"
+                      tabindex="11" multiple="multiple">
                 <option value="a">Aa</option>
                 <option value="b">Bb</option>
                 <option value="c">Cc</option>

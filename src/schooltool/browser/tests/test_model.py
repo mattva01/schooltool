@@ -882,6 +882,7 @@ def doctest_RelationshipViewMixin():
 
     """
 
+
 class TestGroupEditView(SchoolToolSetup):
 
     def setUp(self):

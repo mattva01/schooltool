@@ -219,9 +219,10 @@ class RootView(View):
             return NewTimePeriodView(self.context.timePeriodService)
         elif name == 'dfschemas':
             return DynamicFacetSchemaServiceView(
-                self.context.dynamicFacetSchemaService)
+                        self.context.dynamicFacetSchemaService)
         elif name == 'newdfschema':
-            return DynamicFacetSchemaWizard(self.context.dynamicFacetSchemaService)
+            return DynamicFacetSchemaWizard(
+                        self.context.dynamicFacetSchemaService)
         raise KeyError(name)
 
 
