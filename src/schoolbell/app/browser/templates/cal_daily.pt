@@ -56,7 +56,7 @@
           </h6>
           <a title="Delete this event" i18n:attributes="title" class="delete"
             tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate}"
-            ><img alt="[X]" border="0"
+            ><img alt="[X]"
               tal:attributes="src context/++resource++delete.png"/></a>
           <div class="body"
               tal:attributes="style string:background: ${ev/color1};">

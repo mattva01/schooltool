@@ -3,7 +3,7 @@
 
   <h4 i18n:translate="">Calendars</h4>
 
-  <form method="POST" action="" tal:attributes="action request/URL"
+  <form method="post" action="" tal:attributes="action request/URL"
         tal:define="dummy view/update">
 
     <div class="row" style="background: #9db8d2">

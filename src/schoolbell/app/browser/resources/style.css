@@ -35,6 +35,10 @@ body {
     min-width: 700px;
 }
 
+img {
+    border: none;
+}
+
 a, a:link, a:visited, a:hover, a:active {
     color: #314e6c;
     font-weight: bold;

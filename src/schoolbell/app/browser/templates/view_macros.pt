@@ -22,8 +22,7 @@
         <a href=""
           tal:define="url context/schoolbell:app/@@absolute_url"
           tal:attributes="href url">
-          <img src="logo.png" alt="SchoolTool" border="0"
-            i18n:attributes="alt"
+          <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
             tal:attributes="src context/++resource++logo.png"/>
         </a>
       </div>
@@ -129,27 +128,27 @@
 
 <metal:block define-macro="calendar-navigation" i18n:domain="schoolbell">
   <div id="calendar-navigation-context">
-    <table cellpadding="0" cellspacing="0" width="100%">
+    <table cellpadding="0" cellspacing="0" style="width:100%">
       <tr>
-        <td align="left" width="33%">
+        <td align="left" style="width:33%">
           <a id="calendar-navigation-context-previous"
              tal:attributes="href view/prev"
-             ><img border="0" src="previous.png" alt="<<"
+             ><img src="previous.png" alt="<<"
                    tal:attributes="src context/++resource++previous.png" />
               <span tal:replace="view/prev_title">Previous</span></a>
         </td>
         <td align="center">
           <a id="calendar-navigation-context-current"
              tal:attributes="href view/current"
-             ><img border="0" src="current.png" alt=""
+             ><img src="current.png" alt=""
                    tal:attributes="src context/++resource++current.png" />
               <span tal:replace="view/current_title">Current</span></a>
         </td>
-        <td align="right" width="33%">
+        <td align="right" style="width:33%">
           <a id="calendar-navigation-context-next"
              tal:attributes="href view/next"
              ><span tal:replace="view/next_title">Next</span>
-              <img border="0" src="next.png" alt=">>"
+              <img src="next.png" alt=">>"
                    tal:attributes="src context/++resource++next.png" /></a>
         </td>
       </tr>
@@ -164,28 +163,24 @@
        title="View daily calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++day.png"
-                              border="0"
                               alt="Daily"/></a>
     <a id="calendar-navigation-week"
        tal:attributes="href python:view.calURL('weekly')"
        title="View weekly calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++week.png"
-                              border="0"
                               alt="Weekly"/></a>
     <a id="calendar-navigation-month"
        tal:attributes="href python:view.calURL('monthly')"
        title="View monthly calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++month.png"
-                              border="0"
                               alt="Monthly"/></a>
     <a id="calendar-navigation-year"
        tal:attributes="href python:view.calURL('yearly')"
        title="View yearly calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++year.png"
-                              border="0"
                               alt="Yearly"/></a>
   </div>
 </metal:block>
@@ -232,7 +227,7 @@
   <div id="portlet-jumpto" class="portlet">
 
     <h4 i18n:translate="">Jump To ...</h4>
-    <form class="center">
+    <form class="center" action="">
       <div>
         <select name="jump" onChange="jumpTo(this);">
           <option value="" i18n:translate="">Month</option>
@@ -245,7 +240,7 @@
       </div>
     </form>
 
-    <form class="center">
+    <form class="center" action="">
       <div>
         <select name="jump" onChange="jumpTo(this);">
           <option value='' i18n:translate="">Year</option>
