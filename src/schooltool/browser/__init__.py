@@ -324,7 +324,8 @@ class ContainerBreadcrumbsMixin(ToplevelBreadcrumbsMixin):
     _container_translations = {'groups': _('Groups'),
                                'persons': _('Persons'),
                                'resources': _('Resources'),
-                               'notes': _('Notes')}
+                               'notes': _('Notes'),
+                               'addresses': _('Addresses')}
 
     del _ # go back to immediate translations
 
