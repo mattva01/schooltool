@@ -6,7 +6,7 @@
     HTTP server.
   </description>
 
-  <import package="zodb" />
+  <import package="ZODB" />
 
   <section type="zodb.database" name="*" required="yes" attribute="database">
     <description>

@@ -299,10 +299,6 @@ src/schooltool/views/www/*.pyc
 src/schooltool/views/www/Data.fs*
 src/schooltool/views/www/*~
 src/schooltool/views/www/*.so
-src/persistence-old/*.pyc
-src/persistence-old/Data.fs*
-src/persistence-old/*~
-src/persistence-old/*.so
 src/persistence-old/tests/*.pyc
 src/persistence-old/tests/Data.fs*
 src/persistence-old/tests/*~
@@ -315,10 +311,6 @@ src/persistence-old/CVS/*.pyc
 src/persistence-old/CVS/Data.fs*
 src/persistence-old/CVS/*~
 src/persistence-old/CVS/*.so
-src/transaction-old/*.pyc
-src/transaction-old/Data.fs*
-src/transaction-old/*~
-src/transaction-old/*.so
 src/transaction-old/tests/*.pyc
 src/transaction-old/tests/Data.fs*
 src/transaction-old/tests/*~
@@ -331,10 +323,6 @@ src/transaction-old/CVS/*.pyc
 src/transaction-old/CVS/Data.fs*
 src/transaction-old/CVS/*~
 src/transaction-old/CVS/*.so
-src/zodb-old/*.pyc
-src/zodb-old/Data.fs*
-src/zodb-old/*~
-src/zodb-old/*.so
 src/zodb-old/code/*.pyc
 src/zodb-old/code/Data.fs*
 src/zodb-old/code/*~

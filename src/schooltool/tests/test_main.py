@@ -490,7 +490,7 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(called[2], (rq.finish, ))
 
     def test__process_many_conflict_errors(self):
-        from zodb.interfaces import ConflictError
+        from ZODB.POSException import ConflictError
 
         path = '/foo'
         error_type = ConflictError
@@ -514,7 +514,7 @@ class TestRequest(unittest.TestCase):
                           1 + rq.site.conflictRetries)
 
     def test__process_some_conflict_errors(self):
-        from zodb.interfaces import ConflictError
+        from ZODB.POSException import ConflictError
 
         path = '/foo'
         body = 'spam and eggs'

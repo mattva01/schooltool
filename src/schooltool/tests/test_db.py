@@ -116,8 +116,8 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
 class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
 
     def setUp(self):
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
 
@@ -155,8 +155,8 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
         return PersistentKeysSet()
 
     def setUp(self):
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
 
@@ -276,8 +276,8 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
 
     def testPersistentSetitem(self):
         from schooltool.db import PersistentPairKeysDict
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         from transaction import get_transaction
         db = DB(MappingStorage())
 
@@ -314,8 +314,8 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
 
     def testPersistentDelitem(self):
         from schooltool.db import PersistentPairKeysDict
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         from transaction import get_transaction
         db = DB(MappingStorage())
 
@@ -453,8 +453,8 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         return PersistentKeysSetWithNames()
 
     def setUp(self):
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
 

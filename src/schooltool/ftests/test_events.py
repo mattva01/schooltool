@@ -80,8 +80,8 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         self.tearDownRegistries()
 
     def test(self):
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         db = DB(MappingStorage())
         datamgr = db.open()
         get_transaction().begin()

@@ -37,7 +37,7 @@ import getopt
 import libxml2
 from zope.interface import moduleProvides
 from transaction import get_transaction
-from zodb.interfaces import ConflictError
+from ZODB.POSException import ConflictError
 from twisted.web import resource
 from twisted.internet import reactor
 from twisted.protocols import http

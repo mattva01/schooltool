@@ -869,8 +869,8 @@ class TestCalendarPersistence(unittest.TestCase):
     """A functional test for timetables persistence."""
 
     def setUp(self):
-        from zodb.db import DB
-        from zodb.storage.mapping import MappingStorage
+        from ZODB.DB import DB
+        from ZODB.MappingStorage import MappingStorage
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
 
