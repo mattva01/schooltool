@@ -997,7 +997,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                   self.interval_widget.error or
                   self.count_widget.error or self.until_widget.error)
 
-        if errors:
+        if errors or 'SUBMIT' not in request.args:
             return View.do_GET(self, request)
 
         start = datetime.combine(self.date_widget.value,

@@ -1019,7 +1019,8 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
                                     'location': 'Kitchen',
-                                    'duration': '50'},
+                                    'duration': '50',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
 
@@ -1047,7 +1048,8 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'recurrence': 'checked',
                                     'recurrence_shown': 'yes',
                                     'recurrence_type': 'daily',
-                                    'interval': '2'},
+                                    'interval': '2',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
 
@@ -1069,7 +1071,8 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
         request = RequestStub(args={'title': '',
                                     'start_date': '2004-12-13',
                                     'start_time': '15:30',
-                                    'duration': '50'},
+                                    'duration': '50',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
         self.assert_('This field is required' in content)
@@ -1368,7 +1371,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'recurrence': 'on',
                                     'recurrence_type': 'weekly',
                                     'interval':'2',
-                                    'exceptions': '2004-01-01\n2004-02-02'},
+                                    'exceptions': '2004-01-01\n2004-02-02',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
 
@@ -1395,6 +1399,27 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                           'http://localhost:7001/persons/johndoe/calendar/'
                           'daily.html?date=2004-08-16')
 
+    def test_nosubmit(self):
+        from schooltool.cal import WeeklyRecurrenceRule
+        view = self.createView()
+        request = RequestStub(args={'event_id': "pick me",
+                                    'title': 'Changed',
+                                    'location': 'Inbetween',
+                                    'start_date': '2004-08-16',
+                                    'start_time': '13:30',
+                                    'duration': '70',
+                                    'recurrence': 'on',
+                                    'recurrence_type': 'weekly',
+                                    'interval':'2',
+                                    'exceptions': '2004-01-01\n2004-02-02'},
+                              method='POST')
+        content = view.render(request)
+
+        events = list(self.person.calendar)
+        self.assertEquals(len(events), 2)
+        self.assert_(self.ev1 in events)
+        self.assert_(self.ev2 in events)
+
     def test_norecur(self):
         from schooltool.cal import WeeklyRecurrenceRule
         view = self.createView()
@@ -1406,7 +1431,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'duration': '70',
                                     'recurrence_shown': 'yes',
                                     'recurrence_type': 'weekly',
-                                    'interval':'2'},
+                                    'interval':'2',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
 
@@ -1445,7 +1471,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'location': 'Inbetween',
                                     'start_date': '2004-08-16',
                                     'start_time': '13:30',
-                                    'duration': '70'},
+                                    'duration': '70',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
 
@@ -1494,7 +1521,8 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'location': 'Inbetween',
                                     'start_date': '2004-08-16',
                                     'start_time': '13:30',
-                                    'duration': '70'},
+                                    'duration': '70',
+                                    'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
 
