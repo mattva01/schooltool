@@ -130,8 +130,25 @@ def doctest_URIObject():
         False
         >>> uri2 != uri3
         True
+        >>> uri == 'example:Just a string'
+        False
+        >>> uri != 'example:Just a string'
+        True
 
-    URIObjects are hashable.  Equal object must hash to the same value
+    By the way, there are separate tests for == and != because in Python
+    __eq__ and __ne__ are two different methods.
+
+    What should uri == 'http://example.com' return?  I have decided that
+    it should return False, because applications may rely on roles having
+    `name` and `description` attributes, after they check the relationship
+    type.
+
+        >>> uri == 'http://example.com'
+        False
+        >>> uri != 'http://example.com'
+        True
+
+    URIObjects are hashable.  Equal objects must hash to the same value
 
         >>> hash(uri) == hash(uri2)
         True

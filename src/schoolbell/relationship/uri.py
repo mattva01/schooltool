@@ -72,10 +72,12 @@ class URIObject(object):
     description = property(lambda self: self._description)
 
     def __eq__(self, other):
+        if not IURIObject.providedBy(other):
+            return False
         return self.uri == other.uri
 
     def __ne__(self, other):
-        return self.uri != other.uri
+        return not self.__eq__(other)
 
     def __hash__(self):
         return hash(self.uri)
