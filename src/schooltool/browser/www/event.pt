@@ -111,6 +111,7 @@
     <div class="row" tal:replace="structure view/location_widget" />
     <div class="row" tal:replace="structure view/other_location_widget" />
     <div class="row" tal:replace="structure view/duration_widget" />
+    <div class="row" tal:replace="structure view/privacy_widget" />
 
 <tal:block condition="not: view/tt_event">
     <div class="row" tal:replace="structure view/recurrence_widget" />

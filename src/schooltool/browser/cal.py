@@ -907,6 +907,13 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.other_location_widget = TextWidget('location_other',
                                                 _('Specify other location'))
 
+        self.privacy_widget = SelectionWidget('privacy',
+                                              _('Visibility to other users'),
+                                              (('public', _('Public')),
+                                               ('private',  _('Busy block')),
+                                               ('hidden', _('Hidden'))),
+                                              value='public')
+
         # Widgets for the recurrence editing
         self.recurrence_widget = CheckboxWidget('recurrence',
                                                 'Recurring')
@@ -961,6 +968,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.duration_widget.update(request)
         self.location_widget.update(request)
         self.other_location_widget.update(request)
+        self.privacy_widget.update(request)
         self.recurrence_widget.update(request)
         self.recurrence_type_widget.update(request)
         self.interval_widget.update(request)
@@ -1007,11 +1015,12 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         location = (self.location_widget.value or
                     self.other_location_widget.value or None)
 
-        self.process(start, duration, self.title_widget.value, location)
+        self.process(start, duration, self.title_widget.value, location,
+                     self.privacy_widget.value)
 
         return self._redirectToDailyView(date=start.date())
 
-    def process(self, dtstart, duration, title, location):
+    def process(self, dtstart, duration, title, location, privacy):
         raise NotImplementedError("override this method in subclasses")
 
     def getRecurrenceRule(self):
@@ -1127,11 +1136,12 @@ class EventAddView(EventViewBase):
 
     authorization = ACLAddAccess
 
-    def process(self, dtstart, duration, title, location):
+    def process(self, dtstart, duration, title, location, privacy):
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
                            location=location,
-                           recurrence=self.getRecurrenceRule())
+                           recurrence=self.getRecurrenceRule(),
+                           privacy=privacy)
         self.context.addEvent(ev)
 
 
@@ -1168,6 +1178,8 @@ class EventEditView(EventViewBase):
             self.location_widget.setValue('')
             self.other_location_widget.setValue(event.location)
 
+        self.privacy_widget.setValue(event.privacy)
+
         if event.recurrence is not None:
             self.recurrence_widget.setValue(True)
 
@@ -1202,11 +1214,12 @@ class EventEditView(EventViewBase):
         self.event = event
         EventViewBase.update(self)
 
-    def process(self, dtstart, duration, title, location):
+    def process(self, dtstart, duration, title, location, privacy):
         uid = self.event.unique_id
         ev = self.event.replace(dtstart=dtstart, duration=duration,
                                 title=title, location=location, unique_id=uid,
-                                recurrence=self.getRecurrenceRule())
+                                recurrence=self.getRecurrenceRule(),
+                                privacy=privacy)
         if self.tt_event:
             if not self.isManager():
                 raise Unauthorized

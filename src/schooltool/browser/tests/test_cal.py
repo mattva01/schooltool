@@ -1004,7 +1004,7 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
                                     'location_other': 'Kitchen',
-                                    'duration': '50'})
+				    'duration': '50', 'privacy': 'hidden'})
         content = view.render(request)
         self.assert_('Add event' in content)
         self.assert_('Hacking' in content)
@@ -1013,6 +1013,11 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
         self.assert_('15:30' in content)
         self.assert_('50' in content)
 
+	doc = HTMLDocument(content)
+        op = doc.query('//select[@name="privacy"]'
+                       '//option[@value="hidden" and @selected="selected"]')
+        assert len(op) == 1, 'hidden not selected'
+
     def test_post(self):
         view = self.createView()
         request = RequestStub(args={'title': 'Hacking',
@@ -1020,6 +1025,7 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
                                     'start_time': '15:30',
                                     'location': 'Kitchen',
                                     'duration': '50',
+				    'privacy': 'private',
                                     'SUBMIT': 'Save'},
                               method='POST')
         content = view.render(request)
@@ -1035,6 +1041,7 @@ class TestEventAddView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(events[0].location, 'Kitchen')
         self.assertEquals(events[0].dtstart, datetime(2004, 8, 13, 15, 30))
         self.assertEquals(events[0].duration, timedelta(minutes=50))
+        self.assertEquals(events[0].privacy, "private")
         assert events[0].recurrence is None
 
     def test_post_recurrent(self):
@@ -1238,6 +1245,10 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         assert len(op) == 1, 'daily not selected'
 
         assertField(doc, 'interval', '2')
+
+        op = doc.query('//select[@name="privacy"]'
+                       '//option[@value="public" and @selected="selected"]')
+        assert len(op) == 1, 'public not selected'
 
     def test_render_range_forever(self):
         from schooltool.cal import DailyRecurrenceRule
@@ -1579,7 +1590,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         view.tt_event = True
 
         args = (datetime(2004, 8, 16, 13, 55), timedelta(minutes=5),
-                'Anything *', None)
+                'Anything *', None, "public")
 
         # Not a manager -- should redirect to unauthorized
         view.isManager = lambda: False
