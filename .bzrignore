@@ -261,3 +261,9 @@ src/schooltool/rest/www/*.so
 ./*.log
 ./roster.txt
 ./schoolbell-data.fs*
+debian/schooltool.substvars
+debian/schooltool.postinst.debhelper
+debian/import-sampleschool
+debian/schooltool.postrm.debhelper
+debian/schooltool.prerm.debhelper
+debian/files

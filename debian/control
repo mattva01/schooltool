@@ -1,0 +1,40 @@
+Source: schoolbell
+Priority: extra
+Maintainer: Brian Sutherland <jinty@web.de>
+Build-Depends: debhelper (>= 4.1.16), python, python2.3-dev (>= 2.3.2)
+Standards-Version: 3.6.1
+
+Package: schoolbell
+Section: misc
+Architecture: all
+Depends: ${python:Depends}, ssl-cert, openssl, libschoolbell (= ${Source-Version}), ${misc:Depends}
+Description: web server for co-ordinating schedules, timetables and calendars
+ SchoolBell is a free and open source application to allow groups and
+ organizations to coordinate schedules and timetables.  Users may manage their
+ personal calendars, group calendars and calendars for resources, e.g., rooms,
+ projectors, etc, via a web interface, or using an iCalendar compliant client
+ such as Mozilla calendar or iCal. SchoolBell is written in Python, and is a
+ Zope 3 component.
+ .
+ This package contains the configuration and the binaries to run a standalone
+ SchoolBell server.
+ .
+ Homepage: http://www.schooltool.org/schoolbell
+
+Package: libschoolbell
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${python:Depends}, python2.3-xml, python2.3-imaging, python2.3-docutils, ${misc:Depends}
+Description: web server for co-ordinating schedules, timetables and calendars
+ SchoolBell is a free and open source application to allow groups and
+ organizations to coordinate schedules and timetables.  Users may manage their
+ personal calendars, group calendars and calendars for resources, e.g., rooms,
+ projectors, etc, via a web interface, or using an iCalendar compliant client
+ such as Mozilla calendar or iCal. SchoolBell is written in Python, and is a
+ Zope 3 component.
+ .
+ This package contains the SchoolBell python module. (And, temporarily, quite a
+ bit of Zope 3.1 development trunk until Zope 3.1 is packaged. This package
+ will then become arch-indep and move to a new nameing scheme.)
+ .
+ Homepage: http://www.schooltool.org/schoolbell
