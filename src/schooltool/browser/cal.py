@@ -32,6 +32,7 @@ from schooltool.browser.auth import TeacherAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
 from schooltool.browser.acl import ACLView
+from schooltool.auth import getACL
 from schooltool.cal import CalendarEvent
 from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
@@ -39,6 +40,7 @@ from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
+from schooltool.interfaces import ModifyPermission
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
@@ -236,20 +238,17 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
 
     __url = None
 
+    def _eventView(self, event):
+        return CalendarEventView(event, getACL(self.context))
+
     def renderEvent(self, event):
-        view = CalendarEventView(event)
-        # Using render here has two downsides:
-        #  - the Content-Type header is overwritten
-        #  - we do needless conversion from Unicode to UTF-8 and back
-        return to_unicode(view.render(self.request))
+        return self._eventView(event).full(self.request)
 
     def eventClass(self, event):
-        view = CalendarEventView(event)
-        return view.cssClass()
+        return self._eventView(event).cssClass()
 
     def eventShort(self, event):
-        view = CalendarEventView(event)
-        return view.short()
+        return self._eventView(event).short()
 
     def update(self):
         if 'date' not in self.request.args:
@@ -768,6 +767,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     authorization = ACLModifyAccess
 
     template = Template('www/event.pt')
+
     page_title = None # overridden by subclasses
     tt_event = False
 
@@ -894,6 +894,7 @@ class EventEditView(EventViewBase):
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title, location):
+        # TODO: check permissions -- only managers can edit timetable events
         uid = self.event.unique_id
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
@@ -931,6 +932,8 @@ class EventDeleteView(View, EventViewHelpers):
         if event is not None:
             self.context.removeEvent(event)
             return self._redirectToDailyView(event.dtstart)
+
+        # TODO: check permissions -- only managers can edit timetable events
 
         # If it is a timetable event, show a confirmation form,
         # and then add a timetable exception (unless canceled).
@@ -1001,7 +1004,28 @@ class CalendarEventView(View):
 
     authorization = PublicAccess
 
-    template = Template("www/cal_event.pt")
+    template = Template("www/cal_event.pt", charset=None)
+
+    def __init__(self, event, acl):
+        """Create a view for event.
+
+        Since ordinary calendar events do not know which calendar they come
+        from, we have to explicitly provide the access control list (acl)
+        that governs access to this calendar.
+        """
+        View.__init__(self, event)
+        self.acl = acl
+
+    def canEdit(self):
+        """Can the current user edit this calendar event?
+
+        Users can edit normal calendar events only if the ACL allows it.
+
+        Only managers can "edit" (that is, create exceptions to) timetable
+        events.
+        """
+        user = self.request.authenticated_user
+        return self.isManager() or self.acl.allows(user, ModifyPermission)
 
     def duration(self):
         """Format the time span of the event."""
@@ -1022,6 +1046,14 @@ class CalendarEventView(View):
             return 'exc_event'
         else:
             return 'event'
+
+    def full(self, request):
+        """Full representation of the event for daily/weekly views."""
+        try:
+            self.request = request
+            return self.do_GET(request)
+        finally:
+            self.request = None
 
     def short(self):
         """Short representation of the event for the monthly view."""

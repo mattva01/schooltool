@@ -28,6 +28,7 @@ from logging import INFO
 from datetime import datetime, date, timedelta
 
 from zope.testing.doctestunit import DocTestSuite
+from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub, setPath
 from schooltool.browser.tests import TraversalTestMixin
 from schooltool.tests.utils import AppSetupMixin, NiceDiffsMixin
@@ -427,8 +428,12 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
             self.assertEquals(month, date(2004, i+1, 1))
 
     def test_renderEvent(self):
+        from schooltool.auth import ACL
+        from schooltool.interfaces import IACLOwner
         from schooltool.browser.cal import CalendarViewBase
         cal = createCalendar()
+        directlyProvides(cal, IACLOwner)
+        cal.acl = ACL()
         view = CalendarViewBase(cal)
         view.request = RequestStub()
         e = createEvent('2004-01-02 14:30', '30min', u'\u263B')
@@ -1316,25 +1321,25 @@ class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
 
 class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
 
-    def test_render(self):
-        from schooltool.cal import CalendarEvent
+    def createView(self, ev=None):
+        from schooltool.auth import ACL
         from schooltool.browser.cal import CalendarEventView
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event",
-                           unique_id="id!")
-        view = CalendarEventView(ev)
-        request = RequestStub()
+        if ev is None:
+            ev = createEvent('2004-12-01 12:01', '1h', 'Main event',
+                            unique_id="id!")
+        view = CalendarEventView(ev, ACL())
+        return view
 
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub()
         content = view.render(request)
         # eat trailing whitespace and empty lines
         content = re.sub('\s+\n', '\n', content)
         expected = dedent("""
             <div class="calevent">
-              <div class="dellink">
-                <a href="delete_event.html?event_id=id%21">[delete]</a>
-              </div>
               <h3>
-                <a href="edit_event.html?event_id=id%21">Main event</a>
+                Main event
               </h3>
               12:01&ndash;13:01
             </div>
@@ -1343,21 +1348,16 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
                           "\n" + diff(content, expected))
 
     def test_cssClass(self):
-        from schooltool.browser.cal import CalendarEventView
-        from schooltool.cal import CalendarEvent
         from schooltool.timetable import TimetableCalendarEvent
         from schooltool.timetable import TimetableException
         from schooltool.timetable import ExceptionalTTCalendarEvent
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event",
-                           unique_id="id!")
-        view = CalendarEventView(ev)
+        view = self.createView()
         self.assertEquals(view.cssClass(), 'event')
 
         tt_ev = TimetableCalendarEvent(datetime(2004, 8, 12, 12, 0),
                                        timedelta(minutes=1), "A",
                                        period_id="foo", activity=object())
-        view = CalendarEventView(tt_ev)
+        view = self.createView(tt_ev)
         self.assertEquals(view.cssClass(), 'tt_event')
 
         exc = TimetableException(date=date(2003, 11, 26), period_id='Green',
@@ -1365,60 +1365,62 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
         exc_ev = ExceptionalTTCalendarEvent(datetime(2004, 8, 12, 12, 0),
                                             timedelta(minutes=1), "A",
                                             exception=exc)
-        view = CalendarEventView(exc_ev)
+        view = self.createView(exc_ev)
         self.assertEquals(view.cssClass(), 'exc_event')
 
     def test_location(self):
-        from schooltool.cal import CalendarEvent
-        from schooltool.browser.cal import CalendarEventView
-
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event",
-                           unique_id="id", location="Office")
-        view = CalendarEventView(ev)
+        ev = createEvent('2004-12-01 12:01', '1h', 'Main event',
+                         unique_id="id", location="Office")
+        view = self.createView(ev)
         content = view.render(RequestStub())
         self.assert_(content, '(Office)' in content)
 
     def test_duration(self):
-        from schooltool.cal import CalendarEvent
-        from schooltool.browser.cal import CalendarEventView
-
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event")
-        view = CalendarEventView(ev)
+        view = self.createView()
         self.assertEquals(view.duration(), '12:01&ndash;13:01')
 
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(days=1), "Long event")
-        view = CalendarEventView(ev)
+        ev = createEvent('2004-12-01 12:01', '1d', 'Long event')
+        view = self.createView(ev)
         self.assertEquals(view.duration(),
                           '2004-12-01 12:01&ndash;2004-12-02 12:01')
 
     def test_short(self):
-        from schooltool.cal import CalendarEvent
-        from schooltool.browser.cal import CalendarEventView
-
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event")
-        view = CalendarEventView(ev)
+        view = self.createView()
         self.assertEquals(view.short(),
                           'Main event (12:01&ndash;13:01)')
 
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(days=1), "Long event")
-        view = CalendarEventView(ev)
+        ev = createEvent('2004-12-01 12:01', '1d', 'Long event')
+        view = self.createView(ev)
         self.assertEquals(view.short(),
                           'Long event (Dec&nbsp;01&ndash;Dec&nbsp;02)')
 
     def test_uniqueId(self):
-        from schooltool.cal import CalendarEvent
-        from schooltool.browser.cal import CalendarEventView
-
-        ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event",
-                           unique_id="Weird@stuff!")
-        view = CalendarEventView(ev)
+        ev = createEvent('2004-12-01 12:01', '1h', 'Main event',
+                         unique_id="Weird@stuff!")
+        view = self.createView(ev)
         self.assertEquals(view.uniqueId(), 'Weird%40stuff%21')
+
+
+class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
+
+    def test_canEdit(self):
+        from schooltool.auth import ACL
+        from schooltool.interfaces import ModifyPermission
+        from schooltool.browser.cal import CalendarEventView
+        ev = createEvent('2004-11-03 14:32', '1h', 'Nothing of importance')
+        acl = ACL()
+        acl.add((self.person, ModifyPermission))
+        view = CalendarEventView(ev, acl)
+
+        anonymous = None
+        def canEdit(user):
+            view.request = RequestStub(authenticated_user=user)
+            return view.canEdit()
+
+        assert not canEdit(anonymous)
+        assert canEdit(self.person)
+        assert not canEdit(self.person2)
+        assert canEdit(self.manager)
 
 
 def test_suite():
@@ -1438,6 +1440,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
+    suite.addTest(unittest.makeSuite(TestCalendarEventPermissionChecking))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 
