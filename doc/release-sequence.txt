@@ -9,8 +9,8 @@ Minor Release
 
 For bugfixes to a released version which are non-debian specific.
 
-1.  Make sure the necessary changes are in both SchoolTool and SchoolBell branches.
-    Merge them from the trunk if necessary.
+1.  Receive gpg signed mails from the major contributors specifying a 
+    subversion revision number to release. Make sure everything is co-ordinated.
 
 2.  Set version in 0.8.x branches.
 
@@ -21,7 +21,7 @@ For bugfixes to a released version which are non-debian specific.
     c.  Write a new Changelog entry in debian/changelog.
 
     d.  Check that the database is compatible with the previous version, if not
-        update db_version in debian/school{bell,tool}.preinst, debian/rules
+        update db_version in debian/school{bell,tool}.{pre,post}inst.
 
 3.  Check release notes in RELEASE.
 
