@@ -761,7 +761,6 @@ class Server:
                 f = file(filename, "a")
                 self.logfiles.append(f)
 
-        self.hitlogfiles = []
         logger = logging.getLogger('access')
         logger.propagate = False
         logger.setLevel(logging.INFO)
