@@ -3,6 +3,7 @@ URI object list test
 SchoolTool> get /uris
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=uriobjects
 <uriobjects>
   <uriobject uri="http://schooltool.org/ns/teaching/taught">
     <name>Taught</name>
@@ -29,5 +30,6 @@ Content-Type: text/xml; charset=UTF-8
     <description>A role of a containing group.</description>
   </uriobject>
 </uriobjects>
+%% END XML
 
 
