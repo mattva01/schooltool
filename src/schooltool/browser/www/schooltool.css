@@ -343,8 +343,6 @@ div.event {
   background: #8f9;
   margin: 1ex;
   padding: 0.5ex 0.5em;
-  border-bottom-width: 3px;
-  border-right-width: 3	px;
   font-size: smaller;
 }
 
@@ -353,8 +351,6 @@ div.ro_event {
   background: #9af;
   margin: 1ex;
   padding: 0.5ex 0.5em;
-  border-bottom-width: 3px;
-  border-right-width: 3px;
   font-size: smaller;
 }
 
@@ -464,8 +460,6 @@ table.daycal {
 
 table.daycal td.empty {
   border-bottom: 1px solid #ddd;
-  border-right-width: 3px;
-  /* border-bottom-width: 3px; */
   padding: 0;
   margin: 0;
 }
@@ -474,8 +468,6 @@ table.daycal td.event{
   border: 1px solid #070;
   background: #af9;
   padding: 1ex 0.5em;
-  border-right-width: 3px;
-  border-bottom-width: 3px;
   vertical-align: top;
   font-size: smaller;
 }
@@ -484,8 +476,6 @@ table.daycal td.ro_event {
   border: 1px solid #007;
   background: #9af;
   padding: 1ex 0.5em;
-  border-right-width: 3px;
-  border-bottom-width: 3px;
   vertical-align: top;
   font-size: smaller;
 }
