@@ -1606,6 +1606,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         self.group = app['groups'].new("root", title="group")
         self.sub = app['groups'].new("subgroup", title="subgroup")
         self.subsub = app['groups'].new("subsubgroup", title="subsubgroup")
+        self.sub2 = app['groups'].new("subgroup2", title="subgroup")
         self.persona = app['persons'].new("a", title="a")
         self.personb = app['persons'].new("b", title="b")
         self.personc = app['persons'].new("c", title="c")
@@ -1618,6 +1619,9 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         Membership(group=self.sub, member=self.personb)
         Membership(group=self.subsub, member=self.personc)
         Membership(group=self.subsub, member=self.persond)
+        # a person can belong to more than one group
+        Membership(group=self.subsub, member=self.persona)
+        Membership(group=self.sub2, member=self.personb)
 
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
 

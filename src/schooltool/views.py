@@ -793,12 +793,14 @@ class RollcallView(View):
     def groupPath(self):
         return getPath(self.context)
 
-    def listPersons(self, group=None):
+    def listPersons(self, group=None, _already_added=None):
         if group is None:
             group = self.context
+        if _already_added is None:
+            _already_added = sets.Set()
         results = []
         for member in getRelatedObjects(group, URIMember):
-            if IPerson.isImplementedBy(member):
+            if IPerson.isImplementedBy(member) and member not in _already_added:
                 absence = member.getCurrentAbsence()
                 if absence is None:
                     presence = "present"
@@ -808,11 +810,12 @@ class RollcallView(View):
                     expected_presence = absence.expected_presence
                     if expected_presence:
                         expected_presence = expected_presence.isoformat(' ')
+                _already_added.add(member)
                 results.append({'title': member.title, 'href': getPath(member),
                                 'presence': presence,
                                 'expected_presence': expected_presence})
             if IGroup.isImplementedBy(member):
-                results.extend(self.listPersons(member))
+                results.extend(self.listPersons(member, _already_added))
         return results
 
     def parseRollcall(self, request):
