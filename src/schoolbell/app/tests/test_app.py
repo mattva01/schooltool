@@ -300,14 +300,12 @@ def doctest_Resource():
 def doctest_getSchoolBellApplication():
     """Tests for getSchoolBellApplication.
 
-    Let's say we have a SchoolBell app, a persons container and a person.
+    Let's say we have a SchoolBell app.
 
       >>> from schoolbell.app.app import SchoolBellApplication, Person
-      >>> from schoolbell.app.security import setUpLocalAuth
+      >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolBellApplication()
-      >>> root = setup.placefulSetUp(True)
-      >>> directlyProvides(app, IContainmentRoot)
-      >>> setUpLocalAuth(app) # makes it a site
+      >>> app.setSiteManager(LocalSiteManager(app))
 
     If site is not a SchoolBellApplication, we get an error
 
