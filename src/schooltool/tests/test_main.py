@@ -159,13 +159,15 @@ class TestSite(unittest.TestCase):
         db = object()
         rootName = 'foo'
         viewFactory = object()
+        logs = [object()]
         authenticator = lambda c, u, p: None
-        site = Site(db, rootName, viewFactory, authenticator)
+        site = Site(db, rootName, viewFactory, authenticator, logs)
         self.assert_(site.db is db)
         self.assert_(site.viewFactory is viewFactory)
         self.assert_(site.rootName is rootName)
         self.assert_(site.authenticate is authenticator)
         self.assertEqual(site.conflictRetries, 5)
+        self.assertEqual(site.exception_logs, logs)
 
     def test_buildProtocol(self):
         from schooltool.main import Site, Request
@@ -710,6 +712,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
                           [('', 123), ('10.20.30.40', 9999)])
         self.assert_(server.config.database is not None)
         self.assertEquals(server.config.path, ['/xxxxx', '/yyyyy/zzzzz'])
+        self.assertEquals(server.config.pid_file, None)
+        self.assertEquals(server.logfiles, [sys.stderr])
         # Check that module schooltool.main is added. This is the metadefault.
         self.assertEquals(server.config.module,
                           ['schooltool.main', 'schooltool.tests.test_main'])

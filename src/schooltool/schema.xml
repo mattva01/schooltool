@@ -84,4 +84,17 @@
       pid-file /var/run/schooltool.pid
     </example>
   </key>
+
+  <multikey name="log-file" datatype="string">
+    <description>
+      Specifies the path of a log file used for exceptions. Special
+      values STDERR and STDOUT mean standar error and standard out
+      respectively.
+    </description>
+    <default>STDERR</default>
+    <example>
+      log-file /var/log/schooltool/error.log
+      log-file STDERR
+    </example>
+  </multikey>
 </schema>

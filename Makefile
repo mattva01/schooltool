@@ -40,12 +40,9 @@ testall: build
 	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
-	@PYTHONPATH=src LC_ALL="C" $(PYTHON) src/schooltool/main.py -c test.conf & \
-	pid=$$! ; \
-	sleep 2 ; \
-	ps -p $$pid > /dev/null && (\
-	$(PYTHON) test.py -f $(TESTFLAGS) ; \
-	kill $$pid )
+	@PYTHONPATH=src LC_ALL="C" $(PYTHON) schooltool-server.py -c test.conf -d \
+	&& ($(PYTHON) test.py -f $(TESTFLAGS) ; \
+	kill `cat testserver.pid`)
 
 run: build
 	$(PYTHON) schooltool-server.py

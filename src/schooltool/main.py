@@ -25,6 +25,7 @@ Options:
 
   -c, --config xxx  use this configuration file instead of the default
   -h, --help        show this help message
+  -d, --daemon      go to background after starting
 
 $Id$
 """
@@ -35,6 +36,7 @@ import ZConfig
 import urllib
 import getopt
 import libxml2
+import datetime
 from zope.interface import moduleProvides
 from transaction import get_transaction
 from ZODB.POSException import ConflictError
@@ -400,6 +402,13 @@ class Request(http.Request):
         body = self.render(resrc)
         return body
 
+    def _printTraceback(self, reason):
+        """Prints the timestamp preceding the traceback to the site log"""
+        for log in self.site.exception_logs:
+            print >> log, '--'
+            print >> log, str(datetime.datetime.now())
+            reason.printTraceback(log)
+
     def _handle_exception(self, reason):
         """Generate an internal error page.
 
@@ -409,7 +418,7 @@ class Request(http.Request):
 
         This is called in a separate thread.
         """
-        self.reactor_hook.callFromThread(reason.printTraceback)
+        self.reactor_hook.callFromThread(self._printTraceback, reason)
         body = reason.getErrorMessage()
         self.reset()
         self.setResponseCode(500)
@@ -455,20 +464,23 @@ class Site(http.HTTPFactory):
 
     conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
 
-    def __init__(self, db, rootName, viewFactory, authenticate):
+    def __init__(self, db, rootName, viewFactory, authenticate,
+                 exception_logs=[sys.stderr]):
         """Creates a site.
 
         Arguments:
-          db            ZODB database
-          rootName      name of the application object in the database
-          viewFactory   factory for the application object views
-          authenticate  authentication function (see IAuthenticator)
+          db               ZODB database
+          rootName         name of the application object in the database
+          viewFactory      factory for the application object views
+          authenticate     authentication function (see IAuthenticator)
+          exception_logs   a sequence of file objects to log exceptions to
         """
         self.__super___init__(None)
         self.db = db
         self.viewFactory = viewFactory
         self.rootName = rootName
         self.authenticate = authenticate
+        self.exception_logs = exception_logs
 
     def buildProtocol(self, addr):
         channel = self.__super_buildProtocol(addr)
@@ -569,6 +581,7 @@ class Server:
                             database
                             event_logging
                             pid_file
+                            log_file
         """
         # Defaults
         config_file = self.findDefaultConfigFile()
@@ -603,6 +616,17 @@ class Server:
 
         # Insert the metadefault for 'modules'
         self.config.module.insert(0, 'schooltool.main')
+
+        # Open the log files for exceptions
+        self.logfiles = []
+        for filename in self.config.log_file:
+            if filename == 'STDOUT':
+                self.logfiles.append(sys.stdin)
+            elif filename == 'STDERR':
+                self.logfiles.append(sys.stderr)
+            else:
+                f = file(filename, "a")
+                self.logfiles.append(f)
 
         # Process any command line arguments that may override config file
         # settings here.
@@ -669,32 +693,14 @@ class Server:
 
         self.threadable_hook.init()
 
-        site = Site(self.db, self.appname, self.viewFactory, self.authenticate)
+        site = Site(self.db, self.appname, self.viewFactory, self.authenticate,
+                    self.logfiles)
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
 
-
         if self.daemon:
-            # Do the double fork
-            pid = os.fork()
-            if pid:
-                sys.exit(0)
-            os.setsid()
-            os.umask(077)
-
-            pid = os.fork()
-            if pid:
-                self.notifyDaemonized(pid)
-                sys.exit(0)
-
-            # Close standard I/O
-            os.close(0)
-            os.close(1)
-            os.close(2)
-            os.open('/dev/null', os.O_RDWR)
-            os.dup(0)
-            os.dup(0)
+            self.daemonize()
 
         if self.config.pid_file:
             pidfile = file(self.config.pid_file, "w")
@@ -707,10 +713,32 @@ class Server:
         self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
         self.reactor_hook.run()
 
-        self.notifyShutdown()
         # Cleanup on signals TERM, INT and BREAK
+        self.notifyShutdown()
         if self.config.pid_file:
             os.unlink(self.config.pid_file)
+
+
+    def daemonize(self):
+        """Daemonize with a double fork and close the standard IO."""
+        pid = os.fork()
+        if pid:
+            sys.exit(0)
+        os.setsid()
+        os.umask(077)
+
+        pid = os.fork()
+        if pid:
+            self.notifyDaemonized(pid)
+            sys.exit(0)
+
+        os.close(0)
+        os.close(1)
+        os.close(2)
+        os.open('/dev/null', os.O_RDWR)
+        os.dup(0)
+        os.dup(0)
+
 
     def prepareDatabase(self):
         """Prepare the database.
