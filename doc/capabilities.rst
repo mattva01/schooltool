@@ -5,27 +5,72 @@ Capability based security
 Glossary
 --------
 
+:capability:
+  A wrapper around an object that intercepts access to attributes, and
+  either allows access or forbids access.
+  A capability also needs to ensure that (except in special cases) any
+  attributes returned from the object are also wrapped with capabilities.
+
 :capability tag:
   A string that represents a "class" of capability.
   This isn't a python class, but rather a classification.
 
-Stuff
------
+Abstract model
+--------------
 
-- probably need a capability for a descriptor that just passes on state
-  for getting a capability for its returned value.
+Abstractly, a capabilities based system works like this:
 
-- talk about the need to avoid dangling references.
-  in general, persistent capabilities can be stored only on an object
-  that the capability refers to. this rule can be broken when there are
-  application-level things to clean up. an example is capabilities coming
-  with facets in schooltool.
+1. A request comes into the system
+2. The system inspects the request, and chooses a root capability.
+   Any value returned from that root capability will also be a capability.
+
+There are N webs of capabilities. Each web has a root. The webs may overlap
+or be interconnected.
+There are no principals or permissions or roles or groups. Different requests
+may get different points of access into the interconnected web, depending on
+the nature of the request.
+
+
+Concrete model
+--------------
+
+This differs from the abstract model:
+
+* We categorise requests into Principals. Usually this is done by looking at
+  the authentication data of the request.
+* There is just one root object. Different principals have access to
+  different capabilities of the root object.
+* There is just one "core" web of objects. Objects are associated with
+  capabilities, either by the object instance, or by an object's class, or
+  from a principal.
+* Accessing a capability will return either a capability or a "rock".
+  A rock is an immutable object that needs no capability.
+
+The capabilities available for an object are categorised by a "capability
+tag". This is a string that represents the ability to do something.
+In a typical system, capability tags represent combinations of
+Create, Retrieve, Update, Delete. So, the available tags are
+  C R U D CR CU CD RU RD UD CRU CRD CUD RUD CRUD.
+In practice, the most commonly useful tags are
+  R CR CRU CRUD
+However, I can think of particular systems where each of the possible tags
+is useful.
+
+A request comes into the system. The system matches the request to a
+Principal. The system chooses an appropriate capability for the root object,
+based on the capabilities available on the root object and the principal,
+and the tags owned by the principal that are pertinent to the root object.
+
+
+Dangling references
+-------------------
 
 There is a danger of dangling references. This is unimportant in the case of
 capabilities stored on objects. This is handled when capabilities are stored
 on the principal because in schooltool capabilities are installed in a
 principal as a consequence of relationships, and are removed when the
 relationship is broken.
+
 
 Attribute access
 ----------------
@@ -46,6 +91,7 @@ I want to get an attribute named 'foo' from CO.
    returned. Otherwise...
    What to do otherwise? Perhaps return an Incapable Capability for V.
    Perhaps raise some kind of error.
+
 
 The search
 ----------
