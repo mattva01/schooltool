@@ -45,6 +45,7 @@ from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.widgets import TextWidget, PasswordWidget
 from schooltool.browser.widgets import TextAreaWidget, SelectionWidget
+from schooltool.browser.widgets import CheckboxWidget
 from schooltool.browser.widgets import dateParser, intParser
 from schooltool.common import to_unicode
 from schooltool.component import FacetManager
@@ -781,16 +782,23 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             label_class="wide",
             value=tts_service.default_id)
 
+        self.restrict_membership_widget = CheckboxWidget(
+            'restrict_membership',
+            _('Restrict group membership to  members of immediate parents.'),
+            value=self.context.restrict_membership)
+
     def update(self, request):
         self.new_event_privacy_widget.update(request)
         self.timetable_privacy_widget.update(request)
         self.default_tts_widget.update(request)
+        self.restrict_membership_widget.update(request)
 
     def do_POST(self, request):
         self.update(request)
         self.new_event_privacy_widget.require()
         self.timetable_privacy_widget.require()
         self.default_tts_widget.require()
+        self.restrict_membership_widget.require()
 
         if (self.new_event_privacy_widget.error or
             self.timetable_privacy_widget.error or
@@ -800,10 +808,12 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
 
         newpriv = self.new_event_privacy_widget.value
         ttpriv = self.timetable_privacy_widget.value
+        restrict = self.restrict_membership_widget.value
         if newpriv is not None:
             self.context.new_event_privacy = newpriv
         if ttpriv is not None:
             self.context.timetable_privacy = ttpriv
+        self.context.restrict_membership = restrict
         service = getTimetableSchemaService(self.context)
         service.default_id = self.default_tts_widget.value
 

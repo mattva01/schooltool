@@ -1124,8 +1124,15 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
                        % (name, value))
         assert len(op) == 1, '%s=%s not selected' % (name, value)
 
+    def assertChecked(self, doc, name, value):
+        op = doc.query('//input[@type="checkbox" and @name="%s"'
+                       ' and %s@checked="checked"]' %
+                       (name, value and " " or "not "))
+        assert len(op) == 1, '%s=%s not selected' % (name, value)
+
     def test_render(self):
         self.app.new_event_privacy = 'hidden'
+        self.app.restrict_membership = True
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager)
         result = view.render(request)
@@ -1135,6 +1142,7 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
         self.assertSelected(doc, 'new_event_privacy', 'hidden')
         self.assertSelected(doc, 'timetable_privacy', 'public')
         self.assertSelected(doc, 'default_tts', 'super')
+        self.assertChecked(doc, 'restrict_membership', True)
 
     def test_do_POST(self):
         view = self.createView()
@@ -1142,11 +1150,15 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
                               method="POST",
                               args={'new_event_privacy': 'hidden',
                                     'timetable_privacy': 'private',
-                                    'default_tts': 'duper'})
+                                    'default_tts': 'duper',
+                                    'restrict_membership': 'on',
+                                    'restrict_membership_shown': 'yes'})
+        self.assertEqual(self.app.restrict_membership, False)
         result = view.render(request)
         self.assertEqual(self.app.new_event_privacy, 'hidden')
         self.assertEqual(self.app.timetable_privacy, 'private')
         self.assertEqual(self.app.timetableSchemaService.default_id, 'duper')
+        self.assertEqual(self.app.restrict_membership, True)
         self.assertEqual(request.code, 302)
         self.assertEqual(request.headers['location'],
                          'http://localhost:7001/')
