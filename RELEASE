@@ -56,6 +56,17 @@ For this reason, included in the official tarball, is a stripped down Zope3 of
 this revision with enough libraries to run SchoolBell as a stand alone server.
 
 
+Known Zope 3 Issues
+~~~~~~~~~~~~~~~~~~~
+
+There are certain known bugs in the revision of Zope 3 used for this version of
+SchoolBell. These are:
+
+* Errors are not logged when user's title includes non-ascii chars
+  http://issues.schooltool.org/issue176
+  http://www.zope.org/Collectors/Zope3-dev/377
+
+
 Database Upgrades
 ~~~~~~~~~~~~~~~~~
 
