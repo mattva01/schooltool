@@ -23,22 +23,18 @@ $Id$
 """
 
 from zope.interface import implements
-from schooltool.interfaces import IEventConfigurable
-from schooltool.interfaces import IPerson, IGroup, IRootGroup, IQueryLinks
-from schooltool.interfaces import ISpecificURI
-from schooltool.component import setFacet, iterFacets
-from schooltool.db import PersistentKeysDict
-from schooltool.event import EventTargetMixin, EventService
+from schooltool.interfaces import IPerson, IGroup, IRootGroup
+from schooltool.event import EventService
 from schooltool.membership import MemberMixin, GroupMixin
 from schooltool.relationship import RelatableMixin
-from schooltool.facet import FacetedMixin, FacetedEventTargetMixin
+from schooltool.facet import FacetedEventTargetMixin
 
 __metaclass__ = type
 
 
 class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
-    implements(IPerson, IQueryLinks)
+    implements(IPerson)
 
     def __init__(self, name):
         MemberMixin.__init__(self)
@@ -49,7 +45,7 @@ class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
 class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
 
-    implements(IGroup, IQueryLinks)
+    implements(IGroup)
 
     def __init__(self, name, facetFactory=None):
         GroupMixin.__init__(self)
@@ -60,7 +56,6 @@ class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
         self.facetFactory = facetFactory
 
 
-
 class RootGroup(Group):
     """A persistent application root object"""
 
@@ -69,4 +64,3 @@ class RootGroup(Group):
     def __init__(self, name, facetFactory=None):
         Group.__init__(self, name, facetFactory)
         self.eventService = EventService()
-

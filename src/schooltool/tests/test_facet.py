@@ -52,7 +52,7 @@ class FacetWithEventsStub(FacetStub):
 class TestFacetedMixin(unittest.TestCase):
 
     def test(self):
-        from schooltool.model import FacetedMixin
+        from schooltool.facet import FacetedMixin
         from schooltool.interfaces import IFaceted
         m = FacetedMixin()
         verifyObject(IFaceted, m)
@@ -61,7 +61,7 @@ class TestFacetedMixin(unittest.TestCase):
 class TestFacetedEventTargetMixin(unittest.TestCase):
 
     def test(self):
-        from schooltool.model import FacetedEventTargetMixin
+        from schooltool.facet import FacetedEventTargetMixin
         from schooltool.interfaces import IFaceted, IEventTarget
         from schooltool.interfaces import IEventConfigurable
         et = FacetedEventTargetMixin()
@@ -70,7 +70,7 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         verifyObject(IEventConfigurable, et)
 
     def test_getEventTable(self):
-        from schooltool.model import FacetedEventTargetMixin
+        from schooltool.facet import FacetedEventTargetMixin
         from schooltool.component import setFacet
         et = FacetedEventTargetMixin()
         et.__facets__ = Set()
