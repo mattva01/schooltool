@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.app.annotatable
+Unit tests for schoolbell.app.notes
 """
 
 import unittest
@@ -48,7 +48,7 @@ def doctest_getNotes():
 
     Now we can check that a new Notes object is created automatically
 
-        >>> from schoolbell.app.annotatable import getNotes
+        >>> from schoolbell.app.notes import getNotes
         >>> notes = getNotes(obj)
 
         >>> from schoolbell.app.interfaces import INotes
@@ -67,6 +67,7 @@ def doctest_getNotes():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(),
+                doctest.DocTestSuite('schoolbell.app.notes'),
            ])
 
 if __name__ == '__main__':
