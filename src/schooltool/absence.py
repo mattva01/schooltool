@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool Absence tracking functionality.
+SchoolTool absence tracking functionality.
 
 $Id$
 """
@@ -59,9 +59,9 @@ class Absence(Persistent):
 
     def addComment(self, comment):
         if not IAbsenceComment.providedBy(comment):
-            raise TypeError("comment is not IAbsenceComment", comment)
+            raise TypeError("Comment is not IAbsenceComment", comment)
         if comment.__parent__ is not None:
-            raise ValueError("comment is already added to an absence", comment)
+            raise ValueError("Comment is already added to an absence", comment)
         event = AbsenceEvent(self, comment)
         if comment.ended is not Unchanged:
             if self.ended and not comment.ended:
@@ -181,5 +181,3 @@ def setUp():
     registerFacetFactory(FacetFactory(AbsenceTrackerFacet,
         name='absence_tracker', title=_('Absence Tracker'),
         facet_name='absences'))
-
-

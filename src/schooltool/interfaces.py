@@ -2033,7 +2033,7 @@ class IAbsence(ILocation):
     """Absence object.
 
     The __parent__ of an absence is its person.  The absence can be
-    located in IPersons.absences by its __name__.
+    located by invoking IPerson.getAbsence(absence.__name__).
 
     All attributes are read-only.  They can be changed by adding new
     comments, therefore the list of comments also doubles as an audit log.
@@ -2060,8 +2060,8 @@ class IAbsence(ILocation):
         """Add a comment.
 
         Sends out an IAbsenceEvent after the comment has been added.  The
-        event is sent to the person and all application objects that the person
-        was absent from.
+        event is sent to the person and all application objects that the
+        person was absent from.
         """
 
 
