@@ -167,28 +167,30 @@ class TimetableActivity:
 
     implements(ITimetableActivity)
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, owner=None):
         self._title = title
+        self._owner = owner
 
     title = property(lambda self: self._title)
+    owner = property(lambda self: self._owner)
 
     def __repr__(self):
-        return "TimetableActivity(%r)" % self.title
+        return "TimetableActivity(%r, %r)" % (self.title, self.owner)
 
     def __eq__(self, other):
         if isinstance(other, TimetableActivity):
-            return self.title == other.title
+            return self.title == other.title and self.owner == other.owner
         else:
             return False
 
     def __ne__(self, other):
         if isinstance(other, TimetableActivity):
-            return self.title != other.title
+            return self.title != other.title or self.owner != other.owner
         else:
             return True
 
     def __hash__(self):
-        return hash(self.title)
+        return hash((self.title, self.owner))
 
 
 #

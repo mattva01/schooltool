@@ -134,7 +134,8 @@ class TimetableReadWriteView(TimetableReadView):
                 xpathctx.setContextNode(period)
                 for activity in xpathctx.xpathEval('tt:activity'):
                     title = activity.get_content()
-                    ttday.add(period_id, TimetableActivity(title))
+                    ttday.add(period_id,
+                              TimetableActivity(title, self.timetabled))
         if self.context is None:
             self.timetabled.timetables[self.key] = tt
         else:

@@ -1164,6 +1164,11 @@ class ITimetableActivity(Interface):
 
     title = Attribute("""The title of the activity""")
 
+    owner = Attribute(
+        """The group or person or other object that owns the activity.
+
+        The activity lives in the owner's timetable.
+        """)
 
 class ICompositeTimetableProvider(Interface):
     """An object which knows how to get the timetables for composition

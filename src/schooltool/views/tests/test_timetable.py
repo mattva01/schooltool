@@ -211,13 +211,13 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         tt['Day 2'] = TimetableDay(['C', 'D'])
         return tt
 
-    def createFull(self):
+    def createFull(self, owner=None):
         from schooltool.timetable import TimetableActivity
         tt = self.createEmpty()
-        tt['Day 1'].add('A', TimetableActivity('Maths'))
-        tt['Day 1'].add('B', TimetableActivity('English'))
-        tt['Day 1'].add('B', TimetableActivity('French'))
-        tt['Day 2'].add('C', TimetableActivity('CompSci'))
+        tt['Day 1'].add('A', TimetableActivity('Maths', owner))
+        tt['Day 1'].add('B', TimetableActivity('English', owner))
+        tt['Day 1'].add('B', TimetableActivity('French', owner))
+        tt['Day 2'].add('C', TimetableActivity('CompSci', owner))
         return tt
 
     def createView(self, context):
@@ -304,7 +304,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         timetabled.__parent__ = ServiceManagerStub()
         return timetabled
 
-    def createView(self, context, timetabled=None,
+    def createView(self, context=None, timetabled=None,
                    key=('2003 fall', 'weekly')):
         from schooltool.views.timetable import TimetableReadWriteView
         if timetabled is None:
@@ -320,16 +320,23 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         self.assertEquals(request.code, 404)
 
     def test_put(self):
+        ttd = self.createTimetabled()
+        key = '2003 fall', 'weekly'
+
         for context, xml, expected in [
-                (self.createEmpty(), self.full_xml, self.createFull()),
-                (self.createFull(), self.empty_xml, self.createEmpty())]:
-            view = self.createView(context)
-            request = RequestStub(method="PUT", body=xml,
-                                  headers={'Content-Type': 'text/xml'})
-            result = view.render(request)
-            self.assertEquals(request.code, 200)
-            self.assertEquals(request.headers['Content-Type'], "text/plain")
-            self.assertEquals(context, expected)
+                (self.createEmpty(), self.full_xml, self.createFull(ttd)),
+                (self.createFull(ttd), self.empty_xml, self.createEmpty())]:
+            ttd.timetables[key] = context
+            self.do_test_put(ttd, key, context, xml, expected)
+
+    def do_test_put(self, timetabled, key, context, xml, expected):
+        view = self.createView(timetabled=timetabled, key=key)
+        request = RequestStub(method="PUT", body=xml,
+                              headers={'Content-Type': 'text/xml'})
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(context, expected)
 
     def test_put_nonexistent(self):
         key = ('2003 fall', 'weekly')
@@ -340,7 +347,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        expected = self.createFull()
+        expected = self.createFull(timetabled)
         self.assertEquals(timetabled.timetables[key], expected)
 
     def do_test_error(self, xml=None, ctype='text/xml'):

@@ -307,35 +307,43 @@ class TestTimetableActivity(unittest.TestCase):
         from schooltool.timetable import TimetableActivity
         from schooltool.interfaces import ITimetableActivity
 
-        ta = TimetableActivity("Dancing")
+        owner = object()
+        ta = TimetableActivity("Dancing", owner)
         verifyObject(ITimetableActivity, ta)
         self.assertEqual(ta.title, "Dancing")
 
         class FakeThing:
             title = "Dancing"
         fake_thing = FakeThing()
-        tb = TimetableActivity("Dancing")
-        tc = TimetableActivity("Fencing")
+        tb = TimetableActivity("Dancing", owner)
+        tc = TimetableActivity("Fencing", owner)
+        td = TimetableActivity("Dancing", object())
 
         # __eq__
         self.assertEqual(ta, ta)
         self.assertEqual(ta, tb)
         self.assertNotEqual(ta, tc)
+        self.assertNotEqual(ta, td)
         self.assertNotEqual(ta, fake_thing)
 
         # __ne__
         self.failIf(ta != ta)
         self.failIf(ta != tb)
         self.assert_(ta != tc)
+        self.assert_(ta != td)
         self.assert_(ta != fake_thing)
 
         # __hash__
         self.assertEqual(hash(ta), hash(tb))
         self.assertNotEqual(hash(ta), hash(tc))
+        self.assertNotEqual(hash(ta), hash(td))
 
-        def try_to_assign():
+        def try_to_assign_title():
             ta.title = "xyzzy"
-        self.assertRaises(AttributeError, try_to_assign)
+        def try_to_assign_owner():
+            ta.owner = "xyzzy"
+        self.assertRaises(AttributeError, try_to_assign_title)
+        self.assertRaises(AttributeError, try_to_assign_owner)
         self.assertEquals(ta.title, "Dancing")
 
 
