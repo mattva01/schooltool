@@ -124,9 +124,14 @@ class ServerSettingsDlg(wxDialog):
 class RollCallDlg(wxDialog):
     """Roll call dialog."""
 
-    def __init__(self, parent, group_title, rollcall):
-        wxDialog.__init__(self, parent, -1, "Roll Call for %s" % group_title,
+    def __init__(self, parent, group_title, group_href, rollcall, client):
+        title = "Roll Call for %s" % group_title
+        wxDialog.__init__(self, parent, -1,title,
               style=wxDIALOG_MODAL|wxCAPTION|wxRESIZE_BORDER|wxTHICK_FRAME)
+        self.title = title
+        self.group_title = group_title
+        self.group_href = group_href
+        self.client = client
 
         vsizer = wxBoxSizer(wxVERTICAL)
 
@@ -219,7 +224,14 @@ class RollCallDlg(wxDialog):
                 resolve.SetFocus()
                 wxBell()
                 return
-        self.EndModal(wxID_OK)
+        rollcall = self.getRollCall()
+        try:
+            self.client.submitRollCall(self.group_href, rollcall)
+        except SchoolToolError, e:
+            wxMessageBox("Could not submit the roll call: %s" % e,
+                         self.title, wxICON_ERROR|wxOK)
+        else:
+            self.EndModal(wxID_OK)
 
     def getRollCall(self):
         """Collect the data for sending a roll call."""
@@ -234,6 +246,8 @@ class RollCallDlg(wxDialog):
                 resolved = None
             else:
                 resolved = resolve.GetValue()
+            if (presence is not None) and not presence:
+                resolved = None
             comment = comment.GetValue()
             rollcall.append((href, presence, comment, resolved))
         return rollcall
@@ -798,15 +812,9 @@ class MainFrame(wxFrame):
             self.SetStatusText(str(e))
             return
         rollcall.sort()
-        dlg = RollCallDlg(self, group_title, rollcall)
+        dlg = RollCallDlg(self, group_title, group_href, rollcall, self.client)
         if dlg.ShowModal() == wxID_OK:
-            rollcall = dlg.getRollCall()
-            try:
-                self.client.submitRollCall(group_href, rollcall)
-            except SchoolToolError, e:
-                self.SetStatusText(str(e))
-            else:
-                self.SetStatusText(self.client.status)
+            self.SetStatusText(self.client.status)
         dlg.Destroy()
 
     def DoViewPersonAbsences(self, event=None):
