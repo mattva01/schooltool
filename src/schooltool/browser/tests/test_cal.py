@@ -1865,6 +1865,30 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
             self.fail("view.isManager returns True so"
                       " _addTimetableException should get called")
 
+    def test_render_inherited_event(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.cal import InheritedCalendarEvent
+        from schooltool.browser import Unauthorized
+        from schooltool.model import Group
+
+        group = Group("A group")
+        group.__name__ = 'other'
+        ev = createEvent('2004-08-16 13:45', '5 min', 'Foo', unique_id='uniq')
+        group.calendar.addEvent(ev)
+        comp_cal = createCalendar()
+        comp_cal.addEvent(InheritedCalendarEvent(ev, group.calendar))
+        view = self.createView()
+        self.person.makeCompositeCalendar = lambda start, end: comp_cal
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'date': '2004-11-05'},
+                              method='POST')
+        content = view.render(request)
+
+        self.assert_('2004-08-16' in content)
+        self.assert_('13:45' in content)
+        self.assert_('Foo' in content)
+
     def test_edit_inherited_event(self):
         from schooltool.timetable import TimetableException
         from schooltool.cal import InheritedCalendarEvent
