@@ -43,6 +43,10 @@ from schooltool.views import parse_datetime
 __metaclass__ = type
 
 
+#
+# Client/server communication
+#
+
 class SchoolToolClient:
     """Client for the SchoolTool HTTP server.
 
@@ -138,14 +142,14 @@ class SchoolToolClient:
         """Return a list of person IDs."""
         response = self.get('/persons')
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return self._parsePeopleList(response.read())
 
     def getPersonInfo(self, person_id):
         """Return information page about a person."""
         response = self.get(person_id)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return response.read()
 
     def getGroupTree(self):
@@ -175,14 +179,14 @@ class SchoolToolClient:
         # by getting /
         response = self.get('/groups/root/tree')
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return self._parseGroupTree(response.read())
 
     def getGroupInfo(self, group_id):
         """Return information page about a group."""
         response = self.get(group_id)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         persons = self._parseMemberList(response.read())
         return GroupInfo(persons)
 
@@ -193,14 +197,14 @@ class SchoolToolClient:
         """
         response = self.get('%s/relationships' % object_id)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return self._parseRelationships(response.read())
 
     def getRollCall(self, group_id):
         """Return a roll call template for a group."""
         response = self.get('%s/rollcall' % group_id)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return self._parseRollCall(response.read())
 
     def submitRollCall(self, group_id, rollcall,
@@ -225,7 +229,7 @@ class SchoolToolClient:
         body = ''.join(body)
         response = self.post('%s/rollcall' % group_id, body)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
 
     def getAbsences(self, uri):
         """Return a list of absences for an object.
@@ -235,15 +239,31 @@ class SchoolToolClient:
         """
         response = self.get(uri)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return self._parseAbsences(response.read())
 
     def getAbsenceComments(self, absence_id):
         """Return a list of absence comments."""
         response = self.get('%s' % absence_id)
         if response.status != 200:
-            raise SchoolToolError("%d %s" % (response.status, response.reason))
+            raise ResponseStatusError(response)
         return self._parseAbsenceComments(response.read())
+
+    def createFacet(self, object_href, factory_name):
+        """Create a facet using a given factory an place it on an object."""
+        body = '<facet factory="%s"/>' % cgi.escape(factory_name, True)
+        response = self.post('%s/facets' % object_href, body)
+        if response.status != 201:
+            raise ResponseStatusError(response)
+
+        # XXX What if the server is broken and does not return a Location
+        #     header, or returns an ill-formed location header, or something
+        #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
+        #     without a trailing slash?
+        location = response.getheader('Location')
+        slashslash = location.index('//')
+        slash = location.index('/', slashslash + 2)
+        return location[slash:]
 
     # Parsing
 
@@ -566,6 +586,10 @@ class Response:
         return self.body
 
 
+#
+# Application object representation
+#
+
 class GroupInfo:
     """Information about a group."""
 
@@ -729,6 +753,20 @@ class AbsenceComment:
                     self.text)
 
 
+#
+# Exceptions
+#
+
 class SchoolToolError(Exception):
     """Communication error"""
+
+
+class ResponseStatusError(SchoolToolError):
+    """The server returned an unexpected HTTP status code."""
+
+    def __init__(self, response):
+        errmsg = "%d %s" % (response.status, response.reason)
+        SchoolToolError.__init__(self, errmsg)
+        self.status = response.status
+        self.reason = response.reason
 

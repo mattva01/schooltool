@@ -463,6 +463,23 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.getAbsenceComments, '/p')
 
+    def test_createFacet(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                    location='http://localhost/p/facets/001'))
+        result = client.createFacet('/p', 'foo"factory')
+        self.assertEquals(result, '/p/facets/001')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/p/facets')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body, '<facet factory="foo&quot;factory"/>')
+
+    def test_createFacet_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.createFacet, '/p', 'foo')
+
     def test__parsePeopleList(self):
         from schooltool.guiclient import SchoolToolClient
         client = SchoolToolClient()

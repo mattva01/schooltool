@@ -36,7 +36,8 @@ import libxml2
 import threading
 from wxPython.wx import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
-from guiclient import SchoolToolClient, SchoolToolError, Unchanged
+from guiclient import SchoolToolClient, Unchanged
+from guiclient import SchoolToolError, ResponseStatusError
 
 __metaclass__ = type
 
@@ -144,32 +145,35 @@ class RollCallDlg(wxDialog):
             grid.Add(wxStaticText(scrolled_panel, -1, presence),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
             radio_sizer = wxBoxSizer(wxVERTICAL)
-            abutton0 = wxRadioButton(scrolled_panel, -1, "Unset",
-                                     style=wxRB_GROUP)
-            abutton0.Hide()
-            abutton2 = wxRadioButton(scrolled_panel, -1, "Present")
-            abutton1 = wxRadioButton(scrolled_panel, -1, "Absent")
+            unknown_btn = wxRadioButton(scrolled_panel, -1, "Unset",
+                                        style=wxRB_GROUP)
+            unknown_btn.Hide()
+            present_btn = wxRadioButton(scrolled_panel, -1, "Present")
+            absent_btn = wxRadioButton(scrolled_panel, -1, "Absent")
             if was_absent:
-                EVT_RADIOBUTTON(self, abutton1.GetId(), self.OnPresenceChanged)
-                EVT_RADIOBUTTON(self, abutton2.GetId(), self.OnPresenceChanged)
-            radio_sizer.Add(abutton2)
-            radio_sizer.Add(abutton1)
+                EVT_RADIOBUTTON(self, absent_btn.GetId(),
+                                self.OnPresenceChanged)
+                EVT_RADIOBUTTON(self, present_btn.GetId(),
+                                self.OnPresenceChanged)
+            radio_sizer.Add(present_btn)
+            radio_sizer.Add(absent_btn)
             grid.Add(radio_sizer)
             text_ctrl = wxTextCtrl(scrolled_panel, -1, style=wxTE_MULTILINE)
             grid.Add(text_ctrl, 1, wxEXPAND)
             radio_sizer = wxBoxSizer(wxVERTICAL)
-            rbutton0 = wxRadioButton(scrolled_panel, -1, "Unset",
-                                     style=wxRB_GROUP)
-            rbutton0.Hide()
-            rbutton1 = wxRadioButton(scrolled_panel, -1, "Resolve")
-            rbutton2 = wxRadioButton(scrolled_panel, -1, "Do not resolve")
-            rbutton1.Disable()
-            rbutton2.Disable()
-            radio_sizer.Add(rbutton1)
-            radio_sizer.Add(rbutton2)
+            undecided_btn = wxRadioButton(scrolled_panel, -1, "Unset",
+                                          style=wxRB_GROUP)
+            undecided_btn.Hide()
+            resolve_btn = wxRadioButton(scrolled_panel, -1, "Resolve")
+            dont_resolve_btn = wxRadioButton(scrolled_panel, -1,
+                                             "Do not resolve")
+            resolve_btn.Disable()
+            dont_resolve_btn.Disable()
+            radio_sizer.Add(resolve_btn)
+            radio_sizer.Add(dont_resolve_btn)
             grid.Add(radio_sizer)
-            self.items.append((href, was_absent, abutton1, abutton2, text_ctrl,
-                               rbutton1, rbutton2))
+            self.items.append((href, was_absent, absent_btn, present_btn,
+                               text_ctrl, resolve_btn, dont_resolve_btn))
         scrolled_panel.SetSizer(grid)
         scrolled_panel.SetupScrolling(scroll_x=False)
         grid.AddGrowableCol(3)
@@ -207,7 +211,7 @@ class RollCallDlg(wxDialog):
         for (href, was_absent, absent, present, comment,
              resolve, dontresolve) in self.items:
             if absent.GetValue() == present.GetValue():
-                absent.SetFocus()
+                present.SetFocus()
                 wxBell()
                 return
             if (present.GetValue() and was_absent
@@ -238,8 +242,8 @@ class RollCallDlg(wxDialog):
 class AbsenceFrame(wxFrame):
     """Window showing the list of person's absences."""
 
-    def __init__(self, client, person_id, title, parent=None, id=-1,
-                 detailed=True, persons=True):
+    def __init__(self, client, href, title, parent=None, id=-1,
+                 detailed=True, persons=True, absence_data=None):
         """Create an absence list window.
 
         Two arguments influence the contents of the absence list:
@@ -254,7 +258,7 @@ class AbsenceFrame(wxFrame):
         wxFrame.__init__(self, parent, id, title, size=wxSize(600, 400))
         self.client = client
         self.title = title
-        self.person_id = person_id
+        self.href = href
         self.absence_data = []
         self.persons = persons
         self.detailed = detailed
@@ -314,24 +318,27 @@ class AbsenceFrame(wxFrame):
         self.SetSizeHints(minW=200, minH=200)
         self.Layout()
 
-        self.DoRefresh()
+        self.DoRefresh(data=absence_data)
 
     def OnClose(self, event=None):
         """Close the absence window."""
         self.Close(True)
 
-    def DoRefresh(self, event=None):
+    def DoRefresh(self, event=None, data=None):
         """Refresh the absence list."""
         self.absence_list.DeleteAllItems()
         self.absence_data = []
         self.comment_list.DeleteAllItems()
         self.comment_data = []
-        try:
-            self.absence_data = self.client.getAbsences(self.person_id)
-        except SchoolToolError, e:
-            wxMessageBox("Could not get list of absences: %s" % e, self.title,
-                         wxICON_ERROR|wxOK)
-            return
+        if data is not None:
+            self.absence_data = data
+        else:
+            try:
+                self.absence_data = self.client.getAbsences(self.href)
+            except SchoolToolError, e:
+                wxMessageBox("Could not get the list of absences: %s" % e,
+                             self.title, wxICON_ERROR|wxOK)
+                return
         if self.detailed:
             # sort newest absences first
             self.absence_data.sort()
@@ -510,9 +517,9 @@ class MainFrame(wxFrame):
         EVT_TREE_SEL_CHANGED(self, ID_GROUP_TREE, self.DoSelectGroup)
         self.treePopupMenu = popupmenu(
                 item("Roll &Call", "Do a roll call", self.DoRollCall),
-##              item("&Absence Tracker",
-##                   "Inspect the absence tracker for this group",
-##                   self.DoGroupAbsenceTracker),
+                item("&Absence Tracker",
+                     "Inspect the absence tracker for this group",
+                     self.DoGroupAbsenceTracker),
                 separator(),
                 item("&Refresh", "Refresh", self.DoRefresh)
             )
@@ -837,7 +844,35 @@ class MainFrame(wxFrame):
             self.SetStatusText("No group selected")
             return
         group_href = self.groupTreeCtrl.GetPyData(item)[0]
-        # XXX: TODO
+        group_title = self.groupTreeCtrl.GetItemText(item)
+        href = "%s/facets/absences" % group_href
+        title = "Absences of %s" % group_title
+        try:
+            try:
+                absence_data = self.client.getAbsences(href)
+            except ResponseStatusError, e:
+                if e.status != 404:
+                    raise
+                if wxMessageBox("Do you want to create a new absence"
+                                " tracker facet and put it on %s?"
+                                % group_title, title, wxYES_NO) != wxYES:
+                    return
+                try:
+                    self.client.createFacet(group_href, 'absence_tracker')
+                except SchoolToolError, e:
+                    wxMessageBox("Could not create an absence tracker: %s" % e,
+                                 title, wxICON_ERROR|wxOK)
+                    return
+                else:
+                    absence_data = self.client.getAbsences(href)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the list of absences: %s" % e,
+                         title, wxICON_ERROR|wxOK)
+            return
+        window = AbsenceFrame(parent=self, title=title, detailed=False,
+                              client=self.client, href=href,
+                              absence_data=absence_data)
+        window.Show()
 
 
 class SchoolToolApp(wxApp):
