@@ -22,7 +22,6 @@ SchoolTool package URI definitions
 $Id$
 """
 
-import re
 from zope.interface import moduleProvides, implements
 from schooltool.common import looks_like_a_uri
 from schooltool.interfaces import IModuleSetup, ComponentLookupError

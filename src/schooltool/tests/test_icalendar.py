@@ -27,7 +27,7 @@ from pprint import pformat
 from datetime import date, timedelta, datetime
 from StringIO import StringIO
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.tests.helpers import diff, dedent, sorted
+from schooltool.tests.helpers import diff, dedent
 
 
 class TestPeriod(unittest.TestCase):

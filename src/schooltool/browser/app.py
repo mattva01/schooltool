@@ -30,7 +30,6 @@ from schooltool.browser import ToplevelBreadcrumbsMixin
 from schooltool.browser import ContainerBreadcrumbsMixin
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
-from schooltool.browser import notFoundPage
 from schooltool.browser import session_time_limit
 from schooltool.browser import valid_name
 from schooltool.browser.applog import ApplicationLogView

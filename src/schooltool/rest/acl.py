@@ -28,9 +28,7 @@ from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest.auth import SystemAccess
 from schooltool.rest.xmlparsing import XMLDocument, XMLError
-from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
-from schooltool.common import to_unicode
 
 __metaclass__ = type
 

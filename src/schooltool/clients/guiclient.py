@@ -32,7 +32,6 @@ import urllib
 import base64
 import cgi
 
-from schooltool.interfaces import ComponentLookupError
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
 from schooltool.common import looks_like_a_uri

@@ -27,7 +27,7 @@ import datetime
 from logging import INFO
 from sets import Set
 
-from zope.interface import implements, directlyProvides
+from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.interfaces import ITraversable

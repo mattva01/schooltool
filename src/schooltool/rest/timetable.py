@@ -37,14 +37,13 @@ from schooltool.rest.xmlparsing import XMLParseError, XMLValidationError
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
-from schooltool.common import UnicodeAwareException, to_unicode
+from schooltool.common import UnicodeAwareException
 from schooltool.common import parse_date, parse_time
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, traverse, getPath
 from schooltool.component import getRelatedObjects
 from schooltool.component import getTimetableModel
-from schooltool.schema.rng import validate_against_schema
 from schooltool.uris import URIMember, URITaught
 from schooltool.cal import SchooldayModel
 from schooltool.translation import ugettext as _
