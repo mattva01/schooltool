@@ -57,7 +57,7 @@ CalendarICalendarView can export calendars in iCalendar format
      'END:VEVENT\r\n',
      'END:VCALENDAR\r\n']
 
-     The last line mkust end in '\r\n' see RFC 2445 4.4.
+     The last line must end in '\r\n' see RFC 2445 4.4.
 
 Register the iCalendar read view in ZCML as
 

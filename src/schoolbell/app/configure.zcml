@@ -76,6 +76,29 @@
              />
   </content>
 
+  <content class="schoolbell.calendar.recurrent.DailyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IDailyRecurrenceRule" />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.WeeklyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IWeeklyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.MonthlyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IMonthlyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.YearlyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IYearlyRecurrenceRule"
+             />
+  </content>
+
   <content class="schoolbell.app.cal.ImmutableCalendar">
     <require permission="zope.View"
              interface="schoolbell.calendar.interfaces.ICalendar" />

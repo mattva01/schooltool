@@ -27,35 +27,34 @@ import urllib
 import calendar
 import sys
 
+from zope.app.form.browser.add import AddView
+from zope.app.form.interfaces import ConversionError
+from zope.app.form.interfaces import IWidgetInputError
+from zope.app.form.interfaces import WidgetInputError, WidgetsError
+from zope.app.form.utility import getWidgetsData
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.app.publisher.browser import BrowserView
+from zope.app.traversing.browser.absoluteurl import absoluteURL
+from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
+from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.interfaces import NotFound
 from zope.schema import Date, TextLine, Choice, Int, Bool, Set, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
-from zope.app.form.interfaces import ConversionError
-from zope.component import queryView, queryMultiAdapter, adapts
-from zope.app.form.interfaces import WidgetInputError, WidgetsError
-from zope.app.form.interfaces import IWidgetInputError
-from zope.publisher.interfaces import NotFound
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.app.publisher.browser import BrowserView
-from zope.app.form.browser.add import AddView
-from zope.app.form.utility import getWidgetsData
-from zope.app.traversing.browser.absoluteurl import absoluteURL
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.cal import CalendarEvent
+from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
-from schoolbell.calendar.utils import week_start, prev_month, next_month
-from schoolbell.calendar.utils import parse_date
-from schoolbell.app.interfaces import ICalendarOwner, IContainedCalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
-from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
-from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
+from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import parse_time, weeknum_bounds
-
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from schoolbell.calendar.utils import week_start, prev_month, next_month
+from schoolbell import SchoolBellMessageID as _
 
 
 class CalendarOwnerTraverser(object):
@@ -71,6 +70,11 @@ class CalendarOwnerTraverser(object):
     def publishTraverse(self, request, name):
         if name == 'calendar':
             return self.context.calendar
+        elif name == 'calendar.ics':
+            calendar = self.context.calendar
+            view = queryMultiAdapter((calendar, request), name=name)
+            assert view, 'Could not find iCalendar view for calendar!'
+            return view
 
         view = queryMultiAdapter((self.context, request), name=name)
         if view is not None:

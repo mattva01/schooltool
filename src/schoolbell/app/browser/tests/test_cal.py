@@ -29,6 +29,7 @@ from zope.publisher.browser import TestRequest
 from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
 from zope.app.tests import setup, ztapi
+from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
 
 # Used in defining TestCalendarEventView
@@ -73,9 +74,18 @@ def doctest_CalendarOwnerTraverser():
         >>> traverser.publishTraverse(request, 'calendar') is person.calendar
         True
 
+    We can also get the calendar as iCalendar:
+
+        >>> from schoolbell.app.interfaces import ICalendar
+        >>> ztapi.browserView(ICalendar, 'calendar.ics', BrowserView)
+        >>> view = traverser.publishTraverse(request, 'calendar.ics')
+        >>> view.context is traverser.context.calendar
+        True
+        >>> view.request is traverser.request
+        True
+
     However, we should be able to access other views of the object:
 
-        >>> from zope.app.publisher.browser import BrowserView
         >>> from schoolbell.app.interfaces import IPerson
         >>> ztapi.browserView(IPerson, 'some_view.html', BrowserView)
 
