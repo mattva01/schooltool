@@ -606,7 +606,6 @@ class TestTimetableSchemaView(TestTimetableReadView):
         </html>
         """
 
-
     def createView(self, context, service=None, key='weekly'):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.views.timetable import TimetableSchemaView

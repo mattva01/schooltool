@@ -877,9 +877,7 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEqual(result, tt)
 
     def test_paths(self):
-        from schooltool.interfaces import IContainmentRoot
         from schooltool.component import getPath
-        from zope.interface import directlyProvides
 
         tm = TimetabledStub(self.eventService)
         tm.__name__ = 'stub'
