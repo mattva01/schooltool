@@ -25,6 +25,7 @@ $Id: test_views.py 397 2003-11-21 11:38:01Z mg $
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
+from schooltool.tests.utils import QuietLibxml2Mixin
 from schooltool.views.tests import RequestStub, UtilityStub, XPathTestContext
 
 
@@ -146,13 +147,14 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
 
 class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
-                              unittest.TestCase):
+                              QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views.app import ApplicationObjectContainerView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool import membership, views
+        self.setUpLibxml2()
         self.setUpRegistries()
         membership.setUp()
         views.setUp()
@@ -166,9 +168,8 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.view.authorization = lambda ctx, rq: True
 
     def tearDown(self):
-        from schooltool.component import resetViewRegistry
-        resetViewRegistry()
-        RegistriesSetupMixin.tearDown(self)
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
 
     def test_render(self):
         request = RequestStub("http://localhost/groups")

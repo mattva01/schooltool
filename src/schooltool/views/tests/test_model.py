@@ -210,6 +210,10 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, QuietLibxml2Mixin,
 
         self.setUpLibxml2()
 
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
+
     def test(self):
         from schooltool.views.model import TreeView
         view = TreeView(self.group)

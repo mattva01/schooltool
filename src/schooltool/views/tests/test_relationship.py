@@ -58,6 +58,10 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.view.authorization = lambda ctx, rq: True
         self.setUpLibxml2()
 
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
+
     def test_listLinks(self):
         from pprint import pformat
         request = RequestStub("http://localhost/groups/sub/relationships/")

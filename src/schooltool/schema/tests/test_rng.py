@@ -29,6 +29,12 @@ from schooltool.tests.utils import QuietLibxml2Mixin
 
 class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):
 
+    def setUp(self):
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+
     def test_validate_against_schema(self):
         from schooltool.schema.rng import validate_against_schema
         schema = '''<?xml version="1.0" encoding="UTF-8"?>

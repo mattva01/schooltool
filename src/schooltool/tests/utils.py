@@ -22,6 +22,7 @@ Common utilities (stubs, mixins) for schooltool unit tests.
 $Id$
 """
 
+import sys
 import unittest
 from pprint import pformat
 from zope.interface import implements
@@ -187,4 +188,11 @@ class QuietLibxml2Mixin:
         import libxml2
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
-    setUp = setUpLibxml2
+    def tearDownLibxml2(self):
+        import libxml2
+        # It's not possible to restore the error handler that was installed
+        # before (libxml2 API limitation), so we set up a generic one that
+        # prints everything to stdout.
+        def on_error_callback(ctx, msg):
+            sys.stderr.write(msg)
+        libxml2.registerErrorHandler(on_error_callback, None)

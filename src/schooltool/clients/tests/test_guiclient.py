@@ -121,6 +121,10 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         import schooltool.uris
         schooltool.uris.setUp()
 
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
+
     def newClient(self, response=None, error=None):
         from schooltool.clients.guiclient import SchoolToolClient
         client = SchoolToolClient()
@@ -1030,6 +1034,10 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         import schooltool.uris
         schooltool.uris.setUp()
 
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
+
     def test__parseContainer(self):
         from schooltool.clients.guiclient import _parseContainer
         body = dedent("""
@@ -1839,7 +1847,14 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
                           'in %s', '%s ago'), '2h15m ago')
 
 
-class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
+class TestSchoolTimetableInfo(NiceDiffsMixin, QuietLibxml2Mixin,
+                              unittest.TestCase):
+
+    def setUp(self):
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
 
     def test_loadData(self):
         from schooltool.clients.guiclient import SchoolTimetableInfo

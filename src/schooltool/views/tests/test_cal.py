@@ -84,6 +84,9 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         self.view.authorization = lambda ctx, rq: True
         self.setUpLibxml2()
 
+    def tearDown(self):
+        self.tearDownLibxml2()
+
     def test_get_empty(self):
         self.do_test_get(dedent("""
             BEGIN:VCALENDAR
@@ -636,7 +639,8 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
         self.assertEquals(len(list(self.resource.calendar)), 0)
 
 
-class TestBookingView(RegistriesSetupMixin, unittest.TestCase):
+class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
+                      unittest.TestCase):
 
     def setUp(self):
         from schooltool.views.cal import BookingView
@@ -644,6 +648,7 @@ class TestBookingView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.model import Group, Person, Resource
         from schooltool.membership import Membership
         import schooltool.membership
+        self.setUpLibxml2()
         self.setUpRegistries()
         schooltool.membership.setUp()
         app = Application()
@@ -657,6 +662,10 @@ class TestBookingView(RegistriesSetupMixin, unittest.TestCase):
         Membership(member=self.manager, group=self.managers)
         self.view = BookingView(self.resource)
         self.view.authorization = lambda ctx, rq: True
+
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
 
     def test(self):
         xml = """

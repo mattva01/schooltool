@@ -130,6 +130,10 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.setUpRegistries()
         self.setUpLibxml2()
 
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
+
     def test_traverse(self):
         from schooltool.views import View
         from schooltool.views.facet import FacetManagementView

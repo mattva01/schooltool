@@ -42,6 +42,12 @@ class AbsenceTrackerStub:
 
 class TestAbsenceCommentParser(QuietLibxml2Mixin, unittest.TestCase):
 
+    def setUp(self):
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+
     def test_parseComment(self):
         from schooltool.interfaces import Unchanged
         from schooltool.views.absence import AbsenceCommentParser
@@ -415,6 +421,10 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         Membership(group=self.sub2, member=self.personb)
 
         Membership(group=self.managers, member=self.manager)
+
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
 
     def test_get(self):
         from schooltool.views.absence import RollCallView

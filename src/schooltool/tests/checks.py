@@ -149,6 +149,12 @@ class LibxmlChecks:
                  % (test, mem - self.last_mem, mem))
         self.last_mem = mem
 
+        # make libxml2 noisy, just in case someone used QuietLibxml2Mixin and
+        # forgot to call tearDownLibxml2
+        def on_error_callback(ctx, msg):
+            sys.stderr.write(msg)
+        libxml2.registerErrorHandler(on_error_callback, None)
+
 
 def test_hooks():
     return [

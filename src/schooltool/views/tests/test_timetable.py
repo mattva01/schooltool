@@ -555,6 +555,9 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.setUpLibxml2()
         self.root = ServiceManagerStub(self.createEmpty())
 
+    def tearDown(self):
+        self.tearDownLibxml2()
+
     def createTimetabled(self):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.timetable import TimePeriodService
@@ -694,7 +697,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.code, 404)
 
 
-class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
+class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
+                              TestTimetableReadView):
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -919,6 +923,15 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         </timetable>
         """
 
+    def setUp(self):
+        TestTimetableReadView.setUp(self)
+        self.setUpRegistries()
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+        self.tearDownRegistries()
+
     def createView(self, context, service=None, key='weekly'):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.views.timetable import TimetableSchemaView
@@ -1112,7 +1125,7 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
 
 
 class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
-                              unittest.TestCase):
+                              QuietLibxml2Mixin, unittest.TestCase):
 
     example_xml = """
         <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1"
@@ -1167,6 +1180,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool import membership
         from schooltool import relationship
         from schooltool.timetable import Timetable, TimetableDay
+        self.setUpLibxml2()
         self.setUpRegistries()
         membership.setUp()
         relationship.setUp()
@@ -1207,6 +1221,10 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         tt["A"] = TimetableDay(("Green", "Blue"))
         tt["B"] = TimetableDay(("Red", "Yellow"))
         service[self.key[1]] = tt
+
+    def tearDown(self):
+        self.tearDownRegistries()
+        self.tearDownLibxml2()
 
     def testEmpty(self):
         request = RequestStub()
