@@ -76,3 +76,8 @@ def diff(old, new, oldlabel="expected output", newlabel="actual output"):
             raise AssertionError('unknown tag %r' % tag)
     return "\n".join(diff)
 
+
+def sorted(l):
+    l = list(l) # make a copy
+    l.sort()
+    return l

@@ -24,7 +24,7 @@ $Id$
 from persistence import Persistent
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
-from schooltool.db import PersistentKeysSet
+from schooltool.db import PersistentKeysSet, PersistentPairKeysDict
 from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
 from schooltool.interfaces import IRelationshipSchemaFactory
 from schooltool.interfaces import IRelationshipSchema
@@ -207,12 +207,44 @@ def defaultRelate(reltype, (a, role_of_a), (b, role_of_b), title=None):
     return links
 
 
-class RelatableMixin:
+class LinkSet:
+    """Set of links."""
+
+    def __init__(self):
+        self._data = PersistentPairKeysDict()
+
+    def add(self, link):
+        """Add a link to the set.
+
+        If an equivalent link (with the same reltype, role and target)
+        already exists in the set, raises a ValueError.
+        """
+        key = (link.traverse(), (link.reltype, link.role))
+        if key in self._data:
+            raise ValueError('duplicate link', link)
+        self._data[key] = link
+
+    def remove(self, link):
+        """Remove a link from the set.
+
+        If an equivalent link does not exist in the set, raises a ValueError.
+        """
+        key = (link.traverse(), (link.reltype, link.role))
+        try:
+            del self._data[key]
+        except KeyError:
+            raise ValueError('link not in set', link)
+
+    def __iter__(self):
+        return self._data.itervalues()
+
+
+class RelatableMixin(Persistent):
 
     implements(IRelatable, IQueryLinks)
 
     def __init__(self):
-        self.__links__ = PersistentKeysSet()
+        self.__links__ = LinkSet()
 
     def listLinks(self, role=ISpecificURI):
         result = []

@@ -226,7 +226,11 @@ class ILink(Interface):
     __parent__ = Attribute("The object at this end of the relationship")
 
     def traverse():
-        """Returns the object at the other end of the relationship."""
+        """Returns the object at the other end of the relationship.
+
+        The object returned by traversing a link is known as the link's
+        target.
+        """
 
 
 class IRemovableLink(ILink):
@@ -256,11 +260,40 @@ class IUnlinkHook(Interface):
         """The given link was unlinked."""
 
 
+class ILinkSet(Interface):
+    """A set of links.
+
+    Raises ValueError on an attempt to add duplicate members.
+
+    Links with the same reltype, role and target are considered to be
+    equal, for purposes of set membership.
+
+    So, a link is a duplicate member if it has the same reltype, role and
+    target as an existing member.
+    """
+
+    def add(link):
+        """Add a link to the set.
+
+        If an equivalent link (with the same reltype, role and target)
+        already exists in the set, raises a ValueError.
+        """
+
+    def remove(link):
+        """Remove a link from the set.
+
+        If an equivalent link does not exist in the set, raises a ValueError.
+        """
+
+    def __iter__():
+        """Return an iterator over the set."""
+
+
 class IRelatable(Interface):
     """An object which can take part in relationships."""
 
     __links__ = Attribute(
-        """A set of links of relationships.""")
+        """An object implementing ILinkSet.""")
 
 
 class IQueryLinks(Interface):

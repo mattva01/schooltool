@@ -27,6 +27,7 @@ from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import ISpecificURI, IRelatable, ILink
 from schooltool.component import inspectSpecificURI
+from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 
@@ -274,6 +275,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
 
         return a, b, links
 
+
 class TestRelatableMixin(unittest.TestCase):
 
     def test(self):
@@ -287,6 +289,12 @@ class TestRelatableMixin(unittest.TestCase):
         verifyObject(IRelatable, a)
 
         _relate(URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
+
+        # no duplicate relationships
+        self.assertRaises(ValueError,
+            _relate, URIClassTutor, (a, URIClassTutor), (b, URIRegClass))
+        self.assertRaises(ValueError,
+            _relate, URIClassTutor, (b, URIRegClass), (a, URIClassTutor))
 
         self.assert_(a.listLinks(URIRegClass)[0].traverse() is b)
         self.assert_(b.listLinks(URIClassTutor)[0].traverse() is a)
@@ -313,6 +321,34 @@ class TestRelatableMixin(unittest.TestCase):
         self.assertEqual(a.listLinks(URIJanitor), [j])
         self.assertEqual(a.listLinks(URIWindowWasher), [])
 
+
+class LinkStub:
+    def __init__(self, reltype, role, target):
+        self.reltype = reltype
+        self.role = role
+        self._target = target
+
+    def traverse(self):
+        return self._target
+
+class TestLinkSet(unittest.TestCase):
+
+    def test(self):
+        from persistence import Persistent
+        from schooltool.relationship import LinkSet
+        s = LinkSet()
+        a = LinkStub(object(), object(), Persistent())
+        b = LinkStub(object(), object(), Persistent())
+        s.add(a)
+        s.add(b)
+        self.assertRaises(ValueError, s.add, a)
+        self.assertEquals(sorted([a, b]), sorted(s))
+
+        s.remove(a)
+        self.assertRaises(ValueError, s.remove, a)
+        self.assertEquals(sorted([b]), sorted(s))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestRelationship))
@@ -320,4 +356,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEvents))
     suite.addTest(unittest.makeSuite(TestRelate))
     suite.addTest(unittest.makeSuite(TestRelatableMixin))
+    suite.addTest(unittest.makeSuite(TestLinkSet))
     return suite
