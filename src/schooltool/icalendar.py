@@ -323,11 +323,32 @@ def _parse_recurrence_monthly(args):
     """Parse iCalendar monthly recurrence rule.
 
     args is a mapping from attribute names in RRULE to their string values.
+
+    Month-day recurrency is the default:
+
+    >>> _parse_recurrence_monthly({})
+    MonthlyRecurrenceRule(1, None, None, (), 'monthday')
+
+    3rd Tuesday in a month:
+
+    >>> _parse_recurrence_monthly({'BYDAY': '3TU'})
+    MonthlyRecurrenceRule(1, None, None, (), 'weekday')
+
+    Last Wednesday:
+
+    >>> _parse_recurrence_monthly({'BYDAY': '-1WE'})
+    MonthlyRecurrenceRule(1, None, None, (), 'lastweekday')
     """
     # XXX Circular import!
     from schooltool.cal import MonthlyRecurrenceRule
-    # XXX TODO
-    return MonthlyRecurrenceRule()
+    if 'BYDAY' in args:
+        if args['BYDAY'][0] == '-':
+            monthly = 'lastweekday'
+        else:
+            monthly = 'weekday'
+    else:
+        monthly = 'monthday'
+    return MonthlyRecurrenceRule(monthly=monthly)
 
 
 def parse_recurrence_rule(args, exdate=None):
