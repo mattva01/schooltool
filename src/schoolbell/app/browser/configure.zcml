@@ -21,27 +21,20 @@
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       menu="zmi_views" title="View" action="index.html" />
 
+<!-- PersonContainer, Person configuration -->
 
   <containerViews
       for="schoolbell.app.interfaces.IPersonContainer"
-      index="zope.View"
       contents="zope.ManageContent"
       add="zope.View"
       />
 
-  <containerViews
-      for="schoolbell.app.interfaces.IGroupContainer"
-      index="zope.View"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
-
-  <containerViews
-      for="schoolbell.app.interfaces.IResourceContainer"
-      index="zope.View"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.IPersonContainer"
+      class="schoolbell.app.browser.app.PersonContainerView"
+      template="container.pt"
+      permission="zope.View" />
 
   <addform
       label="Add a Person"
@@ -59,7 +52,22 @@
       view="addSchoolBellPerson.html"
       />
 
- <addform
+<!-- GroupContainer, Group configuration -->
+
+  <containerViews
+      for="schoolbell.app.interfaces.IGroupContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.IGroupContainer"
+      class="schoolbell.app.browser.app.GroupContainerView"
+      template="container.pt"
+      permission="zope.View" />
+
+  <addform
       label="Add a Group"
       name="addSchoolBellGroup.html"
       schema="schoolbell.app.interfaces.IGroup"
@@ -75,7 +83,22 @@
       view="addSchoolBellGroup.html"
       />
 
- <addform
+<!-- ResourceContainer, Resource configuration -->
+
+  <containerViews
+      for="schoolbell.app.interfaces.IResourceContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.IResourceContainer"
+      class="schoolbell.app.browser.app.ResourceContainerView"
+      template="container.pt"
+      permission="zope.View" />
+
+  <addform
       label="Add a Resource"
       name="addSchoolBellResource.html"
       schema="schoolbell.app.interfaces.IResource"
@@ -90,6 +113,8 @@
       permission="zope.ManageContent"
       view="addSchoolBellResource.html"
       />
+
+<!-- Skin and resources -->
 
   <zope:subscriber
       factory=".skin.schoolBellTraverseSubscriber"

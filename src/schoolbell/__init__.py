@@ -54,3 +54,6 @@ Things that are not currently supported:
   supported by SchoolBell.
 
 """
+
+from zope.i18n import MessageIDFactory
+SchoolBellMessageID = MessageIDFactory("schoolbell")

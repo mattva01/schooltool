@@ -79,7 +79,7 @@ class Person(Persistent, Contained):
 
     implements(IPersonContained)
 
-    display_name = None
+    title = None
     first_name = None
     last_name = None
     date_of_birth = None
