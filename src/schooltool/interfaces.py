@@ -829,6 +829,14 @@ class ISchooldayModelWrite(Interface):
         0 is Monday, 1 is Tuesday, etc.
         """
 
+    def toggleWeekdays(*weekdays):
+        """Toggle the state of all days of week with a number in weekdays.
+
+        The numbering used is the same as one used by
+        datetime.date.weekday() method, or the calendar module.
+        0 is Monday, 1 is Tuesday, etc.
+        """
+
     def reset(first, last):
         """Change the period and mark all days as holidays.
 

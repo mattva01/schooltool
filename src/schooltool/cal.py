@@ -108,6 +108,14 @@ class SchooldayModel(DateRange, Persistent):
             if date.weekday() in weekdays and self.isSchoolday(date):
                 self.remove(date)
 
+    def toggleWeekdays(self, *weekdays):
+        for date in self:
+            if date.weekday() in weekdays:
+                if self.isSchoolday(date):
+                    self.remove(date)
+                else:
+                    self.add(date)
+
     def reset(self, first, last):
         if last < first:
             # import timemachine

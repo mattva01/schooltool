@@ -2,15 +2,19 @@
 <head>
   <title metal:fill-slot="title" i18n:translate="">New time period</title>
   <script type="text/javascript" metal:fill-slot="extrahead">
-    function toggle(idx) {
+    function update(idx) {
         var checkbox = document.getElementById('c' + idx);
         var cell = document.getElementById('td' + idx);
-        checkbox.checked = !checkbox.checked;
         if (checkbox.checked) {
             cell.className = "holiday";
         } else {
             cell.className = "schoolday";
         }
+    }
+    function toggle(idx) {
+        var checkbox = document.getElementById('c' + idx);
+        checkbox.checked = !checkbox.checked;
+        update(idx);
     }
     function hide_checkboxes() {
         var inputs = document.getElementsByTagName('input');
@@ -77,6 +81,24 @@ Second, please specify which days are school days, and which days are holidays.
     </tr>
   </table>
 
+  <p>
+    <span i18n:translate="">Toggle the following days of week: </span>
+    <input class="button" type="submit" name="TOGGLE_0" value="Monday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_1" value="Tuesday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_2" value="Wednesday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_3" value="Thursday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_4" value="Friday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_5" value="Saturday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_6" value="Sunday"
+           i18n:attributes="value" />
+  </p>
+
   <p>Click on a day to toggle its state.</p>
 
   <table class="schooldaymodel" tal:repeat="month calendar">
@@ -98,12 +120,13 @@ Second, please specify which days are school days, and which days are holidays.
       <td tal:repeat="day week/days"
           tal:attributes="class day/class;
                           id python:day['index'] and 'td%d' % day['index'];
-                          onClick day/onClick">
+                          onclick day/onclick">
         <label tal:condition="day/number">
           <span tal:replace="day/number">N</span>
           <input type="checkbox" name="holiday"
                  tal:attributes="value day/date; checked day/checked;
-                                 id string:c${day/index}" />
+                           onchange string:javascript:update(${day/index});
+                           id string:c${day/index};" />
         </label>
       </td>
     </tr>

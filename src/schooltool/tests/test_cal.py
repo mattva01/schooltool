@@ -98,6 +98,12 @@ class TestSchooldayModel(unittest.TestCase):
             self.assert_(cal.isSchoolday(date(2003, 9, day)))
             self.assert_(cal.isSchoolday(date(2003, 9, day+1)))
 
+        cal.toggleWeekdays(calendar.TUESDAY, calendar.WEDNESDAY)
+        for day in 1, 8, 15:
+            self.assert_(cal.isSchoolday(date(2003, 9, day)))
+            self.assert_(not cal.isSchoolday(date(2003, 9, day+1)))
+            self.assert_(cal.isSchoolday(date(2003, 9, day+2)))
+
     def test_contains(self):
         from schooltool.cal import SchooldayModel
         cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 16))

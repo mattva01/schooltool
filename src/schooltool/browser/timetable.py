@@ -363,11 +363,14 @@ class NewTimePeriodView(View):
             return None
         model = SchooldayModel(first, last)
         model.addWeekdays(0, 1, 2, 3, 4, 5, 6)
-        for holiday in self.request.args.get('holiday', []):
+        for holiday in request.args.get('holiday', []):
             try:
                 model.remove(parse_date(holiday))
             except ValueError:
                 continue
+        toggle = [n for n in range(7) if ('TOGGLE_%d' % n) in request.args]
+        if toggle:
+            model.toggleWeekdays(*toggle)
         return model
 
     def calendar(self):
@@ -399,13 +402,13 @@ class NewTimePeriodView(View):
                             css_class = 'schoolday'
                         days.append({'number': day.day, 'class': css_class,
                                      'date': day.strftime('%Y-%m-%d'),
-                                     'onClick': 'javascript:toggle(%d)'%index,
+                                     'onclick': 'javascript:toggle(%d)'%index,
                                      'index': index,
                                      'checked': checked})
                     else:
                         days.append({'number': None, 'class': None,
                                      'date': None, 'checked': None,
-                                     'index': None, 'onClick': None})
+                                     'index': None, 'onclick': None})
                     day += datetime.timedelta(1)
                 weeks.append({'title': week_title,
                               'days': days})

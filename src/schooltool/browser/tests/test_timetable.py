@@ -711,6 +711,25 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assert_(model.isSchoolday(datetime.date(2004, 9, 8)))
         self.assert_(not model.isSchoolday(datetime.date(2004, 9, 12)))
 
+    def test_buildModel_toggle(self):
+        view = self.createView()
+        request = view.request
+        request.args['start'] = ['2004-09-01']
+        request.args['end'] = ['2004-09-30']
+        request.args['holiday'] = ['2004-09-07', '2004-09-12', 'ignore errors']
+        request.args['TOGGLE_0'] = ['Toggle']
+        request.args['TOGGLE_6'] = ['Toggle']
+        view.start_widget.update(request)
+        view.end_widget.update(request)
+        model = view._buildModel(request)
+        self.assertEquals(model.first, datetime.date(2004, 9, 1))
+        self.assertEquals(model.last, datetime.date(2004, 9, 30))
+        self.assert_(not model.isSchoolday(datetime.date(2004, 9, 6)))
+        self.assert_(not model.isSchoolday(datetime.date(2004, 9, 7)))
+        self.assert_(model.isSchoolday(datetime.date(2004, 9, 8)))
+        self.assert_(model.isSchoolday(datetime.date(2004, 9, 12)))
+        self.assert_(not model.isSchoolday(datetime.date(2004, 9, 27)))
+
     def test_calendar(self):
         self.checkCalendar(2004, 8, 1, 2004, 8, 31, """
                 *                        August 2004
