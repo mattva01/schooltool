@@ -171,6 +171,13 @@ exception
       ...
     NoSuchRelationship
 
+If you have a relationship schema, you can call its `unlink` method, as
+a shortcut for the full unrelate call.
+
+    >>> Membership.unlink(member=lilfroggy, group=frogs)
+    >>> getRelatedObjects(frogs, URIMember)
+    []
+
 
 Relationship properties
 -----------------------

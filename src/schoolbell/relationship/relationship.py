@@ -156,13 +156,15 @@ class RelationshipSchema(object):
         >>> Membership = RelationshipSchema(URIMembership,
         ...                     member=URIMember, group=URIGroup)
 
-    Then you can create relationships by writing
+    Then you can create and break relationships by writing
 
         >>> Membership(member=a, group=b)
+        >>> Membership.unlink(member=a, group=b)
 
     instead of having to explicitly say
 
-        relate(URIMembership, (a, URIMember), (b, URIGroup))
+        >>> relate(URIMembership, (a, URIMember), (b, URIGroup))
+        >>> unrelate(URIMembership, (a, URIMember), (b, URIGroup))
 
     That's it.
 
@@ -177,6 +179,15 @@ class RelationshipSchema(object):
         self.roles = roles
 
     def __call__(self, **parties):
+        """Establish a relationship."""
+        self._doit(relate, **parties)
+
+    def unlink(self, **parties):
+        """Break a relationship."""
+        self._doit(unrelate, **parties)
+
+    def _doit(self, fn, **parties):
+        """Extract and validate parties from keyword arguments and call fn."""
         (name_of_a, role_of_a), (name_of_b, role_of_b) = self.roles.items()
         try:
             a = parties.pop(name_of_a)
@@ -188,7 +199,7 @@ class RelationshipSchema(object):
             raise TypeError('Missing a %r keyword argument.' % name_of_b)
         if parties:
             raise TypeError("Too many keyword arguments.")
-        relate(self.rel_type, (a, role_of_a), (b, role_of_b))
+        fn(self.rel_type, (a, role_of_a), (b, role_of_b))
 
 
 class RelationshipProperty(object):
