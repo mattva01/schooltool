@@ -435,7 +435,6 @@ class TestCalendarViewBase(unittest.TestCase):
                           [CalendarDay(date(2004, 8, 16)),
                            CalendarDay(date(2004, 8, 23))])
 
-
     def test_getWeek_first_day_of_week(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
