@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" i18n:translate="">Resource info</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">
+  <h1 metal:fill-slot="h1" i18n:translate="">
     Resource info
   </h1>
   <metal:block metal:fill-slot="content">
@@ -11,10 +11,10 @@
       <a class="action" tal:condition="view/canEdit"
          tal:attributes="href view/editURL" i18n:translate="">Edit</a>
     </div>
-    <div class="row"><b>Name:</b>
+    <div class="row"><b i18n:translate="">Name:</b>
       <span tal:replace="python:context.__name__">res123</span>
     </div>
-    <div class="row"><b>Title:</b>
+    <div class="row"><b i18n:translate="">Title:</b>
       <span tal:replace="context/title">Resource title</span>
     </div>
   </metal:block>

@@ -10,8 +10,8 @@
   <metal:block metal:fill-slot="content" tal:define="update view/update">
 
   <tal:block condition="view/booked">
-    <p>Resource booked.</p>
-    <p><a href="/busysearch">Back to resource search</a></p>
+    <p i18n:translate="">Resource booked.</p>
+    <p><a href="/busysearch" i18n:translate="">Back to resource search</a></p>
   </tal:block>
 
   <tal:block condition="not:view/booked">
@@ -42,7 +42,8 @@
       <label for="conflicts" i18n:translate="">Ignore conflicts</label>
       <input id="conflicts" name="conflicts" type="checkbox" value="ignore" />
     </div>
-    <input name="CONFIRM_BOOK" type="submit" value="Book" />
+    <input class="button" name="CONFIRM_BOOK" type="submit" value="Book" 
+           i18n:attributes="value"/>
   </form>
   </tal:block>
   </metal:block>

@@ -9,11 +9,13 @@
   <metal:block metal:fill-slot="content">
     <h2 tal:content="view/cursor/isoformat" />
     <div class="calnav">
-    <a tal:attributes="href string:${request/path}?date=${view/prev}">
+    <a tal:attributes="href string:${request/path}?date=${view/prev}" 
+       i18n:translate="">
        Previous day</a>
-    <a tal:attributes="href request/path">
+    <a tal:attributes="href request/path" i18n:translate="">
        Today</a>
-    <a tal:attributes="href string:${request/path}?date=${view/next}">
+    <a tal:attributes="href string:${request/path}?date=${view/next}" 
+       i18n:translate="">
         Next day</a>
     </div>
 
