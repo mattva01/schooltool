@@ -35,8 +35,7 @@ from schooltool.browser.auth import isManager
 from schooltool.browser.timetable import TimetableTraverseView
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
-from schooltool.interfaces import IPerson
-from schooltool.interfaces import IGroup
+from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.membership import Membership
 from schooltool.rest.infofacets import maxspect
 from schooltool.translation import ugettext as _
@@ -388,6 +387,16 @@ class GroupTeachersView(View):
                 request.appLog(_("Relationship '%s' between %s and %s created")
                                % ('Teaching', getPath(obj),
                                   getPath(self.context)))
+
+
+class ResourceView(View):
+    """View for displaying a resource."""
+
+    __used_for__ = IResource
+
+    authorization = AuthenticatedAccess
+
+    template = Template("www/resource.pt")
 
 
 class PhotoView(View):

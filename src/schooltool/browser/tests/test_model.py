@@ -692,6 +692,22 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
                   "/persons/josh and /groups/new created", INFO)])
 
 
+class TestResourceView(unittest.TestCase):
+
+    def test(self):
+        from schooltool.model import Resource
+        from schooltool.browser.model import ResourceView
+        resource = Resource("I'm a resource")
+        resource.__name__ = 're123'
+        view = ResourceView(resource)
+        view.authorization = lambda x, y: True
+        request = RequestStub()
+        content = view.render(request)
+
+        self.assert_("I'm a resource" in content)
+        self.assert_("re123" in content)
+
+
 class TestPhotoView(unittest.TestCase):
 
     def createView(self, photo):
@@ -727,6 +743,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupView))
     suite.addTest(unittest.makeSuite(TestGroupEditView))
     suite.addTest(unittest.makeSuite(TestGroupTeachersView))
+    suite.addTest(unittest.makeSuite(TestResourceView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     return suite
 

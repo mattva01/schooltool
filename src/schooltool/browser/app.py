@@ -259,4 +259,3 @@ class GroupContainerView(ObjectContainerView):
     add_view = GroupAddView
     obj_view = GroupView
 
-
