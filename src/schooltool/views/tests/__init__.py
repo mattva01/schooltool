@@ -35,7 +35,7 @@ class RequestStub:
     reason = 'OK'
 
     def __init__(self, uri='', method='GET', body='', headers=None,
-                 authenticated_user=None):
+                 authenticated_user=None, accept=()):
         self.uri = uri
         self.method = method
         self.path = ''
@@ -50,7 +50,7 @@ class RequestStub:
         if headers:
             for k, v in headers.items():
                 self.request_headers[k.lower()] = v
-        self.accept = []
+        self.accept = list(accept)
         self.path = uri
         self._transport = 'INET'
         self._hostname = 'localhost'

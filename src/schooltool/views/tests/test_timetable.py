@@ -120,6 +120,30 @@ class ServiceManagerStub:
         return {'resources': self.resources}[name]
 
 
+class TestTimetableContentNegotiation(unittest.TestCase):
+
+    def test(self):
+        from schooltool.views.timetable import TimetableContentNegotiation
+        cn = TimetableContentNegotiation()
+        cn.template = 'xml'
+        cn.html_template = 'html'
+        cn.wxhtml_template = 'wxhtml'
+
+        rq = RequestStub()
+        self.assertEquals(cn.chooseRepresentation(rq), 'xml')
+        rq = RequestStub(accept=[(1, 'text/html', {}, {})])
+        self.assertEquals(cn.chooseRepresentation(rq), 'html')
+        rq = RequestStub(accept=[(1, 'text/xml', {}, {}),
+                                 (0.9, 'text/html', {}, {})])
+        self.assertEquals(cn.chooseRepresentation(rq), 'xml')
+        rq = RequestStub(headers={'User-Agent': 'some variant of Mozilla'},
+                         accept=[(1, 'text/xml', {}, {}),
+                                 (0.9, 'text/html', {}, {})])
+        self.assertEquals(cn.chooseRepresentation(rq), 'html')
+        rq = RequestStub(headers={'User-Agent': 'wxWindows'})
+        self.assertEquals(cn.chooseRepresentation(rq), 'wxhtml')
+
+
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
     def do_test(self, view_class, tt_view_class, xml=None, html=None,
@@ -183,8 +207,6 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
-              <meta http-equiv="Content-Type"
-                    content="text/html; charset=UTF-8" />
               <title>Timetables for Foo</title>
             </head>
             <body>
@@ -221,8 +243,6 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
-              <meta http-equiv="Content-Type"
-                    content="text/html; charset=UTF-8" />
               <title>Timetables for Foo</title>
             </head>
             <body>
@@ -258,8 +278,6 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """, dedent("""
             <html>
             <head>
-              <meta http-equiv="Content-Type"
-                    content="text/html; charset=UTF-8" />
               <title>Composite timetables for Foo</title>
             </head>
             <body>
@@ -295,8 +313,6 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                 """, """
                 <html>
                 <head>
-                  <meta http-equiv="Content-Type"
-                        content="text/html; charset=UTF-8" />
                   <title>School timetables</title>
                 </head>
                 <body>
@@ -341,7 +357,6 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html_template = """
         <html>
         <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
           <title>
             John Smith's %(tt_type)s timetable for 2003 fall, weekly
           </title>
@@ -408,7 +423,6 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     full_html_template = """
         <html>
         <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
           <title>
             John Smith's %(tt_type)s timetable for 2003 fall, weekly
           </title>
@@ -875,7 +889,6 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
     empty_html = """
         <html>
         <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
           <title>Timetable schema: weekly</title>
           <style type="text/css">
             table { border-collapse: collapse; }
@@ -1616,6 +1629,7 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestTimetableContentNegotiation))
     suite.addTest(unittest.makeSuite(TestTimetableTraverseViews))
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
     suite.addTest(unittest.makeSuite(TestTimetableReadWriteView))

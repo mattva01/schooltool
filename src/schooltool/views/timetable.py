@@ -68,8 +68,12 @@ class TimetableContentNegotiation:
         Subclasses should provide the following attributes:
           - template
           - html_template
+          - wxhtml_template
         """
         user_agent = request.getHeader('User-Agent') or ''
+        if 'wxWindows' in user_agent:
+            # wxHTML is an extremely ill-behaved HTTP client
+            return self.wxhtml_template
         if 'Mozilla' in user_agent:
             # A hack to override content negotiation for Mozilla, IE and
             # other common browsers that won't know what to do with XML
@@ -86,6 +90,8 @@ class TimetableReadView(View, TimetableContentNegotiation):
 
     template = Template("www/timetable.pt", content_type="text/xml")
     html_template = Template("www/timetable_html.pt")
+    # wxWindows has problems with UTF-8
+    wxhtml_template = Template("www/timetable_html.pt", charset='ISO-8859-1')
     authorization = PublicAccess
 
     def __init__(self, context, key):
@@ -401,11 +407,14 @@ class BaseTimetableTraverseView(View, TimetableContentNegotiation):
      - title
      - template
      - html_template
+     - wxhtml_template
      - _traverse
     """
 
     template = Template("www/timetables.pt", content_type="text/xml")
     html_template = Template("www/timetables_html.pt")
+    # wxWindows has problems with UTF-8
+    wxhtml_template = Template("www/timetables_html.pt", charset='ISO-8859-1')
     authorization = PublicAccess
 
     def __init__(self, context, time_period=None):
