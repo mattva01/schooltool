@@ -134,9 +134,11 @@
 
   <content class=".cal.CalendarEvent">
     <require permission="schoolbell.viewCalendar"
-             interface="schoolbell.calendar.interfaces.ICalendarEvent" />
+             interface="schoolbell.calendar.interfaces.ICalendarEvent"
+             attributes="resources" />
     <require permission="schoolbell.modifyEvent"
-             set_schema="schoolbell.calendar.interfaces.ICalendarEvent" />
+             set_schema="schoolbell.calendar.interfaces.ICalendarEvent"
+             attributes="bookResource unbookResource" />
   </content>
 
 <!-- Security declarations for calendaring -->
