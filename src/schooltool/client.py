@@ -99,7 +99,8 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         """
         try:
             conn = self.http(self.server, self.port)
-            conn.putrequest('GET', line.split()[0])
+            resource = line.split()[0]
+            conn.putrequest('GET', resource)
             conn.putheader('Accept', self.accept)
             conn.endheaders()
             response = conn.getresponse()
@@ -114,6 +115,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                     parser.setFeature(feature_namespaces, 1)
                     parser.parse(StringIO(data))
                     nr = 0
+                    self.resources = []
                     for link in handler.links:
                         nr += 1
                         if 'title' in link:
@@ -125,12 +127,15 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                             href = link['href']
                         else:
                             href = "no href"
-                        self.emit("%-3d %s (%s)" % (nr, title, href))
+                        try:
+                            self.resources.append(http_join(resource, href))
+                            self.emit("%-3d %s (%s)" % (nr, title, href))
+                        except (IndexError, ValueError):
+                            pass
                 except SAXParseException, e:
                     self.emit("Could not extract links: %s" % e)
         except socket.error:
             self.emit('Error: could not connect to %s' % self.server)
-
 
     def do_links(self, line):
         """Toggle the display of xlinks found in the response.
@@ -144,6 +149,17 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         if line.lower() == "off":
             self.links = False
 
+    def do_follow(self, line):
+        """Follow the link from the last document.
+
+        follow <nr>
+        """
+        try:
+            link = self.resources[int(line.split()[0])-1]
+            self.do_get(link)
+        except (IndexError, ValueError):
+            self.emit("Wrong link number")
+
 class XLinkHandler(ContentHandler):
 
     def __init__(self):
@@ -156,6 +172,33 @@ class XLinkHandler(ContentHandler):
                 link[attr] = attrs.get((namespace, attr))
         if link:
             self.links.append(link)
+
+def http_join(path, rel):
+    """os.path.join for HTTP paths.
+
+    The first argument should be an abs. path, the second argument
+    is a relative path.  Directory names must end with a '/'.
+    """
+
+    if rel.startswith('/'):
+        return rel
+
+    chunks = path.split('/')
+    if chunks[0]:
+        raise ValueError, "The path should be absolute"
+    chunks = chunks[1:-1]
+
+    for chunk in rel.split('/'):
+        if chunk == '..':
+            del chunks[-1]
+        elif chunk == ".":
+            pass
+        elif chunk == '':
+            raise ValueError, "Empty path elements are not allowed"
+        else:
+            chunks.append(chunk)
+    chunks.insert(0, '')
+    return '/'.join(chunks)
 
 def main():
     Client().cmdloop()

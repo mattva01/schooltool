@@ -172,7 +172,25 @@ class TestClient(unittest.TestCase):
 
 ==================================================
 1   John (student1)
-2   Kate (student2)""")
+2   Kate (student2)"""
+                         )
+        self.assertEqual(self.client.resources,
+                         ['/student1', '/student2'])
+
+    def test_follow(self):
+        self.client.resources = ['/doc.xml']
+        self.client.do_follow('1')
+        self.assertEqual(self.emitted, """\
+<index xmlns:xlink="http://www.w3.org/1999/xlink">
+  <student xlink:type="simple"
+           xlink:href="student1"
+           xlink:title="John"/>
+  <student xlink:type="simple"
+           xlink:href="student2"
+           xlink:title="Kate"/>
+</index>
+"""
+                         )
 
 class TestXLinkHandler(unittest.TestCase):
 
@@ -205,11 +223,28 @@ class TestXLinkHandler(unittest.TestCase):
                            'role': "http://www.example.com/role"}])
 
 
+class TestUtilities(unittest.TestCase):
+
+    def test_http_join(self):
+        from schooltool.client import http_join
+        self.assertEqual(http_join('/', 'foo'), '/foo')
+        self.assertEqual(http_join('/foo', 'bar'), '/bar')
+        self.assertEqual(http_join('/foo/bar', '../baz'), '/baz')
+        self.assertEqual(http_join('/foo/bar', '/baz'), '/baz')
+        self.assertRaises(IndexError, http_join, '/foo/bar', '../../baz')
+        self.assertRaises(ValueError, http_join, 'foo/bar', '../baz')
+        self.assertRaises(ValueError, http_join, '/foo/bar', 'baz//quux')
+        self.assertRaises(ValueError, http_join,
+                          '/foo/bar', 'http://www.akl.lt/programos')
+        # That ain't right, but let's document it anyway
+        self.assertRaises(ValueError, http_join,
+                          'http://example.com/foo', '../baz')
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestClient))
     suite.addTest(unittest.makeSuite(TestXLinkHandler))
+    suite.addTest(unittest.makeSuite(TestUtilities))
     return suite
 
 if __name__ == '__main__':
