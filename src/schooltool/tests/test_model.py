@@ -27,7 +27,7 @@ from datetime import datetime
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.interfaces import ILink, IFacet
 
@@ -54,7 +54,7 @@ class FacetStub(Persistent):
     __parent__ = None
 
 
-class TestPerson(EventServiceTestMixin, unittest.TestCase):
+class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
 
     def test(self):
         from schooltool.interfaces import IPerson, IEventTarget, IRelatable
@@ -73,7 +73,7 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         from schooltool.component import FacetManager
         person = Person('John Smith')
         person.__parent__ = self.eventService
-        absence = person.addAbsence(AbsenceComment(None, None))
+        absence = person.reportAbsence(AbsenceComment(None, None))
         link = LinkStub()
         person.__links__.add(link)
         facet = FacetStub()
@@ -92,15 +92,18 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         person = Person('John Smith')
         person.__parent__ = self.eventService
 
+        # A new person has no absences
         self.assert_(person.getCurrentAbsence() is None)
         self.assertEquals(list(person.iterAbsences()), [])
 
-        self.assertRaises(TypeError, person.addAbsence, object())
+        # Adding a non-IAbsenceComment does not affect anything
+        self.assertRaises(TypeError, person.reportAbsence, object())
         self.assert_(person.getCurrentAbsence() is None)
         self.assertEquals(list(person.iterAbsences()), [])
 
+        # Adding an IAbsenceComment to a person creates an IAbsence
         comment1 = AbsenceComment(object(), "some text")
-        absence = person.addAbsence(comment1)
+        absence = person.reportAbsence(comment1)
         self.assert_(IAbsence.isImplementedBy(absence))
         self.assert_(comment1 in absence.comments)
         self.assert_(absence.person is person)
@@ -108,44 +111,57 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         self.assert_(not absence.resolved)
         self.assert_(person.getAbsence(absence.__name__) is absence)
         self.assertRaises(KeyError, person.getAbsence, absence.__name__ + "X")
-        self.assert_(absence in person.iterAbsences())
+        self.assertEquals([absence], list(person.iterAbsences()))
         self.assert_(person.getCurrentAbsence() is absence)
 
+        # Check that adding a second comment changes the current absence
         dt = datetime(2003, 10, 28)
         comment2 = AbsenceComment(object(), "some text",
-                                  expected_presence_change=dt)
-        absence2 = person.addAbsence(comment2)
+                                  expected_presence=dt)
+        absence2 = person.reportAbsence(comment2)
+        self.assertEquals([absence], list(person.iterAbsences()))
         self.assert_(absence2 is absence)
         self.assertEquals(absence.comments, [comment1, comment2])
         self.assertEquals(absence.expected_presence, dt)
         self.assert_(person.getCurrentAbsence() is absence)
 
-        comment3 = AbsenceComment(None, "resolved", resolution_change=True)
-        absence3 = person.addAbsence(comment3)
+        # Check that a comment can resolve the absence
+        comment3 = AbsenceComment(None, "resolved", resolution=True)
+        absence3 = person.reportAbsence(comment3)
         self.assert_(absence3 is absence)
         self.assert_(absence.resolved)
         self.assert_(person.getCurrentAbsence() is None)
 
+        # Check that reporting an absence when there is no current absence
+        # creates a new absence.
         comment4 = AbsenceComment(object(), "some text")
-        absence4 = person.addAbsence(comment4)
+        absence4 = person.reportAbsence(comment4)
         self.assert_(absence4 is not absence)
         self.assertEquals(absence4.comments, [comment4])
         self.assert_(person.getCurrentAbsence() is absence4)
+        self.assertEqualsSorted([absence, absence4],
+                                list(person.iterAbsences()))
 
-        absence4.addComment(AbsenceComment(None, "", resolution_change=True))
+        # Add comments to absences directly, rather than via Person.
+        # Check that resolving an absence multiple times is ok.
+        absence4.addComment(AbsenceComment(None, "", resolution=True))
         self.assert_(person.getCurrentAbsence() is None)
-        absence4.addComment(AbsenceComment(None, "", resolution_change=True))
+        absence4.addComment(AbsenceComment(None, "", resolution=True))
         self.assert_(person.getCurrentAbsence() is None)
-        absence.addComment(AbsenceComment(None, "", resolution_change=False))
+        # Unresolving a previously resolved absence makes it into the current
+        # absence.
+        absence.addComment(AbsenceComment(None, "", resolution=False))
         self.assert_(person.getCurrentAbsence() is absence)
-        absence.addComment(AbsenceComment(None, "", resolution_change=False))
+        absence.addComment(AbsenceComment(None, "", resolution=False))
         self.assert_(person.getCurrentAbsence() is absence)
-        absence4.addComment(AbsenceComment(None, "", resolution_change=True))
+        absence4.addComment(AbsenceComment(None, "", resolution=True))
         self.assert_(person.getCurrentAbsence() is absence)
+        # Check that you cannot re-open an absence while another absence is
+        # unresolved.
         old_len = len(absence4.comments)
         self.assertRaises(ValueError, absence4.addComment,
-                          AbsenceComment(None, "", resolution_change=False,
-                                         expected_presence_change=dt))
+                          AbsenceComment(None, "", resolution=False,
+                                         expected_presence=dt))
         self.assertEquals(len(absence4.comments), old_len)
         self.assert_(absence4.resolved)
         self.assert_(absence4.expected_presence is None)
@@ -156,11 +172,40 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         person = Person('John Smith')
         person.__parent__ = self.eventService
 
-        comment = AbsenceComment(object(), "some text", resolution_change=True)
-        absence = person.addAbsence(comment)
+        comment = AbsenceComment(object(), "some text", resolution=True)
+        absence = person.reportAbsence(comment)
         self.assert_(absence.resolved)
         self.assert_(absence in person.iterAbsences())
         self.assert_(person.getCurrentAbsence() is None)
+
+
+class TestUnchanged(unittest.TestCase):
+
+    def test(self):
+        from StringIO import StringIO
+        from cPickle import Pickler, Unpickler
+        from schooltool.interfaces import UnchangedClass, Unchanged
+        unchanged1 = UnchangedClass()
+        self.assert_(unchanged1 is Unchanged)
+        self.assert_(Unchanged is not UnchangedClass)
+
+        self.assertRaises(TypeError, lambda: Unchanged < Unchanged)
+        self.assertRaises(TypeError, lambda: Unchanged <= Unchanged)
+        self.assertRaises(TypeError, lambda: Unchanged > Unchanged)
+        self.assertRaises(TypeError, lambda: Unchanged >= Unchanged)
+        self.assert_(Unchanged == Unchanged)
+        self.assert_(not (Unchanged != Unchanged))
+        self.assert_(Unchanged != object())
+        self.assert_(not (Unchanged == object()))
+
+        s = StringIO()
+        p = Pickler(s)
+        p.dump(unchanged1)
+        s.seek(0)
+        u = Unpickler(s)
+        unchanged2 = u.load()
+
+        self.assert_(unchanged2 is Unchanged)
 
 
 class TestGroup(unittest.TestCase):
@@ -248,27 +293,57 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
 
     def test_addComment(self):
         from schooltool.model import AbsenceComment
-        from schooltool.interfaces import IAbsenceEvent
-        comment1 = AbsenceComment(object(), "text")
+        from schooltool.interfaces import INewAbsenceEvent
+        from schooltool.interfaces import IResolvedAbsenceEvent
+        comment1 = AbsenceComment(object(), "text",
+                                  resolution=False)
         self.absence.addComment(comment1)
         self.assertEquals(self.absence.comments, [comment1])
         e = self.checkOneEventReceived([self.person])
-        self.assert_(IAbsenceEvent.isImplementedBy(e))
+        self.assert_(INewAbsenceEvent.isImplementedBy(e))
         self.assert_(e.absence, self.absence)
         self.assert_(e.comment, comment1)
 
-    def testAbsenceEvent(self):
+        comment2 = AbsenceComment(object(), "still absent")
+        self.absence.addComment(comment2)
+        # Still the same event
+        e = self.checkOneEventReceived([self.person])
+        self.assert_(INewAbsenceEvent.isImplementedBy(e))
+        self.eventService.clearEvents()
+        self.person.clearEvents()
+
+        comment3 = AbsenceComment(object(), "I'll be back",
+                                  resolution=True)
+        self.absence.addComment(comment3)
+        e = self.checkOneEventReceived([self.person])
+        self.assert_(IResolvedAbsenceEvent.isImplementedBy(e))
+
+
+    def testAbsenceEvents(self):
         from schooltool.model import AbsenceEvent
+        from schooltool.model import NewAbsenceEvent
+        from schooltool.model import ResolvedAbsenceEvent
         from schooltool.interfaces import IAbsenceEvent
+        from schooltool.interfaces import INewAbsenceEvent
+        from schooltool.interfaces import IResolvedAbsenceEvent
         comment = object()
         event = AbsenceEvent(self.absence, comment)
         verifyObject(IAbsenceEvent, event)
         self.assert_(event.absence is self.absence)
         self.assert_(event.comment is comment)
 
+        event = NewAbsenceEvent(self.absence, comment)
+        verifyObject(INewAbsenceEvent, event)
+        verifyObject(IAbsenceEvent, event)
+
+        event = ResolvedAbsenceEvent(self.absence, comment)
+        verifyObject(IResolvedAbsenceEvent, event)
+        verifyObject(IAbsenceEvent, event)
+
+
     def testAbsenceComment(self):
         from schooltool.model import AbsenceComment
-        from schooltool.interfaces import IAbsenceComment
+        from schooltool.interfaces import IAbsenceComment, Unchanged
         reporter = object()
         text = "this person is late AGAIN"
         lower_limit = datetime.utcnow()
@@ -279,27 +354,28 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(comment1.text, text)
         self.assertEquals(comment1.absent_from, None)
         self.assert_(lower_limit <= comment1.datetime <= upper_limit)
-        self.assert_(comment1.resolution_change is None)
-        self.assert_(comment1.expected_presence_change is None)
+        self.assert_(comment1.resolution is Unchanged)
+        self.assert_(comment1.expected_presence is Unchanged)
 
         dt = datetime(2003, 10, 28)
         dt2 = datetime(2003, 10, 29, 9, 0)
         group = object()
         comment2 = AbsenceComment(reporter, text, dt=dt, absent_from=group,
-                                  resolution_change=True,
-                                  expected_presence_change=dt2)
+                                  resolution=True,
+                                  expected_presence=dt2)
         self.assertEquals(comment2.reporter, reporter)
         self.assertEquals(comment2.text, text)
         self.assertEquals(comment2.absent_from, group)
         self.assertEquals(comment2.datetime, dt)
-        self.assertEquals(comment2.resolution_change, True)
-        self.assertEquals(comment2.expected_presence_change, dt2)
+        self.assertEquals(comment2.resolution, True)
+        self.assertEquals(comment2.expected_presence, dt2)
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
+    suite.addTest(unittest.makeSuite(TestUnchanged))
     suite.addTest(unittest.makeSuite(TestAbsencePersistence))
     suite.addTest(unittest.makeSuite(TestAbsence))
     return suite

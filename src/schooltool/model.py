@@ -25,8 +25,9 @@ $Id$
 from datetime import datetime
 from zope.interface import implements
 from persistence import Persistent
-from schooltool.interfaces import IPerson, IGroup
+from schooltool.interfaces import IPerson, IGroup, Unchanged
 from schooltool.interfaces import IAbsence, IAbsenceComment, IAbsenceEvent
+from schooltool.interfaces import INewAbsenceEvent, IResolvedAbsenceEvent
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
@@ -59,7 +60,7 @@ class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
     def getCurrentAbsence(self):
         return self._current_absence
 
-    def addAbsence(self, comment):
+    def reportAbsence(self, comment):
         if not IAbsenceComment.isImplementedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
         absence = self.getCurrentAbsence()
@@ -110,23 +111,28 @@ class Absence(Persistent):
         self.__parent__ = None
 
     def addComment(self, comment):
+        event = None
         if not IAbsenceComment.isImplementedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
-        if comment.resolution_change is not None:
-            if self.resolved and not comment.resolution_change:
+        if not self.comments:
+            # This is the first comment
+            event = NewAbsenceEvent(self, comment)
+        if comment.resolution is not Unchanged:
+            if self.resolved and not comment.resolution:
                 if self.person.getCurrentAbsence() is not None:
                     raise ValueError("Cannot reopen an absence when another"
                                      " one is not resolved", self, comment)
                 self.person._current_absence = self
-            elif not self.resolved and comment.resolution_change:
+            elif not self.resolved and comment.resolution:
                 self.person._current_absence = None
-            self.resolved = comment.resolution_change
-        if comment.expected_presence_change is not None:
-            self.expected_presence = comment.expected_presence_change
+                event = ResolvedAbsenceEvent(self, comment)
+            self.resolved = comment.resolution
+        if comment.expected_presence is not Unchanged:
+            self.expected_presence = comment.expected_presence
         self.comments.append(comment)
         self.comments = self.comments
-        event = AbsenceEvent(self, comment)
-        event.dispatch(self.person)
+        if event is not None:
+            event.dispatch(self.person)
 
 
 class AbsenceComment:
@@ -134,15 +140,15 @@ class AbsenceComment:
     implements(IAbsenceComment)
 
     def __init__(self, reporter, text, dt=None, absent_from=None,
-                 expected_presence_change=None, resolution_change=None):
+                 expected_presence=Unchanged, resolution=Unchanged):
         if dt is None:
             dt = datetime.utcnow()
         self.reporter = reporter
         self.text = text
         self.datetime = dt
         self.absent_from = absent_from
-        self.expected_presence_change = expected_presence_change
-        self.resolution_change = resolution_change
+        self.expected_presence = expected_presence
+        self.resolution = resolution
 
 
 class AbsenceEvent(EventMixin):
@@ -156,4 +162,12 @@ class AbsenceEvent(EventMixin):
 
     def __str__(self):
         return "AbsenceEvent for %s" % self.absence
+
+
+class NewAbsenceEvent(AbsenceEvent):
+    implements(INewAbsenceEvent)
+
+
+class ResolvedAbsenceEvent(AbsenceEvent):
+    implements(IResolvedAbsenceEvent)
 

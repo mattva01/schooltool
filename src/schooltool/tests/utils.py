@@ -80,7 +80,7 @@ class EventServiceTestMixin:
 
     setUp = setUpEventService
 
-    def checkOneEventReceived(self, receivers=None):
+    def checkOneEventReceived(self, receivers=()):
         """Check that exactly one event was received by the event service.
 
         Returns that one event.
@@ -91,10 +91,9 @@ class EventServiceTestMixin:
         """
         self.assertEquals(len(self.eventService.events), 1)
         e = self.eventService.events[0]
-        if receivers:
-            for target in receivers:
-                self.assertEquals(len(target.events), 1)
-                self.assert_(target.events[0] is e)
+        for receiver in receivers:
+            self.assertEquals(len(receiver.events), 1)
+            self.assert_(receiver.events[0] is e)
         return e
 
 

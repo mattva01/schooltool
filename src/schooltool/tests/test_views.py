@@ -1142,7 +1142,7 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        absence = context.addAbsence(AbsenceComment(None, ''))
+        absence = context.reportAbsence(AbsenceComment(None, ''))
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
         result = view._traverse(absence.__name__, request)
@@ -1156,8 +1156,8 @@ class TestAbsenceManagementView(EventServiceTestMixin, unittest.TestCase):
         from schooltool.model import Person, AbsenceComment
         context = Person()
         setPath(context, '/person', root=self.serviceManager)
-        context.addAbsence(AbsenceComment(None, '', resolution_change=True))
-        context.addAbsence(AbsenceComment(None, ''))
+        context.reportAbsence(AbsenceComment(None, '', resolution=True))
+        context.reportAbsence(AbsenceComment(None, ''))
         self.assertEquals(len(list(context.iterAbsences())), 2)
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
@@ -1214,12 +1214,12 @@ class TestAbsenceView(EventServiceTestMixin, unittest.TestCase):
         setPath(group1, '/group1')
         person = Person()
         setPath(person, '/person', root=self.serviceManager)
-        absence = person.addAbsence(AbsenceComment(reporter1, 'Some text',
+        absence = person.reportAbsence(AbsenceComment(reporter1, 'Some text',
                 dt=datetime.datetime(2001, 1, 1)))
-        person.addAbsence(AbsenceComment(reporter2, 'More text',
+        person.reportAbsence(AbsenceComment(reporter2, 'More text',
                 absent_from=group1, dt=datetime.datetime(2002, 2, 2),
-                expected_presence_change=datetime.datetime(2003, 03, 03),
-                resolution_change=True))
+                expected_presence=datetime.datetime(2003, 03, 03),
+                resolution=True))
         view = AbsenceView(absence)
         request = RequestStub("http://localhost/person/absences/001")
         result = view.render(request)

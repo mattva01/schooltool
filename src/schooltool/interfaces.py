@@ -22,6 +22,8 @@ SchoolTool package interfaces
 $Id$
 """
 
+__metaclass__ = type
+
 from zope.interface import Interface, Attribute, moduleProvides
 
 #
@@ -768,10 +770,12 @@ class IPerson(IFaceted, ILocation, IMultiContainer):
     def getCurrentAbsence():
         """Return the currently unresolved absence or None."""
 
-    def addAbsence(comment):
-        """Add a new absence or extend the current absence.
+    def reportAbsence(comment):
+        """Report that this person is absent, still absent, or no
+        longer absent.
 
-        Returns IAbsence.
+        Returns the IAbsence which may be a new absence or this
+        person's current absence extended by the comment.
         """
 
 
@@ -800,6 +804,38 @@ class IAbsence(ILocation):
         """
 
 
+class UnchangedClass:
+    """Singleton marker object for things that are unchanged."""
+
+    def __new__(cls):
+        instance = getattr(cls, '__singleton_instance__', None)
+        if instance is None:
+            instance = object.__new__(cls)
+            cls.__singleton_instance__ = instance
+        return instance
+
+    def __str__(self):
+        return "The Unchanged singleton"
+
+    def __lt__(self, other):
+        raise TypeError("Cannot compare Unchanged using <, <=, >, >=")
+
+    __gt__ = __le__ = __ge__ = __lt__
+
+    def __eq__(self, other):
+        return self is other
+
+    def __ne__(self, other):
+        return self is not other
+
+
+# Register Unchanged to be a constant by identity, even when pickled and
+# unpickled.
+import copy_reg
+copy_reg.pickle(UnchangedClass, lambda obj: 'Unchanged', UnchangedClass)
+
+Unchanged = UnchangedClass()
+
 class IAbsenceComment(Interface):
 
     datetime = Attribute("""Date and time of the comment""")
@@ -808,10 +844,10 @@ class IAbsenceComment(Interface):
     absent_from = Attribute(
         """Application object (group or whatever) the person was absent
         from (can be None)""")
-    resolution_change = Attribute(
-        """New value of resolution (True, False or None)""")
-    expected_presence_change = Attribute(
-        """New value of expected_presence (datetime or None)""")
+    resolution = Attribute(
+        """New value of resolution (True, False or Unchanged)""")
+    expected_presence = Attribute(
+        """New value of expected_presence (datetime, None, or Unchanged)""")
 
 
 class IAbsenceEvent(IEvent):
@@ -819,6 +855,14 @@ class IAbsenceEvent(IEvent):
 
     absence = Attribute("""IAbsence""")
     comment = Attribute("""IAbsenceComment that describes the change""")
+
+
+class INewAbsenceEvent(IAbsenceEvent):
+    """An event that gets sent when a new absence is created."""
+
+
+class IResolvedAbsenceEvent(IAbsenceEvent):
+    """An event that gets sent when an absence is resolved."""
 
 
 class IApplication(IContainmentRoot, IServiceManager, ITraversable):

@@ -30,7 +30,7 @@ from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility, IFacet
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import ComponentLookupError
+from schooltool.interfaces import ComponentLookupError, Unchanged
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
 from schooltool.component import FacetManager, iterFacetFactories
@@ -623,17 +623,21 @@ class AbsenceView(View):
         return getPath(self.context.person)
 
     def listComments(self):
-        resolvedness = {None: None, False: 'unresolved', True: 'resolved'}
-        return [{'datetime': comment.datetime.isoformat(' '),
-                 'text': comment.text,
-                 'absent_from': (comment.absent_from is not None
-                        and getPath(comment.absent_from) or None),
-                 'resolved': resolvedness[comment.resolution_change],
-                 'expected_presence': (comment.expected_presence_change
-                        and comment.expected_presence_change.isoformat(' ')
-                        or None),
-                 'reporter_href': getPath(comment.reporter)}
-                for comment in self.context.comments]
+        resolvedness = {Unchanged: None, False: 'unresolved', True: 'resolved'}
+        def format_presence(pr):
+            if pr is not Unchanged:
+                return comment.expected_presence.isoformat(' ')
+            else:
+                return None
+        return [
+            {'datetime': comment.datetime.isoformat(' '),
+             'text': comment.text,
+             'absent_from': (comment.absent_from is not None
+                             and getPath(comment.absent_from) or None),
+             'resolved': resolvedness[comment.resolution],
+             'expected_presence': format_presence(comment.expected_presence),
+             'reporter_href': getPath(comment.reporter)}
+            for comment in self.context.comments]
 
 
 def setUp():
