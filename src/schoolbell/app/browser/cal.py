@@ -898,6 +898,7 @@ class EventDeleteView(BrowserView):
 
         if event.recurrence is None:
             # Bah, the event is not recurrent.  Easy!
+            # XXX It shouldn't be.  We should still ask for confirmation.
             ICalendar(event).removeEvent(event)
             return self._redirectBack(date)
         else:
