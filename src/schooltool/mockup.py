@@ -58,7 +58,6 @@ class FakeApplication(Persistent):
 
     def __init__(self, datamgr):
         self.root = Group("root")
-        datamgr.add(self.root)
         self.people = Group("people")
         self.root.add(self.people)
         self.people.add(FakePerson('John'))

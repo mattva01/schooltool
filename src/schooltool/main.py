@@ -464,7 +464,6 @@ class Server:
     def createApplication(self, datamgr):
         """Instantiate a new application"""
         root = RootGroup("root")
-        datamgr.add(root)
         teachers = Group("teachers")
         students = Group("students")
         cleaners = Group("cleaners")

@@ -29,7 +29,7 @@ from schooltool.interfaces import IFaceted, IEventConfigurable, IQueryLinks
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.interfaces import ISpecificURI, URIGroup, URIMember
 from schooltool.component import queryFacet, setFacet, getFacetItems
-from schooltool.db import PersistentKeysSet, PersistentKeysDict, HookablePJar
+from schooltool.db import PersistentKeysSet, PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 
 __metaclass__ = type
@@ -102,13 +102,6 @@ class GroupMember(Persistent):
             return [GroupLink(group) for group in self.groups()]
         else:
             return []
-
-    def setDataManager(self, datamanager):
-        # Can be in the process of being unghostified, need to be careful.
-        if hasattr(self, '_groups'):
-            datamanager.add(self._groups)
-
-    _p_jar = HookablePJar(setDataManager)
 
 
 class FacetedMixin:
