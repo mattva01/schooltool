@@ -60,21 +60,20 @@ def absoluteURL(request, obj, suffix=''):
     Virtual hosting is supported:
 
       >>> request.getHost = lambda: ('SSL', 'example.com', 443)
-      >>> request.virtualpath = '/virtual/path'
 
       >>> absoluteURL(request, root)
-      'https://example.com:443/virtual/path'
+      'https://example.com:443/'
       >>> absoluteURL(request, obj)
-      'https://example.com:443/virtual/path/obj'
+      'https://example.com:443/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absoluteURL(request, root, 'subobject/or/two')
-      'https://example.com:443/virtual/path/subobject/or/two'
+      'https://example.com:443/subobject/or/two'
       >>> absoluteURL(request, obj, 'subobject')
-      'https://example.com:443/virtual/path/obj/subobject'
+      'https://example.com:443/obj/subobject'
 
     """
     if request.getHost()[0] == 'SSL':
@@ -90,6 +89,13 @@ def absoluteURL(request, obj, suffix=''):
 def absolutePath(request, obj, suffix=''):
     """Return the absolute path of an object in context of request.
 
+    The difference between schooltool.component.getPath and absolutePath
+    is that the former works with "physical", application-space paths while
+    the latter works with URL-space paths.  Currently the mapping is nearly
+    one-to-one, but this might change in the future (e.g. virtual hosting
+    directives might strip some initial path elements and add some virtual
+    elements in their place).
+
     Example:
 
       >>> from schooltool.views.tests import LocatableStub, setPath
@@ -104,27 +110,17 @@ def absolutePath(request, obj, suffix=''):
       >>> absolutePath(request, obj)
       '/obj'
 
-    The essential difference from schooltool.component.getPath is that
-    absolutePath considers request.virtualpath.
-
-      >>> request.virtualpath = '/virtual/path'
-      >>> absolutePath(request, root)
-      '/virtual/path'
-      >>> absolutePath(request, obj)
-      '/virtual/path/obj'
-
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absolutePath(request, root, 'subobject')
-      '/virtual/path/subobject'
+      '/subobject'
       >>> absolutePath(request, obj, 'subobject/subsubobject')
-      '/virtual/path/obj/subobject/subsubobject'
+      '/obj/subobject/subsubobject'
 
     """
-    path = request.virtualpath.split('/')
-    path += getPath(obj).split('/')
+    path = getPath(obj).split('/')
     path += suffix.split('/')
     return '/' + '/'.join(filter(None, path))
 

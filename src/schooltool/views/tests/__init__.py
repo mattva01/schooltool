@@ -39,7 +39,6 @@ class RequestStub:
         self.uri = uri
         self.method = method
         self.path = ''
-        self.virtualpath = ''
         self.content = StringIO(body)
         self.authenticated_user = authenticated_user
         self.headers = {}

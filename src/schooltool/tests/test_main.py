@@ -401,15 +401,14 @@ class TestRequest(unittest.TestCase):
         channel = ChannelStub()
         rq = Request(channel, True)
         rq.reactor_hook = ReactorStub()
-        rq.path = '/++vh++https:www.example.com:443/schooltool/++/foo/ba%72'
+        rq.path = '/++vh++https:www.example.com:443/foo/ba%72'
         rq.process()
         self.assertEqual(rq.postpath, ['foo', 'bar'])
-        self.assertEqual(rq.virtualpath, '/schooltool')
         self.assertEqual(rq.getHost(), ('SSL', 'www.example.com', 443))
 
         rq = Request(channel, True)
         rq.reactor_hook = ReactorStub()
-        rq.path = '/++vh++https:www.example.com:443/schooltool/foo/ba%72'
+        rq.path = '/++vh++https:www.example.com/schooltool/foo/ba%72'
         rq.process()
         self.assertEqual(rq.code, 400)
 
@@ -419,12 +418,10 @@ class TestRequest(unittest.TestCase):
         rq = Request(channel, True)
         rq.host = ('INET', 'localhost', 80)
         rq.reactor_hook = ReactorStub()
-        rq.postpath = ['++vh++https:host:443', 'virtual1', 'virtual2', '++',
-                       'groups', 'teachers']
+        rq.postpath = ['++vh++https:host:443', 'groups', 'teachers']
         rq._handleVh()
         self.assertEqual(rq.postpath, ['groups', 'teachers'])
         self.assertEqual(rq.getHost(), ('SSL', 'host', 443))
-        self.assertEqual(rq.virtualpath, '/virtual1/virtual2')
 
         # No vh directive
         rq = Request(channel, True)
@@ -434,18 +431,6 @@ class TestRequest(unittest.TestCase):
         rq._handleVh()
         self.assertEqual(rq.postpath, ['groups', 'teachers'])
         self.assertEqual(rq.getHost(), ('INET', 'localhost', 80))
-        self.assertEqual(rq.virtualpath, '')
-
-        # No virtual path
-        rq = Request(channel, True)
-        rq.host = ('INET', 'localhost', 80)
-        rq.reactor_hook = ReactorStub()
-        rq.postpath = ['++vh++http:host:8080', '++',
-                       'groups', 'teachers']
-        rq._handleVh()
-        self.assertEqual(rq.postpath, ['groups', 'teachers'])
-        self.assertEqual(rq.getHost(), ('INET', 'host', 8080))
-        self.assertEqual(rq.virtualpath, '')
 
     def test_handleVh_errors(self):
         from schooltool.main import Request
@@ -455,18 +440,15 @@ class TestRequest(unittest.TestCase):
         rq.reactor_hook = ReactorStub()
 
         # Too few colons
-        rq.postpath = ['++vh++https:host', 'virtual1', 'virtual2', '++',
-                       'groups', 'teachers']
+        rq.postpath = ['++vh++https:host', 'groups', 'teachers']
         self.assertRaises(ValueError, rq._handleVh)
 
-        # No ++
-        rq.postpath = ['++vh++https:host:443', 'virtual1', 'virtual2',
-                       'groups', 'teachers']
+        # Too many colons
+        rq.postpath = ['++vh++https:host:and:443', 'groups', 'teachers']
         self.assertRaises(ValueError, rq._handleVh)
 
         # Bad port
-        rq.postpath = ['++vh++https:host:www', 'virtual1', 'virtual2', '++',
-                       'groups', 'teachers']
+        rq.postpath = ['++vh++https:host:www', 'groups', 'teachers']
         self.assertRaises(ValueError, rq._handleVh)
 
     def newRequest(self, path, render_stub=None, traverse_stub=None,
