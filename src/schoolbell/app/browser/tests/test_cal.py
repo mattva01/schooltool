@@ -850,6 +850,7 @@ def doctest_CalendarEventAddView_add():
 
     """
 
+
 def doctest_CalendarEventAddView_add_validation():
     r"""Tests for CalendarEventAddView form validation.
 
@@ -938,6 +939,7 @@ def doctest_CalendarEventAddView_add_validation():
         True
 
     """
+
 
 def doctest_CalendarEventAddView_add_recurrence():
     r"""Tests for CalendarEventAddView adding of recurring event.
@@ -1044,6 +1046,7 @@ def doctest_CalendarEventAddView_add_recurrence():
 
     """
 
+
 def doctest_CalendarEventAddView_recurrence_exceptions():
     r"""Tests for CalendarEventAddView adding of new event.
 
@@ -1098,8 +1101,8 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         >>> event.recurrence
         DailyRecurrenceRule(1, None, None, (datetime.date(2004, 8, 14), datetime.date(2004, 8, 19), datetime.date(2004, 8, 20)))
 
-   If the any of the lines contains an invalid date - ConversionError
-   is signaled:
+    If the any of the lines contains an invalid date - ConversionError
+    is signaled:
 
         >>> request.form['field.exceptions'] = '2004-08-14\n2004'
         >>> calendar = Calendar()
@@ -1114,6 +1117,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         0
 
     """
+
 
 def doctest_CalendarEventAddView_getMonthDay():
     r"""Tests for CalendarEventAddView.getMonthDay().
@@ -1162,6 +1166,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
         [0, 5, 6]
 
     """
+
 
 def doctest_CalendarEventAddView_weekdayDisabled():
     r"""Tests for CalendarEventAddView.weekdayDisabled().
@@ -1247,6 +1252,7 @@ def doctest_CalendarEventAddView_getWeekDay():
         u'same weekday'
 
     """
+
 
 def doctest_CalendarEventAddView_getLastWeekDay():
     r"""Tests for CalendarEventAddView.getLastWeekDay().
@@ -1352,6 +1358,7 @@ def doctest_CalendarEventAddView_cross_validation():
 
     """
 
+
 class CalendarEventEditTestView(CalendarEventEditView):
     """Class for testing CalendarEventEditView.
 
@@ -1381,7 +1388,7 @@ def doctest_CalendarEventEditView_edit():
 
     Let's try to edit the event:
 
-        >>> request = TestRequest(form={'field.title': 'NonHackig',
+        >>> request = TestRequest(form={'field.title': 'NonHacking',
         ...                             'field.start_date': '2004-09-13',
         ...                             'field.start_time': '15:30',
         ...                             'field.duration': '50',
@@ -1400,6 +1407,7 @@ def doctest_CalendarEventEditView_edit():
         >>> print view.error
         None
 
+        # TODO: does not work yet.
         #>>> event.title
         #u'NonHacking'
         #>>> event.dtstart
@@ -1669,6 +1677,7 @@ def doctest_CalendarEventEditView_getInitialData():
 
     """
 
+
 def doctest_CalendarEventEditView_getStartDate():
     """Tests for CalendarEventEditView getStartDate().
 
@@ -1705,6 +1714,7 @@ def doctest_CalendarEventEditView_getStartDate():
         True
 
     """
+
 
 class TestGetRecurrenceRule(unittest.TestCase):
 
