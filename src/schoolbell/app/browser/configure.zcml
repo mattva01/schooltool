@@ -594,6 +594,9 @@
   <resource name="toolbar-background-hover.png"
             file="resources/toolbar-background-hover.png"
             layer=".skin.ISchoolBellLayer" />
+  <resource name="sidebar-background.png"
+            file="resources/sidebar-background.png"
+            layer=".skin.ISchoolBellLayer" />
 
   <resource name="previous.png" file="resources/previous.png"
             layer=".skin.ISchoolBellLayer" />

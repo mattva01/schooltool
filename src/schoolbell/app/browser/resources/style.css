@@ -242,9 +242,9 @@ input.button-cancel {
 */
 
 #column-left {
-    border-right: 1px #bab5ab solid;
-    border-bottom: 1px #bab5ab solid;
-    background: #eae8e3;
+    background: #eae8e3 url(++resource++sidebar-background.png) bottom right no-repeat;
+    padding-right: 3px;
+    padding-bottom: 2em;
 }
 
 #column-left .portlet {
