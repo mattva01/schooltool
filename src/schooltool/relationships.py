@@ -23,8 +23,10 @@ $Id$
 """
 from persistence import Persistent
 from persistence.dict import PersistentDict
-from zope.interface import implements
+from zope.interface import implements, classProvides
 from schooltool.interfaces import IRemovableLink, IRelatable
+from schooltool.interfaces import IRelationshipSchemaFactory
+from schooltool.interfaces import IRelationshipSchema
 from schooltool.component import inspectSpecificURI
 
 __metaclass__ = type
@@ -94,9 +96,44 @@ class _LinkRelationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
-def relate(title, a, role_of_a, b, role_of_b):
+def relate(title, (a, role_of_a), (b, role_of_b)):
     """See IRelationshipAPI"""
     link_a = Link(a, role_of_b)
     link_b = Link(b, role_of_a)
     _LinkRelationship(title, link_a, link_b)
     return link_a, link_b
+
+
+class RelationshipSchema:
+    classProvides(IRelationshipSchemaFactory)
+    implements(IRelationshipSchema)
+
+    def __init__(self, *reltype_and_optional_title, **roles):
+        if len(reltype_and_optional_title) == 1:
+            self.type, = reltype_and_optional_title
+            self.title, doc = inspectSpecificURI(self.type)
+        elif len(reltype_and_optional_title) == 2:
+            self.type, self.title = reltype_and_optional_title
+        else:
+            raise TypeError("There can be either one or two positional"
+                            " arguments. (got %r)"
+                            % (reltype_and_optional_title,))
+        if len(roles) != 2:
+            raise TypeError("A relationship must have exactly two ends.")
+
+        self.roles = roles
+
+    def __call__(self, **parties):
+        if len(self.roles) != len(parties):
+            # XXX testme
+            raise TypeError("Wrong number of parties to this relationship."
+                            " Need %s, got %r" % (len(self.roles), parties))
+        L = []
+        for name, uri in self.roles.items():
+            party = parties.pop(name, None)
+            if party is None:
+                raise TypeError("This relationship needs a %s party."
+                                " Got %r" % (name, parties))
+            L.append((party, uri))
+        return relate(self.title, L[0], L[1])
+

@@ -242,9 +242,36 @@ class IQueryLinks(Interface):
         """
 
 
+class IRelationshipSchemaFactory(Interface):
+
+    def __call__(relationship_type, optional_title, **roles):
+        """Create an IRelationshipSchema of relationship_type.
+
+        Use keyword arguments to say what roles are required when
+        creating such a relationship.
+
+        The relationship type must be given. However, the title is
+        optional, and defaults to the URI of the relationship type.
+        """
+
+
+class IRelationshipSchema(Interface):
+    """Object that represents a relationship."""
+
+    type = Attribute("An ISpecificURI for the type of this relationship.")
+    title = Attribute("The title of this relationship.")
+
+    def __call__(**parties):
+        """Relate the parties to the relationship.
+
+        The objects are related according to the roles indicated
+        by the keyword arguments.
+        """
+
+
 class IRelationshipAPI(Interface):
 
-    def relate(title, a, role_a, b, role_b):
+    def relate(title, (a, role_a), (b, role_b)):
         """Relate a and b via the roles and title.
 
         Returns a tuple of links attached to a and b respectively.
@@ -257,8 +284,8 @@ class IRelationshipAPI(Interface):
                    my superior
 
         relate('command',
-                 officer, URIMySuperior,
-                 soldier, URIMyReport)
+               (officer, URIMySuperior),
+               (soldier, URIMyReport))
 
         Returns a two-tuple of:
           * The link traversable from the officer, role is URIMyReport

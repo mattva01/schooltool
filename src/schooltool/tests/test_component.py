@@ -267,7 +267,7 @@ class TestRelationships(unittest.TestCase):
         soldier = Relatable()
         self.assertEqual(list(getRelatedObjects(officer, URIReport)), [])
 
-        relate("Command", officer, URISuperior, soldier, URIReport)
+        relate("Command", (officer, URISuperior), (soldier, URIReport))
         self.assertEqual(list(getRelatedObjects(officer, URIReport)),
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
@@ -289,7 +289,7 @@ class TestRelate(unittest.TestCase):
         role_a = URISuperior
         b = object()
         role_b = URIReport
-        links = relate('a title', a, role_a, b, role_b)
+        links = relate('a title', (a, role_a), (b, role_b))
         self.assertEqual(len(links), 2)
         self.assertEquals(self.stub.title, title)
         self.assert_(self.stub.a is a)
@@ -305,17 +305,17 @@ class TestRelate(unittest.TestCase):
         m = MemberStub()
         g = GroupStub()
 
-        links = relate("Membership", g, URIGroup, m, URIMember)
+        links = relate("Membership", (g, URIGroup), (m, URIMember))
         self.assertEqual(len(links), 2)
         self.assertEqual(type(links[0]), MemberLink)
         self.assertEqual(type(links[1]), GroupLink)
 
-        links = relate("Membership",  m, URIMember, g, URIGroup)
+        links = relate("Membership",  (m, URIMember), (g, URIGroup))
         self.assertEqual(len(links), 2)
         self.assertEqual(type(links[0]), GroupLink)
         self.assertEqual(type(links[1]), MemberLink)
 
-        links = relate("Membership",  m, URIMember, g, URISuperior) # ?
+        links = relate("Membership",  (m, URIMember), (g, URISuperior))
         self.assertEqual(len(links), 2)
         self.assertNotEqual(type(links[0]), GroupLink)
         self.assertNotEqual(type(links[1]), MemberLink)
@@ -327,7 +327,7 @@ class Stub_relate3:
     role_a = None
     b = None
     role_b = None
-    def __call__(self, title, a, role_a, b, role_b):
+    def __call__(self, title, (a, role_a), (b, role_b)):
         self.title = title
         self.a = a
         self.role_a = role_a

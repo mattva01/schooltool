@@ -184,9 +184,11 @@ def isURI(uri):
 # relate3 is replaced by a stub when unit testing
 from schooltool.relationships import relate as relate3
 
-def relate(title, a, role_a, b, role_b):
+def relate(title, (a, role_a), (b, role_b)):
     """See IRelationshipAPI"""
-    from schooltool.model import MemberLink, GroupLink # XXX
+    # XXX This is to avoid a circular import
+    from schooltool.model import MemberLink, GroupLink
+
     group, member = None, None
     if role_a is URIGroup and role_b is URIMember:
         group = a
@@ -199,7 +201,7 @@ def relate(title, a, role_a, b, role_b):
         name = group.add(member)
         return GroupLink(member, group, name), MemberLink(group, member, name)
     else:
-        return relate3(title, a, role_a, b, role_b)
+        return relate3(title, (a, role_a), (b, role_b))
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""
