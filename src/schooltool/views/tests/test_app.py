@@ -239,12 +239,12 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(name, 'foo')
 
         view = ApplicationObjectCreatorView(self.app['groups'], 'bar')
-        xml = '''<object title="Bar Bar"
+        xml = '''<object title="Bar Bar \xe2\x98\xbb"
                          xmlns='http://schooltool.org/ns/model/0.1'/>'''
         name = self.test_post(method="PUT", suffix="/bar", view=view,
                               body=xml)
         self.assertEquals(name, 'bar')
-        self.assert_(self.app['groups'][name].title == 'Bar Bar')
+        self.assert_(self.app['groups'][name].title == u'Bar Bar \u263B')
 
     def test__traverse(self):
         from schooltool.views.model import GroupView

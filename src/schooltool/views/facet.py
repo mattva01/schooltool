@@ -36,6 +36,7 @@ from schooltool.views import absoluteURL
 from schooltool.views.auth import PublicAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
+from schooltool.common import to_unicode
 
 __metaclass__ = type
 
@@ -112,7 +113,7 @@ class FacetManagementView(View):
             xpathctx.xpathRegisterNs('m', ns)
             nodes = xpathctx.xpathEval('/m:facet/@factory')
             if nodes:
-                factory_name = nodes[0].content
+                factory_name = to_unicode(nodes[0].content)
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()

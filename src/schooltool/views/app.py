@@ -36,7 +36,7 @@ from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
 from schooltool.views.csvexport import CSVExporter
 from schooltool.views.auth import PublicAccess
-from schooltool.common import parse_date
+from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 
@@ -118,7 +118,7 @@ class ApplicationObjectCreator:
             xpathctx.xpathRegisterNs('m', ns)
             nodes = xpathctx.xpathEval('/*/@title')
             if nodes:
-                kw['title'] = nodes[0].content
+                kw['title'] = to_unicode(nodes[0].content)
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()

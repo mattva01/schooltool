@@ -232,7 +232,9 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         view.authorization = lambda ctx, rq: True
         for body in ("foo", '<facet factory="eventlog">',
                      '<facet xmlns="http://schooltool.org/ns/model/0.1"'
-                     ' factory="nosuchfactory"/>', ):
+                     ' factory="nosuchfactory"/>',
+                     '<facet xmlns="http://schooltool.org/ns/model/0.1"'
+                     ' factory="nosuchfactory \xe2\x98\xbb"/>'):
             request = RequestStub("http://localhost/group/facets",
                                   method="POST",
                                   body=body)

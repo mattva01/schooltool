@@ -34,7 +34,7 @@ from schooltool.views import View, Template
 from schooltool.views import notFoundPage, textErrorPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
-from schooltool.common import parse_date
+from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 
@@ -105,7 +105,7 @@ class PersonInfoFacetView(FacetView):
 
             def extract(attr):
                 node = xpathctx.xpathEval('/st:person_info/st:%s' % attr)[0]
-                return node.content.strip()
+                return to_unicode(node.content).strip()
 
             self.context.first_name = extract('first_name')
             self.context.last_name = extract('last_name')

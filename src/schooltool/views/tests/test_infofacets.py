@@ -69,10 +69,10 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         from schooltool.model import Person
         body = """
             <person_info xmlns="http://schooltool.org/ns/model/0.1">
-              <first_name>John</first_name>
-              <last_name>Smith</last_name>
+              <first_name>John \xe2\x98\xbb</first_name>
+              <last_name>Smith \xe2\x98\xbb</last_name>
               <date_of_birth>1970-04-21</date_of_birth>
-              <comment>...</comment>
+              <comment>... \xe2\x98\xbb</comment>
             </person_info>
             """
         person = Person()
@@ -85,11 +85,11 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         result = view.render(request)
         self.assertEquals(result, "Updated")
         self.assertEquals(request.code, 200)
-        self.assertEquals(context.first_name, 'John')
-        self.assertEquals(context.last_name, 'Smith')
-        self.assertEquals(person.title, 'John Smith')
+        self.assertEquals(context.first_name, u'John \u263B')
+        self.assertEquals(context.last_name, u'Smith \u263B')
+        self.assertEquals(person.title, u'John \u263B Smith \u263B')
         self.assertEquals(context.date_of_birth, datetime.date(1970, 4, 21))
-        self.assertEquals(context.comment, '...')
+        self.assertEquals(context.comment, u'... \u263B')
 
         body2 = """
             <person_info xmlns="http://schooltool.org/ns/model/0.1"
