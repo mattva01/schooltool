@@ -92,7 +92,7 @@ install-stamp: build
 	install -m 644 -D -p debian/ssl-cert.cnf \
 	    debian/$(package)/etc/$(package)/ssl-cert.cnf	
 	install -m 644 -D -p debian/$(package).conf.default \
-	    debian/$(package)/etc/$(package)/$(package).conf.default
+	    debian/$(package)/usr/share/$(package)/$(package).conf.default
 
 	
 	###### Client Packages ######
