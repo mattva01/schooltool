@@ -8,14 +8,6 @@ src/*.pyc
 src/Data.fs*
 src/*~
 src/*.so
-src/CVS/*.pyc
-src/CVS/Data.fs*
-src/CVS/*~
-src/CVS/*.so
-src/ZConfig/*.pyc
-src/ZConfig/Data.fs*
-src/ZConfig/*~
-src/ZConfig/*.so
 src/ZConfig/CVS/*.pyc
 src/ZConfig/CVS/Data.fs*
 src/ZConfig/CVS/*~
