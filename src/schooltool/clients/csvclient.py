@@ -110,18 +110,12 @@ Sample resources.csv::
 $Id$
 """
 
-import csv
 import cgi
 import sys
 import base64
 import httplib
-
 from schooltool.translation import ugettext as _
-from schooltool.common import UnicodeAwareException, from_locale
-
-
-class DataError(UnicodeAwareException):
-    pass
+from schooltool.csvimport import CSVImporterBase
 
 
 class HTTPClient:
@@ -150,67 +144,6 @@ class HTTPClient:
         if body is not None:
             conn.send(body)
         return conn.getresponse()
-
-
-class CSVImporterBase:
-
-    def importGroupsCsv(self, csvdata):
-        lineno = 0
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 4:
-                    raise DataError(_("Error in group data, line %d:"
-                                      " expected 4 columns, got %d") %
-                                    (lineno + 1, len(row)))
-                name, title, parents, facets = map(from_locale, row)
-                self.importGroup(name, title, parents, facets)
-        except csv.Error, e:
-            raise DataError(_("Error in group data line %d: %s")
-                            % (lineno + 1, e))
-
-    def importPersonsCsv(self, csvdata, parent_group, teaching=False):
-        lineno = 0
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 4:
-                    raise DataError(_("Error in %s data line %d:"
-                                      " expected 4 columns, got %d") %
-                                    (parent_group, lineno + 1, len(row)))
-                title, groups, dob, comment = map(from_locale, row)
-                name = self.importPerson(title, parent_group, groups,
-                                         teaching=teaching)
-                self.importPersonInfo(name, title, dob, comment)
-        except csv.Error, e:
-            raise DataError(_("Error in %s parent_group data line %d: %s")
-                            % (parent_group, lineno + 1, e))
-
-    def importResourcesCsv(self, csvdata):
-        lineno = 0
-        try:
-            for lineno, row in enumerate(csv.reader(csvdata)):
-                if len(row) != 2:
-                    raise DataError(_("Error in resource data line %d:"
-                                      " expected 2 columns, got %d") %
-                                    (lineno + 1, len(row)))
-                title, groups = map(from_locale, row)
-                self.importResource(title, groups)
-        except csv.Error, e:
-            raise DataError(_("Error in resource data line %d: %s")
-                            % (lineno + 1, e))
-
-    # The methods below must be overridden by subclasses.
-
-    def importGroup(self, name, title, parents, facets):
-        raise NotImplementedError()
-
-    def importPerson(self, title, parent, groups, teaching=False):
-        raise NotImplementedError()
-
-    def importResource(self, title, groups):
-        raise NotImplementedError()
-
-    def importPersonInfo(self, name, title, dob, comment):
-        raise NotImplementedError()
 
 
 class CSVImporterHTTP(CSVImporterBase):

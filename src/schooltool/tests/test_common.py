@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2003 Shuttleworth Foundation
+# Copyright (c) 2004 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ $Id$
 import unittest
 import datetime
 from zope.testing.doctestunit import DocTestSuite
+from schooltool.tests.utils import NiceDiffsMixin
 
 __metaclass__ = type
 
@@ -70,6 +71,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 
+
 if __name__ == '__main__':
     unittest.main()
-
