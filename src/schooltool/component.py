@@ -24,8 +24,9 @@ $Id$
 
 import re
 from sets import Set
-from zope.interface import moduleProvides
+from zope.interface import moduleProvides, InterfaceSpecification
 from zope.interface.interfaces import IInterface
+from zope.interface.type import TypeRegistry
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
@@ -190,32 +191,27 @@ def isURI(uri):
 # Relationships
 #
 
-relationship_registry = []
+relationship_registry = TypeRegistry()
 
 def resetRelationshipRegistry():
     """Clears the relationship registry"""
     global relationship_registry
-    relationship_registry = []
+    relationship_registry = TypeRegistry()
 
 
 def registerRelationship(rel_type, handler):
     """See IRelationshipAPI"""
-    for type, ignore in relationship_registry:
-        if type is rel_type:
-            raise ValueError("Handler for %s already registered" % rel_type)
-    relationship_registry.append((rel_type, handler))
+    if relationship_registry.get(rel_type) is not None:
+        raise ValueError("Handler for %s already registered" % rel_type)
+    relationship_registry.register(rel_type, handler)
 
 
 def getRelationshipHandlerFor(rel_type):
     """Returns the registered handler for relationship_type."""
-    best, best_handler = None, None
-    for type, handler in relationship_registry:
-        if (rel_type.extends(type, False)
-            and (best is None or type.extends(best, False))):
-            best, best_handler = type, handler
-    if best is None:
+    handlers = relationship_registry.getAll(InterfaceSpecification(rel_type))
+    if not handlers:
         raise ComponentLookupError("No handler registered for %s" % rel_type)
-    return best_handler
+    return handlers[0]
 
 
 def relate(relationship_type, (a, role_a), (b, role_b), title=None):
