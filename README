@@ -21,13 +21,17 @@ Project structure
 
   Makefile              makefile for building extension modules
   setup.py              distutils setup script for building extension modules
-  test.py               unit test runner
+  test.py               test runner
   schooltool.conf.in    sample configuration file
 
   build/                temporary files are placed here during build process
+  coverage/             unit test coverage reports are placed here
   src/                  source code
     schooltool/         Python module 'schooltool'
       main.py           executable prototype
+      client.py         executable command line client
+      wxclient.py       executable wxWindows client prototype
+      *.py              other modules (see docstrings)
       schema.xml        ZConfig schema definition for the configuration file
       www/              page templates
       ftests/           functional tests for the schooltool module
