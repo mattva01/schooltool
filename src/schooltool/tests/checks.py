@@ -115,7 +115,42 @@ class StdoutChecks:
             warn("%s wrote to sys.stderr" % test)
 
 
+class LibxmlChecks:
+
+    def __init__(self):
+        self.last_mem = 0
+
+    def startTest(self, test):
+        import libxml2
+        mem = libxml2.debugMemory(1)
+        if mem > self.last_mem:
+            warn("libxml2 used %d bytes of memory before test %s"
+                 % (mem - self.last_mem, test))
+
+        # Attempts to call libxml2.cleanupParser() in stopTest and then check
+        # that debugMemory() returns 0 were unsuccessful.  It appears that
+        # cleanupParser can only work correctly once.  Instead try to subtract
+        # this overhead once by calling libxml2.initParser() and remembering
+        # the amount of memory it takes (395 bytes here).
+        libxml2.initParser()
+        self.last_mem = libxml2.debugMemory(1)
+        if self.last_mem != libxml2.debugMemory(1):
+            warn("libxml2 acts strangely")
+
+    def stopTest(self, test):
+        import libxml2
+        libxml2.cleanupParser()
+        mem = libxml2.debugMemory(1)
+        if mem > self.last_mem:
+            warn("%s leaked %d bytes of memory in libxml2 objects (total: %d)"
+                 % (test, mem - self.last_mem, mem))
+        self.last_mem = mem
+
+
 def test_hooks():
-    return [StdoutChecks(),     # should be the first one
-            ComponentChecks(),
-            TransactionChecks()]
+    return [
+        StdoutChecks(),     # should be the first one
+        ComponentChecks(),
+        TransactionChecks(),
+        LibxmlChecks(),
+    ]
