@@ -43,7 +43,7 @@ regexp is applied to the whole path (package/package/module.py). Test regexp
 is applied to a full test id (package.package.module.class.test_method).
 
 Options:
-  -h                    print this help message
+  -h, --help            print this help message
   -v                    verbose (print dots for each test run)
   -vv                   very verbose (print test names)
   -q                    quiet (do not print anything on success)
@@ -479,9 +479,9 @@ def main(argv):
     opts, args = getopt.gnu_getopt(argv[1:], 'hvpqufw',
                                    ['list-files', 'list-tests', 'list-hooks',
                                     'level=', 'all-levels', 'coverage',
-                                    'search-in=', 'immediate-errors'])
+                                    'search-in=', 'immediate-errors', 'help'])
     for k, v in opts:
-        if k == '-h':
+        if k in ['-h', '--help']:
             print __doc__
             return 0
         elif k == '-v':
