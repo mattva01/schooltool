@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: interfaces.py,v 1.25 2004/03/30 22:01:34 jim Exp $
+$Id: interfaces.py,v 1.26 2004/04/05 19:44:01 jim Exp $
 """
 
 from zope.interface import Interface
@@ -25,12 +25,6 @@ class IElement(Interface):
 
     __name__ = Attribute('__name__', 'The object name')
     __doc__  = Attribute('__doc__', 'The object doc string')
-
-    def getName():
-        """Returns the name of the object."""
-
-    def getDoc():
-        """Returns the documentation for the object."""
 
     def getTaggedValue(tag):
         """Returns the value associated with 'tag'.
@@ -232,23 +226,16 @@ class IInterface(ISpecification, IElement):
         attributes defined by base classes will be included.
         """
 
-    def getDescriptionFor(name):
+    def __getitem__(name):
         """Get the description for a name
 
         If the named attribute is not defined, a KeyError is raised.
         """
-
-    __getitem__ = getDescriptionFor
-
-    def queryDescriptionFor(name, default=None):
-        """Look up the description for a name
-
-        If the named attribute is not defined, the default is
-        returned.
-        """
     
     def validateInvariants(obj, errors=None):
-        """validate object to defined invariants.  If errors is None,
+        """Validate invariants
+
+        Validate object to defined invariants.  If errors is None,
         raises first Invalid error; if errors is a list, appends all errors
         to list, then raises Invalid with the errors as the first element
         of the "args" tuple."""

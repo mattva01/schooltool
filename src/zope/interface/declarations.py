@@ -24,7 +24,7 @@ There are three flavors of declarations:
     provided by objects.
     
 
-$Id: declarations.py,v 1.20 2004/02/20 16:56:50 fdrake Exp $
+$Id: declarations.py,v 1.21 2004/04/05 19:43:59 jim Exp $
 """
 
 import sys
@@ -332,8 +332,12 @@ def implementedByFallback(cls):
         spec.inherit = None    # old-style implies no inherit
         del cls.__implements__ # get rid of the old-style declaration
     else:
-        spec = Implements(
-            *[implementedBy(c) for c in cls.__bases__])
+        try:
+            bases = cls.__bases__
+        except AttributeError:
+            raise TypeError("ImplementedBy called for non-type", cls)
+
+        spec = Implements(*[implementedBy(c) for c in bases])
         spec.inherit = cls
 
     spec.__name__ = getattr(cls, '__module__', '?') + '.' + cls.__name__

@@ -18,6 +18,9 @@ If .path file isn't found in the directory of the setpath.py module, then try
 to import ZODB.  If that succeeds, we assume the path is already set up
 correctly.  If that import fails, an IOError is raised.
 """
+
+# XXX Why does this want to find ZODB ???
+
 import os
 import sys
 

@@ -268,8 +268,10 @@ class _I2(_I1__):
 
 
 def test_suite():
+    from docfilesuite import DocFileSuite
     suite = unittest.makeSuite(InterfaceTests)
     suite.addTest(DocTestSuite("zope.interface.interface"))
+    suite.addTest(DocFileSuite('../README.txt'))
     return suite
 
 def main():

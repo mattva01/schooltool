@@ -13,7 +13,7 @@
 ##############################################################################
 """Parse XML and compile to TALInterpreter intermediate code.
 
-$Id: talparser.py,v 1.5 2004/03/19 21:42:04 fdrake Exp $
+$Id: talparser.py,v 1.6 2004/04/07 15:13:00 gintautasm Exp $
 """
 from zope.tal.taldefs import XML_NS, ZOPE_I18N_NS, ZOPE_METAL_NS, ZOPE_TAL_NS
 from zope.tal.talgenerator import TALGenerator
@@ -81,7 +81,6 @@ class TALParser(XMLParser):
                 taldict[keybase] = value
                 item = item + ("tal",)
             elif ns == 'i18n':
-                # assert 0, "dealing with i18n: " + `(keybase, value)`
                 i18ndict[keybase] = value
                 item = item + ('i18n',)
             fixedattrlist.append(item)

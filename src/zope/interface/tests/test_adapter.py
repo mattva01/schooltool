@@ -13,7 +13,7 @@
 ##############################################################################
 """XXX short summary goes here.
 
-$Id: test_adapter.py,v 1.4 2004/03/15 20:41:55 jim Exp $
+$Id: test_adapter.py,v 1.5 2004/04/05 19:43:41 jim Exp $
 """
 import unittest, doctest
 import zope.interface
@@ -198,30 +198,9 @@ def test_getRegisteredMatching_with_with():
 
 
 
-def DocFileSuite(*paths):
-    # It's not entirely obvious how to connection this single string
-    # with unittest.  For now, re-use the _utest() function that comes
-    # standard with doctest in Python 2.3.  One problem is that the
-    # error indicator doesn't point to the line of the doctest file
-    # that failed.
-    import os, doctest, new
-    t = doctest.Tester(globs={})
-    suite = unittest.TestSuite()
-    dir = os.path.split(__file__)[0]
-    for path in paths:
-        path = os.path.join(dir, path)
-        source = open(path).read()
-        def runit(path=path, source=source):
-            doctest._utest(t, path, source, path, 0)
-        runit = new.function(runit.func_code, runit.func_globals, path,
-                             runit.func_defaults, runit.func_closure)
-        f = unittest.FunctionTestCase(runit,
-                                      description="doctest from %s" % path)
-        suite.addTest(f)
-    return suite
-
 
 def test_suite():
+    from docfilesuite import DocFileSuite
     return unittest.TestSuite((
         DocFileSuite('../adapter.txt', 'foodforthought.txt'),
         doctest.DocTestSuite('zope.interface.adapter'),

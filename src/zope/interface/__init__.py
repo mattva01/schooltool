@@ -67,7 +67,7 @@ There is also a script, pyskel.py in the package that can be used to
 create interface skeletons. Run it without arguments to get documentation.
 
 Revision information:
-$Id: __init__.py,v 1.12 2004/01/20 21:17:41 poster Exp $
+$Id: __init__.py,v 1.13 2004/04/05 19:43:51 jim Exp $
 """
 
 from zope.interface.interface import Interface, _wire
@@ -91,5 +91,7 @@ from zope.interface.declarations import Provides
 
 
 from zope.interface.interfaces import IInterfaceDeclaration
+
 moduleProvides(IInterfaceDeclaration)
+
 __all__ = ('Interface', 'Attribute') + tuple(IInterfaceDeclaration)

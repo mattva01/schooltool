@@ -156,6 +156,7 @@ class ITALExpressionEngine(Interface):
 
     def translate(msgid, domain=None, mapping=None, default=None):
         """See ITranslationService.translate()"""
+        # XXX ITranslationService does not exist!
 
     def evaluateCode(lang, code):
         """Evaluates code of the given language.

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<body xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<span i18n:translate="">
+  <span tal:replace="str:Lomax" i18n:name="name" /> was born in
+  <span tal:replace="str:Antarctica" i18n:name="country" />.
+</span>
+</body>

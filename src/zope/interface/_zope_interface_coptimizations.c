@@ -309,6 +309,8 @@ Spec_implementedBy(PyObject *self, PyObject *cls)
   PyObject *decl, *item;
 
   decl = implementedBy(NULL, cls);
+  if (decl == NULL)
+    return NULL;
   
   if (PyObject_TypeCheck(decl, &SpecType))
     item = Spec_extends(decl, self);
@@ -533,7 +535,7 @@ init_zope_interface_coptimizations(void)
   /* Create the module and add the functions */
   m = Py_InitModule3("_zope_interface_coptimizations", m_methods,
                      "C optimizations for zope.interface\n\n"
-                     "$Id: _zope_interface_coptimizations.c,v 1.4 2004/03/05 22:09:28 jim Exp $");  
+                     "$Id: _zope_interface_coptimizations.c,v 1.5 2004/04/05 19:43:57 jim Exp $");  
   if (m == NULL)
     return;
   
