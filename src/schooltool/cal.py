@@ -622,10 +622,15 @@ class MonthlyRecurrenceRule(RecurrenceRule):
 
     def _nextRecurrence(self, date):
         """Adds the basic step of recurrence to the date"""
-        year, month = divmod(date.year * 12 + date.month + self.interval - 1,
-                             12)
-        month += 1
-        return date.replace(year=year, month=month)
+        year = date.year
+        month = date.month
+        while True:
+            year, month = divmod(year * 12 + month - 1 + self.interval, 12)
+            month += 1 # convert 0..11 to 1..12
+            try:
+                return date.replace(year=year, month=month)
+            except ValueError:
+                continue
 
     def apply(self, event, enddate=None):
         if self.monthly == 'monthday':

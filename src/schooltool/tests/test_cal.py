@@ -991,6 +991,30 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         expected = [date(1978, 5, 17), date(1978, 9, 17)]
         self.assertEqual(result, expected)
 
+    def test_apply_endofmonth(self):
+        from schooltool.cal import CalendarEvent
+        rule = self.createRule(monthly="monthday")
+        ev = CalendarEvent(datetime(2001, 1, 31, 0, 0),
+                           timedelta(minutes=10),
+                           "End of month", unique_id="uid")
+
+        # The event happened after the range -- empty result
+        result = list(rule.apply(ev, date(2001, 12, 31)))
+        self.assertEqual(len(result), 7)
+
+        rule = self.createRule(monthly="monthday", count=7)
+        result = list(rule.apply(ev, date(2001, 12, 31)))
+        self.assertEqual(len(result), 7)
+        self.assertEqual(result[-1], date(2001, 12, 31))
+
+        rule = self.createRule(monthly="monthday", interval=2)
+        result = list(rule.apply(ev, date(2002, 1, 31)))
+        self.assertEqual(result, [date(2001, 1, 31),
+                                  date(2001, 3, 31),
+                                  date(2001, 5, 31),
+                                  date(2001, 7, 31),
+                                  date(2002, 1, 31),])
+
     def test_apply_weekday(self):
         from schooltool.cal import CalendarEvent
         rule = self.createRule(monthly="weekday")
