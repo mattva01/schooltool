@@ -163,6 +163,19 @@ class TestACLCalendarAccess(AppSetupMixin, AuthPolicyTestMixin,
                           Set([self.root, g1, g21, g22]))
 
 
+    def test_CalendarFooAccess(self):
+        from schooltool.browser.auth import CalendarViewAccess
+        from schooltool.browser.auth import CalendarAddAccess
+        from schooltool.browser.auth import CalendarModifyAccess
+
+        for access in (CalendarModifyAccess, CalendarAddAccess,
+                       CalendarViewAccess):
+            self.assertAllows(access, [self.person, self.manager],
+                              self.person.calendar)
+            self.assertDenies(access,
+                              [self.anonymous, self.person2, self.teacher],
+                              self.person.calendar)
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBrowserAuthPolicies))

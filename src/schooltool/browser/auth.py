@@ -39,6 +39,8 @@ from schooltool.rest.auth import isManager, isTeacher
 from schooltool.rest.auth import PrivateAccess      # reexport
 from schooltool.component import getRelatedObjects
 from schooltool.uris import URIGroup
+from schooltool.interfaces import ViewPermission, ModifyPermission
+from schooltool.interfaces import AddPermission
 
 __metaclass__ = type
 
@@ -96,3 +98,7 @@ class ACLCalendarAccess:
                     getAncestors(parent)
         getAncestors(person)
         return ancestors
+
+CalendarViewAccess = ACLCalendarAccess(ViewPermission)
+CalendarModifyAccess = ACLCalendarAccess(ModifyPermission)
+CalendarAddAccess = ACLCalendarAccess(AddPermission)

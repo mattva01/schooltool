@@ -27,6 +27,8 @@ from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
+from schooltool.browser.auth import CalendarViewAccess, CalendarModifyAccess
+from schooltool.browser.auth import CalendarAddAccess
 from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
@@ -154,7 +156,7 @@ class CalendarViewBase(View):
 
     __used_for__ = ICalendar
 
-    authorization = PrivateAccess
+    authorization = CalendarViewAccess
 
     # Which day is considered to be the first day of the week (0 = Monday,
     # 6 = Sunday).  Currently hardcoded.  A similair value is also hardcoded
@@ -300,7 +302,7 @@ class DailyCalendarView(CalendarViewBase):
 
     __used_for__ = ICalendar
 
-    authorization = PrivateAccess
+    authorization = CalendarViewAccess
 
     template = Template("www/cal_daily.pt")
 
@@ -558,7 +560,7 @@ class CalendarView(View):
     Switches daily, weekly, monthly, yearly calendar presentations.
     """
 
-    authorization = PrivateAccess
+    authorization = CalendarViewAccess
 
     def _traverse(self, name, request):
         if name == 'weekly.html':
@@ -589,7 +591,7 @@ class EventViewBase(View):
 
     __used_for__ = ICalendar
 
-    authorization = PrivateAccess
+    authorization = CalendarModifyAccess
 
     template = Template('www/event.pt')
     page_title = None # overridden by subclasses
@@ -672,6 +674,8 @@ class EventAddView(EventViewBase):
 
     page_title = _("Add event")
 
+    authorization = CalendarAddAccess
+
     def process(self, dtstart, duration, title, location):
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__,
@@ -716,7 +720,7 @@ class EventDeleteView(View):
 
     __used_for__ = ICalendar
 
-    authorization = PrivateAccess
+    authorization = CalendarModifyAccess
 
     def do_GET(self, request):
         event_id = to_unicode(request.args['event_id'][0])
