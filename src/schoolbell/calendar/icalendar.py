@@ -272,7 +272,8 @@ def read_icalendar(icalendar_text):
     Unsuppored features of the iCalendar file (e.g. VTODO components, complex
     recurrence rules, unknown properties) are silently ignored.
     """
-    if isinstance(icalendar_text, str):
+    if not hasattr(icalendar_text, 'read'):
+        # It is not a file-like object -- let's assume it is a string
         icalendar_text = StringIO(icalendar_text)
     reader = ICalReader(icalendar_text)
     for vevent in reader.iterEvents():
@@ -441,7 +442,7 @@ class ICalReader:
         (name, value, params).
         """
         record = []
-        for line in self.file.readlines():
+        for line in self.file:
             if line[0] in '\t ':
                 line = line[1:]
             elif record:
