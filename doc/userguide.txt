@@ -14,10 +14,10 @@ Here you can choose the server, port to connect to and the user/password to
 use.  The Server Settings dialog can be accessed at any time via the
 Setting->Server menu item.
 
-What you see after logging in is the main SchoolTool window.  It is divided 
+What you see after logging in is the main SchoolTool window.  It is divided
 into three panes:
 
-* The group tree, shows you groups, subgroups and their members.
+* The group tree, which shows you groups, subgroups and their members.
 
 * The members pane, showing the members of the selected group.
 
@@ -26,7 +26,7 @@ into three panes:
 
 In this document, we use the following conventions:
 
-* The "context menu" is accessed by right-clicking on something.
+* The "context menu" is accessed by right-clicking on an object.
 
 * The notation Menu->Submenu->Subsubmenu shows a particular menu item
   to select.
@@ -173,8 +173,8 @@ can additionaly run roll calls and book resources, and the managers
 can edit all information.
 
 The username for a user is set when the user is created and cannot be
-changed.  The password can be changed by the user themselves or a
+changed.  The password can be changed by the user himself or a
 manager by right-clicking on a user and choosing "Change Password".
 
-People can be made into teachers and managers by adding them to the
+People can be given teacher or manager privileges by adding them to the
 Teachers and System Managers groups respectively.
