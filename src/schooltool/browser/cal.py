@@ -60,6 +60,7 @@ class BookingView(View):
                 self.start_time = ":".join(parts[1].split(':')[:2])
             if 'mins' in request.args:
                 self.duration = to_unicode(request.args['mins'][0])
+            self.owner_name = request.authenticated_user.__name__
             return
 
         force = 'conflicts' in request.args
@@ -77,11 +78,11 @@ class BookingView(View):
                 self.error = _("Only managers can set the owner")
                 return
             persons = traverse(self.context, '/persons')
-            self.owner_name = owner_name = to_unicode(request.args['owner'][0])
+            self.owner_name = to_unicode(request.args['owner'][0])
             try:
-                owner = persons[owner_name]
+                owner = persons[self.owner_name]
             except KeyError:
-                self.error = _("Invalid owner: %s") % owner_name
+                self.error = _("Invalid owner: %s") % self.owner_name
                 return
         else:
             owner = request.authenticated_user
