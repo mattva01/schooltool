@@ -637,16 +637,27 @@ class BaseTimetableModel(Persistent):
 
     Subclasses must define these methods:
 
-       def schooldayStrategy(self, date, generator):
-           'Returns a day_id for a certain date'
+       def schooldayStrategy(self, date, day_iterator):
+           '''Return a day_id for a certain date.
+
+           Will be called sequentially for all school days.
+           '''
 
        def _dayGenerator(self):
-           'Returns a generator to be passed to each call to schooldayStrategy'
+           '''Return an iterator to be passed to schooldayStrategy'''
     """
     implements(ITimetableModel)
 
     timetableDayIds = ()
     dayTemplates = {}
+
+    def _validateDayTemplates(self):
+        if None not in self.dayTemplates:
+            for weekday in range(7):
+                if weekday not in self.dayTemplates:
+                    raise AssertionError("No day template for day %d,"
+                                         " and no fallback either"
+                                         % weekday)
 
     def createCalendar(self, schoolday_model, timetable):
         exceptions = {}
@@ -766,6 +777,7 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
     def __init__(self, day_ids, day_templates):
         self.timetableDayIds = day_ids
         self.dayTemplates = day_templates
+        self._validateDayTemplates()
 
     def _dayGenerator(self):
         return itertools.cycle(self.timetableDayIds)
@@ -783,6 +795,7 @@ class WeeklyTimetableModel(BaseTimetableModel):
         self.dayTemplates = day_templates
         if day_ids is not None:
             self.timetableDayIds = day_ids
+        self._validateDayTemplates()
 
     def schooldayStrategy(self, date, generator):
         return self.timetableDayIds[date.weekday()]

@@ -893,16 +893,16 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.interfaces import ITimetableModel
 
-        model = SequentialDaysTimetableModel(("A","B"), {})
+        model = SequentialDaysTimetableModel(("A","B"), {None: 3})
         verifyObject(ITimetableModel, model)
 
     def test_eq(self):
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.timetable import WeeklyTimetableModel
-        model = SequentialDaysTimetableModel(("A","B"), {1: 2})
-        model2 = SequentialDaysTimetableModel(("A","B"), {1: 2})
-        model3 = WeeklyTimetableModel(("A","B"), {1: 2})
-        model4 = SequentialDaysTimetableModel(("A"), {1: 2})
+        model = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
+        model2 = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
+        model3 = WeeklyTimetableModel(("A","B"), {1: 2, None: 3})
+        model4 = SequentialDaysTimetableModel(("A"), {1: 2, None: 3})
 
         self.assertEqual(model, model2)
         self.assertNotEqual(model2, model3)
