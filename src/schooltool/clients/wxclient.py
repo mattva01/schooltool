@@ -33,6 +33,7 @@ the Free Software Foundation; either version 2 of the License, or
 
 import os
 import sets
+import locale
 import libxml2
 import datetime
 import threading
@@ -2133,9 +2134,13 @@ class MainFrame(wxFrame):
         for idx, item in enumerate(self.relationshipListData):
             self.relationshipListCtrl.InsertStringItem(idx, item.target_title)
             self.relationshipListCtrl.SetItemData(idx, idx)
-            self.relationshipListCtrl.SetStringItem(idx, 1, nameURI(item.role))
-            self.relationshipListCtrl.SetStringItem(idx, 2,
-                                                    nameURI(item.arcrole))
+            role = nameURI(item.role).encode(locale.getpreferredencoding(),
+                                             'replace')
+            arcrole = nameURI(item.arcrole).encode(
+                                             locale.getpreferredencoding(),
+                                             'replace')
+            self.relationshipListCtrl.SetStringItem(idx, 1, role)
+            self.relationshipListCtrl.SetStringItem(idx, 2, arcrole)
         self.relationshipListCtrl.Thaw()
 
     def DoRefresh(self, event=None):

@@ -27,7 +27,7 @@ from zope.interface import Interface, moduleProvides
 from zope.interface.interfaces import IInterface
 from schooltool.interfaces import IModuleSetup, ComponentLookupError
 from schooltool.common import dedent
-from schooltool.translation import gettext
+from schooltool.translation import ugettext
 
 __metaclass__ = type
 
@@ -129,8 +129,8 @@ def inspectSpecificURI(uri, translate=True):
         doc = ""
 
     if translate:
-        title = title and gettext(title)
-        doc = gettext(doc)
+        title = title and ugettext(title)
+        doc = ugettext(doc)
 
     return uri, title, doc
 
