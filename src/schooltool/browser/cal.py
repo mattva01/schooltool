@@ -726,7 +726,6 @@ class EventViewHelpers:
         If event is already an exceptional event, the corresponding
         exception is adjusted.  Otherwise a new one is created.
         """
-        print event # XXX
         if IExceptionalTTCalendarEvent.providedBy(event):
             exception = event.exception
         else:
