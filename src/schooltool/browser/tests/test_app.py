@@ -190,7 +190,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         self.assertTraverses(view, 'resources', ResourceContainerView,
                              app['resources'])
-        self.assertTraverses(view, 'csvimport', CSVImportView, app)
+        self.assertTraverses(view, 'csvimport.html', CSVImportView, app)
         self.assertTraverses(view, 'busysearch', BusySearchView, app)
         self.assertTraverses(view, 'ttschemas', TimetableSchemaServiceView,
                              app.timetableSchemaService)
