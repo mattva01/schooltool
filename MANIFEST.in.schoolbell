@@ -9,6 +9,10 @@ include remove-stale-bytecode.py
 
 include images/schoolbell.svg
 include scripts/schoolbell
+include scripts/schoolbell-export.py
+include scripts/schoolbell-import.py
+include scripts/run-export.sh
+include scripts/run-import.sh
 
 recursive-include src/schoolbell *.py *.pt *.css *.png *.txt
 recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
