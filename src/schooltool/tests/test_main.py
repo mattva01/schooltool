@@ -515,7 +515,6 @@ class TestServer(unittest.TestCase):
 
     def test_loadConfig(self):
         from schooltool.main import Server
-        from zodb.storage.mapping import MappingStorage
         server = Server()
         server.notifyConfigFile = lambda x: None
         config_file = self.getConfigFileName()

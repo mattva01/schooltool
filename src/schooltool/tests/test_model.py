@@ -27,7 +27,7 @@ from sets import Set
 from zope.interface import implements
 from zope.interface.verify import verifyObject
 from schooltool.interfaces import IGroupMember, IFacet, IFaceted
-from schooltool.interfaces import IEventConfigurable, IEvent
+from schooltool.interfaces import IEventConfigurable
 
 __metaclass__ = type
 
@@ -192,96 +192,12 @@ class TestFacetedMixin(unittest.TestCase):
         verifyObject(IFaceted, m)
 
 
-class TargetStub:
-    events = ()
-
-    def handle(self, event):
-        self.events += (event, )
-
-class TestEventMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import EventMixin
-        from schooltool.interfaces import IEvent
-        marker = object()
-        e = EventMixin(marker)
-        verifyObject(IEvent, e)
-        self.assertEquals(e.context, marker)
-
-    def test_dispatch(self):
-        from schooltool.model import EventMixin
-        target = TargetStub()
-        e = EventMixin()
-        e.dispatch(target)
-        self.assertEquals(target.events, (e, ))
-
-    def test_dispatch_default_arg(self):
-        from schooltool.model import EventMixin
-        target = TargetStub()
-        e = EventMixin(target)
-        e.dispatch()
-        self.assertEquals(target.events, (e, ))
-
-    def test_dispatch_repeatedly(self):
-        from schooltool.model import EventMixin
-        target = TargetStub()
-        e = EventMixin()
-        e.dispatch(target)
-        e.dispatch(target)
-        e.dispatch(target)
-        self.assertEquals(target.events, (e, ))
-
-
-class IEventA(IEvent):
-    pass
-
-class IEventB(IEvent):
-    pass
-
-class EventAStub:
-    implements(IEventA)
-
-    def __init__(self):
-        self.dispatched_to = []
-
-    def dispatch(self, target):
-        self.dispatched_to.append(target)
-
-class EventActionStub:
-    def __init__(self, evtype):
-        self.eventType = evtype
-        self.calls = []
-
-    def handle(self, event, target):
-        self.calls.append((event, target))
-
-class TestEventTargetMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import EventTargetMixin
-        from schooltool.interfaces import IEventTarget, IEventConfigurable
-        et = EventTargetMixin()
-        verifyObject(IEventTarget, et)
-        verifyObject(IEventConfigurable, et)
-        self.assertEquals(list(et.eventTable), [])
-
-    def test_handle(self):
-        from schooltool.model import EventTargetMixin
-        et = EventTargetMixin()
-        handler_a = EventActionStub(IEventA)
-        handler_b = EventActionStub(IEventB)
-        et.eventTable.extend([handler_a, handler_b])
-        event = EventAStub()
-        et.handle(event)
-        self.assertEqual(handler_a.calls, [(event, et)])
-        self.assertEqual(handler_b.calls, [])
-
-
 class TestFacetedEventTargetMixin(unittest.TestCase):
 
     def test(self):
         from schooltool.model import FacetedEventTargetMixin
-        from schooltool.interfaces import IFaceted, IEventTarget, IEventConfigurable
+        from schooltool.interfaces import IFaceted, IEventTarget
+        from schooltool.interfaces import IEventConfigurable
         et = FacetedEventTargetMixin()
         verifyObject(IFaceted, et)
         verifyObject(IEventTarget, et)
@@ -300,71 +216,6 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         self.assertEquals(et.getEventTable(), [0, 2])
 
 
-class TestEventActionMixins(unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import EventActionMixin
-        from schooltool.interfaces import IEventAction
-        marker = object()
-        ea = EventActionMixin(marker)
-        verifyObject(IEventAction, ea)
-        self.assertEquals(ea.eventType, marker)
-        self.assertRaises(NotImplementedError, ea.handle, None, None)
-
-    def testLookupAction(self):
-        from schooltool.model import LookupAction
-        from schooltool.interfaces import ILookupAction
-        la = LookupAction()
-        verifyObject(ILookupAction, la)
-        self.assertEquals(list(la.eventTable), [])
-        self.assertEquals(la.eventType, IEvent)
-
-        handler_a = EventActionStub(IEventA)
-        handler_b = EventActionStub(IEventB)
-        la = LookupAction(eventType=IEventA, eventTable=[handler_a, handler_b])
-        self.assertEquals(la.eventType, IEventA)
-        event = EventAStub()
-        target = object()
-        la.handle(event, target)
-        self.assertEqual(handler_a.calls, [(event, target)])
-        self.assertEqual(handler_b.calls, [])
-
-    def testRouteToMembersAction(self):
-        from schooltool.model import RouteToMembersAction
-        from schooltool.interfaces import IRouteToMembersAction
-        action = RouteToMembersAction(IEventA)
-        verifyObject(IRouteToMembersAction, action)
-        self.assertEquals(action.eventType, IEventA)
-
-        event = EventAStub()
-        child1, child2 = object(), object()
-        target = {1: child1, 2: child2}
-        action.handle(event, target)
-        dispatched_to = event.dispatched_to
-        members = [child1, child2]
-        members.sort()
-        dispatched_to.sort()
-        self.assertEquals(dispatched_to, members)
-
-    def testRouteToGroupsAction(self):
-        from schooltool.model import RouteToGroupsAction
-        from schooltool.interfaces import IRouteToGroupsAction
-        action = RouteToGroupsAction(IEventA)
-        verifyObject(IRouteToGroupsAction, action)
-        self.assertEquals(action.eventType, IEventA)
-
-        event = EventAStub()
-        group1, group2 = object(), object()
-        target = MemberStub()
-        target.groups = lambda: [group1, group2]
-        action.handle(event, target)
-        dispatched_to = event.dispatched_to
-        groups = [group1, group2]
-        groups.sort()
-        dispatched_to.sort()
-        self.assertEquals(dispatched_to, groups)
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
@@ -372,10 +223,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRootGroup))
     suite.addTest(unittest.makeSuite(TestGroupMember))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
-    suite.addTest(unittest.makeSuite(TestEventMixin))
-    suite.addTest(unittest.makeSuite(TestEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
-    suite.addTest(unittest.makeSuite(TestEventActionMixins))
     return suite
 
 if __name__ == '__main__':

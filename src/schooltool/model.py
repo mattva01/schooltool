@@ -22,18 +22,14 @@ SchoolTool organisational model.
 $Id$
 """
 
-from sets import Set
 from zope.interface import implements
 from persistence import Persistent
-from persistence.list import PersistentList
 from zodb.btrees.IOBTree import IOBTree
-from schooltool.interfaces import IFaceted
+from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
-from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
-from schooltool.interfaces import IEventAction, ILookupAction
-from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentListSet, PersistentKeysDict
+from schooltool.event import EventTargetMixin
 
 __metaclass__ = type
 
@@ -80,39 +76,6 @@ class FacetedMixin:
         self.__facets__ = PersistentKeysDict()
 
 
-class EventMixin:
-
-    implements(IEvent)
-
-    def __init__(self, context=None):
-        self.context = context
-        self.__seen = Set()
-
-    def dispatch(self, target=None):
-        if target is None:
-            target = self.context
-        if target not in self.__seen:
-            self.__seen.add(target)
-            target.handle(self)
-
-
-class EventTargetMixin:
-
-    implements(IEventTarget, IEventConfigurable)
-
-    def __init__(self):
-        self.eventTable = PersistentList()
-
-    def getEventTable(self):
-        # this method can be overriden in subclasses
-        return self.eventTable
-
-    def handle(self, event):
-        for action in self.getEventTable():
-            if action.eventType.isImplementedBy(event):
-                action.handle(event, self)
-
-
 class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
 
     def __init__(self):
@@ -125,51 +88,6 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
             if facet.active and IEventConfigurable.isImplementedBy(facet):
                 tables.append(facet.eventTable)
         return sum(tables, [])
-
-
-class EventActionMixin:
-
-    implements(IEventAction)
-
-    def __init__(self, eventType):
-        self.eventType = eventType
-
-    def handle(self, event, target):
-        raise NotImplementedError('Subclasses must override this method')
-
-
-class LookupAction(EventActionMixin):
-
-    implements(ILookupAction)
-
-    def __init__(self, eventTable=None, eventType=IEvent):
-        EventActionMixin.__init__(self, eventType)
-        if eventTable is None:
-            eventTable = PersistentList()
-        self.eventTable = eventTable
-
-    def handle(self, event, target):
-        for action in self.eventTable:
-            if action.eventType.isImplementedBy(event):
-                action.handle(event, target)
-
-
-class RouteToMembersAction(EventActionMixin):
-
-    implements(IRouteToMembersAction)
-
-    def handle(self, event, target):
-        for member in target.values():
-            event.dispatch(member)
-
-
-class RouteToGroupsAction(EventActionMixin):
-
-    implements(IRouteToGroupsAction)
-
-    def handle(self, event, target):
-        for group in target.groups():
-            event.dispatch(group)
 
 
 class Person(Persistent, GroupMember,  FacetedEventTargetMixin):
@@ -241,3 +159,4 @@ class Group(Persistent, GroupMember, FacetedEventTargetMixin):
 class RootGroup(Group):
     """A persistent application root object"""
     implements(IRootGroup)
+
