@@ -6,9 +6,6 @@
 <body>
   <h1 metal:fill-slot="h1"><span tal:replace="context/title" /></h1>
   <metal:block metal:fill-slot="content">
-  <div class="actions" tal:condition="view/canEdit">
-    <a class="action" tal:attributes="href view/editURL">Edit</a>
-  </div>
   <div class="parentgroups">
     <h3 i18n:translate="">Parent groups</h3>
     <p tal:repeat="parent python: view.getParentGroups(request)">
@@ -16,20 +13,25 @@
     </p>
   </div>
 
-  <div class="subgroups">
-    <h3 i18n:translate="">Subgroups</h3>
-    <p tal:repeat="sub python: view.getSubGroups(request)">
-     <a tal:attributes="href sub/url" tal:content="sub/title"/>
-    </p>
-  </div>
-
   <div class="members">
-    <h3 i18n:translate="">Members</h3>
-    <p tal:repeat="obj python: view.getOtherMembers(request)">
-     <a tal:attributes="href obj/url" tal:content="obj/title"/>
-    </p>
+    <div tal:define="subgroups python:view.getSubGroups(request)"
+         tal:condition="subgroups">
+      <h3 i18n:translate="">Subgroups</h3>
+      <p tal:repeat="sub subgroups">
+       <a tal:attributes="href sub/url" tal:content="sub/title"/>
+      </p>
+    </div>
+    <div tal:define="members python:view.getOtherMembers(request)"
+         tal:condition="members">
+      <h3 i18n:translate="">Members</h3>
+      <p tal:repeat="obj members">
+       <a tal:attributes="href obj/url" tal:content="obj/title"/>
+      </p>
+    </div>
+    <div class="actions" tal:condition="view/canEdit">
+      <a class="action" tal:attributes="href view/editURL">Edit</a>
+    </div>
   </div>
-
   </metal:block>
 </body>
 </html>

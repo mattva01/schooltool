@@ -76,17 +76,9 @@ input.field {
   padding: 2px 4px;
 }
 
-div.subgroups {
+div.members {
   background: #aee5ac;
   border: 1px solid #036d00;
-  padding: 1ex;
-  margin: 1ex 1em;
-  float: left;
-}
-
-div.members {
-  background: #acb8e5;
-  border: 1px solid #052082;
   padding: 1ex;
   margin: 1ex 1em;
   float: left;
@@ -109,7 +101,6 @@ div.groups {
 }
 
 div.members h3,
-div.subgroups h3,
 div.groups h3,
 div.parentgroups h3 {
   color: black;
@@ -118,7 +109,6 @@ div.parentgroups h3 {
 }
 
 div.members p,
-div.subgroups p,
 div.groups p,
 div.parentgroups p {
   margin: 0 0 0.5ex 0;
