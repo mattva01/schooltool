@@ -85,8 +85,7 @@ case "$1" in
         cp -a /usr/share/$package/$package.conf.default $config
         # Set the default language from the default environment if it exists
         if [ -f /etc/environment ];then
-            lang=`cat /etc/environment|grep -o '^[ ]*LANG=[^#]*'|tail -1\
-                |sed 's/^[ ]*LANG=//'|sed 's/ //g'`|| true
+            lang=`. /etc/environment; echo $LANG`
             if [ -n $lang ];then
                 echo >> $config
                 echo '# Default translation' >> $config
