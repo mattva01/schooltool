@@ -500,7 +500,7 @@ class RecurrenceRule:
         """Return extra iCal arguments as a string.
 
         Should be overridden by child classes that have specific arguments.
-        The returned string must not include the terminating semicolon.
+        The returned string must not include the semicolon separator.
         If None is returned, no arguments are inserted.
         """
         pass
@@ -555,7 +555,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
     def _validate(self):
         RecurrenceRule._validate(self)
         for dow in self.weekdays:
-            if not isinstance(dow, int) or not  0 <= dow <= 6:
+            if not isinstance(dow, int) or not 0 <= dow <= 6:
                 raise ValueError("Day of week must be an integer 0..6 (got %r)"
                                  % (dow, ))
 
@@ -603,6 +603,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         return date + date.resolution
 
     def _iCalArgs(self, dtstart):
+        """Return iCalendar parameters specific to monthly reccurence."""
         if self.weekdays:
             return 'BYDAY=' + ','.join([ical_weekdays[weekday]
                                         for weekday in self.weekdays])
@@ -634,9 +635,8 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     def _validate(self):
         RecurrenceRule._validate(self)
         if self.monthly not in ("monthday", "weekday", "lastweekday"):
-                raise ValueError("monthly must be one of 'monthday',"
-                                 " 'weekday', 'lastweekday'. Got %r"
-                                 % (self.monthly, ))
+            raise ValueError("monthly must be one of 'monthday', 'weekday',"
+                             " 'lastweekday'. Got %r" % (self.monthly, ))
 
     def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
                 exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
@@ -657,7 +657,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
                 self.until, self.exceptions, self.monthly)
 
     def _nextRecurrence(self, date):
-        """Adds the basic step of recurrence to the date"""
+        """Add basic step of recurrence to the date."""
         year = date.year
         month = date.month
         while True:
@@ -725,6 +725,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
             month += 1
 
     def _iCalArgs(self, dtstart):
+        """Return iCalendar parameters specific to monthly reccurence."""
         if self.monthly == 'monthday':
             return 'BYMONTHDAY=%d' % dtstart.day
         elif self.monthly == 'weekday':
