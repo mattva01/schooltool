@@ -912,18 +912,23 @@ class CalendarEvent(Persistent):
 
     implements(ICalendarEvent)
 
+    unique_id = property(lambda self: self._unique_id)
     dtstart = property(lambda self: self._dtstart)
     duration = property(lambda self: self._duration)
     title = property(lambda self: self._title)
     owner = property(lambda self: self._owner)
     context = property(lambda self: self._context)
 
-    def __init__(self, dt, duration, title, owner=None, context=None):
+    def __init__(self, dt, duration, title,
+                 owner=None, context=None, unique_id=None):
         self._dtstart = dt
         self._duration = duration
         self._title = title
         self._owner = owner
         self._context = context
+        if unique_id is None:
+            unique_id = str(hash(self))
+        self._unique_id = unique_id
 
     def __cmp__(self, other):
         if not isinstance(other, CalendarEvent):
