@@ -183,21 +183,21 @@ class View(_View):
     def isManager(self):
         """Check if the authenticated user is a manager.
 
-        To be used from page templates (e.g. tal:condition="view/isManager").
+        To be used from page templates (e.g., tal:condition="view/isManager").
         """
         return isManager(self.request.authenticated_user)
 
     def isTeacher(self):
         """Check if the authenticated user is a manager or a teacher.
 
-        To be used from page templates (e.g. tal:condition="view/isTeacher").
+        To be used from page templates (e.g., tal:condition="view/isTeacher").
         """
         return isTeacher(self.request.authenticated_user)
 
     def isNotable(self):
-        """Return True/False if the current context is relatable.
+        """Return True if the current context is relatable.
 
-        This is a utility for use in tal, primarily for the note system
+        This is a utility for use in TAL, primarily for the note system.
         """
 
         return IRelatable.providedBy(self.context)
@@ -207,7 +207,6 @@ class View(_View):
 
         XXX: refactor, remove passed request
         """
-
         user = request.authenticated_user
         # We should really just check to see if the object implements
         # IRelatable
@@ -216,7 +215,7 @@ class View(_View):
                     for obj in getRelatedObjects(self.context, URINotation)]
             list.sort()
             return [obj for title, obj in list if obj.owner == user]
-        except AttributeError:
+        except AttributeError: # XXX This looks fishy.
             return []
 
 

@@ -145,12 +145,12 @@ class SchooldayModel(DateRange, Persistent):
 class ImmutableCalendar:
     """An immutable calendar.
 
-    This calendar gets given an iterable of events upon its creation
-    and cannot change it.
+    This calendar is given an iterable of events upon its creation, which
+    may not be changed later.
 
     It is used for functionally defined calendars and other
-    non-persistent calendars, such as returned by `expand` and
-    `byDate` methods of ICalendar.
+    non-persistent calendars, such as ones returned by ICalendar.expand
+    or ICalendar.byDate.
     """
 
     implements(ICalendar)
