@@ -1662,20 +1662,20 @@ class PersonInfoDlg(wxDialog):
         try:
             photo = file(filename, 'rb').read()
         except IOError, e:
-            wxMessageBox(_("Could not read %s") % filename, self.title,
-                         wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not read %s") % filename,
+                         self.title, wxICON_ERROR|wxOK)
             return
         try:
             self.client.savePersonPhoto(self.person_path, photo)
         except SchoolToolError, e:
-            wxMessageBox(_("Could not update person photo: %s")
-                         % e, self.title, wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not update person photo: %s") % e,
+                         self.title, wxICON_ERROR|wxOK)
             return
         try:
             photo = self.client.getPersonPhoto(self.person_path)
         except SchoolToolError, e:
-            wxMessageBox(_("Could not get person photo: %s")
-                         % e, self.title, wxICON_ERROR|wxOK)
+            wxMessageBox(_("Could not get person photo: %s") % e,
+                         self.title, wxICON_ERROR|wxOK)
             return
         else:
             photo = wxBitmapFromImage(wxImageFromStream(StringIO(photo)))
@@ -1786,17 +1786,25 @@ class AppLogFrame(wxDialog):
             self.refresh()
 
     def OnFilter(self, event=None):
+        """Set the new filter string and show results."""
         self.filter_str = self.filter_ctrl.GetValue()
         self.page = -1
         self.refresh()
 
     def refresh(self):
+        """Refresh the log text control.
+
+        Shows an error dialog and returns False on failure,
+        returns True on success.
+        """
         try:
             log_page = self.client.getAppLogPage(page=self.page,
                                                  pagesize=self.pagesize,
                                                  filter=self.filter_str)
         except SchoolToolError, e:
-            return False  # XXX I'm not sure what we should do here.
+            wxMessageBox(_("Could not retrieve application log data"),
+                         _("Error"), wxICON_ERROR|wxOK)
+            return False
 
         self.page = log_page.page
 
