@@ -17,7 +17,7 @@
     in.
   </div>
 
-  <form action="." method="POST" class="standalone"
+  <form action="." method="post" class="standalone"
     tal:attributes="action string:${context/@@absolute_url}/@@login.html">
 
     <h3 i18n:translate="">Please log in</h3>
