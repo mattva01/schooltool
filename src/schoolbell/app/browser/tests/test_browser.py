@@ -81,9 +81,74 @@ def doctest_getSchoolBellApplication():
     """
 
 
+def doctest_SortBy():
+    """Tests for SortBy adapter.
+
+        >>> from schoolbell.app.browser import SortBy
+        >>> from zope.interface.verify import verifyObject
+        >>> adapter = SortBy([])
+
+        >>> from zope.app.traversing.interfaces import IPathAdapter
+        >>> verifyObject(IPathAdapter, adapter)
+        True
+
+        >>> from zope.app.traversing.interfaces import ITraversable
+        >>> verifyObject(ITraversable, adapter)
+        True
+
+    You can sort empty lists
+
+        >>> adapter.traverse('name')
+        []
+
+    You can sort lists of dicts
+
+        >>> a_list = [{'id': 42, 'title': 'How to get ahead in navigation'},
+        ...           {'id': 11, 'title': 'The ultimate answer: 6 * 9'},
+        ...           {'id': 33, 'title': 'Alphabet for beginners'}]
+        >>> for item in SortBy(a_list).traverse('title'):
+        ...     print item['title']
+        Alphabet for beginners
+        How to get ahead in navigation
+        The ultimate answer: 6 * 9
+
+    You can sort lists of objects by attribute
+
+        >>> class SomeObject:
+        ...     def __init__(self, name):
+        ...         self.name = name
+        >>> another_list = map(SomeObject, ['orange', 'apple', 'pear'])
+        >>> for item in SortBy(another_list).traverse('name'):
+        ...     print item.name
+        apple
+        orange
+        pear
+
+    You cannot mix and match objects and dicts in the same list, though.
+    Also, if you specify the name of a method, SortBy will not call that
+    method to get sort keys.
+
+    You can sort arbitrary iterables, in fact:
+
+        >>> import itertools
+        >>> iterable = itertools.chain(another_list, another_list)
+        >>> for item in SortBy(iterable).traverse('name'):
+        ...     print item.name
+        apple
+        apple
+        orange
+        orange
+        pear
+        pear
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite('schoolbell.app.browser'))
+    suite.addTest(doctest.DocFileSuite('../templates.txt'))
     return suite
 
 
