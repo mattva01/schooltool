@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 from sets import Set
+from persistence import Persistent
 from zope.interface import Interface, implements
 from zope.interface import directlyProvidedBy, directlyProvides
 from zope.interface.verify import verifyObject
@@ -139,24 +140,6 @@ class TestRootGroup(unittest.TestCase):
         group = RootGroup("root")
         verifyObject(IRootGroup, group)
 
-
-class TestPersistentListSet(unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import PersistentListSet
-        p = PersistentListSet()
-        a, b = object(), object()
-        p.add(a)
-        self.assertEquals(list(p), [a])
-        p.add(a)
-        self.assertEquals(list(p), [a])
-        p.add(b)
-        self.assertEquals(list(p), [a, b])
-        p.remove(a)
-        self.assertEquals(list(p), [b])
-        p.add(a)
-        self.assertEquals(list(p), [b, a])
-
 class TestMarkingGroup(unittest.TestCase):
 
     def test_interface(self):
@@ -199,6 +182,97 @@ class TestMarkingGroup(unittest.TestCase):
         self.failIf(ITeacher.isImplementedBy(a))
         self.assert_(ITeacher.isImplementedBy(b))
 
+
+class TestPersistentListSet(unittest.TestCase):
+
+    def test(self):
+        from schooltool.model import PersistentListSet
+        p = PersistentListSet()
+        a, b = object(), object()
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        p.add(b)
+        self.assertEquals(list(p), [a, b])
+        p.remove(a)
+        self.assertEquals(list(p), [b])
+        p.add(a)
+        self.assertEquals(list(p), [b, a])
+
+class P(Persistent):
+    pass
+
+class TestPersistentKeysDict(unittest.TestCase):
+
+    def setUp(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        self.db = DB(MappingStorage())
+        self.datamgr = self.db.open()
+
+    def test_setitem(self):
+        from schooltool.model import PersistentKeysDict
+        ob = object()
+        p = P()
+        d = PersistentKeysDict()
+        self.assertRaises(TypeError, d.__setitem__, p, 1)
+        self.datamgr.add(d)
+        d[p] = 2
+        self.assert_(p._p_oid)
+        self.assertRaises(TypeError, d.__setitem__, ob, 1)
+
+    def test_getitem(self):
+        from schooltool.model import PersistentKeysDict
+        ob = object()
+        p = P()
+        d = PersistentKeysDict()
+        self.datamgr.add(d)
+        d[p] = 2
+        self.assertEqual(d[p], 2)
+        self.assertRaises(TypeError, d.__getitem__, object())
+        self.assertRaises(KeyError, d.__getitem__, P())
+
+    def test_delitem(self):
+        from schooltool.model import PersistentKeysDict
+        ob = object()
+        p = P()
+        d = PersistentKeysDict()
+        self.datamgr.add(d)
+        d[p] = 2
+        self.assertEqual(d[p], 2)
+        del d[p]
+        self.assertRaises(KeyError, d.__getitem__, p)
+        self.assertRaises(KeyError, d.__delitem__, p)
+        self.assertRaises(KeyError, d.__delitem__, P())
+        self.assertRaises(TypeError, d.__delitem__, object())
+
+    def test_keys_iter_len(self):
+        from schooltool.model import PersistentKeysDict
+        ob = object()
+        p = P()
+        p2 = P()
+        d = PersistentKeysDict()
+        self.assertRaises(TypeError, d.keys)
+        self.assertRaises(TypeError, list, d)
+        self.datamgr.add(d)
+        d[p] = 2
+        d[p2] = 3
+        self.assertEqual(d.keys(), [p, p2])
+        self.assertEqual(list(d), [p, p2])
+        self.assertEqual(len(d), 2)
+
+    def test_contains(self):
+        from schooltool.model import PersistentKeysDict
+        ob = object()
+        p = P()
+        d = PersistentKeysDict()
+        self.datamgr.add(d)
+        d[p] = 2
+        self.assert_(p in d)
+        self.assertRaises(TypeError, d.__contains__, object())
+        self.assert_(P() not in d)
+
 class TestFacetedMixin(unittest.TestCase):
 
     def test(self):
@@ -216,6 +290,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupMember))
     suite.addTest(unittest.makeSuite(TestMarkingGroup))
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
+    suite.addTest(unittest.makeSuite(TestPersistentKeysDict))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     return suite
 

@@ -23,6 +23,7 @@ $Id$
 """
 
 from sets import Set
+import UserDict
 import logging
 from zope.interface import implements, directlyProvidedBy, directlyProvides
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
@@ -180,3 +181,66 @@ class PersistentListSet(Persistent):
 
     def remove(self, item):
         self._data.remove(item)
+
+class PersistentKeysDict(Persistent, UserDict.DictMixin):
+    """A PersistentDict which uses persistent objects as keys by
+    relying on their _p_oids.
+
+    If an object used as a key does not yet have a _p_oid, it is added
+    to self._p_jar and assigned a _p_oid.  Thus, PersistentKeysDict()
+    has to be added to the ZODB connection before being used.
+    """
+
+    def __init__(self):
+        # XXX: probably getting a connection or a persistent object
+        # here is a good idea. Let's see how it gets used...
+        self._data = PersistentDict()
+
+    def __setitem__(self, key, value):
+        """Adds a value to the dict.
+
+        If a key object does not yet have _p_oid, it is added to the
+        current connection (self._p_jar).
+        """
+        self.checkJar()
+        self.checkKey(key)
+        if key._p_oid is None:
+            self._p_jar.add(key)
+        self._data[key._p_oid] = value
+
+    def __getitem__(self, key):
+        self.checkKey(key)
+        return self._data[key._p_oid]
+
+    def __delitem__(self, key):
+        self.checkKey(key)
+        del self._data[key._p_oid]
+
+    def keys(self):
+        self.checkJar()
+        result = []
+        for oid in self._data:
+            result.append(self._p_jar.get(oid))
+        # XXX returning a lazy sequence is one optimization we might make
+        return result
+
+    def __contains__(self, key):
+        self.checkKey(key)
+        return  key._p_oid in self._data
+
+    def __iter__(self):
+        self.checkJar()
+        for oid in self._data:
+            yield self._p_jar.get(oid)
+
+    def __len__(self):
+        return len(self._data)
+
+    def checkJar(self):
+        if  self._p_jar is None:
+            raise TypeError("PersistentKeyDict %r must be added "
+                            "to the connection before being used" % (self, ))
+
+    def checkKey(self, key):
+        if not hasattr(key, '_p_oid'):
+            raise TypeError("the key must be persistent (got %r)" % (key, ))
