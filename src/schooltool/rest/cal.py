@@ -230,7 +230,7 @@ class CalendarReadView(View):
             result += [
                 "BEGIN:VEVENT",
                 "UID:%s" % ical_text(event.unique_id),
-                "SUMMARY:%s" % ical_text(event.title)]
+                "SUMMARY:%s" % ical_text(event.title or "")]
             if event.location is not None:
                 result.append("LOCATION:%s" % ical_text(event.location))
             result += [
