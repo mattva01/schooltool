@@ -33,7 +33,7 @@ class SampleSchoolImporter:
     host = 'localhost'
     port = 7001
 
-    expected_version = 'SchoolTool/0.4'
+    expected_version = 'SchoolTool/0.5'
 
     datadir = datadir
     ttconfig_filename = datadir + '/ttconfig.data'
