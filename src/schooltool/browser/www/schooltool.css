@@ -109,6 +109,7 @@ label {
   float: left;
   font-weight: bold;
   color: black;
+  padding: 1px 2px;
 }
 
 label.wide {
@@ -557,6 +558,10 @@ table.timetable td.time input.text {
 }
 table.timetable td.buttons {
   text-align: right;
+}
+
+input.narrow {
+  width: 5em;
 }
 
 /* Time periods */

@@ -130,11 +130,13 @@ Second, select the way timetable days are aligned with calendar days.
 
 <p i18n:translate="">
 Third, define the time and duration of periods when they fall on certain
-days of week.  Use the following format: <tt>HH:MM-HH:MM</tt> (e.g.,
-9:30-10:15).  It is not necessary to define all periods for all days of week,
-omissions will just cause that period to be skipped if it happens to fall on
-that day of week.  If the list of periods is not up to date with the changes
-you made in the table above, use the Update button to refresh the form.
+days of week.  Use one of the the following format: <tt>HH:MM</tt> (also, don't
+forget to specify the duration in the text box below) or <tt>HH:MM-HH:MM</tt>
+(when you want to specify both endpoints explicitly, e.g., 9:30-10:15).  It is
+not necessary to define all periods for all days of week, omissions will just
+cause that period to be skipped if it happens to fall on that day of week.  If
+the list of periods is not up to date with the changes you made in the table
+above, use the Update button to refresh the form.
 </p>
 
 <div class="form">
@@ -172,6 +174,16 @@ you made in the table above, use the Update button to refresh the form.
       </td>
     </tal:block></tr>
   </table>
+  <div class="error" tal:condition="view/discarded_some_periods"
+       i18n:translate="">
+    Certain period specifications were incorrect, and therefore were discarded.
+  </div>
+
+  <div class="row"
+       tal:define="tabindex view/next_tabindex"
+       tal:replace="structure python:view.duration_widget(tabindex=tabindex)">
+    [Duration]
+  </div>
 
   <div class="buttons">
     <input type="submit" class="button" name="UPDATE" value="Update"
