@@ -22,13 +22,14 @@ The views for the schooltool content objects.
 $Id$
 """
 
+import re
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility
-from schooltool.component import getPath, getRelatedObjects
-from schooltool.component import getView, registerView, strURI
+from schooltool.component import getPath, traverse, getRelatedObjects
+from schooltool.component import getView, registerView, strURI, getURI
 from schooltool.debug import IEventLog, IEventLogUtility
 
 __metaclass__ = type
@@ -312,8 +313,33 @@ class RelationshipsView(View):
                 for type, role in self.context.getValencies()]
 
     def do_POST(self, request):
-        # XXX -- do the actual processing
+        body = request.content.read()
+        type = self.extractKeyword(body, 'arcrole')
+        role = self.extractKeyword(body, 'role')
+        path = self.extractKeyword(body, 'href')
+        title = self.extractKeyword(body, 'title')
+
+        type = getURI(type)
+        role = getURI(role)
+        other = traverse(self.context, path)
+        val = self.context.getValencies()[type, role]
+        kw = {val.this: self.context, val.other: other}
+        val.schema(**kw)
         request.setResponseCode(201, 'Created')
+
+    def extractKeyword(self, text, key):
+        '''This is a temporary stub for validating XML parsing.
+
+        Extracts values of key="value" format from a string.
+
+        Throws a KeyError if key is not found.
+        '''
+        pat = re.compile('\\b%s="([^"]*)"' % key)
+        match =  pat.search(text)
+        if match:
+            return match.group(1)
+        else:
+            raise KeyError("%r not in text" % (key,))
 
 
 def setUp():

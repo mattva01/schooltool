@@ -613,16 +613,16 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.group, member=self.per)
         Membership(group=self.sub, member=self.per)
 
-        self.view = RelationshipsView(self.per)
+        self.view = RelationshipsView(self.sub)
 
     def test_listLinks(self):
         from pprint import pformat
-        request = RequestStub("http://localhost/persons/p/relationships/")
+        request = RequestStub("http://localhost/groups/sub/relationships/")
         request.method = "GET"
         result = self.view.listLinks()
         self.assertEquals(len(result), 2)
-        self.assert_({'path': '/groups/subgroup',
-                      'role': 'http://schooltool.org/ns/membership/group',
+        self.assert_({'path': '/persons/p',
+                      'role': 'http://schooltool.org/ns/membership/member',
                       'type': 'http://schooltool.org/ns/membership',
                       'title': 'http://schooltool.org/ns/membership'}
                      in result, pformat(result))
@@ -633,17 +633,17 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
                      in result, pformat(result))
 
     def test_getValencies(self):
-        request = RequestStub("http://localhost/persons/p/relationships/")
+        request = RequestStub("http://localhost/groups/sub/relationships/")
         request.method = "GET"
         result = self.view.getValencies()
         self.assertEquals(result,
                           [{'type':'http://schooltool.org/ns/membership',
-                            'role':'http://schooltool.org/ns/membership/member'
+                            'role':'http://schooltool.org/ns/membership/group'
                             }])
 
     def testGET(self):
         # from schooltool.component import getPath
-        request = RequestStub("http://localhost/persons/p/relationships/")
+        request = RequestStub("http://localhost/groups/sub/relationships/")
         request.method = "GET"
         result = self.view.render(request)
         self.assert_('<valencies>' in result)
@@ -659,7 +659,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
 
     def testPOST(self):
         # from schooltool.component import getPath
-        request = RequestStub("http://localhost/persons/p/relationships/")
+        request = RequestStub("http://localhost/groups/sub/relationships/")
         request.content = StringIO('''\
             <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
                   xlink:type="simple"
@@ -670,10 +670,35 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             ''')
         request.content.seek(0, 0)
         request.method = "POST"
+        self.assertEquals(len(self.sub.listLinks()), 2)
+        self.assert_(self.new not in
+                     [l.traverse() for l in self.sub.listLinks()])
         result = self.view.render(request)
         self.assertEquals(request.code, 201)
-        # XXX:  Check that the relationship got actually added
+        self.assertEquals(len(self.sub.listLinks()), 3)
+        self.assert_(self.new in
+                     [l.traverse() for l in self.sub.listLinks()])
 
+    def test_extractKeyword(self):
+        request = RequestStub("http://localhost/groups/sub/relationships/")
+        text = '''This is not even XML, it\'s just some random text.
+               xlink:type="simple"
+               xlink:title="http://schooltool.org/ns/membership"
+               xlink:arcrole="http://schooltool.org/ns/membership"
+               xlink:role="http://schooltool.org/ns/membership/group"
+               xlink:href="/groups/new"
+               '''
+        extr = self.view.extractKeyword
+        self.assertEquals(extr(text, 'type'), 'simple')
+        self.assertEquals(extr(text, 'xlink:role'),
+                          'http://schooltool.org/ns/membership/group')
+        self.assertEquals(extr(text, 'role'),
+                          'http://schooltool.org/ns/membership/group')
+        self.assertEquals(extr(text, 'xlink:arcrole'),
+                          'http://schooltool.org/ns/membership')
+        self.assertEquals(extr(text, 'href'),
+                          '/groups/new')
+        self.assertRaises(KeyError, extr, text, 'shmoo')
 
 
 def test_suite():
