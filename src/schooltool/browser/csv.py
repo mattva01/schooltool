@@ -23,8 +23,13 @@ Web-application views for managing SchoolTool data in CSV format.
 $Id$
 """
 
+import datetime
+
 from schooltool.browser import View, Template
+from schooltool.component import traverse, FacetManager
 from schooltool.interfaces import IApplication
+from schooltool.clients.csvclient import CSVImporterBase  # XXX Foreign import
+from schooltool.membership import Membership
 
 
 class CSVImportView(View):
@@ -37,4 +42,45 @@ class CSVImportView(View):
 
     def do_POST(self, request):
         pass
+
+
+class CSVImporterZODB(CSVImporterBase):
+    """A CSV importer that works directly with the database."""
+
+    def __init__(self, root):
+        self.groups = root['groups']
+        self.persons = root['persons']
+        self.resources = root['resources']
+
+    def importGroup(self, name, title, parents, facets):
+        group = self.groups.new(__name__=name, title=title)
+        for parent in parents.split():
+            other = traverse(self.groups, parent) # XXX TODO exceptions
+            Membership(group=other, member=group)
+            # TODO: facets
+        return group.__name__
+
+    def importPerson(self, title, parent, groups, teaching=False):
+        person = self.persons.new(title=title)
+        # TODO: process other arguments
+        return person.__name__
+
+    def importResource(self, title, groups):
+        resource = self.resources.new(title=title)
+        for group in groups.split():
+            other = traverse(self.groups, group) # XXX TODO exceptions
+            Membership(group=other, member=resource)
+        return resource.__name__
+
+    def importPersonInfo(self, name, title, dob, comment):
+        person = self.persons[name]
+        infofacet = FacetManager(person).facetByName('person_info')
+
+        infofacet.first_name, infofacet.last_name = title.split(None, 1)
+
+        # XXX error checking
+        date_elements = [int(el) for el in dob.split('-')]
+        infofacet.dob = datetime.date(*date_elements)
+        infofacet.comment = comment
+
 
