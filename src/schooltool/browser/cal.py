@@ -838,36 +838,43 @@ class EventDeleteView(View):
     authorization = ACLModifyAccess
 
     def do_GET(self, request):
+        event = None
         event_id = to_unicode(request.args['event_id'][0])
 
-        # XXX Two-level try-excepts don't look pretty.  And the whole method
-        #     is rather convoluted, it needs to be cleaned up.
         try:
+            # look for an ordinary calendar event
             event = self.context.find(event_id)
         except KeyError:
             # the event could be a timetable event
+            appobject = self.context.__parent__
             try:
-                appobject = self.context.__parent__
                 event = appobject.makeCalendar().find(event_id)
             except KeyError:
-                suffix = 'daily.html'
+                pass
             else:
-                if 'CONFIRM' not in request.args:
-                    return View.do_GET(self, request)
+                # found a timetable event
+                if 'CONFIRM' in request.args:
+                    self._removeTTEvent(event)
                 else:
-                    dt = event.dtstart.date()
-                    exception = TimetableException(dt, event.period_id,
-                                                   event.activity, None)
-                    tt = event.activity.timetable
-                    tt.exceptions.append(exception)
-
-                    suffix = 'daily.html?date=%s' % dt
+                    return View.do_GET(self, request)
         else:
-            suffix = 'daily.html?date=%s' % event.dtstart.date()
+            # found an ordinary event; remove it from the calendar
             self.context.removeEvent(event)
+
+        if event is not None:
+            suffix = 'daily.html?date=%s' % event.dtstart.date()
+        else:
+            suffix = 'daily.html'
 
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)
+
+    def _removeTTEvent(self, event):
+        exception = TimetableException(event.dtstart.date(),
+                                       event.period_id,
+                                       event.activity, None)
+        tt = event.activity.timetable
+        tt.exceptions.append(exception)
 
 
 class CalendarComboMixin(View):
