@@ -120,7 +120,7 @@ def parse_datetime(s):
         ValueError: Bad datetime: 01/02/03
 
     """
-    m = re.match("(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
+    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
     if not m:
         raise ValueError("Bad datetime: %s" % s)
     ssssss = m.groups()[7]

@@ -115,7 +115,7 @@ def doctest_PlainCalendarView():
 def doctest_CalendarDay():
     """A calendar day is a set of events that took place on a particular day.
 
-        >>> from schooltool.browser.cal import CalendarDay
+        >>> from schoolbell.app.browser.cal import CalendarDay
         >>> day1 = CalendarDay(date(2004, 8, 5))
         >>> day2 = CalendarDay(date(2004, 7, 15), ["abc", "def"])
         >>> day1.date
@@ -158,7 +158,7 @@ def createEvent(dtstart, duration, title, **kw):
     error reporting, but it's OK, as it is only used in unit tests.
     """
     from schoolbell.calendar.simple import SimpleCalendarEvent
-    from schooltool.common import parse_datetime # XXX XXX XXX XXX XXX
+    from schoolbell.app.browser.cal import parse_datetime
     if dtstart.count(':') == 0:         # YYYY-MM-DD
         dtstart = parse_datetime(dtstart+' 00:00:00') # add hh:mm:ss
     elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
@@ -180,7 +180,7 @@ def createEvent(dtstart, duration, title, **kw):
 
 
 class TestCalendarViewBase(unittest.TestCase):
-    # Legacy unit tests from SchoolTool
+    # Legacy unit tests from SchoolTool.
 
     def test_dayTitle(self):
         from schoolbell.app.browser.cal import CalendarViewBase
@@ -352,9 +352,8 @@ def doctest_CalendarViewBase():
         >>> request.form['date'] = '2005-01-02'
         >>> view.update()
 
-        # TODO:
-        # >>> view.cursor
-        # datetime.date(2005, 1, 2)
+        >>> view.cursor
+        datetime.date(2005, 1, 2)
 
     """
 
