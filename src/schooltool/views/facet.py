@@ -71,8 +71,8 @@ class FacetView(View):
                                  _("Owned facets may not be deleted manually"))
         path = getPath(self.context)
         FacetManager(self.context.__parent__).removeFacet(self.context)
-        request.site.logAppEvent(request.authenticated_user,
-                                 "Facet removed: %s" % path)
+        request.site.logAppEvent(request.authenticated_user, path,
+                                 "Facet removed")
         request.setHeader('Content-Type', 'text/plain')
         return _("Facet removed")
 
@@ -139,8 +139,8 @@ class FacetManagementView(View):
 
         location = absoluteURL(request, facet)
         path = getPath(facet)
-        request.site.logAppEvent(request.authenticated_user,
-                                 "Facet created: %s" % path)
+        request.site.logAppEvent(request.authenticated_user, path,
+                                 "Facet created")
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)

@@ -200,9 +200,8 @@ class SchooldayModelCalendarView(View):
         return _("Calendar imported")
 
     def log_PUT(self, request):
-        path = getPath(self.context)
         request.site.logAppEvent(request.authenticated_user,
-                                 "Calendar updated: %s" % path)
+                                 getPath(self.context), "Calendar updated")
 
 
 class CalendarReadView(View):
@@ -311,9 +310,8 @@ class CalendarView(CalendarReadView):
             for event in events:
                 # newly added  events
                 self.context.addEvent(event)
-            path = getPath(self.context)
             request.site.logAppEvent(request.authenticated_user,
-                                     "Imported calendar: %s" % path)
+                                     getPath(self.context), "Imported calendar")
             request.setHeader('Content-Type', 'text/plain')
             return _("Calendar imported")
 
@@ -379,7 +377,9 @@ class BookingView(View):
             ev = CalendarEvent(start, duration, title, owner, self.context)
             self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
+
             request.site.logAppEvent(request.authenticated_user,
+                                     getPath(self.context),
                                      '%s booked by %s' % (self.context.title,
                                                           owner.title))
             request.setHeader('Content-Type', 'text/plain')

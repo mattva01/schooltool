@@ -102,8 +102,8 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
         self.assertEquals(request.site.applog,
-                          [(None, "1 event cleared", INFO),
-                           (None, "0 events cleared", INFO)])
+                          [(None, '', "1 event cleared", INFO),
+                           (None, '', "0 events cleared", INFO)])
 
         request = RequestStub("http://localhost/foo/eventlog", "PUT")
         request.content.write("something")

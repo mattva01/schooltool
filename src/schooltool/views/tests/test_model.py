@@ -350,7 +350,7 @@ class TestPersonPasswordView(unittest.TestCase):
         result = v.render(request)
         self.assertEqual(request.code, 200)
         self.assertEquals(request.site.applog,
-                [(None, "Password changed for /persons/001 (John)", INFO)])
+                [(None, '/persons/001', "Password changed for John", INFO)])
         self.assertEqual(result, "Password changed")
         self.assert_(p.checkPassword("Foo bar"))
 
@@ -366,7 +366,7 @@ class TestPersonPasswordView(unittest.TestCase):
         result = v.render(request)
         self.assertEqual(request.code, 200)
         self.assertEquals(request.site.applog,
-                [(None, "Account disabled for /persons/002 (John)", INFO)])
+                [(None, '/persons/002', "Account disabled for John", INFO)])
         self.assertEqual(result, "Account disabled")
         self.assert_(not p.checkPassword("foo"))
 

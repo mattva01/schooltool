@@ -116,8 +116,8 @@ class RelationshipsView(View):
 
         link = links[val.other]
         location = absoluteURL(request, link)
-        request.site.logAppEvent(request.authenticated_user,
-                                 "Relationship created: %s" % getPath(link))
+        request.site.logAppEvent(request.authenticated_user, getPath(link),
+                                 "Relationship created")
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
@@ -139,7 +139,7 @@ class LinkView(View):
     def do_DELETE(self, request):
         self.context.unlink()
         request.site.logAppEvent(request.authenticated_user,
-                                 "Link removed: %s" % getPath(self.context))
+                                 getPath(self.context), "Link removed")
         request.setHeader('Content-Type', 'text/plain')
         return _("Link removed")
 

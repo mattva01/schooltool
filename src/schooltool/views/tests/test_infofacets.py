@@ -93,7 +93,7 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         result = view.render(request)
         self.assertEquals(result, "Updated")
         self.assertEquals(request.site.applog,
-                          [(None, 'Facet updated: /persons/007/info', INFO)])
+                          [(None, '/persons/007/info', 'Facet updated', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(context.first_name, u'John \u263B')
         self.assertEquals(context.last_name, u'Smith \u263B')
@@ -118,7 +118,7 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(result, "Updated")
         self.assertEquals(request.code, 200)
         self.assertEquals(request.site.applog,
-                          [(None, 'Facet updated: /persons/007/info', INFO)])
+                          [(None, '/persons/007/info', 'Facet updated', INFO)])
         self.assertEquals(context.first_name, '')
         self.assertEquals(context.last_name, '')
         self.assert_(context.date_of_birth is None)
@@ -168,7 +168,7 @@ class TestPhotoView(unittest.TestCase):
         ctype = "image/jpeg"
 
         context = PersonInfoFacet()
-        setPath(context, '/my/dogs/photo')
+        setPath(context, "/my/dog's/photo")
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='PUT', body=photo,
@@ -176,7 +176,7 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.site.applog,
-                          [(None, 'Photo added: /my/dogs/photo', INFO)])
+                          [(None, "/my/dog's/photo", 'Photo added', INFO)])
         self.assert_(context.photo is not None)
 
     def test_put_errors(self):
@@ -187,7 +187,7 @@ class TestPhotoView(unittest.TestCase):
         ctype = "image/jpeg"
 
         context = PersonInfoFacet()
-        setPath(context, '/my/dogs/photo')
+        setPath(context, "/my/dog's/photo")
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='PUT', body=photo,
@@ -202,14 +202,14 @@ class TestPhotoView(unittest.TestCase):
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
         context.photo = '8-)'
-        setPath(context, '/my/dogs/photo')
+        setPath(context, "/my/dog's/photo")
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.site.applog,
-                          [(None, 'Photo removed: /my/dogs/photo', INFO)])
+                          [(None, "/my/dog's/photo", 'Photo removed', INFO)])
         self.assert_(context.photo is None)
 
 

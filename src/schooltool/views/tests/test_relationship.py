@@ -126,8 +126,8 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
         result = self.view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.site.applog,
-                [(None, 'Relationship created: /groups/sub/relationships/0003',
-                  INFO)])
+                [(None, '/groups/sub/relationships/0003',
+                  'Relationship created', INFO)])
         self.assertEquals(len(self.sub.listLinks()), 3)
         self.assert_(self.new in
                      [l.traverse() for l in self.sub.listLinks()])
@@ -270,7 +270,7 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.assertEqual(len(self.sub.listLinks()), 1)
         result = self.view.render(request)
         self.assertEqual(request.site.applog,
-                         [(None, 'Link removed: /groups/root/0001', INFO)])
+                         [(None, '/groups/root/0001', 'Link removed', INFO)])
         self.assertEqual(result, 'Link removed')
         self.assertEqual(len(self.sub.listLinks()), 0)
 

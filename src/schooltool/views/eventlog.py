@@ -57,7 +57,7 @@ class EventLogView(View):
                                             " is defined for event logs"))
         n = len(self.context.getReceived())
         self.context.clear()
-        request.site.logAppEvent(request.authenticated_user,
+        request.site.logAppEvent(request.authenticated_user, "",
                                  n == 1 and "1 event cleared"
                                          or "%d events cleared" % n)
         request.setHeader('Content-Type', 'text/plain')

@@ -36,8 +36,8 @@ class SiteStub:
     def __init__(self):
         self.applog = []
 
-    def logAppEvent(self, user, message, level=logging.INFO):
-        self.applog.append((user, message, level))
+    def logAppEvent(self, user, path, message, level=logging.INFO):
+        self.applog.append((user, path, message, level))
 
 
 class RequestStub:

@@ -127,8 +127,8 @@ class SiteStub:
         else:
             raise AuthenticationError('bad login (%r, %r)' % (user, password))
 
-    def logAppEvent(self, user, message, level=logging.INFO):
-        self.applog.append((user, message, level))
+    def logAppEvent(self, user, path, message, level=logging.INFO):
+        self.applog.append((user, path, message, level))
 
 
 class ChannelStub:
@@ -221,11 +221,11 @@ class TestSite(unittest.TestCase):
                 self.username = username
 
         site.applogger = AppLoggerStub()
-        site.logAppEvent(None, 'Hello')
-        site.logAppEvent(UserStub('me'), 'Bye', level=logging.WARNING)
+        site.logAppEvent(None, '/where/where?', 'Hello')
+        site.logAppEvent(UserStub('me'), '/here', 'Bye', level=logging.WARNING)
         self.assertEquals(site.applogger.applog,
-                          [(logging.INFO, "(UNKNOWN) Hello"),
-                           (logging.WARNING, "(me) Bye")])
+                          [(logging.INFO, "(UNKNOWN) [/where/where?] Hello"),
+                           (logging.WARNING, "(me) [/here] Bye")])
 
 
 class TestAcceptParsing(unittest.TestCase):
@@ -705,8 +705,8 @@ class TestRequest(unittest.TestCase):
                           'basic realm="SchoolTool"')
 
         self.assertEquals(rq.site.applog,
-                [(None, "Failed login, username: 'fred'", logging.WARNING),
-                 (None, "Failed login, username: 'freq'", logging.WARNING)])
+                [(None, "", "Failed login, username: 'fred'", logging.WARNING),
+                 (None, "", "Failed login, username: 'freq'", logging.WARNING)])
 
     # _handle_exception is tested indirectly, in test__process_on_exception
     # and test__process_many_conflict_errors

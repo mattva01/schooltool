@@ -647,8 +647,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'Timetable updated: /john/timetables/2003 fall/weekly',
-                  INFO)])
+                [(None, '/john/timetables/2003 fall/weekly',
+                  'Timetable updated', INFO)])
         self.assertEquals(timetabled.timetables[key], expected)
 
     def test_put_nonexistent(self):
@@ -729,9 +729,8 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None,
-                  'Timetable deleted: /john/timetables/2003 fall/weekly',
-                  INFO)])
+                [(None, '/john/timetables/2003 fall/weekly',
+                  'Timetable deleted', INFO)])
         self.assert_(key not in timetabled.timetables)
 
     def test_delete_nonexistent(self):
@@ -1018,8 +1017,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, "Timetable schema deleted: /ttservice/weekly",
-                  INFO)])
+                [(None, '/ttservice/weekly', "Timetable schema deleted", INFO)])
 
         self.assertRaises(KeyError, lambda: service[key])
 
@@ -1072,8 +1070,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'Timetable schema updated: /ttservice/weekly',
-                  INFO)])
+                [(None, '/ttservice/weekly', 'Timetable schema updated', INFO)])
         self.assertEquals(service[key], self.createEmpty())
 
     def test_roundtrip(self):
@@ -1383,7 +1380,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'School timetable updated', INFO)])
+                [(None, '', 'School timetable updated', INFO)])
 
         self.assertEquals(self.sg4.timetables[self.key],
                           self.sg4.timetables[self.key].cloneEmpty())
@@ -1433,7 +1430,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'School timetable updated', INFO)])
+                [(None, '', 'School timetable updated', INFO)])
         self.assertEquals(self.sg1.timetables[self.key],
                           self.sg1.timetables[self.key].cloneEmpty())
         self.assertEquals(self.sg2.timetables[self.key],
@@ -1613,7 +1610,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'Calendar created: /time-periods/2003 fall', INFO)])
+                [(None, '/time-periods/2003 fall', 'Calendar created', INFO)])
         self.assert_(key in service)
         self.assertEquals(service[key].first, datetime.date(2004, 9, 1))
         self.assertEquals(getPath(service[key]), '/time-periods/%s' % key)
@@ -1633,7 +1630,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'Calendar deleted: /tpservice/2003 fall', INFO)])
+                [(None, '/tpservice/2003 fall', 'Calendar deleted', INFO)])
         self.assert_(key not in service)
 
     def test_delete_nonexistent(self):

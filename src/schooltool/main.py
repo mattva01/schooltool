@@ -448,7 +448,7 @@ class Request(http.Request):
                 self.authenticated_user = self.site.authenticate(app,
                         self.getUser(), self.getPassword())
             except AuthenticationError:
-                self.site.logAppEvent(None, "Failed login, username: %r"
+                self.site.logAppEvent(None, "", "Failed login, username: %r"
                                             % self.getUser(), logging.WARNING)
                 body = textErrorPage(self, _("Bad username or password"),
                                      code=401)
@@ -557,13 +557,13 @@ class Site(http.HTTPFactory):
         channel.site = self
         return channel
 
-    def logAppEvent(self, user, message, level=logging.INFO):
+    def logAppEvent(self, user, path, message, level=logging.INFO):
         """Add a log entry to the application log."""
         if user is None:
             username = 'UNKNOWN'
         else:
             username = user.username
-        self.applogger.log(level, "(%s) %s" % (username, message))
+        self.applogger.log(level, "(%s) [%s] %s" % (username, path, message))
 
 
 #

@@ -211,7 +211,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         self.assertEquals(request.site.applog,
-                [(None, 'Absence created: /person/absences/001', INFO)])
+                [(None, '/person/absences/001', 'Absence created', INFO)])
         location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
@@ -244,7 +244,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
 
         self.assertEquals(request.site.applog,
-                [(None, 'Absence updated: /person/absences/001', INFO)])
+                [(None, '/person/absences/001', 'Absence updated', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
         location = request.headers['location']
@@ -356,7 +356,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'Comment added to /person/absences/001', INFO)])
+                [(None, '/person/absences/001', 'Comment added', INFO)])
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
         self.assertEquals(comment.text, u"Foo \u2730")
@@ -512,10 +512,11 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(result, "2 absences and 1 presences reported")
 
         self.assertEquals(request.site.applog,
-                [(self.manager, msg, INFO)
-                 for msg in ['Reported absence: /persons/b/absences/001',
-                             'Reported presence: /persons/c/absences/001',
-                             'Reported absence: /persons/d/absences/001']])
+                [(self.manager, path, msg, INFO)
+                 for path, msg in
+                        [('/persons/b/absences/001', 'Absence reported'),
+                         ('/persons/c/absences/001', 'Presence reported'),
+                         ('/persons/d/absences/001', 'Absence reported')]])
 
         # persona was present and is present, no comments should be added.
         self.assertEqual(len(list(self.persona.iterAbsences())), 0)
@@ -574,10 +575,8 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         # when reporter is not explicitly specified, take authenticated_user
         result = view.render(request)
         self.assertEquals(request.site.applog,
-                [(self.personb, msg, INFO)
-                 for msg in ['Reported absence: /persons/a/absences/001',
-                             'Reported absence: /persons/c/absences/001',
-                             'Reported absence: /persons/d/absences/001']])
+                [(self.personb, '/persons/%s/absences/001' % person,
+                  'Absence reported', INFO) for person in ['a', 'c', 'd']])
         self.assertEquals(request.code, 200, 'request failed:\n' + result)
         absence = self.persona.getCurrentAbsence()
         comment = absence.comments[-1]

@@ -23,22 +23,15 @@ $Id: test_views.py 397 2003-11-21 11:38:01Z mg $
 """
 
 import unittest
+from logging import INFO
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub, UtilityStub, XPathTestContext
+from schooltool.views.tests import RequestStub, UtilityStub, SiteStub
+from schooltool.views.tests import XPathTestContext
 
 
 __metaclass__ = type
-
-
-class SiteStub:
-
-    def __init__(self):
-        self.applog = []
-
-    def logAppEvent(self, user, message, level='INFO'):
-        self.applog.append((user, message, level))
 
 
 class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
@@ -210,7 +203,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         if suffix:
             self.assertEquals(view.obj_path, '/groups' + suffix)
         self.assertEquals(request.site.applog,
-                          [(None, "Object created: " + view.obj_path, 'INFO')])
+                          [(None, view.obj_path, "Object created", INFO)])
         location = request.headers['location']
         base = "http://localhost:7001/groups/"
         self.assert_(location.startswith(base),
