@@ -36,19 +36,19 @@ class TestSchoolBellSubscriber(unittest.TestCase):
         from schoolbell.app.app import SchoolBellApplication
         from schoolbell.app.interfaces import ISchoolBellApplication
 
-        # A schoolbell is traversed
+        # A non SchoolBellApplication is traversed
         ob = object()
         request = TestRequest()
         ev = BeforeTraverseEvent(ob, request)
         schoolBellTraverseSubscriber(ev)
         self.assert_(not ISchoolBellSkin.providedBy(request))
 
-        # An umbrella is traversed
+        # A SchoolBellApplication is traversed
         ob = SchoolBellApplication()
         request = TestRequest()
         ev = BeforeTraverseEvent(ob, request)
         schoolBellTraverseSubscriber(ev)
-        assert ISchoolBellSkin.providedBy(request)
+        self.assert_(ISchoolBellSkin.providedBy(request))
 
 
 def test_suite():
