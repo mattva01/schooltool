@@ -192,6 +192,10 @@
       </h1>
     </metal:block>
 
+    <metal:block fill-slot="column-left-extra">
+      <div metal:use-macro="view/@@standard_macros/calendar-portlets"/>
+    </metal:block>
+
     <metal:block fill-slot="body">
         <div metal:use-macro="view/@@standard_macros/calendar-mode"/>
         <div class="calcontent">
@@ -201,4 +205,96 @@
         </div>
     </metal:block>
   </html>
+</metal:block>
+
+<!-- BEGIN CALENDAR MACROS -->
+
+<metal:block define-macro="portlet-calendar-jumpto" 
+    i18n:domain="schooltool">
+  <div id="portlet-jumpto" class="portlet">
+
+    <h4 i18n:translate="">Jump To ...</h4>
+    <form class="center">
+      <div>
+        <select name="jump" onChange="jumpTo(this);">
+          <option value="" i18n:translate="">Month</option>
+          <tal:loop repeat="month view/getJumpToMonths">
+            <option
+              tal:attributes="value string:monthly.html?date=2004-${month/value}-01"
+              tal:content="month/label" />
+          </tal:loop>
+        </select>
+      </div>
+    </form>
+
+    <form class="center">
+      <div>
+        <select name="jump" onChange="jumpTo(this);">
+          <option value='' i18n:translate="">Year</option>
+          <tal:loop repeat="year view/getJumpToYears">
+            <option value="" i18n:translate=""
+              tal:attributes="value string:yearly.html?date=${year/value}-11-01"
+              tal:content="year/label" />
+          </tal:loop>
+        </select>
+      </div>
+    </form>
+  </div>
+</metal:block>
+
+
+<metal:block define-macro="brief-month-view" i18n:domain="schoolbell">
+  <table class="month" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="7" class="month-title"
+          tal:define="mtit python:view.monthTitle(month[1][0].date)">
+        <a tal:content="mtit"
+            tal:attributes="href python:view.calURL('monthly',
+                            month[1][0].date);
+                            title mtit"/>
+      </th>
+    </tr>
+    <tr tal:repeat="week month">
+      <td tal:replace="structure
+          python:view.renderRow(week, month[1][0].date.month)" />
+    </tr>
+
+  </table>
+
+</metal:block>
+
+<metal:block define-macro="portlet-calendar-view-month"
+    i18n:domain="schoolbell">
+
+  <div id="portlet-calendar-view-month" class="portlet">
+
+      <tal:block define="month python:view.getMonth(view.prevMonth());">
+          <metal:block use-macro="view/@@standard_macros/brief-month-view"
+              i18n:domain="schooltool" />
+      </tal:block>
+
+      <tal:block define="month python:view.getMonth(view.cursor);">
+          <metal:block use-macro="view/@@standard_macros/brief-month-view"
+              i18n:domain="schooltool" />
+      </tal:block>
+
+      <tal:block define="month python:view.getMonth(view.nextMonth());">
+          <metal:block use-macro="view/@@standard_macros/brief-month-view"
+              i18n:domain="schooltool" />
+      </tal:block>
+
+  </div>
+
+</metal:block>
+
+
+
+<!-- END CALENDAR MACROS -->
+
+<metal:block define-macro="calendar-portlets">
+
+  <metal:block use-macro="view/@@standard_macros/portlet-calendar-jumpto"/>
+
+  <metal:block use-macro="view/@@standard_macros/portlet-calendar-view-month"/>
+
 </metal:block>

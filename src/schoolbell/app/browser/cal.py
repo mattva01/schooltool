@@ -426,6 +426,55 @@ class CalendarViewBase(BrowserView):
     def nextDay(self):
         return self.cursor + timedelta(1)
 
+    def getJumpToYears(self):
+        """Return jump targets for five years centered on the current year."""
+        this_year = datetime.today().year
+        return [{'label': year, 'value': year}
+                for year in range(this_year - 2, this_year + 3)]
+
+    def getJumpToMonths(self):
+        """Return a list of months for the drop down in the jump portlet."""
+        months = []
+        for k, v in self.month_names.items():
+            months.append({'label': unicode(v), 'value': k})
+        return months
+
+    def monthTitle(self, date):
+        return unicode(self.month_names[date.month])
+
+    def renderRow(self, week, month):
+        """Do some HTML rendering in Python for performance.
+
+        This gains us 0.4 seconds out of 0.6 on my machine.
+        Here is the original piece of ZPT:
+
+         <td class="cal_yearly_day" tal:repeat="day week">
+          <a tal:condition="python:day.date.month == month[1][0].date.month"
+             tal:content="day/date/day"
+             tal:attributes="href python:view.calURL('daily', day.date);
+                             class python:(len(day.events) > 0
+                                           and 'cal_yearly_day_busy'
+                                           or  'cal_yearly_day')"/>
+         </td>
+        """
+        result = []
+
+        for day in week:
+            result.append('<td class="cal_yearly_day">')
+            if day.date.month == month:
+                if len(day.events):
+                    cssClass = 'cal_yearly_day_busy'
+                else:
+                    cssClass = 'cal_yearly_day'
+                # Let us hope that URLs will not contain < > & or "
+                # This is somewhat related to
+                #   http://issues.schooltool.org/issue96
+                result.append('<a href="%s" class="%s">%s</a>' %
+                              (self.calURL('daily', day.date), cssClass,
+                               day.date.day))
+            result.append('</td>')
+        return "\n".join(result)
+
 
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""
@@ -517,44 +566,8 @@ class YearlyCalendarView(CalendarViewBase):
         """Return the link for the next year."""
         return self.calURL('yearly', date(self.cursor.year + 1, 1, 1))
 
-    def monthTitle(self, date):
-        return unicode(self.month_names[date.month])
-
     def shortDayOfWeek(self, date):
         return unicode(self.short_day_of_week_names[date.weekday()])
-
-    def renderRow(self, week, month):
-        """Do some HTML rendering in Python for performance.
-
-        This gains us 0.4 seconds out of 0.6 on my machine.
-        Here is the original piece of ZPT:
-
-         <td class="cal_yearly_day" tal:repeat="day week">
-          <a tal:condition="python:day.date.month == month[1][0].date.month"
-             tal:content="day/date/day"
-             tal:attributes="href python:view.calURL('daily', day.date);
-                             class python:(len(day.events) > 0
-                                           and 'cal_yearly_day_busy'
-                                           or  'cal_yearly_day')"/>
-         </td>
-        """
-        result = []
-
-        for day in week:
-            result.append('<td class="cal_yearly_day">')
-            if day.date.month == month:
-                if len(day.events):
-                    cssClass = 'cal_yearly_day_busy'
-                else:
-                    cssClass = 'cal_yearly_day'
-                # Let us hope that URLs will not contain < > & or "
-                # This is somewhat related to
-                #   http://issues.schooltool.org/issue96
-                result.append('<a href="%s" class="%s">%s</a>' %
-                              (self.calURL('daily', day.date), cssClass,
-                               day.date.day))
-            result.append('</td>')
-        return "\n".join(result)
 
 
 class CalendarEventView(object):
