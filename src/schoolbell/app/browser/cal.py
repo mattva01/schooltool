@@ -212,8 +212,12 @@ class EventForDisplay(object):
 
         dtend -- timestamp when the event ends
         color1, color2 -- colors used for display
+        shortTitle -- title truncated to ~15 characters
+        cssClass - 'class' attribute for styles
 
     """
+
+    cssClass = 'event'  # at the moment no other classes are used
 
     def __init__(self, event, color1, color2):
         self.context = event
@@ -229,6 +233,16 @@ class EventForDisplay(object):
 
     def __getattr__(self, name):
         return getattr(self.context, name)
+
+    def renderShort(self):
+        """Short representation of the event for the monthly view."""
+        if self.dtstart.date() == self.dtend.date():
+            duration =  "%s&ndash;%s" % (self.dtstart.strftime('%H:%M'),
+                                         self.dtend.strftime('%H:%M'))
+        else:
+            duration =  "%s&ndash;%s" % (self.dtstart.strftime('%b&nbsp;%d'),
+                                         self.dtend.strftime('%b&nbsp;%d'))
+        return "%s (%s)" % (self.shortTitle, duration)
 
 
 class CalendarDay(object):

@@ -271,6 +271,12 @@ def doctest_EventForDisplay():
         >>> e1 > e2
         True
 
+    The `renderShort` method is used to render the event in the monthly
+    calendar view.
+
+        >>> print e2.renderShort().replace('&ndash;', '--')
+        sleeping for a ... (12:00--12:15)
+
     """
 
 

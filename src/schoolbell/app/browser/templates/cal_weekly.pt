@@ -24,7 +24,8 @@
                            evdate python:event.dtstart.strftime('%Y-%m-%d')"
                tal:attributes="class python:start and 'first' or '';
                                href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${event/unique_id};
-                               style string:background: ${event/color1};; border-color: ${event/color2};
+                               style string:background: ${event/color1};;
+                                            border-color: ${event/color2};
                                title event/title">
               <span tal:content="event/shortTitle"/>
               (<span tal:content="python:event.dtstart.strftime('%H:%M')"
