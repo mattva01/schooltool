@@ -11,13 +11,16 @@ schooltool (0.8-1) unstable; urgency=low
     removed all links from /usr/share to /usr/lib.
   * Changed priority to extra.
   * Fixed rules so that binary-arch and binary-indep targets build the
-    correct packages (Closes: Bug#278095).
+    correct packages (Closes: Bug#279111).
   * On log rotation, only restart the server once and do not produce any
     output on success.
   * Changed dependency on python-tcpwrap from suggests to recommends.
   * Added database versioning code. If the database is thought to be
     incompatible, the user is asked in the preinst if it can be deleted.
   * Copy translation files (*.mo) into server package on package build.
+  * Add release notes to packages.
+  * Merge build the schoolbell package in this source package. The schoolbell
+    source package will be removed from debian.
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 

@@ -1,32 +1,32 @@
-Template: schooltool/listen
+Template: schoolbell/listen
 Type: string
 Default: 7001
 _Description: Interfaces for the RESTive interface over HTTP
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
-Template: schooltool/web
+Template: schoolbell/web
 Type: string
 Default: 7080
 _Description: Interfaces for the web interface over HTTP
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
-Template: schooltool/listen_ssl
+Template: schoolbell/listen_ssl
 Type: string
 Default:
 _Description: Interfaces for the RESTive interface over HTTPS
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
-Template: schooltool/web_ssl
+Template: schoolbell/web_ssl
 Type: string
 Default:
 _Description: Interfaces for the web interface over HTTPS
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
-Template: schooltool/cert-type
+Template: schoolbell/cert-type
 Type: select
 __Choices: Create Self-Signed Certificate, Import Certificate
 Default: Create Self-Signed Certificate
@@ -36,23 +36,23 @@ _Description: How would you like to set up the SSL certificate:
  .
  You can create a self signed root certificate that can be imported into
  web browsers. The certificate can be copied from
- /etc/schooltool/cert.pem.
+ /etc/schoolbell/cert.pem.
  .
  Or, you can import a certificate. For instance a certificate signed by a
  CA. The certificate must be in PEM format and contain the private key.
 
-Template: schooltool/create-cert
+Template: schoolbell/create-cert
 Type: boolean
 Default: false
 _Description: Would you like to re-create the SSL certificate?
  You already have an SSL certificate.
 
-Template: schooltool/import-cert
+Template: schoolbell/import-cert
 Type: string
 Default: /
 _Description: Enter the filename of the SSL certificate (in PEM format) to import.
 
-Template: schooltool/incompatible_database
+Template: schoolbell/incompatible_database
 Type: boolean
 Default: true
 Description: Should the previous database be removed?

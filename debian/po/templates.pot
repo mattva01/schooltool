@@ -11,25 +11,12 @@
 #
 #    Developers do not need to manually edit POT or PO files.
 #
-#    ########
-#    Please do not waste your time translating the templates from
-#    the SchoolBell package. They are exactly the same as the templates
-#    from the SchoolTool package and are merged every upstream release.
-#
-#    Also I would prefer if you translated the original from the repository
-#    at http://source.schooltool.org/viewcvs/trunk/schooltool/debian/po
-#    You can post the results at schhotool@schooltool.org, or send them
-#    directly to me.
-#
-#    And, Thank You! - schooltool maintainer
-#    ########
-#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-18 10:53+0200\n"
+"POT-Creation-Date: 2004-11-01 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,31 +26,31 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:5
+#: ../schooltool.templates:4 ../schoolbell.templates:4
 msgid "Interfaces for the RESTive interface over HTTP"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:12
+#: ../schooltool.templates:11 ../schoolbell.templates:11
 msgid "Interfaces for the web interface over HTTP"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:19
+#: ../schooltool.templates:18 ../schoolbell.templates:18
 msgid "Interfaces for the RESTive interface over HTTPS"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:26
+#: ../schooltool.templates:25 ../schoolbell.templates:25
 msgid "Interfaces for the web interface over HTTPS"
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:26
+#: ../schooltool.templates:25 ../schoolbell.templates:25
 msgid ""
 "Please type in a space separated list of [address:]port values that you "
 "would like the server to listen on."
@@ -71,41 +58,41 @@ msgstr ""
 
 #. Type: select
 #. Choices
-#: ../schooltool.templates:32
+#: ../schooltool.templates:31 ../schoolbell.templates:31
 msgid "Create Self-Signed Certificate"
 msgstr ""
 
 #. Type: select
 #. Choices
-#: ../schooltool.templates:32
+#: ../schooltool.templates:31 ../schoolbell.templates:31
 msgid "Import Certificate"
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../schooltool.templates:35
+#: ../schooltool.templates:33 ../schoolbell.templates:33
 msgid "How would you like to set up the SSL certificate:"
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../schooltool.templates:35
+#: ../schooltool.templates:33 ../schoolbell.templates:33
 msgid ""
 "Please select how you would like to set up the SSL certificate for your "
-"schooltool-ssl server."
+"server."
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../schooltool.templates:35
+#: ../schooltool.templates:33
 msgid ""
 "You can create a self signed root certificate that can be imported into web "
-"browsers. The certificate can be copied from /etc/schooltool-ssl/cert.pem."
+"browsers. The certificate can be copied from /etc/schooltool/cert.pem."
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../schooltool.templates:35
+#: ../schooltool.templates:33 ../schoolbell.templates:33
 msgid ""
 "Or, you can import a certificate. For instance a certificate signed by a CA. "
 "The certificate must be in PEM format and contain the private key."
@@ -113,18 +100,26 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:49
+#: ../schooltool.templates:47 ../schoolbell.templates:47
 msgid "Would you like to re-create the SSL certificate?"
 msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:49
+#: ../schooltool.templates:47 ../schoolbell.templates:47
 msgid "You already have an SSL certificate."
 msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:55
+#: ../schooltool.templates:53 ../schoolbell.templates:53
 msgid "Enter the filename of the SSL certificate (in PEM format) to import."
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../schoolbell.templates:33
+msgid ""
+"You can create a self signed root certificate that can be imported into web "
+"browsers. The certificate can be copied from /etc/schoolbell/cert.pem."
 msgstr ""

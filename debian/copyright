@@ -34,6 +34,7 @@ where dir can be
     share/schooltool-clients
     lib/schooltool-clients
     share/schooltool
+    share/schoolbell
     lib/schooltool
 
 Files in the same directory of the source tree as the main README file are (c)

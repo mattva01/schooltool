@@ -1,0 +1,173 @@
+#!/bin/bash
+# postinst script for server package
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+#
+# quoting from the policy:
+#     Any necessary prompting should almost always be confined to the
+#     post-installation script, and should be protected with a conditional
+#     so that unnecessary prompting doesn't happen if a package's
+#     installation fails and the `postinst' is called with `abort-upgrade',
+#     `abort-remove' or `abort-deconfigure'.
+
+package=schoolbell
+sslcert=/etc/$package/$package.cert.pem
+sslkey=/etc/$package/$package.privkey.pem
+sslconf=/etc/$package/ssl-cert.cnf
+config=/etc/$package/$package.conf
+db_version=0.8     # TODO - delete this when schooltool can upgrade it's own database
+
+# Helper Functions
+set_simple () {
+    # this sets a simple var in the config file overwriting all instances
+    # already present.
+    # $1 is the variable; $2 is a space separated list of the the values
+    header="# marker for $1 settings - Please don't change or delete this line."
+    stanza="$header\n"
+    for i in $2;do
+        stanza="$stanza$1 $i\n"
+    done
+    cp -a $config $config.tmp
+
+    if [ `grep -c "$header" $config` == 0 ]; then
+        echo "$header" >> $config
+    fi
+
+    cat $config                 \
+    | grep -v "^ *${1} .*"      \
+    | sed "s|$header|$stanza|"  \
+    > $config.tmp
+
+    mv -f $config.tmp $config
+}
+
+. /usr/share/debconf/confmodule
+
+case "$1" in
+    configure|reconfigure)
+    # Create a system user
+    if ! getent group $package > /dev/null 2>&1 ; then
+        addgroup --system --quiet $package
+    fi
+    if ! getent passwd $package > /dev/null 2>&1 ; then
+        adduser --quiet \
+        --system --disabled-login --ingroup $package \
+        --home /var/lib/$package --no-create-home \
+        $package
+    fi
+    # Create files and directories
+    [ -d /var/lib/$package ] || mkdir -p /var/lib/$package
+    [ -d /var/run/$package ] || mkdir -p /var/run/$package
+    [ -d /var/log/$package ] || mkdir -p /var/log/$package
+    chown $package:$package /var/lib/$package
+    chown $package:$package /var/run/$package
+    chown $package:$package /var/log/$package
+
+    # Set the database version.
+    # This is depended on and depends on code in preinst
+    # TODO - delete this when schooltool can upgrade it's own database
+    echo $db_version > /var/lib/$package/database_ver
+    
+    #Make the config file
+    #Put the default template there if none exists
+    if [ ! -e $config ]; then
+        cp -a /usr/share/$package/$package.conf.default $config
+    fi
+
+    # Setup Interfaces
+    db_get $package/listen
+    set_simple listen "$RET"
+    db_get $package/web
+    set_simple web "$RET"
+    db_get $package/listen_ssl
+    set_simple listen_ssl "$RET"
+    db_get $package/web_ssl
+    set_simple web_ssl "$RET"
+
+    # Should we create an SSL cert?
+    db_get $package/create-cert
+    Create="$RET"
+    # re-set the default
+    db_reset $package/create-cert
+    if [ "z$Create" == ztrue ]; then
+        db_get $package/cert-type
+        case "$RET" in
+
+            Create*)
+            #Ok, create the SSL certificate, overwriting if necessary
+            TMPFILE1=`mktemp` || exit 1
+            TMPFILE2=`mktemp` || exit 1
+            cp $sslconf $TMPFILE1
+            # Get the answers to the cert questions
+            for template in 'countryname' 'statename' 'localityname' \
+                'organisationname' 'ouname' 'hostname' 'email';do
+                db_get $package/$template
+                ans="$RET"
+                sed -e s#@"$template"@#"$ans"# $TMPFILE1 > $TMPFILE2
+                cp $TMPFILE2 $TMPFILE1
+            done
+            export RANDFILE=/dev/random
+            openssl req -config $TMPFILE1 -new -x509 -nodes -out $sslcert \
+                -keyout $sslkey
+            cat $sslcert >> $sslkey
+            rm -f $TMPFILE1 $TMPFILE2
+            ;;
+
+            Import*)
+            # Import it from a file
+            db_get $package/import-cert
+            cp "$RET" $sslkey
+            privkey=0
+            while read x;do
+                if [ `echo $x | grep -c -- '-----BEGIN.*PRIVATE KEY-----'` != 0 ] ;then
+                    privkey=1
+                fi
+                if [ $privkey == 0 ];then
+                    echo "$x"
+                fi
+                if [ `echo $x | grep -c -- '-----END.*PRIVATE KEY-----'` != 0 ] ;then
+                    privkey=0
+                fi
+            done <$sslkey >$sslcert
+            ;;
+        esac
+    fi
+    # If an SSL Certificate exists, give it the right permissions and add it to the
+    # Config file
+    if [ -f $sslkey ]; then
+        chown $package:$package $sslkey
+        chmod 600 $sslkey
+        set_simple ssl_certificate $sslkey
+    fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+
+esac
+
+db_stop
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0
