@@ -325,7 +325,7 @@ class ExpandedCalendarEvent(CalendarEvent):
     def __init__(self, dtstart, duration, title, owner=None, context=None,
                  location=None, unique_id=None, recurrence=None,
                  original=None):
-        self.original=original
+        self.original = original
         CalendarEvent.__init__(self, dtstart, duration, title, owner=owner,
                                context=context, location=location,
                                unique_id=unique_id, recurrence=recurrence)
