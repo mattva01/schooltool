@@ -61,6 +61,13 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
+      for=".interfaces.IHavePreferences"
+      provides=".interfaces.IPersonPreferences"
+      factory=".app.getPersonPreferences"
+      trusted="true"
+      />
+
+  <adapter
       for=".interfaces.ISchoolBellCalendar"
       provides="zope.app.filerepresentation.interfaces.IWriteFile"
       factory=".cal.WriteCalendar"
@@ -82,6 +89,12 @@
          If we want local grants set on the calendar itself to work, then
          the 'calendar' attribute must be publically available. -->
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+  </content>
+
+  <content class=".app.PersonPreferences">
+    <require permission="schoolbell.view"
+        interface="schoolbell.app.interfaces.IPersonPreferences"
+        set_schema="schoolbell.app.browser.app.IPersonPreferencesForm" />
   </content>
 
   <content class=".app.Group">

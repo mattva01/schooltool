@@ -238,6 +238,32 @@ def doctest_Person():
 
     """
 
+def doctest_PersonPreferences():
+    r"""Tests for the Preferences adapter
+
+        >>> from zope.app.tests import setup
+        >>> from zope.interface.verify import verifyObject
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.interfaces import IHavePreferences
+
+        >>> person = Person('person')
+        >>> verifyObject(IHavePreferences, person)
+        True
+
+    Make sure the attribute stores the correct interface
+        >>> from schoolbell.app.app import IPersonPreferences
+        >>> from schoolbell.app.app import getPersonPreferences
+        >>> prefs = getPersonPreferences(person)
+        >>> verifyObject(IPersonPreferences, prefs)
+        True
+        >>> prefs.timezone
+        'UTC'
+        >>> prefs.weekstart
+        'Sunday'
+
+    """
 
 def doctest_Group():
     r"""Tests for Group

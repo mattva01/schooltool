@@ -35,12 +35,15 @@ from zope.app.container.interfaces import INameChooser
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
+from zope.app.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import setSite, getSite
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
+from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
+from schoolbell.app.interfaces import IHavePreferences
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -164,7 +167,7 @@ class SimpleNameChooser(NameChooser):
 class Person(Persistent, Contained):
     """Person."""
 
-    implements(IPersonContained, IAttributeAnnotatable)
+    implements(IPersonContained, IHavePreferences, IAttributeAnnotatable)
 
     photo = None
     username = None
@@ -191,6 +194,28 @@ class Person(Persistent, Contained):
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
             return self.__parent__.__parent__
+
+
+class PersonPreferences(Persistent):
+
+    implements(IPersonPreferences)
+
+    def __init__(self):
+        self.timezone = "UTC"
+        self.dateformat = "YYYY-MM-DD"
+        self.timeformat = "HH:MM"
+        self.weekstart = "Sunday"
+
+
+def getPersonPreferences(person):
+    """Adapt an IAnnotatable object to IPersonPreferences."""
+    annotations = IAnnotations(person)
+    key = 'schoolbell.app.PersonPreferences'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = PersonPreferences()
+        return annotations[key]
 
 
 def hash_password(password):

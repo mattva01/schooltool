@@ -39,12 +39,15 @@ $Id$
 """
 
 from zope.interface import Interface, Attribute
-from zope.schema import Text, TextLine, Bytes, Object
+from zope.schema import Text, TextLine, Bytes, Object, Choice
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication
+from zope.app.annotation.interfaces import IAnnotatable
+
+import pytz
 
 from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
 
@@ -119,6 +122,10 @@ class IGroupMember(Interface):
     groups = Attribute("""Groups (see IRelationshipProperty)""")
 
 
+class IHavePreferences(IAnnotatable):
+    """An object that can have preferences. Namely a Person."""
+
+
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""
 
@@ -189,6 +196,18 @@ class IPersonContained(IPerson, IContained, IAdaptableToSchoolBellApplication):
     """Person contained in an IPersonContainer."""
 
     containers(IPersonContainer)
+
+
+class IPersonPreferences(Interface):
+    """Preferences stored in an annotation on a person."""
+
+    timezone = Attribute("""Timezone to display""")
+
+    timeformat = Attribute("""Time Format preference""")
+
+    dateformat = Attribute("""Date format preference""")
+
+    weekstart = Attribute("""Start week Sunday or Monday""")
 
 
 class IGroup(ICalendarOwner):

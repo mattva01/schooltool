@@ -738,6 +738,33 @@ def doctest_PersonAddView():
 
     """
 
+def doctest_PersonPreferencesView():
+    """
+
+        >>> from schoolbell.app.browser.app import PersonPreferencesView
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.app import getPersonPreferences
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from schoolbell.app.interfaces import IHavePreferences
+
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IHavePreferences, IPersonPreferences, \
+                                 getPersonPreferences)
+
+        >>> person = Person()
+        >>> request = TestRequest()
+
+        >>> view = PersonPreferencesView(person, request)
+
+    Cancel a change TODO: set view.message
+
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = PersonPreferencesView(person, request)
+
+    XXX this should test post
+
+    """
 
 def doctest_LoginView():
     """

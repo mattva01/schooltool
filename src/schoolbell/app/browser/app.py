@@ -24,6 +24,7 @@ $Id$
 
 from zope.interface import Interface, implements
 from zope.schema import Password, TextLine, Bytes, Bool, getFieldNamesInOrder
+from zope.schema import Choice
 from zope.schema.interfaces import ValidationError
 from zope.app import zapi
 from zope.app.form.utility import getWidgetsData, setUpWidgets
@@ -45,12 +46,15 @@ from zope.security.management import getSecurityPolicy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
+from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.app import Person, getSchoolBellApplication
+from schoolbell.app.app import Person
+from schoolbell.app.app import getSchoolBellApplication
 
+import pytz
 
 class ContainerView(BrowserView):
     """A base view for all containers.
@@ -279,6 +283,64 @@ class PersonEditView(BrowserView):
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
 
+
+class IPersonPreferencesForm(Interface):
+
+    timezone = Choice(title=u"Time Zone",
+                    description=u"Time Zone used to display your calendar",
+                    values=pytz.common_timezones)
+
+    timeformat = Choice(title=u"Time Format",
+                    description=u"Time Format",
+                    values=("HH:MM", "H:MM am/pm"))
+
+    dateformat = Choice(title=u"Date Format",
+                    description=u"Date Format",
+                    values=("MM-DD-YY", "YYYY-DD-MM"))
+
+    weekstart = Choice(title=u"Week starts on:",
+                    description=u"Start display of weeks on Sunday or Monday",
+                    values=("Sunday", "Monday"))
+
+
+class PersonPreferencesView(BrowserView):
+    """View used for editing person preferences."""
+
+    __used_for__ = IPersonPreferences
+
+    # TODO: these aren't used yet but should be
+    error = None
+    message = None
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+
+        prefs = IPersonPreferences(self.context)
+        initial = {'timezone': prefs.timezone,
+                   'timeformat': prefs.timeformat,
+                   'dateformat': prefs.dateformat,
+                   'weekstart': prefs.weekstart}
+
+        setUpWidgets(self, IPersonPreferencesForm, IInputWidget,
+                     initial=initial)
+
+    def update(self):
+
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+        if 'UPDATE_SUBMIT' in self.request:
+            try:
+                data = getWidgetsData(self, IPersonPreferencesForm)
+            except WidgetsError:
+                return # Errors will be displayed next to widgets
+
+            prefs = IPersonPreferences(self.context)
+            prefs.timezone = data['timezone']
+            prefs.timeformat = data['timeformat']
+            prefs.dateformat = data['dateformat']
+            prefs.weekstart = data['weekstart']
 
 
 class IPersonAddForm(Interface):
