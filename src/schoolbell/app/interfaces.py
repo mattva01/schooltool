@@ -43,6 +43,8 @@ from zope.schema import TextLine, Bytes, Object
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
+from zope.app.security.interfaces import IAuthentication
+from schoolbell.calendar.interfaces import ICalendar
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 
 
@@ -190,3 +192,16 @@ class ISchoolBellApplication(IReadContainer):
     This object can be added as a regular content object to a folder, or
     TODO: it can be used as the application root object.
     """
+
+
+class ISchoolBellAuthentication(IAuthentication):
+    """A local authentication utility for SchoolBell"""
+
+    def setCredentials(request, username, password):
+        """Save the username and password in the session.
+
+        If the credentials passed are invalid, ValueError is raised.
+        """
+
+    def clearCredentials(request):
+        """Forget the username and password stored in a session"""

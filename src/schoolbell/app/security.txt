@@ -74,8 +74,11 @@ The SchoolBellAuthenticationUtility is an IAuthentication utility that
 lives in that site:
 
     >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+    >>> from schoolbell.app.interfaces import ISchoolBellAuthentication
     >>> auth = SchoolBellAuthenticationUtility()
     >>> verifyObject(IAuthentication, auth)
+    True
+    >>> verifyObject(ISchoolBellAuthentication, auth)
     True
 
 Let's provide the location of auth:
@@ -170,10 +173,11 @@ Suppose, the user 'frog' has a password:
 The frog has authenticated itself in the login form and the
 credentials are stored in the session:
 
-    >>> from zope.app.session.interfaces import ISession
-    >>> session = ISession(request)['schoolbell.auth']
-    >>> session['username'] = 'frog'
-    >>> session['password'] = 'pond'
+    >>> auth.setCredentials(request, 'frog', 'shmond')
+    Traceback (most recent call last):
+    ...
+    ValueError: bad credentials
+    >>> auth.setCredentials(request, 'frog', 'pond')
 
 Now, it is authenticated by our utility:
 
@@ -185,7 +189,7 @@ Now, it is authenticated by our utility:
 
 If the password is incorrect, authentication does not work:
 
-    >>> session['password'] = 'pod'
+    >>> auth.clearCredentials(request)
     >>> auth.authenticate(request)
 
 

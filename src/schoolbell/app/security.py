@@ -39,6 +39,8 @@ from zope.app.container.interfaces import IObjectAddedEvent
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.interfaces import ISchoolBellAuthentication
+
 
 class Principal(Contained):
     implements(IGroupAwarePrincipal)
@@ -59,7 +61,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
     in the session.
     """
 
-    implements(IAuthentication, ILocation)
+    implements(ISchoolBellAuthentication, ILocation)
 
     person_prefix = "sb.person."
     group_prefix = "sb.group."
@@ -70,12 +72,15 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
         Retrieves the username and password from the session.
         """
-        app = getSchoolBellApplication(self)
         session = ISession(request)[self.session_name]
         if 'username' in session and 'password' in session:
-            person = app['persons'][session['username']]
-            if person.checkPassword(session['password']):
+            if self._checkPassword(session['username'], session['password']):
                 return self.getPrincipal('sb.person.' + session['username'])
+
+    def _checkPassword(self, username, password):
+        app = getSchoolBellApplication(self)
+        person = app['persons'][username]
+        return person.checkPassword(password)
 
     def unauthenticatedPrincipal(self):
         """Return the unauthenticated principal, if one is defined."""
@@ -113,6 +118,18 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
         next = getNextService(self, 'Utilities')
         return next.getUtility(IAuthentication).getPrincipal(id)
+
+    def setCredentials(self, request, username, password):
+        if not self._checkPassword(username, password):
+            raise ValueError('bad credentials')
+        session = ISession(request)[self.session_name]
+        session['username'] = username
+        session['password'] = password
+
+    def clearCredentials(self, request):
+        session = ISession(request)[self.session_name]
+        del session['username']
+        del session['password']
 
 
 def setUpLocalAuth(site, auth=None):
