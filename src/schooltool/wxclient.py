@@ -35,7 +35,6 @@ import sets
 import libxml2
 import threading
 from wxPython.wx import *
-from wxPython.lib.dialogs import wxMultipleChoiceDialog
 from wxPython.lib.scrolledpanel import wxScrolledPanel
 from schooltool.guiclient import SchoolToolClient, Unchanged, RollCallEntry
 from schooltool.guiclient import SchoolToolError, ResponseStatusError
