@@ -26,8 +26,99 @@ import os
 from persistence import Persistent
 from schooltool.model import Person, Group
 from schooltool.views import View, Template
+from zope.interface import implements
+from schooltool.db import PersistentKeysDict
+from zodb.btrees.IOBTree import IOBTree
+
 
 __metaclass__ = type
+
+
+#
+#  Crap ripped off of membership.py
+#
+
+class MemberMixin(Persistent):
+    """A mixin providing the IGroupMember interface.
+
+    Also, it implements ILocation by setting the first group the
+    member is added to as a parent, and clearing it if the member is
+    removed from it.
+    """
+
+    def __init__(self):
+        self._groups = PersistentKeysDict()
+        self.__name__ = None
+        self.__parent__ = None
+
+    def groups(self):
+        """See IGroupMember"""
+        return self._groups.keys()
+
+    def notifyAdded(self, group, name):
+        """See IGroupMember"""
+        self._groups[group] = name
+        if self.__parent__ is None:
+            self.__parent__ = group
+            self.__name__ = str(name)
+
+    def notifyRemoved(self, group):
+        """See IGroupMember"""
+        del self._groups[group]
+        if group == self.__parent__:
+            self.__parent__ = None
+            self.__name__ = None
+
+
+class GroupMixin(Persistent):
+    """This class is a mixin which makes things a group"""
+
+    def __init__(self):
+        self._next_key = 0
+        self._members = IOBTree()
+
+    def keys(self):
+        """See IGroup"""
+        return self._members.keys()
+
+    def values(self):
+        """See IGroup"""
+        return self._members.values()
+
+    def items(self):
+        """See IGroup"""
+        return self._members.items()
+
+    def __getitem__(self, key):
+        """See IGroup"""
+        return self._members[key]
+
+    def add(self, member):
+        """See IGroup"""
+        key = self._next_key
+        self._next_key += 1
+        self._members[key] = member
+        self._addhook(member)
+        member.notifyAdded(self, key)
+        # XXX this should send events as well
+        return key
+
+    def __delitem__(self, key):
+        """See IGroup"""
+        member = self._members[key]
+        self._deletehook(member)
+        del self._members[key]
+        member.notifyRemoved(self)
+        # XXX this should send event and call unlink notifications as well
+
+    # Hooks for use by mixers-in
+
+    def _addhook(self, member):
+        pass
+
+    def _deletehook(self, member):
+        pass
+
 
 
 #
@@ -42,29 +133,39 @@ def readFile(filename):
     f.close()
     return data
 
-
 class FakePhoto:
 
     format = 'image/jpeg'
     data = readFile('photo.jpg')
 
 
-class FakePerson(Person):
+class FakePerson(Person, MemberMixin):
+
+    def __init__(self, name):
+        Person.__init__(self, name)
+        MemberMixin.__init__(self)
 
     photo = FakePhoto()
 
 
+class FakeGroup(Group, GroupMixin, MemberMixin):
+
+    def __init__(self, name):
+        Group.__init__(self, name)
+        MemberMixin.__init__(self)
+        GroupMixin.__init__(self)
+
 class FakeApplication(Persistent):
 
-    def __init__(self, datamgr):
-        self.root = Group("root")
-        self.people = Group("people")
+    def __init__(self):
+        self.root = FakeGroup("root")
+        self.people = FakeGroup("people")
         self.root.add(self.people)
         self.people.add(FakePerson('John'))
         self.people.add(FakePerson('Steve'))
         self.people.add(FakePerson('Mark'))
         self.counter = 0
-        self.root = Group("root")
+        self.root = FakeGroup("root")
 
 
 #

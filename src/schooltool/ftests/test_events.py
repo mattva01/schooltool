@@ -22,10 +22,11 @@ Functional tests for SchoolTool event system
 
 import unittest
 from sets import Set
+from persistence import Persistent
 from zope.interface import implements, Attribute
-from schooltool.interfaces import IEvent, IEventTarget, IRelatable
+from schooltool.interfaces import IEvent, IEventTarget, IRelatable, ILocation
 from schooltool.event import EventMixin
-from schooltool.membership import MemberMixin
+from schooltool.mockup import MemberMixin
 from transaction import get_transaction
 
 __metaclass__ = type
@@ -54,11 +55,10 @@ class ArbitraryEvent(ContextEvent):
     implements(IArbitraryEvent)
 
 
-class EventCatcher(MemberMixin):
-    implements(IEventTarget, IRelatable)
+class EventCatcher(Persistent):
+    implements(IEventTarget, IRelatable, ILocation)
 
     def __init__(self):
-        MemberMixin.__init__(self)
         self.received = []
         self.__links__ = Set()
 

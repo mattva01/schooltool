@@ -641,7 +641,7 @@ class TestServer(unittest.TestCase):
         transaction = TransactionStub()
         server.get_transaction_hook = lambda: transaction
         cookie = object()
-        server.appFactory = lambda conn: cookie
+        server.appFactory = lambda: cookie
         db = DbStub()
         appname = 'foo'
         server.ensureAppExists(db, appname)
@@ -656,12 +656,11 @@ class TestServer(unittest.TestCase):
         from schooltool.main import Server
         server = Server()
         class DummyDataManager:
-            def add(self, object):
                 pass
-        app = server.createApplication(DummyDataManager())
-        a = app[0][0]
-        b = app[1][0]
-        c = app[2][0]
+        app = server.createApplication()
+        a = app['groups']['teachers']
+        b = app['persons']['Aiste']
+        c = app['persons']['Steve']
 
 
 def test_suite():

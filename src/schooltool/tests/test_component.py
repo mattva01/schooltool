@@ -275,6 +275,11 @@ class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
         setUpRelationships()
         self.setUpEventService()
 
+    def test_api(self):
+        from schooltool import component
+        from schooltool.interfaces import IRelationshipAPI
+        verifyObject(IRelationshipAPI, component)
+
     def tearDown(self):
         self.tearDownRelationshipRegistry()
 
@@ -319,7 +324,10 @@ class TestRelationships(EventServiceTestMixin, RelationshipTestMixin,
         self.assertEquals(getRelationshipHandlerFor(ISpecificURI), stub)
         self.assertEquals(getRelationshipHandlerFor(URISomething), stub2)
 
-        self.assertRaises(ValueError, registerRelationship, ISpecificURI, stub)
+        # Idempotent
+        self.assertRaises(ValueError,
+                          registerRelationship, ISpecificURI, stub2)
+        registerRelationship(ISpecificURI, stub)
 
         m, g = object(), object()
         args = (URISomething, (m, URISomething), (g, URISomething))

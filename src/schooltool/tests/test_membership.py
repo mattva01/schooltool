@@ -26,7 +26,7 @@ import unittest
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import IGroupMember, IFaceted, IQueryLinks
+from schooltool.interfaces import IFaceted, IQueryLinks
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RelationshipTestMixin
@@ -42,35 +42,6 @@ class P(Persistent):
 class BasicRelatable(Relatable, RelatableMixin):
     pass
 
-class MemberStub(BasicRelatable):
-    implements(IGroupMember, IFaceted)
-
-    def __init__(self, parent=None, name='does not matter'):
-        BasicRelatable.__init__(self, parent, name)
-        self.__facets__ = {}
-        self.added = None
-        self.removed = None
-
-    def notifyAdded(self, group, name):
-        self.added = group
-        if self not in group.values():
-            raise AssertionError("notifyAdded called too early")
-
-    def notifyRemoved(self, group):
-        self.removed = group
-        if self in group.values():
-            raise AssertionError("notifyRemoved called too early")
-
-
-class GroupStub(BasicRelatable):
-    deleted = None
-
-    def __delitem__(self, key):
-        self.deleted = key
-
-    def add(self, value):
-        return "name"
-
 
 
 class TestURIs(unittest.TestCase):
@@ -84,74 +55,6 @@ class TestURIs(unittest.TestCase):
         from schooltool.interfaces import URIMember
         from schooltool.component import inspectSpecificURI
         inspectSpecificURI(URIMember)
-
-
-class TestMemberMixin(unittest.TestCase):
-
-    def test_notifyAdded(self):
-        from schooltool.membership import MemberMixin
-        member = MemberMixin()
-        group = P()
-        member.notifyAdded(group, 1)
-        self.assertEqual(list(member.groups()), [group])
-        self.assertEqual(member.__parent__, group)
-        self.assertEqual(member.__name__, '1')
-        member.notifyAdded(P(), '2')
-        self.assertEqual(member.__parent__, group)
-        self.assertEqual(member.__name__, '1')
-
-    def test_notifyRemoved(self):
-        from schooltool.membership import MemberMixin
-        member = MemberMixin()
-        group = object()
-        other = object()
-        for parent in (group, other):
-            member.__parent__ = parent
-            member.__name__ = 'spam'
-            member._groups = {group: '1'}
-            member.notifyRemoved(group)
-            self.assertEqual(list(member.groups()), [])
-            self.assertRaises(KeyError, member.notifyRemoved, group)
-            if parent == group:
-                self.assertEqual(member.__parent__, None)
-                self.assertEqual(member.__name__, None)
-            else:
-                self.assertEqual(member.__parent__, other)
-                self.assertEqual(member.__name__, 'spam')
-
-
-class TestGroupMixin(unittest.TestCase):
-
-    def test_add(self):
-        from schooltool.membership import GroupMixin
-        group = GroupMixin()
-        member = MemberStub()
-        key = group.add(member)
-        self.assertEqual(member, group[key])
-        self.assertEqual(member.added, group)
-        self.assertRaises(TypeError, group.add, "not a member")
-
-    def test_remove(self):
-        from schooltool.membership import GroupMixin
-        group = GroupMixin()
-        member = MemberStub()
-        key = group.add(member)
-        del group[key]
-        self.assertRaises(KeyError, group.__getitem__, key)
-        self.assertRaises(KeyError, group.__delitem__, key)
-        self.assertEqual(member.removed, group)
-
-    def test_items(self):
-        from schooltool.membership import GroupMixin
-        group = GroupMixin()
-        self.assertEquals(list(group.keys()), [])
-        self.assertEquals(list(group.values()), [])
-        self.assertEquals(list(group.items()), [])
-        member = MemberStub()
-        key = group.add(member)
-        self.assertEquals(list(group.keys()), [key])
-        self.assertEquals(list(group.values()), [member])
-        self.assertEquals(list(group.items()), [(key, member)])
 
 
 class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
@@ -172,7 +75,7 @@ class TestMembershipRelationship(RelationshipTestMixin, EventServiceTestMixin,
 
         registerRelationship(URIMembership, handler)
 
-        g, m = GroupStub(), MemberStub()
+        g, m = BasicRelatable(), BasicRelatable()
         result = Membership(group=g, member=m)
         self.assert_(result['group'] is cookie, "our handler wasn't called")
 
@@ -293,9 +196,7 @@ class TestMembershipRelate(RelationshipTestMixin, EventServiceTestMixin,
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestGroupMixin))
     suite.addTest(unittest.makeSuite(TestMembershipRelationship))
-    suite.addTest(unittest.makeSuite(TestMemberMixin))
     suite.addTest(unittest.makeSuite(TestURIs))
     suite.addTest(unittest.makeSuite(TestCyclicConstraint))
     suite.addTest(unittest.makeSuite(TestEvents))

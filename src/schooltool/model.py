@@ -25,31 +25,31 @@ $Id$
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup
 from schooltool.event import EventService
-from schooltool.membership import MemberMixin, GroupMixin
 from schooltool.relationship import RelatableMixin
 from schooltool.facet import FacetedEventTargetMixin
 
 __metaclass__ = type
 
 
-class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):
+class Person(FacetedEventTargetMixin, RelatableMixin):
 
     implements(IPerson)
 
     def __init__(self, title=None):
-        MemberMixin.__init__(self)
         FacetedEventTargetMixin.__init__(self)
         RelatableMixin.__init__(self)
         self.title = title
+        self.__name__ = None
+        self.__parent__ = None
 
 
-class Group(GroupMixin, MemberMixin, FacetedEventTargetMixin, RelatableMixin):
+class Group(FacetedEventTargetMixin, RelatableMixin):
 
     implements(IGroup)
 
     def __init__(self, title=None):
-        GroupMixin.__init__(self)
-        MemberMixin.__init__(self)
         FacetedEventTargetMixin.__init__(self)
         RelatableMixin.__init__(self)
         self.title = title
+        self.__name__ = None
+        self.__parent__ = None

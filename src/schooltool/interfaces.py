@@ -344,11 +344,14 @@ class IRelationshipAPI(Interface):
             [link.traverse() for link in obj.listLinks(role)]
         """
 
-    def registerRelationshipType(relationship_type, factory):
+    def registerRelationship(relationship_type, factory):
         """Register a relationship type.
 
         relationship_type is an ISpecificURI.
         factory is an IRelationshipFactory.
+
+        This function does nothing if the same registration is
+        attempted the second time.
 
         When IRelationshipAPI.relate is called, it will find the handler for
         the most specific relationship type and defer to that.
@@ -556,78 +559,17 @@ class IFacetAPI(Interface):
 
 
 #
-# Groups and membership
-#
-
-class IGroupRead(Interface):
-    """A set of group members.
-
-    All group members must implement IGroupMember.  If facetFactory is not
-    None, they also must implement IFaceted.
-    """
-
-    def __getitem__(key):
-        """Returns a member with the given key.
-
-        Raises a KeyError if there is no such member.
-        """
-
-    def keys():
-        """Returns a sequence of member keys."""
-
-    def values():
-        """Returns a sequence of members."""
-
-    def items():
-        """Returns a sequence of (key, member) pairs."""
-
-
-class IGroupWrite(Interface):
-    """Modification access to a group."""
-
-    def add(memeber):
-        """Adds a new member to this group.
-
-        Returns the key assigned to this member.
-
-        If facetFactory is not None, creates a facet for this member
-        if it does not already have one, and marks it as active.
-        Member facets are keyed by the group.
-        """
-
-    def __delitem__(key):
-        """Removes a member from the group.
-
-        Raises a KeyError if there is no such member.
-
-        If facetFactory is not None, marks the facet keyed by this
-        group as inactive.
-        """
-
-
-class IGroup(IGroupWrite, IGroupRead, IFaceted):
-    __doc__ = IGroupRead.__doc__
-
-
-class IGroupMember(ILocation):
-
-    title = Attribute("A human readable name of this member.")
-
-    def groups():
-        """Returns a set for all groups this object is a member of."""
-
-    def notifyAdded(group, name):
-        """Notifies the member that it's added to a group."""
-
-    def notifyRemoved(group):
-        """Notifies the member that it's removed from a group."""
-
-
-#
 # Application objects
 #
 
-class IPerson(IGroupMember, IFaceted):
+class IGroup(IFaceted, ILocation):
+    """A set of group members.
+
+    Participates in URIMembership as URIGroup or URIMember.
+    """
+
+
+class IPerson(IFaceted, ILocation):
 
     title = Attribute("Person's name")
 

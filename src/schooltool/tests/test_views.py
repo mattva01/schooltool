@@ -45,17 +45,6 @@ class RequestStub:
         self.code = code
         self.reason = reason
 
-class MemberStub:
-    from zope.interface import implements
-    from schooltool.interfaces import IGroupMember
-    added = None
-    removed = None
-    implements(IGroupMember)
-    def notifyAdded(self, group, name):
-        self.added = group
-    def notifyRemoved(self, group):
-        self.removed = group
-
 
 class TestTemplate(unittest.TestCase):
 
@@ -196,6 +185,8 @@ class TestGroupView(unittest.TestCase):
         from schooltool.views import GroupView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership, setUp
+        setUp()
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
@@ -203,30 +194,11 @@ class TestGroupView(unittest.TestCase):
         self.sub = app['groups'].new("subgroup", title="subgroup")
         self.per = app['persons'].new("p", title="p")
 
-        self.subkey = self.group.add(self.sub)
-        self.perkey = self.group.add(self.per)
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
 
         self.view = GroupView(self.group)
 
-    def test_traverse(self):
-        from schooltool.views import GroupView, PersonView
-        from schooltool.interfaces import ComponentLookupError
-
-        subview = self.view._traverse(str(self.subkey), RequestStub())
-        self.assertEqual(subview.__class__, GroupView)
-
-        perview = self.view._traverse(str(self.perkey), RequestStub())
-        self.assertEqual(perview.__class__, PersonView)
-
-        self.assertRaises(KeyError, self.view._traverse,
-                          "Nonexistent", RequestStub())
-
-        self.assertRaises(KeyError, self.view._traverse,
-                          None, RequestStub())
-
-        trash = self.group.add(MemberStub())
-        self.assertRaises(ComponentLookupError, self.view._traverse,
-                          trash, RequestStub())
 
     def test_render(self):
         from schooltool.component import getPath
@@ -237,14 +209,17 @@ class TestGroupView(unittest.TestCase):
         expected = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>group</name>
-              <item xlink:type="simple" xlink:title="subgroup"
-                    xlink:href="%s"/>
+            ---8<---
               <item xlink:type="simple" xlink:title="p"
                     xlink:href="%s"/>
+            ---8<---
+              <item xlink:type="simple" xlink:title="subgroup"
+                    xlink:href="%s"/>
+            ---8<---
             </group>
-            """ % (getPath(self.sub), getPath(self.per)))
-        self.assertEqual(result, expected,
-                         'expected != actual\n%s' % diff(expected, result))
+            """ % (getPath(self.per), getPath(self.sub)))
+        for segment in expected.split("---8<---\n"):
+            self.assert_(segment in result, segment)
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
 
@@ -255,6 +230,8 @@ class TestPersonView(unittest.TestCase):
         from schooltool.views import PersonView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership, setUp
+        setUp()
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
@@ -262,9 +239,9 @@ class TestPersonView(unittest.TestCase):
         self.sub = app['groups'].new("subgroup", title="subgroup")
         self.per = app['persons'].new("p", title="Pete")
 
-        self.group.add(self.sub)
-        self.group.add(self.per)
-        self.sub.add(self.per)
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
+        Membership(group=self.sub, member=self.per)
 
         self.view = PersonView(self.per)
 

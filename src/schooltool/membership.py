@@ -26,14 +26,13 @@ from sets import Set
 from zope.interface import implements, moduleProvides
 from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
-from schooltool.interfaces import IQueryLinks, IGroupMember, IGroup
+from schooltool.interfaces import IQueryLinks, IGroup
 from schooltool.interfaces import ISpecificURI, IRemovableLink
 from schooltool.interfaces import URIMembership, URIGroup, URIMember
 from schooltool.interfaces import IMembershipEvent
 from schooltool.interfaces import IMemberAddedEvent
 from schooltool.interfaces import IMemberRemovedEvent
 from schooltool.interfaces import IModuleSetup
-from schooltool.db import PersistentKeysDict
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool import relationship
 from schooltool.component import registerRelationship
@@ -41,93 +40,6 @@ from schooltool.component import registerRelationship
 moduleProvides(IModuleSetup)
 
 __metaclass__ = type
-
-
-class MemberMixin(Persistent):
-    """A mixin providing the IGroupMember interface.
-
-    Also, it implements ILocation by setting the first group the
-    member is added to as a parent, and clearing it if the member is
-    removed from it.
-    """
-
-    implements(IGroupMember)
-
-    def __init__(self):
-        self._groups = PersistentKeysDict()
-        self.__name__ = None
-        self.__parent__ = None
-
-    def groups(self):
-        """See IGroupMember"""
-        return self._groups.keys()
-
-    def notifyAdded(self, group, name):
-        """See IGroupMember"""
-        self._groups[group] = name
-        if self.__parent__ is None:
-            self.__parent__ = group
-            self.__name__ = str(name)
-
-    def notifyRemoved(self, group):
-        """See IGroupMember"""
-        del self._groups[group]
-        if group == self.__parent__:
-            self.__parent__ = None
-            self.__name__ = None
-
-
-class GroupMixin(Persistent):
-    """This class is a mixin which makes things a group"""
-
-    def __init__(self):
-        self._next_key = 0
-        self._members = IOBTree()
-
-    def keys(self):
-        """See IGroup"""
-        return self._members.keys()
-
-    def values(self):
-        """See IGroup"""
-        return self._members.values()
-
-    def items(self):
-        """See IGroup"""
-        return self._members.items()
-
-    def __getitem__(self, key):
-        """See IGroup"""
-        return self._members[key]
-
-    def add(self, member):
-        """See IGroup"""
-        if not IGroupMember.isImplementedBy(member):
-            raise TypeError("Members must implement IGroupMember")
-        key = self._next_key
-        self._next_key += 1
-        self._members[key] = member
-        self._addhook(member)
-        member.notifyAdded(self, key)
-        # XXX this should send events as well
-        return key
-
-    def __delitem__(self, key):
-        """See IGroup"""
-        member = self._members[key]
-        self._deletehook(member)
-        del self._members[key]
-        member.notifyRemoved(self)
-        # XXX this should send event and call unlink notifications as well
-
-    # Hooks for use by mixers-in
-
-    def _addhook(self, member):
-        pass
-
-    def _deletehook(self, member):
-        pass
-
 
 Membership = RelationshipSchema(URIMembership,
                                 group=URIGroup, member=URIMember)

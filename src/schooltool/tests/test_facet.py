@@ -27,7 +27,7 @@ from sets import Set
 from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
-from schooltool.interfaces import IGroupMember, IFacet, IFaceted
+from schooltool.interfaces import IFacet, IFaceted
 from schooltool.interfaces import IEventConfigurable, ISpecificURI
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook

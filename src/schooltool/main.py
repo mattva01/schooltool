@@ -48,6 +48,7 @@ from schooltool import mockup
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model
 from schooltool.views import GroupView, errorPage
+from schooltool.membership import Membership
 
 __metaclass__ = type
 
@@ -469,11 +470,11 @@ class Server:
         conn = db.open()
         root = conn.root()
         if root.get(appname) is None:
-            root[appname] = self.appFactory(conn)
+            root[appname] = self.appFactory()
             self.get_transaction_hook().commit()
         conn.close()
 
-    def createApplication(self, datamgr):
+    def createApplication(self):
         """Instantiate a new application"""
         app = Application()
         app['groups'] = ApplicationObjectContainer(model.Group)
@@ -482,18 +483,19 @@ class Server:
         Group = app['groups'].new
 
         root = Group(title="root")
-        teachers = Group(title="teachers")
-        students = Group(title="students")
-        cleaners = Group(title="cleaners")
-        root.add(teachers)
-        root.add(students)
-        root.add(cleaners)
-        teachers.add(Person(title="Mark"))
-        teachers.add(Person(title="Steve"))
-        students.add(Person(title="Aiste"))
-        cleaners.add(Person(title="Albertas"))
-        cleaners.add(Person(title="Marius"))
-        return root
+        teachers = Group("teachers", title="teachers")
+        students = Group("students", title="students")
+        cleaners = Group("cleaners", title="cleaners")
+        Membership(group=root, member=teachers)
+        Membership(group=root, member=students)
+        Membership(group=root, member=cleaners)
+
+        Membership(group=teachers, member=Person("Mark", title="Mark"))
+        Membership(group=teachers, member=Person("Steve", title="Steve"))
+        Membership(group=students, member=Person("Aiste", title="Aiste"))
+        Membership(group=cleaners, member=Person("Albert", title="Albert"))
+        Membership(group=cleaners, member=Person("Marius", title="Marius"))
+        return app
 
     def notifyConfigFile(self, config_file):
         print >> self.stdout, "Reading configuration from %s" % config_file

@@ -31,9 +31,11 @@ from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IFacet, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
+from schooltool.interfaces import IRelationshipAPI
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
 
-moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
+moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI,
+               IRelationshipAPI)
 
 __metaclass__ = type
 
@@ -199,9 +201,13 @@ def resetRelationshipRegistry():
 
 def registerRelationship(rel_type, handler):
     """See IRelationshipAPI"""
-    if relationship_registry.get(rel_type) is not None:
+    reghandler = relationship_registry.get(rel_type)
+    if reghandler is handler:
+        return
+    elif reghandler is not None:
         raise ValueError("Handler for %s already registered" % rel_type)
-    relationship_registry.register(rel_type, handler)
+    else:
+        relationship_registry.register(rel_type, handler)
 
 
 def getRelationshipHandlerFor(rel_type):

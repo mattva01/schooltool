@@ -24,8 +24,9 @@ $Id$
 
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
-from schooltool.interfaces import IGroup, IPerson
-from schooltool.component import getPath, ComponentLookupError
+from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
+from schooltool.component import getPath, getRelatedObjects
+from schooltool.component import ComponentLookupError
 
 __metaclass__ = type
 
@@ -160,20 +161,8 @@ class GroupView(View):
 
     template = Template("www/group.pt", content_type="text/xml")
 
-    def _traverse(self, name, request):
-        try:
-            item = self.context[int(name)]
-        except (TypeError, ValueError):
-            raise KeyError(name)
-        if IGroup.isImplementedBy(item):
-            return GroupView(item)
-        elif IPerson.isImplementedBy(item):
-            return PersonView(item)
-        else:
-            raise ComponentLookupError("view for %s" % item)
-
     def listItems(self):
-        for item in self.context.values():
+        for item in getRelatedObjects(self.context, URIMember):
             yield {'title': item.title, 'path': getPath(item)}
 
 
@@ -184,4 +173,4 @@ class PersonView(View):
 
     def getGroups(self):
         return [{'title': group.title, 'path': getPath(group)}
-                for group in self.context.groups()]
+                for group in getRelatedObjects(self.context, URIGroup)]
