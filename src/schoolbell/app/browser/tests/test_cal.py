@@ -991,7 +991,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors                                # doctest: +ELLIPSIS
-        ConversionError: ('Invalid datetime data', <...>)
+        ConversionError: (u'Invalid datetime data', <...>)
         >>> view.error is None
         True
 
@@ -1007,7 +1007,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors                                # doctest: +ELLIPSIS
-        ConversionError: ('Invalid integer data', <...>)
+        ConversionError: (u'Invalid integer data', <...>)
         >>> view.error is None
         True
 
@@ -1751,7 +1751,7 @@ def doctest_CalendarEventEditView_updateForm():
     """
 
 def doctest_CalendarEventEditView_getInitialData():
-    """Tests for CalendarEventEditView editing of new event.
+    r"""Tests for CalendarEventEditView editing of new event.
 
     Let's create an event:
 
@@ -1766,76 +1766,25 @@ def doctest_CalendarEventEditView_getInitialData():
         >>> request = TestRequest()
         >>> view = CalendarEventEditTestView(event, request)
 
-        >>> def normalize(s):
-        ...   return '\\n  '.join(filter(None, s.split(' ')))
-
     Let's check whether the default values are set properly:
 
-        >>> print normalize(view.title_widget())
-        <input
-          class="textType"
-          id="field.title"
-          name="field.title"
-          size="20"
-          type="text"
-          value="Hacking"
-          />
+        >>> view.title_widget._getFormValue()
+        'Hacking'
 
-        >>> print normalize(view.start_date_widget())
-        <input
-          class="textType"
-          id="field.start_date"
-          name="field.start_date"
-          size="20"
-          type="text"
-          value="2004-08-13"
-          />
+        >>> view.start_date_widget._getFormValue()
+        datetime.date(2004, 8, 13)
 
-        >>> print normalize(view.start_time_widget())
-        <input
-          class="textType"
-          id="field.start_time"
-          name="field.start_time"
-          size="20"
-          type="text"
-          value="20:00"
-          />
+        >>> view.start_time_widget._getFormValue()
+        '20:00'
 
-        >>> print normalize(view.duration_widget())
-        <input
-          class="textType"
-          id="field.duration"
-          name="field.duration"
-          size="10"
-          type="text"
-          value="61"
-          />
+        >>> view.duration_widget._getFormValue()
+        61
 
-        >>> print normalize(view.location_widget())
-        <input
-          class="textType"
-          id="field.location"
-          name="field.location"
-          size="20"
-          type="text"
-          value="Kitchen"
-          />
+        >>> view.location_widget._getFormValue()
+        'Kitchen'
 
-        >>> print normalize(view.recurrence_widget())
-        <input
-          class="hiddenType"
-          id="field.recurrence.used"
-          name="field.recurrence.used"
-          type="hidden"
-          value=""
-          />
-          <input
-          class="checkboxType"
-          id="field.recurrence"
-          name="field.recurrence"
-          type="checkbox"
-          value="on"
-          />
+        >>> view.recurrence_widget._getFormValue()
+        ''
 
     Let's create a recurrent event:
 
@@ -1854,68 +1803,20 @@ def doctest_CalendarEventEditView_getInitialData():
 
     Let's check whether the default values are set properly:
 
-        >>> print normalize(view.recurrence_widget())
-        <input
-          class="hiddenType"
-          id="field.recurrence.used"
-          name="field.recurrence.used"
-          type="hidden"
-          value=""
-          />
-          <input
-          class="checkboxType"
-          checked="checked"
-          id="field.recurrence"
-          name="field.recurrence"
-          type="checkbox"
-          value="on"
-          />
+        >>> view.recurrence_widget._getFormValue()
+        'on'
 
-        >>> print normalize(view.interval_widget())
-        <input
-          class="textType"
-          id="field.interval"
-          name="field.interval"
-          size="10"
-          type="text"
-          value="2"
-          />
+        >>> view.interval_widget._getFormValue()
+        2
 
-        >>> print view.recurrence_type_widget()
-        <div>
-        <div class="value">
-        <select name="field.recurrence_type" size="1" >
-        <option value="daily">Day</option>
-        <option value="weekly">Week</option>
-        <option value="monthly">Month</option>
-        <option selected="selected" value="yearly">Year</option>
-        </select>
-        </div>
-        <input name="field.recurrence_type-empty-marker" type="hidden" value="1" />
-        </div>
+        >>> view.recurrence_type_widget._getFormValue()
+        'yearly'
 
-        >>> print view.range_widget()
-        <div>
-        <div class="value">
-        <select name="field.range" size="1" >
-        <option value="">(no value)</option>
-        <option value="count">Count</option>
-        <option selected="selected" value="until">Until</option>
-        <option value="forever">forever</option>
-        </select>
-        </div>
-        <input name="field.range-empty-marker" type="hidden" value="1" />
-        </div>
+        >>> view.range_widget._getFormValue()
+        'until'
 
-        >>> print normalize(view.until_widget())
-        <input
-          class="textType"
-          id="field.until"
-          name="field.until"
-          size="20"
-          type="text"
-          value="2004-01-02"
-          />
+        >>> view.until_widget._getFormValue()
+        '2004-01-02'
 
     Let's create a weekly recurrent event with exceptions:
 
@@ -1938,73 +1839,26 @@ def doctest_CalendarEventEditView_getInitialData():
 
     Let's check whether the default values are set properly:
 
-        >>> print normalize(view.recurrence_widget())
-        <input
-          class="hiddenType"
-          id="field.recurrence.used"
-          name="field.recurrence.used"
-          type="hidden"
-          value=""
-          />
-          <input
-          class="checkboxType"
-          checked="checked"
-          id="field.recurrence"
-          name="field.recurrence"
-          type="checkbox"
-          value="on"
-          />
+        >>> view.recurrence_widget._getFormValue()
+        'on'
 
-        >>> print normalize(view.interval_widget())
-        <input
-          class="textType"
-          id="field.interval"
-          name="field.interval"
-          size="10"
-          type="text"
-          value="1"
-          />
+        >>> view.interval_widget._getFormValue()
+        1
 
-        >>> print view.recurrence_type_widget()
-        <div>
-        <div class="value">
-        <select name="field.recurrence_type" size="1" >
-        <option value="daily">Day</option>
-        <option selected="selected" value="weekly">Week</option>
-        <option value="monthly">Month</option>
-        <option value="yearly">Year</option>
-        </select>
-        </div>
-        <input name="field.recurrence_type-empty-marker" type="hidden" value="1" />
-        </div>
+        >>> view.recurrence_type_widget._getFormValue()
+        'weekly'
 
-        >>> print view.range_widget()
-        <div>
-        <div class="value">
-        <select name="field.range" size="1" >
-        <option value="">(no value)</option>
-        <option selected="selected" value="count">Count</option>
-        <option value="until">Until</option>
-        <option value="forever">forever</option>
-        </select>
-        </div>
-        <input name="field.range-empty-marker" type="hidden" value="1" />
-        </div>
+        >>> view.range_widget._getFormValue()
+        'count'
 
-        >>> print view.count_widget() # doctest: +ELLIPSIS
-        <input...value="20"...
+        >>> view.count_widget._getFormValue()
+        20
 
-        >>> print view.exceptions_widget().replace("\\r\\n", "\\n")
-        <textarea cols="60" id="field.exceptions" name="field.exceptions" rows="15" >2004-08-14
-        2004-08-15</textarea>
+        >>> view.exceptions_widget._getFormValue()
+        '2004-08-14\r\n2004-08-15'
 
-        >>> print view.weekdays_widget() # doctest: +ELLIPSIS
-        <script type="text/javascript">
-        ...
-              <select id="field.weekdays.to"
-                      name="field.weekdays.to" size="5" multiple="">
-              </select>
-        ...
+        >>> view.weekdays_widget._getFormValue()
+        [1, 2, 3, 4, 5, 6]
 
 
     Let's create another recurrent event:
@@ -2026,23 +1880,13 @@ def doctest_CalendarEventEditView_getInitialData():
 
     The count should be set:
 
-        >>> print view.count_widget() # doctest: +ELLIPSIS
-        <input...value="5"...
+        >>> view.count_widget._getFormValue()
+        5
 
     As well as the range:
 
-        >>> print view.range_widget()
-        <div>
-        <div class="value">
-        <select name="field.range" size="1" >
-        <option value="">(no value)</option>
-        <option selected="selected" value="count">Count</option>
-        <option value="until">Until</option>
-        <option value="forever">forever</option>
-        </select>
-        </div>
-        <input name="field.range-empty-marker" type="hidden" value="1" />
-        </div>
+        >>> view.range_widget._getFormValue()
+        'count'
 
     Now one more event:
 
